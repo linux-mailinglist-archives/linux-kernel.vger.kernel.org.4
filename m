@@ -2,455 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A3F5E798B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576705E7994
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbiIWL0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S230207AbiIWL3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiIWLZw (ORCPT
+        with ESMTP id S229624AbiIWL3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:25:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78C1132D4F;
-        Fri, 23 Sep 2022 04:25:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 23 Sep 2022 07:29:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2017183AE;
+        Fri, 23 Sep 2022 04:29:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 78D2521A76;
-        Fri, 23 Sep 2022 11:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663932335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2F69v0wemc1/ZerM3OCnPLkIGTSfi+iHrOw/OqLO6Mw=;
-        b=g8GzpP1b9174yh3pveNaOWRveV1kJ7NcdXIzkvB4O8fsAO5DKPMItUKXavLjxfRzTymdif
-        MLAcwCXHGRBafRiqgSFfe+17Wii5Yy1gHbqSfzNwcw6SItRWsge7+c8gmIBjxAhKhuktmJ
-        amCs2j7i8sZnbJwHpxGNW/xXsGOBrKw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663932335;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2F69v0wemc1/ZerM3OCnPLkIGTSfi+iHrOw/OqLO6Mw=;
-        b=IGZ25ozlMayDVFtGFH50c6EJpD5dFWUknm3xQe/YykTxIaB4vsfV2tPBx8CAygVZJ7V48R
-        awpyzJenWGFnRlDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6334A13AA5;
-        Fri, 23 Sep 2022 11:25:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BKwsGK+XLWMaWAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 11:25:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EC586A0685; Fri, 23 Sep 2022 13:25:34 +0200 (CEST)
-Date:   Fri, 23 Sep 2022 13:25:34 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: factor out ext4_free_ext_path()
-Message-ID: <20220923112534.vrmjckuli7zqlc5l@quack3>
-References: <20220923013254.3581264-1-yebin10@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DF41B82289;
+        Fri, 23 Sep 2022 11:29:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C17C433D6;
+        Fri, 23 Sep 2022 11:28:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663932542;
+        bh=bMYt1/N3KNrv0i41IENSYS+pss/KJGw9J8JCAluJZe4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mtNpKxd1lGQnHI5nG3P2zGAtV6XMmlokHgE/SVoqu0TriQbTz+abC3DxNjhX6waeg
+         kJmhxsJpW9KtW0Uu9l0o4PEajLuS22INuxkqTgYvgRTwk8DmtobAJUTE5nhQK5Kjh8
+         66wKro/NQtoRl96QDWkMy4Za0Mnw2WowaVo3WtrqqlB3NaK3HcLKEIgonO0IYR+vD4
+         OLK148heaY+Ls5+ii+KOc7ayVyIAhHBaPpUdcSSpuFXtxternihO4madYiZauN07nF
+         iDFdvFw9eGM/txPBfDzWmzQkoz49yrGiaDMCMtW2jpxKUTicjLU/B6S9H/mJTnq3v+
+         dDN6KuFoTqLOQ==
+Message-ID: <3bbdfb31-2ba2-7345-54c7-82a67d95e30f@kernel.org>
+Date:   Fri, 23 Sep 2022 13:28:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923013254.3581264-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [V14,08/15] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
+ compatible
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org,
+        kyrie wu <kyrie.wu@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
+References: <20220915064337.2686-1-irui.wang@mediatek.com>
+ <20220915064337.2686-9-irui.wang@mediatek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220915064337.2686-9-irui.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 23-09-22 09:32:54, Ye Bin wrote:
-> Factor out ext4_free_ext_path(). No functional change.
+On 15/09/2022 08:43, Irui Wang wrote:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> Add mediatek,mt8195-jpgdec compatible to binding document.
 
-Nice. Just maybe I'd make ext4_free_ext_path() not inline and just put it
-into extents.c. Because after this patch ext4_ext_drop_refs() is only used
-in three places - ext4_free_ext_path(), ext4_find_extent(), and
-mext_check_coverage(). The use in mext_check_coverage() can be actually
-removed - get_ext_path() -> ext4_find_extent() takes care of dropping the
-references. And then ext4_ext_drop_refs() can be made static making things
-more obvious...
+Use scripts/get_maintainers.pl to CC all maintainers and relevant
+mailing lists.
 
-								Honza
-
+> 
+> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+> Signed-off-by: irui wang <irui.wang@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  fs/ext4/ext4.h           |  6 ++++
->  fs/ext4/extents.c        | 75 ++++++++++++++--------------------------
->  fs/ext4/extents_status.c |  3 +-
->  fs/ext4/fast_commit.c    |  6 ++--
->  fs/ext4/migrate.c        |  3 +-
->  fs/ext4/move_extent.c    |  9 ++---
->  fs/ext4/verity.c         |  6 ++--
->  7 files changed, 40 insertions(+), 68 deletions(-)
+>  .../media/mediatek,mt8195-jpegdec.yaml        | 169 ++++++++++++++++++
+>  1 file changed, 169 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
 > 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index e6674504ca2a..0583e5c8d395 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -3786,6 +3786,12 @@ extern void ext4_orphan_file_block_trigger(
->  				struct buffer_head *bh,
->  				void *data, size_t size);
->  
-> +static inline void ext4_free_ext_path(struct ext4_ext_path *path)
-> +{
-> +	ext4_ext_drop_refs(path);
-> +	kfree(path);
-> +}
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> new file mode 100644
+> index 000000000000..9135cf889d1e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> @@ -0,0 +1,169 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  /*
->   * Add new method to test whether block and inode bitmaps are properly
->   * initialized. With uninit_bg reading the block from disk is not enough
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index c148bb97b527..60ff1a764f52 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -632,8 +632,7 @@ int ext4_ext_precache(struct inode *inode)
->  	ext4_set_inode_state(inode, EXT4_STATE_EXT_PRECACHED);
->  out:
->  	up_read(&ei->i_data_sem);
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	return ret;
->  }
->  
-> @@ -951,8 +950,7 @@ ext4_find_extent(struct inode *inode, ext4_lblk_t block,
->  	return path;
->  
->  err:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	if (orig_path)
->  		*orig_path = NULL;
->  	return ERR_PTR(ret);
-> @@ -2170,8 +2168,7 @@ int ext4_ext_insert_extent(handle_t *handle, struct inode *inode,
->  	err = ext4_ext_dirty(handle, inode, path + path->p_depth);
->  
->  cleanup:
-> -	ext4_ext_drop_refs(npath);
-> -	kfree(npath);
-> +	ext4_free_ext_path(npath);
->  	return err;
->  }
->  
-> @@ -3057,8 +3054,7 @@ int ext4_ext_remove_space(struct inode *inode, ext4_lblk_t start,
->  		}
->  	}
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	path = NULL;
->  	if (err == -EAGAIN)
->  		goto again;
-> @@ -4371,8 +4367,7 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
->  	allocated = map->m_len;
->  	ext4_ext_show_leaf(inode, path);
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  
->  	trace_ext4_ext_map_blocks_exit(inode, flags, map,
->  				       err ? err : allocated);
-> @@ -5241,8 +5236,7 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
->  			break;
->  	}
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	return ret;
->  }
->  
-> @@ -5534,15 +5528,13 @@ static int ext4_insert_range(struct file *file, loff_t offset, loff_t len)
->  					EXT4_GET_BLOCKS_METADATA_NOFAIL);
->  		}
->  
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  		if (ret < 0) {
->  			up_write(&EXT4_I(inode)->i_data_sem);
->  			goto out_stop;
->  		}
->  	} else {
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  	}
->  
->  	ret = ext4_es_remove_extent(inode, offset_lblk,
-> @@ -5762,10 +5754,8 @@ ext4_swap_extents(handle_t *handle, struct inode *inode1,
->  		count -= len;
->  
->  	repeat:
-> -		ext4_ext_drop_refs(path1);
-> -		kfree(path1);
-> -		ext4_ext_drop_refs(path2);
-> -		kfree(path2);
-> +		ext4_free_ext_path(path1);
-> +		ext4_free_ext_path(path2);
->  		path1 = path2 = NULL;
->  	}
->  	return replaced_count;
-> @@ -5844,8 +5834,7 @@ int ext4_clu_mapped(struct inode *inode, ext4_lblk_t lclu)
->  	}
->  
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  
->  	return err ? err : mapped;
->  }
-> @@ -5912,8 +5901,7 @@ int ext4_ext_replay_update_ex(struct inode *inode, ext4_lblk_t start,
->  	ret = ext4_ext_dirty(NULL, inode, &path[path->p_depth]);
->  	up_write(&EXT4_I(inode)->i_data_sem);
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	ext4_mark_inode_dirty(NULL, inode);
->  	return ret;
->  }
-> @@ -5931,8 +5919,7 @@ void ext4_ext_replay_shrink_inode(struct inode *inode, ext4_lblk_t end)
->  			return;
->  		ex = path[path->p_depth].p_ext;
->  		if (!ex) {
-> -			ext4_ext_drop_refs(path);
-> -			kfree(path);
-> +			ext4_free_ext_path(path);
->  			ext4_mark_inode_dirty(NULL, inode);
->  			return;
->  		}
-> @@ -5945,8 +5932,7 @@ void ext4_ext_replay_shrink_inode(struct inode *inode, ext4_lblk_t end)
->  		ext4_ext_dirty(NULL, inode, &path[path->p_depth]);
->  		up_write(&EXT4_I(inode)->i_data_sem);
->  		ext4_mark_inode_dirty(NULL, inode);
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  	}
->  }
->  
-> @@ -5985,13 +5971,11 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
->  		return PTR_ERR(path);
->  	ex = path[path->p_depth].p_ext;
->  	if (!ex) {
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  		goto out;
->  	}
->  	end = le32_to_cpu(ex->ee_block) + ext4_ext_get_actual_len(ex);
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  
->  	/* Count the number of data blocks */
->  	cur = 0;
-> @@ -6021,30 +6005,26 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
->  	if (IS_ERR(path))
->  		goto out;
->  	numblks += path->p_depth;
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	while (cur < end) {
->  		path = ext4_find_extent(inode, cur, NULL, 0);
->  		if (IS_ERR(path))
->  			break;
->  		ex = path[path->p_depth].p_ext;
->  		if (!ex) {
-> -			ext4_ext_drop_refs(path);
-> -			kfree(path);
-> +			ext4_free_ext_path(path);
->  			return 0;
->  		}
->  		cur = max(cur + 1, le32_to_cpu(ex->ee_block) +
->  					ext4_ext_get_actual_len(ex));
->  		ret = skip_hole(inode, &cur);
->  		if (ret < 0) {
-> -			ext4_ext_drop_refs(path);
-> -			kfree(path);
-> +			ext4_free_ext_path(path);
->  			break;
->  		}
->  		path2 = ext4_find_extent(inode, cur, NULL, 0);
->  		if (IS_ERR(path2)) {
-> -			ext4_ext_drop_refs(path);
-> -			kfree(path);
-> +			ext4_free_ext_path(path);
->  			break;
->  		}
->  		for (i = 0; i <= max(path->p_depth, path2->p_depth); i++) {
-> @@ -6058,10 +6038,8 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
->  			if (cmp1 != cmp2 && cmp2 != 0)
->  				numblks++;
->  		}
-> -		ext4_ext_drop_refs(path);
-> -		ext4_ext_drop_refs(path2);
-> -		kfree(path);
-> -		kfree(path2);
-> +		ext4_free_ext_path(path);
-> +		ext4_free_ext_path(path2);
->  	}
->  
->  out:
-> @@ -6088,13 +6066,11 @@ int ext4_ext_clear_bb(struct inode *inode)
->  		return PTR_ERR(path);
->  	ex = path[path->p_depth].p_ext;
->  	if (!ex) {
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  		return 0;
->  	}
->  	end = le32_to_cpu(ex->ee_block) + ext4_ext_get_actual_len(ex);
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  
->  	cur = 0;
->  	while (cur < end) {
-> @@ -6113,8 +6089,7 @@ int ext4_ext_clear_bb(struct inode *inode)
->  					ext4_fc_record_regions(inode->i_sb, inode->i_ino,
->  							0, path[j].p_block, 1, 1);
->  				}
-> -				ext4_ext_drop_refs(path);
-> -				kfree(path);
-> +				ext4_free_ext_path(path);
->  			}
->  			ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
->  			ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 23167efda95e..cd0a861853e3 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -667,8 +667,7 @@ static void ext4_es_insert_extent_ext_check(struct inode *inode,
->  		}
->  	}
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  }
->  
->  static void ext4_es_insert_extent_ind_check(struct inode *inode,
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 9549d89b3519..54ccc61c713a 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -1770,8 +1770,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
->  			ret = ext4_ext_insert_extent(
->  				NULL, inode, &path, &newex, 0);
->  			up_write((&EXT4_I(inode)->i_data_sem));
-> -			ext4_ext_drop_refs(path);
-> -			kfree(path);
-> +			ext4_free_ext_path(path);
->  			if (ret)
->  				goto out;
->  			goto next;
-> @@ -1926,8 +1925,7 @@ static void ext4_fc_set_bitmaps_and_counters(struct super_block *sb)
->  					for (j = 0; j < path->p_depth; j++)
->  						ext4_mb_mark_bb(inode->i_sb,
->  							path[j].p_block, 1, 1);
-> -					ext4_ext_drop_refs(path);
-> -					kfree(path);
-> +					ext4_free_ext_path(path);
->  				}
->  				cur += ret;
->  				ext4_mb_mark_bb(inode->i_sb, map.m_pblk,
-> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-> index 54e7d3c95fd7..0a220ec9862d 100644
-> --- a/fs/ext4/migrate.c
-> +++ b/fs/ext4/migrate.c
-> @@ -56,8 +56,7 @@ static int finish_range(handle_t *handle, struct inode *inode,
->  	retval = ext4_ext_insert_extent(handle, inode, &path, &newext, 0);
->  err_out:
->  	up_write((&EXT4_I(inode)->i_data_sem));
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	lb->first_pblock = 0;
->  	return retval;
->  }
-> diff --git a/fs/ext4/move_extent.c b/fs/ext4/move_extent.c
-> index 701f1d6a217f..69e5e6a639cc 100644
-> --- a/fs/ext4/move_extent.c
-> +++ b/fs/ext4/move_extent.c
-> @@ -32,8 +32,7 @@ get_ext_path(struct inode *inode, ext4_lblk_t lblock,
->  	if (IS_ERR(path))
->  		return PTR_ERR(path);
->  	if (path[ext_depth(inode)].p_ext == NULL) {
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  		*ppath = NULL;
->  		return -ENODATA;
->  	}
-> @@ -107,8 +106,7 @@ mext_check_coverage(struct inode *inode, ext4_lblk_t from, ext4_lblk_t count,
->  	}
->  	ret = 1;
->  out:
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	return ret;
->  }
->  
-> @@ -694,8 +692,7 @@ ext4_move_extents(struct file *o_filp, struct file *d_filp, __u64 orig_blk,
->  		ext4_discard_preallocations(donor_inode, 0);
->  	}
->  
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  	ext4_double_up_write_data_sem(orig_inode, donor_inode);
->  	unlock_two_nondirectories(orig_inode, donor_inode);
->  
-> diff --git a/fs/ext4/verity.c b/fs/ext4/verity.c
-> index b051d19b5c8a..20cadfb740dc 100644
-> --- a/fs/ext4/verity.c
-> +++ b/fs/ext4/verity.c
-> @@ -298,16 +298,14 @@ static int ext4_get_verity_descriptor_location(struct inode *inode,
->  	last_extent = path[path->p_depth].p_ext;
->  	if (!last_extent) {
->  		EXT4_ERROR_INODE(inode, "verity file has no extents");
-> -		ext4_ext_drop_refs(path);
-> -		kfree(path);
-> +		ext4_free_ext_path(path);
->  		return -EFSCORRUPTED;
->  	}
->  
->  	end_lblk = le32_to_cpu(last_extent->ee_block) +
->  		   ext4_ext_get_actual_len(last_extent);
->  	desc_size_pos = (u64)end_lblk << inode->i_blkbits;
-> -	ext4_ext_drop_refs(path);
-> -	kfree(path);
-> +	ext4_free_ext_path(path);
->  
->  	if (desc_size_pos < sizeof(desc_size_disk))
->  		goto bad;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +title: MediaTek JPEG Encoder Device Tree Bindings
+> +
+> +maintainers:
+> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+> +
+> +description:
+> +  MediaTek JPEG Decoder is the JPEG decode hardware present in MediaTek SoCs
+> +
+> +properties:
+> +  compatible:
+> +    items:
+
+You do not have more than one item. Skip items.
+
+> +      - const: mediatek,mt8195-jpgdec
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    maxItems: 6
+> +    description:
+> +      Points to the respective IOMMU block with master port as argument, see
+> +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
+> +      Ports are according to the HW.
+> +
+> +  dma-ranges:
+> +    maxItems: 1
+> +    description: |
+> +      Describes the physical address space of IOMMU maps to memory.
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+> +# Required child node:
+> +patternProperties:
+> +  "^jpgdec@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      The jpeg decoder hardware device node which should be added as subnodes to
+> +      the main jpeg node.
+> +
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt8195-jpgdec-hw
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      iommus:
+> +        minItems: 1
+> +        maxItems: 32
+> +        description:
+> +          List of the hardware port in respective IOMMU block for current Socs.
+> +          Refer to bindings/iommu/mediatek,iommu.yaml.
+> +
+> +      interrupts:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        maxItems: 1
+> +
+> +      clock-names:
+> +        items:
+> +          - const: jpgdec
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - iommus
+> +      - interrupts
+> +      - clocks
+> +      - clock-names
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - power-domains
+> +  - iommus
+> +  - dma-ranges
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        jpgdec_master {
+
+No underscores in node names.
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +                compatible = "mediatek,mt8195-jpgdec";
+> +                power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +                iommus = <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +                ranges;
+
+Mess up indentation.
+
+
+Best regards,
+Krzysztof
+
