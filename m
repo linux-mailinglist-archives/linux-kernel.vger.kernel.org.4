@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B2C5E804F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEBB5E8052
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiIWREK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S232399AbiIWRE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiIWRDy (ORCPT
+        with ESMTP id S231387AbiIWREI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:03:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D60514AD54
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:03:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D011B8220F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0505C433C1;
-        Fri, 23 Sep 2022 17:03:49 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="a/cNt+jd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663952628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zHOgIOddNY860ZL19g2r4MW0E1ZbKOT+NC2vMETCNx4=;
-        b=a/cNt+jdPiQOtxSkqLqKafMnsloCi6S6/jZ1RbPyPypuJKp6gtBwWl7WTOPO+6+GwlxRv4
-        PfGxYe7gcYa+mjaAFrxp7IzMbkJfCt9yxJ9+mBm/i6Hbd8OZ4XRGNJsT/7QBjAdyzG9o/E
-        AjYWZvVsrfs0Sht8UyVHiQEzUK9/8hk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d2b20c29 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 23 Sep 2022 17:03:48 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v3 2/3] m68k: virt: generate new RNG seed on reboot
-Date:   Fri, 23 Sep 2022 19:03:39 +0200
-Message-Id: <20220923170340.4099226-2-Jason@zx2c4.com>
-In-Reply-To: <20220923170340.4099226-1-Jason@zx2c4.com>
-References: <20220923170340.4099226-1-Jason@zx2c4.com>
+        Fri, 23 Sep 2022 13:04:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE17814AD7A;
+        Fri, 23 Sep 2022 10:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663952642; x=1695488642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PTqQK6dYlkjIw/931CWXKps3JJ2u8fVVhXqBGqzRZKA=;
+  b=aq8FOnQEUA2FLFHjMpgirg0U5RsvXBYb4YJufK6ZsBfYr9u8OetGUWnd
+   Yj9cHxYiu7ntY0aC5FXN3bA4479z0dRdUlbI2690efOqQEm3zN4+9EouQ
+   rStqKSoB1P/y2LLoesD0jTumJxug8/LmbclkeyF7DJCmYNwFRaETYpSlx
+   oSivNfS/IV/Ob6UC3n6lSQxlYl1wEDFDp3H8OM4dbps9o7PeBQygZs1Lf
+   N338CnxlM1m0pqtVTNH/+dmSjlsrQWg1cC7WpFrTuisHoiIy3Pzs1GzUb
+   25IVKFjPS7LwLoeeYGRIzcIFBZy9QRucoZvWrjFPVCKxOFQXMguVuXAm+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="362450367"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="362450367"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 10:03:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="620275074"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 23 Sep 2022 10:03:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obm5U-006a2K-0A;
+        Fri, 23 Sep 2022 20:03:40 +0300
+Date:   Fri, 23 Sep 2022 20:03:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v2 0/9] pwm: lpss: Clean up and convert to a pure library
+Message-ID: <Yy3m63T6P00SM5mp@smile.fi.intel.com>
+References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than rebooting into a system with no entropy, regenerate the RNG
-seed before rebooting, so that the new system has a fresh seed.
+On Thu, Sep 08, 2022 at 04:56:49PM +0300, Andy Shevchenko wrote:
+> First of all, a set of cleanups and code deduplications (for better
+> maintenance) to the PWM LPSS driver.
+> 
+> Second, we may (re-)use the core part as a library in the future in
+> the devices that combine the same PWM IP in their address space. So
+> convert the core file to be a pure library which doesn't require any
+> special resource handling or alike.
 
-Fixes: a1ee38ab1a75 ("m68k: virt: Use RNG seed from bootinfo block")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/m68k/virt/config.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+What happened to the PWM subsystem maintenance again?
+For weeks there is no reaction from the maintainer(s)... :-(
+If there is a lag of maintaining, perhaps we should mark it
+as Orphaned?
 
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-index 4ab22946ff68..d4627840e35b 100644
---- a/arch/m68k/virt/config.c
-+++ b/arch/m68k/virt/config.c
-@@ -45,10 +45,18 @@ static void virt_halt(void)
- 		;
- }
- 
-+static const struct bi_record *rng_seed_record;
-+
- static void virt_reset(void)
- {
- 	void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
- 
-+	if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
-+		u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
-+		get_random_bytes((u8 *)rng_seed_record->data + 2, len);
-+		*(u16 *)rng_seed_record->data = cpu_to_be16(len);
-+	}
-+
- 	iowrite32be(CMD_RESET, base + VIRT_CTRL_REG_CMD);
- 	local_irq_disable();
- 	while (1)
-@@ -101,6 +109,8 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
- 		 * length to prevent kexec from using it.
- 		 */
- 		memzero_explicit((void *)data, len + 2);
-+		/* Store a reference to be filled in on reboot. */
-+		rng_seed_record = record;
- 		break;
- 	}
- 	default:
 -- 
-2.37.3
+With Best Regards,
+Andy Shevchenko
+
 
