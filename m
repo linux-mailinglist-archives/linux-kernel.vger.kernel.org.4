@@ -2,139 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DA45E71D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278155E71D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiIWCWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 22:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S231556AbiIWCXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 22:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiIWCV7 (ORCPT
+        with ESMTP id S229522AbiIWCXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 22:21:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132581181CF;
-        Thu, 22 Sep 2022 19:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663899719; x=1695435719;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=UwDG7pDg4q+ikiSIyDkSSay/EkxC20ZvQE0rFh71LXs=;
-  b=iSwyTWNSeLffzQzp5pTUMUGSvqDdVDcvuUdNhPYhKCrD4W3DTx9Z2tx8
-   EHVDDUPdrE9sTmwqPWPPecC2IKgZQ4BHNJhzcE9tSl7ybqCkjFjDM5TGx
-   RClO5kGjCoDuyN9eXWfD+kz+E0xvjVh2QvKmIIZAjJWURQ/cvOjJ26Bum
-   3IclQio2IIR5n0BfsQGnD5Pg58Ay6uSXSpA323hFX0Q0IMIm9l5TpnXed
-   OGcjvKJb/Qsy19mlSts+GzfhJ0cVNjPCqYksAjdAIDT4fSlJ88mcUWfWR
-   iTSqxwN1jeLk2tVcjj9PJBPvwC+jaB4CPNGRGx/CCVdua3J5zjrzRe1Vz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298089181"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="298089181"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:21:58 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="653238520"
-Received: from ningqu-mobl1.ccr.corp.intel.com (HELO [10.254.210.156]) ([10.254.210.156])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:21:53 -0700
-Message-ID: <075278e0-77ce-2361-8ded-6cd6bb20216f@linux.intel.com>
-Date:   Fri, 23 Sep 2022 10:21:51 +0800
+        Thu, 22 Sep 2022 22:23:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49E11181D0;
+        Thu, 22 Sep 2022 19:23:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74184B80E8B;
+        Fri, 23 Sep 2022 02:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE9CC433C1;
+        Fri, 23 Sep 2022 02:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663899795;
+        bh=US9WnX/zDydwXEUduLYigaXcXHA4trAG1ZKUNyExbKo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b0rS3GOFYxJNVdo9tfEgS+oreCpFWivwJ5oY+HahAWtsI1GAHAIw+p2XhlH4MPJFq
+         rA/6nCP3DbIMaClDclqyuXWZVAK6QgkoWl8dQAuCW/ckq+qVc+60pelkZko/90HTwt
+         LkrwJBnqOFQHy5RFljZ1BXScQXu86NzGXC9hIQBMB3NpKxRx4S20dxY4xaGUY1dPUZ
+         yKitvkP7ZBhJgCnxpG1kMnpbpNetnyrv31I0NSzMbjq4nIcjeKyKrl/KNSLKxuVIbZ
+         fqqeufohYfKw6DhW036w9tR1/KnsqMWtZiFV2Yar353FULxcuFp2XCfOVJzkJbT8TL
+         1DXNU9rloxN3Q==
+Date:   Thu, 22 Sep 2022 19:23:13 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     <jiri@mellanox.com>, <moshe@mellanox.com>, <davem@davemloft.net>,
+        <idosch@nvidia.com>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <chenhao418@huawei.com>
+Subject: Re: [PATCH net-next 2/2] net: hns3: PF add support setting
+ parameters of congestion control algorithm by devlink param
+Message-ID: <20220922192313.628470a6@kernel.org>
+In-Reply-To: <20220923013818.51003-3-huangguangbin2@huawei.com>
+References: <20220923013818.51003-1-huangguangbin2@huawei.com>
+        <20220923013818.51003-3-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
- <20220906124458.46461-8-baolu.lu@linux.intel.com>
- <YyyECCbmfsaDpDgJ@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v13 07/13] iommu/vt-d: Add SVA domain support
-In-Reply-To: <YyyECCbmfsaDpDgJ@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/22 23:49, Jason Gunthorpe wrote:
-> On Tue, Sep 06, 2022 at 08:44:52PM +0800, Lu Baolu wrote:
->> +static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
->> +{
->> +	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
->> +	struct iommu_domain *domain;
->> +
->> +	/* Domain type specific cleanup: */
->> +	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
->> +	if (domain) {
->> +		switch (domain->type) {
->> +		case IOMMU_DOMAIN_SVA:
->> +			intel_svm_remove_dev_pasid(dev, pasid);
->> +			break;
->> +		default:
->> +			/* should never reach here */
->> +			WARN_ON(1);
->> +			break;
+On Fri, 23 Sep 2022 09:38:18 +0800 Guangbin Huang wrote:
+> Some new devices support dynamiclly configuring parameters of congestion
+> control algorithm, this patch implement it by devlink param.
 > 
-> This is eventually going to need a lot more cleaning up to split out
-> the PASID from the SVM stuff.
+> Examples of read and set command are as follows:
 > 
-> SVA should *only* be a set of predefined handlers (in the core code!)
-> for the generic PRI mechanism, it shouldn't be entangled deeply into
-> PASID or the drivers like this.
+> $ devlink dev param set pci/0000:35:00.0 name algo_param value \
+>   "type@dcqcn_alp@30_f@35_tmp@11_tkp@11_ai@60_maxspeed@17_g@11_al@19_cnptime@20" \
+>   cmode runtime
 > 
-> When we get done with this, the flow should have the core code attach
-> a SVA domain to a PASID with PRI enabled and the core code should
-> supply a generic PRI implementation that does the mmu_notifier
-> stuff.
+> $ devlink dev param show pci/0000:35:00.0 name algo_param
+> pci/0000:35:00.0:
+>   name algo_param type driver-specific
+>     values:
+>       cmode runtime value type@dcqcn_ai@60_f@35_tkp@11_tmp@11_alp@30_maxspeed@17_g@11_al@19_cnptime@20
 
-Yes. Agreed.
-
-At the beginning of this project, I wanted to consolidate the mm
-notifications into the core. However, ARM SMMUv3 and Intel handle the mm
-notifications a little differently. Then I decided to do this work
-separately from the current series.
-
-> 
-> Also, stuff like this:
-> 
-> 				/* We mandate that no page faults may be outstanding
-> 				 * for the PASID when intel_svm_unbind_mm() is called.
-> 				 * If that is not obeyed, subtle errors will happen.
-> 				 * Let's make them less subtle... */
-> 
-> Are going to be problematic for VFIO as well. In a VFIO world the
-> entire RID and its entire PASID table has to be owned by VFIO and
-> never shared - so these sequencing issues should be solvable.
-> 
-> But this is all for further series..
-
-Yes. All these sound interesting future series.
-
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-I'm very appreciated for your time.
-
-Best regards,
-baolu
+Please put your RDMA params to the RDMA subsystem.
+It's not what devlink is for. In general 95% of the time devlink params
+are not the answer upstream.
