@@ -2,69 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0ED5E7149
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6685E7152
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiIWBP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229552AbiIWBSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiIWBPz (ORCPT
+        with ESMTP id S230211AbiIWBSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:15:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9462E985AB;
-        Thu, 22 Sep 2022 18:15:54 -0700 (PDT)
+        Thu, 22 Sep 2022 21:18:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA402115F61;
+        Thu, 22 Sep 2022 18:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663895754; x=1695431754;
+  t=1663895885; x=1695431885;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CvKvMtolEyCI8+WxsUgfsfdHD6KxACdHivq41STFQOA=;
-  b=X/9EKO0Y7WA7omXNacsHLCKSg2gpQPZqwgux3NAE/8Y0Ecc8AEChaQoV
-   9M86jWh2Rc9dAijssaliNnT/8pZaNbjLd0zMUhtffEiKMVjpfFnRFJjzs
-   EGfibYuCis9i+MyAFPtiWBw5e2mS4U/tCY/kGBVC2Dilv2HL1XHJxQVeu
-   IGb254B5jkxdyBm+N77eEW7DCXuKUA1zEOvRB+uMYCZgdF6tfXbWYvuTB
-   MjPAQ6M3iZIU6o1Cnyxy5MjGwKN4gckoWFeLGncG3v4VVVjmd+hD8a2ez
-   LsF4CFhFz+UGWo7SKX26HA80tOKuTboBG0aof+jlYdN5uHWe331bZwVwc
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300465244"
+   in-reply-to:mime-version;
+  bh=l3ul+CGCdTk69XKK5rNwUowrnd4TAMKcEnFnfyDpX20=;
+  b=Ix7TsSBuzK2oebsnZliFSfHYvz1FTQrdowcNgbAillsMAbuCSivw+Qth
+   bcvKKF7Gybe3ch+H84LjqKfrNS1VGi1xv9ltrNYi2vlDcvlU0i/+5oayo
+   k9yjPqRz2S6Fs+sTTnL4hxXmWJomZnEKdprvTO73Ksfjvv7iSnhLncv0h
+   q6JEitRO1MsEplv1jk1FBpsxT/hGm63iaZPkuHMJOyNXSkc6i9whpw6Ao
+   m2K89Y/K5lCBk46ibRKoCR8GlH4Y3Ne6mtqqOj3IYFGz/O0qCfb4S8U25
+   j4IXVYwRVwBt+QWANVqHU2106AgoJzLMuM/zAw1iJe2snWW3mkMKbpSqc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="386769917"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300465244"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 18:15:54 -0700
+   d="scan'208";a="386769917"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 18:18:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="709121640"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 18:15:50 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obXID-00059I-1X;
-        Fri, 23 Sep 2022 01:15:49 +0000
-Date:   Fri, 23 Sep 2022 09:15:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, sboyd@kernel.org,
-        mturquette@baylibre.com, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de
-Cc:     kbuild-all@lists.01.org, runyang.chen@mediatek.com,
-        miles.chen@mediatek.com, wenst@chromium.org,
-        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH] reset: mediatek: Move mediatek system clock reset to
- reset folder
-Message-ID: <202209230958.2rV4kEVM-lkp@intel.com>
-References: <20220922141107.10203-1-rex-bc.chen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+   d="scan'208";a="948838379"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Sep 2022 18:18:05 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 18:18:04 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 18:18:04 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 22 Sep 2022 18:18:04 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 22 Sep 2022 18:18:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c5lL90fKt2YaWaqbNMDaUS2NGVRBSbrug/+DsDcHeSg6lXP1w0tnDpRrXaI7536lvsZA5cI8yLVAIDzUfSqKLOWCer/C1jfdU8HZh7Qdx/QmD2CQt5w2fNzntJbPfasI4So4d91ZRKdwruYc1zuRU8EmC6u9j9B30SmdQqsTn3g6F63OPRU1/6YKDcWu4RAkGIVV5BNbQlaGnXSgF67lNvWjmb1PeUGatg4rz6t6jvyfET0/aBf2zX1hojXF5YvJbK8Rp/swdJE8dQU5Zd8lf9kH1zy7xmMmH1cz6ZkRbRMQMobY4eKn7vxu8UQL+8E9/uK0VKsJXblMwvFOaNEvZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=myMUoiXtOJxDzw88Tt0zpzm75N+ctzDw88hVEii7450=;
+ b=Ls5qwhbrAimaFXMW6ByvOKNEQoWA7d2AM9rSofGuGJTOySSdlb038r8ZzGcvMvEVcXEeHSRn4fw9tcKBvabjIdu4/pgto8O4WJp2GExKN8tQA/fe4rPxo+PcOVRh6rP8srMGhuFWuRefokQE1BO4cUA8vT4/ZhUNP+b69qd4lvcoWH141fND/4YfSczaTCZA9k93ucwKFv8TlNHzT+vLCEv26OX5amUZENNOAXbgtRVm+er+yiqNpF/eeZERJhZxbMVmdvOeAJeUAM04RoF0EFlg+GFqRQ/CF3HvpPB7794xBcuBhPNF6kjfbVTzQS5SStjngouljviX4IGBnBeH0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by SJ0PR11MB5769.namprd11.prod.outlook.com (2603:10b6:a03:420::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.16; Fri, 23 Sep
+ 2022 01:18:02 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::ccec:43dc:464f:4100]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::ccec:43dc:464f:4100%5]) with mapi id 15.20.5654.016; Fri, 23 Sep 2022
+ 01:18:02 +0000
+Date:   Fri, 23 Sep 2022 09:17:25 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+CC:     Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian K??nig <christian.koenig@amd.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jacob Shin <jacob.shin@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "dev@openvswitch.org" <dev@openvswitch.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 01/12] slab: Introduce kmalloc_size_roundup()
+Message-ID: <Yy0JJV4c3DffCF+4@feng-clx>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-2-keescook@chromium.org>
+ <YyxDFfKmSNNkHBFi@hyeyoo>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220922141107.10203-1-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <YyxDFfKmSNNkHBFi@hyeyoo>
+X-ClientProxiedBy: SG2P153CA0006.APCP153.PROD.OUTLOOK.COM (2603:1096::16) To
+ MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|SJ0PR11MB5769:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc0ab040-ae7c-44e6-8509-08da9d01759a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6V8+euZIkJYjQSDnHjWKaHQEB6DTWqX6s0TcA4E4D3pSyH8Lf0c9gH8NKz5y2DR3R5qK7KA5mnOkJYrJdWTV8HdCUlRbeUb5/j6tMWQJ3bkv7wH3gmV5HFxFNvWgmqXNopNxPxp1KVKaoAmSPILkDuEupXMn3UZ7P8qecu2BM5Vtel0K4xRENxCiwKUd6d7L4mbJ93m72VYNw99gn10qlminsPH9RhxIIMYipTBFZ8e9SQrDcmeC8xnBuRa2oaAHDK1A/PS+YwG40h/Kmg86/Y3qcKsMNNrnjZcLYzronuJX7CB2ku+F6lT7rlhzQbTLPRnf8v4gBbuouOGpbgp+uF0iQEme+A8QFd67lJCIl9b3ynN3PiPzJoO/xZCsQ7h6DgEeHtBt7rh/qpWwhoOEx3wX73rmQAvL8F57LgMu8xzwZGeJq8/b3ZeIjQQwT/eIa3CbcCBwMYVknRxZPFmNfNqLk9oOJaiGEZvGEHJf8HBJHO1sQHVGRwpicctAXELMUA9IyOabI+kzAN3dTROKLbut1goOs2Uo9Fs06lK4oyHdtTrrY46vIvdtpaj03kCDskfGVU9oUfBFINcSKeqfEsqypVOdcWgvzpTR+l3xZ0v4wywYnIcOFipcq/TtZOiX8ZxDI8yu207YIr4vADFs0Wx8McaBp1rm8aztd7KOAzE6AFOjfc6wit2Ms4fadepdnnPo7TP9M4Gl5phR9vqykBoONKS9/vEumvcD0AYC74QVsRHuHJNX86EJ6NRfhZ7IfZw61tLrLytqIIOixdWlDGvD76kxGMI7wZzItUBKLX7z077VvA+F1Unn00GU5JCWAiDhjCxG9oKjtAkp9i+7jg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199015)(8936002)(186003)(66556008)(5660300002)(66946007)(83380400001)(41300700001)(4326008)(6506007)(478600001)(7406005)(26005)(7416002)(9686003)(6916009)(33716001)(6512007)(66476007)(8676002)(2906002)(86362001)(6666004)(38100700002)(54906003)(966005)(44832011)(6486002)(82960400001)(316002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?owj8151iRwJDfX+jX1EkBZacYNEQZ+4DrarNXuVKKWvghQTRrAVclv6Qq+l9?=
+ =?us-ascii?Q?ygxc68zZCXFHrWRLFuG7lRAPF9ehB3dVcax1mBB8TK9kgeV+EkoyuVks97so?=
+ =?us-ascii?Q?8kn2quQV6CVmCOzP6miUSSASQmqps/bHhuVdzp60nWaSBVYibKeBZZjDqPA8?=
+ =?us-ascii?Q?RwFsU02OPnjT14XnjxyQ1/EcPaYf+LQ0L6X+wBMeWiofymaMFxH04EkwWSqL?=
+ =?us-ascii?Q?PHfb5O4/xOZe+QGGxuBo9HWNtJR5lv4lSM7smiqlvWjIbWvZRx8eUCgwasqE?=
+ =?us-ascii?Q?TKcyM2JJKSLLgMr855jqW9Q7kqOfldQtV/iMuPMqeMNMcENRC/MKuYedlRj/?=
+ =?us-ascii?Q?8bYgsXT2rXt/ZcDjNiFOWh+so8s/oM/mTii1T8P1CZFwU8g2ad7rknPGPnTy?=
+ =?us-ascii?Q?1VmPc9UQpe8quJJnNijgq8F7OJA1eaYfaCP6PdawuSQ6xKlP+yTCjHxNwZ0E?=
+ =?us-ascii?Q?Sv9R0M5suOZV3ihcEMQ7ox/l1dRJizFKICCsyHoGjeFXAmNhVBDEyxVCS7iT?=
+ =?us-ascii?Q?EP2TMdjDSILcwR3y//i8cJlmejQHzlZSy8CtgmdhLX4B+R8lepxkEX9yhqKH?=
+ =?us-ascii?Q?Bi9NSHnZWNxDkgTfT04M500RLu1BwUVxWuyi/mvLCd7gXwXeI8nSVOGMo5Rg?=
+ =?us-ascii?Q?dNf/2vnCIRx+NwblKOUlcl7zP7oaT+0/pO2IU+f/54dBjNuTr/W3qCMb3rn1?=
+ =?us-ascii?Q?VfkZYgtRH62O7Oggps3WOXAKxMgysRPOEdSAHGELetvgBC+dAIFFwVjyqiYa?=
+ =?us-ascii?Q?I/k/qGRLzlnCdAX7mbDErdnM340agdqbT2/wgq8gW6B1lJJ89Sgh5wPLE05S?=
+ =?us-ascii?Q?eLXEkfJoQfReO35JE4lCw2BC8yJfr5g3ywfiALbMLY7Phi5rHFBu1pE+jtuO?=
+ =?us-ascii?Q?XHOxiXonZy95JkwU790XsyRdR8eScPgz5o5sLUXK1QbFC3dA5NLx+PCLJ6AY?=
+ =?us-ascii?Q?2BrtnhLAy25yVGOYIHZ/6Rp/LFUwcP5SxnyyviVqErhG8nlvE/6+IZXa1Z2E?=
+ =?us-ascii?Q?w3OJpkqJw5WAVRfzq1OrhWNhiJ6lb8uvNKKeLNguZDVfg5KnIVQI3AhXacva?=
+ =?us-ascii?Q?/LDlikCmgzqO+JLH2TMrkviNssITHCRjeh3wT7LO4Jr2j3mfGXS6sSU6aaEA?=
+ =?us-ascii?Q?roM1NjQffBMm8CqCNrWQLy4Pq37jLNZ1EZ6CP0cMJro8eY5XTBMvXCmQQb9j?=
+ =?us-ascii?Q?zt3VQcZoGRPp7PYFiDUH/oqURkY/reYUQHHGYbXm0dol9AL2QFwS1Iqd95As?=
+ =?us-ascii?Q?W4R2HokMDZI0Dh0bnaxZEPso2W+2F9JhlDAiG1KwCnrFiqP78syEkC+DuISg?=
+ =?us-ascii?Q?c8q+MQOj1/n0bnWapMAv9pz8cEzksNXJNkhmC/crR3LXR4AI+ook3DXrgw5U?=
+ =?us-ascii?Q?zyTs3kWw8xPkCPFSV0JquRpITFTih8xi4FkgF+Ow58TcvQjoUpg6su8DXIQ+?=
+ =?us-ascii?Q?i1PP7AQqETUe1Xf43ftPagC3iZjCBgkn7MeSl+covGXs7u4MVtJfsgem3+Tb?=
+ =?us-ascii?Q?y+vZqwWss1JRZakS2ZLLwitCMQnRcyip6YyStxXjF+yoVSIdtMFI4ku9V6eH?=
+ =?us-ascii?Q?pzHauWk33lkFYTL1ryHK4hfmvz/BxnPEMY4lWlCD?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc0ab040-ae7c-44e6-8509-08da9d01759a
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 01:18:02.2591
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: REs2eeqwREID/61A/OqDNwf1VdpYcsGMa+CVnsln0X/rG4ol9P/vOb64oJHStPfdvzzu4p5rb+p2NA1Gk9mJVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5769
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,223 +181,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bo-Chen,
+Thanks Hyeonggon for looping in me.
 
-Thank you for the patch! Yet something to improve:
+On Thu, Sep 22, 2022 at 07:12:21PM +0800, Hyeonggon Yoo wrote:
+> On Wed, Sep 21, 2022 at 08:10:02PM -0700, Kees Cook wrote:
+> > In the effort to help the compiler reason about buffer sizes, the
+> > __alloc_size attribute was added to allocators. This improves the scope
+> > of the compiler's ability to apply CONFIG_UBSAN_BOUNDS and (in the near
+> > future) CONFIG_FORTIFY_SOURCE. For most allocations, this works well,
+> > as the vast majority of callers are not expecting to use more memory
+> > than what they asked for.
+> > 
+> > There is, however, one common exception to this: anticipatory resizing
+> > of kmalloc allocations. These cases all use ksize() to determine the
+> > actual bucket size of a given allocation (e.g. 128 when 126 was asked
+> > for). This comes in two styles in the kernel:
+> > 
+> > 1) An allocation has been determined to be too small, and needs to be
+> >    resized. Instead of the caller choosing its own next best size, it
+> >    wants to minimize the number of calls to krealloc(), so it just uses
+> >    ksize() plus some additional bytes, forcing the realloc into the next
+> >    bucket size, from which it can learn how large it is now. For example:
+> > 
+> > 	data = krealloc(data, ksize(data) + 1, gfp);
+> > 	data_len = ksize(data);
+> > 
+> > 2) The minimum size of an allocation is calculated, but since it may
+> >    grow in the future, just use all the space available in the chosen
+> >    bucket immediately, to avoid needing to reallocate later. A good
+> >    example of this is skbuff's allocators:
+> > 
+> > 	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
+> > 	...
+> > 	/* kmalloc(size) might give us more room than requested.
+> > 	 * Put skb_shared_info exactly at the end of allocated zone,
+> > 	 * to allow max possible filling before reallocation.
+> > 	 */
+> > 	osize = ksize(data);
+> >         size = SKB_WITH_OVERHEAD(osize);
+> > 
+> > In both cases, the "how large is the allocation?" question is answered
+> > _after_ the allocation, where the compiler hinting is not in an easy place
+> > to make the association any more. This mismatch between the compiler's
+> > view of the buffer length and the code's intention about how much it is
+> > going to actually use has already caused problems[1]. It is possible to
+> > fix this by reordering the use of the "actual size" information.
+> > 
+> > We can serve the needs of users of ksize() and still have accurate buffer
+> > length hinting for the compiler by doing the bucket size calculation
+> > _before_ the allocation. Code can instead ask "how large an allocation
+> > would I get for a given size?".
+> > 
+> > Introduce kmalloc_size_roundup(), to serve this function so we can start
+> > replacing the "anticipatory resizing" uses of ksize().
+> >
+> 
+> Cc-ing Feng Tang who may welcome this series ;)
+ 
+Indeed! This will help our work of extending slub redzone check,
+as we also ran into some trouble with ksize() users when extending
+the redzone support to this extra allocated space than requested
+size [1], and have to disable the redzone sanity for all ksize()
+users [2].
 
-[auto build test ERROR on v6.0-rc6]
-[also build test ERROR on linus/master]
-[cannot apply to clk/clk-next pza/reset/next mbgg-mediatek/for-next next-20220921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1]. https://lore.kernel.org/lkml/20220719134503.GA56558@shbuild999.sh.intel.com/
+[2]. https://lore.kernel.org/lkml/20220913065423.520159-5-feng.tang@intel.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Chen-Chen/reset-mediatek-Move-mediatek-system-clock-reset-to-reset-folder/20220922-221303
-base:    521a547ced6477c54b4b0cc206000406c221b4d6
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220923/202209230958.2rV4kEVM-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/69ce72445492a02115b1e7c7527a8a107f48aab8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bo-Chen-Chen/reset-mediatek-Move-mediatek-system-clock-reset-to-reset-folder/20220922-221303
-        git checkout 69ce72445492a02115b1e7c7527a8a107f48aab8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/
+Thanks,
+Feng
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device/driver.h:21,
-                    from include/linux/device.h:32,
-                    from include/linux/auxiliary_bus.h:11,
-                    from drivers/reset/reset-mediatek-sysclk.c:6:
->> drivers/reset/reset-mediatek-sysclk.c:499:32: error: 'mtk_reset_ids' undeclared here (not in a function); did you mean 'mtk_reset_ops'?
-     499 | MODULE_DEVICE_TABLE(auxiliary, mtk_reset_ids);
-         |                                ^~~~~~~~~~~~~
-   include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^~~~
->> drivers/reset/reset-mediatek-sysclk.c:539:5: warning: no previous prototype for 'mtk_reset_init_with_node' [-Wmissing-prototypes]
-     539 | int mtk_reset_init_with_node(struct device_node *np, const char *name)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/reset/reset-mediatek-sysclk.c:550:6: warning: no previous prototype for 'mtk_rst_remove_with_node' [-Wmissing-prototypes]
-     550 | void mtk_rst_remove_with_node(struct device_node *np, const char *name)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/module.h:244:21: error: '__mod_auxiliary__mtk_reset_ids_device_table' aliased to undefined symbol 'mtk_reset_ids'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |                     ^~~~~~
-   drivers/reset/reset-mediatek-sysclk.c:499:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
-     499 | MODULE_DEVICE_TABLE(auxiliary, mtk_reset_ids);
-         | ^~~~~~~~~~~~~~~~~~~
-
-
-vim +499 drivers/reset/reset-mediatek-sysclk.c
-
-   402	
-   403	static struct auxiliary_device_id mtk_sysclk_reset_ids[] = {
-   404		{
-   405			.name = "clk_mt2701_eth.mt2701-eth-rst",
-   406			.driver_data = MTK_RST_ID_MT2701_ETH,
-   407		},
-   408		{
-   409			.name = "clk_mt2701_g3d.mt2701-g3d-rst",
-   410			.driver_data = MTK_RST_ID_MT2701_G3D,
-   411		},
-   412		{
-   413			.name = "clk_mt2701_hif.mt2701-hif-rst",
-   414			.driver_data = MTK_RST_ID_MT2701_HIF,
-   415		},
-   416		{
-   417			.name = "clk_mt2701.mt2701-infrasys-rst",
-   418			.driver_data = MTK_RST_ID_MT2701_INFRASYS,
-   419		},
-   420		{
-   421			.name = "clk_mt2701.mt2701-pericfg-rst",
-   422			.driver_data = MTK_RST_ID_MT2701_PERICFG,
-   423		},
-   424		{
-   425			.name = "clk_mt2712.mt2712-infra-rst",
-   426			.driver_data = MTK_RST_ID_MT2712_INFRA,
-   427		},
-   428		{
-   429			.name = "clk_mt2712.mt2712-peri-rst",
-   430			.driver_data = MTK_RST_ID_MT2712_PERI,
-   431		},
-   432		{
-   433			.name = "clk_mt7622_eth.mt7622-eth-rst",
-   434			.driver_data = MTK_RST_ID_MT7622_ETH,
-   435		},
-   436		{
-   437			.name = "clk_mt7622_hif.mt7622-usb-rst",
-   438			.driver_data = MTK_RST_ID_MT7622_SSUSBSYS,
-   439		},
-   440		{
-   441			.name = "clk_mt7622_hif.mt7622-pcie-rst",
-   442			.driver_data = MTK_RST_ID_MT7622_PCIESYS,
-   443		},
-   444		{
-   445			.name = "clk_mt7622.mt7622-infrasys-rst",
-   446			.driver_data = MTK_RST_ID_MT7622_INFRASYS,
-   447		},
-   448		{
-   449			.name = "clk_mt7622.mt7622-pericfg-rst",
-   450			.driver_data = MTK_RST_ID_MT7622_PERICFG,
-   451		},
-   452		{
-   453			.name = "clk_mt7629_eth.mt7629-ethsys-rst",
-   454			.driver_data = MTK_RST_ID_MT7629_ETHSYS,
-   455		},
-   456		{
-   457			.name = "clk_mt7629_hif.mt7629-usb-rst",
-   458			.driver_data = MTK_RST_ID_MT7629_SSUSBSYS,
-   459		},
-   460		{
-   461			.name = "clk_mt7629_hif.mt7629-pcie-rst",
-   462			.driver_data = MTK_RST_ID_MT7629_PCIESYS,
-   463		},
-   464		{
-   465			.name = "clk_mt8135.mt8135-infrasys-rst",
-   466			.driver_data = MTK_RST_ID_MT8135_INFRASYS,
-   467		},
-   468		{
-   469			.name = "clk_mt8135.mt8135-pericfg-rst",
-   470			.driver_data = MTK_RST_ID_MT8135_PERICFG,
-   471		},
-   472		{
-   473			.name = "clk_mt8173.mt8173-infracfg-rst",
-   474			.driver_data = MTK_RST_ID_MT8173_INFRACFG,
-   475		},
-   476		{
-   477			.name = "clk_mt8173.mt8173-pericfg-rst",
-   478			.driver_data = MTK_RST_ID_MT8173_PERICFG,
-   479		},
-   480		{
-   481			.name = "clk_mt8183.mt8183-infra-rst",
-   482			.driver_data = MTK_RST_ID_MT8183_INFRA,
-   483		},
-   484		{
-   485			.name = "clk_mtk.mt8186-infra-ao-rst",
-   486			.driver_data = MTK_RST_ID_MT8186_INFRA_AO,
-   487		},
-   488		{
-   489			.name = "clk_mt8192.mt8192-infra-rst",
-   490			.driver_data = MTK_RST_ID_MT8192_INFRA,
-   491		},
-   492		{
-   493			.name = "clk_mtk.mt8195-infra-ao-rst",
-   494			.driver_data = MTK_RST_ID_MT8195_INFRA_AO,
-   495		},
-   496		{
-   497		},
-   498	};
- > 499	MODULE_DEVICE_TABLE(auxiliary, mtk_reset_ids);
-   500	
-   501	/* reset data */
-   502	static struct mtk_clk_rst_data clk_rst_data[] = {
-   503		[MTK_RST_ID_MT2701_ETH]		= { .desc = &mt2701_eth_rst_desc, },
-   504		[MTK_RST_ID_MT2701_G3D]		= { .desc = &mt2701_g3d_clk_rst_desc, },
-   505		[MTK_RST_ID_MT2701_HIF]		= { .desc = &mt2701_eth_rst_desc, },
-   506		[MTK_RST_ID_MT2701_INFRASYS]	= { .desc = &mt2701_infrasys_clk_rst_desc, },
-   507		[MTK_RST_ID_MT2701_PERICFG]	= { .desc = &mt2701_pericfg_clk_rst_desc, },
-   508		[MTK_RST_ID_MT2712_INFRA]	= { .desc = &mt2701_infrasys_clk_rst_desc, },
-   509		[MTK_RST_ID_MT2712_PERI]	= { .desc = &mt2701_pericfg_clk_rst_desc, },
-   510		[MTK_RST_ID_MT7622_ETH]		= { .desc = &mt2701_eth_rst_desc, },
-   511		[MTK_RST_ID_MT7622_SSUSBSYS]	= { .desc = &mt2701_eth_rst_desc, },
-   512		[MTK_RST_ID_MT7622_PCIESYS]	= { .desc = &mt2701_eth_rst_desc, },
-   513		[MTK_RST_ID_MT7622_INFRASYS]	= { .desc = &mt7622_infrasys_clk_rst_desc, },
-   514		[MTK_RST_ID_MT7622_PERICFG]	= { .desc = &mt2701_pericfg_clk_rst_desc, },
-   515		[MTK_RST_ID_MT7629_ETHSYS]	= { .desc = &mt2701_eth_rst_desc, },
-   516		[MTK_RST_ID_MT7629_SSUSBSYS]	= { .desc = &mt2701_eth_rst_desc, },
-   517		[MTK_RST_ID_MT7629_PCIESYS]	= { .desc = &mt2701_eth_rst_desc, },
-   518		[MTK_RST_ID_MT8135_INFRASYS]	= { .desc = &mt2701_infrasys_clk_rst_desc, },
-   519		[MTK_RST_ID_MT8135_PERICFG]	= { .desc = &mt2701_pericfg_clk_rst_desc, },
-   520		[MTK_RST_ID_MT8173_INFRACFG]	= { .desc = &mt2701_infrasys_clk_rst_desc, },
-   521		[MTK_RST_ID_MT8173_PERICFG]	= { .desc = &mt2701_pericfg_clk_rst_desc, },
-   522		[MTK_RST_ID_MT8183_INFRA]	= { .desc = &mt8183_rst_desc, },
-   523		[MTK_RST_ID_MT8186_INFRA_AO]	= { .desc = &mt8186_rst_desc, },
-   524		[MTK_RST_ID_MT8192_INFRA]	= { .desc = &mt8192_rst_desc, },
-   525		[MTK_RST_ID_MT8195_INFRA_AO]	= { .desc = &mt8195_rst_desc, },
-   526		{},
-   527	};
-   528	
-   529	static struct mtk_clk_rst_data *find_rst_data(const char *name)
-   530	{
-   531		int i;
-   532	
-   533		for (i = 0; i < ARRAY_SIZE(mtk_sysclk_reset_ids); i++)
-   534			if (mtk_sysclk_reset_ids[i].name == name)
-   535				return &clk_rst_data[mtk_sysclk_reset_ids[i].driver_data];
-   536		return NULL;
-   537	}
-   538	
- > 539	int mtk_reset_init_with_node(struct device_node *np, const char *name)
-   540	{
-   541		struct mtk_clk_rst_data *data = find_rst_data(name);
-   542	
-   543		if (!np || !data)
-   544			return -EINVAL;
-   545	
-   546		return register_rst_ctrl_with_node(np, data);
-   547	}
-   548	EXPORT_SYMBOL_GPL(mtk_reset_init_with_node);
-   549	
- > 550	void mtk_rst_remove_with_node(struct device_node *np, const char *name)
-   551	{
-   552		struct mtk_clk_rst_data *data = find_rst_data(name);
-   553	
-   554		if (!np || !data)
-   555			return;
-   556	
-   557		reset_controller_unregister(&data->rcdev);
-   558	}
-   559	EXPORT_SYMBOL_GPL(mtk_rst_remove_with_node);
-   560	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > [1] https://github.com/ClangBuiltLinux/linux/issues/1599
+> >     https://github.com/KSPP/linux/issues/183
+> > 
+> > Cc: Vlastimil Babka <vbabka@suse.cz>
+> > Cc: Pekka Enberg <penberg@kernel.org>
+> > Cc: David Rientjes <rientjes@google.com>
+> > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: linux-mm@kvack.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
