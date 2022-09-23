@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9875E84B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961FD5E84C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiIWVPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
+        id S232799AbiIWVTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 17:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiIWVP2 (ORCPT
+        with ESMTP id S232578AbiIWVTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:15:28 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5146810974A;
-        Fri, 23 Sep 2022 14:15:26 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:41498)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1obq16-00E7wF-5r; Fri, 23 Sep 2022 15:15:24 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:42904 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1obq15-002Iu9-9s; Fri, 23 Sep 2022 15:15:23 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Cambda Zhu <cambda@linux.alibaba.com>
-Cc:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Dust Li <dust.li@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>
-References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
-        <87pmfn5tu1.fsf@email.froward.int.ebiederm.org>
-        <87r102ejwo.fsf@oldenburg.str.redhat.com>
-        <0CC7D0E7-71C5-4DAC-8A01-F9E13659F864@linux.alibaba.com>
-        <87illeedc5.fsf@oldenburg.str.redhat.com>
-        <613994F7-054D-4992-A159-96D34B17BC7F@linux.alibaba.com>
-Date:   Fri, 23 Sep 2022 16:15:17 -0500
-In-Reply-To: <613994F7-054D-4992-A159-96D34B17BC7F@linux.alibaba.com> (Cambda
-        Zhu's message of "Fri, 23 Sep 2022 16:40:15 +0800")
-Message-ID: <87illd4wt6.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 23 Sep 2022 17:19:47 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8C27FDA
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:19:45 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d11so1257093pll.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ZnB23LLp/vlB+ryCWR3RfzNeLIOvdyceafUVjogXEh8=;
+        b=Y0ehwZOs+7K7MVGIhod7Oz82juhcilJsd4wl7E7yhwCNzs0m2pNmp9XEEfoPUh6mNC
+         rOHJpV9AYYiNrGQgNITm72gcxDBIDDUvag8cZ/PJV24RhHG7n7IWH65/OiySYH0R6YLB
+         LMZVh3V1mGG6AIVleW4VIPVY6lhqB3r4vbsz8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZnB23LLp/vlB+ryCWR3RfzNeLIOvdyceafUVjogXEh8=;
+        b=IuiVfNUr7PoLHp8HQ4Qmj+wz6b1ar6Fg1q8yMzNLUVEcrzy5y3l+qGd6/tHIbkmOT8
+         4PjQMFXCTXn+hpYNpWTOZwQQo/gaKKlGdUc5Z2kEjGk699948xrvcDcl8xdzbu2Io4yD
+         aZ7L+ApzQr7UUZ9YtiFto+GzqSMyp4DhPNRdGk0KWwmPrQezc3Dnp/3bcVhmdvZ6mq5v
+         ZvI/XcTPSrmknLrjWCiVmv6JQaYHG302MU9Teg6KZrYo818P6Ocba/W6IFLX5oB/iCiv
+         LEFDgqyOWLgpjtxHwLlO6F93EDmBQ2PMmZKj60h/2DsnFLOEmG4N1rm0ygRCYv3kG8pk
+         semw==
+X-Gm-Message-State: ACrzQf18zWStAyiqfBQ3+aukwKpoZwnZD9pRpzG0G0w13nMf3PTRyTvH
+        yTznCrNspnCBRCcdcyzg6Rj1Uw==
+X-Google-Smtp-Source: AMsMyM7aSk+mgvNkxhO3PAF0I3gXdX+yml32CiH6ECVZxXMsQdqv44K9s+DqCiaekrj/oHbACSgxpw==
+X-Received: by 2002:a17:90b:1bc3:b0:203:84d:59b1 with SMTP id oa3-20020a17090b1bc300b00203084d59b1mr23683457pjb.37.1663967984643;
+        Fri, 23 Sep 2022 14:19:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902eb8c00b0016dbe37cebdsm6230493plg.246.2022.09.23.14.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 14:19:43 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 14:19:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
+Message-ID: <202209231417.F73F40060@keescook>
+References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
+ <20220922193157.1673623-1-dave.hansen@linux.intel.com>
+ <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
+ <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
+ <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
+ <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
+ <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
+ <202209231126.6855D54@keescook>
+ <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1obq15-002Iu9-9s;;;mid=<87illd4wt6.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/4VcLV1GEezk2s9ZhUWxWg4vG40jA8jlg=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: ; sa02 0; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Cambda Zhu <cambda@linux.alibaba.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 349 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.8 (1.1%), b_tie_ro: 2.6 (0.7%), parse: 0.68
-        (0.2%), extract_message_metadata: 2.4 (0.7%), get_uri_detail_list:
-        0.98 (0.3%), tests_pri_-1000: 2.8 (0.8%), tests_pri_-950: 1.07 (0.3%),
-        tests_pri_-900: 0.83 (0.2%), tests_pri_-90: 111 (31.9%), check_bayes:
-        110 (31.5%), b_tokenize: 4.7 (1.3%), b_tok_get_all: 6 (1.6%),
-        b_comp_prob: 1.38 (0.4%), b_tok_touch_all: 96 (27.4%), b_finish: 0.68
-        (0.2%), tests_pri_0: 213 (61.0%), check_dkim_signature: 0.38 (0.1%),
-        check_dkim_adsp: 1.63 (0.5%), poll_dns_idle: 0.25 (0.1%),
-        tests_pri_10: 1.79 (0.5%), tests_pri_500: 6 (1.7%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: Syscall kill() can send signal to thread ID
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cambda Zhu <cambda@linux.alibaba.com> writes:
+On Fri, Sep 23, 2022 at 09:53:02PM +0200, Ard Biesheuvel wrote:
+> On Fri, 23 Sept 2022 at 20:31, Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Sep 23, 2022 at 04:26:58PM +0200, Ard Biesheuvel wrote:
+> > > I was basically making the point that we still support i386 without
+> > > PAE (which is a prerequisite for supporting non-executable mappings),
+> > > and if we are going to be pedantic about security on this
+> > > architecture, we should probably make PAE mandatory as well.
+> >
+> > My expectation would be that if someone is running modern kernels on i386,
+> > they're not using PAE. If they care about PAE, I'd expect them to have
+> > long since moved to x86_64.
+> >
+> 
+> Not sure I follow. If they care about PAE, they turn it on. Or do you
+> mean 'if they care about being able to address lots of physical
+> memory'? Because the *other* reason you might care about PAE is
+> because it gives you NX support.
 
->> On Sep 23, 2022, at 15:53, Florian Weimer <fweimer@redhat.com> wrote:
->> 
->>> I don't quite understand what you mean, sorry. But if kill() returns
->>> -ESRCH for tid which is not equal to tgid, kill() can only send signal
->>> to thread group via main thread id, that is what BSD did and manual
->>> said. It seems not odd?
->> 
->> It's still odd because there's one TID per process that's valid for
->> kill by accident.  That's all.
+Right, I meant if they care about NX (and the topic of this thread)
+they want PAE, and if they want PAE, they likely moved to x86_64 long
+long ago for new kernels.
 
-> As far as I know, there is no rule forbidding 'process ID'(TGID on Linux)
-> equals to main thread ID, is it right?
+> But currently, PAE is not even enabled in the i386_defconfig, and
+> defaults to off. This means people that are unaware of this won't
+> enable it, and will be running without NX support.
 
-There is an unfortunate guarantee that glibc depends upon that after
-exec TGID == TID for the initial thread in a process.  I say unfortunate
-because maintaining that guarantee when another thread in the process
-calls exec is a bit painful.
+And they all make me cry. ;)
 
-> If one wants to send signal to a specific thread, tgkill() can do
-> that. As far as I understand, the difference between kill() and
-> tgkill() is whether the signal is set on shared_pending, whatever the
-> ID is a process ID or a thread ID. For Linux, the main thread ID just
-> equals to the process ID.
+> > > If we are ok with the current state, enabling this permission check on
+> > > i386 makes no sense.
+> >
+> > I'd agree. If it's a choice between "spend a lot of time making sure
+> > this works correctly on i386" and "don't do this at all on i386", I
+> > would pick the latter. If someone steps up to do the former, then by
+> > all means take the patches.
+> >
+> 
+> OK, so it seems we're all in violent agreement here. And if there is
+> ever a push for enabling security features on 32-bit, we can add this
+> to the laundry list of things that need to be looked at.
 
-Correct.  kill and tgkill uses different signal queues.  Kill is global
-to the destination process and tgkill is always thread local.
+Yup.
 
-> So the meaning of kill(main_tid, sig) is sending signal to a process,
-> of which the PID equals to the first argument. It's not odd, I think.
-
-Yes, the oddity is the TGID and TID share the same value, nothing else.
-
-Eric
+-- 
+Kees Cook
