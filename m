@@ -2,335 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F425E784B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B455E784A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiIWK1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S231206AbiIWK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiIWK1T (ORCPT
+        with ESMTP id S231445AbiIWK1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:27:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEC712BD80
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663928836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bXO9oOvEakJQaCux4sN1MC8/DbUtPOyx4yghkQLDDTQ=;
-        b=Yerc3ltYlrXMkRDwGMLpGI/cqJ3XkbGZL9USbvAjau7heKoGhxKH1/iOZjIZLTFyjb8Dsi
-        kA2RYeCJhYnIkIB06JaUzW3lih2FJstOKzDTNRtohSFqtANDQ5wEjg6q7cVTD+owX3Vo1W
-        IND9ESLocqzIF5PFHChQIHhcVdVvAnM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-AxwnU0S_NgaeAGMX1rvJnw-1; Fri, 23 Sep 2022 06:27:10 -0400
-X-MC-Unique: AxwnU0S_NgaeAGMX1rvJnw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C8F080029D;
-        Fri, 23 Sep 2022 10:27:10 +0000 (UTC)
-Received: from starship (unknown [10.40.193.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6555D40C94AA;
-        Fri, 23 Sep 2022 10:27:08 +0000 (UTC)
-Message-ID: <e84ebf0a7ac9322bd0cfa742ef6dd2bbfdac0df9.camel@redhat.com>
-Subject: Re: [PATCH v3 07/28] KVM: x86: Inhibit APIC memslot if x2APIC and
- AVIC are enabled
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Fri, 23 Sep 2022 13:27:07 +0300
-In-Reply-To: <20220920233134.940511-8-seanjc@google.com>
-References: <20220920233134.940511-1-seanjc@google.com>
-         <20220920233134.940511-8-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 23 Sep 2022 06:27:31 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BD1128883
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:27:30 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id t70so11856831pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=/w7UwzbnmRu6xEONdwmcsNTVMZbCIcvKyFDV77tAiGg=;
+        b=mehSYMeQH8vOgqAOnwXfGbYx+IpqCu5xdiL89kkg46DrWR8EVIhDqlVLrMK84WfLBB
+         EHRTcIyurlarGnPmFcwDx8g577B7xFhNLIciS6F3ctrEJNt5dnDTSB7nX47utcyLCLGb
+         H5+diuZ6d+2QxalKWw8jC8ohSt5uMVqaJMdRtv3q//TFHgVub4QkReED8S1/BQcmjRdk
+         9/WclkM2Nft0LF2S4C5Kal3Rx2P8kXhTJYCEUHrYmfTm9NgMzD0/cnJ+tYTAcmOedKmS
+         aco1p239ISkaZXkLq5qNtemNoaM6VjC6WJ5PQUQi10Kd+BEtqsHjhcckZkAyem8aFq8Y
+         3mJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/w7UwzbnmRu6xEONdwmcsNTVMZbCIcvKyFDV77tAiGg=;
+        b=oyCrPjynH8qCrnxps4Nk5zhyHWBM5EYZhltISdW7d+sMrMTP8ze39y+/MVq4sArNKO
+         uy85OMpuGueby+b8rMtamiFil8I1LjABfJQKf6mUvBY/6+klqDcnZ+G6uykis6YgMkJk
+         DjFuVS8xUaFdPhB7P8oHVSkUgsToru9s2PzIFk/Sz4AzDkJmQBIOsqlmYko60qJrQTLa
+         sYrDmCjuS5YOe7HcAEGPMNjD4JrijsAEAjdDssV/J5xcZdss3MIuKPLK9L9w6s4clCvO
+         ycIGZZ1OxRXCRDfy4gd/t9pBIAt25WvtoIvB2F+kAseI2nzaAT9j4hhF3UnWlMWPtnZZ
+         xIfQ==
+X-Gm-Message-State: ACrzQf2gIJ13SOc2qDAuYl4A5yJpKP5LIzjXAh2wCjKZsVc2+hamZvM+
+        /HIW+fSFbqIvLu1ta67UJvk=
+X-Google-Smtp-Source: AMsMyM56YedmD5V4tFh9GW+U5G0/uzoj2JAE4AJoZh+GDlKD73vrBZx+LRvm/XOrqzuRLehduaT9KQ==
+X-Received: by 2002:a63:cc4a:0:b0:439:1c48:2fed with SMTP id q10-20020a63cc4a000000b004391c482fedmr7158359pgi.618.1663928849810;
+        Fri, 23 Sep 2022 03:27:29 -0700 (PDT)
+Received: from localhost ([223.104.44.30])
+        by smtp.gmail.com with ESMTPSA id ij29-20020a170902ab5d00b00172e19c5f8bsm5669042plb.168.2022.09.23.03.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 03:27:29 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     yin31149@gmail.com
+Cc:     18801353760@163.com, almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] fs/ntfs3: fix slab-out-of-bounds Read in run_unpack
+Date:   Fri, 23 Sep 2022 18:27:21 +0800
+Message-Id: <20220923102721.32425-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220923084917.17666-1-yin31149@gmail.com>
+References: <20220923084917.17666-1-yin31149@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-20 at 23:31 +0000, Sean Christopherson wrote:
-> Free the APIC access page memslot if any vCPU enables x2APIC and SVM's
-> AVIC is enabled to prevent accesses to the virtual APIC on vCPUs with
-> x2APIC enabled.   On AMD, due to its "hybrid" mode where AVIC is enabled
-> when x2APIC is enabled even without x2AVIC support, keeping the APIC
-> access page memslot results in the guest being able to access the virtual
-> APIC page as x2APIC is fully emulated by KVM.  I.e. hardware isn't aware
-> that the guest is operating in x2APIC mode.
-> 
-> Intel doesn't suffer from the same issue as APICv has fully independent
-> VMCS controls for xAPIC vs. x2APIC virtualization.  Technically, KVM
-> should provide bus error semantics and not memory semantics for the APIC
-> page when x2APIC is enabled, but KVM already provides memory semantics in
-> other scenarios, e.g. if APICv/AVIC is enabled and the APIC is hardware
-> disabled (via APIC_BASE MSR).
-> 
-> Reserve an inhibit bit so that common code can detect whether or not the
-> "x2APIC inhibit" applies, but use a dedicated flag to track the inhibit
-> so that it doesn't need to be stripped from apicv_inhibit_reasons (since
-> it's not a "full" inhibit).
-> 
-> Note, setting apic_access_memslot_inhibited without taking locks relies
-> on it being sticky, and also relies on apic_access_memslot_enabled being
-> set during vCPU creation (before kvm_vcpu_reset()).  vCPUs can race to
-> set the inhibit and delete the memslot, i.e. can get false positives, but
-> can't false negatives as apic_access_memslot_enabled can't be toggle "on"
-> once any vCPU reaches kvm_lapic_set_base().
-> 
-> Opportunistically drop the "can" while updating avic_activate_vmcb()'s
-> comment, i.e. to state that KVM _does_ support the hybrid mode.  Move
-> the "Note:" down a line to conform to preferred kernel/KVM multi-line
-> comment style.
-> 
-> Opportunistically update the apicv_update_lock comment, as it isn't
-> actually used to protect apic_access_memslot_enabled (it's protected by
-> slots_lock).
-> 
-> Fixes: 0e311d33bfbe ("KVM: SVM: Introduce hybrid-AVIC mode")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, 23 Sept 2022 at 16:51, Hawkins Jiawei <yin31149@gmail.com> wrote:
+>
+> Syzkaller reports slab-out-of-bounds bug as follows:
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+> Read of size 1 at addr ffff88801bbdff02 by task syz-executor131/3611
+>
+> [...]
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+>  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+>  run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+>  run_unpack_ex+0xb0/0x7c0 fs/ntfs3/run.c:1057
+>  ntfs_read_mft fs/ntfs3/inode.c:368 [inline]
+>  ntfs_iget5+0xc20/0x3280 fs/ntfs3/inode.c:501
+>  ntfs_loadlog_and_replay+0x124/0x5d0 fs/ntfs3/fsntfs.c:272
+>  ntfs_fill_super+0x1eff/0x37f0 fs/ntfs3/super.c:1018
+>  get_tree_bdev+0x440/0x760 fs/super.c:1323
+>  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+>  do_new_mount fs/namespace.c:3040 [inline]
+>  path_mount+0x1326/0x1e20 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  [...]
+>  </TASK>
+>
+> The buggy address belongs to the physical page:
+> page:ffffea00006ef600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bbd8
+> head:ffffea00006ef600 order:3 compound_mapcount:0 compound_pincount:0
+> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>  ffff88801bbdfe00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff88801bbdfe80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> >ffff88801bbdff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>                    ^
+>  ffff88801bbdff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff88801bbe0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ==================================================================
+>
+> Kernel will tries to read record and parse MFT from disk in
+> ntfs_read_mft().
+>
+> Yet the problem is that during enumerating attributes in record,
+> kernel doesn't check whether run_off field loading from the disk
+> is a valid value.
+>
+> To be more specific, if attr->nres.run_off is larger than attr->size,
+> kernel will passes an invalid argument run_buf_size in
+> run_unpack_ex(), which having an integer overflow. Then this invalid
+> argument will triggers the slab-out-of-bounds Read bug as above.
+>
+> This patch solves it by adding the sanity check between
+> the offset to packed runs and attribute size.
+>
+> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
 > ---
->  arch/x86/include/asm/kvm_host.h | 18 ++++++++++++++---
->  arch/x86/kvm/lapic.c            | 34 +++++++++++++++++++++++++++++++--
->  arch/x86/kvm/lapic.h            |  1 +
->  arch/x86/kvm/svm/avic.c         | 15 ++++++++-------
->  arch/x86/kvm/x86.c              |  7 +++++++
->  5 files changed, 63 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 2c96c43c313a..6475c882b359 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1132,6 +1132,17 @@ enum kvm_apicv_inhibit {
->  	 * AVIC is disabled because SEV doesn't support it.
->  	 */
->  	APICV_INHIBIT_REASON_SEV,
+>  fs/ntfs3/inode.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> index 51363d4e8636..443a32f789ff 100644
+> --- a/fs/ntfs3/inode.c
+> +++ b/fs/ntfs3/inode.c
+> @@ -365,6 +365,11 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+>         roff = le16_to_cpu(attr->nres.run_off);
+>
+>         t64 = le64_to_cpu(attr->nres.svcn);
 > +
-> +	/*
-> +	 * Due to sharing page tables across vCPUs, the xAPIC memslot must be
-> +	 * deleted if any vCPU has x2APIC enabled as SVM doesn't provide fully
-> +	 * independent controls for AVIC vs. x2AVIC, and also because SVM
-> +	 * supports a "hybrid" AVIC mode for CPUs that support AVIC but not
-> +	 * x2AVIC.  Note, this isn't a "full" inhibit and is tracked separately.
-> +	 * AVIC can still be activated, but KVM must not create SPTEs for the
-> +	 * APIC base.  For simplicity, this is sticky.
-> +	 */
-> +	APICV_INHIBIT_REASON_X2APIC,
-
-Hi Sean!
-
-So assuming that I won't object to making it SVM specific (I still think
-that VMX should also inhibit this memslot because this is closer to x86 spec,
-but if you really want it this way, I won't fight over it):
-
-I somewhat don't like this inhibit, because now it is used just to say
-'I am AVIC'.
-
-What do you think if you just move the code that removes the memslot to SVM,
-to avic_set_virtual_apic_mode?
-
-
->  };
->  
->  struct kvm_arch {
-> @@ -1169,10 +1180,11 @@ struct kvm_arch {
->  	struct kvm_apic_map __rcu *apic_map;
->  	atomic_t apic_map_dirty;
->  
-> -	/* Protects apic_access_memslot_enabled and apicv_inhibit_reasons */
-> -	struct rw_semaphore apicv_update_lock;
-> -
->  	bool apic_access_memslot_enabled;
-> +	bool apic_access_memslot_inhibited;
-
-So the apic_access_memslot_enabled currently tracks if the memslot is enabled.
-As I see later in the patch when you free the memslot, you set it to false,
-which means that if a vCPU is created after that (it can happen in theory),
-the memslot will be created again :(
-
-I say we need 'enabled', and 'allocated' booleans instead. Inhibit will set
-enabled to false, and then on next vcpu run, that will free the memslot.
-
-when enabled == false, the code needs to be changed to not allocate it again.
-
+> +       /* offset to packed runs is out-of-bounds */
+> +       if (roff > asize)
+> +               goto out;
 > +
-> +	/* Protects apicv_inhibit_reasons */
-> +	struct rw_semaphore apicv_update_lock;
->  	unsigned long apicv_inhibit_reasons;
->  
->  	gpa_t wall_clock;
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 99994d2470a2..70f00eda75b2 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2394,9 +2394,26 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
->  		}
->  	}
->  
-> -	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
-> +	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE)) {
->  		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
->  
-> +		/*
-> +		 * Mark the APIC memslot as inhibited if x2APIC is enabled and
-> +		 * the x2APIC inhibit is required.  The actual deletion of the
-> +		 * memslot is handled by vcpu_run() as SRCU may or may not be
-> +		 * held at this time, i.e. updating memslots isn't safe.  Don't
-> +		 * check apic_access_memslot_inhibited, this vCPU needs to
-> +		 * ensure the memslot is deleted before re-entering the guest,
-> +		 * i.e. needs to make the request even if the inhibit flag was
-> +		 * already set by a different vCPU.
-> +		 */
-> +		if (vcpu->kvm->arch.apic_access_memslot_enabled &&
-> +		    static_call(kvm_x86_check_apicv_inhibit_reasons)(APICV_INHIBIT_REASON_X2APIC)) {
-> +			vcpu->kvm->arch.apic_access_memslot_inhibited = true;
-> +			kvm_make_request(KVM_REQ_UNBLOCK, vcpu);
+>         err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
+>                             t64, Add2Ptr(attr, roff), asize - roff);
+>         if (err < 0)
+> --
+> 2.25.1
+>
+return -EINVAL when roff is out-of-bounds
 
-You are about to remove the KVM_REQ_UNBLOCK in other patch series.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+master
 
-How about just raising KVM_REQ_APICV_UPDATE on current vCPU
-and having a special case in kvm_vcpu_update_apicv of 
-
-if (apic_access_memslot_enabled == false && apic_access_memslot_allocaed == true) {
-	drop srcu lock
-	free the memslot
-	take srcu lock
-}
-
-That wasn't possible to do with regular AVIC inhibit as I tried, because it has to be done
-before any vCPU re-enters the guest, so the KVM_REQ_APICV_UPDATE has to be raised
-on all vCPUs, and then a 'winning' vCPU would toggle the memslot, but that
-would cause a lot of impossible to solve races, thus I abandoned that approach
-back then.
-
-Here the accuracy is not that critical so we can raise the request on current vCPU,
-as you do in your patch anyway, so it should work.
-
-
-> +		}
-> +	}
-> +
->  	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
->  		kvm_vcpu_update_apicv(vcpu);
->  		static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
-> @@ -2440,7 +2457,8 @@ int kvm_alloc_apic_access_page(struct kvm *kvm)
->  	int ret = 0;
->  
->  	mutex_lock(&kvm->slots_lock);
-> -	if (kvm->arch.apic_access_memslot_enabled)
-> +	if (kvm->arch.apic_access_memslot_enabled ||
-> +	    kvm->arch.apic_access_memslot_inhibited)
->  		goto out;
->  
->  	hva = __x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT,
-> @@ -2468,6 +2486,18 @@ int kvm_alloc_apic_access_page(struct kvm *kvm)
->  }
->  EXPORT_SYMBOL_GPL(kvm_alloc_apic_access_page);
->  
-> +void kvm_free_apic_access_page(struct kvm *kvm)
-> +{
-> +	mutex_lock(&kvm->slots_lock);
-> +
-> +	if (kvm->arch.apic_access_memslot_enabled) {
-> +		__x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT, 0, 0);
-> +		kvm->arch.apic_access_memslot_enabled = false;
-> +	}
-> +
-> +	mutex_unlock(&kvm->slots_lock);
-> +}
-> +
->  void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
->  {
->  	struct kvm_lapic *apic = vcpu->arch.apic;
-> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-> index 6d06397683d0..e2271ffa7ac0 100644
-> --- a/arch/x86/kvm/lapic.h
-> +++ b/arch/x86/kvm/lapic.h
-> @@ -112,6 +112,7 @@ int kvm_apic_set_irq(struct kvm_vcpu *vcpu, struct kvm_lapic_irq *irq,
->  int kvm_apic_local_deliver(struct kvm_lapic *apic, int lvt_type);
->  void kvm_apic_update_apicv(struct kvm_vcpu *vcpu);
->  int kvm_alloc_apic_access_page(struct kvm *kvm);
-> +void kvm_free_apic_access_page(struct kvm *kvm);
->  
->  bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
->  		struct kvm_lapic_irq *irq, int *r, struct dest_map *dest_map);
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 0424a5e664bb..8f9426f21bbf 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -72,12 +72,12 @@ static void avic_activate_vmcb(struct vcpu_svm *svm)
->  
->  	vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
->  
-> -	/* Note:
-> -	 * KVM can support hybrid-AVIC mode, where KVM emulates x2APIC
-> -	 * MSR accesses, while interrupt injection to a running vCPU
-> -	 * can be achieved using AVIC doorbell. The AVIC hardware still
-> -	 * accelerate MMIO accesses, but this does not cause any harm
-> -	 * as the guest is not supposed to access xAPIC mmio when uses x2APIC.
-> +	/*
-> +	 * Note: KVM supports hybrid-AVIC mode, where KVM emulates x2APIC MSR
-> +	 * accesses, while interrupt injection to a running vCPU can be
-> +	 * achieved using AVIC doorbell.  KVM disables the APIC access page
-> +	 * (deletes the memslot) if any vCPU has x2APIC enabled, thus enabling
-> +	 * AVIC in hybrid mode activates only the doorbell mechanism.
->  	 */
->  	if (apic_x2apic_mode(svm->vcpu.arch.apic) &&
->  	    avic_mode == AVIC_MODE_X2) {
-> @@ -987,7 +987,8 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
->  			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
->  			  BIT(APICV_INHIBIT_REASON_SEV)      |
->  			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
-> -			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
-> +			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED) |
-> +			  BIT(APICV_INHIBIT_REASON_X2APIC);
->  
->  	return supported & BIT(reason);
->  }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d7374d768296..aa5ab0c620de 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10705,6 +10705,13 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
->  			break;
->  		}
->  
-> +		if (vcpu->kvm->arch.apic_access_memslot_inhibited &&
-> +		    vcpu->kvm->arch.apic_access_memslot_enabled) {
-> +			kvm_vcpu_srcu_read_unlock(vcpu);
-> +			kvm_free_apic_access_page(vcpu->kvm);
-> +			kvm_vcpu_srcu_read_lock(vcpu);
-> +		}
-> +
->  		if (__xfer_to_guest_mode_work_pending()) {
->  			kvm_vcpu_srcu_read_unlock(vcpu);
->  			r = xfer_to_guest_mode_handle_work(vcpu);
-
-I will review the rest of the patch series on next Wednesday (after
-our holidays). 
-From a quick glance they look good to me.
-
-
-Thanks,
-Best regards,
-	Maxim Levitsky
-
-
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 51363d4e8636..10723231e482 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -365,6 +365,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+ 	roff = le16_to_cpu(attr->nres.run_off);
+ 
+ 	t64 = le64_to_cpu(attr->nres.svcn);
++
++	/* offset to packed runs is out-of-bounds */
++	if (roff > asize) {
++		err = -EINVAL;
++		goto out;
++	}
++
+ 	err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
+ 			    t64, Add2Ptr(attr, roff), asize - roff);
+ 	if (err < 0)
