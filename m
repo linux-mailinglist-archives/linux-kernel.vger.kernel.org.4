@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED635E7431
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE185E743B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiIWGej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S230388AbiIWGhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiIWGeg (ORCPT
+        with ESMTP id S229488AbiIWGhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:34:36 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D326392;
-        Thu, 22 Sep 2022 23:34:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VQViWnv_1663914871;
-Received: from 30.97.56.82(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQViWnv_1663914871)
-          by smtp.aliyun-inc.com;
-          Fri, 23 Sep 2022 14:34:32 +0800
-Message-ID: <882f5629-a6e2-5fcc-7d26-b3de77ca2985@linux.alibaba.com>
-Date:   Fri, 23 Sep 2022 14:34:29 +0800
+        Fri, 23 Sep 2022 02:37:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB831280DB;
+        Thu, 22 Sep 2022 23:37:47 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYj7L3frZzpStW;
+        Fri, 23 Sep 2022 14:34:54 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 14:37:44 +0800
+Message-ID: <287e46e8-8e6b-f872-f706-4a79a79a888c@huawei.com>
+Date:   Fri, 23 Sep 2022 14:37:44 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RESEND PATCH V5 6/7] ublk_drv: add START_USER_RECOVERY and
- END_USER_RECOVERY support
-Content-Language: en-US
-To:     ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220923061505.52007-1-ZiyangZhang@linux.alibaba.com>
- <20220923061505.52007-7-ZiyangZhang@linux.alibaba.com>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <20220923061505.52007-7-ZiyangZhang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [net-next] selftests: Fix the if conditions of in
+ test_extra_filter()
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+References: <1663850569-33122-1-git-send-email-wangyufen@huawei.com>
+ <20220922061239.115520b2@kernel.org>
+From:   wangyufen <wangyufen@huawei.com>
+In-Reply-To: <20220922061239.115520b2@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/23 14:15, ZiyangZhang wrote:
-> START_USER_RECOVERY and END_USER_RECOVERY are two new control commands
-> to support user recovery feature.
-> 
-> After a crash, user should send START_USER_RECOVERY, it will:
-> (1) check if (a)current ublk_device is UBLK_S_DEV_QUIESCED which was
->     set by quiesce_work and (b)chardev is released
-> (2) reinit all ubqs, including:
->     (a) put the task_struct and reset ->ubq_daemon to NULL.
->     (b) reset all ublk_io.
-> (3) reset ub->mm to NULL.
-> 
-> Then, user should start a new process and send FETCH_REQ on each
-> ubq_daemon.
-> 
-> Finally, user should send END_USER_RECOVERY, it will:
-> (1) wait for all new ubq_daemons getting ready.
-> (2) update ublksrv_pid
-> (3) unquiesce the request queue and expect incoming ublk_queue_rq()
-> (4) convert ub's state to UBLK_S_DEV_LIVE
-> 
-> Note: we can handle STOP_DEV between START_USER_RECOVERY and
-> END_USER_RECOVERY. This is helpful to users who cannot start new process
-> after sending START_USER_RECOVERY ctrl-cmd.
-> 
-> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
 
-Let me explain why we still need two ctrl-cmds: START_USER_RECOVERY
-and END_USER_RECOVERY:
+在 2022/9/22 21:12, Jakub Kicinski 写道:
+> On Thu, 22 Sep 2022 20:42:49 +0800 Wang Yufen wrote:
+>> The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
+>> if bind success or errno != EADDRINUSE, testcase should be failed.
+> Please add a Fixes tag, even if the buggy commit has not reached Linus
+> yet.
 
-(1) They are easy to use and understand. Just like calling
-    a)ADD_DEV, b)start daemon c)START_DEV, we can recover a device by
-    a)START_USER_RECOVERY b)start new daemon c)END_USER_RECOVERY.
-    IMO, START_USER_RECOVERY can guide user whether to start a new daemon.
-    Without it, user must directly start a new daemon. He may fail here
-    because /dev/ublkc* is not released. So a retry is necessary here.
-    But I think that let the user retry by sending START_USER_RECOVERY
-    instead of opening /dev/ublkc* is more reasonable.
+Thanks for your comment.  will add in v2
 
-(2) Handling put_task_struct(ubq_daemon) is hard in ublk_ch_release().
-    Assume all ioucmds have been issued back to userspace and a crash happens,
-    ublk_ch_release() can be called immediately here and ubq_daemon is
-    freed. But monoitor_work may be running now. Dealing with UAF on
-    ubq_daemon in monitor_work may be difficult. But handling
-    put_task_struct(ubq_daemon) in START_USER_RECOVERY solves the problem
-    because monitor_work is sure to be canceled. Besides, here is no race
-    with ublk_deinit_queue() since it cannot be called if ub's state is
-    QUIESCED.
-
-Regards,
-Zhang
