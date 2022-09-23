@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289035E7808
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770C65E7878
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiIWKPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S231325AbiIWKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiIWKPm (ORCPT
+        with ESMTP id S230055AbiIWKet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:15:42 -0400
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450D92604;
-        Fri, 23 Sep 2022 03:15:40 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2940037wmb.0;
-        Fri, 23 Sep 2022 03:15:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H3k8nwYg9LM+0smtYDMfCrY2rja+gudmrYIAx1+mEps=;
-        b=6/f8awuQNJ0pRmjE7SjNSRROM1eCeYPgvkSN0GPMjn/WBJh2zoeTL4X52y/aixVSss
-         Gh3Gu4AtDakwpyrL4N6e9RGJGxH282rc7fBov32flqvO8NsuIkHQh1lcm3Zvyk3oOWO2
-         Q1pMqEUqXKuWzb5hhckFN6qZ4NxYjSvARjA9E0ocpn2ZoaP9WQIHYSv/PGCy+PLpf8jM
-         Jc5q9TS997twPCVoLul0z861BwyEdlOlq06eWF8iUQFf6+dhVQXT/eRIpnypMRznRRCU
-         Ncx/K+dnJKt87AomFYiP6gK47WsCGUu+bQpk2GWflDxO8XE+N1AMZd445Z4qh7q0PUYa
-         Ov/w==
-X-Gm-Message-State: ACrzQf2sRJUDurHby/PhsWmfCgihioiQMGlDKDadTwyH1XdPq1hMyS7L
-        o2fA60EPUeXEW9DbuplPTucfuZHbh4A=
-X-Google-Smtp-Source: AMsMyM6uVc1utll1leFSA3Ob9+kmyV0+mvx+mZpkH4OV2fn7yg3XyYhCkjXBv8PD3H23g3832TOSOw==
-X-Received: by 2002:a05:600c:2b88:b0:3b4:8680:165b with SMTP id j8-20020a05600c2b8800b003b48680165bmr13130181wmc.113.1663928138757;
-        Fri, 23 Sep 2022 03:15:38 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c2ca600b003b4c40378casm2165673wmc.39.2022.09.23.03.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 03:15:38 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 10:15:36 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH] drm/hyperv: Don't overwrite dirt_needed value set by host
-Message-ID: <Yy2HSKb4AtcF+em6@liuwe-devbox-debian-v2>
-References: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 06:34:49 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BB3192BB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:34:46 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B12451B7BF5;
+        Fri, 23 Sep 2022 12:34:44 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6605C1A0F3B;
+        Fri, 23 Sep 2022 12:34:44 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 978121820F5A;
+        Fri, 23 Sep 2022 18:34:42 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        s.hauer@pengutronix.de
+Subject: [RESEND PATCH] ASoC: fsl_asrc_dma: fully initialize structs
+Date:   Fri, 23 Sep 2022 18:15:47 +0800
+Message-Id: <1663928147-10106-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 08:32:46AM -0700, Saurabh Sengar wrote:
-> Existing code is causing a race condition where dirt_needed value is
-> already set by the host and gets overwritten with default value. Remove
-> this default setting of dirt_needed, to avoid overwriting the value
-> received in the channel callback set by vmbus_open. Removing this
-> setting also means the default value for dirt_needed is changed to false
-> as it's allocated by kzalloc which is similar to legacy hyperv_fb driver.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Sascha Hauer <s.hauer@pengutronix.de>
 
-Applied to hyperv-next. Thanks.
+The driver uses two statically ininitialized struct dma_slave_config,
+but only one of them is initialized to zero. Initialize config_be to
+zero as well to make sure that no fields are filled with random values.
+Let the compiler do this instead of explicitly calling memset() which
+makes it easier to read.
 
-I ended up reconstructing the patch myself since the said driver
-changed. It is only a one line change so that's fine. If the committed
-patch is wrong, please let me know.
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/fsl_asrc_dma.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/sound/soc/fsl/fsl_asrc_dma.c b/sound/soc/fsl/fsl_asrc_dma.c
+index 12ddf2320f2d..3b81a465814a 100644
+--- a/sound/soc/fsl/fsl_asrc_dma.c
++++ b/sound/soc/fsl/fsl_asrc_dma.c
+@@ -139,7 +139,7 @@ static int fsl_asrc_dma_hw_params(struct snd_soc_component *component,
+ 	struct dma_chan *tmp_chan = NULL, *be_chan = NULL;
+ 	struct snd_soc_component *component_be = NULL;
+ 	struct fsl_asrc *asrc = pair->asrc;
+-	struct dma_slave_config config_fe, config_be;
++	struct dma_slave_config config_fe = {}, config_be = {};
+ 	struct sdma_peripheral_config audio_config;
+ 	enum asrc_pair_index index = pair->index;
+ 	struct device *dev = component->dev;
+@@ -183,7 +183,6 @@ static int fsl_asrc_dma_hw_params(struct snd_soc_component *component,
+ 		return -EINVAL;
+ 	}
+ 
+-	memset(&config_fe, 0, sizeof(config_fe));
+ 	ret = snd_dmaengine_pcm_prepare_slave_config(substream, params, &config_fe);
+ 	if (ret) {
+ 		dev_err(dev, "failed to prepare DMA config for Front-End\n");
+-- 
+2.34.1
+
