@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DE75E7863
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DBD5E786E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiIWKbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S231765AbiIWKc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbiIWKaz (ORCPT
+        with ESMTP id S231462AbiIWKcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:30:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8941111E95E;
-        Fri, 23 Sep 2022 03:30:53 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYpG12Tpsz6HHxp;
-        Fri, 23 Sep 2022 18:26:01 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 12:30:50 +0200
-Received: from [10.48.153.47] (10.48.153.47) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 11:30:50 +0100
-Message-ID: <569cb47c-af63-cf70-ae1a-4c5116dd4877@huawei.com>
-Date:   Fri, 23 Sep 2022 11:30:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
- open coded
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-7-yanaijie@huawei.com>
- <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
- <3c1aa262-7e9b-cb6c-e8a1-a1a201050a10@huawei.com>
- <6c299e8f-80be-0276-c8b1-9df1946434da@huawei.com>
- <d3c7285f-6318-8254-2bfa-d836f12fcd88@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <d3c7285f-6318-8254-2bfa-d836f12fcd88@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.153.47]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 06:32:18 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8973412DEF2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:32:03 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2479F5809F0;
+        Fri, 23 Sep 2022 06:32:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 23 Sep 2022 06:32:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663929121; x=1663932721; bh=b5154p7+jw
+        vVybTnV4XOC9aGotedUG0z1MsOq616Jbc=; b=k9bU0VORHmBJt7KPkKuBBTcZbY
+        QA3kx10eWTFiwOmyoiCict9Dfk8o5uCUg3qg7VM9DFh2a5TbY1E/NMEcKfPsdZSc
+        08hCSuiKnQSk2mlMKlCGY5V0cha/KM7i2u0FUL0hF2m39ZtESjfsw+Zk1GNUrGrD
+        jGE8C5uaoADfLqRHFvjS0VvsNVu5nnfluIAVulHvjiPi1L8sQYmBpM2OXHANpbRu
+        8qOBZJa5apfuB9HCwldF0TIz7aqYTg+9622/pHrPAtz1CjI/vG5o+emrNHB8srKk
+        /EXqM/UzPPHcN0/3eLkCgry15A/ir2thuq9O7VKJA1g3YFnFmMU9T2aFuZjg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663929121; x=1663932721; bh=b5154p7+jwvVybTnV4XOC9aGoted
+        UG0z1MsOq616Jbc=; b=qtSqNLuwmRHY/7d2tD6A/zls1b51QbKDVrSpnj6LgJLJ
+        yP6nPJ/bX37TyqwR/wUTqnO/WyV2lUOfe2JBYFJ4EV3kbY3bFCJH1dGVe0ylHbQD
+        ZrETuI+61q9GeOlw6Y3ApLS6GZozoqkfezwgEj/RIzQzlSdtZSt+27vIrjIUncK3
+        d3uji0RhRhRWiCo15BDKaRajgPoLofpKA6+JaHEzxK91RDoZYb0Rj3aER/xNwKWj
+        r+mpfny7tZge0bCtyZLAoqEIq81WUoZNnlKEQP2M9p+ggckJi7YQBsasKbErDimC
+        hx5jp1RBqh0zXgqJm3eBzXoeY0KKRCxO2hJblzYG4g==
+X-ME-Sender: <xms:IIstY9sUvlU4LGEpHsO60t2j8bzIvfpizt1gpZrADxlA0boeu5IDdg>
+    <xme:IIstY2e_hbRomLaiU1bsskRfqAB_Tm72UXf0JGxa-DPal27UefIwcglLK4DXf4ubl
+    X5j-ZkcGs6WLLehi6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:IIstYwxhPcMuGUXW7qVJXYJBn9sNAleJfrZ12mF9H_V6LE325F7Ojw>
+    <xmx:IIstY0OGRmpCtguIu2St8OksJBodX7te27iq3KpW0ZDPwoE2AuMx3A>
+    <xmx:IIstY98gr7gKPJOmpGam0XIWZ1ok448ttmYLpTz3WMaXBN64FQs_4w>
+    <xmx:IYstY4beCZaACWxKPqm4oAXvgDG_RyzWzkuq7z9gO5m13ZcaiNU4tA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 851E9B60086; Fri, 23 Sep 2022 06:32:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <c4ee195a-cf1f-44f6-b3b6-241d04e01fb9@www.fastmail.com>
+In-Reply-To: <alpine.DEB.2.21.2209220223080.29493@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2209220223080.29493@angie.orcam.me.uk>
+Date:   Fri, 23 Sep 2022 12:31:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RISC-V: Make port I/O string accessors actually work
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 11:13, Jason Yan wrote:
->>
->> Please explain why.
->>
->> I would assume that if those helpers were only used in libsas code 
->> (and not LLDDs) then they could be put in sas_internal.h and no need 
->> for export
->>
+On Thu, Sep 22, 2022, at 11:56 PM, Maciej W. Rozycki wrote:
+> Fix port I/O string accessors such as `insb', `outsb', etc. which use 
+> the physical PCI port I/O address rather than the corresponding memory 
+> mapping to get at the requested location, which in turn breaks at least 
+> accesses made by our parport driver to a PCIe parallel port such as:
+>
+> PCI parallel port detected: 1415:c118, I/O at 0x1000(0x1008), IRQ 20
+> parport0: PC-style at 0x1000 (0x1008), irq 20, using FIFO 
+> [PCSPP,TRISTATE,COMPAT,EPP,ECP]
+
+The patch looks correct to me, but I'm curious: Are you actually
+using a parport device on your system, or just testing it to
+make it work?
+
+> +#define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), 
+> buffer, count)
+> +#define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), 
+> buffer, count)
+> +#define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), 
+> buffer, count)
 > 
-> 
-> Sorry, I did not make it clear. I mean we need to export 
-> sas_find_attathed_phy() below. Not the sas address comparation helpers.
 
-That seems fine to me.
+I don't see anything actually risc-v specific in these definitions,
+and it would be great to make the asm-generic version do the
+right thing here. As far as I can tell, the only difference is
+the barriers in the risc-v version, and we should really have the
+same in the generic code anyway.
 
-About sas_find_attathed_phy() implementation,
-
- > +static inline int sas_find_attathed_phy(struct expander_device *ex_dev,
- > +                                       struct domain_device *dev)
- > +{
- > +       struct ex_phy *phy;
- > +       int phy_id;
- > +
- > +       for (phy_id = 0; phy_id < ex_dev->num_phys; phy_id++) {
- > +               phy = &ex_dev->ex_phy[phy_id];
- > +               if (SAS_ADDR(phy->attached_sas_addr)
- > +                       == SAS_ADDR(dev->sas_addr))
- > +                       return phy_id;
- > +       }
- > +
- > +       return ex_dev->num_phys;
-
-Returning ex_dev->num_phys would seem ok, but then the LLDD needs to 
-check that return against ex_dev->num_phys. It seems ok, but I'm still 
-not 100% comfortable with that. Maybe returning -ENODEV may be better.
-
-Or return boolean and pass phy_id as pointer to be filled in when 
-returning true.
-
- > +}
-
-Thanks,
-John
-
+     Arnd
