@@ -2,141 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659D55E863B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 01:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79765E863F
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 01:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiIWXOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 19:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S231968AbiIWXPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 19:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiIWXOR (ORCPT
+        with ESMTP id S232854AbiIWXPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 19:14:17 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132921288B8;
-        Fri, 23 Sep 2022 16:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=5kMEPhzVXTTbbICaU8r7DWXEcfo3/fUnkZgSNRbVGrQ=; b=Ds5pkHy8uJ8iHLx1IhVZslc3Zr
-        t+/v6e2S0GOtygp04iEzUQ4muWRW49cSuHskBcPhKEmScyKVVNbv1b0IEIEm4288vPB2ORsUShnrR
-        5b0ZNRvCvlMo3b/OgyG61P2rlIrRtuEe3C4OiOnSLdRflOjXh5VLRa20wpoNzxJ6JNQGv6rSbiZWU
-        AD0pz04P15zsrIEz9+33+KxiyTKqT+9rfjT16tZREnE4SsZ6WCMRf/n7BHgLJrLNv2vLvF2cOEW+t
-        jBCLX28uFxceZJK6OCyyhhrZ6v4TJQcfX0pMKJQ7kJ5MvS616Y2UkZGuSWQKg0hDO0SjNHIt790HB
-        GyuZbEuw==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1obrs5-0090pq-Lv; Fri, 23 Sep 2022 17:14:14 -0600
-Message-ID: <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
-Date:   Fri, 23 Sep 2022 17:14:11 -0600
+        Fri, 23 Sep 2022 19:15:47 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E478F15818
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:15:42 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id ml1so906393qvb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=cHKAxGMuxvnZOWi2kVzE6Zjg/2r0BKsDScmdf0kn5Dg=;
+        b=hKEfM8QsnAKqVHZgprigLpD1qbmh+qDIPekChNSNaMOykardrQE+y9kVKX0FGmICEc
+         YL1wuPKAO0BJKk3bh33DZtxjfWTmR4HG1vVDS6bzMvj0VJEFtLSXpodFwMLccG5sNW2j
+         SVN2OT5/o1TVhYup42NhsQzPCcvC1C6/Ns/Mm2Ro4kTe5vFTbS+jfJfIqPrWdsWGRjxn
+         cRzHU7W/rUY4oRzfPYlSKZv0yBTcdt+JfodPmnyf0m7jCZWLd+Hh7r/sgfIC5t0DTJz3
+         rPmdxQsSDAS0CQHI/OejSsqfQbjLFW5UgyG3sGwbFCkZRzmsfJyOaww7/EWjg3eolmkU
+         i/Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cHKAxGMuxvnZOWi2kVzE6Zjg/2r0BKsDScmdf0kn5Dg=;
+        b=sNMVd1KuZGAO2/K2QMtfWrE0xKKS1JWbuhiLlbfrqdmogftpvCFuzDKts9ghOEWVob
+         sPzkA5AFGqAN+ZILaTtQd377zMr4UvDHI7Dc24m4kUEPqIVcpHDeOq31ik2ZdNfvVs8Q
+         PUGKUzFGCYTI/7Ap/BnossXDGPc1xLMk7XwuUKwFR6R1OHkgZMBa8RQIXkqXWpghcv5N
+         7FZJ1G2hinoPcoPTn+FLPcAP/ckChe7p6e9WjX8PxldkusvwSx3DPmMZCKt0TRhW2jw1
+         KK0AMF4/QSbvLwckyH2p2zHU8mrQdA9DEvzFfzM2slcK+x5w15Cus3RBKPrdyUel5Ir0
+         5rRg==
+X-Gm-Message-State: ACrzQf0DOSk/lrfzoDevMgeeetWzdpye0wkr5s6VQ6Qw5jkaux4ZkeLX
+        HSnSAKgsxjYFxwjmjOO3At9WJg==
+X-Google-Smtp-Source: AMsMyM6eAh9FLvG7sO8rySas8N5LnqZkV0oHyHDFYEywdyu+4WJgqQz9XTPEubZ5SWatsfKIV+yPBA==
+X-Received: by 2002:a0c:f50d:0:b0:4ac:72b6:455b with SMTP id j13-20020a0cf50d000000b004ac72b6455bmr8986596qvm.66.1663974941982;
+        Fri, 23 Sep 2022 16:15:41 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id c15-20020ac8110f000000b0035bbb0fe90bsm6027556qtj.47.2022.09.23.16.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 16:15:41 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 16:15:29 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Keith Busch <kbusch@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Song <liusong@linux.alibaba.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
+In-Reply-To: <391b1763-7146-857-e3b6-dc2a8e797162@google.com>
+Message-ID: <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com>
+References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com> <YyjdiKC0YYUkI+AI@kbusch-mbp> <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com> <20220921164012.s7lvklp2qk6occcg@quack3> <20220923144303.fywkmgnkg6eken4x@quack3> <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com>
+ <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com> <391b1763-7146-857-e3b6-dc2a8e797162@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-CA
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-References: <20220922163926.7077-1-logang@deltatee.com>
- <20220922163926.7077-2-logang@deltatee.com> <Yy33LUqvDLSOqoKa@ziepe.ca>
- <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
- <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
- <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
- <Yy46KbD/PvhaHA6X@ziepe.ca>
- <3840c1c6-3a5c-2286-e577-949f0d4ea7a6@deltatee.com>
- <Yy48GPMdQS/pzNSa@ziepe.ca>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <Yy48GPMdQS/pzNSa@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, gregkh@linuxfoundation.org, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting PCI
- P2PDMA pages
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-09-23 17:07, Jason Gunthorpe wrote:
-> On Fri, Sep 23, 2022 at 05:01:26PM -0600, Logan Gunthorpe wrote:
->>
->>
->>
->> On 2022-09-23 16:58, Jason Gunthorpe wrote:
->>> On Fri, Sep 23, 2022 at 02:11:03PM -0600, Logan Gunthorpe wrote:
->>>>
->>>>
->>>> On 2022-09-23 13:53, Jason Gunthorpe wrote:
->>>>> On Fri, Sep 23, 2022 at 01:08:31PM -0600, Logan Gunthorpe wrote:
->>>>> I'm encouraging Dan to work on better infrastructure in pgmap core
->>>>> because every pgmap implementation has this issue currently.
->>>>>
->>>>> For that reason it is probably not so relavent to this series.
->>>>>
->>>>> Perhaps just clarify in the commit message that the FOLL_LONGTERM
->>>>> restriction is to copy DAX until the pgmap page refcounts are fixed.
->>>>
->>>> Ok, I'll add that note.
->>>>
->>>> Per the fix for the try_grab_page(), to me it doesn't fit well in 
->>>> try_grab_page() without doing a bunch of cleanup to change the
->>>> error handling, and the same would have to be added to try_grab_folio().
->>>> So I think it's better to leave it where it was, but move it below the 
->>>> respective grab calls. Does the incremental patch below look correct?
->>>
->>> Oh? I was thinking of just a very simple thing:
->>
->> Really would like it to return -EREMOTEIO instead of -ENOMEM as that's the
->> error used for bad P2PDMA page everywhere.
+On Fri, 23 Sep 2022, Hugh Dickins wrote:
+> On Fri, 23 Sep 2022, Keith Busch wrote:
 > 
-> I'd rather not see GUP made more fragile just for that..
+> > Does the following fix the observation? Rational being that there's no reason
+> > to spin on the current wait state that is already under handling; let
+> > subsequent clearings proceed to the next inevitable wait state immediately.
+> 
+> It's running fine without lockup so far; but doesn't this change merely
+> narrow the window?  If this is interrupted in between atomic_try_cmpxchg()
+> setting wait_cnt to 0 and sbq_index_atomic_inc() advancing wake_index,
+> don't we run the same risk as before, of sbitmap_queue_wake_up() from
+> the interrupt handler getting stuck on that wait_cnt 0?
 
-Not sure how that's more fragile... You're way seems more dangerous given
-the large number of call sites we are adding it to when it might not apply.
+Yes, it ran successfully for 50 minutes, then an interrupt came in
+immediately after the cmpxchg, and it locked up just as before.
+
+Easily dealt with by disabling interrupts, no doubt, but I assume it's a
+badge of honour not to disable interrupts here (except perhaps in waking).
+
+Some clever way to make the wait_cnt and wake_index adjustments atomic?
+
+Or is this sbitmap_queue_wake_up() interrupting sbitmap_queue_wake_up()
+just supposed never to happen, the counts preventing it: but some
+misaccounting letting it happen by mistake?
 
 > 
->> Plus the concern that some of the callsites of try_grab_page() might not have
->> a get or a pin and thus it's not safe which was the whole point of the change
->> anyway.
+> > 
+> > ---
+> > diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> > index 624fa7f118d1..47bf7882210b 100644
+> > --- a/lib/sbitmap.c
+> > +++ b/lib/sbitmap.c
+> > @@ -634,6 +634,13 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+> >  
+> >  	*nr -= sub;
+> >  
+> > +	/*
+> > +	 * Increase wake_index before updating wait_cnt, otherwise concurrent
+> > +	 * callers can see valid wait_cnt in old waitqueue, which can cause
+> > +	 * invalid wakeup on the old waitqueue.
+> > +	 */
+> > +	sbq_index_atomic_inc(&sbq->wake_index);
+> > +
+> >  	/*
+> >  	 * When wait_cnt == 0, we have to be particularly careful as we are
+> >  	 * responsible to reset wait_cnt regardless whether we've actually
+> > @@ -660,13 +667,6 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+> >  	 * of atomic_set().
+> >  	 */
+> >  	smp_mb__before_atomic();
+> > -
+> > -	/*
+> > -	 * Increase wake_index before updating wait_cnt, otherwise concurrent
+> > -	 * callers can see valid wait_cnt in old waitqueue, which can cause
+> > -	 * invalid wakeup on the old waitqueue.
+> > -	 */
+> > -	sbq_index_atomic_inc(&sbq->wake_index);
+> >  	atomic_set(&ws->wait_cnt, wake_batch);
+> >  
+> >  	return ret || *nr;
+> > --
 > 
-> try_grab_page() calls folio_ref_inc(), that is only legal if it knows
-> the page is already a valid pointer under the PTLs, so it is safe to
-> check the pgmap as well.
-
-My point is it doesn't get a reference or a pin unless FOLL_PIN or FOLL_GET is
-set and the documentation states that neither might be set, in which case 
-folio_ref_inc() will not be called...
-
-
-Logan
