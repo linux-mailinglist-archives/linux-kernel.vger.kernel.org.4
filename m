@@ -2,109 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532105E73D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFA65E73DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiIWGRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S230076AbiIWGSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiIWGRd (ORCPT
+        with ESMTP id S230081AbiIWGSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:17:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0E512387A;
-        Thu, 22 Sep 2022 23:17:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3CD2B821C2;
-        Fri, 23 Sep 2022 06:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923D2C433D6;
-        Fri, 23 Sep 2022 06:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663913843;
-        bh=087222Xy8pZjxNKwBirqYA3XIzVV/4i7Mss3vpSpd14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JWIwwHV/RaIiU6aBqkf7d1JFcWRbDborvpLhn3FVp0PRRXG/Ofa8dYm9RTBoMHfMx
-         KbV2rEc7i7fUrlTOCJ5CtIynqpFMnkVUjp6hjHhZRtiFI9wlEtLYsbG7x8WALnduAz
-         wGQpsJUKd5Gd1j3aZoJf/HPbJpTfR7meZCsOdBM5gs8e+d5xf1Kb5ZzUv2NCTRrXWq
-         NimW7ZebHGANSFgKT4lEFWpoedoa01T9VVg8KIHDcXX/sL2Q0Pkni/0oFw1xWqbu5n
-         B8bWTYdit0IMdjyJA5OIFtqQ3RC5CsUzu9tNzs9O8SyKJewh5pH9EPvvufNCR222Pp
-         g9Vw4qFwOo+VQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1obc06-0006GM-An; Fri, 23 Sep 2022 08:17:26 +0200
-Date:   Fri, 23 Sep 2022 08:17:26 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 08/10] drm/msm/hdmi: fix IRQ lifetime
-Message-ID: <Yy1Pdr6gxGR1O+o2@hovoldconsulting.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-9-johan+linaro@kernel.org>
- <9e223c13-15e2-de5e-e1e1-0dbbe629a0a1@quicinc.com>
+        Fri, 23 Sep 2022 02:18:18 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC8B124C12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:18:08 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id a29so11477514pfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=f05ljLlUO9sOr4KvcyD5u6idMugfpqT7D62/tn0sbO8=;
+        b=pAvhqToInZNWXhG5z96xzXs+MzZS5uqkxvSry9ySyYz+8JEQ2tND181S0DlMybrFVF
+         w9mQcz4K1+mUBdiR7jMk1OgouLtp3SIbWTIdJAuInKMUMlC3zgcqfadD9bthLMIhcxJV
+         NlWa43k4iW9B685LT1MgSDhmG2HVZp50lFSWPmGj9tI8hYXuCiRtHIa6zpmH+mPXyeO3
+         GJX0ozoHvatgXFpit87GcEYn4y2HqDv++gZQKG3CgMwqShpYwfCHUrWCLAt0bPT0diZh
+         dZgixhDbnM3FuGLYxWY62s/n25z5NY1wYDP+6ZFzWhlGsgpB4WJf0D1iZKYaFOtQJsaU
+         WJmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=f05ljLlUO9sOr4KvcyD5u6idMugfpqT7D62/tn0sbO8=;
+        b=y6E051RPjxFceFt/dYTxhv7zcjkB+vgH+kX0SB6H0GP4a9I7Lo2+L7jUka3qAEJqWu
+         1oia/GtiCNHrL0eSWxNU9O65H7BdY6ggf3dHK3r7+SEH+8fMZgTuxadhXOraEykAzbBU
+         DYrMdAWEubpSW0/uJOPL8rzmfXJjZ3txBbGoAgrFdgfecVbS+TC7OKRJTz63dW0vCgT+
+         vm7kXVORIWAPnzAEcxkCQUBMH3lKKGyETva6L0n7/Aj8dgkzJKhGgb2DHd4dPzGkpIZq
+         CkQVOuk6A1QPtjtA0BK5JotYoj0Gkr5Fm3Cms7H2Wxegk0wTukuZfF0Az7JB8hHqLeqx
+         KTuA==
+X-Gm-Message-State: ACrzQf2NOj4pGJNAs8Z63ntD5ZhjsZGZ+DxVRTDsVVxJzdooZbcMzvVA
+        VE0h18P0QzTsH/qE5T+nTfrBJdQEGqSn9A==
+X-Google-Smtp-Source: AMsMyM7Yk+O5UM+vUUWL9QNeCbgNalG8zHkQHUtJtwzxGXbiqGa6c/4GNh20lsyAoFvR3tRsLjTxOw==
+X-Received: by 2002:a63:ff4f:0:b0:439:61d6:197 with SMTP id s15-20020a63ff4f000000b0043961d60197mr6165593pgk.67.1663913887935;
+        Thu, 22 Sep 2022 23:18:07 -0700 (PDT)
+Received: from liang-Predator-PH517-52.. (60-250-232-247.hinet-ip.hinet.net. [60.250.232.247])
+        by smtp.gmail.com with ESMTPSA id c190-20020a624ec7000000b00540f3ac5fb8sm5515248pfb.69.2022.09.22.23.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 23:18:07 -0700 (PDT)
+From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     dianders@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/2] Add LTE SKU for sc7280-evoker family
+Date:   Fri, 23 Sep 2022 14:17:54 +0800
+Message-Id: <20220923061756.2557403-1-sheng-liang.pan@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e223c13-15e2-de5e-e1e1-0dbbe629a0a1@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:55:03PM -0700, Kuogee Hsieh wrote:
-> 
-> On 9/13/2022 1:53 AM, Johan Hovold wrote:
-> > Device-managed resources allocated post component bind must be tied to
-> > the lifetime of the aggregate DRM device or they will not necessarily be
-> > released when binding of the aggregate device is deferred.
-> >
-> > This is specifically true for the HDMI IRQ, which will otherwise remain
-> > requested so that the next bind attempt fails when requesting the IRQ a
-> > second time.
-> >
-> > Fix this by tying the device-managed lifetime of the HDMI IRQ to the DRM
-> > device so that it is released when bind fails.
-> >
-> > Fixes: 067fef372c73 ("drm/msm/hdmi: refactor bind/init")
-> > Cc: stable@vger.kernel.org      # 3.19
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> > Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> > Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+This patch add common dtsi and WIFI/LTE dts for evoker.
 
-I believe you meant:
+Changes in v2:
+- change Cover-letter tittle
 
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Sheng-Liang Pan (2):
+  dt-bindings: arm: qcom: Separete LTE/WIFI SKU for sc7280-evoker
+  arm64: dts: qcom: Add LTE SKU for sc7280-evoker family
 
-here (i.e. without the '>' quotes). Otherwise the tooling may not pick
-these up.
+ .../devicetree/bindings/arm/qcom.yaml         |  5 ++++
+ arch/arm64/boot/dts/qcom/Makefile             |  3 ++-
+ .../dts/qcom/sc7280-herobrine-evoker-lte.dts  | 14 ++++++++++
+ .../boot/dts/qcom/sc7280-herobrine-evoker.dts | 16 ++++++++++++
+ ...er-r0.dts => sc7280-herobrine-evoker.dtsi} | 26 +++++--------------
+ 5 files changed, 44 insertions(+), 20 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
+ rename arch/arm64/boot/dts/qcom/{sc7280-herobrine-evoker-r0.dts => sc7280-herobrine-evoker.dtsi} (93%)
 
-Thanks for reviewing and testing.
+-- 
+2.34.1
 
-Johan
