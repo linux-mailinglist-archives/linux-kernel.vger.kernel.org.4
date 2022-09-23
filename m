@@ -2,137 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045455E843E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2DF5E8424
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiIWUlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 16:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S233071AbiIWUfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 16:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiIWUka (ORCPT
+        with ESMTP id S232995AbiIWUeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 16:40:30 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EC41514F7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:35:43 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id t70so1278245pgc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=+2laYBdgjwT7rG4W5AHSQduuvkvGMevdVubQImW4gKw=;
-        b=nbTXxoItIcoLMSX/37BnKPPw/3YlEPQi9RGa22B4OfB3Mw3rQ7fVLlIBZDFWhU6SQB
-         iQQy0oVdOCW9DPex5gUVO+9CVPiYxCD2RX7jYGmew9mYG9nePUONwhOxImpJpLdtHO3I
-         +RIWIsZx79HIw7FNWO7gsYSXx6hJ7HZJNUkfA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=+2laYBdgjwT7rG4W5AHSQduuvkvGMevdVubQImW4gKw=;
-        b=RN8LwOpF5tBPSZJEO9JCuqM2eulGQvwenPkmbb3uwVhVOXBiIqI1WrmHYKHoZ5zqNF
-         t4KxK3KZZqXt/mHGUGL4sqnME07WBQUwxq/lAcSmsguf+Fej3nsNk+ANFbl2/kEMGkun
-         fvw0v6NpXvjPWw0oI9ueGetKGM2lAITk6NkHm2MkwsC8RD22QQOajF5hbYtSms6KBgOn
-         966U4nVsIbdxd9vBPlou22hyEtPBjVcUgYVSOK7cHEpVZ2ofPpikbNH+4pV/BvuY5Aqv
-         rUAoJ+V1QsRmKwx0EmN1/vVRLr+B/dUWkk6jHmQRfEkUZnWO+SWDnKO7a3MXXCOFfoQ5
-         wmcw==
-X-Gm-Message-State: ACrzQf1qLMhXlZd8VGQgvj3qnkIzOBT9/bOatCevlhLveSrdYR1cdZzd
-        Brx4QDjlGDRIz42QX7OnxZDG1A==
-X-Google-Smtp-Source: AMsMyM5bm7zGXJ9d50JTGsymxB/VLZYV8oPS2I+E2tFMZpMAmvrfAs1/p+X8f9kZo4aKjt6+zvlMFg==
-X-Received: by 2002:a63:8649:0:b0:43a:d230:d3b5 with SMTP id x70-20020a638649000000b0043ad230d3b5mr9208334pgd.493.1663965329910;
-        Fri, 23 Sep 2022 13:35:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w7-20020a170902e88700b0017685f53537sm6450933plg.186.2022.09.23.13.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 13:35:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 16/16] slab: Restore __alloc_size attribute to __kmalloc_track_caller
-Date:   Fri, 23 Sep 2022 13:28:22 -0700
-Message-Id: <20220923202822.2667581-17-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
-References: <20220923202822.2667581-1-keescook@chromium.org>
+        Fri, 23 Sep 2022 16:34:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B3F14D30F;
+        Fri, 23 Sep 2022 13:28:46 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NKPDua007507;
+        Fri, 23 Sep 2022 20:28:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=C1ePJ8Mf307F7nByJ7BtKcM8WaOumNsqo6SgWuWLwEw=;
+ b=Xzb0PKVSMLpfwtNDd4ZmIgKg6KYRwRWpQYVfhC8USQLDiyZrvilCdgpwLCdlGM32a1As
+ iXu9bmQ2286Z0uXLI6QV8+zPdDTeym/eKx2tDiqiV1Gk6TQsDhIKhIpElC6p4vqJz21C
+ sEjpG19MY8HoLIA2GWagHijQH5teyNaJnmQgZyY1YRhQwKZk9Iq46TmL/WHwXUtibcOz
+ hCO9Lzzhw3WCL4gUih28SQ8SrUub13FKNWQRiR9kaiGZAJY/CSHxQwOhKEezslEFTVoR
+ bs0ewsqo9RNILomoX6jp+l/vgUvAsAGM3T2d9VEbNP+YoJhSlPjM7Ju0aH1cu3QyHll2 ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jsktj02w9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 20:28:33 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28NKPWwo009551;
+        Fri, 23 Sep 2022 20:28:32 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jsktj02vt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 20:28:32 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28NKL9TY024646;
+        Fri, 23 Sep 2022 20:28:31 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 3jn5vamg9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 20:28:31 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28NKSUlT7340554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Sep 2022 20:28:30 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B69358054;
+        Fri, 23 Sep 2022 20:28:30 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E0B958058;
+        Fri, 23 Sep 2022 20:28:29 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.173.46])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Sep 2022 20:28:29 +0000 (GMT)
+Message-ID: <0f9387c9ceec0819de7bdb8b3635af8fa8236973.camel@linux.ibm.com>
+Subject: Re: [PATCH -next 1/4] ima: Use DECLARE_FLEX_ARRAY() helper in
+ ima_modsig
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 23 Sep 2022 16:28:28 -0400
+In-Reply-To: <20220905075837.1083216-2-cuigaosheng1@huawei.com>
+References: <20220905075837.1083216-1-cuigaosheng1@huawei.com>
+         <20220905075837.1083216-2-cuigaosheng1@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -EumnrV6P_ZEykrDwuIzUAun3irb-r9e
+X-Proofpoint-ORIG-GUID: 1VEcZepvLU4jde-VqGfHDtl1Nq8N4AiX
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1650; h=from:subject; bh=/OaZMueZzIe84chcaXjPmGvBh3Vl4n1WZ7Et98TCic4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbmpXV27OdVCurixM5mD3YL9FeIo8HzPKP6kKFZ 0hj84SaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5gAKCRCJcvTf3G3AJrk1D/ 9suh4VQDWJhn6CjYJdrIyeIOje+kXnxuVQ4rZWxcfisvcOa9LBG3AeDjRuKI4VpUdYD37IwPPRov57 7ySYIwMkjVqKZEa/PzjhXiMhpeo5c/FR+mC/2/7gf0vf6wqxRDni79+/q13dY5meEj/JSCQ/VnxZRe gjJepCGBakVJaJJpuemoCwsjm59sySqVEfoXZQ3j8FvjLzn3UEHguFLm71uFRvZJYaFRgcZYER/6SM gtzHNWGWaCNhF8dkKOnwzFjb9Rnzxv996CnMgQ48xhu33oEvFn/qv87UNwxYH5nu+eGAj6AOn0942n o/n7ecuvzIw73BhNbAqSHTiF/7CH2P1ACFMXogDcRbmseRTH9IxMtimtJP4ycB5H3BlirHH62OwXYW HcNSihxuIstBMI+dXzPUAePdpDw9zFpCkThJFB3HawrMyY1xWxrUir3MaIirOiGPAaNsQ2phrSDz2q 89SyrvWcLNxNEqTTWGHN3J4vSrnAPQTLDJgx+qlchawQhrFpywa38+u+aGHG0NL7zPvmR7xoWq31Bj MvQuhlk8RDsuhGN+mFYxlipeK0PD5eo1yTnzSxnawr2guLYHLoh5ZATYEPsnWaJ23aiXDLUrWeSOx6 ihxdUdxuZS6AB+vqV1rDpWb7cFU4nZ6MydrAXZN1cwWnC866PyTB2WT4EREg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-23_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209230130
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With skbuff's post-allocation use of ksize() rearranged to use
-kmalloc_size_round() prior to allocation, the compiler can correctly
-reason about the size of these allocations. The prior mismatch had caused
-buffer overflow mitigations to erroneously fire under CONFIG_UBSAN_BOUNDS,
-requiring a partial revert of the __alloc_size attributes. Restore the
-attribute that had been removed in commit 93dd04ab0b2b ("slab: remove
-__alloc_size attribute from __kmalloc_track_caller").
+Hi Gaosheng,
 
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: linux-mm@kvack.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/slab.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thank you for the patches.
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 727640173568..297b85ed2c29 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -693,7 +693,8 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
-  * allocator where we care about the real place the memory allocation
-  * request comes from.
-  */
--extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
-+extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
-+				   __alloc_size(1);
- #define kmalloc_track_caller(size, flags) \
- 	__kmalloc_track_caller(size, flags, _RET_IP_)
- 
+On Mon, 2022-09-05 at 15:58 +0800, Gaosheng Cui wrote:
+> Zero-length arrays are deprecated and we are moving towards adopting
+> C99 flexible-array members instead. So, replace zero-length array
+> declaration with the new DECLARE_FLEX_ARRAY() helper macro in struct
+> modsig.
+> 
+> This helper allows for a flexible-array member in a union.
+> 
+> Link: KSPP#21
+> Link: KSPP#193
+> Link: KSPP#197
+
+The above shortened link is a bit confusing.  The #193 complete link is
+mentioned in the cover letter.  In all cases being modified the "[]" 
+notation is used.  Is this a boiler plate patch description or are all
+three of these links really applicable to each of the patches?  
+
+- Eliminate fake flexible arrays from the kernel ("variable length"
+one-element and zero-length arrays) #21
+- Replace fake flexible-array declarations with the
+DECLARE_FLEX_ARRAY() helper macro #193
+- Address -Wzero-length-array warnings reported by Clang #197
+
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+
+Shouldn't this link be in the cover letter?  And the applicable
+link(s), as shown in the cover letter, here in the patches?
+
 -- 
-2.34.1
+thanks,
+
+Mimi
+
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  security/integrity/ima/ima_modsig.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+> index fb25723c65bc..d132383dbb64 100644
+> --- a/security/integrity/ima/ima_modsig.c
+> +++ b/security/integrity/ima/ima_modsig.c
+> @@ -29,7 +29,7 @@ struct modsig {
+>  	 * storing the signature.
+>  	 */
+>  	int raw_pkcs7_len;
+> -	u8 raw_pkcs7[];
+> +	DECLARE_FLEX_ARRAY(u8, raw_pkcs7);
+>  };
+>  
+>  /*
+
 
