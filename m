@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBAA5E84F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F167B5E84F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiIWVb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
+        id S231402AbiIWVdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 17:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiIWVbR (ORCPT
+        with ESMTP id S229525AbiIWVdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:31:17 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5D8B6D1B;
-        Fri, 23 Sep 2022 14:31:15 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id c7so1355275pgt.11;
-        Fri, 23 Sep 2022 14:31:15 -0700 (PDT)
+        Fri, 23 Sep 2022 17:33:00 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966119E8BC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:32:58 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id mi14so735644qvb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=onRZypm85DpA8F8xppQeAp1Vjn+WOvdDaZWVxEq3cLc=;
-        b=AeUNuttHkTaoXwu2MlIkDD2woBAl8avyM41dVZduixGhJTCYnqihozhDNDuvmvRqbu
-         +u0g4u3ztcyq2l97S51FzEVJhiwGEt9SBftjI8gKnb6sZY1EzYZkeKvEwMyqgWKyXwJG
-         ZjlRrhe9fVXoE8B1bVn3qhbZAdSNoUKZBqa8zpBBn/m4qIkT/y4hnFnRkUg+jRmH4gp4
-         BKG8PYXtMccnfGNFz5UVvPv9kC853jR7svR1stpYtYmuTIgpRaG1ISQsbE4h+ftIcV48
-         2z+V+d/75k/6aacdfZnoe73t9ciMSNCt5LxEhZRHuTDpiBJBbtEjAmBdt5J5H6pwuZjw
-         Ykpw==
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=rSFjW36jJOKHdmnnk3/fGHSGvXpsb/XtXPbpN+m6od0=;
+        b=WbGuo/Q+2JQls71JXy+DKjT5lrw9Kurr859OQWRjUynQP9sn+xsppwjjlQoPfdEMSk
+         UtXtkNhx2Ve54PsfhiAsf3fxP9SOXsyLtjyMrQ/bO3Kr/89MWJMKEGObGFlV/4jC01E7
+         p5Bu8AlF4rtevBUYS6v/GZpbDCqkysmu4vOtXv1fgT3Pwyj5wFKf9ckkGMeaO9H/x/xJ
+         aJ84ZU9KLyjGw2pAVsfKPntSXrF7DP7wGMPdE91jn19BQ0UNfqAfL61/nL8Mfnkfn4IC
+         pnqDIFsY2GMYomFs6QM6Tx6qkmipmV3Zwelkia49Vq4sLM7XVnY0vDgbvylNhcf5jG9n
+         jGzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=onRZypm85DpA8F8xppQeAp1Vjn+WOvdDaZWVxEq3cLc=;
-        b=0JClvZcGxumQsR/nlUwhl533KEaiqe4heSjZKsOHH8breUNYNKb3CisJX4O8Eps2B0
-         N76YpmSbI303cguMLVHzS5Ac7UDyMldw0+V8xIub1HfWvXX/WO1oh1EKlmhrUHuPnamP
-         Fv3Id66fsrW5iRhaAsdm8EKmaTVOB+srFWjIHmcLw6If/TZHj0CSO7P78Il34Tabm7M2
-         +7h/jZDBVL4sH0dZzDhGMj3BnF/+v1i1qf5qhULpyEVfe9omOvc/5F8a4LtFuTCErWgW
-         mW9YId+paqmKLbGGXu/huQSvYhqze6gsy31wFTG2yByUdyRpL6MkOKwpaBAYK8WFjLU9
-         tXyg==
-X-Gm-Message-State: ACrzQf3HxvXwpQ0fGMZcyjTO+YKaG/BUbpbw4W3PHc/GUA6dOqyKi3NA
-        9VK46AhapYdK16qvDACNR5da7HTrJlSva2nuqws=
-X-Google-Smtp-Source: AMsMyM5/kokYfSEaldCoGBdzMKYQ2l0ms9OVcQvuTon6Yt4h5vSgBS0LuY0eA2e8/jJPXCsYLA1MCVthbGeyahsD5Qo=
-X-Received: by 2002:a05:6a00:a95:b0:547:b3e0:b1c0 with SMTP id
- b21-20020a056a000a9500b00547b3e0b1c0mr11273947pfl.53.1663968674771; Fri, 23
- Sep 2022 14:31:14 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rSFjW36jJOKHdmnnk3/fGHSGvXpsb/XtXPbpN+m6od0=;
+        b=Lfx47yhj9oBw04i7TgiBpknw0lWJTy4ziPJAR2IDCISeSXSt/rEuZrJWBnpBpwdpOO
+         qId/WaOr0gi8I4GBTyd0h+B753ZgfPGFvKuiGfq7isnfTWUgPl3rdUgoGnX2iiAX8OuG
+         gD8RemsnHClgnAa8zYJpJDTRQ98Os10ixtOh1u5lYC5Ea9RCDGbA5UUDqHe2+b/wRwnT
+         QL2Dejzn83lQTSTwB8+NualgVs3iRsYY3sSAz0rU+GFfUsBw0ioAxT9dP+yGlZ6jWdfi
+         tku9v9AINNQJJoElWNmSXKLyYyVoALtlVUf7Tp7l2nNSjL8skF1NMHEKYeDD/NRzITG3
+         k0dA==
+X-Gm-Message-State: ACrzQf1uuFvNS4C4IFdQEwfsCHj0kAGbOmMm5j4O0955eCEbY1VXRHLh
+        5IJ2bqzAOzi2eId0t5UC33D7B5eCrpE=
+X-Google-Smtp-Source: AMsMyM7qf1MHs6jAk6JGH+Y+JEInqHcOSVpwobrhyzSADRCm0JJE5Wom3ODGyFKeuiOts9//gGR+Fg==
+X-Received: by 2002:a0c:8dca:0:b0:4ad:6e03:c906 with SMTP id u10-20020a0c8dca000000b004ad6e03c906mr8735830qvb.74.1663968777751;
+        Fri, 23 Sep 2022 14:32:57 -0700 (PDT)
+Received: from Gentoo ([154.16.192.39])
+        by smtp.gmail.com with ESMTPSA id c15-20020ac8110f000000b0035bbb0fe90bsm5881272qtj.47.2022.09.23.14.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 14:32:57 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 03:02:32 +0530
+From:   Bhaskar Chowdhury <bhaskarlinux73@gmail.com>
+To:     Daniel Mentz <danielmentz@google.com>
+Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, masahiroy@kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kernel:gen_kheaders:Replace md5sum to sha256sum
+Message-ID: <Yy4l8AVyoEJtV+Vm@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <bhaskarlinux73@gmail.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>, masahiroy@kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+References: <20220923110332.24090-1-unixbhaskar@gmail.com>
+ <CAE2F3rDymUUDyXrxFyhSGe4k1jrsZih2DbXViA23wAND=XJuyg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
- <2254584.ElGaqSPkdT@opensuse> <CAKgT0UfThk3MLcE38wQu5+2Qy7Ld2px-2WJgnD+2xbDsA8iEEw@mail.gmail.com>
- <2834855.e9J7NaK4W3@opensuse> <d4e33ca3-92e5-ba30-f103-09d028526ea2@intel.com>
- <CAKgT0Uf1o+i0qKf7J_xqC3SACRFhiYqyhBeQydgUafB5uFkAvg@mail.gmail.com>
- <22aa8568-7f6e-605e-7219-325795b218b7@intel.com> <CAKgT0UfU6Hu3XtuJS_vvmeOMDdFcVanieGXRLyVRmPF7+eRjvg@mail.gmail.com>
- <f32338c8-db1a-ba0c-9254-922d96f2e601@intel.com>
-In-Reply-To: <f32338c8-db1a-ba0c-9254-922d96f2e601@intel.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 23 Sep 2022 14:31:03 -0700
-Message-ID: <CAKgT0Ucr7s48WskQikmLcukrvC-34Nd8NwCbFG=vF0wn0VbfDQ@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-To:     Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0rxz6OFaGQFUDwk7"
+Content-Disposition: inline
+In-Reply-To: <CAE2F3rDymUUDyXrxFyhSGe4k1jrsZih2DbXViA23wAND=XJuyg@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,110 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:51 AM Anirudh Venkataramanan
-<anirudh.venkataramanan@intel.com> wrote:
+
+--0rxz6OFaGQFUDwk7
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+
+On 11:12 Fri 23 Sep 2022, Daniel Mentz wrote:
+>On Fri, Sep 23, 2022 at 4:06 AM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+>> Thought to apply a better encryption mechanism.
 >
-> On 9/23/2022 8:31 AM, Alexander Duyck wrote:
-> > On Thu, Sep 22, 2022 at 3:38 PM Anirudh Venkataramanan
-> > <anirudh.venkataramanan@intel.com> wrote:
-> >>
-> >> On 9/22/2022 1:58 PM, Alexander Duyck wrote:
-> >>> On Thu, Sep 22, 2022 at 1:07 PM Anirudh Venkataramanan
-> >>> <anirudh.venkataramanan@intel.com> wrote:
-> >>>>
-> >>>>
-> >>>> Following Fabio's patches, I made similar changes for e1000/e1000e and
-> >>>> submitted them to IWL [1].
-> >>>>
-> >>>> Yesterday, Ira Weiny pointed me to some feedback from Dave Hansen on the
-> >>>> use of page_address() [2]. My understanding of this feedback is that
-> >>>> it's safer to use kmap_local_page() instead of page_address(), because
-> >>>> you don't always know how the underlying page was allocated.
-> >>>>
-> >>>> This approach (of using kmap_local_page() instead of page_address())
-> >>>> makes sense to me. Any reason not to go this way?
-> >>>>
-> >>>> [1]
-> >>>>
-> >>>> https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20220919180949.388785-1-anirudh.venkataramanan@intel.com/
-> >>>>
-> >>>> https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20220919180949.388785-2-anirudh.venkataramanan@intel.com/
-> >>>>
-> >>>> [2]
-> >>>> https://lore.kernel.org/lkml/5d667258-b58b-3d28-3609-e7914c99b31b@intel.com/
-> >>>>
-> >>>> Ani
-> >>>
-> >>> For the two patches you referenced the driver is the one allocating
-> >>> the pages. So in such a case the page_address should be acceptable.
-> >>> Specifically we are falling into alloc_page(GFP_ATOMIC) which should
-> >>> fall into the first case that Dave Hansen called out.
-> >>
-> >> Right. However, I did run into a case in the chelsio inline crypto
-> >> driver where it seems like the pages are allocated outside the driver.
-> >> In such cases, kmap_local_page() would be the right approach, as the
-> >> driver can't make assumptions on how the page was allocated.
-> >
-> > Right, but that is comparing apples and oranges. As I said for Tx it
-> > would make sense, but since we are doing the allocations for Rx that
-> > isn't the case so we don't need it.
-> >
-> >> ... and this makes me wonder why not just use kmap_local_page() even in
-> >> cases where the page allocation was done in the driver. IMO, this is
-> >> simpler because
-> >>
-> >> a) you don't have to care how a page was allocated. kmap_local_page()
-> >> will create a temporary mapping if required, if not it just becomes a
-> >> wrapper to page_address().
-> >>
-> >> b) should a future patch change the allocation to be from highmem, you
-> >> don't have to change a bunch of page_address() calls to be
-> >> kmap_local_page().
-> >>
-> >> Is using page_address() directly beneficial in some way?
-> >
-> > By that argument why don't we just leave the code alone and keep using
-> > kmap? I am pretty certain that is the logic that had us using kmap in
-> > the first place since it also dumps us with page_address in most cases
-> > and we didn't care much about the other architectures.
+>MD5 and SHA256 are secure (or, in the case of MD5, not so secure) hash
+>algorithms, not encryption mechanisms.
 >
-> Well, my understanding is that kmap_local_page() doesn't have the
-> overheads kmap() has, and that alone is reason enough to replace kmap()
-> and kmap_atomic() with kmap_local_page() where possible.
-
-It has less overhead, but there is still some pretty significant code
-involved. Basically in the cases where it can't bail out and just call
-page_address it will call __kmap_local_page_prot(),
-https://elixir.bootlin.com/linux/v6.0-rc4/source/mm/highmem.c#L517.
-
-> > If you look at
-> > the kmap_local_page() it just adds an extra step or two to calling
-> > page_address(). In this case it is adding extra complication to
-> > something that isn't needed which is the reason why we are going
-> > through this in the first place. If we are going to pull the bandage I
-> > suggest we might as well just go all the way and not take a half-step
-> > since we don't actually need kmap or its related calls for this.
+>> Replace all occurance of md5sum to sha256sum .
 >
-> I don't really see this as "pulling the kmap() bandage", but a "use a
-> more appropriate kmap function if you can" type situation.
+>Looking at this script, I'm not convinced that it relies on MD5 being
+>a cryptophically secure hash function. It appears to me as if this
+>script uses MD5 to simply detect innocent changes to a set of files as
+>opposed to guarding against malicious attacks. I also found that
+>sha256sum takes almost three times longer than md5sum. So, in the
+>absence of security requirements, md5sum might actually be the better
+>choice because it's faster.
 
-My concern is that it is more of a half step in the case of the
-e1000/e1000e drivers. We likely should have fixed this some time ago
-when I had rewritten the Rx path for the igb and ixgbe drivers, but I
-just didn't get around to it because if I messed with other areas it
-would have required more validation. I'd rather not carry around the
-extra code or function calls if we don't need it.
-
-> FWIW, I am not against using page_address(). Just wanted to hash this
-> out and get to a conclusion before I made new changes.
->
-> Ani
-
-I gathered as much based on your other conversation. This is
-essentially the module-local case you had referred to in which the
-page is allocated and used within the module so there is no need to be
-concerned about it possibly being a highmem page.
-
+Al righto! Then...no issues, give it a pass.
+--
 Thanks,
+Bhaskar
 
-- Alex
+"Here's looking at you kid"-- Casablanca
+https://about.me/unixbhaskar
+
+--0rxz6OFaGQFUDwk7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCAAdFiEEs7FAjU4eq1yogJSEAkGeLcGNq5MFAmMuJfAACgkQAkGeLcGN
+q5OqngwAqKVulL0D7+pSyt+EoqX11vRhvNV24J14JrJdXCkg8RTrMDFnCHS8xo8y
+ypsXspIKDFo0Qy943HS/5CNYI6ulx4fI6EGKB4T4oFqxf53Mb8hLiiNT9fURRcXY
+t6R54tBi58wnyP8DMi56I/zEniTpvUhKh6hfaei8392CseZcb1RV+Vgq+q+v2UDq
+L61XVfhqq3axJi2VCZLH3uTQUBW5UQjP3d+KkVHfoHMOMXpWV8K7AVdSYZRSjOJG
+90Au0GjS11AoAtw43ZrIFVJ05rcPTgoZSVjvfQdv438p/M7hQwd+3Gxgz7I4Y5A2
+o4aijZeHeI5qrJpvitR3m1PXQjdn7wRK29ImydEcJY7zrhhL50wLlCFViR2K6gN6
+AaABCvOlXOm/7RCXcft8dGlGEIYR5b8gWGIipW7O6jlCLaY1y+MMVpO9Mhgd84GO
+3JQvryuoJG3WPmY4TZGvQpuwWC+WPoArqbnTRgw0S+2vCtlcU8s3kWwpGBfMh3xc
+Kmb/ob8S
+=8hBt
+-----END PGP SIGNATURE-----
+
+--0rxz6OFaGQFUDwk7--
