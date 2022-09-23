@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702E95E76E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685A25E77E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiIWJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S230076AbiIWKDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbiIWJZP (ORCPT
+        with ESMTP id S229926AbiIWKDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:25:15 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF15C8405
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:25:13 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYmsH4jy8zHqJg;
-        Fri, 23 Sep 2022 17:22:59 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 17:25:11 +0800
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 17:25:10 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-Subject: [PATCH] debugfs: use DEFINE_SHOW_ATTRIBUTE to define debugfs_regset32_fops
-Date:   Fri, 23 Sep 2022 18:25:54 +0800
-Message-ID: <20220923102554.2443452-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 23 Sep 2022 06:03:31 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE849126473
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:03:28 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso4941133pjm.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Igny7pTb9AijsoV7hvvN55djeYxG08/baILhy9iEypk=;
+        b=VyNg8Ii30CtNaDjTaFtYwnCPGNizxdHazep/PeUMboCspqgfeSQKiTDgFqQ/vnSWap
+         I6K+5rIOzf6oPLowz6qMKern4LAU+kuhCxl2cKsoDyaMK5RQBAdbOTcSQdsWjYs7fH/2
+         r2ifcY+C7IcX/MgZHx2XCZCtc9FWTEhhD9cp8tcZNX4r65ktat7ezbP4J7S0MzKJVvaf
+         blucuvgyjLxrT7LyKHphiuoB6HBLdMdch+R44ds3IpGA4zV+TntlFd5qfftF0ZD9gdu8
+         mXzhYsqjs6u7tHiObI+Ezy69dAFTYIpvLcHuYzgtjtte3xIEMPQzbsx7Q0PMJsahI81Y
+         M9+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Igny7pTb9AijsoV7hvvN55djeYxG08/baILhy9iEypk=;
+        b=mU5AVmUIzxl2uM+xM4rTL0g333Kfi5uQrZsEPUmmoDi2PDayUMvD1obyneanMfAGKv
+         WADx/0WenDBzpd7+9nOVvIfS1hGw79FNsSecMJAuzebrwezrlPoLkKWytiiRlfAt6tOd
+         wRd8vAzl+FhIeMTsvCIyCo8UD2kELcNveEnLeqwbKSpytUy/E9AaeCjVuMvHyIcLeuZZ
+         +CPt0Za/q3dWE63unv7TiYvFhd5YRKbAfKBnOV3oc7VPpp9FFJ5StBCTNvXWbTgkTVXt
+         3MUcFjCuX9ttM+CA4NUJQEAMkX4cMhAil/uMroa9XjRv4Sqhc2XzWj5CeVKk+IzUc/Ei
+         fXXQ==
+X-Gm-Message-State: ACrzQf00cP+E5B5CxuN53L0notoJ/nWmj/EIQmgZrPVnczqDtr+bDwW3
+        jELbjHZ8xlNLyjdrBSJFHJncm6LLNpERqaMoulmp/Lpg
+X-Google-Smtp-Source: AMsMyM422saiBMn/ttuHBBoJOpy7D9O9IJYmJtuUdgGr8ByYU4QCQaCJ++5PPH1JIak8CwDVtGUjpQ==
+X-Received: by 2002:a17:90b:1a90:b0:202:ff17:4a80 with SMTP id ng16-20020a17090b1a9000b00202ff174a80mr20367969pjb.213.1663927407990;
+        Fri, 23 Sep 2022 03:03:27 -0700 (PDT)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id l25-20020a635b59000000b0043395af24f6sm5374100pgm.25.2022.09.23.03.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 03:03:27 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
+Cc:     guoren@linux.alibaba.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH RESEND] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+Date:   Fri, 23 Sep 2022 18:01:49 +0800
+Message-Id: <20220923100149.2647325-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
+riscv now uses -fpatchable-function-entry with dynamic ftrace after
+the `afc76b8b8` commit, which means recordmcount shouldn't be called
+to create the __mcount_loc section before the vmlinux linking.
 
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+We should select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
+Makefile not to run recordmcount.
+
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 ---
- fs/debugfs/file.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index 950c63fa4d0b..ddb3fc258df9 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -1121,7 +1121,7 @@ void debugfs_print_regs32(struct seq_file *s, const struct debugfs_reg32 *regs,
- }
- EXPORT_SYMBOL_GPL(debugfs_print_regs32);
- 
--static int debugfs_show_regset32(struct seq_file *s, void *data)
-+static int debugfs_regset32_show(struct seq_file *s, void *data)
- {
- 	struct debugfs_regset32 *regset = s->private;
- 
-@@ -1136,17 +1136,7 @@ static int debugfs_show_regset32(struct seq_file *s, void *data)
- 	return 0;
- }
- 
--static int debugfs_open_regset32(struct inode *inode, struct file *file)
--{
--	return single_open(file, debugfs_show_regset32, inode->i_private);
--}
--
--static const struct file_operations fops_regset32 = {
--	.open =		debugfs_open_regset32,
--	.read =		seq_read,
--	.llseek =	seq_lseek,
--	.release =	single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(debugfs_regset32);
- 
- /**
-  * debugfs_create_regset32 - create a debugfs file that returns register values
-@@ -1167,7 +1157,7 @@ void debugfs_create_regset32(const char *name, umode_t mode,
- 			     struct dentry *parent,
- 			     struct debugfs_regset32 *regset)
- {
--	debugfs_create_file(name, mode, parent, regset, &fops_regset32);
-+	debugfs_create_file(name, mode, parent, regset, &debugfs_regset32_fops);
- }
- EXPORT_SYMBOL_GPL(debugfs_create_regset32);
- 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c22f58155948..25db8cea876a 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -246,6 +246,7 @@ config ARCH_RV64I
+ 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
+ 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+ 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
++	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+ 	select SWIOTLB if MMU
 -- 
-2.31.1
+2.20.1
 
