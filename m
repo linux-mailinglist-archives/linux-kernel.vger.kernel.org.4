@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251315E7982
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A5F5E7987
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiIWLYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S229949AbiIWLZf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Sep 2022 07:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiIWLYP (ORCPT
+        with ESMTP id S231440AbiIWLZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:24:15 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1225137461
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:23:35 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id t70so11978421pgc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date;
-        bh=REIOUlOZuR2Dd03PbSB7cFdrr86vzDy5is9HvQVwqOc=;
-        b=KcgfRfVYGauuLgvui7owu3BU/Z7+CTtWQcE+Z60T6syawS10cHJ6WhG7LXHJNWDgwg
-         eCa/OnHa3JwTrCdhZqkZUgtLpai2yUEh6sVG9sfGL46TNy378yMCoM1xdUcsQwOSROTU
-         h45aPVLMjWRJJk0x5G5TRxVvJ7s8Sg3hD4Wh/v+T7Vj6zIDbBVTs1dN6fCJ0jUuXYdr8
-         8wB1oI892OnaII7BNrGvL9XtRrMrt9m42aeXx7rSACgihwREAZN1y8iyya8ocwCA+8af
-         /AFr5BrufxrnEreBcOdnl33LugE2l817Fp1KaRAWbL4S9tqf0dNHXvKWu1h70OTbJS1t
-         JFRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=REIOUlOZuR2Dd03PbSB7cFdrr86vzDy5is9HvQVwqOc=;
-        b=rXDvCDq5XvlLCR/psFmbFbSYECgyIhLv/+zXw6qI5oIxEEfKcEZmNAIEuYEBOf1FA7
-         LbcmAmM8VlVorAd1WU5R1nEn21ywuvXbISl6q5HSTR5FSJYBorj+ngKkqz2ZZI1ZNevC
-         5QiC30GEhSinEXRk9jtok/B3DeJPRtMeXqqkm8kUHbyJh3BuTBNuNdRrwiGpv9IqtD2V
-         qLhL/djca2kT/CY6QVJSbDx1AhzjMgqLZv9QWCPMuQy39prz+J1ETU9rm5FSYRvYwGeD
-         HBYw7LtC0paocpg3LXgjAKkxgolKDi22j0CfHqg7qPm8xX0kpbF599xuCNcMpNtaaC6F
-         Sowg==
-X-Gm-Message-State: ACrzQf2jUSDbcbHrLmnHJaM4Y8YKVxn2aPMqj9Y5Tk7jgZvyVeN8i0y0
-        wuT54g9TztFgQeY71X5JxL/qr8yxGRA7WSr4osA=
-X-Google-Smtp-Source: AMsMyM7CmXeYHzs1yO8Rgy5zY3tySOuksEOeoUcxlJVMX6JPTm1TD0jUQF3NlmOdxcQ/TWXggYzC3Q==
-X-Received: by 2002:a05:6a00:2488:b0:540:e5e5:ba48 with SMTP id c8-20020a056a00248800b00540e5e5ba48mr8677357pfv.51.1663932209555;
-        Fri, 23 Sep 2022 04:23:29 -0700 (PDT)
-Received: from localhost ([88.128.88.52])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa79629000000b00537eb0084f9sm6068167pfg.83.2022.09.23.04.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 04:23:28 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 04:23:28 -0700 (PDT)
-X-Google-Original-Date: Fri, 23 Sep 2022 04:22:45 PDT (-0700)
-Subject: [GIT PULL] RISC-V Fixes for 6.0-rc7
-CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-d96d9461-4a76-47d6-8a6c-fe0890247b0b@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 07:25:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943B8139415
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:24:24 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-88-mnhmMfK-PT2rPSHOtJFAFA-1; Fri, 23 Sep 2022 12:24:21 +0100
+X-MC-Unique: mnhmMfK-PT2rPSHOtJFAFA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 23 Sep
+ 2022 12:24:18 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 23 Sep 2022 12:24:18 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'cambda@linux.alibaba.com'" <cambda@linux.alibaba.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Subject: RE: Syscall kill() can send signal to thread ID
+Thread-Topic: Syscall kill() can send signal to thread ID
+Thread-Index: AQHYzwCNj4NIUfe8L0qIx1KiSNUBva3s3edg
+Date:   Fri, 23 Sep 2022 11:24:18 +0000
+Message-ID: <062228e73ef444dcafbcb6056bd6c37c@AcuMS.aculab.com>
+References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
+ <87k05v5sqn.fsf@email.froward.int.ebiederm.org>
+ <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
+In-Reply-To: <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 20e0fbab16003ae23a9e86a64bcb93e3121587ca:
+...
+> And yes, I'm tracking a bug. A service monitor, like systemd or
+> some watchdog, uses kill() to check if a pid is valid or not:
+>   1. Store service pid into cache.
+>   2. Check if pid in cache is valid by kill(pid, 0).
+>   3. Check if pid in cache is the service to watch.
+> 
+> So if kill(pid, 0) returns success but no process info shows on 'ps'
+> command, the service monitor could be confused. The monitor could
+> check if pid is tid, but this means the odd behavior would be used
+> intentionally. And this workaround may be unsafe on other OS?
 
-  perf: RISC-V: fix access beyond allocated array (2022-09-08 13:50:25 -0700)
+That looks pretty broken to me.
+On Linux a pid can be reused immediately a process exits.
+So there is really no guarantee that the pid is the one you want.
+IIRC there are some recent changes that mean opening /proc/<pid>
+will stop the pid being reused - allowing checks before sending a signal.
+(Netbsd won't reuse a pid for a reasonable number of forks
+and then uses a semi-random pid allocator.
+Don't know whether any other 'bsd picked up that change.)
 
-are available in the Git repository at:
+Also using signals in multi-threaded programs is pretty much
+non-portable.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.0-rc7
+	David
 
-for you to fetch changes up to c589e3ca27c9f608004b155d3acb2fab6f7a9f26:
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-  RISC-V: Avoid coupling the T-Head CMOs and Zicbom (2022-09-17 01:48:24 -0700)
-
-----------------------------------------------------------------
-RISC-V Fixes for 6.0-rc7
-
-* A handful of build fixes for the T-Head errata, including some
-  functional issues the compilers found.
-* A fix for a nasty sigreturn bug.
-
-----------------------------------------------------------------
-Sorry in advance if something else has gone off the rails on this one, I had a
-bit of an unplanned vacation this week and it's shaping up to be more tiring
-than the conferences.  This is just what was there last week (without the
-deadlock), I figured it'd be best to avoid delaying those any longer.
-
-With any luck I'll be home tomorrow, so things should return to sanity
-soon-ish.
-
-----------------------------------------------------------------
-Al Viro (1):
-      riscv: fix a nasty sigreturn bug...
-
-Heiko Stuebner (1):
-      riscv: make t-head erratas depend on MMU
-
-Palmer Dabbelt (2):
-      RISC-V: Clean up the Zicbom block size probing
-      RISC-V: Avoid coupling the T-Head CMOs and Zicbom
-
-Randy Dunlap (1):
-      riscv: fix RISCV_ISA_SVPBMT kconfig dependency warning
-
- arch/riscv/Kconfig                  |  1 +
- arch/riscv/Kconfig.erratas          |  4 ++--
- arch/riscv/errata/thead/errata.c    |  1 +
- arch/riscv/include/asm/cacheflush.h |  5 +++++
- arch/riscv/kernel/setup.c           |  2 +-
- arch/riscv/kernel/signal.c          |  2 ++
- arch/riscv/mm/dma-noncoherent.c     | 23 +++++++++++++----------
- 7 files changed, 25 insertions(+), 13 deletions(-)
