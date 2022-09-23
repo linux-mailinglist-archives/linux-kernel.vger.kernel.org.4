@@ -2,149 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4045E77C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751D35E77CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiIWJ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S231317AbiIWJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiIWJ45 (ORCPT
+        with ESMTP id S229727AbiIWJ6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:56:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23713073E;
-        Fri, 23 Sep 2022 02:56:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0655821A8E;
-        Fri, 23 Sep 2022 09:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663927014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=us+dLjYsj7y69xS3UKuaVga8AZkPesdObHEXPyfea7c=;
-        b=CgxV01WFtYUpA/rNfefeudFxFUhoOnJkG0HnO1V8uPJV6xSkn7z6huZF6R/QyGCFIU4LFW
-        nLaS8GVaFPjeIepZRkh+yYXVCVHc6p3IUk7v/7W2BW+ptoKZAM5vDzldVqFlXMDJhkwMkj
-        xQ+0bvG9JPXm64wVtf0yQcflvm+rYaA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663927014;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=us+dLjYsj7y69xS3UKuaVga8AZkPesdObHEXPyfea7c=;
-        b=KXTNeaDMsUrJxPhK3xNAXOp5p3gQfxpAMM25eFV7D53yDuXmK5zyxRULi3uK1YGDGVOS1x
-        vSjXFKMYV27kfYDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E584313A00;
-        Fri, 23 Sep 2022 09:56:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Oh0FOOWCLWNiMQAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 09:56:53 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 443FDA0685; Fri, 23 Sep 2022 11:56:53 +0200 (CEST)
-Date:   Fri, 23 Sep 2022 11:56:53 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Dave Chinner <david@fromorbit.com>, Theodore Ts'o <tytso@mit.edu>,
-        NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <20220923095653.5c63i2jgv52j3zqp@quack3>
-References: <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
- <20220918235344.GH3600936@dread.disaster.area>
- <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
- <20220920001645.GN3600936@dread.disaster.area>
- <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
- <20220921000032.GR3600936@dread.disaster.area>
- <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
- <20220921214124.GS3600936@dread.disaster.area>
- <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>
- <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>
+        Fri, 23 Sep 2022 05:58:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E53130BEE
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:58:34 -0700 (PDT)
+X-UUID: b753a4c2b30541be9ede7a4f19138a6a-20220923
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Y/0TWUoQdZUcZfvklK2LlSKQbDtiwqZfo59qL2l07nc=;
+        b=aMDa8GQalYmvN7y+ojo5iF+4GjHSAHWLUEK8xjN9uep7uuCZsTTi7Yzt3j/DYumJ2LW27mK1XbBZ8UmGoICBQG1MoouAxygY+psrYH2yEe1W91wEuk2GY/MjlwFrEmDO4IFDUJ+WEZcsiemMm4w63T1ZYEq6sGnz3OPdYIJLMbI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:6fe8acad-2eab-4e21-91d3-7fea83afff5e,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.11,REQID:6fe8acad-2eab-4e21-91d3-7fea83afff5e,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:39a5ff1,CLOUDID:259101e4-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:220923175829DDH7STM6,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL
+        :0
+X-UUID: b753a4c2b30541be9ede7a4f19138a6a-20220923
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 705211098; Fri, 23 Sep 2022 17:58:28 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 23 Sep 2022 17:58:26 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 23 Sep 2022 17:58:25 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <matthias.bgg@gmail.com>, <jason-jh.lin@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <rex-bc.chen@mediatek.com>, <ck.hu@mediatek.com>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>, Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v10,0/3] Add dpi output format control for MT8186
+Date:   Fri, 23 Sep 2022 17:58:21 +0800
+Message-ID: <1663927104-15506-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 22-09-22 16:18:02, Jeff Layton wrote:
-> On Thu, 2022-09-22 at 06:18 -0400, Jeff Layton wrote:
-> > On Thu, 2022-09-22 at 07:41 +1000, Dave Chinner wrote:
-> > > e.g. The NFS server can track the i_version values when the NFSD
-> > > syncs/commits a given inode. The nfsd can sample i_version it when
-> > > calls ->commit_metadata or flushed data on the inode, and then when
-> > > it peeks at i_version when gathering post-op attrs (or any other
-> > > getattr op) it can decide that there is too much in-memory change
-> > > (e.g. 10,000 counts since last sync) and sync the inode.
-> > > 
-> > > i.e. the NFS server can trivially cap the maximum number of
-> > > uncommitted NFS change attr bumps it allows to build up in memory.
-> > > At that point, the NFS server has a bound "maximum write count" that
-> > > can be used in conjunction with the xattr based crash counter to
-> > > determine how the change_attr is bumped by the crash counter.
-> > 
-> > Well, not "trivially". This is the bit where we have to grow struct
-> > inode (or the fs-specific inode), as we'll need to know what the latest
-> > on-disk value is for the inode.
-> > 
-> > I'm leaning toward doing this on the query side. Basically, when nfsd
-> > goes to query the i_version, it'll check the delta between the current
-> > version and the latest one on disk. If it's bigger than X then we'd just
-> > return NFS4ERR_DELAY to the client.
-> > 
-> > If the delta is >X/2, maybe it can kick off a workqueue job or something
-> > that calls write_inode with WB_SYNC_ALL to try to get the thing onto the
-> > platter ASAP.
-> 
-> Still looking at this bit too. Probably we can just kick off a
-> WB_SYNC_NONE filemap_fdatawrite at that point and hope for the best?
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-"Hope" is not a great assurance regarding data integrity ;) Anyway, it
-depends on how you imagine the "i_version on disk" is going to be
-maintained. It could be maintained by NFSD inside commit_inode_metadata() -
-fetch current i_version value before asking filesystem for the sync and by the
-time commit_metadata() returns we know that value is on disk. If we detect the
-current - on_disk is > X/2, we call commit_inode_metadata() and we are
-done. It is not even *that* expensive because usually filesystems optimize
-away unnecessary IO when the inode didn't change since last time it got
-synced.
+Base on the branch of ck-linux-next/mediatek-drm-fixes.
 
-								Honza
+Change since v9:
+1. Modify the location of the mmsys_dev member variable.
+
+Change since v8:
+1. Modified the title and some description information.
+
+Changes since v7:
+1. This series is based on the following patch:
+   [1] soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
+   https://patchwork.kernel.org/project/linux-mediatek/patch/1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com/
+2. Modify the DPI_FORMAT_MASK macro definition to GENMASK(1, 0);
+3. Add all settings to mtk_mmsys_ddp_dpi_fmt_config;
+4. Modify the commit title to Add mt8186 dpi compatibles and platform
+data.
+
+Changes since v6:
+1. Different from other ICs, when mt8186 DPI changes the output format,
+the mmsys_base+400 register needs to be set to be valid at the same
+time.
+   In this series, all the situations that mmsys need to be set up are
+perfected (not necessarily used in practice).
+2. Put the value that controls the mmsys function in mtk-mmsys.h.
+3. Encountered the sink ic switched between dual edge and single edge,
+perfected setting and clearing mmsys bit operations in mtk_dpi.c.
+
+Changes since v5:
+1. Separate the patch that adds edge_cfg_in_mmsys from the patch that
+adds mt8186 dpi support.
+2. Move the mmsys register definition to mmsys driver.
+ 
+Changes since v4:
+1. This series of cancellations is based on the following patches:
+   [1] Add MediaTek SoC(vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/
+   [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/
+2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
+3. MMSYS 0x400 register is modified to MT8186_MMSYS_DPI_OUTPUT_FORMAT;
+4. Fix formatting issues.
+
+Changes since v3:
+1. Fix formatting issues;
+2. Modify the edge output control name & description;
+3. Fix the threading problem.
+
+Changes since v2:
+1. Modify key nouns in the description;
+2. Add the label of jitao to Co-developed-by;
+3. Macro definition address lowercase problem and function naming;
+4. Add missing a description of this property in the mtk_dpi_conf.
+
+Change since v1:
+1. Modify mt8186 compatiable location.
+2. Modify MT8186_DPI_OUTPUT_FORMAT name.
+
+When MT8186 outputs dpi signal, it is necessary to add dual edge output
+format control in mmsys.
+
+Xinlei Lee (3):
+  soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
+  drm: mediatek: Adjust the dpi output format to MT8186
+  drm: mediatek: Add mt8186 dpi compatibles and platform data
+
+ drivers/gpu/drm/mediatek/mtk_dpi.c     | 32 ++++++++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
+ drivers/soc/mediatek/mt8186-mmsys.h    |  8 ++++---
+ drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++-----
+ include/linux/soc/mediatek/mtk-mmsys.h |  7 ++++++
+ 5 files changed, 67 insertions(+), 9 deletions(-)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.18.0
+
