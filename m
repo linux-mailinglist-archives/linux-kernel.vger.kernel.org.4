@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6ED5E816F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1235E8173
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbiIWSDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S232651AbiIWSDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbiIWSCh (ORCPT
+        with ESMTP id S232587AbiIWSCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 14:02:37 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9185513E7E1;
-        Fri, 23 Sep 2022 11:01:58 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 18:01:55 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86D513EE95;
+        Fri, 23 Sep 2022 11:01:59 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:01:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663956117;
+        s=2020; t=1663956118;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fsAIyuj4x0iEQg9cqv5G9BqMj5jKXDRAGq1wmpP6RCM=;
-        b=KfMpyNoyBP/Eq2IcUPPxbiqfzamWtBMQzsYgFBZi2lqliOlSHXHAYKFuAOr4TSGJMyesfH
-        rfgif7rfc7VFet8pY06dT4nUL6qhjfViPX6cDpnU5JUSMNNQcL/JwupN26ellSiSgHX+Sy
-        O8ZsFOSg6vJBdIdRpP0ZredNGorrbzBh/Av8i4JEGjxMps88HgFY68+CQi3g+qIjkWyIKa
-        xG6W1d2imYY2lNpgy6NXAf7k9Pba8M1ub08ziMu01JwY1R3zkMDo/bD0z6kWtjs4gNx4Wz
-        Zf2wd7X7I6JjOkkrMJrFK2A5xJy6XcMV33d7gz+WHoiBFmfASrBOrGfoYqqV2A==
+        bh=0Te0qtIdI3W0ICk/OBQHzFhDBkKsDg5PMEOT/JijiAE=;
+        b=20NWmrK9mjXqb0JQO9C/mi1uiOiaGT1cEDe3vMNurNJgEwn2X3q+5hC80yE7bcZcx0RxCc
+        s+MdviIyM+eQzNkJOSNCARIYziQW/yQBCj6gi4rkASVNm5BvUUw9gq6JDbpLGXwyzXwGZa
+        n+8cyjx3Dk4ZrdG0NZPCV0tmTab39+wEM90s+O8Z3qwLnfpDbiw4dbjlnl5z8DRbbSlhB5
+        jriR7eiJJV9q/91QfFP2KxAqoTi/YP9vbBKSAwiHf2EbtVcjtPp5UnyuVlyWDSRgca9rlL
+        2qqGJ3z1onW5wIfu9myOZ+wYkJmPCbXGQI91V/NLjDFUo6TEJRj0GrTyWNTqaw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663956117;
+        s=2020e; t=1663956118;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fsAIyuj4x0iEQg9cqv5G9BqMj5jKXDRAGq1wmpP6RCM=;
-        b=lmrKcNPW3vmwjQbsNxCOvnVuLCII87nnZpPrUNVGhtkEqWIK7Uug9lVFOd770jOs97qqhF
-        QBHCt1EyFy6CajAg==
+        bh=0Te0qtIdI3W0ICk/OBQHzFhDBkKsDg5PMEOT/JijiAE=;
+        b=MYJSwlLXDGLz06b4tHHoJPgt4aAbSN5uVLaU1SyxpBmORtxRZIT13zaI1Eet0l1NzWAOtf
+        59NdI5aB5y8diOCQ==
 From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Remove set_mba_sc()s control array
- re-initialisation
+Subject: [tip: x86/cache] x86/resctrl: Add domain offline callback for resctrl work
 Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Shaopeng Tan <tan.shaopeng@fujitsu.com>,
@@ -52,10 +51,10 @@ Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Xin Hao <xhao@linux.alibaba.com>,
         Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220902154829.30399-7-james.morse@arm.com>
-References: <20220902154829.30399-7-james.morse@arm.com>
+In-Reply-To: <20220902154829.30399-6-james.morse@arm.com>
+References: <20220902154829.30399-6-james.morse@arm.com>
 MIME-Version: 1.0
-Message-ID: <166395611583.401.8392213412380309845.tip-bot2@tip-bot2>
+Message-ID: <166395611688.401.1902343437727291224.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,31 +70,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     1644dfe727cb042ef7f2e773015747954fd0e746
-Gitweb:        https://git.kernel.org/tip/1644dfe727cb042ef7f2e773015747954fd0e746
+Commit-ID:     798fd4b9ac37fec571f55fb8592497b0dd5f7a73
+Gitweb:        https://git.kernel.org/tip/798fd4b9ac37fec571f55fb8592497b0dd5f7a73
 Author:        James Morse <james.morse@arm.com>
-AuthorDate:    Fri, 02 Sep 2022 15:48:14 
+AuthorDate:    Fri, 02 Sep 2022 15:48:13 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 22 Sep 2022 16:08:20 +02:00
+CommitterDate: Thu, 22 Sep 2022 15:42:40 +02:00
 
-x86/resctrl: Remove set_mba_sc()s control array re-initialisation
+x86/resctrl: Add domain offline callback for resctrl work
 
-set_mba_sc() enables the 'software controller' to regulate the bandwidth
-based on the byte counters. This can be managed entirely in the parts
-of resctrl that move to /fs/, without any extra support from the
-architecture specific code. set_mba_sc() is called by rdt_enable_ctx()
-during mount and unmount. It currently resets the arch code's ctrl_val[]
-and mbps_val[] arrays.
+Because domains are exposed to user-space via resctrl, the filesystem
+must update its state when CPU hotplug callbacks are triggered.
 
-The ctrl_val[] was already reset when the domain was created, and by
-reset_all_ctrls() when the filesystem was last unmounted. Doing the work
-in set_mba_sc() is not necessary as the values are already at their
-defaults due to the creation of the domain, or were previously reset
-during umount(), or are about to reset during umount().
+Some of this work is common to any architecture that would support
+resctrl, but the work is tied up with the architecture code to
+free the memory.
 
-Add a reset of the mbps_val[] in reset_all_ctrls(), allowing the code in
-set_mba_sc() that reaches in to the architecture specific structures to
-be removed.
+Move the monitor subdir removal and the cancelling of the mbm/limbo
+works into a new resctrl_offline_domain() call. These bits are not
+specific to the architecture. Grouping them in one function allows
+that code to be moved to /fs/ and re-used by another architecture.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -105,43 +99,148 @@ Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Xin Hao <xhao@linux.alibaba.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20220902154829.30399-7-james.morse@arm.com
+Link: https://lore.kernel.org/r/20220902154829.30399-6-james.morse@arm.com
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c     | 26 +-------------
+ arch/x86/kernel/cpu/resctrl/internal.h |  2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 45 ++++++++++++++++++++++---
+ include/linux/resctrl.h                |  1 +-
+ 4 files changed, 44 insertions(+), 30 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index e37889f..f691829 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -523,27 +523,8 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+ 
+ 	cpumask_clear_cpu(cpu, &d->cpu_mask);
+ 	if (cpumask_empty(&d->cpu_mask)) {
+-		/*
+-		 * If resctrl is mounted, remove all the
+-		 * per domain monitor data directories.
+-		 */
+-		if (static_branch_unlikely(&rdt_mon_enable_key))
+-			rmdir_mondata_subdir_allrdtgrp(r, d->id);
++		resctrl_offline_domain(r, d);
+ 		list_del(&d->list);
+-		if (r->mon_capable && is_mbm_enabled())
+-			cancel_delayed_work(&d->mbm_over);
+-		if (is_llc_occupancy_enabled() &&  has_busy_rmid(r, d)) {
+-			/*
+-			 * When a package is going down, forcefully
+-			 * decrement rmid->ebusy. There is no way to know
+-			 * that the L3 was flushed and hence may lead to
+-			 * incorrect counts in rare scenarios, but leaving
+-			 * the RMID as busy creates RMID leaks if the
+-			 * package never comes back.
+-			 */
+-			__check_limbo(d, true);
+-			cancel_delayed_work(&d->cqm_limbo);
+-		}
+ 
+ 		/*
+ 		 * rdt_domain "d" is going to be freed below, so clear
+@@ -551,11 +532,8 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+ 		 */
+ 		if (d->plr)
+ 			d->plr->d = NULL;
+-
+-		bitmap_free(d->rmid_busy_llc);
+-		kfree(d->mbm_total);
+-		kfree(d->mbm_local);
+ 		domain_free(hw_dom);
++
+ 		return;
+ 	}
+ 
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index be48a68..e12b55f 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -522,8 +522,6 @@ void free_rmid(u32 rmid);
+ int rdt_get_mon_l3_config(struct rdt_resource *r);
+ void mon_event_count(void *info);
+ int rdtgroup_mondata_show(struct seq_file *m, void *arg);
+-void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
+-				    unsigned int dom_id);
+ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+ 		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
+ 		    int evtid, int first);
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 5830905..b32ceff 100644
+index 030a703..5830905 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -1898,18 +1898,12 @@ void rdt_domain_reconfigure_cdp(struct rdt_resource *r)
- static int set_mba_sc(bool mba_sc)
+@@ -2499,14 +2499,12 @@ static int mon_addfile(struct kernfs_node *parent_kn, const char *name,
+  * Remove all subdirectories of mon_data of ctrl_mon groups
+  * and monitor groups with given domain id.
+  */
+-void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r, unsigned int dom_id)
++static void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
++					   unsigned int dom_id)
  {
- 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
--	struct rdt_hw_domain *hw_dom;
--	struct rdt_domain *d;
+ 	struct rdtgroup *prgrp, *crgrp;
+ 	char name[32];
  
- 	if (!is_mbm_enabled() || !is_mba_linear() ||
- 	    mba_sc == is_mba_sc(r))
- 		return -EINVAL;
- 
- 	r->membw.mba_sc = mba_sc;
--	list_for_each_entry(d, &r->domains, list) {
--		hw_dom = resctrl_to_arch_dom(d);
--		setup_default_ctrlval(r, hw_dom->ctrl_val, hw_dom->mbps_val);
--	}
- 
- 	return 0;
+-	if (!r->mon_capable)
+-		return;
+-
+ 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
+ 		sprintf(name, "mon_%s_%02d", r->name, dom_id);
+ 		kernfs_remove_by_name(prgrp->mon.mon_data_kn, name);
+@@ -3233,6 +3231,45 @@ out:
+ 	return ret;
  }
-@@ -2327,8 +2321,10 @@ static int reset_all_ctrls(struct rdt_resource *r)
- 		hw_dom = resctrl_to_arch_dom(d);
- 		cpumask_set_cpu(cpumask_any(&d->cpu_mask), cpu_mask);
  
--		for (i = 0; i < hw_res->num_closid; i++)
-+		for (i = 0; i < hw_res->num_closid; i++) {
- 			hw_dom->ctrl_val[i] = r->default_ctrl;
-+			hw_dom->mbps_val[i] = MBA_MAX_MBPS;
-+		}
- 	}
- 	cpu = get_cpu();
- 	/* Update CBM on this cpu if it's in cpu_mask. */
++static void domain_destroy_mon_state(struct rdt_domain *d)
++{
++	bitmap_free(d->rmid_busy_llc);
++	kfree(d->mbm_total);
++	kfree(d->mbm_local);
++}
++
++void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
++{
++	lockdep_assert_held(&rdtgroup_mutex);
++
++	if (!r->mon_capable)
++		return;
++
++	/*
++	 * If resctrl is mounted, remove all the
++	 * per domain monitor data directories.
++	 */
++	if (static_branch_unlikely(&rdt_mon_enable_key))
++		rmdir_mondata_subdir_allrdtgrp(r, d->id);
++
++	if (is_mbm_enabled())
++		cancel_delayed_work(&d->mbm_over);
++	if (is_llc_occupancy_enabled() && has_busy_rmid(r, d)) {
++		/*
++		 * When a package is going down, forcefully
++		 * decrement rmid->ebusy. There is no way to know
++		 * that the L3 was flushed and hence may lead to
++		 * incorrect counts in rare scenarios, but leaving
++		 * the RMID as busy creates RMID leaks if the
++		 * package never comes back.
++		 */
++		__check_limbo(d, true);
++		cancel_delayed_work(&d->cqm_limbo);
++	}
++
++	domain_destroy_mon_state(d);
++}
++
+ static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
+ {
+ 	size_t tsize;
+diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+index d512455..5d283bd 100644
+--- a/include/linux/resctrl.h
++++ b/include/linux/resctrl.h
+@@ -193,5 +193,6 @@ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
+ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
+ 			    u32 closid, enum resctrl_conf_type type);
+ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
++void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
+ 
+ #endif /* _RESCTRL_H */
