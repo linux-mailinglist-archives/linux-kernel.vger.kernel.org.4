@@ -2,390 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406C35E7913
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210DE5E791E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiIWLGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S231989AbiIWLJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiIWLGq (ORCPT
+        with ESMTP id S231879AbiIWLJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:06:46 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43A21181EB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:06:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 3so11940296pga.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:06:44 -0700 (PDT)
+        Fri, 23 Sep 2022 07:09:17 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFA6132FCA
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:09:12 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so5419485pjk.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:09:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CivlmnyVEpJwxv4DfN3B0qY4C20BTHgcub0RDyyW0bM=;
-        b=EkZWmF2KFjEeC9eST5w3FG1iQSe8lysLjlSX4ewpXpPvQffX41YrJ9eQE+qHBoFxE4
-         96x/BQSHseSbZlpC0NodeqBWzzXltawzlJO+BF83TflXKKdCpoUjQ97rFddlnP00MHxq
-         9FjR8FNe0e4JoTbZID0ICO70hZOeoRiDO0NuoRb0uCTIuHiwhM0x3Ch0z5IN8wGDL8dp
-         Kk1WEpmD+dPkterwT6eXG/jG9bu2qXjgVbf7GcIH1iUUTP7nWXHKHpX+o/oH70iu7XX0
-         fmyGmt1W+EQevlfXDbt+pGZd6k8260RT5IMxM7gM/Ks+OmVFwD+JAyWmZ8PkI7/Ev133
-         Rggg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=38vBN+HT6w3U+RtDFoqBhH6s4iHURXZfpLy7z8EYMlE=;
+        b=EHUp/zkSTwxB0dLlAkC8M4Ag7gykkHh0kBOw5++/VepQm8TcECazjM8hCK4J8Gl1sw
+         ZaIFEh8KCsqOUcGb4Rmz28oHPtl1IDNz1UpTUDCrwJBQpyi1JN+K86ZwjO3cjX4nay9G
+         TNF9wTVHMlF/t8av/LO87e9q0fNgg8lkZqJh/IceBUdSmWBJzdkcibagEwMXD3uLqcy1
+         icIntukTou/hje3f8b03shwtIA5zAuKaYcFsLIhDSg7fVEnQ1oxnPvhIIo6BwC08b0zT
+         uVAiIGNdWjQrZPEHpnce8Va2/zv0wKq3+snSgslXqAK8nnlrB/LTCKA8Pc1+nH7zZAJj
+         1EIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CivlmnyVEpJwxv4DfN3B0qY4C20BTHgcub0RDyyW0bM=;
-        b=IWra1B5vo/6CIs/i72ZW68RslKEOl4dbRisxcoPXQyrkcBFCpqhPr8rdWoh/AG0RO+
-         aP2yLCVa9S2RmXkhpw+Z61z4Hu5Pu9bD7hB/KLEjOCDr6NqqTBucHG39e/S83aDlF+9B
-         8+9z9IXXtusa9IrKu4yDBJw3PseZ1n/mvNg0fQxC8IIW3hD78SzmkdxythX3VvpgWsBx
-         UyE/jsUVuWeEkwNgoOXab68Y8enXVhI7ypG1r3GfewDFkBx0NE4fRDjXZ+lYTYAgUypH
-         190tIuWdZPsrOSvLDuDiGQGP5RVJRuiZNuF0EA1VEX5YC0lTJ9SF90oF6vZT8vvLAfqn
-         92cQ==
-X-Gm-Message-State: ACrzQf3CjO0uICtNKpOqbxm7ozgMlQ6lSEyVu+/VPHJMxEtvUBqyPTwe
-        u2dIXXAZFQljjj+BtCZqLGQg+63Ddc2a7MUimo/Y+Q==
-X-Google-Smtp-Source: AMsMyM5yjt4thE5+scbK0mFtX6Qki9qAhM+aBrZAdvG3AwgbQrDAjujCM9rFQSp2nJxxMKdOQ1bqv2d1CQtnz1OfIvw=
-X-Received: by 2002:a63:85c6:0:b0:43a:eb08:6ea7 with SMTP id
- u189-20020a6385c6000000b0043aeb086ea7mr7216977pgd.336.1663931204200; Fri, 23
- Sep 2022 04:06:44 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=38vBN+HT6w3U+RtDFoqBhH6s4iHURXZfpLy7z8EYMlE=;
+        b=GbfRphl7/l3VBgWUdbNSZuhOKNNyXwNd2QxUgV3p3xE9+4x/TohpislY+CeEof3Eqb
+         sC59sPsJsbhGDBnqRKo+X7xPuBIxe9M1+ReKpffdeGoofA+1DZkHvJj1lodFPoFcXfFq
+         jmsWQCiXCVH0A89ycQtnWHg/gTCzRakYbEiCmW8xafDgHQfdZptt0Z7yqX3QWzqm/OXf
+         /Ho5h1rOeTZtvGWZ27l3qt6CjE0TgglQ3efBLQKDyjXas9iKzXnxnH3EqjrawV254sC2
+         lzDW0afxOw7PIKfJvh/BrIUTYXwuUDevxJp8HqT5G6EGc9vFujpyQhKusF6brJhKTabF
+         7tnw==
+X-Gm-Message-State: ACrzQf2YOFLdg9Loqozpp+lJqk/Fb2LxKdYxXE9Iq5QjMTtazJ+HnuiM
+        WiNjfn83wCETzn2evlEackI=
+X-Google-Smtp-Source: AMsMyM4SL2toKi8zTuEXxlW4GnFsAw2n3rMki7gsyoLSA9r2JQhajuZ2Pqm+wCPSx2BcPC6kxxBDng==
+X-Received: by 2002:a17:90b:38cb:b0:200:aaa6:6428 with SMTP id nn11-20020a17090b38cb00b00200aaa66428mr20735412pjb.47.1663931351648;
+        Fri, 23 Sep 2022 04:09:11 -0700 (PDT)
+Received: from localhost ([223.104.44.30])
+        by smtp.gmail.com with ESMTPSA id mi7-20020a17090b4b4700b00200b12f2bf5sm10039873pjb.1.2022.09.23.04.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 04:09:11 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, 18801353760@163.com,
+        yin31149@gmail.com
+Subject: [PATCH v2] fs/ntfs3: fix slab-out-of-bounds Read in run_unpack
+Date:   Fri, 23 Sep 2022 19:09:04 +0800
+Message-Id: <20220923110905.33588-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <0000000000009145fc05e94bd5c3@google.com>
+References: <0000000000009145fc05e94bd5c3@google.com>
 MIME-Version: 1.0
-References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com> <20220922050718.1079651-3-Naresh.Solanki@9elements.com>
-In-Reply-To: <20220922050718.1079651-3-Naresh.Solanki@9elements.com>
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-Date:   Fri, 23 Sep 2022 13:06:52 +0200
-Message-ID: <CALNFmy0VGEYso1SDXQzmt8419RmG8CHEJUzZpFd0WvYeBzPDUw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (max6639) Change from pdata to dt configuration
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 7:07 AM Naresh Solanki
-<naresh.solanki@9elements.com> wrote:
->
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
->
-> max6639_platform_data is not used by any in-kernel driver and does not
-> address the MAX6639 channels separately. Move to device tree
-> configuration with explicit properties to configure each channel.
->
-> Non-DT platform can still use this module with its default
-> configuration.
->
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  drivers/hwmon/max6639.c               | 162 +++++++++++++++++++-------
->  include/linux/platform_data/max6639.h |  15 ---
->  2 files changed, 119 insertions(+), 58 deletions(-)
->  delete mode 100644 include/linux/platform_data/max6639.h
->
-> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> index 14bb7726f8d7..4e8c3d3ec4fd 100644
-> --- a/drivers/hwmon/max6639.c
-> +++ b/drivers/hwmon/max6639.c
-> @@ -19,7 +19,6 @@
->  #include <linux/hwmon-sysfs.h>
->  #include <linux/err.h>
->  #include <linux/mutex.h>
-> -#include <linux/platform_data/max6639.h>
->
->  /* Addresses to scan */
->  static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-> @@ -85,8 +84,9 @@ struct max6639_data {
->         u8 temp_ot[2];          /* OT Temperature, 0..255 C (->_emergency) */
->
->         /* Register values initialized only once */
-> -       u8 ppr;                 /* Pulses per rotation 0..3 for 1..4 ppr */
-> -       u8 rpm_range;           /* Index in above rpm_ranges table */
-> +       u8 ppr[2];              /* Pulses per rotation 0..3 for 1..4 ppr */
-> +       u8 rpm_range[2];        /* Index in above rpm_ranges table */
-> +       u8 pwm_polarity[2];     /* Fans PWM polarity, 0..1 */
->
->         /* Optional regulator for FAN supply */
->         struct regulator *reg;
-> @@ -319,7 +319,7 @@ static ssize_t fan_input_show(struct device *dev,
->                 return PTR_ERR(data);
->
->         return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index],
-> -                      data->rpm_range));
-> +                      data->rpm_range[attr->index]));
->  }
->
->  static ssize_t alarm_show(struct device *dev,
-> @@ -386,28 +386,26 @@ static struct attribute *max6639_attrs[] = {
->  ATTRIBUTE_GROUPS(max6639);
->
->  /*
-> - *  returns respective index in rpm_ranges table
-> - *  1 by default on invalid range
-> + *  Get respective index in rpm_ranges table
->   */
-> -static int rpm_range_to_reg(int range)
-> +static int rpm_range_to_index(u8 *index, int range)
->  {
->         int i;
->
->         for (i = 0; i < ARRAY_SIZE(rpm_ranges); i++) {
-> -               if (rpm_ranges[i] == range)
-> -                       return i;
-> +               if (rpm_ranges[i] == range) {
-> +                       *index = i;
-> +                       return 0;
-> +               }
->         }
->
-> -       return 1; /* default: 4000 RPM */
-> +       return -EINVAL;
->  }
->
->  static int max6639_init_client(struct i2c_client *client,
->                                struct max6639_data *data)
->  {
-> -       struct max6639_platform_data *max6639_info =
-> -               dev_get_platdata(&client->dev);
->         int i;
-> -       int rpm_range = 1; /* default: 4000 RPM */
->         int err;
->
->         /* Reset chip to default values, see below for GCONFIG setup */
-> @@ -416,43 +414,25 @@ static int max6639_init_client(struct i2c_client *client,
->         if (err)
->                 goto exit;
->
-> -       /* Fans pulse per revolution is 2 by default */
-> -       if (max6639_info && max6639_info->ppr > 0 &&
-> -                       max6639_info->ppr < 5)
-> -               data->ppr = max6639_info->ppr;
-> -       else
-> -               data->ppr = 2;
-> -       data->ppr -= 1;
-> -
-> -       if (max6639_info)
-> -               rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
-> -       data->rpm_range = rpm_range;
-> -
->         for (i = 0; i < 2; i++) {
->
->                 /* Set Fan pulse per revolution */
->                 err = i2c_smbus_write_byte_data(client,
->                                 MAX6639_REG_FAN_PPR(i),
-> -                               data->ppr << 6);
-> +                               data->ppr[i] << 6);
->                 if (err)
->                         goto exit;
->
->                 /* Fans config PWM, RPM */
->                 err = i2c_smbus_write_byte_data(client,
->                         MAX6639_REG_FAN_CONFIG1(i),
-> -                       MAX6639_FAN_CONFIG1_PWM | rpm_range);
-> +                       MAX6639_FAN_CONFIG1_PWM | data->rpm_range[i]);
->                 if (err)
->                         goto exit;
->
-> -               /* Fans PWM polarity high by default */
-> -               if (max6639_info && max6639_info->pwm_polarity == 0)
-> -                       err = i2c_smbus_write_byte_data(client,
-> -                               MAX6639_REG_FAN_CONFIG2a(i), 0x00);
-> -               else
-> -                       err = i2c_smbus_write_byte_data(client,
-> -                               MAX6639_REG_FAN_CONFIG2a(i), 0x02);
-> -               if (err)
-> -                       goto exit;
-> +               /* Fans PWM polarity */
-> +               err = i2c_smbus_write_byte_data(client,
-> +                       MAX6639_REG_FAN_CONFIG2a(i), data->pwm_polarity[i] ? 0x00 : 0x02);
->
->                 /*
->                  * /THERM full speed enable,
-> @@ -464,10 +444,6 @@ static int max6639_init_client(struct i2c_client *client,
->                 if (err)
->                         goto exit;
->
-> -               /* Max. temp. 80C/90C/100C */
-> -               data->temp_therm[i] = 80;
-> -               data->temp_alert[i] = 90;
-> -               data->temp_ot[i] = 100;
->                 err = i2c_smbus_write_byte_data(client,
->                                 MAX6639_REG_THERM_LIMIT(i),
->                                 data->temp_therm[i]);
-> @@ -483,8 +459,6 @@ static int max6639_init_client(struct i2c_client *client,
->                 if (err)
->                         goto exit;
->
-> -               /* PWM 120/120 (i.e. 100%) */
-> -               data->pwm[i] = 120;
->                 err = i2c_smbus_write_byte_data(client,
->                                 MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
->                 if (err)
-> @@ -524,12 +498,87 @@ static void max6639_regulator_disable(void *data)
->         regulator_disable(data);
->  }
->
-> +static int max6639_probe_child_from_dt(struct i2c_client *client,
-> +                                     struct device_node *child,
-> +                                     struct max6639_data *data)
-> +
-> +{
-> +       struct device *dev = &client->dev;
-> +       u32 i, val;
-> +       int err;
-> +
-> +       err = of_property_read_u32(child, "reg", &i);
-> +       if (err) {
-> +               dev_err(dev, "missing reg property of %pOFn\n", child);
-> +               return err;
-> +       }
-> +
-> +       if (i >= 2) {
-> +               dev_err(dev, "invalid reg %d of %pOFn\n", i, child);
-> +               return -EINVAL;
-> +       }
-> +
-> +       err = of_property_read_u32(child, "pulses-per-revolution", &val);
-> +       if (!err) {
-> +               if (val < 0 || val > 5) {
-> +                       dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val, child);
-> +                       return -EINVAL;
-> +               }
-> +               data->ppr[i] = val;
-> +       }
-> +
-> +       err = of_property_read_u32(child, "maxim,rpm-range", &val);
-> +       if (!err) {
-> +               err = rpm_range_to_index(&data->rpm_range[i], val);
-> +               if (err) {
-> +                       dev_err(dev, "invalid maxim,rpm-range %d of %pOFn\n", val, child);
-> +                       return err;
-> +               }
-> +       }
-> +
-> +       err = of_property_read_u32(child, "pwm-polarity", &val);
-> +       if (!err) {
-> +               if (val > 1) {
-> +                       dev_err(dev, "invalid pwm-polarity %d of %pOFn\n", val, child);
-> +                       return -EINVAL;
-> +               }
-> +               data->pwm_polarity[i] = val;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int max6639_probe_from_dt(struct i2c_client *client, struct max6639_data *data)
-> +{
-> +       struct device *dev = &client->dev;
-> +       const struct device_node *np = dev->of_node;
-> +       struct device_node *child;
-> +       int err;
-> +
-> +       /* Compatible with non-DT platforms */
-> +       if (!np)
-> +               return 0;
-> +
-> +       for_each_child_of_node(np, child) {
-> +               if (strcmp(child->name, "channel"))
+Syzkaller reports slab-out-of-bounds bug as follows:
+==================================================================
+BUG: KASAN: slab-out-of-bounds in run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+Read of size 1 at addr ffff88801bbdff02 by task syz-executor131/3611
 
-According to the dt-binding this should be "fan" instead of "channel".
+[...]
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+ run_unpack_ex+0xb0/0x7c0 fs/ntfs3/run.c:1057
+ ntfs_read_mft fs/ntfs3/inode.c:368 [inline]
+ ntfs_iget5+0xc20/0x3280 fs/ntfs3/inode.c:501
+ ntfs_loadlog_and_replay+0x124/0x5d0 fs/ntfs3/fsntfs.c:272
+ ntfs_fill_super+0x1eff/0x37f0 fs/ntfs3/super.c:1018
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ [...]
+ </TASK>
 
-> +                       continue;
-> +
-> +               err = max6639_probe_child_from_dt(client, child, data);
-> +               if (err) {
-> +                       of_node_put(child);
-> +                       return err;
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int max6639_probe(struct i2c_client *client)
->  {
->         struct device *dev = &client->dev;
->         struct max6639_data *data;
->         struct device *hwmon_dev;
-> -       int err;
-> +       int err, i;
->
->         data = devm_kzalloc(dev, sizeof(struct max6639_data), GFP_KERNEL);
->         if (!data)
-> @@ -560,6 +609,24 @@ static int max6639_probe(struct i2c_client *client)
->
->         mutex_init(&data->update_lock);
->
-> +       /* default values */
-> +       for (i = 0; i < 2; i++) {
-> +               /* 4000 RPM */
-> +               data->rpm_range[i] = 1;
-> +               data->ppr[i] = 2;
-> +               data->pwm_polarity[i] = 1;
-> +               /* Max. temp. 80C/90C/100C */
-> +               data->temp_therm[i] = 80;
-> +               data->temp_alert[i] = 90;
-> +               data->temp_ot[i] = 100;
-> +               /* PWM 120/120 (i.e. 100%) */
-> +               data->pwm[i] = 120;
-> +       }
-> +
-> +       err = max6639_probe_from_dt(client, data);
-> +       if (err)
-> +               return err;
-> +
->         /* Initialize the max6639 chip */
->         err = max6639_init_client(client, data);
->         if (err < 0)
-> @@ -618,6 +685,14 @@ static const struct i2c_device_id max6639_id[] = {
->
->  MODULE_DEVICE_TABLE(i2c, max6639_id);
->
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id maxim_of_platform_match[] = {
-> +       {.compatible = "maxim,max6639"},
-> +       {},
-> +};
-> +MODULE_DEVICE_TABLE(of, maxim_of_platform_match);
-> +#endif
-> +
->  static SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
->
->  static struct i2c_driver max6639_driver = {
-> @@ -625,6 +700,7 @@ static struct i2c_driver max6639_driver = {
->         .driver = {
->                    .name = "max6639",
->                    .pm = &max6639_pm_ops,
-> +                  .of_match_table = of_match_ptr(maxim_of_platform_match),
->                    },
->         .probe_new = max6639_probe,
->         .id_table = max6639_id,
-> diff --git a/include/linux/platform_data/max6639.h b/include/linux/platform_data/max6639.h
-> deleted file mode 100644
-> index 65bfdb4fdc15..000000000000
-> --- a/include/linux/platform_data/max6639.h
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -#ifndef _LINUX_MAX6639_H
-> -#define _LINUX_MAX6639_H
-> -
-> -#include <linux/types.h>
-> -
-> -/* platform data for the MAX6639 temperature sensor and fan control */
-> -
-> -struct max6639_platform_data {
-> -       bool pwm_polarity;      /* Polarity low (0) or high (1, default) */
-> -       int ppr;                /* Pulses per rotation 1..4 (default == 2) */
-> -       int rpm_range;          /* 2000, 4000 (default), 8000 or 16000 */
-> -};
-> -
-> -#endif /* _LINUX_MAX6639_H */
-> --
-> 2.35.3
->
+The buggy address belongs to the physical page:
+page:ffffea00006ef600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bbd8
+head:ffffea00006ef600 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88801bbdfe00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801bbdfe80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801bbdff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                   ^
+ ffff88801bbdff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801bbe0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+Kernel will tries to read record and parse MFT from disk in
+ntfs_read_mft().
+
+Yet the problem is that during enumerating attributes in record,
+kernel doesn't check whether run_off field loading from the disk
+is a valid value.
+
+To be more specific, if attr->nres.run_off is larger than attr->size,
+kernel will passes an invalid argument run_buf_size in
+run_unpack_ex(), which having an integer overflow. Then this invalid
+argument will triggers the slab-out-of-bounds Read bug as above.
+
+This patch solves it by adding the sanity check between
+the offset to packed runs and attribute size.
+
+link: https://lore.kernel.org/all/0000000000009145fc05e94bd5c3@google.com/#t
+Reported-and-tested-by: syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+v1 -> v2:
+  return -EINVAL when roff is out-of-bounds
+
+ fs/ntfs3/inode.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 51363d4e8636..10723231e482 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -365,6 +365,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+ 	roff = le16_to_cpu(attr->nres.run_off);
+ 
+ 	t64 = le64_to_cpu(attr->nres.svcn);
++
++	/* offset to packed runs is out-of-bounds */
++	if (roff > asize) {
++		err = -EINVAL;
++		goto out;
++	}
++
+ 	err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
+ 			    t64, Add2Ptr(attr, roff), asize - roff);
+ 	if (err < 0)
+-- 
+2.25.1
+
