@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FED5E73BE
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD285E73BD
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiIWGPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S230021AbiIWGPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiIWGOy (ORCPT
+        with ESMTP id S229966AbiIWGO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:14:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14E736DDE;
-        Thu, 22 Sep 2022 23:14:52 -0700 (PDT)
+        Fri, 23 Sep 2022 02:14:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371401F620
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663913692; x=1695449692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lXSwP6og/ifxpWP/EGCyBAwoeYKaiCrVRuMGlHz6n0A=;
-  b=IvHnMYI9n4Al7rg8Nq02b+AHoOrI3n46aIb8CKEEaYlrufsfSSp4Fe6B
-   rCkyMlVhQuiwloKVp/JyUTMu1CsJ3SPWsg4h1icf6W5YvAFwNIJlV/r2h
-   Z9nCSgmGaoBwj2IVXa8v5A7zzjchU7RPmQjqt/AQ0j0rqzjiYwMmiMVzf
-   z9BVQ+kjv2b82Qe7UaIaxeAtpPs4/rQXkV+DY2IA6AtIsGaInz7lDCNRB
-   tswdTtSvzH7NKJnDBXriaZFKvKedlcqfOlJ4Ki31xVQf8t/EyaHyIV2DO
-   UVFYGNdYS+Nf2oGYvpjsdpBx0cu5fGUAxfP1GThJ1/BzvXJvOYt6u473f
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362329709"
+  t=1663913696; x=1695449696;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yds55nrNBjnAAYbVzo+ebOY4TxoD2LZ81oVZrn2BonU=;
+  b=GeJ+ikYU5HjkKGTRCoUb57kdXrdnagU0G/v+3JZdWgNKyoJZ0g58QAh6
+   GaLQSFMA0TjJcSylFYcg3+cG5KA4TcGdCVMKv3SWywOxa4KiBaTY9SLhl
+   Bsi9Eks0CE8oIAHOnrzrXBWeHctq9sObZPQkzul/co+v5Y8bHzYQ9tjWQ
+   cI0iGemnoN0veepimdEg1JB76VW0LHZVMevlO1oGc/a8jn8ka8sIcnRVg
+   AlVJJpYB2oPDIBEFevA66VinuLq6XrsTyBNOqQY2WrnpRSxNbyy/+BCL/
+   Fw2oGWjvHXHIWw/TKxwouw9u4v8Sxd1A/FegMRoOuCGkjvsmcj6zGda+j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301964278"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="362329709"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 23:14:39 -0700
+   d="scan'208";a="301964278"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 23:14:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="688607032"
+   d="scan'208";a="948906545"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 23:14:36 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 22 Sep 2022 23:14:36 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1obbxL-0005Nk-1v;
+        id 1obbxL-0005Ng-1n;
         Fri, 23 Sep 2022 06:14:35 +0000
-Date:   Fri, 23 Sep 2022 14:13:59 +0800
+Date:   Fri, 23 Sep 2022 14:14:00 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>, jiri@mellanox.com,
-        moshe@mellanox.com, davem@davemloft.net, kuba@kernel.org,
-        idosch@nvidia.com
-Cc:     kbuild-all@lists.01.org, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangguangbin2@huawei.com, lipeng321@huawei.com,
-        chenhao418@huawei.com
-Subject: Re: [PATCH net-next 1/2] devlink: expand
- __DEVLINK_PARAM_MAX_STRING_VALUE to 256
-Message-ID: <202209231438.WCQ3Wu5L-lkp@intel.com>
-References: <20220923013818.51003-2-huangguangbin2@huawei.com>
+To:     Koba Ko <koba.ko@canonical.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18:
+ error: invalid use of undefined type 'struct cpuinfo_x86'
+Message-ID: <202209232234.DkFw3520-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923013818.51003-2-huangguangbin2@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -68,131 +61,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guangbin,
+Hi Koba,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git bcff1a37bafc144d67192f2f5e1f4b9c49b37bd6
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220923/202209231438.WCQ3Wu5L-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bf682942cd26ce9cd5e87f73ae099b383041e782
+commit: b3dc549986eb7b38eba4a144e979dc93f386751f drm/amdgpu: Disable PCIE_DPM on Intel RKL Platform
+date:   1 year, 1 month ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220923/202209232234.DkFw3520-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e503c1118546fbb4e0d1274058f5ca0851f4b9a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
-        git checkout e503c1118546fbb4e0d1274058f5ca0851f4b9a0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3dc549986eb7b38eba4a144e979dc93f386751f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b3dc549986eb7b38eba4a144e979dc93f386751f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash net/core/
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   net/core/devlink.c: In function 'devlink_nl_param_fill.constprop':
->> net/core/devlink.c:5382:1: warning: the frame size of 1060 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    5382 | }
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:92,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/gpu/drm/amd/amdgpu/../pm/inc/pp_debug.h:35,
+                    from drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:23:
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c: In function 'intel_core_rkl_chk':
+   arch/um/include/asm/processor-generic.h:104:19: error: called object is not a function or function pointer
+     104 | #define cpu_data (&boot_cpu_data)
+         |                  ~^~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1742:34: note: in expansion of macro 'cpu_data'
+    1742 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                                  ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+         |                  ^~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:33: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+         |                                 ^~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1748:1: error: control reaches end of non-void function [-Werror=return-type]
+    1748 | }
          | ^
+   cc1: some warnings being treated as errors
 
 
-vim +5382 net/core/devlink.c
+vim +1744 drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c
 
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5293  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5294  static int devlink_nl_param_fill(struct sk_buff *msg, struct devlink *devlink,
-f4601dee25d5fe Vasundhara Volam 2019-01-28  5295  				 unsigned int port_index,
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5296  				 struct devlink_param_item *param_item,
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5297  				 enum devlink_command cmd,
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5298  				 u32 portid, u32 seq, int flags)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5299  {
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5300  	union devlink_param_value param_value[DEVLINK_PARAM_CMODE_MAX + 1];
-7c62cfb8c5744b Jiri Pirko       2019-02-07  5301  	bool param_value_set[DEVLINK_PARAM_CMODE_MAX + 1] = {};
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5302  	const struct devlink_param *param = param_item->param;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5303  	struct devlink_param_gset_ctx ctx;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5304  	struct nlattr *param_values_list;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5305  	struct nlattr *param_attr;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5306  	int nla_type;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5307  	void *hdr;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5308  	int err;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5309  	int i;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5310  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5311  	/* Get value from driver part to driverinit configuration mode */
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5312  	for (i = 0; i <= DEVLINK_PARAM_CMODE_MAX; i++) {
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5313  		if (!devlink_param_cmode_is_supported(param, i))
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5314  			continue;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5315  		if (i == DEVLINK_PARAM_CMODE_DRIVERINIT) {
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5316  			if (!param_item->driverinit_value_valid)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5317  				return -EOPNOTSUPP;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5318  			param_value[i] = param_item->driverinit_value;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5319  		} else {
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5320  			ctx.cmode = i;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5321  			err = devlink_param_get(devlink, param, &ctx);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5322  			if (err)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5323  				return err;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5324  			param_value[i] = ctx.val;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5325  		}
-7c62cfb8c5744b Jiri Pirko       2019-02-07  5326  		param_value_set[i] = true;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5327  	}
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5328  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5329  	hdr = genlmsg_put(msg, portid, seq, &devlink_nl_family, flags, cmd);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5330  	if (!hdr)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5331  		return -EMSGSIZE;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5332  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5333  	if (devlink_nl_put_handle(msg, devlink))
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5334  		goto genlmsg_cancel;
-f4601dee25d5fe Vasundhara Volam 2019-01-28  5335  
-c1e5786d6771c6 Vasundhara Volam 2019-01-28  5336  	if (cmd == DEVLINK_CMD_PORT_PARAM_GET ||
-c1e5786d6771c6 Vasundhara Volam 2019-01-28  5337  	    cmd == DEVLINK_CMD_PORT_PARAM_NEW ||
-c1e5786d6771c6 Vasundhara Volam 2019-01-28  5338  	    cmd == DEVLINK_CMD_PORT_PARAM_DEL)
-f4601dee25d5fe Vasundhara Volam 2019-01-28  5339  		if (nla_put_u32(msg, DEVLINK_ATTR_PORT_INDEX, port_index))
-f4601dee25d5fe Vasundhara Volam 2019-01-28  5340  			goto genlmsg_cancel;
-f4601dee25d5fe Vasundhara Volam 2019-01-28  5341  
-ae0be8de9a53cd Michal Kubecek   2019-04-26  5342  	param_attr = nla_nest_start_noflag(msg, DEVLINK_ATTR_PARAM);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5343  	if (!param_attr)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5344  		goto genlmsg_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5345  	if (nla_put_string(msg, DEVLINK_ATTR_PARAM_NAME, param->name))
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5346  		goto param_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5347  	if (param->generic && nla_put_flag(msg, DEVLINK_ATTR_PARAM_GENERIC))
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5348  		goto param_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5349  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5350  	nla_type = devlink_param_type_to_nla_type(param->type);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5351  	if (nla_type < 0)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5352  		goto param_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5353  	if (nla_put_u8(msg, DEVLINK_ATTR_PARAM_TYPE, nla_type))
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5354  		goto param_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5355  
-ae0be8de9a53cd Michal Kubecek   2019-04-26  5356  	param_values_list = nla_nest_start_noflag(msg,
-ae0be8de9a53cd Michal Kubecek   2019-04-26  5357  						  DEVLINK_ATTR_PARAM_VALUES_LIST);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5358  	if (!param_values_list)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5359  		goto param_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5360  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5361  	for (i = 0; i <= DEVLINK_PARAM_CMODE_MAX; i++) {
-7c62cfb8c5744b Jiri Pirko       2019-02-07  5362  		if (!param_value_set[i])
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5363  			continue;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5364  		err = devlink_nl_param_value_fill_one(msg, param->type,
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5365  						      i, param_value[i]);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5366  		if (err)
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5367  			goto values_list_nest_cancel;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5368  	}
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5369  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5370  	nla_nest_end(msg, param_values_list);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5371  	nla_nest_end(msg, param_attr);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5372  	genlmsg_end(msg, hdr);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5373  	return 0;
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5374  
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5375  values_list_nest_cancel:
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5376  	nla_nest_end(msg, param_values_list);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5377  param_nest_cancel:
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5378  	nla_nest_cancel(msg, param_attr);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5379  genlmsg_cancel:
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5380  	genlmsg_cancel(msg, hdr);
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5381  	return -EMSGSIZE;
-45f05def5c44c8 Moshe Shemesh    2018-07-04 @5382  }
-45f05def5c44c8 Moshe Shemesh    2018-07-04  5383  
+  1738	
+  1739	static bool intel_core_rkl_chk(void)
+  1740	{
+  1741	#if IS_ENABLED(CONFIG_X86_64)
+  1742		struct cpuinfo_x86 *c = &cpu_data(0);
+  1743	
+> 1744		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+  1745	#else
+  1746		return false;
+  1747	#endif
+  1748	}
+  1749	
 
 -- 
 0-DAY CI Kernel Test Service
