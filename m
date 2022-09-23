@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C11B5E81F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D6A5E81FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbiIWSqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S232775AbiIWSrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiIWSqc (ORCPT
+        with ESMTP id S229821AbiIWSra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:46:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9233120583;
-        Fri, 23 Sep 2022 11:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663958791; x=1695494791;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=D42fxf/LEPjQZXKiJb/KVJ5udjtoI05vUX7hP10VSl0=;
-  b=lXHzOqzF2LLhSNr+fgBvz6bC9Bxshs+gX7SXtHTuWKIep+TXV/1zBXKM
-   Q4GHCNf2Yrs2chkghhg106C1FwMn2FbQ/Am8t3N0IXPxPWCWpdmAisfBt
-   pZlK1aDQPVdeCwcqbWllt0L7Yrp3i32JtN5hjX+8OuJPZM7zN9yVjb24+
-   wC046QJdh3AgGMbfEaBNdRH7osqsdIAlm2/inV15MxaFioX7S1Simhh8q
-   gM4c4/2NSHlyK6ees1drQpC7xBYJkOTBnClbiZuv8k4FvFP1ALy5w+yLj
-   b/diHdv8LzxQEBjcgx532gydq+7A321MQPuiMAy8E4qsJf71HPITLpFBN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="302116091"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="302116091"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 11:46:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="795607571"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 23 Sep 2022 11:46:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BB58E86; Fri, 23 Sep 2022 21:46:36 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions by forward declarations
-Date:   Fri, 23 Sep 2022 21:46:32 +0300
-Message-Id: <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
-References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 14:47:30 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96E6120584
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:47:29 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2EA14580AB5;
+        Fri, 23 Sep 2022 14:47:29 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 23 Sep 2022 14:47:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663958849; x=1663962449; bh=qo3CYYH+x0
+        KzkklxDqq7gxHs69euR9fR9lwXjAKaH5k=; b=pj5ljiAo8N4izK1Z4Ob9Qy10cd
+        AqHgbAFTddrFGBKahcAIhMBAQ9pjDDrqD+4Lj2JBix/D6gcBpBmS+O59/xjiic2O
+        vt43qok+qPJECzDr9Z4Q0Jj7a7froaYWannBSfgIlKNk2S7+9CO3Ney2azhqtzyI
+        wx3yCD05EXu6M64YYFJ9Fm0k64PoaeUaY1+YwUOWXWSapny68I6WaFgH+MTUSFNy
+        F3WqUXiXFs2uOtTlaoIQQsLNT5cCdx4wKJU+Oce1Tn3QSnQ1qYqkDq+l9Q7bfeD/
+        x2ETrNIp1vaAx9senTXn6cu7TVOXZY+oi21Hd2Okm/nigDPf3+an5s5BEvow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663958849; x=1663962449; bh=qo3CYYH+x0KzkklxDqq7gxHs69eu
+        R9fR9lwXjAKaH5k=; b=hUyaPn5ZiXJ64xU+51g0jXtF33XkmTsTWXIXbyIF3Mit
+        LRTYyn0b8BllTHiu4hO75fjMlDv9+GZbR1gg/Qc3cLeXlqNdaerY5EEkiXul2y+Z
+        n2+1pLmzjxUdUH3FkN1bZz5YzgnUaUYlTVfVQG+HmYOyXHECEuxbdHfWrvv45/6A
+        SQQNtPi6o+Bt6s481rKbpmaJSYHKKHy2sTLlLAqQ++kzsHoNrZJANkpN909AZz/3
+        7EayaGFiEbG2pq1bR+59Q8wEheLUYWmLeBPwU1D+JfnbBjz1bkxrcG4gdnMGuV7p
+        MhpRY+quLRbHP/lX/+829YlhVpX8eJ0nuxhj5aNR7A==
+X-ME-Sender: <xms:QP8tY8gh5QGmyaPX7J_jAbokbpE9eGIkep0XgeGmFz9yQ0ZuSLe3hw>
+    <xme:QP8tY1AuP4f75Q0HLZulmnML6EGKhAOC1mBRilLlmu0VUbn9Zh_rZerZCkBGzI-yb
+    kNeCPmOVRdwjo2S8R0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgudefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:QP8tY0HwomLMMicDl7j1gzB4PW6addPqHN7zHhjUFWEglHPiH5Fq5g>
+    <xmx:QP8tY9QdCoIhZPnQKZ6fOIk4eH81n8l1Yw_wDLS2XLKehN8ItXhKrQ>
+    <xmx:QP8tY5zvzgh5_y1yEnJK8iWClCFZqeiPRNc969rHJDFR7S-EyrA0PA>
+    <xmx:Qf8tY0_U1esJunMp6rqhxEAS58oFl8qvwygqJxezRWzx1AZSi8e8hg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 25172B60086; Fri, 23 Sep 2022 14:47:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <9aff6eac-71f0-4a5d-a26f-c2cc91a37555@www.fastmail.com>
+In-Reply-To: <ea5feb59-59b2-a0ad-e878-9b431d810291@infradead.org>
+References: <202209180926.OaCX9uMr-lkp@intel.com>
+ <ea5feb59-59b2-a0ad-e878-9b431d810291@infradead.org>
+Date:   Fri, 23 Sep 2022 20:47:07 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Randy Dunlap" <rdunlap@infradead.org>,
+        "kernel test robot" <lkp@intel.com>,
+        "Qin Jian" <qinjian@cqplus1.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: sunplus-uart.c:undefined reference to `uart_suspend_port'
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the data structure is only referred by pointer, compiler may not need
-to see the contents of the data type. Thus, we may replace header inclusions
-by respective forward declarations.
+On Sun, Sep 18, 2022, at 7:22 AM, Randy Dunlap wrote:
+> Arnd, Qin Jian,
+>
+> Fix is here:
+> https://lore.kernel.org/lkml/20220901000821.15376-1-rdunlap@infradead.org/
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/input/matrix_keypad.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I picked up the patch now. I was debating whether we should just remove
+the 'select' entirely and handle this using the defconfig as we do
+for most other platforms, but your patch is the easier fix, and
+I didn't want to risk getting it wrong if I rush in a different fix
+before 6.0.
 
-diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
-index 9476768c3b90..b8d8d69eba29 100644
---- a/include/linux/input/matrix_keypad.h
-+++ b/include/linux/input/matrix_keypad.h
-@@ -3,8 +3,9 @@
- #define _MATRIX_KEYPAD_H
- 
- #include <linux/types.h>
--#include <linux/input.h>
--#include <linux/of.h>
-+
-+struct device;
-+struct input_dev;
- 
- #define MATRIX_MAX_ROWS		32
- #define MATRIX_MAX_COLS		32
--- 
-2.35.1
-
+      Arnd
