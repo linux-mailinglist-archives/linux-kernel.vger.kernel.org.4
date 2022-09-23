@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2335E82AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFC35E82A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiIWTsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S232142AbiIWTrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiIWTsV (ORCPT
+        with ESMTP id S229612AbiIWTro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 15:48:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05EA1323E9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:48:10 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id l10so1071192plb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:48:10 -0700 (PDT)
+        Fri, 23 Sep 2022 15:47:44 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E425B12E421;
+        Fri, 23 Sep 2022 12:47:43 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id u69so1192831pgd.2;
+        Fri, 23 Sep 2022 12:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LWXlTBMzBHY8/RDjz/XaxuIaQimJV8NYOPXjURO0DVA=;
-        b=AwzKiLnafZK7mBFElsrxYgXpuhCcb0V8YNmMnmimU0hlaAcOqbnznpqv++v6Zu1XXK
-         T77MV+nH09MUxz4NMYF1oT9jrYu8SyiU7YyIQWmBromBpxB+k7eFJ+ZxRaGjNLaPyyIe
-         AyAujNKZZo2sLqJdakfSaT4GAUHD7H2e8Rld4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=dYW2QvrbYPxRlGnPxo3uZr3e/x2sb01bmiBhimSNx+g=;
+        b=qZX3vRZuZ+fRu6tDcq0SK4OgJZ6DD+ik97Xmvg+swWF9LVCQktV9X7ebQ5e360CPfh
+         51YBE9eelQ0/VWnng4ARoGc9rIa8CWWQRE9rU4JiFVxQ3zfbXe/tvt86P1EL1pErvQa6
+         O92lSeukBSSqPRZ3ubs8dJpin2MabE1TZ2LhTkr/VJn1XeJPZsQ4fqDVTQUM2nrSxiT1
+         2U6Fl+f54qTeUPQhg2WgXCLlwTmhvf2eC9Tl2VwidesfgAsoA9lbPwqvfKU4xzlTS4TA
+         Dnj8PYwBtciBGe0oVCcD3QpZtA3TK5xDCzkEgN98CCdUhtOYO2eO6Atu7Rpin4g12l8c
+         5AdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=LWXlTBMzBHY8/RDjz/XaxuIaQimJV8NYOPXjURO0DVA=;
-        b=24RKVi7PDy+QsvHwi6Y1gxWXDBxefxGKU8M4Mc1r9SZQBdGG8vSMvmt2BtG3PMJwMp
-         p9evRZCEXntyj0gLXgyO7HSgCI1ql2eagUrrLKVQp0Yx75g+6yZrRL0gUdBCjXKYbRtJ
-         tbAQR1B3ByhJsEo64AhTg+ym6+XOPITcLbMSnpZBDkUf4ArHzz/hwEtx2DPP8I8SLiIk
-         FNy5fFafyXXcwksvpUzOIQgH44WAS2cjmVbEpFpXmkQr0HtH8tXhyioHftDX4kepmKRe
-         onGYXpkl118qQnJOCW1CH0ggnlQ2Ao9N/Tj/jhxClKhc9p2VqX7xneBZ3876KDOG03im
-         IdjQ==
-X-Gm-Message-State: ACrzQf26u7wdaxFmG0hfeRA3punr07Gt69V79xncRfwMkvQmCQ/KkzdP
-        UFTBYhvwHxx7AVpNmLURaIhAPg==
-X-Google-Smtp-Source: AMsMyM7bDZajh6oHdZnatHqDhw0iyyGb6dwwHuzZ6SxbHCuTloaEzkC1FhfRge/dE2kdLj7JlkBSXQ==
-X-Received: by 2002:a17:902:f707:b0:178:77ca:a770 with SMTP id h7-20020a170902f70700b0017877caa770mr9982812plo.54.1663962489579;
-        Fri, 23 Sep 2022 12:48:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o13-20020a63e34d000000b00438e0db80dasm5990756pgj.65.2022.09.23.12.48.08
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=dYW2QvrbYPxRlGnPxo3uZr3e/x2sb01bmiBhimSNx+g=;
+        b=Jgj14qeh61QoJLDIpF5nx3DkXSFyRqAG9zw5sLEsiEtuuiN0pgeA+kk11XbnrU0/5S
+         H0IRvbtHlxP5Pau5aDsfzigkUiMFCbXkyt8S4GkqZRYAcbzawST2pLPEkYYEctJ9Li1u
+         X5O5ypgoWKtz9eIWLpwr/ZVLum5dqCPpdb5ahK35R1J7hr1g9Sej3Fk9i6xr5vICnlFl
+         VqCljCdvy20XBAZLMncFYZBEij37grdLJoX+jcdwvpGj50CyoIFteNUa/qJuLWD4WEgO
+         ohDVine1CvsKKQ0ML38jAS2gcy1AD50Nl0U+AHvzp4legWzE2NJMIi07rq+DwJEJqsqc
+         koEw==
+X-Gm-Message-State: ACrzQf0sUyQPFL7JJ3RID7Zc527AqHk8Q5bPJpQxwOr2ia6NHDI1H6L9
+        JBAhKh6PWkAMwfuOQufZnqQ=
+X-Google-Smtp-Source: AMsMyM4cCqqysTgzMQTMKzRJROfgK/UDjNAB2DNKRBILlYpsh6gy8TqUFLGkYmPoV8PdF1ZnQZwdVg==
+X-Received: by 2002:a63:4752:0:b0:439:5dcc:fd78 with SMTP id w18-20020a634752000000b004395dccfd78mr8777279pgk.104.1663962463312;
+        Fri, 23 Sep 2022 12:47:43 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:202:201:8b46:be3c:2c54:68a5])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170902784700b001753cb9893csm6405187pln.187.2022.09.23.12.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 12:48:08 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        Jason@zx2c4.com, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra comparison
-Date:   Fri, 23 Sep 2022 12:47:19 -0700
-Message-Id: <166396243656.2664601.3410906576496436654.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220923154001.4074849-1-Jason@zx2c4.com>
-References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com> <20220923154001.4074849-1-Jason@zx2c4.com>
+        Fri, 23 Sep 2022 12:47:42 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] Input: lm8333 - add missing linux/input.h include
+Date:   Fri, 23 Sep 2022 12:47:34 -0700
+Message-Id: <20220923194738.927408-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 17:40:01 +0200, Jason A. Donenfeld wrote:
-> Currently the clamp algorithm does:
-> 
-> 	if (val > hi)
-> 		val = hi;
-> 	if (val < lo)
-> 		val = lo;
-> 
-> [...]
+We are going to clean up matrix_keymap.h from unnecessary includes,
+so the driver needs to include API that it uses directly.
 
-Applied (with the little changes mentioned in v2 thread) to
-for-next/hardening, thanks!
+Also let's sort includes alphabetically and drop unneeded irq.h
 
-[1/1] minmax: clamp more efficiently by avoiding extra comparison
-      https://git.kernel.org/kees/c/97dd4f05a2ce
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/input/keyboard/lm8333.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/input/keyboard/lm8333.c b/drivers/input/keyboard/lm8333.c
+index 9dac22c14125..3052cd6dedac 100644
+--- a/drivers/input/keyboard/lm8333.c
++++ b/drivers/input/keyboard/lm8333.c
+@@ -4,13 +4,13 @@
+  * Copyright (C) 2012 Wolfram Sang, Pengutronix <kernel@pengutronix.de>
+  */
+ 
+-#include <linux/module.h>
+-#include <linux/slab.h>
+-#include <linux/irq.h>
+ #include <linux/i2c.h>
+-#include <linux/interrupt.h>
++#include <linux/input.h>
+ #include <linux/input/matrix_keypad.h>
+ #include <linux/input/lm8333.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/slab.h>
+ 
+ #define LM8333_FIFO_READ		0x20
+ #define LM8333_DEBOUNCE			0x22
 -- 
-Kees Cook
+2.37.3.998.g577e59143f-goog
 
