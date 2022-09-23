@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BB45E787D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B558D5E787E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbiIWKgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S231604AbiIWKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiIWKgP (ORCPT
+        with ESMTP id S231661AbiIWKge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:36:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA3C122619
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:36:13 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28N9xZps016526;
-        Fri, 23 Sep 2022 10:35:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ooxMihpH152oG5VCj9k8zT0AYwKGGyXZsd3SxSfv/Mg=;
- b=YSmP1tBiERN4CvL/u1SFXYI2gtimnBHgDWwwQCbsnFSd1D8e2FN7AJmwdDjVbph0jNTi
- 4zJkIMyXbwR1yXbbFpeb/qV5Unz01W3luNh4nxQIkDlLrIU+8ZkTsxWoO3Otx3W5hzSG
- U5QYvU/fkbLtXja79Qzo7Vnf8MMNsDs2sUCjiwWG/acXzGzdsvEkIZsn/rwrJJi2iwf7
- jGOSXwEaBpqEBW6sWy+yHBJ+LvMdQ5dewGOnTFiv8dI95ik4gsCP2Zv5eOeTgckkU+qg
- NxzdlumeoAV89fkgTjWSGcCHnG3hQVOrLtY1D8VLqm0b/ne1jQmoay/j4Bw9h4aJ+Ume 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3js8necbyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 10:35:46 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28N89EQ0000401;
-        Fri, 23 Sep 2022 10:35:46 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3js8necbxa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 10:35:45 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28NAZi2A014518;
-        Fri, 23 Sep 2022 10:35:44 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3jn5ghnv3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 10:35:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28NAa8YR39977348
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Sep 2022 10:36:08 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6202CAE059;
-        Fri, 23 Sep 2022 10:35:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1EF5AE057;
-        Fri, 23 Sep 2022 10:35:36 +0000 (GMT)
-Received: from [9.43.40.22] (unknown [9.43.40.22])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Sep 2022 10:35:36 +0000 (GMT)
-Message-ID: <3a966604-77c5-e6fc-1541-2fed7c71cc0c@linux.ibm.com>
-Date:   Fri, 23 Sep 2022 16:05:30 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v4] mm/demotion: Expose memory tier details via sysfs
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-References: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com>
- <874jwyjyy9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <874jwyjyy9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: INbxC0JoIBAkkr3j-pMzcrV5m05BRPRE
-X-Proofpoint-ORIG-GUID: X6-BGHRBFgUjWrMlgzwXW4O5k3W1p20y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_02,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- phishscore=0 impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209230068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        Fri, 23 Sep 2022 06:36:34 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F831296AA
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:36:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4D303580B87;
+        Fri, 23 Sep 2022 06:36:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 23 Sep 2022 06:36:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663929392; x=1663932992; bh=8ZYpe7XeT8
+        FlyFC9e+LWprOH1EQh9rPAyx+toWGSAIg=; b=C0uKAyh5/Q80ptL9ZwKe7u9zK/
+        TM43WoY/KFp1v96GL/LXevi4mnPDn5cM8WidNl4AaWH7GtrMWvyPih2+P2z9/CgB
+        j/bGIqyGX+X3rNJM45dPySTWID3CPB3hYBrJRO+W1IeqRKkPnBRMYSlXGm1XaDS1
+        LqysUf2Kd+FlQ6wYCIrNIcYpUtXAwJ9w5CpmvNqvtFqDyQiRAPp/M4gs7XxbR6WQ
+        vXgg8sw2EwCgM76zEz7Bf3iAk6dxC6dKXzr/e+KFFQyaUXo4j6H5K5TOJBg+WQi9
+        fzzZHpyE4GuyN560HNik92I53Z7SCEIMLnVx+VpJW1X3svXJEqlMc43Z5mmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663929392; x=1663932992; bh=8ZYpe7XeT8FlyFC9e+LWprOH1EQh
+        9rPAyx+toWGSAIg=; b=Vhgvk9aOvM9/nEoVRkZG1553EhClsLuKcAzjL8h43FEd
+        vh0go7loZThAxjYHy9AS1fAPH8lmd9XTgr9dfqGzhIjblIUhbln9ysWmjX8BWbsW
+        e9EB+fkrpaRR2KGu2Mrc+5k3q4bhcmsnkB8krBIlCAZz0EVr5FzATyqMuWHU3vPb
+        438vSrcCKzH5hcmENSb+j/LlSNE5Jf1B8IGFgQpSdGwMVsZwVbcAKO+GqQSNphoE
+        VAH7gvGLjP+PjROM6MM6Y0vcFo8/YsDMsQ/rmyi9xBZJB9sdt+QJEUnwHTKgAxIc
+        wY+1RMZ0V+J4UQIxYp2EevofZpFt71JY0GVBlKOjBA==
+X-ME-Sender: <xms:L4wtYyidkLJr1-L1UrVFc0SMv175WTIs5fR5HvP_109YwAWELrMNMg>
+    <xme:L4wtYzD2ms2Qc-7eWLcABiIx6I4WngeO3XAj9GuP2EIzD9-sCoTFVQpOceL6QGyzP
+    RUFoQNQhYdrC9JbnWI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:MIwtY6FKyk-mG8Fw30oh8S1_hRppzLPQsvaAeatX5iE-2PYDzXZjQQ>
+    <xmx:MIwtY7TYfWd7fa8JTH7G-c6JretI6bIKLGDar51nNhZ2aXfQD9TGBg>
+    <xmx:MIwtY_zAejuuPN6Tt8pNiElK5fWj_o2nRTBM2QwrSrYz5jM6cNAhiA>
+    <xmx:MIwtY2mcf1lvM4J9Mt_dMEgqm1vhamyaumAyvngwqUMNTfjmjndtxw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DCAABB60086; Fri, 23 Sep 2022 06:36:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <45de6e04-b19b-4ffe-878e-6ba8123f2aef@www.fastmail.com>
+In-Reply-To: <mhng-37586d5e-5576-448a-8d9c-4d277c252365@palmer-ri-x1c9>
+References: <mhng-37586d5e-5576-448a-8d9c-4d277c252365@palmer-ri-x1c9>
+Date:   Fri, 23 Sep 2022 12:35:50 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Anup Patel" <apatel@ventanamicro.com>
+Cc:     "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        anup@brainfault.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, mchitale@ventanamicro.com
+Subject: Re: [PATCH v2 1/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for systems
+ with Svpbmt
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,49 +87,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/22 1:37 PM, Huang, Ying wrote:
-> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-> 
->> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
->> related details can be found. All allocated memory tiers will be listed
->> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+On Thu, Sep 22, 2022, at 6:35 PM, Palmer Dabbelt wrote:
+> On Thu, 15 Sep 2022 19:24:55 PDT (-0700), apatel@ventanamicro.com wrote:
 >>
->> The nodes which are part of a specific memory tier can be listed via
->> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
-> 
-> It appears that XXXs is used for mask while XXXs_list is used for list?
-> For example,
-> 
-> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus
-> 0,00100004
-> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
-> 2,20
-> 
-> It's better to follow the this convention?
-> 
-
-That is not followed in other parts of the kernel. I was loking at cpuset 
-
-$cat cpuset.cpus.effective 
-0-7
-
-
-
-
->> A directory hierarchy looks like
->> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
->> memory_tier4/
->> ├── nodes
->> ├── subsystem -> ../../../../bus/memory_tiering
->> └── uevent
+>> On Tue, Aug 30, 2022 at 10:17 AM Anup Patel <apatel@ventanamicro.com> wrote:
+>>>
+>>> Currently, all flavors of ioremap_xyz() function maps to the generic
+>>> ioremap() which means any ioremap_xyz() call will always map the
+>>> target memory as IO using _PAGE_IOREMAP page attributes. This breaks
+>>> ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
+>>> remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
+>>> page attributes.
+>>>
+>>> To address above (just like other architectures), we implement RISC-V
+>>> specific ioremap_cache() and ioremap_wc() which maps memory using page
+>>> attributes as defined by the Svpbmt specification.
+>>>
+>>> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
+>>> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+>>> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 >>
->> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
->> 0,2
->>
->> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> 
-> Best Regards,
-> Huang, Ying
-> 
-> [snip]
+>> This is a crucial RC fix. Can you please take this ?
+>
+> Sorry I missed this, I thought it was just part of the rest of this 
+> patch set.  That said, I'm not actually sure this is a critical fix: 
+> sure it's a performance problem, and if some driver is expecting 
+> ioremap_cache() to go fast then possibly a pretty big one, but the only 
+> Svpmbt hardware that exists is the D1 and that was just supported this 
+> release so it's not a regression.  Maybe that's a bit pedantic, but all 
+> this travel has kind of made things a mess and I'm trying to make sure 
+> nothing goes off the rails.
 
+I think generally speaking any use of ioremap_cache() in a driver
+is a mistake. The few users that exist are usually from historic
+x86 specific code and are hard to kill off.
+
+     Arnd
