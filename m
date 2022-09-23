@@ -2,156 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E265E7C24
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816A65E7C28
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiIWNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S232367AbiIWNph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiIWNoK (ORCPT
+        with ESMTP id S229784AbiIWNpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:44:10 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2117.outbound.protection.outlook.com [40.107.243.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A864139F44;
-        Fri, 23 Sep 2022 06:44:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bChZAANCcS6n1GQbws0rX2hO8jjfIiO5tO5P7Y/P/UoM5chXP2eLlxluWZuXdtRek48pva2vNZWph18aePaNVEEoBiLsvooHHmhk9wHxzytj8xyunL/Gf1scvJicq0oFLN6XtkExNVvG/fjX67EZvEwiahj1AMcTBAmWEakRTiY8tXAo0r8LqFJPPsDgCdfHmG878Inx54Xw5mn5nculTCOHtHWS5NSHZ3LQIEftLFU0Ao7owWM6Zfs477VL9S7YOKUWGOOhg/SacWtzqe1YaieCQn2NZiVjHP5ygztkZOHAM7LsGfYrnbdpz3yBdWvFqBMKb70BWvC0QuWheiU1jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=trjjDsGTMyaOppxmQ21/iRx8GlxFho4+6y7BguKmi/E=;
- b=dk9WxC54ezytt3p4OOvvT0J8/C4AJ+gZqX7sJNx/IGeYd7NdFd3Jvmh7PcfTVLx2pjA1mnMj6WJ1qfncgtHnyoBIzE0s+kXzU2jETglvG9Tn76GaJpz+SSvHVM4CdqLHjhpkEUL9doKKfcyvlleSvlpYsTQ2iKsIGsaqterf7YDEGSL8XkW+zOZXOdM+hWzFrqyC5eQnkCEZXGGeyKrFluT71YkjRRsi58JdEKWWWDDHhg7LVMKxaTAKQ4ywggIYtbkfjDMjqsgQyLaguXzPJiDlE9SNLZ4FPjmClowlV1GwAUxa2R7yLkjTJUBtH45HzQd6280F/Gd4Ml8z+8IltA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hammerspace.com; dmarc=pass action=none
- header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=trjjDsGTMyaOppxmQ21/iRx8GlxFho4+6y7BguKmi/E=;
- b=e+EtRgcvNKSQvfPLyTQuuQHTO158GbSlmes8fVUVlJZlYWM9gaAABRFicVHXL62AAFb6FrfnpzaTfIpKZFMhuhEBtuzcVLWJEICrRx3N3s+t1SLhGj+Q/2GLHb2krlcyJZPBG39hak3SFdDSLIyt5lA7d3+CLw/HlK/ifj+P0F0=
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
- by DM8PR13MB5143.namprd13.prod.outlook.com (2603:10b6:8:3::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.8; Fri, 23 Sep 2022 13:44:06 +0000
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::93e4:42a1:96af:575e]) by CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::93e4:42a1:96af:575e%7]) with mapi id 15.20.5676.009; Fri, 23 Sep 2022
- 13:44:06 +0000
-From:   Trond Myklebust <trondmy@hammerspace.com>
-To:     "jack@suse.cz" <jack@suse.cz>,
-        "jlayton@kernel.org" <jlayton@kernel.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "neilb@suse.de" <neilb@suse.de>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Thread-Topic: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Thread-Index: AQHYwqs/evAHvn9kzUKFB4lWpvCB0q3T1xmAgAATgACAAAFbgIAABbEAgAAK/YCAALZNAIAAgw4AgAByGoCAAAZagIAAAzmAgAAdFoCAAAvtAIAADJkAgANYaoCAApXgAIAAn+4AgAQd8ACAABFGgIAAGxkAgAARzACAAAYwgIAADquAgAAGDQCAADHXgIAAjpcAgABOzoCAADwjAIADto4AgADfUACAALlzgIAAqj+AgADjjgCAALDXAIAAup8AgADTfYCAAKeNAIAA5MiAgAA/cYA=
-Date:   Fri, 23 Sep 2022 13:44:05 +0000
-Message-ID: <2d41c08e1fd96d55c794c3b4cd43a51a0494bfcf.camel@hammerspace.com>
-References: <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
-         <20220918235344.GH3600936@dread.disaster.area>
-         <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
-         <20220920001645.GN3600936@dread.disaster.area>
-         <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
-         <20220921000032.GR3600936@dread.disaster.area>
-         <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
-         <20220921214124.GS3600936@dread.disaster.area>
-         <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>
-         <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>
-         <20220923095653.5c63i2jgv52j3zqp@quack3>
-In-Reply-To: <20220923095653.5c63i2jgv52j3zqp@quack3>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=hammerspace.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH0PR13MB5084:EE_|DM8PR13MB5143:EE_
-x-ms-office365-filtering-correlation-id: 3d7a560f-9338-43ae-4aa8-08da9d69aef1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7C1JKMqH3i3fX80oE7Ch4phDNADAO10CfIdmEmHokW3+MwkcUXQAELY6ny2x+dPK39vAZ3673T39fgYodWfvC7Ar+UMrUlW5692SQRmQK9NzKULqPKkazhQwdqm+3gCo02NEeL6yNTeERIsMBFf0lUzZfai8ieOn1RQWQCABX/uVjtrHMTRuQrL+i0NUJDB/MmxCe7Govo8VZXbmO3GWupyEIt9EoC0xlCG83HhiuvL64RHee3yupII9hInSxJLwVS9Fu0bUfm6CBgqWKoNsFmx/Qe0aCAwiI09VG0xHvB4IDd8py+U/KtqQN4cI9IJ6WLKw4B72a6RWDUGkar50Qa+i5SGYBXg6f6TPj33GCffq0+d0aeopMQaqrAnx8XH4vIfJWJe2MQVpMqM0ZlZdCNd3qU84e1MJLe1ohnn3gBn16M+0xi09UAAi9V/8iSECImllOU5hnMaOxADWT+3546AxvbAdjXR9gyUgHaz1SG2Ayp/zqVZRtFxHwFR7e1Ktq+kNwa/0lxrHct3YZm2sz6f2/eBv/jp5oobaHsPt4rhBOVj32WNJAVhnIRkCripF9aoVJUP3vXG5qqMDzMrW6loaX14QZ6PDxGzW9SglC17G2b7sXz9k69Z9x0tTear9j9wp8CtW6MSPHu+rruwvkiIFBkpLhTjZrDVbkrQTaTKfg71hRdyKnzG0F/3kUobMVTGW0+Q9aBc1NsUpUOIUMHd49gTnvQ2ZF+iYahAL8wC3vEa8IvX/nGMqM3c1zeNuKAP6zu6rSi2/7NEfctEGCA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(396003)(39840400004)(346002)(451199015)(6486002)(66946007)(4326008)(66556008)(64756008)(8676002)(478600001)(66446008)(76116006)(71200400001)(66476007)(8936002)(2906002)(38100700002)(122000001)(186003)(26005)(7416002)(5660300002)(83380400001)(6512007)(2616005)(41300700001)(6506007)(36756003)(110136005)(54906003)(316002)(38070700005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YUovc3JUNVJIbHY2RnM2VU1uZlRzTjdrMlZjTS9TQnN2OHB2MXZQMEZiMjlX?=
- =?utf-8?B?a0REVGlCL05SVFFCMDFrRUsvK0Z6ZXZzMDRUc1p3bmJLcnM3L3VkaXF5NmZO?=
- =?utf-8?B?bHFxVlVpTkZHanRhbzEvaHRDaHNDTlZFQnFnbkg5S2l2T0ZTVERCb29zbEIw?=
- =?utf-8?B?UStwVDlZTG1KMWUwYytTRlc2cGNxWTBOMmpFZjBiclducmxnODRzeWRsTjZB?=
- =?utf-8?B?aGtvbExBaWY5RVFZQ0tucFJsVWdYNEpnWmREZ01xcnVBWjh3VzhMZE5nM2Er?=
- =?utf-8?B?VEJMTURrMWQ2WXR1dnBtVFA0cHlOWGdudjJQNEx0TmhmVGx1TmMyL2xKY3lv?=
- =?utf-8?B?aW5oc1FDYjF4b1ZibzJ3ZHExbythYngxSWtVSEJzT0ZPUDVGU3hDMk0zaVVR?=
- =?utf-8?B?RFd2NnF3c3dKR1I5WjlEcyt4azA3NFdLY3hLL2FuZlJFTjlUNUpFbDFaNHFn?=
- =?utf-8?B?L011MXU2U0hjVVRkam05aEhtS1I0VE1xVjl4VkFjK3N1VDhJTk1KY3ZhdWh0?=
- =?utf-8?B?RlpUZEJvUmRjUzdsQ00zdXQwd2RSQjJkSXVJaERHRjlMa1k2ZXhsWnp5TzEz?=
- =?utf-8?B?RHFneVlqcWY1UU93Uk5CN2NIRm1lWW5lSVNZWmdKcXVIb3VTTzV1aWVvbFEy?=
- =?utf-8?B?bnV5dkU3TmNwTTNQTVZydEVxK0FHOFJSU2k1U1JLUGZaTVE1dmVrdS9sWnlR?=
- =?utf-8?B?UUVuYW9PRndnazhhdkVpeTV0RmhHRzVkUllTdHQxcXNYS0NnMnJLNzEyK3Yz?=
- =?utf-8?B?K1pLZ3N6RFZYOVdFbExFVWx6U0RMUUxrMVhnb2xJNmlRSXRrdVR1UHdRQWNn?=
- =?utf-8?B?RDRrT2wzMlZhY3hyY1pOY3NzMm45NHBPUCtNL2lsck9xTldUZlpyaXA5SDNj?=
- =?utf-8?B?NVNNUGdtYi9ocjU4TGdXTEJiZTJ0bVZYeUg3WjNZSGFWb0QrcWF5QWhhc25u?=
- =?utf-8?B?NGVLeWV1YktQNndZcTlGZTR3VlNmTzdPQlk2ejR0ZkNTVlpGM2N4dXVad1gz?=
- =?utf-8?B?TkVVV1c4OTZzUHUvbWtFK3lxOXFaTTU2ZSsrOVUxS0NOSjAvNTU0b0NEUG8w?=
- =?utf-8?B?ZklBWENVbFRFUmxhQlJ1SExsd1JyYUtjQU9samgrNythNEQyVnNWTWpOdk9H?=
- =?utf-8?B?NWlMY2xtVDBxTklqUDdoN3BQbHc3bmFhN2pBTlpDUG5mSWtUYW9mSVNWSHFO?=
- =?utf-8?B?Nk1OeHBqRlRkQ09kNFNjSWM1ck9hYk9xdnFUVENsbmcwcFJwUTRPMVBQbnNo?=
- =?utf-8?B?WVZZZC9TUHdlRmFjL1V2Sllpbm9ZUTJ5QytiSEExelFIcGZtbmJUM2RIdFd5?=
- =?utf-8?B?VWI3MFB0Z1BJZmgrWEs0bEVJaDZXN29NSHJGYzhaSHhMcFd5aEVod0dwZ1E3?=
- =?utf-8?B?SzdycVNLZit3SUV5UUEyUUhtRGN1NmdrQ0Zja2RYZEZ3SlZabzhNNHpiU1pW?=
- =?utf-8?B?V1lSSlJFNFRKWE5JUmI0Z21zbFVpNmVQSVgraE9scjF0UjJLZlovajJBOXNh?=
- =?utf-8?B?cE9WOE9iQXJhVXRrdUtQR2doVEh5bFFMaElPQTRrcmY3SENvQnZyS2oxZjdu?=
- =?utf-8?B?Qk9UclNENFcyZDJYbzJvcWpvd0JUVDExOEFTc0dxQkdOUDlzcVF3VTI2MWpu?=
- =?utf-8?B?aGRYY2ZRRDJsdlVIRHVPU1grNjgyU01IOUlPZEdOTGZZOGx5US8xaUN2SEV3?=
- =?utf-8?B?ajAvTTZPOWVnYlNGVFgyVE9Ed3lKUGNYUmJoVHoyQ2MyWlVJTm5LcWZYRXVX?=
- =?utf-8?B?OXFnZVhVZHFQTGlFNndxOTd5R21STngzK09LbVRUWkVUR0dweVhBWWppN3hx?=
- =?utf-8?B?VENiYmJId3JRSDBHRUpSUEFlSjdNZ3NQWGRtdmpLKzFCWkc0Vk9HTktVZjV0?=
- =?utf-8?B?SlpmK3czT2JZZnNESHh6aWd2Yit6ZnVXdlFKSVJNb1lWbStTRndmcjhlQklC?=
- =?utf-8?B?NnVvSzZsYzZQc0Z6dW1jYzY0dU5ORzlqbjNtUzI3ekZlMTJkTGVHVEpJRnE5?=
- =?utf-8?B?ekpCQUVnaU1ORmZNK1NDQ2ZNSU9QRzFnQkZnTllSM0E0SHpHeVdaclljRXV0?=
- =?utf-8?B?MjlSc1c4WnhrSlRJZ0h4dnlQR25LQkY0WUpHdzJLOEJ2UnNhWjd4SkJ4RWk3?=
- =?utf-8?B?VlNPbmdndzN6c0swcm9ENkhyeDRQMlRwcmgxU2x0Y3gzbnNIOFJ5NXJOdm1B?=
- =?utf-8?B?clE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AC231563EBEA0D4D937A7E89D4BA6B94@namprd13.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 23 Sep 2022 09:45:33 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136B79E0FD;
+        Fri, 23 Sep 2022 06:45:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQX7UDK_1663940723;
+Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQX7UDK_1663940723)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Sep 2022 21:45:25 +0800
+Message-ID: <d4edc6f4-e56f-4a19-3c34-b65d4903bfc0@linux.alibaba.com>
+Date:   Fri, 23 Sep 2022 21:45:23 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: hammerspace.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d7a560f-9338-43ae-4aa8-08da9d69aef1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2022 13:44:05.8209
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i85Qg2Taee1vgZ8xu70XYijtLt3G9sYfflagSa7Ty3eEygjTVm/H4Zfwxs0EtiIkbaemMGPONu06/qEFnoyWYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5143
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
+        robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+ <20220917121036.14864-3-xueshuai@linux.alibaba.com>
+ <20220922165820.000017b6@huawei.com>
+Content-Language: en-US
+In-Reply-To: <20220922165820.000017b6@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,58 +49,682 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA5LTIzIGF0IDExOjU2ICswMjAwLCBKYW4gS2FyYSB3cm90ZToNCj4gT24g
-VGh1IDIyLTA5LTIyIDE2OjE4OjAyLCBKZWZmIExheXRvbiB3cm90ZToNCj4gPiBPbiBUaHUsIDIw
-MjItMDktMjIgYXQgMDY6MTggLTA0MDAsIEplZmYgTGF5dG9uIHdyb3RlOg0KPiA+ID4gT24gVGh1
-LCAyMDIyLTA5LTIyIGF0IDA3OjQxICsxMDAwLCBEYXZlIENoaW5uZXIgd3JvdGU6DQo+ID4gPiA+
-IGUuZy4gVGhlIE5GUyBzZXJ2ZXIgY2FuIHRyYWNrIHRoZSBpX3ZlcnNpb24gdmFsdWVzIHdoZW4g
-dGhlDQo+ID4gPiA+IE5GU0QNCj4gPiA+ID4gc3luY3MvY29tbWl0cyBhIGdpdmVuIGlub2RlLiBU
-aGUgbmZzZCBjYW4gc2FtcGxlIGlfdmVyc2lvbiBpdA0KPiA+ID4gPiB3aGVuDQo+ID4gPiA+IGNh
-bGxzIC0+Y29tbWl0X21ldGFkYXRhIG9yIGZsdXNoZWQgZGF0YSBvbiB0aGUgaW5vZGUsIGFuZCB0
-aGVuDQo+ID4gPiA+IHdoZW4NCj4gPiA+ID4gaXQgcGVla3MgYXQgaV92ZXJzaW9uIHdoZW4gZ2F0
-aGVyaW5nIHBvc3Qtb3AgYXR0cnMgKG9yIGFueQ0KPiA+ID4gPiBvdGhlcg0KPiA+ID4gPiBnZXRh
-dHRyIG9wKSBpdCBjYW4gZGVjaWRlIHRoYXQgdGhlcmUgaXMgdG9vIG11Y2ggaW4tbWVtb3J5DQo+
-ID4gPiA+IGNoYW5nZQ0KPiA+ID4gPiAoZS5nLiAxMCwwMDAgY291bnRzIHNpbmNlIGxhc3Qgc3lu
-YykgYW5kIHN5bmMgdGhlIGlub2RlLg0KPiA+ID4gPiANCj4gPiA+ID4gaS5lLiB0aGUgTkZTIHNl
-cnZlciBjYW4gdHJpdmlhbGx5IGNhcCB0aGUgbWF4aW11bSBudW1iZXIgb2YNCj4gPiA+ID4gdW5j
-b21taXR0ZWQgTkZTIGNoYW5nZSBhdHRyIGJ1bXBzIGl0IGFsbG93cyB0byBidWlsZCB1cCBpbg0K
-PiA+ID4gPiBtZW1vcnkuDQo+ID4gPiA+IEF0IHRoYXQgcG9pbnQsIHRoZSBORlMgc2VydmVyIGhh
-cyBhIGJvdW5kICJtYXhpbXVtIHdyaXRlIGNvdW50Ig0KPiA+ID4gPiB0aGF0DQo+ID4gPiA+IGNh
-biBiZSB1c2VkIGluIGNvbmp1bmN0aW9uIHdpdGggdGhlIHhhdHRyIGJhc2VkIGNyYXNoIGNvdW50
-ZXINCj4gPiA+ID4gdG8NCj4gPiA+ID4gZGV0ZXJtaW5lIGhvdyB0aGUgY2hhbmdlX2F0dHIgaXMg
-YnVtcGVkIGJ5IHRoZSBjcmFzaCBjb3VudGVyLg0KPiA+ID4gDQo+ID4gPiBXZWxsLCBub3QgInRy
-aXZpYWxseSIuIFRoaXMgaXMgdGhlIGJpdCB3aGVyZSB3ZSBoYXZlIHRvIGdyb3cNCj4gPiA+IHN0
-cnVjdA0KPiA+ID4gaW5vZGUgKG9yIHRoZSBmcy1zcGVjaWZpYyBpbm9kZSksIGFzIHdlJ2xsIG5l
-ZWQgdG8ga25vdyB3aGF0IHRoZQ0KPiA+ID4gbGF0ZXN0DQo+ID4gPiBvbi1kaXNrIHZhbHVlIGlz
-IGZvciB0aGUgaW5vZGUuDQo+ID4gPiANCj4gPiA+IEknbSBsZWFuaW5nIHRvd2FyZCBkb2luZyB0
-aGlzIG9uIHRoZSBxdWVyeSBzaWRlLiBCYXNpY2FsbHksIHdoZW4NCj4gPiA+IG5mc2QNCj4gPiA+
-IGdvZXMgdG8gcXVlcnkgdGhlIGlfdmVyc2lvbiwgaXQnbGwgY2hlY2sgdGhlIGRlbHRhIGJldHdl
-ZW4gdGhlDQo+ID4gPiBjdXJyZW50DQo+ID4gPiB2ZXJzaW9uIGFuZCB0aGUgbGF0ZXN0IG9uZSBv
-biBkaXNrLiBJZiBpdCdzIGJpZ2dlciB0aGFuIFggdGhlbg0KPiA+ID4gd2UnZCBqdXN0DQo+ID4g
-PiByZXR1cm4gTkZTNEVSUl9ERUxBWSB0byB0aGUgY2xpZW50Lg0KPiA+ID4gDQo+ID4gPiBJZiB0
-aGUgZGVsdGEgaXMgPlgvMiwgbWF5YmUgaXQgY2FuIGtpY2sgb2ZmIGEgd29ya3F1ZXVlIGpvYiBv
-cg0KPiA+ID4gc29tZXRoaW5nDQo+ID4gPiB0aGF0IGNhbGxzIHdyaXRlX2lub2RlIHdpdGggV0Jf
-U1lOQ19BTEwgdG8gdHJ5IHRvIGdldCB0aGUgdGhpbmcNCj4gPiA+IG9udG8gdGhlDQo+ID4gPiBw
-bGF0dGVyIEFTQVAuDQo+ID4gDQo+ID4gU3RpbGwgbG9va2luZyBhdCB0aGlzIGJpdCB0b28uIFBy
-b2JhYmx5IHdlIGNhbiBqdXN0IGtpY2sgb2ZmIGENCj4gPiBXQl9TWU5DX05PTkUgZmlsZW1hcF9m
-ZGF0YXdyaXRlIGF0IHRoYXQgcG9pbnQgYW5kIGhvcGUgZm9yIHRoZQ0KPiA+IGJlc3Q/DQo+IA0K
-PiAiSG9wZSIgaXMgbm90IGEgZ3JlYXQgYXNzdXJhbmNlIHJlZ2FyZGluZyBkYXRhIGludGVncml0
-eSA7KSBBbnl3YXksDQo+IGl0DQo+IGRlcGVuZHMgb24gaG93IHlvdSBpbWFnaW5lIHRoZSAiaV92
-ZXJzaW9uIG9uIGRpc2siIGlzIGdvaW5nIHRvIGJlDQo+IG1haW50YWluZWQuIEl0IGNvdWxkIGJl
-IG1haW50YWluZWQgYnkgTkZTRCBpbnNpZGUNCj4gY29tbWl0X2lub2RlX21ldGFkYXRhKCkgLQ0K
-PiBmZXRjaCBjdXJyZW50IGlfdmVyc2lvbiB2YWx1ZSBiZWZvcmUgYXNraW5nIGZpbGVzeXN0ZW0g
-Zm9yIHRoZSBzeW5jDQo+IGFuZCBieSB0aGUNCj4gdGltZSBjb21taXRfbWV0YWRhdGEoKSByZXR1
-cm5zIHdlIGtub3cgdGhhdCB2YWx1ZSBpcyBvbiBkaXNrLiBJZiB3ZQ0KPiBkZXRlY3QgdGhlDQo+
-IGN1cnJlbnQgLSBvbl9kaXNrIGlzID4gWC8yLCB3ZSBjYWxsIGNvbW1pdF9pbm9kZV9tZXRhZGF0
-YSgpIGFuZCB3ZQ0KPiBhcmUNCj4gZG9uZS4gSXQgaXMgbm90IGV2ZW4gKnRoYXQqIGV4cGVuc2l2
-ZSBiZWNhdXNlIHVzdWFsbHkgZmlsZXN5c3RlbXMNCj4gb3B0aW1pemUNCj4gYXdheSB1bm5lY2Vz
-c2FyeSBJTyB3aGVuIHRoZSBpbm9kZSBkaWRuJ3QgY2hhbmdlIHNpbmNlIGxhc3QgdGltZSBpdA0K
-PiBnb3QNCj4gc3luY2VkLg0KPiANCg0KTm90ZSB0aGF0IHRoZXNlIGFwcHJvYWNoZXMgcmVxdWly
-aW5nIDNyZCBwYXJ0eSBoZWxwIGluIG9yZGVyIHRvIHRyYWNrDQppX3ZlcnNpb24gaW50ZWdyaXR5
-IGFjcm9zcyBmaWxlc3lzdGVtIGNyYXNoZXMgYWxsIG1ha2UgdGhlIGlkZWEgb2YNCmFkZGluZyBp
-X3ZlcnNpb24gdG8gc3RhdHgoKSBhIG5vLWdvLg0KDQpJdCBpcyBvbmUgdGhpbmcgZm9yIGtuZnNk
-IHRvIGFkZCBzcGVjaWFsaXNlZCBtYWNoaW5lcnkgZm9yIGludGVncml0eQ0KY2hlY2tpbmcsIGJ1
-dCBpZiBhbGwgYXBwbGljYXRpb25zIG5lZWQgdG8gZG8gc28sIHRoZW4gdGhleSBhcmUgaGlnaGx5
-DQp1bmxpa2VseSB0byB3YW50IHRvIGFkb3B0IHRoaXMgYXR0cmlidXRlLg0KDQoNCi0tIA0KVHJv
-bmQgTXlrbGVidXN0DQpMaW51eCBORlMgY2xpZW50IG1haW50YWluZXIsIEhhbW1lcnNwYWNlDQp0
-cm9uZC5teWtsZWJ1c3RAaGFtbWVyc3BhY2UuY29tDQoNCg0K
+在 2022/9/22 PM11:58, Jonathan Cameron 写道:
+> On Sat, 17 Sep 2022 20:10:35 +0800
+> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+> 
+>> This commit adds the PCIe Performance Monitoring Unit (PMU) driver support
+>> for T-Head Yitian SoC chip. Yitian is based on the Synopsys PCI Express
+>> Core controller IP which provides statistics feature. The PMU is not a PCIe
+>> Root Complex integrated End Point(RCiEP) device but only register counters
+>> provided by each PCIe Root Port.
+>>
+>> To facilitate collection of statistics the controller provides the
+>> following two features for each Root Port:
+>>
+>> - Time Based Analysis (RX/TX data throughput and time spent in each
+>>   low-power LTSSM state)
+>> - Event counters (Error and Non-Error for lanes)
+>>
+>> Note, only one counter for each type.
+>>
+>> This driver add PMU devices for each PCIe Root Port. And the PMU device is
+>> named based the BDF of Root Port. For example,
+>>
+>>     10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+>>
+>> the PMU device name for this Root Port is pcie_bdf_100000.
+>>
+>> Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
+>>
+>>     $# perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
+>>
+>> average RX bandwidth can be calculated like this:
+>>
+>>     PCIe TX Bandwidth = PCIE_TX_DATA * 16B / Measure_Time_Window
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> 
+> +CC linux-pci list and Bjorn.
+> 
+> Question in here which I've been meaning to address for other reasons
+> around how to register 'extra features' on pci ports.
+> 
+> This particular PMU is in config space in a Vendor Specific Extended
+> Capability.
+> 
+> I've focused on that aspect for this review rather than the perf parts.
+> We'll need to figure that story out first as doing this from a bus walk
+> makes triggered of a platform driver is not the way I'd expect to see
+> this work.
+
+Thank you for your valuable comments. Please see my reply inline.
+
+Best Regards,
+Shuai
+
+>> diff --git a/drivers/perf/dwc_pcie_pmu.c b/drivers/perf/dwc_pcie_pmu.c
+>> new file mode 100644
+>> index 000000000000..81e534be13fa
+>> --- /dev/null
+>> +++ b/drivers/perf/dwc_pcie_pmu.c
+>> @@ -0,0 +1,976 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Synopsys DesignWare PCIe PMU driver
+>> + *
+>> + * Copyright (C) 2021, 2022 Alibaba Inc.
+>> + */
+>> + 
+>> +#include <linux/pci.h>
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/cpuhotplug.h>
+>> +#include <linux/cpumask.h>
+>> +#include <linux/device.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/list.h>
+>> +#include <linux/perf_event.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/smp.h>
+>> +#include <linux/sysfs.h>
+>> +#include <linux/types.h>
+>> +
+>> +#define DRV_NAME				"dwc_pcie_pmu"
+>> +#define DEV_NAME				"dwc_pcie_pmu"
+> Put these strings where they are used.  That's where people will look for them...
+
+Got it. Will use strings directly in next version.
+
+> 
+>> +#define RP_NUM_MAX				32 /* 2die * 4RC * 4Ctrol */
+> 
+> This driver is 'almost' generic. So if you an avoid defines based on a particular
+> platform that's definitely good!
+
+Good idea. How about defining RP_NUM_MAX as 64? As fars as I know,
+some platfrom use 2 sockets, 2 die per socket.
+Then 2 sockets * 2 dies * 4 Root Complex * 4 root port.
+
+> 
+>> +#define ATTRI_NAME_MAX_SIZE			32
+>> +
+>> +#define DWC_PCIE_VSEC_ID			0x02
+>> +#define DWC_PCIE_VSEC_REV			0x04
+> 
+> I wouldn't define the REV like this. Put the number inline so we
+> can clearly see this is revision 4.  VSEC_ID won't change so a
+> define for that is fine.
+
+I see. I will use 0x04 instead REV macro in next version.
+
+>> +
+>> +#define DWC_PCIE_LINK_CAPABILITIES_REG		0xC
+> This is PCIE spec defined.  Put these in a common header.
+
+Good catch, I will fix in next version.
+
+>> +#define DWC_PCIE_LANE_SHIFT			4
+>> +#define DWC_PCIE_LANE_MASK			GENMASK(9, 4)
+>> +
+>> +#define DWC_PCIE_EVENT_CNT_CTRL			0x8
+>> +#define DWC_PCIE__CNT_EVENT_SELECT_SHIFT	16
+> 
+> Why double __?  If point is , then
+> naming works better
+> DWC_PCIE_EVENT_CNT_CTRL_REG
+> DWC_PCIE_EVENT_CNT_CTRL_EV_SELECT_MSK etc
+
+Yes, I point to use double `__` to indicate it is a field of register,
+as CMN and CCN drivers do. I also considered naming with REG explicitly,
+but the macro is so long that I often have to wrap code into multilines.
+Any way, it's fine to rename if you still suggest to do so.
+
+> 
+>> +#define DWC_PCIE__CNT_EVENT_SELECT_MASK		GENMASK(27, 16)
+>> +#define DWC_PCIE__CNT_LANE_SELECT_SHIFT		8
+>> +#define DWC_PCIE__CNT_LANE_SELECT_MASK		GENMASK(11, 8)
+>> +#define DWC_PCIE__CNT_STATUS_SHIFT		7
+>> +#define DWC_PCIE__CNT_STATUS_MASK		BIT(7)
+>> +#define DWC_PCIE__CNT_ENABLE_SHIFT		2
+> 
+> With FIELD_PREP() / FIELD_GET() you should never need to define the shifts.
+> They will be extracted from the masks as needed.
+> 
+>> +#define DWC_PCIE__CNT_ENABLE_MASK		GENMASK(4, 2)
+>> +#define DWC_PCIE_PER_EVENT_OFF			(0x1 << DWC_PCIE__CNT_ENABLE_SHIFT)
+> FIELD_PREP() / FIELD_GET() combined with defines for the values.
+> 
+> #define DWC_PCIE_CNT_ENABLE_MASK ...
+
+Got it, I will use FIELD_PREP() / FIELD_GET() to remove SHIFT micros
+and improve code readability.
+
+> 
+>> +#define DWC_PCIE_PER_EVENT_ON			(0x3 << DWC_PCIE__CNT_ENABLE_SHIFT)
+>> +#define DWC_PCIE_EVENT_CLEAR_MASK		GENMASK(1, 0)
+>> +
+>> +#define DWC_PCIE_EVENT_CNT_DATA			0xC
+>> +
+>> +#define DWC_PCIE_TIME_BASED_ANALYSIS_CTRL	0x10
+>> +#define DWC_PCIE__TIME_BASED_REPORT_SELECT_SHIFT	24
+>> +#define DWC_PCIE__TIME_BASED_REPORT_SELECT_MASK	GENMASK(31, 24)
+>> +#define DWC_PCIE__TIME_BASED_DURATION_SHIFT	8
+>> +#define DWC_PCIE__TIME_BASED_DURATION_SELECT	GENMASK(15, 8)
+>> +#define DWC_PCIE_DURATION_MANUAL_CTRL		0x0
+>> +#define DWC_PCIE_DURATION_1MS			0x1
+>> +#define DWC_PCIE_DURATION_10MS			0x2
+>> +#define DWC_PCIE_DURATION_100MS			0x3
+>> +#define DWC_PCIE_DURATION_1S			0x4
+>> +#define DWC_PCIE_DURATION_2S			0x5
+>> +#define DWC_PCIE_DURATION_4S			0x6
+>> +#define DWC_PCIE_DURATION_4US			0xff
+>> +#define DWC_PCIE__TIME_BASED_COUNTER_ENABLE	1
+>> +
+>> +#define DWC_PCIE_TIME_BASED_ANALYSIS_DATA_REG_LOW	0x14
+>> +#define DWC_PCIE_TIME_BASED_ANALYSIS_DATA_REG_HIGH	0x18
+>> +
+>> +/* Event attributes */
+>> +#define DWC_PCIE_CONFIG_EVENTID			GENMASK(15, 0)
+>> +#define DWC_PCIE_CONFIG_TYPE			GENMASK(19, 16)
+>> +#define DWC_PCIE_CONFIG_LANE			GENMASK(27, 20)
+>> +
+>> +#define DWC_PCIE_EVENT_ID(event)	FIELD_GET(DWC_PCIE_CONFIG_EVENTID, (event)->attr.config)
+>> +#define DWC_PCIE_EVENT_TYPE(event)	FIELD_GET(DWC_PCIE_CONFIG_TYPE, (event)->attr.config)
+>> +#define DWC_PCIE_EVENT_LANE(event)	FIELD_GET(DWC_PCIE_CONFIG_LANE, (event)->attr.config)
+>> +
+>> +#define DWC_PCIE_PMU_HAS_REGISTER		1
+>> +
+>> +enum dwc_pcie_event_type {
+>> +	DWC_PCIE_TYPE_INVALID,
+>> +	DWC_PCIE_TIME_BASE_EVENT,
+>> +	DWC_PCIE_LANE_EVENT,
+>> +};
+>> +
+>> +struct dwc_event_counters {
+>> +	const char name[32];
+>> +	u32 event_id;
+>> +};
+>> +
+>> +struct dwc_pcie_pmu {
+>> +	struct hlist_node node;
+>> +	unsigned int on_cpu;
+>> +	struct pmu pmu;
+>> +	struct device *dev;
+>> +};
+>> +
+>> +struct dwc_pcie_info_table {
+>> +	u32 bdf;
+>> +	u32 cap_pos;
+>> +	u32 num_lanes;
+>> +	struct pci_dev *pdev;
+>> +	struct dwc_pcie_pmu pcie_pmu;
+>> +	u8 pmu_is_register;
+>> +	struct perf_event *event;
+>> +
+>> +	struct dwc_pcie_event_attr *lane_event_attrs;
+>> +	struct attribute **pcie_pmu_event_attrs;
+>> +	struct attribute_group pcie_pmu_event_attrs_group;
+>> +	const struct attribute_group *pcie_pmu_attr_groups[4];
+>> +};
+>> +
+>> +struct dwc_pcie_pmu_priv {
+>> +	struct device *dev;
+>> +	u32 pcie_ctrl_num;
+>> +	struct dwc_pcie_info_table *pcie_table;
+>> +};
+>> +
+>> +#define DWC_PCIE_CREATE_BDF(seg, bus, dev, func)	\
+>> +	(((seg) << 24) | (((bus) & 0xFF) << 16) | (((dev) & 0xFF) << 8) | (func))
+> 
+> Superficially this looks pretty standard.  Why is is DWC specific?
+
+You are right, it is not DWC specific.
+
+I found a similar definition in arch/ia64/pci/pci.c .
+
+	#define PCI_SAL_ADDRESS(seg, bus, devfn, reg)		\
+	(((u64) seg << 24) | (bus << 16) | (devfn << 8) | (reg))
+
+Should we move it into a common header first?
+
+> 
+>> +#define to_pcie_pmu(p) (container_of(p, struct dwc_pcie_pmu, pmu))
+> 
+> Prefix that name.  I'm hopeful we'll have a PCI SIG defined PMU one
+> day and when we do that macro belongs to that!
+> to_dwc_pcie_pmu() is possibly fine.
+
+I entirely agree that a standard definition is preferred.
+Will use to_dwc_pcie_pmu instead in next version.
+
+> 
+>> +
+>> +static struct platform_device *dwc_pcie_pmu_dev;
+>> +static char *event_attr_name = "events";
+>> +
+> 
+> 
+> ...
+> 
+>> +
+>> +static int dwc_pcie_find_ras_des_cap_position(struct pci_dev *pdev, int *pos)
+>> +{
+>> +	u32 header;
+>> +	int vsec = 0;
+>> +
+>> +	while ((vsec = pci_find_next_ext_capability(pdev, vsec,
+>> +						    PCI_EXT_CAP_ID_VNDR))) {
+> 
+> This probably belongs in the PCI core in a similar fashion to the DVSEC
+> helper.
+> 
+>> +		pci_read_config_dword(pdev, vsec + PCI_VNDR_HEADER, &header);
+>> +		/* Is the device part of a DesignWare Cores PCIe Controller ? */
+> 
+> Good question... This code doesn't check that.  VSEC ID is matched only with
+> the Vendor ID of the devices - unlike DVSEC where this would all be nice
+> and local.
+
+I think a similar fashion is
+
+	u16 pci_find_vsec_capability(struct pci_dev *dev, u16 vendor, int cap)
+
+As you see, I don't want to limit this driver to a specific vendor, like
+Alibaba (0x1ded), because this driver is generic to all DesignWare Cores PCIe
+Controller. Therefore, dwc_pcie_find_ras_des_cap_position does not check vendor
+like pci_find_vsec_capability.
+
+Do you mean to use DVSEC instead? I try to read out DVSEC with lspci:
+
+    # lspci -vvv
+    b0:00.0 PCI bridge: Alibaba (China) Co., Ltd. M1 Root Port (rev 01) (prog-if 00 [Normal decode])
+    [...snip...]
+        Capabilities: [374 v1] Vendor Specific Information: ID=0002 Rev=4 Len=100 <?>
+        Capabilities: [474 v1] Vendor Specific Information: ID=0001 Rev=1 Len=038 <?>
+        Capabilities: [4ac v1] Data Link Feature <?>
+        Capabilities: [4b8 v1] Designated Vendor-Specific: Vendor=0001 ID=0000 Rev=1 Len=64 <?>
+        Capabilities: [4fc v1] Vendor Specific Information: ID=0005 Rev=1 Len=018 <?>
+
+How can we tell it's a DesignWare Cores PCIe Controller?
+
+
+>> +		if (PCI_VNDR_HEADER_ID(header) == DWC_PCIE_VSEC_ID &&
+>> +		    PCI_VNDR_HEADER_REV(header) == DWC_PCIE_VSEC_REV) {
+>> +			*pos = vsec;
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	return -ENODEV;
+>> +}
+>> +
+>> +static int dwc_pcie_pmu_discover(struct dwc_pcie_pmu_priv *priv)
+>> +{
+>> +	int val, where, index = 0;
+>> +	struct pci_dev *pdev = NULL;
+>> +	struct dwc_pcie_info_table *pcie_info;
+>> +
+>> +	priv->pcie_table =
+>> +	    devm_kcalloc(priv->dev, RP_NUM_MAX, sizeof(*pcie_info), GFP_KERNEL);
+>> +	if (!priv->pcie_table)
+>> +		return -EINVAL;
+>> +
+>> +	pcie_info = priv->pcie_table;
+>> +	while ((pdev = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, pdev)) != NULL &&
+>> +	       index < RP_NUM_MAX) {
+> 
+> This having a driver than then walks the pci topology to find root ports and add
+> extra stuff to them is not a clean solution.
+> 
+> The probing should be driven from the existing PCI driver topology.
+> There are a bunch of new features we need to add to ports in the near future
+> anyway - this would just be another one.
+> Same problem exists for CXL CPMU perf devices - so far we only support those
+> on end points, partly because we need a clean way to probe them on pci ports.
+> 
+> Whatever we come up with there will apply here as well.
+
+I see your point. Any link to reference?
+
+> 
+>> +		if (!pci_dev_is_rootport(pdev))
+>> +			continue;
+>> +
+>> +		pcie_info[index].bdf = dwc_pcie_get_bdf(pdev);
+>> +		pcie_info[index].pdev = pdev;
+> Probably want a sanity check this has a vendor ID appropriate the VSEC you are about
+> to look for.
+
+If I check the vendor ID here or in dwc_pcie_find_ras_des_cap_position, this driver
+will only work for Alibaba as I mentioned before.
+
+> 
+>> +
+>> +		if (dwc_pcie_find_ras_des_cap_position(pdev, &where))
+>> +			continue;
+>> +
+>> +		pcie_info[index].cap_pos = where;
+>> +
+>> +		pci_read_config_dword(pdev,
+>> +				pdev->pcie_cap + DWC_PCIE_LINK_CAPABILITIES_REG,
+>> +				&val);
+>> +		pcie_info[index].num_lanes =
+>> +			(val & DWC_PCIE_LANE_MASK) >> DWC_PCIE_LANE_SHIFT;
+> 
+> FIELD_GET()
+
+Will fix in next version.
+
+> 
+>> +		index++;
+>> +	}
+>> +
+>> +	if (!index)
+>> +		return -ENODEV;
+>> +
+>> +	priv->pcie_ctrl_num = index;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static inline int dwc_pcie_pmu_read_dword(struct dwc_pcie_info_table *pcie_info,
+>> +					  u32 reg, u32 *val)
+>> +{
+>> +	return pci_read_config_dword(pcie_info->pdev, pcie_info->cap_pos + reg,
+>> +				     val);
+>> +}
+>> +
+>> +static inline int dwc_pcie_pmu_write_dword(struct dwc_pcie_info_table
+>> +					   *pcie_info, u32 reg, u32 val)
+>> +{
+>> +	return pci_write_config_dword(pcie_info->pdev, pcie_info->cap_pos + reg,
+>> +				      val);
+>> +}
+> 
+> These two wrappers don't add a lot so I would drop them.
+
+I see, I will use pci_{write/read}_config_dword directly.
+
+> 
+>> +
+>> +static int dwc_pcie_pmu_set_event_id(struct dwc_pcie_info_table *pcie_info,
+>> +				     int event_id)
+>> +{
+>> +	int ret;
+>> +	u32 val;
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info, DWC_PCIE_EVENT_CNT_CTRL, &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	val &= ~DWC_PCIE__CNT_ENABLE_MASK;
+>> +	val &= ~DWC_PCIE__CNT_EVENT_SELECT_MASK;
+>> +	val |= event_id << DWC_PCIE__CNT_EVENT_SELECT_SHIFT;
+> 
+> FIELD_PREP()
+
+Will fix in next version.
+
+
+>> +
+>> +	ret = dwc_pcie_pmu_write_dword(pcie_info, DWC_PCIE_EVENT_CNT_CTRL, val);
+>> +	if (ret)
+>> +		pci_err(pcie_info->pdev, "PCIe write fail\n");
+>> +
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +
+>> +static int dwc_pcie_pmu_read_base_time_counter(struct dwc_pcie_info_table
+>> +					       *pcie_info, u64 *counter)
+>> +{
+>> +	u32 ret, val;
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info,
+>> +				      DWC_PCIE_TIME_BASED_ANALYSIS_DATA_REG_HIGH,
+>> +				      &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	*counter = val;
+>> +	*counter <<= 32;
+> 
+> This looks like you could get ripping between the upper and lower dwords.
+> What prevents that? Perhaps a comment to say why that's not a problem?
+
+The Time-based Analysis Data which contains the measurement results of
+RX/TX data throughput and time spent in each low-power LTSSM state is 64 bit.
+The data is provided by two 32 bit registers so I rip them together. I will
+add a comment here in next verison.
+
+> 
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info,
+>> +				      DWC_PCIE_TIME_BASED_ANALYSIS_DATA_REG_LOW,
+>> +				      &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	*counter += val;
+>> +
+>> +	return ret;
+>> +}
+> ...
+> 
+> 
+>> +static int __dwc_pcie_pmu_probe(struct dwc_pcie_pmu_priv *priv,
+>> +				struct dwc_pcie_info_table *pcie_info)
+>> +{
+>> +	int ret;
+>> +	char *name;
+>> +	struct dwc_pcie_pmu *pcie_pmu;
+>> +	struct device *dev;
+>> +
+>> +	if (!pcie_info || !pcie_info->pdev) {
+>> +		pci_err(pcie_info->pdev, "Input parameter is invalid\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	pcie_pmu = &pcie_info->pcie_pmu;
+>> +	dev = &pcie_info->pdev->dev;
+>> +
+>> +	ret = dwc_pcie_pmu_attr_init(priv, pcie_info);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PMU attr init fail ret=%d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	pcie_pmu->dev = dev;
+>> +	pcie_pmu->pmu = (struct pmu) {
+>> +		.module		= THIS_MODULE,
+>> +		.task_ctx_nr	= perf_invalid_context,
+>> +		.pmu_enable	= NULL,
+>> +		.pmu_disable	= NULL,
+>> +		.event_init	= dwc_pcie_pmu_event_init,
+>> +		.add		= dwc_pcie_pmu_event_add,
+>> +		.del		= dwc_pcie_pmu_event_del,
+>> +		.start		= dwc_pcie_pmu_event_start,
+>> +		.stop		= dwc_pcie_pmu_event_stop,
+>> +		.read		= dwc_pcie_pmu_event_read,
+>> +		.attr_groups	= pcie_info->pcie_pmu_attr_groups,
+>> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+>> +	};
+>> +
+>> +	name = devm_kasprintf(priv->dev, GFP_KERNEL, "pcie_bdf_%x",
+>> +			      pcie_info->bdf);
+>> +	if (!name)
+>> +		return -ENOMEM;
+>> +
+>> +	/* Pick one CPU to be the preferred one to use */
+>> +	pcie_pmu->on_cpu = raw_smp_processor_id();
+> Above there are references to multiple dies.  Maybe at least make sure you
+> are on a near by die? (I'm guessing at topology!)
+
+Good idea, will fix in next version.
+
+>> +
+>> +	ret = perf_pmu_register(&pcie_pmu->pmu, name, -1);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "Error %d registering PMU @%x\n", ret,
+>> +				 pcie_info->bdf);
+>> +		return ret;
+>> +	}
+>> +
+>> +	pcie_info->pmu_is_register = DWC_PCIE_PMU_HAS_REGISTER;
+> 
+> As below. I think you can drop this state info.
+
+Please see my confusion bellow.
+
+> 
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int dwc_pcie_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +	struct dwc_pcie_pmu_priv *priv = platform_get_drvdata(pdev);
+>> +	int index;
+>> +	struct dwc_pcie_pmu *pcie_pmu;
+>> +
+>> +	for (index = 0; index < priv->pcie_ctrl_num; index++)
+>> +		if (priv->pcie_table[index].pmu_is_register) {
+>> +			pcie_pmu = &priv->pcie_table[index].pcie_pmu;
+>> +			perf_pmu_unregister(&pcie_pmu->pmu);
+>> +		}
+>> +	return 0;
+>> +}
+>> +
+>> +static int dwc_pcie_pmu_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret = 0;
+> 
+> Initialized in all paths where it is used. Compiler should be able to tell
+> that so I doubt you need this to be set to 0 here.
+
+Agree, will leave it as uninitialized.
+
+> 
+>> +	int pcie_index;
+>> +	struct dwc_pcie_pmu_priv *priv;
+>> +
+>> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +	priv->dev = &pdev->dev;
+>> +	platform_set_drvdata(pdev, priv);
+>> +
+>> +	/* If PMU is not support on current platform, keep slient */
+>> +	if (dwc_pcie_pmu_discover(priv))
+>> +		return 0;
+>> +
+>> +	for (pcie_index = 0; pcie_index < priv->pcie_ctrl_num; pcie_index++) {
+>> +		struct pci_dev *rp = priv->pcie_table[pcie_index].pdev;
+>> +
+>> +		ret = __dwc_pcie_pmu_probe(priv, &priv->pcie_table[pcie_index]);
+>> +		if (ret) {
+>> +			dev_err(&rp->dev, "PCIe PMU probe fail\n");
+>> +			goto pmu_unregister;
+>> +		}
+>> +	}
+>> +	dev_info(&pdev->dev, "PCIe PMUs registered\n");
+> 
+> Noise in the logs.  There are lots of ways to know if we reached this point
+> so this adds no value.
+
+Got it, will drop this out in next version.
+
+> 
+>> +
+>> +	return 0;
+>> +
+>> +pmu_unregister:
+>> +	dwc_pcie_pmu_remove(pdev);
+> 
+> I'd much rather see the unwind here directly so we can clearly see that it undoes
+> the result of errors in this function.  That removes the need to use the
+> is_registered flag in the remove() function simplifying that flow as well.
+
+Do you mean that if perf_pmu_register fails, then jump to pmu_unregister lable directly?
+How can we tell which PMU diveice fails to reigister?
+
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static struct platform_driver dwc_pcie_pmu_driver = {
+>> +	.probe = dwc_pcie_pmu_probe,
+>> +	.remove = dwc_pcie_pmu_remove,
+>> +	.driver = {.name = DRV_NAME,},
+> More common to format as
+> 	.driver = {
+> 		.name = "dwc_pcie_pmu",
+> 	},
+> };
+> Note use of string here.  Using a define just forces people to
+> look for this in the wrong place.
+
+I see, will use string here in next version.
+
+> 
+>> +};
+>> +
+>> +static int __init dwc_pcie_pmu_init(void)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = platform_driver_register(&dwc_pcie_pmu_driver);
+>> +
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	dwc_pcie_pmu_dev =
+>> +	    platform_device_register_simple(DEV_NAME, -1, NULL, 0);
+> 
+> I'd normally expect to see the device created as a result of firmware
+> description (ACPI DSDT / or Device tree)
+> It is unusual to create a 'real' device directly in the driver
+> init - that's normally reserved for various fake / software devices.
+
+I see your concerns. You mentioned that
+
+   > The probing should be driven from the existing PCI driver topology.
+
+Should we add a fake device in firmware or drive from PCI driver topology?
+
+Thank you.
+
+Best Regards,
+Shuai
+
+>> +	if (IS_ERR(dwc_pcie_pmu_dev)) {
+>> +		platform_driver_unregister(&dwc_pcie_pmu_driver);
+>> +		return PTR_ERR(dwc_pcie_pmu_dev);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void __exit dwc_pcie_pmu_exit(void)
+>> +{
+>> +	platform_device_unregister(dwc_pcie_pmu_dev);
+>> +	platform_driver_unregister(&dwc_pcie_pmu_driver);
+>> +}
+>> +
+>> +module_init(dwc_pcie_pmu_init);
+>> +module_exit(dwc_pcie_pmu_exit);
+>> +
+>> +MODULE_DESCRIPTION("PMU driver for DesignWare Cores PCI Express Controller");
+>> +MODULE_AUTHOR("xueshuai@linux.alibaba.com");
+>> +MODULE_AUTHOR("yinxuan_cw@linux.alibaba.com");
+>> +MODULE_LICENSE("GPL v2");
