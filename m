@@ -2,114 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A925E85B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1E85E85C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIWWRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S231527AbiIWWTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIWWRd (ORCPT
+        with ESMTP id S229511AbiIWWTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:17:33 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8EC11E97D;
-        Fri, 23 Sep 2022 15:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663971452; x=1695507452;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8tE/QBR6Q/gediWIXN96SP8n9NX5gdozFhDqCtkEAms=;
-  b=TAAo2GnTWOpEr9PzjxlZtNnsmGcudY2xkDMoZxtefQ23ujLxlN3x6Jlr
-   af8/S2hMWxauyr4lHmCuLxiHwSrLKbc1yZooktCiIxZQF5mvNmROz6SzF
-   qcb6Ufh/ODWl4iuiXd1dUEJvtMsE2yasJlw2VE24d6cv7aUbPN8mngk+8
-   9yl3v/f0fczuQXDYCnZ/bNgv2dr1t8gJqgUg87FUgjJkLyMQxQNWD6isA
-   K70jvoiNq8gooiI/3GE1gB5q+iqrH92VXgb4DPAkfyo6IDCR2mC2tLZkC
-   nSc0IID/lk1V+KIbhsvwsZotb210PnGMihByL8yz4oMmdn71oEUjf+fjA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="301599009"
-X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
-   d="scan'208";a="301599009"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 15:17:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
-   d="scan'208";a="745954546"
-Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
-  by orsmga004.jf.intel.com with ESMTP; 23 Sep 2022 15:17:31 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>
-Subject: [PATCH] x86/mm: Disable W^X detection and enforcement on 32-bit
-Date:   Fri, 23 Sep 2022 15:17:30 -0700
-Message-Id: <20220923221730.1860518-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 23 Sep 2022 18:19:41 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0697519C3D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:19:39 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220923221937euoutp0152d3035f89f7f8cc9011c06436f90d2c~XnVVs5bS30972909729euoutp01e
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 22:19:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220923221937euoutp0152d3035f89f7f8cc9011c06436f90d2c~XnVVs5bS30972909729euoutp01e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663971577;
+        bh=Y0nKIoUfaCsg/EXBd0afFa2cIruznfzPq/OchNG5aew=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=uw/fUJ+iNNxawiiNEg+cFFYZybUtoV76QYldqlOdtJaIJcKEQC8ssV7fgt02VkjS3
+         RFLK+MD0oFtFmRu8uV3ceoxy4bfXDB2gypGKQ38n/ALKN5UEHT0Z16L7ICZqcxmq8H
+         XDF3lPBuFNq5Vy4wLmrxU64Id72+b2kTjxFlYDek=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220923221936eucas1p242e1f6e807d036ec3872293ac6c52c24~XnVVCdF5Z1450914509eucas1p2n;
+        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 0C.8A.07817.8F03E236; Fri, 23
+        Sep 2022 23:19:36 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144~XnVUyMwcb2541025410eucas1p1u;
+        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220923221936eusmtrp12112bfd1533bb8855963fa0fa6589466~XnVUxje8b2319123191eusmtrp1i;
+        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
+X-AuditID: cbfec7f4-893ff70000011e89-af-632e30f84da1
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id AD.71.10862.8F03E236; Fri, 23
+        Sep 2022 23:19:36 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220923221936eusmtip109eab2a655d387ee53d23b068ea14331~XnVUZMguV0727107271eusmtip1g;
+        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
+Message-ID: <c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com>
+Date:   Sat, 24 Sep 2022 00:19:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v4 01/30] thermal/core: Add a generic
+ thermal_zone_get_trip() function
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220921094244.606948-2-daniel.lezcano@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEKsWRmVeSWpSXmKPExsWy7djP87o/DPSSDR5c17M4PL/CYt5nWYvL
+        u+awWXzuPcJoMffLVGaLJw/72BzYPBbvecnksWlVJ5vHnWt72Dw+b5ILYInisklJzcksSy3S
+        t0vgynj9Yx1zwTXJihe3XjI1ML4X6WLk5JAQMJF4OO8CYxcjF4eQwApGiYtffrFCOF8YJRb2
+        drCAVAkJfGaUODElCq7j9EE2iKLljBLL989ghnA+Mko8W/0IrINXwE5iyfbd7CA2i4CqxMd/
+        h9gg4oISJ2c+AasRFUiWmHXsGCOILSwQI9F8to8JxGYWEJe49WQ+mC0i4Cjx5e8idoh4scTv
+        Z81gNpuAoUTX2y6wmZwCDhLrf91hhaiRl9j+dg7YQRICJzgkfjQvYoY420Viwr0JULawxKvj
+        W9ghbBmJ05N7WCAa2hklFvy+zwThTGCUaHh+ixGiylrizrlfQOs4gFZoSqzfpQ8RdpR4tbgV
+        LCwhwCdx460gxBF8EpO2TWeGCPNKdLQJQVSrScw6vg5u7cELl5gnMCrNQgqWWUjen4XknVkI
+        excwsqxiFE8tLc5NTy02ykst1ytOzC0uzUvXS87P3cQITDan/x3/soNx+auPeocYmTgYDzFK
+        cDArifCmXNRNFuJNSaysSi3Kjy8qzUktPsQozcGiJM7LNkMrWUggPbEkNTs1tSC1CCbLxMEp
+        1cCU6Pht7Y3ov19Z5XyXcBR8KOOp3Xf08eOA6wfzPDzk+xI4Z3KV3fqZeVzP/3bqPNvFm8MC
+        L3e07rSd6OgQdUVhZf7bCuWmSAWBokxthUkS17nvy1/Sel9V5vlmf4vERm1tCcG3e9xnvWNp
+        O+9b3tYZv2M1/7fDNzk1IlbHB77W/P+r+t3frRu+THyTqSrzRzvb3VXiWWjpbm72PvEpmc7f
+        tYzf8c3tC/F5cvZN8Nsf0h0mF4wY56pxxEx0uSbZrPbQ8XRSuNUZ1kcCLke98ioj5be8u/3P
+        5tmX5j+dJrvnHTr2fJnEnrOhMw8Vsni1ukkuS1G5y9E2sezYzKqgF4cVp0SEPp+2UVD+5vbO
+        GH0lluKMREMt5qLiRACnoD7LpQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsVy+t/xu7o/DPSSDXbulLU4PL/CYt5nWYvL
+        u+awWXzuPcJoMffLVGaLJw/72BzYPBbvecnksWlVJ5vHnWt72Dw+b5ILYInSsynKLy1JVcjI
+        Ly6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy3j9Yx1zwTXJihe3XjI1
+        ML4X6WLk5JAQMJF4ePogWxcjF4eQwFJGiT9Pr7JBJGQkTk5rYIWwhSX+XOsCiwsJvGeUuL8g
+        DcTmFbCTWLJ9NzuIzSKgKvHx3yE2iLigxMmZT1hAbFGBZIklDffB5ggLxEg0n+1jArGZBcQl
+        bj2ZD2aLCDhKfPm7iB0iXizR1/qeFWJXqURTfx/YHDYBQ4mutxA3cAo4SKz/dYcVot5Momtr
+        FyOELS+x/e0c5gmMQrOQnDELybpZSFpmIWlZwMiyilEktbQ4Nz232EivODG3uDQvXS85P3cT
+        IzC2th37uWUH48pXH/UOMTJxMB5ilOBgVhLhTbmomyzEm5JYWZValB9fVJqTWnyI0RQYFhOZ
+        pUST84HRnVcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwCT++6D7
+        uRwxbmnW6qs566V3LdF5uJ3h4P2kwrOHOuKmbb0Vqac3W7AxO6TlmaxyC1PFi/a/QS8PavCW
+        Z5YqGQWqpppcnM9m3tp6Mvu3atz/WdWCRoubvt/gfRN78JzAJ++oh5ckRJJ8v7YcuerB/vXx
+        xhkeR/OPxLdd6og4z1vLd0V54ZKrjb0zfs2Zv8BmSsDb+UKKW09Zcz2Z9GGhfLTG48KpBkVz
+        MgrMf07jWnqeh7W0gPXw6vlHU55p3Si067K4FH3gw+U3WnIx/6sWNq3/u8nxs4a32S+Lmof7
+        twhm3dzK2ZfGs+fCz/ly6oe4T9zJmzBtfp0k9+XEtdte5fn6Msyfv/6kxccLfof8tVcrsRRn
+        JBpqMRcVJwIA3VYWuzYDAAA=
+X-CMS-MailID: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
+References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+        <20220921094244.606948-2-daniel.lezcano@linaro.org>
+        <CGME20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 32-bit code is in a weird spot.  Some 32-bit builds (non-PAE) do not
-even have NX support.  Even PAE builds that support NX have to contend
-with things like EFI data and code mixed in the same pages where W+X
-is unavoidable.
+Hi Daniel,
 
-The folks still running X86_32=y kernels are unlikely to care much about
-NX.  That combined with the fundamental inability fix _all_ of the W+X
-things means this code had little value on X86_32=y.  Disable the checks.
+On 21.09.2022 11:42, Daniel Lezcano wrote:
+> The thermal_zone_device_ops structure defines a set of ops family,
+> get_trip_temp(), get_trip_hyst(), get_trip_type(). Each of them is
+> returning a property of a trip point.
+>
+> The result is the code is calling the ops everywhere to get a trip
+> point which is supposed to be defined in the backend driver. It is a
+> non-sense as a thermal trip can be generic and used by the backend
+> driver to declare its trip points.
+>
+> Part of the thermal framework has been changed and all the OF thermal
+> drivers are using the same definition for the trip point and use a
+> thermal zone registration variant to pass those trip points which are
+> part of the thermal zone device structure.
+>
+> Consequently, we can use a generic function to get the trip points
+> when they are stored in the thermal zone device structure.
+>
+> This approach can be generalized to all the drivers and we can get rid
+> of the ops->get_trip_*. That will result to a much more simpler code
+> and make possible to rework how the thermal trip are handled in the
+> thermal core framework as discussed previously.
+>
+> This change adds a function thermal_zone_get_trip() where we get the
+> thermal trip point structure which contains all the properties (type,
+> temp, hyst) instead of doing multiple calls to ops->get_trip_*.
+>
+> That opens the door for trip point extension with more attributes. For
+> instance, replacing the trip points disabled bitmask with a 'disabled'
+> field in the structure.
+>
+> Here we replace all the calls to ops->get_trip_* in the thermal core
+> code with a call to the thermal_zone_get_trip() function.
+>
+> While at it, add the thermal_zone_get_num_trips() to encapsulate the
+> code more and reduce the grip with the thermal framework internals.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: Andy Shevchenko <andy@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: linux-efi@vger.kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
----
- arch/x86/mm/pat/set_memory.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This patch landed in linux next-20220923 as commit 78ffa3e58d93 
+("thermal/core: Add a generic thermal_zone_get_trip() function"). 
+Unfortunately it introduces a deadlock:
 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 20b1e24baa85..efe882c753ca 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -587,6 +587,14 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- {
- 	unsigned long end;
- 
-+	/*
-+	 * 32-bit has some unfixable W+X issues, like EFI code
-+	 * and writeable data being in the same page.  Disable
-+	 * detection and enforcement there.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32))
-+		return new;
-+
- 	/* Only enforce when NX is supported: */
- 	if (!(__supported_pte_mask & _PAGE_NX))
- 		return new;
+thermal_zone_device_update() calls handle_thermal_trip() under the 
+tz->lock, which in turn calls thermal_zone_get_trip(), which gathers 
+again tz->lock. I've tried to fix this by switching 
+handle_thermal_trip() to call __thermal_zone_get_trip().
+
+This helps for fixing the issue in this change, but then I've tried to 
+apply it on top of linux next-20220923. Unfortunately it fails again. It 
+looks that the other changes also assumes that calling 
+thermal_zone_get_trip() is possible under the tz->lock, because in my 
+case it turned out that handle_non_critical_trips() called 
+step_wise_throttle(), which in turn called thermal_zone_get_trip(). I 
+gave up fixing this. Please re-check possible call paths and adjust 
+locking to them.
+
+
+> ---
+>   drivers/thermal/thermal_core.c    | 87 +++++++++++++++++++++++--------
+>   drivers/thermal/thermal_helpers.c | 28 +++++-----
+>   drivers/thermal/thermal_netlink.c | 21 ++++----
+>   drivers/thermal/thermal_sysfs.c   | 66 +++++++++--------------
+>   include/linux/thermal.h           |  5 ++
+>   5 files changed, 118 insertions(+), 89 deletions(-)
+>
+> ...
+
+Best regards
 -- 
-2.34.1
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
