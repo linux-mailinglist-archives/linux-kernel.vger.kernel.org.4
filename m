@@ -2,196 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0031C5E70B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70F75E70B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiIWAiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S231322AbiIWAiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIWAiO (ORCPT
+        with ESMTP id S229771AbiIWAiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:38:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE1D106A07
+        Thu, 22 Sep 2022 20:38:18 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2122.outbound.protection.outlook.com [40.107.117.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC6F10195D
         for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663893493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zk1+EgBiZaGHGemzxW1+05s07p+KTnrxlBzg9GZkgF4=;
-        b=RL3gRldBFbP/CGZeyF6+Gr6fxnHUaqnHAM8NbwVbD5rINNVHVXnFMhetdA1V8rDL4IkSEr
-        7zPWwlIsgZbGD05J0Q+p4C1AvKqybuTUd1pMxUbbJ6EeoBulaMVBvktoLNX/19LKbbmNcj
-        UAvQS75odQ44VXaHqIstc9Qi0BMZvRA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-258-Hbh2bazNPWqKme8RzUCvqA-1; Thu, 22 Sep 2022 20:38:08 -0400
-X-MC-Unique: Hbh2bazNPWqKme8RzUCvqA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8651C85A5A6;
-        Fri, 23 Sep 2022 00:38:08 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.33.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4727240C6EC2;
-        Fri, 23 Sep 2022 00:38:08 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 20:38:06 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
- nodes
-Message-ID: <Yyz/7gWdP+ftQdIO@lorien.usersys.redhat.com>
-References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Puh32ym3Y4SM2bkH1uSWpN1XdYBDLHQ1V8FHlOdPs+pd5SzK1lujZFAEN2voZRJknt/YhdFLHlb0rINauOcTIC5rRb2mMWJTBTCuWQy+y3Je0kwYJrpu4/Mg+gQ74JvnIZT27e0rAgQjBqkysRGfX1pc6NYj09vskrTDp6cgAgWEeJmil0PHiXqB8WF9Mx0L2gjIXOsnOlSeOm8m0HNHiKsmrD2/HcR2qwcF/4Oyxep2SLe070eV6DxkgdFhw1nWpXAaLLk0jNq3y55F9Ew6QBiO1EgtBYTw9BoO+HrQmm2Ht1bbLbehw/01eIM+VzLmcZul9uNRuZtdOFesXx0LXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQIVCAiTF8lFixLGVtQeq+9YKPnkFjB/yOjCH9QCaeM=;
+ b=LNGbf9SCAvMomrNm2k2unbaIo+7znV8MipkeBjNPVGFiESR93O6lCVweubkqVeruGcfLxPsMwBN8nlyBNA3a9D6NBVTn+x2LsDxWRyfGJGzyYr3zp0G0e3lJgSTIQCQ5d7jV8UrazMk85wXGeph5xStN3bcwfuOAe51Xch/LvwACPVHyE1bhgFUarNQG4ztVyOyhxXm7r9+TFpKYuIpUBOPOyTRr+q2bHRT2tpW5ebBmOMg5DgePNVfe3ihA3Byh/sfarZhBbO54CXGs2mi+hBWmWqPt7e1Hs1DSqfraQFEF26J8j7776qf9gPOgh5hcuvb9YIaEtlxez8HB83jVTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lQIVCAiTF8lFixLGVtQeq+9YKPnkFjB/yOjCH9QCaeM=;
+ b=SjJPQJ4kBX7pc28C55ZzFX9oI4tBq2fitqFYDHiiHF17EkZyxX9A+KwreI1WMi86NlisiwlQIKdOozArrId2LCSkBkg+4pO0TVpSC/KOOKYlH/Aq34uvBxiFOPXRhbDIRM6TNEJTlT/8V9lPzNbamaqKAEI/5rSLv1As1e/4mg2p2BBrNVND+ndAoz7YkJsH1ACAyYCQHa6T1D0iFlDPirFTquaDCa05jmJBOOYzQA9z3I9B8eQ6skohcm4dmtsoK7xl8J7exRFJx+l2Y1EF13lf4n5dh2ICgO3V2/OdG+7uo89LfHIh2yHJdccjSw2XlJG6PP4QWK35UXZJ9LGBmw==
+Received: from HK0PR06MB3779.apcprd06.prod.outlook.com (2603:1096:203:b8::10)
+ by TYUPR06MB6269.apcprd06.prod.outlook.com (2603:1096:400:351::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Fri, 23 Sep
+ 2022 00:38:08 +0000
+Received: from HK0PR06MB3779.apcprd06.prod.outlook.com
+ ([fe80::b70:5d66:bdf1:ff47]) by HK0PR06MB3779.apcprd06.prod.outlook.com
+ ([fe80::b70:5d66:bdf1:ff47%7]) with mapi id 15.20.5654.019; Fri, 23 Sep 2022
+ 00:38:08 +0000
+From:   ChiaWei Wang <chiawei_wang@aspeedtech.com>
+To:     "minyard@acm.org" <minyard@acm.org>
+CC:     "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: RE: [PATCH] ipmi: kcs: aspeed: Update port address comments
+Thread-Topic: [PATCH] ipmi: kcs: aspeed: Update port address comments
+Thread-Index: AQHYzJVUtbRY+/SRCUqfvaXOF1k3N63r0TSAgABVS9CAAATrAIAAASRQ
+Date:   Fri, 23 Sep 2022 00:38:08 +0000
+Message-ID: <HK0PR06MB377992E9AF7B91CE41452B4A91519@HK0PR06MB3779.apcprd06.prod.outlook.com>
+References: <20220920020333.601-1-chiawei_wang@aspeedtech.com>
+ <YyywI8265vECnEHv@minyard.net>
+ <HK0PR06MB37794D51E9DB4A864249F96691519@HK0PR06MB3779.apcprd06.prod.outlook.com>
+ <Yyz70LckHqyiNhGa@minyard.net>
+In-Reply-To: <Yyz70LckHqyiNhGa@minyard.net>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HK0PR06MB3779:EE_|TYUPR06MB6269:EE_
+x-ms-office365-filtering-correlation-id: 2488154e-5b35-40fe-05cd-08da9cfbe2be
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Rz7gJiNjI5lX0Wq0enDshCzbc489BBGdv1EhpiPrRyTN+amMMsbQ0TZcVDt9d5KQpSGmTt02wDB1SllwFiCd4jEEFFCJuZdgQ/uthOBOgLsAyBmDdFHyVIsFuO+UFTjRdP6sFL1urWpVv2CMJVkhcUi2srO6KHqpntZODo8iMOkSvYRZ9Dt0BERNxcWvGIZZxbpqzC43D36dbYi0n3+bUBvnipu2TRuYlxBmd0lCBw+pJnSJzHrAjl9jibsi801OzZw6F/fnmLTjXk28Zv1L6THUDfah9DtBubVy6riBpKMZpPWFhRUN0nbgqFVtSQUVOnOmWyqEpiUZR6ye0MHx9a99zr5YbEYDCUQ/kd6Cc/I6eMuIh3i8NVXAvityUxP20rxEium/uTgSO514+YXwSfauUOCgd7QXQoC0ZbyXkM7S8Extmxx6Mp+A7pI6R4tWJzxo4MYCZwgR9muBJlGJiWFDzt3SBo3hImoNyDc85FgIGomJa03k5XGrKCtnB/JzKvPS2Tk5ogmz88d0619cbMICjVUcs7xDB796R995pZch5j3EswxjDcpm6P107Dc/IY2zyQ+wCGDr63wcvmsKjR5/ZtS59SsFRjBK0rt6jsiwMmixS5hxUh2NRSv0BR4l1IJKGXI0yEkDzPtFlpA1fkQNQHzHh5HwFlmRiXyB/7l07qKMrbT5QU/de5/HKzDG1lAfEiTR/TPKLC1q2p863ANsq614h145onR3S7aXK4U6+IR2ufqCWgU/DcxOfqlLc5eq2LnkOyD/wrnfDq4Ycw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3779.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(376002)(136003)(39850400004)(451199015)(54906003)(6916009)(316002)(2906002)(38100700002)(33656002)(66946007)(15650500001)(76116006)(8936002)(6506007)(7696005)(4326008)(26005)(41300700001)(64756008)(66556008)(38070700005)(66446008)(66476007)(86362001)(8676002)(52536014)(5660300002)(55016003)(122000001)(478600001)(186003)(83380400001)(9686003)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cTlWRW5SMzVOQndaZ29qWWJYb2pzcmRSdVYvcG9oeU1lM2JGSllGampqN3pm?=
+ =?utf-8?B?bVgyYWpRUWMybk40R1lVNXg3RC93eGRiUVQydTBjbWgySndHdytMNFRqTzV6?=
+ =?utf-8?B?dnZKQXplQXg0djBQR3JRcDFYWTUrZzZTc3VtSThiSDk2cVFpTVh6OFNGZW11?=
+ =?utf-8?B?RXBHeThYOHRoOTBxcE9KQWNOV1dXVXNKMXNFSFU3MFlXQTZlaE15OVEzRHVy?=
+ =?utf-8?B?bVNwZnlPWnVhbFRDK1hBQitIVndobVNvS0EvbkdPeWxVU2hEN0xFOHgyZ3dO?=
+ =?utf-8?B?ZCs0TWwxZTFZd01FbmlONTNpYzJUb2ZhRjFydFdmbEd0R1lhbUxLRzQ1cVlr?=
+ =?utf-8?B?MEpvWEpYdjlBR2IrbkVYTnA0WVhGeHdmeFJoOHVrblZNVDJ5WkY5SU5hdUNT?=
+ =?utf-8?B?RHZGUmVpZUorSjgzYUprSGc4RkRlcmJhNFoxR0s0dFhlOXp0QjBTOS9mbEhH?=
+ =?utf-8?B?c0loMWoxaStWNHJjVmFJMk1pVnVKWDErY213bDI0QTJSTktDN3d4N2YxQlZ2?=
+ =?utf-8?B?a0grVkZEZENQUW50amhYQVBDa2ZjR2MvQzJzK0dTYkJLZU14MUpwajB1V013?=
+ =?utf-8?B?NmRMSTZwWlgrSENtNVRtTkZEbWVxdGxVMmp5MERoVVprekxLN3NmT2RHdDNB?=
+ =?utf-8?B?cWVTVjBNeGMxZGozbFROSGczRTF0R2t1Y21mQy9rWGhDZFJUMXhrZ3g0RUEz?=
+ =?utf-8?B?OUNXY3hMbjVqa2FRVDJzVUJJbnpkdy9oYkp0WmRxZ1hzeDdCazIybGM1dndS?=
+ =?utf-8?B?NVUwcDRKSU1VSFNQUGRXb1czVldsR3hMRlJFS0Q0TzFHNTQ2RUQ4b0szRW9C?=
+ =?utf-8?B?N2pFZXUrb2NVaUZVSCtMaUtCT1JqbVB3Z1RNdnN3anp4UDZIb1BObXJnUkRu?=
+ =?utf-8?B?Z0t6bUhSWG9BVlZrQVFzOExXRUVOZUQ0SmxnN0E1blpudkF0ZTZNeFRHNzBm?=
+ =?utf-8?B?QWZPdTFzTW1qeEVkS3pQa1NFU1Jlc1YybTFsOHArTWNKaXpDM1NYdi9DekV2?=
+ =?utf-8?B?R0RyaloyYnFwVEh5UTl5RkJ5QzJka2psdDFrN2U5MnZSb3dSbERmUUNFWS92?=
+ =?utf-8?B?dDB5T2tJd2VHb3NVTnRyQXlwOEUzNXkzZzU5bjI1SUJkVEFING91elJPQjcr?=
+ =?utf-8?B?a28zTEs0cWx4c0FNWThycDJxVWxzWEY5eXRoRk8vb053aGt6cEhHVmd6aHo2?=
+ =?utf-8?B?NmhNSXcvek5IVnFwZGF4dWE4THFiNmNWVjBhVlNkOTlVUkhlYVBUS3pZRllB?=
+ =?utf-8?B?aGx3WUszMmpOUWdzNDQrUk42N2MxanZIMmpmQ0dhVWxFdVVMV2xMVEE2VDRz?=
+ =?utf-8?B?NTJHalE2U3R3SUZYQkpFend4UGU0REN5WW42VWVnRzEvcjZpeGVnSnB5ZTJC?=
+ =?utf-8?B?YXptYmtQWmhIblFEd3R6NGpSNE8zczhOZC81eE1pTDRIZVlxSnVNbDZXcDhW?=
+ =?utf-8?B?NWw0M2Z1ZWtWWjlNTGhFRm1xUUF4QkZpL0NqNkFNTkNWZG5KM3A0MXZXLzV1?=
+ =?utf-8?B?NmtIUzVaWXJkWEh5dDU3ZVdHZEZvUXMrTjc3REpubXF2L3YzMEtTUVp2Vi9O?=
+ =?utf-8?B?aWpSdDJYM25rTEVINHEyVFo3MHNkZzUzR0hMazZyYXMwdXlPT2Q2OWxuTXJK?=
+ =?utf-8?B?ZUx5WmV1SnViQmFtR0pzeVlyOENMcERnWGhFUVZxVE9YUCtBY0twMUliOW9H?=
+ =?utf-8?B?RjlJQitEMkRNZGIwSzlQTCtFaFBINHJQc21iWEh2dk9pYlFVUU93Rk9LcUdI?=
+ =?utf-8?B?SExNWTZ6ZXpSdDI2T0VqZ3dJWEhMaG9weEhDZjBZbjd5MXRxdGFkY3VXaXFQ?=
+ =?utf-8?B?UUoxcFM5ZmR5emhqdUxwWms5ZUlUbHpqcEVmRyttRGw5cW0yQzY1aElFdGJF?=
+ =?utf-8?B?V0s3OEtqQ0txTW55S01mcFFzdzNPZU1hM0RoUXdqQlZrSzBBRzJpRm0xRmNw?=
+ =?utf-8?B?R0VnZVh0d0JxcGZtR3krM0hvSjRJTmNLUDJvcHhZZklMOHc4SGtKYXdxdUZn?=
+ =?utf-8?B?amQyZ2piN0UrT3p3YkVvU3lJZVFOSlBST2luMGozV01mUFpBUDZwK0F5Nzgy?=
+ =?utf-8?B?L1I1Z1hOc0U5ZnFPVXNtME44eHFsUXdGZ3JSWktha0ZsbVczb3lKQWE0TnJy?=
+ =?utf-8?B?blZHU3Nza3NONG1yOTJVZ3dLaWp1UVEzcTZwUnRENWNLZWkvN3hubUUzWXJH?=
+ =?utf-8?B?V3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3779.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2488154e-5b35-40fe-05cd-08da9cfbe2be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2022 00:38:08.0706
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gZP9uSuFr89EMVWwkiNBtIQv/f78AnSR1JOlMzgznI8vndzNhkqOv7kdvz8Lu1RyvGEEE0AXPU/lVRWZ30WrcBdJ0goRnuyCxPD0mTNLDfg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6269
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-On Thu, Sep 22, 2022 at 10:49:54PM +0300 Andy Shevchenko wrote:
-> Currently the approximation is used which wastes the more memory
-> the more CPUs are present on the system. Proposed change calculates
-> the exact maximum needed in the worst case:
-> 
->   NR_CPUS	old		new
->   -------	---		---
->   1 .. 1170	4096		4096
->   1171 .. 1860	4098 ..	6510	4096
->   ...		...		...
->   2*4096	28672		19925
->   4*4096	57344		43597
->   8*4096	114688		92749
->   16*4096	229376		191053
->   32*4096	458752		403197
->   64*4096	917504		861949
->   128*4096	1835008		1779453
->   256*4096	3670016		3670016
-> 
-> Under the hood the reccurent formula is being used:
->   (5 - 0) * 2 +
->     (50 - 5) * 3 +
->       (500 - 50) * 4 +
->         (5000 - 500) * 5 +
->           ...
->             (X[i] - X[i-1]) * i
-> 
-> which allows to count the exact maximum length in the worst case,
-> i.e. when each second CPU is being listed. For backward compatibility
-> for more than 1170 and less than 1861 CPUs the page size is preserved.
-> 
-> For less than 1171 and more than 1 million CPUs the old is being used.
-
-The memory is not really wasted since it's probably temporary in userspace
-and in the kernel it _is_ temporary and is only the length of the kasprintf
-string, which is most of the time much less.
-
-But that said, it is more accurate than the previous estimate.
-
-I was wondering if you were going to try to come up with a suitable
-compile time macro :)
-
-I tested 2, 8192 and 16k since the kernel does not want to build for other
-reasons with NR_CPUS at 32k.
-
-Reviewed-by: Phil Auld <pauld@redhat.com>
-Tested-by: Phil Auld <pauld@redhat.com>
-
-
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: described better the advantage for 1171..1860 CPUs cases
->  include/linux/cpumask.h | 48 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
-> 
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index 1b442fb2001f..12cf0905ca74 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -1122,6 +1122,21 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
->   *
->   * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
->   *
-> + * for cpulist the reccurent formula is being used:
-> + *   (5 - 0) * 2 +
-> + *     (50 - 5) * 3 +
-> + *       (500 - 50) * 4 +
-> + *         (5000 - 500) * 5 +
-> + *           ...
-> + *             (X[i] - X[i-1]) * i
-> + *
-> + * which allows to count the exact maximum length in the worst case,
-> + * i.e. when each second CPU is being listed. For backward compatibility
-> + * for more than 1170 and less than 1861 CPUs the page size is preserved.
-> + *
-> + * For less than 1171 and more than 1 million CPUs the old is being used
-> + * as described below:
-> + *
->   * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
->   * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
->   * cover a worst-case of every other cpu being on one of two nodes for a
-> @@ -1132,6 +1147,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
->   */
->  #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
->  					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-> +
-> +#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
-> +#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
-> +#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
-> +#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
-> +#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
-> +#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
-> +
-> +#if NR_CPUS < 1861
-> +#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
-> +#elif NR_CPUS < 10000
-> +#define CPULIST_FILE_MAX_BYTES			\
-> +	 (__CPULIST_FOR_10(10) +		\
-> +	  __CPULIST_FOR_100(100) +		\
-> +	  __CPULIST_FOR_1000(1000) +		\
-> +	  __CPULIST_FOR_10000(NR_CPUS))
-> +#elif NR_CPUS < 100000
-> +#define CPULIST_FILE_MAX_BYTES			\
-> +	 (__CPULIST_FOR_10(10) +		\
-> +	  __CPULIST_FOR_100(100) +		\
-> +	  __CPULIST_FOR_1000(1000) +		\
-> +	  __CPULIST_FOR_10000(10000) +		\
-> +	  __CPULIST_FOR_100000(NR_CPUS))
-> +#elif NR_CPUS < 1000000
-> +#define CPULIST_FILE_MAX_BYTES			\
-> +	 (__CPULIST_FOR_10(10) +		\
-> +	  __CPULIST_FOR_100(100) +		\
-> +	  __CPULIST_FOR_1000(1000) +		\
-> +	  __CPULIST_FOR_10000(10000) +		\
-> +	  __CPULIST_FOR_100000(100000) +	\
-> +	  __CPULIST_FOR_1000000(NR_CPUS))
-> +#else
->  #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-> +#endif
->  
->  #endif /* __LINUX_CPUMASK_H */
-> -- 
-> 2.35.1
-> 
-
-
-Cheers,
-Phil
-
-
--- 
-
+PiBGcm9tOiBDb3JleSBNaW55YXJkIDx0Y21pbnlhcmRAZ21haWwuY29tPiBPbiBCZWhhbGYgT2Yg
+Q29yZXkgTWlueWFyZA0KPiBTZW50OiBGcmlkYXksIFNlcHRlbWJlciAyMywgMjAyMiA4OjIxIEFN
+DQo+IA0KPiBPbiBGcmksIFNlcCAyMywgMjAyMiBhdCAxMjowODowN0FNICswMDAwLCBDaGlhV2Vp
+IFdhbmcgd3JvdGU6DQo+ID4gSGkgQ29yZXksDQo+ID4NCj4gPiA+IEZyb206IENvcmV5IE1pbnlh
+cmQgPHRjbWlueWFyZEBnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBDb3JleQ0KPiBNaW55YXJkDQo+
+ID4gPiBTZW50OiBGcmlkYXksIFNlcHRlbWJlciAyMywgMjAyMiAyOjU4IEFNDQo+ID4gPg0KPiA+
+ID4gT24gVHVlLCBTZXAgMjAsIDIwMjIgYXQgMTA6MDM6MzNBTSArMDgwMCwgQ2hpYS1XZWkgV2Fu
+ZyB3cm90ZToNCj4gPiA+ID4gUmVtb3ZlIEFTVF91c3JHdWlkZV9LQ1MucGRmIGFzIGl0IGlzIG5v
+IGxvbmdlciBtYWludGFpbmVkLg0KPiA+ID4NCj4gPiA+IEV2ZW4gaWYgaXQncyBubyBsb25nZXIg
+bWFpbnRhaW5lZCwgaXMgaXQgdXNlZnVsPyAgSXQgc2VlbXMgYmV0dGVyIHRvDQo+ID4gPiBsZWF2
+ZSBpbiB1c2VmdWwgZG9jdW1lbnRhdGlvbiB1bmxlc3MgaXQgaGFzIGJlZW4gcmVwbGFjZWQgd2l0
+aCBzb21ldGhpbmcNCj4gZWxzZS4NCj4gPg0KPiA+IFRoaXMgZG9jdW1lbnQgaGFzIG5vIHBlcm1l
+YW50IHB1YmxpYyBsaW5rIHRvIGFjY2Vzcy4NCj4gPiBBc3BlZWQgaGFzIGRyb3BwZWQgdGhpcyBm
+aWxlIGJ1dCB3ZSBrZWVwIHJlY2VpdmluZyBjdXN0b21lciByZXF1ZXN0IGFza2luZw0KPiBmb3Ig
+dGhpcyBkb2N1bWVudC4NCj4gPiBUaGUgbW9zdCBpbXBvcnRhbnQgcGFydCByZWdhcmRpbmcgS0NT
+IHBvcnQgcnVsZSBpcyBzdGlsbCBrZXB0IGluIHRoZSB1cGRhdGVkDQo+IGNvbW1lbnQuDQo+IA0K
+PiBJIG1lYW4sIGlmIHlvdSBoYXZlIGNvZGUgdGhhdCBpcyBpbXBsZW1lbnRpbmcgd2hhdCBpcyBk
+b2N1bWVudGVkLCB3aHkgZGlkDQo+IHlvdSByZW1vdmUgdGhlIGRvY3VtZW50PyAgSSBkb24ndCB1
+bmRlcnN0YW5kIHdoeSB5b3Ugd291bGQgcmV0aXJlDQo+IGRvY3VtZW50YXRpb24gdGhhdCBwZW9w
+bGUgc3RpbGwgd2FudCB0byB1c2UuDQo+IA0KPiBJIGNvdWxkIHB1dCBpdCBvbiB0aGUgSVBNSSBz
+b3VyY2Vmb3JnZSBvciBnaXRodWIgcGFnZSBhcyBhIGhpc3RvcmljYWwgZG9jdW1lbnQuDQoNClRo
+aXMgZG9jdW1lbnQgaXMgYSBwZXJzb25hbCBub3RlIG9mIG9uZSBvZiBvdXIgZm9ybWVyIGVtcGxv
+eWVlLg0KSXQgaXMga25vd24gdG8gb25seSB0aGUgb3duZXIgYW5kIGhpcyBzdXBwb3J0aW5nIGN1
+c3RvbWVycy4NCk1vc3Qgb2YgdXMgaGFzIG5vIGFjY2VzcyB0byB0aGlzIGRvY3VtZW50Lg0KSW4g
+YWRkaXRpb24sIGFmdGVyIGNoaXAgcmV2aXNpb24sIGNlcnRhaW4gaW5mb3JtYXRpb24gaXMgbm90
+IGd1YXJhbnRlZWQgYW55bW9yZS4NCg0KUmVnYXJkcywNCkNoaWF3ZWkNCg==
