@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36EB5E76AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9A25E76B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiIWJTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
+        id S231281AbiIWJTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiIWJTC (ORCPT
+        with ESMTP id S230171AbiIWJT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:19:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6142FAE9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663924738; x=1695460738;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=qFRpcPQ3Nucr6vmKDoOh9w6fsNE+aROgpsnIbjVMoU4=;
-  b=bUKYsorL1NjFvawWOqHNdEu3qHvdsVv5YZBBoGQBp2ecE9m69qf1x/KJ
-   ueaLIC1f7jpT4ydAcyXhjnyLuiE7Tyk9Dtj6jtD0WRwvSTo6exA4WKNm/
-   bG7uISSIJY8fKSOEbhSWAFKR9Flr6g2iO0nk++UXKRN1tWXOXKMOjUBAD
-   ir8DYBKPQsUXIK1VzQ4HIA1FxiPd0grwqCQ5w5pCFOQwWhSIIscXpNrEU
-   zWe2HTKrqCVsDIiQx2HtygspPbC0kEitue1p6ZmSlfJm/nt0Loy0gUAq7
-   7eVl4AroO5WHa3rQaYos0fIoGpeB4xh15kLN4zjezIAJ+70/FCU6cm5P8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298151934"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="298151934"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:18:58 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="865231225"
-Received: from armannov-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.61.93])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:18:50 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
- display modes
-In-Reply-To: <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
- <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
-Date:   Fri, 23 Sep 2022 12:18:32 +0300
-Message-ID: <87h70y4ffb.fsf@intel.com>
+        Fri, 23 Sep 2022 05:19:27 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A613FFAD7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:19:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id f9so18840294lfr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Kn1SujOTRSyA2lpFvTg92J/mHIxi4T22q5/4Og5DL18=;
+        b=Eravv2cszM2onFllxNWqYfBkD2740qBYFMRrXIf/p9/edgz7MSfXRZdUAyJ2AaU3vC
+         Mdz+alj2diNP/8pOAzvz3iRVzsPgFAMP8pZuwVy4EMwG+p3JIHRHdwS8KvHzmWjm0WFD
+         YwHr1fiqKz1ijvu+1ezC7ufTqVnYqE8x6MoVAP3RX38AfAzYvVMxAd23G5CXD/L0Dk/Q
+         qy/UsJUcbonOM68PnejWezrVckk9dqriUPgTWZQCtA3LETESFBcDxT46EqDVm83rEcn9
+         VjMwMczMe9F7mc2DZZxDOIVxmpyG0qcWW6faK1eJ74cuApyVV2LsFfktYCX6kgQBTqS9
+         aW2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Kn1SujOTRSyA2lpFvTg92J/mHIxi4T22q5/4Og5DL18=;
+        b=w/9HiCM1pIfN971BlmMGuXKdm7wx9R4KsjbDMaMiiHa5/xxC1yoOslVd3zUJVy0dOP
+         zxR2lCxmAHuMfyQGFKUdwTCKQIwXPDpYScTC3ipxFzyskQm3nEeKNDUSc9M+SlsowX+L
+         mdaeTc2pKgisSkeHcpkds4R5ly35t8ZOLXCyIOuwGP/8KYYsytvKNHneqDjlSdikQUyh
+         lGxivYJW5pmsFLR7/xARpTZHNXHU+OSkiWs0RRDTGXDqouMtApYLrs4uXp3NtNM5l6pk
+         IoAz6A+NzRgPRqMVG/YyrG+MuKNfBsD0nmBG2y7VFDll1mxV1/Nc4CT07zjhbNJjwVsM
+         qyeQ==
+X-Gm-Message-State: ACrzQf1KLO5FYUkGZRH0szJQE+2krU0ZjIr3WTWQk+9IxFjpbmr3dmm0
+        5ChWHTwofmOood+OWMoAw8vuZA==
+X-Google-Smtp-Source: AMsMyM7rAP554ffKv14+G5Z04osY2Lbv/LSvwWpONmenm703lxvFiMvD7gT95QU2MxQKWO3kXuJzyQ==
+X-Received: by 2002:a05:6512:10ce:b0:49e:ad1f:3d7 with SMTP id k14-20020a05651210ce00b0049ead1f03d7mr2653889lfg.609.1663924763678;
+        Fri, 23 Sep 2022 02:19:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g20-20020a2ea4b4000000b0026bddcf75d1sm1294971ljm.44.2022.09.23.02.19.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 02:19:23 -0700 (PDT)
+Message-ID: <8a256c49-1a7a-42bb-2daf-cc0c66b9f7a6@linaro.org>
+Date:   Fri, 23 Sep 2022 11:19:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/3] ARM: dts: orion5x: Add D-Link DNS-323 Device Tree
+Content-Language: en-US
+To:     Mauri Sandberg <maukka@ext.kapsi.fi>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de, olof@lixom.net,
+        andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, linux@armlinux.org.uk
+Cc:     pali@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-3-maukka@ext.kapsi.fi>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220922202458.7592-3-maukka@ext.kapsi.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 22.09.22 um 16:25 schrieb Maxime Ripard:
->> +	drm_dbg_kms(dev,
->> +		    "Generating a %ux%u%c, %u-line mode with a %lu kHz clock\n",
->> +		    hactive, vactive,
->> +		    interlace ? 'i' : 'p',
->> +		    params->num_lines,
->> +		    pixel_clock_hz / 1000);
->
-> Divide by HZ_PER_KHZ here and in other places.
->
->    https://elixir.bootlin.com/linux/latest/source/include/linux/units.h#L23
+On 22/09/2022 22:24, Mauri Sandberg wrote:
+> Add a device tree for D-Link DNS-323. The device has three different
+> variants; A1, B1 and C1. Common parts are included in a .dtsi file
+> and each hardware variant has its own .dts file.
 
-From the Department of Bikeshedding:
+Thank you for your patch. There is something to discuss/improve.
 
-I find "pixel_clock_hz / 1000" has much more clarity than
-"pixel_clock_hz / HZ_PER_KHZ".
+> +
+> +/delete-node/ &sata;
+> +
+> +&gpio0 {
+> +	pinctrl-0 = <&pmx_gpio_misc>;
+> +	pinctrl-names = "default";
+> +
+> +	/* The DNS323 rev A1 power LED requires GPIO 4 to be low. */
+> +	pin_gpio0_4 {
 
-I don't consider the SI prefixes magic numbers.
+No underscores in node names.
 
+> +		gpio-hog;
+> +		gpios = <4 GPIO_ACTIVE_LOW>;
+> +		output-high;
+> +		line-name = "Power led enable";
+> +	};
+> +};
+> +
+> +&pmx_gpio_misc {
+> +	marvell,pins = "mpp4";
+> +};
+> +
+> +&pmx_ge {
+> +	marvell,pins = "mpp11", "mpp12", "mpp13", "mpp14", "mpp15",
+> +		       "mpp16", "mpp17", "mpp18", "mpp19";
+> +};
+> diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts b/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
+> new file mode 100644
+> index 000000000000..e01ba809ffca
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include "orion5x-mv88f5182.dtsi"
+> +#include "orion5x-dlink-dns323.dtsi"
+> +
+> +/ {
+> +	model = "D-Link DNS-323 rev B1";
+> +	compatible = "dlink,dns323b1", "dlink,dns323", "marvell,orion5x-88f5182",
+> +		     "marvell,orion5x";
+> +};
+> +
+> +&gpio0 {
+> +	pinctrl-0 = <&pmx_gpio_misc>;
+> +	pinctrl-names = "default";
+> +
+> +	/* The rev B1 has a flag to indicate the system is up.
+> +	 * Without this flag set, power LED will flash and cannot be
+> +	 * controlled via gpio-leds.
+> +	 */
+> +	pin_gpio0_3 {
 
-BR,
-Jani.
+No underscores in node names.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Best regards,
+Krzysztof
+
