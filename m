@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8255E816C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254CC5E8174
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiIWSDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S232575AbiIWSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbiIWSCl (ORCPT
+        with ESMTP id S232688AbiIWSCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:02:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42513EEB1;
-        Fri, 23 Sep 2022 11:02:01 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 18:01:58 -0000
+        Fri, 23 Sep 2022 14:02:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014AA13EEB7;
+        Fri, 23 Sep 2022 11:02:02 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:01:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663956120;
+        s=2020; t=1663956121;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tngDgJXtM1s4FtbZmPcrzF4trxX2thrHI+85DbCcVYU=;
-        b=bhhaljwfQOexuIlalZzZjcKdcYrLewbVNd6X5NQ5/byNm8BpPInj8ALg2JilgNy/vZIoBw
-        9bJkPoBwr9HvD4CtfFIY3X/8hBTcGRRh5GSr9S7jLHTWIUgVnquWpkpQtBf0FQvaKd/ZY/
-        yeSrSUeF0EBF4aPXsJMetRIOCn75AZho8eZXGe6uP4DTBDYUx9JeR1Mge2B/xiGsLs/y2s
-        SRgD0p31KK7s4NY2wQKSAxJtoHnNLHFq2urwxKoWzN2IdJyy79rm1G9qTrS81QcOvWAyp/
-        MfHmQUKnBbDvJRrZ30EUAgRCDKFQg+HQXrQ1GlWZUUgMzzPWRkbgLzvlywZZvg==
+        bh=lH/wU8qKai82u9onQ/8vIrAKuz/6rH0e9hId46dJGZY=;
+        b=c5EP/xDVIs1GUne7Za/h113RTj45h69yLPJRe9oGqpmetLi8j27hb2PGclVYsJq7Qne74m
+        VRxjKQlJxzlw67MkDAUMwbPpWrDMraD6ILA6IxmwlxiAHzlk/7ceZvrfdr6kDMGkgHbElM
+        FanGDKtuXX/iCneE0G8T5XIMGvcdWgmhetLqAfmcXv85/GRh7W57wDjOSncd0WHEtE0yXt
+        9FymVMWWXnlqDJ7yMjgiwdpZURhPgJ5T9ApZgqmK9/Ff+4/IOjvTaSUlQiS8/LAp0egXS/
+        hv23OyMBiRfx0DNDQo+aSuoJxE4vSLlVVFpbY2W7LqAyxv5Q9hX7d2XEZa8cMA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663956120;
+        s=2020e; t=1663956121;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tngDgJXtM1s4FtbZmPcrzF4trxX2thrHI+85DbCcVYU=;
-        b=w9zc/Lcw7Z3buyk6zqvq3dkT2uIDMAuVxygBS9bw61YnbxqIfLDbVsXjdqJTjd1zPwyVpO
-        kJUuSdiF1lFiuzDw==
+        bh=lH/wU8qKai82u9onQ/8vIrAKuz/6rH0e9hId46dJGZY=;
+        b=zBJJ0sNy2WF6UL3FTBEKqrWz9s/r92l+HNmXklVh8rnIYjJqsx0bYMXT/5qeXqc0mjhOIT
+        CIgNmOe66M0pVQBA==
 From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Add domain online callback for resctrl work
+Subject: [tip: x86/cache] x86/resctrl: Merge mon_capable and mon_enabled
 Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Shaopeng Tan <tan.shaopeng@fujitsu.com>,
@@ -51,10 +51,10 @@ Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Xin Hao <xhao@linux.alibaba.com>,
         Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220902154829.30399-4-james.morse@arm.com>
-References: <20220902154829.30399-4-james.morse@arm.com>
+In-Reply-To: <20220902154829.30399-3-james.morse@arm.com>
+References: <20220902154829.30399-3-james.morse@arm.com>
 MIME-Version: 1.0
-Message-ID: <166395611895.401.13347771402133648689.tip-bot2@tip-bot2>
+Message-ID: <166395611999.401.11964148666220209989.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,26 +70,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     3a7232cdf19e39e7f24c493117b373788b348af2
-Gitweb:        https://git.kernel.org/tip/3a7232cdf19e39e7f24c493117b373788b348af2
+Commit-ID:     bab6ee736873becc0216ba5fd159394e272d01b2
+Gitweb:        https://git.kernel.org/tip/bab6ee736873becc0216ba5fd159394e272d01b2
 Author:        James Morse <james.morse@arm.com>
-AuthorDate:    Fri, 02 Sep 2022 15:48:11 
+AuthorDate:    Fri, 02 Sep 2022 15:48:10 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 22 Sep 2022 15:13:27 +02:00
+CommitterDate: Thu, 22 Sep 2022 14:43:08 +02:00
 
-x86/resctrl: Add domain online callback for resctrl work
+x86/resctrl: Merge mon_capable and mon_enabled
 
-Because domains are exposed to user-space via resctrl, the filesystem
-must update its state when CPU hotplug callbacks are triggered.
+mon_enabled and mon_capable are always set as a pair by
+rdt_get_mon_l3_config().
 
-Some of this work is common to any architecture that would support
-resctrl, but the work is tied up with the architecture code to
-allocate the memory.
+There is no point having two values.
 
-Move domain_setup_mon_state(), the monitor subdir creation call and the
-mbm/limbo workers into a new resctrl_online_domain() call. These bits
-are not specific to the architecture. Grouping them in one function
-allows that code to be moved to /fs/ and re-used by another architecture.
+Merge them together.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -99,205 +94,98 @@ Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Xin Hao <xhao@linux.alibaba.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20220902154829.30399-4-james.morse@arm.com
+Link: https://lore.kernel.org/r/20220902154829.30399-3-james.morse@arm.com
 ---
- arch/x86/kernel/cpu/resctrl/core.c     | 53 ++------------------
- arch/x86/kernel/cpu/resctrl/internal.h |  2 +-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 65 +++++++++++++++++++++++--
- include/linux/resctrl.h                |  1 +-
- 4 files changed, 67 insertions(+), 54 deletions(-)
+ arch/x86/kernel/cpu/resctrl/internal.h | 4 ----
+ arch/x86/kernel/cpu/resctrl/monitor.c  | 1 -
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 8 ++++----
+ include/linux/resctrl.h                | 2 --
+ 4 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 2f87177..25f3014 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -443,42 +443,6 @@ static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
- 	return 0;
- }
- 
--static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
--{
--	size_t tsize;
--
--	if (is_llc_occupancy_enabled()) {
--		d->rmid_busy_llc = bitmap_zalloc(r->num_rmid, GFP_KERNEL);
--		if (!d->rmid_busy_llc)
--			return -ENOMEM;
--		INIT_DELAYED_WORK(&d->cqm_limbo, cqm_handle_limbo);
--	}
--	if (is_mbm_total_enabled()) {
--		tsize = sizeof(*d->mbm_total);
--		d->mbm_total = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
--		if (!d->mbm_total) {
--			bitmap_free(d->rmid_busy_llc);
--			return -ENOMEM;
--		}
--	}
--	if (is_mbm_local_enabled()) {
--		tsize = sizeof(*d->mbm_local);
--		d->mbm_local = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
--		if (!d->mbm_local) {
--			bitmap_free(d->rmid_busy_llc);
--			kfree(d->mbm_total);
--			return -ENOMEM;
--		}
--	}
--
--	if (is_mbm_enabled()) {
--		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
--		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
--	}
--
--	return 0;
--}
--
- /*
-  * domain_add_cpu - Add a cpu to a resource's domain list.
-  *
-@@ -498,6 +462,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
- 	struct list_head *add_pos = NULL;
- 	struct rdt_hw_domain *hw_dom;
- 	struct rdt_domain *d;
-+	int err;
- 
- 	d = rdt_find_domain(r, id, &add_pos);
- 	if (IS_ERR(d)) {
-@@ -527,21 +492,15 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
- 		return;
- 	}
- 
--	if (r->mon_capable && domain_setup_mon_state(r, d)) {
-+	list_add_tail(&d->list, add_pos);
-+
-+	err = resctrl_online_domain(r, d);
-+	if (err) {
-+		list_del(&d->list);
- 		kfree(hw_dom->ctrl_val);
- 		kfree(hw_dom->mbps_val);
- 		kfree(hw_dom);
--		return;
- 	}
--
--	list_add_tail(&d->list, add_pos);
--
--	/*
--	 * If resctrl is mounted, add
--	 * per domain monitor data directories.
--	 */
--	if (static_branch_unlikely(&rdt_mon_enable_key))
--		mkdir_mondata_subdir_allrdtgrp(r, d);
- }
- 
- static void domain_remove_cpu(int cpu, struct rdt_resource *r)
 diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 8828b5c..be48a68 100644
+index 53f3d27..8828b5c 100644
 --- a/arch/x86/kernel/cpu/resctrl/internal.h
 +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -524,8 +524,6 @@ void mon_event_count(void *info);
- int rdtgroup_mondata_show(struct seq_file *m, void *arg);
- void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
- 				    unsigned int dom_id);
--void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
--				    struct rdt_domain *d);
- void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- 		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
- 		    int evtid, int first);
+@@ -459,10 +459,6 @@ int resctrl_arch_set_cdp_enabled(enum resctrl_res_level l, bool enable);
+ 	for_each_rdt_resource(r)					      \
+ 		if (r->mon_capable)
+ 
+-#define for_each_mon_enabled_rdt_resource(r)				      \
+-	for_each_rdt_resource(r)					      \
+-		if (r->mon_enabled)
+-
+ /* CPUID.(EAX=10H, ECX=ResID=1).EAX */
+ union cpuid_0x10_1_eax {
+ 	struct {
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index eaf25a2..497cadf 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -717,7 +717,6 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
+ 	l3_mon_evt_init(r);
+ 
+ 	r->mon_capable = true;
+-	r->mon_enabled = true;
+ 
+ 	return 0;
+ }
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index def7c66..030a703 100644
+index 526eb93..def7c66 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2565,16 +2565,13 @@ out_destroy:
-  * Add all subdirectories of mon_data for "ctrl_mon" groups
-  * and "monitor" groups with given domain id.
-  */
--void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
--				    struct rdt_domain *d)
-+static void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
-+					   struct rdt_domain *d)
- {
- 	struct kernfs_node *parent_kn;
+@@ -1765,7 +1765,7 @@ static int rdtgroup_create_info_dir(struct kernfs_node *parent_kn)
+ 			goto out_destroy;
+ 	}
+ 
+-	for_each_mon_enabled_rdt_resource(r) {
++	for_each_mon_capable_rdt_resource(r) {
+ 		fflags =  r->fflags | RF_MON_INFO;
+ 		sprintf(name, "%s_MON", r->name);
+ 		ret = rdtgroup_mkdir_info_resdir(r, name, fflags);
+@@ -2504,7 +2504,7 @@ void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r, unsigned int dom_id)
+ 	struct rdtgroup *prgrp, *crgrp;
+ 	char name[32];
+ 
+-	if (!r->mon_enabled)
++	if (!r->mon_capable)
+ 		return;
+ 
+ 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
+@@ -2572,7 +2572,7 @@ void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
  	struct rdtgroup *prgrp, *crgrp;
  	struct list_head *head;
  
--	if (!r->mon_capable)
--		return;
--
- 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
- 		parent_kn = prgrp->mon.mon_data_kn;
- 		mkdir_mondata_subdir(parent_kn, d, r, prgrp);
-@@ -3236,6 +3233,64 @@ out:
- 	return ret;
- }
- 
-+static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
-+{
-+	size_t tsize;
-+
-+	if (is_llc_occupancy_enabled()) {
-+		d->rmid_busy_llc = bitmap_zalloc(r->num_rmid, GFP_KERNEL);
-+		if (!d->rmid_busy_llc)
-+			return -ENOMEM;
-+	}
-+	if (is_mbm_total_enabled()) {
-+		tsize = sizeof(*d->mbm_total);
-+		d->mbm_total = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
-+		if (!d->mbm_total) {
-+			bitmap_free(d->rmid_busy_llc);
-+			return -ENOMEM;
-+		}
-+	}
-+	if (is_mbm_local_enabled()) {
-+		tsize = sizeof(*d->mbm_local);
-+		d->mbm_local = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
-+		if (!d->mbm_local) {
-+			bitmap_free(d->rmid_busy_llc);
-+			kfree(d->mbm_total);
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
-+{
-+	int err;
-+
-+	lockdep_assert_held(&rdtgroup_mutex);
-+
+-	if (!r->mon_enabled)
 +	if (!r->mon_capable)
-+		return 0;
-+
-+	err = domain_setup_mon_state(r, d);
-+	if (err)
-+		return err;
-+
-+	if (is_mbm_enabled()) {
-+		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
-+		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
-+	}
-+
-+	if (is_llc_occupancy_enabled())
-+		INIT_DELAYED_WORK(&d->cqm_limbo, cqm_handle_limbo);
-+
-+	/* If resctrl is mounted, add per domain monitor data directories. */
-+	if (static_branch_unlikely(&rdt_mon_enable_key))
-+		mkdir_mondata_subdir_allrdtgrp(r, d);
-+
-+	return 0;
-+}
-+
- /*
-  * rdtgroup_init - rdtgroup initialization
-  *
+ 		return;
+ 
+ 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
+@@ -2642,7 +2642,7 @@ static int mkdir_mondata_all(struct kernfs_node *parent_kn,
+ 	 * Create the subdirectories for each domain. Note that all events
+ 	 * in a domain like L3 are grouped into a resource whose domain is L3
+ 	 */
+-	for_each_mon_enabled_rdt_resource(r) {
++	for_each_mon_capable_rdt_resource(r) {
+ 		ret = mkdir_mondata_subdir_alldom(kn, r, prgrp);
+ 		if (ret)
+ 			goto out_destroy;
 diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 8180c53..d512455 100644
+index 386ab3a..8180c53 100644
 --- a/include/linux/resctrl.h
 +++ b/include/linux/resctrl.h
-@@ -192,5 +192,6 @@ u32 resctrl_arch_get_num_closid(struct rdt_resource *r);
- int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
- u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
- 			    u32 closid, enum resctrl_conf_type type);
-+int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
- 
- #endif /* _RESCTRL_H */
+@@ -130,7 +130,6 @@ struct resctrl_schema;
+ /**
+  * struct rdt_resource - attributes of a resctrl resource
+  * @rid:		The index of the resource
+- * @mon_enabled:	Is monitoring enabled for this feature
+  * @alloc_capable:	Is allocation available on this machine
+  * @mon_capable:	Is monitor feature available on this machine
+  * @num_rmid:		Number of RMIDs available
+@@ -149,7 +148,6 @@ struct resctrl_schema;
+  */
+ struct rdt_resource {
+ 	int			rid;
+-	bool			mon_enabled;
+ 	bool			alloc_capable;
+ 	bool			mon_capable;
+ 	int			num_rmid;
