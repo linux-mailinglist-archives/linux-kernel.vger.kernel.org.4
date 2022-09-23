@@ -2,146 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3185E7DF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890455E7DF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiIWPKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S232331AbiIWPLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiIWPKK (ORCPT
+        with ESMTP id S231835AbiIWPLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:10:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5AEA6C3E;
-        Fri, 23 Sep 2022 08:10:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a8so701936lff.13;
-        Fri, 23 Sep 2022 08:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=hwfpnky+kIGo+6BQx8KdkTZdwoBXJ3O3qQ3V/MMGJ2A=;
-        b=BIAfiW5N0huK12QJFQGlWS36v5duFfTFhPIL5P8CSd7cFfrvpohsj9C/SmDfqfE3dK
-         w60UDYJH4a88/UiomenYEkRGJ+UMwWaTAGbOCvvmdzvklxmcQxz2qT3SRjgkDyzf5X/7
-         yBzrcMPHJ31oq9uhTY+j6B/JpCdppMuuO+D1u0cyq0uL43bXjx7SSq8qeSB0JnFWg09p
-         +jj02AHFLUnqFX0ryGL3bxcnWx8wepDpjfRaHVfcHbnO7jze7uKJ+7rVEXxA0QMqrw+h
-         LfHjQ0gZI5jNOIWLbJ/pc3g5AqkbatW4AibHVVTE6DsXf58m+109mp5fiLcpRTwms5Ew
-         KVGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=hwfpnky+kIGo+6BQx8KdkTZdwoBXJ3O3qQ3V/MMGJ2A=;
-        b=V0tlV5PVuWDVyKl6VALIVDCuUwR+6SWgPyFgFwszqAz6M0DhtJhRdJbD9ZjdmLR06I
-         bw+nBQGMhk7KI0eQ9vIsmFj0yPOdcNQy4XWwqHhbYY2Ww7bvhyqDg6C0yEfHRuzqJ1MI
-         yMsr/ew6iaVm0gDHBmYMvVCNqyEq+Boh1HkdF82dyBu5SYzzSHjErrWR0QHWSZOmcdq9
-         8gNSIGaGBT09iWl1ydckXad7PsSuFF3jaBy7BW2TLnH7+MBIZBA83tF0So0WSMGRzt0c
-         k/38LfYmMWjc3uqytKPGaTHJSYS0CuTkHzNJu0MzoV6aLRF1UzJhv4E8p5LzNNejBfA5
-         EHlQ==
-X-Gm-Message-State: ACrzQf3CpjGtHbpJrffm/JsLp/ucKE/M8zxEqLmlZqeJvg6hShzsbYlu
-        iVIM6MO2asQ/E6Ug3zIUyEs=
-X-Google-Smtp-Source: AMsMyM5zLDQVvZSzGLwguzeWNaDqtr4FE+pno4tipIsQDe7U44bV4oyqIeDh+lDftH60BX7Yyy4AyQ==
-X-Received: by 2002:a05:6512:706:b0:498:b7ea:f2e8 with SMTP id b6-20020a056512070600b00498b7eaf2e8mr3429941lfs.570.1663945806195;
-        Fri, 23 Sep 2022 08:10:06 -0700 (PDT)
-Received: from pc636 (host-95-193-99-240.mobileonline.telia.com. [95.193.99.240])
-        by smtp.gmail.com with ESMTPSA id y6-20020ac24466000000b00492e69be4d6sm1493029lfl.27.2022.09.23.08.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 08:10:05 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Fri, 23 Sep 2022 17:10:03 +0200
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <Yy3MS2uhSgjF47dy@pc636>
-References: <20220923103858.26729-1-fw@strlen.de>
- <Yy20toVrIktiMSvH@dhcp22.suse.cz>
- <20220923133512.GE22541@breakpoint.cc>
- <Yy3GL12BOgp3wLjI@pc636>
- <20220923145409.GF22541@breakpoint.cc>
+        Fri, 23 Sep 2022 11:11:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276C4132D5B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663945861; x=1695481861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vd0xsX3fKUl3hM0m74uKnSRNDfGQc4zIVA6EdBvgBgQ=;
+  b=QfZ/ST6CUw/675RhnkS2UX8eYkl618MBPW0BauLrk/rr99eZmB0wAU8P
+   oahL9RFe2fi5lSd2hJBqin5dsTwiE5cIwhxzg5WJJqayREziBUaBkTFDv
+   K8YruhTEgQP9tosKiJDaLQJBL2O1oHgIeI8n6ysB7O/ty0Aw2Fc0lzLPb
+   lEpWrJnLsh/CVU7uQmpxqHOisMsplE+NQGZa15sLQjvrABAmRy2x3QN4h
+   0HfmjYfQWdvqsJRpjl1BM0FztlZFqm/JV6Eg+KcXnW6ksnN0LX1gVeRTr
+   7fxKBwvpsT5YZez9FI1MoCtw1A7y9JyrC1UaJHYVz2y7y53EUwk5K3KjQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="362424535"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="362424535"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:11:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="571403496"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 23 Sep 2022 08:10:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obkKO-006Vwk-1X;
+        Fri, 23 Sep 2022 18:10:56 +0300
+Date:   Fri, 23 Sep 2022 18:10:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] minmax: clamp more efficiently by avoiding extra
+ comparison
+Message-ID: <Yy3MgMhYDFYnLAV/@smile.fi.intel.com>
+References: <20220923100621.3888015-1-Jason@zx2c4.com>
+ <Yy2MDWCHTW0M3Z6i@smile.fi.intel.com>
+ <CAHmME9osJiKg8-o-OdfCPS6t_fZ=zgGKZdy0CgybaK2NDv8XLA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923145409.GF22541@breakpoint.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9osJiKg8-o-OdfCPS6t_fZ=zgGKZdy0CgybaK2NDv8XLA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 04:54:09PM +0200, Florian Westphal wrote:
-> Uladzislau Rezki <urezki@gmail.com> wrote:
-> > On Fri, Sep 23, 2022 at 03:35:12PM +0200, Florian Westphal wrote:
-> > > Michal Hocko <mhocko@suse.com> wrote:
-> > > > On Fri 23-09-22 12:38:58, Florian Westphal wrote:
-> > > > > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
-> > > > >  kernel BUG at mm/vmalloc.c:2437!
-> > > > >  invalid opcode: 0000 [#1] SMP
-> > > > >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
-> > > > >  [..]
-> > > > >  RIP: 0010:__get_vm_area_node+0x120/0x130
-> > > > >   __vmalloc_node_range+0x96/0x1e0
-> > > > >   kvmalloc_node+0x92/0xb0
-> > > > >   bucket_table_alloc.isra.0+0x47/0x140
-> > > > >   rhashtable_try_insert+0x3a4/0x440
-> > > > >   rhashtable_insert_slow+0x1b/0x30
-> > > > >  [..]
-> > > > > 
-> > > > > bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
-> > > > > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
-> > > > > 
-> > > > > Revert the problematic change and stay with slab allocator.
-> > > > 
-> > > > Why don't you simply fix the caller?
-> > > 
-> > > Uh, not following?
-> > > 
-> > > kvzalloc(GFP_ATOMIC) was perfectly fine, is this illegal again?
+On Fri, Sep 23, 2022 at 12:40:47PM +0200, Jason A. Donenfeld wrote:
+> On Fri, Sep 23, 2022 at 12:36 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Fri, Sep 23, 2022 at 12:06:21PM +0200, Jason A. Donenfeld wrote:
+> > > Currently the clamp algorithm does:
 > > >
-> > <snip>
-> > static struct vm_struct *__get_vm_area_node(unsigned long size,
-> > 		unsigned long align, unsigned long shift, unsigned long flags,
-> > 		unsigned long start, unsigned long end, int node,
-> > 		gfp_t gfp_mask, const void *caller)
-> > {
-> > 	struct vmap_area *va;
-> > 	struct vm_struct *area;
-> > 	unsigned long requested_size = size;
-> > 
-> > 	BUG_ON(in_interrupt());
-> > ...
-> > <snip>
-> > 
-> > vmalloc is not supposed to be called from the IRQ context.
+> > >       if (val > hi)
+> > >               val = hi;
+> > >       if (val < lo)
+> > >               val = lo;
+> > >
+> > > But since hi > lo by definition, this can be made more efficient with:
+> >
+> > It's strongly speaking, but we have to proof that, right?
+> > So, while I haven't checked the code, this change should also
+> > include (does it?) the corresponding compile-time checks (for
+> > constant arguments) in similar way how it's done for GENMASK().
+> >
+> > Otherwise I have no objections.
 > 
-> It uses kvzalloc, not vmalloc api.
-> 
-> Before 2018, rhashtable did use kzalloc OR kvzalloc, depending on gfp_t.
-> 
-> Quote from 93f976b5190df327939 changelog:
->   As of ce91f6ee5b3b ("mm: kvmalloc does not fallback to vmalloc for
->   incompatible gfp flags") we can simplify the caller
->   and trust kvzalloc() to just do the right thing.
-> 
-> I fear that if this isn't allowed it will result in hard-to-spot bugs
-> because things will work fine until a fallback to vmalloc happens.
-> 
-> rhashtable may not be the only user of kvmalloc api that rely on
-> ability to call it from (soft)irq.
->
-Doing the "p = kmalloc(sizeof(*p), GFP_ATOMIC);" from an atomic context
-is also a problem nowadays. Such code should be fixed across the kernel
-because of PREEMPT_RT support.
+> I think most cases are with compile time constants, but some cases are
+> with variables. What should we do in that case? Checking variables at
+> runtime incurs the same cost as the old code. I guess we could do this
+> fast thing for constants and the slower old thing for non-constants?
+> Or not do either, keep this commit as is, and just accept that if you
+> pass bogus bounds to clamp, you're going to end up with something
+> weird, which is already the case now so not a big deal?
 
---
-Uladzislau Rezki
+I'm talking only for the cases where we _can_ check. For variables it's
+probably tricky to do at compile time if possible at all.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
