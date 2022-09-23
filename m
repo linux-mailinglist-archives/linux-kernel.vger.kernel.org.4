@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA825E7730
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B62E5E7738
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiIWJbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S230492AbiIWJcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiIWJbT (ORCPT
+        with ESMTP id S231869AbiIWJbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:31:19 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0FED5ED
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:30:24 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r7so19532001wrm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:30:24 -0700 (PDT)
+        Fri, 23 Sep 2022 05:31:42 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886A399EE
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:31:35 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id j24so13467490lja.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:31:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=NsCaxjSsnAPb9dr7jfz45Z2k7us6uvI3bad+ssBYPRY=;
-        b=kbAlmpgaEhf+5kfZd0SX24hWQBfs6lcGNXHiOLu0XLbPbbDq0VKm8G5TI+fPbE0Vm1
-         JomapF/69N/+VHhQNzJckRo24YdeHtN2fRdvUhLT/DUjRZv7hny8rK4zUIZStUCYN2Bh
-         wVUvQovR86bYYvrqW2XAIiCP7d2AszTLEftzWrTtOUP5E6SHsqL3tD+HHW6GfcIVPMzj
-         Pes9Bk7HYpkTskt9vLb7QCAb6XvOl6dCcssaqJwfalDPtBykq8O7KdtEdTJEB9U9VfcR
-         C4HRGXiUbojFb0hx6rCow34cFwi8wqHyx+P0OqGbC0ikFlnI/7iEt1nB82stw5N/CJpU
-         RtqA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=loilT9KOrc8UgH6EVysVDR9IA3XxRhSds+VZ69dyocA=;
+        b=tKLpy2UwHDJcgXNYiAbhs5SI5sJHw23wtrZtVFWcXI8ADmftNYt9f9eqzGbmFjGO5B
+         NzXpwiN+FfIrULrse9QbxxKmF23tyTNCZVU7bhZ2CA4zzWuTJQC0DxQhlZaW9JGbrvI+
+         6+ZBM9zRYxIJKOZSk3gpYzQFjzFjgLf68rc6Ckzk2M2BgUdI/Ve1EGg4TiCJ1PKHYIVe
+         sLk7PPl8X9EuVw7x16TmD0VksSNJIhoHp/cYFZ8iRE/EZgkTC0a1JysQ2ux5EMnhL9Km
+         JWG2t0zq2ryD9zW5Pi9/w3dl+90iIKqT6FTAwSCe/G9MNlcA78cf6tRhQJmP79XdzrUb
+         LSGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=NsCaxjSsnAPb9dr7jfz45Z2k7us6uvI3bad+ssBYPRY=;
-        b=j7hKHSBs1hcji+dQCU0tHyTSBoGWJSl5wG1Km8octg9cyYKOFt7Hc8d4CsVqkKTH0L
-         6MG4KeCo9Q56xqKx/6aBPJYGQg8WwMu8mE427/If5owAfVFAwSRudJKRWi6VhyfOcnFO
-         CRWQYQLM0GkWqwWfRTHVrrL17SEW3UuRM02aq+PqrRlhLCadnvCktAmhFWjViZV2q3eJ
-         FRtEbA0VgjcGOG+Fit3WdwBn2aljFXld0vaBQR3+RKj2jEiKWVFjGsuKe7aK7HUmn6rP
-         ExwHVTtdlAU1F093CfnFRcrvdSmrylPLIiMNF1UO19/bFtZOjSbrjVSwyuBKJY2x0aXx
-         aFNQ==
-X-Gm-Message-State: ACrzQf3saYIwYH0DYqeyY+0stgc4lKjsSdYI9VSOU2cHXJl7pNH/TkX+
-        OJ9rhfnuZhKsnzVZzx/Us0OmZMZOACKSej7M
-X-Google-Smtp-Source: AMsMyM44w6e4lTsfnYrmAUHtoedhrpX4y0mRP2LzWbfviDNNggw30fENEV3+xEJfkW3hyLy2wWMfFg==
-X-Received: by 2002:a5d:53c8:0:b0:228:62ee:64cb with SMTP id a8-20020a5d53c8000000b0022862ee64cbmr4495871wrw.267.1663925423276;
-        Fri, 23 Sep 2022 02:30:23 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5990:ddf8:daac:3833? ([2a01:e0a:982:cbb0:5990:ddf8:daac:3833])
-        by smtp.gmail.com with ESMTPSA id r9-20020adff109000000b00229b76f872asm8619293wro.27.2022.09.23.02.30.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 02:30:22 -0700 (PDT)
-Message-ID: <b9aa1178-5848-70fd-2dc1-9f36d845985e@linaro.org>
-Date:   Fri, 23 Sep 2022 11:30:21 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=loilT9KOrc8UgH6EVysVDR9IA3XxRhSds+VZ69dyocA=;
+        b=pff6xpeng6JHSUK/7A+h0h9dIkekOBAoa6/IJDsOw0jKAGNXOczq1u7NE+buLB0BaW
+         ldalGJK1cC32vIvmO5M/whJd+KeXs1ERsJB0ZkctuKiNot6vc0MgDF7HAS82QFbPdOJ/
+         g7CsSxHmh6AinkozaH3SeaHDzZgLOS3gL9XrAEZV74NmUTWa0hCU8i3gKLrXO6upiamC
+         OBqlNsQpdNN64QVfyXYq0fFjM+3Hzjn3Bhb6Cf4NReYaiUUFgY3ySAIMdcv9qMmLf0TN
+         BuAJ8o04jeSLZijgyCTeUt1SBo0WIFebzEM3ITVPykmAvSapTXUPEAH5X4SbByZhYLWJ
+         Sf5A==
+X-Gm-Message-State: ACrzQf3usyCw7CB2PTSzl/zHH8A9/6II0TRD6ATV4ISpEGhZIicrOvkC
+        OuKmCq8Ut36NV1dVJcphj2uTug==
+X-Google-Smtp-Source: AMsMyM5pu4SglWelw1JOJblaAvHizdmtgcvDCNQ6UzszauiF6a9na7nIKBo2/ir/pFTyjxwg3tIZ3Q==
+X-Received: by 2002:a2e:a28e:0:b0:25e:734f:38fa with SMTP id k14-20020a2ea28e000000b0025e734f38famr2522446lja.446.1663925493539;
+        Fri, 23 Sep 2022 02:31:33 -0700 (PDT)
+Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id n5-20020ac24905000000b0048a934168c0sm1367297lfi.35.2022.09.23.02.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 02:31:33 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 11:31:31 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 08/12] dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: add
+ bias-bus-hold and input-enable
+Message-ID: <20220923093131.5fb5co5i3f4eybcs@krzk-bin>
+References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
+ <20220922195651.345369-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 5.15 247/779] drm/meson: encoder_hdmi: switch to bridge
- DRM_BRIDGE_ATTACH_NO_CONNECTOR
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Stefan Agner <stefan@agner.ch>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-amlogic@lists.infradead.org
-References: <20220815180337.130757997@linuxfoundation.org>
- <20220815180347.894058731@linuxfoundation.org>
- <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
- <685b64f60375b69c5c790286f1386be3@agner.ch> <YyBoACiWvW1UnfQA@kroah.com>
- <db3b3082-5278-7ed8-4322-2422cec227a5@linaro.org>
- <Yy154kHD7PPtj05W@kroah.com>
-Organization: Linaro Developer Services
-In-Reply-To: <Yy154kHD7PPtj05W@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220922195651.345369-9-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,67 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 23/09/2022 11:18, Greg Kroah-Hartman wrote:
-> On Fri, Sep 23, 2022 at 11:12:02AM +0200, Neil Armstrong wrote:
->> Hi Greg,
->>
->> On 13/09/2022 13:22, Greg Kroah-Hartman wrote:
->>> On Mon, Sep 12, 2022 at 08:48:24PM +0200, Stefan Agner wrote:
->>>> On 2022-09-12 18:08, Stefan Agner wrote:
->>>>> On 2022-08-15 19:58, Greg Kroah-Hartman wrote:
->>>>>> From: Neil Armstrong <narmstrong@baylibre.com>
->>>>>>
->>>>>> [ Upstream commit 0af5e0b41110e2da872030395231ab19c45be931 ]
->>>>>>
->>>>>> This implements the necessary change to no more use the embedded
->>>>>> connector in dw-hdmi and use the dedicated bridge connector driver
->>>>>> by passing DRM_BRIDGE_ATTACH_NO_CONNECTOR to the bridge attach call.
->>>>>>
->>>>>> The necessary connector properties are added to handle the same
->>>>>> functionalities as the embedded dw-hdmi connector, i.e. the HDR
->>>>>> metadata, the CEC notifier & other flags.
->>>>>>
->>>>>> The dw-hdmi output_port is set to 1 in order to look for a connector
->>>>>> next bridge in order to get DRM_BRIDGE_ATTACH_NO_CONNECTOR working.
->>>>>
->>>>> HDMI on ODROID-N2+ was working with v5.15.60, and stopped working with
->>>>> v5.15.61. Reverting this commit (and two dependent refcount leak) to be
->>>>> the culprit. Reverting just the refcount leaks is not enough to get HDMI
->>>>> working, so I assume it is this commit.
->>>>>
->>>>> I haven't investigated much beyond that, maybe its simple a case of a
->>>>> missing kernel configuration? DRM_DISPLAY_CONNECTOR is compiled, and the
->>>>> module display_connector is loaded, so that part seemed to have worked.
->>>>>
->>>>> Any ideas welcome.
->>>>>
->>>>> FWIW, I track the issue in the HAOS tracker at
->>>>> https://github.com/home-assistant/operating-system/issues/2120.
->>>>
->>>> It seems that backporting commit 7cd70656d128 ("drm/bridge:
->>>> display-connector: implement bus fmts callbacks") fixes the problem
->>>> without reverting this commit.
->>>>
->>>> @Greg, can we backport this commit as well?
->>>
->>> sure, now queued up, thanks.
->>
->> Backport of 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks") is still missing in 5.15-stable.
+On Thu, 22 Sep 2022 21:56:47 +0200, Krzysztof Kozlowski wrote:
+> The existing SC7280 LPASS pin controller nodes use bias-bus-hold and
+> input-enable, so allow them.  Squash also blank lines for readability.
 > 
-> I see it in the 5.15.68 release as commit 590b4f10e3a4.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> What am I missing?
 
-Nothing, must be tired, was looking git log in the wrong path...
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-> 
-> confused,
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Sorry for the noise,
-Neil
+Full log is available here: https://patchwork.ozlabs.org/patch/1681325
 
-> 
-> greg k-h
 
+pinctrl@33c0000: 'dmic01-active-pins', 'dmic01-sleep-pins', 'rx_swr-active-pins', 'tx_swr-active-pins', 'tx_swr-sleep-pins', 'wsa-swr-active-pins', 'wsa-swr-sleep-pins' do not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/qcom/qrb5165-rb5.dtb
+	arch/arm64/boot/dts/qcom/sm8250-hdk.dtb
+	arch/arm64/boot/dts/qcom/sm8250-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dtb
+	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dtb
