@@ -2,190 +2,537 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1E85E85C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7565E85CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiIWWTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S231345AbiIWWXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIWWTl (ORCPT
+        with ESMTP id S230047AbiIWWXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:19:41 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0697519C3D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:19:39 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220923221937euoutp0152d3035f89f7f8cc9011c06436f90d2c~XnVVs5bS30972909729euoutp01e
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 22:19:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220923221937euoutp0152d3035f89f7f8cc9011c06436f90d2c~XnVVs5bS30972909729euoutp01e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663971577;
-        bh=Y0nKIoUfaCsg/EXBd0afFa2cIruznfzPq/OchNG5aew=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=uw/fUJ+iNNxawiiNEg+cFFYZybUtoV76QYldqlOdtJaIJcKEQC8ssV7fgt02VkjS3
-         RFLK+MD0oFtFmRu8uV3ceoxy4bfXDB2gypGKQ38n/ALKN5UEHT0Z16L7ICZqcxmq8H
-         XDF3lPBuFNq5Vy4wLmrxU64Id72+b2kTjxFlYDek=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220923221936eucas1p242e1f6e807d036ec3872293ac6c52c24~XnVVCdF5Z1450914509eucas1p2n;
-        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 0C.8A.07817.8F03E236; Fri, 23
-        Sep 2022 23:19:36 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144~XnVUyMwcb2541025410eucas1p1u;
-        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220923221936eusmtrp12112bfd1533bb8855963fa0fa6589466~XnVUxje8b2319123191eusmtrp1i;
-        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
-X-AuditID: cbfec7f4-893ff70000011e89-af-632e30f84da1
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id AD.71.10862.8F03E236; Fri, 23
-        Sep 2022 23:19:36 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220923221936eusmtip109eab2a655d387ee53d23b068ea14331~XnVUZMguV0727107271eusmtip1g;
-        Fri, 23 Sep 2022 22:19:36 +0000 (GMT)
-Message-ID: <c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com>
-Date:   Sat, 24 Sep 2022 00:19:36 +0200
+        Fri, 23 Sep 2022 18:23:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C781497BC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:23:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id dv25so3346195ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4oqyTkBBDw3LTmTITK5vyNnI1QkI4Y5DdLpXejtCHoY=;
+        b=bhDnbELAevvPVnhReDF/VQ1fkqPSkrWfUHJ7AefH7oNQZeJGyiIjM/rldTaMG7QWtw
+         kf43gw25L4/r1LH8DT3ukacprjz6fYGnpWTn1oB9Rw3NAuD3cbr8h4h4C9NVvsYoobL0
+         yPFfbQfjket+9sK2EgAcIj2bcXDD+sWXu+LsM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4oqyTkBBDw3LTmTITK5vyNnI1QkI4Y5DdLpXejtCHoY=;
+        b=NSrMpD1R21Z6w3Rux+GcsLh0J40+pT3dozWiNbj0jTcSKebx8HGgjcovpuhVfzt5CP
+         LLIYSFEE5GePgwKOQzteTz5Mk6BMbyClienRnwsKnbMqSI/BqE0c4l7FA2CvZN6ZHdRB
+         V6CERD8JiUyeFZt2R8jUnWwz9KkgNzhok8SAbL7aHqu+bDbpDUdRgnrPTwnvrQm3zU5R
+         QLAhu+jkvdsSviV8zuw2Nb1tLh6oi5Y59vfUQB//9UwjqduLq3DylBXlpeD61Wrz/Mx4
+         ai4YcITzaurcoecBJ7lgStagLRKBV+PhrpOxzzb3tZ79Hf4prcxZA30ylO26D7bLw5/l
+         JAGA==
+X-Gm-Message-State: ACrzQf0DGEM8yr2VOnskDq19GWRrtgEnxcCk2/fMpYZYHTjoXZ+1lMvW
+        NtYgifUcbpkR6Q6Gkp2W1DStmnVco1AYNw==
+X-Google-Smtp-Source: AMsMyM7jOYQypdsZ3c628ux0HuylAZFDDfdB/ahi+MIN7R7gQ7DerAWgOkDxaPCwLauSWaon8bfjqQ==
+X-Received: by 2002:a17:907:70a:b0:750:bf91:caa3 with SMTP id xb10-20020a170907070a00b00750bf91caa3mr8985844ejb.711.1663971781136;
+        Fri, 23 Sep 2022 15:23:01 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b00782e3cf7277sm369708ejf.120.2022.09.23.15.22.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 15:23:00 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id l8so1074723wmi.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:22:59 -0700 (PDT)
+X-Received: by 2002:a7b:c389:0:b0:3b4:a67a:2ef7 with SMTP id
+ s9-20020a7bc389000000b003b4a67a2ef7mr14181065wmj.180.1663971779214; Fri, 23
+ Sep 2022 15:22:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH v4 01/30] thermal/core: Add a generic
- thermal_zone_get_trip() function
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220921094244.606948-2-daniel.lezcano@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEKsWRmVeSWpSXmKPExsWy7djP87o/DPSSDR5c17M4PL/CYt5nWYvL
-        u+awWXzuPcJoMffLVGaLJw/72BzYPBbvecnksWlVJ5vHnWt72Dw+b5ILYInisklJzcksSy3S
-        t0vgynj9Yx1zwTXJihe3XjI1ML4X6WLk5JAQMJF4OO8CYxcjF4eQwApGiYtffrFCOF8YJRb2
-        drCAVAkJfGaUODElCq7j9EE2iKLljBLL989ghnA+Mko8W/0IrINXwE5iyfbd7CA2i4CqxMd/
-        h9gg4oISJ2c+AasRFUiWmHXsGCOILSwQI9F8to8JxGYWEJe49WQ+mC0i4Cjx5e8idoh4scTv
-        Z81gNpuAoUTX2y6wmZwCDhLrf91hhaiRl9j+dg7YQRICJzgkfjQvYoY420Viwr0JULawxKvj
-        W9ghbBmJ05N7WCAa2hklFvy+zwThTGCUaHh+ixGiylrizrlfQOs4gFZoSqzfpQ8RdpR4tbgV
-        LCwhwCdx460gxBF8EpO2TWeGCPNKdLQJQVSrScw6vg5u7cELl5gnMCrNQgqWWUjen4XknVkI
-        excwsqxiFE8tLc5NTy02ykst1ytOzC0uzUvXS87P3cQITDan/x3/soNx+auPeocYmTgYDzFK
-        cDArifCmXNRNFuJNSaysSi3Kjy8qzUktPsQozcGiJM7LNkMrWUggPbEkNTs1tSC1CCbLxMEp
-        1cCU6Pht7Y3ov19Z5XyXcBR8KOOp3Xf08eOA6wfzPDzk+xI4Z3KV3fqZeVzP/3bqPNvFm8MC
-        L3e07rSd6OgQdUVhZf7bCuWmSAWBokxthUkS17nvy1/Sel9V5vlmf4vERm1tCcG3e9xnvWNp
-        O+9b3tYZv2M1/7fDNzk1IlbHB77W/P+r+t3frRu+THyTqSrzRzvb3VXiWWjpbm72PvEpmc7f
-        tYzf8c3tC/F5cvZN8Nsf0h0mF4wY56pxxEx0uSbZrPbQ8XRSuNUZ1kcCLke98ioj5be8u/3P
-        5tmX5j+dJrvnHTr2fJnEnrOhMw8Vsni1ukkuS1G5y9E2sezYzKqgF4cVp0SEPp+2UVD+5vbO
-        GH0lluKMREMt5qLiRACnoD7LpQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsVy+t/xu7o/DPSSDXbulLU4PL/CYt5nWYvL
-        u+awWXzuPcJoMffLVGaLJw/72BzYPBbvecnksWlVJ5vHnWt72Dw+b5ILYInSsynKLy1JVcjI
-        Ly6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy3j9Yx1zwTXJihe3XjI1
-        ML4X6WLk5JAQMJF4ePogWxcjF4eQwFJGiT9Pr7JBJGQkTk5rYIWwhSX+XOsCiwsJvGeUuL8g
-        DcTmFbCTWLJ9NzuIzSKgKvHx3yE2iLigxMmZT1hAbFGBZIklDffB5ggLxEg0n+1jArGZBcQl
-        bj2ZD2aLCDhKfPm7iB0iXizR1/qeFWJXqURTfx/YHDYBQ4mutxA3cAo4SKz/dYcVot5Momtr
-        FyOELS+x/e0c5gmMQrOQnDELybpZSFpmIWlZwMiyilEktbQ4Nz232EivODG3uDQvXS85P3cT
-        IzC2th37uWUH48pXH/UOMTJxMB5ilOBgVhLhTbmomyzEm5JYWZValB9fVJqTWnyI0RQYFhOZ
-        pUST84HRnVcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwCT++6D7
-        uRwxbmnW6qs566V3LdF5uJ3h4P2kwrOHOuKmbb0Vqac3W7AxO6TlmaxyC1PFi/a/QS8PavCW
-        Z5YqGQWqpppcnM9m3tp6Mvu3atz/WdWCRoubvt/gfRN78JzAJ++oh5ckRJJ8v7YcuerB/vXx
-        xhkeR/OPxLdd6og4z1vLd0V54ZKrjb0zfs2Zv8BmSsDb+UKKW09Zcz2Z9GGhfLTG48KpBkVz
-        MgrMf07jWnqeh7W0gPXw6vlHU55p3Si067K4FH3gw+U3WnIx/6sWNq3/u8nxs4a32S+Lmof7
-        twhm3dzK2ZfGs+fCz/ly6oe4T9zJmzBtfp0k9+XEtdte5fn6Msyfv/6kxccLfof8tVcrsRRn
-        JBpqMRcVJwIA3VYWuzYDAAA=
-X-CMS-MailID: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
-        <20220921094244.606948-2-daniel.lezcano@linaro.org>
-        <CGME20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.3.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid> <202209201552.DF8C511D23@keescook>
+In-Reply-To: <202209201552.DF8C511D23@keescook>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Fri, 23 Sep 2022 15:22:21 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6AEKiYUf9yZ1Z6F0w+=S2KJvZ6HVK+eVsQ3fF1u+HaVQ@mail.gmail.com>
+Message-ID: <CAE=gft6AEKiYUf9yZ1Z6F0w+=S2KJvZ6HVK+eVsQ3fF1u+HaVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] security: keys: trusted: Include TPM2 creation data
+To:     Kees Cook <keescook@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Tue, Sep 20, 2022 at 4:04 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Aug 23, 2022 at 03:25:19PM -0700, Evan Green wrote:
+> > In addition to the private key and public key, the TPM2_Create
+> > command may also return creation data, a creation hash, and a creation
+> > ticket. These fields allow the TPM to attest to the contents of a
+> > specified set of PCRs at the time the trusted key was created. Encrypted
+> > hibernation will use this to ensure that PCRs settable only by the
+> > kernel were set properly at the time of creation, indicating this is an
+> > authentic hibernate key.
+> >
+> > Encode these additional parameters into the ASN.1 created to represent
+> > the key blob. The new fields are made optional so that they don't bloat
+> > key blobs which don't need them, and to ensure interoperability with
+> > old blobs.
+> >
+> > ---
+> >
+> > (no changes since v1)
+> >
+> > This is a replacement for Matthew's original patch here:
+> > https://patchwork.kernel.org/patch/12096489/
+> >
+> > That patch was written before the exported key format was switched to
+> > ASN.1. This patch accomplishes the same thing (saving, loading, and
+> > getting pointers to the creation data) while utilizing the new ASN.1
+> > format.
+>
+> This part (between your S-o-b and the "---") should got below the "---"
+> after your S-o-b, otherwise tooling will include it in the commit log
+> (or lose your S-o-b).
 
-On 21.09.2022 11:42, Daniel Lezcano wrote:
-> The thermal_zone_device_ops structure defines a set of ops family,
-> get_trip_temp(), get_trip_hyst(), get_trip_type(). Each of them is
-> returning a property of a trip point.
->
-> The result is the code is calling the ops everywhere to get a trip
-> point which is supposed to be defined in the backend driver. It is a
-> non-sense as a thermal trip can be generic and used by the backend
-> driver to declare its trip points.
->
-> Part of the thermal framework has been changed and all the OF thermal
-> drivers are using the same definition for the trip point and use a
-> thermal zone registration variant to pass those trip points which are
-> part of the thermal zone device structure.
->
-> Consequently, we can use a generic function to get the trip points
-> when they are stored in the thermal zone device structure.
->
-> This approach can be generalized to all the drivers and we can get rid
-> of the ops->get_trip_*. That will result to a much more simpler code
-> and make possible to rework how the thermal trip are handled in the
-> thermal core framework as discussed previously.
->
-> This change adds a function thermal_zone_get_trip() where we get the
-> thermal trip point structure which contains all the properties (type,
-> temp, hyst) instead of doing multiple calls to ops->get_trip_*.
->
-> That opens the door for trip point extension with more attributes. For
-> instance, replacing the trip points disabled bitmask with a 'disabled'
-> field in the structure.
->
-> Here we replace all the calls to ops->get_trip_* in the thermal core
-> code with a call to the thermal_zone_get_trip() function.
->
-> While at it, add the thermal_zone_get_num_trips() to encapsulate the
-> code more and reduce the grip with the thermal framework internals.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Will fix.
 
-This patch landed in linux next-20220923 as commit 78ffa3e58d93 
-("thermal/core: Add a generic thermal_zone_get_trip() function"). 
-Unfortunately it introduces a deadlock:
-
-thermal_zone_device_update() calls handle_thermal_trip() under the 
-tz->lock, which in turn calls thermal_zone_get_trip(), which gathers 
-again tz->lock. I've tried to fix this by switching 
-handle_thermal_trip() to call __thermal_zone_get_trip().
-
-This helps for fixing the issue in this change, but then I've tried to 
-apply it on top of linux next-20220923. Unfortunately it fails again. It 
-looks that the other changes also assumes that calling 
-thermal_zone_get_trip() is possible under the tz->lock, because in my 
-case it turned out that handle_non_critical_trips() called 
-step_wise_throttle(), which in turn called thermal_zone_get_trip(). I 
-gave up fixing this. Please re-check possible call paths and adjust 
-locking to them.
-
-
-> ---
->   drivers/thermal/thermal_core.c    | 87 +++++++++++++++++++++++--------
->   drivers/thermal/thermal_helpers.c | 28 +++++-----
->   drivers/thermal/thermal_netlink.c | 21 ++++----
->   drivers/thermal/thermal_sysfs.c   | 66 +++++++++--------------
->   include/linux/thermal.h           |  5 ++
->   5 files changed, 118 insertions(+), 89 deletions(-)
 >
-> ...
+> >
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > ---
+> >  include/keys/trusted-type.h               |   8 +
+> >  security/keys/trusted-keys/tpm2key.asn1   |   5 +-
+> >  security/keys/trusted-keys/trusted_tpm2.c | 202 +++++++++++++++++++---
+> >  3 files changed, 190 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+> > index 4eb64548a74f1a..209086fed240a5 100644
+> > --- a/include/keys/trusted-type.h
+> > +++ b/include/keys/trusted-type.h
+> > @@ -22,15 +22,23 @@
+> >  #define MAX_BLOB_SIZE                        512
+> >  #define MAX_PCRINFO_SIZE             64
+> >  #define MAX_DIGEST_SIZE                      64
+> > +#define MAX_CREATION_DATA            412
+> > +#define MAX_TK                               76
+> >
+> >  struct trusted_key_payload {
+> >       struct rcu_head rcu;
+> >       unsigned int key_len;
+> >       unsigned int blob_len;
+> > +     unsigned int creation_len;
+> > +     unsigned int creation_hash_len;
+> > +     unsigned int tk_len;
+> >       unsigned char migratable;
+> >       unsigned char old_format;
+> >       unsigned char key[MAX_KEY_SIZE + 1];
+> >       unsigned char blob[MAX_BLOB_SIZE];
+> > +     unsigned char *creation;
+> > +     unsigned char *creation_hash;
+> > +     unsigned char *tk;
+> >  };
+> >
+> >  struct trusted_key_options {
+> > diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+> > index f57f869ad60068..1bfbf290e523a3 100644
+> > --- a/security/keys/trusted-keys/tpm2key.asn1
+> > +++ b/security/keys/trusted-keys/tpm2key.asn1
+> > @@ -7,5 +7,8 @@ TPMKey ::= SEQUENCE {
+> >       emptyAuth       [0] EXPLICIT BOOLEAN OPTIONAL,
+> >       parent          INTEGER ({tpm2_key_parent}),
+> >       pubkey          OCTET STRING ({tpm2_key_pub}),
+> > -     privkey         OCTET STRING ({tpm2_key_priv})
+> > +     privkey         OCTET STRING ({tpm2_key_priv}),
+> > +     creationData    [1] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_data}),
+> > +     creationHash    [2] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_hash}),
+> > +     creationTk      [3] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_tk})
+> >       }
+>
+> Maybe include a link (or named reference) to these fields from the TPM
+> spec?
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Sure. The TPM spec names their structure types (TPM2B_CREATION_DATA,
+TPM2B_DIGEST, etc), so I'll add comments with the names of the types
+as well as the command they came out of.
 
+>
+> > [...]
+> > @@ -46,6 +49,26 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+> >
+> >       pub_len = get_unaligned_be16(src) + 2;
+> >       pub = src;
+> > +     src += pub_len;
+> > +
+> > +     creation_data_len = get_unaligned_be16(src);
+> > +     if (creation_data_len) {
+> > +             creation_data_len += 2;
+> > +             creation_data = src;
+> > +             src += creation_data_len;
+> > +
+> > +             creation_hash_len = get_unaligned_be16(src) + 2;
+> > +             creation_hash = src;
+> > +             src += creation_hash_len;
+> > +
+> > +             /*
+> > +              * The creation ticket (TPMT_TK_CREATION) consists of a 2 byte
+> > +              * tag, 4 byte handle, and then a TPM2B_DIGEST, which is a 2
+> > +              * byte length followed by data.
+> > +              */
+> > +             creation_tk_len = get_unaligned_be16(src + 6) + 8;
+> > +             creation_tk = src;
+> > +     }
+> >
+> >       if (!scratch)
+> >               return -ENOMEM;
+>
+> I don't see anything in this code (even before your patch) actually
+> checking length against the "len" argument to tpm2_key_encode(). I think
+> that needs to be fixed so proper bounds checking can be done here.
+> Otherwise how do we know if we're running off the end of "src"?
+>
+> Yes, I realize if we have a malicious TPM everything goes out the
+> window, but TPMs don't always behave -- this code should likely be more
+> defensive. Or, I've misunderstood where "src" is coming from.
+> Regardless, my question stands: what is checking "len"?
+
+Sure, will add checks of len to my hunk and the bit above.
+
+>
+> > @@ -63,26 +86,81 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+> >       }
+> >
+> >       /*
+> > -      * Assume both octet strings will encode to a 2 byte definite length
+> > +      * Assume each octet string will encode to a 2 byte definite length.
+> > +      * Each optional octet string consumes one extra byte.
+> >        *
+> > -      * Note: For a well behaved TPM, this warning should never
+> > -      * trigger, so if it does there's something nefarious going on
+> > +      * Note: For a well behaved TPM, this warning should never trigger, so
+> > +      * if it does there's something nefarious going on
+> >        */
+> > -     if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> > -              "BUG: scratch buffer is too small"))
+> > -             return -EINVAL;
+> > +     if (WARN(work - scratch + pub_len + priv_len + creation_data_len +
+> > +              creation_hash_len + creation_tk_len + (7 * 5) + 3 >
+> > +              SCRATCH_SIZE,
+> > +              "BUG: scratch buffer is too small")) {
+> > +             rc = -EINVAL;
+> > +             goto err;
+> > +     }
+> >
+> >       work = asn1_encode_integer(work, end_work, options->keyhandle);
+> >       work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+> >       work = asn1_encode_octet_string(work, end_work, priv, priv_len);
+> > +     if (creation_data_len) {
+> > +             u8 *scratch2 = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+> > +             u8 *work2;
+> > +             u8 *end_work2 = scratch2 + SCRATCH_SIZE;
+> > +
+> > +             if (!scratch2) {
+> > +                     rc = -ENOMEM;
+> > +                     goto err;
+> > +             }
+> > +
+> > +             work2 = asn1_encode_octet_string(scratch2,
+> > +                                              end_work2,
+> > +                                              creation_data,
+> > +                                              creation_data_len);
+> > +
+> > +             work = asn1_encode_tag(work,
+> > +                                    end_work,
+> > +                                    1,
+> > +                                    scratch2,
+> > +                                    work2 - scratch2);
+> > +
+> > +             work2 = asn1_encode_octet_string(scratch2,
+> > +                                              end_work2,
+> > +                                              creation_hash,
+> > +                                              creation_hash_len);
+> > +
+> > +             work = asn1_encode_tag(work,
+> > +                                    end_work,
+> > +                                    2,
+> > +                                    scratch2,
+> > +                                    work2 - scratch2);
+> > +
+> > +             work2 = asn1_encode_octet_string(scratch2,
+> > +                                              end_work2,
+> > +                                              creation_tk,
+> > +                                              creation_tk_len);
+> > +
+> > +             work = asn1_encode_tag(work,
+> > +                                    end_work,
+> > +                                    3,
+> > +                                    scratch2,
+> > +                                    work2 - scratch2);
+> > +
+> > +             kfree(scratch2);
+> > +     }
+> >
+> >       work1 = payload->blob;
+> >       work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+> >                                    scratch, work - scratch);
+> > -     if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> > -             return PTR_ERR(work1);
+> > +     if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
+> > +             rc = PTR_ERR(work1);
+> > +             goto err;
+>
+> I find the addition of the word "BUG" in a WARN() to be confusing. :) I
+> realize this is just copying the existing style, though.
+
+It wasn't my favorite either, but I felt an urge to be consistent. So
+far I've lft this as-is, holler if I should change it.
+
+>
+> > +     }
+> >
+> >       return work1 - payload->blob;
+> > +err:
+> > +     kfree(scratch);
+> > +     return rc;
+> >  }
+> >
+> >  struct tpm2_key_context {
+> > @@ -91,15 +169,21 @@ struct tpm2_key_context {
+> >       u32 pub_len;
+> >       const u8 *priv;
+> >       u32 priv_len;
+> > +     const u8 *creation_data;
+> > +     u32 creation_data_len;
+> > +     const u8 *creation_hash;
+> > +     u32 creation_hash_len;
+> > +     const u8 *creation_tk;
+> > +     u32 creation_tk_len;
+> >  };
+> >
+> >  static int tpm2_key_decode(struct trusted_key_payload *payload,
+> > -                        struct trusted_key_options *options,
+> > -                        u8 **buf)
+> > +                        struct trusted_key_options *options)
+> >  {
+> > +     u64 data_len;
+> >       int ret;
+> >       struct tpm2_key_context ctx;
+> > -     u8 *blob;
+> > +     u8 *blob, *buf;
+> >
+> >       memset(&ctx, 0, sizeof(ctx));
+> >
+> > @@ -108,21 +192,57 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > -     if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
+> > +     data_len = ctx.priv_len + ctx.pub_len + ctx.creation_data_len +
+> > +                ctx.creation_hash_len + ctx.creation_tk_len;
+> > +
+> > +     if (data_len > MAX_BLOB_SIZE)
+> >               return -EINVAL;
+> >
+> > -     blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
+> > -     if (!blob)
+> > +     buf = kmalloc(data_len + 4, GFP_KERNEL);
+> > +     if (!buf)
+> >               return -ENOMEM;
+> >
+> > -     *buf = blob;
+> > +     blob = buf;
+> >       options->keyhandle = ctx.parent;
+> >
+> >       memcpy(blob, ctx.priv, ctx.priv_len);
+> >       blob += ctx.priv_len;
+> >
+> >       memcpy(blob, ctx.pub, ctx.pub_len);
+> > +     blob += ctx.pub_len;
+> > +     if (ctx.creation_data_len) {
+> > +             memcpy(blob, ctx.creation_data, ctx.creation_data_len);
+> > +             blob += ctx.creation_data_len;
+> > +     }
+> > +
+> > +     if (ctx.creation_hash_len) {
+> > +             memcpy(blob, ctx.creation_hash, ctx.creation_hash_len);
+> > +             blob += ctx.creation_hash_len;
+> > +     }
+> >
+> > +     if (ctx.creation_tk_len) {
+> > +             memcpy(blob, ctx.creation_tk, ctx.creation_tk_len);
+> > +             blob += ctx.creation_tk_len;
+> > +     }
+> > +
+> > +     /*
+> > +      * Copy the buffer back into the payload blob since the creation
+> > +      * info will be used after loading.
+> > +      */
+> > +     payload->blob_len = blob - buf;
+> > +     memcpy(payload->blob, buf, payload->blob_len);
+> > +     if (ctx.creation_data_len) {
+> > +             payload->creation = payload->blob + ctx.priv_len + ctx.pub_len;
+> > +             payload->creation_len = ctx.creation_data_len;
+> > +             payload->creation_hash = payload->creation + ctx.creation_data_len;
+> > +             payload->creation_hash_len = ctx.creation_hash_len;
+> > +             payload->tk = payload->creation_hash +
+> > +                           payload->creation_hash_len;
+> > +
+> > +             payload->tk_len = ctx.creation_tk_len;
+> > +     }
+> > +
+> > +     kfree(buf);
+> >       return 0;
+> >  }
+> >
+> > @@ -185,6 +305,42 @@ int tpm2_key_priv(void *context, size_t hdrlen,
+> >       return 0;
+> >  }
+> >
+> > +int tpm2_key_creation_data(void *context, size_t hdrlen,
+> > +                        unsigned char tag,
+> > +                        const void *value, size_t vlen)
+> > +{
+> > +     struct tpm2_key_context *ctx = context;
+> > +
+> > +     ctx->creation_data = value;
+> > +     ctx->creation_data_len = vlen;
+> > +
+> > +     return 0;
+> > +}
+>
+> What is hdrlen here? Or rather, what kinds of bounds checking is needed
+> here?
+
+The prototype of asn1_action_t looks like this:
+
+typedef int (*asn1_action_t)(void *context,
+     size_t hdrlen, /* In case of ANY type */
+     unsigned char tag, /* In case of ANY type */
+     const void *value, size_t vlen);
+
+I'm not an ASN.1 expert, but from studying asn1_ber_decoder(), it
+looks like the core unit of an ASN.1 thing is a TLV, and hdrlen
+represents the number of bytes in the datastream that make up the {TL}
+portion. Based on the ANY comment above this seems to maybe be useful
+for certain generic/undefined object types, but I think it's not
+relevant to the types we're using. The vlen arg is the L value of the
+TLV, which is what we save away in tpm2_key_context. In
+asn1_ber_decoder(), I do see checks that what they pass for vlen stays
+within the bounds of the source data buffer (since I knew you'd ask
+:)).
+
+
+>
+> > +
+> > +int tpm2_key_creation_hash(void *context, size_t hdrlen,
+> > +                        unsigned char tag,
+> > +                        const void *value, size_t vlen)
+> > +{
+> > +     struct tpm2_key_context *ctx = context;
+> > +
+> > +     ctx->creation_hash = value;
+> > +     ctx->creation_hash_len = vlen;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +int tpm2_key_creation_tk(void *context, size_t hdrlen,
+> > +                      unsigned char tag,
+> > +                      const void *value, size_t vlen)
+> > +{
+> > +     struct tpm2_key_context *ctx = context;
+> > +
+> > +     ctx->creation_tk = value;
+> > +     ctx->creation_tk_len = vlen;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /**
+> >   * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+> >   *
+> > @@ -229,6 +385,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> >                     struct trusted_key_options *options)
+> >  {
+> >       int blob_len = 0;
+> > +     unsigned int offset;
+> >       struct tpm_buf buf;
+> >       u32 hash;
+> >       u32 flags;
+> > @@ -317,13 +474,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> >               rc = -E2BIG;
+> >               goto out;
+> >       }
+> > -     if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
+> > +     offset = TPM_HEADER_SIZE + 4;
+> > +     if (tpm_buf_length(&buf) < offset + blob_len) {
+> >               rc = -EFAULT;
+> >               goto out;
+> >       }
+> >
+> >       blob_len = tpm2_key_encode(payload, options,
+> > -                                &buf.data[TPM_HEADER_SIZE + 4],
+> > +                                &buf.data[offset],
+> >                                  blob_len);
+> >
+> >  out:
+> > @@ -370,13 +528,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> >       int rc;
+> >       u32 attrs;
+> >
+> > -     rc = tpm2_key_decode(payload, options, &blob);
+> > -     if (rc) {
+> > -             /* old form */
+> > -             blob = payload->blob;
+> > +     rc = tpm2_key_decode(payload, options);
+> > +     if (rc)
+> >               payload->old_format = 1;
+> > -     }
+> >
+> > +     blob = payload->blob;
+> >       /* new format carries keyhandle but old format doesn't */
+> >       if (!options->keyhandle)
+> >               return -EINVAL;
+> > @@ -433,8 +589,6 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> >                       (__be32 *) &buf.data[TPM_HEADER_SIZE]);
+> >
+> >  out:
+> > -     if (blob != payload->blob)
+> > -             kfree(blob);
+> >       tpm_buf_destroy(&buf);
+> >
+> >       if (rc > 0)
+> > --
+> > 2.31.0
+> >
+>
+> Otherwise looks good!
+
+Thank you for reviewing it!
+-Evan
