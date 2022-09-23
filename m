@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B385E7750
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30325E7751
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiIWJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S231216AbiIWJgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiIWJgB (ORCPT
+        with ESMTP id S230024AbiIWJgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:36:01 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32216109539
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:35:57 -0700 (PDT)
-Received: from p508fdb48.dip0.t-ipconnect.de ([80.143.219.72] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1obf61-0005SF-PN; Fri, 23 Sep 2022 11:35:45 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: Re: [PATCH 2/2] riscv: Move cast inside kernel_mapping_[pv]a_to_[vp]a
-Date:   Fri, 23 Sep 2022 11:35:44 +0200
-Message-ID: <3482469.aeNJFYEL58@phil>
-In-Reply-To: <20220922054743.30159-2-samuel@sholland.org>
-References: <20220922054743.30159-1-samuel@sholland.org> <20220922054743.30159-2-samuel@sholland.org>
+        Fri, 23 Sep 2022 05:36:11 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CA68F958
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:36:10 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j16so18928197lfg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=xZardqzm0PQ0BwEDikq+bXXk6zHXw5HLd+Zlh682CZg=;
+        b=mcu3yMDkzkOqWpb72+eQWf/7D7TbI3EkyYNzG9ZhLxD2RlVGikbCjAXG41pQYzvGW6
+         g3p/6Q4L18OpBW3VZmBsmaZ4BHf9hdbfvaRj7yrbo3t9Qh8Lt8Hgedh9hMzLKEgknax4
+         KLtz9gxXU3l75IlMDkEydAf/SH6ZC2vmqJuJovbwPRTz2I3Ifc1/9Q6t9aV7j7bFiWNn
+         YOl4l5l1GbLrP83PSgY/aAq2KiJFlPmIi0Dx70Md/O015nZOQihRtmaA9uQvZfTnIJWO
+         eQ/mxgB12wVVeSh8nZpwfI4XOqWKQGXgiQPP01f+GOujqeoHv/92xmFcLrITbM6xe/dh
+         TLVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=xZardqzm0PQ0BwEDikq+bXXk6zHXw5HLd+Zlh682CZg=;
+        b=qdPupL4XbBjljuYkoon9KBJrWJ8wGegmMUd1oNkCYDvK1ZDbMOgoUJwp0BGNvjqaH2
+         +b16mY1khiqGiUaTXouxva2M/gif3Z4JV5QLDAGpazVAF7bLpqM1+xy7Mi2NI8WepXJe
+         TbVzhr0BuRsb0KkZsdgas91yUiiThOMhlNvoFsjPFc45D0wnu5mm+u44D01nua9GLLtx
+         qjpGFrvOKv3IVhSR68vg2rD/uxrRvudlDCNZVOVQFYgwvkbgO3ptybGxTxqqE6vPac5i
+         li/1UpLiqbqnmQhwjoLhxt/Yjh1f5cEnOV2w5qJKGJZgyD/Ftzcq9PLzY1fG4hKmosgG
+         tDhw==
+X-Gm-Message-State: ACrzQf2lgKLlOagQ/0xKctDYN+tuOXRwZpS/SBP9FYJvCuJJi2kh3xMS
+        LWyn2F5o1KjY3mxaiXpdVHNWNlEA2uQVcA==
+X-Google-Smtp-Source: AMsMyM4grVVkVaVmdwZUlkTdjVCx4Ne2FBaiAhvziX1K9e4iP+nkA6l/z1NWFoG9xk905NGzqnDc9Q==
+X-Received: by 2002:a05:6512:3ca2:b0:497:9db7:ec10 with SMTP id h34-20020a0565123ca200b004979db7ec10mr3134937lfv.350.1663925768687;
+        Fri, 23 Sep 2022 02:36:08 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v25-20020a2e9259000000b0026c15d60ad1sm1281456ljg.132.2022.09.23.02.36.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 02:36:08 -0700 (PDT)
+Message-ID: <69111370-d536-eb67-b528-f61a3b81de82@linaro.org>
+Date:   Fri, 23 Sep 2022 11:36:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] dt-bindings: display: mediatek: dsi: Add compatible for
+ MediaTek MT8188
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, rex-bc.chen@mediatek.com,
+        ck.hu@mediatek.com, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jitao.shi@mediatek.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1663912657-28883-1-git-send-email-xinlei.lee@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1663912657-28883-1-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 22. September 2022, 07:47:42 CEST schrieb Samuel Holland:
-> Before commit 44c922572952 ("RISC-V: enable XIP"), these macros cast
-> their argument to unsigned long. That commit moved the cast after an
-> assignment to an unsigned long variable, rendering it ineffectual.
-> Move the cast back, so we can remove the cast at each call site.
+On 23/09/2022 07:57, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-
-makes the code a lot nicer to read
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-> ---
-> 
->  arch/riscv/errata/thead/errata.c |  4 ++--
->  arch/riscv/include/asm/page.h    | 18 +++++++++---------
->  arch/riscv/mm/init.c             | 16 ++++++++--------
->  3 files changed, 19 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index 83174f13783e..38c2c6b0f6b8 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -76,8 +76,8 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->  		if (cpu_req_errata & tmp) {
->  			/* On vm-alternatives, the mmu isn't running yet */
->  			if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> -				memcpy((void *)kernel_mapping_va_to_pa((unsigned long)alt->old_ptr),
-> -				       (void *)kernel_mapping_va_to_pa((unsigned long)alt->alt_ptr),
-> +				memcpy((void *)kernel_mapping_va_to_pa(alt->old_ptr),
-> +				       (void *)kernel_mapping_va_to_pa(alt->alt_ptr),
->  				       alt->alt_len);
->  			else
->  				patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index ac70b0fd9a9a..9f432c1b5289 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -123,20 +123,20 @@ extern phys_addr_t phys_ram_base;
->  	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
->  
->  #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-> -#define kernel_mapping_pa_to_va(y)	({						\
-> -	unsigned long _y = y;								\
-> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_xip_pa_offset) :		\
-> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
-> +#define kernel_mapping_pa_to_va(y)	({					\
-> +	unsigned long _y = (unsigned long)(y);					\
-> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
-> +		(void *)(_y + kernel_map.va_kernel_xip_pa_offset) :		\
-> +		(void *)(_y + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
->  	})
->  #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
->  
->  #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
->  #define kernel_mapping_va_to_pa(y) ({						\
-> -	unsigned long _y = y;							\
-> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-> -		((unsigned long)(_y) - kernel_map.va_kernel_xip_pa_offset) :		\
-> -		((unsigned long)(_y) - kernel_map.va_kernel_pa_offset - XIP_OFFSET);	\
-> +	unsigned long _y = (unsigned long)(y);					\
-> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
-> +		(_y - kernel_map.va_kernel_xip_pa_offset) :			\
-> +		(_y - kernel_map.va_kernel_pa_offset - XIP_OFFSET);		\
->  	})
->  
->  #define __va_to_pa_nodebug(x)	({						\
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index b56a0a75533f..7d59516ce6b3 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -927,15 +927,15 @@ static void __init pt_ops_set_early(void)
->   */
->  static void __init pt_ops_set_fixmap(void)
->  {
-> -	pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
-> -	pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-> +	pt_ops.alloc_pte = kernel_mapping_pa_to_va(alloc_pte_fixmap);
-> +	pt_ops.get_pte_virt = kernel_mapping_pa_to_va(get_pte_virt_fixmap);
->  #ifndef __PAGETABLE_PMD_FOLDED
-> -	pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
-> -	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
-> -	pt_ops.alloc_pud = kernel_mapping_pa_to_va((uintptr_t)alloc_pud_fixmap);
-> -	pt_ops.get_pud_virt = kernel_mapping_pa_to_va((uintptr_t)get_pud_virt_fixmap);
-> -	pt_ops.alloc_p4d = kernel_mapping_pa_to_va((uintptr_t)alloc_p4d_fixmap);
-> -	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va((uintptr_t)get_p4d_virt_fixmap);
-> +	pt_ops.alloc_pmd = kernel_mapping_pa_to_va(alloc_pmd_fixmap);
-> +	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va(get_pmd_virt_fixmap);
-> +	pt_ops.alloc_pud = kernel_mapping_pa_to_va(alloc_pud_fixmap);
-> +	pt_ops.get_pud_virt = kernel_mapping_pa_to_va(get_pud_virt_fixmap);
-> +	pt_ops.alloc_p4d = kernel_mapping_pa_to_va(alloc_p4d_fixmap);
-> +	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va(get_p4d_virt_fixmap);
->  #endif
->  }
->  
+> Add dt-binding documentation of dpi for MediaTek MT8188 SoC.
 > 
 
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
