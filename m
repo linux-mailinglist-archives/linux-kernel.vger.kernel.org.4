@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337085E75ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DFE5E75F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiIWIju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S230049AbiIWIkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiIWIjq (ORCPT
+        with ESMTP id S230062AbiIWIkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:39:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44D82C669;
-        Fri, 23 Sep 2022 01:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=V1rRq3lqNoW5TcE/xufv462Ekykzam6103C+3ht2Ez0=; b=nJejs3bRso0/zXedtRupWJU72A
-        D3mRvV1bNdE2jDqNQcPlaka+ZwzpBWGS5HALHhg96r/Xp9OkKYfxPZYX4J3P+AbEbEuE2fbiu5w2q
-        OswO4Rg7IAV6ekjzj5XIhzHzkgwzwTDKamCK8uJ1uCrwR//u5idtB2/UT1b11j2E7/5jb61SIPgEt
-        fMKj4ZhqXR7WVWpg8ZeafRMkrxjAbjvm21zfVvJTbzz1AsoVx7wjyA79kn1mhGhQPBjPgOEOc4tKM
-        kOVN+tMXAAJ30PeiPypcGFxGeX+CNxeYmzxe6HJiJe6T7SD4E1F1E45QfBGkRMXYGwstHf7BwLD7F
-        Oa6WIohQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obeDT-0030o0-Un; Fri, 23 Sep 2022 08:39:23 +0000
-Date:   Fri, 23 Sep 2022 01:39:23 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <Yy1wu9tKo/sbsi1N@infradead.org>
-References: <YxhaJktqtHw3QTSG@infradead.org>
- <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
- <YyIEgD8ksSZTsUdJ@ZenIV>
- <20220915081625.6a72nza6yq4l5etp@quack3>
- <YyvG+Oih2A37Grcf@ZenIV>
- <a6f95605-c2d5-6ec5-b85c-d1f3f8664646@nvidia.com>
- <20220922112935.pep45vfqfw5766gq@quack3>
- <Yy0lztxfwfGXFme4@ZenIV>
- <7e652ba4-8b03-59e0-a9ef-1118c4bbd492@nvidia.com>
+        Fri, 23 Sep 2022 04:40:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953AAA50DD;
+        Fri, 23 Sep 2022 01:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663922408; x=1695458408;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iejbR8WlaYF8JWGPcuXfUF5HflRzNVutSIIKS7awbhI=;
+  b=iRVD1vsOZRCMbmDA2fOe9blB3xuTBIWPYo+8ZzvQxgg0EjfXy3HXp0hK
+   cP6mVDYC8WVrBAfRShLsaObA7gZbWd0sOrPdHg5/NnUx3ZxkgpKmzmiEs
+   H7I6zhUWxR9PIEtz3qCUCfeptJ0XcQRP6gA69KYeWAPaEgruUeatcIlLu
+   c+EsMJ46Kxal5Fhk1KYuyab5C/H4/FCZSMTRqlTbqBXJh7jd3609p3NyV
+   re0KmRmfci+vUw862CTGLpkKJeoWnJgZg4N/ZwB6bhjbRDI7Eruab6Pxn
+   VjClUqhxONXT211D0KqJ3Uz4bQKqwp6nasopLJOTZitnTCUjTZX9pYR5l
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="287661204"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="287661204"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:40:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="620141860"
+Received: from kanglong-mobl1.gar.corp.intel.com ([10.213.38.10])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:39:48 -0700
+Message-ID: <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
+Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        linux@roeck-us.net, len.brown@intel.com
+Date:   Fri, 23 Sep 2022 16:39:42 +0800
+In-Reply-To: <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
+References: <20220922133800.12918-1-rui.zhang@intel.com>
+         <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e652ba4-8b03-59e0-a9ef-1118c4bbd492@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:05:16PM -0700, John Hubbard wrote:
-> I certainly hope not. And in fact, we should really just say that that's
-> a rule: the whole time the page is pinned, it simply must remain dirty
-> and writable, at least with the way things are right now.
+Hi, Dave,
 
-Yes, if we can stick to that rule and make sure shared pagecache is
-never dirtied through get_user_pags anywhere that will allow us to
-fix a lot of mess
+On Thu, 2022-09-22 at 09:53 -0700, Dave Hansen wrote:
+> > Changes since V2:
+> >  - changelog improvements based on Peter' feedback
+> >  - Remove combined tags
+> 
+> I fixed those up and started testing your v2 yesterday.
 
-> To fix those cases, IIUC, the answer is: you must make the page dirty
-> properly, with page_mkwrite(), not just with set_page_dirty_lock(). And
-> that has to be done probably a lot earlier, for reasons that I'm still
-> vague on. But perhaps right after pinning the page. (Assuming that we
-> hold off writeback while the page is pinned.)
+Thanks for doing this.
 
-I think we need to hold off the writeback for it to work properly.
-The big question is, is if there are callers that do expect data
-to be written back on mappings that are longterm pinned.  RDMA or
-vfio would come to mind.
+>   Can you
+> double-check that this:
+> 
+> 	
+> https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=cpuid1f
+> 
+> Looks the same as your v3?
+
+There is no code difference.
+Just that I have updated the subject and changelog of patch 1/8 per
+Peter' suggestion
+https://lore.kernel.org/lkml/8496afee057d63b83a7ff02ec7f1de8c2d0e97ae.camel@intel.com/
+
+thanks,
+rui
+
