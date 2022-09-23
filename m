@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C22A5E7924
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AE25E792B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiIWLKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S230479AbiIWLN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiIWLKU (ORCPT
+        with ESMTP id S229794AbiIWLN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:10:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E09BA831E;
-        Fri, 23 Sep 2022 04:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B07161EF9;
-        Fri, 23 Sep 2022 11:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 664ADC433D7;
-        Fri, 23 Sep 2022 11:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663931418;
-        bh=LbW+VUr9DWt/bljfn5Ciy9AmuInJestA0k3eWHVTt6k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RYaHvTqq5gghs2gneIkUOvpWfNcxCgBpvD6gOB5162wt+2McsR83Vl73OpvKKpn2e
-         RCIj0oiS5U9XleKIyItiMsDYWY7jx4UwundC1RMm11QNkhKurfeeYjheFmSqh6K5qY
-         OBSyTf9SANNaAQbOhMIXGABEEELA27gxx/Duuy+S4hNZFFLmh6PcNRiCnF3JBzzKWK
-         H7pB5v4PvKiuDSEJArKoxH+VBuG4dU/CIVcC7PM8M/M9t6dc/0NGqDl0iHqXKrb7WH
-         eRS6PuSv+GP7U8IbZbN6XWS+Ihk1huu0GGk2GnIt2CQTNQNzrGtUaJlmfaYoW9Yj9n
-         V4fAEnH9CmyKQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A6F4E4D03A;
-        Fri, 23 Sep 2022 11:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 23 Sep 2022 07:13:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C81332E4;
+        Fri, 23 Sep 2022 04:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zfgAtGE1lzX9cKdfzAVSb8jixMZFgP1pDMu4gWZzZHk=; b=Aceuu38oHTVA5CFZWx2oP+KXGT
+        XezfqgfXSkFakEfdz/3LwuygiHo3V15hhuBPQS170VUkaHE1bG5ZV1PzU9o/DFGvmJinwV1eNl3Oq
+        rGbsOzCebKqKL3lGJXLzQrJIvbvRLYnkBVPHZVFzy4WrnqOlZZnpcQOoYmUD87Bd1/O3tMq+/O0EK
+        1IQ1HZ4YRymL+zTfhr3XCU/r50Hd/OH9ggDqL/+pLY3i1QbagUDCd+gabWy2DsQypRiaWsw1LqXPY
+        W49KwuoTl+mh0gomtmls5Z/eytm5BcFPp2Ely9KrdoGMO+EoiMpKESbjx6l6eWfUPjP3RWwGdmefr
+        C3j9c/5g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obgcL-00FCci-AK; Fri, 23 Sep 2022 11:13:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5FB7B3001FD;
+        Fri, 23 Sep 2022 13:13:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 222612BC047C3; Fri, 23 Sep 2022 13:13:12 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 13:13:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Subject: Re: [PATCH v4 03/25] rseq: Extend struct rseq with numa node id
+Message-ID: <Yy2UyL7vtQqWqKyI@hirez.programming.kicks-ass.net>
+References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+ <20220922105941.237830-4-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v6 0/8] net: phy: Add support for rate matching
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166393141830.14679.9638727148672158207.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Sep 2022 11:10:18 +0000
-References: <20220920221235.1487501-1-sean.anderson@seco.com>
-In-Reply-To: <20220920221235.1487501-1-sean.anderson@seco.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, olteanv@gmail.com, edumazet@google.com,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        alexandru.marginean@nxp.com, davem@davemloft.net,
-        claudiu.manoil@nxp.com, ioana.ciornei@nxp.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922105941.237830-4-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Sep 22, 2022 at 06:59:18AM -0400, Mathieu Desnoyers wrote:
+> diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
+> index a04a64bc1a00..6bd442697354 100644
+> --- a/include/trace/events/rseq.h
+> +++ b/include/trace/events/rseq.h
+> @@ -16,13 +16,15 @@ TRACE_EVENT(rseq_update,
+>  
+>  	TP_STRUCT__entry(
+>  		__field(s32, cpu_id)
+> +		__field(s32, node_id)
+>  	),
+>  
+>  	TP_fast_assign(
+>  		__entry->cpu_id = raw_smp_processor_id();
+> +		__entry->node_id = cpu_to_node(raw_smp_processor_id());
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Very minor nit: perhaps:
 
-On Tue, 20 Sep 2022 18:12:27 -0400 you wrote:
-> This adds support for phy rate matching: when a phy adapts between
-> differing phy interface and link speeds. It was originally submitted as
-> part of [1], which is considered "v1" of this series.
-> 
-> Several past discussions [2-4] around adding rate adaptation provide
-> some context.
-> 
-> [...]
+		_entry->node_id = cpu_to_node(__entry->cpu_id);
 
-Here is the summary with links:
-  - [net-next,v6,1/8] net: phylink: Document MAC_(A)SYM_PAUSE
-    https://git.kernel.org/netdev/net-next/c/72bc36956f73
-  - [net-next,v6,2/8] net: phylink: Export phylink_caps_to_linkmodes
-    https://git.kernel.org/netdev/net-next/c/606116529ab2
-  - [net-next,v6,3/8] net: phylink: Generate caps and convert to linkmodes separately
-    https://git.kernel.org/netdev/net-next/c/3e6eab8f3ef9
-  - [net-next,v6,4/8] net: phy: Add support for rate matching
-    https://git.kernel.org/netdev/net-next/c/0c3e10cb4423
-  - [net-next,v6,5/8] net: phylink: Adjust link settings based on rate matching
-    https://git.kernel.org/netdev/net-next/c/ae0e4bb2a0e0
-  - [net-next,v6,6/8] net: phylink: Adjust advertisement based on rate matching
-    https://git.kernel.org/netdev/net-next/c/b7e9294885b6
-  - [net-next,v6,7/8] net: phy: aquantia: Add some additional phy interfaces
-    https://git.kernel.org/netdev/net-next/c/7de26bf144f6
-  - [net-next,v6,8/8] net: phy: aquantia: Add support for rate matching
-    (no matching commit)
+just in case it does a reload and finds a different value.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>  	),
