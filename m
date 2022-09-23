@@ -2,223 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2795E792F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9EB5E7938
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiIWLOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S231793AbiIWLPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiIWLOO (ORCPT
+        with ESMTP id S232201AbiIWLOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:14:14 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993831280FE
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:14:12 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EC446580219;
-        Fri, 23 Sep 2022 07:14:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 23 Sep 2022 07:14:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1663931649; x=1663938849; bh=U8iCHLFAXA
-        03KunxPFzc62aKiSEd/kuLZlf3yHGCKvs=; b=KnfxfY7Xan2R/4k1btc8AOnQ76
-        iapL04VVpwC3mc47Xy7W1ybrnD1B+GsvXIFtI8NCivc/3NvvFhKrGjyRSf8zqmBz
-        h3oyGPndxWxRVfRDpUbc14sX5bSTJRat1pJNcdLKnFL5W5nTaYifVgElOvGp3KI+
-        E9ax4ZkmVl6Z6BzFFIWjoZCeiSLc9HbAPr4f2xBDj7sW2WlZXAdybWq89LsngniV
-        qDW59Qe5U4EnPdR3A+qAJI23fz97G00Jv7VBIbTDTaUawwJ0ohiBcYjqLlWgjgLf
-        PnkoBElktz7rXP6uSVg98fzU5ETzORxC1FsOl1x+Qro/sgqAXssRV57flcgw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663931649; x=1663938849; bh=U8iCHLFAXA03KunxPFzc62aKiSEd
-        /kuLZlf3yHGCKvs=; b=1GhdtXSmXpYbKvsFs9JbbeWnAKG2XGmX2scD84UrYBfi
-        5xsixll0/LQ9aZAnSFbrIUAh7jhK+uHTI2CUCZOfTgeCNwOKTg9k62U1eUCB2DBh
-        kacuKD6ef9jZMedV6A7BDHPVujQQTga5+oQ/4ZNh3DZwP6OZvlR6gXGtRyU41V7t
-        MoRZY8CdMqeG8L/U7N/B5MHYo7cFlxftdjPOjHJlb8wEaf3aprvkdwwO7Dcz4zEJ
-        O6ybqeci288KeYjzCMFo1kPDOc0XickXrQo5fe1K9Jgh3uYx09LFELjFkvhhqBLp
-        sc62E8aLibgzZhAMlGZX/8msotG7GTWkc7tjH8aPxg==
-X-ME-Sender: <xms:AJUtY2xa1bk34l1pHTeeFyZSFR8XYGpS7RdYpivk6bGt8sXGIUQKmQ>
-    <xme:AJUtYySkmhrE-td8_OS9SiOXKFpmkp0d18bkdwfgU5peHQl4FZm0ZvHTCDN8hua2E
-    mI-QBptmV0YNwLF6vE>
-X-ME-Received: <xmr:AJUtY4WT4MMS2L2fAvGxxlscWcbfOugjTcLumFJcpH419COuvEs87YYldelb79iSjqU6JfA-swpSmwhFHj6aBWiVOmXbhsZaa7c2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeelueejheffvdetueeugfelteeigedtgfejvdfhffegjeehffekjeetgfef
-    jeektdenucffohhmrghinhepkhhunhhithdruggvvhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:AJUtY8i5p8Q5oDGyONfpJLocht4JJhZ0PDzuusO_NVh92D0XYWzYkg>
-    <xmx:AJUtY4CO91y_-5wYfQ_-_V8bkgJPZ0qEQKMUuAuLUEtpMSneTEqMhA>
-    <xmx:AJUtY9JIVd5aB0BLzvgr8rgJ9V52lbKx4HlFqJY9XHgQKAaSKJSjng>
-    <xmx:AZUtYzbsLKdxOqkUmwsdNIJnDd-kHhg8D6i48JoU6mPEj3lD_CN6Uw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 23 Sep 2022 07:14:08 -0400 (EDT)
-Date:   Fri, 23 Sep 2022 13:14:05 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>, Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 13/33] drm/client: Add some tests for
- drm_connector_pick_cmdline_mode()
-Message-ID: <20220923111405.mnspcuiwfzxyxix6@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-13-f733a0ed9f90@cerno.tech>
- <49ea7c7c-7d4c-8348-ea75-e0f376111e4c@suse.de>
- <b3c4ee65-fc56-f54c-3946-b6524fb36f72@redhat.com>
- <93969920-b5ed-ff15-48d4-02e2f9c23505@suse.de>
+        Fri, 23 Sep 2022 07:14:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B2C2F387;
+        Fri, 23 Sep 2022 04:14:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 11E011F947;
+        Fri, 23 Sep 2022 11:14:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663931686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dfT5DLVmPxZ6Z/F4rJ4D8/3rzyoU2jcg2Mx19Dzkp/4=;
+        b=iSUP4pnIA8676mGrt56+5j8aj16F9I1u5aDcBWlbzc23BNF4yhdlx/IMGh34M8EJbINa6C
+        A7b0d57zV/SSlZmjnAhugpR9240TlcXXEQxKMBZapmZ4ohXITjr9KwLFFdf5SzVhAZIAm6
+        tegMOnjSQHsbkmUqG4G0KBVG7fHJhi4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663931686;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dfT5DLVmPxZ6Z/F4rJ4D8/3rzyoU2jcg2Mx19Dzkp/4=;
+        b=k6948tk+vleUDxoQWklFishzT7RI5ong1XmRTfOr4pYyn8r8BLoZBEpJ7I9fF/OX06gJvE
+        tf7pIHL6dH5ycQDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED8C313AA5;
+        Fri, 23 Sep 2022 11:14:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GfvvOSWVLWOYUwAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 11:14:45 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 77020A0685; Fri, 23 Sep 2022 13:14:45 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 13:14:45 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        lczerner@redhat.com, enwlinux@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, chengzhihao1@huawei.com, yukuai3@huawei.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix use-after-free in ext4_ext_shift_extents
+Message-ID: <20220923111445.letb6y3leixm2b7b@quack3>
+References: <20220922120434.1294789-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4cwm4b5gx3ebmiqr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <93969920-b5ed-ff15-48d4-02e2f9c23505@suse.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922120434.1294789-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 22-09-22 20:04:34, Baokun Li wrote:
+> If the starting position of our insert range happens to be in the hole
+> between the two ext4_extent_idx, because the lblk of the ext4_extent in
+> the previous ext4_extent_idx is always less than the start, which leads
+> to the "extent" variable access across the boundary, the following UAF is
+> triggered:
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_ext_shift_extents+0x257/0x790
+> Read of size 4 at addr ffff88819807a008 by task fallocate/8010
+> CPU: 3 PID: 8010 Comm: fallocate Tainted: G            E     5.10.0+ #492
+> Call Trace:
+>  dump_stack+0x7d/0xa3
+>  print_address_description.constprop.0+0x1e/0x220
+>  kasan_report.cold+0x67/0x7f
+>  ext4_ext_shift_extents+0x257/0x790
+>  ext4_insert_range+0x5b6/0x700
+>  ext4_fallocate+0x39e/0x3d0
+>  vfs_fallocate+0x26f/0x470
+>  ksys_fallocate+0x3a/0x70
+>  __x64_sys_fallocate+0x4f/0x60
+>  do_syscall_64+0x33/0x40
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> ==================================================================
+> 
+> For right shifts, we can divide them into the following situations：
+> 
+> 1. When the first ee_block of ext4_extent_idx is greater than or equal to
+>    start, make right shifts directly from the first ee_block.
+>     1) If it is greater than start, we need to continue searching in the
+>        previous ext4_extent_idx.
+>     2) If it is equal to start, we can exit the loop (iterator=NULL).
+> 
+> 2. When the first ee_block of ext4_extent_idx is less than start, then
+>    traverse from the last extent to find the first extent whose ee_block
+>    is less than start.
+>     1) If extent is still the last extent after traversal, it means that
+>        the last ee_block of ext4_extent_idx is less than start, that is,
+>        start is located in the hole between idx and (idx+1), so we can
+>        exit the loop directly (break) without right shifts.
+>     2) Otherwise, make right shifts at the corresponding position of the
+>        found extent, and then exit the loop (iterator=NULL).
+> 
+> Fixes: 331573febb6a ("ext4: Add support FALLOC_FL_INSERT_RANGE for fallocate")
+> Cc: stable@vger.kernel.org # v4.2+
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
---4cwm4b5gx3ebmiqr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the fix! It looks good to me. Feel free to add:
 
-On Fri, Sep 23, 2022 at 12:30:09PM +0200, Thomas Zimmermann wrote:
-> Am 23.09.22 um 11:26 schrieb Javier Martinez Canillas:
-> > On 9/23/22 11:15, Thomas Zimmermann wrote:
-> > > Hi
-> > >=20
-> > > Am 22.09.22 um 16:25 schrieb Maxime Ripard:
-> > > > drm_connector_pick_cmdline_mode() is in charge of finding a proper
-> > > > drm_display_mode from the definition we got in the video=3D command=
- line
-> > > > argument.
-> > > >=20
-> > > > Let's add some unit tests to make sure we're not getting any regres=
-sions
-> > > > there.
-> > > >=20
-> > > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > > >=20
-> > > > diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm=
-/drm_client_modeset.c
-> > > > index bbc535cc50dd..d553e793e673 100644
-> > > > --- a/drivers/gpu/drm/drm_client_modeset.c
-> > > > +++ b/drivers/gpu/drm/drm_client_modeset.c
-> > > > @@ -1237,3 +1237,7 @@ int drm_client_modeset_dpms(struct drm_client=
-_dev *client, int mode)
-> > > >    	return ret;
-> > > >    }
-> > > >    EXPORT_SYMBOL(drm_client_modeset_dpms);
-> > > > +
-> > > > +#ifdef CONFIG_DRM_KUNIT_TEST
-> > > > +#include "tests/drm_client_modeset_test.c"
-> > > > +#endif
-> > >=20
-> > > I strongly dislike this style of including source files in each other.
-> > > It's a recipe for all kind of build errors. Can you do something else?
-> > >=20
-> >=20
-> > This seems to be the convention used to test static functions and what's
-> > documented in the Kunit docs: https://kunit.dev/third_party/kernel/docs=
-/tips.html#testing-static-functions
->=20
-> That document says "...one option is to conditionally #include the test
-> file...". This doesn't sound like a strong requirement.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-No, but this is the only option documented, which still indicates a very
-strong preference.
+								Honza
 
-> > I agree with you that's not ideal but I think that consistency with how
-> > it is done by other subsystems is also important.
-> > > As the tested function is an internal interface, maybe export a wrapp=
-er
-> > > if tests are enabled, like this:
-> > >=20
-> > > #ifdef CONFIG_DRM_KUNIT_TEST
-> > > struct drm_display_mode *
-> > > drm_connector_pick_cmdline_mode_kunit(drm_conenctor)
-> > > {
-> > >     return drm_connector_pick_cmdline_mode(connector)
-> > > }
-> > > EXPORT_SYMBOL(drm_connector_pick_cmdline_mode_kunit)
-> > > #endif
-> > >=20
-> > > The wrapper's declaration can be located in the kunit test file.
-
-And I'm afraid this just doesn't scale. If we start testing more and
-more static functions, do we really want to have that wrapper for each
-of them?
-
-> > But that's also not nice since we are artificially exposing these only
-> > to allow the static functions to be called from unit tests. And would
-> > be a different approach than the one used by all other subsystems...
-> >=20
->=20
-> There's the problem of interference between the source files when building
-> the code. It's also not the same source code after including the test fil=
-e.
-> At a minimum, including the tests' source file further includes more file=
-s.
-> <kunit/tests.h> also includes quite a few of Linux header files.
->=20
-> IMHO the current convention (if any) is far from optimal and we should
-> consider breaking it.
-
-I mean... this is a discussion about theoretical issues. If there is
-indeed some regular build errors on this, then sure, we can change it.
-
-I'm confident that will affect pretty much every one using kunit equally
-though, so I'm fairly sure the documentation itself will have changed.
-
-But right now we're discussing an alternative because of a problem we
-never experienced. I don't see the point of breaking the consistency
-provided by the documentation for something not backed by any actual
-problem.
-
-Maxime
-
---4cwm4b5gx3ebmiqr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYy2U/QAKCRDj7w1vZxhR
-xbjnAQDguqVberZj4t3P9J7J+oQg19WB9p14JwDj9eYuF79RiAEAjgZAHDUtrTKk
-vCbaI/ojPoO94K+YindeHthKWzTZrwo=
-=uI0t
------END PGP SIGNATURE-----
-
---4cwm4b5gx3ebmiqr--
+> ---
+> V1->V2:
+>   Initialize "ret" after the "again:" label to avoid return value mismatch.
+>   Refactoring reduces cycles and makes code more readable.
+> 
+>  fs/ext4/extents.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index c148bb97b527..39c9f87de0be 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -5179,6 +5179,7 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
+>  	 * and it is decreased till we reach start.
+>  	 */
+>  again:
+> +	ret = 0;
+>  	if (SHIFT == SHIFT_LEFT)
+>  		iterator = &start;
+>  	else
+> @@ -5222,14 +5223,21 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
+>  					ext4_ext_get_actual_len(extent);
+>  		} else {
+>  			extent = EXT_FIRST_EXTENT(path[depth].p_hdr);
+> -			if (le32_to_cpu(extent->ee_block) > 0)
+> +			if (le32_to_cpu(extent->ee_block) > start)
+>  				*iterator = le32_to_cpu(extent->ee_block) - 1;
+> -			else
+> -				/* Beginning is reached, end of the loop */
+> +			else if (le32_to_cpu(extent->ee_block) == start)
+>  				iterator = NULL;
+> -			/* Update path extent in case we need to stop */
+> -			while (le32_to_cpu(extent->ee_block) < start)
+> +			else {
+> +				extent = EXT_LAST_EXTENT(path[depth].p_hdr);
+> +				while (le32_to_cpu(extent->ee_block) >= start)
+> +					extent--;
+> +
+> +				if (extent == EXT_LAST_EXTENT(path[depth].p_hdr))
+> +					break;
+> +
+>  				extent++;
+> +				iterator = NULL;
+> +			}
+>  			path[depth].p_ext = extent;
+>  		}
+>  		ret = ext4_ext_shift_path_extents(path, shift, inode,
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
