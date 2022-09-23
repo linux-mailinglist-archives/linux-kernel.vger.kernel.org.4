@@ -2,157 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEAB5E7F99
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F055E7F9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiIWQVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S230237AbiIWQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbiIWQUr (ORCPT
+        with ESMTP id S229495AbiIWQWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:20:47 -0400
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0A51A209;
-        Fri, 23 Sep 2022 09:19:52 -0700 (PDT)
-Received: by mail-pj1-f52.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so6323859pjq.3;
-        Fri, 23 Sep 2022 09:19:52 -0700 (PDT)
+        Fri, 23 Sep 2022 12:22:25 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42D1A213
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:22:24 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id g8so377891iob.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JCEsHMJy/ullYPtJF9xFE7cEbWJdSEZSG4mebaxAikg=;
+        b=IPgz1Um4bHtnZ2dNoSBJBU6fTHVnplRX9o7pqgKX7IFaUnpFUCpIWhk31BWuTU3gNu
+         pZF33VJy8pyJW29qSRJV737/MZxKPVkPdF2w80LAbfh569ftv1MS5rHSnpDqKFQ6Tb4a
+         c5sdmUC/n/8rj15ShatBCv33tDuPfRVDQJrW38HxWB6sKC0Q/u0tbv26A8AU0Bt8/ZLM
+         iQ/0hiYxh5U5FfdBXEqvsKwZj63QvJRGr5bSebSEJ7pajM+mlLeKqsMZuU57c4kY8BVt
+         vYuQS05vGmK/F/l30fmwkSenX8SwwyEs2armnGwM4ZFV+46a0vg6y9W1VkY8/WbCUN3X
+         QXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=vnSOT79vZm2Z1X3vBb9NByt6VpxGbBF310FVdgigcRo=;
-        b=AnKstt4jHs13SEIbBQjTLVpMdnTxp4iC2lGMr97kEGL1/nOIMX0wGXSLJwEh1C5DlN
-         svQxtFNscoAO8ZSQZ63YeMluOLAqXUJDAInRhIfuoY0NzEIXDl5gqYnU09ECmEGFzk0a
-         UFiMH1aAcfdJqW9jA+1dAatW4jqSZ/2vM1nDfX1fdC+Uu3o5rbcWTEYFsZejw5iDtds/
-         sI+1ODLNtPx6DymzjNwVQK5M5DGz95m9VyrnYuEY8YgFBynAix3esmnBHdHNNIJZQhtZ
-         0ey4mWjMjpp8HV1LlaovCGgPh6i5/Y7kyxBcROp2sknAO3wcGAoU+yq2GNWy6/IyFNK0
-         6AEQ==
-X-Gm-Message-State: ACrzQf2SQr4ao71itcMWsdL3xicS+Ect41LPwxz/q+x7FhKbUXepj1/C
-        vg4ExZPJwad8K5Gt1DFuDdU=
-X-Google-Smtp-Source: AMsMyM5CMCm0D86HYnpQDo/X7/UqnWT+5BzKuiOzTeV53omgR+X965yxoHmyOZ/dbkOcdr27tB35Ow==
-X-Received: by 2002:a17:90a:c782:b0:202:c73e:5488 with SMTP id gn2-20020a17090ac78200b00202c73e5488mr21574508pjb.202.1663949991522;
-        Fri, 23 Sep 2022 09:19:51 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:aa13:bc38:2a63:318e? ([2620:15c:211:201:aa13:bc38:2a63:318e])
-        by smtp.gmail.com with ESMTPSA id x18-20020a634852000000b004388f33b80esm5811710pgk.2.2022.09.23.09.19.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 09:19:50 -0700 (PDT)
-Message-ID: <396ddf4d-5a81-f6dc-b98f-a6cdad553e91@acm.org>
-Date:   Fri, 23 Sep 2022 09:19:48 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JCEsHMJy/ullYPtJF9xFE7cEbWJdSEZSG4mebaxAikg=;
+        b=sqwRdjVb5BHThOn4Jkh/pmurHoW6cHPWTXglPPPrUADPQBpSN6BvTtiUQKHRWiN52s
+         J1Jd7y/idDcLyWYG98e1DKq+kLNbfr4uHrEOlTvb9OT1PA+Z03eT+3OEi6nuH3TBe2Au
+         XlWUUxlM8z2BnAw22XgDbqnV9JfRxNbVZT3nmB0JjVVETj8jWM7cCOVV/+PnfsfUWN/v
+         c8y0AhL8ITPl1Cc9+bzkpFPh4SLF5EPBW89YAQB5SbDuJjSKV7TEx0i9ZogcoX1eaTnN
+         si4CXXVajGGAhfG8+eTN9EtCJaZIg2KrYqEo9PP6FFIwBt7QRfF4PQugP6bvnyJW9PU4
+         Es3g==
+X-Gm-Message-State: ACrzQf2FK5hja1AVYM2PPgC9AA1snlZVbcyvJ3HFobFjvSpCmfKPnIcx
+        MLtAFWuju1SomAQ/LCsindzpm6brMgGS9bWULXJlaD9xlqY=
+X-Google-Smtp-Source: AMsMyM4yb1sDTwxg385CK1YA3wTc7Ykm2hNJpzzeTvyNMwOM2t3R0WDgxOVrq5SSvxtWLpDaWBXu8ZX1eH7pOW00KhE=
+X-Received: by 2002:a6b:8fd8:0:b0:6a0:f9ea:2a05 with SMTP id
+ r207-20020a6b8fd8000000b006a0f9ea2a05mr4006231iod.123.1663950142809; Fri, 23
+ Sep 2022 09:22:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: Please further explain Linux's "zoned storage" roadmap [was: Re:
- [PATCH v14 00/13] support zoned block devices with non-power-of-2 zone sizes]
-Content-Language: en-US
-To:     =?UTF-8?Q?Matias_Bj=c3=b8rling?= <Matias.Bjorling@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Cc:     "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@kernel.org" <snitzer@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "pankydev8@gmail.com" <pankydev8@gmail.com>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>
-References: <CGME20220920091120eucas1p2c82c18f552d6298d24547cba2f70b7fc@eucas1p2.samsung.com>
- <20220920091119.115879-1-p.raghav@samsung.com> <YytJhEywBhqcr7MX@redhat.com>
- <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
- <8fd1d8b1-9f43-eb03-4a7f-187723d1c483@acm.org>
- <BYAPR04MB4968EB5E341049DFF973B9B1F1519@BYAPR04MB4968.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <BYAPR04MB4968EB5E341049DFF973B9B1F1519@BYAPR04MB4968.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <CAFCwf12P6DckVUJL7V_Z7ASj+8A3yyx9eX5MpZPF47Rzg6CjEA@mail.gmail.com>
+ <7hh71uixd9.fsf@baylibre.com>
+In-Reply-To: <7hh71uixd9.fsf@baylibre.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Fri, 23 Sep 2022 19:21:55 +0300
+Message-ID: <CAFCwf12mjshsf+GC-Y9irvPFT=W4Uis10OnZ4PNN1txjXyzLSA@mail.gmail.com>
+Subject: Re: New subsystem for acceleration devices
+To:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 23:29, Matias Bjørling wrote:
-> With UFS, in the proposed copy I have (may been changed) - there's
-> the concept of gap zones, which is zones that cannot be accessed by
-> the host. The gap zones are essentially "LBA fillers", enabling the
-> next writeable zone to start at a X * pow2 size offset. My
-> understanding is that this specific approach was chosen to simplify
-> standardization in UFS and avoid updating T10's ZBC with zone
-> capacity support.
-> 
-> While UFS would technically expose non-power of 2 zone sizes, they're
-> also, due to the gap zones, could also be considered power of 2 zones
-> if one considers the seq. write zone + the gap zone as a single
-> unit.
-> 
-> When I think about having UFS support in the kernel, the SWR and the
-> gap zone could be represented as a single unit. For example:
-> 
-> UFS - Zone Report
->    Zone 0: SWR, LBA 0-11
->    Zone 1: Gap, LBA 12-15
->    Zone 2: SWR, LBA 16-27
->    Zone 3: Gap, LBA 28-31
->    ...
-> 
-> Kernel representation - Zone Report (as supported today)
->    Zone 0: SWR, LBA 0-15, Zone Capacity 12
->    Zone 1: SWR, LBA 16-31, Zone Capacity 12
->    ...
-> 
-> If doing it this way, it removes the need for filesystems,
-> device-mappers, user-space applications having to understand gap
-> zones, and allows UFS to work out of the box with no changes to the
-> rest of the zoned storage eco-system.
-> 
-> Has the above representation been considered?
+On Mon, Aug 29, 2022 at 11:54 PM Kevin Hilman <khilman@baylibre.com> wrote:
+>
+> Hi Oded (and sorry I misspelled your name last time),
+>
+> Oded Gabbay <oded.gabbay@gmail.com> writes:
+>
+> > On Tue, Aug 23, 2022 at 9:24 PM Kevin Hilman <khilman@baylibre.com> wrote:
+> >>
+> >> Hi Obed,
+> >>
+> >> Oded Gabbay <oded.gabbay@gmail.com> writes:
+> >>
+> >> [...]
+> >>
+> >> > I want to update that I'm currently in discussions with Dave to figure
+> >> > out what's the best way to move forward. We are writing it down to do
+> >> > a proper comparison between the two paths (new accel subsystem or
+> >> > using drm). I guess it will take a week or so.
+> >>
+> >> Any update on the discussions with Dave? and/or are there any plans to
+> >> discuss this further at LPC/ksummit yet?
+> > Hi Kevin.
+> >
+> > We are still discussing the details, as at least the habanalabs driver
+> > is very complex and there are multiple parts that I need to see if and
+> > how they can be mapped to drm.
+> > Some of us will attend LPC so we will probably take advantage of that
+> > to talk more about this.
+>
+> OK, looking forward to some more conversations at LPC.
+>
+> >>
+> >> We (BayLibre) are upstreaming support for APUs on Mediatek SoCs, and are
+> >> using the DRM-based approach.  I'll also be at LPC and happy to discuss
+> >> in person.
+> >>
+> >> For some context on my/our interest: back in Sept 2020 we initially
+> >> submitted an rpmesg based driver for kernel communication[1].  After
+> >> review comments, we rewrote that based on DRM[2] and are now using it
+> >> for some MTK SoCs[3] and supporting our MTK customers with it.
+> >>
+> >> Hopefully we will get the kernel interfaces sorted out soon, but next,
+> >> there's the userspace side of things.  To that end, we're also working
+> >> on libAPU, a common, open userspace stack.  Alex Bailon recently
+> >> presented a proposal earlier this year at Embedded Recipes in Paris
+> >> (video[4], slides[5].)
+> >>
+> >> libAPU would include abstractions of the kernel interfaces for DRM
+> >> (using libdrm), remoteproc/rpmsg, virtio etc. but also goes farther and
+> >> proposes an open firmware for the accelerator side using
+> >> libMetal/OpenAMP + rpmsg for communication with (most likely closed
+> >> source) vendor firmware.  Think of this like sound open firmware (SOF[6]),
+> >> but for accelerators.
+> >
+> > I think your device and the habana device are very different in
+> > nature, and it is part of what Dave and I discussed, whether these two
+> > classes of devices can live together. I guess they can live together
+> > in the kernel, but in the userspace, not so much imo.
+>
+> Yeah, for now I think focusing on how to handle both classes of devices
+> in the kernel is the most important.
+>
+> > The first class is the edge inference devices (usually as part of some
+> > SoC). I think your description of the APU on MTK SoC is a classic
+> > example of such a device.
+>
+> Correct.
+>
+> > You usually have some firmware you load, you give it a graph and
+> > pointers for input and output and then you just execute the graph
+> > again and again to perform inference and just replace the inputs.
+> >
+> > The second class is the data-center, training accelerators, which
+> > habana's gaudi device is classified as such. These devices usually
+> > have a number of different compute engines, a fabric for scaling out,
+> > on-device memory, internal MMUs and RAS monitoring requirements. Those
+> > devices are usually operated via command queues, either through their
+> > kernel driver or directly from user-space. They have multiple APIs for
+> > memory management, RAS, scaling-out and command-submissions.
+>
+> OK, I see.
+>
+> >>
+> >> We've been using this succesfully for Mediatek SoCs (which have a
+> >> Cadence VP6 APU) and have submitted/published the code, including the
+> >> OpenAMP[7] and libmetal[8] parts in addition to the kernel parts already
+> >> mentioned.
+> > What's the difference between libmetal and other open-source low-level
+> > runtime drivers, such as oneAPI level-zero ?
+>
+> TBH, I'd never heard of oneAPI before, so I'm assuming it's mainly
+> focused in the data center.  libmetal/openAMP are widely used
+> in the consumer, industrial embedded space, and heavily used by FPGAs in
+> many market segments.
+>
+> > Currently we have our own runtime driver which is tightly coupled with
+> > our h/w. For example, the method the userspace "talks" to the
+> > data-plane firmware is very proprietary as it is hard-wired into the
+> > architecture of the entire ASIC and how it performs deep-learning
+> > training. Therefore, I don't see how this can be shared with other
+> > vendors. Not because of secrecy but because it is simply not relevant
+> > to any other ASIC.
+>
+> OK, makes sense.
+>
+> Thanks for clarifying your use case in more detail.
+>
+> Kevin
 
-Hi Matias,
+Hi all,
+I wanted to update on this issue for those of you who weren't in LPC.
+We had a BOF session about this topic with most, if not all, of the
+relevant people - DRM maintainers, Greg and other subsystem and device
+drivers maintainers.
+Dave Airlie summarized the session in his blog -
+https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html
 
-What has been described above is the approach from the first version of 
-the zoned storage for UFS (ZUFS) draft standard. Support for this 
-approach is available in the upstream kernel. See also "[PATCH v2 0/9] 
-Support zoned devices with gap zones", 2022-04-21 
-(https://lore.kernel.org/linux-scsi/20220421183023.3462291-1-bvanassche@acm.org/).
+TL;DR
+Accelerators drivers will use the DRM subsystem code, but they will be
+located in a different directory (drivers/accel) and will be exposed
+to the userspace using a new major and a new device char name
+(/dev/accelX).
 
-Since F2FS extents must be split at gap zones, gap zones negatively 
-affect sequential read and write performance. So we abandoned the gap 
-zone approach. The current approach is as follows:
-* The power-of-two restriction for the offset between zone starts has 
-been removed. Gap zones are no longer required. Hence, we will need the 
-patches that add support for zone sizes that are not a power of two.
-* The Sequential Write Required (SWR) and Sequential Write Preferred 
-(SWP) zone types are supported. The feedback we received from UFS 
-vendors is that which zone type works best depends on their firmware and 
-ASIC design.
-* We need a queue depth larger than one (QD > 1) for writes to achieve 
-the full sequential write bandwidth. We plan to support QD > 1 as follows:
-   - If writes have to be serialized, submit these to the same hardware
-     queue. According to the UFS host controller interface (UFSHCI)
-     standard, UFS host controllers are not allowed to reorder SCSI
-     commands that are submitted to the same hardware queue. A source of
-     command reordering that remains is the SCSI retry mechanism. Retries
-     happen e.g. after a command timeout.
-   - For SWP zones, require the UFS device firmware to use its garbage
-     collection mechanism to reorder data in the unlikely case that
-     out-of-order writes happened.
-   - For SWR zones, retry writes that failed because these were received
-     out-of-order by a UFS device. ZBC-1 requires compliant devices to
-     respond with ILLEGAL REQUEST / UNALIGNED WRITE COMMAND to out-of-
-     order writes.
+I'm currently working on preparing some prerequisite patches for the
+DRM subsystem to support the new subsystem (e.g. new major number).
+After that will be merged, I plan to move the habanalabs driver to the
+new location and convert it to use the modified DRM framework code.
 
-We have considered the zone append approach but decided not to use it 
-because if zone append commands get reordered the data ends up 
-permanently out-of-order on the storage medium. This affects sequential 
-read performance negatively.
-
-Bart.
+Thanks,
+Oded
