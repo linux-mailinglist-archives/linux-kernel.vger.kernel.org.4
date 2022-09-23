@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779D85E7C11
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6442B5E7C0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbiIWNjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S231627AbiIWNjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbiIWNj1 (ORCPT
+        with ESMTP id S229511AbiIWNjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:39:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE50A13BCEC;
-        Fri, 23 Sep 2022 06:39:21 -0700 (PDT)
-Received: from weisslap.fritz.box ([31.19.218.61]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MEF87-1oRVkB2g6P-00ABiH; Fri, 23 Sep 2022 15:39:02 +0200
-From:   =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-To:     Paolo Abeni <pabeni@redhat.com>, Pravin B Shelar <pshelar@ovn.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Joe Stringer <joe@cilium.io>, Andy Zhou <azhou@ovn.org>,
-        =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 net-next 2/2] net: openvswitch: allow conntrack in non-initial user namespace
-Date:   Fri, 23 Sep 2022 15:38:20 +0200
-Message-Id: <20220923133820.993725-3-michael.weiss@aisec.fraunhofer.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220923133820.993725-1-michael.weiss@aisec.fraunhofer.de>
-References: <20220923133820.993725-1-michael.weiss@aisec.fraunhofer.de>
+        Fri, 23 Sep 2022 09:39:11 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DC4A98C5;
+        Fri, 23 Sep 2022 06:39:09 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 71C5B7F9;
+        Fri, 23 Sep 2022 13:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 71C5B7F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1663940349; bh=XtwcXAwE7op9aNDWjiJrtgb37mH7+IErYuk6ped7kew=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=FZi9/vFOrDm0CaK2TE2Py0RePLYhQf8j5N0LwRMMJygDH6lGG4a8kQc5knsaR3leq
+         r4WWT8Qv4siVf0a1IkBmjrWf6N8D4dzVs6C2dpgeaDYo0bWCuFGICNpCYr4B3ambAy
+         CIZQHnAQnYaf+xJPSCZIudHQaxExKlsfc9f2WuKeutXFQl5VUVKxmiZ+4YsLf5sTEE
+         UyCigETcpxjvsbt6STZota1w2ZgzE4OH6PjmS7XP8vp5ap/kgBDrUwWn8sSSGyj6/v
+         Jln9xcx643/aQa4SS7oQaJbtUvDKka0+RljOr2fSM/RP697TVs91xpRJUW5gFNWo+M
+         3evwU4IdcDdfQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2 7/7] docs: put atomic*.txt and memory-barriers.txt
+ into the core-api book
+In-Reply-To: <0ce29b47-1e4b-6c3a-27fa-47e442f1f21e@gmail.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <20220922204138.153146-8-corbet@lwn.net>
+ <0ce29b47-1e4b-6c3a-27fa-47e442f1f21e@gmail.com>
+Date:   Fri, 23 Sep 2022 07:39:08 -0600
+Message-ID: <87a66qp5vn.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:LHiZC01TYNuQgQi1n7k4fjs48kn5evKqTxORFX0N4WGhIiWE1qt
- ytlmRPcQeMizccFmES5wgcNTy73yUGF1YYehKezF6UnKhoaDdy6RMYimmM5rpUkO2ChLYyO
- wuiFKVoh9BkATo37lKSMYqGIOcltEms47WoH0diAa9JHiPZlAa9v6g52Nd84mDQqg1kDBco
- eAPyAKiEIABd7x3Tpk2jA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NoCYHAXAiuc=:BkTba5eXU+OtZQg/tp7Xf/
- LPiN3nxlZB66+C5CPHChpTEAVl0ILzWTZFvYsuMV4MusszuRQiuD5ngdyVOLD+O3olIkF9Shi
- Ibd9vy9ROYLZe006fVOZiyHcKpkVVVstJiHO415iiA+bCnXanu5SQ9yxE+LqnThpzcCx1tLqC
- zMwRKzmzKnr6DeRJP2kF+h4pWlQWjivfZHBwNYM+yshldHlAbNgmvXQlZHSE/9+RTQWHU359j
- UJ+IUzWezMojl2SrSpCbXj5pQR+cERBrPVIlSXs5VNmd23ilQvRYAWE9Qbn0wNIWcohCtOv1g
- VJl2arIHAoXhzne3aYYQvPEzaEKMLcjXEk9HG5GHqo6Q7HyBxwQSg2wUb716Wacyws4PGUfyG
- q1UptSqcYaANoH6/V+0JibQhny1NgbJbf4cqAugCL4KFM2TkDZzPuWl5ZC2HiuSpLQ3R2vM1h
- 45FN5ws/KwSX3kkSns91oweWOiFHsuOKy4ztVTTk1qyxqwPQf6jdn/lQFn/VULQha0hhJEg45
- TLvoE3IZY5Ok38iKZ5S+rwvKNqXinixCcektKi6KrC/u06rgdqJinv9FjTxjC4RromsG0SQyp
- uNclstL3Ul+4djrODCAyVvqVLOZ1jcZMjD8Rus2Dj9rlr8Tjbd69uuAyr+sQklDTYcujYXv3Z
- kXKh0D2bhdn5VuxDsbalzhvbFVKYwQcSePChm1Cgaltk3Ldi255l2O2AiI5PQSiCNfRStF4zS
- IF7b9ef8oRA5ICrRsvFlxeGna8aKEsx5+JLof3g9Lv3xZmoKF/t/r46PN0uvunbVbtlYX1WMW
- PPHmjNiYod+4QvRn0f2iquDR/L/BQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the previous commit, the Netlink interface of the OVS
-conntrack module was restricted to global CAP_NET_ADMIN by using
-GENL_ADMIN_PERM. This is changed to GENL_UNS_ADMIN_PERM to support
-unprivileged containers in non-initial user namespace.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
----
- net/openvswitch/conntrack.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+> On 9/23/22 03:41, Jonathan Corbet wrote:
+>> @@ -0,0 +1,18 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +   This is a simple wrapper to bring atomic_bitops.txt into the RST world
+>> +   until such a time as that file can be converted directly.
+>> +
+>> +=============
+>> +Atomic bitops
+>> +=============
+>> +
+>> +.. raw:: latex
+>> +
+>> +    \footnotesize
+>> +
+>> +.. include:: ../../atomic_bitops.txt
+>> +   :literal:
+>> +
+>> +.. raw:: latex
+>> +
+>> +    \normalsize
+>
+> Shouldn't warning like "This documentation isn't in RST format and included
+> as literal block" be added?
 
-diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
-index 48e8f5c29b67..cb255d8ed99a 100644
---- a/net/openvswitch/conntrack.c
-+++ b/net/openvswitch/conntrack.c
-@@ -1982,7 +1982,8 @@ static int ovs_ct_limit_set_zone_limit(struct nlattr *nla_zone_limit,
- 		} else {
- 			struct ovs_ct_limit *ct_limit;
- 
--			ct_limit = kmalloc(sizeof(*ct_limit), GFP_KERNEL);
-+			ct_limit = kmalloc(sizeof(*ct_limit),
-+					   GFP_KERNEL_ACCOUNT);
- 			if (!ct_limit)
- 				return -ENOMEM;
- 
-@@ -2252,14 +2253,16 @@ static int ovs_ct_limit_cmd_get(struct sk_buff *skb, struct genl_info *info)
- static const struct genl_small_ops ct_limit_genl_ops[] = {
- 	{ .cmd = OVS_CT_LIMIT_CMD_SET,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM, /* Requires CAP_NET_ADMIN
--					   * privilege. */
-+		.flags = GENL_UNS_ADMIN_PERM, /* Requires CAP_NET_ADMIN
-+					       * privilege.
-+					       */
- 		.doit = ovs_ct_limit_cmd_set,
- 	},
- 	{ .cmd = OVS_CT_LIMIT_CMD_DEL,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM, /* Requires CAP_NET_ADMIN
--					   * privilege. */
-+		.flags = GENL_UNS_ADMIN_PERM, /* Requires CAP_NET_ADMIN
-+					       * privilege.
-+					       */
- 		.doit = ovs_ct_limit_cmd_del,
- 	},
- 	{ .cmd = OVS_CT_LIMIT_CMD_GET,
--- 
-2.30.2
+Why?  Who needs that information and what will they do with it?
 
+Thanks,
+
+jon
