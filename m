@@ -2,58 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077525E7647
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589105E764A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiIWIyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S231411AbiIWIzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiIWIyC (ORCPT
+        with ESMTP id S231409AbiIWIzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:54:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268C7127C93;
-        Fri, 23 Sep 2022 01:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qJoM9qns597lWjvqNQtNyuD9dZiJpMQUDrks0cpJIxI=; b=b12lvY0N4pJiX4S/nj2V3GzgEd
-        ckoiFQ2AzGYuYr2OXHbo3SVTrRYB8himE/19nZhpL3e6zBcaat4HC3gb+sM2W+nApmtbtWo85ryuf
-        dQmuy818O8bgPxeLT1IkyT8XbASYho2HXLu0mfn2GU0VCZFCNo6bUWX0uZB/hrzitmNBt3MnKYDyC
-        TaRJ/zkqxYK2VLF9rf4gNM0eZGpA8AM+H3QOQ8klDarsW3lvhg3EipDAmfEHX73rPOLj1L3LScx8z
-        OiBGTHz3GQJgkO4XR48E2/WR15xuNF3v1E8oc82tJrCQXj5UUh7GgjJtQxu5/MbFbVNmNQ0Z7UtMi
-        jQ07cVsg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obeRV-0035Gf-QI; Fri, 23 Sep 2022 08:53:53 +0000
-Date:   Fri, 23 Sep 2022 01:53:53 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v3 5/5] elevator: remove redundant code in
- elv_unregister_queue()
-Message-ID: <Yy10IZdOh2+QOAhq@infradead.org>
-References: <20220922113558.1085314-1-yukuai3@huawei.com>
- <20220922113558.1085314-6-yukuai3@huawei.com>
+        Fri, 23 Sep 2022 04:55:13 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FA87B784;
+        Fri, 23 Sep 2022 01:55:10 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1obeSi-0007LE-IZ; Fri, 23 Sep 2022 10:55:08 +0200
+Message-ID: <7f02143c-461f-268b-0f17-7fe20a7423d6@leemhuis.info>
+Date:   Fri, 23 Sep 2022 10:55:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922113558.1085314-6-yukuai3@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US, de-DE
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v2 0/4] Rewrite the top-level index.rst
+In-Reply-To: <20220922204138.153146-1-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1663923311;751ff017;
+X-HE-SMSGID: 1obeSi-0007LE-IZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On 22.09.22 22:41, Jonathan Corbet wrote:
+> The top-level index.rst file is the entry point for the kernel's
+> documentation, especially for readers of the HTML output.  It is currently
+> a mess containing everything we thought to throw in there.  Firefox says it
+> would require 26 pages of paper to print it.  That is not a user-friendly
+> introduction.
 
-But this really should go first in the series.
+That's true, but is it maybe good or even important for googleability?
+When you talked about this in your LPC talk this went on in the matrix chat:
+
+```
+Nur Hussein
+I feel like every existing page needs to be accessible (somehow)
+from that starting page
+
+Zsuzsa Nagy
+
+access to all pages <- findability from a search engine (technical
+author talking here)
+
+step #2 in-site search for those who already landed on your pages
+```
+
+It looks to me like Zsuzsa shared a lot of valuable comments on the chat
+during the talk. I wonder if we should bring Zsuzsa into this discussion
+before heading in a wrong direction, as that might result in some back
+and forth that just confuses people reading the docs.
+
+Maybe we should try to get even more people into the discussion that
+write docs for a living. I guess there might be some people at Red Hat,
+SUSE, or open source projects that have actual experience in bringing
+structure into a big chunk of texts of a large open source project. Not
+sure if we can get them to help us, but I guess it's worth a try.
+
+> This series aims to improve our documentation entry point with a focus on
+> rewriting index.rst.  The result is, IMO, simpler and more approachable.
+> For anybody who wants to see the rendered results without building the
+> docs, have a look at:
+> 
+>   https://static.lwn.net/kerneldoc/
+
+I still think we're doing all this to build something for users and
+hence docs for users should be at the top spot. I'd even think "those
+people are selfish" if I'd look into the docs of a software and find
+texts for developers at the top spot.
+
+> Unless I get screams I plan to slip this into 6.1.  It is definitely not
+> the final form of the front page, but I doubt we'll ever get there; we can
+> change it in whatever ways make sense.
+
+My 2 cent: why the rush? I'd say: let's try to get some feedback from
+Zsuzsa and experts on docs first. I'd be willing to approach them. If
+that doesn't work out over the next few weeks, just merge what you have
+for 6.2.
+
+Ciao, Thorsten
