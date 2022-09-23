@@ -2,174 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCC25E8525
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3415E8584
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiIWVwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S231995AbiIWWCr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Sep 2022 18:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIWVwi (ORCPT
+        with ESMTP id S229512AbiIWWCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:52:38 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DCA1323E2;
-        Fri, 23 Sep 2022 14:52:37 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C5C0C5C00F5;
-        Fri, 23 Sep 2022 17:52:34 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 23 Sep 2022 17:52:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663969954; x=1664056354; bh=48NjErML18
-        V8FEC6ma2n9S/WAw7f8GnGxxmF8unyKIQ=; b=ddvDvgBFW/wUPmVfW0yAMGY1vg
-        nQKjtal8R2KB5gbNmmb0gEfdbaLtg8WxtQadoR0134uV4fYdOqgfrBNhvmZPPjAY
-        Co4rQ7Q8cgvrwsG9BWhIYZF5eSy+CeufoaXT/CDWy1hQo9yP/Lt80GR7WfSgfIvm
-        yb1R3OLav9dnU3bCksCiPxm7TibrO0zQ93cLJL3gnUFxkCMlMK6MSwKGWKlO3gVE
-        iU7ONK0A7LU7T+EWUmVNjCiluw3LABWF/5bD/DTbaP5DLxzrvNzgJTim14YGsCfs
-        8q/BgLzetFQl0RgtNK6tj2GR51V9s/CRnMS5fbF0KKvrYLBSapGh92RqlIiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663969954; x=1664056354; bh=48NjErML18V8FEC6ma2n9S/WAw7f
-        8GnGxxmF8unyKIQ=; b=T6apudbidu6svbDifmwwQHsbnK/u4vUnkQJNHNwrI2EN
-        KhhjZixhCcbi/lil8Db651j/h7C+296ApPjVCSyCj09xAHMMlDrwMFt6ndaqjMwT
-        lLEtPCMJFTzvzF1Q0UGFIIRmHgkNhGadaWsId3s2P12hm9CzrhT/Q9sDi4irjB3o
-        kYw7RWXnq0YD2V9dU3RULTFRjb08tNkinf5Cvuyg8J7heeAXxMDG2ANJxaGpRWSR
-        n+ynxF+I1+NbL4oF6sVI/kDTvz3ArGPH3GbOKxBWYCsoMHFbw3AO2aoMFKls1rPb
-        7TFHBR/tuXsVX89rpRav1b2nifdR/TXY8FnVDeqAJQ==
-X-ME-Sender: <xms:oiouY2KziXEte8XQRGu10H_OBYTLdQ-ANjksg7-Hb-SEEbht0Eok4g>
-    <xme:oiouY-KIGbHetNhsQAK_x_YcWMZCxRCGdiwNnKMQcWxfWNSG5RTTCwLoFkeG1UJDj
-    CfWNARXEcnIPfA1hpI>
-X-ME-Received: <xmr:oiouY2usknzNEQraC9wRQTIkD1DTer3dh6XhAakB5PQDdXbdRqqR74sbO8ksf07kv45QE_ajwlpcp9Ujri2eVgQd5tPiWwxf>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefjedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:oiouY7b34tLWMVfuI-XeH3hM-SPLJUXSmm1R9HAw9wTklFQfUb2W_A>
-    <xmx:oiouY9bAPCE5K1gYZA4zDqKhAPqc3YFYiMP7oFQUDl2VbesrHpIhDA>
-    <xmx:oiouY3D7TJYKSkNqSLmCxxnXj15Aq0aBUe1hb1p3fYCSjzPBsxL0GQ>
-    <xmx:oiouY7OFwT7R_aZTzzHWB0SamZvjiP7h1a4899y2prrRObLSF3Aqrg>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 23 Sep 2022 17:52:34 -0400 (EDT)
-Date:   Fri, 23 Sep 2022 16:52:33 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v4] ARM: dts: aspeed: yosemit V2: Enable OCP debug card
-Message-ID: <Yy4qofFUIxudLxbS@heinlein>
-References: <20220921064309.GA18932@hcl-ThinkPad-T495>
+        Fri, 23 Sep 2022 18:02:45 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2421EDD3B;
+        Fri, 23 Sep 2022 15:02:43 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id 6B5201A0739;
+        Fri, 23 Sep 2022 22:02:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id B26E420028;
+        Fri, 23 Sep 2022 22:02:19 +0000 (UTC)
+Message-ID: <ac809b03c78355b52c4ce936cc5a4ed3dd303441.camel@perches.com>
+Subject: Re: [PATCH v9 09/10] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+From:   Joe Perches <joe@perches.com>
+To:     Han Jingoo <jingoohan1@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        torvalds@linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia.Lawall@inria.fr, krzysztof.kozlowski@linaro.org
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee@kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        mazziesaccount@gmail.com, andriy.shevchenko@linux.intel.com,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Date:   Fri, 23 Sep 2022 15:02:28 -0700
+In-Reply-To: <CAPOBaE7mcNqgQvsPpqewmq=Na9MC9RH5AW8CHn5ZJFAUsq6_eg@mail.gmail.com>
+References: <20220830034042.9354-2-peterwu.pub@gmail.com>
+         <20220830034042.9354-10-peterwu.pub@gmail.com>
+         <CAPOBaE7rz2F-sij-LbYau6TRxFoOfmoUc=R__Z7iUrFWmZPgrg@mail.gmail.com>
+         <CABtFH5+PuK4vptVNmpn4h2FCxNFp3wWvhUrOxgqArx4YxCY99w@mail.gmail.com>
+         <CAHp75VeRgRdv54yO51nBwKx8O2pNLvOD2mrqn31zvx4ffSpCHw@mail.gmail.com>
+         <CAPOBaE7mcNqgQvsPpqewmq=Na9MC9RH5AW8CHn5ZJFAUsq6_eg@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wHWYLb7Xs2B5C7b+"
-Content-Disposition: inline
-In-Reply-To: <20220921064309.GA18932@hcl-ThinkPad-T495>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
+X-Stat-Signature: icdqc5u914mweh6876zxemizkb1yinja
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: B26E420028
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
         version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX180tjz2i84oRN7SAvJ/UKULO1Sz9+vBSi8=
+X-HE-Tag: 1663970539-507553
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-09-23 at 14:34 -0700, Han Jingoo wrote:
+> On Wed, Sep 21, 2022 Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > 
+> > On Wed, Sep 21, 2022 at 4:48 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > > On Sun, Sep 18, 2022 at 3:22 AM Han Jingoo <jingoohan1@gmail.com> wrote:
+> > > > On Mon, Aug 29, 2022 ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > 
+> > > > > +#define MT6370_ITORCH_MIN_uA           25000
+> > > > > +#define MT6370_ITORCH_STEP_uA          12500
+> > > > > +#define MT6370_ITORCH_MAX_uA           400000
+> > > > > +#define MT6370_ITORCH_DOUBLE_MAX_uA    800000
+> > > > > +#define MT6370_ISTRB_MIN_uA            50000
+> > > > > +#define MT6370_ISTRB_STEP_uA           12500
+> > > > > +#define MT6370_ISTRB_MAX_uA            1500000
+> > > > > +#define MT6370_ISTRB_DOUBLE_MAX_uA     3000000
+> > > > 
+> > > > Use upper letters as below:
+> > 
+> > For microseconds (and other -seconds) the common practice (I assume
+> > historically) is to use upper letters, indeed. But for current it's
+> > more natural to use small letters for unit multiplier as it's easier
+> > to read and understand.
 
---wHWYLb7Xs2B5C7b+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think it's fine. see:
 
+commit 22735ce857a2d9f4e6eec37c36be3fcf9d21d154
+Author: Joe Perches <joe@perches.com>
+Date:   Wed Jul 3 15:05:33 2013 -0700
 
-> Subject: [PATCH v4] ARM: dts: aspeed: yosemit V2: Enable OCP debug card
+    checkpatch: ignore SI unit CamelCase variants like "_uV"
+    
+    Many existing variable names use SI like variants that should be otherwise
+    obvious and acceptable.
 
-Please double-check your spelling of commit messages.  You've misspelled
-"yosemite" here, which gives an impression that it is quite likely that
-other things are wrong with your commit.
-
-On Wed, Sep 21, 2022 at 12:13:09PM +0530, Karthikeyan Pasupathi wrote:
-> Added IPMB-13 channel for Debug Card communication.
-> which improve the readability of the machine and makes
-> easier to debug the server.  and it will display the some
-> informations about the server like "system info",
-> "Critical sensors" and "critical sel".
->=20
-> ---
-> --- v4- Resolved syntax error
-> --- v3- Updated the title and commit
-> --- v2- Updated the title
-> --- v1- Initial draft
-> ---
->=20
-> Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-> ---
->  arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/=
-arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> index 8864e9c312a8..84236df522dc 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> @@ -215,6 +215,17 @@
->  	};
->  };
-> =20
-> +&i2c13 {
-> +	status =3D "okay";
-> +	// Debug Card
-> +	multi-master;
-> +	ipmb13@10 {
-> +		compatible =3D "ipmb-dev";
-> +		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
->  &pwm_tacho {
->  	status =3D "okay";
->  	//FSC
-> --=20
-> 2.17.1
->=20
-
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
-
---=20
-Patrick Williams
-
---wHWYLb7Xs2B5C7b+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmMuKqEACgkQqwNHzC0A
-wRkAfxAAhLE3Aykgvtr1bC+tjK+SlTLbEJx1tviuSQLRCJQiG4svJWTSiVWsukmU
-lRYBTtx5wWtTAKTMcltlihOLgUmvhp9WmELC/LlCZqNTvx9CFZk6zwM4LkaFW7SJ
-+L/rL3ecLmP4QhAia9j5+pkZH/EVeN5gfuiYgeGFgDTx2cQAJ9614rBUpalcCnBZ
-Spc4CmZeOkmMv88RmU0NqvnLEnOXBTATWKpxh+3VbPHFa2xmMqcvleWA4cDAI4li
-nAyudDPMpOv/wg8ofjtPypfFNqG+tFZRU7Fdcqd5NJwkFMlGfC49aaNKbpkivy32
-EY/95D/rcfl7bQey4BHoUB8CaSMGFsyFw9Z/YalLZ57EiZ4YAKAEWgPAWzQU1yJb
-PjDyXwnQh12jvOG79XdVRWELWO3qvjszhcCAknTrBxerCceC8Ga+cA1sm5eoZR1N
-VSK2KP3FhL4yST8OEFU2C2yvgKYi9xpRPB12/po5mTMPlxbsPFlJ8IJxGT1NGsqP
-Ip4vsiKX7RR1sJ+WAr77gcfNrN8pvScm3gLlluah+JMPr23ZGgBlIGPl4FTk/xgS
-VMBGcO9zfcc+8BKmgJZ7Yc8hfu7TEq3XoM3cP0VR38mO3BKwvx+hcHiVO2xSKKDU
-S+c0oNAo4Z0oJIveoA8ucTBVHTWs4PZZVCKE9kYRTS1TTpnIuPg=
-=mMuK
------END PGP SIGNATURE-----
-
---wHWYLb7Xs2B5C7b+--
