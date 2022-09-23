@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DB95E7657
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C45E5E765F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiIWI6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S231537AbiIWJAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbiIWI6S (ORCPT
+        with ESMTP id S231464AbiIWJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:58:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF4912C6BD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:58:18 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 05B17660223B;
-        Fri, 23 Sep 2022 09:58:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663923496;
-        bh=TtjCeYOKDFThjw+4dvKD2IYNwoiHybT6ddMpEd9VHdE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O74axDIWWHuxdFAV+18mWU5cgcKNGxmjpgM/CgsKtwAObBN/wV0cYBMzAEI369zv6
-         q5ADViaqzPXApn8bP2RUEMEjpTTFEHjTStXgxWdciXUqeQd5Lu5eOX92TkD8TJ5JKQ
-         L/iNYYK/PYvFFzp9GDYIiRZSRLGWzBfxlIRAOBdR2oXrm+dhxxFc8BCSZI4BJyzvE8
-         m6bZ8zu2lfizlkrTpA74weDDW+bYyCjnRXalbuM5Q29pRMMdN1xp+SVRO9weaEtvLR
-         U61NcolypqZzUfkg0EkjeKMv24pPw3gx6YeMMz3GgxLDnyY/3UhneImx1x72qQNAM4
-         0XW0jUfiSW62g==
-Message-ID: <2e65843f-75b5-2e66-f7a0-96ac8925a1f5@collabora.com>
-Date:   Fri, 23 Sep 2022 10:58:13 +0200
+        Fri, 23 Sep 2022 05:00:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4C3FFA70
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:00:15 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYmJV2fhdzHpjW;
+        Fri, 23 Sep 2022 16:58:02 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 17:00:13 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <bsegall@google.com>,
+        <mgorman@suse.de>, <bristot@redhat.com>, <vschneid@redhat.com>,
+        <cuigaosheng1@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ftrace: Remove obsoleted code from ftrace and task_struct
+Date:   Fri, 23 Sep 2022 17:00:12 +0800
+Message-ID: <20220923090012.505990-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 2/6] ASoC: mediatek: mt8195: Expose individual headset
- jack pins
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220922235951.252532-1-nfraprado@collabora.com>
- <20220922235951.252532-3-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220922235951.252532-3-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/09/22 01:59, Nícolas F. R. A. Prado ha scritto:
-> The rt5682 codec is able to distinguish between two event types:
-> headphone insertion/removal and headset microphone insertion/removal.
-> However, currently, the mt8195 ASoC driver exposes a single kcontrol
-> for the headset jack, so userspace isn't able to differentiate between
-> the two events.
-> 
-> Add a definition for the headset jack pins, so that a separate jack
-> kcontrol is created for each one, allowing userspace to track and handle
-> them individually.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+The trace of "struct task_struct" was no longer used since
+commit 345ddcc882d8 ("ftrace: Have set_ftrace_pid use the
+bitmap like events do"), and the functions about flags for
+current->trace is useless, so remove them.
 
-Nit: for the title... ASoC: mediatek: mt8195-mt6359: ....
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ include/linux/ftrace.h | 41 -----------------------------------------
+ include/linux/sched.h  |  3 ---
+ 2 files changed, 44 deletions(-)
 
-Apart from that,
-
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-[On MT8195 Cherry Tomato Chromebook]
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 0b61371e287b..62557d4bffc2 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -1122,47 +1122,6 @@ static inline void unpause_graph_tracing(void) { }
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+ 
+ #ifdef CONFIG_TRACING
+-
+-/* flags for current->trace */
+-enum {
+-	TSK_TRACE_FL_TRACE_BIT	= 0,
+-	TSK_TRACE_FL_GRAPH_BIT	= 1,
+-};
+-enum {
+-	TSK_TRACE_FL_TRACE	= 1 << TSK_TRACE_FL_TRACE_BIT,
+-	TSK_TRACE_FL_GRAPH	= 1 << TSK_TRACE_FL_GRAPH_BIT,
+-};
+-
+-static inline void set_tsk_trace_trace(struct task_struct *tsk)
+-{
+-	set_bit(TSK_TRACE_FL_TRACE_BIT, &tsk->trace);
+-}
+-
+-static inline void clear_tsk_trace_trace(struct task_struct *tsk)
+-{
+-	clear_bit(TSK_TRACE_FL_TRACE_BIT, &tsk->trace);
+-}
+-
+-static inline int test_tsk_trace_trace(struct task_struct *tsk)
+-{
+-	return tsk->trace & TSK_TRACE_FL_TRACE;
+-}
+-
+-static inline void set_tsk_trace_graph(struct task_struct *tsk)
+-{
+-	set_bit(TSK_TRACE_FL_GRAPH_BIT, &tsk->trace);
+-}
+-
+-static inline void clear_tsk_trace_graph(struct task_struct *tsk)
+-{
+-	clear_bit(TSK_TRACE_FL_GRAPH_BIT, &tsk->trace);
+-}
+-
+-static inline int test_tsk_trace_graph(struct task_struct *tsk)
+-{
+-	return tsk->trace & TSK_TRACE_FL_GRAPH;
+-}
+-
+ enum ftrace_dump_mode;
+ 
+ extern enum ftrace_dump_mode ftrace_dump_on_oops;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 5cdf746988a1..77f68f8b795c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1402,9 +1402,6 @@ struct task_struct {
+ #endif
+ 
+ #ifdef CONFIG_TRACING
+-	/* State flags for use by tracers: */
+-	unsigned long			trace;
+-
+ 	/* Bitmask and counter of trace recursion: */
+ 	unsigned long			trace_recursion;
+ #endif /* CONFIG_TRACING */
+-- 
+2.25.1
 
