@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276B95E805A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2045E806E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbiIWRHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S231160AbiIWRKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiIWRHM (ORCPT
+        with ESMTP id S232287AbiIWRKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:07:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F51D14A7BE
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:07:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D95E961D29
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39DEC433C1;
-        Fri, 23 Sep 2022 17:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663952830;
-        bh=Zi+X8uctJFup7TbjedrP/+Pjx2XQ+XyqRpfIjKiqz5c=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BSztG1GiNRCbiEZ9nEehKrwGLVvxFPufNR7ae5EdtcCrBEyGfjiDER6M94hGNwPNv
-         lcHYxiQqfrT8g//ifN58fpdYsf2CPW9fNyQQO5sjASPDwdnUFSJbNVGgzFftJ2vg0P
-         IRen6gE0IZDx1OJyeDHtK6KgMRjiiixkSABZPXlRP5lHekakdq7QirLfmRI5gD6429
-         yNqqo53SzDDFrv9aqeTtQJ54TrEtW5XOdc1wV5L29+TUyA1CJ6cb3xv4kXFpVsPHab
-         a2qaaOXHeBlD1mCx2b5Wze/Rh5fl8s67jApIgjzEpefkSHu3QODtK/t7KxIiZ1Yc7X
-         NUgtnGYHOla9A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     patches@lists.linux.dev,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220922153752.336193-1-nathan@kernel.org>
-References: <20220922153752.336193-1-nathan@kernel.org>
-Subject: Re: [PATCH -next] ASoC: Intel: sof_da7219_mx98360a: Access num_codecs through dai_link
-Message-Id: <166395282771.610218.7443739355228325098.b4-ty@kernel.org>
-Date:   Fri, 23 Sep 2022 18:07:07 +0100
+        Fri, 23 Sep 2022 13:10:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5B41162DB;
+        Fri, 23 Sep 2022 10:10:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9C334219EC;
+        Fri, 23 Sep 2022 17:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663953043; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZSPBzEUu4HvvRKKrmrdU/FMS6Qx20fLyxT3yF1tghgc=;
+        b=uumJiLIU2hCeUjB//pYmunQ3XhUTmH5n97IVRpx0df4OZYv5fuXBQ0xekIy4XJccvKNdf+
+        ZZ2q/2pniI8zXucmq84IOe9+SqdEoZRhNamUxbx08sYZ/Rz9mhwPlaqhD1IuXjRA5vy2v5
+        Iqu37b4i4NZhqLy45/3MLfqEcVgd2Os=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663953043;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZSPBzEUu4HvvRKKrmrdU/FMS6Qx20fLyxT3yF1tghgc=;
+        b=Fngpn3ub5IEe7UJDgzoo8OBgYwiwTJAr8CYGfJ5/Ppmar1cb8XYsiESPKo8Bi3lpB3A8SE
+        scN82gpoaRkfC7CQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 44B9C2C15B;
+        Fri, 23 Sep 2022 17:10:41 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        linux-s390@vger.kernel.org (open list:S390),
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
+        (AARCH64 ARCHITECTURE)),
+        linuxppc-dev@lists.ozlabs.org (open list:LINUX FOR POWERPC (32-BIT AND
+        64-BIT)), kexec@lists.infradead.org (open list:KEXEC),
+        Coiby Xu <coxu@redhat.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James Morse <james.morse@arm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: [PATCH 5.15 0/6] arm64: kexec_file: use more system keyrings to verify kernel image signature + dependencies
+Date:   Fri, 23 Sep 2022 19:10:28 +0200
+Message-Id: <cover.1663951201.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,41 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022 08:37:52 -0700, Nathan Chancellor wrote:
-> After commit 3989ade2d1e7 ("ASoC: soc.h: remove num_cpus/codecs"), the
-> following build error occurs:
-> 
->   sound/soc/intel/boards/sof_da7219_max98373.c:198:27: error: no member named 'num_codecs' in 'struct snd_soc_pcm_runtime'
->           for (j = 0; j < runtime->num_codecs; j++) {
->                           ~~~~~~~  ^
->   1 error generated.
-> 
-> [...]
+Hello,
 
-Applied to
+this is backport of commit 0d519cadf751
+("arm64: kexec_file: use more system keyrings to verify kernel image signature")
+to table 5.15 tree including the preparatory patches.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Some patches needed minor adjustment for context.
 
-Thanks!
+Thanks
 
-[1/1] ASoC: Intel: sof_da7219_mx98360a: Access num_codecs through dai_link
-      commit: 0402cca4828dd9556d36ddef67710993b7063f7c
+Michal
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Coiby Xu (3):
+  kexec: clean up arch_kexec_kernel_verify_sig
+  kexec, KEYS: make the code in bzImage64_verify_sig generic
+  arm64: kexec_file: use more system keyrings to verify kernel image
+    signature
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Naveen N. Rao (2):
+  kexec_file: drop weak attribute from functions
+  kexec: drop weak attribute from functions
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Sven Schnelle (1):
+  s390/kexec_file: move kernel image size check
 
-Thanks,
-Mark
+ arch/arm64/include/asm/kexec.h        | 20 ++++++-
+ arch/arm64/kernel/kexec_image.c       | 11 +---
+ arch/powerpc/include/asm/kexec.h      | 14 +++++
+ arch/s390/boot/head.S                 |  2 -
+ arch/s390/include/asm/kexec.h         | 14 +++++
+ arch/s390/include/asm/setup.h         |  1 -
+ arch/s390/kernel/machine_kexec_file.c | 17 +-----
+ arch/x86/include/asm/kexec.h          | 12 ++++
+ arch/x86/kernel/kexec-bzimage64.c     | 20 +------
+ include/linux/kexec.h                 | 82 ++++++++++++++++++++++----
+ kernel/kexec_core.c                   | 27 ---------
+ kernel/kexec_file.c                   | 83 ++++++++++-----------------
+ 12 files changed, 163 insertions(+), 140 deletions(-)
+
+-- 
+2.35.3
+
