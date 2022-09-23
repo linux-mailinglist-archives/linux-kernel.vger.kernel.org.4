@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65F55E7E6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7790B5E7E69
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiIWPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S232626AbiIWPaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiIWPaL (ORCPT
+        with ESMTP id S231864AbiIWPaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 11:30:11 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38189A025C;
-        Fri, 23 Sep 2022 08:30:10 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so981814wml.5;
-        Fri, 23 Sep 2022 08:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=gg7c3+nPaOD0UzlmBSknHTXtYlfYqSbcyWP/vuEk7iw=;
-        b=AdqWNyJmseV6WkMJUgNEnikY3m5LuH3gfZwjmnoZmqoNeG7+bJYlRYwdr3WDrFIDtp
-         uWJCiknjsHSeVTL4PTPcH5pXuUt1EEmRw1uJdffkceAgBhE+VivNBfKFZFLuJrIMd8db
-         xTuzchA6U2Z8C5R+GtV9smjSqJQzc1YkkfZJb9L32Gr2zlGz0DmYpyGKfumF9iFKgPPv
-         nsswJBKkSBRXgsLrDEhcDxBr3HfYVqUGw6NVQbLcapstY0itJt63tn3e22h1beIodCoQ
-         lgLJYFjR3M1HWM7sD59Rjryd2iKlu0scsSLKOCrHtB2mxRhuyGP+V+Aos5yvyDkfNY27
-         2eCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=gg7c3+nPaOD0UzlmBSknHTXtYlfYqSbcyWP/vuEk7iw=;
-        b=kfVa+LDvmHIviYFtwQpySNLhwzzwSA1Br9Rg4HFZbexcItlD7JMdxy3DT82HxwFs31
-         scFtiurd/zd6udVtaKJfdPX8LJ3+zcLvCusX8U8unBdBrLfpnuo46f8T5JsVrtooewGK
-         867rlnnnLCJv3Sxzy/PYuugyv2atSChwLjCYsQuVlN2YkgBNgVRkDizyflVScKiIB0+4
-         SUY6/PyBugaU4gpb4hsvTLUHUJU9Vwdxu+wnTGLTJW8+2eXtPeCt3xwpcYXp4IA+APe3
-         JjXmpXYIEcm/cwVoU+SytKN0agdSixXWf4JX1L1paVCuQd5zGBHN3WukBdUnu9nNWqik
-         S6Cw==
-X-Gm-Message-State: ACrzQf1y3WXa5s4j2L86/ISYOmCWkwtOM77CeefpGMrH+DfHL0/mBsfu
-        ZyDoVxaV5V2OeBhTuDXTYL9BIxWaHLSEYl7CUAk395XyiuI=
-X-Google-Smtp-Source: AMsMyM5RTWD4gU/b2HEuIL0niREH20lZYx8/WgJjmlRiiIZpt6drIFCBzdIEnFEi4AQh9EeHig0PGCUiPV7ptw59K/8=
-X-Received: by 2002:a05:600c:4e44:b0:3b4:bed2:4f5e with SMTP id
- e4-20020a05600c4e4400b003b4bed24f5emr13737730wmq.193.1663947008663; Fri, 23
- Sep 2022 08:30:08 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B4A9FAB5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:30:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD6CFB80B3A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:30:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545E4C433C1;
+        Fri, 23 Sep 2022 15:30:04 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 11:31:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: printk meeting at LPC 2022
+Message-ID: <20220923113107.79d3e013@gandalf.local.home>
+In-Reply-To: <875yheqh6v.fsf@jogness.linutronix.de>
+References: <20220910221947.171557773@linutronix.de>
+        <87h71cr1gb.fsf@jogness.linutronix.de>
+        <875yheqh6v.fsf@jogness.linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Jeff Harris <jefftharris@gmail.com>
-Date:   Fri, 23 Sep 2022 11:29:52 -0400
-Message-ID: <CAGMfbUO=Zy_nXJ9wKV5r2xRBuK7_X3kL2TvM1jWB_hTPUvhnbw@mail.gmail.com>
-Subject: serial: New xr20m117x driver questions
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have a driver for the MaxLinear XR20M117x family of UARTs that I'd like
-to contribute but have a couple questions.  The driver is heavily based on
-the existing sc16is7xx driver.  The driver started with the sample driver
-from MaxLinear for Linux 3.x.x, but as the integration of their driver
-proceeded into our 4.4 kernel, there were features and fixes missing that
-were present in the current sc16is7xx driver.
+On Fri, 23 Sep 2022 16:55:28 +0206
+John Ogness <john.ogness@linutronix.de> wrote:
 
-The register set is similar, but there are a few places where the behavior
-is different.  Would it be best to create a new driver or add the XR20M117x
-UARTs to the sc16is7xx driver with a flag to choose one behavior or the
-other?
+>   All other consoles could then be tried as a "last hope" at the very
+>   end of panic(), after all records have been flushed to reliable
+>   consoles and when it no longer matters if a console kills the CPU. For
+>   non-panic emergencies (warn, rcu stalls, etc), there may be other
+>   flags that would be needed.
 
-I have developed and tested the driver as a back-port of the mainline
-sc16is7xx driver to the 4.4 kernel used on our embedded platform.  I don't
-have a ready method to test the driver with a newer kernel (other than
-ensuring compilation success).  Is that a concern for accepting the driver?
+I think we may need to check if kexec is involved. We don't want one of
+these "last hope" consoles to lock up the system preventing kexec to occur.
 
-Part link:
-https://www.maxlinear.com/product/interface/uarts/i2c-spi-uarts/xr20m1172
+But if there's no kexec, and the system is just going to lock up anyway,
+then sure go ahead and call the unsafe consoles.
 
-Thanks,
-Jeff
+-- Steve
