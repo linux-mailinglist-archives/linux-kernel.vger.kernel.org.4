@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C1C5E70D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03605E70E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiIWAr7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 20:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S231836AbiIWAtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiIWAr5 (ORCPT
+        with ESMTP id S231948AbiIWAsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:47:57 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8FDE21F7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:47:57 -0700 (PDT)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 8DAAF40B3E;
-        Fri, 23 Sep 2022 00:47:55 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id BD6E32F;
-        Fri, 23 Sep 2022 00:47:41 +0000 (UTC)
-Message-ID: <34b60d0ed48e4384e82a29020702ee2471092fb1.camel@perches.com>
-Subject: Re: [PATCH] fs/ntfs3: fix negative shift size in
- true_sectors_per_clst()
-From:   Joe Perches <joe@perches.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Shigeru Yoshida <syoshida@redhat.com>
-Cc:     syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, ntfs3@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 22 Sep 2022 17:47:51 -0700
-In-Reply-To: <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
-References: <000000000000f8b5ef05dd25b963@google.com>
-         <4b37f037-3b10-b4e4-0644-73441c8fa0af@I-love.SAKURA.ne.jp>
-         <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 22 Sep 2022 20:48:46 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AB61129CB;
+        Thu, 22 Sep 2022 17:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+EJcVW2EYUNXTqhRfx0vxCPdYZJqDOXK42F5LbtSHP8=; b=4gYXKlbluRK7YU/49QiPRDi0qq
+        oq3ibUPXcr5NnhrkkRYxy8ivVHOAcyy0fu1w/h5+7vC7XaOebzxOqmBYkYTHWnuL+kuai5e/e8tof
+        OhmWDDiUXfmB1uv2hedGyd+F+lgF/lVAK+bt4aH5jW++/OhiYczw8pU0jJSWEpfOYOqI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1obWrj-00HaDh-Pw; Fri, 23 Sep 2022 02:48:27 +0200
+Date:   Fri, 23 Sep 2022 02:48:27 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v6 6/7] dt-bindings: net: pse-dt: add bindings
+ for regulator based PoDL PSE controller
+Message-ID: <Yy0CWwN7lx36geg1@lunn.ch>
+References: <20220921124748.73495-1-o.rempel@pengutronix.de>
+ <20220921124748.73495-7-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: BD6E32F
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: eo3ixo5odzpwpf9s5tiwmc7efjghe9qh
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/xx4yzr8Tvi0rO8ab9gqFKolV42Rk2IkU=
-X-HE-Tag: 1663894061-333989
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921124748.73495-7-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 17:38 -0700, Randy Dunlap wrote:
-> it appears that the NTFS3 maintainer is MIA again. :(
+On Wed, Sep 21, 2022 at 02:47:46PM +0200, Oleksij Rempel wrote:
+> Add bindings for the regulator based Ethernet PoDL PSE controller and
+> generic bindings for all PSE controllers.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-(I've no affiliation with the NTFS3 maintainer or paragon)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Perhaps the expectation of prioritized immediate turnaround is unrealistic.
-
-It's free.  Be patient.
-
+    Andrew
