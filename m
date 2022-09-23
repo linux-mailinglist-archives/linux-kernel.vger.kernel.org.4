@@ -2,149 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28195E7E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AC85E7E35
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiIWPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S232496AbiIWPV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbiIWPVC (ORCPT
+        with ESMTP id S232565AbiIWPVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:21:02 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30BB5A73
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:20:59 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id k10so817653lfm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=buJ2Vw0w3M4WrtI5/DU3oXsQobrkkmx9rFyElDeN7mE=;
-        b=e4OQSAjFu3gpxUO4Unn7HPTzW4khEaeLVPKzk0HjIO1WzfoYTIkCo/F1RYrvwR66SF
-         JwCMt5XxADhIKzoYXxMVuOAC/AuI4zxQZgSxUcFBjf8hrr2yXlfmAMcitgt6vZxhWH7Z
-         +VIcwj2/Ns3wteLBkCd1UIvA6lB5eXh/e73AYfVmUkfoy7XbWsS6Q2HYL5D+SrhsOsPZ
-         qOl0jP48UI31PUrNDZzwE9j3uXZ/4o/lWYfvXhojlsVXKd3GrscU+YcreZEHR9zMjYjf
-         xc0uDmUYT7UwO9Q1pGoCLduSZHAasvlCEIMiRTg83bldOSofpAYj2YT99ZO5jc8hyvkT
-         Y9Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=buJ2Vw0w3M4WrtI5/DU3oXsQobrkkmx9rFyElDeN7mE=;
-        b=CdXlBwxQvfBAasSO4O6pkOJqGdEDZJDZYhBQHlEeiREAhd2/+eVGBHQOEoe0GTo+m5
-         dc/0raj849NYiPVeRPhXb+SJATUVQr41CdddWqp24W+17JjchNpLjpWO2N535BHb6vf0
-         JFmxLLbxVh4P6wqjKwKEEXS6OxsJJTgQR+c1VHIJzjle5IoVj5EP32+MnFzRQXdRdoeg
-         tLsk6AmrhN4p5bRO0USPMEe7ENSkf/FaIT1YO1+8Z+cJoDNT4oYRHDtPRXrnZ09uggRx
-         3HI20GOIHE//632nqsjtLu8kfobqTjQpiQ74I86NTSVShVAJ7xt/QzrYl/w/NPm5cIQj
-         3RQQ==
-X-Gm-Message-State: ACrzQf2PLlmcTuVOJG95FxC4Pzms+MVks30mtOZ8Bj1P1HPcitkUH2Nl
-        pzmZiFkQda5FtzJ6zp6JfZwl8dkCw5z9LIjjw1mdqw==
-X-Google-Smtp-Source: AMsMyM7tQgOI6niyU5IXyfNHgsog0iDYl0WXgb5yVh7a8oMMnxo4TbbSeRkhbm4RLcMIb8opCLgiEX29WHKjDwAENJs=
-X-Received: by 2002:a05:6512:b85:b0:499:202a:bde9 with SMTP id
- b5-20020a0565120b8500b00499202abde9mr3630798lfv.550.1663946457534; Fri, 23
- Sep 2022 08:20:57 -0700 (PDT)
+        Fri, 23 Sep 2022 11:21:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9393DF192C;
+        Fri, 23 Sep 2022 08:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663946491; x=1695482491;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=knBQ7zAmYT9oqE/HB/kSwqI8AwDgZ/tNqaN2kNiG/Dc=;
+  b=FM8izTCSgK6EaEHmAAemZhpfH8bVe4mwHrWxO9B2ZYdnV4UHQY830Qjt
+   S8eTJlsB1ypbsuK33Neg2AMZzr6BkwIVeH2KlhsU1q63lNUgZSle5b1uy
+   /dkQITGYQFUaMIC23jaC7p0WH8JChmzfhQJoYlpLTkdM9OHPYg5cjiWWC
+   69uKUO4ohlqQNuUiewNi2+kI7sReHeKh4FI2jmT146zMjf8CJDqoOrwyh
+   olJkKh2iMHiXEySu0bKgLjFG3nRlhYU0r3plgBep/wVuBHIqTctOmat0D
+   iJSrAAH2ayaKd28i8Q3ieiEy8/jtg5lMXzdHFt0emNFQ5/tK7CtTvK1fw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="283713146"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="283713146"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:21:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="762647111"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Sep 2022 08:21:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obkUH-006WBG-0B;
+        Fri, 23 Sep 2022 18:21:09 +0300
+Date:   Fri, 23 Sep 2022 18:21:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX interrupts
+Message-ID: <Yy3O5OeDjJ99g/M2@smile.fi.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
+ <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <DS0PR11MB63734D4DF4C4F368805EC97DDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Yyy8Pp0Y4NRzIzNw@google.com> <20220923005319.wkzpl36uailh4zbw@box.shutemov.name>
-In-Reply-To: <20220923005319.wkzpl36uailh4zbw@box.shutemov.name>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Fri, 23 Sep 2022 16:20:21 +0100
-Message-ID: <CA+EHjTy+2JG_=Xw5ojwZAW6+3Nr4-4a8YCBxWN5PmAhh7jjT+A@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Sep 23, 2022 at 05:17:43AM -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Define and use a DFHv1 parameter to add generic support for MSIX
+> interrupts for DFL devices.
 
-On Fri, Sep 23, 2022 at 1:53 AM Kirill A . Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Thu, Sep 22, 2022 at 07:49:18PM +0000, Sean Christopherson wrote:
-> > On Thu, Sep 22, 2022, Wang, Wei W wrote:
-> > > On Thursday, September 15, 2022 10:29 PM, Chao Peng wrote:
-> > > > +int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
-> > > > +                  int *order)
-> > >
-> > > Better to remove "order" from this interface?
-> >
-> > Hard 'no'.
-> >
-> > > Some callers only need to get pfn, and no need to bother with
-> > > defining and inputting something unused. For callers who need the "order",
-> > > can easily get it via thp_order(pfn_to_page(pfn)) on their own.
-> >
-> > That requires (a) assuming the pfn is backed by struct page, and (b) assuming the
-> > struct page is a transparent huge page.  That might be true for the current
-> > implementation, but it most certainly will not always be true.
-> >
-> > KVM originally did things like this, where there was dedicated code for THP vs.
-> > HugeTLB, and it was a mess.  The goal here is very much to avoid repeating those
-> > mistakes.  Have the backing store _tell_ KVM how big the mapping is, don't force
-> > KVM to rediscover the info on its own.
->
-> I guess we can allow order pointer to be NULL to cover caller that don't
-> need to know the order. Is it useful?
+...
 
-I think that would be useful. In pKVM we don't need to know the order,
-and I had to use a dummy variable when porting V7.
+> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
 
-Cheers,
-/fuad
+> +
+
+Unneeded blank line.
+
+> +		v = FIELD_GET(DFH_VERSION, readq(base));
+> +		switch (v) {
+
+This v...
+
+> +		case 0:
+> +			break;
+> +
+> +		case 1:
+> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+
+Extra space.
+
+...and this v are semantically different. It's quite hard to deduce their
+semantics.
+
+> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
+> +						     DFHv1_PARAM_ID_MSIX);
+
+I guess I have suggested to use temporary variable(s) here.
+
+			void __iomem *dfhv1 = base + DFHv1...;
+			void __iomem *nth;
+
+> +				if (off >= 0) {
+
+					nth = dfhv1 + off;
+
+> +					ibase = readl(base + DFHv1_PARAM_HDR +
+> +						      off + DFHv1_PARAM_MSIX_STARTV);
+> +					inr = readl(base + DFHv1_PARAM_HDR +
+> +						    off + DFHv1_PARAM_MSIX_NUMV);
+
+					ibase = readl(nth + DFHv1_PARAM_MSIX_STARTV);
+					inr = readl(nth + DFHv1_PARAM_MSIX_NUMV);
+
+> +					dev_dbg(binfo->dev, "start %d num %d fid 0x%x\n",
+> +						ibase, inr, fid);
+> +				}
+> +			}
+> +			break;
+> +
+> +		default:
+> +			dev_warn(binfo->dev, "unexpected DFH version %lld\n", v);
+> +			break;
+> +		}
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
