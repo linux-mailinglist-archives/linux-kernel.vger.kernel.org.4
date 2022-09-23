@@ -2,182 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DA55E7562
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FC45E756C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiIWIGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S231148AbiIWIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiIWIGL (ORCPT
+        with ESMTP id S230369AbiIWIHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:06:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6810D11D627
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:06:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D8075219EA;
-        Fri, 23 Sep 2022 08:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663920368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W32O2yVRih3gwoLv5jL3J0R/1OnRljKFS2FDN0VocOE=;
-        b=Pl+SdTc+QcZJWIEU7QfsDd9fWk+tzpEKp98gH4KLelmFYEfxGSkZDcpoW93NPCiQEEZlRA
-        1/U+svWsV7gEff7FfI+aU0ZK3lquksmd+Ub4khv76ZN+gNsorAqcgk9Fm61CGQm67HM4gW
-        7yVWAAJIOCnqk4Gn3Ot22Qei23yZeEc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663920368;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W32O2yVRih3gwoLv5jL3J0R/1OnRljKFS2FDN0VocOE=;
-        b=NEpLtuMet7hLasS4xxYkCmyMQfFFoYvb6ECDUGdet0SLgusoImC7tJ/mUOcja0Sxt59rAE
-        jJ3Ap0C7aW+8EYDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56F2E13AA5;
-        Fri, 23 Sep 2022 08:06:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MOJIFPBoLWNLfwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 23 Sep 2022 08:06:08 +0000
-Message-ID: <73cd87f9-655a-5510-f3f7-e552dcefdf0d@suse.de>
-Date:   Fri, 23 Sep 2022 10:06:07 +0200
+        Fri, 23 Sep 2022 04:07:47 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE0612AEC7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663920467; x=1695456467;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=uBsTZao/V9u69Rkv2ClXIbFBUPJIjmVzZTRL2kTNlC8=;
+  b=kqQRtQyhPFfaRvQZT3NFJdc5xuHNGGEABL4IyDrdr6UcLCqpW3sXsxu+
+   LKEUy1c06GtbkPAE59zPTzN1QiGcqEx8vH2+33vyM/Kf2Rzb7VwGp9LtJ
+   ouRBcwCtWrd0Ghmd6P52xDvAEuvy8GAMjArNw5lg2JJd12xmfv88S8XG4
+   YCjnkC3wuRvLvIp6xIV7sHpKI/XAdRz5ZVfF6pmGLiriMRe9mS2x3xl94
+   Nm/vdhIFvggD7MWr9GrID8E8bVNwVXm8qxG0uJfvPHQ4DZAfhmIKKHFfZ
+   cYHZKc1UumfDujxDwS09DVqlFYw+TyvU/QKNWJOsQpOZD9Ybhv98RG6/V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300525842"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="300525842"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:07:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="762533962"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:07:43 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [PATCH v4] mm/demotion: Expose memory tier details via sysfs
+References: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com>
+Date:   Fri, 23 Sep 2022 16:07:42 +0800
+In-Reply-To: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com> (Aneesh Kumar
+        K. V.'s message of "Thu, 22 Sep 2022 15:52:01 +0530")
+Message-ID: <874jwyjyy9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 01/33] drm/tests: Order Kunit tests in Makefile
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------009tUO10dHwudn8iU0mykD8M"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------009tUO10dHwudn8iU0mykD8M
-Content-Type: multipart/mixed; boundary="------------c3qicYVAnU4Lh99nFLW5qyTI";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Maxime Ripard <maxime@cerno.tech>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Ben Skeggs <bskeggs@redhat.com>,
- David Airlie <airlied@linux.ie>, Maxime Ripard <mripard@kernel.org>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Emma Anholt <emma@anholt.net>, Karol Herbst <kherbst@redhat.com>,
- Samuel Holland <samuel@sholland.org>,
- Jani Nikula <jani.nikula@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
- Lyude Paul <lyude@redhat.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Chen-Yu Tsai <wens@csie.org>
-Cc: Dom Cobley <dom@raspberrypi.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
- Phil Elwell <phil@raspberrypi.com>, linux-arm-kernel@lists.infradead.org
-Message-ID: <73cd87f9-655a-5510-f3f7-e552dcefdf0d@suse.de>
-Subject: Re: [PATCH v2 01/33] drm/tests: Order Kunit tests in Makefile
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
---------------c3qicYVAnU4Lh99nFLW5qyTI
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+> related details can be found. All allocated memory tiers will be listed
+> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>
+> The nodes which are part of a specific memory tier can be listed via
+> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
 
-DQoNCkFtIDIyLjA5LjIyIHVtIDE2OjI1IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gU2lu
-Y2Ugd2UndmUgcmVjZW50bHkgYWRkZWQgYSB0b24gb2YgdGVzdHMsIHRoZSBsaXN0IHN0YXJ0
-cyB0byBiZSBhIGJpdA0KPiBvZiBhIG1lc3MgYW5kIGNyZWF0ZXMgdW5uZWVkZWQgY29uZmxp
-Y3RzLg0KPiANCj4gTGV0J3Mgb3JkZXIgaXQgYWxwaGFiZXRpY2FsbHkuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBNYXhpbWUgUmlwYXJkIDxtYXhpbWVAY2Vybm8udGVjaD4NCg0KQWNrZWQt
-Ynk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IA0KPiBk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3Rlc3RzL01ha2VmaWxlIGIvZHJpdmVycy9n
-cHUvZHJtL3Rlc3RzL01ha2VmaWxlDQo+IGluZGV4IDkxYjcwZjdkMjc2OS4uMmQ5ZjQ5YjYy
-ZWNiIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdGVzdHMvTWFrZWZpbGUNCj4g
-KysrIGIvZHJpdmVycy9ncHUvZHJtL3Rlc3RzL01ha2VmaWxlDQo+IEBAIC0xLDUgKzEsMTMg
-QEANCj4gICAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICAgDQo+IC1v
-YmotJChDT05GSUdfRFJNX0tVTklUX1RFU1QpICs9IGRybV9mb3JtYXRfaGVscGVyX3Rlc3Qu
-byBkcm1fZGFtYWdlX2hlbHBlcl90ZXN0Lm8gXA0KPiAtCWRybV9jbWRsaW5lX3BhcnNlcl90
-ZXN0Lm8gZHJtX3JlY3RfdGVzdC5vIGRybV9mb3JtYXRfdGVzdC5vIGRybV9wbGFuZV9oZWxw
-ZXJfdGVzdC5vIFwNCj4gLQlkcm1fZHBfbXN0X2hlbHBlcl90ZXN0Lm8gZHJtX2ZyYW1lYnVm
-ZmVyX3Rlc3QubyBkcm1fYnVkZHlfdGVzdC5vIGRybV9tbV90ZXN0Lm8NCj4gK29iai0kKENP
-TkZJR19EUk1fS1VOSVRfVEVTVCkgKz0gXA0KPiArCWRybV9idWRkeV90ZXN0Lm8gXA0KPiAr
-CWRybV9jbWRsaW5lX3BhcnNlcl90ZXN0Lm8gXA0KPiArCWRybV9kYW1hZ2VfaGVscGVyX3Rl
-c3QubyBcDQo+ICsJZHJtX2RwX21zdF9oZWxwZXJfdGVzdC5vIFwNCj4gKwlkcm1fZm9ybWF0
-X2hlbHBlcl90ZXN0Lm8gXA0KPiArCWRybV9mb3JtYXRfdGVzdC5vIFwNCj4gKwlkcm1fZnJh
-bWVidWZmZXJfdGVzdC5vIFwNCj4gKwlkcm1fbW1fdGVzdC5vIFwNCj4gKwlkcm1fcGxhbmVf
-aGVscGVyX3Rlc3QubyBcDQo+ICsJZHJtX3JlY3RfdGVzdC5vDQo+IA0KDQotLSANClRob21h
-cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
-IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
-ZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhy
-ZXI6IEl2byBUb3Rldg0K
+It appears that XXXs is used for mask while XXXs_list is used for list?
+For example,
 
---------------c3qicYVAnU4Lh99nFLW5qyTI--
+# cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+0,00100004
+# cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+2,20
 
---------------009tUO10dHwudn8iU0mykD8M
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+It's better to follow the this convention?
 
------BEGIN PGP SIGNATURE-----
+> A directory hierarchy looks like
+> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
+> memory_tier4/
+> =E2=94=9C=E2=94=80=E2=94=80 nodes
+> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tiering
+> =E2=94=94=E2=94=80=E2=94=80 uevent
+>
+> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
+> 0,2
+>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMtaO8FAwAAAAAACgkQlh/E3EQov+B0
-hw/+LQ747nt5mB/33pcmDcLYpCscgMBYQNTV/Sz4gO0OeWb5p2GydGSx3oBbGoigBcPktrGYfbQ7
-ZOIMPQNHdVeUy73nL5nCvyVjiLM1YkwrD8JtwgS8YxBzTkiv6noQz3RgQJECkMFJToW+sjEZOofR
-cm9NVEiN6uvC3746K+O8/Tk4vQjqgWjUWmcjliRuao7r8SbLvPHDz3HaB3DajOw9kltJqiOw6QNq
-mbxSz2+ovZbk1Pt51M/PZnMBLhI0T/K0Haz8A6voMM6xj1ROGWF4svTDiXJj7bWjZ+s3orvKmNl2
-lkSDGXSQWD1tAzkkNGE+hiRD0chELIFyx53L8n49cIkGq3GvN/04cMDpRdNFTTYdgSqibjx+0Sd3
-nBCcThQ4O0ONL4HQ/yIHdz9eZy6zLAuSU0XgtFwfSeLvayhTOnukJPKXsUpOJ7RrnUDhmZkCpgnz
-P4U2lIzrnum0eNvk1LQuUIfcurPAeHj5uwhq8gGraWv2r0IOqlaAzM9TXiCfBnqgvzLORbx7o3w/
-pEZp8kX9deCUF2H1EQ5XIJFqQNtwI/lyfXNL9q18zb0AvfR8uxOVselZE+3H6igyDYEOAty6XrTb
-Fc/23cwmvW3diIDAL6z4+hAKVLKR8UOc+OjB1DUfBF1FbOFfjGAkp+F4R2aWq017QCQwphE31vX/
-Xvw=
-=fZ0n
------END PGP SIGNATURE-----
+Best Regards,
+Huang, Ying
 
---------------009tUO10dHwudn8iU0mykD8M--
+[snip]
