@@ -2,50 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8A75E8617
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8C75E861D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbiIWWyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S232726AbiIWW65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiIWWyQ (ORCPT
+        with ESMTP id S232301AbiIWW6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:54:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6455413EE9E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:54:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C59761D9C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 22:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D548CC433C1;
-        Fri, 23 Sep 2022 22:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663973654;
-        bh=gCJ8DR840inCdFEFB4zVuogQsDTiryXsoN5Cs3aTkmg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=raUysYcQlgcKkCEAXtNM5kTHYKgQujoGqIyUz8/cM6rL/oebYKznvjyMEy8KqlQaG
-         6+z3oy4Lq1TU9tNsJRyShPGIa4oU45HDrGB7VukzoNL07s2nEAnkFahOAPEfzdW5HP
-         rw0ycj+7bxLEb8kMoZ2iMoTNqRRtQZypLVc/tZ8Y=
-Date:   Fri, 23 Sep 2022 15:54:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra
- comparison
-Message-Id: <20220923155412.b0132fc62eca18817a023cd2@linux-foundation.org>
-In-Reply-To: <20220923154001.4074849-1-Jason@zx2c4.com>
-References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com>
-        <20220923154001.4074849-1-Jason@zx2c4.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Fri, 23 Sep 2022 18:58:53 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F138E1476B3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:58:51 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id r20so955200qtn.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=FNVLh7QhTGQ0fcTY+ctZvZZG3IwOkyYDgRdATbQqFOE=;
+        b=K6ThUhwaPxzE2uNJlUneDV+lEcb3sOSkMme+uJcOlA6PYnkzlx9eWnQI1++F4JHPTq
+         6r5PK01FmTenaqwabhqB54wtpEtSh4q/f93LAarupwwOtTOjD+IgB/VnY7DUeuIhnkQC
+         ueJpGrhUyrDSBys3KiQqSXiiBkciEmtt9rHzEbu8riWDZ48ZSyiWrSiPky8YDf3TxmTw
+         JUiu1YmBDldxsDnWcSHllSPx0BxlwyOXe/lppV6D0S4dxlwZK9P4DpsQeTWyB8t6HwzK
+         z3SSHJoW/95nBFxiW6hEVkAM1qDx4k+3uHGKOmgxxq5NvqNGbvm3e45Zg2lFjxXsyWRU
+         k//Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FNVLh7QhTGQ0fcTY+ctZvZZG3IwOkyYDgRdATbQqFOE=;
+        b=20x0SzXqI2m6tvoqoQEXRkwy0K1jraVr7ADhurQSFi46wP4FWYoXObKRh30GyVzWbg
+         md8G/uKuAij78tUAwh1SwuHehGl5zgxB31RHUZ5XZqBEC9ba5pTh19qPLZeqbijCq5Kz
+         i8Uqnh7ThGzJNdf9OFzvMghb8sALSpNXGKILku3B+/pxNleEGJX8u3XN7K7ejMugmB4P
+         EEUPcoAeX8pv4rpy7Sa7MJs04S3ossl+xSJCOKHq9gJcTH03Umyt8Y1ZiCIhsbggzCRa
+         F0uAlGBfavzkdbOuqrEwC2KpBR4eK9fCZUEwsMsOrPxwuXblEVuhyVQoEivQlQdWEw4Q
+         ihnQ==
+X-Gm-Message-State: ACrzQf24UD5DQnVaNVK7TtzpqaXN26vqAOxVqChGhhXMdXpQQBXeT01y
+        ya/SH2Lt71xX6nXKojvKHFlNmQ==
+X-Google-Smtp-Source: AMsMyM47dsm4TxegiRkZUeLCH+5O+Wr8H54uLORgq4Q+/7wXo2aoGW0gmLRhcDSR3jPPk1osSOqTXA==
+X-Received: by 2002:ac8:5a8b:0:b0:35b:f5c0:d5c9 with SMTP id c11-20020ac85a8b000000b0035bf5c0d5c9mr9233331qtc.14.1663973931136;
+        Fri, 23 Sep 2022 15:58:51 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05620a254500b006b98315c6fbsm7255492qko.1.2022.09.23.15.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 15:58:50 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1obrdB-00316G-At;
+        Fri, 23 Sep 2022 19:58:49 -0300
+Date:   Fri, 23 Sep 2022 19:58:49 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting
+ PCI P2PDMA pages
+Message-ID: <Yy46KbD/PvhaHA6X@ziepe.ca>
+References: <20220922163926.7077-1-logang@deltatee.com>
+ <20220922163926.7077-2-logang@deltatee.com>
+ <Yy33LUqvDLSOqoKa@ziepe.ca>
+ <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
+ <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
+ <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,28 +98,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 17:40:01 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+On Fri, Sep 23, 2022 at 02:11:03PM -0600, Logan Gunthorpe wrote:
+> 
+> 
+> On 2022-09-23 13:53, Jason Gunthorpe wrote:
+> > On Fri, Sep 23, 2022 at 01:08:31PM -0600, Logan Gunthorpe wrote:
+> > I'm encouraging Dan to work on better infrastructure in pgmap core
+> > because every pgmap implementation has this issue currently.
+> > 
+> > For that reason it is probably not so relavent to this series.
+> > 
+> > Perhaps just clarify in the commit message that the FOLL_LONGTERM
+> > restriction is to copy DAX until the pgmap page refcounts are fixed.
+> 
+> Ok, I'll add that note.
+> 
+> Per the fix for the try_grab_page(), to me it doesn't fit well in 
+> try_grab_page() without doing a bunch of cleanup to change the
+> error handling, and the same would have to be added to try_grab_folio().
+> So I think it's better to leave it where it was, but move it below the 
+> respective grab calls. Does the incremental patch below look correct?
 
-> Currently the clamp algorithm does:
-> 
-> 	if (val > hi)
-> 		val = hi;
-> 	if (val < lo)
-> 		val = lo;
-> 
-> But since hi > lo by definition, this can be made more efficient with:
-> 
-> 	if (val > hi)
-> 		val = hi;
-> 	else if (val < lo)
-> 		val = lo;
-> 
-> So fix up the clamp and clamp_t functions to do this, adding the same
-> argument checking as for min and min_t.
-> 
+Oh? I was thinking of just a very simple thing:
 
-The patch adds 140 bytes of text to mm/memblock.o, for example. 
-Presumably from the additional branch.  Larger text means larger cache
-footprint means slower.
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -225,6 +225,11 @@ bool __must_check try_grab_page(struct page *page, unsigned int flags)
+                node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, 1);
+        }
+ 
++       if (unlikely(!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page))) {
++               gup_put_folio(page_folio(page), 1, flags);
++              return false;
++       }
++
+        return true;
+ }
 
-So where's the proof that this change gives us a more efficient kernel?
+
+> I am confused about what happens if neither FOLL_PIN or FOLL_GET 
+> are set (which the documentation for try_grab_x() says is possible, but
+> other documentation suggests that FOLL_GET is automatically set). 
+> In which case it'd be impossible to do the check if we can't 
+> access the page.
+
+try_grab_page is operating under the PTL so it can probably touch the
+page OK (though perhaps we don't need to even check anything)
+
+try_grab_folio cannot be called without PIN/GET, so like this perhaps:
+
+@@ -123,11 +123,14 @@ static inline struct folio *try_get_folio(struct page *page, int refs)
+  */
+ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
+ {
++       struct folio *folio;
++
++       if (WARN_ON((flags & (FOLL_GET | FOLL_PIN)) == 0))
++               return NULL;
++
+        if (flags & FOLL_GET)
+-               return try_get_folio(page, refs);
++               folio = try_get_folio(page, refs);
+        else if (flags & FOLL_PIN) {
+-               struct folio *folio;
+-
+                /*
+                 * Can't do FOLL_LONGTERM + FOLL_PIN gup fast path if not in a
+                 * right zone, so fail and let the caller fall back to the slow
+@@ -160,11 +163,14 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
+                                        refs * (GUP_PIN_COUNTING_BIAS - 1));
+                node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, refs);
+ 
+-               return folio;
+        }
+ 
+-       WARN_ON_ONCE(1);
+-       return NULL;
++       if (unlikely(!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page))) {
++               gup_put_folio(page, 1, flags);
++               return NULL;
++       }
++
++       return folio;
+ }
+
+Jason
+
