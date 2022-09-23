@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B015A5E7DA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A35E7DAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiIWOyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S231371AbiIWOzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiIWOyR (ORCPT
+        with ESMTP id S231808AbiIWOyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:54:17 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6B12B4BF;
-        Fri, 23 Sep 2022 07:54:13 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1obk49-0005kN-E1; Fri, 23 Sep 2022 16:54:09 +0200
-Date:   Fri, 23 Sep 2022 16:54:09 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Florian Westphal <fw@strlen.de>, Michal Hocko <mhocko@suse.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <20220923145409.GF22541@breakpoint.cc>
-References: <20220923103858.26729-1-fw@strlen.de>
- <Yy20toVrIktiMSvH@dhcp22.suse.cz>
- <20220923133512.GE22541@breakpoint.cc>
- <Yy3GL12BOgp3wLjI@pc636>
+        Fri, 23 Sep 2022 10:54:52 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E031233
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:51 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id m3so533588eda.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mUvnHMrqfDygHJMP4jfoffRWSC2dEXcdYnkQt9a9yPM=;
+        b=TPh/CO1WsOshsy9Z1qDuaG5AVH9P5aDVxMID5Ar49LbzNe7WdIev6YWo8FuVK23rhT
+         YTYLnJ/I0E37oBcMvk7wX+rNMqxdQOrRkaYwq8ai2h/imkGljlsWS43Nu3F0qsn2pAG9
+         5t2nYlUIp29PGr0JlxAHAT4/usbuEDLKPW0yU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mUvnHMrqfDygHJMP4jfoffRWSC2dEXcdYnkQt9a9yPM=;
+        b=I+Jr6JBZpAVuo3vsiNKFkll/NrywC256eo1SI3ouUjoZ8IfIlS7F4SCTHgWNSPkz8e
+         nnN6XirBLsx4HLSg7AFRDkN7xnH6Otva73zgKA27FJ/ykIzilFhT15e415pP/sPls/Pb
+         O7aufvMKn9r9vPA9np34mR+5KuESNmh9LLD/1teRKNX0+luFV2x0BAQxp4XGvEqeE2sZ
+         2OFahXg6J7NhL2QcIVYo4TF7VP4LJ2CNiv6eZiQ4NloP8ucE7/XCcYuhQhwFmdh4KGWd
+         7sOOsC3HYrdkGC4nbkFc3/FKI2SI/A0yroZag5oGwToQ1KwKhtBAFFpMLK8lChSbLrhA
+         3LYA==
+X-Gm-Message-State: ACrzQf3sQxlviZWYVEfY1er4MNEZSC5pLnmJa88Xv2O/nnaWNzdxZvFY
+        ljub1jxoWUrKG0dAcdtStkGrIcmoxvwnsrdP
+X-Google-Smtp-Source: AMsMyM5OIpr9X6MpjNrpU/1FYEqoQw27grKINK7tdEZO2zf3jcTL20VfB8Q25XOMnRHpEgHXw0iq5Q==
+X-Received: by 2002:a05:6402:748:b0:44e:b48f:f5ec with SMTP id p8-20020a056402074800b0044eb48ff5ecmr9132950edy.146.1663944890174;
+        Fri, 23 Sep 2022 07:54:50 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b007341663d7ddsm4176337ejd.96.2022.09.23.07.54.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 07:54:49 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id s14so476083wro.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:48 -0700 (PDT)
+X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
+ i15-20020a5d522f000000b00228dc7fb9a8mr5684489wra.617.1663944887695; Fri, 23
+ Sep 2022 07:54:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yy3GL12BOgp3wLjI@pc636>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923083657.v5.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+ <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
+In-Reply-To: <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 23 Sep 2022 07:54:35 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WSy3x=9qQdrDGZvc82NZYsQ=TRQ05cHECbU+Q5U5f16Q@mail.gmail.com>
+Message-ID: <CAD=FV=WSy3x=9qQdrDGZvc82NZYsQ=TRQ05cHECbU+Q5U5f16Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] dt-bindings: input: touchscreen: elants_i2c: Add
+ eth3915n touchscreen chip
+To:     Yunlong Jia <ecs.beijing2022@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Yunlong Jia <yunlong.jia@ecs.com.tw>,
+        Bob Moragues <moragues@chromium.org>,
+        David Heidelberg <david@ixit.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uladzislau Rezki <urezki@gmail.com> wrote:
-> On Fri, Sep 23, 2022 at 03:35:12PM +0200, Florian Westphal wrote:
-> > Michal Hocko <mhocko@suse.com> wrote:
-> > > On Fri 23-09-22 12:38:58, Florian Westphal wrote:
-> > > > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
-> > > >  kernel BUG at mm/vmalloc.c:2437!
-> > > >  invalid opcode: 0000 [#1] SMP
-> > > >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
-> > > >  [..]
-> > > >  RIP: 0010:__get_vm_area_node+0x120/0x130
-> > > >   __vmalloc_node_range+0x96/0x1e0
-> > > >   kvmalloc_node+0x92/0xb0
-> > > >   bucket_table_alloc.isra.0+0x47/0x140
-> > > >   rhashtable_try_insert+0x3a4/0x440
-> > > >   rhashtable_insert_slow+0x1b/0x30
-> > > >  [..]
-> > > > 
-> > > > bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
-> > > > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
-> > > > 
-> > > > Revert the problematic change and stay with slab allocator.
-> > > 
-> > > Why don't you simply fix the caller?
-> > 
-> > Uh, not following?
-> > 
-> > kvzalloc(GFP_ATOMIC) was perfectly fine, is this illegal again?
-> >
-> <snip>
-> static struct vm_struct *__get_vm_area_node(unsigned long size,
-> 		unsigned long align, unsigned long shift, unsigned long flags,
-> 		unsigned long start, unsigned long end, int node,
-> 		gfp_t gfp_mask, const void *caller)
-> {
-> 	struct vmap_area *va;
-> 	struct vm_struct *area;
-> 	unsigned long requested_size = size;
-> 
-> 	BUG_ON(in_interrupt());
-> ...
-> <snip>
-> 
-> vmalloc is not supposed to be called from the IRQ context.
+Hi,
 
-It uses kvzalloc, not vmalloc api.
+On Fri, Sep 23, 2022 at 1:47 AM Yunlong Jia <ecs.beijing2022@gmail.com> wrote:
+>
+> Add an elan touch screen chip eth3915n.
+>
+> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
+> Suggested-by: Douglas Anderson <dianders@chromium.org>
+>
+> ---
+>
+> Changes in v5:
+>  1. ekth3915 is the true compatible and ekth3500 is the fallback.
+>
+> Changes in v4:
+>  1. eth3915n dt bindings added in v4.
+>
+>  .../bindings/input/touchscreen/elan,elants_i2c.yaml    | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 
-Before 2018, rhashtable did use kzalloc OR kvzalloc, depending on gfp_t.
+Fabulous. I'll expect this patch to go through the input tree and
+patches #1 and #3 to go through the Qualcomm tree.
 
-Quote from 93f976b5190df327939 changelog:
-  As of ce91f6ee5b3b ("mm: kvmalloc does not fallback to vmalloc for
-  incompatible gfp flags") we can simplify the caller
-  and trust kvzalloc() to just do the right thing.
-
-I fear that if this isn't allowed it will result in hard-to-spot bugs
-because things will work fine until a fallback to vmalloc happens.
-
-rhashtable may not be the only user of kvmalloc api that rely on
-ability to call it from (soft)irq.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
