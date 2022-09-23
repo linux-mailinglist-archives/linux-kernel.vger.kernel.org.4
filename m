@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D405E783F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF045E7844
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiIWK0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S230424AbiIWK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiIWK0b (ORCPT
+        with ESMTP id S231253AbiIWK04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:26:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34266122634
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:26:31 -0700 (PDT)
+        Fri, 23 Sep 2022 06:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352B128883;
+        Fri, 23 Sep 2022 03:26:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3E7F6123F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA911C433D6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:26:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M8R6qgI2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663928788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QgWPyzZNjKxy0P2YXKLOdQ3Qr9+tTm5v6GiBVGnh5ts=;
-        b=M8R6qgI2/KFogmJnRbiITSqWktoq0R5NDFvI9tkKeJfSsikLsrjkIwC3+neOP3mvb8sRaX
-        5HAaYVqc++JhG85Ke8PPfY1iuq3c5pSPdnridNXCxD6pY0muffCYfByUQrRA5dSFP09vOt
-        RsOQSaqK8TTSjC3kD+q1C96G5fF0HDs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8ecdf6b5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 23 Sep 2022 10:26:28 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] random: clamp credited irq bits to maximum mixed
-Date:   Fri, 23 Sep 2022 12:26:15 +0200
-Message-Id: <20220923102615.3890383-1-Jason@zx2c4.com>
-In-Reply-To: <20220923092204.3818698-1-Jason@zx2c4.com>
-References: <20220923092204.3818698-1-Jason@zx2c4.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C584EB82190;
+        Fri, 23 Sep 2022 10:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4FBC433C1;
+        Fri, 23 Sep 2022 10:26:50 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 11:26:47 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoffer Dall <cdall@cs.columbia.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <Yy2J52TLL7i2laSZ@arm.com>
+References: <20220919140531.3741d146@canb.auug.org.au>
+ <87fsgnlopt.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fsgnlopt.wl-maz@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the most that's mixed into the pool is sizeof(long)*2, don't
-credit more than that many bytes of entropy.
+On Mon, Sep 19, 2022 at 10:04:30AM +0100, Marc Zyngier wrote:
+> On Mon, 19 Sep 2022 05:05:31 +0100,
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Today's linux-next merge of the kvm-arm tree got a conflict in:
+> > 
+> >   arch/arm64/kvm/sys_regs.c
+> > 
+> > between commit:
+> > 
+> >   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
+> > 
+> > from the arm64 tree and commit:
+> > 
+> >   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
+> > 
+> > from the kvm-arm tree.
+[...]
+> Catalin, Will: in order to avoid further conflicts, I've taken the
+> liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
+> Let me know if that's a problem.
 
-Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No problem.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 520a385c7dab..2f370aa248b2 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1004,7 +1004,7 @@ static void mix_interrupt_randomness(struct work_struct *work)
- 	local_irq_enable();
- 
- 	mix_pool_bytes(pool, sizeof(pool));
--	credit_init_bits(max(1u, (count & U16_MAX) / 64));
-+	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
- 
- 	memzero_explicit(pool, sizeof(pool));
- }
+> Also, I've resolved the conflict in a slightly different way. Not that
+> the above was wrong in any way, but we might as well fix it in a more
+> idiomatic way:
+> 
+>  	/* We can only differ with CSV[23], and anything else is an error */
+>  	val ^= read_id_reg(vcpu, rd);
+> -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+> -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
+> +	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
+> +		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
+>  	if (val)
+>  		return -EINVAL;
+
+It looks fine, thanks.
+
 -- 
-2.37.3
-
+Catalin
