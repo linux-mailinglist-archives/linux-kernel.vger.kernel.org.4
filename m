@@ -2,154 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D8F5E8103
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F05E810A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiIWRnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S232360AbiIWRpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiIWRm4 (ORCPT
+        with ESMTP id S232287AbiIWRpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:42:56 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963424661B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:42:55 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1278a61bd57so1236590fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:42:55 -0700 (PDT)
+        Fri, 23 Sep 2022 13:45:45 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D0B14F820
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:45:44 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id y11so704922pjv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xbj6epvJJhhapTMVuodevN96OG6IhecVF0uzFcA1js8=;
-        b=PdNbfG7dLZJPXXVVrSSHaozoV7dVWBYqD6KfJj9NhK2ugy4djDTBaPYwhD2Vv0/Oov
-         1UCF3DLjngt6G3egCCdPI26bLOTMe6clFwf1MNrsuZ3K0GfZZRJ8Duy2W9G4voez3lIZ
-         fUK5MxfSmOE0fEa8yv6WKDO0IIaRReAQXykoRc0P8jN4vv1yrEud17v1XQkW3cktemg9
-         QVK6K8Ft45rbwaew/ArnYpokLoxmrLXeYGYK7zhTPVjZK+B6yHS5Kj4I6s4rHtCYyeEK
-         OlxcW7D5ZrSHC0DP55D4XMDKYBlxhLdtgSPjRCcMwDCbqv4Es2F7DxHAFOzM8+kdqqXP
-         oqJQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1W19l9DCIdh8AdoZLG059wHQSMo4HlwOoqThHwjkRJs=;
+        b=kzaeMXcRHogHx1jdPsQE/dCgpx1HAIXr3A5bw1te7bpSaoDvBbBxuGfClu9wbV0UaK
+         wGJrubxOcXUPT+E9xYsoWbpPOFp9Ys6tIqUVK0BMrCTbblZ470lHxUaHYRnPXVeqNG5b
+         EnWjP7/VaAl2f+jvxvAzIxss42b82HI8yccu0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xbj6epvJJhhapTMVuodevN96OG6IhecVF0uzFcA1js8=;
-        b=AGV5+KjZ+1xW7F+c4nPJn2RKWC22e4GkHuzHm1qbreatSbqXbieyEgHtazr7hOZHhd
-         WIoHb6QF6fxlozF0r+yg6ziZDN7Rg1kOr6p80nXq553WRWpq08TU7EmzSSHLzwshTrcz
-         Lq2r63t2ds4TUUm3mPB1xNsQy0YiBJiG1n6agRXNfniibIc98mwoXU9nLc7lRfn7hMKb
-         mMDUmAEljUTkf5/dV5krkCZgJgfen5NI+GzwmI95CtCuvlgGmz8JzjH6zJJci8t24Q5U
-         xk+kkWq6PvnhpPbIfELYSX5nd0Wnr4WFTLRVHBTPfg3xFoDPFze+OUtXxZkgaeMcxJZ2
-         lxqA==
-X-Gm-Message-State: ACrzQf1JdhelD3ZPpnExcwSlISaaHbw/GXlIkH2A5Ot3zMYxrbj08yaW
-        /v7LibF1MgOKOZkrzAbKzaNoAM0Z/G8dGgd++j74b4kw+g==
-X-Google-Smtp-Source: AMsMyM4nOntxYIBjWoQA+kOV867HFzXiGgpCE78cV/95Rz3YJow53XHYaEDcWLh0KFgMR8Uyo6DYBMSMy8TBaVBR9AI=
-X-Received: by 2002:a05:6870:15c9:b0:101:e18b:d12d with SMTP id
- k9-20020a05687015c900b00101e18bd12dmr12107961oad.51.1663954974870; Fri, 23
- Sep 2022 10:42:54 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1W19l9DCIdh8AdoZLG059wHQSMo4HlwOoqThHwjkRJs=;
+        b=MDSXmhLDNF+NcpWmeX9W4B6uzNEVf68NplVBmuPfEFuK8nlYlXzXSa1UpS2b8c0Z6G
+         0fh5y48bIms7dbEvwQt5vCyCCR49XKZnupArrVTEGxmoRfJxqaOYtR1FIRAmE7L+i/6w
+         Q4kej5SbatdjdHx4rCruCVlC4ZxqTZBDyW5AvcFysTwwS6b6yXYQHaW89MSphiXddRPG
+         O7Jf7tQsizPFb0K/LFULQP83jsDf5898kiHxPQNbVJrJCJXLvrTTQAXbQBGweHVlznWY
+         F2vOfZR9yakMmUT0BecWrTkORI8BRU9s7xVx6V+b4a6HWAouoAIdVYy3CDYSs7Qfbmq5
+         hyGg==
+X-Gm-Message-State: ACrzQf1ik33XKJNEi6ZK8912hzWLNY2NVurIFK2c/8qF4x6cPrjVTmUP
+        26hMlo9o52ecZgOEN6yKvQNXaw==
+X-Google-Smtp-Source: AMsMyM51KpVTj5e0/6iXhj+Ej1quD9cSKABJOyqN4n4YbwIuC8QKpUGwuIECeN0CLsBcG/05ihNS0A==
+X-Received: by 2002:a17:90b:38c5:b0:202:98df:208c with SMTP id nn5-20020a17090b38c500b0020298df208cmr22271561pjb.129.1663955143751;
+        Fri, 23 Sep 2022 10:45:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p18-20020a631e52000000b004393f60db36sm5940622pgm.32.2022.09.23.10.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 10:45:42 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:45:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] Rewrite the top-level index.rst
+Message-ID: <202209230942.E199E35F@keescook>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <7f02143c-461f-268b-0f17-7fe20a7423d6@leemhuis.info>
+ <875yhep5l1.fsf@meer.lwn.net>
+ <aa35d204-3033-96f2-ed83-c5034067fe4b@leemhuis.info>
+ <87r102nnef.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220922193817.106041-1-nathanl@linux.ibm.com>
- <20220922193817.106041-3-nathanl@linux.ibm.com> <CAHC9VhTWMFbCxQFAEJZzS3Kd5cSFigmvHac5y5ypVU7TqRqpTA@mail.gmail.com>
- <87wn9uzhqr.fsf@mpe.ellerman.id.au> <878rmaqeuw.fsf@linux.ibm.com>
-In-Reply-To: <878rmaqeuw.fsf@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 23 Sep 2022 13:42:43 -0400
-Message-ID: <CAHC9VhRW5X4-7yOtEbWeMnTCtbnKHW0Nt8BFp8S3M65kFDKXoA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] powerpc/rtas: block error injection when locked down
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jmorris@namei.org, serge@hallyn.com,
-        ajd@linux.ibm.com, gcwilson@linux.ibm.com, nayna@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r102nnef.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:40 AM Nathan Lynch <nathanl@linux.ibm.com> wrote:
-> Michael Ellerman <mpe@ellerman.id.au> writes:
-> > Paul Moore <paul@paul-moore.com> writes:
-> >> On Thu, Sep 22, 2022 at 3:38 PM Nathan Lynch <nathanl@linux.ibm.com> wrote:
-> >>>
-> >>> The error injection facility on pseries VMs allows corruption of
-> >>> arbitrary guest memory, potentially enabling a sufficiently privileged
-> >>> user to disable lockdown or perform other modifications of the running
-> >>> kernel via the rtas syscall.
-> >>>
-> >>> Block the PAPR error injection facility from being opened or called
-> >>> when locked down.
-> >>>
-> >>> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
-> >>> ---
-> >>>  arch/powerpc/kernel/rtas.c | 25 ++++++++++++++++++++++++-
-> >>>  include/linux/security.h   |  1 +
-> >>>  security/security.c        |  1 +
-> >>>  3 files changed, 26 insertions(+), 1 deletion(-)
-> >>
-> >> ...
-> >>
-> >>> diff --git a/include/linux/security.h b/include/linux/security.h
-> >>> index 1ca8dbacd3cc..b5d5138ae66a 100644
-> >>> --- a/include/linux/security.h
-> >>> +++ b/include/linux/security.h
-> >>> @@ -123,6 +123,7 @@ enum lockdown_reason {
-> >>>         LOCKDOWN_BPF_WRITE_USER,
-> >>>         LOCKDOWN_DBG_WRITE_KERNEL,
-> >>>         LOCKDOWN_DEVICE_TREE,
-> >>> +       LOCKDOWN_RTAS_ERROR_INJECTION,
-> >>
-> >> With the understanding that I've never heard of RTAS until now, are
-> >> there any other RTAS events that would require a lockdown reason?  As
-> >> a follow up, is it important to distinguish between different RTAS
-> >> lockdown reasons?
->
-> 1. Not to my current knowledge.
-> 2. Yes, I think so, see below.
->
-> >>
-> >> I'm trying to determine if we can just call it LOCKDOWN_RTAS.
-> >
-> > Yes I think we should.
-> >
-> > Currently it only locks down the error injection calls, not all of RTAS.
-> >
-> > But firmware can/will add new RTAS calls in future, so it's always
-> > possible something will need to be added to the list of things that need
-> > to be blocked during lockdown.
-> >
-> > So I think calling it LOCKDOWN_RTAS would be more general and future
-> > proof, and can be read to mean "lockdown the parts of RTAS that need
-> > to be locked down".
->
-> RTAS provides callable interfaces for a broad variety of functions,
-> including device configuration, halt/reboot/suspend, CPU online/offline,
-> NVRAM access, firmware upgrade, platform diagnostic data retrieval, and
-> others.
->
-> Currently I don't know of other RTAS-provided functions that should be
-> restricted. But if we were to add more, then -- in answer to Paul -- yes
-> I think it would be important to have distinct reasons and
-> messages. Taking the point of view of someone diagnosing lockdown denial
-> messages and relating them to kernel code and user space activity, I
-> would rather we err toward specificity.
+On Fri, Sep 23, 2022 at 09:03:36AM -0600, Jonathan Corbet wrote:
+> For better or for worse, our most prominent user-facing documentation is
+> the man pages, which are not a part of the kernel repository.  (Hmm...it
+> wouldn't hurt to add a link to them to the front page, if and when a
+> site with current man pages exists again).
 
-As I said before, RTAS is a great mystery to me, if it can be extended
-in the future then having a targeted lockdown name makes perfect
-sense.
+Oh, yes, good idea!
 
-> So a single RTAS catch-all lockdown reason doesn't appeal to me, but
-> lockdown reasons and messages aren't ABI (right?) ...
+> I don't have that much invested in the current ordering, we can
+> certainly change it - anytime we want.  Anybody else have an opinion on
+> that topic?
 
-Correct.  Or at least that is my understanding, but there have been
-some odd rulings on lockdown in the past so my advice would be to make
-*very* sure you get this right the first time.  From what you and
-Michael have said, it seems like a function specific name is the way
-to go here, and based on your explanations of the situation it seems
-like putting this in the integrity bin is the right way to go.
+I think you, as the recognized leader of the doc project, can
+establish some guiding principles on this, providing a bit of top-down
+order. e.g. adopt a specific "Linux kernel documentation project mission
+statement / strategy" that takes a distinctly opinionated stand on
+anything that has been debated. For example, a strawman, not meant
+to block this series in any way:
+
+	Our primary audience is kernel developers, especially new
+	contributors. Our next priority is people who want to engage
+	with the developer community, but may not strictly be kernel
+	developers (e.g. testers, bug reporters, researchers, press,
+	etc). Next is users of the kernel, especially for how to use
+	various features or configurations.
+
+	Topics are ordered from least complexity to greatest complexity,
+	with ties solved alphabetically.
+
+	Links to development conversations must use Lore URLs unless
+	they are specifically not available.
+
+	Links to external documentation is strongly encouraged. Any
+	dead links will be removed if not updated within 6 months.
+
+	The "htmldocs" build target is expected to build without
+	warnings.
+
+It could live in Documentation/doc-guide/contributing.rst, and be the
+tie-break for anything that comes up. Obviously, it, too, could change.
+
+> I guess my feelings are that (1) I've had enough promises to help with
+> documentation over the years to learn not to count on such until said
+> help actually materializes, and (2) demonstrating what we can do can, I
+> hope, only inspire people who know more than me to show what we *really*
+> can do...
+
+Ship it! "Patches welcome", etc. :)
 
 -- 
-paul-moore.com
+Kees Cook
