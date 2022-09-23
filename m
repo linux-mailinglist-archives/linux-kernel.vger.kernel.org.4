@@ -2,146 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399BC5E7951
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3015E7962
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiIWLUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S232178AbiIWLWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiIWLUw (ORCPT
+        with ESMTP id S231756AbiIWLV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:20:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C930AC9977;
-        Fri, 23 Sep 2022 04:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663932051; x=1695468051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6Qbcmzx6oXxdj+twPmsuaKBP/DBj7kMJ9vSNnRiPopw=;
-  b=Jx09fmYbd3leCnsaK7ykSyCj+NtQm2vqBxCbKIFhFwrIvXHKKnnKkJC7
-   MU3FGa38bsGuL+aZcslHi51Tb00obG1UATZM8ZBOQwVYf2pHR2jruHryr
-   FljnNXG27tMWuO7Vzbq5Oq9DhohcYpHaDl3eYoHM3SS7aZyfQDJHBK9LI
-   K5hUt7Qr0STjxYU90401nCgM2t3k87WgzuYIOu8HzzG29MgxoDgGPHakx
-   7Ft51dckYCQlnaJCtO7dcYfuxJLTxuYG/DLci4O2Pcm3rCoYCSUQdykJt
-   t+8kp+EXkOssGlDEqKOz2ne5Yp6skfC8cUjS5LMnqdLd1GOAt8CYVnJtA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301453230"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="301453230"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 04:20:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="622489619"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2022 04:20:47 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obgjf-0005c0-15;
-        Fri, 23 Sep 2022 11:20:47 +0000
-Date:   Fri, 23 Sep 2022 19:20:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>, jiri@mellanox.com,
-        moshe@mellanox.com, davem@davemloft.net, kuba@kernel.org,
-        idosch@nvidia.com
-Cc:     kbuild-all@lists.01.org, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangguangbin2@huawei.com, lipeng321@huawei.com,
-        chenhao418@huawei.com
-Subject: Re: [PATCH net-next 2/2] net: hns3: PF add support setting
- parameters of congestion control algorithm by devlink param
-Message-ID: <202209231935.JRvKASjh-lkp@intel.com>
-References: <20220923013818.51003-3-huangguangbin2@huawei.com>
+        Fri, 23 Sep 2022 07:21:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8403F127576;
+        Fri, 23 Sep 2022 04:21:53 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYqP022JYzMpQF;
+        Fri, 23 Sep 2022 19:17:08 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:51 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:50 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH v5 00/10] kallsyms: Optimizes the performance of lookup symbols
+Date:   Fri, 23 Sep 2022 19:20:23 +0800
+Message-ID: <20220923112033.1958-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923013818.51003-3-huangguangbin2@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guangbin,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git bcff1a37bafc144d67192f2f5e1f4b9c49b37bd6
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220923/202209231935.JRvKASjh-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fc0ab8f22c924e963b0e0a2723cbb49acc1d3bb3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
-        git checkout fc0ab8f22c924e963b0e0a2723cbb49acc1d3bb3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_get_algo_param_value':
->> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:418:35: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
-     418 |         char *value, *value_tmp, *tmp;
-         |                                   ^~~
-   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_algo_param_set':
->> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:690:13: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
-     690 |         int cnt = 0;
-         |             ^~~
-   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_is_algo_param_valid':
-   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:727:35: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
-     727 |         char *value, *value_tmp, *tmp;
-         |                                   ^~~
+v4 --> v5:
+1. In scripts/kallsyms.c, we use an extra field to hold type and eventually
+   put it together with name in write_src().
+2. Generate a new table kallsyms_best_token_table[], so that we compress a
+   symbol in the kernel using a process similar to compress_symbol().
+3. Remove helper sym_name(), and rename field 'sym[]' to 'name[]' in
+   scripts/kallsyms.c
+4. Add helper __kallsyms_lookup_compressed_name() to avoid duplicate code in
+   functions kallsyms_lookup_name() and kallsyms_on_each_match_symbol().
+5. Add a new parameter "const char *modname" to module_kallsyms_on_each_symbol(),
+   this makes the code logic clearer.
+6. Delete the parameter 'struct module *' in the hook function associated with
+   kallsyms_on_each_symbol(), it's unused now.
 
 
-vim +/tmp +418 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+v3 --> v4:
+1. Move the declaration of function kallsyms_sym_address() to linux/kallsyms.h,
+   fix a build warning.
 
-   415	
-   416	static int hclge_devlink_get_algo_param_value(const char *str, u64 *param_value)
-   417	{
- > 418		char *value, *value_tmp, *tmp;
-   419		int ret = 0;
-   420		int i;
-   421	
-   422		value = kmalloc(sizeof(char) * __DEVLINK_PARAM_MAX_STRING_VALUE,
-   423				GFP_KERNEL);
-   424		if (!value)
-   425			return -ENOMEM;
-   426	
-   427		strncpy(value, str, __DEVLINK_PARAM_MAX_STRING_VALUE);
-   428		value_tmp = value;
-   429	
-   430		tmp = strsep(&value, "@");
-   431	
-   432		for (i = 0; i < strlen(value); i++) {
-   433			if (!(value[i] >= '0' && value[i] <= '9')) {
-   434				kfree(value_tmp);
-   435				return -EINVAL;
-   436			}
-   437		}
-   438	
-   439		ret = kstrtou64(value, 0, param_value);
-   440	
-   441		kfree(value_tmp);
-   442		return ret;
-   443	}
-   444	
+v2 --> v3:
+1. Improve test cases, perform complete functional tests on functions
+   kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+   kallsyms_on_each_match_symbol().
+2. Add patch [PATCH v3 2/8] scripts/kallsyms: ensure that all possible
+   combinations are compressed.
+3. The symbol type is not compressed regardless of whether
+   CONFIG_KALLSYMS_ALL is set or not. The memory overhead is increased
+   by less than 20KiB if CONFIG_KALLSYMS_ALL=n.
+4. Discard [PATCH v2 3/8] kallsyms: Adjust the types of some local variables
+
+v1 --> v2:
+Add self-test facility
+
+v1:
+Currently, to search for a symbol, we need to expand the symbols in
+'kallsyms_names' one by one, and then use the expanded string for
+comparison. This is very slow.
+
+In fact, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names'.
+
+This patch series optimizes the performance of function kallsyms_lookup_name(),
+and function klp_find_object_symbol() in the livepatch module. Based on the
+test results, the performance overhead is reduced to 5%. That is, the
+performance of these functions is improved by 20 times.
+
+To avoid increasing the kernel size in non-debug mode, the optimization is only
+for the case CONFIG_KALLSYMS_ALL=y.
+
+
+Zhen Lei (10):
+  scripts/kallsyms: rename build_initial_tok_table()
+  scripts/kallsyms: don't compress symbol types
+  scripts/kallsyms: remove helper sym_name() and cleanup
+  scripts/kallsyms: generate kallsyms_best_token_table[]
+  kallsyms: Improve the performance of kallsyms_lookup_name()
+  kallsyms: Add helper kallsyms_on_each_match_symbol()
+  livepatch: Use kallsyms_on_each_match_symbol() to improve performance
+  livepatch: Improve the search performance of
+    module_kallsyms_on_each_symbol()
+  kallsyms: Delete an unused parameter related to
+    kallsyms_on_each_symbol()
+  kallsyms: Add self-test facility
+
+ include/linux/kallsyms.h   |  12 +-
+ include/linux/module.h     |   4 +-
+ init/Kconfig               |  13 ++
+ kernel/Makefile            |   1 +
+ kernel/kallsyms.c          | 167 ++++++++++++++-
+ kernel/kallsyms_internal.h |   1 +
+ kernel/kallsyms_selftest.c | 421 +++++++++++++++++++++++++++++++++++++
+ kernel/livepatch/core.c    |  31 ++-
+ kernel/module/kallsyms.c   |  15 +-
+ kernel/trace/ftrace.c      |   3 +-
+ scripts/kallsyms.c         |  88 +++++---
+ 11 files changed, 694 insertions(+), 62 deletions(-)
+ create mode 100644 kernel/kallsyms_selftest.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
