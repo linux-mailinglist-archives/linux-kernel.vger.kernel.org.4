@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655315E8038
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08A35E803B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbiIWQ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S230207AbiIWQ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiIWQ42 (ORCPT
+        with ESMTP id S230229AbiIWQ64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:56:28 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8F147A25;
-        Fri, 23 Sep 2022 09:56:25 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b75so702782pfb.7;
-        Fri, 23 Sep 2022 09:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=gDnFtBDWnaQb0EZfSvmlT1Y3CSzxSfSbrFYVrNHAlWY=;
-        b=nJpGVmrJ8LFWr4YUd4tyLXEHdzNuawescNn1exeJPfczG6PC37lX5/GTSli4NZecto
-         4pnOno2T5PrkErzkc4X5e69SOjBA5jQ8WaaqgsI3sLdGQOxYi3b8hxuqdLZ+R/TrlyrB
-         8zr4NXsc8lo4BMNOzmyq4ctow2JZ6xDv+nIWhzG7rRuEqGmy8xYTnx5qIQyaF+XellfY
-         6uroIJFr3XbT/DMmSyxujV90ZfLsUjnpJUmWAo1/1H/46fQ8cKv7CBLPSoPj2BOTPTQi
-         29DO0TFMN/Vg0R3zsABeugYJk98eo7OGS6wumj2oaQwnPbIPRQPgtSkdnYWy21XJi9Vl
-         /dEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gDnFtBDWnaQb0EZfSvmlT1Y3CSzxSfSbrFYVrNHAlWY=;
-        b=OhVrclAI2+E1/V+qygmmAjTBoRJIVYl485/eUn6NN8pJ6TqXtzyWohOdRZLJacC+Pp
-         mTPLWu8FKfGAtW0NK2xv+zzsjjO/3a8GQpoFsmAnt7nsJJPFRnstOsfoJc2B47Uy3gD8
-         suv2OZlv1lPDFxZO8MLjBDSCWW5k6eQwYY1xvVoBFLx1KZI4bcrZk8hL5+016e8VGW/p
-         FieDtukMLe2re6VxaztNZLGT6P7tvI3gZeg+OZqoF7+5FIPHOZnPXlLLNiE9BL7VJL6c
-         ePFbnNJH5wXAYF5Y88BDkElczpHCmQSs5dC6vt7OdKV8PY7EpoxFpUFGDQu5Mro10Pwp
-         SC9g==
-X-Gm-Message-State: ACrzQf28H8NPq1jM5N5rnsuYglJ8Txo6ycPs4m1juGCIrsGK32mBBXqA
-        dpwkFH9EGqOzALyg+l0vbnA=
-X-Google-Smtp-Source: AMsMyM50i0r9WGAhxGu1gLkNa+7qktNFTXLcKOMTnuhEF1HBG19CZLdyZ/1mb/GIgb/zMu1LnQkPuA==
-X-Received: by 2002:a05:6a00:1892:b0:540:acee:29e8 with SMTP id x18-20020a056a00189200b00540acee29e8mr10125222pfh.1.1663952184685;
-        Fri, 23 Sep 2022 09:56:24 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:8b46:be3c:2c54:68a5])
-        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b0016909be39e5sm6311778plb.177.2022.09.23.09.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 09:56:24 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:56:21 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Yunlong Jia <ecs.beijing2022@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Henry Sun <henrysun@google.com>,
-        Yunlong Jia <yunlong.jia@ecs.com.tw>,
-        Bob Moragues <moragues@chromium.org>,
-        David Heidelberg <david@ixit.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] dt-bindings: input: touchscreen: elants_i2c: Add
- eth3915n touchscreen chip
-Message-ID: <Yy3lNem7Uh4I6+LF@google.com>
-References: <20220923083657.v5.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
- <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
+        Fri, 23 Sep 2022 12:58:56 -0400
+X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Sep 2022 09:58:52 PDT
+Received: from omta33.uswest2.a.cloudfilter.net (omta33.uswest2.a.cloudfilter.net [35.89.44.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7DA148A0E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:58:52 -0700 (PDT)
+Received: from eig-obgw-6001a.ext.cloudfilter.net ([10.0.30.140])
+        by cmsmtp with ESMTP
+        id ba3TouGAasYJKblzOoXilM; Fri, 23 Sep 2022 16:57:22 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id blzModnmlJzQ5blzMoIcOQ; Fri, 23 Sep 2022 16:57:21 +0000
+X-Authority-Analysis: v=2.4 cv=MaV/Brzf c=1 sm=1 tr=0 ts=632de571
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=FqOIB2A0pCpItkPd+H5VLg==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10
+ a=wYkD_t78qR0A:10 a=1Vq8JeZ7YxIarabX38cA:9 a=QEXdDO2ut3YA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FLY2ZY7ymRr6++gvseBT22t1fbdbp4dMhqB4jOqPPM8=; b=JfrxsHO/L0pRqzR5yIPhwxR8tC
+        PSS37c4n08S2ZiudUSufuraw+SgKPf8+MkA1dUQmo8Gm8OtQ7K2B+HM0EdWMSNFDu+Pm9L+Rn2bFb
+        OS9JoS29kihy6g/Z4Y/kABajSDd+o92IszuhMmcytgmETEy70wrbu6VcILf6k+IXagWtZSJHieFi/
+        bKzd3XbNaOo3LrqAHGwbttQChLl/dAgrHWEsaeC+bMcQaCsIATwgJMx6vZnLSTZk9mv2IWLWMmYxd
+        fItcyeKzD1loGySu8CLY+EmFzvxWJTx+NYrEMSNUg+Nmm3nD7/q0+5+5dFzEQpFXRjZycD3K+81rV
+        eD6acjLA==;
+Received: from 187.184.158.46.cable.dyn.cableonline.com.mx ([187.184.158.46]:65034 helo=[192.168.0.24])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1oblzL-0014A3-2i;
+        Fri, 23 Sep 2022 11:57:19 -0500
+Message-ID: <80657fb9-97cf-0677-bc2d-0dbbac2b610a@embeddedor.com>
+Date:   Fri, 23 Sep 2022 11:57:15 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH][next] powerpc: Fix fall-through warning for Clang
+Content-Language: en-US
+To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Scott Wood <oss@buserror.net>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-hardening@vger.kernel.org
+References: <Yxe8XTY5C9qJLd0Z@work>
+ <166393161454.498456.8335142306216879652.b4-ty@ellerman.id.au>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <166393161454.498456.8335142306216879652.b4-ty@ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.184.158.46
+X-Source-L: No
+X-Exim-ID: 1oblzL-0014A3-2i
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187.184.158.46.cable.dyn.cableonline.com.mx ([192.168.0.24]) [187.184.158.46]:65034
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfMTcb++bZ/Fx5eIm4TsSDXd9R9AqoZd9ermxdIaPrDh/tSwhAgq6gASJ6sCecV4vHa3K1XmM+l3bCtlQ1HRD4gaLjdiLAVDtxltXIp3Z01T90VjImiWj
+ EcXOkCl1ada1mkx2tiVGd1ahKg7RcarFviNmD1N1qb7RSdUaH1nWQUyI+FwitR+zzxRzRnm2XqRD2Zw8zJiujBPKMNJHxX0DmKMK7YSAYz7bXUs4Tg7u2vXI
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,14 +95,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 08:47:17AM +0000, Yunlong Jia wrote:
-> Add an elan touch screen chip eth3915n.
-> 
-> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
-> Suggested-by: Douglas Anderson <dianders@chromium.org>
-> 
 
-Applied, thank you.
+> Applied to powerpc/next.
 
--- 
-Dmitry
+Great. :)
+
+Thanks, Michael.
+--
+Gustavo
