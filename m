@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45F45E775A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B0F5E773E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiIWJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S231271AbiIWJd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbiIWJgn (ORCPT
+        with ESMTP id S231738AbiIWJdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:36:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5084FFF3E7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:36:35 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYn476F2kzlVyl;
-        Fri, 23 Sep 2022 17:32:23 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 17:36:33 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.174) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 17:36:32 +0800
-From:   Li Huafei <lihuafei1@huawei.com>
-To:     <mpe@ellerman.id.au>, <jniethe5@gmail.com>
-CC:     <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
-        <mhiramat@kernel.org>, <rostedt@goodmis.org>,
-        <peterz@infradead.org>, <naveen.n.rao@linux.vnet.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <lihuafei1@huawei.com>
-Subject: [PATCH] powerpc/kprobes: Fix null pointer reference in arch_prepare_kprobe()
-Date:   Fri, 23 Sep 2022 17:32:53 +0800
-Message-ID: <20220923093253.177298-1-lihuafei1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 23 Sep 2022 05:33:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C8AEE65C
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:32:59 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a8so18829049lff.13
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HmRlc+Hs05+wWYAlUZbO8wKKqWbps5u2XXFVd5In1P4=;
+        b=k62JTALVIbxJxDPZBvTcfYIjMm9LvN78w/7pRi3AOa3ZfKNhxoyZtj+WVIaiMqxnCm
+         FbbI5PoHbHvM572eUlY24+DDUSMCyz5rxDmA/13DDALISeE+i0mIsTb+Ci6LNDdKNqFc
+         grq936CQefHpKiLerD8b0rV4GN9QGn40q7sp0w99JeWba1qQdgF6djE0+GmALUsVOM64
+         eOx5XV/d/7qcYxpMdCKA8Krc3lC/5KHuvTCRKt4UzVDCHbmlSGqhe6GqJDAe/PNFLRkD
+         JRo+27uG+A4gDcgMnhOXmToXRvCafB9hIZZ2KaHb8SMUfoQPIo7wu2Mib7ofB6Z0DpPQ
+         prZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HmRlc+Hs05+wWYAlUZbO8wKKqWbps5u2XXFVd5In1P4=;
+        b=XdIGKXRv0voYTMdWTGjMs5HArEPZc3Kw15vfAYZS8EXGWQeMBcM4hWMWD87i21Fd1f
+         dmiaOJOfcHoWJSQRe4lJ1O6wXwNHUcVEvF72v0mUgr4joEnnBiFydkvHJga1skMi/xe5
+         7ZPknom3qjA0W5Qt4gskW/MWrwsgkuMgHVOlanBwTyMdi1C6t7obQUJqxDRdIbA7bmbb
+         wrGY8ifJwhfSAOzDlDScfqqXBwnUotsUtUbNVOMnmlZwiuLHmDZ7CVnvzokHy3scuLEO
+         OAQC7o5rDDhRyqq/XuKmEJ1VsyANQ6afim+K9Y+cf0dBdzzYYZW+/+qEnEfaJ4Ob1WdX
+         ReJw==
+X-Gm-Message-State: ACrzQf0vUgPJR1kygZ3c8QTGhGYbMjqNu5+Gg604QBudApmOzTiHb/qO
+        RY6jNg7PKyxaeHJN1GjIKkjAtg==
+X-Google-Smtp-Source: AMsMyM41PF1DfX86gyr8+1V5cqnkGU7hwHacoJtPRCrhEh0T56pEuQ/5pXkVWm8izoaAmZbewxT9wA==
+X-Received: by 2002:a05:6512:318e:b0:497:564e:5953 with SMTP id i14-20020a056512318e00b00497564e5953mr2805645lfe.220.1663925577452;
+        Fri, 23 Sep 2022 02:32:57 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o17-20020ac24e91000000b0049964f68457sm1358757lfr.262.2022.09.23.02.32.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 02:32:57 -0700 (PDT)
+Message-ID: <af938440-b34b-5e17-33f9-d8da3fbdde07@linaro.org>
+Date:   Fri, 23 Sep 2022 11:32:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] dt-bindings: power: gpcv2: correct patternProperties
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, l.stach@pengutronix.de, ulf.hansson@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20220923075427.985504-1-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220923075427.985504-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found a null pointer reference in arch_prepare_kprobe():
+On 23/09/2022 09:54, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> i.MX8MQ has pgc 'power-domain@a', so correct patternProperties
 
-  # echo 'p cmdline_proc_show' > kprobe_events
-  # echo 'p cmdline_proc_show+16' >> kprobe_events
-  [   67.278533][  T122] Kernel attempted to read user page (0) - exploit attempt? (uid: 0)
-  [   67.279326][  T122] BUG: Kernel NULL pointer dereference on read at 0x00000000
-  [   67.279738][  T122] Faulting instruction address: 0xc000000000050bfc
-  [   67.280486][  T122] Oops: Kernel access of bad area, sig: 11 [#1]
-  [   67.280846][  T122] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA PowerNV
-  [   67.281435][  T122] Modules linked in:
-  [   67.281903][  T122] CPU: 0 PID: 122 Comm: sh Not tainted 6.0.0-rc3-00007-gdcf8e5633e2e #10
-  [   67.282547][  T122] NIP:  c000000000050bfc LR: c000000000050bec CTR: 0000000000005bdc
-  [   67.282920][  T122] REGS: c0000000348475b0 TRAP: 0300   Not tainted  (6.0.0-rc3-00007-gdcf8e5633e2e)
-  [   67.283424][  T122] MSR:  9000000000009033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR: 88002444  XER: 20040006
-  [   67.284023][  T122] CFAR: c00000000022d100 DAR: 0000000000000000 DSISR: 40000000 IRQMASK: 0
-  [   67.284023][  T122] GPR00: c000000000050bec c000000034847850 c0000000013f6100 c000000001fb7718
-  [   67.284023][  T122] GPR04: c000000000515c10 c000000000e5fe08 c00000000133da60 c000000004839300
-  [   67.284023][  T122] GPR08: c0000000014ffb98 0000000000000000 c000000000515c0c c000000000e18576
-  [   67.284023][  T122] GPR12: c000000000e60170 c0000000015a0000 00000001155e0460 0000000000000000
-  [   67.284023][  T122] GPR16: 0000000000000000 00007fffe8eeb3c8 0000000116320728 0000000000000000
-  [   67.284023][  T122] GPR20: 0000000116320720 0000000000000000 c0000000012fa918 0000000000000006
-  [   67.284023][  T122] GPR24: c0000000014ffb98 c0000000011ed360 0000000000000000 c000000001fb7928
-  [   67.284023][  T122] GPR28: 0000000000000000 0000000000000000 000000007c0802a6 c000000001fb7918
-  [   67.287799][  T122] NIP [c000000000050bfc] arch_prepare_kprobe+0x10c/0x2d0
-  [   67.288490][  T122] LR [c000000000050bec] arch_prepare_kprobe+0xfc/0x2d0
-  [   67.289025][  T122] Call Trace:
-  [   67.289268][  T122] [c000000034847850] [c0000000012f77a0] 0xc0000000012f77a0 (unreliable)
-  [   67.289999][  T122] [c0000000348478d0] [c000000000231320] register_kprobe+0x3c0/0x7a0
-  [   67.290439][  T122] [c000000034847940] [c0000000002938c0] __register_trace_kprobe+0x140/0x1a0
-  [   67.290898][  T122] [c0000000348479b0] [c0000000002944c4] __trace_kprobe_create+0x794/0x1040
-  [   67.291330][  T122] [c000000034847b60] [c0000000002a1614] trace_probe_create+0xc4/0xe0
-  [   67.291717][  T122] [c000000034847bb0] [c00000000029363c] create_or_delete_trace_kprobe+0x2c/0x80
-  [   67.292158][  T122] [c000000034847bd0] [c000000000264420] trace_parse_run_command+0xf0/0x210
-  [   67.292611][  T122] [c000000034847c70] [c0000000002934a0] probes_write+0x20/0x40
-  [   67.292996][  T122] [c000000034847c90] [c00000000045e98c] vfs_write+0xfc/0x450
-  [   67.293356][  T122] [c000000034847d50] [c00000000045eec4] ksys_write+0x84/0x140
-  [   67.293716][  T122] [c000000034847da0] [c00000000002e4fc] system_call_exception+0x17c/0x3a0
-  [   67.294186][  T122] [c000000034847e10] [c00000000000c0e8] system_call_vectored_common+0xe8/0x278
-  [   67.294680][  T122] --- interrupt: 3000 at 0x7fffa5682de0
-  [   67.294937][  T122] NIP:  00007fffa5682de0 LR: 0000000000000000 CTR: 0000000000000000
-  [   67.295313][  T122] REGS: c000000034847e80 TRAP: 3000   Not tainted  (6.0.0-rc3-00007-gdcf8e5633e2e)
-  [   67.295725][  T122] MSR:  900000000280f033 <SF,HV,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44002408  XER: 00000000
-  [   67.296291][  T122] IRQMASK: 0
-  [   67.296291][  T122] GPR00: 0000000000000004 00007fffe8eeaec0 00007fffa5757300 0000000000000001
-  [   67.296291][  T122] GPR04: 0000000116329c60 0000000000000017 0000000000116329 0000000000000000
-  [   67.296291][  T122] GPR08: 0000000000000006 0000000000000000 0000000000000000 0000000000000000
-  [   67.296291][  T122] GPR12: 0000000000000000 00007fffa580ac60 00000001155e0460 0000000000000000
-  [   67.296291][  T122] GPR16: 0000000000000000 00007fffe8eeb3c8 0000000116320728 0000000000000000
-  [   67.296291][  T122] GPR20: 0000000116320720 0000000000000000 0000000000000000 0000000000000002
-  [   67.296291][  T122] GPR24: 00000001163206f0 0000000000000020 00007fffe8eeafa0 0000000000000001
-  [   67.296291][  T122] GPR28: 0000000000000000 0000000000000017 0000000116329c60 0000000000000001
-  [   67.299570][  T122] NIP [00007fffa5682de0] 0x7fffa5682de0
-  [   67.299837][  T122] LR [0000000000000000] 0x0
-  [   67.300072][  T122] --- interrupt: 3000
-  [   67.300447][  T122] Instruction dump:
-  [   67.300736][  T122] 386319d8 481342f5 60000000 60000000 60000000 e87f0028 3863fffc 481dc4d1
-  [   67.301230][  T122] 60000000 2c230000 41820018 e9230058 <81290000> 552936be 2c090001 4182018c
-  [   67.302102][  T122] ---[ end trace 0000000000000000 ]---
-  [   67.302496][  T122]
 
-The address being probed has some special:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  cmdline_proc_show: Probe based on ftrace
-  cmdline_proc_show+16: Probe for the next instruction at the ftrace location
-
-The ftrace-based kprobe does not generate kprobe::ainsn::insn, it gets
-set to NULL. In arch_prepare_kprobe() it will check for:
-
-  ...
-  prev = get_kprobe(p->addr - 1);
-  preempt_enable_no_resched();
-  if (prev && ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
-  ...
-
-If prev is based on ftrace, 'ppc_inst_read(prev->ainsn.insn)' will occur
-with a null pointer reference. At this point prev->addr will not be a
-prefixed instruction, so the check can be skipped.
-
-Check if prev is ftrace-based kprobe before reading 'prev->ainsn.insn'
-to fix this problem.
-
-Fixes: b4657f7650ba ("powerpc/kprobes: Don't allow breakpoints on suffixes")
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
----
- arch/powerpc/kernel/kprobes.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
-index 912d4f8a13be..9f6cbbd56809 100644
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -161,7 +161,12 @@ int arch_prepare_kprobe(struct kprobe *p)
- 	preempt_disable();
- 	prev = get_kprobe(p->addr - 1);
- 	preempt_enable_no_resched();
--	if (prev && ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
-+	/*
-+	 * When prev is a ftrace-based kprobe, we don't have an insn, and it
-+	 * doesn't probe for prefixed instruction.
-+	 */
-+	if (prev && !kprobe_ftrace(prev) &&
-+	    ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
- 		printk("Cannot register a kprobe on the second word of prefixed instruction\n");
- 		ret = -EINVAL;
- 	}
--- 
-2.17.1
+Best regards,
+Krzysztof
 
