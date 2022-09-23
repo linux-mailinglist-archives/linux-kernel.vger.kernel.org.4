@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536255E7D9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B015A5E7DA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiIWOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S231417AbiIWOyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiIWOwQ (ORCPT
+        with ESMTP id S229512AbiIWOyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:52:16 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FCF12FF3A;
-        Fri, 23 Sep 2022 07:52:14 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id C18C860005;
-        Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, heiko@sntech.de,
-        jay.xu@rock-chips.com, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] gpio: rockchip: request GPIO mux to pinctrl when setting direction
-Date:   Fri, 23 Sep 2022 16:51:41 +0200
-Message-Id: <20220923145141.3463754-3-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220923145141.3463754-1-foss+kernel@0leil.net>
-References: <20220923145141.3463754-1-foss+kernel@0leil.net>
+        Fri, 23 Sep 2022 10:54:17 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6B12B4BF;
+        Fri, 23 Sep 2022 07:54:13 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1obk49-0005kN-E1; Fri, 23 Sep 2022 16:54:09 +0200
+Date:   Fri, 23 Sep 2022 16:54:09 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Florian Westphal <fw@strlen.de>, Michal Hocko <mhocko@suse.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Martin Zaharinov <micron10@gmail.com>
+Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
+Message-ID: <20220923145409.GF22541@breakpoint.cc>
+References: <20220923103858.26729-1-fw@strlen.de>
+ <Yy20toVrIktiMSvH@dhcp22.suse.cz>
+ <20220923133512.GE22541@breakpoint.cc>
+ <Yy3GL12BOgp3wLjI@pc636>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy3GL12BOgp3wLjI@pc636>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Uladzislau Rezki <urezki@gmail.com> wrote:
+> On Fri, Sep 23, 2022 at 03:35:12PM +0200, Florian Westphal wrote:
+> > Michal Hocko <mhocko@suse.com> wrote:
+> > > On Fri 23-09-22 12:38:58, Florian Westphal wrote:
+> > > > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+> > > >  kernel BUG at mm/vmalloc.c:2437!
+> > > >  invalid opcode: 0000 [#1] SMP
+> > > >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
+> > > >  [..]
+> > > >  RIP: 0010:__get_vm_area_node+0x120/0x130
+> > > >   __vmalloc_node_range+0x96/0x1e0
+> > > >   kvmalloc_node+0x92/0xb0
+> > > >   bucket_table_alloc.isra.0+0x47/0x140
+> > > >   rhashtable_try_insert+0x3a4/0x440
+> > > >   rhashtable_insert_slow+0x1b/0x30
+> > > >  [..]
+> > > > 
+> > > > bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
+> > > > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+> > > > 
+> > > > Revert the problematic change and stay with slab allocator.
+> > > 
+> > > Why don't you simply fix the caller?
+> > 
+> > Uh, not following?
+> > 
+> > kvzalloc(GFP_ATOMIC) was perfectly fine, is this illegal again?
+> >
+> <snip>
+> static struct vm_struct *__get_vm_area_node(unsigned long size,
+> 		unsigned long align, unsigned long shift, unsigned long flags,
+> 		unsigned long start, unsigned long end, int node,
+> 		gfp_t gfp_mask, const void *caller)
+> {
+> 	struct vmap_area *va;
+> 	struct vm_struct *area;
+> 	unsigned long requested_size = size;
+> 
+> 	BUG_ON(in_interrupt());
+> ...
+> <snip>
+> 
+> vmalloc is not supposed to be called from the IRQ context.
 
-Before the split of gpio and pinctrl sections in their own driver,
-rockchip_set_mux was called in pinmux_ops.gpio_set_direction for
-configuring a pin in its GPIO function.
+It uses kvzalloc, not vmalloc api.
 
-This is essential for cases where pinctrl is "bypassed" by gpio
-consumers otherwise the GPIO function is not configured for the pin and
-it does not work. Such was the case for the sysfs/libgpiod userspace
-GPIO handling.
+Before 2018, rhashtable did use kzalloc OR kvzalloc, depending on gfp_t.
 
-Let's call pinctrl_gpio_direction_input/output when setting the
-direction of a GPIO so that the pinctrl core requests from the rockchip
-pinctrl driver to put the pin in its GPIO function.
+Quote from 93f976b5190df327939 changelog:
+  As of ce91f6ee5b3b ("mm: kvmalloc does not fallback to vmalloc for
+  incompatible gfp flags") we can simplify the caller
+  and trust kvzalloc() to just do the right thing.
 
-Fixes: 9ce9a02039de ("pinctrl/rockchip: drop the gpio related codes")
-Fixes: 936ee2675eee ("gpio/rockchip: add driver for rockchip gpio")
-Cc: stable@vger.kernel.org
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
- drivers/gpio/gpio-rockchip.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+I fear that if this isn't allowed it will result in hard-to-spot bugs
+because things will work fine until a fallback to vmalloc happens.
 
-diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-index bb50335239ac8..b83913e1ee49e 100644
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -156,6 +156,12 @@ static int rockchip_gpio_set_direction(struct gpio_chip *chip,
- 	unsigned long flags;
- 	u32 data = input ? 0 : 1;
- 
-+
-+	if (input)
-+		pinctrl_gpio_direction_input(bank->pin_base + offset);
-+	else
-+		pinctrl_gpio_direction_output(bank->pin_base + offset);
-+
- 	raw_spin_lock_irqsave(&bank->slock, flags);
- 	rockchip_gpio_writel_bit(bank, offset, data, bank->gpio_regs->port_ddr);
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
--- 
-2.37.3
-
+rhashtable may not be the only user of kvmalloc api that rely on
+ability to call it from (soft)irq.
