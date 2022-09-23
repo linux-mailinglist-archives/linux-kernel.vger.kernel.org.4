@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133875E8081
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A9F5E8067
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiIWRL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S232216AbiIWRKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiIWRK4 (ORCPT
+        with ESMTP id S229511AbiIWRKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:10:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF21C1476B3;
-        Fri, 23 Sep 2022 10:10:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8D36F21A00;
-        Fri, 23 Sep 2022 17:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663953053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QRfz1/B0IIqdEm2ULAdzw2ZVBSUuR0X0Ut/+jLa53V8=;
-        b=kLL4Zpb6J7PJq/PYwC/tPaufWCJRpvAigyyTCeKZfNQ3l9Ak24S8OTk56KQ1U2CzfvkCKt
-        /llrTCKYTVIDDisK4Z0+fM3Fu9BP1byEibNgKgl2P16avZvEUKaXIMSAEHLNODE/fcZ1Jh
-        bMM8Q3R1u0vb0lcnheY5OwHVwsK1CYg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663953053;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QRfz1/B0IIqdEm2ULAdzw2ZVBSUuR0X0Ut/+jLa53V8=;
-        b=0Ng5B60uFipqXS3UKQFk39stBw0uR/GCzmUr/IXsONALgjWOiaNonHV6IsVNmYtIfSAZu3
-        gnvfLruu+SLfN/CQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 50BCD2C178;
-        Fri, 23 Sep 2022 17:10:53 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Baoquan He <bhe@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Coiby Xu <coxu@redhat.com>, James Morse <james.morse@arm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
-        (AARCH64 ARCHITECTURE)), kexec@lists.infradead.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH 5.15 6/6] arm64: kexec_file: use more system keyrings to verify kernel image signature
-Date:   Fri, 23 Sep 2022 19:10:34 +0200
-Message-Id: <7e5537e4b8dc8de3570072666527de97de88b634.1663951201.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <cover.1663951201.git.msuchanek@suse.de>
-References: <cover.1663951201.git.msuchanek@suse.de>
+        Fri, 23 Sep 2022 13:10:36 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B45CF370B;
+        Fri, 23 Sep 2022 10:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663953034; x=1695489034;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mn6yhKOElmfbXGir3ybNXHJ2hPzgirxFvVm3h7RTIzs=;
+  b=jQnVJBEgIaabSat6yTuemPBuua7pbd0b6WtlrTgMsIh8RI1OSH14HaSy
+   xBr8/6jUkF5qYe+L2VCvcnJP+hWGvg6+6OQhpIOkqMz5E7Unt+eXhxJKW
+   NQ4cAQMZeTJEvzC+MHg2q/KYJiGf8R0IGPcbTVg3VdCSouczz6Eh6AyY6
+   dNLvcU+oGyrwwZXGbdWS8fYqo1VLeCKzSYQ3KDo5GPk+82OzLGz7wQo39
+   kR5YMbQ6BBL/h0BlbTIJY5ThBDuv7v67Y1yVQl30S5y6C+B4KdjQ45S+Q
+   TfGeXuIXUlhllzPG0Kkl2qK4f4JEu+tBsbzhcLaETAsiL/eFo9cKH/NLY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="326969142"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="326969142"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 10:10:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="571440021"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 23 Sep 2022 10:10:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 812BEF7; Fri, 23 Sep 2022 20:10:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <damm+renesas@opensource.se>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] serdev: Replace poll loop by readx_poll_timeout() macro
+Date:   Fri, 23 Sep 2022 20:10:48 +0300
+Message-Id: <20220923171048.37386-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coiby Xu <coxu@redhat.com>
+The readx_poll_timeout() consolidates the necessary code under
+macro. Replace current code with it.
 
-commit 0d519cadf75184a24313568e7f489a7fc9b1be3b upstream.
-
-Currently, when loading a kernel image via the kexec_file_load() system
-call, arm64 can only use the .builtin_trusted_keys keyring to verify
-a signature whereas x86 can use three more keyrings i.e.
-.secondary_trusted_keys, .machine and .platform keyrings. For example,
-one resulting problem is kexec'ing a kernel image  would be rejected
-with the error "Lockdown: kexec: kexec of unsigned images is restricted;
-see man kernel_lockdown.7".
-
-This patch set enables arm64 to make use of the same keyrings as x86 to
-verify the signature kexec'ed kernel image.
-
-Fixes: 732b7b93d849 ("arm64: kexec_file: add kernel signature verification support")
-Cc: stable@vger.kernel.org # 105e10e2cf1c: kexec_file: drop weak attribute from functions
-Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
-Cc: stable@vger.kernel.org # 83b7bb2d49ae: kexec, KEYS: make the code in bzImage64_verify_sig generic
-Acked-by: Baoquan He <bhe@redhat.com>
-Cc: kexec@lists.infradead.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Co-developed-by: Michal Suchanek <msuchanek@suse.de>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm64/kernel/kexec_image.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+v2: dropped TODO: in the Subject line
+ include/linux/serdev.h | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/kernel/kexec_image.c b/arch/arm64/kernel/kexec_image.c
-index 9ec34690e255..5ed6a585f21f 100644
---- a/arch/arm64/kernel/kexec_image.c
-+++ b/arch/arm64/kernel/kexec_image.c
-@@ -14,7 +14,6 @@
- #include <linux/kexec.h>
- #include <linux/pe.h>
- #include <linux/string.h>
--#include <linux/verification.h>
- #include <asm/byteorder.h>
- #include <asm/cpufeature.h>
- #include <asm/image.h>
-@@ -130,18 +129,10 @@ static void *image_load(struct kimage *image,
- 	return NULL;
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 66f624fc618c..69d9c3188065 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -7,9 +7,11 @@
+ 
+ #include <linux/types.h>
+ #include <linux/device.h>
++#include <linux/iopoll.h>
+ #include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/delay.h>
++#include <vdso/time64.h>
+ 
+ struct serdev_controller;
+ struct serdev_device;
+@@ -279,18 +281,10 @@ static inline bool serdev_device_get_cts(struct serdev_device *serdev)
+ 
+ static inline int serdev_device_wait_for_cts(struct serdev_device *serdev, bool state, int timeout_ms)
+ {
+-	unsigned long timeout;
+ 	bool signal;
+ 
+-	timeout = jiffies + msecs_to_jiffies(timeout_ms);
+-	while (time_is_after_jiffies(timeout)) {
+-		signal = serdev_device_get_cts(serdev);
+-		if (signal == state)
+-			return 0;
+-		usleep_range(1000, 2000);
+-	}
+-
+-	return -ETIMEDOUT;
++	return readx_poll_timeout(serdev_device_get_cts, serdev, signal, signal == state,
++				  2000, timeout_ms * USEC_PER_MSEC);
  }
  
--#ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
--static int image_verify_sig(const char *kernel, unsigned long kernel_len)
--{
--	return verify_pefile_signature(kernel, kernel_len, NULL,
--				       VERIFYING_KEXEC_PE_SIGNATURE);
--}
--#endif
--
- const struct kexec_file_ops kexec_image_ops = {
- 	.probe = image_probe,
- 	.load = image_load,
- #ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
--	.verify_sig = image_verify_sig,
-+	.verify_sig = kexec_kernel_verify_pe_sig,
- #endif
- };
+ static inline int serdev_device_set_rts(struct serdev_device *serdev, bool enable)
 -- 
-2.35.3
+2.35.1
 
