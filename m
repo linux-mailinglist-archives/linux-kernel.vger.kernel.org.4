@@ -2,319 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517BD5E7C9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99CB5E7CA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiIWOMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S232304AbiIWONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiIWOMS (ORCPT
+        with ESMTP id S231281AbiIWONS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:12:18 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75006B5A4D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:12:15 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 23:12:04 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663942333;
+        Fri, 23 Sep 2022 10:13:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C05B5A4D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663942396;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dvPwM1cF3LDELbAASe38zl1PgrpfZck8Uq5npiVmskg=;
-        b=lJLV9kQwtjfS4/R2xzfuvYrcfp9xxRrEo1UwiBOqn80UuWnBusebLX7UEmsk98DmZLqRgZ
-        v7QoqT7KwnFA3qA/1gkqqhHjp+V/dfd1FDsM1dHJb+qOaDa3kYPu+SWqWz+FxTNi3fUIE7
-        3l5pPGwU2qDMqS7a04JWLgYEiWm6PdY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] mm/hwpoison: introduce per-memory_block hwpoison
- counter counter
-Message-ID: <20220923141204.GA1484969@ik1-406-35019.vs.sakura.ne.jp>
-References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
- <20220921091359.25889-5-naoya.horiguchi@linux.dev>
- <20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3/tXnfx2ItcntdX91SAbA2MDsexn7TrLVcjXsKnHLr8=;
+        b=Scz8dVCp4Cq9vKyt89ZgXSggMEd8HQlr7LS2jv6bmDEHQbk1Is37cb5Cus9JeukbYkfIkt
+        +UYCBryWEilCHrGSqi7W52TPh/fShzKHvC1nueWy/ZnPGpzUM/6tpomKj17Pkv2AYm2csW
+        rNJCi7+sxESRhWA5uZ7b71nL/JVGvqE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-WaWDUrP3OWaat30aMeE9dw-1; Fri, 23 Sep 2022 10:13:12 -0400
+X-MC-Unique: WaWDUrP3OWaat30aMeE9dw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E685101E14D;
+        Fri, 23 Sep 2022 14:13:12 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 427CA40C2066;
+        Fri, 23 Sep 2022 14:13:12 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.0-rc7
+Date:   Fri, 23 Sep 2022 10:13:12 -0400
+Message-Id: <20220923141312.96688-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There seems another build error in aarch64 with MEMORY_HOTPLUG disabled.
-https://lore.kernel.org/lkml/20220923110144.GA1413812@ik1-406-35019.vs.sakura.ne.jp/
-, so let me revise this patch again to handle it.
+Linus,
 
-- Naoya Horiguchi
+As everyone back came back from conferences, here are the pending patches
+for Linux 6.0.
 
----
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Date: Fri, 23 Sep 2022 22:51:20 +0900
-Subject: [PATCH v5 4/4] mm/hwpoison: introduce per-memory_block hwpoison counter
+The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
 
-Currently PageHWPoison flag does not behave well when experiencing memory
-hotremove/hotplug.  Any data field in struct page is unreliable when the
-associated memory is offlined, and the current mechanism can't tell whether
-a memory section is onlined because a new memory devices is installed or
-because previous failed offline operations are undone.  Especially if
-there's a hwpoisoned memory, it's unclear what the best option is.
+  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
 
-So introduce a new mechanism to make struct memory_block remember that
-a memory block has hwpoisoned memory inside it. And make any online event
-fail if the onlined memory block contains hwpoison.  struct memory_block
-is freed and reallocated over ACPI-based hotremove/hotplug, but not over
-sysfs-based hotremove/hotplug.  So it's desirable to implement hwpoison
-counter on this struct.
+are available in the Git repository at:
 
-Note that clear_hwpoisoned_pages() is relocated to be called earlier than
-now, just before unregistering struct memory_block.  Otherwise, the
-per-memory_block hwpoison counter is freed and we fail to adjust global
-hwpoison counter properly.
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
-ChangeLog v4 -> v5:
-- add Reported-by of lkp bot,
-- check both CONFIG_MEMORY_FAILURE and CONFIG_MEMORY_HOTPLUG in introduced #ifdefs,
-  intending to fix "undefined reference" errors in aarch64.
+for you to fetch changes up to 69604fe76e58c9d195e48b41d019b07fc27ce9d7:
 
-ChangeLog v3 -> v4:
-- fix build error (https://lore.kernel.org/linux-mm/202209231134.tnhKHRfg-lkp@intel.com/)
-  by using memblk_nr_poison() to access to the member ->nr_hwpoison
----
- drivers/base/memory.c  | 34 ++++++++++++++++++++++++++++++++++
- include/linux/memory.h |  3 +++
- include/linux/mm.h     | 24 ++++++++++++++++++++++++
- mm/internal.h          |  8 --------
- mm/memory-failure.c    | 31 ++++++++++---------------------
- mm/sparse.c            |  2 --
- 6 files changed, 71 insertions(+), 31 deletions(-)
+  Merge tag 'kvm-s390-master-6.0-2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD (2022-09-23 10:06:08 -0400)
 
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index 9aa0da991cfb..99e0e789616c 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -183,6 +183,9 @@ static int memory_block_online(struct memory_block *mem)
- 	struct zone *zone;
- 	int ret;
- 
-+	if (memblk_nr_poison(start_pfn))
-+		return -EHWPOISON;
-+
- 	zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
- 				  start_pfn, nr_pages);
- 
-@@ -864,6 +867,7 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
- 		mem = find_memory_block_by_id(block_id);
- 		if (WARN_ON_ONCE(!mem))
- 			continue;
-+		clear_hwpoisoned_pages(memblk_nr_poison(start));
- 		unregister_memory_block_under_nodes(mem);
- 		remove_memory_block(mem);
- 	}
-@@ -1164,3 +1168,33 @@ int walk_dynamic_memory_groups(int nid, walk_memory_groups_func_t func,
- 	}
- 	return ret;
- }
-+
-+#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)
-+void memblk_nr_poison_inc(unsigned long pfn)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		atomic_long_inc(&mem->nr_hwpoison);
-+}
-+
-+void memblk_nr_poison_sub(unsigned long pfn, long i)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		atomic_long_sub(i, &mem->nr_hwpoison);
-+}
-+
-+unsigned long memblk_nr_poison(unsigned long pfn)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		return atomic_long_read(&mem->nr_hwpoison);
-+	return 0;
-+}
-+#endif
-diff --git a/include/linux/memory.h b/include/linux/memory.h
-index aa619464a1df..ad8cd9bb3239 100644
---- a/include/linux/memory.h
-+++ b/include/linux/memory.h
-@@ -85,6 +85,9 @@ struct memory_block {
- 	unsigned long nr_vmemmap_pages;
- 	struct memory_group *group;	/* group (if any) for this block */
- 	struct list_head group_next;	/* next block inside memory group */
-+#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)
-+	atomic_long_t nr_hwpoison;
-+#endif
- };
- 
- int arch_get_memory_phys_device(unsigned long start_pfn);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2bb5d1596041..936864d6f8be 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3280,6 +3280,7 @@ extern int soft_offline_page(unsigned long pfn, int flags);
- #ifdef CONFIG_MEMORY_FAILURE
- extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
- extern void num_poisoned_pages_inc(unsigned long pfn);
-+extern void clear_hwpoisoned_pages(long nr_poison);
- #else
- static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
- {
-@@ -3289,6 +3290,29 @@ static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
- static inline void num_poisoned_pages_inc(unsigned long pfn)
- {
- }
-+
-+static inline void clear_hwpoisoned_pages(long nr_poison)
-+{
-+}
-+#endif
-+
-+#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)
-+extern void memblk_nr_poison_inc(unsigned long pfn);
-+extern void memblk_nr_poison_sub(unsigned long pfn, long i);
-+extern unsigned long memblk_nr_poison(unsigned long pfn);
-+#else
-+static inline void memblk_nr_poison_inc(unsigned long pfn)
-+{
-+}
-+
-+static inline void memblk_nr_poison_sub(unsigned long pfn, long i)
-+{
-+}
-+
-+static inline unsigned long memblk_nr_poison(unsigned long pfn)
-+{
-+	return 0;
-+}
- #endif
- 
- #ifndef arch_memory_failure
-diff --git a/mm/internal.h b/mm/internal.h
-index b3002e03c28f..42ba8b96cab5 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -708,14 +708,6 @@ extern u64 hwpoison_filter_flags_value;
- extern u64 hwpoison_filter_memcg;
- extern u32 hwpoison_filter_enable;
- 
--#ifdef CONFIG_MEMORY_FAILURE
--void clear_hwpoisoned_pages(struct page *memmap, int nr_pages);
--#else
--static inline void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
--{
--}
--#endif
--
- extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
-         unsigned long, unsigned long,
-         unsigned long, unsigned long);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index a069d43bc87f..03479895086d 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -74,14 +74,17 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
- 
- static bool hw_memory_failure __read_mostly = false;
- 
--static inline void num_poisoned_pages_inc(unsigned long pfn)
-+void num_poisoned_pages_inc(unsigned long pfn)
- {
- 	atomic_long_inc(&num_poisoned_pages);
-+	memblk_nr_poison_inc(pfn);
- }
- 
- static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
- {
- 	atomic_long_sub(i, &num_poisoned_pages);
-+	if (pfn != -1UL)
-+		memblk_nr_poison_sub(pfn, i);
- }
- 
- /*
-@@ -2414,6 +2417,10 @@ int unpoison_memory(unsigned long pfn)
- unlock_mutex:
- 	mutex_unlock(&mf_mutex);
- 	if (!ret || freeit) {
-+		/*
-+		 * TODO: per-memory_block counter might break when the page
-+		 * size to be unpoisoned is larger than a memory_block.
-+		 */
- 		num_poisoned_pages_sub(pfn, count);
- 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
- 				 page_to_pfn(p), &unpoison_rs);
-@@ -2618,25 +2625,7 @@ int soft_offline_page(unsigned long pfn, int flags)
- 	return ret;
- }
- 
--void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
-+void clear_hwpoisoned_pages(long nr_poison)
- {
--	int i, total = 0;
--
--	/*
--	 * A further optimization is to have per section refcounted
--	 * num_poisoned_pages.  But that would need more space per memmap, so
--	 * for now just do a quick global check to speed up this routine in the
--	 * absence of bad pages.
--	 */
--	if (atomic_long_read(&num_poisoned_pages) == 0)
--		return;
--
--	for (i = 0; i < nr_pages; i++) {
--		if (PageHWPoison(&memmap[i])) {
--			total++;
--			ClearPageHWPoison(&memmap[i]);
--		}
--	}
--	if (total)
--		num_poisoned_pages_sub(total);
-+	num_poisoned_pages_sub(-1UL, nr_poison);
- }
-diff --git a/mm/sparse.c b/mm/sparse.c
-index e5a8a3a0edd7..2779b419ef2a 100644
---- a/mm/sparse.c
-+++ b/mm/sparse.c
-@@ -926,8 +926,6 @@ void sparse_remove_section(struct mem_section *ms, unsigned long pfn,
- 		unsigned long nr_pages, unsigned long map_offset,
- 		struct vmem_altmap *altmap)
- {
--	clear_hwpoisoned_pages(pfn_to_page(pfn) + map_offset,
--			nr_pages - map_offset);
- 	section_deactivate(pfn, nr_pages, altmap);
- }
- #endif /* CONFIG_MEMORY_HOTPLUG */
--- 
-2.37.3.518.g79f2338b37
+----------------------------------------------------------------
+ARM:
+
+* Fix for kmemleak with pKVM
+
+s390:
+
+* Fixes for VFIO with zPCI
+
+* smatch fix
+
+x86:
+
+* Ensure XSAVE-capable hosts always allow  FP and SSE state to be saved
+  and restored via KVM_{GET,SET}_XSAVE
+
+* Fix broken max_mmu_rmap_size stat
+
+* Fix compile error with old glibc that doesn't have gettid()
+
+----------------------------------------------------------------
+Dr. David Alan Gilbert (1):
+      KVM: x86: Always enable legacy FP/SSE in allowed user XFEATURES
+
+Janis Schoetterl-Glausch (1):
+      KVM: s390: Pass initialized arg even if unused
+
+Jinrong Liang (1):
+      selftests: kvm: Fix a compile error in selftests/kvm/rseq_test.c
+
+Matthew Rosato (3):
+      KVM: s390: pci: fix plain integer as NULL pointer warnings
+      KVM: s390: pci: fix GAIT physical vs virtual pointers usage
+      KVM: s390: pci: register pci hooks without interpretation
+
+Miaohe Lin (1):
+      KVM: x86/mmu: add missing update to max_mmu_rmap_size
+
+Paolo Bonzini (2):
+      Merge tag 'kvmarm-fixes-6.0-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvm-s390-master-6.0-2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD
+
+Sean Christopherson (2):
+      KVM: x86: Reinstate kvm_vcpu_arch.guest_supported_xcr0
+      KVM: x86: Inject #UD on emulated XSETBV if XSAVES isn't enabled
+
+Zenghui Yu (1):
+      KVM: arm64: Use kmemleak_free_part_phys() to unregister hyp_mem_base
+
+ arch/arm64/kvm/arm.c                    |  2 +-
+ arch/s390/kvm/gaccess.c                 | 16 +++++++++++++---
+ arch/s390/kvm/interrupt.c               |  2 +-
+ arch/s390/kvm/kvm-s390.c                |  4 ++--
+ arch/s390/kvm/pci.c                     | 20 ++++++++++++++------
+ arch/s390/kvm/pci.h                     |  6 +++---
+ arch/x86/include/asm/kvm_host.h         |  1 +
+ arch/x86/kvm/cpuid.c                    | 11 ++++++++---
+ arch/x86/kvm/emulate.c                  |  3 +++
+ arch/x86/kvm/mmu/mmu.c                  |  2 ++
+ arch/x86/kvm/x86.c                      | 10 +++-------
+ tools/testing/selftests/kvm/rseq_test.c |  2 +-
+ 12 files changed, 52 insertions(+), 27 deletions(-)
 
