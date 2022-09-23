@@ -2,126 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EB55E7F51
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F3F5E7F58
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbiIWQKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S232536AbiIWQOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIWQKr (ORCPT
+        with ESMTP id S229495AbiIWQOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:10:47 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80054.outbound.protection.outlook.com [40.107.8.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269D100ABF;
-        Fri, 23 Sep 2022 09:10:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R0lwXVQaYy2bCqosjikh3DMpA3+DjQs+WaAUrVjq2wRV/BAEE3UBvJaO/qkmRgi86ZXVkSvCTz/ao10tLNvuzg6WFyNiHJIPuvab6zu5U5E36gX2RchMlrJR4fnNshR1Jvy7fHtA+D7aystkkdeHzMSz/c2vLxMwSRdpIrzy2U7x+1K/oucx+na5sARX190r0rkLv8cwRFlBZBSqeOYIUQmRW8ei8Q645pEpD9UImBLjXTRoYkGlfqB2/xkFgRIpxgJzH7aNWQWT98tGdyOy59Z9uYQfC2Ror1D/Q+0LIucci7F3/D4QJduV/SHKQp5YT2HeuigSiLxomC5bcjRDlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0I9d6fFTkUE/1Ec4HDlr0XPlyYKYoNV1csdu1HWClJA=;
- b=POqecjvyXmUCoiADkU+aSyHlsIsEhK89ch+WI88MNuardAcKwV7mEP2ygJa3q+l4Mfkk2FLMCPFbVhT530c2qtLKeYqr5hb4crClUtx5dUL53IP/0fA+lZBTH2rEOr+BIro3iieEMPgjUj8uX7f6aS1ArOSl6vngZA1osN/IhSclaWZvcOGFeDkIIIQssVUuQajcCgmELJgpgTC2owUUokl8U91J0S3Grjw81H4SLBOsC5noD6t0ie9J8wyKhweSy6VRbB5BnWuU+4IF5j/S2hpUsizjS7jKnzFR0R7egW41vbk9vloQ/45+dGXjkF/am5FC0/dUBSal4e1zmXqAxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0I9d6fFTkUE/1Ec4HDlr0XPlyYKYoNV1csdu1HWClJA=;
- b=B1qlAF8H23zlDkmOB7AASlwD7Or5T72RArbywFCcc16SDHb65yZ3nVyNd0Dk4fn5cS8Oa+fGoskY0ev9RSupG4mkhslM+pVDtjpa2KdkLIEPA8Qi2ySsgs5TKKcoT9yeufmvVfyjfukO2WLFvY+/AmgA+Dutjs0MrvCY5204WuIcK1j4F04sU0gZD0i4rvFrhcveqSlu3DwWFiODj8oaP+OzMl1R7uQOLauGcQslHx0liSOzLKxcTNcRYP8Q9iJprEUUvKxo02lmQTqntQIBZ6EuYvcFDlxYsb5mN0IWxdW1HTmluPstq9ejyPJ4kkP5zpFB3Z5ejkQym4xGZHeCmw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by DBAPR03MB6502.eurprd03.prod.outlook.com (2603:10a6:10:196::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
- 2022 16:10:40 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::204a:de22:b651:f86d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::204a:de22:b651:f86d%6]) with mapi id 15.20.5654.014; Fri, 23 Sep 2022
- 16:10:40 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [PATCH v2 5/9] arm64: dts: ls1046a: make dma-coherent global to
- the SoC
-To:     Li Yang <leoyang.li@nxp.com>, shawnguo@kernel.org,
-        devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>
-References: <20220915233432.31660-1-leoyang.li@nxp.com>
- <20220915233432.31660-6-leoyang.li@nxp.com>
-Message-ID: <e27d295b-abbf-716c-5e0d-97dd63ce07df@seco.com>
-Date:   Fri, 23 Sep 2022 12:10:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20220915233432.31660-6-leoyang.li@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0443.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::28) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Fri, 23 Sep 2022 12:14:04 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439E91280F1;
+        Fri, 23 Sep 2022 09:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YgHH6pk3nJLXW2jbXtGoxm+4FKcaifQJYVKj+aRwkxg=; b=ELnSTSol/sfK6s31ClYuS8gszF
+        sgXyMtpRrY266URjhhF2+1SDFZPQ78gjuIuhX2IKz28nBNhRVMvO+lvdYB0u9QfxT77iP5VaWVadQ
+        XQ7c8C2XILfSmvEUEZNndcp74iadwyK5fGrJ2BFrCVFtzqPwlVzV8idNgG0D9vuRVL5c60jrYWDzq
+        7t0rwxdFdeOKfLhnBFBDnyEJQ9KRzGyGnf7Y6ovolAFvEL3wYKawkB7tGYFSqpHRkMjTbebYoWz82
+        P+56yyxTj49Ngg8b0QDC7L5mid0UQH+ffCszwa9c1DnG3p+HPNkrve7pWm/ViH77+sQ5wQ2HwLSDK
+        1uOznKEw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oblJ8-002uO3-0s;
+        Fri, 23 Sep 2022 16:13:42 +0000
+Date:   Fri, 23 Sep 2022 17:13:42 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <Yy3bNjaiUoGv/djG@ZenIV>
+References: <20220906102106.q23ovgyjyrsnbhkp@quack3>
+ <YxhaJktqtHw3QTSG@infradead.org>
+ <YyFPtTtxYozCuXvu@ZenIV>
+ <20220914145233.cyeljaku4egeu4x2@quack3>
+ <YyIEgD8ksSZTsUdJ@ZenIV>
+ <20220915081625.6a72nza6yq4l5etp@quack3>
+ <YyvG+Oih2A37Grcf@ZenIV>
+ <YyxzYTlyGhbb2MOu@infradead.org>
+ <Yy00eSjyxvUIp7D5@ZenIV>
+ <Yy1x8QE9YA4HHzbQ@infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|DBAPR03MB6502:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03b9df79-11ca-44a5-5c2d-08da9d7e28f1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6RFEOR0PMY7VTh0AHqYraWPuxMuweTI+8y8BD47ZnAHU0CcHXTRF59q4YtsNN2hy711TQtSVnRohbmFzC8togae51fTMk+I5KdEyBD7Jzzvc5heFOBpU89vHPlFxg+bP31wvz7RhUa94fmsR26unc5dKCgwhueTNPGWym0wH02gTWM8ZJ3v6fr8NvAKoQeljqSnlyYjWwrN80Fii7WmjQSjHLvDidyn+AQaTdhnsSPpHi5C2oIu6185c6CDZebgFL5kkcQVmzbpZMD9m7uKv41i9fh+W07axZy6ORmGJHeUgJfp6aEGg/HIpuXymdbs61+HKjg9pZC5UARoHzTGsmkPzMwndoNfDqpVPgwNJ8BM4govuX3uEnBvo7SVuIUQcr6crUvuzhNgItCj5pgU7FRO5S3Ifr3xmH/WP3suYQqLGJiFxGmR2oWMP/I2EXmnLk0H63TlJRBVRjP5z3s1UIInNrUv5P0xd5EmSqzgh5zjYf6+U1dK+9czVkLhj6sxyWfTMpIFbW9dhAOC44rv7lSplhN4AFErpnmYB4F3dN8CIOIRPx8akNDzrgDeD90hJPygb8s1CaOBQst5FENvd3WohIy8AoR9+wOW47CQz/Ns4xz5TvJA56AhVzCQ6lchD9nnTYJ3auv7i+PuNAMLconfgDFsJ+rHwohzM+XsSCWTxB+s8bk5JlYIYPaDS/qsD5pPEWWs111klQRnbLSCGT65CF/M4xWMUdwXIJ+/hgJWgJ1RVPm2c0fTx5XYP9SBO5BXUdjq5HX/4PkSWaxBz8+Eq0BKdeXqibetMVLeyUM0Hw7xDxDLoROdEmZPvM7V627GNWx52Yr+xfU6XcGnz7d0onO/Mwbv2q29P+eJ6VJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(39840400004)(346002)(376002)(136003)(451199015)(6666004)(6506007)(26005)(52116002)(6512007)(53546011)(36756003)(2616005)(316002)(478600001)(6486002)(186003)(966005)(86362001)(38350700002)(38100700002)(31696002)(83380400001)(31686004)(44832011)(2906002)(5660300002)(66946007)(41300700001)(66476007)(4326008)(66556008)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmIrR3A1NGVvVzhhREREWENhSFpacjd2aU9KNk9zRHUvNzhGQVJoMW9xYXM2?=
- =?utf-8?B?MVBtamg0TDRPQ1RMNG1YZ0x3WkZ4VFFwQ0RKWGJMY3YvN1piSFJyRW4ycXhk?=
- =?utf-8?B?M1dZUGJOeXFBNUMvc25EVWN0bEhva3FRQjh2blVUWkNuK0dXdGFDdFFHOWd4?=
- =?utf-8?B?dkcvR09sc2tQUVNZdTZab0dvazAxcUU4TFNTV3pid2x5UFdZcnNoUkhTcExO?=
- =?utf-8?B?dFFHaENMQnk2cUtSbWpRS05tYXRBM0F2Zm1EMU41eEVXdVlUYVRHODFWS1Mz?=
- =?utf-8?B?T1RGb1hobHRtZ0NPYXVJMWhYaXFpZFpLRDBveVRaeXBjSHFkS3dhL29IOHR1?=
- =?utf-8?B?bmRvVGszSHBIeXZsd1hYN01Cc1huQ25kNWZNOVBKcHU4bEpGd3VIQXJlbUp2?=
- =?utf-8?B?MzJaUC9NaUZZZmRIY1M4RU5HeXFmNStTaE1tQi9XcnZwVWVOMjYxanhiMmcz?=
- =?utf-8?B?RWV3MTFxS0NsWXNLeTZuOW9NcWRqQnZYU1F5K3hYaVp0THVCc3RSTTJBRnlp?=
- =?utf-8?B?RmRJdEoxb2dOUTdVQ0Fya096U1pXL0ZZM3FQdW42dHJMbUlaWVlzUXYyQUZ1?=
- =?utf-8?B?YUdXVGFoeXdDc3lZTUloMlJpbmhVMW1oK1VvVlozTlJBbytpU1A0bUJxR0xO?=
- =?utf-8?B?WlduVUZjTjQ1Tkd5ZHNKbHFzaHBYQmNVUThWWmJuUGJ5a2o2L2RBOEtLZTZh?=
- =?utf-8?B?cjV0dk9GTFBsdkhreUFPVmxFN0hlUSttanRNcThyYjN6Tmc5bkFsSDBZc1ZV?=
- =?utf-8?B?ZW9BY0c3bVIzTUdhVDZtTDRZSFhxSWZFdm0wdENRajdXcDdvU2xoaVQ3R3Aw?=
- =?utf-8?B?ZW1LckJCZXVyQ1VkMnpFUTY4cXVMelhQWU4rWWlWZzc4c1Fnc0kwSHBlQ2My?=
- =?utf-8?B?cEJWN1NhZ2w1VitoT2hlY2pMalg0emxjT0xWMmlXNHQ3K3d0ekRXL3JyMmM4?=
- =?utf-8?B?cmIvVlBSYWRtK1hVVzMxcFNhcGtKNVNlWXZkdzNlb1dGbEE3L0dzUy9WbUVh?=
- =?utf-8?B?QmJiMm5ZQmxOc0huWlRyQWRtMGpNOS9MalpJOFY0MmlJN2QxOGxKbHNPeTlP?=
- =?utf-8?B?WmlTbzJtRlVOK2VxUms1ZC8vQVk1akJ3UTA4RDNnM1NEQ3NET2JiL0pBNkhC?=
- =?utf-8?B?T3FpZ1dxMlpUU1FablpHZ3YrWDRJazRSZlRSeTJ5elY0WlIzYXg5djJheEg3?=
- =?utf-8?B?QWhiTElOZEFVbjhOTnhQVDNEOXNyL1RXbEtieTJ6YndyRnB1UDF1ejBIQ3Ni?=
- =?utf-8?B?eGRYd2NPb0N3ZXk4WWk2S1ZHU2ZHeCtqUWIxS3BKeUFLSVIrSmU4T2gzYUVD?=
- =?utf-8?B?dW1OVEJDK1FhU0RrMnNMVjdIZ0I4eGZlVzBsK0lBaUhLaS9EZHRIWnhmc1pj?=
- =?utf-8?B?RFZwMXVzZGhYbzlPbGVYcFFCNlBTNDMzbXZtN3VKYVoyc0xNby9CRDVZR1dw?=
- =?utf-8?B?ejdsRWkxcVlnVCtCNHUrRmtpSzVxMDF1ejUvTlNVUUVzdDBrbi95dk5SNG5y?=
- =?utf-8?B?V3NsVE5WcC9vZFJ1THB6SXE3TC9iQThwQ2hvdHg4Z0FsWUZVdEpGaHlremNi?=
- =?utf-8?B?aktkdjFSam5CM2habWV4ZXlCY0lObytBTERnLzB4a0pZbXdhTlVCbzM4ZE5I?=
- =?utf-8?B?OG0xcWhpTXhFRXZ2TTMrbGdHRjFIeTIwK0FxZGZ6b3ZpT2dEdEU0QjNCYzFR?=
- =?utf-8?B?OEcvdEtNaFJ2R2pXcEwzRXc2ZTE3TTRpd3JNWU1wZDZjY3hEU2haQWlnUUJn?=
- =?utf-8?B?dFRlbjBpcEkzQlhETVhDcnUyRXlVRWxpRHgzTHBTdVBZVUU2Z0YrV2cySU1T?=
- =?utf-8?B?ZWZtSGMraGVGdksrd0JGcWkxTnc0WnV3ZnNGYlNCdjV1WktwTmNyREl6WjRM?=
- =?utf-8?B?d2Z5NHhGK0htUGdSMGRVdDYxMEtmY3FrQUQ1di95UVRQSEVYYy9FdWd6c21U?=
- =?utf-8?B?N3NHV3FaYnRWYS8wdThpdTBkcFhMZ1VxZVljQWR6bkVhMmlMUlhsR0tPZ0dz?=
- =?utf-8?B?cFVkVEVMYUUvdGl6bDNCUDNOWloxcXF2Z2liekNKazdqMXNNWUgxZHN2b0N4?=
- =?utf-8?B?TkNNVHpOaE5leFV2bHFSTjJHaUNadFFaRlk3UHN3cS91YVlrdmtGUVdZcFRS?=
- =?utf-8?B?MzJYT1hTQTE3YXU1YVlqUEFGZTBjekQrWHF3RlV2NGFUUkdBUjdVOGFncXht?=
- =?utf-8?B?d2c9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03b9df79-11ca-44a5-5c2d-08da9d7e28f1
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 16:10:40.6567
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mitTPkHrjD7FRKH5P54MwFZHkEIVmrcAOR2Dxze8m4hgt/xcFJwNJCTx5WXUL+i89CGs6qJ1dtYT/Uoljpa6sQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR03MB6502
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy1x8QE9YA4HHzbQ@infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,73 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 23, 2022 at 01:44:33AM -0700, Christoph Hellwig wrote:
 
-Hi All,
+> Why would I?  We generall do have or should have the iov_iter around.
 
-On 9/15/22 7:34 PM, Li Yang wrote:
-> These SoCs are really completely dma coherent in their entirety so add
-> the dma-coherent property at the soc level in the device tree and drop
-> the instances where it's specifically added to a few select devices.
+Not for async IO.
+
+> And for the common case where we don't (bios) we can carry that
+> information in the bio as it needs a special unmap helper anyway.
+
+*Any* async read_iter is like that.
+
+> > Where are they getting
+> > dropped and what guarantees that IO is complete by that point?
 > 
-> Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+> The exact place depens on the exact taaraget frontend of which we have
+> a few.  But it happens from the end_io callback that is triggered
+> through a call to target_complete_cmd.
+
+OK...
+
+> > The reason I'm asking is that here you have an ITER_BVEC possibly fed to
+> > __blkdev_direct_IO_async(), with its
+> >         if (iov_iter_is_bvec(iter)) {
+> >                 /*
+> >                  * Users don't rely on the iterator being in any particular
+> >                  * state for async I/O returning -EIOCBQUEUED, hence we can
+> >                  * avoid expensive iov_iter_advance(). Bypass
+> >                  * bio_iov_iter_get_pages() and set the bvec directly.
+> >                  */
+> >                 bio_iov_bvec_set(bio, iter);
+> > which does *not* grab the page referneces.  Sure, bio_release_pages() knows
+> > to leave those alone and doesn't drop anything.  However, what is the
+> > mechanism preventing the pages getting freed before the IO completion
+> > in this case?
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> index 27033c558e3e..e406499a26b4 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> @@ -273,6 +273,7 @@ soc: soc {
->  		#size-cells = <2>;
->  		ranges;
->  		dma-ranges = <0x0 0x0 0x0 0x0 0x10000 0x00000000>;
-> +		dma-coherent;
->  
->  		ddr: memory-controller@1080000 {
->  			compatible = "fsl,qoriq-memory-controller";
-> @@ -355,7 +356,6 @@ crypto: crypto@1700000 {
->  			ranges = <0x0 0x00 0x1700000 0x100000>;
->  			reg = <0x00 0x1700000 0x0 0x100000>;
->  			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
-> -			dma-coherent;
->  
->  			sec_jr0: jr@10000 {
->  				compatible = "fsl,sec-v5.4-job-ring",
-> @@ -794,7 +794,6 @@ pcie1: pcie@3400000 {
->  			#address-cells = <3>;
->  			#size-cells = <2>;
->  			device_type = "pci";
-> -			dma-coherent;
->  			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
->  			ranges = <0x81000000 0x0 0x00000000 0x40 0x00010000 0x0 0x00010000   /* downstream I/O */
-> @@ -834,7 +833,6 @@ pcie2: pcie@3500000 {
->  			#address-cells = <3>;
->  			#size-cells = <2>;
->  			device_type = "pci";
-> -			dma-coherent;
->  			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
->  			ranges = <0x81000000 0x0 0x00000000 0x48 0x00010000 0x0 0x00010000   /* downstream I/O */
-> @@ -874,7 +872,6 @@ pcie3: pcie@3600000 {
->  			#address-cells = <3>;
->  			#size-cells = <2>;
->  			device_type = "pci";
-> -			dma-coherent;
->  			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
->  			ranges = <0x81000000 0x0 0x00000000 0x50 0x00010000 0x0 0x00010000   /* downstream I/O */
-> 
+> The contract that callers of bvec iters need to hold their own
+> references as without that doing I/O do them would be unsafe.  It they
+> did not hold references the pages could go away before even calling
+> bio_iov_iter_get_pages (or this open coded bio_iov_bvec_set).
 
-I'd like to summarize the conclusions of [1] below. This patch breaks
-I2C0, which is the only user of eDMA at the moment. eDMA is noncoherent
-because snooping is not enabled for it. I have submitted a patch [2] to
-U-Boot to enable snooping for eDMA. For now, this patch must add
-dma-noncoherent to the i2c0 node.
+You are mixing two issues here - holding references to pages while using
+iov_iter instance is obvious; holding them until async IO is complete, even
+though struct iov_iter might be long gone by that point is a different
+story.
 
---Sean
+And originating iov_iter instance really can be long-gone by the time
+of IO completion - requirement to keep it around would be very hard to
+satisfy.  I've no objections to requiring the pages in ITER_BVEC to be
+preserved at least until the IO completion by means independent of
+whatever ->read_iter/->write_iter does to them, but
+	* that needs to be spelled out very clearly and
+	* we need to verify that it is, indeed, the case for all existing
+iov_iter_bvec callers, preferably with comments next to non-obvious ones
+(something that is followed only by the sync IO is obvious)
 
-[1] https://lore.kernel.org/linux-arm-kernel/29a09f45-24f9-68be-bdc2-8691af41b5db@seco.com/T/#t
-[2] https://lore.kernel.org/u-boot/20220923160551.2200873-1-sean.anderson@seco.com/T/#u
+That goes not just for bio - if we make get_pages *NOT* grab references
+on ITER_BVEC (and I'm all for it), we need to make sure that those
+pages won't be retained after the original protection runs out.  Which
+includes the reference put into struct nfs_request, for example, as well
+as whatever ceph transport is doing, etc.  Another thing that needs to
+be sorted out is __zerocopy_sg_from_iter() and its callers - AFAICS,
+all of those are in ->sendmsg() with MSG_ZEROCOPY in flags.
+
+It's a non-trivial amount of code audit - we have about 40 iov_iter_bvec()
+callers in the tree, and while many are clearly sync-only... the ones
+that are not tend to balloon into interesting analysis of call chains, etc.
+
+Don't get me wrong - that analysis needs to be done, just don't expect
+it to be trivial.  And it will require quite a bit of cooperation from the
+folks familiar with e.g. drivers/target, or with ceph transport layer,
+etc.
+
+FWIW, my preference would be along the lines of
+
+	Backing memory for any non user-backed iov_iter should be protected
+	from reuse by creator of iov_iter and that protection should continue
+	through not just all synchronous operations with iov_iter in question
+	- it should last until all async operations involving that memory are
+	finished.  That continued protection must not depend upon taking
+	extra page references, etc. while we are working with iov_iter.
+
+But getting there will take quite a bit of code audit and probably some massage
+as well.
