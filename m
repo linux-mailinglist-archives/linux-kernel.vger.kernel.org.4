@@ -2,169 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C15E70CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3FC5E70CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiIWApz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
+        id S230510AbiIWAqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiIWApw (ORCPT
+        with ESMTP id S229503AbiIWAqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:45:52 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D322EE21F7;
-        Thu, 22 Sep 2022 17:45:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYYNQ0zZTz4xFt;
-        Fri, 23 Sep 2022 10:45:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663893943;
-        bh=rGf9RK9axNS29lF+1Tk0fM4E8gstBlgMV5uuDa8Dis8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cdJa2l/NjA63O5kbi8vAAUzH8KEycYSEykyhYn0ooK9GUzCEPq3lE24wVGgas+p36
-         j75ZfTNl4qt35sRWAzwOxbFu/EUvfG2hfkKtTJkUTnP7A2Kxr9fwS4dF7CJ2S6cIVN
-         bfXw34dbTMI5VuNkxxq/+3OBvVz5xmBj3TRIBm5wiXjay4FVMnoleDQ/lj1Rp5HMqu
-         v7Sfv9ikb7F5viY9RopTGBzC+Kkve320utUZfYCObWCZBiI42vBYZf2M1FfLlsGkXI
-         7c7FL9iheayAMLjU7SmsM5mP8qT+514+QUhurprcbEq0k1Kybn0HTaxFRZW/3dMotA
-         KvWjeCEK5W8Lg==
-Date:   Fri, 23 Sep 2022 10:45:38 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: linux-next: manual merge of the net-next tree with the bpf tree
-Message-ID: <20220923104538.4e159c3a@canb.auug.org.au>
+        Thu, 22 Sep 2022 20:46:36 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A49FE21F7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:46:35 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id a20so7496538qtw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=mXVWJIJwSO3raPa9ufywv7c+77gnmVznFVtzSWE/PWI=;
+        b=CnUtdlr3MflXY9APdCyGECCKCC6Tg9h7Xm0eVaSftVCuFpx60N0VpT3gsXKWp2kJTY
+         BXfmkKkmCmMzeBqeM5TSPaMsFazVxYCHrB9XzOgVrMnFKe3GXPL9xlqeXzL71fci+GQQ
+         1xYLa7an7rxSru244yJW+eB9FK8APVNsjDKGTjwtGH7hKxgKNOS0B5QptjEbE04XDya7
+         3zsVN2/eKX24VQntvodQAVNVCUPnO7xHK7i8AYcAo4Z+kwLOlvwVEbVBcMyipjuBhQIL
+         ZEE/yM3/2wqIf/Gz7jH880f9PvFOwqvoAYltFFZAufrTg6Lrk5XgGIlT8vo3hY8RiTex
+         i16w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=mXVWJIJwSO3raPa9ufywv7c+77gnmVznFVtzSWE/PWI=;
+        b=4CZCzMWfxtmptleWjmKv5WnhzI3Py76WhOQmpEAKBx30jXMRHhjjUXRR1Pm1I95zrX
+         dJ6z5cojrTjjjhfUTOyhZiO/TRjwHqGQvIgsbdmq76QMgNr6HMEyuUr77cH33LMxxjhr
+         RYGVUvWHxkGVU1AgfsP4n9jaDoGZFJs63CgUrgkLsbAkPzmMDUNr7S2FKX1SRyV1JnXC
+         rE+5MSSvqFkdlNr/VU8uJO/XavdqKS2jUtaguLca6fKq46seLCI7CWTbFPtsrVCPEsKA
+         IhF8D00HINDdXXgD5OoZBQT+ZP44C/Xtt2gegWIy0zVNf+iqE9FQa2QfP599QICRzvbj
+         igYg==
+X-Gm-Message-State: ACrzQf0j1qEL8ZCKfO4xwoNgwz+Vli/MSpB3bdiDuyPIbvHKL9BlqM6R
+        0pOyUPOzFekY+l1/3TDCaw==
+X-Google-Smtp-Source: AMsMyM7Vwi8UT8AzmcUsgZ+9Dfnkxh4vwpyYFitMUQ1x78fA2yBEqtNkAHc+z3c3ThqM2bEfFYa5lA==
+X-Received: by 2002:ac8:578c:0:b0:35c:d9fe:98f7 with SMTP id v12-20020ac8578c000000b0035cd9fe98f7mr5175139qta.360.1663893994524;
+        Thu, 22 Sep 2022 17:46:34 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id br30-20020a05620a461e00b006ceafb1aa92sm5152695qkb.96.2022.09.22.17.46.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 17:46:33 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:5d3f:d09:85d2:d6e])
+        by serve.minyard.net (Postfix) with ESMTPSA id 9E69A180015;
+        Fri, 23 Sep 2022 00:46:32 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 19:46:31 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     ChiaWei Wang <chiawei_wang@aspeedtech.com>
+Cc:     "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH] ipmi: kcs: aspeed: Update port address comments
+Message-ID: <Yy0B5+jzc7R7Drz7@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220920020333.601-1-chiawei_wang@aspeedtech.com>
+ <YyywI8265vECnEHv@minyard.net>
+ <HK0PR06MB37794D51E9DB4A864249F96691519@HK0PR06MB3779.apcprd06.prod.outlook.com>
+ <Yyz70LckHqyiNhGa@minyard.net>
+ <HK0PR06MB377992E9AF7B91CE41452B4A91519@HK0PR06MB3779.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x.xndCVlhRvd.Rgtr_1BZpg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HK0PR06MB377992E9AF7B91CE41452B4A91519@HK0PR06MB3779.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/x.xndCVlhRvd.Rgtr_1BZpg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Sep 23, 2022 at 12:38:08AM +0000, ChiaWei Wang wrote:
+> > From: Corey Minyard <tcminyard@gmail.com> On Behalf Of Corey Minyard
+> > Sent: Friday, September 23, 2022 8:21 AM
+> > 
+> > On Fri, Sep 23, 2022 at 12:08:07AM +0000, ChiaWei Wang wrote:
+> > > Hi Corey,
+> > >
+> > > > From: Corey Minyard <tcminyard@gmail.com> On Behalf Of Corey
+> > Minyard
+> > > > Sent: Friday, September 23, 2022 2:58 AM
+> > > >
+> > > > On Tue, Sep 20, 2022 at 10:03:33AM +0800, Chia-Wei Wang wrote:
+> > > > > Remove AST_usrGuide_KCS.pdf as it is no longer maintained.
+> > > >
+> > > > Even if it's no longer maintained, is it useful?  It seems better to
+> > > > leave in useful documentation unless it has been replaced with something
+> > else.
+> > >
+> > > This document has no permeant public link to access.
+> > > Aspeed has dropped this file but we keep receiving customer request asking
+> > for this document.
+> > > The most important part regarding KCS port rule is still kept in the updated
+> > comment.
+> > 
+> > I mean, if you have code that is implementing what is documented, why did
+> > you remove the document?  I don't understand why you would retire
+> > documentation that people still want to use.
+> > 
+> > I could put it on the IPMI sourceforge or github page as a historical document.
+> 
+> This document is a personal note of one of our former employee.
+> It is known to only the owner and his supporting customers.
+> Most of us has no access to this document.
+> In addition, after chip revision, certain information is not guaranteed anymore.
 
-Hi all,
+Ok, I'll take the patch.  Thanks.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+-corey
 
-  kernel/bpf/helpers.c
-
-between commit:
-
-  8addbfc7b308 ("bpf: Gate dynptr API behind CAP_BPF")
-
-from the bpf tree and commits:
-
-  8a67f2de9b1d ("bpf: expose bpf_strtol and bpf_strtoul to all program type=
-s")
-  5679ff2f138f ("bpf: Move bpf_loop and bpf_for_each_map_elem under CAP_BPF=
-")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc kernel/bpf/helpers.c
-index 3814b0fd3a2c,fc08035f14ed..000000000000
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@@ -1627,12 -1607,26 +1607,12 @@@ bpf_base_func_proto(enum bpf_func_id fu
-  		return &bpf_ringbuf_discard_proto;
-  	case BPF_FUNC_ringbuf_query:
-  		return &bpf_ringbuf_query_proto;
-- 	case BPF_FUNC_for_each_map_elem:
-- 		return &bpf_for_each_map_elem_proto;
-- 	case BPF_FUNC_loop:
-- 		return &bpf_loop_proto;
- -	case BPF_FUNC_ringbuf_reserve_dynptr:
- -		return &bpf_ringbuf_reserve_dynptr_proto;
- -	case BPF_FUNC_ringbuf_submit_dynptr:
- -		return &bpf_ringbuf_submit_dynptr_proto;
- -	case BPF_FUNC_ringbuf_discard_dynptr:
- -		return &bpf_ringbuf_discard_dynptr_proto;
-  	case BPF_FUNC_strncmp:
-  		return &bpf_strncmp_proto;
-+ 	case BPF_FUNC_strtol:
-+ 		return &bpf_strtol_proto;
-+ 	case BPF_FUNC_strtoul:
-+ 		return &bpf_strtoul_proto;
- -	case BPF_FUNC_dynptr_from_mem:
- -		return &bpf_dynptr_from_mem_proto;
- -	case BPF_FUNC_dynptr_read:
- -		return &bpf_dynptr_read_proto;
- -	case BPF_FUNC_dynptr_write:
- -		return &bpf_dynptr_write_proto;
- -	case BPF_FUNC_dynptr_data:
- -		return &bpf_dynptr_data_proto;
-  	default:
-  		break;
-  	}
-@@@ -1661,20 -1655,10 +1641,24 @@@
-  		return &bpf_timer_cancel_proto;
-  	case BPF_FUNC_kptr_xchg:
-  		return &bpf_kptr_xchg_proto;
- +	case BPF_FUNC_ringbuf_reserve_dynptr:
- +		return &bpf_ringbuf_reserve_dynptr_proto;
- +	case BPF_FUNC_ringbuf_submit_dynptr:
- +		return &bpf_ringbuf_submit_dynptr_proto;
- +	case BPF_FUNC_ringbuf_discard_dynptr:
- +		return &bpf_ringbuf_discard_dynptr_proto;
- +	case BPF_FUNC_dynptr_from_mem:
- +		return &bpf_dynptr_from_mem_proto;
- +	case BPF_FUNC_dynptr_read:
- +		return &bpf_dynptr_read_proto;
- +	case BPF_FUNC_dynptr_write:
- +		return &bpf_dynptr_write_proto;
- +	case BPF_FUNC_dynptr_data:
- +		return &bpf_dynptr_data_proto;
-+ 	case BPF_FUNC_for_each_map_elem:
-+ 		return &bpf_for_each_map_elem_proto;
-+ 	case BPF_FUNC_loop:
-+ 		return &bpf_loop_proto;
-  	default:
-  		break;
-  	}
-
---Sig_/x.xndCVlhRvd.Rgtr_1BZpg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMtAbIACgkQAVBC80lX
-0GzPpgf/fGxLlpKlv/FkhBQhOtNgln+HvExwblbi1ilrlx22YxH1jwfqQfiTC/aL
-bB9ibnBQuNE5eobjf+5cTsQmN2GtwbjpgwcZ5DoZlJayxYewhVCGADVA8wXWklXg
-PsciMHevMX59adtsNym61qWgyG04nAgLGRNT9Io/UkmgFXcnqR6Hvq6Hz5cb4p+J
-eHr6aN1hJl+97dniJSIZyvtjoTjRAhroFK1A/sN+iMujFSWChDLTIillIz7YSR11
-mUkQsEru7ggF0PDEjyaNqYT7wXzpH8zPpENYnoQ59u+4qSKBs1K/AThkv/Xw3d42
-MRoHwgpXKcc1ghHmEl8ZBqJJRUZc5Q==
-=bMEs
------END PGP SIGNATURE-----
-
---Sig_/x.xndCVlhRvd.Rgtr_1BZpg--
+> 
+> Regards,
+> Chiawei
