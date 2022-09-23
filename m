@@ -2,66 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A2B5E81D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA685E81E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiIWSkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231533AbiIWSko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiIWSj6 (ORCPT
+        with ESMTP id S232911AbiIWSkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:39:58 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB2A36418;
-        Fri, 23 Sep 2022 11:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5XVJhTPnv/t+6fNWcKxu2IRDvTLKyajV1YnmX0URcS0=; b=Qgol9JsptI1U+GNLMUmbjfqu+7
-        +0aPHL5RJJQUz4x+BocqjR7jwIJ/BLo1B85IjjtVgEfoYh/+vLZ8SrjizsCX0fWWCbnezABn53QZk
-        28Bt+2eFvrW6AiCD9xc4xEmWtCWOjZgUmCSnqEhrFQ0SAnCQ4544aGOLXH0doUxBVV+0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1obnac-0003Je-72; Fri, 23 Sep 2022 20:39:54 +0200
-Date:   Fri, 23 Sep 2022 20:39:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, prasanna.vengateshan@microchip.com,
-        hkallweit1@gmail.com
-Subject: Re: [Patch net-next v4 4/6] net: dsa: microchip: move interrupt
- handling logic from lan937x to ksz_common
-Message-ID: <Yy39eo4oL6oP4twY@lunn.ch>
-References: <20220922071028.18012-1-arun.ramadoss@microchip.com>
- <20220922071028.18012-5-arun.ramadoss@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922071028.18012-5-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 14:40:36 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD88A6C28;
+        Fri, 23 Sep 2022 11:40:34 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 0EF3A580B86;
+        Fri, 23 Sep 2022 14:40:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 23 Sep 2022 14:40:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663958433; x=1663962033; bh=8bciG4zq3c
+        1fgJUXpN6Xfq9ayVFaPQsJlfJ51hqnhag=; b=mu67ZZTY1E4gC5hxnR1tmic3BO
+        ZVXCEqwfYme1u37Pje/jqcZ6LktWbkFtLVZtsUJWckNCuUPqUWniIxWGnFZrkYUL
+        htd69DHyz8UB3ySN3MBNY7k0KCgdn+35GdkNOV+NxUVgOXlYTiDbSqo3JdeYdfAr
+        8FCuxr9qn4bhCauzeek9Xmkct+W2vSau3Ne78lhQIMiEHGxwxRBYpB7RBKb/oL4x
+        d0KiEiqGc9YXthq5X6UZ7+kSWWp30viWsA3UaQRPWk6SVtbnm6ySKLk/zSJFlBkE
+        cMYRym6QtnleWesctMiSu36e01UGtf/LYTG8dMZ/vYLOWTWk+w6+0xfmNdgw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663958433; x=1663962033; bh=8bciG4zq3c1fgJUXpN6Xfq9ayVFa
+        PQsJlfJ51hqnhag=; b=BpNX57Z48CaWEz00dPfahZ6syraP4PZdPltC3nWaV6g2
+        voFSWSU4ND0nk8HSEvZ0wcfSXKAz1Dymd3n4/IbIBqH7rndUsmCVQrgGkEXaVUdo
+        /Jw7y7ki8xmIU5Dlo8I0kMmjH62mRRCrts8pBUbgcP3zz5x0+Mw0cKTxAqGT/1P6
+        35HADwMOBJHlwDA2akAvZtFxfJsSQHRXqT7hifoLpoifxVdiML02Ly4COGPi6GDd
+        5Cxs7hX0PRcATDOuiO/RKz+hduKXKBtxt8m8KDzqjLCOqRDyaz3Oif7kSczq+AEo
+        FspR3U9KyRG/FuQxNoeB5fIDtyqpLZOz/Og5SadSFQ==
+X-ME-Sender: <xms:of0tYzae2rnLTD-qLbyPHXGZFC3ko-zoCeoDBTsi8gB4s4PxKf4b5Q>
+    <xme:of0tYyb994GU0hI41uH6_jA285Gtd_ak4BGecRZrQDAsK8mQxvaZEK3QaPrTrewDC
+    FTKagF4h2WYmoLxBt0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgudefudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefg
+    udfgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:of0tY19Fb253gGbJN2R3j6Y6BWxLaCgUCjr_PA-NpDrMFTSmZIVL_g>
+    <xmx:of0tY5pPK5iCiGLFoFtM_tBZmVBMtr9RuErA33ZhMk6e-V7FiHf9JQ>
+    <xmx:of0tY-oEMd7ucQkB8vHXIBPRKHRw6IWl3WamWHHcSHKEDPKVJOy-1g>
+    <xmx:of0tYyYjb7v5PqJNh8GQ6e8XYw31z5T__ZeBcbx9n9ydY_WF32Kufg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1F141B60086; Fri, 23 Sep 2022 14:40:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <b7379459-989f-446d-9d1d-b381a8550de1@www.fastmail.com>
+In-Reply-To: <PH0PR12MB548166865BF446C7F232DCE1DC519@PH0PR12MB5481.namprd12.prod.outlook.com>
+References: <20220915050106.650813-1-parav@nvidia.com>
+ <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
+ <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <a8ee97f5-b92f-47a6-9b50-197974738ff7@www.fastmail.com>
+ <PH0PR12MB548113D13F9E9CE4D5206514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <9ae25893-f19f-4186-a19a-7fc55d9295ed@www.fastmail.com>
+ <PH0PR12MB548166865BF446C7F232DCE1DC519@PH0PR12MB5481.namprd12.prod.outlook.com>
+Date:   Fri, 23 Sep 2022 20:40:12 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Parav Pandit" <parav@nvidia.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "Dan Lustig" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH] locking/memory-barriers.txt: Improve documentation for writel()
+ usage
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:40:26PM +0530, Arun Ramadoss wrote:
-> To support the phy link detection through interrupt method for ksz9477
-> based switch, the interrupt handling routines are moved from
-> lan937x_main.c to ksz_common.c. The only changes made are functions
-> names are prefixed with ksz_ instead of lan937x_.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+On Fri, Sep 23, 2022, at 5:55 PM, Parav Pandit wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> Sent: Friday, September 16, 2022 12:09 AM
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+>> > And I sort of see above pattern in two drivers, and it is not good.
+>> > It ends up doing dsb(st) on arm64, while needed barrier is only
+>> > dmb(oshst).
+>> >
+>> > So to fix those two drivers, it is better to first avoid wmb()
+>> > documentation reference when referring to writel().
+>> 
+>> Yes, this suggestion is correct. On x86 and a few others, I think it's even
+>> worse when wmb() is an expensive barrier, while writel() is the same as
+>> writel_relaxed() and the barrier is implied by the MMIO access.
+>> 
+>> It might help to spell this out and say that writel() is always preferred over
+>> wmb()+writel_relaxed().
+>> 
+> True.
+>
+>> Site note: there are several other problems with wmb()+__raw_writel(),
+>> which on many architectures does not guarantee any atomicity of the access
+>> (a word store could get split into four byte stores), breaks endianess
+>> assumptions and may still not provide the correct barrier semantics.
+>>
+> Hmm. So far didn't observe this on arm64, x86_64, ppc64 yet.
+> May be because the address is aligned to 8 bytes, we don't see the byte stores?
 
-    Andrew
+It's complicated. On some architectures (but not the ones you list),
+__raw_writel() is a pointer dereference, so the compiler is allowed
+to use whichever instruction it wants. Depending on the CPU it
+is building for, gcc can decide to split up those stores when it
+sees a pointer that was assigned from pointer with lesser alignment
+(which is undefined behavior in C). If the pointer is actually
+unaligned but gcc does not see this, then powerpc and arm will
+trigger an alignment exception for an MMIO location even on CPUs
+that can work with unaligned data on normal RAM.
+
+> mlx5_write64() variant to use writeX() and avoid wmb() post the 
+> documentation update is good start.
+
+Ok, fair enough, as long as the loop function is not timing
+critical itself.
+
+    Arnd
