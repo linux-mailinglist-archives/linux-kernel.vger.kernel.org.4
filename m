@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F167B5E84F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8B55E8500
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiIWVdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S232781AbiIWVe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 17:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiIWVdA (ORCPT
+        with ESMTP id S232004AbiIWVeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:33:00 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966119E8BC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:32:58 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id mi14so735644qvb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:32:58 -0700 (PDT)
+        Fri, 23 Sep 2022 17:34:21 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F88274CC1;
+        Fri, 23 Sep 2022 14:34:20 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id y8so1830539edc.10;
+        Fri, 23 Sep 2022 14:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date;
-        bh=rSFjW36jJOKHdmnnk3/fGHSGvXpsb/XtXPbpN+m6od0=;
-        b=WbGuo/Q+2JQls71JXy+DKjT5lrw9Kurr859OQWRjUynQP9sn+xsppwjjlQoPfdEMSk
-         UtXtkNhx2Ve54PsfhiAsf3fxP9SOXsyLtjyMrQ/bO3Kr/89MWJMKEGObGFlV/4jC01E7
-         p5Bu8AlF4rtevBUYS6v/GZpbDCqkysmu4vOtXv1fgT3Pwyj5wFKf9ckkGMeaO9H/x/xJ
-         aJ84ZU9KLyjGw2pAVsfKPntSXrF7DP7wGMPdE91jn19BQ0UNfqAfL61/nL8Mfnkfn4IC
-         pnqDIFsY2GMYomFs6QM6Tx6qkmipmV3Zwelkia49Vq4sLM7XVnY0vDgbvylNhcf5jG9n
-         jGzA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2tSqnggIyDo6YUr0zNltSFoKVKbExYQv0L5PsQaqx/s=;
+        b=mC5OTEroAwnh1aV0/k1oPe+NXV0TA7Ze+A1xSqjAYtWFHQmQllTO2D5NFTgRNAaYmT
+         9ftX5WSLtzU2ypfDMT3O8sHcHAnbhOQyP3iw/qBmEo1MS7KrHK9T7qMSNgKzSJ+gKYID
+         /abixiX9djqlc0Y/J/wim5USaRy8aF+H2vHddS2/BtkRSL/9hE50+MF2PbOdi3Sk2Gl6
+         VosQoBRGmWXFe5bsDbIbt+mPWxWzs9fsS3VkuvMuKTsQce3IGe9Tc+oS/HXH/f+GD3ev
+         uHxxaisRU0SVBPc0aV+ppRW6J8ERcyNX4rsfpw6JIQ1m3AX4/2lvWnFKGIrpL0hEOzl5
+         cXlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rSFjW36jJOKHdmnnk3/fGHSGvXpsb/XtXPbpN+m6od0=;
-        b=Lfx47yhj9oBw04i7TgiBpknw0lWJTy4ziPJAR2IDCISeSXSt/rEuZrJWBnpBpwdpOO
-         qId/WaOr0gi8I4GBTyd0h+B753ZgfPGFvKuiGfq7isnfTWUgPl3rdUgoGnX2iiAX8OuG
-         gD8RemsnHClgnAa8zYJpJDTRQ98Os10ixtOh1u5lYC5Ea9RCDGbA5UUDqHe2+b/wRwnT
-         QL2Dejzn83lQTSTwB8+NualgVs3iRsYY3sSAz0rU+GFfUsBw0ioAxT9dP+yGlZ6jWdfi
-         tku9v9AINNQJJoElWNmSXKLyYyVoALtlVUf7Tp7l2nNSjL8skF1NMHEKYeDD/NRzITG3
-         k0dA==
-X-Gm-Message-State: ACrzQf1uuFvNS4C4IFdQEwfsCHj0kAGbOmMm5j4O0955eCEbY1VXRHLh
-        5IJ2bqzAOzi2eId0t5UC33D7B5eCrpE=
-X-Google-Smtp-Source: AMsMyM7qf1MHs6jAk6JGH+Y+JEInqHcOSVpwobrhyzSADRCm0JJE5Wom3ODGyFKeuiOts9//gGR+Fg==
-X-Received: by 2002:a0c:8dca:0:b0:4ad:6e03:c906 with SMTP id u10-20020a0c8dca000000b004ad6e03c906mr8735830qvb.74.1663968777751;
-        Fri, 23 Sep 2022 14:32:57 -0700 (PDT)
-Received: from Gentoo ([154.16.192.39])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac8110f000000b0035bbb0fe90bsm5881272qtj.47.2022.09.23.14.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 14:32:57 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 03:02:32 +0530
-From:   Bhaskar Chowdhury <bhaskarlinux73@gmail.com>
-To:     Daniel Mentz <danielmentz@google.com>
-Cc:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, masahiroy@kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kernel:gen_kheaders:Replace md5sum to sha256sum
-Message-ID: <Yy4l8AVyoEJtV+Vm@Gentoo>
-Mail-Followup-To: Bhaskar Chowdhury <bhaskarlinux73@gmail.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>, masahiroy@kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20220923110332.24090-1-unixbhaskar@gmail.com>
- <CAE2F3rDymUUDyXrxFyhSGe4k1jrsZih2DbXViA23wAND=XJuyg@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2tSqnggIyDo6YUr0zNltSFoKVKbExYQv0L5PsQaqx/s=;
+        b=dyMjkE7b/TvmkmZl4axMAolpsFsoiL3ibg5RNQzAARoTsZhPA6rX96M+GJtt+mYSgr
+         DGcuPNeaMApNymSNCXnB3AlXVz3f5u2zniamtO+NhxJwjdPK1sFj4TaE6FCvHAru5jiZ
+         +DE/vtUyCW9LDV1i8bUqn/sCK3d0W8cGLQ0btzsf5jUOSpHPE01n8ooRT8d/CDpX/Uro
+         P09eoV5ulAoNT+5SHngJzuOTdYuL2Y3ne22JboNk8m/YwEVVnGTzS2l2i7zTkdrlsr/z
+         /XcSGVO4hRPa6nmr29WdqptfgCVcYDtjJ/Eo2KdVUgrL8Thy5Eg7k7CFZGubhh89JTRz
+         rCLA==
+X-Gm-Message-State: ACrzQf3iabMzNgr3frTTu6vgCeoH6qEtYwHqqz/UCTrxkHr6Sp+m3I2k
+        dTFVpHipqawoSsYyndYwo67lmXKTPIRFH53uJOk=
+X-Google-Smtp-Source: AMsMyM5IZsfJ8dcFfC0J6aK5kWjLl/L84uf2axz39u9HVDC/sm5vNCQLHxNNHmrmfV4MxviVVR/a5HiZQAJ2yKDCUpw=
+X-Received: by 2002:a05:6402:1e8c:b0:44f:f70:e75e with SMTP id
+ f12-20020a0564021e8c00b0044f0f70e75emr10298957edf.405.1663968858816; Fri, 23
+ Sep 2022 14:34:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0rxz6OFaGQFUDwk7"
-Content-Disposition: inline
-In-Reply-To: <CAE2F3rDymUUDyXrxFyhSGe4k1jrsZih2DbXViA23wAND=XJuyg@mail.gmail.com>
+References: <20220830034042.9354-2-peterwu.pub@gmail.com> <20220830034042.9354-10-peterwu.pub@gmail.com>
+ <CAPOBaE7rz2F-sij-LbYau6TRxFoOfmoUc=R__Z7iUrFWmZPgrg@mail.gmail.com>
+ <CABtFH5+PuK4vptVNmpn4h2FCxNFp3wWvhUrOxgqArx4YxCY99w@mail.gmail.com> <CAHp75VeRgRdv54yO51nBwKx8O2pNLvOD2mrqn31zvx4ffSpCHw@mail.gmail.com>
+In-Reply-To: <CAHp75VeRgRdv54yO51nBwKx8O2pNLvOD2mrqn31zvx4ffSpCHw@mail.gmail.com>
+From:   Han Jingoo <jingoohan1@gmail.com>
+Date:   Fri, 23 Sep 2022 14:34:07 -0700
+Message-ID: <CAPOBaE7mcNqgQvsPpqewmq=Na9MC9RH5AW8CHn5ZJFAUsq6_eg@mail.gmail.com>
+Subject: Re: [PATCH v9 09/10] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        torvalds@linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joe Perches <joe@perches.com>, Julia.Lawall@inria.fr,
+        krzysztof.kozlowski@linaro.org
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee@kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        mazziesaccount@gmail.com, andriy.shevchenko@linux.intel.com,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,52 +95,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---0rxz6OFaGQFUDwk7
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-
-On 11:12 Fri 23 Sep 2022, Daniel Mentz wrote:
->On Fri, Sep 23, 2022 at 4:06 AM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
->> Thought to apply a better encryption mechanism.
+On Wed, Sep 21, 2022 Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 >
->MD5 and SHA256 are secure (or, in the case of MD5, not so secure) hash
->algorithms, not encryption mechanisms.
+> On Wed, Sep 21, 2022 at 4:48 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > On Sun, Sep 18, 2022 at 3:22 AM Han Jingoo <jingoohan1@gmail.com> wrote:
+> > > On Mon, Aug 29, 2022 ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 >
->> Replace all occurance of md5sum to sha256sum .
+> > > > +#define MT6370_ITORCH_MIN_uA           25000
+> > > > +#define MT6370_ITORCH_STEP_uA          12500
+> > > > +#define MT6370_ITORCH_MAX_uA           400000
+> > > > +#define MT6370_ITORCH_DOUBLE_MAX_uA    800000
+> > > > +#define MT6370_ISTRB_MIN_uA            50000
+> > > > +#define MT6370_ISTRB_STEP_uA           12500
+> > > > +#define MT6370_ISTRB_MAX_uA            1500000
+> > > > +#define MT6370_ISTRB_DOUBLE_MAX_uA     3000000
+> > >
+> > > Use upper letters as below:
 >
->Looking at this script, I'm not convinced that it relies on MD5 being
->a cryptophically secure hash function. It appears to me as if this
->script uses MD5 to simply detect innocent changes to a set of files as
->opposed to guarding against malicious attacks. I also found that
->sha256sum takes almost three times longer than md5sum. So, in the
->absence of security requirements, md5sum might actually be the better
->choice because it's faster.
+> For microseconds (and other -seconds) the common practice (I assume
+> historically) is to use upper letters, indeed. But for current it's
+> more natural to use small letters for unit multiplier as it's easier
+> to read and understand.
 
-Al righto! Then...no issues, give it a pass.
---
-Thanks,
-Bhaskar
+(CC'ed Linus Torvalds, Andrew Morton, Joe Perches, Julia Lawall,
+Krzysztof Kozlowski,)
 
-"Here's looking at you kid"-- Casablanca
-https://about.me/unixbhaskar
+Yep, it is common practice. Long time ago, I met the same problem on
+how to present micro-ampere:
+visibility vs coding practice. At that time, I followed the coding
+practice. So, was there anyone who
+rejected this decision to mix upper and lower letters when you gave
+your comment last July?
+If there is no objection, or most of maintainers and long-term
+contributors agree with that,
+I am ok with that.
 
---0rxz6OFaGQFUDwk7
-Content-Type: application/pgp-signature; name="signature.asc"
+To Tovalds, Andrew, Joe, Julia, Krzysztof,
 
------BEGIN PGP SIGNATURE-----
+I just need your feedback on coding styles. Are you ok with mixing
+upper and lower letters for visibility
+to present micro-seconds or micro-ampere? Andy (one of very-active
+contributors) gives his opinion that
+mixing upper and lower letters can be acceptable. I remain neutral on
+this coding style issue.
 
-iQGzBAABCAAdFiEEs7FAjU4eq1yogJSEAkGeLcGNq5MFAmMuJfAACgkQAkGeLcGN
-q5OqngwAqKVulL0D7+pSyt+EoqX11vRhvNV24J14JrJdXCkg8RTrMDFnCHS8xo8y
-ypsXspIKDFo0Qy943HS/5CNYI6ulx4fI6EGKB4T4oFqxf53Mb8hLiiNT9fURRcXY
-t6R54tBi58wnyP8DMi56I/zEniTpvUhKh6hfaei8392CseZcb1RV+Vgq+q+v2UDq
-L61XVfhqq3axJi2VCZLH3uTQUBW5UQjP3d+KkVHfoHMOMXpWV8K7AVdSYZRSjOJG
-90Au0GjS11AoAtw43ZrIFVJ05rcPTgoZSVjvfQdv438p/M7hQwd+3Gxgz7I4Y5A2
-o4aijZeHeI5qrJpvitR3m1PXQjdn7wRK29ImydEcJY7zrhhL50wLlCFViR2K6gN6
-AaABCvOlXOm/7RCXcft8dGlGEIYR5b8gWGIipW7O6jlCLaY1y+MMVpO9Mhgd84GO
-3JQvryuoJG3WPmY4TZGvQpuwWC+WPoArqbnTRgw0S+2vCtlcU8s3kWwpGBfMh3xc
-Kmb/ob8S
-=8hBt
------END PGP SIGNATURE-----
+e.g., #define MT6370_ITORCH_DOUBLE_MAX_uA    800000
 
---0rxz6OFaGQFUDwk7--
+Thank you.
+
+Best regards,
+Jingoo Han
+
+>
+> > > #define MT6370_ITORCH_MIN_UA           25000
+> > > #define MT6370_ITORCH_STEP_UA          12500
+> > > #define MT6370_ITORCH_MAX_UA           400000
+> > > #define MT6370_ITORCH_DOUBLE_MAX_UA    800000
+> > > #define MT6370_ISTRB_MIN_UA            50000
+> > > #define MT6370_ISTRB_STEP_UA           12500
+> > > #define MT6370_ISTRB_MAX_UA            1500000
+> > > #define MT6370_ISTRB_DOUBLE_MAX_UA     3000000
+> > >
+> > > > +#define MT6370_STRBTO_MIN_US           64000
+> > > > +#define MT6370_STRBTO_STEP_US          32000
+> > > > +#define MT6370_STRBTO_MAX_US           2432000
+> >
+> > Hi Jingoo,
+> >
+> > This coding style is in accordance with Andy's opinion in this mail:
+> > https://lore.kernel.org/linux-arm-kernel/CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com/
+>
+> True.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
