@@ -2,101 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB585E7859
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A56F5E785D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiIWKaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S231274AbiIWKas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiIWK3u (ORCPT
+        with ESMTP id S231439AbiIWKaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:29:50 -0400
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C881EACD;
-        Fri, 23 Sep 2022 03:29:33 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so453652wml.5;
-        Fri, 23 Sep 2022 03:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SE7j1SyBj/+TA8gJBsOv8qKC0/+Bq0DCDf8kH6ZzU7Y=;
-        b=IdInhTcz6QiO5G97sat5gDPGBHMKtt4vqhrxauoWj7xKW9zfkceW0AzgJHAvSFyeSc
-         /m1OxANT60Q7eOYr7f1+uZ7TI1dkmcHNBUq2rRfZWz3HPJeW24Boggj5NQb6E1oiWY/w
-         GgshbcukQE4mbGxFRCE6tE1sH3Zj7emGtnZAEJrQ32jhDlR4Uf8YXXGxi7rJRx+g/A43
-         eT69+UMXgR2ccj6DqamFeaTBktY+xnZ/035gTkAp6ZxJ60bfy631O0K+DEFlYx1NWeNZ
-         d+34ipal5g1i+SRfaImTk6o4D+5jvBo6jnru1prnsojqPll/wHffAt5/Cma+cY98f/GX
-         iXUg==
-X-Gm-Message-State: ACrzQf03px80Dj28p5k2kjyR6HoGwyiWNF2mSvCT+bAjBtfSVReanVWe
-        GWIO2c3SM2elz/a9FaWJc2n9CpC+SpI=
-X-Google-Smtp-Source: AMsMyM41XZ1QnkyEzPlCTwXp3tBbyxAA1Mmdgf8UHYIakAw0nNLZ+ah6MCM3MMqFCWdvMEQ9qQ/+gA==
-X-Received: by 2002:a05:600c:4651:b0:3b3:3f99:4ad6 with SMTP id n17-20020a05600c465100b003b33f994ad6mr5509311wmo.90.1663928971951;
-        Fri, 23 Sep 2022 03:29:31 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b003b47575d304sm2436352wmj.32.2022.09.23.03.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 03:29:31 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 10:29:30 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] Drivers: hv: vmbus: Fix kernel-doc
-Message-ID: <Yy2Kioe5+MglezEq@liuwe-devbox-debian-v2>
-References: <20220919063815.1881-1-jiapeng.chong@linux.alibaba.com>
- <BYAPR21MB1688D522A27450BF8F0BF067D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Fri, 23 Sep 2022 06:30:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E7CF3926
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:30:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E23841FA43;
+        Fri, 23 Sep 2022 10:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663929010; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+d3oE0MQ60Quyrm+hahnRJfo1NbXRnt7z2frKzHN6Cw=;
+        b=r06gVQPNIDK4LH+V1E1K4+E5n1wjlUGLFV++vtnoRA4+sqkhImdwAmdAc4qYXxp6b1exxQ
+        6+q0NrirZ4sRKnI9BVzjZRca/F/ugjiQ+O/gDtYfpTcfuuLEWSh1Lvgylu+UC+CtlKqrCH
+        UCPJWlCNDJWn+E9hErYWx4JlCrL8R5k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663929010;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+d3oE0MQ60Quyrm+hahnRJfo1NbXRnt7z2frKzHN6Cw=;
+        b=Zt/7M2bFCcgg4tq5iROb8fzzfqor4FD4u21ddlXuIEQs5SwuBjDjExYsB0s7xpNLkEMvPL
+        32rQOjVu8WR0XAAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E81E13AA5;
+        Fri, 23 Sep 2022 10:30:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QrdHFrKKLWMUQAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 23 Sep 2022 10:30:10 +0000
+Message-ID: <93969920-b5ed-ff15-48d4-02e2f9c23505@suse.de>
+Date:   Fri, 23 Sep 2022 12:30:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688D522A27450BF8F0BF067D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 13/33] drm/client: Add some tests for
+ drm_connector_pick_cmdline_mode()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Dom Cobley <dom@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-13-f733a0ed9f90@cerno.tech>
+ <49ea7c7c-7d4c-8348-ea75-e0f376111e4c@suse.de>
+ <b3c4ee65-fc56-f54c-3946-b6524fb36f72@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <b3c4ee65-fc56-f54c-3946-b6524fb36f72@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------2CtqZ2vfwLlkheeWKPIE9NVi"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:37:27PM +0000, Michael Kelley (LINUX) wrote:
-> From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com> Sent: Sunday, September 18, 2022 11:38 PM
-> > 
-> > drivers/hv/vmbus_drv.c:1587: warning: expecting prototype for
-> > __vmbus_child_driver_register(). Prototype was for __vmbus_driver_register() instead.
-> > 
-> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2210
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> > ---
-> >  drivers/hv/vmbus_drv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> > index 7b9f3fc3adf7..621702a1725f 100644
-> > --- a/drivers/hv/vmbus_drv.c
-> > +++ b/drivers/hv/vmbus_drv.c
-> > @@ -1573,7 +1573,7 @@ static int vmbus_bus_init(void)
-> >  }
-> > 
-> >  /**
-> > - * __vmbus_child_driver_register() - Register a vmbus's driver
-> > + * __vmbus_driver_register() - Register a vmbus's driver
-> >   * @hv_driver: Pointer to driver structure you want to register
-> >   * @owner: owner module of the drv
-> >   * @mod_name: module name string
-> > --
-> > 2.20.1.7.g153144c
-> 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------2CtqZ2vfwLlkheeWKPIE9NVi
+Content-Type: multipart/mixed; boundary="------------x3op9zyJLgSfMXocf8xeVJiF";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ Maxime Ripard <maxime@cerno.tech>, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+ Maxime Ripard <mripard@kernel.org>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Emma Anholt <emma@anholt.net>, Karol Herbst <kherbst@redhat.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Jani Nikula <jani.nikula@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Lyude Paul <lyude@redhat.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Chen-Yu Tsai <wens@csie.org>
+Cc: Dom Cobley <dom@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Phil Elwell <phil@raspberrypi.com>, nouveau@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+ Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
+ <noralf@tronnes.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Message-ID: <93969920-b5ed-ff15-48d4-02e2f9c23505@suse.de>
+Subject: Re: [PATCH v2 13/33] drm/client: Add some tests for
+ drm_connector_pick_cmdline_mode()
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-13-f733a0ed9f90@cerno.tech>
+ <49ea7c7c-7d4c-8348-ea75-e0f376111e4c@suse.de>
+ <b3c4ee65-fc56-f54c-3946-b6524fb36f72@redhat.com>
+In-Reply-To: <b3c4ee65-fc56-f54c-3946-b6524fb36f72@redhat.com>
 
-Applied to hyperv-next. Thanks.
+--------------x3op9zyJLgSfMXocf8xeVJiF
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMjMuMDkuMjIgdW0gMTE6MjYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IE9uIDkvMjMvMjIgMTE6MTUsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0K
+Pj4gSGkNCj4+DQo+PiBBbSAyMi4wOS4yMiB1bSAxNjoyNSBzY2hyaWViIE1heGltZSBSaXBh
+cmQ6DQo+Pj4gZHJtX2Nvbm5lY3Rvcl9waWNrX2NtZGxpbmVfbW9kZSgpIGlzIGluIGNoYXJn
+ZSBvZiBmaW5kaW5nIGEgcHJvcGVyDQo+Pj4gZHJtX2Rpc3BsYXlfbW9kZSBmcm9tIHRoZSBk
+ZWZpbml0aW9uIHdlIGdvdCBpbiB0aGUgdmlkZW89IGNvbW1hbmQgbGluZQ0KPj4+IGFyZ3Vt
+ZW50Lg0KPj4+DQo+Pj4gTGV0J3MgYWRkIHNvbWUgdW5pdCB0ZXN0cyB0byBtYWtlIHN1cmUg
+d2UncmUgbm90IGdldHRpbmcgYW55IHJlZ3Jlc3Npb25zDQo+Pj4gdGhlcmUuDQo+Pj4NCj4+
+PiBTaWduZWQtb2ZmLWJ5OiBNYXhpbWUgUmlwYXJkIDxtYXhpbWVAY2Vybm8udGVjaD4NCj4+
+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0
+LmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMNCj4+PiBpbmRleCBi
+YmM1MzVjYzUwZGQuLmQ1NTNlNzkzZTY3MyAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL2dw
+dS9kcm0vZHJtX2NsaWVudF9tb2Rlc2V0LmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
+ZHJtX2NsaWVudF9tb2Rlc2V0LmMNCj4+PiBAQCAtMTIzNywzICsxMjM3LDcgQEAgaW50IGRy
+bV9jbGllbnRfbW9kZXNldF9kcG1zKHN0cnVjdCBkcm1fY2xpZW50X2RldiAqY2xpZW50LCBp
+bnQgbW9kZSkNCj4+PiAgICAJcmV0dXJuIHJldDsNCj4+PiAgICB9DQo+Pj4gICAgRVhQT1JU
+X1NZTUJPTChkcm1fY2xpZW50X21vZGVzZXRfZHBtcyk7DQo+Pj4gKw0KPj4+ICsjaWZkZWYg
+Q09ORklHX0RSTV9LVU5JVF9URVNUDQo+Pj4gKyNpbmNsdWRlICJ0ZXN0cy9kcm1fY2xpZW50
+X21vZGVzZXRfdGVzdC5jIg0KPj4+ICsjZW5kaWYNCj4+DQo+PiBJIHN0cm9uZ2x5IGRpc2xp
+a2UgdGhpcyBzdHlsZSBvZiBpbmNsdWRpbmcgc291cmNlIGZpbGVzIGluIGVhY2ggb3RoZXIu
+DQo+PiBJdCdzIGEgcmVjaXBlIGZvciBhbGwga2luZCBvZiBidWlsZCBlcnJvcnMuIENhbiB5
+b3UgZG8gc29tZXRoaW5nIGVsc2U/DQo+Pg0KPiANCj4gVGhpcyBzZWVtcyB0byBiZSB0aGUg
+Y29udmVudGlvbiB1c2VkIHRvIHRlc3Qgc3RhdGljIGZ1bmN0aW9ucyBhbmQgd2hhdCdzDQo+
+IGRvY3VtZW50ZWQgaW4gdGhlIEt1bml0IGRvY3M6IGh0dHBzOi8va3VuaXQuZGV2L3RoaXJk
+X3BhcnR5L2tlcm5lbC9kb2NzL3RpcHMuaHRtbCN0ZXN0aW5nLXN0YXRpYy1mdW5jdGlvbnMN
+Cg0KVGhhdCBkb2N1bWVudCBzYXlzICIuLi5vbmUgb3B0aW9uIGlzIHRvIGNvbmRpdGlvbmFs
+bHkgI2luY2x1ZGUgdGhlIHRlc3QgDQpmaWxlLi4uIi4gVGhpcyBkb2Vzbid0IHNvdW5kIGxp
+a2UgYSBzdHJvbmcgcmVxdWlyZW1lbnQuDQoNCj4gDQo+IEkgYWdyZWUgd2l0aCB5b3UgdGhh
+dCdzIG5vdCBpZGVhbCBidXQgSSB0aGluayB0aGF0IGNvbnNpc3RlbmN5IHdpdGggaG93DQo+
+IGl0IGlzIGRvbmUgYnkgb3RoZXIgc3Vic3lzdGVtcyBpcyBhbHNvIGltcG9ydGFudC4NCj4g
+ICANCj4+IEFzIHRoZSB0ZXN0ZWQgZnVuY3Rpb24gaXMgYW4gaW50ZXJuYWwgaW50ZXJmYWNl
+LCBtYXliZSBleHBvcnQgYSB3cmFwcGVyDQo+PiBpZiB0ZXN0cyBhcmUgZW5hYmxlZCwgbGlr
+ZSB0aGlzOg0KPj4NCj4+ICNpZmRlZiBDT05GSUdfRFJNX0tVTklUX1RFU1QNCj4+IHN0cnVj
+dCBkcm1fZGlzcGxheV9tb2RlICoNCj4+IGRybV9jb25uZWN0b3JfcGlja19jbWRsaW5lX21v
+ZGVfa3VuaXQoZHJtX2NvbmVuY3RvcikNCj4+IHsNCj4+ICAgICByZXR1cm4gZHJtX2Nvbm5l
+Y3Rvcl9waWNrX2NtZGxpbmVfbW9kZShjb25uZWN0b3IpDQo+PiB9DQo+PiBFWFBPUlRfU1lN
+Qk9MKGRybV9jb25uZWN0b3JfcGlja19jbWRsaW5lX21vZGVfa3VuaXQpDQo+PiAjZW5kaWYN
+Cj4+DQo+PiBUaGUgd3JhcHBlcidzIGRlY2xhcmF0aW9uIGNhbiBiZSBsb2NhdGVkIGluIHRo
+ZSBrdW5pdCB0ZXN0IGZpbGUuDQo+Pg0KPiANCj4gQnV0IHRoYXQncyBhbHNvIG5vdCBuaWNl
+IHNpbmNlIHdlIGFyZSBhcnRpZmljaWFsbHkgZXhwb3NpbmcgdGhlc2Ugb25seQ0KPiB0byBh
+bGxvdyB0aGUgc3RhdGljIGZ1bmN0aW9ucyB0byBiZSBjYWxsZWQgZnJvbSB1bml0IHRlc3Rz
+LiBBbmQgd291bGQNCj4gYmUgYSBkaWZmZXJlbnQgYXBwcm9hY2ggdGhhbiB0aGUgb25lIHVz
+ZWQgYnkgYWxsIG90aGVyIHN1YnN5c3RlbXMuLi4NCj4gDQoNClRoZXJlJ3MgdGhlIHByb2Js
+ZW0gb2YgaW50ZXJmZXJlbmNlIGJldHdlZW4gdGhlIHNvdXJjZSBmaWxlcyB3aGVuIA0KYnVp
+bGRpbmcgdGhlIGNvZGUuIEl0J3MgYWxzbyBub3QgdGhlIHNhbWUgc291cmNlIGNvZGUgYWZ0
+ZXIgaW5jbHVkaW5nIA0KdGhlIHRlc3QgZmlsZS4gQXQgYSBtaW5pbXVtLCBpbmNsdWRpbmcg
+dGhlIHRlc3RzJyBzb3VyY2UgZmlsZSBmdXJ0aGVyIA0KaW5jbHVkZXMgbW9yZSBmaWxlcy4g
+PGt1bml0L3Rlc3RzLmg+IGFsc28gaW5jbHVkZXMgcXVpdGUgYSBmZXcgb2YgTGludXggDQpo
+ZWFkZXIgZmlsZXMuDQoNCklNSE8gdGhlIGN1cnJlbnQgY29udmVudGlvbiAoaWYgYW55KSBp
+cyBmYXIgZnJvbSBvcHRpbWFsIGFuZCB3ZSBzaG91bGQgDQpjb25zaWRlciBicmVha2luZyBp
+dC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0K
+R3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2Vy
+bWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihI
+UkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYN
+Cg==
+
+--------------x3op9zyJLgSfMXocf8xeVJiF--
+
+--------------2CtqZ2vfwLlkheeWKPIE9NVi
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMtirEFAwAAAAAACgkQlh/E3EQov+CM
+OA/9HZJ5Dr75ScIPSVmAz7p2sZT/skTdYhTo2rlRnmdB/TQQoL8Ftkp+CxLqMzpnu32lx4PZ2r/c
+Ji6hUAmmqGFngV4rgCmMqA3i+ZhZwfXa3nz5lcwe6jtmZBx2Ey2waNXbSrjioJOGxSKtDDbUnz1p
+hqCxNHLIpNC2T8jbVfKMPtWTBzX8EqyGhDypnseC4ypyI14YvbE6oEfKUgcxDeTwCrgXKf5U2j72
+Ec8hiqh0H1O1IIbutmuil6eKNCKs2EBLv6tZz/4tNBdn7aDjkUA4nNpV974Rk9hHV27kK8dEQXpu
+kb+PnBHnSH6l1rRWfvPM4EhhLX972LUz8rXU7P50dj1RWtrSxWOp4yN6g1fVE/Os3vNOCRL0aQoQ
+agK/lz3WZFk5MCbuy+5YtGCq9F3eFYfS6UV+8ipsJJcilkNmkGsmVriZZep5+Q2TgEWpGIBhox6b
+2etoG3cSlUXaS7PwDkbXrjHblroxCxuvvR0N8dI9miCtHNOW/MHqA4+BowQD5Pls8wn1GPkFFk2W
+lWdd+Ccg4KXb50YBxZBBvL7dtCMif7yKHVvhdFws9T7WmRKjZVl9CPNJZYPMrMnnEBQ+ydKof7XR
+EN5ZxiPIlzv7oNmI6kzervSrsugTxiCds/ODjyrA0l9fJ78aaR8yp/v3eFwhU7n/3I59xCj1M8ky
+0Fc=
+=v90E
+-----END PGP SIGNATURE-----
+
+--------------2CtqZ2vfwLlkheeWKPIE9NVi--
