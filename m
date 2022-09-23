@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165335E7E1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DEB5E7E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIWPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S229608AbiIWPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiIWPUL (ORCPT
+        with ESMTP id S231601AbiIWPUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:20:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD5EA8CDD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:20:09 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 17:20:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663946408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ChXukQZHG1H+NkDadHDSMq1SZcmQ3PX5cO0/7t8CDJw=;
-        b=Xtm2p4aap/w8OKZ6h9PJXQsBl9lbw6/Qln1VWS7xrQ7VbxkCot98ZIieNTMJqghyX5i2FW
-        FpHL+QYw1K+hDBXzZAHC8WWDFqYNYdTeohesE1A/e6Obo9txlMxWuXj31b83FlH9JrgHMP
-        zGtIpesVAuK0dEwFZY2+rMwWHk1MQwDqCmGvW1PQiuf5FgzWwCDf+Xm2DkIUJOeB5+/7n/
-        I24Ptjt/c60xRF8+KIoFHftMvAlEnyLnMlM1eMNjoUthuKB7EA1UFkdM/1sqSuSQ2/We8n
-        LObEDAoEhy25wxS6oLC8q3+hZI6mczRoCks6fpUJTRYjjZyoCLalMwPip0AwCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663946408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ChXukQZHG1H+NkDadHDSMq1SZcmQ3PX5cO0/7t8CDJw=;
-        b=YGAA4hl3yGSZMXLrcMn2k6YV7qztam8qm7ur/lVvwBNjqjrMhYTXpBKUelhQPyIJ+VMSP4
-        f472O4RCHEQNzXCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        John Kacur <jkacur@redhat.com>,
-        "John B. Wyatt IV" <jbwyatt4@gmail.com>
-Subject: Re: printk meeting at LPC 2022
-Message-ID: <Yy3Opv5f5QG9eNih@linutronix.de>
-References: <20220910221947.171557773@linutronix.de>
- <87h71cr1gb.fsf@jogness.linutronix.de>
- <875yheqh6v.fsf@jogness.linutronix.de>
+        Fri, 23 Sep 2022 11:20:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442AFE6A00;
+        Fri, 23 Sep 2022 08:20:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED4B8B838C3;
+        Fri, 23 Sep 2022 15:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B72C43142;
+        Fri, 23 Sep 2022 15:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663946426;
+        bh=zo7rFZiPS4WyTBZk4VHnI8cDdMwygNZyE43ol0e2o2A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h5A9XThDA/5s0nOAX9forsdLayrzgXUza7l79K6258CeVyLTGUt6X96ZBEPlttNp5
+         ElY629wCutz4/DSMBngmRLN37ymIDXCrKV/Z2J6jov2aGTDZS4bkyZbVrUsPgnnbig
+         yqDUPOVPVI82nAtprBZMueiVWOHOBWkCOsQi3r/9/PBuhqMgwsKjbhOa0KFz5Ia5ga
+         FesASNFIjqev89LM8TbV6f0uz9NdHPJ6XfW7MlY5FZbM7WXYQZK/8HegplFfsL3tOO
+         9djqqHdCD9lVmJpKW6oZAbuByK69CJ3xUbSxMjXmvykRA9FiAOhnIFGmLKDGuYyXRw
+         uNUmczkVos0qg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Subject: [PATCH -next] thermal/intel/int340x: Initialized ret in error path in int340x_thermal_zone_add()
+Date:   Fri, 23 Sep 2022 08:20:09 -0700
+Message-Id: <20220923152009.1721739-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <875yheqh6v.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-23 16:55:28 [+0206], John Ogness wrote:
-> If I have missed anything relevant, please let me know.
+Clang warns:
 
-I just wanted to state, that there was discussion at the end about
-removing the early_printk drivers in favour of the atomic-printing
-driver/ support which should be capable to do the same.
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+          if (!int34x_thermal_zone->ops)
+              ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
+          return ERR_PTR(ret);
+                        ^~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
+          if (!int34x_thermal_zone->ops)
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
+          int ret;
+                ^
+                  = 0
+  1 error generated.
 
-> John Ogness
+If kmemdup() fails, -ENOMEM should be returned.
 
-Sebastian
+Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1717
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index ea05be8c2834..228f44260b27 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -219,8 +219,10 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 
+ 	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+ 					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
+-	if (!int34x_thermal_zone->ops)
++	if (!int34x_thermal_zone->ops) {
++		ret = -ENOMEM;
+ 		goto err_ops_alloc;
++	}
+ 
+ 	if (get_temp)
+ 		int34x_thermal_zone->ops->get_temp = get_temp;
+
+base-commit: 2b109cffe6836f0bb464639cdcc59fc537e3ba41
+-- 
+2.37.3
+
