@@ -2,99 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266155E7D3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4E95E7D4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiIWOft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S231736AbiIWOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIWOfr (ORCPT
+        with ESMTP id S229963AbiIWOi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:35:47 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABA7F2749
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:35:44 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28NEZgEL063409;
-        Fri, 23 Sep 2022 23:35:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Fri, 23 Sep 2022 23:35:42 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28NEZgBr063406
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 23 Sep 2022 23:35:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ea7c00c1-07d7-c23e-80f0-0693016e9731@I-love.SAKURA.ne.jp>
-Date:   Fri, 23 Sep 2022 23:35:43 +0900
+        Fri, 23 Sep 2022 10:38:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9421C143287
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:38:28 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1objoi-00045V-NU; Fri, 23 Sep 2022 16:38:12 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1objoh-0001T7-SC; Fri, 23 Sep 2022 16:38:11 +0200
+Date:   Fri, 23 Sep 2022 16:38:11 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
+        laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
+        hverkuil@xs4all.nl, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v3 4/4] media: tc358746: add Toshiba TC358746 Parallel to
+ CSI-2 bridge driver
+Message-ID: <20220923143811.d5gk52vh2koczyhk@pengutronix.de>
+References: <20220922134843.3108267-1-m.felsch@pengutronix.de>
+ <20220922134843.3108267-5-m.felsch@pengutronix.de>
+ <Yy2rNit+rRGkcFdL@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] fs/ntfs3: fix negative shift size in
- true_sectors_per_clst()
-Content-Language: en-US
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>,
-        "'Aleksandr Nogikh' via syzkaller-bugs" 
-        <syzkaller-bugs@googlegroups.com>, ntfs3@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-References: <000000000000f8b5ef05dd25b963@google.com>
- <4b37f037-3b10-b4e4-0644-73441c8fa0af@I-love.SAKURA.ne.jp>
- <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
- <423b1fa6-10fa-3ff9-52bc-1262643c62d9@I-love.SAKURA.ne.jp>
- <CANp29Y7fSsjqKbFiMZDG_w-ERigQOk_6Zw3L9rw5erpP3rRU0g@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CANp29Y7fSsjqKbFiMZDG_w-ERigQOk_6Zw3L9rw5erpP3rRU0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy2rNit+rRGkcFdL@paasikivi.fi.intel.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/23 20:58, Aleksandr Nogikh wrote:
-> We do have plans to start inspecting LKML messages for the patches
-> that mention syzbot-reported bugs. It will be possible then to display
-> them all on the bug page and somehow mark bugs with a PATCH sent on
-> the list.
+Hi Sakari,
 
-I interpret it as an attempt to automatically show "Patch proposed" state.
-But since not all patches have Reported-by: tag, and/or a proposed patch
-with Reported-by: tag might be withdrawn via review, that state should be
-also manually changeable.
+On 22-09-23, Sakari Ailus wrote:
+> Hi Marco,
+> 
+> Thanks for the update. A few small things below.
+> 
+> On Thu, Sep 22, 2022 at 03:48:43PM +0200, Marco Felsch wrote:
+> ...
+> > +static int tc358746_apply_misc_config(struct tc358746 *tc358746)
+> > +{
+> > +	const struct v4l2_mbus_framefmt *mbusfmt;
+> > +	struct v4l2_subdev *sd = &tc358746->sd;
+> > +	struct v4l2_subdev_state *sink_state;
+> > +	const struct tc358746_format *fmt;
+> > +	struct device *dev = sd->dev;
+> > +	u32 val;
+> > +	int err;
+> > +
+> > +	sink_state = v4l2_subdev_lock_and_get_active_state(sd);
+> > +	mbusfmt = v4l2_subdev_get_pad_format(sd, sink_state, TC358746_SINK);
+> > +	v4l2_subdev_unlock_state(sink_state);
+> > +
+> > +	fmt = tc358746_get_format_by_code(TC358746_SINK, mbusfmt->code);
+> 
+> You can no longer access mbusfmt here as you've already unlocked subdev
+> state.
 
-> And then syzbot should just display all such received comments on the
-> bug's web page, right?
+You're right, Laurent also mentioned this but this function gets called
+during .s_stream(on) so the format shouldn't be changed that late.
+However since you're the 2nd with the thought, I will fix it in the v4.
 
-Whether "all comments" or "last comment" needs some decision. It might be a few words
-indicating culprit subsystem (probably "last" should overwrite), it might be memo
-describing how far debugging went (probably "all" is helpful), it might be some
-URL where discussions/patches are (probably "all" is helpful), it might be trying to
-show or hide "Patch proposed" state (probably "last" should overwrite).
+> > +
+> > +	/* Self defined CSI user data type id's are not supported yet */
+> > +	val = PDFMT(fmt->pdformat);
+> > +	dev_dbg(dev, "DATAFMT: 0x%x\n", val);
+> > +	err = tc358746_write(tc358746, DATAFMT_REG, val);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	val = PDATAF(fmt->pdataf);
+> > +	dev_dbg(dev, "CONFCTL[PDATAF]: 0x%x\n", fmt->pdataf);
+> > +	err = tc358746_update_bits(tc358746, CONFCTL_REG, PDATAF_MASK, val);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	val = tc358746->vb_size / 32;
+> > +	dev_dbg(dev, "FIFOCTL: %u (0x%x)\n", val, val);
+> > +	err = tc358746_write(tc358746, FIFOCTL_REG, val);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	/* Total number of bytes for each line/width */
+> > +	val = mbusfmt->width * fmt->bpp / 8;
+> > +	dev_dbg(dev, "WORDCNT: %u (0x%x)\n", val, val);
+> > +	return tc358746_write(tc358746, WORDCNT_REG, val);
+> > +}
+> 
+> ...
+> 
+> > +static int tc358746_s_stream(struct v4l2_subdev *sd, int enable)
+> > +{
+> > +	struct tc358746 *tc358746 = to_tc358746(sd);
+> > +	struct v4l2_subdev *src;
+> > +	int err;
+> > +
+> > +	dev_dbg(sd->dev, "%sable\n", enable ? "en" : "dis");
+> > +
+> > +	src = tc358746_get_remote_sd(&tc358746->pads[TC358746_SINK]);
+> > +	if (!src)
+> > +		return -EPIPE;
+> > +
+> > +	if (enable) {
+> > +		err = pm_runtime_resume_and_get(sd->dev);
+> > +		if (err)
+> > +			return err;
+> > +
+> > +		err = tc358746_apply_dphy_config(tc358746);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		err = tc358746_apply_misc_config(tc358746);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		err = tc358746_enable_csi_lanes(tc358746, 1);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		err = tc358746_enable_csi_module(tc358746, 1);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		err = tc358746_enable_parallel_port(tc358746, 1);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		err = v4l2_subdev_call(src, video, s_stream, 1);
+> > +		if (err)
+> > +			goto err_out;
+> > +
+> > +		return err;
+> 
+> This can be return 0.
 
+Sure.
 
+Regards,
+  Marco
 
-By the way, a possible improvement on "Patch testing requests:" table.
-Although the "Patch" link showing diff output after applying proposed patch is OK,
-I'd like to also see a link to original "#syz test:" mail, for the intent of diff
-(which would be in patch description part if it was a formal patch) is dropped from
-diff output in the "Patch" link.
-
-For example, https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232 was forgotten
-for 1000 days after 7 patch testing requests. I can't easily find the intent of each diff
-(e.g. just debug printk() or proper fix). It seems the last one was about to formal submit,
-but I can't find why it is not yet applied.
-
+> 
+> > +
+> > +err_out:
+> > +		pm_runtime_mark_last_busy(sd->dev);
+> > +		pm_runtime_put_sync_autosuspend(sd->dev);
+> > +
+> > +		return err;
+> > +	}
+> 
+> -- 
+> Kind regards,
+> 
+> Sakari Ailus
+> 
