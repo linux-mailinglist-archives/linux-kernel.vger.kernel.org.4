@@ -2,130 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AC05E77A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E9E5E77A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiIWJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S231300AbiIWJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiIWJtg (ORCPT
+        with ESMTP id S230064AbiIWJu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:49:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6302F5582;
-        Fri, 23 Sep 2022 02:49:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 23 Sep 2022 05:50:26 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01542F646;
+        Fri, 23 Sep 2022 02:50:23 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0254662065;
-        Fri, 23 Sep 2022 09:49:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E477C43141;
-        Fri, 23 Sep 2022 09:49:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663926572;
-        bh=o8SnYBCJPoKVzlDX3HK1erMQU1GfgJ7738btMSkX6Sw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BvtBEhFI8y2AZUbhduoY8Z4T2hqy+6QhNm10Gpqg5rDilUY4S9cTHTu8gn3Rr5TMG
-         qB4q7m5haISUvUsHumhtX/ReNW/k9x+l/TTcBCJ51u0deJAEbQiAybtbcTbfqn2fMY
-         J9DEOqnmDcO3Og03tGtUbN5EGpeBwRew+iyCqIxOYZ6BAVVm5wTOnH2+o/FCSWReOq
-         ZXSuRvvy9kzIlhIncItg6UjZFWYYXKlR5eQVopgayFt/MseeFrWs2dYHcGokmtsSIp
-         HIW2nw9tqqCFWPW3z1GYmpLGWtNtnW6vH/lZ5GaRMwKWfHU1SdF/5a8oleyB6B6Ls1
-         q5u8dxnUW002A==
-Received: by mail-lj1-f181.google.com with SMTP id g20so12807842ljg.7;
-        Fri, 23 Sep 2022 02:49:32 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2MslM7bSGScWgW/NnJ99zHQ2N3Q+YdfmZUnAnaP7SDlca0g/X3
-        uqLB8Ztz8B6X8XSpZEdvb1m0uWot0emH6LTqOFc=
-X-Google-Smtp-Source: AMsMyM6V4wsWir94AhN8Gq9G73T6gub2GM+Y6qssId2N73+QD+nRZ116sRY61I2BhCZMEJiC1zXXSl7lyVYArvnDFoA=
-X-Received: by 2002:a2e:8349:0:b0:26c:4311:9b84 with SMTP id
- l9-20020a2e8349000000b0026c43119b84mr2736019ljh.152.1663926570273; Fri, 23
- Sep 2022 02:49:30 -0700 (PDT)
+        by mail.3ffe.de (Postfix) with ESMTPSA id CEEA01250;
+        Fri, 23 Sep 2022 11:50:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1663926620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rsjnwaPBUJPxsfvMj/cndZRq66fUnmrOrL2fxzRC6eM=;
+        b=Vo/KwCDEpx4d40kwWFj++T4igYTLUw9NzlU2K1j6bQCcPM1bDONFO0p0SdHvB15ph73J5+
+        ljXz7N5HJuJQbLXYxoYUN54ohBOjysdyQF3yVM3BsPZC9rorCg6hABoPxsAnTYup5yiXug
+        T0D0FgvjxrI0iuZr09OgUs0UKDHA5/+b54VFiCrNQdkJF8D8UStNpcu6ROLR7i0ic2oZjm
+        sxqrNAKm70I51CL6hiM4JpwlI9ULLO+imFkBFHiAV12naDwWmehQZMomlcS+DzN6j8eYWv
+        tUWgjDh4kteHN/ud1yuB1WOyP15OgfD/ANhT3bh2kmORbw+JHgj/eTCn7nP9HA==
+From:   Michael Walle <michael@walle.cc>
+To:     sfr@canb.auug.org.au
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, naoya.horiguchi@nec.com,
+        Michael Walle <michael@walle.cc>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Date:   Fri, 23 Sep 2022 11:50:13 +0200
+Message-Id: <20220923095013.1151252-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220923175554.59431f7b@canb.auug.org.au>
+References: <20220923175554.59431f7b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
- <20220922193157.1673623-1-dave.hansen@linux.intel.com> <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
- <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 23 Sep 2022 11:49:19 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
-Message-ID: <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Kees)
+Hi,
 
-On Fri, 23 Sept 2022 at 09:00, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Sep 23, 2022 at 12:08:57AM +0200, Ard Biesheuvel wrote:
-> > On Thu, 22 Sept 2022 at 21:32, Dave Hansen <dave.hansen@linux.intel.com> wrote:
-> > >
-> > > From: Peter Zijlstra <peterz@infradead.org>
-> > >
-> > > I'm planning on sticking this in x86/mm so that it goes upstream
-> > > along with the W+X detection code.
-> > >
-> > > --
-> > >
-> > > A recent x86/mm change warns and refuses to create W+X mappings.
-> > >
-> > > The 32-bit EFI code tries to create such a mapping and trips over
-> > > the new W+X refusal.
-> > >
-> > > Make the EFI_RUNTIME_SERVICES_CODE mapping read-only to fix it.
-> > >
-> >
-> > This is not safe. EFI_RUNTIME_SERVICES_CODE covers both .text and
-> > .data sections of the EFI runtime PE/COFF executables in memory, so
-> > you are essentially making .data and .bss read-only. (Whether those
-> > executables actually modify their .data and .bss at runtime is a
-> > different matter, but the point is that it used to be possible)
-> >
-> > More recent firmwares may provide a 'memory attributes table'
-> > separately which describes the individual sections, but older 32-bit
-> > firmwares are not even built with 4k section alignment, so code and
-> > data may share a single page. Note that we haven't wired up this
-> > memory attributes table on i386 at the moment, and I seriously doubt
-> > that 32-bit firmware in the field exposes it.
-> >
-> > Can we just turn off this feature for 32-bit?
->
-> Goodie; some seriously security minded people who did that EFI turd :/
+> After merging the mm tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> drivers/base/memory.c: In function 'memory_block_online':
+> drivers/base/memory.c:186:34: error: 'struct memory_block' has no member na=
+> med 'nr_hwpoison'
+>   186 |         if (atomic_long_read(&mem->nr_hwpoison))
+>       |                                  ^~
+> drivers/base/memory.c: In function 'remove_memory_block_devices':
+> drivers/base/memory.c:870:61: error: 'struct memory_block' has no member na=
+> med 'nr_hwpoison'
+>   870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hw=
+> poison));
+>       |                                                             ^~
+> 
+> Caused by commit
+> 
+>   69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
+> 
+> This build has CONFIG_MEMORY_FAILURE not set.
 
-To be fair, most people tended to care more about memory footprint
-than about security at the time. And I don't recall a lot of
-enthusiasm in the Linux community either for rounding up kernel
-sections so they could be mapped with W^X permissions. And without
-PAE, all memory is executable anyway.
+There also seems be more missing stubs. I'm getting:
 
-> Let's just heap it on the pile of 32bit sucks and should not be
-> considered a security target anymore and indeed kill this feature.
->
+aarch64-linux-gnu-ld: mm/memory-failure.o: in function `unpoison_memory':
+memory-failure.c:(.text+0x1c38): undefined reference to `memblk_nr_poison_sub'
+aarch64-linux-gnu-ld: mm/memory-failure.o: in function `num_poisoned_pages_inc':
+memory-failure.c:(.text+0x2c8c): undefined reference to `memblk_nr_poison_inc'
+aarch64-linux-gnu-ld: memory-failure.c:(.text+0x2cbc): undefined reference to `memblk_nr_poison_inc'
 
-I take it this issue is triggered by the fact that i386 maps the EFI
-runtime regions into the kernel page tables, and are therefore always
-mapped, right? If anyone cares enough about this to go and fix it, we
-could switch to the approach we use everywhere else, i.e., treat EFI
-memory as user space mappings, and activate them only while a runtime
-service is in progress.
+On a board where CONFIG_MEMORY_HOTPLUG is not set, but
+CONFIG_MEMORY_FAILURE is. So either there are stubs missing or
+MEMORY_FAILURE should depend MEMORY_HOTPLUG (?!).
 
-But frankly, why would anyone still be running this? With the EFI
-mixed mode support, only systems with CPUs that don't actually
-implement long mode still need this, and I am skeptical that such
-deployments would use recent kernels.
+-michael
