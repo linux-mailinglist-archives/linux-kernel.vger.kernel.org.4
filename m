@@ -2,108 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97B75E7521
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC6C5E752F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIWHr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 03:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S230055AbiIWHuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 03:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIWHry (ORCPT
+        with ESMTP id S230119AbiIWHuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:47:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04CE248D5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 00:47:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663919272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/+P/fMW7VDMnmP5VRBiHacncvYL8dIY+LMFFHhigG8Q=;
-        b=EFe5ezpAqPuvYdUVUYm1eD8sQMmZyT4esZ5FuCnQFOERNaBbPBGu8H1i+oh24PFbzfQTTI
-        7R+KeWUIlTUq5IzNnXC6GUmkc/kWrNyJSVo9VszsKfB71iWP5E44ZQJEFbdznEzaH4v1g8
-        4QZEc+pS2jp61m+CLbZtkq4f/XGyslE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-505-mDYvXDE1PqukDptpKf-iSw-1; Fri, 23 Sep 2022 03:47:51 -0400
-X-MC-Unique: mDYvXDE1PqukDptpKf-iSw-1
-Received: by mail-wm1-f70.google.com with SMTP id r7-20020a1c4407000000b003b3309435a9so1938176wma.6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 00:47:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=/+P/fMW7VDMnmP5VRBiHacncvYL8dIY+LMFFHhigG8Q=;
-        b=Y6Z0W0ncFwFZf+BOo6Aa2kgj/UAWaZuWh755y032FFuHj4RSCBuJC4LicfguIsDSh9
-         h7xUBJ2w1Sdcf/st7WDAaWlqMHPRvo6ONC03e4uzJu+IYn/qJOuOIRLQ2RW66NgpaGpH
-         4NJCPBW2zn1xqqL/KLsQy2pFOt9aTABMjbScnkVq1L9c3AzxVSSdsj0fbR1frx0gxYni
-         MstReB+JbtvRfWXNiX+MQ22SIgzi5fdymzuxdGw9srwOiJKfgKqJ62kdcG65J0S9JOil
-         e6ayiuCAcfRMLFk/F1G4kDAUEVyFL10XTZAzuU6subbatT1Fm8iu8fgqp69Wr98ARWYw
-         dZRg==
-X-Gm-Message-State: ACrzQf1sHxSRkJb7v63oe7fClmGG+QudiKY+hc/nXtTELUR7qZ0RvX5H
-        Hy27Z8ECfM+vq6KPmlg5aMLkIQnpcxlOY1CgmnZZLppVJ08tO7SmjpeaOxayZBm9zGDD3fzTrn4
-        0spjBuV8KfBHWGVxGwIpkDfaW
-X-Received: by 2002:a05:600c:6025:b0:3b4:8c0c:f3c9 with SMTP id az37-20020a05600c602500b003b48c0cf3c9mr11665690wmb.206.1663919270123;
-        Fri, 23 Sep 2022 00:47:50 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7a95m6opm7J4WD6s/vx9Rcuct08uvQpDL9tFS6iwAukDQSmGR/COOIY7aqMip2kcbGqylyIA==
-X-Received: by 2002:a05:600c:6025:b0:3b4:8c0c:f3c9 with SMTP id az37-20020a05600c602500b003b48c0cf3c9mr11665675wmb.206.1663919269777;
-        Fri, 23 Sep 2022 00:47:49 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:cc00:4585:a83b:64f2:ad21? (p200300cbc704cc004585a83b64f2ad21.dip0.t-ipconnect.de. [2003:cb:c704:cc00:4585:a83b:64f2:ad21])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a2f2bb72d5sm2077518wmq.45.2022.09.23.00.47.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 00:47:49 -0700 (PDT)
-Message-ID: <9c4af0f9-22ff-4e4f-58c7-65808d55ca67@redhat.com>
-Date:   Fri, 23 Sep 2022 09:47:48 +0200
+        Fri, 23 Sep 2022 03:50:13 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405D11C145
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 00:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663919410; x=1695455410;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=541maJMIqeYc+trWLsc9+u0f7KuAV6zoN3csGgwaWiY=;
+  b=QhVT+HbxyBfoc+Ncr/X1QNC+SeGOPARtRbZlmVdXVf/ec0vE0ZDJw866
+   RXvESkRXPM4WXNoBbtU0SYa5hSKih5V51lYXqU4airHnexCzTW07ZRcKs
+   9TpRKRCUXAi9zdm8DDI64xskaKtK4q9tkcX2cOvbXp4eTdv6G7PIBQDdQ
+   p1M+zpBUCHBOh76DyHpW3rIRh2A+QYig4ZO6e+FdVu1QVHfCmAY2ifQ5M
+   0Q1kUHVT4MRkwQ9qA20gNSfVMO1IK6DNUDOU2nuQ2xZ/GlE4/1d4O3MSW
+   RM8b4XJy9aMOKG2bXFY4fugDCEAyVLE6wdkBRj40aGIF20/XyJcRxvkJI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300522472"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="300522472"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 00:50:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="948932919"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 00:50:08 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obdRn-0005RY-2P;
+        Fri, 23 Sep 2022 07:50:07 +0000
+Date:   Fri, 23 Sep 2022 15:49:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Binglei Wang <l3b2w1@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: arch/riscv/kernel/probes/rethook.c:10:22: warning: no previous
+ prototype for function 'arch_rethook_trampoline_callback'
+Message-ID: <202209231518.BeRYebh5-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v4 7/8] memory: remove unused
- register_hotmemory_notifier()
-Content-Language: en-US
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Christoph Lameter <cl@linux.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20220923033347.3935160-1-liushixin2@huawei.com>
- <20220923033347.3935160-8-liushixin2@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220923033347.3935160-8-liushixin2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.09.22 05:33, Liu Shixin wrote:
-> Remove unused register_hotmemory_notifier().
-> 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->   include/linux/memory.h | 6 ------
->   1 file changed, 6 deletions(-)
-> 
-> diff --git a/include/linux/memory.h b/include/linux/memory.h
-> index aa619464a1df..98d2a2ebcc10 100644
-> --- a/include/linux/memory.h
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220922-214607/Binglei-Wang/rethook-add-riscv-rethook-implementation/20220922-120748
+head:   859acf9e4b9a99384f7a8085032c9844ea0fc4f6
+commit: 859acf9e4b9a99384f7a8085032c9844ea0fc4f6 rethook: add riscv rethook implementation.
+date:   18 hours ago
+config: riscv-randconfig-r013-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231518.BeRYebh5-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/859acf9e4b9a99384f7a8085032c9844ea0fc4f6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220922-214607/Binglei-Wang/rethook-add-riscv-rethook-implementation/20220922-120748
+        git checkout 859acf9e4b9a99384f7a8085032c9844ea0fc4f6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/probes/
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/probes/rethook.c:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from arch/riscv/kernel/probes/rethook.c:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from arch/riscv/kernel/probes/rethook.c:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> arch/riscv/kernel/probes/rethook.c:10:22: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
+   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+                        ^
+   arch/riscv/kernel/probes/rethook.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+   ^
+   static 
+   8 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
+   Selected by [m]:
+   - DRM_TTM_HELPER [=m] && HAS_IOMEM [=y] && DRM [=m]
+   - DRM_HISI_HIBMC [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && (ARM64 || COMPILE_TEST [=y])
+
+
+vim +/arch_rethook_trampoline_callback +10 arch/riscv/kernel/probes/rethook.c
+
+     8	
+     9	/* This is called from arch_rethook_trampoline() */
+  > 10	unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+    11	{
+    12		return rethook_trampoline_handler(regs, regs->s0);
+    13	}
+    14	NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+    15	
 
 -- 
-Thanks,
-
-David / dhildenb
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
