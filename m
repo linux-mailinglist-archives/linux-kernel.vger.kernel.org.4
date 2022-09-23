@@ -2,99 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C725E755B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DA55E7562
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiIWICT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        id S230054AbiIWIGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiIWICM (ORCPT
+        with ESMTP id S229797AbiIWIGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:02:12 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32481127C91
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id 63so16121120ybq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=cfIxv64ssPCAsFkiNHHMFgdJK+aS3ek+iLqUHDY6WnbjhiOIdSnQ44wWRghl+HhmM+
-         ZgInIkmqqBXRmr0iLX3qhhwZFhR/JPfzleN6mm2nw1mLuOcoAzAHWkBFiHwZ7tqjMZgF
-         PsKRUIHjUUQqGprd2uONY74u1xE5BTvss8qSBbNp7Z+Aq70BRE20eriiNGYVyBXq+Hsq
-         b5rkcgTekY6IxWT4nPGAarRMzqwaFzSMb85FKRftobSoeGzks+ft+jlIfNWEogJG+3AZ
-         NOSobbcfUtAgxZtAvcYwJWnSzI9bh6dTNyppITL3cUvgwoUGwW3iGN9w6X1aRyfg5wnI
-         lcKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=zddDesCu4F1ekJ3YWCWDDCWEULIKsfCoTHNm/m+zTe+wcIV1c2QpP7JrEmbIAQxl5P
-         kNTtd4sXNE3mRg/mgNUpz8POOu9v2lMw217wWXd3feRX+gEYc6w/xibxUTFI+2LHSrzL
-         v3vyZ21pONM/yKkXDnUn6Vxu9jucuxZzAi4F0IWmlrzzyrGBQ41057i9d8eAOUyZn0rR
-         7E7cn0/+AiqrLRFnF5H9PlYJpewMF+bnj6FCsVXOtBIfQxcnYMdbTRuz4/w1pp2MJEQg
-         4sm/CNt93jLBi+kx2EkkncX778ZxfReFUaG8ztbZY0g9JnkBvlGmCtu0oMERlVleXK18
-         I/lA==
-X-Gm-Message-State: ACrzQf1LBbJ96kLGe8c9RasMzYeOnwZznbEd2EdTUMGcDK71R522jzxE
-        0rfHS3mU6eGXvwYjhgVQK95MUbXVKQBmbGMXsAU=
-X-Google-Smtp-Source: AMsMyM4xZCf+qxLt2Ywm13M7JqasT1TK3BugpgoPjyQSFw4MK8Zlc9YURZmRkEz6rKorJr4UyEvKaVmMnfEZ87d4MnU=
-X-Received: by 2002:a25:2f12:0:b0:6b3:e5e4:aeeb with SMTP id
- v18-20020a252f12000000b006b3e5e4aeebmr7800323ybv.22.1663920129070; Fri, 23
- Sep 2022 01:02:09 -0700 (PDT)
+        Fri, 23 Sep 2022 04:06:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6810D11D627
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:06:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8075219EA;
+        Fri, 23 Sep 2022 08:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663920368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W32O2yVRih3gwoLv5jL3J0R/1OnRljKFS2FDN0VocOE=;
+        b=Pl+SdTc+QcZJWIEU7QfsDd9fWk+tzpEKp98gH4KLelmFYEfxGSkZDcpoW93NPCiQEEZlRA
+        1/U+svWsV7gEff7FfI+aU0ZK3lquksmd+Ub4khv76ZN+gNsorAqcgk9Fm61CGQm67HM4gW
+        7yVWAAJIOCnqk4Gn3Ot22Qei23yZeEc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663920368;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W32O2yVRih3gwoLv5jL3J0R/1OnRljKFS2FDN0VocOE=;
+        b=NEpLtuMet7hLasS4xxYkCmyMQfFFoYvb6ECDUGdet0SLgusoImC7tJ/mUOcja0Sxt59rAE
+        jJ3Ap0C7aW+8EYDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56F2E13AA5;
+        Fri, 23 Sep 2022 08:06:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MOJIFPBoLWNLfwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 23 Sep 2022 08:06:08 +0000
+Message-ID: <73cd87f9-655a-5510-f3f7-e552dcefdf0d@suse.de>
+Date:   Fri, 23 Sep 2022 10:06:07 +0200
 MIME-Version: 1.0
-Received: by 2002:a25:3256:0:0:0:0:0 with HTTP; Fri, 23 Sep 2022 01:02:08
- -0700 (PDT)
-Reply-To: seybasaniel@gmail.com
-From:   Seyba Daniel <bellomouse33@gmail.com>
-Date:   Fri, 23 Sep 2022 10:02:08 +0200
-Message-ID: <CAC0qSW7sc6GUJtHgf3r23GFt653_aZzwewRn531NjpkWamAU7A@mail.gmail.com>
-Subject: HELLO,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b43 listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9503]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [bellomouse33[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [bellomouse33[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 01/33] drm/tests: Order Kunit tests in Makefile
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Dom Cobley <dom@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------009tUO10dHwudn8iU0mykD8M"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it, which you will
-be communicated in details upon response.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------009tUO10dHwudn8iU0mykD8M
+Content-Type: multipart/mixed; boundary="------------c3qicYVAnU4Lh99nFLW5qyTI";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Ben Skeggs <bskeggs@redhat.com>,
+ David Airlie <airlied@linux.ie>, Maxime Ripard <mripard@kernel.org>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Emma Anholt <emma@anholt.net>, Karol Herbst <kherbst@redhat.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Jani Nikula <jani.nikula@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Lyude Paul <lyude@redhat.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Chen-Yu Tsai <wens@csie.org>
+Cc: Dom Cobley <dom@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+ Phil Elwell <phil@raspberrypi.com>, linux-arm-kernel@lists.infradead.org
+Message-ID: <73cd87f9-655a-5510-f3f7-e552dcefdf0d@suse.de>
+Subject: Re: [PATCH v2 01/33] drm/tests: Order Kunit tests in Makefile
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
 
-My dearest regards
+--------------c3qicYVAnU4Lh99nFLW5qyTI
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Seyba Daniel
+DQoNCkFtIDIyLjA5LjIyIHVtIDE2OjI1IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gU2lu
+Y2Ugd2UndmUgcmVjZW50bHkgYWRkZWQgYSB0b24gb2YgdGVzdHMsIHRoZSBsaXN0IHN0YXJ0
+cyB0byBiZSBhIGJpdA0KPiBvZiBhIG1lc3MgYW5kIGNyZWF0ZXMgdW5uZWVkZWQgY29uZmxp
+Y3RzLg0KPiANCj4gTGV0J3Mgb3JkZXIgaXQgYWxwaGFiZXRpY2FsbHkuDQo+IA0KPiBTaWdu
+ZWQtb2ZmLWJ5OiBNYXhpbWUgUmlwYXJkIDxtYXhpbWVAY2Vybm8udGVjaD4NCg0KQWNrZWQt
+Ynk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IA0KPiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3Rlc3RzL01ha2VmaWxlIGIvZHJpdmVycy9n
+cHUvZHJtL3Rlc3RzL01ha2VmaWxlDQo+IGluZGV4IDkxYjcwZjdkMjc2OS4uMmQ5ZjQ5YjYy
+ZWNiIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdGVzdHMvTWFrZWZpbGUNCj4g
+KysrIGIvZHJpdmVycy9ncHUvZHJtL3Rlc3RzL01ha2VmaWxlDQo+IEBAIC0xLDUgKzEsMTMg
+QEANCj4gICAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICAgDQo+IC1v
+YmotJChDT05GSUdfRFJNX0tVTklUX1RFU1QpICs9IGRybV9mb3JtYXRfaGVscGVyX3Rlc3Qu
+byBkcm1fZGFtYWdlX2hlbHBlcl90ZXN0Lm8gXA0KPiAtCWRybV9jbWRsaW5lX3BhcnNlcl90
+ZXN0Lm8gZHJtX3JlY3RfdGVzdC5vIGRybV9mb3JtYXRfdGVzdC5vIGRybV9wbGFuZV9oZWxw
+ZXJfdGVzdC5vIFwNCj4gLQlkcm1fZHBfbXN0X2hlbHBlcl90ZXN0Lm8gZHJtX2ZyYW1lYnVm
+ZmVyX3Rlc3QubyBkcm1fYnVkZHlfdGVzdC5vIGRybV9tbV90ZXN0Lm8NCj4gK29iai0kKENP
+TkZJR19EUk1fS1VOSVRfVEVTVCkgKz0gXA0KPiArCWRybV9idWRkeV90ZXN0Lm8gXA0KPiAr
+CWRybV9jbWRsaW5lX3BhcnNlcl90ZXN0Lm8gXA0KPiArCWRybV9kYW1hZ2VfaGVscGVyX3Rl
+c3QubyBcDQo+ICsJZHJtX2RwX21zdF9oZWxwZXJfdGVzdC5vIFwNCj4gKwlkcm1fZm9ybWF0
+X2hlbHBlcl90ZXN0Lm8gXA0KPiArCWRybV9mb3JtYXRfdGVzdC5vIFwNCj4gKwlkcm1fZnJh
+bWVidWZmZXJfdGVzdC5vIFwNCj4gKwlkcm1fbW1fdGVzdC5vIFwNCj4gKwlkcm1fcGxhbmVf
+aGVscGVyX3Rlc3QubyBcDQo+ICsJZHJtX3JlY3RfdGVzdC5vDQo+IA0KDQotLSANClRob21h
+cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
+IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
+ZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhy
+ZXI6IEl2byBUb3Rldg0K
+
+--------------c3qicYVAnU4Lh99nFLW5qyTI--
+
+--------------009tUO10dHwudn8iU0mykD8M
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMtaO8FAwAAAAAACgkQlh/E3EQov+B0
+hw/+LQ747nt5mB/33pcmDcLYpCscgMBYQNTV/Sz4gO0OeWb5p2GydGSx3oBbGoigBcPktrGYfbQ7
+ZOIMPQNHdVeUy73nL5nCvyVjiLM1YkwrD8JtwgS8YxBzTkiv6noQz3RgQJECkMFJToW+sjEZOofR
+cm9NVEiN6uvC3746K+O8/Tk4vQjqgWjUWmcjliRuao7r8SbLvPHDz3HaB3DajOw9kltJqiOw6QNq
+mbxSz2+ovZbk1Pt51M/PZnMBLhI0T/K0Haz8A6voMM6xj1ROGWF4svTDiXJj7bWjZ+s3orvKmNl2
+lkSDGXSQWD1tAzkkNGE+hiRD0chELIFyx53L8n49cIkGq3GvN/04cMDpRdNFTTYdgSqibjx+0Sd3
+nBCcThQ4O0ONL4HQ/yIHdz9eZy6zLAuSU0XgtFwfSeLvayhTOnukJPKXsUpOJ7RrnUDhmZkCpgnz
+P4U2lIzrnum0eNvk1LQuUIfcurPAeHj5uwhq8gGraWv2r0IOqlaAzM9TXiCfBnqgvzLORbx7o3w/
+pEZp8kX9deCUF2H1EQ5XIJFqQNtwI/lyfXNL9q18zb0AvfR8uxOVselZE+3H6igyDYEOAty6XrTb
+Fc/23cwmvW3diIDAL6z4+hAKVLKR8UOc+OjB1DUfBF1FbOFfjGAkp+F4R2aWq017QCQwphE31vX/
+Xvw=
+=fZ0n
+-----END PGP SIGNATURE-----
+
+--------------009tUO10dHwudn8iU0mykD8M--
