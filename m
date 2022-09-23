@@ -2,171 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38A15E7D5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08C25E7D6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiIWOkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S231819AbiIWOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbiIWOkv (ORCPT
+        with ESMTP id S229808AbiIWOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:40:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06AAF1857;
-        Fri, 23 Sep 2022 07:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663944050; x=1695480050;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Fs2fxSNfqcm045ENtCdw6SPv/7P4W5SdGkbp+E5zDPs=;
-  b=i+BwdRNi7rDZY/UqqxhbZHRtF4gNbate7cbADjOUl1qhk/F5DBDjyK3h
-   QnMNfsHQEgVGY9JUHqe0OavUKGaVZAJu4IOVVzQDUB9nx/N/9fEUiYstQ
-   xT0dDkHosU2Ah12vHmFeOy2OfBpwnnxbPo1kByGlLbzo/P0cffTBCbmdl
-   Z9SYi03qbwYAchcy/3NrsLoclCIT6opp2phfG5KOEiYklR1NyT96bTJ7O
-   zUUUm4bk2TvPnwh9YrrCPAUrfQZJWye/TPLhqtUBeQEYjx6aK879ZR/51
-   d2FjSmJ1ViIRwFk/qedxV+m9cChDWXQ7XqYvQlf7LZJiGTCMUAUCUaI0u
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="302053273"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="302053273"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:40:48 -0700
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="865312354"
-Received: from alutz-mobl.ger.corp.intel.com ([10.252.35.146])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:40:42 -0700
-Date:   Fri, 23 Sep 2022 17:40:40 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2 1/6] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <40e867ec-c7-66f-9db9-94f6132d587e@linux.intel.com>
-Message-ID: <b0689af0-511-dd5d-8e3-cca69d609cb0@linux.intel.com>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-2-matthew.gerlach@linux.intel.com> <40e867ec-c7-66f-9db9-94f6132d587e@linux.intel.com>
+        Fri, 23 Sep 2022 10:42:38 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A19312FF00
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:42:37 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id g6so255753ild.6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=KPF2lqF/WtNz1hYLUge3B8Vp3BuerYZNr3G0LKFM+pI=;
+        b=gGnxOJrzA69G0jn1C8f+RQVhfmTHqoKHFI3+99865brwbstNc1J2/z9iqIIu10QDLB
+         4NLuEqFsYK96WzVR7C2e6Em/Q7fFvn9PQvfUdFE0Kgc7zk5U97BgfP0YtQkqSMDzKaqG
+         fe3C0co8WGjRk1ntXTXbg/lLRF0PXK8bDayXk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=KPF2lqF/WtNz1hYLUge3B8Vp3BuerYZNr3G0LKFM+pI=;
+        b=QSf68duvynO+hRnASf1Bo/vSRSzUE1Xo3GrvhiEm8lR8MDGhMVFF8YTLTI3kpTiXdG
+         DYzBczeqpoHwDZk96CJmonW1k6QaRtBzAgGTmc4CwcJ9iExCV5bKWWTaLUHsS+BcLB41
+         kBTGFyVOulBB755jrUqAulu6XoaIgCmR68gq7naPBCy+bVN3Bzvc1V8E5JDsvjrFrSq5
+         c0jG6REqzee+nOxJwQctsYBiYChgUpwk0mie+rHCy/ymsOaQcq54k/d+kZIZ5P+rgWGZ
+         FG377uCJqw/BkLQc1XHpn9KWAO27lg7wiUp2hLPd3DiJ7jC851xTkYYOwZxpmq8HyftV
+         DZkw==
+X-Gm-Message-State: ACrzQf2IxDJ61jkmrbP+vG4WIeLeg3d9Lgk7WNsDI3OT4GCT8rok8Dh4
+        YZJ4L434RHvOoYoeTjwzgam+wQ==
+X-Google-Smtp-Source: AMsMyM5B06KoxoN0qBRyK2rGavS6PZzCApYyN7HCsCIYb2derNbv+I2Yo72cxf2knFUZ1oV3smdxZQ==
+X-Received: by 2002:a05:6e02:194c:b0:2eb:6cfa:1615 with SMTP id x12-20020a056e02194c00b002eb6cfa1615mr4251985ilu.10.1663944156485;
+        Fri, 23 Sep 2022 07:42:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id q39-20020a027b27000000b0034b362d5a12sm3365431jac.97.2022.09.23.07.42.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 07:42:36 -0700 (PDT)
+Message-ID: <19cecfa3-7333-d97f-374a-12150acda79c@linuxfoundation.org>
+Date:   Fri, 23 Sep 2022 08:42:35 -0600
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2146711104-1663944047=:1595"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [GIT PULL] Landlock fix for v6.0 #2
+Content-Language: en-US
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220923104322.3182116-1-mic@digikod.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20220923104322.3182116-1-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2146711104-1663944047=:1595
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 23 Sep 2022, Ilpo J�rvinen wrote:
-
-> On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+On 9/23/22 04:43, Mickaël Salaün wrote:
+> Hi Linus,
 > 
-> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > 
-> > Add documentation describing the extensions provided by Version
-> > 1 of the Device Feature Header (DFHv1).
-> > 
-> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > ---
-> > v2: s/GUILD/GUID/
-> >     add picture
-> > ---
-> >  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 49 insertions(+)
-> > 
-> > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> > index 15b670926084..7c786b75b498 100644
-> > --- a/Documentation/fpga/dfl.rst
-> > +++ b/Documentation/fpga/dfl.rst
-> > @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
-> >  driver's id_table.
-> >  
-> >  
-> > +Extending the Device Feature Header - DFHv1
-> > +===========================================
-> > +The current 8 bytes of the Device Feature Header, hereafter referred to as
-> > +to DFHv0, provide very little opportunity for the hardware to describe itself
-> > +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
-> > +to provide increased flexibility and extensibility to hardware designs using
-> > +Device Feature Lists.  The list below describes some of the goals behind the
-> > +changes in DFHv1:
-> > +
-> > +* Provide a standardized mechanism for features to describe
-> > +  parameters/capabilities to software.
-> > +* Standardize the use of a GUID for all DFHv1 types.
-> > +* Decouple the location of the DFH from the register space of the feature itself.
-> > +
-> > +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
-> > +a list of parameter values to a particular feature.
-> > +
-> > +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
-> > +across all types.
-> > +
-> > +With DFHv0, the register map of a given feature is located immediately following
-> > +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
-> > +map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
-> > +structure is shown below:
-> > +
-> > +    +-----------------------------------------------------------------------+
-> > +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63                                 GUID_L                             0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63                                 GUID_H                             0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63                 Address/Offset                            1|  Rel  0|
-> > +    +-----------------------------------------------------------------------+
+> This change fixes out-of-tree builds for Landlock tests, which was
+> initially identified here:
+> https://lore.kernel.org/r/CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com
 > 
-> Is something missing here given the layout is claimed (in 2/6) to be:
+> Please pull this Landlock fix for v6.0-rc7 .  This change merged
+> cleanly with your tree, and have been successfully tested in the latest
+> linux-next releases for a week.
 > 
-> "DFHv1 Register Offset definitons
-> In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA"
-> 
-> ?
-
-Ah, I think I've figured it out, PARAM_HDR + PARAM_DATA combo is repeated 
-n times (rather than the params being covered by the "PARAM_DATA")?
-
--- 
- i.
-
-> > +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63                 Parameter Data                                     0|
-> > +    +-----------------------------------------------------------------------+
-> > +
-> > +                                  ...
-> > +
-> > +    +-----------------------------------------------------------------------+
-> > +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
-> > +    +-----------------------------------------------------------------------+
-> > +    |63                 Parameter Data                                     0|
-> > +    +-----------------------------------------------------------------------+
-> > +
-> >  Open discussion
-> >  ===============
-> >  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
-> > 
-> 
+> Regards,
+>   Mickaël
 > 
 
---8323329-2146711104-1663944047=:1595--
+Thank you for taking care of this Mickaël.
+
+thanks,
+-- Shuah
