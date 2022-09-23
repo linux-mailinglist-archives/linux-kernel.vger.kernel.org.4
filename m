@@ -2,147 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D0B5E85E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873B35E85E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiIWW3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S232473AbiIWWdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIWW3d (ORCPT
+        with ESMTP id S232350AbiIWWc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:29:33 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8813F49;
-        Fri, 23 Sep 2022 15:29:29 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 22:29:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663972167;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FKqtrIa6eWeO5fTQzsUl+gBgUVyxyORjsqKunP19yko=;
-        b=Gc35W1p0Z0YQKURH+k+F7VWYgkeERZCXmcZsSWBkFII/FQl9Z1z1LILTW/HMrCoCNOqoTh
-        ngPviG4j16gvW/vdCbaX7SBeWt6mQZKiOvqtPBF8ZPzxqJAhvshLrCm3jW3HoyakJw23Qv
-        jLFQo2gF6jE/BKUN9C0f/7+f/oXTysIm4OE6IxClp+ZxNTouFjuTJFLNmyzz8IFLvqAwGe
-        FYE+/l02KF7RMX7Idi+PaRe3qohTOKgBFiQxh+2/r2StwAZC+miHohzm41KcYn8QEyiZN9
-        vlMKN/I2Xf0pS7+Gwfi1ADWLokzYlgOeC/F+2EiCwqmL5ICnUL9R8yvbnPN15Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663972167;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FKqtrIa6eWeO5fTQzsUl+gBgUVyxyORjsqKunP19yko=;
-        b=KMSHUw6rnb3bUD7gAcCSSvD45IQ044XHNM6fRLKvIz1iStFAsxsuHr9KBS8qxLfQhs6pzr
-        azc+tj7N4ptk6ICw==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] ACPI: processor idle: Practically limit "Dummy
- wait" workaround to old Intel systems
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Fri, 23 Sep 2022 18:32:59 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BFB121E5C;
+        Fri, 23 Sep 2022 15:32:58 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:40284)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obrE5-009AGO-Rn; Fri, 23 Sep 2022 16:32:53 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:52214 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obrE4-002SIJ-6J; Fri, 23 Sep 2022 16:32:52 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Zijlstra <peterz@infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220922184745.3252932-1-dave.hansen@intel.com>
-References: <20220922184745.3252932-1-dave.hansen@intel.com>
+        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
+        <20220922193157.1673623-1-dave.hansen@linux.intel.com>
+        <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
+        <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
+        <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
+        <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
+        <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
+        <202209231126.6855D54@keescook>
+        <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
+        <202209231417.F73F40060@keescook>
+        <69e00173-087e-6a22-7a02-0c1212f42065@intel.com>
+Date:   Fri, 23 Sep 2022 17:32:45 -0500
+In-Reply-To: <69e00173-087e-6a22-7a02-0c1212f42065@intel.com> (Dave Hansen's
+        message of "Fri, 23 Sep 2022 15:15:15 -0700")
+Message-ID: <87a66p3enm.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Message-ID: <166397216527.401.8938673863974895520.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1obrE4-002SIJ-6J;;;mid=<87a66p3enm.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19oWRRkF39/nqNxUkNH38XNkkkXt00RYVc=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: ; sa06 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Dave Hansen <dave.hansen@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 443 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 12 (2.7%), b_tie_ro: 10 (2.3%), parse: 1.20
+        (0.3%), extract_message_metadata: 14 (3.1%), get_uri_detail_list: 1.98
+        (0.4%), tests_pri_-1000: 15 (3.3%), tests_pri_-950: 1.20 (0.3%),
+        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 93 (21.1%), check_bayes:
+        92 (20.7%), b_tokenize: 8 (1.7%), b_tok_get_all: 8 (1.9%),
+        b_comp_prob: 2.8 (0.6%), b_tok_touch_all: 69 (15.6%), b_finish: 0.98
+        (0.2%), tests_pri_0: 293 (66.1%), check_dkim_signature: 0.53 (0.1%),
+        check_dkim_adsp: 3.1 (0.7%), poll_dns_idle: 1.23 (0.3%), tests_pri_10:
+        2.4 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Dave Hansen <dave.hansen@intel.com> writes:
 
-Commit-ID:     e400ad8b7e6a1b9102123c6240289a811501f7d9
-Gitweb:        https://git.kernel.org/tip/e400ad8b7e6a1b9102123c6240289a811501f7d9
-Author:        Dave Hansen <dave.hansen@intel.com>
-AuthorDate:    Thu, 22 Sep 2022 11:47:45 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 23 Sep 2022 15:24:10 -07:00
+> On 9/23/22 14:19, Kees Cook wrote:
+>>> But currently, PAE is not even enabled in the i386_defconfig, and
+>>> defaults to off. This means people that are unaware of this won't
+>>> enable it, and will be running without NX support.
+>> And they all make me cry. ;)
+>
+> It's been like that for a long time, presumably because the defconfig
+> should *boot* in as many cases as possible.  It wouldn't be hard to
+> change.  It also wouldn't be hard to default to HIGHMEM4G (non-PAE) on
+> targeted builds for CPUs that don't support it.  Patch attached to do
+> that, if anyone else has an opinion.
+>
+> We should probably just leave i386 alone, but it breaks my heart to see
+> Kees in tears.
 
-ACPI: processor idle: Practically limit "Dummy wait" workaround to old Intel systems
+Is it at all possible to simply drop efi support for 32bit builds?
 
-Old, circa 2002 chipsets have a bug: they don't go idle when they are
-supposed to.  So, a workaround was added to slow the CPU down and
-ensure that the CPU waits a bit for the chipset to actually go idle.
-This workaround is ancient and has been in place in some form since
-the original kernel ACPI implementation.
+Last I looked (and it was quite a while ago) efi was only supported
+same architecture.  So we are talking about 32bit efi for 32bit kernels.
 
-But, this workaround is very painful on modern systems.  The "inl()"
-can take thousands of cycles (see Link: for some more detailed
-numbers and some fun kernel archaeology).
+I think there were only a handful of systems that ever shipped 32bit
+efi, because when 32bit efi came out 64bit processors had been shipping
+for several years already.
 
-First and foremost, modern systems should not be using this code.
-Typical Intel systems have not used it in over a decade because it is
-horribly inferior to MWAIT-based idle.
+We still probably need to deal with whatever is needed for the BIOS.
 
-Despite this, people do seem to be tripping over this workaround on
-AMD system today.
+If there are enough interesting systems to care to keep the few systems
+that shipped with 32bit efi support going it probably does make sense to
+change how it is implemented because using the kernel's page tables has
+been nasty and given kexec all kinds of challenges to support because
+not only does efi happen strange mapping attributes but efi also winds
+up living at a fixed virtual address, that can't be changed.  So if you
+care about anything like address space layout randomization efi provides
+a well know fixed target that defeats all of your work there as well.
 
-Limit the "dummy wait" workaround to Intel systems.  Keep Modern AMD
-systems from tripping over the workaround.  Remotely modern Intel
-systems use intel_idle instead of this code and will, in practice,
-remain unaffected by the dummy wait.
+Can we do something to isolate 32bit efi so it is not a painpoint?
 
-Reported-by: K Prateek Nayak <kprateek.nayak@amd.com>
-Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-Link: https://lore.kernel.org/all/20220921063638.2489-1-kprateek.nayak@amd.com/
-Link: https://lkml.kernel.org/r/20220922184745.3252932-1-dave.hansen@intel.com
----
- drivers/acpi/processor_idle.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+Given how long 8bit and 16bit systems have lasted I rather suspect 32bit
+x86 will last in some embedded form for a very long time.  PAE came in
+about the first pentium's I think so most embedded i386 processors
+should support it.
 
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 16a1663..9f40917 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -531,10 +531,27 @@ static void wait_for_freeze(void)
- 	/* No delay is needed if we are in guest */
- 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
- 		return;
-+	/*
-+	 * Modern (>=Nehalem) Intel systems use ACPI via intel_idle,
-+	 * not this code.  Assume that any Intel systems using this
-+	 * are ancient and may need the dummy wait.  This also assumes
-+	 * that the motivating chipset issue was Intel-only.
-+	 */
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-+		return;
- #endif
--	/* Dummy wait op - must do something useless after P_LVL2 read
--	   because chipsets cannot guarantee that STPCLK# signal
--	   gets asserted in time to freeze execution properly. */
-+	/*
-+	 * Dummy wait op - must do something useless after P_LVL2 read
-+	 * because chipsets cannot guarantee that STPCLK# signal gets
-+	 * asserted in time to freeze execution properly
-+	 *
-+	 * This workaround has been in place since the original ACPI
-+	 * implementation was merged, circa 2002.
-+	 *
-+	 * If a profile is pointing to this instruction, please first
-+	 * consider moving your system to a more modern idle
-+	 * mechanism.
-+	 */
- 	inl(acpi_gbl_FADT.xpm_timer_block.address);
- }
- 
+Eric
