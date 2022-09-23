@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA1D5E76D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C515E76D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiIWJXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S231676AbiIWJYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiIWJXR (ORCPT
+        with ESMTP id S231666AbiIWJYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:23:17 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B61E10A8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:23:15 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a2so18847655lfb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:23:15 -0700 (PDT)
+        Fri, 23 Sep 2022 05:24:15 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98595E10BA
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:24:14 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a14so13949309ljj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=6KRGHi5QO3WPnDzOkycHTFaQ6rn1LlFLCXaq4LIPA2o=;
-        b=nr19Q9adKvfDHJX1/MuKtdcCmb+W2G4kH9i+60wOK18TE2mFjrQb+Zhxkd4iaZDLYw
-         UljVVMKI9OZEOTsuDxxGAT5c/UFL8XR67rS6OWaaw9r4B8Qgmujg/irw+c6WkX8QZbyS
-         uc4dhF5ciBcdB6NnytStFtuQlGW/MCd6onKxK6cu8Ue6qxkAAec6dFtEW27xIKGPCGf+
-         RJUnMQeiGSrQ6DmPFstmf9gOAdikqtf/ykVZrUAvavkQBmcQrXPZk3kubgEHf9sxAbjQ
-         KYQt8AkzYu1LGEoaUIe2emDFYd9Atk9KwGWgew5BnOESRBgIDVIrqORDZrcToYmUVGlb
-         5d/g==
+        bh=8sl1ujRTUl11fto0Ranm/tI+97TTYIAhGCwPSMFjBPA=;
+        b=ZmEoXITQANAMGtqR91k1N7e/qM09bOZ9VUmbOJlmxoe+wA90YrN7DHPuk9pKGvpSLz
+         xVyVY8rDgCNF4lOF70B+xypS4s7g5dhX+x54O5gy4n+rSN/V2QhRsGhHl/g/VNcnYRY6
+         hqfp/v0KjYxaRphFyh8LBs0DbdbMzF982rBw1L5Yd6AWdwn12ub7APMiLwna9FPPqT5T
+         F58b/se2mImF2x5vYBQSz5BrkaaFXH20uMIge/H5VwKCMwuGvcvz9Uz9ZzFxBYK8v5aZ
+         UO4tOOdqKsIX9MEkra1vW9KosdEXSgKIbulthiqEK1fP3CuvU/jsvhwgOwvgHhhQUZ1N
+         TznQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=6KRGHi5QO3WPnDzOkycHTFaQ6rn1LlFLCXaq4LIPA2o=;
-        b=E1dmb2yL0gNgpRh4/cSzxQ3CILUlUPBBTE9DXINKVEaINfWb9QTfupCu396PMFVmfY
-         XQRo07rVUyT2+FvDkT1Kj4Hn100eVY4p5+IO6zdepReLZTTjsMZnscg9Ivx9LYOPTT4A
-         hsfdioqROrG7ozAffWU63lF2QpGKcpb/oY2yU3h7M3uiKlIvSfps2I8WW4Bs7G5G585h
-         vMXvSJUqATRmCVq4aUCmHtHq+hKUc/4TL9CVdmLm8vAx2RvSdv8i63uk40Avpy3epeo4
-         WXb9AbNu6CCvHqmBWRV3y7XnTYXwk/cnHH9+3WZx3jzyLXaWY57FnND1km0V3r2jMfBW
-         QCGA==
-X-Gm-Message-State: ACrzQf0kHdTKKZ5BGOdtSsjg//hHibL49vYEy+7n7fZnbwcKrR2vg918
-        zarrkeE9gAJmM2wNShdio4Tvsw==
-X-Google-Smtp-Source: AMsMyM5CQWggSmYXQq0F3Di+/pXRM3IYsH2YikO+/Bi2/zu7pZyr6nxphxgrV9sWndQW0zsNvXqCvQ==
-X-Received: by 2002:a05:6512:1320:b0:488:8fcc:e196 with SMTP id x32-20020a056512132000b004888fcce196mr2715533lfu.602.1663924994025;
-        Fri, 23 Sep 2022 02:23:14 -0700 (PDT)
+        bh=8sl1ujRTUl11fto0Ranm/tI+97TTYIAhGCwPSMFjBPA=;
+        b=pRsRRx59myNVrrIqAxhliJc73aGOh2U3El7qlAEraLpRsXNneADV0LD1v+eJOq251Z
+         lslBD6qEE6fxyz7LjqqKAqrmLeHKMBejBT9qDNEV8tSs4hkoxHCx/1mld3badCEkmA9p
+         Tm5pcZpaTAK771cg6JMX6lonAfUIwL6/9aVulfuGOK+2JP/ioeXR+MF96Y08FEcQXDM/
+         KfIxajNiWb5sXjS2FeQugGOhLjWqiqH1pBmBNg0U5C6mKHkviT3S1JyBX+UNA4IlG57I
+         bYxNpzbNH6a48LG+103ll0KIqKIiD9XYyEDZ73dxrmvy3U/WaGQH5+onYxK/OTjn3Q5g
+         Hp7Q==
+X-Gm-Message-State: ACrzQf2QvG5Wo4KRMRwVwA+cB2SM7n7wO6MuI3HoG3U5L+e+NSzuIZdq
+        GnUHA0BRTR8CtbW+bdDgJbEGKA==
+X-Google-Smtp-Source: AMsMyM65tpnYo0kY2Z5LJkbV/ckJdFgr1A0vjEOnLqPHceegmPhm+LwV4t9iV3qr8H8ZzzsIrZDrFQ==
+X-Received: by 2002:a05:651c:1789:b0:26c:7480:f6f8 with SMTP id bn9-20020a05651c178900b0026c7480f6f8mr1866963ljb.374.1663925052895;
+        Fri, 23 Sep 2022 02:24:12 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac25f4b000000b00499b1873d6dsm1349862lfz.269.2022.09.23.02.23.12
+        by smtp.gmail.com with ESMTPSA id d2-20020a056512368200b00494a603953dsm1362860lfs.89.2022.09.23.02.24.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 02:23:13 -0700 (PDT)
-Message-ID: <29f9fbd3-a266-e947-5dad-27181d3945e3@linaro.org>
-Date:   Fri, 23 Sep 2022 11:23:12 +0200
+        Fri, 23 Sep 2022 02:24:12 -0700 (PDT)
+Message-ID: <2de38167-976b-6996-7929-a41a842991a2@linaro.org>
+Date:   Fri, 23 Sep 2022 11:24:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [resend PATCH v4 2/2] dt-bindings: net: snps,dwmac: add clk_csr
- property
+Subject: Re: [PATCH v7] iio: adc: mcp3911: add support to set PGA
 Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Christophe Roullier <christophe.roullier@st.com>
-References: <20220922092743.22824-1-jianguo.zhang@mediatek.com>
- <20220922092743.22824-3-jianguo.zhang@mediatek.com>
- <04b9e5ef-f3c7-3400-f9df-2f585a084c5d@linaro.org>
- <8007b455dd18837c06ab099a6009505e7dddc124.camel@mediatek.com>
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220922194639.1118971-1-marcus.folkesson@gmail.com>
+ <a34d9ee8-8bf8-3158-7fe6-cbde513aa1a7@linaro.org>
+ <CAHp75VcEGb3kS03QG0ebOJYH1X_D5EbBjL6iNWUxQ5j=aCu29A@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8007b455dd18837c06ab099a6009505e7dddc124.camel@mediatek.com>
+In-Reply-To: <CAHp75VcEGb3kS03QG0ebOJYH1X_D5EbBjL6iNWUxQ5j=aCu29A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,39 +82,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 03:48, Jianguo Zhang wrote:
-> Dear Krzysztof,
+On 22/09/2022 23:07, Andy Shevchenko wrote:
+> On Thu, Sep 22, 2022 at 11:00 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 22/09/2022 21:46, Marcus Folkesson wrote:
 > 
-> 	Thanks for your comment.
+> ...
 > 
-> On Thu, 2022-09-22 at 17:07 +0200, Krzysztof Kozlowski wrote:
->> On 22/09/2022 11:27, Jianguo Zhang wrote:
->>> The clk_csr property is parsed in driver for generating MDC clock
->>> with correct frequency. A warning('clk_csr' was unexpeted) is
->>> reported
->>> when runing 'make_dtbs_check' because the clk_csr property
->>> has been not documented in the binding file.
->>>
->>
->> You did not describe the case, but apparently this came with
->> 81311c03ab4d ("net: ethernet: stmmac: add management of clk_csr
->> property") which never brought the bindings change.
->>
->> Therefore the property was never part of bindings documentation and
->> bringing them via driver is not the correct process. It bypasses the
->> review and such bypass cannot be an argument to bring the property to
->> bindings. It's not how new properties can be added.
->>
->> Therefore I don't agree. Please make it a property matching bindings,
->> so
->> vendor prefix, no underscores in node names.
->>
->> Driver and DTS need updates.
->>
-> We will rename the property 'clk_csr' as 'snps,clk-csr' and update DTS
-> & driver to align with the new name in next versions patches.
+>> No need to cc-us. Use scripts/get_maintainers.pl.
+> 
+> While I understand your point it's much easier to Cc all related
+> people for all patches in the series, given the fact that many (code)
+> maintainers ask for that (Cc'ing them all patches). So I prefer to be
+> on the contributor side for the sake of ease of contribution.
 
-Thanks!
+Then please explain me how I am related to this patchset (it's one
+patch, BTW, not a patchset)...
 
 Best regards,
 Krzysztof
