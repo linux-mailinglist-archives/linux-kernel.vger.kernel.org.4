@@ -2,206 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F055E7F9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD715E7F9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiIWQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S231474AbiIWQW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIWQWZ (ORCPT
+        with ESMTP id S229495AbiIWQWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:22:25 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42D1A213
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:22:24 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id g8so377891iob.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JCEsHMJy/ullYPtJF9xFE7cEbWJdSEZSG4mebaxAikg=;
-        b=IPgz1Um4bHtnZ2dNoSBJBU6fTHVnplRX9o7pqgKX7IFaUnpFUCpIWhk31BWuTU3gNu
-         pZF33VJy8pyJW29qSRJV737/MZxKPVkPdF2w80LAbfh569ftv1MS5rHSnpDqKFQ6Tb4a
-         c5sdmUC/n/8rj15ShatBCv33tDuPfRVDQJrW38HxWB6sKC0Q/u0tbv26A8AU0Bt8/ZLM
-         iQ/0hiYxh5U5FfdBXEqvsKwZj63QvJRGr5bSebSEJ7pajM+mlLeKqsMZuU57c4kY8BVt
-         vYuQS05vGmK/F/l30fmwkSenX8SwwyEs2armnGwM4ZFV+46a0vg6y9W1VkY8/WbCUN3X
-         QXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JCEsHMJy/ullYPtJF9xFE7cEbWJdSEZSG4mebaxAikg=;
-        b=sqwRdjVb5BHThOn4Jkh/pmurHoW6cHPWTXglPPPrUADPQBpSN6BvTtiUQKHRWiN52s
-         J1Jd7y/idDcLyWYG98e1DKq+kLNbfr4uHrEOlTvb9OT1PA+Z03eT+3OEi6nuH3TBe2Au
-         XlWUUxlM8z2BnAw22XgDbqnV9JfRxNbVZT3nmB0JjVVETj8jWM7cCOVV/+PnfsfUWN/v
-         c8y0AhL8ITPl1Cc9+bzkpFPh4SLF5EPBW89YAQB5SbDuJjSKV7TEx0i9ZogcoX1eaTnN
-         si4CXXVajGGAhfG8+eTN9EtCJaZIg2KrYqEo9PP6FFIwBt7QRfF4PQugP6bvnyJW9PU4
-         Es3g==
-X-Gm-Message-State: ACrzQf2FK5hja1AVYM2PPgC9AA1snlZVbcyvJ3HFobFjvSpCmfKPnIcx
-        MLtAFWuju1SomAQ/LCsindzpm6brMgGS9bWULXJlaD9xlqY=
-X-Google-Smtp-Source: AMsMyM4yb1sDTwxg385CK1YA3wTc7Ykm2hNJpzzeTvyNMwOM2t3R0WDgxOVrq5SSvxtWLpDaWBXu8ZX1eH7pOW00KhE=
-X-Received: by 2002:a6b:8fd8:0:b0:6a0:f9ea:2a05 with SMTP id
- r207-20020a6b8fd8000000b006a0f9ea2a05mr4006231iod.123.1663950142809; Fri, 23
- Sep 2022 09:22:22 -0700 (PDT)
+        Fri, 23 Sep 2022 12:22:55 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD691A213;
+        Fri, 23 Sep 2022 09:22:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SoW0wQYpPhXmGA+enURbjCTHDRAMrHQvSsxPzpoxV/A/UIEaO4tD1kmRorpehPZSlP7xPfKRcZjPN3LZTZN2c3k/QGljvYhM4S+jnNo+v6mFExY+qExX2BBd84Mw9n5E9DmfFccXKPzUaaE/A0QM1JhUZJNfgGQ+PD9lsB9kS1Q5/jIKYXZ1vJEKl2uq3YI9psF2lPP+qQvXjX2TW9ycGrj0r0CH8yWJ0kZ19UZdozVYEHD6vRLwvPhZMzXM7XUfUKN/QPBngFAGwkMbAxQ/7RG7au9EPRE8OmYRn/8rV2kbcpJJ+MMf6g6nnSZVS3JBRYnagwlqHY5zW6A8DFc91w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uYaRvfsz72cGMxA4mk6Qs+b4oPUKMtxoGGggYDAUarI=;
+ b=B95ytpJYgxHlFkfaxChOsnrzf5CiPbTg+PZXl6Rx5wpKEg/76cUyEaj7m9lI4zaLt6oD95EBOFhl0G30GVh9RG0oAWAKuJQ0Hg3Vr0WmKGb33LQJUyzlcNTDSkXP3j50x8+8mRQb+wH/a319ZsuyBSnhcCdnmRCHrE/1x3tUfBcnYO++St6T3bQ9Pzqp+EbKYCoWLe6kwDXKWM7YpBCYJMwnidWW7ygB6kkkrZjsE6BCuveYlYUjH+U5mDGh4fH+q7YjnHOr0Cm9yul78dzjhfil5HGxpSQbjx1D8c/hDByT5t/hlwZSd7kY5hRaEoPhxViFtP5turp19kdWPlE0CA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uYaRvfsz72cGMxA4mk6Qs+b4oPUKMtxoGGggYDAUarI=;
+ b=rtLoR9ZOHhTwV9LrT3RmQ2TBfSIoGrkYmVfihqjm955XmjIxv31VdC6+fe4InNBnjUIhzqbBorI1uO+GUEXFKXarFK3CjJe1nP1ItKKVpBLJRTxDsQ3IfewZOliWvqVLTMDNc6fynIJ+bUJ00i6Iz0hD/EXJx5H0WsTbknkcqmFWkG/ikjjfEoXKjLyegYsdlOSFyewTTYysvcIgbcB8xxOTLpohT7xmq9KupTZxdRdu4ADPFVv8GGmp4ZMp8PJKSxroaYl9ChXmRBJzoPX0H4denKvs/uNXxiK5LRgCG3lUCoCD0IY4yRGHkIwLLVLWUGFVbG0CExm86eMAJsTffg==
+Received: from SJ1PR12MB6339.namprd12.prod.outlook.com (2603:10b6:a03:454::10)
+ by BL1PR12MB5923.namprd12.prod.outlook.com (2603:10b6:208:39a::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 16:22:52 +0000
+Received: from SJ1PR12MB6339.namprd12.prod.outlook.com
+ ([fe80::2db9:5c61:102e:dfd4]) by SJ1PR12MB6339.namprd12.prod.outlook.com
+ ([fe80::2db9:5c61:102e:dfd4%6]) with mapi id 15.20.5632.019; Fri, 23 Sep 2022
+ 16:22:52 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 3/3] dmaengine: tegra: Add support for dma-channel-mask
+Thread-Topic: [PATCH v2 3/3] dmaengine: tegra: Add support for
+ dma-channel-mask
+Thread-Index: AQHYzBq1VH2N02dZjk2+4dPkKtVnFK3s0MSAgAABj3CAAAoPAIAAAqQggAAMtgCAAEzYcA==
+Date:   Fri, 23 Sep 2022 16:22:51 +0000
+Message-ID: <SJ1PR12MB6339A665889F4F4B55AE81E5C0519@SJ1PR12MB6339.namprd12.prod.outlook.com>
+References: <20220919112559.58195-1-akhilrajeev@nvidia.com>
+ <20220919112559.58195-4-akhilrajeev@nvidia.com>
+ <8d15c575-a490-e1ed-7e97-5a5cdea0925f@nvidia.com>
+ <SJ1PR12MB633958099C6DDAA4A428ECBEC0519@SJ1PR12MB6339.namprd12.prod.outlook.com>
+ <d2b4a1f5-200f-2560-c249-709e4e2817b1@nvidia.com>
+ <SJ1PR12MB6339660F292E63B2E0CDD85FC0519@SJ1PR12MB6339.namprd12.prod.outlook.com>
+ <d289e057-9709-1b4d-f64f-c3ed627cd0f7@nvidia.com>
+In-Reply-To: <d289e057-9709-1b4d-f64f-c3ed627cd0f7@nvidia.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR12MB6339:EE_|BL1PR12MB5923:EE_
+x-ms-office365-filtering-correlation-id: 941c44e6-0d67-4405-58f7-08da9d7fdd0b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bsUIegvjbu+zCCb4qjWLB00ypY0ZctBN/jqqcgrsNtB+oaZj2zKxwG3ApZXEsQr/8eGx9YyV55f4S+AoTSxIwMgP9cH0QuwhdunyODwNDTyH0YA3W9BXlsBN5oOGI1IHGzyNqy97QuoN3JgcHAD4mZY3Im0NACS2YUfky9Nr+nPh625zpVokIOisMu++t0Fl9hag/6x4InldVlMA1fhHEykWiZWQ84u1ecnl39AyY4P686At3lwxqbUdJEPmTzQlV+Lj7jnko7pg/iDgSOdefRahmfxhvlWyJlXgFKKTjJC51YGyq3WFC8XIGBZfxEhAJdRLK9dMDmXu2NRGPbcRl8gx40BH7SAjrEoQVmkQ4CApFUvdTLxVKOvcLtOQgjMwIlFJp/GbFsg/NI5n7SQjZ9bA+I5QOMwo3QnrfbT9J0U2qS5aXB9BUrMR2rVX2VP/6vqP3RYHS/3hz/mJGg4EHyIvzSh5mJ0HSjdem6htWp9qvRWsWDygmza45GAqfldjJ8IuDaYmr5Q8MZ7WIFlkaO05BQdm345c04HsvcdYfJiTUCKn886IvI5LzIGLh3NkisqoTE0Gm7974fxSxmS1vLLG99WLsprHyFUMtFkEFk2AOvJ0erxk+d+3JhcyE1UgrjkmD51qgiQsNkfyE9cj5rAoK1+2hIxhhurN+UBsasD8Cf2yKq0SZcn9hn9YwJf3u9FMQxMJzDxY1DmT7xIhew/4KOztLSDuoPGZXnrnyQaevvJYq0kqLUt7d/5lcTbDftSV8qjUYhHpOWHCnVfXkA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR12MB6339.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(136003)(376002)(396003)(39860400002)(451199015)(66476007)(66556008)(64756008)(66446008)(66946007)(110136005)(9686003)(26005)(8676002)(6506007)(7696005)(186003)(76116006)(122000001)(71200400001)(38070700005)(478600001)(5660300002)(316002)(55016003)(38100700002)(8936002)(86362001)(4744005)(33656002)(41300700001)(52536014)(83380400001)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VnNnNkNTbC8xU1didFl5SWJZVk5ZVXJ5SkhDb0Fzamo1VFVENFVIQ1pWWmU2?=
+ =?utf-8?B?V001bmp2VEZkSFBsNThaOGo4SUtYMWhPOHFCZjFRLzljeDFQbmZGb25ucGRh?=
+ =?utf-8?B?elpKeHVGTlRTS2s0RUx1S0dSb2pkWTkwUjQxRTNZckVqcmpQL1VoYWdFZGRZ?=
+ =?utf-8?B?ZWxzYnBhMUE5a2wzM0lJOUwzQ0ZrbDhCYzR2bS9Pdm5xdVAwMUxoenNIR0FK?=
+ =?utf-8?B?Q0tsM29ZalBndy9qaFFFRTlZQy9BZ1B2aGVqSzhranh3aWFmLzBvY0dwOXB1?=
+ =?utf-8?B?WWc2UndnNGRrbWg5ZFB4WlhtOWlOd296dTY1UWhCOHdKUjEyclREa0UvRlov?=
+ =?utf-8?B?NjlLT2h3dkVGeTdnQzRGT3VWQ284TktKYkxtbHJnbXVYakpMN1NLVWQ4akl4?=
+ =?utf-8?B?Y3JabDNmQnRUUG81eXB2M09oeDhPWFplclI2ekdwdytTWFo2SE9iODMyeUI4?=
+ =?utf-8?B?b1NMVjFzcmREWEhiUFJ3OXpMNmNoLzFBNzdsUk5NeElXV2pPZXNrL0ZnK2ZP?=
+ =?utf-8?B?RzFFVzV3NmN1eW1UZFI1azdGWm44OVB6TUhoUkV5UzY2ck0ycXh0R3RMQmVv?=
+ =?utf-8?B?OE1VaDBJTkN1TmovMEhqMmVPRjVLWnE4UkdwbEc0cTRzSHBRVnNpTXlDYnpV?=
+ =?utf-8?B?QTVKSkNMcEdqZ3N5U2grMzJ0THZUNnFpOXpxelhyYnk5RHcvVGlkYTJQZXVa?=
+ =?utf-8?B?T3JGRVAyRG1TZnNWcG1aWGQ1dVJ1RzlvVjZLRWlpNUl5WUVTOFhFdndhL1J0?=
+ =?utf-8?B?MmlXUDk0SG5FdzR0MjRLWlpYUmYrNjZmRFVmOHBxZk1MdU5sMmY2L1ExU2hR?=
+ =?utf-8?B?OXlqSWlUc2hYeDhmRjVkR0t0RHRYbzJyTk5ZYlk3SUFaQ0ZPb3lFTjU3c1cw?=
+ =?utf-8?B?MGxJOC9ib1FudGdRMXZRZ1ZieHVGVEUraFJGYkMycXpZUlVxMlhYeVhvaXpY?=
+ =?utf-8?B?MDB0TTJuWFNDMURoUXJ2Q0ZEVk9Cd3ZkUFpYS3hveVAvNlJyVUFEM29LVXlw?=
+ =?utf-8?B?emVmQWhmMXdXRXpsNGJmbHMxV0dnNy93K2wvS1orZUZIOXJVekhDaVBlRjVP?=
+ =?utf-8?B?eU9mRzFhcHJpOEZMbFkwLzUyb3FPUkM5OEVWNCtrR2czWkRvYTZzY1piN1F4?=
+ =?utf-8?B?OXZTMzRwL1pWZnBZT0I2SzFXNkRMU1k3aHo2UHE1RU9YZHZTTkFVVHpra1lT?=
+ =?utf-8?B?dElkT01NSVhuaVBXMXJGM0RKU1ZQazFQR3lzQU5FWGFsTk1PSkplVVBDVzIr?=
+ =?utf-8?B?dmZGWVkrRHRLbFdmL1FsR1hBSjM4MDlmcnVsQlpFTE1GdVo1L1BEa21lSW1n?=
+ =?utf-8?B?MllTOWloOHVyZ295dENDWmNBU0Y0T1BmYktUMisxczBOTjd3TGtwTm01UUJq?=
+ =?utf-8?B?WHlnNCtFZ1ZrZ3g3dXE4UEpQZ0RDenlScTNTU0M5VVN0S1hTYnlXUTc0ejhL?=
+ =?utf-8?B?R0lIWHJvUDB2MFNqNkZ3dmlVMTVLeVc1MGdpOVhNNmF1WUI4UWlaRllRTTh1?=
+ =?utf-8?B?Qkg2eEJEbVFud2tDUFEyODBBdWY5N1ZOL1NWNk1kcG8vcFpLSXM0Mko5dUhM?=
+ =?utf-8?B?UmxMdnB5bGpqSDhsc3RkOTRSWm1XTE4yK2pxVGxNd3BEUUQzZzREZER3Y1Bx?=
+ =?utf-8?B?UW5Ya2NWVWhrTHNieHJYSnNjVitydVpPMjc1TFMzb3liNkNxU2tIQUJQaGFY?=
+ =?utf-8?B?UFpYakM2MnFaUDRSYkdpK0R4SURja2pHRTJtREhPTVZBcng3ek0xaGE2YVA3?=
+ =?utf-8?B?L1YvS0Z3NmVNS25ybHpRVHlqRzNDMmQ1S0g5clRzRGM2dGsyV3oyRGpaR3NP?=
+ =?utf-8?B?d3JZLy9WMjVlWXZaVFduaDJ0dHlCV2xTejZsZzk4eTErZ3dLV0NNTStKaTA1?=
+ =?utf-8?B?ejl0Y2pKMnorUkI0NWFUOUZwbUp5Tm5VVUh1OTgwNHhvT3BsdHF0WjcxY3Uy?=
+ =?utf-8?B?aGhUZjd0Uk1QUjJmWm9tMHZ4d0NjWU5GcitHZFVaQzdKZkx3eHNpaUk5TnR5?=
+ =?utf-8?B?K2JTdGhOblV6ckp5SXg5aHRLTXVnS0J2TzNRWElMY0FaVCtQQTNHd0diVG1h?=
+ =?utf-8?B?VE1rTHBlQjBGeDliaHBkc0tMQ09HbW5sdHZvMm8wZFRueXJ2SlljcE83RlZm?=
+ =?utf-8?Q?6LQMQnWlRBQ2pIegifkHhSs8c?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAFCwf12P6DckVUJL7V_Z7ASj+8A3yyx9eX5MpZPF47Rzg6CjEA@mail.gmail.com>
- <7hh71uixd9.fsf@baylibre.com>
-In-Reply-To: <7hh71uixd9.fsf@baylibre.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Fri, 23 Sep 2022 19:21:55 +0300
-Message-ID: <CAFCwf12mjshsf+GC-Y9irvPFT=W4Uis10OnZ4PNN1txjXyzLSA@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR12MB6339.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 941c44e6-0d67-4405-58f7-08da9d7fdd0b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2022 16:22:52.1106
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Kn5nWALm1+vXbHaPw6KuG+IlBjWwG5Ummn7+z4vsJpNjKOcGV1FLziDmY+I06z6iS3fX9tt31e/n+WG4lUmL8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5923
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:54 PM Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Hi Oded (and sorry I misspelled your name last time),
->
-> Oded Gabbay <oded.gabbay@gmail.com> writes:
->
-> > On Tue, Aug 23, 2022 at 9:24 PM Kevin Hilman <khilman@baylibre.com> wrote:
-> >>
-> >> Hi Obed,
-> >>
-> >> Oded Gabbay <oded.gabbay@gmail.com> writes:
-> >>
-> >> [...]
-> >>
-> >> > I want to update that I'm currently in discussions with Dave to figure
-> >> > out what's the best way to move forward. We are writing it down to do
-> >> > a proper comparison between the two paths (new accel subsystem or
-> >> > using drm). I guess it will take a week or so.
-> >>
-> >> Any update on the discussions with Dave? and/or are there any plans to
-> >> discuss this further at LPC/ksummit yet?
-> > Hi Kevin.
-> >
-> > We are still discussing the details, as at least the habanalabs driver
-> > is very complex and there are multiple parts that I need to see if and
-> > how they can be mapped to drm.
-> > Some of us will attend LPC so we will probably take advantage of that
-> > to talk more about this.
->
-> OK, looking forward to some more conversations at LPC.
->
-> >>
-> >> We (BayLibre) are upstreaming support for APUs on Mediatek SoCs, and are
-> >> using the DRM-based approach.  I'll also be at LPC and happy to discuss
-> >> in person.
-> >>
-> >> For some context on my/our interest: back in Sept 2020 we initially
-> >> submitted an rpmesg based driver for kernel communication[1].  After
-> >> review comments, we rewrote that based on DRM[2] and are now using it
-> >> for some MTK SoCs[3] and supporting our MTK customers with it.
-> >>
-> >> Hopefully we will get the kernel interfaces sorted out soon, but next,
-> >> there's the userspace side of things.  To that end, we're also working
-> >> on libAPU, a common, open userspace stack.  Alex Bailon recently
-> >> presented a proposal earlier this year at Embedded Recipes in Paris
-> >> (video[4], slides[5].)
-> >>
-> >> libAPU would include abstractions of the kernel interfaces for DRM
-> >> (using libdrm), remoteproc/rpmsg, virtio etc. but also goes farther and
-> >> proposes an open firmware for the accelerator side using
-> >> libMetal/OpenAMP + rpmsg for communication with (most likely closed
-> >> source) vendor firmware.  Think of this like sound open firmware (SOF[6]),
-> >> but for accelerators.
-> >
-> > I think your device and the habana device are very different in
-> > nature, and it is part of what Dave and I discussed, whether these two
-> > classes of devices can live together. I guess they can live together
-> > in the kernel, but in the userspace, not so much imo.
->
-> Yeah, for now I think focusing on how to handle both classes of devices
-> in the kernel is the most important.
->
-> > The first class is the edge inference devices (usually as part of some
-> > SoC). I think your description of the APU on MTK SoC is a classic
-> > example of such a device.
->
-> Correct.
->
-> > You usually have some firmware you load, you give it a graph and
-> > pointers for input and output and then you just execute the graph
-> > again and again to perform inference and just replace the inputs.
-> >
-> > The second class is the data-center, training accelerators, which
-> > habana's gaudi device is classified as such. These devices usually
-> > have a number of different compute engines, a fabric for scaling out,
-> > on-device memory, internal MMUs and RAS monitoring requirements. Those
-> > devices are usually operated via command queues, either through their
-> > kernel driver or directly from user-space. They have multiple APIs for
-> > memory management, RAS, scaling-out and command-submissions.
->
-> OK, I see.
->
-> >>
-> >> We've been using this succesfully for Mediatek SoCs (which have a
-> >> Cadence VP6 APU) and have submitted/published the code, including the
-> >> OpenAMP[7] and libmetal[8] parts in addition to the kernel parts already
-> >> mentioned.
-> > What's the difference between libmetal and other open-source low-level
-> > runtime drivers, such as oneAPI level-zero ?
->
-> TBH, I'd never heard of oneAPI before, so I'm assuming it's mainly
-> focused in the data center.  libmetal/openAMP are widely used
-> in the consumer, industrial embedded space, and heavily used by FPGAs in
-> many market segments.
->
-> > Currently we have our own runtime driver which is tightly coupled with
-> > our h/w. For example, the method the userspace "talks" to the
-> > data-plane firmware is very proprietary as it is hard-wired into the
-> > architecture of the entire ASIC and how it performs deep-learning
-> > training. Therefore, I don't see how this can be shared with other
-> > vendors. Not because of secrecy but because it is simply not relevant
-> > to any other ASIC.
->
-> OK, makes sense.
->
-> Thanks for clarifying your use case in more detail.
->
-> Kevin
-
-Hi all,
-I wanted to update on this issue for those of you who weren't in LPC.
-We had a BOF session about this topic with most, if not all, of the
-relevant people - DRM maintainers, Greg and other subsystem and device
-drivers maintainers.
-Dave Airlie summarized the session in his blog -
-https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html
-
-TL;DR
-Accelerators drivers will use the DRM subsystem code, but they will be
-located in a different directory (drivers/accel) and will be exposed
-to the userspace using a new major and a new device char name
-(/dev/accelX).
-
-I'm currently working on preparing some prerequisite patches for the
-DRM subsystem to support the new subsystem (e.g. new major number).
-After that will be merged, I plan to move the habanalabs driver to the
-new location and convert it to use the modified DRM framework code.
-
-Thanks,
-Oded
+PiA+PiBBaCBPSy4gSSB3YXMgd29uZGVyaW5nIGhvdyB0aGlzIHdvcmtlZCB3aXRoICdjaGFubmVs
+X3JlZ19zaXplJyBidXQNCj4gPj4gbG9va2luZyBjbG9zZXIgSSBzZWUgY2hhbm5lbF9yZWdfc2l6
+ZSBpcyBhbHdheXMgU1pfNjRLLiBJIHdvbmRlciB3aHkgd2UNCj4gPj4gZXZlbiBib3RoZXIgaGF2
+aW5nIHRoaXMgcGFyYW1ldGVyIGFuZCBkb24ndCB1c2UgU1pfNjRLIGRpcmVjdGx5Pw0KPiA+IFRo
+ZXJlIGlzIGFuIG9mZnNldCBmcm9tIHRoZSBiYXNlIGFkZHJlc3Mgd2hpY2ggdGhlIHBlciBjaGFu
+bmVsIHJlZ2lzdGVycyBzdGFydC4NCj4gPiBBbHRob3VnaCB0aGlzIG9mZnNldCB2YWx1ZSBoYXBw
+ZW5zIHRvIG1hdGNoIHdpdGggdGhlIGNoYW5uZWxfcmVnX3NpemUsIHRoaXMgaXMNCj4gPiBub3Qg
+YWN0dWFsbHkgdGhlIHBlciBjaGFubmVsIHJlZ2lzdGVyIHNpemUuDQo+IA0KPiBZZXMgSSBzZWUg
+dGhhdCwgYnV0IEkgbWVhbiB3aHkgZG8gd2UgZXZlbiBib3RoZXIgaGF2aW5nIHRoaXMNCj4gY2hh
+bm5lbF9yZWdfc2l6ZSBwYXJhbWV0ZXI/IERvZXMgbm90IGxvb2sgbGlrZSB3ZSBuZWVkIHRoaXMg
+KGN1cnJlbnRseSkuDQo+IEFsbCB3ZSBuZWVkIGlzIC4uLg0KPiANCj4gICB0ZGMtPmNoYW5fYmFz
+ZV9vZmZzZXQgPSBURUdSQV9HUENETUFfQ0hBTk5FTF9CQVNFX0FERFJfT0ZGU0VUICsNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAoaSAqIFNaXzY0Syk7DQo+IA0KQWguIE9rLiBHb3QgaXQg
+bm93LiBXb3VsZCBhZGQgdGhpcyBhcyBhbiBpbXByb3ZlbWVudCBpbiBhbm90aGVyIHBhdGNoLg0K
+DQpUaGFua3MsDQpBa2hpbA0KDQoNCg==
