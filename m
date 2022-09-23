@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399FA5E80BE
+	by mail.lfdr.de (Postfix) with ESMTP id 85D8C5E80BF
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiIWRcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S231741AbiIWRcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiIWRcG (ORCPT
+        with ESMTP id S231548AbiIWRcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:32:06 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0836C14DAFA;
-        Fri, 23 Sep 2022 10:32:05 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id u69so876810pgd.2;
-        Fri, 23 Sep 2022 10:32:04 -0700 (PDT)
+        Fri, 23 Sep 2022 13:32:07 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8F614F2A1;
+        Fri, 23 Sep 2022 10:32:06 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id t70so864980pgc.5;
+        Fri, 23 Sep 2022 10:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=pZtpDw8g2Ig311Mibhr8MbvmenDJsBQuKJmWvsuyeVE=;
-        b=GEF9dIXv7Sy/4KA9vyHhg4UBazeUuMCkcNr1yavfRFikVeYm/tdt3orkNywerR13hk
-         GmxiSUchGPEnhgktSYe4ikJfPTQykQKkqtLSkahh+H6su2xSJCO4kA6GYl1IkHkMilhM
-         +i7wXTLUcspvmldldRSKWWZNnGXe5jmnUjYSIktSGG2sCZ4FTyPfHogCy1q51J64GdHH
-         RBjbW+rAxW6YtSKnlfbP//KaKr2I4lHmb9y8z5d44/BWwItXKXpeFPlqBAIl3abKWueT
-         csJ4milWjA35ymqfrScnjpEbm6BGqrdbI+7qkM+UtEymU4EjTHKajehuOq0hYTBp2NDJ
-         Rsrw==
+        bh=W36UO1DduOC6lC3UNJg02JeBSkjr99vbivlTYF45xZc=;
+        b=gDA5yBkpK4OWYC5cZvGc6utQAk9oEdh/gpbKjvPsXUNTMrEb2lwTSQiS5ZvKB+1MN9
+         XOrCSW+9RLLenEQ5V6tzeC8riGsKy/5HNhqseAvW9M5RKBHBEukFaoXsmCccq281TBG6
+         jbv5xI/hzc73ldboUea3lLak3pn0hJchYcTe7gWb5IYggIGaYrnGAl6P5p+9pPqdr3Z+
+         RQ60tKvK//lU4G7FEAsIK5JVwXIKuSrBVJNMjYQjGvSgdvGvR0WXdj3vGA2DSxCE9l9u
+         DMfk/XpCAtq3tEYeANahQJEcils1agEfHzHFw6iNvIxSRU6Sr2+szRJsYDMM1dOKAVGw
+         9CDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date;
-        bh=pZtpDw8g2Ig311Mibhr8MbvmenDJsBQuKJmWvsuyeVE=;
-        b=pKDxt8aKtiDiVwmvWpmJkxiJsgRW3SrUQoncNP2cA4T2L4miPYszyyM3ab+RhEuBtS
-         wnJSUR34eZQQoYe7fMHWeu1c5YCNXApkpl7AUoOKxCbJgyhhS+T1Tqndu08eKKd6GUMG
-         RIvNfBqd+LYDCS8fPzUUC8D6Ru0hQ9sv22vhwHpNOhLDGfO5uGwpqdsBRlTI0WfdFYBI
-         I2u6wnf8rc+7/l8A5NoooJya+kkgu1rCUQcA7eojP8dgOJy+44nj8D4DuHgcYXx9842D
-         DsogqdmJI/NqHb0szoMIGVM/+J2rXBOlGiobH1ykdAPZAvm8dgBGdEZ1oa+9yECx+syl
-         aTag==
-X-Gm-Message-State: ACrzQf2jseNRlVPQwdc4H9r4TmEjV2Ru9Zs1v4st+8r2leMDZo1Wp4K3
-        xCP+boF3IELuwNGSfKPmLF3WFGZ2ENo=
-X-Google-Smtp-Source: AMsMyM6vsJ7lPsmwFX9RiouzZyqmsaj6SMQb8Jf6n6vBen1wJDf8Q3PdmI1JL4bEskuzatwvJL1QTg==
-X-Received: by 2002:a05:6a00:1253:b0:546:3d50:3284 with SMTP id u19-20020a056a00125300b005463d503284mr10197877pfi.72.1663954324222;
-        Fri, 23 Sep 2022 10:32:04 -0700 (PDT)
+        bh=W36UO1DduOC6lC3UNJg02JeBSkjr99vbivlTYF45xZc=;
+        b=ZE8SPPLImx51W1UZp2A4OeiWQFXxVQvKg0ycgMKR4waj4+qYaB9QWLVg2LtnExFP40
+         QcWZWSDNY/WnN/tTCGZzYtPyttAbkpmL66Q3JSrcSqJCpfTGQOoruBFEV8hIGROpp0FR
+         h+TjxpFwzgHtYxyveCNpH27du5ypbrOZd+OATt4tPnOAJSGqHiI7lyykUBbxzIPK0d7V
+         bhgFq2cs0kOnNeWSwOnppNx8whSuJ1R1qwR/aUtsDUFUnScZHPJ4QfAwEGtX9nh3LwIl
+         /71Ych+N7kgdy9DnYz49F6m0xktHIWcD7FdVNqTfgDW6CPCpJMPcOvcx3AmH01zq3R6V
+         vKzA==
+X-Gm-Message-State: ACrzQf26OImHNpJ34+V3NQFae8PK4h8NKuZ46tcIW3tH/ijMHOf3UYai
+        OAH2tssMISiq/ezU79gro74=
+X-Google-Smtp-Source: AMsMyM4cDzwcYZgEgP7IP60ApaJgt3rydvMoQd0oGcAKuxwhoEnd6NOUDlUCSiJ5dRHvSoh492r5JQ==
+X-Received: by 2002:a63:618d:0:b0:43c:268a:8510 with SMTP id v135-20020a63618d000000b0043c268a8510mr6152772pgb.518.1663954325589;
+        Fri, 23 Sep 2022 10:32:05 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:c716:a857:50ee:f56e])
-        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm6719499pfu.2.2022.09.23.10.32.03
+        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm6719499pfu.2.2022.09.23.10.32.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
+        Fri, 23 Sep 2022 10:32:05 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org,
         Stephane Eranian <eranian@google.com>
-Subject: [PATCH 1/4] perf record: Fix a segfault in record__read_lost_samples()
-Date:   Fri, 23 Sep 2022 10:31:39 -0700
-Message-Id: <20220923173142.805896-2-namhyung@kernel.org>
+Subject: [PATCH 2/4] perf inject: Clarify build-id options a little bit
+Date:   Fri, 23 Sep 2022 10:31:40 -0700
+Message-Id: <20220923173142.805896-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 In-Reply-To: <20220923173142.805896-1-namhyung@kernel.org>
 References: <20220923173142.805896-1-namhyung@kernel.org>
@@ -78,47 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When it fails to open events record__open() returns without setting the
-session->evlist.  Then it gets a segfault in the function trying to read
-lost sample counts.  You can easily reproduce it as a normal user like:
+Update the documentation of --build-id and --buildid-all options to
+clarify the difference between them.  The former requires full sample
+processing to find which DSOs are actually used.  While the latter simply
+injects every DSO's build-id from MMAP{,2} records, skipping SAMPLEs.
 
-  $ perf record -p 1 true
-  ...
-  perf: Segmentation fault
-  ...
-
-Skip the function if it has no evlist.  And add more protection for evsels
-which are not properly initialized.
-
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-record.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/perf/Documentation/perf-inject.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 741e763436ca..f4f1619199e5 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -1888,6 +1888,10 @@ static void record__read_lost_samples(struct record *rec)
- 	struct perf_record_lost_samples *lost;
- 	struct evsel *evsel;
+diff --git a/tools/perf/Documentation/perf-inject.txt b/tools/perf/Documentation/perf-inject.txt
+index 70e2ac3cc91a..c972032f4ca0 100644
+--- a/tools/perf/Documentation/perf-inject.txt
++++ b/tools/perf/Documentation/perf-inject.txt
+@@ -25,10 +25,12 @@ OPTIONS
+ -------
+ -b::
+ --build-ids::
+-        Inject build-ids into the output stream
++	Inject build-ids of DSOs hit by samples into the output stream.
++	This means it needs to process all SAMPLE records to find the DSOs.
  
-+	/* there was an error during record__open */
-+	if (session->evlist == NULL)
-+		return;
-+
- 	lost = zalloc(PERF_SAMPLE_MAX_SIZE);
- 	if (lost == NULL) {
- 		pr_debug("Memory allocation failed\n");
-@@ -1899,6 +1903,8 @@ static void record__read_lost_samples(struct record *rec)
- 	evlist__for_each_entry(session->evlist, evsel) {
- 		struct xyarray *xy = evsel->core.sample_id;
+ --buildid-all::
+-	Inject build-ids of all DSOs into the output stream
++	Inject build-ids of all DSOs into the output stream regardless of hits
++	and skip SAMPLE processing.
  
-+		if (xy == NULL || evsel->core.fd == NULL)
-+			continue;
- 		if (xyarray__max_x(evsel->core.fd) != xyarray__max_x(xy) ||
- 		    xyarray__max_y(evsel->core.fd) != xyarray__max_y(xy)) {
- 			pr_debug("Unmatched FD vs. sample ID: skip reading LOST count\n");
+ --known-build-ids=::
+ 	Override build-ids to inject using these comma-separated pairs of
 -- 
 2.37.3.998.g577e59143f-goog
 
