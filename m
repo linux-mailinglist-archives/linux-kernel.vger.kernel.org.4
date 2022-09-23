@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7015E80BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399FA5E80BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiIWRcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
+        id S231698AbiIWRcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiIWRcE (ORCPT
+        with ESMTP id S230054AbiIWRcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:32:04 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AA012BD98;
-        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 78so825838pgb.13;
-        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
+        Fri, 23 Sep 2022 13:32:06 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0836C14DAFA;
+        Fri, 23 Sep 2022 10:32:05 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id u69so876810pgd.2;
+        Fri, 23 Sep 2022 10:32:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=JCv6sv00YaO4tU61lqZx/ARNo7oEKPFV016dlURUeFc=;
-        b=OdN3pbQpOZktYmS2WG5YnbAEMZ+Bq1ZGT50wjJhl7V1Nb2ALsjFJW2xHgUWspChrEy
-         uTTknjZNvhsfUKAi1+b0JYNLjuNH8B5sk645HZtEXikdHZQhnIBucAuKfS36vPRsR/g/
-         UC/KFaQmtzjhd6e0AQpCphmwcaP+DaurqEU4jgOSlhRc4tiW2IMqt8Zdx/rxypjvVkK2
-         Crdvge3dM5kERkGVL1F+dqp/YiMHSs2FQtvaF34wtsWJplhaZVmPhrwJxATY8NHhb9Fw
-         dkJJK+h3tXtP762bCAI/NSzNsQ/3VrTPwXujPXa/5dJW9zxkjlHkbmHNOjllZWnGUSP8
-         W0yw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
+        bh=pZtpDw8g2Ig311Mibhr8MbvmenDJsBQuKJmWvsuyeVE=;
+        b=GEF9dIXv7Sy/4KA9vyHhg4UBazeUuMCkcNr1yavfRFikVeYm/tdt3orkNywerR13hk
+         GmxiSUchGPEnhgktSYe4ikJfPTQykQKkqtLSkahh+H6su2xSJCO4kA6GYl1IkHkMilhM
+         +i7wXTLUcspvmldldRSKWWZNnGXe5jmnUjYSIktSGG2sCZ4FTyPfHogCy1q51J64GdHH
+         RBjbW+rAxW6YtSKnlfbP//KaKr2I4lHmb9y8z5d44/BWwItXKXpeFPlqBAIl3abKWueT
+         csJ4milWjA35ymqfrScnjpEbm6BGqrdbI+7qkM+UtEymU4EjTHKajehuOq0hYTBp2NDJ
+         Rsrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=JCv6sv00YaO4tU61lqZx/ARNo7oEKPFV016dlURUeFc=;
-        b=K/pkr//ZcosbSyZiJ3aMSDLVkp6ZrLR4vQXy2aGTMhKUMUlsIRqQNWYsTeKfYxuvh/
-         h91DeEzw0o5MtU9VZfCQkJUuyJ9tL7C6P0o4eQitfftkZG1pnBLi8NI5QQzoDuR17CA0
-         yLRQ/754MMaQH6IjMqto0zlLmjR1kS12eWQqkeTdH0/DxKYge5jnM2l90EQ4Ey4QB46x
-         k8NJcAZ6n14GbpxTPJUSXWNC79ywrDPjN1uAh6sYzO1MvfjJwB2oRjaApn2SRfK8J1iH
-         XIFkxlKmJz4JZ2hyNRWKxt5GeejaG9jaXJvY6vrL4z1SbETdlVWOu+SH2HKy0PA4fjwJ
-         WWJA==
-X-Gm-Message-State: ACrzQf1xx1Pkf5yl8kGeRd2Q04xSO6Z+JW+p0jS9II6uiozN/75ZCtHu
-        nXWyLjm04U5icCPSbAYibbw01sWJxOI=
-X-Google-Smtp-Source: AMsMyM5W/Nnz+Ei6eaOF7Zd7e9mvoKj+Rge261fAN0/i8Plgv3bz9R+bB+3VUn2IJEMdw3NoXrflrg==
-X-Received: by 2002:a05:6a00:1248:b0:548:2e34:65e1 with SMTP id u8-20020a056a00124800b005482e3465e1mr10484417pfi.82.1663954322999;
-        Fri, 23 Sep 2022 10:32:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=pZtpDw8g2Ig311Mibhr8MbvmenDJsBQuKJmWvsuyeVE=;
+        b=pKDxt8aKtiDiVwmvWpmJkxiJsgRW3SrUQoncNP2cA4T2L4miPYszyyM3ab+RhEuBtS
+         wnJSUR34eZQQoYe7fMHWeu1c5YCNXApkpl7AUoOKxCbJgyhhS+T1Tqndu08eKKd6GUMG
+         RIvNfBqd+LYDCS8fPzUUC8D6Ru0hQ9sv22vhwHpNOhLDGfO5uGwpqdsBRlTI0WfdFYBI
+         I2u6wnf8rc+7/l8A5NoooJya+kkgu1rCUQcA7eojP8dgOJy+44nj8D4DuHgcYXx9842D
+         DsogqdmJI/NqHb0szoMIGVM/+J2rXBOlGiobH1ykdAPZAvm8dgBGdEZ1oa+9yECx+syl
+         aTag==
+X-Gm-Message-State: ACrzQf2jseNRlVPQwdc4H9r4TmEjV2Ru9Zs1v4st+8r2leMDZo1Wp4K3
+        xCP+boF3IELuwNGSfKPmLF3WFGZ2ENo=
+X-Google-Smtp-Source: AMsMyM6vsJ7lPsmwFX9RiouzZyqmsaj6SMQb8Jf6n6vBen1wJDf8Q3PdmI1JL4bEskuzatwvJL1QTg==
+X-Received: by 2002:a05:6a00:1253:b0:546:3d50:3284 with SMTP id u19-20020a056a00125300b005463d503284mr10197877pfi.72.1663954324222;
+        Fri, 23 Sep 2022 10:32:04 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:c716:a857:50ee:f56e])
-        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm6719499pfu.2.2022.09.23.10.32.01
+        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm6719499pfu.2.2022.09.23.10.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 10:32:02 -0700 (PDT)
+        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,10 +60,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org,
         Stephane Eranian <eranian@google.com>
-Subject: [PATCH 0/4] perf tools: Assorted random fixes and updates
-Date:   Fri, 23 Sep 2022 10:31:38 -0700
-Message-Id: <20220923173142.805896-1-namhyung@kernel.org>
+Subject: [PATCH 1/4] perf record: Fix a segfault in record__read_lost_samples()
+Date:   Fri, 23 Sep 2022 10:31:39 -0700
+Message-Id: <20220923173142.805896-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+In-Reply-To: <20220923173142.805896-1-namhyung@kernel.org>
+References: <20220923173142.805896-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,33 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+When it fails to open events record__open() returns without setting the
+session->evlist.  Then it gets a segfault in the function trying to read
+lost sample counts.  You can easily reproduce it as a normal user like:
 
-This is collection of random fixes and updates.
-And I'm resending them as they seem to be lost in the list.
+  $ perf record -p 1 true
+  ...
+  perf: Segmentation fault
+  ...
 
-Thanks,
-Namhyung
+Skip the function if it has no evlist.  And add more protection for evsels
+which are not properly initialized.
 
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-record.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Namhyung Kim (4):
-  perf record: Fix a segfault in record__read_lost_samples()
-  perf inject: Clarify build-id options a little bit
-  perf tools: Add 'addr' sort key
-  perf annotate: Toggle full address <-> offset display
-
- tools/perf/Documentation/perf-inject.txt |  6 ++--
- tools/perf/Documentation/perf-report.txt |  3 +-
- tools/perf/builtin-record.c              |  6 ++++
- tools/perf/ui/browsers/annotate.c        |  6 +++-
- tools/perf/util/annotate.c               | 19 +++++++++++-
- tools/perf/util/annotate.h               |  4 ++-
- tools/perf/util/hist.c                   |  1 +
- tools/perf/util/hist.h                   |  1 +
- tools/perf/util/sort.c                   | 38 ++++++++++++++++++++++++
- tools/perf/util/sort.h                   |  1 +
- 10 files changed, 79 insertions(+), 6 deletions(-)
-
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 741e763436ca..f4f1619199e5 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1888,6 +1888,10 @@ static void record__read_lost_samples(struct record *rec)
+ 	struct perf_record_lost_samples *lost;
+ 	struct evsel *evsel;
+ 
++	/* there was an error during record__open */
++	if (session->evlist == NULL)
++		return;
++
+ 	lost = zalloc(PERF_SAMPLE_MAX_SIZE);
+ 	if (lost == NULL) {
+ 		pr_debug("Memory allocation failed\n");
+@@ -1899,6 +1903,8 @@ static void record__read_lost_samples(struct record *rec)
+ 	evlist__for_each_entry(session->evlist, evsel) {
+ 		struct xyarray *xy = evsel->core.sample_id;
+ 
++		if (xy == NULL || evsel->core.fd == NULL)
++			continue;
+ 		if (xyarray__max_x(evsel->core.fd) != xyarray__max_x(xy) ||
+ 		    xyarray__max_y(evsel->core.fd) != xyarray__max_y(xy)) {
+ 			pr_debug("Unmatched FD vs. sample ID: skip reading LOST count\n");
 -- 
 2.37.3.998.g577e59143f-goog
 
