@@ -2,105 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FBB5E750E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132565E7512
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiIWHmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 03:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S230015AbiIWHpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 03:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiIWHmw (ORCPT
+        with ESMTP id S229788AbiIWHpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:42:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94BD12B5E8;
-        Fri, 23 Sep 2022 00:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fJVkN3zl/CpWmP9dd2Lm5sbuLgWWweRXNMjf8rPwe/o=; b=SU9FA91wpTS50POPo2Bs9dgx7k
-        sgMOA/lj8s09GfcCjfXrtEGlVzZivBrNX5QoqVYQHJbkB8xaDWABSlHJ4y4Jn1Q22rc5DNStYHYGs
-        51/6Q8YLcRpxiK7XdQaRTSzAFy1gkkLXAa592KdQyUBiGSUcXry1DypZmhfi5amggg1HSQnkZJvNL
-        OfVum3geX4LdQk2ukKdS3wvPnWXPSEA+u5ePg/2L1vHABkx/yvwmzHQbD9lXQEQvi9fMpYTyDnLUq
-        6i0+fCKkH+qA+31iLJPZSqPpxNGRr6ojuGavOQSchM/LInAE8533HCYQbSPL2uKChV7HV+XyBnspa
-        w5t8EePg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obdK4-00FAHm-Ju; Fri, 23 Sep 2022 07:42:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD62F300074;
-        Fri, 23 Sep 2022 09:42:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8B8992BB8937C; Fri, 23 Sep 2022 09:42:06 +0200 (CEST)
-Date:   Fri, 23 Sep 2022 09:42:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andreas Mohr <andi@lisas.de>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, rui.zhang@intel.com,
-        gpiccoli@igalia.com, daniel.lezcano@linaro.org,
-        ananth.narayan@amd.com, gautham.shenoy@amd.com,
-        Calvin Ong <calvin.ong@amd.com>, stable@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <Yy1jTlviqANR/OT9@hirez.programming.kicks-ass.net>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
- <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
- <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
- <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
- <YyzBLc+OFIN2BMz5@rhlx01.hs-esslingen.de>
- <4d61b9c0-ee00-c5f6-bef1-622b80c79714@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d61b9c0-ee00-c5f6-bef1-622b80c79714@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 03:45:01 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5725F3D5BC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 00:44:56 -0700 (PDT)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+DpYy1jsI4gAA--.57695S2;
+        Fri, 23 Sep 2022 15:44:41 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kexec@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] LoongArch: Add kexec/kdump support
+Date:   Fri, 23 Sep 2022 15:44:30 +0800
+Message-Id: <1663919073-26849-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8CxT+DpYy1jsI4gAA--.57695S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFW3Xw4rCFWkZF1kWrWDtwb_yoWrXFyfpF
+        48Crn5Kr4kGFn3t3Z7Jr17uFyrZwn7Ga13W3ZFy348ZF12gF1UZr9YvFnrZFyDtw4fKr4I
+        qFnYgw429a4UG3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
+        wI1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU5dl1PUUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:21:31PM -0700, Dave Hansen wrote:
-> On 9/22/22 13:10, Andreas Mohr wrote:
-> >   (- but then what about other more modern chipsets?)
-> > 
-> > --> we need to achieve (hopefully sufficiently precisely) a solution which
-> > takes into account Zen3 STPCLK# improvements while
-> > preserving "accepted" behaviour/requirements on *all* STPCLK#-hampered chipsets
-> > ("STPCLK# I/O wait is default/traditional handling"?).
-> 
-> Ideally, sure.  But, we're talking about theoretically regressing the
-> idle behavior of some indeterminate set of old systems, the majority of
-> which are sitting in a puddle of capacitor goo at the bottom of a
-> landfill right now.  This is far from an ideal situation.
-> 
-> FWIW, I'd much rather do something like
-> 
-> 	if ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD) &&
-> 	    (boot_cpu_data.x86_model >= 0xF))
-> 		return;
-> 
-> 	inl(slow_whatever);
-> 
-> than a Zen check.  AMD has, as far as I know, been a lot more sequential
-> and sane about model numbers than Intel, and there are some AMD model
-> number range checks in the codebase today.
-> 
-> A check like this would also be _relatively_ future-proof in the case
-> that X86_FEATURE_ZEN stops getting set on future AMD CPUs.  That's a lot
-> more likely than AMD going and reusing a <0xF model.
+This patch series to support kexec/kdump (only 64bit).
 
-Except you need to add VENDOR_HYGON at the very least. All of this turns
-into a trainwreck real quick.
+Kexec is a system call that enables you to load and boot into another kernel
+from the currently running kernel. This is useful for kernel developers or
+other people who need to reboot very quickly without waiting for the whole
+BIOS boot process to finish.
+
+Kdump uses kexec to quickly boot to a dump-capture kernel whenever a
+dump of the system kernel's memory needs to be taken (for example, when
+the system panics). The system kernel's memory image is preserved across
+the reboot and is accessible to the dump-capture kernel.
+
+For details, see Documentation/admin-guide/kdump/kdump.rst.
+
+User tools kexec-tools see link [1].
+
+TODO:
+Currently kdump does not support the same binary image, the production kernel
+and the capture kernel will be generated with different configurations. I will
+support kernel relocation support in the near future. Then will go to implement
+the same binary support based on kernel relocation support.
+
+[1] Link: https://github.com/tangyouling/kexec-tools
+
+Changes in v4:
+ After applying the following series of patches [1], the following
+ modifications need to be made:
+ - Adjust the number of parameters and the content of the parameters passed.
+ - Removed build and processing of fdt.
+ - Add handling of command line segments.
+ - Use the command line argument "elfcorehdr=" instead of the "linux,elfcorehdr"
+   member in fdt.
+ - Use the command line argument "mem=" instead of the "linux, usable-memory-range"
+   member in fdt.
+ - Use the command line argument "initrd=" instead of the "linux,initrd-start" and
+   "linux,initrd-end" members of fdt.
+ - Removed handling of "linux,elfcorehdr" and "linux, usable-memory-range".
+ - Add handling of "elfcorehdr=".
+ - Modify the handling of "mem=".
+ - Add implementation of reserve_oldmem_region.
+ - Reimplemented kexec-tools (note that kexec-tools needs to be updated).
+
+   Link [1]: https://lore.kernel.org/loongarch/20220920183554.3870247-1-ardb@kernel.org/T/#md02ad4a1510586b2df177cbce4422434eff2d457
+   [PATCH v2 0/8] efi: disentangle the generic EFI stub from FDT
+
+Changes in v3:
+ - Adjust the PE header (note that kexec-tools needs to be updated).
+ - Add ibar in kexec_reboot().
+ - boot_flag is replaced by efi_boot.
+ - Adjust do_kexec parameter passing order.
+ - Adjust the order of static variables to be consistent with do_kexec.
+ - Remove a-series register save.
+ - Some comments and register usage modification.
+ - Add the opening and closing of the cpu core state.
+ - Add a call to cpu_device_up to turn it on when the cpu core state is offline.
+
+Changes in v2:
+ - Add ibar.
+ - Access via IOCSR.
+ - Remove the settings of the tp, sp registers.
+ - Remove the crash.c file and merge the relevant code into machine_kexec.c.
+ - Adjust the use of CONFIG_SMP macro to avoid build errors under !SMP
+   configuration.
+ - Change the default value of PHYSICAL_START of the capture kernel to
+   0x90000000a0000000.
+
+Youling Tang (3):
+  LoongArch: Add kexec support
+  LoongArch: Add kdump support
+  LoongArch: Enable CONFIG_KEXEC
+
+ arch/loongarch/Kconfig                     |  33 +++
+ arch/loongarch/Makefile                    |   4 +
+ arch/loongarch/configs/loongson3_defconfig |   1 +
+ arch/loongarch/include/asm/kexec.h         |  60 ++++
+ arch/loongarch/kernel/Makefile             |   3 +
+ arch/loongarch/kernel/crash_dump.c         |  19 ++
+ arch/loongarch/kernel/head.S               |   6 +-
+ arch/loongarch/kernel/machine_kexec.c      | 309 +++++++++++++++++++++
+ arch/loongarch/kernel/mem.c                |   1 +
+ arch/loongarch/kernel/relocate_kernel.S    | 112 ++++++++
+ arch/loongarch/kernel/setup.c              | 123 +++++++-
+ arch/loongarch/kernel/traps.c              |   4 +
+ 12 files changed, 664 insertions(+), 11 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kexec.h
+ create mode 100644 arch/loongarch/kernel/crash_dump.c
+ create mode 100644 arch/loongarch/kernel/machine_kexec.c
+ create mode 100644 arch/loongarch/kernel/relocate_kernel.S
+
+-- 
+2.36.0
+
