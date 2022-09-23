@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDB25E7241
+	by mail.lfdr.de (Postfix) with ESMTP id 11F1A5E7240
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 05:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiIWDAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 23:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S232228AbiIWDAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 23:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiIWDAQ (ORCPT
+        with ESMTP id S231201AbiIWDAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Sep 2022 23:00:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4816E889
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC11B5AC5E
         for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:00:13 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYcJJ5QMhzpVZh;
-        Fri, 23 Sep 2022 10:57:20 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYcH15JCVzWgnw;
+        Fri, 23 Sep 2022 10:56:13 +0800 (CST)
 Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Fri, 23 Sep 2022 11:00:11 +0800
 Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
  (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 11:00:10 +0800
+ 2022 11:00:11 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@redhat.com>,
@@ -35,9 +35,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Liu Shixin <liushixin2@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 4/8] mm/mmap: use hotplug_memory_notifier() directly
-Date:   Fri, 23 Sep 2022 11:33:43 +0800
-Message-ID: <20220923033347.3935160-5-liushixin2@huawei.com>
+Subject: [PATCH v4 5/8] mm/mm_init.c: use hotplug_memory_notifier() directly
+Date:   Fri, 23 Sep 2022 11:33:44 +0800
+Message-ID: <20220923033347.3935160-6-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220923033347.3935160-1-liushixin2@huawei.com>
 References: <20220923033347.3935160-1-liushixin2@huawei.com>
@@ -64,28 +64,31 @@ register_hotmemory_notifier().
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 ---
- mm/mmap.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ mm/mm_init.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 6445fd386f04..5a217378a62a 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3745,13 +3745,9 @@ static int reserve_mem_notifier(struct notifier_block *nb,
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 0d7b2bd2454a..44aadc162d1f 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -178,16 +178,10 @@ static int __meminit mm_compute_batch_notifier(struct notifier_block *self,
  	return NOTIFY_OK;
  }
  
--static struct notifier_block reserve_mem_nb = {
--	.notifier_call = reserve_mem_notifier,
+-static struct notifier_block compute_batch_nb __meminitdata = {
+-	.notifier_call = mm_compute_batch_notifier,
+-	.priority = IPC_CALLBACK_PRI, /* use lowest priority */
 -};
 -
- static int __meminit init_reserve_notifier(void)
+ static int __init mm_compute_batch_init(void)
  {
--	if (register_hotmemory_notifier(&reserve_mem_nb))
-+	if (hotplug_memory_notifier(reserve_mem_notifier, 0))
- 		pr_err("Failed registering memory add/remove notifier for admin reserve\n");
- 
+ 	mm_compute_batch(sysctl_overcommit_memory);
+-	register_hotmemory_notifier(&compute_batch_nb);
+-
++	hotplug_memory_notifier(mm_compute_batch_notifier, IPC_CALLBACK_PRI);
  	return 0;
+ }
+ 
 -- 
 2.25.1
 
