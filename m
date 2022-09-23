@@ -2,212 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2DB5E7190
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035615E7196
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiIWBt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S231532AbiIWBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiIWBt0 (ORCPT
+        with ESMTP id S229977AbiIWBwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:49:26 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF662EBD43
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:49:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VQUVO-6_1663897756;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VQUVO-6_1663897756)
-          by smtp.aliyun-inc.com;
-          Fri, 23 Sep 2022 09:49:22 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH] erofs: introduce partial-referenced pclusters
-Date:   Fri, 23 Sep 2022 09:49:15 +0800
-Message-Id: <20220923014915.4362-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
+        Thu, 22 Sep 2022 21:52:04 -0400
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37159105D58
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:52:03 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 792928027B0F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:51:49 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 70CDB10047F81
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:51:18 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id bXqXo53CqaT2RbXqYokOTN; Fri, 23 Sep 2022 01:51:18 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=BO52EHcG c=1 sm=1 tr=0 ts=632d1116
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Mf2rGUZYFQaqaNI/qIH3PTHdd2ShD4CUpypEv+2hwWM=; b=eHfEzddBA8e+Hfwdhlp5pddsdh
+        Wk/NLOzM1nPbCTym1KSYoH6Eg7EG6RUckOvY1kBoWSSGWfvKhx6SzFeYdd+ZqxkFr+u20aeOQTH71
+        UMrPTD6E7ZO+veGVWeV8uDsfmH2FIZ3g+AbgeJMtXKWyBGn6hxmc97rBl9mQjdOVAmHgh2bgA77b7
+        E08Bfoy5hGwachyRs/R8RlsJUYVj/ymhzjC1qTp32O2LT3BSwLeA79BLLJZonpZ64nzL7gYN+65rm
+        MT2GOt7bqROLzbSpfWsu+PE/WvzuigKhpnPwlhlGENgHC1s/pkHgPj7/Bn7nTcsiTL2uzCVxpMbRJ
+        E9cvt22w==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45900 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1obXqV-003SSO-FI;
+        Thu, 22 Sep 2022 19:51:15 -0600
+Subject: Re: [PATCH 5.15 00/45] 5.15.70-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <7bb44052-d6db-e2ef-d512-61f30c79c71e@w6rz.net>
+Date:   Thu, 22 Sep 2022 18:51:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1obXqV-003SSO-FI
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45900
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to deduplication for compressed data, pclusters can be partially
-referenced with their prefixes.
+On 9/21/22 8:45 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.70 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 23 Sep 2022 15:36:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.70-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Together with the user-space implementation, it enables EROFS
-variable-length global compressed data deduplication with rolling
-hash.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/decompressor_lzma.c | 3 +++
- fs/erofs/erofs_fs.h          | 7 ++++++-
- fs/erofs/internal.h          | 4 ++++
- fs/erofs/super.c             | 2 ++
- fs/erofs/sysfs.c             | 2 ++
- fs/erofs/zdata.c             | 1 +
- fs/erofs/zmap.c              | 6 +++++-
- 7 files changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
-index 5e59b3f523eb..091fd5adf818 100644
---- a/fs/erofs/decompressor_lzma.c
-+++ b/fs/erofs/decompressor_lzma.c
-@@ -217,6 +217,9 @@ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
- 			strm->buf.out_size = min_t(u32, outlen,
- 						   PAGE_SIZE - pageofs);
- 			outlen -= strm->buf.out_size;
-+			if (!rq->out[no] && rq->fillgaps)	/* deduped */
-+				rq->out[no] = erofs_allocpage(pagepool,
-+						GFP_KERNEL | __GFP_NOFAIL);
- 			if (rq->out[no])
- 				strm->buf.out = kmap(rq->out[no]) + pageofs;
- 			pageofs = 0;
-diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
-index 5d8fefd8b3fb..0e6c6a234438 100644
---- a/fs/erofs/erofs_fs.h
-+++ b/fs/erofs/erofs_fs.h
-@@ -26,6 +26,7 @@
- #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
- #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
- #define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
-+#define EROFS_FEATURE_INCOMPAT_DEDUPE		0x00000020
- #define EROFS_ALL_FEATURE_INCOMPAT		\
- 	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
- 	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
-@@ -34,7 +35,8 @@
- 	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
- 	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
- 	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
--	 EROFS_FEATURE_INCOMPAT_FRAGMENTS)
-+	 EROFS_FEATURE_INCOMPAT_FRAGMENTS | \
-+	 EROFS_FEATURE_INCOMPAT_DEDUPE)
- 
- #define EROFS_SB_EXTSLOT_SIZE	16
- 
-@@ -371,6 +373,9 @@ enum {
- #define Z_EROFS_VLE_DI_CLUSTER_TYPE_BITS        2
- #define Z_EROFS_VLE_DI_CLUSTER_TYPE_BIT         0
- 
-+/* (noncompact only, HEAD) This pcluster refers to partial decompressed data */
-+#define Z_EROFS_VLE_DI_PARTIAL_REF		(1 << 15)
-+
- /*
-  * D0_CBLKCNT will be marked _only_ at the 1st non-head lcluster to store the
-  * compressed block count of a compressed extent (in logical clusters, aka.
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 9f89c1da6229..db8466f2a918 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -291,6 +291,7 @@ EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
- EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
- EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
- EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
-+EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
- EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
- 
- /* atomic flag definitions */
-@@ -392,6 +393,7 @@ enum {
- 	BH_Encoded = BH_PrivateStart,
- 	BH_FullMapped,
- 	BH_Fragment,
-+	BH_Partialref,
- };
- 
- /* Has a disk mapping */
-@@ -404,6 +406,8 @@ enum {
- #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
- /* Located in the special packed inode */
- #define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
-+/* the extent refers to partial compressed data */
-+#define EROFS_MAP_PARTIAL_REF	(1 << BH_Partialref)
- 
- struct erofs_map_blocks {
- 	struct erofs_buf buf;
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 4a55908ad37b..6bc45403ea5e 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -424,6 +424,8 @@ static int erofs_read_superblock(struct super_block *sb)
- 		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
- 	if (erofs_sb_has_fragments(sbi))
- 		erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
-+	if (erofs_sb_has_dedupe(sbi))
-+		erofs_info(sb, "EXPERIMENTAL global deduplication feature in use. Use at your own risk!");
- out:
- 	erofs_put_metabuf(&buf);
- 	return ret;
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index dd6eb7eccf9a..783bb7b21b51 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -77,6 +77,7 @@ EROFS_ATTR_FEATURE(compr_head2);
- EROFS_ATTR_FEATURE(sb_chksum);
- EROFS_ATTR_FEATURE(ztailpacking);
- EROFS_ATTR_FEATURE(fragments);
-+EROFS_ATTR_FEATURE(dedupe);
- 
- static struct attribute *erofs_feat_attrs[] = {
- 	ATTR_LIST(zero_padding),
-@@ -88,6 +89,7 @@ static struct attribute *erofs_feat_attrs[] = {
- 	ATTR_LIST(sb_chksum),
- 	ATTR_LIST(ztailpacking),
- 	ATTR_LIST(fragments),
-+	ATTR_LIST(dedupe),
- 	NULL,
- };
- ATTRIBUTE_GROUPS(erofs_feat);
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index c92a72f5bca6..cce56dde135c 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -814,6 +814,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 		fe->pcl->multibases = true;
- 
- 	if ((map->m_flags & EROFS_MAP_FULL_MAPPED) &&
-+	    !(map->m_flags & EROFS_MAP_PARTIAL_REF) &&
- 	    fe->pcl->length == map->m_llen)
- 		fe->pcl->partial = false;
- 	if (fe->pcl->length < offset + end - map->m_la) {
-diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-index 6830999529d7..5ce63326aa7d 100644
---- a/fs/erofs/zmap.c
-+++ b/fs/erofs/zmap.c
-@@ -167,6 +167,7 @@ struct z_erofs_maprecorder {
- 	u16 delta[2];
- 	erofs_blk_t pblk, compressedblks;
- 	erofs_off_t nextpackoff;
-+	bool partialref;
- };
- 
- static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
-@@ -225,6 +226,8 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
- 	case Z_EROFS_VLE_CLUSTER_TYPE_PLAIN:
- 	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD1:
- 	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD2:
-+		if (advise & Z_EROFS_VLE_DI_PARTIAL_REF)
-+			m->partialref = true;
- 		m->clusterofs = le16_to_cpu(di->di_clusterofs);
- 		m->pblk = le32_to_cpu(di->di_u.blkaddr);
- 		break;
-@@ -688,7 +691,8 @@ static int z_erofs_do_map_blocks(struct inode *inode,
- 		err = -EOPNOTSUPP;
- 		goto unmap_out;
- 	}
--
-+	if (m.partialref)
-+		map->m_flags |= EROFS_MAP_PARTIAL_REF;
- 	map->m_llen = end - map->m_la;
- 
- 	if (flags & EROFS_GET_BLOCKS_FINDTAIL) {
--- 
-2.24.4
+Tested-by: Ron Economos <re@w6rz.net>
 
