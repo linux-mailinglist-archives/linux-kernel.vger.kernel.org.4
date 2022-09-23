@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F05E7E57
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA18F5E7E5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbiIWP0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S232561AbiIWP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiIWP0j (ORCPT
+        with ESMTP id S231474AbiIWP2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:26:39 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7208613FB60
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:26:38 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so8143272pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:26:38 -0700 (PDT)
+        Fri, 23 Sep 2022 11:28:13 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D388D143576;
+        Fri, 23 Sep 2022 08:28:12 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso490948pjd.1;
+        Fri, 23 Sep 2022 08:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=ZWy71aF5Z4g2M7EPQKOVM2PfzynmTIcPbYGqsH4ugQ0=;
-        b=Mc/z/AW6VhBGHjGOwfn5PkruFSYFBqwRa5tn3GQM1lteEuCJ+V+6CTTP+G7dOZobuq
-         SWkg0q7JprL6fPbvwir3O3D3qKy1ydWGK8W7Kf+IVk+byBRnLMC2DbHJPNBWSU9TBi8L
-         VCy9giJRvqA10AGLkdx52plKJ0ZUGujwB2zWMv44LDqZYgwCHropbLoWHZ0KrdngDhws
-         GGKp3HoKQvAzGeeqFPEHPEeieFN5NfrQtixeYoOb3q1x11vmTs681STsJInjzjbG2HER
-         BS9VPdRm5uNaGZMm5QmPMjCheLjyDIeN8yS14WY2ESUAL5Kc/XQgKtaI5foIEeeb2JTf
-         fTKA==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date;
+        bh=5r7foWQmgnElkTtlj2t11gwXHrDcKejvsb3U8D3RKiE=;
+        b=CME6FiUdsbwMGLzNgML6WHHl1lM9nFZE7vx7IzFUZRa/XbKB8NDkcto6BiUp759bV9
+         7r862R6CjsSoGCnmpL+41+hVunsCJjoGMXymp0R7Y8Zqxaed1kZEIL0i1tno1wiFta14
+         jDYVEVndeuszvfDVLmcN1ZWzzcJYK5yleexxpDYQ2kwKg8ZV0BOerRBch2oONh0denaD
+         lMDWdFMkd7McKfKnErgCx/kVfT1S64SKIpeAmn0fG0ljoRFoAciqPfTwVNQstTTm38vA
+         l20Vf9rljn53hxlAXjYXbP3NGVmpwqPmgsukOtjbJ7qYlDo6jO0zGDdno3Ho30fJb8kq
+         Xvhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=ZWy71aF5Z4g2M7EPQKOVM2PfzynmTIcPbYGqsH4ugQ0=;
-        b=Y4mDNJkVWEEHrIGMxkoN7hVaS71/yhokLL+6DPox5mWp9z5jIlrRMoI5bPYzKcbnE9
-         2TrJrb6lgCNXmSszdVNVs5VlQSzLz14J+JduTy4+lgdBFPCs7899Psi5QqsnkB6JFZsI
-         6TWqCfZ0bp0ttOw+odNSlX9E+9MHtLaEI3XMBeCRBfqpLY8dyCAzMuD0vqEsgf4VqN5o
-         9EBjOi2ztlHsnc9RSzTPqanFlad/DAzMLhobgZWWdFSlZmXGkL7i0jk3epA5oJuGQVZO
-         WbgTBAaoGQwx/wDlce5idg/0NUupQWH/yOpZOGuW9S8pPjvNuW2J0zdMGOQBVZSgg5yT
-         wpkw==
-X-Gm-Message-State: ACrzQf28rF81tfz6zMjjJIfofIBHWOESpHux5Gxfh+7y7tNGXf56u8xf
-        ZsotiKu7chyEpO9ZmDVMvq4AN8cRoEgytg==
-X-Google-Smtp-Source: AMsMyM4GYd6v9EMcN/Fb6ZH7c8imRbDWdoMZ8VzP/mcwqALCzvBDvUx78UKS9xewkApkxFvEyWUvAQ==
-X-Received: by 2002:a17:903:130f:b0:178:b6fd:7eb3 with SMTP id iy15-20020a170903130f00b00178b6fd7eb3mr9012080plb.82.1663946798026;
-        Fri, 23 Sep 2022 08:26:38 -0700 (PDT)
-Received: from [10.4.89.86] ([139.177.225.237])
-        by smtp.gmail.com with ESMTPSA id y7-20020a623207000000b0053f9466b1b2sm6610523pfy.35.2022.09.23.08.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 08:26:37 -0700 (PDT)
-Message-ID: <ecceec1b-d201-fef5-de91-476c44151517@bytedance.com>
-Date:   Fri, 23 Sep 2022 23:26:32 +0800
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=5r7foWQmgnElkTtlj2t11gwXHrDcKejvsb3U8D3RKiE=;
+        b=O4d1+J6Tf0kU8ELmX+6TqFaLbBBm5t0TccKa2qakdL4qvusc5CYFzpORYyWGyKYYSq
+         cuU6KOCP5FZNw/uX7+KNcE8gvhtSLNKqXoctnomkL37EfKkQc27kFqyQjyJc/PmtOD7s
+         DpUlASdWDC9cbob7dfTxJbGU68xkY/EqYRzlD0vgIARaOA76V1E8H8sPkMd9iHpSOeHD
+         sZK9CY1KXtQMP8Q7EnYe26yxvKzLJYAA5PCfGrn2C2j4fjW828PfCmgTFaxkpvevHr6U
+         U6Oqzol1GG0tzNkJy018YuIC2wGXNSMFwF3drl3/PVJhJvVJclDB9SE2c2UZvjDgQqV8
+         wsBA==
+X-Gm-Message-State: ACrzQf2jAtMXMHq9qkoUrYR7z3nbv5E80lfjpv7nZM5MYyi0CgQlu8uK
+        CD7b+QXXTTH94KN9pcg3r/8=
+X-Google-Smtp-Source: AMsMyM6Q+wxHrhd5Z1U8d4zBgf7c0opVTeT/ajm9hG/mwLKjWxsSuYka/83LtH8DJGgJk6NpllHvbg==
+X-Received: by 2002:a17:902:f08a:b0:176:b477:8be0 with SMTP id p10-20020a170902f08a00b00176b4778be0mr9293590pla.66.1663946892310;
+        Fri, 23 Sep 2022 08:28:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a15-20020a17090a740f00b002036006d65bsm1688463pjg.39.2022.09.23.08.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 08:28:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 23 Sep 2022 08:28:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kbuild@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lin <ming.l@ssi.samsung.com>,
+        Sagi Grimberg <sagi@grimberg.me>
+Subject: Re: [PATCH] lib/sg_pool: change module_init(sg_pool_init) to
+ subsys_initcall
+Message-ID: <20220923152809.GA455235@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [External] Re: [PATCH] cgroup/cpuset: Add a new isolated
- mems.policy type.
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        wuyun.abel@bytedance.com
-References: <20220904040241.1708-1-hezhongkun.hzk@bytedance.com>
- <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
- <0e5f380b-9201-0f56-9144-ce8449491fc8@bytedance.com>
- <YxXUjvWmZoG9vVNV@dhcp22.suse.cz>
- <ca5e57fd-4699-2cec-b328-3d6bac43c8ef@bytedance.com>
- <Yxc+HZ6rjcR535oN@dhcp22.suse.cz>
- <93d76370-6c43-5560-9a5f-f76a8cc979e0@bytedance.com>
- <YxmXeC7te2HAi4dX@dhcp22.suse.cz>
- <fa5e5a79-aa1a-a009-d0c8-0a39380a71b6@bytedance.com>
- <120cb50d-d617-a60a-ec24-915f826318f1@bytedance.com>
- <Yy1gP7wcoCqzRa0B@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <Yy1gP7wcoCqzRa0B@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 23, 2022 at 08:38:35PM +0900, Masahiro Yamada wrote:
+> sg_alloc_table_chained() is called by several drivers, but if it is
+> called before sg_pool_init(), it results in a NULL pointer dereference
+> in sg_pool_alloc().
 > 
-> set_mempolicy is a per task_struct operation and so should be pidfd
-> based API as well. If somebody requires a per-thread-group setting then
-> the whole group should be iterated. I do not think we have any
-> precendence where pidfd operation on the thread group leader has side
-> effects on other threads as well.
+> Since commit 9b1d6c895002 ("lib: scatterlist: move SG pool code from
+> SCSI driver to lib/sg_pool.c"), we rely on module_init(sg_pool_init)
+> is invoked before other module_init calls but this assumption is
+> fragile.
+> 
+> I slightly changed the link order while Kbuild refactoring Kbuild,
+> then uncovered this issue. I should keep the current link order, but
+> depending on a specific call order among module_init is so fragine.
+> 
+> We usually define the init order by specifying *_initcall correctly,
+> or delay the driver probing by returning -EPROBE_DEFER.
+> 
+> Change module_initcall() to subsys_initcall(), and also delete the
+> pointless module_exit() because lib/sg_pool.c is always compiled as
+> built-in. (CONFIG_SG_POOL is bool)
+> 
+> Link: https://lore.kernel.org/all/20220921043946.GA1355561@roeck-us.net/
+> Link: https://lore.kernel.org/all/8e70837d-d859-dfb2-bf7f-83f8b31467bc@samsung.com/
+> Fixes: 9b1d6c895002 ("lib: scatterlist: move SG pool code from SCSI driver to lib/sg_pool.c")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Hi Michal,
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-I got it, thanks for your suggestions and reply.
+Guenter
