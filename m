@@ -2,155 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ACE5E7BE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4195E7BE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiIWNbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S231213AbiIWNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiIWNay (ORCPT
+        with ESMTP id S229726AbiIWNeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:30:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E22E6DE9;
-        Fri, 23 Sep 2022 06:30:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F4FD62510;
-        Fri, 23 Sep 2022 13:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6481AC433D6;
-        Fri, 23 Sep 2022 13:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663939851;
-        bh=l1JlluurWiwvkKH7l5/tNNLVpHEQly8opDz1dsRJSOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TB2uLYC0uWJqGmCUafRtEj3CAiR5CnJiMB8w1NeQkeoHgEHqP4OJSUMGbgzYSqwO5
-         8TNpqzkzimHavz8/puunVuqIGDKx5UmmX6UCMlpDOO2wAJMKp0+eKgdlaAdAxHpeFp
-         foSM3FT9zvDgoCxL4DTMddeQ+W1J2Ncya5pastOM+lGnRQl84Xfrl9VNCFemqaP5bm
-         RRrhmGijiYJ3/Z1Yc8Rh+2UtbgP+IGSbESZVkhwOuT3fOWN0zLNLx1zs/msuBmMbVq
-         Ra0s/Jg/4XvF+oSrV9qxB3UrlTpuQ0mBAg1cGbEn7rOSCLyi2WSZAlPZhgfsxbc1Jx
-         ytbGFRjQTJjeA==
-Date:   Fri, 23 Sep 2022 16:30:47 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: TPM: hibernate with IMA PCR 10
-Message-ID: <Yy21B4EGumiI9XsU@kernel.org>
-References: <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
- <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
- <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
- <Yw7L+X2cHf9qprxl@kernel.org>
- <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
- <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
- <Yxl8tbJERqrmsgpU@kernel.org>
- <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
- <YylDYU+KTX/KJpqU@kernel.org>
- <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+        Fri, 23 Sep 2022 09:34:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E99EE131F54;
+        Fri, 23 Sep 2022 06:34:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFD3A1042;
+        Fri, 23 Sep 2022 06:34:19 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.223])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2712F3F73B;
+        Fri, 23 Sep 2022 06:34:10 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 14:34:07 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, guoren@kernel.org, frederic@kernel.org,
+        vincent.chen@sifive.com, ardb@kernel.org, mhiramat@kernel.org,
+        rostedt@goodmis.org, keescook@chromium.org,
+        catalin.marinas@arm.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH for-next v2 0/4] riscv: Improvments for stacktrace
+Message-ID: <Yy21z0NgBgJXF1Km@FVFF77S0Q05N>
+References: <20220921125128.33913-1-chenzhongjin@huawei.com>
+ <YysZf2Y37QMBDt8n@FVFF77S0Q05N>
+ <7834a259-4bd7-a955-acaa-21c36c7c22c2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7834a259-4bd7-a955-acaa-21c36c7c22c2@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 04:15:20PM -0400, Mimi Zohar wrote:
-> On Tue, 2022-09-20 at 07:36 +0300, Jarkko Sakkinen wrote:
-> > On Sat, Sep 10, 2022 at 10:40:05PM -0400, Mimi Zohar wrote:
-> > > On Thu, 2022-09-08 at 08:25 +0300, Jarkko Sakkinen wrote:
-> > > > On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
-> > > > > On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
-> > > > > > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
-> > > > > > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
-> > > > > > > > > > Enabling the kernel to be able to do encryption and integrity checks on
-> > > > > > > > > > the hibernate image prevents a malicious userspace from escalating to
-> > > > > > > > > > kernel execution via hibernation resume.  [snip]
-> > > > > > > > >
-> > > > > > > > > I have a related question.
-> > > > > > > > >
-> > > > > > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
-> > > > > > > > > hibernate image is restored:
-> > > > > > > > >
-> > > > > > > > > 1. Is there a design for how PCR 10 is restored?
-> > > > > > > >
-> > > > > > > > I don't see anything that does that at present.
-> > > > > > > >
-> > > > > > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
-> > > > > > > > > restored?
-> > > > > > > >
-> > > > > > > > They're part of the running kernel state, so should re-appear without
-> > > > > > > > any special casing. However, in the absence of anything repopulating
-> > > > > > > > PCR 10, they'll no longer match the in-TPM value.
-> > > > > > >
-> > > > > > > This feature could still be supported, if IMA is disabled
-> > > > > > > in the kernel configuration, which I see a non-issue as
-> > > > > > > long as config flag checks are there.
-> > > > > > 
-> > > > > > Right, from what I understand about IMA, the TPM's PCR getting out of
-> > > > > > sync with the in-kernel measurement list across a hibernate (because
-> > > > > > TPM is reset) or kexec() (because in-memory list gets reset) is
-> > > > > > already a problem. This series doesn't really address that, in that it
-> > > > > > doesn't really make that situation better or worse.
-> > > > > 
-> > > > > For kexec, the PCRs are not reset, so the IMA measurment list needs to
-> > > > > be carried across kexec and restored.  This is now being done on most
-> > > > > architectures.  Afterwards, the IMA measurement list does match the
-> > > > > PCRs.
-> > > > > 
-> > > > > Hibernation introduces a different situation, where the the PCRs are
-> > > > > reset, but the measurement list is restored, resulting in their not
-> > > > > matching.
-> > > > 
-> > > > As I said earlier the feature still can be supported if
-> > > > kernel does not use IMA but obviously needs to be flagged.
+On Thu, Sep 22, 2022 at 04:22:23PM +0800, Chen Zhongjin wrote:
+> Hi,
+> 
+> On 2022/9/21 22:02, Mark Rutland wrote:
+> > On Wed, Sep 21, 2022 at 08:51:23PM +0800, Chen Zhongjin wrote:
+> > > Currently, the stacktrace with FRAME_POINTER on riscv has some problem:
 > > > 
-> > > Jumping to the conclusion that "hibernate" is acceptable for non-IMA
-> > > enabled kernels misses the security implications of mixing (kexec) non-
-> > > IMA and IMA enabled kernels. 
-> > > I would prefer some sort of hibernate marker, the equivalent of a
-> > > "boot_aggregate" record.
-> > 
-> > Not sure if this matters. If you run a kernel, which is not aware
-> > of IMA, it's your choice. I don't undestand why here is so important
-> > to protect user from doing illogical decisions.
-> > 
-> > If you want non-IMA kernels to support IMA, CONFIG_IMA should not
-> > probably even exist because you are essentially saying that any
-> > kernel play well with IMA.
+> > > 1. stacktrace will stop at irq so it can't get the stack frames before
+> > > irq entry.
+> > > 2. stacktrace can't unwind all the real stack frames when there is
+> > > k{ret}probes or ftrace.
+> > > 
+> > > These are mainly becase when there is a pt_regs on stack, we can't unwind
+> > > the stack frame as normal function.
+> > > 
+> > > Some architectures (e.g. arm64) create a extra stackframe inside pt_regs.
+> > > However this doesn't work for riscv because the ra is not ensured to be
+> > > pushed to stack. As explained in:
+> > > commit f766f77a74f5("riscv/stacktrace: Fix stack output without ra on the stack top")
+> > FWIW, this is also a latent problem on arm64, since we don't know whether the
+> > LR is live at an exception boundary (and we currently always ignore it).
 > 
-> That will never happen, nor am I suggesting it should.
+> In fact this is still a problem for riscv, I didn't unwind the caller of
+> ftrace or probed func
 > 
-> Enabling hibernate or IMA shouldn't be an either-or decision, if at all
-> possible.  The main concern is that attestation servers be able to
-> detect hibernation and possibly the loss of measurement
-> history.  Luckily, although the PCRs are reset, the TPM
-> pcrUpdateCounter is not.
+> of kretprobe because they are inside function pro/epilogue.
 > 
-> I would appreciate including a "hibernate" marker, similar to the
-> "boot_aggregate".
+> The problem on riscv is a little more complex, for leaf function, ra will
+> always not be pushed to stack and fp will be pushed to ra slot. This patch
+> solved this problem.
 
-Yeah, I guess that would not do harm.
+That's the same on arm64, our `LR` is equivalent to your `RA`.
 
-BR, Jarkko
+I have a series at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/stacktrace/metadata
+
+... which explciitly indicates pt_regs::pc and pt_regs::lr in the stack trace
+output (and for RELIABLE_STACKTRACE we'd mark the LR entries as unreliable).
+
+> > My plan to fix that on arm64 is to push an empty frame record to the stack upon
+> > an exception, and use that to find the pt_regs, from which we can get the PC
+> > and LR (and then we can report the later as unreliable). That should be roughly
+> > equivalent to what you do in this series (where use use the LSB to identify
+> > that the pointer is actually a pt_regs).
+> 
+> IIRC, this solution looks like:
+> 
+> =====
+> 
+> Func1     { lr, fp } or { nothing }
+> 
+> irq entry { pt_regs & empty stackframe[2] }
+> 
+> handler   { lr, fp }
+> 
+> ======
+> 
+> handler->fp points to stackframe, and when we find stackframe is empty, we
+> know we are inside
+> 
+> an pt_regs and can find registers by offset.
+> 
+> I think it's available, there no other scenario will cause the frame list
+> contains zero (unless stack is clobbered).
+
+That's basically what I do in my series; see:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/stacktrace/metadata&id=7394a825bc4f8243b28261517999793acb6f11cd
+
+... but I haven't posted that to the list yet as I *also* want to add code to
+check that we were at an exception boundary when we saw this (based on the
+prior PC/LR being in the entry text, using some metadata I have yet to add).
+
+> And it seems only fp slot should be zero, lr will be clobbered after
+> function call, we cannot use lr inside pt_regs.
+
+I'm not sure what you mean here.
+
+I agree that the LR in the pt_regs isn't *reliable*, and won't *always* be
+valid, but it will sometimes be valid.
+
+> > One important thing to note is that when crossing an exception boundary you
+> > won't know whether RA is live, and so you might try to consume an address twice
+> > (if it has also been pushed to the stack). That could be problematic for
+> > unwinding ftrace or kretprobes. On arm64 we had to implement
+> > HAVE_FUNCTION_GRAPH_RET_ADDR_PTR so that we could reliably unwind ftrace. See
+> > commit:
+> > 
+> >    c6d3cd32fd0064af ("arm64: ftrace: use HAVE_FUNCTION_GRAPH_RET_ADDR_PTR")
+> > 
+> > ... and we haven't yet come up with something similar for kretprobes (though I
+> > suspect we'll need to).
+> 
+> Can we test the sp and fp inside pt_regs? Because luckily arm64 saves lr, fp
+> and moves sp together.
+> 
+> Before sp is moved we will have fp == sp from last frame 'mov x29, sp'. So
+> if they are same, we uses the lr in pt_regs, conversely we use lr on stack.
+
+The frame record (which FP points to) can live anywhere in a stack frame, so
+comparing aginst SP doesn't tell us anything. Regardless of whether FP == SP,
+the LTR might be valid or invalid.
+
+There is no way of knowing if LR is live without information from the compiler
+that we don't have today (though from LPC 2022, it seems like CTF *might* be
+sufficient -- that's on my list of things to look at).
+
+Thanks,
+Mark.
