@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F9E5E8159
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8565E815D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiIWSCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S230369AbiIWSCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiIWSB4 (ORCPT
+        with ESMTP id S232524AbiIWSCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:01:56 -0400
+        Fri, 23 Sep 2022 14:02:01 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684513B02B;
-        Fri, 23 Sep 2022 11:01:50 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 18:01:47 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB32DF6AB;
+        Fri, 23 Sep 2022 11:01:51 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:01:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663956108;
+        s=2020; t=1663956109;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RP33hmU47JCBRwoHwo7pdXT4kEvbG5wa9NDdI5mr7kI=;
-        b=NUU5ob5iKaAwbK5dI1fnRorO//SdGZ+jI8WrIhCjA20uac1gMbRxS1VljH/KlcHHHs9lD5
-        jRjpjxhwGTDqs10bYA1YpUnWChB2SeppTzSJ0XOJah+74RTeCI723k5YLUoS0m7nYR/Cow
-        4eb5V+PFSCsCHAMjGhOpGB/DYGoGYuZr+QA8yKqUs9om/JqI6RO0D6MTIVycyDvimaoNCr
-        tRaGm4BrIwkvCKrdmNMxwHfBt48YEO65YacPUSKfHndACk1TdxAyuNP48PMyeKfVaFfaBW
-        hkNH68EvxjlcQLu8ggJ8BmMeFBCCP6TpgKrThWdAas3v2mBfH2MWiqAKls1hBQ==
+        bh=Li8pAkwglZYyRS/J517vlEY2TKtkkBCB4c1uyllFKWE=;
+        b=oWJV6DnmojLLFC2O0nXPqnFO8JAQnN+vuMxLpKz30BEDbNZVPrJtxILKjCwoR2Pc8brjvp
+        ENt4OSX7pLb5N756QJxq+O52ehgPIoFbfq/9xMUSsoOAJKXBobVT8TgCxREV6vioTv/Gy6
+        FKBz389uDLRYMUsIS1VkYB9/uz10riWzmUjSLRmt7BzPW3ll4K0YKQ+yV7q49LHGwfiCSt
+        ZH35aEaSLgm1jxv2HXC+Jaru4yBW9n2REZ3vgJKW2m6t2F16PVxOUKR2Rxbw+Qe4rH6bKw
+        BAurigtwwGeJwfoq1V1K3AyEUy/m1lKY0C8F80H5tKTzRKuermbbBchqVilMLg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663956108;
+        s=2020e; t=1663956109;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RP33hmU47JCBRwoHwo7pdXT4kEvbG5wa9NDdI5mr7kI=;
-        b=5Cmub1qeXiASyRFY1Y40j6gsOZmCXK0Dr7u67Vg5GLLrdwn53UTE3UJedoMXbKMTTcqt8E
-        5BpNj7o26OnvJJBQ==
+        bh=Li8pAkwglZYyRS/J517vlEY2TKtkkBCB4c1uyllFKWE=;
+        b=G+hBM6JpzF+95Urk5eQdwBuxb/Q+V6U7aaW8GZphDCV91+2vs1+bzXwD9zo3pZIcwHs+ed
+        1XZGcXxgdpsHT9Dw==
 From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Allow per-rmid arch private storage to be reset
+Subject: [tip: x86/cache] x86/resctrl: Add per-rmid arch private storage for
+ overflow and chunks
 Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Shaopeng Tan <tan.shaopeng@fujitsu.com>,
@@ -51,10 +52,10 @@ Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Xin Hao <xhao@linux.alibaba.com>,
         Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220902154829.30399-15-james.morse@arm.com>
-References: <20220902154829.30399-15-james.morse@arm.com>
+In-Reply-To: <20220902154829.30399-14-james.morse@arm.com>
+References: <20220902154829.30399-14-james.morse@arm.com>
 MIME-Version: 1.0
-Message-ID: <166395610745.401.14525671499008071933.tip-bot2@tip-bot2>
+Message-ID: <166395610853.401.13795446222171166361.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,24 +71,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     fea62d370d7a1ba288d71d0cae7ad47c2a02b839
-Gitweb:        https://git.kernel.org/tip/fea62d370d7a1ba288d71d0cae7ad47c2a02b839
+Commit-ID:     48dbe31a243d5fc7c07b7f03b48e95ec4696b118
+Gitweb:        https://git.kernel.org/tip/48dbe31a243d5fc7c07b7f03b48e95ec4696b118
 Author:        James Morse <james.morse@arm.com>
-AuthorDate:    Fri, 02 Sep 2022 15:48:22 
+AuthorDate:    Fri, 02 Sep 2022 15:48:21 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 23 Sep 2022 12:49:04 +02:00
+CommitterDate: Thu, 22 Sep 2022 17:46:09 +02:00
 
-x86/resctrl: Allow per-rmid arch private storage to be reset
+x86/resctrl: Add per-rmid arch private storage for overflow and chunks
 
-To abstract the rmid counters into a helper that returns the number
-of bytes counted, architecture specific per-rmid state is needed.
+A renamed __rmid_read() is intended as the function that an
+architecture agnostic resctrl filesystem driver can use to
+read a value in bytes from a counter. Currently the function returns
+the MBM values in chunks directly from hardware. For bandwidth
+counters the resctrl filesystem uses this to calculate the number of
+bytes ever seen.
 
-It needs to be possible to reset this hidden state, as the values
-may outlive the life of an rmid, or the mount time of the filesystem.
+MPAM's scaling of counters can be changed at runtime, reducing the
+resolution but increasing the range. When this is changed the prev_msr
+values need to be converted by the architecture code.
 
-mon_event_read() is called with first = true when an rmid is first
-allocated in mkdir_mondata_subdir(). Add resctrl_arch_reset_rmid()
-and call it from __mon_event_count()'s rr->first check.
+Add an array for per-rmid private storage. The prev_msr and chunks
+values will move here to allow resctrl_arch_rmid_read() to always
+return the number of bytes read by this counter without assistance
+from the filesystem. The values are moved in later patches when
+the overflow and correction calls are moved into __rmid_read().
 
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -97,152 +105,104 @@ Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Xin Hao <xhao@linux.alibaba.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20220902154829.30399-15-james.morse@arm.com
+Link: https://lore.kernel.org/r/20220902154829.30399-14-james.morse@arm.com
 ---
- arch/x86/kernel/cpu/resctrl/internal.h | 18 +++----------
- arch/x86/kernel/cpu/resctrl/monitor.c  | 35 ++++++++++++++++++++++++-
- include/linux/resctrl.h                | 23 ++++++++++++++++-
- 3 files changed, 62 insertions(+), 14 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c     | 35 +++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/resctrl/internal.h | 14 ++++++++++-
+ 2 files changed, 49 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 4de8e5b..b34a140 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -22,14 +22,6 @@
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 90ebb7d..de62b0b 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -413,6 +413,8 @@ static void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
  
- #define L2_QOS_CDP_ENABLE		0x01ULL
- 
--/*
-- * Event IDs are used to program IA32_QM_EVTSEL before reading event
-- * counter from IA32_QM_CTR
-- */
--#define QOS_L3_OCCUP_EVENT_ID		0x01
--#define QOS_L3_MBM_TOTAL_EVENT_ID	0x02
--#define QOS_L3_MBM_LOCAL_EVENT_ID	0x03
--
- #define CQM_LIMBOCHECK_INTERVAL	1000
- 
- #define MBM_CNTR_WIDTH_BASE		24
-@@ -73,7 +65,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
-  * @list:		entry in &rdt_resource->evt_list
-  */
- struct mon_evt {
--	u32			evtid;
-+	enum resctrl_event_id	evtid;
- 	char			*name;
- 	struct list_head	list;
- };
-@@ -90,9 +82,9 @@ struct mon_evt {
- union mon_data_bits {
- 	void *priv;
- 	struct {
--		unsigned int rid	: 10;
--		unsigned int evtid	: 8;
--		unsigned int domid	: 14;
-+		unsigned int rid		: 10;
-+		enum resctrl_event_id evtid	: 8;
-+		unsigned int domid		: 14;
- 	} u;
- };
- 
-@@ -100,7 +92,7 @@ struct rmid_read {
- 	struct rdtgroup		*rgrp;
- 	struct rdt_resource	*r;
- 	struct rdt_domain	*d;
--	int			evtid;
-+	enum resctrl_event_id	evtid;
- 	bool			first;
- 	u64			val;
- };
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 2d81b6c..e975514 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -137,7 +137,37 @@ static inline struct rmid_entry *__rmid_entry(u32 rmid)
- 	return entry;
+ static void domain_free(struct rdt_hw_domain *hw_dom)
+ {
++	kfree(hw_dom->arch_mbm_total);
++	kfree(hw_dom->arch_mbm_local);
+ 	kfree(hw_dom->ctrl_val);
+ 	kfree(hw_dom);
+ }
+@@ -438,6 +440,34 @@ static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
+ 	return 0;
  }
  
--static u64 __rmid_read(u32 rmid, u32 eventid)
-+static struct arch_mbm_state *get_arch_mbm_state(struct rdt_hw_domain *hw_dom,
-+						 u32 rmid,
-+						 enum resctrl_event_id eventid)
++/**
++ * arch_domain_mbm_alloc() - Allocate arch private storage for the MBM counters
++ * @num_rmid:	The size of the MBM counter array
++ * @hw_dom:	The domain that owns the allocated arrays
++ */
++static int arch_domain_mbm_alloc(u32 num_rmid, struct rdt_hw_domain *hw_dom)
 +{
-+	switch (eventid) {
-+	case QOS_L3_OCCUP_EVENT_ID:
-+		return NULL;
-+	case QOS_L3_MBM_TOTAL_EVENT_ID:
-+		return &hw_dom->arch_mbm_total[rmid];
-+	case QOS_L3_MBM_LOCAL_EVENT_ID:
-+		return &hw_dom->arch_mbm_local[rmid];
++	size_t tsize;
++
++	if (is_mbm_total_enabled()) {
++		tsize = sizeof(*hw_dom->arch_mbm_total);
++		hw_dom->arch_mbm_total = kcalloc(num_rmid, tsize, GFP_KERNEL);
++		if (!hw_dom->arch_mbm_total)
++			return -ENOMEM;
++	}
++	if (is_mbm_local_enabled()) {
++		tsize = sizeof(*hw_dom->arch_mbm_local);
++		hw_dom->arch_mbm_local = kcalloc(num_rmid, tsize, GFP_KERNEL);
++		if (!hw_dom->arch_mbm_local) {
++			kfree(hw_dom->arch_mbm_total);
++			hw_dom->arch_mbm_total = NULL;
++			return -ENOMEM;
++		}
 +	}
 +
-+	/* Never expect to get here */
-+	WARN_ON_ONCE(1);
-+
-+	return NULL;
++	return 0;
 +}
 +
-+void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
-+			     u32 rmid, enum resctrl_event_id eventid)
-+{
-+	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
-+	struct arch_mbm_state *am;
+ /*
+  * domain_add_cpu - Add a cpu to a resource's domain list.
+  *
+@@ -487,6 +517,11 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
+ 		return;
+ 	}
+ 
++	if (r->mon_capable && arch_domain_mbm_alloc(r->num_rmid, hw_dom)) {
++		domain_free(hw_dom);
++		return;
++	}
 +
-+	am = get_arch_mbm_state(hw_dom, rmid, eventid);
-+	if (am)
-+		memset(am, 0, sizeof(*am));
-+}
-+
-+static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
- {
- 	u64 val;
+ 	list_add_tail(&d->list, add_pos);
  
-@@ -291,6 +321,9 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
- 	struct mbm_state *m;
- 	u64 chunks, tval;
+ 	err = resctrl_online_domain(r, d);
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 4606209..4de8e5b 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -304,16 +304,30 @@ struct mbm_state {
+ };
  
-+	if (rr->first)
-+		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
-+
- 	tval = __rmid_read(rmid, rr->evtid);
- 	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL)) {
- 		return tval;
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index f4c9101..8184567 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -32,6 +32,16 @@ enum resctrl_conf_type {
- 
- #define CDP_NUM_TYPES	(CDP_DATA + 1)
- 
-+/*
-+ * Event IDs, the values match those used to program IA32_QM_EVTSEL before
-+ * reading IA32_QM_CTR on RDT systems.
+ /**
++ * struct arch_mbm_state - values used to compute resctrl_arch_rmid_read()s
++ *			   return value.
++ * @prev_msr:	Value of IA32_QM_CTR last time it was read for the RMID used to
++ *		find this struct.
 + */
-+enum resctrl_event_id {
-+	QOS_L3_OCCUP_EVENT_ID		= 0x01,
-+	QOS_L3_MBM_TOTAL_EVENT_ID	= 0x02,
-+	QOS_L3_MBM_LOCAL_EVENT_ID	= 0x03,
++struct arch_mbm_state {
++	u64	prev_msr;
 +};
 +
- /**
-  * struct resctrl_staged_config - parsed configuration to be applied
-  * @new_ctrl:		new ctrl value to be loaded
-@@ -210,4 +220,17 @@ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
- int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
- void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
- 
 +/**
-+ * resctrl_arch_reset_rmid() - Reset any private state associated with rmid
-+ *			       and eventid.
-+ * @r:		The domain's resource.
-+ * @d:		The rmid's domain.
-+ * @rmid:	The rmid whose counter values should be reset.
-+ * @eventid:	The eventid whose counter values should be reset.
-+ *
-+ * This can be called from any CPU.
-+ */
-+void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
-+			     u32 rmid, enum resctrl_event_id eventid);
-+
- #endif /* _RESCTRL_H */
+  * struct rdt_hw_domain - Arch private attributes of a set of CPUs that share
+  *			  a resource
+  * @d_resctrl:	Properties exposed to the resctrl file system
+  * @ctrl_val:	array of cache or mem ctrl values (indexed by CLOSID)
++ * @arch_mbm_total:	arch private state for MBM total bandwidth
++ * @arch_mbm_local:	arch private state for MBM local bandwidth
+  *
+  * Members of this structure are accessed via helpers that provide abstraction.
+  */
+ struct rdt_hw_domain {
+ 	struct rdt_domain		d_resctrl;
+ 	u32				*ctrl_val;
++	struct arch_mbm_state		*arch_mbm_total;
++	struct arch_mbm_state		*arch_mbm_local;
+ };
+ 
+ static inline struct rdt_hw_domain *resctrl_to_arch_dom(struct rdt_domain *r)
