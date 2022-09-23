@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961FD5E84C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1C25E84C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbiIWVTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S232808AbiIWVV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 17:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiIWVTr (ORCPT
+        with ESMTP id S231205AbiIWVVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:19:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8C27FDA
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:19:45 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d11so1257093pll.8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ZnB23LLp/vlB+ryCWR3RfzNeLIOvdyceafUVjogXEh8=;
-        b=Y0ehwZOs+7K7MVGIhod7Oz82juhcilJsd4wl7E7yhwCNzs0m2pNmp9XEEfoPUh6mNC
-         rOHJpV9AYYiNrGQgNITm72gcxDBIDDUvag8cZ/PJV24RhHG7n7IWH65/OiySYH0R6YLB
-         LMZVh3V1mGG6AIVleW4VIPVY6lhqB3r4vbsz8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZnB23LLp/vlB+ryCWR3RfzNeLIOvdyceafUVjogXEh8=;
-        b=IuiVfNUr7PoLHp8HQ4Qmj+wz6b1ar6Fg1q8yMzNLUVEcrzy5y3l+qGd6/tHIbkmOT8
-         4PjQMFXCTXn+hpYNpWTOZwQQo/gaKKlGdUc5Z2kEjGk699948xrvcDcl8xdzbu2Io4yD
-         aZ7L+ApzQr7UUZ9YtiFto+GzqSMyp4DhPNRdGk0KWwmPrQezc3Dnp/3bcVhmdvZ6mq5v
-         ZvI/XcTPSrmknLrjWCiVmv6JQaYHG302MU9Teg6KZrYo818P6Ocba/W6IFLX5oB/iCiv
-         LEFDgqyOWLgpjtxHwLlO6F93EDmBQ2PMmZKj60h/2DsnFLOEmG4N1rm0ygRCYv3kG8pk
-         semw==
-X-Gm-Message-State: ACrzQf18zWStAyiqfBQ3+aukwKpoZwnZD9pRpzG0G0w13nMf3PTRyTvH
-        yTznCrNspnCBRCcdcyzg6Rj1Uw==
-X-Google-Smtp-Source: AMsMyM7aSk+mgvNkxhO3PAF0I3gXdX+yml32CiH6ECVZxXMsQdqv44K9s+DqCiaekrj/oHbACSgxpw==
-X-Received: by 2002:a17:90b:1bc3:b0:203:84d:59b1 with SMTP id oa3-20020a17090b1bc300b00203084d59b1mr23683457pjb.37.1663967984643;
-        Fri, 23 Sep 2022 14:19:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902eb8c00b0016dbe37cebdsm6230493plg.246.2022.09.23.14.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 14:19:43 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 14:19:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
-Message-ID: <202209231417.F73F40060@keescook>
-References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
- <20220922193157.1673623-1-dave.hansen@linux.intel.com>
- <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
- <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
- <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
- <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
- <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
- <202209231126.6855D54@keescook>
- <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
+        Fri, 23 Sep 2022 17:21:12 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4048C120BDF;
+        Fri, 23 Sep 2022 14:21:11 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:46132)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obq6g-000o8g-4w; Fri, 23 Sep 2022 15:21:10 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:49406 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obq6f-002Jll-1i; Fri, 23 Sep 2022 15:21:09 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     cambda@linux.alibaba.com
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
+        <87k05v5sqn.fsf@email.froward.int.ebiederm.org>
+        <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
+Date:   Fri, 23 Sep 2022 16:21:02 -0500
+In-Reply-To: <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
+        (cambda@linux.alibaba.com's message of "Fri, 23 Sep 2022 11:56:55
+        +0800")
+Message-ID: <874jwx4wjl.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1obq6f-002Jll-1i;;;mid=<874jwx4wjl.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18HrC7RwvP/0Caif2Ktot5rOINy7T4j660=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: ; sa02 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;cambda@linux.alibaba.com
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 416 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 3.9 (0.9%), b_tie_ro: 2.7 (0.6%), parse: 0.68
+        (0.2%), extract_message_metadata: 9 (2.1%), get_uri_detail_list: 2.1
+        (0.5%), tests_pri_-1000: 10 (2.5%), tests_pri_-950: 1.07 (0.3%),
+        tests_pri_-900: 0.79 (0.2%), tests_pri_-90: 72 (17.2%), check_bayes:
+        70 (16.9%), b_tokenize: 7 (1.6%), b_tok_get_all: 9 (2.1%),
+        b_comp_prob: 1.86 (0.4%), b_tok_touch_all: 50 (12.0%), b_finish: 0.71
+        (0.2%), tests_pri_0: 309 (74.2%), check_dkim_signature: 0.40 (0.1%),
+        check_dkim_adsp: 1.71 (0.4%), poll_dns_idle: 0.38 (0.1%),
+        tests_pri_10: 1.77 (0.4%), tests_pri_500: 6 (1.5%), rewrite_mail: 0.00
+        (0.0%)
+Subject: Re: Syscall kill() can send signal to thread ID
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:53:02PM +0200, Ard Biesheuvel wrote:
-> On Fri, 23 Sept 2022 at 20:31, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, Sep 23, 2022 at 04:26:58PM +0200, Ard Biesheuvel wrote:
-> > > I was basically making the point that we still support i386 without
-> > > PAE (which is a prerequisite for supporting non-executable mappings),
-> > > and if we are going to be pedantic about security on this
-> > > architecture, we should probably make PAE mandatory as well.
-> >
-> > My expectation would be that if someone is running modern kernels on i386,
-> > they're not using PAE. If they care about PAE, I'd expect them to have
-> > long since moved to x86_64.
-> >
-> 
-> Not sure I follow. If they care about PAE, they turn it on. Or do you
-> mean 'if they care about being able to address lots of physical
-> memory'? Because the *other* reason you might care about PAE is
-> because it gives you NX support.
+"cambda@linux.alibaba.com" <cambda@linux.alibaba.com> writes:
 
-Right, I meant if they care about NX (and the topic of this thread)
-they want PAE, and if they want PAE, they likely moved to x86_64 long
-long ago for new kernels.
+>> On Sep 22, 2022, at 23:33, Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> 
+>> cambda@linux.alibaba.com writes:
+>> 
+>>> I found syscall kill() can send signal to a thread id, which is
+>>> not the TGID. But the Linux manual page kill(2) said:
+>>> 
+>>> "The kill() system call can be used to send any signal to any
+>>> process group or process."
+>>> 
+>>> And the Linux manual page tkill(2) said:
+>>> 
+>>> "tgkill() sends the signal sig to the thread with the thread ID
+>>> tid in the thread group tgid.  (By contrast, kill(2) can be used
+>>> to send a signal only to a process (i.e., thread group) as a
+>>> whole, and the signal will be delivered to an arbitrary thread
+>>> within that process.)"
+>>> 
+>>> I don't know whether the meaning of this 'process' should be
+>>> the TGID? Because I found kill(tid, 0) will return ESRCH on FreeBSD,
+>>> while Linux sends signal to the thread group that the thread belongs
+>>> to.
+>>> 
+>>> If this is as expected, should we add a notice to the Linux manual
+>>> page? Because it's a syscall and the pids not equal to tgid are not
+>>> listed under /proc. This may be a little confusing, I guess.
+>> 
+>> How did you come across this?  Were you just experimenting?
+>> 
+>> I am wondering if you were tracking a bug, or a portability problem
+>> or something else.  If the current behavior is causing problems in
+>> some way instead of just being a detail that no one really cares about
+>> either way it would be worth considering if we want to maintain the
+>> current behavior.
+>> 
+>> Eric
+>
+> I have found I can cd into /proc/tid, and the proc_pid_readdir()
+> uses next_tgid() to filter tid. Also the 'ps' command reads the
+> /proc dir to show processes. That's why I was confused with kill().
+>
+> And yes, I'm tracking a bug. A service monitor, like systemd or
+> some watchdog, uses kill() to check if a pid is valid or not:
+>   1. Store service pid into cache.
+>   2. Check if pid in cache is valid by kill(pid, 0).
+>   3. Check if pid in cache is the service to watch.
+>
+> So if kill(pid, 0) returns success but no process info shows on 'ps'
+> command, the service monitor could be confused. The monitor could
+> check if pid is tid, but this means the odd behavior would be used
+> intentionally. And this workaround may be unsafe on other OS?
+>
+> I'm agreed with you that this behavior shouldn't be removed, in case
+> some userspace applications use it now.
 
-> But currently, PAE is not even enabled in the i386_defconfig, and
-> defaults to off. This means people that are unaware of this won't
-> enable it, and will be running without NX support.
+As has already been mentioned using pids and api's like kill is
+fundamentally racy.  We try and to keep from reusing pids too quickly.
+Unfortunately what we have is that on average there will be some time
+between pid reuse not an kind of worst case guarantee.
 
-And they all make me cry. ;)
+We have slowly been introducing techniques into linux allow combatting
+that.  A directory processes directory in proc that you have open will
+never point to another process even after the pid is reused.  Similarly
+we have pidfd that will associate with a specific process and will not
+associate with any other process even if the processes pid is reused.
 
-> > > If we are ok with the current state, enabling this permission check on
-> > > i386 makes no sense.
-> >
-> > I'd agree. If it's a choice between "spend a lot of time making sure
-> > this works correctly on i386" and "don't do this at all on i386", I
-> > would pick the latter. If someone steps up to do the former, then by
-> > all means take the patches.
-> >
-> 
-> OK, so it seems we're all in violent agreement here. And if there is
-> ever a push for enabling security features on 32-bit, we can add this
-> to the laundry list of things that need to be looked at.
+That is we have userspace pid value reuse, but we don't reuse struct pid
+in the kernel.
 
-Yup.
+Unfortunately I don't think there is anything that allows these races to
+be addressed in a portable manner.
 
--- 
-Kees Cook
+Eric
+
