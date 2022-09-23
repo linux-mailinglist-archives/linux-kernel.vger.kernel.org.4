@@ -2,120 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C6E5E8253
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B285E8258
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiIWTEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S231767AbiIWTFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiIWTEi (ORCPT
+        with ESMTP id S230449AbiIWTFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 15:04:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFAE2DFF;
-        Fri, 23 Sep 2022 12:04:33 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NH6DdC025652;
-        Fri, 23 Sep 2022 19:03:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=MuBSUJNz2EZLJFjx/Wk5ELtrb2nH5vloc/QhcYKQVkM=;
- b=FR/IRFY+xcS5+T96EwH2BEsei7I8INijO+y1CvmB0XLIxHsR+E/m3MRItHxgavaGJwcA
- KsyUmZFYDmvNH1P73Uj/EZEUYCMWsxAPZTpWNV+OGzjfa0xnaUBhmJrhAfoMzrE6Ey8N
- wxbf8fka4FoKcEJ9JcI4pQ5+ynBLMJs81tMVS+usEOsrKX5ZybA9ae0myEN7KxcCPtW7
- LtQRsfCCvfwaMgMtpR/nllUJxa8hKrM8msTJKGgBGo9NkEyi7hOoKneuqLC4fjGfbNHy
- OLg48NU4twXsjqFqCkqDOOMvZ7r/bn3RK7zpG4w0PSmEsU+ZIsoxVXv1L8IMsrf42V4L Pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jsam5pwyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 19:03:43 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28NInoc6008637;
-        Fri, 23 Sep 2022 19:03:42 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jsam5pwwn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 19:03:42 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28NIo3SS026482;
-        Fri, 23 Sep 2022 19:03:41 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02wdc.us.ibm.com with ESMTP id 3jn5va1m27-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 19:03:41 +0000
-Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28NJ3fLn7799506
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Sep 2022 19:03:41 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F0E658059;
-        Fri, 23 Sep 2022 19:03:39 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAF6E58043;
-        Fri, 23 Sep 2022 19:03:36 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.173.46])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Sep 2022 19:03:36 +0000 (GMT)
-Message-ID: <67337b60a4d3cae00794d3cfd0e5add9899f18b7.camel@linux.ibm.com>
-Subject: Re: [PATCH 5.15 0/6] arm64: kexec_file: use more system keyrings to
- verify kernel image signature + dependencies
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Michal Suchanek <msuchanek@suse.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KEXEC" <kexec@lists.infradead.org>,
-        Coiby Xu <coxu@redhat.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Date:   Fri, 23 Sep 2022 15:03:36 -0400
-In-Reply-To: <cover.1663951201.git.msuchanek@suse.de>
-References: <cover.1663951201.git.msuchanek@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SsokmeIEOQvFjsuuW5hlsedfFQGtkcPI
-X-Proofpoint-ORIG-GUID: xC2eJ1JrrMo3jvaPpOW6BQ5aqRsb_2NA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_06,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0
- impostorscore=0 clxscore=1011 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2209230120
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Fri, 23 Sep 2022 15:05:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CAA3D75
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663959904; x=1695495904;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YkbF167qKa4BtHKOjrejr/KpiaR+fUFgfEok5NmFkLw=;
+  b=QFRrCCj3bA960FlIjNzC1AHG/Pcu0IdsjF/SMSVJ8fXh3wxuJK9YAQTE
+   ek0RpeyNiqeZbqPWQkvtz8L4PykltdR/fKqysF45mBqTQNPQnyV1Gak7v
+   h/HPp4J/WOEEtsOwQet1rG+c/AwYZKJFkemty8fvSHBp7njcUxtlUezSA
+   yNIJvN3d8Xfl084XMKpEZyQqXOZ8jUzTX93KBXDLB84VlrFgWFNaqlHrz
+   ABPdSSNC7X4HGIDWMdbqTz60c6PMcIIeckbdfTZtx/avtsCHBpX+oW7MS
+   OYMW3ef0hlOMRPh1sHSeWj83iBjHd+A4nlgJ/TVh3nFsH9uQD1S+eQXsO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="287791599"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="287791599"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 12:05:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="949133577"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 12:05:02 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obnyw-0005sS-0N;
+        Fri, 23 Sep 2022 19:05:02 +0000
+Date:   Sat, 24 Sep 2022 03:04:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [peterz-queue:call-depth-tracking 59/60]
+ ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
+Message-ID: <202209240243.vRVXCjW9-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,24 +62,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-23 at 19:10 +0200, Michal Suchanek wrote:
-> Hello,
-> 
-> this is backport of commit 0d519cadf751
-> ("arm64: kexec_file: use more system keyrings to verify kernel image signature")
-> to table 5.15 tree including the preparatory patches.
-> 
-> Some patches needed minor adjustment for context.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git call-depth-tracking
+head:   856304fc062b9ad34742a604b98cc775846c0cb3
+commit: 46f9bf3269a589dc0258ae68c32e064e25a0a149 [59/60] x86/ftrace: Make it call depth tracking aware
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220924/202209240243.vRVXCjW9-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=46f9bf3269a589dc0258ae68c32e064e25a0a149
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue call-depth-tracking
+        git checkout 46f9bf3269a589dc0258ae68c32e064e25a0a149
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/trace/
 
-In general when backporting this patch set, there should be a
-dependency on backporting these commits as well.  In this instance for
-linux-5.15.y, they've already been backported.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-543ce63b664e ("lockdown: Fix kexec lockdown bypass with ima policy")
-af16df54b89d ("ima: force signature verification when CONFIG_KEXEC_SIG is configured")
+All warnings (new ones prefixed by >>):
+
+   kernel/trace/trace.c: In function 'trace_check_vprintf':
+   kernel/trace/trace.c:3846:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    3846 |                 trace_seq_vprintf(&iter->seq, iter->fmt, ap);
+         |                 ^~~~~~~~~~~~~~~~~
+   kernel/trace/trace.c:3913:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    3913 |                 trace_seq_vprintf(&iter->seq, p, ap);
+         |                 ^~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/asm-offsets.h:1,
+                    from kernel/trace/trace_selftest.c:10,
+                    from kernel/trace/trace.c:8672:
+   ./include/generated/asm-offsets.h: At top level:
+>> ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
+      81 | #define TASK_SIZE -1342177280 /* TASK_SIZE */
+         | 
+   In file included from arch/powerpc/include/asm/processor.h:73,
+                    from arch/powerpc/include/asm/thread_info.h:46,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7,
+                    from include/linux/ring_buffer.h:5,
+                    from kernel/trace/trace.c:15:
+   arch/powerpc/include/asm/task_size_32.h:9: note: this is the location of the previous definition
+       9 | #define TASK_SIZE (CONFIG_TASK_SIZE)
+         | 
+--
+   In file included from arch/powerpc/include/asm/asm-offsets.h:1,
+                    from kernel/trace/trace_selftest.c:10,
+                    from kernel/trace/trace.c:8672:
+>> ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
+      81 | #define TASK_SIZE -1342177280 /* TASK_SIZE */
+         | 
+   In file included from arch/powerpc/include/asm/processor.h:73,
+                    from arch/powerpc/include/asm/thread_info.h:46,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7,
+                    from include/linux/ring_buffer.h:5,
+                    from kernel/trace/trace.c:15:
+   arch/powerpc/include/asm/task_size_32.h:9: note: this is the location of the previous definition
+       9 | #define TASK_SIZE (CONFIG_TASK_SIZE)
+         | 
 
 -- 
-thanks,
-
-Mimi
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
