@@ -2,168 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB055E8647
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 01:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A515E8648
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 01:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiIWXVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 19:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S232937AbiIWXWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 19:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiIWXVj (ORCPT
+        with ESMTP id S232906AbiIWXWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 19:21:39 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB9F12059C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:21:38 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id b23so974183qtr.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:21:38 -0700 (PDT)
+        Fri, 23 Sep 2022 19:22:00 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FF613C857
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:21:56 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t7so2070213wrm.10
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=5ASiwm1avkHZc/hoLIIFI/eZ/ZpBbfiIv79qS4VlyJQ=;
-        b=S5exWhlgK2IwN/41jFZWVgtUOIPgOVHZzklRjzN/LhjEdicvHTUHfUAsCYVTnPVnJ2
-         pLEkXf8ppCaivB8zKkiV5xHWOxHPCLi3Oh+ndtGqO5/3PUUide2X+tNk9f/o4UzdzyYs
-         l723v+ePlu64jTV7J6j32h1l2vV58qu0PGnwnjWq1iAlo8weVGw4X7p2xu80tzvCf8Bc
-         ooZJQ9qz1n896baC9VOTDnZDGs1Udgq290N5MKBgwJb9UGx/0yIR9beq7q1pXKyuOrOG
-         qyywJClQqtur0GI4MaezATtC6BZH247PjXoZSk168tI57X6i1340gKDYtNSceLs7zRnN
-         PqMA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=frdneqNgohyqfaLqmKFd2BmYARCxGSlQak12BbbYcOg=;
+        b=TJPCvP7bV80TCrXRHimFuM3VCTfL6G8bUOiIyvzX+tr8CG91/5xBsfkck5PqRoCnhs
+         cTajAkvCQyq5sTHCiuCULuVZwKOwtoeRxT4bRKEaEZX4kT0D/PU2cizl6FJDgK2og5kf
+         PD5rZ2Yahwepjgf6L+vSsYqnSpW32ZESnM7lCvc1Zf8FIU7snegkcKgbOcOaxmoXMB4S
+         lpFcMNQazfgG3lWStnXMOfbGbmSTVCuEHdzUYdiQwK/u0F4GHMknWREzUNbv6Xcs+eq1
+         I7ohPvc/JgTpaiy4z1uxKaQ1Yt5skyPRUsZjQGMeeDpU85kaKtResnYMF9zuU8TCE+7r
+         XalA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=5ASiwm1avkHZc/hoLIIFI/eZ/ZpBbfiIv79qS4VlyJQ=;
-        b=EVriCRUibLuIilfbBiv0Y6aG64LauZtlsxxes7H8BsXCJgBhDR+oEVOuO6Q7MST1GR
-         qfhSnhLoZN5Mj4T5bIgjfTvmGvL9hLd/CZlzHk6v3PIs8SKmosyBTPBky71daa8VQ92s
-         JRMpvK8g7vsygIDFTNrDiRtv5U1HsTvI5GEA7vBt34jkB5V1XT5VqEywpGhET8hijNsU
-         gzWP0gcw83b19Jk1MtNwCXpdywTVz5LkkE9QnFaI5ZEUBAFne/nAM2CuGQd01OGrlQAO
-         5BOsTfiw82Adb/h0l886VVkppybz8L5hOz893BkpH4q2OQ35B4RaepYR4ljCou6AHXb1
-         /Reg==
-X-Gm-Message-State: ACrzQf3QRRCiTkdnOMuMRHc6dm/CRNSC13e5ifIOlbRgRnBafd79qpYy
-        088ei1Qn8b0Xn1KD+jGp+VcOTg==
-X-Google-Smtp-Source: AMsMyM6UQR7CtJ4cZm41QVD6wT/F9o4m06KKQo4p97qx0szYOwFcvEevzn63HXF/BrGZl/ZOmXXdrA==
-X-Received: by 2002:a05:622a:174b:b0:35d:1be5:c65e with SMTP id l11-20020a05622a174b00b0035d1be5c65emr6445841qtk.422.1663975297167;
-        Fri, 23 Sep 2022 16:21:37 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id t83-20020a374656000000b006ce9d6e51f4sm6650434qka.67.2022.09.23.16.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 16:21:36 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1obrzD-0035zj-Lo;
-        Fri, 23 Sep 2022 20:21:35 -0300
-Date:   Fri, 23 Sep 2022 20:21:35 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting
- PCI P2PDMA pages
-Message-ID: <Yy4/f+s1jOCm7dFo@ziepe.ca>
-References: <20220922163926.7077-1-logang@deltatee.com>
- <20220922163926.7077-2-logang@deltatee.com>
- <Yy33LUqvDLSOqoKa@ziepe.ca>
- <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
- <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
- <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
- <Yy46KbD/PvhaHA6X@ziepe.ca>
- <3840c1c6-3a5c-2286-e577-949f0d4ea7a6@deltatee.com>
- <Yy48GPMdQS/pzNSa@ziepe.ca>
- <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=frdneqNgohyqfaLqmKFd2BmYARCxGSlQak12BbbYcOg=;
+        b=51v9PtkCpiRH5GlwNsjRime0balz+adTZ6TzKJCqbtOS5FhUm+NqXUv1Ed2/v+8zft
+         WxVKPv9GaZeDfGEo6KK0PR1yh4W6CA7DEEpuiOYinGrPf3hlo5ad3CE/BdUqcBqEeJND
+         kP6AfH5j8MrrFDQvj02/VS5GHL52Kx9D8RHT0PSdVWPvsGBwk/3GJ4Bpo6rLgUfCdV5W
+         Z//78WczzxSgWzoY9txlCSqBKM0WrWheM3MogE/RIQA13yT5KHUO6f/p7iT7l8WWO1Pi
+         DksAy+8G/fxLz7RzKzqLeyOw83Y2FLxsHEFTaRjSoI+p2eH13H8xuPziHCWiDypcMAXw
+         y4yg==
+X-Gm-Message-State: ACrzQf2KxKxaOKEPz9xLHnpMP6b4rWpfk7rc2oozfJs8P8ZNw/25cYr3
+        yJwNg+JnS5CuiX4TLgyEkoECs1kcYXf8kOqohacxiQ==
+X-Google-Smtp-Source: AMsMyM5g/pjLAFTsrWxFtxYuiT4NfQV+k7wHnbrGj/E75UsGHsZkI9jrfYEruVIr5A5+J1JQpsDF4437msoLxkoePg0=
+X-Received: by 2002:adf:dd8f:0:b0:22a:84ab:4be3 with SMTP id
+ x15-20020adfdd8f000000b0022a84ab4be3mr6526914wrl.40.1663975314553; Fri, 23
+ Sep 2022 16:21:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923173142.805896-1-namhyung@kernel.org> <20220923173142.805896-4-namhyung@kernel.org>
+In-Reply-To: <20220923173142.805896-4-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 23 Sep 2022 16:21:42 -0700
+Message-ID: <CAP-5=fVZhzUiauL58E7Usy4O15-WuYQkKxOwDrS4f-fy5kNVFw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] perf tools: Add 'addr' sort key
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 05:14:11PM -0600, Logan Gunthorpe wrote:
-> 
-> 
-> On 2022-09-23 17:07, Jason Gunthorpe wrote:
-> > On Fri, Sep 23, 2022 at 05:01:26PM -0600, Logan Gunthorpe wrote:
-> >>
-> >>
-> >>
-> >> On 2022-09-23 16:58, Jason Gunthorpe wrote:
-> >>> On Fri, Sep 23, 2022 at 02:11:03PM -0600, Logan Gunthorpe wrote:
-> >>>>
-> >>>>
-> >>>> On 2022-09-23 13:53, Jason Gunthorpe wrote:
-> >>>>> On Fri, Sep 23, 2022 at 01:08:31PM -0600, Logan Gunthorpe wrote:
-> >>>>> I'm encouraging Dan to work on better infrastructure in pgmap core
-> >>>>> because every pgmap implementation has this issue currently.
-> >>>>>
-> >>>>> For that reason it is probably not so relavent to this series.
-> >>>>>
-> >>>>> Perhaps just clarify in the commit message that the FOLL_LONGTERM
-> >>>>> restriction is to copy DAX until the pgmap page refcounts are fixed.
-> >>>>
-> >>>> Ok, I'll add that note.
-> >>>>
-> >>>> Per the fix for the try_grab_page(), to me it doesn't fit well in 
-> >>>> try_grab_page() without doing a bunch of cleanup to change the
-> >>>> error handling, and the same would have to be added to try_grab_folio().
-> >>>> So I think it's better to leave it where it was, but move it below the 
-> >>>> respective grab calls. Does the incremental patch below look correct?
-> >>>
-> >>> Oh? I was thinking of just a very simple thing:
-> >>
-> >> Really would like it to return -EREMOTEIO instead of -ENOMEM as that's the
-> >> error used for bad P2PDMA page everywhere.
-> > 
-> > I'd rather not see GUP made more fragile just for that..
-> 
-> Not sure how that's more fragile... You're way seems more dangerous given
-> the large number of call sites we are adding it to when it might not
-> apply.
+On Fri, Sep 23, 2022 at 10:32 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Sometimes users want to see actual (virtual) address of sampled instructions.
+> Add a new 'addr' sort key to display the raw addresses.
+>
+>   $ perf record -o- true | perf report -i- -s addr
+>   # To display the perf.data header info, please use --header/--header-only options.
+>   #
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.000 MB - ]
+>   #
+>   # Total Lost Samples: 0
+>   #
+>   # Samples: 12  of event 'cycles:u'
+>   # Event count (approx.): 252512
+>   #
+>   # Overhead  Address
+>   # ........  ..................
+>   #
+>       42.96%  0x7f96f08443d7
+>       29.55%  0x7f96f0859b50
+>       14.76%  0x7f96f0852e02
+>        8.30%  0x7f96f0855028
+>        4.43%  0xffffffff8de01087
+>
+> Note that it just compares and displays the sample ip.  Each process can
+> have a different memory layout and the ip will be different even if they run
+> the same binary.  So this sort key is mostly meaningful for per-process
+> profile data.
+>
+> Cc: Stephane Eranian <eranian@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-No, that is the point, it *always* applies. A devmap struct page of
-the wrong type should never exit gup, from any path, no matter what.
+Acked-by: Ian Rogers <irogers@google.com>
 
-We have two central functions that validate a page is OK to return,
-that *everyone* must call.
+Thanks,
+Ian
 
-If you don't put it there then we will probably miss copying it into a
-call site eventually.
-
-> > try_grab_page() calls folio_ref_inc(), that is only legal if it knows
-> > the page is already a valid pointer under the PTLs, so it is safe to
-> > check the pgmap as well.
-> 
-> My point is it doesn't get a reference or a pin unless FOLL_PIN or FOLL_GET is
-> set and the documentation states that neither might be set, in which case 
-> folio_ref_inc() will not be called...
-
-That isn't how GUP is structured, all the calls to try_grab_page() are
-in places where PIN/GET might be set and are safe for that usage.
-
-If we know PIN/GET is not set then we don't even need to call the
-function because it is a NOP.
-
-Jason
+> ---
+>  tools/perf/Documentation/perf-report.txt |  3 +-
+>  tools/perf/util/hist.c                   |  1 +
+>  tools/perf/util/hist.h                   |  1 +
+>  tools/perf/util/sort.c                   | 38 ++++++++++++++++++++++++
+>  tools/perf/util/sort.h                   |  1 +
+>  5 files changed, 43 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+> index 24efc0583c93..4533db2ee56b 100644
+> --- a/tools/perf/Documentation/perf-report.txt
+> +++ b/tools/perf/Documentation/perf-report.txt
+> @@ -73,7 +73,7 @@ OPTIONS
+>         Sort histogram entries by given key(s) - multiple keys can be specified
+>         in CSV format.  Following sort keys are available:
+>         pid, comm, dso, symbol, parent, cpu, socket, srcline, weight,
+> -       local_weight, cgroup_id.
+> +       local_weight, cgroup_id, addr.
+>
+>         Each key has following meaning:
+>
+> @@ -114,6 +114,7 @@ OPTIONS
+>         - local_ins_lat: Local instruction latency version
+>         - p_stage_cyc: On powerpc, this presents the number of cycles spent in a
+>           pipeline stage. And currently supported only on powerpc.
+> +       - addr: (Full) virtual address of the sampled instruction
+>
+>         By default, comm, dso and symbol keys are used.
+>         (i.e. --sort comm,dso,symbol)
+> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> index 06f5dbf213ad..17a05e943b44 100644
+> --- a/tools/perf/util/hist.c
+> +++ b/tools/perf/util/hist.c
+> @@ -215,6 +215,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
+>         hists__new_col_len(hists, HISTC_GLOBAL_INS_LAT, 13);
+>         hists__new_col_len(hists, HISTC_LOCAL_P_STAGE_CYC, 13);
+>         hists__new_col_len(hists, HISTC_GLOBAL_P_STAGE_CYC, 13);
+> +       hists__new_col_len(hists, HISTC_ADDR, BITS_PER_LONG / 4 + 2);
+>
+>         if (symbol_conf.nanosecs)
+>                 hists__new_col_len(hists, HISTC_TIME, 16);
+> diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
+> index c7a7a3fa0b87..ebd8a8f783ee 100644
+> --- a/tools/perf/util/hist.h
+> +++ b/tools/perf/util/hist.h
+> @@ -79,6 +79,7 @@ enum hist_column {
+>         HISTC_GLOBAL_P_STAGE_CYC,
+>         HISTC_ADDR_FROM,
+>         HISTC_ADDR_TO,
+> +       HISTC_ADDR,
+>         HISTC_NR_COLS, /* Last entry */
+>  };
+>
+> diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+> index 6d5588e80935..2e7330867e2e 100644
+> --- a/tools/perf/util/sort.c
+> +++ b/tools/perf/util/sort.c
+> @@ -1948,6 +1948,43 @@ struct sort_entry sort_dso_size = {
+>         .se_width_idx   = HISTC_DSO_SIZE,
+>  };
+>
+> +/* --sort dso_size */
+> +
+> +static int64_t
+> +sort__addr_cmp(struct hist_entry *left, struct hist_entry *right)
+> +{
+> +       u64 left_ip = left->ip;
+> +       u64 right_ip = right->ip;
+> +       struct map *left_map = left->ms.map;
+> +       struct map *right_map = right->ms.map;
+> +
+> +       if (left_map)
+> +               left_ip = left_map->unmap_ip(left_map, left_ip);
+> +       if (right_map)
+> +               right_ip = right_map->unmap_ip(right_map, right_ip);
+> +
+> +       return _sort__addr_cmp(left_ip, right_ip);
+> +}
+> +
+> +static int hist_entry__addr_snprintf(struct hist_entry *he, char *bf,
+> +                                    size_t size, unsigned int width)
+> +{
+> +       u64 ip = he->ip;
+> +       struct map *map = he->ms.map;
+> +
+> +       if (map)
+> +               ip = map->unmap_ip(map, ip);
+> +
+> +       return repsep_snprintf(bf, size, "%-#*llx", width, ip);
+> +}
+> +
+> +struct sort_entry sort_addr = {
+> +       .se_header      = "Address",
+> +       .se_cmp         = sort__addr_cmp,
+> +       .se_snprintf    = hist_entry__addr_snprintf,
+> +       .se_width_idx   = HISTC_ADDR,
+> +};
+> +
+>
+>  struct sort_dimension {
+>         const char              *name;
+> @@ -1997,6 +2034,7 @@ static struct sort_dimension common_sort_dimensions[] = {
+>         DIM(SORT_GLOBAL_INS_LAT, "ins_lat", sort_global_ins_lat),
+>         DIM(SORT_LOCAL_PIPELINE_STAGE_CYC, "local_p_stage_cyc", sort_local_p_stage_cyc),
+>         DIM(SORT_GLOBAL_PIPELINE_STAGE_CYC, "p_stage_cyc", sort_global_p_stage_cyc),
+> +       DIM(SORT_ADDR, "addr", sort_addr),
+>  };
+>
+>  #undef DIM
+> diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
+> index af14eb46c2b6..04ff8b61a2a7 100644
+> --- a/tools/perf/util/sort.h
+> +++ b/tools/perf/util/sort.h
+> @@ -236,6 +236,7 @@ enum sort_type {
+>         SORT_GLOBAL_INS_LAT,
+>         SORT_LOCAL_PIPELINE_STAGE_CYC,
+>         SORT_GLOBAL_PIPELINE_STAGE_CYC,
+> +       SORT_ADDR,
+>
+>         /* branch stack specific sort keys */
+>         __SORT_BRANCH_STACK,
+> --
+> 2.37.3.998.g577e59143f-goog
+>
