@@ -2,176 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982B85E8015
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383FA5E8017
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiIWQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S231534AbiIWQmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiIWQlv (ORCPT
+        with ESMTP id S231652AbiIWQmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:41:51 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC9414DAE4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:41:22 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id b23so659277pfp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=CCcB2IivbnzKK3Fhxx9t3mrn1ZxfWfp+R3o89Fj/9Xo=;
-        b=Mx88uG+fKQFt0HG6PwPXEdC0yY3iRmRPGPewaxChkzvXtJKUGeYM/pI1BU+Y8URAEZ
-         EC2SuutpN7N6YweCdakgehETgcNl4RDNZKYrw5+Su46g8RDWjVB3JeNuJ65ktUfgcI7K
-         f+McPnrD/zMU/7WRaOOaDcMmDCBnlCaz7AU1U=
+        Fri, 23 Sep 2022 12:42:13 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947781B0E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:41:38 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id a9-20020a056e0208a900b002f6b21181f5so587468ilt.10
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:41:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=CCcB2IivbnzKK3Fhxx9t3mrn1ZxfWfp+R3o89Fj/9Xo=;
-        b=iIovvEJzV248u8aMtTqIE+uyOAjNhpdRxWERDvFt0kifSEnSEMQpEtGxtPvEJkDyda
-         E+3XIQKeye7dWBCjf7apnfPYQtHDlHWVl6T3rznMjJHbwyXgyopc51VqFsWhuHevX7rE
-         C7BeS9v2aJUcFdx2vY0Rct27QPINC9txSlGn5KuEJgdYnOQw/ltDrY791Otkhl1DZeBL
-         su7J+DITbXCxSg/WfVmWsFiuX112Cl6kRcKFk9BceWpSqC6L8qoZSv4P6QjVWS9kt1Mn
-         S0+/BAQ/nBSwaHtfycnQjkzbT1o7pee34Uh+FLM/PqwB1jLtnym6vti7uU/v1tdis49a
-         akbA==
-X-Gm-Message-State: ACrzQf3XhYv0gMbpsnMcxPJCEDU6yJfUSJDwV2kf6v7maHvwo+hC4MGq
-        rYxMJc7oXOZSrcE+0PkP9EMT261t5oxObQ==
-X-Google-Smtp-Source: AMsMyM7AaNJiN1wSNNbkFT/PjzVg7VYkaKDZs/IqSwZA6DAcrWp/Z12rHxuCW0NtyIjOiQxgwZLqmw==
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id s201-20020a632cd2000000b0041c590167d8mr8323352pgs.365.1663951281340;
-        Fri, 23 Sep 2022 09:41:21 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902d48500b0017684444f57sm6332171plg.224.2022.09.23.09.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 09:41:20 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:41:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra
- comparison
-Message-ID: <202209230932.1FA2FF39@keescook>
-References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com>
- <20220923154001.4074849-1-Jason@zx2c4.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TLGBQepgSmBhiUnRTqRvQ1LUISgDXrjWwuExeNYIVI0=;
+        b=UQ2cygIFkAaAVCJxp1c5MTykvvrqs45uh14/dZJGoZQaGpdolQChyVVJVTK2g4gR7q
+         ETUdDxE9XH4SHK0oYSZlQr1pXSFecjUVcvj7mX0++wRYigDNidEFZyeWCYtDU096+Fa4
+         eSnBT82xr+M87b9+cR8++CrfGoQhnNXcm4rHtUU3r0chO6dGn6HbahizP4UG23a6IkvE
+         aTY7CJovGRVn+DhNvLAn0hPImRjhCiFExcBZVVzm3bw5TR2lzoQJFg7dwkyvkty++zVC
+         ugkrPGuLWnWg198ob3FGyDsCaHdYPeak8imOYcbZHkcXH1HpvQnxTMU7w2mS/aGpiz0Q
+         pBnw==
+X-Gm-Message-State: ACrzQf34oZuwlWc4JhQffIrpASNw1sfACxZc9kwiztIPpiSSC1V56AD8
+        y3iyfzIy+JLdN2hTQLjeY9ergX22tjD+MLIhL/zFT+1IIIaY
+X-Google-Smtp-Source: AMsMyM7EPi6wRy1BkXonok+Y1PmI36LaeQR/PlxmEDTDxd/nsU/E+SrLBUQm/BLXe77C0HncoK6RgRVyCep0/zAAjSdcp+S1PudF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923154001.4074849-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1601:b0:6a1:d963:4fc with SMTP id
+ x1-20020a056602160100b006a1d96304fcmr4235876iow.67.1663951297446; Fri, 23 Sep
+ 2022 09:41:37 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 09:41:37 -0700
+In-Reply-To: <0000000000005ec0e805e9575c11@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000020c4805e95ada45@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_sendrecv_fail
+From:   syzbot <syzbot+4c597a574a3f5a251bda@syzkaller.appspotmail.com>
+To:     Kernel-team@fb.com, asml.silence@gmail.com, axboe@kernel.dk,
+        dylany@fb.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 05:40:01PM +0200, Jason A. Donenfeld wrote:
-> Currently the clamp algorithm does:
-> 
-> 	if (val > hi)
-> 		val = hi;
-> 	if (val < lo)
-> 		val = lo;
-> 
-> But since hi > lo by definition, this can be made more efficient with:
-> 
-> 	if (val > hi)
-> 		val = hi;
-> 	else if (val < lo)
-> 		val = lo;
-> 
-> So fix up the clamp and clamp_t functions to do this, adding the same
-> argument checking as for min and min_t.
-> 
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  include/linux/minmax.h | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-> index 5433c08fcc68..30e2e2cd0f44 100644
-> --- a/include/linux/minmax.h
-> +++ b/include/linux/minmax.h
-> @@ -37,6 +37,27 @@
->  		__cmp(x, y, op), \
->  		__cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
->  
-> +#define __clamp(val, lo, hi)							\
-> +	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
-> +
-> +#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
-> +		typeof(val) unique_val = (val);					\
-> +		typeof(lo) unique_lo = (lo);					\
-> +		typeof(hi) unique_hi = (hi);					\
-> +		__clamp(unique_val, unique_lo, unique_hi); })
-> +
-> +#define __clamp_input_check(lo, hi)						\
-> +        (BUILD_BUG_ON_ZERO(__builtin_choose_expr(				\
-> +                __is_constexpr((lo) > (hi)), (lo) > (hi), false)))
+syzbot has found a reproducer for the following issue on:
 
-Nice. :)
+HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=158bdb90880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
+dashboard link: https://syzkaller.appspot.com/bug?extid=4c597a574a3f5a251bda
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d95fd8880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d0c2ef080000
 
-> +
-> +#define __careful_clamp(val, lo, hi) ({						\
-> +	__clamp_input_check(lo, hi) + 						\
-> +	__builtin_choose_expr(__typecheck(val, lo) && __typecheck(val, hi) &&	\
-> +			      __typecheck(hi, lo) && __is_constexpr(val) && 	\
-> +			      __is_constexpr(lo) && __is_constexpr(hi),		\
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4c597a574a3f5a251bda@syzkaller.appspotmail.com
 
-I really like it! I might have used:
+==================================================================
+BUG: KASAN: use-after-free in io_sendrecv_fail+0x3b0/0x3e0 io_uring/net.c:1221
+Write of size 8 at addr ffff888021163080 by task syz-executor258/3615
 
-	__safe_cmp(val, lo) && __safe_cmp(val, hi)
+CPU: 1 PID: 3615 Comm: syz-executor258 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:395
+ kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
+ io_sendrecv_fail+0x3b0/0x3e0 io_uring/net.c:1221
+ io_req_complete_failed+0x155/0x1b0 io_uring/io_uring.c:873
+ io_drain_req io_uring/io_uring.c:1648 [inline]
+ io_queue_sqe_fallback.cold+0x29f/0x788 io_uring/io_uring.c:1931
+ io_submit_sqe io_uring/io_uring.c:2160 [inline]
+ io_submit_sqes+0x1180/0x1df0 io_uring/io_uring.c:2276
+ __do_sys_io_uring_enter+0xac6/0x2410 io_uring/io_uring.c:3216
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f8db2983dc9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffe363f568 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f8db2983dc9
+RDX: 0000000000000000 RSI: 0000000000002a6e RDI: 0000000000000003
+RBP: 00007f8db2947f70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8db2948000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-instead of the "open coded" __typecheck()s and __is_constexpr()s, but
-it's the same result.
+Allocated by task 3615:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ __do_kmalloc_node mm/slab_common.c:934 [inline]
+ __kmalloc+0x54/0xc0 mm/slab_common.c:947
+ kmalloc include/linux/slab.h:564 [inline]
+ io_alloc_async_data+0x9b/0x160 io_uring/io_uring.c:1590
+ io_msg_alloc_async io_uring/net.c:138 [inline]
+ io_msg_alloc_async_prep io_uring/net.c:147 [inline]
+ io_sendmsg_prep_async+0x19b/0x3c0 io_uring/net.c:221
+ io_req_prep_async+0x1d9/0x300 io_uring/io_uring.c:1613
+ io_drain_req io_uring/io_uring.c:1645 [inline]
+ io_queue_sqe_fallback.cold+0x281/0x788 io_uring/io_uring.c:1931
+ io_submit_sqe io_uring/io_uring.c:2160 [inline]
+ io_submit_sqes+0x1180/0x1df0 io_uring/io_uring.c:2276
+ __do_sys_io_uring_enter+0xac6/0x2410 io_uring/io_uring.c:3216
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> +		__clamp(val, lo, hi),						\
-> +		__clamp_once(val, lo, hi, __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
+Freed by task 3615:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1669 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1695
+ slab_free mm/slub.c:3599 [inline]
+ __kmem_cache_free+0xab/0x3b0 mm/slub.c:3612
+ io_sendrecv_fail+0x2a4/0x3e0 io_uring/net.c:1220
+ io_req_complete_failed+0x155/0x1b0 io_uring/io_uring.c:873
+ io_drain_req io_uring/io_uring.c:1648 [inline]
+ io_queue_sqe_fallback.cold+0x29f/0x788 io_uring/io_uring.c:1931
+ io_submit_sqe io_uring/io_uring.c:2160 [inline]
+ io_submit_sqes+0x1180/0x1df0 io_uring/io_uring.c:2276
+ __do_sys_io_uring_enter+0xac6/0x2410 io_uring/io_uring.c:3216
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-*complaint about line being >100 characters, but I don't really care* If
-anyone is really bothered, this looks fine, too:
+The buggy address belongs to the object at ffff888021163000
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 128 bytes inside of
+ 512-byte region [ffff888021163000, ffff888021163200)
 
-		__clamp_once(val, lo, hi,					\
-			     __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
+The buggy address belongs to the physical page:
+page:ffffea0000845800 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffffea0000854700 pfn:0x21160
+head:ffffea0000845800 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888011841c80 dead000080100010 0000000000000000
+raw: ffffea0000854700 dead000000000002 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1501, tgid 1501 (kworker/u4:5), ts 8710207687, free_ts 0
+ prep_new_page mm/page_alloc.c:2538 [inline]
+ get_page_from_freelist+0x1092/0x2d20 mm/page_alloc.c:4287
+ __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5546
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2280
+ alloc_slab_page mm/slub.c:1739 [inline]
+ allocate_slab+0x213/0x300 mm/slub.c:1884
+ new_slab mm/slub.c:1937 [inline]
+ ___slab_alloc+0xac1/0x1430 mm/slub.c:3119
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3217
+ slab_alloc_node mm/slub.c:3302 [inline]
+ __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3375
+ kmalloc_trace+0x22/0x60 mm/slab_common.c:1014
+ kmalloc include/linux/slab.h:559 [inline]
+ kzalloc include/linux/slab.h:695 [inline]
+ alloc_bprm+0x51/0x900 fs/exec.c:1510
+ kernel_execve+0xab/0x500 fs/exec.c:1969
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:113
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page_owner free stack trace missing
 
-*shrug*
+Memory state around the buggy address:
+ ffff888021162f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888021163000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888021163080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff888021163100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888021163180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-> +
->  /**
->   * min - return minimum of two values of the same or compatible types
->   * @x: first value
-> @@ -86,7 +107,7 @@
->   * This macro does strict typechecking of @lo/@hi to make sure they are of the
->   * same type as @val.  See the unnecessary pointer comparisons.
->   */
-> -#define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
-> +#define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
->  
->  /*
->   * ..and if you can't take the strict
-> @@ -121,7 +142,7 @@
->   * This macro does no typechecking and uses temporary variables of type
->   * @type to make all the comparisons.
->   */
-> -#define clamp_t(type, val, lo, hi) min_t(type, max_t(type, val, lo), hi)
-> +#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
->  
->  /**
->   * clamp_val - return a value clamped to a given range using val's type
-> -- 
-> 2.37.3
-> 
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
-I can take this unless akpm wants it?
-
--- 
-Kees Cook
