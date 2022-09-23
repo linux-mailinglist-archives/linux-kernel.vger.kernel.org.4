@@ -2,98 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5745E8155
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F9E5E8159
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiIWSC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S232721AbiIWSCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbiIWSB4 (ORCPT
+        with ESMTP id S232542AbiIWSB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 14:01:56 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3BF13B020
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:01:50 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id s10so915939ljp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=+eIR6AfSTB8DWh5+B5Z4YqWXu7teRvEJ4ZS7gggMip4=;
-        b=WyGlQEwEVC+tbmNABQhslxc8Eq/t4QW6tdtnfrV0L3vKr42INmBi8oqJZp0L5EwgH4
-         Dz9AeBx07zFcoHrl3Sl0fD+QOy+UqqbmdsfuzIMWruhO4/bTKq7Wy+sfBqGazpIgPYOV
-         Qh5mWNZNqbfSoi2Y7IpYHO94/d6DmJVVqRa0kV8sMAZeDFst18pIaD+4t9QrduTdr6qb
-         iaXKyAyKql1VcTgbimy/Vg4EEr3RjUMLtCs5IecHOURQCKG3ZpJBGTG8/SrzXIXjFnk4
-         Y/iEUX05ETv8n+FJcI0bt7aF5FXx9mRBAC6uCwBomXAAkTuvznH/U42mtxzwRBy5ytzs
-         GMoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+eIR6AfSTB8DWh5+B5Z4YqWXu7teRvEJ4ZS7gggMip4=;
-        b=G9o9j7HvgP1xb8eYlX2KKe5uQfgJY5rIyrd+cbNs8JUGxOiy3Ieg1IYcdNHmDQ4tMZ
-         zYjGvGG2jcKHDevjNd4iSFpmXW1exKxmlQ0vC80dJsH5WFF1+8srYMh4RKM44g8ahzod
-         SPS/exy/8ZQ6Qmk+d9zZSDbNYhwZpyQ6wMqdXTsZNvyqanWmsCXQWlQo2g4ev5Wf7zER
-         /v0fZZIm+oJmZz+BBCZaL9hw1Tw8vPCjjMdOegFSwJjT1U5uYpgLcAvwhPhT9ef6z2MC
-         DyEbG9syQtS7wb1KjTKi1hr0H9hO+bBnlQ5VDF1dQN5RWO+68YTmcvavn7ufpnuW0YUI
-         6Vyw==
-X-Gm-Message-State: ACrzQf300nhxzHUxZdpyzoEUZNznK32aNXDK3du+KV7RccG44piLSaCS
-        LK7VWv2Qz+4+WpTzseJC4B3Jyw==
-X-Google-Smtp-Source: AMsMyM4XyRJvK7ry06yCnbRgnXp4sD04RCyfa2wfONI+pVCcMJ1YFcv8qzXroxpJS9nFsIjIdLvJ7g==
-X-Received: by 2002:a2e:9214:0:b0:26c:5abd:93af with SMTP id k20-20020a2e9214000000b0026c5abd93afmr3308958ljg.294.1663956108255;
-        Fri, 23 Sep 2022 11:01:48 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a8-20020a05651c010800b0026c3975f488sm1483521ljb.26.2022.09.23.11.01.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 11:01:47 -0700 (PDT)
-Message-ID: <4e52f4ac-4073-16a1-803d-d29e1708f05e@linaro.org>
-Date:   Fri, 23 Sep 2022 20:01:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684513B02B;
+        Fri, 23 Sep 2022 11:01:50 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:01:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663956108;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RP33hmU47JCBRwoHwo7pdXT4kEvbG5wa9NDdI5mr7kI=;
+        b=NUU5ob5iKaAwbK5dI1fnRorO//SdGZ+jI8WrIhCjA20uac1gMbRxS1VljH/KlcHHHs9lD5
+        jRjpjxhwGTDqs10bYA1YpUnWChB2SeppTzSJ0XOJah+74RTeCI723k5YLUoS0m7nYR/Cow
+        4eb5V+PFSCsCHAMjGhOpGB/DYGoGYuZr+QA8yKqUs9om/JqI6RO0D6MTIVycyDvimaoNCr
+        tRaGm4BrIwkvCKrdmNMxwHfBt48YEO65YacPUSKfHndACk1TdxAyuNP48PMyeKfVaFfaBW
+        hkNH68EvxjlcQLu8ggJ8BmMeFBCCP6TpgKrThWdAas3v2mBfH2MWiqAKls1hBQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663956108;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RP33hmU47JCBRwoHwo7pdXT4kEvbG5wa9NDdI5mr7kI=;
+        b=5Cmub1qeXiASyRFY1Y40j6gsOZmCXK0Dr7u67Vg5GLLrdwn53UTE3UJedoMXbKMTTcqt8E
+        5BpNj7o26OnvJJBQ==
+From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cache] x86/resctrl: Allow per-rmid arch private storage to be reset
+Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220921143603.175195-1-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220921143603.175195-1-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220902154829.30399-15-james.morse@arm.com>
+References: <20220902154829.30399-15-james.morse@arm.com>
+MIME-Version: 1.0
+Message-ID: <166395610745.401.14525671499008071933.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 16:36, Viorel Suman (OSS) wrote:
-> From: Viorel Suman <viorel.suman@nxp.com>
-> 
-> Sync defines with the latest available SCFW kit version 1.13.0,
-> may be found at the address below:
-> 
-> https://www.nxp.com/webapp/Download?colCode=L5.15.32_2.0.0_SCFWKIT-1.13.0&appType=license
+The following commit has been merged into the x86/cache branch of tip:
 
+Commit-ID:     fea62d370d7a1ba288d71d0cae7ad47c2a02b839
+Gitweb:        https://git.kernel.org/tip/fea62d370d7a1ba288d71d0cae7ad47c2a02b839
+Author:        James Morse <james.morse@arm.com>
+AuthorDate:    Fri, 02 Sep 2022 15:48:22 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 23 Sep 2022 12:49:04 +02:00
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+x86/resctrl: Allow per-rmid arch private storage to be reset
 
-Best regards,
-Krzysztof
+To abstract the rmid counters into a helper that returns the number
+of bytes counted, architecture specific per-rmid state is needed.
 
+It needs to be possible to reset this hidden state, as the values
+may outlive the life of an rmid, or the mount time of the filesystem.
+
+mon_event_read() is called with first = true when an rmid is first
+allocated in mkdir_mondata_subdir(). Add resctrl_arch_reset_rmid()
+and call it from __mon_event_count()'s rr->first check.
+
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Jamie Iles <quic_jiles@quicinc.com>
+Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Tested-by: Xin Hao <xhao@linux.alibaba.com>
+Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+Link: https://lore.kernel.org/r/20220902154829.30399-15-james.morse@arm.com
+---
+ arch/x86/kernel/cpu/resctrl/internal.h | 18 +++----------
+ arch/x86/kernel/cpu/resctrl/monitor.c  | 35 ++++++++++++++++++++++++-
+ include/linux/resctrl.h                | 23 ++++++++++++++++-
+ 3 files changed, 62 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 4de8e5b..b34a140 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -22,14 +22,6 @@
+ 
+ #define L2_QOS_CDP_ENABLE		0x01ULL
+ 
+-/*
+- * Event IDs are used to program IA32_QM_EVTSEL before reading event
+- * counter from IA32_QM_CTR
+- */
+-#define QOS_L3_OCCUP_EVENT_ID		0x01
+-#define QOS_L3_MBM_TOTAL_EVENT_ID	0x02
+-#define QOS_L3_MBM_LOCAL_EVENT_ID	0x03
+-
+ #define CQM_LIMBOCHECK_INTERVAL	1000
+ 
+ #define MBM_CNTR_WIDTH_BASE		24
+@@ -73,7 +65,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
+  * @list:		entry in &rdt_resource->evt_list
+  */
+ struct mon_evt {
+-	u32			evtid;
++	enum resctrl_event_id	evtid;
+ 	char			*name;
+ 	struct list_head	list;
+ };
+@@ -90,9 +82,9 @@ struct mon_evt {
+ union mon_data_bits {
+ 	void *priv;
+ 	struct {
+-		unsigned int rid	: 10;
+-		unsigned int evtid	: 8;
+-		unsigned int domid	: 14;
++		unsigned int rid		: 10;
++		enum resctrl_event_id evtid	: 8;
++		unsigned int domid		: 14;
+ 	} u;
+ };
+ 
+@@ -100,7 +92,7 @@ struct rmid_read {
+ 	struct rdtgroup		*rgrp;
+ 	struct rdt_resource	*r;
+ 	struct rdt_domain	*d;
+-	int			evtid;
++	enum resctrl_event_id	evtid;
+ 	bool			first;
+ 	u64			val;
+ };
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index 2d81b6c..e975514 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -137,7 +137,37 @@ static inline struct rmid_entry *__rmid_entry(u32 rmid)
+ 	return entry;
+ }
+ 
+-static u64 __rmid_read(u32 rmid, u32 eventid)
++static struct arch_mbm_state *get_arch_mbm_state(struct rdt_hw_domain *hw_dom,
++						 u32 rmid,
++						 enum resctrl_event_id eventid)
++{
++	switch (eventid) {
++	case QOS_L3_OCCUP_EVENT_ID:
++		return NULL;
++	case QOS_L3_MBM_TOTAL_EVENT_ID:
++		return &hw_dom->arch_mbm_total[rmid];
++	case QOS_L3_MBM_LOCAL_EVENT_ID:
++		return &hw_dom->arch_mbm_local[rmid];
++	}
++
++	/* Never expect to get here */
++	WARN_ON_ONCE(1);
++
++	return NULL;
++}
++
++void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
++			     u32 rmid, enum resctrl_event_id eventid)
++{
++	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
++	struct arch_mbm_state *am;
++
++	am = get_arch_mbm_state(hw_dom, rmid, eventid);
++	if (am)
++		memset(am, 0, sizeof(*am));
++}
++
++static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
+ {
+ 	u64 val;
+ 
+@@ -291,6 +321,9 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
+ 	struct mbm_state *m;
+ 	u64 chunks, tval;
+ 
++	if (rr->first)
++		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
++
+ 	tval = __rmid_read(rmid, rr->evtid);
+ 	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL)) {
+ 		return tval;
+diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+index f4c9101..8184567 100644
+--- a/include/linux/resctrl.h
++++ b/include/linux/resctrl.h
+@@ -32,6 +32,16 @@ enum resctrl_conf_type {
+ 
+ #define CDP_NUM_TYPES	(CDP_DATA + 1)
+ 
++/*
++ * Event IDs, the values match those used to program IA32_QM_EVTSEL before
++ * reading IA32_QM_CTR on RDT systems.
++ */
++enum resctrl_event_id {
++	QOS_L3_OCCUP_EVENT_ID		= 0x01,
++	QOS_L3_MBM_TOTAL_EVENT_ID	= 0x02,
++	QOS_L3_MBM_LOCAL_EVENT_ID	= 0x03,
++};
++
+ /**
+  * struct resctrl_staged_config - parsed configuration to be applied
+  * @new_ctrl:		new ctrl value to be loaded
+@@ -210,4 +220,17 @@ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
+ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
+ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
+ 
++/**
++ * resctrl_arch_reset_rmid() - Reset any private state associated with rmid
++ *			       and eventid.
++ * @r:		The domain's resource.
++ * @d:		The rmid's domain.
++ * @rmid:	The rmid whose counter values should be reset.
++ * @eventid:	The eventid whose counter values should be reset.
++ *
++ * This can be called from any CPU.
++ */
++void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
++			     u32 rmid, enum resctrl_event_id eventid);
++
+ #endif /* _RESCTRL_H */
