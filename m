@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FBB5E79A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765095E79A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiIWLcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S231406AbiIWLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiIWLcv (ORCPT
+        with ESMTP id S230327AbiIWLeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:32:51 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A059812DEB7;
-        Fri, 23 Sep 2022 04:32:49 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MYqj50GSCzl15D;
-        Fri, 23 Sep 2022 19:31:05 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgDXKXNemS1javcXBQ--.14144S3;
-        Fri, 23 Sep 2022 19:32:47 +0800 (CST)
-Subject: Re: [PATCH v3 3/5] block, bfq: don't disable wbt if
- CONFIG_BFQ_GROUP_IOSCHED is disabled
-To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, paolo.valente@linaro.org,
-        axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220922113558.1085314-1-yukuai3@huawei.com>
- <20220922113558.1085314-4-yukuai3@huawei.com>
- <Yy10vjnxAvca8Ee1@infradead.org>
- <988a86f2-e960-ba59-4d41-f4c8a6345ee9@huaweicloud.com>
- <20220923100659.a3atdanlvygffuxt@quack3>
- <95998ae6-8bbf-b438-801b-7033ceaf9c36@huaweicloud.com>
- <20220923110354.czvzm6rjm7mtqyh3@quack3>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <9edbfe1a-b4ba-7967-4287-1610415f6449@huaweicloud.com>
-Date:   Fri, 23 Sep 2022 19:32:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 23 Sep 2022 07:34:25 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E263712DEF0;
+        Fri, 23 Sep 2022 04:34:23 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id AAA691883FE5;
+        Fri, 23 Sep 2022 11:34:20 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 96BC42500261;
+        Fri, 23 Sep 2022 11:34:20 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 89B6B9EC0005; Fri, 23 Sep 2022 11:34:15 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-In-Reply-To: <20220923110354.czvzm6rjm7mtqyh3@quack3>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDXKXNemS1javcXBQ--.14144S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr1fuFWkJFW7XFW8Zry3XFb_yoW5Wr15p3
-        4xKay0kF48AryxKwnFvw18Xa4Fyw4xJr47WF1rA3ykAas0vr1xJw4fKa1Y9a4q9r4xGw12
-        yFn8XrZrAr18ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Date:   Fri, 23 Sep 2022 13:34:15 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
+References: <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <546f96aa592aec4d64bdfc45d4618c05@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +83,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jan!
+On 2022-09-21 09:15, Ido Schimmel wrote:
 
-在 2022/09/23 19:03, Jan Kara 写道:
-> Hi Kuai!
-> 
-> On Fri 23-09-22 18:23:03, Yu Kuai wrote:
->> 在 2022/09/23 18:06, Jan Kara 写道:
->>> On Fri 23-09-22 17:50:49, Yu Kuai wrote:
->>>> Hi, Christoph
->>>>
->>>> 在 2022/09/23 16:56, Christoph Hellwig 写道:
->>>>> On Thu, Sep 22, 2022 at 07:35:56PM +0800, Yu Kuai wrote:
->>>>>> wbt and bfq should work just fine if CONFIG_BFQ_GROUP_IOSCHED is disabled.
->>>>>
->>>>> Umm, wouldn't this be something decided at runtime, that is not
->>>>> if CONFIG_BFQ_GROUP_IOSCHED is enable/disable in the kernel build
->>>>> if the hierarchical cgroup based scheduling is actually used for a
->>>>> given device?
->>>>> .
->>>>>
->>>>
->>>> That's a good point,
->>>>
->>>> Before this patch wbt is simply disabled if elevator is bfq.
->>>>
->>>> With this patch, if elevator is bfq while bfq doesn't throttle
->>>> any IO yet, wbt still is disabled unnecessarily.
->>>
->>> It is not really disabled unnecessarily. Have you actually tested the
->>> performance of the combination? I did once and the results were just
->>> horrible (which is I made BFQ just disable wbt by default). The problem is
->>> that blk-wbt assumes certain model of underlying storage stack and hardware
->>> behavior and BFQ just does not fit in that model. For example BFQ wants to
->>> see as many requests as possible so that it can heavily reorder them,
->>> estimate think times of applications, etc. On the other hand blk-wbt
->>> assumes that if request latency gets higher, it means there is too much IO
->>> going on and we need to allow less of "lower priority" IO types to be
->>> submitted. These two go directly against one another and I was easily
->>> observing blk-wbt spiraling down to allowing only very small number of
->>> requests submitted while BFQ was idling waiting for more IO from the
->>> process that was currently scheduled.
->>>
->>
->> Thanks for your explanation, I understand that bfq and wbt should not
->> work together.
->>
->> However, I wonder if CONFIG_BFQ_GROUP_IOSCHED is disabled, or service
->> guarantee is not needed, does the above phenomenon still exist? I find
->> it hard to understand... Perhaps I need to do some test.
-> 
-> Well, BFQ implements for example idling on sync IO queues which is one of
-> the features that upsets blk-wbt. That does not depend on
-> CONFIG_BFQ_GROUP_IOSCHED in any way. Also generally the idea that BFQ
-> assigns storage *time slots* to different processes and IO from other
-> processes is just queued at those times increases IO completion
-> latency (for IOs of processes that are not currently scheduled) and this
-> tends to confuse blk-wbt.
-> 
-I see it now, thanks a lot for your expiations, that really helps a lot.
+> 	# Check blackhole entries can be replaced.
+> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
+> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
+> 	check_fail $? "Blackhole entry found after replacement"
 
-I misunderstand about the how the bfq works. I'll remove this patch in
-next version.
-
-Thanks,
-Kuai
-
-> 								Honza
-> 
+There seems to be a problem with replacing blackhole fdb entries as 
+fdb_find_rcu() does not find the associated fdb entry (addr, vid) and I 
+don't know why that is the case?
 
