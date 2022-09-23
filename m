@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A1B5E7543
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D985E754D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiIWH4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 03:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S230514AbiIWH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 03:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiIWH4B (ORCPT
+        with ESMTP id S231163AbiIWH6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:56:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7F012BDB6;
-        Fri, 23 Sep 2022 00:55:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Fri, 23 Sep 2022 03:58:31 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB5812E407;
+        Fri, 23 Sep 2022 00:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OBb/Vyt/knoHoeVbmT/onk2LeOhkHBZeeIy4HQ7B610=; b=kbx8x+vJdxxg0SYtDk6TZ/8TQ0
+        LRgsxJZK09kxU4gmM2WloCSBDUu4eSWhSD4GWQXXHQTmkESIqSLqInRQCVl+N98wZqz+lvMK7Gohh
+        lGEaPydkRwFl0hvrvnc+OAIp1oT07orwd6jaiouTzuYj/o9bd1VflVdaf42S50eCYqBtezEK8N0qB
+        EI85G4Dzlkg1aWZSVGWmcNplNbVOrJ6Gfn8Fsc8VQexstnwQamqQOirbg+SSMQm1Q4sAIf/3f9NPW
+        lAt1/dKXB7IKFHQLKijTg+0jw5jLSlunoSIHlGlrfgB0hGHgaXQKHv5Ta7qMhuv5en7RHhWppGVK/
+        E6EC9rYA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obdZI-00FAQd-33; Fri, 23 Sep 2022 07:57:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYkwr3K57z4xFt;
-        Fri, 23 Sep 2022 17:55:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663919757;
-        bh=5PmsY0I+WpfQJ1e1B8ggSK+yj8ur7fl3q0NjIItHC9k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DJwMJwqHWUK13ZtEx/VMmNOZ/fjulrP1hgphSZ85+jFSUcndTdyqInuDuHK2/MKJq
-         RvnPtYGn/BfJaYCF3EMOPHvPZcqWuKi+V/KY5TGvtGYnkiCXnS4Elg8jkr63jFFsft
-         Jy7Za8C7WXGhgRtZIMJlrytGtpnS23xaZGCIGWct4RSdkFvufSx686KSjLrWEuOTRe
-         g11ULQ713B3GM98jVV7CuSBjY7f4C47I1RKbHSsmUB1FBt3/GlElplAq2jRIPzj302
-         uUYpNwhoCyna5aWKU9/pn6552G78sdpqiR6XDBNoTzogUxtrJFbvGqocEbn/5+qlh3
-         UIp6LpOr6FT3g==
-Date:   Fri, 23 Sep 2022 17:55:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20220923175554.59431f7b@canb.auug.org.au>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 386193001FD;
+        Fri, 23 Sep 2022 09:57:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1970C207C83B0; Fri, 23 Sep 2022 09:57:51 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 09:57:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andreas Mohr <andi@lisas.de>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
+        puwen@hygon.cn, mario.limonciello@amd.com, rui.zhang@intel.com,
+        gpiccoli@igalia.com, daniel.lezcano@linaro.org,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com,
+        Calvin Ong <calvin.ong@amd.com>, stable@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
+Message-ID: <Yy1m/5topydhbWS2@hirez.programming.kicks-ass.net>
+References: <20220921063638.2489-1-kprateek.nayak@amd.com>
+ <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
+ <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
+ <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
+ <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
+ <YyzBLc+OFIN2BMz5@rhlx01.hs-esslingen.de>
+ <4d61b9c0-ee00-c5f6-bef1-622b80c79714@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vd1HxF/OXtA5/lvB_oLqdgK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d61b9c0-ee00-c5f6-bef1-622b80c79714@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vd1HxF/OXtA5/lvB_oLqdgK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 22, 2022 at 02:21:31PM -0700, Dave Hansen wrote:
+> FWIW, I'd much rather do something like
+> 
+> 	if ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD) &&
+> 	    (boot_cpu_data.x86_model >= 0xF))
+> 		return;
+> 
+> 	inl(slow_whatever);
+> 
+> than a Zen check.  AMD has, as far as I know, been a lot more sequential
+> and sane about model numbers than Intel, and there are some AMD model
+> number range checks in the codebase today.
 
-Hi all,
+Some might be broken; apparently their SoC/Entertainment divisions has a
+few out of order SKUs that were not listed in their regular documents.
+(yay interweb)
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-drivers/base/memory.c: In function 'memory_block_online':
-drivers/base/memory.c:186:34: error: 'struct memory_block' has no member na=
-med 'nr_hwpoison'
-  186 |         if (atomic_long_read(&mem->nr_hwpoison))
-      |                                  ^~
-drivers/base/memory.c: In function 'remove_memory_block_devices':
-drivers/base/memory.c:870:61: error: 'struct memory_block' has no member na=
-med 'nr_hwpoison'
-  870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hw=
-poison));
-      |                                                             ^~
-
-Caused by commit
-
-  69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
-
-This build has CONFIG_MEMORY_FAILURE not set.
-
-I have applied the following fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 23 Sep 2022 17:50:50 +1000
-Subject: [PATCH] fix up for "mm/hwpoison: introduce per-memory_block hwpois=
-on counter"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/base/memory.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index c9bde4c4ffdf..143c63ceb4c3 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -183,8 +183,10 @@ static int memory_block_online(struct memory_block *me=
-m)
- 	struct zone *zone;
- 	int ret;
-=20
-+#ifdef CONFIG_MEMORY_FAILURE
- 	if (atomic_long_read(&mem->nr_hwpoison))
- 		return -EHWPOISON;
-+#endif
-=20
- 	zone =3D zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
- 				  start_pfn, nr_pages);
-@@ -867,7 +869,9 @@ void remove_memory_block_devices(unsigned long start, u=
-nsigned long size)
- 		mem =3D find_memory_block_by_id(block_id);
- 		if (WARN_ON_ONCE(!mem))
- 			continue;
-+#ifdef CONFIG_MEMORY_FAILURE
- 		clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
-+#endif
- 		unregister_memory_block_under_nodes(mem);
- 		remove_memory_block(mem);
- 	}
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/vd1HxF/OXtA5/lvB_oLqdgK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMtZooACgkQAVBC80lX
-0Gw2QAf9HUn7UIOdAbSw/a4Rv+GTG4C4Jdzvk1gHVcq3NXbHA1Pf2DRVhWhTulxR
-RNe52fMedFZAreBSHDNuLckmq0TSPlOELYiHyMxZRPIW3gd7VtpkIn52gRnUK8Jj
-wwYZ1kqeimE9mS0bAy89eprsO7/X90BgAjTQxxNdOpnASlt4yuJCO2c78Z9iKKAH
-nqcq3gJAKoR5qrWS1MolcJe9zh0DBtSw0M/8yBVD5+E92ubDW09gGP1ETBp5mNzi
-stT8nOboBQaYWu4CRzcuS08OvrYleiClGTjPPB1wie4CioBG5G91zC9DcldQzzjy
-4qxDV1d1S5F2OsYc5+Qu9bmWxUBdXg==
-=u5li
------END PGP SIGNATURE-----
-
---Sig_/vd1HxF/OXtA5/lvB_oLqdgK--
+I ran into this when I tried doing a Zen2 range check for retbleed. In
+the end we ended up using the availablility of STIBP as a heuristic to
+indentify Zen2+ or something.
