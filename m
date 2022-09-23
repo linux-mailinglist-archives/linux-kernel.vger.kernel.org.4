@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058A35E7DAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472B65E7F3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiIWOzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S231235AbiIWQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiIWOyw (ORCPT
+        with ESMTP id S229833AbiIWQAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:54:52 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E031233
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m3so533588eda.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:51 -0700 (PDT)
+        Fri, 23 Sep 2022 12:00:34 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FE710D66B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:00:32 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id 3so367456qka.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mUvnHMrqfDygHJMP4jfoffRWSC2dEXcdYnkQt9a9yPM=;
-        b=TPh/CO1WsOshsy9Z1qDuaG5AVH9P5aDVxMID5Ar49LbzNe7WdIev6YWo8FuVK23rhT
-         YTYLnJ/I0E37oBcMvk7wX+rNMqxdQOrRkaYwq8ai2h/imkGljlsWS43Nu3F0qsn2pAG9
-         5t2nYlUIp29PGr0JlxAHAT4/usbuEDLKPW0yU=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=X88HL68aCJfUdncHY2qCCi0nVDkqRyJbXT1bnLIzN/g=;
+        b=VUpkFa4te7+t8eoE80PTwHihbzULcEDPH782yyzbWnAH8w5kGE4rPY+uKn2oNFebBr
+         xNYOkeyNA+UQwMBvd1BtkUKIsQHIhLpgtkmbWT0J/JkYRM28U8Dt9R+2fOI/jsM/vsuw
+         wMrgA96CpiaRhX6fESL5ksDfIk6ONv35FU0JNtbKegRkViNDky/OjLgDjp9rIEDl+Fry
+         TIqZcM6HHx9aFV6DcWUWeFbd5i1oSNy80vdrqBZm5DxWGQUv2XjSy5Y1guDRNpOF79Z8
+         LO8MF+saot5atdu13Ig8RfUUX5EZzEWjWC1Kkq9mO18HlVXmRCLM+Fwj+vusXQj9TiZP
+         9Beg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mUvnHMrqfDygHJMP4jfoffRWSC2dEXcdYnkQt9a9yPM=;
-        b=I+Jr6JBZpAVuo3vsiNKFkll/NrywC256eo1SI3ouUjoZ8IfIlS7F4SCTHgWNSPkz8e
-         nnN6XirBLsx4HLSg7AFRDkN7xnH6Otva73zgKA27FJ/ykIzilFhT15e415pP/sPls/Pb
-         O7aufvMKn9r9vPA9np34mR+5KuESNmh9LLD/1teRKNX0+luFV2x0BAQxp4XGvEqeE2sZ
-         2OFahXg6J7NhL2QcIVYo4TF7VP4LJ2CNiv6eZiQ4NloP8ucE7/XCcYuhQhwFmdh4KGWd
-         7sOOsC3HYrdkGC4nbkFc3/FKI2SI/A0yroZag5oGwToQ1KwKhtBAFFpMLK8lChSbLrhA
-         3LYA==
-X-Gm-Message-State: ACrzQf3sQxlviZWYVEfY1er4MNEZSC5pLnmJa88Xv2O/nnaWNzdxZvFY
-        ljub1jxoWUrKG0dAcdtStkGrIcmoxvwnsrdP
-X-Google-Smtp-Source: AMsMyM5OIpr9X6MpjNrpU/1FYEqoQw27grKINK7tdEZO2zf3jcTL20VfB8Q25XOMnRHpEgHXw0iq5Q==
-X-Received: by 2002:a05:6402:748:b0:44e:b48f:f5ec with SMTP id p8-20020a056402074800b0044eb48ff5ecmr9132950edy.146.1663944890174;
-        Fri, 23 Sep 2022 07:54:50 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b007341663d7ddsm4176337ejd.96.2022.09.23.07.54.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 07:54:49 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id s14so476083wro.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:54:48 -0700 (PDT)
-X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
- i15-20020a5d522f000000b00228dc7fb9a8mr5684489wra.617.1663944887695; Fri, 23
- Sep 2022 07:54:47 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=X88HL68aCJfUdncHY2qCCi0nVDkqRyJbXT1bnLIzN/g=;
+        b=I8Yjsgmnjl7Vd2gtM4T0r9xK1QtIaWl3xpgmEo39oF15fiQGpm8EqijdCH21prMBO6
+         jKD5qRipxSdoCu/bxMzJF+HS7NjoJ6AiKsr5OKiWvliJvYD8yJPgbKXVRPbSGUUj8IeW
+         hh21A31MIWsZUpRBEPIGdr77h4/G4w+eWxqJbndK/hs1kjusmwxES0afcc6hH9y2SElP
+         8d2CqiLUAVIt+Xb6IUHz2D6Sr/qB4/Gxf8P/wUDZ0opdo0Nt1LKzGRcWwIa166dKebYC
+         0qIlYBQUzRzopOhEkSjwpMhNK87i5891TBwpjJ+oYfTg9TZzspDpVOd2hxcAcLZ2zPcE
+         UClg==
+X-Gm-Message-State: ACrzQf2gzPTLTBTy/foXSP9bySnedKISgPzocyJRWESeSxIIG+hTsAoD
+        9RIM122Mr2gk1FhKjwNiybHkdQ==
+X-Google-Smtp-Source: AMsMyM7IAev448Zrmf+Niu2uyhsLlID8pvs9GcXbVVcKhh+AbrsvOR/difIN2QuQyu5B0IygdBrt1Q==
+X-Received: by 2002:a05:620a:2442:b0:6ce:d766:ca81 with SMTP id h2-20020a05620a244200b006ced766ca81mr5956031qkn.687.1663948831972;
+        Fri, 23 Sep 2022 09:00:31 -0700 (PDT)
+Received: from fedora ([204.156.113.250])
+        by smtp.gmail.com with ESMTPSA id do11-20020a05620a2b0b00b006ce441816e0sm6245068qkb.15.2022.09.23.09.00.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 09:00:31 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:55:46 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mranostay@ti.com
+Subject: Re: [PATCH v9 0/4] ECAP support on TI AM62x SoC
+Message-ID: <Yy3I8vKSfYdaZunw@fedora>
+References: <20220923142437.271328-1-jpanis@baylibre.com>
 MIME-Version: 1.0
-References: <20220923083657.v5.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
- <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
-In-Reply-To: <20220923083657.v5.2.Ic4e8f03868f88b8027a81bc3d414bae68978e6b7@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 23 Sep 2022 07:54:35 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WSy3x=9qQdrDGZvc82NZYsQ=TRQ05cHECbU+Q5U5f16Q@mail.gmail.com>
-Message-ID: <CAD=FV=WSy3x=9qQdrDGZvc82NZYsQ=TRQ05cHECbU+Q5U5f16Q@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] dt-bindings: input: touchscreen: elants_i2c: Add
- eth3915n touchscreen chip
-To:     Yunlong Jia <ecs.beijing2022@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Yunlong Jia <yunlong.jia@ecs.com.tw>,
-        Bob Moragues <moragues@chromium.org>,
-        David Heidelberg <david@ixit.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6qnNNKSKTZQ4BW8h"
+Content-Disposition: inline
+In-Reply-To: <20220923142437.271328-1-jpanis@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Sep 23, 2022 at 1:47 AM Yunlong Jia <ecs.beijing2022@gmail.com> wrote:
->
-> Add an elan touch screen chip eth3915n.
->
-> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
-> Suggested-by: Douglas Anderson <dianders@chromium.org>
->
-> ---
->
-> Changes in v5:
->  1. ekth3915 is the true compatible and ekth3500 is the fallback.
->
-> Changes in v4:
->  1. eth3915n dt bindings added in v4.
->
->  .../bindings/input/touchscreen/elan,elants_i2c.yaml    | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+--6qnNNKSKTZQ4BW8h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fabulous. I'll expect this patch to go through the input tree and
-patches #1 and #3 to go through the Qualcomm tree.
+On Fri, Sep 23, 2022 at 04:24:33PM +0200, Julien Panis wrote:
+> The Enhanced Capture (ECAP) module can be used to timestamp events
+> detected on signal input pin. It can be used for time measurements
+> of pulse train signals.
+>=20
+> ECAP module includes 4 timestamp capture registers. For all 4 sequenced
+> timestamp capture events (0->1->2->3->0->...), edge polarity (falling/ris=
+ing
+> edge) can be selected.
+>=20
+> This driver leverages counter subsystem to :
+> - select edge polarity for all 4 capture events (event mode)
+> - log timestamps for each capture event
+> Event polarity, and CAP0/1/2/3 timestamps give all the information
+> about the input pulse train. Further information can easily be computed :
+> period and/or duty cycle if frequency is constant, elapsed time between
+> pulses, etc...
+>=20
+> This patchset must be applied on top of the following counter subsystem p=
+atchset :
+> https://lore.kernel.org/all/cover.1663693757.git.william.gray@linaro.org/
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Hello Julien,
+
+Tentatively, this version looks good to me. Due to the amount of changes
+we've made in the past week I'm going to let it sit on the list for a
+while to give any lingering issues we missed a chance to be found. If
+nothing pops up during that time, I expect to queue this next week and
+hopefully include it with the other Counter changes in time for the 6.1
+merge window.
+
+By the way, in the future you can use the '--base' git format-patch
+argument to specify the base commit (and any prereq patches) that your
+series is based on: https://git-scm.com/docs/git-format-patch#_base_tree_in=
+formation
+
+That makes it clear to reviewers and maintainers where they should apply
+your patchset, and should also prevent the kernel test robot from
+testing against the wrong base.
+
+William Breathitt Gray
+
+--6qnNNKSKTZQ4BW8h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYy3I8gAKCRC1SFbKvhIj
+K4VyAP0TS6xWP5CFMk76z6N5ksg9cJ2R+S8ZmLw3qAg8JHdBVgEAno4zuIl4Uf9n
+dXIjZ9ayvffGfaYRnYTBD2XUXT8G8gs=
+=tET1
+-----END PGP SIGNATURE-----
+
+--6qnNNKSKTZQ4BW8h--
