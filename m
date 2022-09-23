@@ -2,118 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6395E71B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9505E71BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiIWCDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 22:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
+        id S230410AbiIWCGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 22:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbiIWCDh (ORCPT
+        with ESMTP id S229521AbiIWCGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 22:03:37 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F92D118B37;
-        Thu, 22 Sep 2022 19:03:36 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VQUivRf_1663898613;
-Received: from 30.97.56.82(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQUivRf_1663898613)
-          by smtp.aliyun-inc.com;
-          Fri, 23 Sep 2022 10:03:34 +0800
-Message-ID: <caf0bfbf-18d2-e936-4bbd-3e728a567de5@linux.alibaba.com>
-Date:   Fri, 23 Sep 2022 10:03:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH V5 6/7] ublk_drv: allow new process to open ublk chardev
- with recovery feature enabled
+        Thu, 22 Sep 2022 22:06:03 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBE128E2C;
+        Thu, 22 Sep 2022 19:06:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mBjtxg6G1ROgl/bBfr9AMut/Ym5TJ8WslHhKTzUtBWOJB9Rn4M+Q+Rs47qQcU0KVJliNZME/PQum+KL1XAEOlrYBuFtlBXQWIRG6f8NO5Of3YBUwOHMrNTcuN5/gsZeuUhalambHkFKvkcJmiP5xLZZiwJY4gH25CnDzGRzHVTX6W/3tEIyM/oYTvr/wLCkRTzFRWlOnIQUAox1lbTSqkrg1C3HqYDFp9DNxCyUjfoieEnCgkZhiPGBoWYDv7HBkKe//aTU3pMtu7I1nSnkrFCeLluyrY2MHbR4+aV/YeV/OWMgMjx9PvmRGDT9VjkKBy0pb+XYgjmqo7o+yBQFh+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=buFa+WQw/q1/AAhXQgBnAGV7XGvGJ0obkpDaCo/dQzE=;
+ b=ZGQ7sA0x1mxeC79SG8AsukL7biP+Aeo2NTVVckixUZRqPukIoSbV+LVnI75toY8KAzW8EeftEJ5GJnGPwgnypaGZ2DZriOF6qLbWWBKgEpzvNdfKGqZ0Bnb90Y6xStaSiBU3yIKIA8dJmfGfyIB6g/YVGHU3D00TqdcLdGZ+XoGSt2YVVVidlOEidcucDWYc9XzAJRJIhWsecd7nNG3MqMT0ALFoEhNODX3rT1EYqjTWQI2V+x4hrboRva8lfJOIAqp3FNRiKZfLUDRNsn16bjPyC9Uw1nmUJ6zx2c0n0UZ+f3/bEEV0+HOtYZ7TlaF2ICNdbZNyuzZmXz4L0LjW5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=buFa+WQw/q1/AAhXQgBnAGV7XGvGJ0obkpDaCo/dQzE=;
+ b=GNpVZe1+kdSaOc1GCTMZ+Px6lsg13hcNIy/iQ0Ywcld9ftIH8bNldDZx1qV3MaWmCrrFJVKoiVgug4f8M3KUKvICMz0Kb53i4kf+i6XKHNY/MelO4qSgxgLvxGK8YBVdxeg1hhc9wwsijL4cXF48bjLz2XI2Pf5WbC0a4AugfTiTPAAsWvq1l7A8LvminW+cNkOSYVc4yci8VZzF6HwqzBRo3sJynCqeylqfXs2TLowWEkcjODteFvxh82V5KSPt4RAFx2s6kFSCCsGjrQcMBrDSKtoL64rvEpSQBmqb7dCUA6wUvqb6P1tDVy03LVMmuzFm9W27GRrqV0LZ8nKdsA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
+ by PH7PR12MB6612.namprd12.prod.outlook.com (2603:10b6:510:210::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 02:06:00 +0000
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
+ 02:05:59 +0000
+Message-ID: <d0c59eb8-baca-26fd-5f10-4a1f89bcf7b9@nvidia.com>
+Date:   Thu, 22 Sep 2022 19:05:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v1 3/3] checkpatch: warn on usage of VM_BUG_ON() and other
+ BUG variants
 Content-Language: en-US
-To:     ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220922061734.21625-1-ZiyangZhang@linux.alibaba.com>
- <20220922061734.21625-7-ZiyangZhang@linux.alibaba.com>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <20220922061734.21625-7-ZiyangZhang@linux.alibaba.com>
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20220920122302.99195-1-david@redhat.com>
+ <20220920122302.99195-4-david@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220920122302.99195-4-david@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY3PR05CA0024.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::29) To DM6PR12MB4140.namprd12.prod.outlook.com
+ (2603:10b6:5:221::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4140:EE_|PH7PR12MB6612:EE_
+X-MS-Office365-Filtering-Correlation-Id: 271e93ad-9713-47b8-75f2-08da9d082846
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gsXoAKb7vTen1Jf/hlXxUgxLTOYkLbE+2OS3EIo8Dwd0NKUy2xPNHJ7h4JS3Cvngi3YrJ2FKqD1kaXDzB18XWaccEdBlKBpyib5JYUSjLHzY23Ww5MWQUeLeAPFsEJosTNgzdpXpj4rdC/+JOvawtqnnnq4CA8ZrCDPMOiQUVYLqWQmW4pmCDdsS/5S+PBAjk0msNcjlslYLGil9A05iCVm8c+taXRga/tSLFw8Ezscot/0dl2ZEhLdlCVGw/kj6c0eDu3uYTFsEqGRs3HKDH4jHlxUHbOjPB83CIHd5UZ7g/+Dn0Ble+91ntK7lutf6Oi5iBsNl2WSPsBcX9nV+Bq+rNS+S2gZFOeXQgPDGn5jvuQYuO7YAM/gsuZaOcDznXIQFstbyJ3dpju3RZFVnHhveroXzZF1w56Hr8/Ij9mZjtXNlymGg2oZwL6YnMNr/mQLZVI1ME+lIOTE8TvifV8SgLonj1FqwWYKhxVAao//6QHyXDynPJJddLpupTozMZ1QCh0r3g8VFbhG1ae2vnO/WoCsk6XcPCyQ6M6CTFOnKD9NMpWq2iErE574Yy4IRcuF2egc1dFds3LlkNGnpHNErlTmyxKIUqGt9itC+Ewo7/eABXdXhvAXnVYuxBGXHciT37GXaKmqx5EAuDz+Ei+4BJ86wmHBiNfx+PGqPZQJD4es2q/u3nXTAu9wtd7IUXl2xLw41HdhKWGlRjxWGfEp9R+yo9mmm2M0xCOIABUmGFWAicS8PRsPaQ6YN5YYDhayQ724vACF3IgIYid/XEujgk4p+kv/biVMavwlA1iSe6aC0jptObAwkW9l4zmbM88s9jiYcabyD9uIXtd/OmXRi2qlgS08BLGWvi1KRRxsnhjCH5m4ZD3RMln7xxYYi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199015)(31696002)(8676002)(66476007)(66556008)(86362001)(6512007)(66946007)(2906002)(8936002)(7416002)(5660300002)(4326008)(6666004)(41300700001)(53546011)(6506007)(2616005)(186003)(83380400001)(26005)(316002)(54906003)(478600001)(966005)(6486002)(38100700002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVdUclBiaytLMW9OOXpmeXJkNjlRZ2FDZE1Uc1VPNVlNTFVsSXJwQVg0elBm?=
+ =?utf-8?B?SDhHZjdub2dUNHVENnFTbm5yUDBPeTZ2WDE2OTNlMHpUeFFsYkJhOXJMTlJT?=
+ =?utf-8?B?SWRKa1B5TG42Y1pFZXlncXA1a2wySy9QTlN5L0lBc25NbXVZMUNKa0gvUGlC?=
+ =?utf-8?B?Q01kM3FVT1NnbjZmR0pETWpwOGhqMWpqVFBvM0VoRHM4WmlUYzFtZHNLN2xu?=
+ =?utf-8?B?aG53K1Z4c283VGFxOEJYeVFlUFk5T3p5elFOUGRaM3YvMGxlSVpwZ0M5bW1Q?=
+ =?utf-8?B?UWF4Q1cyRXJ6MndtK2c5QUM0NStib0pBODNFTWJKeXFzUkdJdDlmMks2czJn?=
+ =?utf-8?B?SmVEYTVxQUdDT2pWSEdhVCtYWFhZRGNodHFOd0pKQ3c1aEZJaGJKU0ZQMkxO?=
+ =?utf-8?B?Zys3ZDlGbmR4VGVyUC81cnRqMExlNER0VEJ0R2NvNGt1aDk3YklDSmZzVVg0?=
+ =?utf-8?B?RWN6SExrOXRGcVdpNlVVRWQ0cnhvSDYwSXg3YTZoaGhtQlI3NEFMNTFod1V5?=
+ =?utf-8?B?VENSRnFoRThjY0xIalRxTUprZld6eG0rZllncTBvT2QyeXdUVndQMkJhQTNR?=
+ =?utf-8?B?WnhMQVRJTExROTBPcmp5clBYOFZhTHZraGM0WlZXSmJVUnFQc3gxcVRSMVM0?=
+ =?utf-8?B?dW5TdlVaRHYrbGpXcnNqWFp1SEtNV3Zndk1weklEcDFjcW10VHdWTzArRXRW?=
+ =?utf-8?B?NHhpMStQUnVOS1dqR2E1YWtLcU1UaGlRNW1TZno5Ry9mbnpDM2tabElUUXVi?=
+ =?utf-8?B?b1ovRGc5L3V0OCthanpBN3Mwd2ZYYVpVNHRIa3MxSFA0dGdITm0wL3MzNmll?=
+ =?utf-8?B?NnBHNmxMMmRYTlNoTUFrRE9qV2VMZHpFazBiUjFwclgyMXc3bURGM1U3Y2My?=
+ =?utf-8?B?Nm9hOTdlQndlaTlWWmNEUklQWEd4dzRCbXk5UzgvL3JCbHBTenFrVnJIVGpk?=
+ =?utf-8?B?Y0d1dkFzdUl2bmRLRENGaTc3Y2I1YVlXaGVFaDErYjZ3TlNXYnRzYW1qZ0lM?=
+ =?utf-8?B?dW1paVdkMkJSb3VwV3oxMTJsSjUvM1hEZE1EY0lkbU9yMWFQMFNSRFowb3Q3?=
+ =?utf-8?B?d0l3OTRLME1LcTdyOHgrN0g1MEV4S0lDcXd6eEg1OUUwMTdFQ250YVZ0ZjFG?=
+ =?utf-8?B?MnpFL1NBSU5SV25nUUhPUUpPT1oxNS9IMTNIcnZvcnZ0NE5rSS9ETVJvWXFE?=
+ =?utf-8?B?TG5jUnlxVEdqK2ZpajloYmczWXh4YTR3Ulh3SFJIZUVkUjNnZ3pCbTdiOEpw?=
+ =?utf-8?B?R2ZrSEwwOEh0K2UxWDFNZm1XcW1rNVM2M085UnhCNk9OUkgreXkxUUYwSEpQ?=
+ =?utf-8?B?dnpSK1FJUVRJNjlzc0h2a1l5cWh1TmVHQmFSMTBYbkdWVUpSa0NmaWY4TTd0?=
+ =?utf-8?B?SWZUVVF5Szh2VXUvcUFOU3lmMzRVYWtlVlhGMHNYOTVDeW00ZGRCNis4SnAz?=
+ =?utf-8?B?Nm9aaGhJcVh2eTQ3UFB2UFlKTWxSMlRLOHo2T2tvR2gyQytjMk5kUXVOeS9u?=
+ =?utf-8?B?b2kxY1JXN1lSNEt1ZnhVNXUzYjdtTVh5VXNaMnM0WUVucGp0TXBWOXBLSDFP?=
+ =?utf-8?B?RVZGM0JwWjlKV1MvZVJqc0dkT0lXUlgrckk5cC9FR3RBVFNablUrSW1uTFB0?=
+ =?utf-8?B?eVRqSnlGYW1TNFJOMGFnODJZQWh1dXhCRGZjMldQbndoRXB1SXJ1VDJTUVFO?=
+ =?utf-8?B?QUNBU0I4MUtveDVnQWxIK2srMW5HYnRhTytGbHY1Z1BsaUJ5VmR2N0xaWmd4?=
+ =?utf-8?B?ZGRDZHhKZDI2SFdQMjNHQ1c3VldlSEF5Q0VDellQNDk5SVRaeU9VMmxCdkIx?=
+ =?utf-8?B?cHhWNGQzekhlU3RPanFZeHRueWhLSFVtczRKeUlQZ0tmeDBCSjJ6RmFZRHA1?=
+ =?utf-8?B?QXNPdTZQb0xmUk10V1ROZGVOV2lQNFN5U0NteVVCdnQydUVrTmxwa2RYRVMx?=
+ =?utf-8?B?QjNlRjAyVXQ1Tjhtd1RWc1J3OTJrdS9WYzI1S29iR2JGWmJycExIaUxlcXov?=
+ =?utf-8?B?ZnB3WFBESU1JSUwyWmJ5b3lkcVJRR1pMNy9MSndjN09aUVdONm0vTHVTTWIz?=
+ =?utf-8?B?NVBnU1NDWGFPS2kyWTVMcEtaN1VsT1F0MEZEOFp1eEVwSkhLbDNPNVArZmV3?=
+ =?utf-8?Q?rd+0TaP8hN/lJ4qFBclYpb5GO?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 271e93ad-9713-47b8-75f2-08da9d082846
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 02:05:59.2363
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hd+k5PYSAZczENF704qH+V0VZcJDYABccKYxDp7B97yLDjnrEkwEjCn5n6+0RMLZL8EMQT273QVJ9xPEoAWg3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6612
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/22 14:17, ZiyangZhang wrote:
-> With recovery feature enabled, if ublk chardev is ready to be released
-> and quiesce_work has been scheduled, we:
-> (1) reinit all ubqs, including:
->     (a) put the task_struct and reset ->ubq_daemon to NULL.
->     (b) reset all ublk_io.
-> (2) reset ub->mm to NULL.
-> Then ublk chardev is released and new process can open it.
+On 9/20/22 05:23, David Hildenbrand wrote:
+> checkpatch does not point out that VM_BUG_ON() and friends should be
+> avoided, however, Linus notes:
 > 
-> RECOVER_DEV is introduced as a new ctrl-cmd for recovery feature.
-> After the chardev is opened and all ubqs are ready, user should send
-> RECOVER_DEV to:
-> (1) wait until all new ubq_daemons getting ready.
-> (2) update ublksrv_pid
-> (3) unquiesce the request queue and expect incoming ublk_queue_rq()
-> (4) convert ub's state to UBLK_S_DEV_LIVE
-> (5) reschedule monitor_work
+>     VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
+>     no different, the only difference is "we can make the code smaller
+>     because these are less important". [1]
 > 
-> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+> So let's warn on VM_BUG_ON() and other BUG variants as well. While at it,
+> make it clearer that the kernel really shouldn't be crashed.
+> 
+> As there are some subsystem BUG macros that actually don't end up crashing
+> the kernel -- for example, KVM_BUG_ON() -- exclude these manually.
+> 
+> [1] https://lore.kernel.org/r/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  drivers/block/ublk_drv.c      | 67 +++++++++++++++++++++++++++++++++++
->  include/uapi/linux/ublk_cmd.h |  1 +
->  2 files changed, 68 insertions(+)
+>  scripts/checkpatch.pl | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 3977869d2bc4..ac8bf497567f 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -898,10 +898,40 @@ static int ublk_ch_open(struct inode *inode, struct file *filp)
->  	return 0;
->  }
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 79e759aac543..21f3a79aa46f 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -4695,12 +4695,12 @@ sub process {
+>  			}
+>  		}
 >  
-> +static void ublk_queue_reinit(struct ublk_device *ub, struct ublk_queue *ubq)
-> +{
-> +	int i;
-> +
-> +	/* old daemon is PF_EXITING, put it now */
-> +	if (ubq->ubq_daemon) {
-> +		put_task_struct(ubq->ubq_daemon);
-> +		/* We have to reset it to NULL, otherwise ub won't accept new FETCH_REQ */
-> +		ubq->ubq_daemon = NULL;
-> +	}
-> +
-> +	for (i = 0; i < ubq->q_depth; i++) {
-> +		struct ublk_io *io = &ubq->ios[i];
-> +
-> +		/* forget everything now and be ready for new FETCH_REQ */
-> +		io->flags = 0;
-> +		io->cmd = NULL;
-> +		io->addr = 0;
-> +	}
-> +	ubq->nr_io_ready = 0;
-> +}
-> +
->  static int ublk_ch_release(struct inode *inode, struct file *filp)
->  {
->  	struct ublk_device *ub = filp->private_data;
-> +	int i;
->  
-> +	pr_devel("%s: reinit queues for dev id %d.\n", __func__, ub->dev_info.dev_id);
-> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
-> +		ublk_queue_reinit(ub, ublk_get_queue(ub, i));
-> +	/* set to NULL, otherwise new ubq_daemon cannot mmap the io_cmd_buf */
-> +	ub->mm = NULL;
-> +	ub->nr_queues_ready = 0;
-> +	init_completion(&ub->completion);
->  	clear_bit(UB_STATE_OPEN, &ub->state);
->  	return 0;
->  }
+> -# avoid BUG() or BUG_ON()
+> -		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
+> +# do not use BUG() or variants
+> +		if ($line =~ /\b(?!AA_|BUILD_|DCCP_|IDA_|KVM_|RWLOCK_|snd_|SPIN_)(?:[a-zA-Z_]*_)?BUG(?:_ON)?(?:_[A-Z_]+)?\s*\(/) {
 
-This one is not correct. I will figure out how to correctly
-put_task_struct(ubq->ubq_daemon) with recovery feature enabled.
+Should this be a separate patch? Adding a bunch of exceptions to the BUG() rules is 
+a separate and distinct thing from adding VM_BUG_ON() and other *BUG*() variants to
+the mix.
+
+>  			my $msg_level = \&WARN;
+>  			$msg_level = \&CHK if ($file);
+>  			&{$msg_level}("AVOID_BUG",
+> -				      "Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()\n" . $herecurr);
+> +				      "Do not crash the kernel unless it is unavoidable - use WARN_ON_ONCE & recovery code (if reasonable) rather than BUG() or variants.\n" . $herecurr);
+
+Here's a requested tweak, to clean up the output and fix punctuation:
+
+"Avoid crashing the kernel--use WARN_ON_ONCE() plus recovery code (if feasible) instead of BUG() or variants.\n" . $herecurr);
+
+
+thanks,
+
+-- 
+John Hubbard
+NVIDIA
+
