@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDF05E7F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6EE5E7F86
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiIWQSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229891AbiIWQSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiIWQRs (ORCPT
+        with ESMTP id S232193AbiIWQRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:17:48 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0D914B84D
+        Fri, 23 Sep 2022 12:17:42 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66B214B84C
         for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:01 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id e15-20020a5d8acf000000b006a3ed059e49so206321iot.14
+Received: by mail-io1-f70.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so218398ioa.7
         for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=SoVzgYeuNxgCDucUevNr4lMmVOJ0okmsV+g8bu6loOI=;
-        b=X3oDONxS99zAXc3N+zNZdxVusIH3AMkgCehig/WX1N8XJnsx22jB1GHQyX8IhkSy+1
-         259lQH8su+xyYhsPsduOYsuL6Bbg9jo/lpylCeZcSYJtQzWGBB5iAw+O7B+l0lz00QQ6
-         5biKLp/dWMMq4cZzLyqavnIhFmrjzFPs9fU6ktx+lXBuBBxRKOV1KX1kWNwYIGRAYOGQ
-         XLI6LTPEkc/gQSFdW37L0w7gAVUX9PmJI8Q3uaP87fpTddugSxKmg7RntkvgYEDOZ9KN
-         4kKiSWS79o5kKz4w9zWPjoaJEgSKYKvwWaarAVNYvpg7H2kjn7dy+V0+s7Ou9SL4RtNV
-         Fbpw==
-X-Gm-Message-State: ACrzQf3zXhwt3Bzz6lrrKaKZzNmLVoXPOACgymTJhk2ryKVRJSPrBINP
-        HrDy0vrdiFn0uHHfgETA0HJ/rFb0AZx8f83UGyQ5ATRpV2YZ
-X-Google-Smtp-Source: AMsMyM7YkoKyXB4qh/JTdf+IYmWybzqi1/P7lYapqJc0Ji69FRYWsKpTURYilZWZ8wvf34O6iS6XPAevZDsthKsRarOS26pCqCKT
+        bh=GMwDSGFnm2GFMzJ4MWSvEgNZvThA12X05V380Vfyex8=;
+        b=HpTkkiRtTATHh6FSfKo9nYLSa3bsfNx5TDZBSP3b15ckQ6W1krrgya8MMkBwVrevSA
+         y3FLjj4gJGO3Td/eiIrs3JnIe6UmWOYnrM3iKZABXxYdqGHthHUBWs24+sFdgqHeHLM8
+         fY4ZGSpUAa/uLsn0Pn3UM7pSNfNFT/I7YPKVDt2VPgOIhQh9EHOn96KTqZARsaI5Tmhh
+         uE+qoQEWkSZrhOzgmu/v2POrDH4MU66Vvu/ylwyACo028Mq2TvnJdtHpkvBphpiIyed3
+         7tF82GpbFSX61dct3R3AwKnEiwFpyw7xoHDt/+p5l4PIYLpaT3L6B7hyJ4EN/nRpvq6F
+         pnHw==
+X-Gm-Message-State: ACrzQf2KkEQfg73t57WY9oi3K+dLpQ4XVR0PZVkBwmHtgTUPB8Pg8HJF
+        Lk+IJATktRNOqAbQR7xK5NY/HhbY5AfWfT/fKpIwnEkusYNE
+X-Google-Smtp-Source: AMsMyM6SoStmsF7msAMqBk7Q1pOlrtqxoZZz9b2tVrTy+VGKGHSk42OkBLBaygCHIwVo5TVRpX5B7yzzsaBSWg5VVtcJiEWu/olB
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1909:b0:2f6:acd5:7e9b with SMTP id
- w9-20020a056e02190900b002f6acd57e9bmr3987835ilu.190.1663949804905; Fri, 23
- Sep 2022 09:16:44 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:16:44 -0700
+X-Received: by 2002:a05:6e02:1bea:b0:2f6:5e61:bf0d with SMTP id
+ y10-20020a056e021bea00b002f65e61bf0dmr4869815ilv.117.1663949805136; Fri, 23
+ Sep 2022 09:16:45 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 09:16:45 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000bab2c05e95a81a3@google.com>
-Subject: [syzbot] BUG: corrupted list in hci_conn_add_sysfs
-From:   syzbot <syzbot+b30ccad4684cce846cef@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000000f316f05e95a815f@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in ni_write_inode
+From:   syzbot <syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,64 +60,89 @@ syzbot found the following issue on:
 
 HEAD commit:    16c9f284e746 Merge branch 'for-next/core', remote-tracking..
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a8f554880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e17bf8880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
-dashboard link: https://syzkaller.appspot.com/bug?extid=b30ccad4684cce846cef
+dashboard link: https://syzkaller.appspot.com/bug?extid=f45957555ed4a808cc7a
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1221ebac880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109c44df080000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11827ec4880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1518404c880000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/fd8978a3a764/disk-16c9f284.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/73ab1c321ad6/vmlinux-16c9f284.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b30ccad4684cce846cef@syzkaller.appspotmail.com
+Reported-by: syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com
 
-Bluetooth: hci0: failed to register connection device
-list_add corruption. prev->next should be next (ffff0000c94de240), but was 623d4d4554535953. (prev=ffff0000c957fe68).
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:32!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+loop0: detected capacity change from 0 to 264192
+ntfs3: loop0: Failed to load $Extend.
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000016
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010af56000
+[0000000000000016] pgd=08000001090da003, p4d=08000001090da003, pud=08000001090ce003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
 Modules linked in:
-CPU: 0 PID: 3060 Comm: kworker/u5:1 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
+CPU: 1 PID: 3036 Comm: syz-executor206 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: hci0 hci_rx_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __list_add_valid+0xb4/0xb8 lib/list_debug.c:30
-lr : __list_add_valid+0xb4/0xb8 lib/list_debug.c:30
-sp : ffff8000126f3ad0
-x29: ffff8000126f3ad0 x28: ffff0000c9208000 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0000caae5014 x24: 0000000000000000
-x23: ffff0000c94de240 x22: ffff0000c957fe68 x21: ffff0000c0c03e68
-x20: ffff0000c0c03e60 x19: ffff0000c94de200 x18: 00000000000000c0
-x17: 3034326564343963 x16: ffff80000db59158 x15: ffff0000c596b500
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c596b500
-x11: ff808000081c30a4 x10: 0000000000000000 x9 : 007b181e3ceb7100
-x8 : 007b181e3ceb7100 x7 : ffff8000081976e4 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefbecd0 x1 : 0000000100000001 x0 : 0000000000000075
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
+pc : ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
+lr : ni_write_inode+0xa0/0x798 fs/ntfs3/frecord.c:3226
+sp : ffff8000126c3800
+x29: ffff8000126c3860 x28: 0000000000000000 x27: ffff0000c8b02000
+x26: ffff0000c7502320 x25: ffff0000c7502288 x24: 0000000000000000
+x23: ffff80000cbec91c x22: ffff0000c8b03000 x21: ffff0000c8b02000
+x20: 0000000000000001 x19: ffff0000c75024d8 x18: 00000000000000c0
+x17: ffff80000dd1b198 x16: ffff80000db59158 x15: ffff0000c4b6b500
+x14: 00000000000000b8 x13: 0000000000000000 x12: ffff0000c4b6b500
+x11: ff80800008be1b60 x10: 0000000000000000 x9 : ffff0000c4b6b500
+x8 : 0000000000000000 x7 : ffff800008be1b50 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000008 x1 : 0000000000000001 x0 : 0000000000000000
 Call trace:
- __list_add_valid+0xb4/0xb8 lib/list_debug.c:30
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- add_tail lib/klist.c:104 [inline]
- klist_add_tail+0x9c/0xd8 lib/klist.c:137
- device_add+0x7a8/0x958 drivers/base/core.c:3528
- hci_conn_add_sysfs+0x4c/0xf4 net/bluetooth/hci_sysfs.c:53
- le_conn_complete_evt+0x858/0xae0 net/bluetooth/hci_event.c:5917
- hci_le_conn_complete_evt+0x58/0xa4 net/bluetooth/hci_event.c:5966
- hci_le_meta_evt+0x1e4/0x230 net/bluetooth/hci_event.c:7110
- hci_event_func net/bluetooth/hci_event.c:7440 [inline]
- hci_event_packet+0x4e0/0x60c net/bluetooth/hci_event.c:7495
- hci_rx_work+0x1a4/0x2f4 net/bluetooth/hci_core.c:4007
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20
-Code: 91257400 aa0303e1 aa0803e3 94a78613 (d4210000) 
+ is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
+ ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
+ ntfs_evict_inode+0x54/0x84 fs/ntfs3/inode.c:1744
+ evict+0xec/0x334 fs/inode.c:665
+ iput_final fs/inode.c:1748 [inline]
+ iput+0x2c4/0x324 fs/inode.c:1774
+ ntfs_new_inode+0x7c/0xe0 fs/ntfs3/fsntfs.c:1660
+ ntfs_create_inode+0x20c/0xe78 fs/ntfs3/inode.c:1278
+ ntfs_create+0x54/0x74 fs/ntfs3/namei.c:100
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x804/0x11c4 fs/namei.c:3688
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190
+Code: 97dafee4 340001b4 f9401328 2a1f03e0 (79402d14) 
 ---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	97dafee4 	bl	0xffffffffff6bfb90
+   4:	340001b4 	cbz	w20, 0x38
+   8:	f9401328 	ldr	x8, [x25, #32]
+   c:	2a1f03e0 	mov	w0, wzr
+* 10:	79402d14 	ldrh	w20, [x8, #22] <-- trapping instruction
 
 
 ---
