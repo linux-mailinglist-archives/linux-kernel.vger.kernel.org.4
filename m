@@ -2,108 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38305E8193
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F51E5E8195
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiIWSLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S232406AbiIWSM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiIWSLh (ORCPT
+        with ESMTP id S231527AbiIWSMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:11:37 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB158ED5D6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:11:35 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q17so908620lji.11
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:11:35 -0700 (PDT)
+        Fri, 23 Sep 2022 14:12:55 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEA3EE64C
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:12:54 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id q26so760302vsr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=bEsiJd/ABJ6GfZVhG9n8srep4jX5Ng0oqWanjXKMf3M=;
-        b=wdf0UoY5ODBa65zXyvuXU6004RbmRtmAQtzkUjBFxlpQtsXPB6f8/sO1rqC0ZGgLp3
-         4AMdVPtt9QHPuyI0VxvgIs+5MrEOgv6JoAB8AlLpxgFsMBIOnfWGqJCA6iLMwm3A9N5n
-         ZIWhGGwWdLofl2d7Oa0JdtvK+ek0ZFgho+IdjF9Zua3H6P1m8VRuu/tO9eMrcsVF5l11
-         CyOBznGHDjwORKYgfJR/Q4p4MPPirUKwQt2U7ZUq1syBcfAYIi47L3cQLBCIvD7tuIti
-         xsWsttC3skEp4jaqH1xDk+E1USMXKtinN/Kps+8JXhGImmHsdG5MDsPXMIDqjiMzGcPq
-         zmMA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7t6V8MWLRtUrTvu+MoIbCnjiI/X4WEGD3aHIxGZW2yA=;
+        b=PQRyfmgaolbiYniSRKRyPZi4Elih62nuDEKXwXyjPtGLW3tx9GzmDbmqpLrVb0cipO
+         KaK0fgca2P0sl9fyfgP7IbPxvfrX2DIOmqV+8Y4ut5fJQNEGEDRg+Xz4tiPdUTR5WDWJ
+         Z1LrctFgO3ffQziTPoOmZjEzbrD573/5f8I5NlFWuB0TMlya2n/FQJr4fq+FtRtQnpxB
+         i35ObhVFZcvWf6M1NtzB8+wHkfnhGKonv2bfbyfOnNjg3y201TEbCZqb987KGBeeWt1j
+         L1UsNEdU/azcrk5n5A77BUJmQnrbRA9o2MkAj79KIa0GXmiJYo+lPC2wMmv2B0krtHJh
+         UumA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bEsiJd/ABJ6GfZVhG9n8srep4jX5Ng0oqWanjXKMf3M=;
-        b=HzvJqW6+JNEO0WqYaMFotQkVYFEtA67Oo8wtvRgR5aEnU37WFmgTyTn2WT9lCEw/rQ
-         I4GuLVPkidif2jpIj9KaOYX2VoJ52O/2ynP3iHwNHnr1HqvR2GWOyeNnq8laSFkMO9g7
-         aEgzz2dXWLuFoKC34vEwI9vBbV2YpaaD7ViACaWmesXXJsHbVxuEfHUVfytm3SyKdUDM
-         56fHHh8o+WqsQB1nCT+RK3MGr4rXHRXxwDKEtJQOR2E2Y2c0H9yJeVeolllDx/+LTa39
-         N3I/o2Fyvxgd83Qq7nR9xM412TSqTx6WIXGk9s8WoFBFD/aHWimriNyveidNvXqr/WKN
-         sjLA==
-X-Gm-Message-State: ACrzQf3OnyNZQqZcQgGuaBv1mBb8ZrtGKQESO1Aq7JeugohA6cENP1Rs
-        swcuQHpbU7SDkVt2yQNAY4m2Ig==
-X-Google-Smtp-Source: AMsMyM5zQjSLuWsd99Ofx6D2TOw4gAeQDb4AO5KB8bpsuR/rhKVETepxlLfDTlGOKwf2sWnZ2pYplA==
-X-Received: by 2002:a2e:92c8:0:b0:25d:6ddf:e71d with SMTP id k8-20020a2e92c8000000b0025d6ddfe71dmr3229734ljh.170.1663956694123;
-        Fri, 23 Sep 2022 11:11:34 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z12-20020a2eb52c000000b00261e2aab7c2sm1491057ljm.58.2022.09.23.11.11.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 11:11:33 -0700 (PDT)
-Message-ID: <a215ae81-10de-7880-1a15-b7b08d0d80d7@linaro.org>
-Date:   Fri, 23 Sep 2022 20:11:32 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7t6V8MWLRtUrTvu+MoIbCnjiI/X4WEGD3aHIxGZW2yA=;
+        b=5hBrmuggDDvx7EMN4vSRomfSiqnDDybpEZCSPJ7lwfb4WIsHBJzFo8eZSlisCvGZwq
+         LSVDqLLAJcrhUQsZWopgOFgF8SmCDfmzU7QsWi27g5qGXi2ejUdj9a9di6LhkaCOEslA
+         dnrTd4OAsaYJ4QGlAs4Au9ZMfCKgOptPJloGaJAQk+nrtsyp/7sfyC2TdQo9r1cvhwnj
+         2ii/XdAHsfFh8MS97Q8ZumFjhWJc5s8OaTptkj2LYHw+8vjglCyLHv3ntiqmE1tNjwQN
+         RzPAPgKBlQ3hJNG/wHt51jcDZyr/3gKzohU/2fYnrHPBuTN45YJ2X516RxGaQ5q3Phe+
+         tCTA==
+X-Gm-Message-State: ACrzQf06rgjSGMgKXQjSngvdvEZBk+wF3qf92tVb4urJlX9kOhi6V+b2
+        YOMCFSAdrrnQa8uJidbCFppGPRoQ3AVmJkddcN6QYmd5xH4=
+X-Google-Smtp-Source: AMsMyM5h14W/BLMKzlIRTPJMJ9YQE8hsu3vqrIBJtsX20teoF1ATwExCh1jUlvj5Pgln0m4yLc4eVdl4/uQSuSs1sfA=
+X-Received: by 2002:a67:ea0b:0:b0:391:7da:9d76 with SMTP id
+ g11-20020a67ea0b000000b0039107da9d76mr4105764vso.84.1663956773490; Fri, 23
+ Sep 2022 11:12:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 2/4] dt-bindings: net: snps,dwmac: add clk_csr property
-Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220923052828.16581-1-jianguo.zhang@mediatek.com>
- <20220923052828.16581-3-jianguo.zhang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220923052828.16581-3-jianguo.zhang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923110332.24090-1-unixbhaskar@gmail.com>
+In-Reply-To: <20220923110332.24090-1-unixbhaskar@gmail.com>
+From:   Daniel Mentz <danielmentz@google.com>
+Date:   Fri, 23 Sep 2022 11:12:42 -0700
+Message-ID: <CAE2F3rDymUUDyXrxFyhSGe4k1jrsZih2DbXViA23wAND=XJuyg@mail.gmail.com>
+Subject: Re: [PATCH] kernel:gen_kheaders:Replace md5sum to sha256sum
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     masahiroy@kernel.org, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 07:28, Jianguo Zhang wrote:
-> The clk_csr property is parsed in driver for generating MDC clock
-> with correct frequency. A warning('clk_csr' was unexpeted) is reported
-> when runing 'make_dtbs_check' because the clk_csr property
-> has been not documented in the binding file.
+On Fri, Sep 23, 2022 at 4:06 AM Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+> Thought to apply a better encryption mechanism.
 
-Your subject is not accurate anymore. Maybe mention that instead of
-existing clk_csr, you add a different property.
+MD5 and SHA256 are secure (or, in the case of MD5, not so secure) hash
+algorithms, not encryption mechanisms.
 
-With commit msg fixes:
+> Replace all occurance of md5sum to sha256sum .
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Looking at this script, I'm not convinced that it relies on MD5 being
+a cryptophically secure hash function. It appears to me as if this
+script uses MD5 to simply detect innocent changes to a set of files as
+opposed to guarding against malicious attacks. I also found that
+sha256sum takes almost three times longer than md5sum. So, in the
+absence of security requirements, md5sum might actually be the better
+choice because it's faster.
