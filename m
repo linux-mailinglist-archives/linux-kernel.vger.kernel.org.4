@@ -2,295 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9669A5E75AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFD45E75AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiIWI0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S231297AbiIWI0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiIWI0W (ORCPT
+        with ESMTP id S231274AbiIWI0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:26:22 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF43122046
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:26:20 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 17:26:13 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663921579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JaQoYM+j6Sz5drFI7/Nc5YLnUcsI4Slr+gq1hLPyp+8=;
-        b=HJjn/ySuGyYyuDyy8S0NeoXOQKQdoAK5rmFjbD9D//E6F8nEE5HuM5iiD53H/1VPDkuDHw
-        J1dPRUHtPjrvQdAYO+Chx4kK0Vvj43vhBlxrB5hjH6F9juwOFhGdFkOi0T4tdMcmnNgPO0
-        Ringhrtz7uVRPjeEDb/gRpJ3B1S6zJU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] mm/hwpoison: introduce per-memory_block hwpoison
- counter counter
-Message-ID: <20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp>
-References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
- <20220921091359.25889-5-naoya.horiguchi@linux.dev>
+        Fri, 23 Sep 2022 04:26:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93975120BC2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:26:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663921610; x=1695457610;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A1SfIwDPy0JQXB0sK0hI7tDxlA2G9LbCtWyHjRWJmcQ=;
+  b=JYX8Vjwx8+WXI7zaMIBAQSoT8/gmNuACAVzeLNdfjoOITun0zuPj4fXr
+   PKuHuBt1Ijsq2OjfsJ7yKhrMOQnzlLdYGcvOgveKgTpD8jb4u9lB7x17v
+   Ta9ZSNlgPGF3NCsTG7aoDwQjhNYI503lcQMAx9FtB86aF3Q+dqxHqhzS5
+   FsRDFPHi0RZcvqsyew9trjRFdrWODYWDUunW2xkMZF411Xw5ExJvDHAMq
+   ffF/t/T1g54PUZGQF9VIEo2LDUxPJHmrtwQ1mW23rHl80/qi5amWtmg+I
+   Rdphk9ND0wYZQF7f4HwpFV9VjJbLc07fGX12fyu5Hww05Vhx9KiDOR2uy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362354243"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="362354243"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:26:49 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="622444104"
+Received: from ngoncia-mobl2.ger.corp.intel.com (HELO paris.ger.corp.intel.com) ([10.249.143.58])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:26:44 -0700
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mchehab@kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
+        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@redhat.com,
+        daniel@ffwll.ch, andi.shyti@linux.intel.com,
+        andrzej.hajda@intel.com, keescook@chromium.org,
+        mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
+        vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com
+Subject: [PATCH v11 0/9] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
+Date:   Fri, 23 Sep 2022 11:26:19 +0300
+Message-Id: <20220923082628.3061408-1-gwan-gyeong.mun@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220921091359.25889-5-naoya.horiguchi@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+This patch series fixes integer overflow or integer truncation issues in
+page lookups, ttm place configuration and scatterlist creation, etc.
+We need to check that we avoid integer overflows when looking up a page,
+and so fix all the instances where we have mistakenly used a plain integer
+instead of a more suitable long.
+And there is an impedance mismatch between the scatterlist API using
+unsigned int and our memory/page accounting in unsigned long. That is we
+may try to create a scatterlist for a large object that overflows returning
+a small table into which we try to fit very many pages. As the object size
+is under the control of userspace, we have to be prudent and catch the
+conversion errors. To catch the implicit truncation as we switch from
+unsigned long into the scatterlist's unsigned int, we use improved
+overflows_type check and report E2BIG prior to the operation. This is
+already used in our create ioctls to indicate if the uABI request is simply
+too large for the backing store. 
+And ttm place also has the same problem with scatterlist creation,
+and we fix the integer truncation problem with the way approached by
+scatterlist creation.
+And It corrects the error code to return -E2BIG when creating gem objects
+using ttm or shmem, if the size is too large in each case.
+In order to provide a common macro, it moves and adds a few utility macros
+into overflow/compiler_types header.
+It introduces assert_same_type() assert_same_typable() macros to catch type
+mismatch while compiling. The existing typecheck() macro outputs build
+warnings, but the newly added assert_same_type() macro uses the
+static_assert macro (which uses _Static_assert keyword and it introduced in
+C11) to generate a build break when the types are different and can be used
+to detect explicit build errors. Unlike the assert_same_type() macro,
+assert_same_typable() macro allows a constant value as the second argument.
+Since static_assert is used at compile time and it requires
+constant-expression as an argument [2][3], overflows_type_ret_const_expr()
+is newly added. the overflows_type() has the same behavior, but the macro
+uses __builtin_add_overflow() internally, and __builtin_add_overflows
+returns a bool type [4], so it is difficult to use as an argument of
+_Static_assert. The assert_same_type and assert_same_typable macros have
+been added to compiler_types.h, but the overflows_type_ret_const_expr macro
+has been added to overflow.h So, overflow.h has to be included to use
+assert_same_typable which internally uses overflows_type_ret_const_expr.
+And it adds unit tests for overflows_type, overflows_type_ret_const_expr,
+assert_same_type and assert_same_typable. The overflows_type has been added
+as well to compare whether the overflows_type_ret_const_expr unit test has
+the same as the result. And it also introduces check_assign() and
+check_assign_user_ptr() macros to perform an assigning source value into
+the destination pointer along with an overflow check.
+In order to implemente check_assign(), overflows_type() on top of updated
+check_add_overflow() macro, this series include the patch which came from
+Kees [1] (this patch is under reviewing from other patch mail). 
 
-Currently PageHWPoison flag does not behave well when experiencing memory
-hotremove/hotplug.  Any data field in struct page is unreliable when the
-associated memory is offlined, and the current mechanism can't tell whether
-a memory section is onlined because a new memory devices is installed or
-because previous failed offline operations are undone.  Especially if
-there's a hwpoisoned memory, it's unclear what the best option is.
+[1] https://lore.kernel.org/all/202208311040.C6CA8253@keescook/
+[2] https://en.cppreference.com/w/c/language/_Static_assert
+[3] C11 standard (ISO/IEC 9899:2011): 6.7.10 Static assertions
+[4] https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
+    6.56 Built-in Functions to Perform Arithmetic with Overflow Checking
+    Built-in Function: bool __builtin_add_overflow (type1 a, type2 b,
+                                                    type3 *res)
 
-So introduce a new mechanism to make struct memory_block remember that
-a memory block has hwpoisoned memory inside it. And make any online event
-fail if the onlined memory block contains hwpoison.  struct memory_block
-is freed and reallocated over ACPI-based hotremove/hotplug, but not over
-sysfs-based hotremove/hotplug.  So it's desirable to implement hwpoison
-counter on this struct.
+v11: Update macro description (Andi)
+     Change _Static_assert to static_assert (Rasmus)
+     Rename assert_type to assert_same_type and  assert_typable to
+     assert_same_typable (Rasmus)
+     Update assert_same_typable macro to handle an overflow check on the
+     target type when a constant value is used. (Kees)
+     Add overflows_type_ret_const_expr which returns constant-expression
+     value (G.G)
+     Add is_unsigned_type (G.G)
+     Add unit tests for overflows_type, overflows_type_ret_const_expr,
+     assert_same_type and assert_same_typable. (Kees)
+     Fix incorrect type assignment between different address spaces caused
+     by the wrong use of __user macro. (kernel test robot)
+v10: Add check_assign_user_ptr() macro and drop overflows_ptr() macro(Kees) 
+     Use assert_typable instead of exactly_pgoff_t() macro (Kees)
+     Remove a redundant type checking for a pointer. (Andrzej)
+     Add patch "compiler_types.h: Add assert_type to catch type mis-match while compiling" and
+     drop patch "util_macros: Add exact_type macro to catch type mis-match while compiling" from patch series (G.G.)
+     (adding of assert_type(t1, t2) and assert_typable(t, n) were suggested by Kees v9's comments)
+v9: Fix overflows_type() to use __builtin_add_overflow() instead of
+    __builtin_add_overflow_p() (Andrzej)
+    Fix overflows_ptr() to use overflows_type() with the unsigned long type (Andrzej)
+v8: Add check_assign() and remove safe_conversion() (Kees)
+    Replace safe_conversion() with check_assign() (Kees)
+    Fix overflows_type() to use gcc's built-in overflow function (Andrzej)
+    Add overflows_ptr() to allow overflow checking when assigning a value
+    into a pointer variable (G.G.)
+v7: Fix to use WARN_ON() macro where GEM_BUG_ON() macro was used. (Jani)
+v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
+    Fix to follow general use case for GEM_BUG_ON(). (Jani)
+v5: Fix an alignment to match open parenthesis
+    Fix macros to be enclosed in parentheses for complex values
+    Fix too long line warning
+v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
+    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
+v3: Modify overflows_type() macro to consider signed data types and
+	add is_type_unsigned() macro (Mauro)
+    Make not use the same macro name on a function. (Mauro)
+    For kernel-doc, macros and functions are handled in the same namespace,
+    the same macro name on a function prevents ever adding documentation for it.
+    Not to change execution inside a macro. (Mauro)
+    Fix the problem that safe_conversion() macro always returns true (G.G)
+    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
 
-Note that clear_hwpoisoned_pages() is relocated to be called earlier than
-now, just before unregistering struct memory_block.  Otherwise, the
-per-memory_block hwpoison counter is freed and we fail to adjust global
-hwpoison counter properly.
+Chris Wilson (3):
+  drm/i915/gem: Typecheck page lookups
+  drm/i915: Check for integer truncation on scatterlist creation
+  drm/i915: Remove truncation warning for large objects
 
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
----
-ChangeLog v3 -> v4:
-- fixed build error (https://lore.kernel.org/linux-mm/202209231134.tnhKHRfg-lkp@intel.com/)
-  by using memblk_nr_poison() to access to the member ->nr_hwpoison
----
- drivers/base/memory.c  | 41 +++++++++++++++++++++++++++++++++++++++++
- include/linux/memory.h |  3 +++
- include/linux/mm.h     |  8 ++++++++
- mm/internal.h          |  8 --------
- mm/memory-failure.c    | 31 ++++++++++---------------------
- mm/sparse.c            |  2 --
- 6 files changed, 62 insertions(+), 31 deletions(-)
+Gwan-gyeong Mun (5):
+  overflow: Move and add few utility macros into overflow
+  compiler_types.h: Add assert_same_type to catch type mis-match while
+    compiling
+  drm/i915: Check for integer truncation on the configuration of ttm
+    place
+  drm/i915: Check if the size is too big while creating shmem file
+  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
+    too large
 
-diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-index 9aa0da991cfb..f470bbfc68d0 100644
---- a/drivers/base/memory.c
-+++ b/drivers/base/memory.c
-@@ -183,6 +183,9 @@ static int memory_block_online(struct memory_block *mem)
- 	struct zone *zone;
- 	int ret;
- 
-+	if (memblk_nr_poison(start_pfn))
-+		return -EHWPOISON;
-+
- 	zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
- 				  start_pfn, nr_pages);
- 
-@@ -864,6 +867,7 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
- 		mem = find_memory_block_by_id(block_id);
- 		if (WARN_ON_ONCE(!mem))
- 			continue;
-+		clear_hwpoisoned_pages(memblk_nr_poison(start));
- 		unregister_memory_block_under_nodes(mem);
- 		remove_memory_block(mem);
- 	}
-@@ -1164,3 +1168,40 @@ int walk_dynamic_memory_groups(int nid, walk_memory_groups_func_t func,
- 	}
- 	return ret;
- }
-+
-+#ifdef CONFIG_MEMORY_FAILURE
-+
-+void memblk_nr_poison_inc(unsigned long pfn)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		atomic_long_inc(&mem->nr_hwpoison);
-+}
-+
-+void memblk_nr_poison_sub(unsigned long pfn, long i)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		atomic_long_sub(i, &mem->nr_hwpoison);
-+}
-+
-+unsigned long memblk_nr_poison(unsigned long pfn)
-+{
-+	const unsigned long block_id = pfn_to_block_id(pfn);
-+	struct memory_block *mem = find_memory_block_by_id(block_id);
-+
-+	if (mem)
-+		return atomic_long_read(&mem->nr_hwpoison);
-+	return 0;
-+}
-+
-+#else
-+unsigned long memblk_nr_poison(unsigned long pfn)
-+{
-+	return 0;
-+}
-+#endif
-diff --git a/include/linux/memory.h b/include/linux/memory.h
-index aa619464a1df..74e6b3ad947f 100644
---- a/include/linux/memory.h
-+++ b/include/linux/memory.h
-@@ -85,6 +85,9 @@ struct memory_block {
- 	unsigned long nr_vmemmap_pages;
- 	struct memory_group *group;	/* group (if any) for this block */
- 	struct list_head group_next;	/* next block inside memory group */
-+#ifdef CONFIG_MEMORY_FAILURE
-+	atomic_long_t nr_hwpoison;
-+#endif
- };
- 
- int arch_get_memory_phys_device(unsigned long start_pfn);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2bb5d1596041..5445943bbb4b 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3280,6 +3280,9 @@ extern int soft_offline_page(unsigned long pfn, int flags);
- #ifdef CONFIG_MEMORY_FAILURE
- extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
- extern void num_poisoned_pages_inc(unsigned long pfn);
-+extern void memblk_nr_poison_inc(unsigned long pfn);
-+extern void memblk_nr_poison_sub(unsigned long pfn, long i);
-+extern void clear_hwpoisoned_pages(long nr_poison);
- #else
- static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
- {
-@@ -3289,7 +3292,12 @@ static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
- static inline void num_poisoned_pages_inc(unsigned long pfn)
- {
- }
-+
-+static inline void clear_hwpoisoned_pages(long nr_poison)
-+{
-+}
- #endif
-+extern unsigned long memblk_nr_poison(unsigned long pfn);
- 
- #ifndef arch_memory_failure
- static inline int arch_memory_failure(unsigned long pfn, int flags)
-diff --git a/mm/internal.h b/mm/internal.h
-index b3002e03c28f..42ba8b96cab5 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -708,14 +708,6 @@ extern u64 hwpoison_filter_flags_value;
- extern u64 hwpoison_filter_memcg;
- extern u32 hwpoison_filter_enable;
- 
--#ifdef CONFIG_MEMORY_FAILURE
--void clear_hwpoisoned_pages(struct page *memmap, int nr_pages);
--#else
--static inline void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
--{
--}
--#endif
--
- extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
-         unsigned long, unsigned long,
-         unsigned long, unsigned long);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index a069d43bc87f..03479895086d 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -74,14 +74,17 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
- 
- static bool hw_memory_failure __read_mostly = false;
- 
--static inline void num_poisoned_pages_inc(unsigned long pfn)
-+void num_poisoned_pages_inc(unsigned long pfn)
- {
- 	atomic_long_inc(&num_poisoned_pages);
-+	memblk_nr_poison_inc(pfn);
- }
- 
- static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
- {
- 	atomic_long_sub(i, &num_poisoned_pages);
-+	if (pfn != -1UL)
-+		memblk_nr_poison_sub(pfn, i);
- }
- 
- /*
-@@ -2414,6 +2417,10 @@ int unpoison_memory(unsigned long pfn)
- unlock_mutex:
- 	mutex_unlock(&mf_mutex);
- 	if (!ret || freeit) {
-+		/*
-+		 * TODO: per-memory_block counter might break when the page
-+		 * size to be unpoisoned is larger than a memory_block.
-+		 */
- 		num_poisoned_pages_sub(pfn, count);
- 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
- 				 page_to_pfn(p), &unpoison_rs);
-@@ -2618,25 +2625,7 @@ int soft_offline_page(unsigned long pfn, int flags)
- 	return ret;
- }
- 
--void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
-+void clear_hwpoisoned_pages(long nr_poison)
- {
--	int i, total = 0;
--
--	/*
--	 * A further optimization is to have per section refcounted
--	 * num_poisoned_pages.  But that would need more space per memmap, so
--	 * for now just do a quick global check to speed up this routine in the
--	 * absence of bad pages.
--	 */
--	if (atomic_long_read(&num_poisoned_pages) == 0)
--		return;
--
--	for (i = 0; i < nr_pages; i++) {
--		if (PageHWPoison(&memmap[i])) {
--			total++;
--			ClearPageHWPoison(&memmap[i]);
--		}
--	}
--	if (total)
--		num_poisoned_pages_sub(total);
-+	num_poisoned_pages_sub(-1UL, nr_poison);
- }
-diff --git a/mm/sparse.c b/mm/sparse.c
-index e5a8a3a0edd7..2779b419ef2a 100644
---- a/mm/sparse.c
-+++ b/mm/sparse.c
-@@ -926,8 +926,6 @@ void sparse_remove_section(struct mem_section *ms, unsigned long pfn,
- 		unsigned long nr_pages, unsigned long map_offset,
- 		struct vmem_altmap *altmap)
- {
--	clear_hwpoisoned_pages(pfn_to_page(pfn) + map_offset,
--			nr_pages - map_offset);
- 	section_deactivate(pfn, nr_pages, altmap);
- }
- #endif /* CONFIG_MEMORY_HOTPLUG */
+Kees Cook (1):
+  overflow: Allow mixed type arguments
+
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 ++++++++++++--
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
+ .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
+ drivers/gpu/drm/i915/i915_gem.c               |  18 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
+ drivers/gpu/drm/i915/i915_user_extensions.c   |   6 +-
+ drivers/gpu/drm/i915/i915_utils.h             |   6 +-
+ drivers/gpu/drm/i915/i915_vma.c               |   8 +-
+ drivers/gpu/drm/i915/intel_region_ttm.c       |  17 +-
+ include/linux/compiler.h                      |   1 +
+ include/linux/compiler_types.h                |  43 ++
+ include/linux/overflow.h                      | 165 ++++++--
+ lib/overflow_kunit.c                          | 384 ++++++++++++++++--
+ 22 files changed, 933 insertions(+), 157 deletions(-)
+
 -- 
-2.37.3.518.g79f2338b37
+2.37.1
 
