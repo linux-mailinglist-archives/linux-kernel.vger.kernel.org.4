@@ -2,135 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BFA5E7E3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275AE5E7E48
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbiIWPWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S232537AbiIWPXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiIWPWD (ORCPT
+        with ESMTP id S232573AbiIWPXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:22:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB72B14356D;
-        Fri, 23 Sep 2022 08:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663946520; x=1695482520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7cPxwyjbHhuihks0jZOWKPSH/Ooof7nqq1xCMFUAIxE=;
-  b=BBQRr6tGkPaWNOQV8UDia5A2l16ChWLYfjZjSrm+8sY1t36kc0+MbGDm
-   x3ojzo2ahHr3ISl+xru9cQd15Japexn2SJPChYZkbMRJsH5AwMCPb5mHO
-   UdONT7zYRhXgcuK31BYB6rKB4xXdJRf01lcJlDEDb/HOikS1ppuXFK7pc
-   50aQkK/P/QsQYZJWfon7SFsZDxyYKLNQBeUA8Wsaat/i9Uuc5W0HHnFKM
-   S/pCO2Fy+KB5nwuT7dwn99uEEo3Xa0OIFfbLmBAeLkUQVmr/6lEkmjW0q
-   83aQJAxe0HIr5VemdMPTAn23wOt7AJ0sEAqE1PxkYhylvHmfyOMXHnOyk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="300596936"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="300596936"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:22:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="653431333"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Sep 2022 08:21:57 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obkV2-0005mW-29;
-        Fri, 23 Sep 2022 15:21:56 +0000
-Date:   Fri, 23 Sep 2022 23:21:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xiaochun Lee <lixiaochun.2888@163.com>,
-        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev
-Cc:     kbuild-all@lists.01.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaochun Lee <lixc17@lenovo.com>
-Subject: Re: [PATCH v1] PCI: Set no io resource for bridges that behind VMD
- controller
-Message-ID: <202209240714.ronvmf1X-lkp@intel.com>
-References: <1663075485-20591-1-git-send-email-lixiaochun.2888@163.com>
+        Fri, 23 Sep 2022 11:23:17 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3761449CB;
+        Fri, 23 Sep 2022 08:23:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PQstN6E8zxHxucgMe5afQ4VbQTXWVhVQmGWmqkLpw3i0HZXN80MUzelcKEBYbj5kW13QFnFdymH84lJagfO1ZSsfNr/m8kLRS2duHzsQcIAQl6K59LwnIDj1EqoxTPC0ceFLPzid8XXsV97NXcCK4v6u5iZV5jxAXlH0Wq3/SBW/orr0QQTFnk6NyC+mZMRHOXRVeySfHXKMc6kmsAmayh9TAwFJSly2DKjJ+UyyueHotydQqj30FfhLuUOaAB7oA//Y6FZK5B7aAekYf4JObNdIiBi+FL+zCsLhNu2MoGf+R9nN8nsoUzqnZgJFflROTP1ChXth2i6UXnrehItZcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y/TCBG4N38Rb0Ozumg6sNQl64nZbZvAf6sNDfqrtcSo=;
+ b=oCtIcqa2jufRKM7esdLgS1AaVbPYHKD5KzIA0U+xmWGb+jvRsLbnBvyfoJ+wm15KZkENCf5TIGE1sgyQlvx0WV9CkJI2CvOkU3FaFyYCY6942gV/iOI3A1426f1uP6PPYt7moy9a3URBYO6mYzTn2ZEDdwjGeCudt+jTSybjOhKB/C0/4YBPA4hb4t8q2+04Omy0bcmRp5TneHEwFgUGZfwH36kAOQYUokcHcSFxXCMX/ure6IceTNcUPrwHUbcpAoWDl0PHybjGZs97uOCzULpbAmPUcX4Jh58GRapN+J4oeNFoJqjBivoDRibY4Wek0qpNRcQIgUmvtMqv/4oTAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/TCBG4N38Rb0Ozumg6sNQl64nZbZvAf6sNDfqrtcSo=;
+ b=HPseY/6CGM7HvbwyE0rEAAknrFausEWPImtC/0fi3qNo3gOQBR7pNGxvsebUDWthaIY1gG2t3qD9f3gTPWZzZsuyIsHYwmGPeLoj+pik74Idbgs+ye59qxFjf5xqZnE3aiT6ORgpx3DvI8Q2z0rsHehrE8ga4I4TX2n6bo9Hsg8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM7PR04MB6949.eurprd04.prod.outlook.com (2603:10a6:20b:102::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Fri, 23 Sep
+ 2022 15:22:58 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::80cb:1937:26ca:fc94]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::80cb:1937:26ca:fc94%9]) with mapi id 15.20.5654.017; Fri, 23 Sep 2022
+ 15:22:58 +0000
+Message-ID: <75366bfac9fcd4f8c35309193705f0277a164ae4.camel@nxp.com>
+Subject: Re: [PATCH v2] PM: runtime: Return properly from rpm_resume() if
+ dev->power.needs_force_resume flag is set
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-imx@nxp.com,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Fri, 23 Sep 2022 23:22:35 +0800
+In-Reply-To: <CAPDyKFqdHX=o4V4K8GdCr4wQ5sjr=JMG6CFAy1849=CtfoSgRQ@mail.gmail.com>
+References: <20220923124904.1373936-1-victor.liu@nxp.com>
+         <CAPDyKFqdHX=o4V4K8GdCr4wQ5sjr=JMG6CFAy1849=CtfoSgRQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR04CA0005.apcprd04.prod.outlook.com
+ (2603:1096:4:197::16) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663075485-20591-1-git-send-email-lixiaochun.2888@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM7PR04MB6949:EE_
+X-MS-Office365-Filtering-Correlation-Id: dca0996c-8475-4802-8d71-08da9d777ef5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bSwjgBDNi6NllF1akVh4zeFIo5a9x7BuWLOXCuNsegBSnxqK3N4I20dmPejueK+PMnzoel+D1uV/DH+nX3y3cjH9T7LcWhSm5yErR6gxrmspqUaPHxjuDMH4Um2+DGVnix701k1X58O201+h+6wuvWydQ4jLKYKQbg+LPWvLJ+FlK8gzdeoJErqvyhdfqX1h+JRCLqiNuXwFASVEDZvI5kfG0s1PAl50z8GSSZsNGDzpioneY8kZ3kPOiMvTwrOiyodfj63P+64EGI5MHNuQ7APyOYy7Y344VG0zdFhpQ/k4facz8qD0pAZyIGgsAnpc1no3Hm98FFRWsUtEfOVANp6ThCMa/cH9QxT5VG3Yl/7NpXkHA4rBDs5NhZ8xtIur9jnTw03NUqXBBlF0CbwhknYOJGm3uOdna/pklgq5Mf5WjC2xzuVnpMqTn33/hxXWZg62FR2jQiEF427ZkIhtB8HuUCLn1bFnKW/ak84J2Sgic5jRZXQEpAahx9lzbT9+d1tY9Ig9mC0dYvVtuUtdKpTR6ifxJPUewaDvyhSo7jvvcP3yBQBp2a8DOHSPxZYR9xN5i2aWzwjcAoY2nBMbumTY/jGgGAX5164q//72xrrAwSA5jBSw5hFNu8Y/3DvGHFgGmXmNt7tgkVinD4T8AIBPdkWrB32sxqs0w+psJVck6KxX3DhCRA9KeMV42RkmVqmgV2rbsmw2yIDRx9BXoaB2YDrcXQ1n3vZ8pYl+DrPGnVO36mMP6RilU4qs2Xonu+LCPJAo6UdDnyyCdl1LGPK0oyePp28wW33yr90fUE8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199015)(38350700002)(38100700002)(86362001)(36756003)(6512007)(83380400001)(52116002)(6506007)(6486002)(2906002)(478600001)(2616005)(186003)(6666004)(66476007)(5660300002)(54906003)(66946007)(6916009)(316002)(66556008)(8676002)(26005)(8936002)(41300700001)(4326008)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SE5rM2VLNFlLQUVBd1JFUkswa2xNd25vNGRwajJSelR2dTA5NHVDcVdWRnlR?=
+ =?utf-8?B?VXJ4a0R5Uyt4SndsbGMzQXdFMVd0T0Z1OHFUaGR2RHY1UzMxNlB2WkxKUnF0?=
+ =?utf-8?B?L0RWU3BldmtveVhOSDhMWURlVjkxVXVJbi9tNjZ0UXYzeGM1ZmN3VUFVbVYr?=
+ =?utf-8?B?V3MyazhnMXpjRTFFSWFSY3h1N051Zis3dnZ3Vmp5VTFTYTh2aDhkYkJZaU54?=
+ =?utf-8?B?NFc0QmZsM21CdTJKTThuZkFRQTBPVWw4SGw5U1A5d0JBcnhCbzdETnhHTVFE?=
+ =?utf-8?B?U1N6MU82YlRKRHhLZEU4MVBtbmg3eG1ZZDVZRlNnV0xlVXBUTmhkeDNRVnZB?=
+ =?utf-8?B?anllOEJnY2lqeU9DOGd2WDMwajFRSThHaCtYTXpnT3IwemJKdTd4UjJPMmkv?=
+ =?utf-8?B?N0N4N2QwT1IzcGFNZUJyMFNKSk5RVU9sWWZPd3YyRVg4YzJzb2VYd3kzNjFt?=
+ =?utf-8?B?Z2NSaE9DR0RrRlAxTS8vR3owbUlvQS9jc1d4N3ZaNExtZjdJaE5MZUhNMFAv?=
+ =?utf-8?B?T0Y3NkdpdDdDYjhUL0tLbTVyNHMwR3lhKzBGak4vTmtQRTVHRTZZNlNIRXFI?=
+ =?utf-8?B?cS9sbmdaUTY0cVN0TjJGbHp4T1dzVzdhVWplSGdFY2FIVmR2eW0wc1dyUVZQ?=
+ =?utf-8?B?M0NwdFp1NlNkdG1XdlJhUm9PR0kzWms2RDZJNkd1MmkwV1JxK2FsWnNHaEli?=
+ =?utf-8?B?Sit1amw3am9FRFpTVDc4MFd5WFBaZ25LRnFSZmZ4V0RTRE5ZV3Y0VzlUdDZH?=
+ =?utf-8?B?NEJJZmJsSk1YS1ZITFVoK25ycWVwOElzM0x6MGh4OUFKU3o0c0tsSXgzcUla?=
+ =?utf-8?B?V3hkSkl6R0lsamFabW5EemRselNNZ3lBeXRDQmE0dWlQd3NuWGxNZGtuSnpi?=
+ =?utf-8?B?ZGFmUVNqU1poNEZFbDRLRWJySUo3R3UyWkJOWGhMS2E0eWt2Ri9CdFAyVmsy?=
+ =?utf-8?B?cFFXMFZjS1Q1ZUhOdytDaDNoNE43YXdkRnBVVjkwU3RmdUN6SGJNV3RXZGU4?=
+ =?utf-8?B?RXhySU8yM056a3R1MnJaTlBmcmhORG5WOUJuQ3FGVXVsa0Zic080eG9Kekl0?=
+ =?utf-8?B?bVhoZC9JN21OdDVEK1lWVEZRemJOWnQzU0Jtc3pQMnhTVThrMHFDSXlLTzM4?=
+ =?utf-8?B?Vy9pSHNHYVZ1TmozMXBob0huc1J3WUMrNTNuN3dxM2YvVG9RMitJcGF4QWs0?=
+ =?utf-8?B?TzhXQzdlOEFpUmNUdUIwNG8wYktVeDFaYTJRcENNWEtFRC91OHdoU0ZkNVhw?=
+ =?utf-8?B?UWg3SlRJRTd4Q0xJZEpOOE1YTHBJcVFYem5RdERNS2RkYWFRWS9KQlUraE1I?=
+ =?utf-8?B?UEVNakZ2eWExeFVkOHNVeEpPMXQ2QUJqcFRWWmF4amxnUWh1VnVWcVJVaW5W?=
+ =?utf-8?B?VmRxMjhEdG5jUmRGOE0rdnBrNzY2Z1Vudk8wdFhVdVl2eXVHbnhmS2lONmhK?=
+ =?utf-8?B?VjE2aTc2dzdXN1BUQVB3QkVnbVdHb2g5bEZLaEg3bDZLbmpaSFFCRjBhSzJT?=
+ =?utf-8?B?aGxaWWh0ZDVsQzE0am5DWSt5ckNmMmRVdm44bFEydDRxaW5DOHBHN3VkM09R?=
+ =?utf-8?B?SU1ZNXFhczYzZmdOaEEyUUs3SmxreUlGRERYNm5XMS96S2pKZ0UxUW5adDhr?=
+ =?utf-8?B?UE9aaWpvQ2JLdlVXS25TU3BPaHUyZXZzblpwbnlsTmV2ZnB3KzVjTGtWTUhQ?=
+ =?utf-8?B?L3R3M1Z5YVVsanRSWENTSngyUlVQQmFjVE1xMFg0WU9hWVlKOUM5eW8zdnF3?=
+ =?utf-8?B?U3pDdmREMy9GUkJPenU5MEM2YzhXOHdOOURMK3JLMTl3MlhqM3BCVWplMUF4?=
+ =?utf-8?B?aS9ya3Y2M0RVV29QK1UzS05ibWMvRmJ1TU9UQmJvT0JONXM5S1lPQ2Y1a1p5?=
+ =?utf-8?B?WmRBMkFFd3F5VzdjamsrbWg1R1Z0S1p0M3R4TkVGQjdlVElSTDJFdmJCZCsz?=
+ =?utf-8?B?NnJNS2cvcWE4bGxuemJmMUY0L3NMeVBRN3VoYzZERDBUWEdpMmY5RWJLZFVr?=
+ =?utf-8?B?bjYyTzVobWhiOU0zSTBMNjE1M3lUSDBPQWxuWm5TSmZ4N2RyRCtmdVVYNUtx?=
+ =?utf-8?B?UFFTUnZJV3lSdlIzV3IzU2VmYkp1WVh5cUdKUElnTU5zTTNyMTVVN2R1Wkkx?=
+ =?utf-8?Q?omuf7jio8XX12eB4kr/hJD0wb?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dca0996c-8475-4802-8d71-08da9d777ef5
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 15:22:58.4755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NJ8f2rVp3TwbiqnZBf7Hudr4s4BgCwVpxAx3PST2CZrHuZ4Bd4szU2csegAH1M292oIBB221nim3O8aZvmGr4w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6949
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaochun,
+On Fri, 2022-09-23 at 15:48 +0200, Ulf Hansson wrote:
+> On Fri, 23 Sept 2022 at 14:47, Liu Ying <victor.liu@nxp.com> wrote:
+> > 
+> > After a device transitions to sleep state through it's system
+> > suspend
+> > callback pm_runtime_force_suspend(), the device's driver may still
+> > try
+> > to do runtime PM for the device(runtime suspend first and then
+> > runtime
+> > resume) although runtime PM is disabled by that callback.  The
+> > runtime
+> > PM operations would not touch the device effectively and the device
+> > is
+> > assumed to be resumed through it's system resume callback
+> > pm_runtime_force_resume().
+> 
+> This sounds like a fragile use case to me. In principle you want to
+> allow the device to be runtime resumed/suspended, after the device
+> has
+> already been put into a low power state through the regular system
+> suspend callback. Normally it seems better to prevent this from
+> happening, completely.
 
-Thank you for the patch! Yet something to improve:
+Not sure if we really may prevent this from happening completely.
 
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on linus/master v6.0-rc6 next-20220923]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> That said, in this case, I wonder if a better option would be to
+> point
+> ->suspend_late() to pm_runtime_force_suspend() and ->resume_early()
+> to
+> pm_runtime_force_resume(), rather than using the regular
+> ->suspend|resume() callbacks. This should avoid the problem, I think,
+> no?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaochun-Lee/PCI-Set-no-io-resource-for-bridges-that-behind-VMD-controller/20220913-213745
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220924/202209240714.ronvmf1X-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f97a8ba561d7cf5a755c8f42421138e8b1073cf9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xiaochun-Lee/PCI-Set-no-io-resource-for-bridges-that-behind-VMD-controller/20220913-213745
-        git checkout f97a8ba561d7cf5a755c8f42421138e8b1073cf9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+I thought about this and it actually works for my particular
+panel-simple case.  What worries me is that the device(DRM device in my
+case) which triggers the runtime PM operations may also use            
+->suspend_late/resume_early() callbacks for whatever reasons, hence no
+fixed order to suspend/resume the two devices(like panel device and DRM
+device).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Also, not sure if there is any sequence issue by using the            
+->suspend_late/resume_early() callbacks in the panel-simple driver,
+since it's written for quite a few display panels which may work with
+various DRM devices - don't want to break any of them.
 
-All errors (new ones prefixed by >>):
+Regards,
+Liu Ying
 
-   drivers/pci/quirks.c: In function 'quirk_vmd_no_iosize':
->> drivers/pci/quirks.c:5985:13: error: implicit declaration of function 'is_vmd' [-Werror=implicit-function-declaration]
-    5985 |         if (is_vmd(bridge->bus) && bridge->is_hotplug_bridge) {
-         |             ^~~~~~
-   cc1: some warnings being treated as errors
+> 
+> Note that, the PM core also disables runtime PM for the device in
+> __device_suspend_late(). For good reasons.
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
 
-
-vim +/is_vmd +5985 drivers/pci/quirks.c
-
-  5959	
-  5960	#if defined(CONFIG_X86_64) || defined(CONFIG_X86)
-  5961	/*
-  5962	 * VMD-enabled root ports use Enhanced Configuration Access Mechanism (ECAM)
-  5963	 * access PCI Express configuration space, and offer VMD_CFGBAR as
-  5964	 * base of PCI Express configuration space for the bridges behind it.
-  5965	 * The configuration space includes IO resources, but these IO
-  5966	 * resources are not actually used on X86, especially the NVMes as
-  5967	 * device connnected on this hot plug bridges, and it can result
-  5968	 * in BAR#13 assign IO resource failed. So we clear IO resources
-  5969	 * by setting an IO base value greater than limit to these bridges.
-  5970	 * Hence, append kernel parameter "pci=hpiosize=0KB" can avoid
-  5971	 * this BAR#13 failed messages show out.
-  5972	 */
-  5973	static void quirk_vmd_no_iosize(struct pci_dev *bridge)
-  5974	{
-  5975		u8 io_base_lo, io_limit_lo;
-  5976		u16 io_low;
-  5977		u32 io_upper16;
-  5978		unsigned long io_mask,  base, limit;
-  5979	
-  5980		io_mask = PCI_IO_RANGE_MASK;
-  5981		if (bridge->io_window_1k)
-  5982			io_mask = PCI_IO_1K_RANGE_MASK;
-  5983	
-  5984		/* VMD Domain */
-> 5985		if (is_vmd(bridge->bus) && bridge->is_hotplug_bridge) {
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
