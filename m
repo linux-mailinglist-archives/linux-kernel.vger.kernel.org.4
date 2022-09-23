@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350FA5E7630
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EECD5E763B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiIWIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S231340AbiIWIwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiIWIuz (ORCPT
+        with ESMTP id S231344AbiIWIvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:50:55 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1AC126461
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:50:54 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w20so11133600ply.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=m0GiZu8zLID0eFEYzNtc/d/rbc2E3znwv6VNJxzsvXA=;
-        b=L1P50DVoPxcpKqaRrMElsHyMYUo6ZaCJl7prsqcYutvTJA7fdBiEBxp1bG2bu1SVpu
-         FDQKD1dFsz6h760y7ANrdH013zGD1YCkLjBi5vewQeL/h3yyoBjHNoOHM11XNGW2+N1o
-         tvkjrU2s1NFsJTkPNrnF+lJn1q8CRjuHIong0uyoF4n160gkkvES7QFotkTGsYR+rB4P
-         CrCtDdeCppNurnU2VQjWpeaokkIoukOavSBoanKSgp3/OYWEM8WU8pLg/+n7bwPUmaod
-         zJHqB3Yc9wy5KZT9+RDWSQiyZZszMDoRGPwZ+G8jWSRfWPjCweKYgHcOWdG1T3dDmg3m
-         gz9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=m0GiZu8zLID0eFEYzNtc/d/rbc2E3znwv6VNJxzsvXA=;
-        b=Y+iF1xt8WYwpYlkOgbMQr4AquCAM4uAOntrnw3NXWIwhgUz/K3qFLHgQqhfIh201Am
-         xh6xlVagESrvOe7tRnVUP40vwE0WyiGP0kG0cRxmfjtwLH+66Q8UwC7IPSDA4Ewk3bIX
-         TTeIta+OMwyMRr0ly3B0xYaKlxzPCKSepMsCwj7iI2TUnF/AJkcjXP5pBi+AgFkdDwv4
-         R7iPDO66w+NVcE3czASpb7JenZexl9VOgOMc9BrjHoDQRHDKnmD7QnGHXbmngSkQ/rDS
-         zQSynvK6e4fk57K4EcTTv4ULIW7mHySMud00CucrrALJY5GicGZZxtRlztF7TFPF9eYE
-         RUDQ==
-X-Gm-Message-State: ACrzQf2lho1CKc+p57RG6xnxNLNAOLdagol+d1Hw2yR3zcO2DRin7WPq
-        h/TLKx62nnBAbBFUp5tGvK+MGQ==
-X-Google-Smtp-Source: AMsMyM6XLM/RH9WGNR6ufoC8vvzvqomkeXaZ1axni1bMksT4CeQzyEhzm1cd+oc/7z3kyomHv+TvOQ==
-X-Received: by 2002:a17:90b:38cb:b0:200:aaa6:6428 with SMTP id nn11-20020a17090b38cb00b00200aaa66428mr20116518pjb.47.1663923033565;
-        Fri, 23 Sep 2022 01:50:33 -0700 (PDT)
-Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902f78300b001752216ca51sm5507871pln.39.2022.09.23.01.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 01:50:33 -0700 (PDT)
-From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
-To:     dianders@chromium.org, thierry.reding@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sean Hong <sean.hong@quanta.corp-partner.google.com>
-Subject: [PATCH] drm/panel-edp: Add BOE NT116WHM-N21 (HW: V8.1)
-Date:   Fri, 23 Sep 2022 16:50:28 +0800
-Message-Id: <20220923085028.306790-1-sean.hong@quanta.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 23 Sep 2022 04:51:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5DA1296B5;
+        Fri, 23 Sep 2022 01:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Mwd96PDyTOevoURdRNm22AhUb71BkD8a02+bd0y+kQ4=; b=tvJph7RgQD7CLZKEaP7wd20+HA
+        yzg1Rpk81YuhnLGg0IxkLW71EYP4wW4RxMvkX1baGgdCA+zsyv0wxDyVeWCGkfoxAJ7O7djHLJL5s
+        9oyGI4jpbsPbsfAD/1s8vHAosC6rt8/vPRZu2pj25Fmrmqh51GANFZB4FeikHq9qZh6sMuW3RgTI4
+        exZH9/upSkiDA3aEr3SXAM5NCGcRAgvOsRUHqBv2zAk5GnhfvqK/Wecjncu/UIVciVJhjnOmG9gGy
+        zr79D+RgDhz/xCk1Amx7X6rjhAl+hOr6g3q+F+AJq0AHJkiqr7j9ytA+QPCRAVyI+5CA3uxYY9gIv
+        71si1rdQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obePA-0033p5-F8; Fri, 23 Sep 2022 08:51:28 +0000
+Date:   Fri, 23 Sep 2022 01:51:28 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Daniil Lunev <dlunev@google.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Evan Green <evgreen@google.com>,
+        Gwendal Grignou <gwendal@google.com>
+Subject: Re: [PATCH RFC 0/8] Introduce provisioning primitives for thinly
+ provisioned storage
+Message-ID: <Yy1zkMH0f9ski4Sg@infradead.org>
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <YyQTM5PRT2o/GDwy@fedora>
+ <CAG9=OMPHZqdDhX=M+ovdg5fa3x4-Q_1r5SWPa8pMTQw0mr5fPg@mail.gmail.com>
+ <Yylvvm3zVgqpqDrm@infradead.org>
+ <CAAKderPF5Z5QLxyEb80Y+90+eR0sfRmL-WfgXLp=eL=HxWSZ9g@mail.gmail.com>
+ <YymkSDsFVVg1nbDP@infradead.org>
+ <CAAKderNcHpbBqWqqd5-WuKLRCQQUt7a_4D4ti4gy15+fKGK0vQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAKderNcHpbBqWqqd5-WuKLRCQQUt7a_4D4ti4gy15+fKGK0vQ@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the BOE - NT116WHM-N21 (HW: V8.1) panel.
+On Wed, Sep 21, 2022 at 07:48:50AM +1000, Daniil Lunev wrote:
+> > There is no such thing as WRITE UNAVAILABLE in NVMe.
+> Apologize, that is WRITE UNCORRECTABLE. Chapter 3.2.7 of
+> NVM Express NVM Command Set Specification 1.0b
 
-Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
----
- drivers/gpu/drm/panel/panel-edp.c | 1 +
- 1 file changed, 1 insertion(+)
+Write uncorrectable is a very different thing, and the equivalent of the
+horribly misnamed SCSI WRITE LONG COMMAND.  It injects an unrecoverable
+error, and does not provision anything.
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 060f4f98bc04..5069440633fd 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1885,6 +1885,7 @@ static const struct edp_panel_entry edp_panels[] = {
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0786, &delay_200_500_p2e80, "NV116WHM-T01"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x07d1, &boe_nv133fhm_n61.delay, "NV133FHM-N61"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x082d, &boe_nv133fhm_n61.delay, "NV133FHM-N62"),
-+	EDP_PANEL_ENTRY('B', 'O', 'E', 0x094b, &delay_200_500_e50, "NT116WHM-N21"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x098d, &boe_nv110wtm_n61.delay, "NV110WTM-N61"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0a5d, &delay_200_500_e50, "NV116WHM-N45"),
- 
--- 
-2.25.1
+> * Each application is potentially allowed to consume the entirety
+>   of the disk space - there is no strict size limit for application
+> * Applications need to pre-allocate space sometime, for which
+>   they use fallocate. Once the operation succeeded, the application
+>   assumed the space is guaranteed to be there for it.
+> * Since filesystems on the volumes are independent, filesystem
+>   level enforcement of size constraints is impossible and the only
+>   common level is the thin pool, thus, each fallocate has to find its
+>   representation in thin pool one way or another - otherwise you
+>   may end up in the situation, where FS thinks it has allocated space
+>   but when it tries to actually write it, the thin pool is already
+>   exhausted.
+> * Hole-Punching fallocate will not reach the thin pool, so the only
+>   solution presently is zero-writing pre-allocate.
 
+To me it sounds like you want a non-thin pool in dm-thin and/or
+guaranted space reservations for it.
+
+> * Thus, a provisioning block operation allows an interface specific
+>   operation that guarantees the presence of the block in the
+>   mapped space. LVM Thin-pool itself is the primary target for our
+>   use case but the argument is that this operation maps well to
+>   other interfaces which allow thinly provisioned units.
+
+I think where you are trying to go here is badly mistaken.  With flash
+(or hard drive SMR) there is no such thing as provisioning LBAs.  Every
+write is out of place, and a one time space allocation does not help
+you at all.  So fundamentally what you try to here just goes against
+the actual physics of modern storage media.  While there are some
+layers that keep up a pretence, trying to that an an exposed API
+level is a really bad idea.
