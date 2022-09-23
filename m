@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C655E71EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBCE5E71F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbiIWCbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 22:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S232317AbiIWCj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 22:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiIWCbl (ORCPT
+        with ESMTP id S232292AbiIWCjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 22:31:41 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED65EF08B;
-        Thu, 22 Sep 2022 19:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663900300; x=1695436300;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pYyYBUYMtYbcujhE22C27QXzCyOfAQYZ1tOZo9rAkuU=;
-  b=C2h/eN5EkPYsjx/D0qZ9gZ5tRTNeMdKdZsBzKJKMIAvqacrPQmshhs2v
-   lvjOF6aV1sXCD+zTbkNoGxeEpYdEbBgUJmSJ5N3mFZDXUCOcOcO0D2c2J
-   8WB0YdGmlJojypMM0mOaJ2mcNYGRboewYmHLwIKn7phyIgQLwg/Yj8MTo
-   A1XAdIYI5UDwhCKTiQp00/LNh3LCohrrRJqL3e63Q7a5MOLXmmuDcnAWT
-   ZVE22YchdkzISQor3Ji9RV7ebvheSeev9weSkzNVaN58zrYf1Vr865hpz
-   t1XYX6P/zYx9xLLBmtGMn61pObLxKosHojVmZXcXYq64qzZUsoi1EZ81S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="287602465"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="287602465"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:31:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="620051445"
-Received: from ningqu-mobl1.ccr.corp.intel.com (HELO [10.254.210.156]) ([10.254.210.156])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:31:35 -0700
-Message-ID: <ca854564-f231-1010-92e3-69acabde2bd1@linux.intel.com>
-Date:   Fri, 23 Sep 2022 10:31:32 +0800
+        Thu, 22 Sep 2022 22:39:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6321191BA;
+        Thu, 22 Sep 2022 19:39:14 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYbpb22StzlXRT;
+        Fri, 23 Sep 2022 10:35:03 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
+ (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
+ 2022 10:39:11 +0800
+From:   Peng Wu <wupeng58@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <asmaa@nvidia.com>, <davthompson@nvidia.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liwei391@huawei.com>, <wupeng58@huawei.com>
+Subject: [PATCH] net/mlxbf_gige: Fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
+Date:   Fri, 23 Sep 2022 02:36:40 +0000
+Message-ID: <20220923023640.116057-1-wupeng58@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v13 09/13] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
- <20220906124458.46461-10-baolu.lu@linux.intel.com>
- <YyyGqDP8AgjsFAkM@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <YyyGqDP8AgjsFAkM@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500023.china.huawei.com (7.221.188.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/23 0:00, Jason Gunthorpe wrote:
-> On Tue, Sep 06, 2022 at 08:44:54PM +0800, Lu Baolu wrote:
-> 
->> +/**
->> + * iommu_sva_bind_device() - Bind a process address space to a device
->> + * @dev: the device
->> + * @mm: the mm to bind, caller must hold a reference to mm_users
->> + *
->> + * Create a bond between device and address space, allowing the device to access
->> + * the mm using the returned PASID. If a bond already exists between @device and
->> + * @mm, it is returned and an additional reference is taken. Caller must call
->> + * iommu_sva_unbind_device() to release each reference.
->> + *
->> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
->> + * initialize the required SVA features.
-> Thsi is something else that needs cleaning up. IOMMU_DEV_FEAT_SVA
-> shouldn't exist.
-> 
-> We need to figure out an appropriate way to allow PRI. IMHO the domain
-> attach should do this, domains that require PRI should be distinct
-> from domains that don't. When a PRI domain is attached the HW should
-> be enabled to do PRI. The domain itself should carry the fault ops/etc
-> that the caller supplies to respond to the PRI.
-> 
-> That is something to address in the PRI series though..
+The devm_ioremap() function returns NULL on error, it doesn't return
+error pointers.
 
- From Intel IOMMU driver's point of view, with above done,
-IOMMU_DEV_FEAT_SVA could be removed. However, it will take more time to
-consider other needs.
+Fixes: 3a1a274e933f ("mlxbf_gige: compute MDIO period based on i1clk")
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+---
+ drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> Reviewed-by: Jason Gunthorpe<jgg@nvidia.com>
+diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
+index 85155cd9405c..a842daa3c507 100644
+--- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
++++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
+@@ -240,8 +240,8 @@ int mlxbf_gige_mdio_probe(struct platform_device *pdev, struct mlxbf_gige *priv)
+ 	}
+ 
+ 	priv->clk_io = devm_ioremap(dev, res->start, resource_size(res));
+-	if (IS_ERR(priv->clk_io))
+-		return PTR_ERR(priv->clk_io);
++	if (!priv->clk_io)
++		return -ENOMEM;
+ 
+ 	mlxbf_gige_mdio_cfg(priv);
+ 
+-- 
+2.17.1
 
-Best regards,
-baolu
