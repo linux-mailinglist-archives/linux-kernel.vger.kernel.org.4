@@ -2,141 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A785E7D55
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38A15E7D5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiIWOj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S232270AbiIWOkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiIWOjY (ORCPT
+        with ESMTP id S231579AbiIWOkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:39:24 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20E143289
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:39:22 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id nb11so1144616ejc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=S5eZN2svmhOfsW6VEcUb5Ry7O5bFBRCb5lC2tn/7Tfo=;
-        b=gkzAlIt/hpKoRZEZLqhfZ8OysZ9L7bILUx3sexHwwb/6XDB+pCPacUz+MJjhWKhuR8
-         03WIYD6q3het0x2eUZOaFt4+8DLRxhO61dji69+3Me4MLavSly0qeRo0vqetAht869ok
-         ifG9Ps6irane6AxqQ0QfJg90uACXU5trZG5FNLfEzHAvnDR/7MbC/Fiy3LIbWwjANhiM
-         E2UJl7+e5iXNxOJG9pVXNlrbpNeiZUe/b5JBc4Ah587wHR6LrqOEcMd85sSJX+AHXzVH
-         ylFVisJVdx3w/VxoxI7/ouKWTh3F9lVB7kokwRSC1DxQ36BVKR9k3+145PxEiaip0TUB
-         rnCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=S5eZN2svmhOfsW6VEcUb5Ry7O5bFBRCb5lC2tn/7Tfo=;
-        b=gfZ/7FFz39yySALpvhmgQ4bS+sM41VOxwU+X5K4cumeN2s2+SECWHMCEDk+f8dV9E9
-         YeTIr8+R710q5MmXAg+7JR7e2JFvYAWuhWdW1B501tjn0eSj2O9UrBWOwOc/VNq4WqSI
-         UyTGzWbJlWnx0Y78XFWOMcKPcRmn7/2LRC2TaSp6AFJ2tvUfwlZex31FLSWmBbIIvCVe
-         evh5P+4laWNIKttwkdES9fhtyLBHk7TsoTlm1JK3CrCzz35g35HkF8pHTmWvMO6n6hmE
-         BSI+qNLR8oTeMvBN6uEGV+/gBrNUbnZSK2deiZfQI4uHGZpU16HaC/rJQTZLC8kwVMkO
-         gTMQ==
-X-Gm-Message-State: ACrzQf3EHe2y8JLcB0ue5idIDJqOXBDhAD+siLjRMOfUAJv9qi71yKXL
-        z3GpUReW8SrKOR3xHAhm82PowA==
-X-Google-Smtp-Source: AMsMyM5/0fjixHZUeDGkqTbJZktQlwbIg9e75ri3yi5AJ6I4VwtQ3bwL9pzvfhAltPu40POCkTiVNg==
-X-Received: by 2002:a17:906:8469:b0:781:fc76:fbd7 with SMTP id hx9-20020a170906846900b00781fc76fbd7mr7457238ejc.486.1663943960828;
-        Fri, 23 Sep 2022 07:39:20 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090623e200b0078197a9421csm4117653ejg.85.2022.09.23.07.39.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 07:39:20 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 23 Sep 2022 16:39:18 +0200
-Message-Id: <CN3UWLRBLVPF.VV4AX2X9TS34@otso>
-Subject: Re: [PATCH v1 00/15] create power sequencing subsystem
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Marcel Holtmann" <marcel@holtmann.org>,
-        "Johan Hedberg" <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        "Kalle Valo" <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Stanimir Varbanov" <svarbanov@mm-sol.com>
-Cc:     <linux-arm-msm@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-X-Mailer: aerc 0.12.0
-References: <20211006035407.1147909-1-dmitry.baryshkov@linaro.org>
-In-Reply-To: <20211006035407.1147909-1-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 23 Sep 2022 10:40:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06AAF1857;
+        Fri, 23 Sep 2022 07:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663944050; x=1695480050;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Fs2fxSNfqcm045ENtCdw6SPv/7P4W5SdGkbp+E5zDPs=;
+  b=i+BwdRNi7rDZY/UqqxhbZHRtF4gNbate7cbADjOUl1qhk/F5DBDjyK3h
+   QnMNfsHQEgVGY9JUHqe0OavUKGaVZAJu4IOVVzQDUB9nx/N/9fEUiYstQ
+   xT0dDkHosU2Ah12vHmFeOy2OfBpwnnxbPo1kByGlLbzo/P0cffTBCbmdl
+   Z9SYi03qbwYAchcy/3NrsLoclCIT6opp2phfG5KOEiYklR1NyT96bTJ7O
+   zUUUm4bk2TvPnwh9YrrCPAUrfQZJWye/TPLhqtUBeQEYjx6aK879ZR/51
+   d2FjSmJ1ViIRwFk/qedxV+m9cChDWXQ7XqYvQlf7LZJiGTCMUAUCUaI0u
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="302053273"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="302053273"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:40:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="865312354"
+Received: from alutz-mobl.ger.corp.intel.com ([10.252.35.146])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:40:42 -0700
+Date:   Fri, 23 Sep 2022 17:40:40 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v2 1/6] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <40e867ec-c7-66f-9db9-94f6132d587e@linux.intel.com>
+Message-ID: <b0689af0-511-dd5d-8e3-cca69d609cb0@linux.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-2-matthew.gerlach@linux.intel.com> <40e867ec-c7-66f-9db9-94f6132d587e@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-2146711104-1663944047=:1595"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Wed Oct 6, 2021 at 5:53 AM CEST, Dmitry Baryshkov wrote:
-> This is a proposed power sequencer subsystem. This is a
-> generification of the MMC pwrseq code. The subsystem tries to abstract
-> the idea of complex power-up/power-down/reset of the devices.
->
-> The primary set of devices that promted me to create this patchset is
-> the Qualcomm BT+WiFi family of chips. They reside on serial+platform
-> or serial + SDIO interfaces (older generations) or on serial+PCIe (newer
-> generations).  They require a set of external voltage regulators to be
-> powered on and (some of them) have separate WiFi and Bluetooth enable
-> GPIOs.
->
-> The major drawback for now is the lack of proper PCIe integration
-> At this moment support for PCIe is hacked up to be able to test the
-> PCIe part of qca6390. Proper PCIe support would require automatically
-> powering up the devices before the scan basing on the proper device
-> structure in the device tree. This two last patches are noted as WIP and
-> are included into the patchset for the purpose of testing WiFi on newer
-> chips (like qca6390/qca6391).
+--8323329-2146711104-1663944047=:1595
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-What's the status of this series? With this I have gotten Bluetooth to
-somewhat work on sm7225-fairphone-fp4, which is using WCN3990/WCN3988.
+On Fri, 23 Sep 2022, Ilpo Järvinen wrote:
 
-Is there another solution with a different patch series that could make
-it work also?
+> On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+> 
+> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > 
+> > Add documentation describing the extensions provided by Version
+> > 1 of the Device Feature Header (DFHv1).
+> > 
+> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > ---
+> > v2: s/GUILD/GUID/
+> >     add picture
+> > ---
+> >  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
+> > 
+> > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> > index 15b670926084..7c786b75b498 100644
+> > --- a/Documentation/fpga/dfl.rst
+> > +++ b/Documentation/fpga/dfl.rst
+> > @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
+> >  driver's id_table.
+> >  
+> >  
+> > +Extending the Device Feature Header - DFHv1
+> > +===========================================
+> > +The current 8 bytes of the Device Feature Header, hereafter referred to as
+> > +to DFHv0, provide very little opportunity for the hardware to describe itself
+> > +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
+> > +to provide increased flexibility and extensibility to hardware designs using
+> > +Device Feature Lists.  The list below describes some of the goals behind the
+> > +changes in DFHv1:
+> > +
+> > +* Provide a standardized mechanism for features to describe
+> > +  parameters/capabilities to software.
+> > +* Standardize the use of a GUID for all DFHv1 types.
+> > +* Decouple the location of the DFH from the register space of the feature itself.
+> > +
+> > +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
+> > +a list of parameter values to a particular feature.
+> > +
+> > +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
+> > +across all types.
+> > +
+> > +With DFHv0, the register map of a given feature is located immediately following
+> > +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
+> > +map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
+> > +structure is shown below:
+> > +
+> > +    +-----------------------------------------------------------------------+
+> > +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63                                 GUID_L                             0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63                                 GUID_H                             0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63                 Address/Offset                            1|  Rel  0|
+> > +    +-----------------------------------------------------------------------+
+> 
+> Is something missing here given the layout is claimed (in 2/6) to be:
+> 
+> "DFHv1 Register Offset definitons
+> In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA"
+> 
+> ?
 
-The latest I could find regarding some new Bluetooth thing is the
-following email from June 2022, but nothing seems to have happened since
-then.
-https://lore.kernel.org/linux-arm-msm/SJ0PR02MB7135746D204F13550E9BAE77F8B2=
-9@SJ0PR02MB7135.namprd02.prod.outlook.com/
+Ah, I think I've figured it out, PARAM_HDR + PARAM_DATA combo is repeated 
+n times (rather than the params being covered by the "PARAM_DATA")?
 
-Regards
-Luca
+-- 
+ i.
 
->
-> Changes since RFC v2:
->  - Add documentation for the pwrseq code. Document data structures,
->    macros and exported functions.
->  - Export of_pwrseq_xlate_onecell()
->  - Add separate pwrseq_set_drvdata() function to follow the typical API
->    design
->  - Remove pwrseq_get_optional()/devm_pwrseq_get_optional()
->  - Moved code to handle old mmc-pwrseq binding to the MMC patch
->  - Split of_pwrseq_xlate_onecell() support to a separate patch
->
-> Changes since RFC v1:
->  - Provider pwrseq fallback support
->  - Implement fallback support in pwrseq_qca.
->  - Mmove susclk handling to pwrseq_qca.
->  - Significantly simplify hci_qca.c changes, by dropping all legacy
->    code. Now hci_qca uses only pwrseq calls to power up/down bluetooth
->    parts of the chip.
+> > +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63                 Parameter Data                                     0|
+> > +    +-----------------------------------------------------------------------+
+> > +
+> > +                                  ...
+> > +
+> > +    +-----------------------------------------------------------------------+
+> > +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> > +    +-----------------------------------------------------------------------+
+> > +    |63                 Parameter Data                                     0|
+> > +    +-----------------------------------------------------------------------+
+> > +
+> >  Open discussion
+> >  ===============
+> >  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> > 
+> 
+> 
 
+--8323329-2146711104-1663944047=:1595--
