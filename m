@@ -2,108 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DEB5E7E23
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA165E7E28
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiIWPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S232284AbiIWPVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiIWPUa (ORCPT
+        with ESMTP id S232537AbiIWPU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:20:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442AFE6A00;
-        Fri, 23 Sep 2022 08:20:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED4B8B838C3;
-        Fri, 23 Sep 2022 15:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B72C43142;
-        Fri, 23 Sep 2022 15:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663946426;
-        bh=zo7rFZiPS4WyTBZk4VHnI8cDdMwygNZyE43ol0e2o2A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h5A9XThDA/5s0nOAX9forsdLayrzgXUza7l79K6258CeVyLTGUt6X96ZBEPlttNp5
-         ElY629wCutz4/DSMBngmRLN37ymIDXCrKV/Z2J6jov2aGTDZS4bkyZbVrUsPgnnbig
-         yqDUPOVPVI82nAtprBZMueiVWOHOBWkCOsQi3r/9/PBuhqMgwsKjbhOa0KFz5Ia5ga
-         FesASNFIjqev89LM8TbV6f0uz9NdHPJ6XfW7MlY5FZbM7WXYQZK/8HegplFfsL3tOO
-         9djqqHdCD9lVmJpKW6oZAbuByK69CJ3xUbSxMjXmvykRA9FiAOhnIFGmLKDGuYyXRw
-         uNUmczkVos0qg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Subject: [PATCH -next] thermal/intel/int340x: Initialized ret in error path in int340x_thermal_zone_add()
-Date:   Fri, 23 Sep 2022 08:20:09 -0700
-Message-Id: <20220923152009.1721739-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        Fri, 23 Sep 2022 11:20:59 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7439A13BCF6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:20:52 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id z20so456039ljq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=SUWKwcsZsry2fgvm0fDpc5kVnOus3A4t37kogjVDCAM=;
+        b=ENR7gm/ufNi1bXyPhRkLqOIR8X61pAuHZDAxvBQJtBMo1XxcJXpZCyvZXjdZtxEGqs
+         Rld/BEcs2SP4Qyo9L4ZnVLbMttpTZWKLplZzijm55RmkSXps8vg+nlMTQRL8Q8n8sP8V
+         PQt74elT4aSaOtht+ghVFN1gYzIIvLmyZUBZycxab9teGDT4klNyOyRb/aF7xVrdEhn9
+         7oLI/l2Io92zNWZn3GSEQCNXcxdOVW4hgKbxpiZ3V8r6dHHCPZ3UDzrOP3Zt+jMD0Csi
+         vmw3ypm10IkLOpdYu1J8qcIYc6CXN4laL/fqx5HsbDxujMM99DHcUV+6BWkduPO9udYw
+         ZNYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=SUWKwcsZsry2fgvm0fDpc5kVnOus3A4t37kogjVDCAM=;
+        b=olUUxVfx38tFUanRURDIBQBRsDI5ncsV49jLsMB8GJR/mJqUWvUHyiWbBhLrkgK6ZH
+         In6U9fvyAPEyq54lOSEcDGmlfu21FwiSSmjAwgPst6zYuOPpcetWhd9u9bzOSwElHILQ
+         zq/Q4bWHpWPD4C0q33FS9gD5/FxpDzLoBdepc6Q1BI+5uqwoSUyMAefqBhwKKV4V18WE
+         yjYvXElQg/OR3tqJm02k52fjfzajSu8EjYiQiU69CoyEizFnk3scfDM6tiZaqvN5sQTy
+         /BR6cwGitjfK2CtshVslhG3AMaBJo3Y7yrgaTmGsqNnUFJxQ8CXTOfQKB8GEwX63FkvR
+         VdiA==
+X-Gm-Message-State: ACrzQf2Vbf8l8UxbKLPPycoFCF1ZWfCdcd0WIuQ+Exq8xndui0atQD5l
+        bdKkU2gHVNb9NGHVeAO5Mz3Kld0++kEH7OobpB2ga0rr8VYkMA==
+X-Google-Smtp-Source: AMsMyM7wJ1CjDy1uo28Cq+7fc7qkrSMtXjul2vWncBmw/XrFOfxAvAKrbpIhjT0LJgDsFIw328yn+2TOFJu3bRs5xe4=
+X-Received: by 2002:a05:651c:1508:b0:26c:622e:abe1 with SMTP id
+ e8-20020a05651c150800b0026c622eabe1mr3040402ljf.228.1663946450628; Fri, 23
+ Sep 2022 08:20:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
+ <Yyi+l3+p9lbBAC4M@google.com> <84e81d21-c800-4fd5-ad7c-f20bcdd7508b@www.fastmail.com>
+In-Reply-To: <84e81d21-c800-4fd5-ad7c-f20bcdd7508b@www.fastmail.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Fri, 23 Sep 2022 16:20:13 +0100
+Message-ID: <CA+EHjTzt6grmRx59ziG6LHWBsE598dxiOYqqRM4cKvpF3ujqHg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+Hi,
 
-  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-          if (!int34x_thermal_zone->ops)
-              ^~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
-          return ERR_PTR(ret);
-                        ^~~
-  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
-          if (!int34x_thermal_zone->ops)
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
-          int ret;
-                ^
-                  = 0
-  1 error generated.
+<...>
 
-If kmemdup() fails, -ENOMEM should be returned.
+> > Regarding pKVM's use case, with the shim approach I believe this can be=
+ done by
+> > allowing userspace mmap() the "hidden" memfd, but with a ton of restric=
+tions
+> > piled on top.
+> >
+> > My first thought was to make the uAPI a set of KVM ioctls so that KVM
+> > could tightly
+> > tightly control usage without taking on too much complexity in the
+> > kernel, but
+> > working through things, routing the behavior through the shim itself
+> > might not be
+> > all that horrific.
+> >
+> > IIRC, we discarded the idea of allowing userspace to map the "private"
+> > fd because
+> > things got too complex, but with the shim it doesn't seem _that_ bad.
+>
+> What's the exact use case?  Is it just to pre-populate the memory?
 
-Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1717
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Prepopulate memory and access memory that could go back and forth from
+being shared to being private.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-index ea05be8c2834..228f44260b27 100644
---- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -219,8 +219,10 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 
- 	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
- 					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
--	if (!int34x_thermal_zone->ops)
-+	if (!int34x_thermal_zone->ops) {
-+		ret = -ENOMEM;
- 		goto err_ops_alloc;
-+	}
- 
- 	if (get_temp)
- 		int34x_thermal_zone->ops->get_temp = get_temp;
+Cheers,
+/fuad
 
-base-commit: 2b109cffe6836f0bb464639cdcc59fc537e3ba41
--- 
-2.37.3
 
+
+> >
+> > E.g. on the memfd side:
+> >
+> >   1. The entire memfd must be mapped, and at most one mapping is allowe=
+d, i.e.
+> >      mapping is all or nothing.
+> >
+> >   2. Acquiring a reference via get_pfn() is disallowed if there's a map=
+ping for
+> >      the restricted memfd.
+> >
+> >   3. Add notifier hooks to allow downstream users to further restrict t=
+hings.
+> >
+> >   4. Disallow splitting VMAs, e.g. to force userspace to munmap() every=
+thing in
+> >      one shot.
+> >
+> >   5. Require that there are no outstanding references at munmap().  Or =
+if this
+> >      can't be guaranteed by userspace, maybe add some way for userspace=
+ to wait
+> >      until it's ok to convert to private?  E.g. so that get_pfn() doesn=
+'t need
+> >      to do an expensive check every time.
+>
+> Hmm.  I haven't looked at the code to see if this would really work, but =
+I think this could be done more in line with how the rest of the kernel wor=
+ks by using the rmap infrastructure.  When the pKVM memfd is in not-yet-pri=
+vate mode, just let it be mmapped as usual (but don't allow any form of GUP=
+ or pinning).  Then have an ioctl to switch to to shared mode that takes lo=
+cks or sets flags so that no new faults can be serviced and does unmap_mapp=
+ing_range.
+>
+> As long as the shim arranges to have its own vm_ops, I don't immediately =
+see any reason this can't work.
