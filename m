@@ -2,174 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2975E751C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516DC5E751F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiIWHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 03:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        id S230161AbiIWHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 03:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIWHqY (ORCPT
+        with ESMTP id S230241AbiIWHqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:46:24 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C31B12CCB7;
-        Fri, 23 Sep 2022 00:45:54 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso4613914pjd.4;
-        Fri, 23 Sep 2022 00:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aW76gmW+Z5hGGf3FjMaj197LqqVcbY4HHUFygvXrzUA=;
-        b=h1Anx/e+40quCUEE9ycjrVAHM57MhJA71U/Re2pB7wtxs4ZMpzqynxCPwQt67zQtJK
-         22UOjlbXgygfYyj/+w60swmIgl4V4Ca7t3JzfUnLX59IqSne7zPqVwzWDTSFDor+Dobp
-         Hn+PrVqeg9+TacjmbTzNXcwSU4ue8KaTkHvranUB+H/P15PlalEHTLrfuTPePP08RbBA
-         CbMRLV8c1El6Iqa4dcypl1M5f7rAmLMcxRW9OPQnKovXtLKh0rb9EA2JslfmsoX4VwmB
-         w6LciDrccFaR+PJZUEb8flOF5JVl1E0CKGjEP7bLoAmx/6BJ3IWW7hCbfnOGj2mPMTnq
-         d2HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aW76gmW+Z5hGGf3FjMaj197LqqVcbY4HHUFygvXrzUA=;
-        b=FoXe2U86faa1WbJSJndwXHwsbCS77nUpeInq6PcHpM+7Qr9kdcW/32ygJO1jX+yu1m
-         mVeBmLtfHAkdXF7r9ihQXAUdnQ7vycHdp/dJ0R9XH2dDRAcKxRdgIzO87IimoOHEm6za
-         VztjnR5JubVMW0enzwTxG2byOaTrkQ/HUN7u2vx2Cf/fjZQylpBGgmHojDm1AsARN/zW
-         a303bHQ9mM3SasefaxRolDz0HuV7AMCWQAjyYzVA2d26KsfEyomhD2NO4gR0ZFk6VTp1
-         t7qvP4ZcZLhiQoJVnIqiJb6U2acWzFXGqAjV9DYgs97RTXu3Y5Ra7niZct33JiHcOcCu
-         mDhA==
-X-Gm-Message-State: ACrzQf0EwWrGC/J6eNm6m1zTIb/QVnp2njMcFvk9DpMT+q60LFL1hLTj
-        0KCmzx874wHaeO5kdPxhv64=
-X-Google-Smtp-Source: AMsMyM71WeCrPnQNhXCWkVmdt5T5edtpWR1oa3FeGb/YIU4JETsDGn0kB1fH/4YJ5z6byQmddCzVuw==
-X-Received: by 2002:a17:902:720b:b0:178:83e9:11ec with SMTP id ba11-20020a170902720b00b0017883e911ecmr7052576plb.34.1663919142618;
-        Fri, 23 Sep 2022 00:45:42 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-67.three.co.id. [180.214.233.67])
-        by smtp.gmail.com with ESMTPSA id w68-20020a628247000000b0053e75395705sm5780233pfd.127.2022.09.23.00.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 00:45:41 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id B596E1037D4; Fri, 23 Sep 2022 14:45:34 +0700 (WIB)
-Date:   Fri, 23 Sep 2022 14:45:34 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Kees Cook <keescook@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v2 5/7] docs: move asm-annotations.rst into core-api
-Message-ID: <Yy1kHrS7ieq1VCqw@debian.me>
-References: <20220922204138.153146-1-corbet@lwn.net>
- <20220922204138.153146-6-corbet@lwn.net>
+        Fri, 23 Sep 2022 03:46:32 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE8F7AC16;
+        Fri, 23 Sep 2022 00:46:26 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1obdOC-0001G0-LO; Fri, 23 Sep 2022 09:46:24 +0200
+Message-ID: <d9a3460b-0ed6-4bfa-5bdd-032f4bc4ebce@leemhuis.info>
+Date:   Fri, 23 Sep 2022 09:46:24 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mx4ZK54fQt2or+1d"
-Content-Disposition: inline
-In-Reply-To: <20220922204138.153146-6-corbet@lwn.net>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US, de-DE
+References: <f6755107-b62c-a388-0ab5-0a6633bf9082@garloff.de>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Kurt Garloff <kurt@garloff.de>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>
+Subject: Re: linux-5.15.69 breaks nfs client
+In-Reply-To: <f6755107-b62c-a388-0ab5-0a6633bf9082@garloff.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1663919186;60e90cd8;
+X-HE-SMSGID: 1obdOC-0001G0-LO
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker. CCing the regression
+mailing list, as it should be in the loop for all regressions, as
+explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+Also CCing the stable ml, the NFS maintainers, and the authors of
+31b992b3c39b, too.
 
---mx4ZK54fQt2or+1d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22.09.22 23:46, Kurt Garloff wrote:
+> 
+> a freshly compiled 5.15.69 kernel showed hangs with NFS.
+> Typically mkdir would end up in a 'D' process state, but I
+> have seen ls -l hanging as well.
+> Server is kernel NFS 5.15.69.
+> 
+> After reverting the last three NFS related commits,
+> a68a734b19af NFS: Fix WARN_ON due to unionization of nfs_inode.nrequests
+> 3b97deb4abf5 NFS: Fix another fsync() issue after a server reboot
+> 31b992b3c39b NFS: Save some space in the inode
+> 
+> things work normally again.
+> 
+> As you can see, I suspected 31b992b3c39b ...
 
-On Thu, Sep 22, 2022 at 02:41:36PM -0600, Jonathan Corbet wrote:
-> @@ -43,10 +43,11 @@ annotated objects like this, tools can be run on them=
- to generate more useful
->  information. In particular, on properly annotated objects, ``objtool`` c=
-an be
->  run to check and fix the object if needed. Currently, ``objtool`` can re=
-port
->  missing frame pointer setup/destruction in functions. It can also
-> -automatically generate annotations for :doc:`ORC unwinder <x86/orc-unwin=
-der>`
-> +automatically generate annotations for the ORC unwinder
-> +(Documentation/x86/orc-unwinder.rst)
->  for most code. Both of these are especially important to support reliable
-> -stack traces which are in turn necessary for :doc:`Kernel live patching
-> -<livepatch/livepatch>`.
-> +stack traces which are in turn necessary for kernel live patching
-> +(Documentation/livepatch/livepatch.rst).
+FWIW, that's e591b298d7ec in mainline.
 
-Hi jon,
+> I know this report is light on details; if nothing like this has been
+> reported yet, let me know and I'll try to find some time to investigate
+> further.
+> 
+> PS: Please keep me on Cc, I'm not subscribed to linux-nfs.
 
-I think Sphinx internal references are better fit for these links:
+I wonder if this is this is a dup of this report:
 
----- >8 ----
+https://lore.kernel.org/all/c5d8485b-0dbc-5192-4dc6-10ef2b86b520@molgen.mpg.de/
 
-diff --git a/Documentation/core-api/asm-annotations.rst b/Documentation/cor=
-e-api/asm-annotations.rst
-index bc514ed598870c..d3071f131dad73 100644
---- a/Documentation/core-api/asm-annotations.rst
-+++ b/Documentation/core-api/asm-annotations.rst
-@@ -43,11 +43,10 @@ annotated objects like this, tools can be run on them t=
-o generate more useful
- information. In particular, on properly annotated objects, ``objtool`` can=
- be
- run to check and fix the object if needed. Currently, ``objtool`` can repo=
-rt
- missing frame pointer setup/destruction in functions. It can also
--automatically generate annotations for the ORC unwinder
--(Documentation/x86/orc-unwinder.rst)
-+automatically generate annotations for the :ref:`ORC unwinder <orc-unwinde=
-r>`
- for most code. Both of these are especially important to support reliable
--stack traces which are in turn necessary for kernel live patching
--(Documentation/livepatch/livepatch.rst).
-+stack traces which are in turn necessary for :ref:`kernel live patching
-+<kernel-livepatch>`.
-=20
- Caveat and Discussion
- ---------------------
-diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatc=
-h/livepatch.rst
-index 68e3651e8af925..ebb8b05a9b0d3e 100644
---- a/Documentation/livepatch/livepatch.rst
-+++ b/Documentation/livepatch/livepatch.rst
-@@ -1,3 +1,5 @@
-+.. _kernel-livepatch:
-+
- =3D=3D=3D=3D=3D=3D=3D=3D=3D
- Livepatch
- =3D=3D=3D=3D=3D=3D=3D=3D=3D
-diff --git a/Documentation/x86/orc-unwinder.rst b/Documentation/x86/orc-unw=
-inder.rst
-index cdb257015bd9e8..b26368c3892d3d 100644
---- a/Documentation/x86/orc-unwinder.rst
-+++ b/Documentation/x86/orc-unwinder.rst
-@@ -1,5 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0
-=20
-+.. _orc-unwinder:
-+
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- ORC unwinder
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+In that thread Trond mentioned
+```
+I believe this is a dependency that was introduced by the back port of
+commit e591b298d7ec ("NFS: Save some space in the inode") into 5.15.68.
+So the reason it wasn't seen is because the change is very recent.
 
-Thanks.
+FYI Greg and Sasha: please also consider pulling 6e176d47160c ("NFSv4:
+Fixes for nfs4_inode_return_delegation()") into that stable series.
+```
 
---=20
-An old man doll... just what I always wanted! - Clara
+Anyway, for the rest of this mail:
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
---mx4ZK54fQt2or+1d
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
------BEGIN PGP SIGNATURE-----
+#regzbot ^introduced 31b992b3c39b
+#regzbot ignore-activity
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYy1kFAAKCRD2uYlJVVFO
-o0KWAP9jzvP4ppaXJOFGMQh19B6PfDGQfLT5QMGsWxf7kAGfjgD9G6np/5Q3JDdz
-Jen+9y5W1RBiByedHFXTIZ/nPiafNQA=
-=PCxc
------END PGP SIGNATURE-----
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
 
---mx4ZK54fQt2or+1d--
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
