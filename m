@@ -2,129 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C45E5E765F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5228B5E7665
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiIWJAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S231543AbiIWJDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiIWJAR (ORCPT
+        with ESMTP id S229810AbiIWJDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:00:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4C3FFA70
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:00:15 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYmJV2fhdzHpjW;
-        Fri, 23 Sep 2022 16:58:02 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 17:00:13 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <bsegall@google.com>,
-        <mgorman@suse.de>, <bristot@redhat.com>, <vschneid@redhat.com>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ftrace: Remove obsoleted code from ftrace and task_struct
-Date:   Fri, 23 Sep 2022 17:00:12 +0800
-Message-ID: <20220923090012.505990-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 23 Sep 2022 05:03:33 -0400
+Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [IPv6:2001:67c:1be8::25:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB79C63;
+        Fri, 23 Sep 2022 02:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:Content-Type:
+        Message-ID:References:In-Reply-To:Cc:To:From:Date:MIME-Version:Sender:
+        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+        :Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=L6X+NVyykXECXexASvsjv9HnB25hHqHZ/AABK6aPkPA=; b=m0BvF06QPo/4R7lQ/IuDPVoQoa
+        EGz/4wcqoR1yO7qLsvegnsXSmZdbo74Cp7OE2hnt4v7QLY5ihwDzvWIOkf678xfZ+DPUuZnUdGqXf
+        5ADyLJA+03hxf/OeIzc1fDU7ok6FsgcDzJMLId0o+4op54pXy59dmDtmwKL8oMgs/aI6zGLWlDkzS
+        /XdxJ+OXt7DAcaktPcHqA3RaFFXX2KNZ/g+zo7W4rjoNyTbHlGNIjtlR6e+X9PS8PtF66C/GxdNp1
+        AqwfoG7RKBtF34gMCxN+oo+9mxNWQ4RDAB8EkPkkkKHhpQR2iftBKzUIvdwrUFyXUqfOAmV1p8okZ
+        A9gi5uDA==;
+Received: from [2001:67c:1be8::200] (port=42784 helo=roundcube.kapsi.fi)
+        by mailserv1.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maukka@ext.kapsi.fi>)
+        id 1obeaY-009Bxr-Ba; Fri, 23 Sep 2022 12:03:14 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 23 Sep 2022 12:03:14 +0300
+From:   maukka@ext.kapsi.fi
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        arnd@arndb.de, olof@lixom.net, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, linux@armlinux.org.uk,
+        pali@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <YyzPVMrfcOkvngxl@lunn.ch>
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-4-maukka@ext.kapsi.fi> <YyzPVMrfcOkvngxl@lunn.ch>
+Message-ID: <6dc27862f8460f875c31ad2de56baa9f@ext.kapsi.fi>
+X-Sender: maukka@ext.kapsi.fi
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:1be8::200
+X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device
+ Tree
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The trace of "struct task_struct" was no longer used since
-commit 345ddcc882d8 ("ftrace: Have set_ftrace_pid use the
-bitmap like events do"), and the functions about flags for
-current->trace is useless, so remove them.
+On 23.9.2022 00:10, Andrew Lunn wrote:
+>> +static void __init dns323_dt_eth_fixup(void)
+>> +{
+>> +	struct device_node *np;
+>> +	u8 addr[ETH_ALEN];
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * The ethernet interfaces forget the MAC address assigned by u-boot
+>> +	 * if the clocks are turned off. Usually, u-boot on orion boards
+>> +	 * has no DT support to properly set local-mac-address property.
+>> +	 * As a workaround, we get the MAC address that is stored in flash
+>> +	 * and update the port device node if no valid MAC address is set.
+>> +	 */
+> 
+> This is true for Kirkwood, but orion5x does not have any clocks to
+> gate. So i'm pretty sure this is not true. You copied this code for a
+> different reason. Please document here the real reason for this code.
+> 
 
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
- include/linux/ftrace.h | 41 -----------------------------------------
- include/linux/sched.h  |  3 ---
- 2 files changed, 44 deletions(-)
+Yes, will do. To my understanding it looks like uboot does not pass 
+anything
+to the kernel.
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 0b61371e287b..62557d4bffc2 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -1122,47 +1122,6 @@ static inline void unpause_graph_tracing(void) { }
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
- 
- #ifdef CONFIG_TRACING
--
--/* flags for current->trace */
--enum {
--	TSK_TRACE_FL_TRACE_BIT	= 0,
--	TSK_TRACE_FL_GRAPH_BIT	= 1,
--};
--enum {
--	TSK_TRACE_FL_TRACE	= 1 << TSK_TRACE_FL_TRACE_BIT,
--	TSK_TRACE_FL_GRAPH	= 1 << TSK_TRACE_FL_GRAPH_BIT,
--};
--
--static inline void set_tsk_trace_trace(struct task_struct *tsk)
--{
--	set_bit(TSK_TRACE_FL_TRACE_BIT, &tsk->trace);
--}
--
--static inline void clear_tsk_trace_trace(struct task_struct *tsk)
--{
--	clear_bit(TSK_TRACE_FL_TRACE_BIT, &tsk->trace);
--}
--
--static inline int test_tsk_trace_trace(struct task_struct *tsk)
--{
--	return tsk->trace & TSK_TRACE_FL_TRACE;
--}
--
--static inline void set_tsk_trace_graph(struct task_struct *tsk)
--{
--	set_bit(TSK_TRACE_FL_GRAPH_BIT, &tsk->trace);
--}
--
--static inline void clear_tsk_trace_graph(struct task_struct *tsk)
--{
--	clear_bit(TSK_TRACE_FL_GRAPH_BIT, &tsk->trace);
--}
--
--static inline int test_tsk_trace_graph(struct task_struct *tsk)
--{
--	return tsk->trace & TSK_TRACE_FL_GRAPH;
--}
--
- enum ftrace_dump_mode;
- 
- extern enum ftrace_dump_mode ftrace_dump_on_oops;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 5cdf746988a1..77f68f8b795c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1402,9 +1402,6 @@ struct task_struct {
- #endif
- 
- #ifdef CONFIG_TRACING
--	/* State flags for use by tracers: */
--	unsigned long			trace;
--
- 	/* Bitmask and counter of trace recursion: */
- 	unsigned long			trace_recursion;
- #endif /* CONFIG_TRACING */
--- 
-2.25.1
+>> +	ret = dns323_read_mac_addr(addr);
+>> +
+>> +	if (ret) {
+>> +		pr_warn("Unable to find MAC address in flash memory\n");
+>> +		return;
+>> +	}
+>> +
+>> +	np = of_find_compatible_node(NULL, NULL, "marvell,orion-eth-port");
+>> +
+>> +	if (!IS_ERR(np)) {
+>> +		struct device_node *pnp = of_get_parent(np);
+>> +		struct clk *clk;
+>> +		struct property *pmac;
+>> +		u8 tmpmac[ETH_ALEN];
+>> +		u8 *macaddr;
+>> +		int i;
+>> +
+>> +		if (!pnp)
+>> +			return;
+>> +
+>> +		/* skip disabled nodes or nodes with valid MAC address*/
+>> +		if (!of_device_is_available(pnp) ||
+>> +		    !of_get_mac_address(np, tmpmac))
+>> +			goto eth_fixup_skip;
+>> +
+>> +		clk = of_clk_get(pnp, 0);
+>> +		if (IS_ERR(clk))
+>> +			goto eth_fixup_skip;
+>> +
+>> +		/* ensure port clock is not gated to not hang CPU */
+>> +		clk_prepare_enable(clk);
+> 
+> I'm pretty sure this clock stuff is not needed. Please comment it out
+> and see if the machine locks up. Kirkwood just stops dead if you
+> access registers when there clocks are disabled. For Orion5x, the
+> ethernet should always have a clock.
+> 
+
+Will do.
+
+>> +
+>> +		/* store MAC address register contents in local-mac-address */
+>> +		pmac = kzalloc(sizeof(*pmac) + 6, GFP_KERNEL);
+>> +		if (!pmac)
+>> +			goto eth_fixup_no_mem;
+>> +
+>> +		pmac->value = pmac + 1;
+>> +		pmac->length = ETH_ALEN;
+>> +		pmac->name = kstrdup("local-mac-address", GFP_KERNEL);
+>> +		if (!pmac->name) {
+>> +			kfree(pmac);
+>> +			goto eth_fixup_no_mem;
+>> +		}
+>> +
+>> +		macaddr = pmac->value;
+>> +		for (i = 0; i < ETH_ALEN; i++)
+>> +			macaddr[i] = addr[i];
+>> +
+>> +		of_update_property(np, pmac);
+>> +
+>> +eth_fixup_no_mem:
+>> +		clk_disable_unprepare(clk);
+>> +		clk_put(clk);
+>> +eth_fixup_skip:
+>> +		of_node_put(pnp);
+>> +	}
+>> +}
+>> +
+>> +void __init dns323_init_dt(void)
+>> +{
+>> +	if (of_machine_is_compatible("dlink,dns323a1")) {
+>> +		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
+> 
+> I spotted this in dns323-setup.c as well. Do you have any idea what it
+> does?
+> 
+
+No idea. I have tried to replicate what was in dns323-setup.c as exactly 
+as possible.
+I can try to leave it out and see if anything changes.
 
