@@ -2,132 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472B65E7F3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7905E7DB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiIWQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S231447AbiIWO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiIWQAe (ORCPT
+        with ESMTP id S230325AbiIWO4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:00:34 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FE710D66B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:00:32 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 3so367456qka.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=X88HL68aCJfUdncHY2qCCi0nVDkqRyJbXT1bnLIzN/g=;
-        b=VUpkFa4te7+t8eoE80PTwHihbzULcEDPH782yyzbWnAH8w5kGE4rPY+uKn2oNFebBr
-         xNYOkeyNA+UQwMBvd1BtkUKIsQHIhLpgtkmbWT0J/JkYRM28U8Dt9R+2fOI/jsM/vsuw
-         wMrgA96CpiaRhX6fESL5ksDfIk6ONv35FU0JNtbKegRkViNDky/OjLgDjp9rIEDl+Fry
-         TIqZcM6HHx9aFV6DcWUWeFbd5i1oSNy80vdrqBZm5DxWGQUv2XjSy5Y1guDRNpOF79Z8
-         LO8MF+saot5atdu13Ig8RfUUX5EZzEWjWC1Kkq9mO18HlVXmRCLM+Fwj+vusXQj9TiZP
-         9Beg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=X88HL68aCJfUdncHY2qCCi0nVDkqRyJbXT1bnLIzN/g=;
-        b=I8Yjsgmnjl7Vd2gtM4T0r9xK1QtIaWl3xpgmEo39oF15fiQGpm8EqijdCH21prMBO6
-         jKD5qRipxSdoCu/bxMzJF+HS7NjoJ6AiKsr5OKiWvliJvYD8yJPgbKXVRPbSGUUj8IeW
-         hh21A31MIWsZUpRBEPIGdr77h4/G4w+eWxqJbndK/hs1kjusmwxES0afcc6hH9y2SElP
-         8d2CqiLUAVIt+Xb6IUHz2D6Sr/qB4/Gxf8P/wUDZ0opdo0Nt1LKzGRcWwIa166dKebYC
-         0qIlYBQUzRzopOhEkSjwpMhNK87i5891TBwpjJ+oYfTg9TZzspDpVOd2hxcAcLZ2zPcE
-         UClg==
-X-Gm-Message-State: ACrzQf2gzPTLTBTy/foXSP9bySnedKISgPzocyJRWESeSxIIG+hTsAoD
-        9RIM122Mr2gk1FhKjwNiybHkdQ==
-X-Google-Smtp-Source: AMsMyM7IAev448Zrmf+Niu2uyhsLlID8pvs9GcXbVVcKhh+AbrsvOR/difIN2QuQyu5B0IygdBrt1Q==
-X-Received: by 2002:a05:620a:2442:b0:6ce:d766:ca81 with SMTP id h2-20020a05620a244200b006ced766ca81mr5956031qkn.687.1663948831972;
-        Fri, 23 Sep 2022 09:00:31 -0700 (PDT)
-Received: from fedora ([204.156.113.250])
-        by smtp.gmail.com with ESMTPSA id do11-20020a05620a2b0b00b006ce441816e0sm6245068qkb.15.2022.09.23.09.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 09:00:31 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 10:55:46 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: Re: [PATCH v9 0/4] ECAP support on TI AM62x SoC
-Message-ID: <Yy3I8vKSfYdaZunw@fedora>
-References: <20220923142437.271328-1-jpanis@baylibre.com>
+        Fri, 23 Sep 2022 10:56:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB78E3EF7;
+        Fri, 23 Sep 2022 07:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663944960; x=1695480960;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xT7yQQlMI8i1XEshe1ZI4ZUk0EILHNHDnZDc2Vgflc4=;
+  b=bZ2WtHr/KzHZHPIV0qBxaIqSSsONtYY0DCGhR4PSLXVcFfGRN2wfpg/O
+   aXouCK0rlJh7W2kH2A8lyKDZzv/oYN8VUib9kcLazHIgZ4A63rRwaJ8Ri
+   eptLiWPZTP5YaqrT1FmMIpW5WVmP3/PUJ+2D7OinhwQzoww7+48TTAAIP
+   jkzQSq7ogEMbVit3Iev+EuGMkohV6c/8BmJGQvq+aBEwblq+gCAjYwf6E
+   2hz8c4HHX6nHDDvP+6YlM3K3xAtruIPV86krwyvm8kSHw+re8ZHMtgHvk
+   4jg78JLQveq+uF+LECwURHFqWvBiCboQnkRLo6IPK/gIcQYPAOWkugNSR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="364626046"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="364626046"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:55:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="620234672"
+Received: from alutz-mobl.ger.corp.intel.com ([10.252.35.146])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:55:54 -0700
+Date:   Fri, 23 Sep 2022 17:55:51 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Matthew Gerlach <matthew.gerlach@intel.com>
+Subject: Re: [PATCH v2 5/6] fpga: dfl: parse the location of the feature's
+ registers from DFHv1
+In-Reply-To: <20220923121745.129167-6-matthew.gerlach@linux.intel.com>
+Message-ID: <5ce7d953-9289-bb2d-79c-2e5669373a35@linux.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-6-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6qnNNKSKTZQ4BW8h"
-Content-Disposition: inline
-In-Reply-To: <20220923142437.271328-1-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
 
---6qnNNKSKTZQ4BW8h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: Matthew Gerlach <matthew.gerlach@intel.com>
+> 
+> The location of a feature's registers is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address.  Parse the location and pass the information
+> to DFL driver.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v2: Introduced in v2.
+> ---
+>  drivers/fpga/dfl.c  | 26 +++++++++++++++++++++++++-
+>  drivers/fpga/dfl.h  |  4 ++++
+>  include/linux/dfl.h |  4 ++++
+>  3 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index dfd3f563c92d..6fb4f30f93cf 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -381,6 +381,8 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+>  	ddev->feature_id = feature->id;
+>  	ddev->revision = feature->revision;
+>  	ddev->cdev = pdata->dfl_cdev;
+> +	ddev->csr_start = feature->csr_start;
+> +	ddev->csr_size = feature->csr_size;
+>  
+>  	/* add mmio resource */
+>  	parent_res = &pdev->resource[feature->resource_index];
+> @@ -708,18 +710,25 @@ struct build_feature_devs_info {
+>   * struct dfl_feature_info - sub feature info collected during feature dev build
+>   *
+>   * @fid: id of this sub feature.
+> + * @revision: revision of this sub feature
+> + * @dfh_version: version of Device Feature Header (DFH)
+>   * @mmio_res: mmio resource of this sub feature.
+>   * @ioaddr: mapped base address of mmio resource.
+>   * @node: node in sub_features linked list.
+> + * @csr_start: DFHv1 start of feature registers
+> + * @csr_size: DFHv1 size of feature registers
+>   * @irq_base: start of irq index in this sub feature.
+>   * @nr_irqs: number of irqs of this sub feature.
+>   */
+>  struct dfl_feature_info {
+>  	u16 fid;
+>  	u8 revision;
+> +	u8 dfh_version;
+>  	struct resource mmio_res;
+>  	void __iomem *ioaddr;
+>  	struct list_head node;
+> +	resource_size_t csr_start;
+> +	resource_size_t csr_size;
+>  	unsigned int irq_base;
+>  	unsigned int nr_irqs;
+>  };
+> @@ -797,6 +806,8 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>  		feature->dev = fdev;
+>  		feature->id = finfo->fid;
+>  		feature->revision = finfo->revision;
+> +		feature->csr_start = finfo->csr_start;
+> +		feature->csr_size = finfo->csr_size;
+>  
+>  		/*
+>  		 * the FIU header feature has some fundamental functions (sriov
+> @@ -1054,6 +1065,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  {
+>  	unsigned int irq_base, nr_irqs;
+>  	struct dfl_feature_info *finfo;
+> +	u8 dfh_version = 0;
+>  	u8 revision = 0;
+>  	int ret;
+>  	u64 v;
+> @@ -1061,7 +1073,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  	if (fid != FEATURE_ID_AFU) {
+>  		v = readq(binfo->ioaddr + ofst);
+>  		revision = FIELD_GET(DFH_REVISION, v);
+> -
+> +		dfh_version = FIELD_GET(DFH_VERSION, v);
+>  		/* read feature size and id if inputs are invalid */
+>  		size = size ? size : feature_size(v);
+>  		fid = fid ? fid : feature_id(v);
+> @@ -1080,12 +1092,24 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>  
+>  	finfo->fid = fid;
+>  	finfo->revision = revision;
+> +	finfo->dfh_version = dfh_version;
+>  	finfo->mmio_res.start = binfo->start + ofst;
+>  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>  	finfo->mmio_res.flags = IORESOURCE_MEM;
+>  	finfo->irq_base = irq_base;
+>  	finfo->nr_irqs = nr_irqs;
 
-On Fri, Sep 23, 2022 at 04:24:33PM +0200, Julien Panis wrote:
-> The Enhanced Capture (ECAP) module can be used to timestamp events
-> detected on signal input pin. It can be used for time measurements
-> of pulse train signals.
->=20
-> ECAP module includes 4 timestamp capture registers. For all 4 sequenced
-> timestamp capture events (0->1->2->3->0->...), edge polarity (falling/ris=
-ing
-> edge) can be selected.
->=20
-> This driver leverages counter subsystem to :
-> - select edge polarity for all 4 capture events (event mode)
-> - log timestamps for each capture event
-> Event polarity, and CAP0/1/2/3 timestamps give all the information
-> about the input pulse train. Further information can easily be computed :
-> period and/or duty cycle if frequency is constant, elapsed time between
-> pulses, etc...
->=20
-> This patchset must be applied on top of the following counter subsystem p=
-atchset :
-> https://lore.kernel.org/all/cover.1663693757.git.william.gray@linaro.org/
+Ordering here seems slightly odd. If finfo would be built before calling
+parse_feature_irqs(), it could be passed into there and there would be no 
+need to:
+- read version for second time
+- pass irq_base & nr_irqs as pointer parameters
 
-Hello Julien,
-
-Tentatively, this version looks good to me. Due to the amount of changes
-we've made in the past week I'm going to let it sit on the list for a
-while to give any lingering issues we missed a chance to be found. If
-nothing pops up during that time, I expect to queue this next week and
-hopefully include it with the other Counter changes in time for the 6.1
-merge window.
-
-By the way, in the future you can use the '--base' git format-patch
-argument to specify the base commit (and any prereq patches) that your
-series is based on: https://git-scm.com/docs/git-format-patch#_base_tree_in=
-formation
-
-That makes it clear to reviewers and maintainers where they should apply
-your patchset, and should also prevent the kernel test robot from
-testing against the wrong base.
-
-William Breathitt Gray
-
---6qnNNKSKTZQ4BW8h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYy3I8gAKCRC1SFbKvhIj
-K4VyAP0TS6xWP5CFMk76z6N5ksg9cJ2R+S8ZmLw3qAg8JHdBVgEAno4zuIl4Uf9n
-dXIjZ9ayvffGfaYRnYTBD2XUXT8G8gs=
-=tET1
------END PGP SIGNATURE-----
-
---6qnNNKSKTZQ4BW8h--
+-- 
+ i.
