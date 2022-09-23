@@ -2,229 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE455E7246
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 05:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049295E727B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 05:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiIWDBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 23:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S232250AbiIWDf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 23:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiIWDAR (ORCPT
+        with ESMTP id S230255AbiIWDfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 23:00:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5472F6F57C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:00:15 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYcK610NPzHqPx;
-        Fri, 23 Sep 2022 10:58:02 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+        Thu, 22 Sep 2022 23:35:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770FFCBADE;
+        Thu, 22 Sep 2022 20:35:47 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYd433QBLzWgp9;
+        Fri, 23 Sep 2022 11:31:47 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 11:00:11 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 11:00:12 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Christoph Lameter <cl@linux.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 8/8] memory: move hotplug memory notifier priority to same file for easy sorting
-Date:   Fri, 23 Sep 2022 11:33:47 +0800
-Message-ID: <20220923033347.3935160-9-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220923033347.3935160-1-liushixin2@huawei.com>
-References: <20220923033347.3935160-1-liushixin2@huawei.com>
+ 15.1.2375.31; Fri, 23 Sep 2022 11:35:45 +0800
+CC:     <yangyicong@hisilicon.com>, Shuai Xue <xueshuai@linux.alibaba.com>,
+        <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <rdunlap@infradead.org>,
+        <robin.murphy@arm.com>, <mark.rutland@arm.com>,
+        <baolin.wang@linux.alibaba.com>, <zhuo.song@linux.alibaba.com>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20220922173217.GA1316280@bhelgaas>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <6592c0a0-e976-2d3b-b7f3-12bc72d55e9b@huawei.com>
+Date:   Fri, 23 Sep 2022 11:35:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm100009.china.huawei.com (7.185.36.113)
+In-Reply-To: <20220922173217.GA1316280@bhelgaas>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The priority of hotplug memory callback is defined in different file.
-And there are some caller using number directly. Collect them together
-into include/linux/memory.h for easy reading. This allows us to sort
-their priorities more intuitively without additional comments.
+On 2022/9/23 1:32, Bjorn Helgaas wrote:
+> On Thu, Sep 22, 2022 at 04:58:20PM +0100, Jonathan Cameron wrote:
+>> On Sat, 17 Sep 2022 20:10:35 +0800
+>> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>>
+>>> This commit adds the PCIe Performance Monitoring Unit (PMU) driver support
+>>> for T-Head Yitian SoC chip. Yitian is based on the Synopsys PCI Express
+>>> Core controller IP which provides statistics feature. The PMU is not a PCIe
+>>> Root Complex integrated End Point(RCiEP) device but only register counters
+>>> provided by each PCIe Root Port.
+>>>
+>>> To facilitate collection of statistics the controller provides the
+>>> following two features for each Root Port:
+>>>
+>>> - Time Based Analysis (RX/TX data throughput and time spent in each
+>>>   low-power LTSSM state)
+>>> - Event counters (Error and Non-Error for lanes)
+>>>
+>>> Note, only one counter for each type.
+>>>
+>>> This driver add PMU devices for each PCIe Root Port. And the PMU device is
+>>> named based the BDF of Root Port. For example,
+>>>
+>>>     10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+>>>
+>>> the PMU device name for this Root Port is pcie_bdf_100000.
+>>>
+>>> Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
+>>>
+>>>     $# perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
+>>>
+>>> average RX bandwidth can be calculated like this:
+>>>
+>>>     PCIe TX Bandwidth = PCIE_TX_DATA * 16B / Measure_Time_Window
+>>>
+>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>>
+>> +CC linux-pci list and Bjorn.
+> 
+> Thanks, this is definitely of interest to linux-pci.
+> 
+>> Question in here which I've been meaning to address for other reasons
+>> around how to register 'extra features' on pci ports.
+>>
+>> This particular PMU is in config space in a Vendor Specific Extended
+>> Capability.
+>>
+>> I've focused on that aspect for this review rather than the perf parts.
+>> We'll need to figure that story out first as doing this from a bus walk
+>> makes triggered of a platform driver is not the way I'd expect to see
+>> this work.
+> 
+>>> +static int dwc_pcie_pmu_discover(struct dwc_pcie_pmu_priv *priv)
+>>> +{
+>>> +	int val, where, index = 0;
+>>> +	struct pci_dev *pdev = NULL;
+>>> +	struct dwc_pcie_info_table *pcie_info;
+>>> +
+>>> +	priv->pcie_table =
+>>> +	    devm_kcalloc(priv->dev, RP_NUM_MAX, sizeof(*pcie_info), GFP_KERNEL);
+>>> +	if (!priv->pcie_table)
+>>> +		return -EINVAL;
+>>> +
+>>> +	pcie_info = priv->pcie_table;
+>>> +	while ((pdev = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, pdev)) != NULL &&
+>>> +	       index < RP_NUM_MAX) {
+>>
+>> This having a driver than then walks the pci topology to find root ports and add
+>> extra stuff to them is not a clean solution.
+>>
+>> The probing should be driven from the existing PCI driver topology.
+>> There are a bunch of new features we need to add to ports in the near future
+>> anyway - this would just be another one.
+>> Same problem exists for CXL CPMU perf devices - so far we only support those
+>> on end points, partly because we need a clean way to probe them on pci ports.
+>>
+>> Whatever we come up with there will apply here as well.
+> 
+> I agree, I don't like to see more uses of pci_get_device() because it
+> doesn't fit the driver model at all.  For one thing, it really screws
+> up the hotplug model because this doesn't account for hot-added
+> devices and there's no clear cleanup path for removal.
+> 
+> Hotplug is likely not an issue in this particular case, but it gets
+> copied to places where it is an issue.
+> 
+> Maybe we need some kind of PCI core interface whereby drivers can
+> register their interest in VSEC and/or DVSEC capabilities.
+> 
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- drivers/acpi/numa/hmat.c     | 2 +-
- fs/proc/kcore.c              | 2 +-
- include/linux/memory-tiers.h | 1 -
- include/linux/memory.h       | 9 +++++++--
- kernel/cgroup/cpuset.c       | 2 +-
- mm/kasan/shadow.c            | 2 +-
- mm/ksm.c                     | 2 +-
- mm/memory-tiers.c            | 2 +-
- mm/mm_init.c                 | 2 +-
- mm/mmap.c                    | 2 +-
- mm/page_ext.c                | 2 +-
- 11 files changed, 16 insertions(+), 12 deletions(-)
+Considering this PMU is related to each Root Port without real backup device. I'm
+wondering whether we can extend the pcie port bus and make use of it (though it's
+currently used by the standard services).
 
-diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
-index 84dffb3dc30e..47c7fae8b6de 100644
---- a/drivers/acpi/numa/hmat.c
-+++ b/drivers/acpi/numa/hmat.c
-@@ -850,7 +850,7 @@ static __init int hmat_init(void)
- 	hmat_register_targets();
- 
- 	/* Keep the table and structures if the notifier may use them */
--	if (!hotplug_memory_notifier(hmat_callback, 2))
-+	if (!hotplug_memory_notifier(hmat_callback, HMAT_CALLBACK_PRI))
- 		return 0;
- out_put:
- 	hmat_free_structures();
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index 7692a360972d..98f3289556e4 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -689,7 +689,7 @@ static int __init proc_kcore_init(void)
- 	add_modules_range();
- 	/* Store direct-map area from physical memory map */
- 	kcore_update_ram();
--	hotplug_memory_notifier(kcore_callback, 0);
-+	hotplug_memory_notifier(kcore_callback, DEFAULT_CALLBACK_PRI);
- 
- 	return 0;
- }
-diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-index 965009aa01d7..fc9647b1b4f9 100644
---- a/include/linux/memory-tiers.h
-+++ b/include/linux/memory-tiers.h
-@@ -18,7 +18,6 @@
-  * the same memory tier.
-  */
- #define MEMTIER_ADISTANCE_DRAM	((4 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE >> 1))
--#define MEMTIER_HOTPLUG_PRIO	100
- 
- struct memory_tier;
- struct memory_dev_type {
-diff --git a/include/linux/memory.h b/include/linux/memory.h
-index 98d2a2ebcc10..463662ef7614 100644
---- a/include/linux/memory.h
-+++ b/include/linux/memory.h
-@@ -112,8 +112,13 @@ struct mem_section;
-  * Priorities for the hotplug memory callback routines (stored in decreasing
-  * order in the callback chain)
-  */
--#define SLAB_CALLBACK_PRI       1
--#define IPC_CALLBACK_PRI        10
-+#define DEFAULT_CALLBACK_PRI	0
-+#define SLAB_CALLBACK_PRI	1
-+#define HMAT_CALLBACK_PRI	2
-+#define MM_COMPUTE_BATCH_PRI	10
-+#define CPUSET_CALLBACK_PRI	10
-+#define MEMTIER_HOTPLUG_PRI	100
-+#define KSM_CALLBACK_PRI	100
- 
- #ifndef CONFIG_MEMORY_HOTPLUG
- static inline void memory_dev_init(void)
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 0c6db6a4f427..3ea2e836e93e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3647,7 +3647,7 @@ void __init cpuset_init_smp(void)
- 	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
- 	top_cpuset.effective_mems = node_states[N_MEMORY];
- 
--	hotplug_memory_notifier(cpuset_track_online_nodes, 10);
-+	hotplug_memory_notifier(cpuset_track_online_nodes, CPUSET_CALLBACK_PRI);
- 
- 	cpuset_migrate_mm_wq = alloc_ordered_workqueue("cpuset_migrate_mm", 0);
- 	BUG_ON(!cpuset_migrate_mm_wq);
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index 0e3648b603a6..2fba1f51f042 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -244,7 +244,7 @@ static int __meminit kasan_mem_notifier(struct notifier_block *nb,
- 
- static int __init kasan_memhotplug_init(void)
- {
--	hotplug_memory_notifier(kasan_mem_notifier, 0);
-+	hotplug_memory_notifier(kasan_mem_notifier, DEFAULT_CALLBACK_PRI);
- 
- 	return 0;
- }
-diff --git a/mm/ksm.c b/mm/ksm.c
-index c19fcca9bc03..7ba97f86d831 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -3211,7 +3211,7 @@ static int __init ksm_init(void)
- 
- #ifdef CONFIG_MEMORY_HOTREMOVE
- 	/* There is no significance to this priority 100 */
--	hotplug_memory_notifier(ksm_memory_callback, 100);
-+	hotplug_memory_notifier(ksm_memory_callback, KSM_CALLBACK_PRI);
- #endif
- 	return 0;
- 
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index 33673ed9b3dc..212c4a81fe47 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -709,7 +709,7 @@ static int __init memory_tier_init(void)
- 	establish_demotion_targets();
- 	mutex_unlock(&memory_tier_lock);
- 
--	hotplug_memory_notifier(memtier_hotplug_callback, MEMTIER_HOTPLUG_PRIO);
-+	hotplug_memory_notifier(memtier_hotplug_callback, MEMTIER_HOTPLUG_PRI);
- 	return 0;
- }
- subsys_initcall(memory_tier_init);
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 44aadc162d1f..c1883362e71d 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -181,7 +181,7 @@ static int __meminit mm_compute_batch_notifier(struct notifier_block *self,
- static int __init mm_compute_batch_init(void)
- {
- 	mm_compute_batch(sysctl_overcommit_memory);
--	hotplug_memory_notifier(mm_compute_batch_notifier, IPC_CALLBACK_PRI);
-+	hotplug_memory_notifier(mm_compute_batch_notifier, MM_COMPUTE_BATCH_PRI);
- 	return 0;
- }
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 5a217378a62a..0fde397963f8 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3747,7 +3747,7 @@ static int reserve_mem_notifier(struct notifier_block *nb,
- 
- static int __meminit init_reserve_notifier(void)
- {
--	if (hotplug_memory_notifier(reserve_mem_notifier, 0))
-+	if (hotplug_memory_notifier(reserve_mem_notifier, DEFAULT_CALLBACK_PRI))
- 		pr_err("Failed registering memory add/remove notifier for admin reserve\n");
- 
- 	return 0;
-diff --git a/mm/page_ext.c b/mm/page_ext.c
-index affe80243b6d..b2ff5c9129f4 100644
---- a/mm/page_ext.c
-+++ b/mm/page_ext.c
-@@ -513,7 +513,7 @@ void __init page_ext_init(void)
- 			cond_resched();
- 		}
- 	}
--	hotplug_memory_notifier(page_ext_callback, 0);
-+	hotplug_memory_notifier(page_ext_callback, DEFAULT_CALLBACK_PRI);
- 	pr_info("allocated %ld bytes of page_ext\n", total_usage);
- 	invoke_init_callbacks();
- 	return;
--- 
-2.25.1
+Thanks.
 
