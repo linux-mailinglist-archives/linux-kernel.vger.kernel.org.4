@@ -2,229 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F015E77E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9F85E77E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiIWKGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S230318AbiIWKHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiIWKGh (ORCPT
+        with ESMTP id S230241AbiIWKG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:06:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E10E12FF39
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:06:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED1EF6221E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:06:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8B9C433C1;
-        Fri, 23 Sep 2022 10:06:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LfjEOtMd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663927591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DOibG2G4RROJyTimhcP/64dWLHwNn7uLTgHZvtO2iSw=;
-        b=LfjEOtMd2yrEyJ8RUOs6dRhOhIAHAAZEXwDfPZyzOUCl536hKxPPc+xtRwxU21wFzNipRT
-        8Nrm4EPfVrLek/A7ChGjfds0kvbAq13FFU45oTqUfyBpzqpQiDCn47NaHHpKIMZrF8IzjE
-        cDdxVn/NlDhlySEV49Z+TDvXtNH/PQM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e806e730 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 23 Sep 2022 10:06:31 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] minmax: clamp more efficiently by avoiding extra comparison
-Date:   Fri, 23 Sep 2022 12:06:21 +0200
-Message-Id: <20220923100621.3888015-1-Jason@zx2c4.com>
+        Fri, 23 Sep 2022 06:06:56 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2067.outbound.protection.outlook.com [40.107.92.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D628F12FF20;
+        Fri, 23 Sep 2022 03:06:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LAzM7Xv9aH9ETD48FrOXvgNYat5IFeqpAc6kB9Vu0aimaQXFCuTKKPHB7xUrifh6K9Quhy4tZM7PH1hoAqGsM6PbdGf3NQi9VqCrZX9IM0P23GOVNb4AbsJ2g/Ymy26lr8vssRxxwaoBtcxAeCMvrhp2goqD+4TipXuKqvFCbyXdoB73Rmmz5RfNJWgwlttbs4MyzX4/0+fG1N6MLoEjlzygQU3DFheUnCUosdfuJucQZ7hUeBcLKAgHPpq6+oBRenWJKTyY9fnDKVsUjEmPvxUMhAdObZu3gbuxPt6Gz0MnK0m53HnA/FDHTjD7Xwtq51sNW/y8ZgWbEdNUKhk0UA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=49oEhZwEtcqsRM1JK2/YWvo8R/EY5HmdoxQ08GU6ppY=;
+ b=dICs1BeBDKG7MNjR0/IS5ZEd2UtcQt8coPcHIMN5LwKMLjGpQzjr3VrtU9YD2C3cgM69Zod43iCO+Tub6a4mtNJ1Xdneub0gyB+mTEBFV+oRXZyA39geIOuehAP7hyCAmMzYCJLUlnGQW3QJb7JnHZFmI4ktszeTHlJARBR7BM9AKfmjoKnHw+Z1k66vjYOyTY+nHec0Sjr+gs5wXxmWC6NJQ4uyyLxlMatpWbr12we6x6DYw2lNzb0LrwhjZHQQBeumNwEQSsT1BtGVIjcVngkKC8oghma2jS+4cy+ZzknPCQQfzJ61scbF20b+zqbrPbB9TVWtZz3MmoIncfO6EA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49oEhZwEtcqsRM1JK2/YWvo8R/EY5HmdoxQ08GU6ppY=;
+ b=dX56VlSnvIEAvWTjMWrbGp5fp/hMc101paT21C13aosU/NjB9uST8TxZe5RirVG8FHvlGgm99Xy/PQatpC2m3N247DnBtJCA+iw1A9e1R0Q14a93YAWtvS8uyEFQPjX2pDjJ7aEagpdz6ou6kL9xqBPFPOVDp78ZvadTPH67rKNMGs5GTKWFYaBOC4j7fAgiC4wbYvq0jbs2Tf+NdGKcJmLmTfEUhJIdXvc350UjmLO5A2dKqXAhsfhsQeZwDV1xRsfv6uHi+6oSKLwtOC3DXaikbKji2+lXwLxbdrC0LTD/uyI4Yem3uwV30ZfPUX2ydgs2b+I+c+wusEB1gd28XA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ PH7PR12MB6635.namprd12.prod.outlook.com (2603:10b6:510:210::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Fri, 23 Sep
+ 2022 10:06:49 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d%5]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
+ 10:06:49 +0000
+Message-ID: <0855bf7f-fd3c-ab6a-cc26-ded8ecb05993@nvidia.com>
+Date:   Fri, 23 Sep 2022 11:06:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: dmaengine: Add dma-channel-mask to
+ Tegra GPCDMA
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>, ldewangan@nvidia.com,
+        vkoul@kernel.org, thierry.reding@gmail.com, p.zabel@pengutronix.de,
+        dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220919112559.58195-1-akhilrajeev@nvidia.com>
+ <20220919112559.58195-2-akhilrajeev@nvidia.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220919112559.58195-2-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P123CA0002.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:338::6) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH7PR12MB6635:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01c8cb0c-ca01-4c35-d0b2-08da9d4b546c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SyL10e2K7E8b7JiN8O28OHvUx4+HVf2IcMR3KiHSz8tmLwgkTiq6ktoSgf71NvtQRUwH67+yH5tWMHBfWAf/ImMDgX9+aPTp99NrQds4SkYoQX7NrjnTZw4gUK+cCpw3Q2A3opA2/332r3YyuAS+i24q8vNM1UGKpQ+qxvPDj+3NTat8Rt9msSP841f+0BsZDNYDoAQsjOWrOe5g+eq/Cy3+GJvuRoWYWWohlK9uZ/PSWE3KY29IC0QD4OQezlb+YXx+R5ZsdfhjbUyn8hex79DxDXYUiKKa0wK/FUBpPCQv67y2kb7YLvm1nJs41u9XCa0H8AAQ1KWBmJ6sfhXwv12809htpryqvLiNJrwcVsfKdGwoE/2/rD8yv38Gi5JV7+TCLa/EFEiPvqf4ctVFoDTke1HgTwEuxQshw9VmuWUBoc4NY611oISoCdlHtKKsHLw/N0iSGtxABITE2xI6fiWlmltomPwsmMChCng5fMpF+cEYNmx9d6htTNvc+/uEbQn15TGGpVB93ho1h6mxfi2stixEM5GkN8JGT5lcB+ANw9z8VY7mRhUkhp8RUNHH5PD0WOgLGMr2zZl25f8jGgmxOyl8FK4KN3IMBxmY5CY7EH9qlxIAnE/zlV1Mc/6VT3nGkDMsjPMn0Obxdl5aT1m4A1k0Gs8xT159tPXHFv6eV4JOTCQvvTYD4WwbX/VWlPTeF/rVyaesiTBC1ol/Ls7NBqPoSU2UGWUNapctO/lqFgfJ1DWddsfaa6S4V6jD6yvtbWlKVCkDo6yREoNL+tUhYQzmGBC78MQ+9itk+P4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(451199015)(66556008)(6506007)(36756003)(31686004)(53546011)(66476007)(31696002)(86362001)(2616005)(6512007)(8936002)(6666004)(2906002)(66946007)(41300700001)(38100700002)(5660300002)(6486002)(83380400001)(316002)(8676002)(478600001)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czVtMDJSbHdiSUxDQ0hCeExnR1pnZEM0V1E5NUY2K0Q2UEJvYTZXSWN6K3RC?=
+ =?utf-8?B?NUtLTjhVMndQQWlCMXkvaFgwbkpDM0gzS3Q0ODBSakdLeDJ6RWxTdFBtdkdu?=
+ =?utf-8?B?OHlSVHBNckROazAvMXdZeVU5cUM1cjIrcXp2TG43aDlCSmR0T0xDSC9QR1pm?=
+ =?utf-8?B?U09NbkxZaFpiUEkyeXpwNTJPR0pudlFvVmpHRFk4MUhFUGxFVkZxTDFvNERO?=
+ =?utf-8?B?K1FseHlqZjZjY2VRUjhFbFo4UDRScHMxcko0aW1jcllnNmZoTi9YaFoyckpr?=
+ =?utf-8?B?UzRVZ01DRlNrcUQ0Mnd0ODdWZEljYnBTQmV1QVNrWVhIbGUzZHNnQVFmNVBW?=
+ =?utf-8?B?aVVNSlhhLzFERzl1aS9pVWZEdE5JMDJzeSt6SE9zd0J3M2s3VDNSY2haTzlO?=
+ =?utf-8?B?ZGtXMDU3NGZObmJHWitBVUI5cEdSYitObUw0d3MwdUR5enM1dXJXUVZ3UTVF?=
+ =?utf-8?B?N0RkekhSdGpiN3RoMmYzYUpxOHRlVWhFdis0K1RCM0J0QTcxVmxPTVAybUJ1?=
+ =?utf-8?B?MXVKZUFtOWpLQlJrM2VFOEdOOVZqQzZod2wrS0s3L2xTNUZJNmJBYWVRenlX?=
+ =?utf-8?B?UC9Mdm5Pd2VLRExXTktYZGVYYzZGaDFUbXJwVFlIaUNDalpMcTR1ZW5vaVNV?=
+ =?utf-8?B?dWFibjJwYXBISmwzalRZNWpSNnhlL1pHaDI1eW5JdGpGQjlseWhIV1lVZ21H?=
+ =?utf-8?B?OWlLTmJCOCs3Sk9uZ2FtZGFNZ1grcWphclAvUFpwSllOMlJScHBUeFNKK0dy?=
+ =?utf-8?B?Rk0xNlJuVEJLQkdxQWVTeG10cXRhZEs5MWtiNHRxSUorWFVNSnpRaWd0S1NE?=
+ =?utf-8?B?MWNBZ3FvL1BiYXdNVG9yVm5PZ1FBMHVwcUcydTFIRy9ENk50TzJBYTd3cEtx?=
+ =?utf-8?B?aHBzL0hTVFRlTkZsdE1GMytDUmJGTis2TFpBdk12eG1scys0SHF1WG1vbXBQ?=
+ =?utf-8?B?RDd4MzAvRytJditvTTFDeFdBZ1BKSXpIajBTSWdUUGJDZjJodTNTQ3BNekZn?=
+ =?utf-8?B?Sk5CTjU4UjE5Nm1xdFNJVDJJN0NQbHc0eVEreWdxY0x1V1p3Q1J6TW9NRStT?=
+ =?utf-8?B?RjY3ZUlpRjlpVWVla0RCQ09EQjJRbGEyS0lOYzY4NXlVc1Irc1NTYW9YMUtG?=
+ =?utf-8?B?cHVQbmtHeXJJZ1JxQjN1T21yd053YkR4R2QxWmljbGlDbUNXYjZwd1NVbFlO?=
+ =?utf-8?B?RkJhM2pWZXNKVGV0NHlHc1UzNUdCN1pFMlZ6UHg4a05xcE1uTk01R3oxN0ln?=
+ =?utf-8?B?cG1hOW5TamN3cWRDdXNjYjVZbG0yZC9saGVDMDJPdStDRDNVVlpkWVhUUEF1?=
+ =?utf-8?B?UjNqekFTSDNDRlpiOTlFQ2NGalJxVnhoUDVoU0JlN2pRc0hwQ0pnT3dsSjhh?=
+ =?utf-8?B?KzFRRzd0TU5EZ1RNREtNZlZXbnFZc0tCbVVtbmZXY05aZnhhUXA5WENPL3BQ?=
+ =?utf-8?B?SXkvOGNOYXhud0VtclNpZzUxZW9vUWdxaTdkUWdHb1lYdzBZcmI1TW1VbEs1?=
+ =?utf-8?B?bnFRRURtTHViYnBmbnpCOUtza2VWNjJCRFArRjRGYlBRczM1Tmc0SjFhbUF4?=
+ =?utf-8?B?NklIWlJHdk0xYlFWWldEbEtVQWlSQjNxM21JbUNiQlFUT0RxZVlsWHJCOTd4?=
+ =?utf-8?B?d0ZpeUZYR3k2MGRIdnFIbU5rTVQ3TWJYcHBGbVJHV1ZRVUJSclo2blQzUFF5?=
+ =?utf-8?B?ZGVUODFOTTNZVzZnclpINDVLbEliZStESkRxK3hodGNBbXpDZFRpMnBPNjJN?=
+ =?utf-8?B?WG1IWFNkN1c0MHR0T1JTamVlMmhPMkFYOEY0cUM0bWw0TnZ4eEVmNW96MDNh?=
+ =?utf-8?B?Q3VCdFM2V3JKVURZSUQrMG5NVFFYeGpFaVE3WUdWNTBpai95ZDhBVjNGM2lh?=
+ =?utf-8?B?RXZ6Q1k2bDlITFVXTlhWL0gzNDM1RDg3djFxdXdkUmRXcEs3ckQxZHVUckNm?=
+ =?utf-8?B?dFZIYjlVd1JseU8vaGFmaTUwMHVTODdpS2JyWEowMXhLUHY4Y0JvMm9TYXRq?=
+ =?utf-8?B?c1k5Y29CWHhyVUNtWnJuQU5LVlBkVnJDSGhYajUxZ0JaRk5GU1VEUnoxVEJt?=
+ =?utf-8?B?QjdPV0ZzWmRsNHFTMS9ZNzY3dURrZERJMVk1M09lQzFyM0tnZ3VjMjF6NFZn?=
+ =?utf-8?B?YWo3KzJLOTdmK0dzUng5SlVLajVxb3BqY1RnOW10RkQ3UGJiWHJsem84Yy9O?=
+ =?utf-8?B?anV2OVZtbnhpMit6YlpIMUlDcGdRYmg3c2hTMHBqZjNEb1RnZTlXajFHWjI2?=
+ =?utf-8?B?YkdNalpuWXFmMXFjblJiV3IvajVBPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01c8cb0c-ca01-4c35-d0b2-08da9d4b546c
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 10:06:49.4153
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VCxXLjWPQrehqudAh/waIcD8WS87Sm9XQ+hvql9dmMQrOgOfRKzfhcJxOht4redNJVyNxw3fgcxaEJeXMfdlRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6635
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the clamp algorithm does:
 
-	if (val > hi)
-		val = hi;
-	if (val < lo)
-		val = lo;
+On 19/09/2022 12:25, Akhil R wrote:
+> Add dma-channel-mask property in Tegra GPCDMA document.
+> 
+> The property would help to specify the channels to be used in
+> kernel and reserve few for the firmware. This was previously
+> achieved by limiting the channel number to 31 in the driver.
+> Now since we can list all 32 channels, update the interrupts
+> property as well to list all 32 interrupts.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>   .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml   | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> index 7e575296df0c..31724cda074e 100644
+> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> @@ -39,7 +39,7 @@ properties:
+>         Should contain all of the per-channel DMA interrupts in
+>         ascending order with respect to the DMA channel index.
+>       minItems: 1
+> -    maxItems: 31
+> +    maxItems: 32
+>   
+>     resets:
+>       maxItems: 1
+> @@ -52,6 +52,9 @@ properties:
+>   
+>     dma-coherent: true
+>   
+> +  dma-channel-mask:
+> +    maxItems: 1
+> +
+>   required:
+>     - compatible
+>     - reg
+> @@ -60,6 +63,7 @@ required:
+>     - reset-names
+>     - "#dma-cells"
+>     - iommus
+> +  - dma-channel-mask
+>   
+>   additionalProperties: false
+>   
+> @@ -108,5 +112,6 @@ examples:
+>           #dma-cells = <1>;
+>           iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
+>           dma-coherent;
+> +        dma-channel-mask = <0xfffffffe>;
+>       };
+>   ...
 
-But since hi > lo by definition, this can be made more efficient with:
 
-	if (val > hi)
-		val = hi;
-	else if (val < lo)
-		val = lo;
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
-So fix up the clamp and clamp_t functions to do this, adding the same
-argument checking as for min and min_t.
+Thanks!
+Jon
 
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- include/linux/minmax.h | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 5433c08fcc68..0153c9eba013 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -19,42 +19,58 @@
- #define __typecheck(x, y) \
- 	(!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
- 
- #define __no_side_effects(x, y) \
- 		(__is_constexpr(x) && __is_constexpr(y))
- 
- #define __safe_cmp(x, y) \
- 		(__typecheck(x, y) && __no_side_effects(x, y))
- 
- #define __cmp(x, y, op)	((x) op (y) ? (x) : (y))
- 
- #define __cmp_once(x, y, unique_x, unique_y, op) ({	\
- 		typeof(x) unique_x = (x);		\
- 		typeof(y) unique_y = (y);		\
- 		__cmp(unique_x, unique_y, op); })
- 
- #define __careful_cmp(x, y, op) \
- 	__builtin_choose_expr(__safe_cmp(x, y), \
- 		__cmp(x, y, op), \
- 		__cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
- 
-+#define __clamp(val, lo, hi) \
-+	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
-+
-+#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
-+		typeof(val) unique_val = (val);					\
-+		typeof(lo) unique_lo = (lo);					\
-+		typeof(hi) unique_hi = (hi);					\
-+		__clamp(unique_val, unique_lo, unique_hi); })
-+
-+#define __careful_clamp(val, lo, hi)						\
-+	__builtin_choose_expr(__typecheck(val, lo) && __typecheck(val, hi) &&	\
-+			      __is_constexpr(val) && 				\
-+			      __is_constexpr(lo) && __is_constexpr(hi),		\
-+		__clamp(val, lo, hi),						\
-+		__clamp_once(val, lo, hi, __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi)))
-+
- /**
-  * min - return minimum of two values of the same or compatible types
-  * @x: first value
-  * @y: second value
-  */
- #define min(x, y)	__careful_cmp(x, y, <)
- 
- /**
-  * max - return maximum of two values of the same or compatible types
-  * @x: first value
-  * @y: second value
-  */
- #define max(x, y)	__careful_cmp(x, y, >)
- 
- /**
-  * min3 - return minimum of three values
-  * @x: first value
-  * @y: second value
-  * @z: third value
-  */
- #define min3(x, y, z) min((typeof(x))min(x, y), z)
-@@ -68,78 +84,78 @@
- #define max3(x, y, z) max((typeof(x))max(x, y), z)
- 
- /**
-  * min_not_zero - return the minimum that is _not_ zero, unless both are zero
-  * @x: value1
-  * @y: value2
-  */
- #define min_not_zero(x, y) ({			\
- 	typeof(x) __x = (x);			\
- 	typeof(y) __y = (y);			\
- 	__x == 0 ? __y : ((__y == 0) ? __x : min(__x, __y)); })
- 
- /**
-  * clamp - return a value clamped to a given range with strict typechecking
-  * @val: current value
-  * @lo: lowest allowable value
-  * @hi: highest allowable value
-  *
-  * This macro does strict typechecking of @lo/@hi to make sure they are of the
-  * same type as @val.  See the unnecessary pointer comparisons.
-  */
--#define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
-+#define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
- 
- /*
-  * ..and if you can't take the strict
-  * types, you can specify one yourself.
-  *
-  * Or not use min/max/clamp at all, of course.
-  */
- 
- /**
-  * min_t - return minimum of two values, using the specified type
-  * @type: data type to use
-  * @x: first value
-  * @y: second value
-  */
- #define min_t(type, x, y)	__careful_cmp((type)(x), (type)(y), <)
- 
- /**
-  * max_t - return maximum of two values, using the specified type
-  * @type: data type to use
-  * @x: first value
-  * @y: second value
-  */
- #define max_t(type, x, y)	__careful_cmp((type)(x), (type)(y), >)
- 
- /**
-  * clamp_t - return a value clamped to a given range using a given type
-  * @type: the type of variable to use
-  * @val: current value
-  * @lo: minimum allowable value
-  * @hi: maximum allowable value
-  *
-  * This macro does no typechecking and uses temporary variables of type
-  * @type to make all the comparisons.
-  */
--#define clamp_t(type, val, lo, hi) min_t(type, max_t(type, val, lo), hi)
-+#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
- 
- /**
-  * clamp_val - return a value clamped to a given range using val's type
-  * @val: current value
-  * @lo: minimum allowable value
-  * @hi: maximum allowable value
-  *
-  * This macro does no typechecking and uses temporary variables of whatever
-  * type the input argument @val is.  This is useful when @val is an unsigned
-  * type and @lo and @hi are literals that will otherwise be assigned a signed
-  * integer type.
-  */
- #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
- 
- /**
-  * swap - swap values of @a and @b
-  * @a: first value
-  * @b: second value
-  */
- #define swap(a, b) \
- 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
 -- 
-2.37.3
-
+nvpublic
