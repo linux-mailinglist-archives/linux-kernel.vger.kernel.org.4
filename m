@@ -2,114 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25125E712C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A5A5E7146
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiIWBJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S232047AbiIWBNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiIWBJN (ORCPT
+        with ESMTP id S232305AbiIWBNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:09:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C8C1166D4;
-        Thu, 22 Sep 2022 18:09:05 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28N0wxED020043;
-        Fri, 23 Sep 2022 01:08:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=AabAOxUY3w5ehAHkcNB5sRfg/2gh4ddNyHuVC49D5gw=;
- b=UXmJPpro4YdxTzJ+IWXRjJlBJqW7LFlNymbHkn7wTawrDipMhEObt87ciayc87hquZ16
- mEtMLYYjfQZovktjzZmALUqXbXQNBkUC8+vbj27/u6SL3qrv/DSmY5AhcWHMsGkv7I5+
- 5bVGa237qFemrTLWrwxf6Obb2/V8If3jmK5MVtzcwX5AyvczZvgP11hds2F5n//GRg6V
- jvREy9Ug3izMaRvyoeu9b/EbNogUDHjY5O+DzySMtNOzw8NfsX4loxGqWu6PECsxkP9z
- HP8/tueSsPU2kU9ee0U5q2vxSpq5ch4ZGNbsLNj8ncPSuu7jkNQHFCNeMwRyNjgaT5RK 4g== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr8y1usyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 01:08:49 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28N18ml2010754
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 01:08:48 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 22 Sep 2022 18:08:48 -0700
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     <mani@kernel.org>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <quic_cang@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <quic_rampraka@quicinc.com>,
-        <quic_richardp@quicinc.com>, <stanley.chu@mediatek.com>,
-        <adrian.hunter@intel.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <beanhuo@micron.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v1 16/16] ufs: qcom-host: Enable multi circular queue capability
-Date:   Thu, 22 Sep 2022 18:05:23 -0700
-Message-ID: <33868968d028272ecee2c9f45f7efb1c95315a45.1663894792.git.quic_asutoshd@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1663894792.git.quic_asutoshd@quicinc.com>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
+        Thu, 22 Sep 2022 21:13:45 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA786115A58
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:13:33 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-12c8312131fso16379251fac.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=2BBAQBVpQ8fXKmes7SQw9/PDpetGobnws+Vor3/B+A0=;
+        b=V1yvgkxoyU/dThLL9TTrsz8DBaGhI/bZIBapBaw5bStsYTbBrSlbORj/zYoEKopoz8
+         cvRGXpv9D3hFZzdHPeKXQX+wUNOtINR1v7flrGgfyWcjXUkAi9vguzc6dybjHcXxASH2
+         qPi/DVTY2Sdp9+cnzaXsYASKeDi/vtfO5dSCCDPXlqjeedSXuCw0Q3ult302E/KOmZ4r
+         rQB8SPV8YM3NkRSM3R3YkUnnH88FrX5DhnHYxrzkNOIv/pjEKIBVlf1arCOTiyVETyN3
+         mu9CdaK13/N1cyb3D+GYjxGPj5s9/0M4sfkbfAT+tXiNxywf9Xc8UsuAB5fucbAbHQxL
+         PxgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2BBAQBVpQ8fXKmes7SQw9/PDpetGobnws+Vor3/B+A0=;
+        b=RdYYVlc+tGXpD2L4v6IAjS9qyntjIVedpnX2mnUBH1v6vcsj16+duLwcKiouh1Wxsd
+         iExrEiTEQcxAGcV1ZujNqoAILL47z5GNAMdSXZZDkPBYQRA2OwEUbPBRllbj+pnDcDUA
+         Qk+cUXS61OiSBZzGgaUZYsHow3yCjn7ANFjV2n40WHg46WLWhYck0DTSEkFLswTOWXCa
+         13APjCySZjWoNvMhvCgaRd5LqRGke9l1ISJ7FwieK1soXD0WzZCxioMLs1N3x6vvw9lt
+         tkm/yUOCN5kNXpe5ZPpE2W2l1jsk0Eo6tn7txfb90xW7n5zbGn3uJYzXKv8gXi9aPQ4Z
+         WPJw==
+X-Gm-Message-State: ACrzQf0xO3TyiiYKoRJZuw3AgvVd0KBZPbkh1kuw/nZLr3wodeqEiu5d
+        oqKaEB8GcaV9BxkCv5iQmVHnJTz8fa+g6g==
+X-Google-Smtp-Source: AMsMyM4y72P7l45Eoh9rVYWaDDqTIPviU+AVVtECUCPHTW7UrA53sCd5HY2mhu2iysRQXSICYV7aOQ==
+X-Received: by 2002:a05:6870:639e:b0:127:bbc2:223e with SMTP id t30-20020a056870639e00b00127bbc2223emr3665823oap.167.1663895612843;
+        Thu, 22 Sep 2022 18:13:32 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id i21-20020a056820013500b00432ac97ad09sm2780618ood.26.2022.09.22.18.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 18:13:32 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 21:08:05 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mranostay@ti.com
+Subject: Re: [PATCH v8 3/4] counter: ti-ecap-capture: capture driver support
+ for ECAP
+Message-ID: <Yy0G9a5S3OzwyEwW@fedora>
+References: <20220922170402.403683-1-jpanis@baylibre.com>
+ <20220922170402.403683-4-jpanis@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: f7hrhw9abDRQjK_2oQOdC2PRG2x0GAM2
-X-Proofpoint-GUID: f7hrhw9abDRQjK_2oQOdC2PRG2x0GAM2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_16,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 adultscore=0 spamscore=0 malwarescore=0
- suspectscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2209230005
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8oIR1Oj1QlTXqeTr"
+Content-Disposition: inline
+In-Reply-To: <20220922170402.403683-4-jpanis@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable MCQ for Qualcomm UFS controllers
 
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+--8oIR1Oj1QlTXqeTr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index df7db01..69d35ee 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -853,6 +853,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_CRYPTO;
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
- 	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-+	hba->caps |= UFSHCD_CAP_MCQ_EN;
- 
- 	if (host->hw_ver.major >= 0x2) {
- 		host->caps = UFS_QCOM_CAP_QUNIPRO |
--- 
-2.7.4
+On Thu, Sep 22, 2022 at 07:04:01PM +0200, Julien Panis wrote:
+> ECAP hardware on TI AM62x SoC supports capture feature. It can be used
+> to timestamp events (falling/rising edges) detected on input signal.
+>=20
+> This commit adds capture driver support for ECAP hardware on AM62x SoC.
+>=20
+> In the ECAP hardware, capture pin can also be configured to be in
+> PWM mode. Current implementation only supports capture operating mode.
+> Hardware also supports timebase sync between multiple instances, but
+> this driver supports simple independent capture functionality.
+>=20
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
 
+Hello Julien,
+
+Comments follow inline below.
+
+> +/**
+> + * struct ecap_cnt_dev - device private data structure
+> + * @enabled: device state
+> + * @clk:     device clock
+> + * @regmap:  device register map
+> + * @nb_ovf:  number of overflows since capture start
+> + * @pm_ctx:  device context for PM operations
+> + */
+> +struct ecap_cnt_dev {
+> +	bool enabled;
+> +	struct clk *clk;
+> +	struct regmap *regmap;
+> +	atomic_t nb_ovf;
+> +	struct {
+> +		u8 ev_mode;
+> +		u32 time_cntr;
+> +	} pm_ctx;
+> +};
+
+Provide documentation for the ev_mode and time_cntr members. You
+probably need a lock as well to protect access to this structure or
+you'll end up with race problems.
+
+
+> +static void ecap_cnt_capture_enable(struct counter_device *counter)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	pm_runtime_get_sync(counter->parent);
+> +
+> +	/* Enable interrupts on events */
+> +	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG,
+> +			   ECAP_EVT_EN_MASK, ECAP_EVT_EN_MASK);
+> +
+> +	/* Run counter */
+> +	regmap_update_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_ECCTL_CFG_MAS=
+K,
+> +			   ECAP_SYNCO_DIS_MASK | ECAP_STOPVALUE_MASK | ECAP_ECCTL_EN_MASK);
+> +}
+> +
+> +static void ecap_cnt_capture_disable(struct counter_device *counter)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	/* Disable interrupts on events */
+> +	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG, ECAP_EVT_EN=
+_MASK, 0);
+> +
+> +	/* Stop counter */
+> +	regmap_update_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_ECCTL_EN_MASK=
+, 0);
+
+Shouldn't the counter be stopped before stopping the interrupts?
+
+> +static int ecap_cnt_count_get_val(struct counter_device *counter, unsign=
+ed int reg, u32 *val)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +	unsigned int regval;
+> +
+> +	pm_runtime_get_sync(counter->parent);
+> +	regmap_read(ecap_dev->regmap, reg, &regval);
+> +	pm_runtime_put_sync(counter->parent);
+> +
+> +	*val =3D regval;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ecap_cnt_count_set_val(struct counter_device *counter, unsign=
+ed int reg, u32 val)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	pm_runtime_get_sync(counter->parent);
+> +	regmap_write(ecap_dev->regmap, reg, val);
+> +	pm_runtime_put_sync(counter->parent);
+> +
+> +	return 0;
+> +}
+
+The ecap_cnt_count_get_val() and ecap_cnt_count_set_val() functions only
+ever return 0. Redefine them as void functions and eliminate the
+unnecessary returns.
+
+> +static int ecap_cnt_count_write(struct counter_device *counter,
+> +				struct counter_count *count, u64 val)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	if (ecap_dev->enabled)
+> +		return -EBUSY;
+
+You should return -EBUSY when the requested operation cannot be
+completed because the device currently performing a task -- i.e. the
+requested operation would stall or otherwise fail if forced. In this
+case, the count value actually can be set while the device is enabled,
+if I'm not mistaken; the count just continues increasing from the new
+written value (i.e. no stall/failure). Therefore, there's not need to
+return -EBUSY here and this check can be eliminated.
+
+> +static int ecap_cnt_pol_write(struct counter_device *counter,
+> +			      struct counter_signal *signal,
+> +			      size_t idx, enum counter_signal_polarity pol)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	if (ecap_dev->enabled)
+> +		return -EBUSY;
+
+I suspect this check can go away for the same reason as above.
+
+> +static int ecap_cnt_cap_write(struct counter_device *counter,
+> +			      struct counter_count *count,
+> +			      size_t idx, u64 cap)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	if (ecap_dev->enabled)
+> +		return -EBUSY;
+
+Same comment as above.
+
+> +static int ecap_cnt_nb_ovf_write(struct counter_device *counter,
+> +				 struct counter_count *count, u64 val)
+> +{
+> +	struct ecap_cnt_dev *ecap_dev =3D counter_priv(counter);
+> +
+> +	if (ecap_dev->enabled)
+> +		return -EBUSY;
+
+Same comment as above.
+
+> +static struct counter_count ecap_cnt_counts[] =3D {
+> +	{
+> +		.id =3D 0,
+
+The id member is for differentiating between multiple Counts. You only
+have one Count in this driver so you don't need to set it because you
+never use it.
+
+William Breathitt Gray
+
+--8oIR1Oj1QlTXqeTr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYy0G9QAKCRC1SFbKvhIj
+KxouAQCf2abb4CAphtgGkhQHIiAbAAbJAjCL1/3/eLHnBeBuwgEAl3EJhEc2Xmrp
+jmOjd5jNtDVQnvB+NsoZnflvSxpU+gQ=
+=XTZc
+-----END PGP SIGNATURE-----
+
+--8oIR1Oj1QlTXqeTr--
