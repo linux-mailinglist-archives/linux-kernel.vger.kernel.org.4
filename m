@@ -2,211 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D8D5E8449
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4E55E8455
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiIWUqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 16:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
+        id S232314AbiIWUwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 16:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiIWUnP (ORCPT
+        with ESMTP id S229733AbiIWUwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 16:43:15 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C204613D857
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:40 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NIGV28006874
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=uMW05ntqhTxnqydbjTlEBEZMb68OIqoNaDlQ3mavUhM=;
- b=PjvXvgInDOcO0zsYqAlpPNRgpxm75fc4q3PSV8XFhZR7cEr0BJWsL1nthv/Tgi9QLzJW
- jTwJ4dZo4J406ivdTkl012y0CFyogyKVNCLsgizDB6LM9wRn9wbA5zMUKhALn4n2PgBY
- 46G/U30j5sJW7+y9+DReAYOBGi+DXuewj7Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jrenwpgxw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:16 -0700
-Received: from twshared22593.02.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 13:37:14 -0700
-Received: by devvm8797.prn0.facebook.com (Postfix, from userid 2982)
-        id 94901B2B7691; Fri, 23 Sep 2022 13:37:02 -0700 (PDT)
-From:   Tomislav Novak <tnovak@fb.com>
-To:     Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tomislav Novak <tnovak@fb.com>,
-        Samuel Gosselin <sgosselin@fb.com>
-Subject: [PATCH] hw_breakpoint: fix single-stepping when using bpf_overflow_handler
-Date:   Fri, 23 Sep 2022 13:36:45 -0700
-Message-ID: <20220923203644.2731604-1-tnovak@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 23 Sep 2022 16:52:45 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1294EF0AC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:52:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYISXiCXslb+QgM8KcKXVngvVgEO+clVNzaVXyd8xFuaawwnwdcRwACcEuCIjxlwwKigJFKsDAU8wnn72XQ5VXJ65pro0AlKB8H+tAOlpuSZm6td/pNT1s+2Af2GvtjKShRuK6yo/WTsffa8hYsQ9J6YhP8Gu5KKuaUzJ11w9SEyUkPHeYVDveXwXztexgHrpydBtKj4tT3TtVPCVblY2umoMtpIhe5krQKg/Y25vRgg3je/MhwZKCNID4SyorDnonqB18WZ4bM3RXl53oXDYBGY7cY9tBcRevefkm99vqfgJaJfPDGZ/sTDz68dbppx9E5yrW8ttXhN9FE5PyJksg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JIHfBcJrCmnBRxtjis+sCa2mamAhQ+etIHBFLKZQ1/w=;
+ b=VWRD39Onxrb6/E/9OEiaqbN0oisxIeaQSi/ZuQfs2SIz0jfYX3FDjU/7NjUt050ngAfslABxlpO3L/RijKo5rmxdEqzSLlzwTsS3MORcu9z4Ee4Yi0LmLj3BxIHs0vtc+IbPHHKGZStHpU7dzxeSD+Gu1zABxwIXvTVhz92MzXuyBcmvFQ7WA8V8BXAYc34i41rZCTTyTwbMdD7ctqa0btyYItxIqpScVYX7ERdTK0j4VUvxcegI/MD0+rp3pxwWpAjhmUdaNoKInw7tQwTufSM3Ikx9ff7WFEtSwAlPtEJjR5O5FTTAEFOGcpeBd7WDaFk1i7r/xJvFSdGYskmI+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JIHfBcJrCmnBRxtjis+sCa2mamAhQ+etIHBFLKZQ1/w=;
+ b=E0udaQMgrKseJFuzs2huo1FNF9l80LoGWsAcGVInddN2pmGD55Qcxztw/x1Mjh/Pd0PLMdjOQe0RFL1MOhkuwygFaNbOHOaF+iaO6smqXvnuNa0wah1AjmcAVoeVSmkIuZwWvtLzhdWRqcT2Z3gA9asHyqNQizb+3cJC7N4Rrlo=
+Received: from DM6PR06CA0088.namprd06.prod.outlook.com (2603:10b6:5:336::21)
+ by IA1PR12MB6209.namprd12.prod.outlook.com (2603:10b6:208:3e7::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 20:52:41 +0000
+Received: from DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:336:cafe::8b) by DM6PR06CA0088.outlook.office365.com
+ (2603:10b6:5:336::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20 via Frontend
+ Transport; Fri, 23 Sep 2022 20:52:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT058.mail.protection.outlook.com (10.13.172.216) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Fri, 23 Sep 2022 20:52:41 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 23 Sep
+ 2022 15:52:38 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Roman Li <roman.li@amd.com>, Jude Shih <shenshih@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Wayne Lin" <Wayne.Lin@amd.com>, hersen wu <hersenxs.wu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
+Subject: [PATCH 1/3] drm/amd/display: fix HDCP drm prop update for MST
+Date:   Fri, 23 Sep 2022 16:52:28 -0400
+Message-ID: <20220923205234.207628-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: zaFUCxm0i5UWzUJ4lEpv1loneSiDHsZp
-X-Proofpoint-ORIG-GUID: zaFUCxm0i5UWzUJ4lEpv1loneSiDHsZp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_09,2022-09-22_02,2022-06-22_01
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT058:EE_|IA1PR12MB6209:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c17acfe-5c42-4a5f-eab3-08da9da58e88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mBw9PxeIwVtfkT/RzL691vsujth81IJOjAX4YKDFVNJC5IW2dIlsTblVrWqH3QhpCLK74gBQughowDr47yfXZ5Cx5dlA0gVex7pSaZo1/e9py1azhsg7Iblq27WWCgCB1ws0YSfqTs1UMjCJcDVuPhwy1ZW6vbCTLVUMj39VVgVISBzp7Mwq1n1SmpMjLGyMKkKRnedwBzOpMTIEjWQEq1hL6GBRRZAzKfmc1kHAp9H+dq/fPT9v1/bZkAAdPi4w4BJFVv08NHmFPWBnw+PiW4aErn5YVJtypYOQebEK9MfDQqqmcMj6INynTGDC5iS8hmap0Tv8HFqzeUuGMnKEJty34B2tiAo2PE4w9td0U3hbj8wT+4kRwKBkHUj5+11TEzQ9o3RZgstx1shmwBkfNSsMx2l7m8YA+hqz1fjO7D/qhW1eIXk/sjocR2TzomX+yM5yz6GgjdkS/w5Nqq0SOaxp3IzL5ZduFr+cX6VlIpnbpwMm/iEJEGVbzYTw7UiElOXNeWxDvpg62SadqZpkyfa+xaRn53zDqcMBvtHT9SDYg5J2/tF67DDObJlATmhMXtqHg7X8bENpQL4h6/XJin9KyxFBhK+bnJOIc91DUmj33SRdYYYVmWMNwxjalOr8Kg0xFgQWTeXqVM+AENY2WGGRkHYVj7fbYWGrLbnEJwKp2SeQ9QEUFOJ/Dsax3+EuxHuh6JkU+H3JX9cn6ualZSUAjf6QgPLr0jZQQlM3Fwg64b44310TCjo+NgfJh06WrY1ui/E9JzYEloTe+WcP+odna4txAFknif1Qe2BEGVlgxhMCYmz7znqx4zyB5A73RN+yRGtMF/YA0lIFFkQmHA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199015)(46966006)(36840700001)(40470700004)(426003)(36756003)(1076003)(2616005)(6666004)(15650500001)(41300700001)(16526019)(336012)(26005)(44832011)(2906002)(8936002)(7696005)(186003)(5660300002)(82740400003)(81166007)(82310400005)(47076005)(83380400001)(40480700001)(86362001)(40460700003)(356005)(36860700001)(478600001)(316002)(54906003)(6916009)(70586007)(4326008)(70206006)(8676002)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 20:52:41.1755
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c17acfe-5c42-4a5f-eab3-08da9da58e88
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6209
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ARM platforms is_default_overflow_handler() is used to determine if
-hw_breakpoint code should single-step over the watchpoint trigger or
-let the custom handler deal with it.
+For MST topology with 1 physical link and multiple connectors (e.g. a
+one-to-many MST hub), if userspace enables HDCP simultaneously on all
+connected outputs, the commit tail iteratively calls
+hdcp_update_display() for each display (connector). However, the HDCP
+workqueue data structure for each link has only one DM connector and
+encryption status member, which means the workqueue of
+property_validate/update() would only be triggered for the last
+connector within this physical link, and therefore the HDCP property
+value of other connectors would stay on DESIRED instead of switching to
+ENABLED. So, to ensure that all of the connectors switch from DESIRED to
+ENABLED keep track of each connector's status in an array instead of
+only keeping track of the status of the most recent connector that
+userspace has interacted with.
 
-Attaching a BPF program to a watchpoint replaces the handler with
-bpf_overflow_handler, which isn't recognized as a default handler so we
-never step over the instruction triggering the data abort exception (the
-watchpoint keeps firing):
-
-  # bpftrace -e 'watchpoint:0x10000000:4:w { printf("hit\n"); }' ./wp_tes=
-t
-  Attaching 1 probe...
-  hit
-  hit
-  hit
-  [...]
-
-(wp_test performs a single 4-byte store to address 0x10000000)
-
-This patch replaces the check with uses_default_overflow_handler(), which
-accounts for the bpf_overflow_handler() case by also testing if the handl=
-er
-invokes one of the perf_event_output functions via orig_default_handler.
-
-Signed-off-by: Tomislav Novak <tnovak@fb.com>
-Tested-by: Samuel Gosselin <sgosselin@fb.com> # arm64
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 ---
- arch/arm/kernel/hw_breakpoint.c   |  8 ++++----
- arch/arm64/kernel/hw_breakpoint.c |  4 ++--
- include/linux/perf_event.h        | 22 +++++++++++++++++++---
- 3 files changed, 25 insertions(+), 9 deletions(-)
+ .../amd/display/amdgpu_dm/amdgpu_dm_hdcp.c    | 145 +++++++++++++-----
+ .../amd/display/amdgpu_dm/amdgpu_dm_hdcp.h    |   5 +-
+ 2 files changed, 113 insertions(+), 37 deletions(-)
 
-diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpo=
-int.c
-index 054e9199f30d..dc0fb7a81371 100644
---- a/arch/arm/kernel/hw_breakpoint.c
-+++ b/arch/arm/kernel/hw_breakpoint.c
-@@ -626,7 +626,7 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
- 	hw->address &=3D ~alignment_mask;
- 	hw->ctrl.len <<=3D offset;
-=20
--	if (is_default_overflow_handler(bp)) {
-+	if (uses_default_overflow_handler(bp)) {
- 		/*
- 		 * Mismatch breakpoints are required for single-stepping
- 		 * breakpoints.
-@@ -798,7 +798,7 @@ static void watchpoint_handler(unsigned long addr, un=
-signed int fsr,
- 		 * Otherwise, insert a temporary mismatch breakpoint so that
- 		 * we can single-step over the watchpoint trigger.
- 		 */
--		if (!is_default_overflow_handler(wp))
-+		if (!uses_default_overflow_handler(wp))
- 			continue;
- step:
- 		enable_single_step(wp, instruction_pointer(regs));
-@@ -811,7 +811,7 @@ static void watchpoint_handler(unsigned long addr, un=
-signed int fsr,
- 		info->trigger =3D addr;
- 		pr_debug("watchpoint fired: address =3D 0x%x\n", info->trigger);
- 		perf_bp_event(wp, regs);
--		if (is_default_overflow_handler(wp))
-+		if (uses_default_overflow_handler(wp))
- 			enable_single_step(wp, instruction_pointer(regs));
- 	}
-=20
-@@ -886,7 +886,7 @@ static void breakpoint_handler(unsigned long unknown,=
- struct pt_regs *regs)
- 			info->trigger =3D addr;
- 			pr_debug("breakpoint fired: address =3D 0x%x\n", addr);
- 			perf_bp_event(bp, regs);
--			if (is_default_overflow_handler(bp))
-+			if (uses_default_overflow_handler(bp))
- 				enable_single_step(bp, addr);
- 			goto unlock;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.c
+index 6202e31c7e3a..922ec91940e4 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.c
+@@ -170,9 +170,10 @@ void hdcp_update_display(struct hdcp_workqueue *hdcp_work,
+ 	struct mod_hdcp_display *display = &hdcp_work[link_index].display;
+ 	struct mod_hdcp_link *link = &hdcp_work[link_index].link;
+ 	struct mod_hdcp_display_query query;
++	unsigned int conn_index = aconnector->base.index;
+ 
+ 	mutex_lock(&hdcp_w->mutex);
+-	hdcp_w->aconnector = aconnector;
++	hdcp_w->aconnector[conn_index] = aconnector;
+ 
+ 	query.display = NULL;
+ 	mod_hdcp_query_display(&hdcp_w->hdcp, aconnector->base.index, &query);
+@@ -204,7 +205,8 @@ void hdcp_update_display(struct hdcp_workqueue *hdcp_work,
+ 					      msecs_to_jiffies(DRM_HDCP_CHECK_PERIOD_MS));
+ 		} else {
+ 			display->adjust.disable = MOD_HDCP_DISPLAY_DISABLE_AUTHENTICATION;
+-			hdcp_w->encryption_status = MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
++			hdcp_w->encryption_status[conn_index] =
++				MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
+ 			cancel_delayed_work(&hdcp_w->property_validate_dwork);
  		}
-diff --git a/arch/arm64/kernel/hw_breakpoint.c b/arch/arm64/kernel/hw_bre=
-akpoint.c
-index b29a311bb055..9659a9555c63 100644
---- a/arch/arm64/kernel/hw_breakpoint.c
-+++ b/arch/arm64/kernel/hw_breakpoint.c
-@@ -654,7 +654,7 @@ static int breakpoint_handler(unsigned long unused, u=
-nsigned long esr,
- 		perf_bp_event(bp, regs);
-=20
- 		/* Do we need to handle the stepping? */
--		if (is_default_overflow_handler(bp))
-+		if (uses_default_overflow_handler(bp))
- 			step =3D 1;
- unlock:
- 		rcu_read_unlock();
-@@ -733,7 +733,7 @@ static u64 get_distance_from_watchpoint(unsigned long=
- addr, u64 val,
- static int watchpoint_report(struct perf_event *wp, unsigned long addr,
- 			     struct pt_regs *regs)
+ 
+@@ -223,9 +225,10 @@ static void hdcp_remove_display(struct hdcp_workqueue *hdcp_work,
  {
--	int step =3D is_default_overflow_handler(wp);
-+	int step =3D uses_default_overflow_handler(wp);
- 	struct arch_hw_breakpoint *info =3D counter_arch_bp(wp);
-=20
- 	info->trigger =3D addr;
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index ee8b9ecdc03b..f174b77437f5 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1105,15 +1105,31 @@ extern int perf_event_output(struct perf_event *e=
-vent,
- 			     struct pt_regs *regs);
-=20
- static inline bool
--is_default_overflow_handler(struct perf_event *event)
-+__is_default_overflow_handler(perf_overflow_handler_t overflow_handler)
+ 	struct hdcp_workqueue *hdcp_w = &hdcp_work[link_index];
+ 	struct drm_connector_state *conn_state = aconnector->base.state;
++	unsigned int conn_index = aconnector->base.index;
+ 
+ 	mutex_lock(&hdcp_w->mutex);
+-	hdcp_w->aconnector = aconnector;
++	hdcp_w->aconnector[conn_index] = aconnector;
+ 
+ 	/* the removal of display will invoke auth reset -> hdcp destroy and
+ 	 * we'd expect the Content Protection (CP) property changed back to
+@@ -247,13 +250,18 @@ static void hdcp_remove_display(struct hdcp_workqueue *hdcp_work,
+ void hdcp_reset_display(struct hdcp_workqueue *hdcp_work, unsigned int link_index)
  {
--	if (likely(event->overflow_handler =3D=3D perf_event_output_forward))
-+	if (likely(overflow_handler =3D=3D perf_event_output_forward))
- 		return true;
--	if (unlikely(event->overflow_handler =3D=3D perf_event_output_backward)=
-)
-+	if (unlikely(overflow_handler =3D=3D perf_event_output_backward))
- 		return true;
- 	return false;
+ 	struct hdcp_workqueue *hdcp_w = &hdcp_work[link_index];
++	unsigned int conn_index;
+ 
+ 	mutex_lock(&hdcp_w->mutex);
+ 
+ 	mod_hdcp_reset_connection(&hdcp_w->hdcp,  &hdcp_w->output);
+ 
+ 	cancel_delayed_work(&hdcp_w->property_validate_dwork);
+-	hdcp_w->encryption_status = MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
++
++	for (conn_index = 0; conn_index < AMDGPU_DM_MAX_DISPLAY_INDEX;
++	     conn_index++)
++		hdcp_w->encryption_status[conn_index] =
++			MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
+ 
+ 	process_output(hdcp_w);
+ 
+@@ -290,45 +298,85 @@ static void event_callback(struct work_struct *work)
+ 
+ 
  }
-=20
-+#define is_default_overflow_handler(event) \
-+	__is_default_overflow_handler((event)->overflow_handler)
+-static void event_property_update(struct work_struct *work)
 +
-+#ifdef CONFIG_BPF_SYSCALL
-+static inline bool uses_default_overflow_handler(struct perf_event *even=
-t)
-+{
-+	if (likely(is_default_overflow_handler(event)))
-+		return true;
++static struct amdgpu_dm_connector *find_first_connected_output(struct hdcp_workqueue *hdcp_work)
+ {
++	unsigned int conn_index;
+ 
++	for (conn_index = 0; conn_index < AMDGPU_DM_MAX_DISPLAY_INDEX;
++	     conn_index++)
++		if (hdcp_work->aconnector[conn_index])
++			return hdcp_work->aconnector[conn_index];
 +
-+	return __is_default_overflow_handler(event->orig_overflow_handler);
++	return NULL;
 +}
-+#else
-+#define uses_default_overflow_handler(event) \
-+	is_default_overflow_handler(event)
-+#endif
 +
- extern void
- perf_event_header__init_id(struct perf_event_header *header,
- 			   struct perf_sample_data *data,
---=20
-2.30.2
++static void event_property_update(struct work_struct *work)
++{
+ 	struct hdcp_workqueue *hdcp_work = container_of(work, struct hdcp_workqueue, property_update_work);
+-	struct amdgpu_dm_connector *aconnector = hdcp_work->aconnector;
+-	struct drm_device *dev = hdcp_work->aconnector->base.dev;
++	struct amdgpu_dm_connector *aconnector =
++		find_first_connected_output(hdcp_work);
++	struct drm_device *dev;
+ 	long ret;
++	unsigned int conn_index;
++	struct drm_connector *connector;
++	struct drm_connector_state *conn_state;
++
++	if (!aconnector)
++		return;
++
++	dev = aconnector->base.dev;
+ 
+ 	drm_modeset_lock(&dev->mode_config.connection_mutex, NULL);
+ 	mutex_lock(&hdcp_work->mutex);
+ 
++	for (conn_index = 0; conn_index < AMDGPU_DM_MAX_DISPLAY_INDEX;
++	     conn_index++) {
++		aconnector = hdcp_work->aconnector[conn_index];
++
++		if (!aconnector)
++			continue;
++
++		if (!aconnector->base.index)
++			continue;
++
++		connector = &aconnector->base;
++		conn_state = aconnector->base.state;
+ 
+-	if (aconnector->base.state && aconnector->base.state->commit) {
+-		ret = wait_for_completion_interruptible_timeout(&aconnector->base.state->commit->hw_done, 10 * HZ);
++		if (!conn_state)
++			continue;
+ 
+-		if (ret == 0) {
+-			DRM_ERROR("HDCP state unknown! Setting it to DESIRED");
+-			hdcp_work->encryption_status = MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
++		if (conn_state->commit) {
++			ret = wait_for_completion_interruptible_timeout(&conn_state->commit->hw_done,
++									10 * HZ);
++			if (!ret) {
++				DRM_ERROR("HDCP state unknown! Setting it to DESIRED");
++				hdcp_work->encryption_status[conn_index] =
++					MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
++			}
+ 		}
+-	}
+ 
+-	if (aconnector->base.state) {
+-		if (hdcp_work->encryption_status != MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF) {
+-			if (aconnector->base.state->hdcp_content_type ==
+-				DRM_MODE_HDCP_CONTENT_TYPE0 &&
+-			hdcp_work->encryption_status <=
+-				MOD_HDCP_ENCRYPTION_STATUS_HDCP2_TYPE0_ON)
+-				drm_hdcp_update_content_protection(&aconnector->base,
++		if (hdcp_work->encryption_status[conn_index] !=
++		    MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF) {
++			if (conn_state->hdcp_content_type ==
++			    DRM_MODE_HDCP_CONTENT_TYPE0 &&
++			    hdcp_work->encryption_status[conn_index] <=
++			    MOD_HDCP_ENCRYPTION_STATUS_HDCP2_TYPE0_ON)
++
++				drm_hdcp_update_content_protection(connector,
+ 					DRM_MODE_CONTENT_PROTECTION_ENABLED);
+-			else if (aconnector->base.state->hdcp_content_type ==
+-					DRM_MODE_HDCP_CONTENT_TYPE1 &&
+-				hdcp_work->encryption_status ==
+-					MOD_HDCP_ENCRYPTION_STATUS_HDCP2_TYPE1_ON)
+-				drm_hdcp_update_content_protection(&aconnector->base,
++			else if (conn_state->hdcp_content_type ==
++				 DRM_MODE_HDCP_CONTENT_TYPE1 &&
++				 hdcp_work->encryption_status[conn_index] ==
++				 MOD_HDCP_ENCRYPTION_STATUS_HDCP2_TYPE1_ON)
++
++				drm_hdcp_update_content_protection(connector,
+ 					DRM_MODE_CONTENT_PROTECTION_ENABLED);
+ 		} else {
+-			drm_hdcp_update_content_protection(&aconnector->base,
++			drm_hdcp_update_content_protection(connector,
+ 				DRM_MODE_CONTENT_PROTECTION_DESIRED);
+ 		}
++
+ 	}
+ 
+ 	mutex_unlock(&hdcp_work->mutex);
+@@ -340,19 +388,37 @@ static void event_property_validate(struct work_struct *work)
+ 	struct hdcp_workqueue *hdcp_work =
+ 		container_of(to_delayed_work(work), struct hdcp_workqueue, property_validate_dwork);
+ 	struct mod_hdcp_display_query query;
+-	struct amdgpu_dm_connector *aconnector = hdcp_work->aconnector;
+-
+-	if (!aconnector)
+-		return;
++	struct amdgpu_dm_connector *aconnector;
++	unsigned int conn_index;
+ 
+ 	mutex_lock(&hdcp_work->mutex);
+ 
+-	query.encryption_status = MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
+-	mod_hdcp_query_display(&hdcp_work->hdcp, aconnector->base.index, &query);
++	for (conn_index = 0; conn_index < AMDGPU_DM_MAX_DISPLAY_INDEX;
++	     conn_index++) {
++		aconnector = hdcp_work->aconnector[conn_index];
+ 
+-	if (query.encryption_status != hdcp_work->encryption_status) {
+-		hdcp_work->encryption_status = query.encryption_status;
+-		schedule_work(&hdcp_work->property_update_work);
++		if (!aconnector)
++			continue;
++
++		if (!aconnector->base.index)
++			continue;
++
++		query.encryption_status = MOD_HDCP_ENCRYPTION_STATUS_HDCP_OFF;
++		mod_hdcp_query_display(&hdcp_work->hdcp, aconnector->base.index,
++				       &query);
++
++		DRM_DEBUG_DRIVER("[HDCP_DM] display %d, CP %u, (query->enc_st, work->enc_st): (%d, %d)\n",
++				 aconnector->base.index,
++				 aconnector->base.state->content_protection,
++				 query.encryption_status,
++				 hdcp_work->encryption_status[conn_index]);
++
++		if (query.encryption_status !=
++		    hdcp_work->encryption_status[conn_index]) {
++			hdcp_work->encryption_status[conn_index] =
++				query.encryption_status;
++			schedule_work(&hdcp_work->property_update_work);
++		}
+ 	}
+ 
+ 	mutex_unlock(&hdcp_work->mutex);
+@@ -686,6 +752,15 @@ struct hdcp_workqueue *hdcp_create_workqueue(struct amdgpu_device *adev, struct
+ 		hdcp_work[i].hdcp.config.ddc.funcs.read_i2c = lp_read_i2c;
+ 		hdcp_work[i].hdcp.config.ddc.funcs.write_dpcd = lp_write_dpcd;
+ 		hdcp_work[i].hdcp.config.ddc.funcs.read_dpcd = lp_read_dpcd;
++
++		memset(hdcp_work[i].aconnector, 0,
++		       sizeof(struct amdgpu_dm_connector *) *
++		       AMDGPU_DM_MAX_DISPLAY_INDEX);
++
++		memset(hdcp_work[i].encryption_status, 0,
++		       sizeof(enum mod_hdcp_encryption_status) *
++		       AMDGPU_DM_MAX_DISPLAY_INDEX);
++
+ 	}
+ 
+ 	cp_psp->funcs.update_stream_config = update_config;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.h b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.h
+index 09294ff122fe..b2dbc0719472 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.h
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_hdcp.h
+@@ -43,7 +43,7 @@ struct hdcp_workqueue {
+ 	struct delayed_work callback_dwork;
+ 	struct delayed_work watchdog_timer_dwork;
+ 	struct delayed_work property_validate_dwork;
+-	struct amdgpu_dm_connector *aconnector;
++	struct amdgpu_dm_connector *aconnector[AMDGPU_DM_MAX_DISPLAY_INDEX];
+ 	struct mutex mutex;
+ 
+ 	struct mod_hdcp hdcp;
+@@ -51,7 +51,8 @@ struct hdcp_workqueue {
+ 	struct mod_hdcp_display display;
+ 	struct mod_hdcp_link link;
+ 
+-	enum mod_hdcp_encryption_status encryption_status;
++	enum mod_hdcp_encryption_status encryption_status[
++		AMDGPU_DM_MAX_DISPLAY_INDEX];
+ 	uint8_t max_link;
+ 
+ 	uint8_t *srm;
+-- 
+2.37.2
 
