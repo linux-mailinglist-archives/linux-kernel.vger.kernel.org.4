@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873D15E7B44
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC5B5E7B45
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiIWNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S231676AbiIWNCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiIWNCb (ORCPT
+        with ESMTP id S231727AbiIWNCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:02:31 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B18413A064
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 06:02:25 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id s10so14583065ljp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 06:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=eSh9lQlxR1gFInxcwx9nPyD8UC9VTqVGCwfXX2VWpoE=;
-        b=UovPoYoZTR7j58R4ZiTzpBg6X75Fbh4OHuNXCuAKYGWsStit1G6qDwPyinFxKZA2CM
-         Ok/j44lXFa9jNi9/3htbd5kAY1WeBWtOWXXXxCX9f6/k78Mor5U+zq/ez/XpWWIxTiTW
-         gBgy1WgeFwegshL4yZhiQ+SwB/kveGJxscwhywriEQHzAhqDa3fb6BBK1w4ZOEZklf0S
-         zfb3crXHhigd9JIp+SSAHAZ66Kg1Y+hC6kpFZsq1mDjgNOneL5r/1GSrSPa+5LE3LsNg
-         Cq/FSHNiedH6MwKNQEqy0TXjSFWZgTchQOiWXva5l9+gj7IRJoT9edwGmmCzhTTkqagm
-         l5uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=eSh9lQlxR1gFInxcwx9nPyD8UC9VTqVGCwfXX2VWpoE=;
-        b=0hcKSx4d58Kk6J9mf06sz3xpKdlTE5VPZm58oDS6LeVJybNUls+N6Yy5MhgK0v1BkI
-         em5yjsr6oDQc6auY333kkrkHaU1v8qod/FsdRkJ8atKtr5VMOT+nXWAf9KUdbfasKpTd
-         rTxMUOjoNDAkPw0wToAHxQMCek064bgdEIbK0pwMwYxRjy6xfMxn1MAirc4QBwy7WOJg
-         63W6q0Ify282W/4sZtm/walLzgzWpoRsCgK16MgUWO1F4JJUN4JzPKGeVxE1URl4MMpr
-         sEWiHkaVkwtL8NrdE8xLeK1/6Mqwz4D5daS5RMyvbXAGEoGnLNRXlSf8u9Ql6XDbW+c/
-         RE4g==
-X-Gm-Message-State: ACrzQf3AdC2FHWPBTz5IClBKwfeqwloLXIL5WlaZ66qkoWVQNvJoDiv4
-        44g/WqsldOnPYyY3Blhs+ioK0A==
-X-Google-Smtp-Source: AMsMyM7qVPPrkR+mwYzG7QUbaiI4bu86AdzgPZgHy75KHEJknXL0Rg1SXgR20+plVTkV408sVjI3LQ==
-X-Received: by 2002:a2e:984a:0:b0:26a:d00a:790f with SMTP id e10-20020a2e984a000000b0026ad00a790fmr2932714ljj.358.1663938142995;
-        Fri, 23 Sep 2022 06:02:22 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h6-20020a19ca46000000b0048b26d4bb64sm1450938lfj.40.2022.09.23.06.02.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 06:02:22 -0700 (PDT)
-Message-ID: <3022c139-d25c-4fcf-33d5-1baf8aa9e61e@linaro.org>
-Date:   Fri, 23 Sep 2022 15:02:21 +0200
+        Fri, 23 Sep 2022 09:02:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA313A060
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 06:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663938161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+8KZImyH1keDN6o1jnF6cQm8Dllod+zGLto6X0zKc1c=;
+        b=gdANi0P/jGcGXY3ucD9Xh9ikqLQMNcltOSoGHrit9u8tlZCWNRHH/v5RpHQR4YJ5VrMpP3
+        7Wjn3T2BfIYsyklpNqjyHM73Ud91v83uk6izbnJjqwO1ZsbZpa/vTqhl282cD2fwcSlH+w
+        UGoYe0K4h45P7k6ugwrquO8jPgMexLg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-6ruVlsqJMtm46GIVpa9B_w-1; Fri, 23 Sep 2022 09:02:36 -0400
+X-MC-Unique: 6ruVlsqJMtm46GIVpa9B_w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9E041C05EB4;
+        Fri, 23 Sep 2022 13:02:35 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.39.195.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 38A9EC16922;
+        Fri, 23 Sep 2022 13:02:33 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 09:02:30 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
+        linux-kernel@vger.kernel.org, yury.norov@gmail.com,
+        rafael@kernel.org
+Subject: Re: aarch64 5.15.68 regression in topology/thread_siblings (huge
+ file size and no content)
+Message-ID: <Yy2uZvsbKStqBKnF@lorien.usersys.redhat.com>
+References: <20220922113217.GA90426@meh.true.cz>
+ <YyxVytqQDbGWPa+6@lorien.usersys.redhat.com>
+ <YyxXoPmtTZHCr5pR@kroah.com>
+ <Yyxgtx/Vr6Ar1xEe@lorien.usersys.redhat.com>
+ <20220922140504.GA58265@meh.true.cz>
+ <YyyY1LgHzQZpQkqM@lorien.usersys.redhat.com>
+ <20220922200506.GC87797@meh.true.cz>
+ <Yy15h2vXFBhCRMrL@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 net-next 00/10] dt-bindings and mt7621 devicetree
- changes
-Content-Language: en-US
-To:     patchwork-bot+netdevbpf@kernel.org,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     robh+dt@kernel.org, matthias.bgg@gmail.com, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, tsbogend@alpha.franken.de,
-        gregkh@linuxfoundation.org, sean.wang@mediatek.com,
-        Landen.Chao@mediatek.com, dqfext@gmail.com,
-        sergio.paracuellos@gmail.com, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220920172556.16557-1-arinc.unal@arinc9.com>
- <166392781809.11802.14314301597128820257.git-patchwork-notify@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <166392781809.11802.14314301597128820257.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yy15h2vXFBhCRMrL@kroah.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 12:10, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
+On Fri, Sep 23, 2022 at 11:16:55AM +0200 Greg Kroah-Hartman wrote:
+> On Thu, Sep 22, 2022 at 10:05:06PM +0200, Petr Štetiar wrote:
+> > Phil Auld <pauld@redhat.com> [2022-09-22 13:18:12]:
+> > 
+> > > Then I applied the fix and the problem went away:
+> > 
+> > I've just tried the same aarch64 and I can confirm, that the
+> > patch fixes the issue.
 > 
-> This series was applied to netdev/net-next.git (master)
-> by David S. Miller <davem@davemloft.net>:
-> 
-> On Tue, 20 Sep 2022 20:25:46 +0300 you wrote:
->> Hello there!
->>
->> This patch series removes old MediaTek bindings, improves mediatek,mt7530
->> and mt7621 memory controller bindings and improves mt7621 DTs.
->>
->> v4:
->> - Keep memory-controller node name.
->> - Change syscon to memory-controller on mt7621.dtsi.
->>
->> [...]
-> 
-> Here is the summary with links:
->   - [v4,net-next,01/10] dt-bindings: net: drop old mediatek bindings
->     https://git.kernel.org/netdev/net-next/c/e8619b05870d
->   - [v4,net-next,02/10] dt-bindings: net: dsa: mediatek,mt7530: change mt7530 switch address
->     https://git.kernel.org/netdev/net-next/c/3737c6aaf22d
->   - [v4,net-next,03/10] dt-bindings: net: dsa: mediatek,mt7530: expand gpio-controller description
->     https://git.kernel.org/netdev/net-next/c/0fbca84eea37
->   - [v4,net-next,04/10] dt-bindings: memory: mt7621: add syscon as compatible string
->     https://git.kernel.org/netdev/net-next/c/862b19b7d4a1
->   - [v4,net-next,05/10] mips: dts: ralink: mt7621: fix some dtc warnings
->     https://git.kernel.org/netdev/net-next/c/5ae75a1ae5c9
->   - [v4,net-next,06/10] mips: dts: ralink: mt7621: remove interrupt-parent from switch node
->     https://git.kernel.org/netdev/net-next/c/08b9eaf454ee
->   - [v4,net-next,07/10] mips: dts: ralink: mt7621: change phy-mode of gmac1 to rgmii
->     https://git.kernel.org/netdev/net-next/c/97721e84f546
->   - [v4,net-next,08/10] mips: dts: ralink: mt7621: change mt7530 switch address
->     https://git.kernel.org/netdev/net-next/c/2b653a373b41
->   - [v4,net-next,09/10] mips: dts: ralink: mt7621: fix external phy on GB-PC2
->     https://git.kernel.org/netdev/net-next/c/247825f991b3
->   - [v4,net-next,10/10] mips: dts: ralink: mt7621: add GB-PC2 LEDs
->     https://git.kernel.org/netdev/net-next/c/394c3032fe0e
+> Wow, that's odd that the file size matters here.
+>
+
+Yeah, I looked through the code some but nothing jumped out where
+that unsigned -1 could cause a problem (like count + 1 wrapping
+to 0 or something).
+
+> Ok, I'll send this to Linus in a few hours, thanks.
+
+Thanks!
 
 
-DTS patches should not go via network tree... We keep them separate on
-purpose - to split hardware description from OS-specific implementation.
+Cheers,
+Phil
 
-Best regards,
-Krzysztof
+> 
+> greg k-h
+> 
+
+-- 
 
