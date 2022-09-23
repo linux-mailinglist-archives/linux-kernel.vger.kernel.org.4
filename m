@@ -2,96 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54435E7296
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 05:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACDF5E729D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiIWDz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 23:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S229892AbiIWEAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 00:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiIWDzZ (ORCPT
+        with ESMTP id S229715AbiIWEAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 23:55:25 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304F482D24
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:55:24 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x1so10657943plv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Is4ZUuvsA3sjDvAuffgt8Yjeir7RGhGpld/940IgtKA=;
-        b=ork+z5O8SaPp7wmqFpJ1fbIfEy21Bezflnx3W+MKpNishKPRFG1VbE4UdJSems1w5W
-         aVDZ/V0iKcIpcOZ0cOq2uTymc73kly+coupqchS5MMHZHeDKPPKYBYQzfzhop0nZtgDF
-         oGUwCQNJBGsuSGc4+Zwcxs1pq1glMrLaW/ADpL2L7LRDCkYLPhpApuzHWa9OEmnooBNb
-         jdNbBUC5CJq5UbxpUXTde9wQg2oR6LxkC+2YMRn52zTLVUR7QiThk3eKzBLyhychmgOB
-         Qpvd58fd5K7VuNNQdPF5UumyLryhWf7ttMqAyQdhug0m5on3KOPe1syo2XOCU/MvM9f9
-         ZS1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Is4ZUuvsA3sjDvAuffgt8Yjeir7RGhGpld/940IgtKA=;
-        b=04kUe0FXWtMQoJyyXDsxyTaK8Nk+oqGH3gjuhF2K8z/YMtGIN5rRsoAaxh7wO5ZX1e
-         DfZswkZUkqXLOUCnjwxkk1NBXEYMUkL7LmjtO2AtZZO/zeiIYxPxmYfZ/s676LeIjGT6
-         oE1VVi3aD92wKnifAtwW+6n6zbHFrF+gobIyOGx/9VcAO364nRdr48n55U2clVUu2LOF
-         zbBw4Tf+taCr+s8XBqVEHToFx6nIn2wRkUVNuVfSwC3+Q35NmPqKDe/W/JW/Lqueb+TG
-         cbF7Kv9fFTLT43w+gfNL1I3Ims8Vt70pklsS+jZ4+O8+C+hPRnB10wMYARM9pLZHaHXk
-         mLEw==
-X-Gm-Message-State: ACrzQf2HoaCWd0p45DP35K+PlnIuWuci/i+yqsTRBq+f06ZSUPB/6F8i
-        rzzvvLa3BxazMlkB5aCNyEI=
-X-Google-Smtp-Source: AMsMyM4bHukWnITYIjGMHwOj87yAZ3XsOTst4unZ9qeD+zXCqaCppO8PmrHzdyO6bfX0BAo+llc7fw==
-X-Received: by 2002:a17:90b:4b4c:b0:203:1eef:d810 with SMTP id mi12-20020a17090b4b4c00b002031eefd810mr19073797pjb.75.1663905323635;
-        Thu, 22 Sep 2022 20:55:23 -0700 (PDT)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id a19-20020a621a13000000b0053e8fe8a705sm5371037pfa.17.2022.09.22.20.55.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 22 Sep 2022 20:55:23 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 11:58:05 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] erofs: introduce partial-referenced pclusters
-Message-ID: <20220923115805.000051fe.zbestahu@gmail.com>
-In-Reply-To: <20220923014915.4362-1-hsiangkao@linux.alibaba.com>
-References: <20220923014915.4362-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        Fri, 23 Sep 2022 00:00:35 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E11B9FA96
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663905633; x=1695441633;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pxYjuu3lxvrOnic49rQLuDK3YaKaCbJs6u697F/+o2k=;
+  b=h5n6RrLuteQz9OI1CjJKajFlXMu1oTTFCALdPwdMQl+TFkHXmchYkude
+   vfvXdSjYKsoYeS8OK/o9qaNwSmF70Zv5SOa/xQR6aGEtDNngpcV29hYG3
+   3tU6hjNqUyvSw+PtnYpAiBTPe2jqGHXFdjqrOkYNNAbW1c9EhIwGoCO/I
+   1dHPLQmDGQYuajUovwrL89EGunZkJqBIeEo6tImXNEjNCNnPx8YJYOWOy
+   vxKP7qsUO4hA5yrgNSEVwuGN0P5gZqqnPggNxn0oaQVZwbwG0ZlT36Wna
+   UQzL0EDdfD0YnIyDZ0GGUdr79ngvMdrIOh4XuUgU2dr7tFC9CW0f6j8ob
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362309294"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="362309294"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:00:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="597727579"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 21:00:30 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obZra-0005I8-0L;
+        Fri, 23 Sep 2022 04:00:30 +0000
+Date:   Fri, 23 Sep 2022 12:00:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 480/484]
+ drivers/base/memory.c:186:34: error: 'struct memory_block' has no member
+ named 'nr_hwpoison'
+Message-ID: <202209231134.tnhKHRfg-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 09:49:15 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   1dee68cfead9a3a85e244a274b4e85620abd5331
+commit: 69b496f03bb46c7ce743aff0d976c078d753d6d6 [480/484] mm/hwpoison: introduce per-memory_block hwpoison counter
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220923/202209231134.tnhKHRfg-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/69b496f03bb46c7ce743aff0d976c078d753d6d6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout 69b496f03bb46c7ce743aff0d976c078d753d6d6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> Due to deduplication for compressed data, pclusters can be partially
-> referenced with their prefixes.
-> 
-> Together with the user-space implementation, it enables EROFS
-> variable-length global compressed data deduplication with rolling
-> hash.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+All errors (new ones prefixed by >>):
 
-> ---
->  fs/erofs/decompressor_lzma.c | 3 +++
->  fs/erofs/erofs_fs.h          | 7 ++++++-
->  fs/erofs/internal.h          | 4 ++++
->  fs/erofs/super.c             | 2 ++
->  fs/erofs/sysfs.c             | 2 ++
->  fs/erofs/zdata.c             | 1 +
->  fs/erofs/zmap.c              | 6 +++++-
->  7 files changed, 23 insertions(+), 2 deletions(-)
+   drivers/base/memory.c: In function 'memory_block_online':
+>> drivers/base/memory.c:186:34: error: 'struct memory_block' has no member named 'nr_hwpoison'
+     186 |         if (atomic_long_read(&mem->nr_hwpoison))
+         |                                  ^~
+   drivers/base/memory.c: In function 'remove_memory_block_devices':
+   drivers/base/memory.c:870:61: error: 'struct memory_block' has no member named 'nr_hwpoison'
+     870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
+         |                                                             ^~
+
+
+vim +186 drivers/base/memory.c
+
+   177	
+   178	static int memory_block_online(struct memory_block *mem)
+   179	{
+   180		unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
+   181		unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
+   182		unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
+   183		struct zone *zone;
+   184		int ret;
+   185	
+ > 186		if (atomic_long_read(&mem->nr_hwpoison))
+   187			return -EHWPOISON;
+   188	
+   189		zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
+   190					  start_pfn, nr_pages);
+   191	
+   192		/*
+   193		 * Although vmemmap pages have a different lifecycle than the pages
+   194		 * they describe (they remain until the memory is unplugged), doing
+   195		 * their initialization and accounting at memory onlining/offlining
+   196		 * stage helps to keep accounting easier to follow - e.g vmemmaps
+   197		 * belong to the same zone as the memory they backed.
+   198		 */
+   199		if (nr_vmemmap_pages) {
+   200			ret = mhp_init_memmap_on_memory(start_pfn, nr_vmemmap_pages, zone);
+   201			if (ret)
+   202				return ret;
+   203		}
+   204	
+   205		ret = online_pages(start_pfn + nr_vmemmap_pages,
+   206				   nr_pages - nr_vmemmap_pages, zone, mem->group);
+   207		if (ret) {
+   208			if (nr_vmemmap_pages)
+   209				mhp_deinit_memmap_on_memory(start_pfn, nr_vmemmap_pages);
+   210			return ret;
+   211		}
+   212	
+   213		/*
+   214		 * Account once onlining succeeded. If the zone was unpopulated, it is
+   215		 * now already properly populated.
+   216		 */
+   217		if (nr_vmemmap_pages)
+   218			adjust_present_page_count(pfn_to_page(start_pfn), mem->group,
+   219						  nr_vmemmap_pages);
+   220	
+   221		mem->zone = zone;
+   222		return ret;
+   223	}
+   224	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
