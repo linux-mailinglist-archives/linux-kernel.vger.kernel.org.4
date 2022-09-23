@@ -2,125 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CE45E7BA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB22A5E7BA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbiIWNTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S231621AbiIWNUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiIWNTd (ORCPT
+        with ESMTP id S230285AbiIWNUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:19:33 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3628B07;
-        Fri, 23 Sep 2022 06:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663939169; x=1695475169;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cMGYQRBhEi7PMXJRQGC2o2noL96QUPhJ/68mPMMdlN8=;
-  b=zv+pSquNqWP61R1e9ViY1gRWmBD5cz46JBGEmtRebnJ6ZfnSRf2oHoEB
-   Mgim2Qg/nKlxySJauZcFQfkHOqOKjd8rIA5c7X/Qdiul2e0hoVNIuKT2i
-   6U5tyOKu41tDq6Zq0ZrEHo3B9ITADMoAs40LYEnBmWnmQ1cpeWVAUz8zp
-   9Gke3q2WKH9PpM6oD4VJ6zXxh79oZScWCY4tdEL5yt8rZw3Zct5pwoAx0
-   x/aqhidOkrATEuZZT3ziJNui0U+5cQYTyAn4DYpse9ONNy5YeYCnREy+G
-   O2d9K52r61M5VTUfs/uOJTkk+CifH6RdXceqOvTCS+vucauSnVJ0gmFkY
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="181694207"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Sep 2022 06:19:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 23 Sep 2022 06:19:21 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 23 Sep 2022 06:19:19 -0700
-Message-ID: <53b7639a-174f-7a49-10a2-60eaa838278a@microchip.com>
-Date:   Fri, 23 Sep 2022 15:19:17 +0200
+        Fri, 23 Sep 2022 09:20:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7E3AA4F2;
+        Fri, 23 Sep 2022 06:20:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 04C03CE1FB0;
+        Fri, 23 Sep 2022 13:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FB4C433C1;
+        Fri, 23 Sep 2022 13:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663939232;
+        bh=m4s+ej4u+QgeEBi8DIicKwr72CdU2CLBWzQKqu6vTOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TAdQxdtOfPEbrimwRWe/Axk+8c9SVxUTqdQsyEbKt31vj9nH26Zavq9Mc5h5yRbd6
+         291RhwDEBQI41nlFTmBtVgVCHgzdewQPaDfRDJTE+460ZDVpK5fr4UXhzKrf6SfHwb
+         ssYSiHb5HpAW18JeD/5+im3tmLN5fso7zdt7skJJhCFdMF/+MIbvRRH5nndB8t8INa
+         IQfHw3uyl1Geib2tZBNWTKI9ARQWLndTawFVHLqk1xF3giVfWbTFyN8oZPLPRY/v07
+         KNNg/5ZyZxmT+tWzyq4nYJBufxIS+0Wuo9wK+l+kANMjPQJ6bs8wHlpVpy/zVoSOtg
+         wPUX+yd6FCKoQ==
+Date:   Fri, 23 Sep 2022 16:20:28 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH 04/20] x86/sgx: Add 'struct sgx_epc_lru' to
+ encapsulate lru list(s)
+Message-ID: <Yy2ynLZ2KX6bOcHr@kernel.org>
+References: <20220922171057.1236139-1-kristen@linux.intel.com>
+ <20220922171057.1236139-5-kristen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] MAINTAINERS: Solve warning regarding inexistent
- atmel-usart binding
-Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>,
-        <gregkh@linuxfoundation.org>, <krzk@kernel.org>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "kernel test robot" <lkp@intel.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220923113415.90236-1-sergiu.moga@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220923113415.90236-1-sergiu.moga@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922171057.1236139-5-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 at 13:34, Sergiu Moga wrote:
-> After the conversion to json-schema, what was previously known as
-> `Documentation/devicetree/bindings/mfd/atmel-usart.txt`
-> has been moved to another bindings directory and renamed to
-> `Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml`.
-> Thus, make `MAINTAINERS` reflect this change.
+On Thu, Sep 22, 2022 at 10:10:41AM -0700, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+> Wrap the existing reclaimable list and its spinlock in a struct to
+> minimize the code changes needed to handle multiple LRUs as well as
+> reclaimable and non-reclaimable lists, both of which will be introduced
+> and used by SGX EPC cgroups.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+The commit message could explicitly state the added data type.
 
-Thanks for having fixed that Sergiu. Regards,
-   Nicolas
+The data type is not LRU: together with the LIFO list, i.e.
+a queue, the code implements LRU alike policy.
+
+I would name the data type as sgx_epc_queue because it is a 
+less confusing name.
 
 > ---
->   MAINTAINERS | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>  arch/x86/kernel/cpu/sgx/main.c | 37 +++++++++++++++++-----------------
+>  arch/x86/kernel/cpu/sgx/sgx.h  | 11 ++++++++++
+>  2 files changed, 30 insertions(+), 18 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d30f26e07cd3..7308dfba6f0e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13292,7 +13292,7 @@ F:	include/dt-bindings/dma/at91.h
->   MICROCHIP AT91 SERIAL DRIVER
->   M:	Richard Genoud <richard.genoud@gmail.com>
->   S:	Maintained
-> -F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
-> +F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
->   F:	drivers/tty/serial/atmel_serial.c
->   F:	drivers/tty/serial/atmel_serial.h
->   
-> @@ -13300,7 +13300,7 @@ MICROCHIP AT91 USART MFD DRIVER
->   M:	Radu Pirea <radu_nicolae.pirea@upb.ro>
->   L:	linux-kernel@vger.kernel.org
->   S:	Supported
-> -F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
-> +F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
->   F:	drivers/mfd/at91-usart.c
->   F:	include/dt-bindings/mfd/at91-usart.h
->   
-> @@ -13308,7 +13308,7 @@ MICROCHIP AT91 USART SPI DRIVER
->   M:	Radu Pirea <radu_nicolae.pirea@upb.ro>
->   L:	linux-spi@vger.kernel.org
->   S:	Supported
-> -F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
-> +F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
->   F:	drivers/spi/spi-at91-usart.c
->   
->   MICROCHIP AUDIO ASOC DRIVERS
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index 4cdeb915dc86..af68dc1c677b 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -26,10 +26,9 @@ static DEFINE_XARRAY(sgx_epc_address_space);
+>  
+>  /*
+>   * These variables are part of the state of the reclaimer, and must be accessed
+> - * with sgx_reclaimer_lock acquired.
+> + * with sgx_global_lru.lock acquired.
+>   */
+> -static LIST_HEAD(sgx_active_page_list);
+> -static DEFINE_SPINLOCK(sgx_reclaimer_lock);
+> +static struct sgx_epc_lru sgx_global_lru;
+>  
+>  static atomic_long_t sgx_nr_free_pages = ATOMIC_LONG_INIT(0);
+>  
+> @@ -298,12 +297,12 @@ static void sgx_reclaim_pages(void)
+>  	int ret;
+>  	int i;
+>  
+> -	spin_lock(&sgx_reclaimer_lock);
+> +	spin_lock(&sgx_global_lru.lock);
+>  	for (i = 0; i < SGX_NR_TO_SCAN; i++) {
+> -		if (list_empty(&sgx_active_page_list))
+> +		if (list_empty(&sgx_global_lru.reclaimable))
+>  			break;
+>  
+> -		epc_page = list_first_entry(&sgx_active_page_list,
+> +		epc_page = list_first_entry(&sgx_global_lru.reclaimable,
+>  					    struct sgx_epc_page, list);
+>  		list_del_init(&epc_page->list);
+>  		encl_page = epc_page->owner;
+> @@ -316,7 +315,7 @@ static void sgx_reclaim_pages(void)
+>  			 */
+>  			epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
+>  	}
+> -	spin_unlock(&sgx_reclaimer_lock);
+> +	spin_unlock(&sgx_global_lru.lock);
+>  
+>  	for (i = 0; i < cnt; i++) {
+>  		epc_page = chunk[i];
+> @@ -339,9 +338,9 @@ static void sgx_reclaim_pages(void)
+>  		continue;
+>  
+>  skip:
+> -		spin_lock(&sgx_reclaimer_lock);
+> -		list_add_tail(&epc_page->list, &sgx_active_page_list);
+> -		spin_unlock(&sgx_reclaimer_lock);
+> +		spin_lock(&sgx_global_lru.lock);
+> +		list_add_tail(&epc_page->list, &sgx_global_lru.reclaimable);
+> +		spin_unlock(&sgx_global_lru.lock);
+>  
+>  		kref_put(&encl_page->encl->refcount, sgx_encl_release);
+>  
+> @@ -374,7 +373,7 @@ static void sgx_reclaim_pages(void)
+>  static bool sgx_should_reclaim(unsigned long watermark)
+>  {
+>  	return atomic_long_read(&sgx_nr_free_pages) < watermark &&
+> -	       !list_empty(&sgx_active_page_list);
+> +	       !list_empty(&sgx_global_lru.reclaimable);
+>  }
+>  
+>  /*
+> @@ -427,6 +426,8 @@ static bool __init sgx_page_reclaimer_init(void)
+>  
+>  	ksgxd_tsk = tsk;
+>  
+> +	sgx_lru_init(&sgx_global_lru);
+> +
+>  	return true;
+>  }
+>  
+> @@ -502,10 +503,10 @@ struct sgx_epc_page *__sgx_alloc_epc_page(void)
+>   */
+>  void sgx_mark_page_reclaimable(struct sgx_epc_page *page)
+>  {
+> -	spin_lock(&sgx_reclaimer_lock);
+> +	spin_lock(&sgx_global_lru.lock);
+>  	page->flags |= SGX_EPC_PAGE_RECLAIMER_TRACKED;
+> -	list_add_tail(&page->list, &sgx_active_page_list);
+> -	spin_unlock(&sgx_reclaimer_lock);
+> +	list_add_tail(&page->list, &sgx_global_lru.reclaimable);
+> +	spin_unlock(&sgx_global_lru.lock);
+>  }
+>  
+>  /**
+> @@ -520,18 +521,18 @@ void sgx_mark_page_reclaimable(struct sgx_epc_page *page)
+>   */
+>  int sgx_unmark_page_reclaimable(struct sgx_epc_page *page)
+>  {
+> -	spin_lock(&sgx_reclaimer_lock);
+> +	spin_lock(&sgx_global_lru.lock);
+>  	if (page->flags & SGX_EPC_PAGE_RECLAIMER_TRACKED) {
+>  		/* The page is being reclaimed. */
+>  		if (list_empty(&page->list)) {
+> -			spin_unlock(&sgx_reclaimer_lock);
+> +			spin_unlock(&sgx_global_lru.lock);
+>  			return -EBUSY;
+>  		}
+>  
+>  		list_del(&page->list);
+>  		page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
+>  	}
+> -	spin_unlock(&sgx_reclaimer_lock);
+> +	spin_unlock(&sgx_global_lru.lock);
+>  
+>  	return 0;
+>  }
+> @@ -564,7 +565,7 @@ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim)
+>  			break;
+>  		}
+>  
+> -		if (list_empty(&sgx_active_page_list))
+> +		if (list_empty(&sgx_global_lru.reclaimable))
+>  			return ERR_PTR(-ENOMEM);
+>  
+>  		if (!reclaim) {
+> diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
+> index 5a7e858a8f98..7b208ee8eb45 100644
+> --- a/arch/x86/kernel/cpu/sgx/sgx.h
+> +++ b/arch/x86/kernel/cpu/sgx/sgx.h
+> @@ -83,6 +83,17 @@ static inline void *sgx_get_epc_virt_addr(struct sgx_epc_page *page)
+>  	return section->virt_addr + index * PAGE_SIZE;
+>  }
+>  
+> +struct sgx_epc_lru {
+> +	spinlock_t lock;
+> +	struct list_head reclaimable;
 
+s/reclaimable/list/
 
--- 
-Nicolas Ferre
+> +};
+> +
+> +static inline void sgx_lru_init(struct sgx_epc_lru *lru)
+> +{
+> +	spin_lock_init(&lru->lock);
+> +	INIT_LIST_HEAD(&lru->reclaimable);
+> +}
+> +
+>  struct sgx_epc_page *__sgx_alloc_epc_page(void);
+>  void sgx_free_epc_page(struct sgx_epc_page *page);
+>  
+> -- 
+> 2.37.3
+> 
+
+Please also add these:
+
+/*
+ * Must be called with queue->lock acquired.
+ */
+static inline struct sgx_epc_page *__sgx_epc_queue_push(struct sgx_epc_queue *queue,
+                                                        struct sgx_page *page)
+{
+        list_add_tail(&page->list, &queue->list);
+}
+
+/*
+ * Must be called with queue->lock acquired.
+ */
+static inline struct sgx_epc_page *__sgx_epc_queue_pop(struct sgx_epc_queue *queue)
+{
+        struct sgx_epc_page *page;
+
+        if (list_empty(&queue->list)
+                return NULL;
+
+	page = list_first_entry(&queue->list, struct sgx_epc_page, list);
+  	list_del_init(&page->list);
+
+        return page;
+}
+
+And use them in existing sites. It ensures coherent behavior. You should be
+able to replace all uses with either, or combination of them (list_move).
+
+BR, Jarkko
