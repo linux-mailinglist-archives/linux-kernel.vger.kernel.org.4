@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585D85E7330
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED4C5E7334
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 07:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIWE7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 00:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S229822AbiIWFBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 01:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiIWE7j (ORCPT
+        with ESMTP id S229624AbiIWFBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:59:39 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B69262FD;
-        Thu, 22 Sep 2022 21:59:35 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id ml1so8354010qvb.1;
-        Thu, 22 Sep 2022 21:59:35 -0700 (PDT)
+        Fri, 23 Sep 2022 01:01:08 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17B12644D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 22:01:05 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3451e7b0234so97481817b3.23
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 22:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=E3uwB8CqWVlPJdmYFGu1eVYpx1JpXqpegdhCF2Dn9pA=;
-        b=nZsnGlCKEzHd5dkQ0Y+CcZkE37s49utJ7EJjcXq+k9Xew12sdEX8ZXxoP6MT11iATd
-         lVSFZjKCwWKTp77T6e35BiSz8cY2UJX++jtcHdDYwSiKi2CF2p3ZirJtNqoZRCo81+qn
-         nbWX+HLIfTNp/1lBNasq9K9qgtuvM8qpjh+S6af5Pq02ap0uCnuCQxAxOW8xASajLw3i
-         QEWtdD692EUISxJ91DrP/Z/n8Xu/FYDgY8WmZkqi/FwPOVKKANdd6LWK71JIjYoRJLcY
-         Gga/YwSnTM5lBPvmjPS7Rr1d0oiHmgABjvrRH467LPt2f/Vm4pPLbbpgu4OVP8qcu0QJ
-         A4Kg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=daFDSoGJO9kSrGHqPw4bon34ioz/ecAvyFcmE63pSEk=;
+        b=GYACt8ZMAo3l8WpXpwRvh1ZV/QgPMQY4sKUHU0FmzF5hMQbpqrQT1jVOFEoalBwZnF
+         9cetOsNQnzSenFbG3crzsiSaU4RiXJPFhqI9x81/PvUIb/Qje5J0+H64d/UKtJQZZC5L
+         uWvdWNNjfNi0383sWvHsxvlC6WjSOkXLEsX/KvzSyWrXErZNPSenGmJfprhTGNvD1TF6
+         Q4C4bMzrmSAvb4BUSCEhn1KJrBgmdugy8IQ7ivckKcC9wix1q2l7DVYWGPZX8YqD+qLG
+         yd90tAu5CI1VaqcFTI+c+JSY8GFCEMetTBWUiEUmtMp8d68iBjrUG+1ykUuubUeRnFrO
+         9HmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=E3uwB8CqWVlPJdmYFGu1eVYpx1JpXqpegdhCF2Dn9pA=;
-        b=YyTy/7PhCu1Nl4g6sJPZ4EXJd3KZglaXe2ZcJHDkFg7nt8RK9qMFr4CliuJAC2yya0
-         CRmY4jmfyf9HiNNV6ey/RVj5RPPLE36doyVYQ30tOBHJ6iSO9L/rW/K9vJmDOANI9VBl
-         WNIII+Tx6oosNBz6PX5iDJ/2c0tilJyfQTqMGPdjLpfTw+Bei2G1K8dsIvVbE9rXQtCc
-         CWuMG6kwg16fLssNSMMBGTNDFYT+bc4JbksjtYuxozUfyd+YfCeZLhzkj1FNKdXagjOa
-         46Ez5EwMdEA+i7s31x5bNOZzXrW3EbMn8xNtBzNJdbF1a0ejkNW5qSfH3Bu36eD0CLw/
-         CYSg==
-X-Gm-Message-State: ACrzQf3XejoZzL4oF49GUr4ixAQZPiD9uMM/xSrmRz4FOSzIw5N2nc3w
-        G2UxX7VMsSwcQ6GnjV65yQ==
-X-Google-Smtp-Source: AMsMyM7daWXjghU4BJEGxdJKD7rszzAz0+XrbF8n/FxFUIKac8PUSEcwk3rImT8JwBHpJCRZAkrBKQ==
-X-Received: by 2002:a05:6214:29e3:b0:4ad:5de4:accd with SMTP id jv3-20020a05621429e300b004ad5de4accdmr5377972qvb.60.1663909174781;
-        Thu, 22 Sep 2022 21:59:34 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-3-231-65-244.compute-1.amazonaws.com. [3.231.65.244])
-        by smtp.gmail.com with ESMTPSA id x17-20020a05620a449100b006b9264191b5sm5263168qkp.32.2022.09.22.21.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 21:59:34 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next RESEND 2/2] af_unix: Refactor unix_read_skb()
-Date:   Thu, 22 Sep 2022 21:59:26 -0700
-Message-Id: <7009141683ad6cd3785daced3e4a80ba0eb773b5.1663909008.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <343b5d8090a3eb764068e9f1d392939e2b423747.1663909008.git.peilin.ye@bytedance.com>
-References: <343b5d8090a3eb764068e9f1d392939e2b423747.1663909008.git.peilin.ye@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=daFDSoGJO9kSrGHqPw4bon34ioz/ecAvyFcmE63pSEk=;
+        b=FthyxhpGZIcs4fVTGSKiAY3k0wEtpoKWREa0wTR0wZTTx3TmOv3Gn2g4MggqrRb5x4
+         UrwxkbGE2sAg1Dlg5o0EOjcR/NkAHJV3DQ5TMwcDbwp7KNdJg/HNhpFGtCk8TVFztWyA
+         8NnbHyegcfIss0AIF1WSPnuSQPAgLNb207NGetcmEQNflvYqtDpO3Oebl+D165eXmvnF
+         dc07wz1ZFRfOOea1kjaaKkiHtJTYVrB2Wh85GxCzqnLsL3yaNjoo2wsCVop0Jj64iCbJ
+         f2dfaxzWK79blhRKJMSOJeVK/XAyiCQ0dBA9xVnjbZhHHS0jgvQbpmR69NXGFwfsi2u5
+         45Xw==
+X-Gm-Message-State: ACrzQf1dyWeMHWWmyDjAj9G7IjGbeH4w91W9DN7/FFq/u2jp4ehib1pp
+        uHIJD3PdOEwaST71dpis/YFCCl/qmIYg1A==
+X-Google-Smtp-Source: AMsMyM5E7B60nFf5LZb+hVSlJESQdtDQkBqmmnVWvuuMsiUjx0f7PPpvSbtGoMnw1NGy4nChmHeMev2peqehZg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:7905:0:b0:348:c973:d2c9 with SMTP id
+ u5-20020a817905000000b00348c973d2c9mr6990823ywc.450.1663909264704; Thu, 22
+ Sep 2022 22:01:04 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 13:00:39 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220923050039.3371091-1-davidgow@google.com>
+Subject: [PATCH] kunit: tool: Don't download risc-v opensbi firmware with wget
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Xu Panda <xu.panda@zte.com.cn>
+Cc:     David Gow <davidgow@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,66 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+When running a RISC-V test kernel under QEMU, we need an OpenSBI BIOS
+file. In the original QEMU support patchset, kunit_tool would optionally
+download this file from GitHub if it didn't exist, using wget.
 
-Similar to udp_read_skb(), delete the unnecessary while loop in
-unix_read_skb() for readability.  Since recv_actor() cannot return a
-value greater than skb->len (see sk_psock_verdict_recv()), remove the
-redundant check.
+These days, it can usually be found in the distro's qemu-system-riscv
+package, and is located in /usr/share/qemu on all the distros I tried
+(Debian, Arch, OpenSUSE). Use this file, and thereby don't do any
+downloading in kunit_tool.
 
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+In addition, we used to shell out to whatever 'wget' was in the path,
+which could have potentially been used to trick the developer into
+running another binary. By not using wget at all, we nicely sidestep
+this issue.
+
+Cc: Xu Panda <xu.panda@zte.com.cn>
+Fixes: 87c9c1631788 ("kunit: tool: add support for QEMU")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- net/unix/af_unix.c | 34 ++++++++++------------------------
- 1 file changed, 10 insertions(+), 24 deletions(-)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index dea2972c8178..c955c7253d4b 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -2536,32 +2536,18 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg, size_t si
+This is a replacement for "kunit: tool: use absolute path for wget":
+https://lore.kernel.org/linux-kselftest/20220922083610.235936-1-xu.panda@zte.com.cn/
+
+Instead of just changing the path to wget, it removes the download
+option completely and grabs the opensbi-riscv64-generic-fw_dynamic.bin
+from the /usr/share/qemu directory, where the distro package manager
+should have put it.
+
+I _think_ this should be okay to treat as a fix: we were always grabbing
+this from the QEMU GitHub repository, so it should be widely available.
+And if you want to treat the wget use as a security issue, getting rid
+of it everywhere would be nice.
+
+Thoughts?
+
+-- David
+
+---
+ tools/testing/kunit/qemu_configs/riscv.py | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+index 6207be146d26..12a1d525978a 100644
+--- a/tools/testing/kunit/qemu_configs/riscv.py
++++ b/tools/testing/kunit/qemu_configs/riscv.py
+@@ -3,17 +3,13 @@ import os
+ import os.path
+ import sys
  
- static int unix_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
- {
--	int copied = 0;
--
--	while (1) {
--		struct unix_sock *u = unix_sk(sk);
--		struct sk_buff *skb;
--		int used, err;
--
--		mutex_lock(&u->iolock);
--		skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
--		mutex_unlock(&u->iolock);
--		if (!skb)
--			return err;
-+	struct unix_sock *u = unix_sk(sk);
-+	struct sk_buff *skb;
-+	int err, copied;
+-GITHUB_OPENSBI_URL = 'https://github.com/qemu/qemu/raw/master/pc-bios/opensbi-riscv64-generic-fw_dynamic.bin'
+-OPENSBI_FILE = os.path.basename(GITHUB_OPENSBI_URL)
++OPENSBI_FILE = 'opensbi-riscv64-generic-fw_dynamic.bin'
++OPENSBI_PATH = '/usr/share/qemu/' + OPENSBI_FILE
  
--		used = recv_actor(sk, skb);
--		if (used <= 0) {
--			if (!copied)
--				copied = used;
--			kfree_skb(skb);
--			break;
--		} else if (used <= skb->len) {
--			copied += used;
--		}
-+	mutex_lock(&u->iolock);
-+	skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
-+	mutex_unlock(&u->iolock);
-+	if (!skb)
-+		return err;
+-if not os.path.isfile(OPENSBI_FILE):
+-	print('\n\nOpenSBI file is not in the current working directory.\n'
+-	      'Would you like me to download it for you from:\n' + GITHUB_OPENSBI_URL + ' ?\n')
+-	response = input('yes/[no]: ')
+-	if response.strip() == 'yes':
+-		os.system('wget ' + GITHUB_OPENSBI_URL)
+-	else:
+-		sys.exit()
++if not os.path.isfile(OPENSBI_PATH):
++	print('\n\nOpenSBI bios was not found in "' + OPENSBI_PATH + '".\n'
++	      'Please ensure that qemu-system-riscv is installed, or edit the path in "qemu_configs/riscv.py"\n')
++	sys.exit()
  
--		kfree_skb(skb);
--		break;
--	}
-+	copied = recv_actor(sk, skb);
-+	kfree_skb(skb);
- 
- 	return copied;
- }
+ QEMU_ARCH = QemuArchParams(linux_arch='riscv',
+ 			   kconfig='''
+@@ -29,4 +25,4 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+ 			   extra_qemu_params=[
+ 					   '-machine', 'virt',
+ 					   '-cpu', 'rv64',
+-					   '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
++					   '-bios', OPENSBI_PATH])
 -- 
-2.20.1
+2.37.3.998.g577e59143f-goog
 
