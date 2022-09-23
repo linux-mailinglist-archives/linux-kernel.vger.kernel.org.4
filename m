@@ -2,120 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035615E7196
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0845E7199
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiIWBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S231808AbiIWByB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 21:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiIWBwE (ORCPT
+        with ESMTP id S230042AbiIWBx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:52:04 -0400
-Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37159105D58
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:52:03 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 792928027B0F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:51:49 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 70CDB10047F81
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:51:18 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id bXqXo53CqaT2RbXqYokOTN; Fri, 23 Sep 2022 01:51:18 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=BO52EHcG c=1 sm=1 tr=0 ts=632d1116
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Mf2rGUZYFQaqaNI/qIH3PTHdd2ShD4CUpypEv+2hwWM=; b=eHfEzddBA8e+Hfwdhlp5pddsdh
-        Wk/NLOzM1nPbCTym1KSYoH6Eg7EG6RUckOvY1kBoWSSGWfvKhx6SzFeYdd+ZqxkFr+u20aeOQTH71
-        UMrPTD6E7ZO+veGVWeV8uDsfmH2FIZ3g+AbgeJMtXKWyBGn6hxmc97rBl9mQjdOVAmHgh2bgA77b7
-        E08Bfoy5hGwachyRs/R8RlsJUYVj/ymhzjC1qTp32O2LT3BSwLeA79BLLJZonpZ64nzL7gYN+65rm
-        MT2GOt7bqROLzbSpfWsu+PE/WvzuigKhpnPwlhlGENgHC1s/pkHgPj7/Bn7nTcsiTL2uzCVxpMbRJ
-        E9cvt22w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45900 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1obXqV-003SSO-FI;
-        Thu, 22 Sep 2022 19:51:15 -0600
-Subject: Re: [PATCH 5.15 00/45] 5.15.70-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220921153646.931277075@linuxfoundation.org>
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <7bb44052-d6db-e2ef-d512-61f30c79c71e@w6rz.net>
-Date:   Thu, 22 Sep 2022 18:51:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1obXqV-003SSO-FI
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45900
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 21:53:57 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E1F10C788;
+        Thu, 22 Sep 2022 18:53:54 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQUYHHZ_1663898030;
+Received: from smtpclient.apple(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VQUYHHZ_1663898030)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Sep 2022 09:53:52 +0800
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH RESEND v1 1/9] crypto/ycc: Add YCC (Yitian Cryptography
+ Complex) accelerator driver
+From:   guanjun <guanjun@linux.alibaba.com>
+In-Reply-To: <YyRDbT0fQQwsVpKL@gondor.apana.org.au>
+Date:   Fri, 23 Sep 2022 09:53:50 +0800
+Cc:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "zelin.deng@linux.alibaba.com" <zelin.deng@linux.alibaba.com>,
+        xuchun.shang@linux.alibaba.com,
+        "artie.ding@linux.alibaba.com" <artie.ding@linux.alibaba.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <C9DB484C-4527-4E0C-9FE4-6CF7C6BA579C@linux.alibaba.com>
+References: <1662435353-114812-1-git-send-email-guanjun@linux.alibaba.com>
+ <1662435353-114812-2-git-send-email-guanjun@linux.alibaba.com>
+ <YyRDbT0fQQwsVpKL@gondor.apana.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 8:45 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.70 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 23 Sep 2022 15:36:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.70-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Tested-by: Ron Economos <re@w6rz.net>
+> 2022年9月16日 下午5:35，Herbert Xu <herbert@gondor.apana.org.au> 写道：
+> 
+> On Tue, Sep 06, 2022 at 11:35:45AM +0800, 'Guanjun' wrote:
+> .
+>> +static const struct file_operations ycc_fops = {
+>> +	.open = ycc_cdev_open,
+>> +	.release = ycc_cdev_release,
+>> +	.unlocked_ioctl = ycc_cdev_ioctl,
+>> +};
+> 
+> What is this device for? It doesn't seem to do anything so why
+> not jsut drop it?
+> 
+> Thanks,
+> -- 
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+
+Hi Herbert,
+Do you have any other comments? If not, I will prepare for the next version :)
+
+Thanks,
+
+Regards,
+Guanjun
 
