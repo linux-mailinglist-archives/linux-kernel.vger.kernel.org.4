@@ -2,155 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9D35E7D6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FF35E7D75
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiIWOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S231592AbiIWOns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbiIWOnH (ORCPT
+        with ESMTP id S232439AbiIWOnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:43:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53530143280;
-        Fri, 23 Sep 2022 07:43:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B8233219F6;
-        Fri, 23 Sep 2022 14:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663944183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3eRIeqJ35bjBaxEIVHyjl5HzJmU8eUg6UuiOKVVDhfI=;
-        b=pjBYBvVquyKzp9m/dCfmi5ulC/6lWsIX/9ZYV8ku+G07BvI2orRR6wcvN3rJlD54BThb0V
-        TPnLhu0D9cr0KZZ7TjMunkwpvmTkrAd3cKB9kuPUg3qug7CbB5bm2HM7Q6qnBUH7CbzSbg
-        BFibh786yP7q2BPSvJOSXGz4Yr8GuwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663944183;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3eRIeqJ35bjBaxEIVHyjl5HzJmU8eUg6UuiOKVVDhfI=;
-        b=BqksOAX4xO6kfjd1zqXmCr3Qb02d8iX6p3pHkpUHPMJQR84+hdETfPOPNtr+82WUJV5deM
-        rHwtczfMmOIi3nBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A903E13A00;
-        Fri, 23 Sep 2022 14:43:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TI87KffFLWPOKwAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 14:43:03 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3415CA0685; Fri, 23 Sep 2022 16:43:03 +0200 (CEST)
-Date:   Fri, 23 Sep 2022 16:43:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
-        Liu Song <liusong@linux.alibaba.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
-Message-ID: <20220923144303.fywkmgnkg6eken4x@quack3>
-References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com>
- <YyjdiKC0YYUkI+AI@kbusch-mbp>
- <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com>
- <20220921164012.s7lvklp2qk6occcg@quack3>
+        Fri, 23 Sep 2022 10:43:42 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96D412FF00;
+        Fri, 23 Sep 2022 07:43:40 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1objty-0000ZC-Ah; Fri, 23 Sep 2022 16:43:38 +0200
+Message-ID: <aa35d204-3033-96f2-ed83-c5034067fe4b@leemhuis.info>
+Date:   Fri, 23 Sep 2022 16:43:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921164012.s7lvklp2qk6occcg@quack3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US, de-DE
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <7f02143c-461f-268b-0f17-7fe20a7423d6@leemhuis.info>
+ <875yhep5l1.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v2 0/4] Rewrite the top-level index.rst
+In-Reply-To: <875yhep5l1.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1663944220;115e561c;
+X-HE-SMSGID: 1objty-0000ZC-Ah
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 21-09-22 18:40:12, Jan Kara wrote:
-> On Mon 19-09-22 16:01:39, Hugh Dickins wrote:
-> > On Mon, 19 Sep 2022, Keith Busch wrote:
-> > > On Sun, Sep 18, 2022 at 02:10:51PM -0700, Hugh Dickins wrote:
-> > > > I have almost no grasp of all the possible sbitmap races, and their
-> > > > consequences: but using the same !waitqueue_active() check as used
-> > > > elsewhere, fixes the lockup and shows no adverse consequence for me.
-> > > 
-> > >  
-> > > > Fixes: 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
-> > > > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > > > ---
-> > > > 
-> > > >  lib/sbitmap.c |    2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > --- a/lib/sbitmap.c
-> > > > +++ b/lib/sbitmap.c
-> > > > @@ -620,7 +620,7 @@ static bool __sbq_wake_up(struct sbitmap
-> > > >  		 * function again to wakeup a new batch on a different 'ws'.
-> > > >  		 */
-> > > >  		if (cur == 0)
-> > > > -			return true;
-> > > > +			return !waitqueue_active(&ws->wait);
-> > > 
-> > > If it's 0, that is supposed to mean another thread is about to make it not zero
-> > > as well as increment the wakestate index. That should be happening after patch
-> > > 48c033314f37 was included, at least.
-> > 
-> > I believe that the thread about to make wait_cnt not zero (and increment the
-> > wakestate index) is precisely this interrupted thread: the backtrace shows
-> > that it had just done its wakeups, so has not yet reached making wait_cnt
-> > not zero; and I suppose that either its wakeups did not empty the waitqueue
-> > completely, or another waiter got added as soon as it dropped the spinlock.
+On 23.09.22 15:45, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
+> 
+>> On 22.09.22 22:41, Jonathan Corbet wrote:
+>>> The top-level index.rst file is the entry point for the kernel's
+>>> documentation, especially for readers of the HTML output.  It is currently
+>>> a mess containing everything we thought to throw in there.  Firefox says it
+>>> would require 26 pages of paper to print it.  That is not a user-friendly
+>>> introduction.
+>>
+>> That's true, but is it maybe good or even important for googleability?
+>> When you talked about this in your LPC talk this went on in the matrix chat:
+>>
+>> ```
+>> Nur Hussein
+>> I feel like every existing page needs to be accessible (somehow)
+>> from that starting page
+>>
+>> Zsuzsa Nagy
+>>
+>> access to all pages <- findability from a search engine (technical
+>> author talking here)
+>>
+>> step #2 in-site search for those who already landed on your pages
+>> ```
+> 
+> So every page remains accessible, just like they are now.  They just
+> aren't linked directly from the front page - as many pages already are
+> not.  I honestly don't understand what the problem is here.
 
-I was trying to wrap my head around this but I am failing to see how we
-could have wait_cnt == 0 for long enough to cause any kind of stall let
-alone a lockup in sbitmap_queue_wake_up() as you describe. I can understand
-we have:
+I'm not sure myself if there is a problem, I just wanted to bring that
+LPC chat up, as it seemed Zsuzsa had a lot of experience with this sort
+of problems at was at least somewhat interested in Linux kernel docs --
+so I thought it might be worth bringing Zsuzsa into this discussion (but
+I couldn't quickly find a email address to simply CC).
 
-CPU1						CPU2
-sbitmap_queue_wake_up()
-  ws = sbq_wake_ptr(sbq);
-  cur = atomic_read(&ws->wait_cnt);
-  do {
-	...
-	wait_cnt = cur - sub;	/* this will be 0 */
-  } while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
-  ...
-						/* Gets the same waitqueue */
-						ws = sbq_wake_ptr(sbq);
-						cur = atomic_read(&ws->wait_cnt);
-						do {
-							if (cur == 0)
-								return true; /* loop */
-  wake_up_nr(&ws->wait, wake_batch);
-  smp_mb__before_atomic();
-  sbq_index_atomic_inc(&sbq->wake_index);
-  atomic_set(&ws->wait_cnt, wake_batch); /* This stops looping on CPU2 */
+> *No* site links everything directly on its front page.  Even if it had
+> an effect on search engines, I think it would be wrong to prioritize SEO
+> over basic usability.
 
-So until CPU1 reaches the atomic_set(), CPU2 can be looping. But how come
-this takes so long that is causes a hang as you describe? Hum... So either
-CPU1 takes really long to get to atomic_set():
-- can CPU1 get preempted? Likely not at least in the context you show in
-  your message
-- can CPU1 spend so long in wake_up_nr()? Maybe the waitqueue lock is
-  contended but still...
+Yeah, agreed. Something about SEO not being a priority was mentioned in
+the chat, too.
 
-or CPU2 somehow sees cur==0 for longer than it should. The whole sequence
-executed in a loop on CPU2 does not contain anything that would force CPU2
-to refresh its cache and get new ws->wait_cnt value so we are at the mercy
-of CPU cache coherency mechanisms to stage the write on CPU1 and propagate
-it to other CPUs. But still I would not expect that to take significantly
-long. Any other ideas?
- 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>>> This series aims to improve our documentation entry point with a focus on
+>>> rewriting index.rst.  The result is, IMO, simpler and more approachable.
+>>> For anybody who wants to see the rendered results without building the
+>>> docs, have a look at:
+>>>
+>>>   https://static.lwn.net/kerneldoc/
+>>
+>> I still think we're doing all this to build something for users and
+>> hence docs for users should be at the top spot. I'd even think "those
+>> people are selfish" if I'd look into the docs of a software and find
+>> texts for developers at the top spot.
+> 
+> Again ... who are the users?
+
+I meant people just using the kernel, not developing the kernel itself
+or developing software that's running on top of it.
+
+>  I maintain that the actual users of our
+> docs are primarily kernel developers.
+
+I guess you are right with that, but maybe that's just like that due to
+the docs we have and not the docs we should have (or should aim for
+having in the long run).
+
+IOW: why is the kernel different from say LibreOffice, Firefox, or some
+random command line app: if I look into the documentation (say because
+I'm using that software for the very first time or because I have a
+problem with it after using it for years) I don't expect to see lots of
+docs at the most prominent place that are only relevant for people that
+want to modify said software; I'd expect things like "what is this
+software and how can I use it", "how can I install this software", "how
+can I report a bug", and "what knobs are available to deal with corner
+cases" there.
+
+>>> Unless I get screams I plan to slip this into 6.1.  It is definitely not
+>>> the final form of the front page, but I doubt we'll ever get there; we can
+>>> change it in whatever ways make sense.
+>>
+>> My 2 cent: why the rush? I'd say: let's try to get some feedback from
+>> Zsuzsa and experts on docs first. I'd be willing to approach them. If
+>> that doesn't work out over the next few weeks, just merge what you have
+>> for 6.2.
+> 
+> I want to do it because it's a clear step forward and has already been
+> pending for a month.  It is surely not perfect, and there will
+> undoubtedly be changes, perhaps big ones, to come, but I cannot imagine
+> a scenario where we want to go back to the mess we have now.
+
+I understand and yes, maybe it's the right thing to do; but OTOH that
+page is a mess for quite a while already, so is it really a big problem
+to just leave it like that for 9 or 10 more weeks while trying to bring
+in a few more people that might be able to directly bring us on a good
+long-term course?
+
+Ciao, Thorsten
