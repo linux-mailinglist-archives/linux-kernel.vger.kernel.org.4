@@ -2,124 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258CD5E7D79
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7710A5E7D7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiIWOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S229928AbiIWOqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiIWOoF (ORCPT
+        with ESMTP id S229975AbiIWOqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:44:05 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E91612FF07;
-        Fri, 23 Sep 2022 07:44:04 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id l12so289906ljg.9;
-        Fri, 23 Sep 2022 07:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=x2AC5aUErTXxDqqDWkhz2yZEaift/7Hb+tiOpgPFGpI=;
-        b=bJVq2/d2V6xNKgToFVEl1MXmS+OhnqeeH0/MJFszIA/svGcpRhMeqpeceCOHGqp3Av
-         h2v0FxgR9jUHDplHeig5OXY9RylJ9L/IEdUnGi2k6CKs/gmzLu8aCLWChPYMxO82C7Pb
-         kHhJySrog3k290ohdzsjpZoVQLprgUMdxaVVGNRZJeJtezd/443kA/7+bXtx2cCwRy2w
-         Cs+RHSaJXXqmko8AlK7v7zTVSFIWXOj4W8085jUUwbfr8K/EuQVlsB+w1x24E/nf53Wg
-         8c8RFXwySopznxMHtpG8p4gMomF7LavoRaH1l1HcNFkbGuB8fcEEC0VmuG9fSYtS43lU
-         B90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=x2AC5aUErTXxDqqDWkhz2yZEaift/7Hb+tiOpgPFGpI=;
-        b=uVOSMCSkO++K+ZilZv8l9HeWQXMV1rUV31qVNoHtb8wRTCrkS/NVB2j54sLd9RqtuZ
-         dXcvCvbb3ReMKt+2CTzUpVcVHYZZvUnWd/eoQPNLqIay53tZD5gomxph6DIGoD/8gTV/
-         vLHBxu5+Ur/mBCOIfjkGyveVsRjm0siYfvxX+iXw9pfa8eRsvfB0XzouASKQfTxstKMs
-         4cfn72kWQ7xH2PPbfnQ0dwaNl9xZTNXRcFN01bnwKIrQND6/bEaIqJe6wrFeI4iKijrU
-         U5kVv0+oI82eMJI77ooSFzIRq2GYEhWdRY/4YLBTeKEXpDTczjfQ4e8d1I0sgzV4b8T0
-         k0/w==
-X-Gm-Message-State: ACrzQf2kdGBtTWHWeV6C6WV4XZzF8/B+IAQGVfmqGdM4v713G2L9jCqM
-        ssh4bDMgDg2uDmTMpfHBD2I=
-X-Google-Smtp-Source: AMsMyM5P2OfBHJhqLzZVNgi5H9ALef+5EkB8eCTv1HW6N5pfTwdZ3Xmn4cMPCZoPZXAWPPwnfOYxLA==
-X-Received: by 2002:a2e:9e81:0:b0:268:894f:8118 with SMTP id f1-20020a2e9e81000000b00268894f8118mr3155396ljk.371.1663944242514;
-        Fri, 23 Sep 2022 07:44:02 -0700 (PDT)
-Received: from pc636 (host-95-193-99-240.mobileonline.telia.com. [95.193.99.240])
-        by smtp.gmail.com with ESMTPSA id m4-20020a2e8704000000b0026bfadf87e3sm1420576lji.20.2022.09.23.07.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 07:44:01 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Fri, 23 Sep 2022 16:43:59 +0200
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, urezki@gmail.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <Yy3GL12BOgp3wLjI@pc636>
-References: <20220923103858.26729-1-fw@strlen.de>
- <Yy20toVrIktiMSvH@dhcp22.suse.cz>
- <20220923133512.GE22541@breakpoint.cc>
+        Fri, 23 Sep 2022 10:46:18 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8951401B9;
+        Fri, 23 Sep 2022 07:46:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQXPcOU_1663944369;
+Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQXPcOU_1663944369)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Sep 2022 22:46:11 +0800
+Message-ID: <f67b3c4e-f60e-ec69-bf29-c34604aa0eff@linux.alibaba.com>
+Date:   Fri, 23 Sep 2022 22:46:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923133512.GE22541@breakpoint.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     will@kernel.org, Jonathan.Cameron@Huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-pci@vger.kernel.org
+References: <20220922173607.GA1318619@bhelgaas>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220922173607.GA1318619@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 03:35:12PM +0200, Florian Westphal wrote:
-> Michal Hocko <mhocko@suse.com> wrote:
-> > On Fri 23-09-22 12:38:58, Florian Westphal wrote:
-> > > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
-> > >  kernel BUG at mm/vmalloc.c:2437!
-> > >  invalid opcode: 0000 [#1] SMP
-> > >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
-> > >  [..]
-> > >  RIP: 0010:__get_vm_area_node+0x120/0x130
-> > >   __vmalloc_node_range+0x96/0x1e0
-> > >   kvmalloc_node+0x92/0xb0
-> > >   bucket_table_alloc.isra.0+0x47/0x140
-> > >   rhashtable_try_insert+0x3a4/0x440
-> > >   rhashtable_insert_slow+0x1b/0x30
-> > >  [..]
-> > > 
-> > > bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
-> > > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
-> > > 
-> > > Revert the problematic change and stay with slab allocator.
-> > 
-> > Why don't you simply fix the caller?
+
+
+在 2022/9/23 AM1:36, Bjorn Helgaas 写道:
+> [+cc linux-pci]
 > 
-> Uh, not following?
+> On Sat, Sep 17, 2022 at 08:10:35PM +0800, Shuai Xue wrote:
+>> This commit adds the PCIe Performance Monitoring Unit (PMU) driver support
+>> for T-Head Yitian SoC chip. Yitian is based on the Synopsys PCI Express
+>> Core controller IP which provides statistics feature. The PMU is not a PCIe
+>> Root Complex integrated End Point(RCiEP) device but only register counters
+>> provided by each PCIe Root Port.
+>>
+>> To facilitate collection of statistics the controller provides the
+>> following two features for each Root Port:
+>>
+>> - Time Based Analysis (RX/TX data throughput and time spent in each
+>>   low-power LTSSM state)
+>> - Event counters (Error and Non-Error for lanes)
+>>
+>> Note, only one counter for each type.
+>>
+>> This driver add PMU devices for each PCIe Root Port. And the PMU device is
+>> named based the BDF of Root Port. For example,
+>>
+>>     10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+>>
+>> the PMU device name for this Root Port is pcie_bdf_100000.
+>>
+>> Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
+>>
+>>     $# perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
+>>
+>> average RX bandwidth can be calculated like this:
+>>
+>>     PCIe TX Bandwidth = PCIE_TX_DATA * 16B / Measure_Time_Window
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 > 
-> kvzalloc(GFP_ATOMIC) was perfectly fine, is this illegal again?
->
-<snip>
-static struct vm_struct *__get_vm_area_node(unsigned long size,
-		unsigned long align, unsigned long shift, unsigned long flags,
-		unsigned long start, unsigned long end, int node,
-		gfp_t gfp_mask, const void *caller)
-{
-	struct vmap_area *va;
-	struct vm_struct *area;
-	unsigned long requested_size = size;
+>> +++ b/drivers/perf/dwc_pcie_pmu.c
+>> ...
+>> +#define DWC_PCIE_VSEC_ID			0x02
+> 
+> I don't think DWC_PCIE_VSEC_ID is a very good name because it doesn't
+> tell us anything about the purpose of the capability.  Something like
+> DWC_PCIE_RAS_DES_VSEC_ID would be more useful to readers.
 
-	BUG_ON(in_interrupt());
-...
-<snip>
+Good idea, will use DWC_PCIE_RAS_DES_VSEC_ID instead in next version.
 
-vmalloc is not supposed to be called from the IRQ context. If it is possible
-it would be better to fix the bucket_table_alloc() by not calling it from the
-IRQ context.  
+> 
+>> +#define DWC_PCIE_LINK_CAPABILITIES_REG		0xC
+>> +#define DWC_PCIE_LANE_SHIFT			4
+>> +#define DWC_PCIE_LANE_MASK			GENMASK(9, 4)
+> 
+> Shouldn't need these at all; see below.
+> 
+>> +struct dwc_pcie_info_table {
+>> +	u32 bdf;
+>> +	u32 cap_pos;
+> 
+> Would be useful to name this "ras_des" or similar so we have a hint
+> about what we're reading/writing when using "pcie_info->cap_pos" below.
 
---
-Uladzislau Rezki
+Good idea, will use ras_des instead in next version.
+
+> 
+>> +static struct device_attribute dwc_pcie_pmu_cpumask_attr =
+>> +__ATTR(cpumask, 0444, dwc_pcie_pmu_cpumask_show, NULL);
+> 
+> DEVICE_ATTR_RO()?
+> 
+>> +#define _dwc_pcie_format_attr(_name, _cfg, _fld)				\
+>> +	(&((struct dwc_pcie_format_attr[]) {{				\
+>> +		.attr = __ATTR(_name, 0444, dwc_pcie_pmu_format_show, NULL),	\
+> 
+> Ditto.
+> 
+>> +#define DWC_PCIE_EVENT_ATTR(_name, _type, _eventid, _lane)		\
+>> +	(&((struct dwc_pcie_event_attr[]) {{				\
+>> +		.attr = __ATTR(_name, 0444, dwc_pcie_event_show, NULL),	\
+> 
+> Ditto.
+
+DEVICE_ATTR_RO may a good choice. But does it fit the code style to use
+DEVICE_ATTR_RO in drivers/perf? As far as know, CCN, CCI, SMMU,
+qcom_l2_pmu use "struct device_attribute" directly.
+
+> 
+>> +static int dwc_pcie_pmu_discover(struct dwc_pcie_pmu_priv *priv)
+>> +{
+>> +	int val, where, index = 0;
+>> +	struct pci_dev *pdev = NULL;
+>> +	struct dwc_pcie_info_table *pcie_info;
+>> +
+>> +	priv->pcie_table =
+>> +	    devm_kcalloc(priv->dev, RP_NUM_MAX, sizeof(*pcie_info), GFP_KERNEL);
+>> +	if (!priv->pcie_table)
+>> +		return -EINVAL;
+>> +
+>> +	pcie_info = priv->pcie_table;
+>> +	while ((pdev = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, pdev)) != NULL &&
+>> +	       index < RP_NUM_MAX) {
+>> +		if (!pci_dev_is_rootport(pdev))
+>> +			continue;
+>> +
+>> +		pcie_info[index].bdf = dwc_pcie_get_bdf(pdev);
+>> +		pcie_info[index].pdev = pdev;
+>> +
+>> +		if (dwc_pcie_find_ras_des_cap_position(pdev, &where))
+>> +			continue;
+>> +
+>> +		pcie_info[index].cap_pos = where;
+>> +
+>> +		pci_read_config_dword(pdev,
+>> +				pdev->pcie_cap + DWC_PCIE_LINK_CAPABILITIES_REG,
+>> +				&val);
+>> +		pcie_info[index].num_lanes =
+>> +			(val & DWC_PCIE_LANE_MASK) >> DWC_PCIE_LANE_SHIFT;
+> 
+> I think you can use pcie_get_width_cap() here.
+
+You are right, will use pcie_get_width_cap() instead in next version.
+
+>> +static int dwc_pcie_pmu_set_event_id(struct dwc_pcie_info_table *pcie_info,
+>> +				     int event_id)
+>> +{
+>> +	int ret;
+>> +	u32 val;
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info, DWC_PCIE_EVENT_CNT_CTRL, &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+> 
+> Maybe #define dev_fmt above to add a prefix to these messages?
+> Otherwise I think they will look like:
+> 
+>   pcieport 0000:00:1c.0: PCIe read fail
+> 
+> which suggests it's related to pcieport, but that's the wrong place to
+> look.
+> 
+> I think every caller of dwc_pcie_pmu_read_dword() makes the same check
+> and prints the same message; maybe the message should be moved inside
+> dwc_pcie_pmu_read_dword()?
+> 
+> Same with dwc_pcie_pmu_write_dword(); moving the message there would
+> simplify all callers.
+
+I would like to wrap dwc_pcie_pmu_{write}_dword out, use pci_{read}_config_dword
+and drop the snaity check of return value as Jonathan suggests.
+How did you like it?
+
+> 
+>> +static int dwc_pcie_pmu_event_enable(struct dwc_pcie_info_table *pcie_info,
+>> +				     u32 enable)
+>> +{
+>> +	u32 ret;
+>> +	u32 val;
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info, DWC_PCIE_EVENT_CNT_CTRL, &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	val &= ~(DWC_PCIE__CNT_ENABLE_MASK);
+> 
+> Superfluous parens.
+
+Will use recap in next version.
+
+> 
+>> +static int dwc_pcie_pmu_base_time_add_prepare(struct dwc_pcie_info_table
+>> +					      *pcie_info, u32 event_id)
+>> +{
+>> +	u32 ret;
+>> +	u32 val;
+>> +
+>> +	ret = dwc_pcie_pmu_read_dword(pcie_info,
+>> +				      DWC_PCIE_TIME_BASED_ANALYSIS_CTRL, &val);
+>> +	if (ret) {
+>> +		pci_err(pcie_info->pdev, "PCIe read fail\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	val &= ~DWC_PCIE__TIME_BASED_REPORT_SELECT_MASK;
+>> +	val |= event_id << DWC_PCIE__TIME_BASED_REPORT_SELECT_SHIFT;
+>> +	val &= ~DWC_PCIE__TIME_BASED_DURATION_SELECT;
+>> +
+>> +	/*
+>> +	 * TIME_BASED_ANALYSIS_DATA_REG is a 64 bit register, we can safely
+>> +	 * use it with any manually controllered duration.
+> 
+> s/controllered/controlled/ ?  Not sure what this means.  Maybe that
+> 64 bits is wide enough you don't need to worry about rollover?
+
+Yes, 64 bits is wide enough so we do not need to worry about rollover.
+Sorry for this typo.
+
+>> +static struct dwc_pcie_info_table *pmu_to_pcie_info(struct pmu *pmu)
+>> +{
+>> +	struct dwc_pcie_info_table *pcie_info;
+>> +	struct dwc_pcie_pmu *pcie_pmu = to_pcie_pmu(pmu);
+>> +
+>> +	pcie_info = container_of(pcie_pmu, struct dwc_pcie_info_table, pcie_pmu);
+>> +	if (pcie_info == NULL)
+>> +		pci_err(pcie_info->pdev, "Can't get pcie info\n");
+> 
+> It shouldn't be possible to get here for a pmu with no pcie_info, and
+> callers don't check for a NULL pointer return value before
+> dereferencing it, so I guess all this adds is an error message before
+> a NULL pointer oops?  Not sure the code clutter is worth it.
+
+Do you mean to drop the snaity check of container_of?
+
+>> +	return pcie_info;
+>> +}
+> 
+>> +static int dwc_pcie_pmu_event_init(struct perf_event *event)
+>> +{
+>> +	struct hw_perf_event *hwc = &event->hw;
+>> +	struct dwc_pcie_pmu *pcie_pmu = to_pcie_pmu(event->pmu);
+>> +	struct perf_event *sibling;
+>> +
+>> +	if (event->attr.type != event->pmu->type)
+>> +		return -ENOENT;
+>> +
+>> +	if (hwc->sample_period) {
+>> +		dev_dbg(pcie_pmu->dev, "Sampling not supported\n");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	if (event->cpu < 0) {
+>> +		dev_dbg(pcie_pmu->dev, "Per-task mode not supported\n");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	event->cpu = pcie_pmu->on_cpu;
+>> +
+>> +	if (event->group_leader != event &&
+>> +	    !is_software_event(event->group_leader)) {
+>> +		dev_dbg(pcie_pmu->dev, "Drive way only allow one event!\n");
+> 
+> "Drive way"?  -ENOPARSE for me :)
+
+Good catch, its a typo and I used this in DDR Driveway PMU debug. Will drop
+it in next version.
+
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	for_each_sibling_event(sibling, event->group_leader) {
+>> +		if (sibling != event && !is_software_event(sibling)) {
+>> +			dev_dbg(pcie_pmu->dev, "Drive way event not allowed!\n");
+>> +			return -EINVAL;
+>> +		}
+>> +	}
+> 
+>> +static void dwc_pcie_pmu_set_period(struct hw_perf_event *hwc)
+>> +{
+>> +	u64 new = 0;
+> 
+> Superfluous variable.
+> 
+>> +	local64_set(&hwc->prev_count, new);
+>> +}
+
+I will set with 0 instead in next version.
+
+> 
+>> +static int __dwc_pcie_pmu_probe(struct dwc_pcie_pmu_priv *priv,
+>> +				struct dwc_pcie_info_table *pcie_info)
+>> +{
+>> +	int ret;
+>> +	char *name;
+>> +	struct dwc_pcie_pmu *pcie_pmu;
+>> +	struct device *dev;
+>> +
+>> +	if (!pcie_info || !pcie_info->pdev) {
+>> +		pci_err(pcie_info->pdev, "Input parameter is invalid\n");
+> 
+> There are a lot of "Input parameter is invalid" messages.  If somebody
+> sees that, there's no hint about which one to look at.  Messages that
+> are constant strings are usually a hint that they could include more
+> information.
+
+I see your points. Will give a more accurate hint.
+
+>> +static int dwc_pcie_pmu_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret = 0;
+>> +	int pcie_index;
+>> +	struct dwc_pcie_pmu_priv *priv;
+>> +
+>> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +	priv->dev = &pdev->dev;
+>> +	platform_set_drvdata(pdev, priv);
+>> +
+>> +	/* If PMU is not support on current platform, keep slient */
+> 
+> s/not support/not supported/
+> s/slient/silent/
+
+Sorry for these typos, will fix in next version.
+
+> 
+> Bjorn
+
+Thank you for your valuable comments.
+
+Best Regards,
+Shuai
+
