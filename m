@@ -2,176 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D95E801A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7B05E801D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiIWQn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S230449AbiIWQoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiIWQnR (ORCPT
+        with ESMTP id S229963AbiIWQog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:43:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D5C139F6D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:43:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C5D562889
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF1BC433C1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:43:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="N88L+RZZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663951388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NfPwWGJjSuA+aMD8WMtVroU4oVr5n6lPjI6B2paPxWA=;
-        b=N88L+RZZ8+vQLdqb99iNZe2lmMXScpUvJ4HDomkEtFU2h4SW548QPMAAwjpo+Kxs9vqc98
-        AxhaRGY65gyU07npdNmpiMMuYKgfsn/hzgMwBdvsBsugscYyJMxO1f7fIhUyD2cn/wVQKM
-        AebsRldou7pLLE1YlUPml2VfyUN1o0Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4a082f9a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 23 Sep 2022 16:43:08 +0000 (UTC)
-Received: by mail-vs1-f48.google.com with SMTP id k2so503651vsk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:43:08 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3fYYuzdplNOlcv/DzAup2mEhQx466yaM/s8zZuey1WzBL4/EIv
-        432fuyHhjAOAI9YpkBY9VeS6oBnkvA0F6YFYsqw=
-X-Google-Smtp-Source: AMsMyM76a4mvOF9kxM3jRLuKNgLrz0bWouKv2zOcUzhq6oS6ufEq+TrMYCNEgeZz1hLi9i8XiqKzAxHFI7d1q3MZdlM=
-X-Received: by 2002:a67:d81e:0:b0:398:2c98:229b with SMTP id
- e30-20020a67d81e000000b003982c98229bmr3941431vsj.73.1663951387659; Fri, 23
- Sep 2022 09:43:07 -0700 (PDT)
+        Fri, 23 Sep 2022 12:44:36 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2083.outbound.protection.outlook.com [40.107.212.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C6EE1F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:44:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mh2EhHwnCwv5wkhN5zNBzgsfBSX54Q3A1taY2fG2dBuqKnz4Pvb4JKEsKN764Nlp8yyyatxFjcIHS8gkPWVYqmbR3ZkTLyKvo941SyrEV+NmXH2eaoCLJzixNBmG0dFP3EaQg4a3+hzc7zDhOLXco3NNzIgjm+eiEnDal+A1HB8svj38PGu0DI0emaOaC/IJUjoBGui84I7q7fcMW90ZDsSfsyOrfdhSOLgf5gHx7pmVXTVIN+RWQajVmwkvhJqbnsGpPlxbBps1sZQ/mzaEUeg1o62OPxn0kmz7Z6v7a42n7R1WZpbcX+ZtaOcttCrqwdA/EFU42lDCQvrpQs9OwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3u5UCXdv4NBiOu8wbQgtCF4UFJyVZDgBqG2DEFLgffI=;
+ b=BtwMPtiLkxNt3InmjG9iizU44ZrCF+oWnt6ZmL5UJOD0stleZPUXUf4Zv6j7IId/aEoAmsP0QFmOK+UmSjif9mVuhpDHQwZjt8onMdzIxAI/bAu79yL3E/rLV89A1sZ8Nc9lCKDR4fGg4ifVgcgfTVxHTtvofmdnLwvqMETBEv6j4hlDwjVwMSo9JbJYU3TutuInHrbHDsaoagtoizmyjCceElR+MaoSu2xyaTIkA2kSDkZWhs1F4EveRzKmvi9N9JNzNJZ86ZuF00hNKtqIlAmsBfJs6vcyAxZIMA+tnrWb2EgVj9V5ApyihFEjecuZW9whBV409rRJLhTPuiatAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3u5UCXdv4NBiOu8wbQgtCF4UFJyVZDgBqG2DEFLgffI=;
+ b=eRJFYkJu1ZnTghI8P9DaquwPE3F9QdecbAuDB0wFYEgc4BTeqne9lONxFDmtLS5blYYQr842r/IE1VRZQKTzTZEPyc8Hq1jH0s9VzYvLZdGm5Bgc8ix2IzAhj1nMMDQsKD671Ov89vnuzQ5b45BuveQDrxuCEAfoL1DGyILzLR91jYPrMPZLOO9GzBWCbYPA+3hzxqKbwN27V+fWbRv9c/bjj2lSDcxKJkrPszNp3KGVF5CsUGHWazNin6/Ig2LmHjL8xmz9+QzD9aRAd/QZmVfRG3mmXImWOX2Zyy31iDjaXbDOYdH3ac6hyz9ReYBW98snmXyBSZMWgb7kOJ2tDA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM8PR12MB5461.namprd12.prod.outlook.com (2603:10b6:8:3a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 16:44:32 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
+ 16:44:32 +0000
+Date:   Fri, 23 Sep 2022 13:44:31 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Ashok Raj <ashok.raj@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Ashok Raj <ashok_raj@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <Yy3ib21g/7QlLn0W@nvidia.com>
+References: <YytT1hfRZdb9GYQK@nvidia.com>
+ <20220923004239.ma2gfrmoezsff4ro@box.shutemov.name>
+ <Yy1D0dLdqTr7ya71@a4bf019067fa.jf.intel.com>
+ <20220923093826.kjad4qe3clwybeh6@box.shutemov.name>
+ <Yy2cfppqkf85hPT7@nvidia.com>
+ <fd1f54b5-010d-da65-3989-d8cf727261c7@intel.com>
+ <Yy3QpOnsNJQ6MykN@araj-MOBL2.amr.corp.intel.com>
+ <c3fb5e4f-a906-bdee-7b34-533f36ba59f7@intel.com>
+ <Yy3UWTLdIldKIfgu@araj-MOBL2.amr.corp.intel.com>
+ <21e4a613-cf21-6d90-17e7-91aa960bdafa@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <21e4a613-cf21-6d90-17e7-91aa960bdafa@intel.com>
+X-ClientProxiedBy: MN2PR06CA0025.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::30) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com>
- <20220923154001.4074849-1-Jason@zx2c4.com> <202209230932.1FA2FF39@keescook>
-In-Reply-To: <202209230932.1FA2FF39@keescook>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 23 Sep 2022 18:42:56 +0200
-X-Gmail-Original-Message-ID: <CAHmME9oySGYZ=r5P6dUJnWp5R9TbwGGXLNWm8O5oyES2dn-PwQ@mail.gmail.com>
-Message-ID: <CAHmME9oySGYZ=r5P6dUJnWp5R9TbwGGXLNWm8O5oyES2dn-PwQ@mail.gmail.com>
-Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra comparison
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|DM8PR12MB5461:EE_
+X-MS-Office365-Filtering-Correlation-Id: a389635c-76ed-4d3a-3431-08da9d82e3f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IFVVJSSq0ikNCASlK67vWVU9k1n8dhlz+IPJiSzn+Mtz+Wv/2FPoko8OfNexYmkMCiWdew3ACKswUYjmf/sWRCCWn7/9aQofdZNpFwq8rnoaAcvD526t7w1eo8sykYBXLfyWLpwK0l1Nx41bfDpSX0yHBdUIbx9mBHp1N7dfcIiJ0nvfeqz5qyMOV5GdP0WmkVzAgpRrCYl4xGTvXHoyf3dA44DRWEgRY38BY6DSXIa6dSGehsqPawYvzX5YGoaoAyvEJhOKVDiy4BT+tOG4SQmCpevbv25QLV+d49Qhzz7pQveb9pmZfMCZ2Ahg/xPChl5ykOK5R4erMe9Smw/IHfZh7obZ9e4vGd9uqhiQM1avcH/M+Rxfq+/RoShsBSObs6SEQJ0x5n3bc02yGEQ//Qw/knO5pMQ1jGthTzneqAyAYmst6AILBnbkGpbgLY8MTKp1SH459LRcJcU77KGH7bDZQTKcR1w7hf8kfEivcw0uNHmcS/kTy01zdHxNBsBXqjMdg1Y0xfYAVAGQol0IIUPZnB9CrUH+eBSLDxihTIURo+e53nV6f6DrHtMxqq+zBahnwefmJXCSzQAMvnsQtXNI3xoPvOnxq/Qy6miTh2NWwG4Fp2G/6SJnLoFTgkt24c35M7MlURXbEfbx+DDM91aMw9Qx2A4sDUYsoEvCbAAHg4ST9m8pG/CmmewvnDoNAmlsYd+6uItSDTmy1mjslA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199015)(38100700002)(4744005)(6486002)(478600001)(66476007)(2616005)(86362001)(186003)(66556008)(66946007)(4326008)(2906002)(26005)(6512007)(6916009)(54906003)(6506007)(36756003)(5660300002)(8936002)(8676002)(7416002)(41300700001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?enBTnMfcxECB7Rp/YQqLyo0awajBgGSiYKlhubfXfrDfnHB6pXc0ptYIyHAh?=
+ =?us-ascii?Q?bZnxccQjMRp21FqRBp8cF4CYdRQ7mHDfOsED3XXLCEBoWWj1GboLPshQS6xR?=
+ =?us-ascii?Q?tVWeemvrqjnQq9w+vqL2M3QIDM+fACC2FNpxlm1iMAfZBgCuEXC4sCa0EQdr?=
+ =?us-ascii?Q?232HKilCD+gCL3h3V3jL2t6sL0h+uwgG/zxcs0olh/zmlHez2IsLFRutEjRQ?=
+ =?us-ascii?Q?3eFCF/dDaPy9NKKjlm6ChvxPhfq4gHOZy+Cla+3MklGrROEl42i7PhKLCcY6?=
+ =?us-ascii?Q?0tRPZStuJcLGh8l1o68Cu3tTt7wpLg/48tzKwYvyrbo7Hu5fYrZqLOvnv+jU?=
+ =?us-ascii?Q?9ymeLRTsd+x1PZxBViTnMhyfjQ6TAWG8FlJdN3xAsU5bu+b11ZZSWz+InoFO?=
+ =?us-ascii?Q?E67xATcFwqNMZt1dUulHWpz8VDq4vzwn162K1rfPzaDzxvaHdfw2c8XGuo/q?=
+ =?us-ascii?Q?9RstLhFl1gnK6yiXWY//TTrBRD2HqT0sj9m/0TEbwNsiZqy/5PiI173crzig?=
+ =?us-ascii?Q?kaiQJiqiihQvPtEcO84gLNxaJe0FliSZSAB6V0A0VCeuAx0Ck8/uvSd9K0rA?=
+ =?us-ascii?Q?jAOWDQpWVwS11A+57Yl7IM/sD5uRyVhcbLP+dvz7CVPcIxp2rXXvId3GREaq?=
+ =?us-ascii?Q?Kf3+ODc1apvZ3AbRRTIwEOEeO95YJDhChRMIhWG3/3PuJzzXCmkGxCw0z3tE?=
+ =?us-ascii?Q?nhkkNn2wTKb20EbTP2Y4hUh3ogWbweVX1e80xwAoSkYeZOC83yF1TLLPpJkK?=
+ =?us-ascii?Q?A+2jtpCXqgC2uZA0pPaJ8m4/mrP1kvzmqJHEsZtXZtuJ7uLZLp1JxRNucU8U?=
+ =?us-ascii?Q?vV5X3efMt6y2q+fB4pjmuIMDy+r9hPkMRSUInRjdeyMsqr5gk1m/QuwIa5EG?=
+ =?us-ascii?Q?nu62vn3/R/moZd+qNUlRLZSN/4icg69hhgoZ01KiCTLenrj1dY54jRRyLsaN?=
+ =?us-ascii?Q?nuVD7KtPnASZnk5Ij1ShaYLumVwxLjFjbiVbEmZMUBx4nIcpNpXz3v55l7/k?=
+ =?us-ascii?Q?7L0uVEWprCznwoKkuvxMJr7gLCDEIz3buDD5aTxwjP9oJHlJtW0aDJ2A5FMu?=
+ =?us-ascii?Q?60sRzyA2DU+qbNZzsbRkUEnh4b2UiZ5YBbq6AMhHIRsJbxjinCyu84nsBEoQ?=
+ =?us-ascii?Q?he82OrJM4vFCLf8DnT3MJfB2hnP5XdMh2yS4pddDt6C23zQ5wP9nbJbcRk9l?=
+ =?us-ascii?Q?hLgqStJY87fcVquJzGHGZI6LZMLPbKx4osoFiBRxOtoLxt3s+5OKBaGH2nNw?=
+ =?us-ascii?Q?3yYHzsvhisJU3gf8nexRk+iUpaTrYsNcTv/ITkkooIktfjWY9mLkdFMj4yAl?=
+ =?us-ascii?Q?SeyotTLZBQfNWyj0pCPgAsxssuveL6ItFecPzpSkXn1G6K4smRV/I/XvUVLF?=
+ =?us-ascii?Q?iZWS/4nvW8aW6UQOfsUj0EiNXSHNKu0MYniTJrPnP4xGTxzUYrH4th8UfAjx?=
+ =?us-ascii?Q?n9rQQDwRNqPcaiXXOZ3tfi5z4O/Rjy7PrPohqFmE8wf83Iyp7KKd/cH5nkoK?=
+ =?us-ascii?Q?RmunV36rZhwPENlaKRXGmeL2Flrd7O2g5n/Aq3XepWHNkQ+NU9l7GOnIj2g8?=
+ =?us-ascii?Q?Uu6X8iGO0MoZhv3MHsjMUN9NSTkKgORen00QOocz?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a389635c-76ed-4d3a-3431-08da9d82e3f0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 16:44:32.3700
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q6kuWVBk/wz+X5vMZ/TlZHNQa/hIIY8uqOlS23xFxIMJ2QJVV3dh1e1VE+Zl1AJD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5461
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 6:41 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Sep 23, 2022 at 05:40:01PM +0200, Jason A. Donenfeld wrote:
-> > Currently the clamp algorithm does:
-> >
-> >       if (val > hi)
-> >               val = hi;
-> >       if (val < lo)
-> >               val = lo;
-> >
-> > But since hi > lo by definition, this can be made more efficient with:
-> >
-> >       if (val > hi)
-> >               val = hi;
-> >       else if (val < lo)
-> >               val = lo;
-> >
-> > So fix up the clamp and clamp_t functions to do this, adding the same
-> > argument checking as for min and min_t.
-> >
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  include/linux/minmax.h | 25 +++++++++++++++++++++++--
-> >  1 file changed, 23 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-> > index 5433c08fcc68..30e2e2cd0f44 100644
-> > --- a/include/linux/minmax.h
-> > +++ b/include/linux/minmax.h
-> > @@ -37,6 +37,27 @@
-> >               __cmp(x, y, op), \
-> >               __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-> >
-> > +#define __clamp(val, lo, hi)                                                 \
-> > +     ((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
-> > +
-> > +#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({               \
-> > +             typeof(val) unique_val = (val);                                 \
-> > +             typeof(lo) unique_lo = (lo);                                    \
-> > +             typeof(hi) unique_hi = (hi);                                    \
-> > +             __clamp(unique_val, unique_lo, unique_hi); })
-> > +
-> > +#define __clamp_input_check(lo, hi)                                          \
-> > +        (BUILD_BUG_ON_ZERO(__builtin_choose_expr(                            \
-> > +                __is_constexpr((lo) > (hi)), (lo) > (hi), false)))
->
-> Nice. :)
->
-> > +
-> > +#define __careful_clamp(val, lo, hi) ({                                              \
-> > +     __clamp_input_check(lo, hi) +                                           \
-> > +     __builtin_choose_expr(__typecheck(val, lo) && __typecheck(val, hi) &&   \
-> > +                           __typecheck(hi, lo) && __is_constexpr(val) &&     \
-> > +                           __is_constexpr(lo) && __is_constexpr(hi),         \
->
-> I really like it! I might have used:
->
->         __safe_cmp(val, lo) && __safe_cmp(val, hi)
->
-> instead of the "open coded" __typecheck()s and __is_constexpr()s, but
-> it's the same result.
->
-> > +             __clamp(val, lo, hi),                                           \
-> > +             __clamp_once(val, lo, hi, __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
->
-> *complaint about line being >100 characters, but I don't really care* If
-> anyone is really bothered, this looks fine, too:
->
->                 __clamp_once(val, lo, hi,                                       \
->                              __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
->
-> *shrug*
->
-> > +
-> >  /**
-> >   * min - return minimum of two values of the same or compatible types
-> >   * @x: first value
-> > @@ -86,7 +107,7 @@
-> >   * This macro does strict typechecking of @lo/@hi to make sure they are of the
-> >   * same type as @val.  See the unnecessary pointer comparisons.
-> >   */
-> > -#define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
-> > +#define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
-> >
-> >  /*
-> >   * ..and if you can't take the strict
-> > @@ -121,7 +142,7 @@
-> >   * This macro does no typechecking and uses temporary variables of type
-> >   * @type to make all the comparisons.
-> >   */
-> > -#define clamp_t(type, val, lo, hi) min_t(type, max_t(type, val, lo), hi)
-> > +#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
-> >
-> >  /**
-> >   * clamp_val - return a value clamped to a given range using val's type
-> > --
-> > 2.37.3
-> >
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> I can take this unless akpm wants it?
+On Fri, Sep 23, 2022 at 09:23:40AM -0700, Dave Hansen wrote:
 
-Fine by me.
+> After our private chat, I think the answer is that devices *have* a role
+> to play.  Device-side logic must know how to untag memory before asking
+> for translation or even *deciding* to ask for address translation.  But,
+> hopefully, the communicating that untagging information to the device
+> will be done in a device-agnostic, standardized way, just how PASIDs or
+> ATS are handled today.
+
+Right, that would be my hope, we will see what PCI SIG standardizes.
+
+Jason
