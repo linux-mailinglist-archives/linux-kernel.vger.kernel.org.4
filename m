@@ -2,127 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8895E7DEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AF95E7DF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiIWPHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S232253AbiIWPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiIWPHs (ORCPT
+        with ESMTP id S231835AbiIWPJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:07:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B027E7437
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663945668; x=1695481668;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qaVWvEDVD+x5lA6GPpq9Rq8DSk3IuDySoon4s6djK4o=;
-  b=gG4Fj0Isb1Ug2ZawvgTbRlGlNuGnJGiGMVXtJszMzA4T0dPtiNjvQzNi
-   W7t2XLiZj07jn3erV/CylU1+IDP6ES6n8kLMDQCrt02zpxW3q5hcNbh07
-   7Xg/Mbcq138B4NJz8B/VvgFnn0zbcQ6K5HTJd9Dp8Hv/JMW730/7Dd5t3
-   9iKVe3mefjDNRxXibi2J+9/0VHxNeZewo+hlqbh6DLwepVJqtBmtsYf07
-   7OBHjupeKmRAiErTqPQgF3MdFNG24GyaMQ8lufDmQjBj5toWyt8KIrK2/
-   heousp2v1XYzfvLgc74SDp+hSiIhpkkAAGXWrxZuK7O9k2QEyVrW0f7TG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="326941386"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="326941386"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:07:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="622546910"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2022 08:07:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1obkHJ-006Vsg-0R;
-        Fri, 23 Sep 2022 18:07:45 +0300
-Date:   Fri, 23 Sep 2022 18:07:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
- nodes
-Message-ID: <Yy3LwItsnEtQkngk@smile.fi.intel.com>
-References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
- <36fc5ec8-12a3-fc04-a8da-59d4e08e41b6@rasmusvillemoes.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36fc5ec8-12a3-fc04-a8da-59d4e08e41b6@rasmusvillemoes.dk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 11:09:43 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7A1704E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:09:38 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220923150935epoutp0489aff483db1444ec7db654804967c12b~Xhd3Vscs01108311083epoutp04D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:09:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220923150935epoutp0489aff483db1444ec7db654804967c12b~Xhd3Vscs01108311083epoutp04D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663945775;
+        bh=njEDpC5oeJPSNhSYmRD3X20OTsya0gdbEZd6SkCmRhw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uJPfFpABAk7bmBkYXfyptGpLMG20TcvFAPdYiUybsUdvuSBN2t742M1HTydtbNFK6
+         C/4RFK7KzpmPvOFjJUqafKFLTwojXXErquX72Ksa99hc8YzaH1SmJiZtJIkvP4P2Q9
+         aykFRD8qY/DcA7vU7OfuknGq1bId5tDKNDD9ZlOs=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220923150934epcas1p45e25c0a20a62821e1d61b90921f684cd~Xhd2p94c-3133331333epcas1p4i;
+        Fri, 23 Sep 2022 15:09:34 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.232]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MYwY92pV2z4x9Ps; Fri, 23 Sep
+        2022 15:09:33 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.EE.51827.D2CCD236; Sat, 24 Sep 2022 00:09:33 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220923150932epcas1p260522873fcf003b821a0d88211e7fec2~Xhd1DxUPn0139301393epcas1p2O;
+        Fri, 23 Sep 2022 15:09:32 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220923150932epsmtrp256a0228c003e923fecf04979080ba55e~Xhd1C-2Ak1039410394epsmtrp2f;
+        Fri, 23 Sep 2022 15:09:32 +0000 (GMT)
+X-AuditID: b6c32a36-17bfa7000000ca73-09-632dcc2dbc64
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.66.18644.C2CCD236; Sat, 24 Sep 2022 00:09:32 +0900 (KST)
+Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
+        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220923150932epsmtip20a8a5da2fe887c335cf636f1c3cd3cc2~Xhd0yniwQ1911719117epsmtip2U;
+        Fri, 23 Sep 2022 15:09:32 +0000 (GMT)
+Date:   Sat, 24 Sep 2022 00:09:32 +0900
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        ogabbay@kernel.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
+Subject: Re: [PATCH v2 01/13] trinity: Add base driver
+Message-Id: <20220924000932.689c44f37abecb153175ed8b@samsung.com>
+In-Reply-To: <51275e33-c791-4593-84d1-eedad27d7fd6@www.fastmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmga7uGd1kgzubBC3+TjrGbjH14RM2
+        i+bF69ks3nfvZrbY+3oru8XlXXPYLG43rmCz2NfzkdHi+bTrLA6cHr9/TWL02LSqk83jzrU9
+        bB77565h9+jbsorR4/MmuQC2qGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWF
+        vMTcVFslF58AXbfMHKCrlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFpgV6xYm5
+        xaV56Xp5qSVWhgYGRqZAhQnZGZ+eN7EVLOCo6DuxkK2BcTNbFyMnh4SAicTigxPYuxi5OIQE
+        djBKPPh0jRHC+cQo8fnqbDYI5zOjxPz9u9lhWv5eaWKGSOxilJiw6wUThNPBJLF01XFGkCoW
+        AVWJ7rf7WUFsNiB75ow1YN0iAsoSv35MYgVpYBb4wyjRt28LWEJYwExiwtSZYDavgKPEpc4F
+        LCA2p4CLxNfZXYwQqy0k7vasAGrmAKoRlPi7QxgkzCwgL7H97RywiyQEpnJIvJyzjRmi3kVi
+        XctOqE+FJV4d3wL1gpTE53d7oeLZElM6FrFA2AUS555vZQaZLyFgLHFxRQqIySygKbF+lz5E
+        haLEzt9zGSHW8km8+9rDClHNK9HRJgRRoiSx5M9hqEUSElNnfGOCsD0kll89xAIJqrdMEvem
+        32CewKgwC+GZWUiemYWweAEj8ypGsdSC4tz01GLDAiN4BCfn525iBCdSLbMdjJPeftA7xMjE
+        wXiIUYKDWUmEd/YdzWQh3pTEyqrUovz4otKc1OJDjKbAqJnILCWanA9M5Xkl8YYmlgYmZkbG
+        JhaGZoZK4rwNM7SShQTSE0tSs1NTC1KLYPqYODilGpiKzcT4r9Z9KF26a+eFHeYFd8rN95yd
+        YP4h4pJjvHDNne31Ztuz5/y44L5e6omC17fIbj4hv0yNe+tlZVcLHGdYctU6Z3vZnDIf/pAl
+        h+JVvz7TNM76/Sjax0B026pmZS1pze4t+X2fP7FdXvDMpSngy6vZXZUzyxoU3tg0i5SrrF7T
+        lnPBSnfn7Th2gaqFX19OXMVgL6jv4sX1xnXWtR9LzpyZuXxXPIPxAb2Zud3TDU49CDbZ8bBh
+        fdKd9oLfz6r3fF75+9q3rw/fvVZRWCjzXjC3RsVkdtn+c/OuPl5zPYg7oqn+fgKTRsU194ks
+        GZzxZVcWdlr9Kfn9sl4w5XrOlW0KU/J3fgyV3dD/8bucEktxRqKhFnNRcSIAwF87Gi0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLLMWRmVeSWpSXmKPExsWy7bCSvK7OGd1kg3k/FS3+TjrGbjH14RM2
+        i+bF69ks3nfvZrbY+3oru8XlXXPYLG43rmCz2NfzkdHi+bTrLA6cHr9/TWL02LSqk83jzrU9
+        bB77565h9+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6MT8+b2AoWcFT0nVjI1sC4ma2LkZND
+        QsBE4u+VJuYuRi4OIYEdjBJPVnyASkhIbLq3HCjBAWQLSxw+XAxR08Yk0dX6gwWkhkVAVaL7
+        7X5WEJsNyJ45Yw07iC0ioCzx68ckVpAGZoE/jBLvO54ygSSEBcwkJkydCVbEK+AocalzAdgg
+        TgEXia+zuxghNrxlkrg3/QYzxBUWEnd7VrCCXMErICjxd4cwSJhZQEvi4a9bLBC2vMT2t3OY
+        JzAKzkKomoWkahaSqgWMzKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYJjREtrB+Oe
+        VR/0DjEycTAeYpTgYFYS4Z19RzNZiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp
+        2ampBalFMFkmDk6pBqaAxbUvlqpbHJ21RFK87Xv2w6PmUyraXl09qdfh8XuddvHvN3+btsoa
+        cy6Wboj4WZKS7cFvUzUlgn/n7BN1Sh5cxx+qWaUvqpzYvPH/52Mdnzqnun6ee6j70qxvGkdm
+        Suj47PcNuntX5cl8liTWSq+Ua4eeqUkkF0d+lpoQ1fBYmEvQQP3DVhmmrZlOJieYX2de+rXA
+        L2t2qO+P41Lrzv3KPF6nZf7gt3t5qearU67Zx3Z+WJTg8cPDSCNiT41Mbdw2LtHoSeKPOw8X
+        3TVMCv9yb0V+7rENBoct5uaf3z3bo+dg78NW99cXKnRjhJcWewrq8t3RqIxIjb3ykYX/Q6lz
+        wr/alWuP/p635pHfbB0lluKMREMt5qLiRACva9QdAAMAAA==
+X-CMS-MailID: 20220923150932epcas1p260522873fcf003b821a0d88211e7fec2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220917072357epcas1p17b277154f0d020435417450fa0337906
+References: <20220917072356.2255620-1-jiho.chu@samsung.com>
+        <CGME20220917072357epcas1p17b277154f0d020435417450fa0337906@epcas1p1.samsung.com>
+        <20220917072356.2255620-2-jiho.chu@samsung.com>
+        <e035ac54-35af-4e86-a74a-9a4c7f936a19@www.fastmail.com>
+        <20220917234918.8b94d2690b8533bd47cf64e0@samsung.com>
+        <51275e33-c791-4593-84d1-eedad27d7fd6@www.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 02:19:14PM +0200, Rasmus Villemoes wrote:
-> On 22/09/2022 21.49, Andy Shevchenko wrote:
+On Thu, 22 Sep 2022 15:56:51 +0200
+"Arnd Bergmann" <arnd@arndb.de> wrote:
+
+> On Sat, Sep 17, 2022, at 4:49 PM, Jiho Chu wrote:
+> > On Sat, 17 Sep 2022 09:41:13 +0200
+> > "Arnd Bergmann" <arnd@arndb.de> wrote:
+> >> 
+> >> If you have the need to manage multiple devices here, maybe use
+> >> a dynamic major number and have the chardev code allocate the
+> >> minor numbers, instead of using multiple misc devices and
+> >> doing that yourself.
+> >> 
+> >
+> > I'm little confusing. It means that managing own char devices is proper,
+> > not using misc device? But, it's still under misc dir.
 > 
-> > + * which allows to count the exact maximum length in the worst case,
-> > + * i.e. when each second CPU is being listed.
+> There is no strict connection between miscdevices and drivers/misc.
 > 
-> I don't think that's actually the worst case. I think that would be
-> where 2 out of 3 cpus are listed. I.e., with 16 cpus
+> The former is for drivers that tend to have only one instance
+> in a system, while the latter is for drivers that do not have
+> a separate subsystem.
 > 
-> 0-1,3-4,6-7,9-10,12-13,15
+>      Arnd
 > 
-> is certainly longer than
-> 
-> 0,2,4,6,8,10,12,14
-> 
-> It's trivial to see that no bitmap with four consecutive bits can be a
-> worst-case, and any bitmap with some three consecutive bits is as bad as
-> the same one with the middle bit cleared (the rep just changes a - to a
-> ,), so the worst case is definitely obtained among bitmaps with at most
-> two consecutive bits.
 
-Thanks, indeed, your variant seems aligned with the comment in the file.
-I have checked on paper what could be the lengths for a few number of CPUs
-and this what it comes:
+Thanks for the clarification. Allocating a dynamic major could be better
+for trinity, which could have multiple instances.
+I'll rewrite code for it in next revision.
 
-  nCPUs		size
-
-  10		13
-  16		25 (13 + 12)
-  32		59 (13 + 46)
-
-and it's visible that the amount of numbers of the same order (in each 10th)
-is up to 7. Which means that the worst case is like 7 numbers for the same
-10th. On top it's up to 3 ranges, means adding 2 characters per each for
-the delimiters.
-
-So,
-  10	7*1 + 3*2				=  13
-  16	7*1 + 3*2 +  4*2 +  2*2			=  25
-  32	7*1 + 3*2 + 15*2 +  7*2			=  57
-  100	7*1 + 3*2 + 63*2 + 31*2			= 389
-
-Where 4 is from (16-10)*7/10 and 2 is half of it (for the range delimiters).
-In similar way the [15, 7] and [63, 31].
-
-Not sure how we should round the numbers (perhaps 15 should be 16, it will
-yield 61 in the 3rd line).
-
-Hence we may see that for 100 we need almost 400 bytes to have, and formula
-nCPUs * 7 / 2 won't work precisely.
-
-That said, my patch is wrong (based on the wrong assumption of a worst case)
-but current approximation seems undersized as well.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Jiho chu
 
