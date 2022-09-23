@@ -2,214 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9635A5E75AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9669A5E75AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiIWI0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S231293AbiIWI0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiIWI0F (ORCPT
+        with ESMTP id S231273AbiIWI0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:26:05 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10071.outbound.protection.outlook.com [40.107.1.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1FA107DED;
-        Fri, 23 Sep 2022 01:26:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ABU54zFuxHjlqhwWnTRy3e4KU/8YpE4OTIqsB5ZU8y3WLw2keT1QHrJQl5V96phzmmUFTy/LJvid38jgwJC6QpmMKuDoP/iuUCygehLVofLzXnp6z3Zq9LIcmmlhr4bVSUmdBoEPV7CglPRFVoCTP/qGjFPFQtHg9eP0CfEvOLWhPshy8UYCVkcA19bnw7e1ARanK/iEvtFzXpawNWO2rlC8YwdgkDBHf11zKyVjURLW4A43NvDIt0XpfQXPbEaRBBmzfYhMH2utXZbuystxSYaMKn34rb/77lZ4UudjhctZSdf6/o91ye2vp3UhC6t6uQvssu+TwjhC5jELkb8b0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kIuapQxWpOTFH0axwi9ywl2Mk/2I8M4IiGtxuGKzffs=;
- b=b0vgzrRbCo5fvasE5QVTsOSVRvBh/OmEPIaLPOOqVHhuNnpKSKmgTveq4jkdYe+8dn9NPIf1bA4RwXowzRRtab8Se9xqN1a7dkdQh23h1yuuLJQEXwTnl+V5oDhBtZEMpayEASHOKMId5RIFpw3BXKz5gKPERTdkKkOF1TMq/PUwMHtSNn1Sts/xA5LW5KfwGukiru5OqxuaC4HRJFQCYkNZz0PWEuvAkPWQOZXn3/x4LD7WpnzA7stEOCEqNx+Fb+fOKZBrpejhAmZLnmcFuHBZh3p453PeKZear4WG1/SEMeqV0K9xleJJj0mhDwsNDZy69zyMHiKvEVgt0JXbwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
- header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kIuapQxWpOTFH0axwi9ywl2Mk/2I8M4IiGtxuGKzffs=;
- b=I4wwX2VBC8EX7XYA8+727llaQANVciO14HXhMestetuEbVdwe1f1qDVyDp8dKTGIEhBvzyn3PnYHClKbWuHB/bnRjqbjvXdkHSFTkZeDCFul3GpEe4mkaiU47oR3ZEdSxROYi9W4rDoYRUGDo01pu4/VSz8aBa66ueP0hTD/0CwkPVZL+wP9NFQA88jdiPci6aR55ZGtSNB0Fkm9CX8xCPJXw+bj6UdKag0ZyyiyAsFZRH15gI5AB/NLc1/yaeMyhVZpwyufmdEn7X3LJVR5zwIYLkTO0soWKENHOcpsewXD6WalWEgqVCJ+fPuqPVnXRCQqiJ3PX3BQHRnbeaz82Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
-Received: from DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
- by PA4PR04MB7712.eurprd04.prod.outlook.com (2603:10a6:102:ec::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
- 2022 08:26:00 +0000
-Received: from DU2PR04MB8536.eurprd04.prod.outlook.com
- ([fe80::5e5e:1989:e5ec:c833]) by DU2PR04MB8536.eurprd04.prod.outlook.com
- ([fe80::5e5e:1989:e5ec:c833%3]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
- 08:26:00 +0000
-Message-ID: <7add41ad-2cff-adef-08c4-dbc02f7c7c31@theobroma-systems.com>
-Date:   Fri, 23 Sep 2022 10:25:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 1/3] Input: add `SW_BOOT_ALT`
-Content-Language: en-US
-To:     Jeff LaBundy <jeff@labundy.com>,
-        Quentin Schulz <foss+kernel@0leil.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, dmitry.torokhov@gmail.com,
-        klaus.goger@theobroma-systems.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-References: <20220922101211.3215888-1-foss+kernel@0leil.net>
- <20220922101211.3215888-2-foss+kernel@0leil.net> <YyyZRt5j180KzGqc@nixie71>
-From:   Quentin Schulz <quentin.schulz@theobroma-systems.com>
-In-Reply-To: <YyyZRt5j180KzGqc@nixie71>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0175.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a0::12) To DU2PR04MB8536.eurprd04.prod.outlook.com
- (2603:10a6:10:2d7::10)
+        Fri, 23 Sep 2022 04:26:22 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF43122046
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:26:20 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 17:26:13 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663921579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JaQoYM+j6Sz5drFI7/Nc5YLnUcsI4Slr+gq1hLPyp+8=;
+        b=HJjn/ySuGyYyuDyy8S0NeoXOQKQdoAK5rmFjbD9D//E6F8nEE5HuM5iiD53H/1VPDkuDHw
+        J1dPRUHtPjrvQdAYO+Chx4kK0Vvj43vhBlxrB5hjH6F9juwOFhGdFkOi0T4tdMcmnNgPO0
+        Ringhrtz7uVRPjeEDb/gRpJ3B1S6zJU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 4/4] mm/hwpoison: introduce per-memory_block hwpoison
+ counter counter
+Message-ID: <20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-5-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8536:EE_|PA4PR04MB7712:EE_
-X-MS-Office365-Filtering-Correlation-Id: ace90edb-0f9e-4032-f6b2-08da9d3d3ee3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7Lo0PziwvXeciu3l3ow16mPcOfeKj5pKtiiiqeF+bgd+hnY5b1aPLV8wJfoAFqArav9Lo4yeHizwvYP111kETAKW4I6z7fLXri/MwPM4KnvE1wX2goaazhzu5vZ+rG8swxac0yiEVYYeYGYtlBlWO+/z+ln0WksXwl5AZVZ7cp7qTm+4AhmiTBdj+OOvs97JVnGjMAl2HvzieEI7AP2mOuEPMbUsjtQ2rdelgSVM9KkBztvo7pQ9VPwgzGtYIvvwPcDEnuvhZmkhKmK3RZbqoM/HZYZHe1scihhdZ5aBLdLqwN7xQWo187ciA+w5gLspmJbKU5lbVrN1mpEdmZrQqFSSGb6U6evHY11ys0hA3L/tgaV9KwwrxLeUVO9JXoiO2r4EKxqqvkUJE7ErFpl0PgggegVZ8oxoDeY4oUxM12LRXgzYFLKHkVkF0DlPycifo5qntepyftQ2VnWAxFZVaX/HC+eobiA5ClXzEX5sCDq8YIQX6Am+EM5WQ/aKYNP5EH0FHTXn2jYpVpyvLS1ONoRRYJz0j8s1DewenwIgebHY9rJCTHYbaYfKx4bpvIi3jl4kKCigGgnegKJccRb4q5AlnGa1YDMlGfSNgq0MErG48ZKmcZDbeHO2idFZcEPdOH+oF/EOtQNft7lWFBzFzmZ+zWy2MgCaregYskFiiWqEedZXd6+mxKib+aHPpZVZNsPT41Hw5LPnOoRkT6/OIZk833sBZ/NfRQtRlcNpDZ/1Y9MWSWNwb4qbExxxWd4Ge2bPtXWZTgNe1z4CJBqEbkPDuGWrkdw1qPEc+/RXw/ScmexFACAnjygcTzw+6YkKtev5eYhItd6phqDbsMPx1Kb4HoeFVJxomt19AOaXSLsPoORLfPhT3+IqAJb5p/NjMj7AVbTB3h9ahEjQZk70ww==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8536.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(346002)(136003)(366004)(376002)(396003)(451199015)(26005)(6512007)(4326008)(6506007)(66556008)(66476007)(36756003)(66946007)(186003)(110136005)(2616005)(316002)(8676002)(478600001)(5660300002)(966005)(31696002)(8936002)(31686004)(7416002)(86362001)(38100700002)(44832011)(41300700001)(2906002)(53546011)(83380400001)(6486002)(81973001)(15398625002)(45980500001)(43620500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2JvdEdSOEd0bmZBRVFKUEtwQm9iayt1dTJYaVUvVFh5aVBUNXhkcEpqR2ZY?=
- =?utf-8?B?UWZ4cTI3N2wxT3JKZml2dG9iaDlpTnkxOVRJU1JkQ1FPSURUZVZQa2c5VGk5?=
- =?utf-8?B?SzllTEFZM3l6VnNtRHdCRCtPb09SbWl2cTZyTWFWazZDdnNXaVRSUzYwdENs?=
- =?utf-8?B?TktCaU4xUkxuU2s4NVZsMDBuT2R5TWhLSURXRjdOZGVLU3BUOFgrbFhkNG5L?=
- =?utf-8?B?eFBkYWRXcjlxTGVHdFJXSzlzcm9mZDRDM1pCTWN1WjhwS0p3Q1lEaWY3dGtK?=
- =?utf-8?B?dmpzd0F0bDVUWlV1RndVS2VhbHlNM0hINDNjVWFzNXg3eGY3SnIzeXArTTRR?=
- =?utf-8?B?L0M0VU5PNnA4TStaR0tobDN2WklKODFPalJFcmo1NFh4eDVYdFpZN1pQRlVM?=
- =?utf-8?B?N3BDYmRZTEYyUU02eDdCaHI0QWZISkY5WFV4UTVGNU5WZGIwU2srVWQ3cFpX?=
- =?utf-8?B?NFBZY0NTTUVNVVRTdVlpQjQ2emdOUTBnWGlaSkwvaWJnOUR3NXgxa0NQRXZB?=
- =?utf-8?B?cEZkTU05MFJ3aWo2ZFhpT0dZazlSRkpadlFySzZNcjgrSVQzN0xBYzRTeDY4?=
- =?utf-8?B?U3NVMzZUZithZk1PeGtUaTVxUGNWY3ZBTUJUeFdmWTEwTEhwRTg0V1pjYnhK?=
- =?utf-8?B?eTlxWDBTQU90dC93NXNPaERIVHdBeGM3LzBXOUwrQnV5Z0hyZzNXVGQ2anQ3?=
- =?utf-8?B?K2tvald1T1ZleHF0NWFqQkNrV0JmNGJhTDlUTmNsR1dYUTRuc3M2ejVSdGtp?=
- =?utf-8?B?bGZmcWg5NTVaQThCc1RYODQwTUYxNjBoWHRUKytIeXZ1RGkySjM4RUVtSncz?=
- =?utf-8?B?L3h4MkducStMakJWTG1KN0FpS2pPckxzenA4bTRXOEJ1Z0xJcVdZS2RnWk5E?=
- =?utf-8?B?bXNjOVh5djh2K2tuNWpwM0taM0tPZ29kUXlkbThQTEhIOXd4N1F5VXZQVTVN?=
- =?utf-8?B?eXRxRi9SeUJUZURrckc1TmpXUUxaelBXUGtvaDhjTW5xTXQ0SlFwUWNmWFJF?=
- =?utf-8?B?WE0zY2FSZVVoSkc1YkdJcGcyODNMeVlCNGUraEo1K1FlR2NHZDVqbFNlWDdL?=
- =?utf-8?B?Sjd1RE9RbWE5dW1kQ0N3WHJETzJKYnBOcmE1TVRZbGErQ3JsMEkyUjlVU1Iy?=
- =?utf-8?B?UmRzWVFWRklzb0NmbUwvTUhVWE4xQ3dFNnp3MkdYR3Y1YndwOEpJNXVYUVNI?=
- =?utf-8?B?SS9TZ3RJaU9KWTFBQU9zcUlyTjViVWhtaHJWMUhmbjJBSFVZNlNkOFQ0N2la?=
- =?utf-8?B?dWxZVDYzWk15QWlSY3RkclBWQXU3VTJxQitZVTVaOEFTSFIrZW9qZnV0MkRj?=
- =?utf-8?B?K2pOL0llWkJrRWRMQkp3QUNqVDVHSmNKOVdVQ0hQQ0FBaW5NMFJSa0hsc2xn?=
- =?utf-8?B?dmtzMlY0VGMrTzFOcElobjRna1dtUUQwZm1qaDRRMU02SWNtd3R0MnpiNlBV?=
- =?utf-8?B?ZEZnWStNV0ZBa1hpUGEzdWYwZzN1ZU9VTFVaRTNrdzhzZzBud1RMVDRHMnUy?=
- =?utf-8?B?akpXS1FGYlFxMEpIVE40ZzlQbHN3aHpHeHhJKzFxeTY3VStLdi9OOUVWL2J0?=
- =?utf-8?B?VnZ2bFJsRUJ5NmxZM2hxengzTlk5SEdoVzFGNkV0d3lJckpReVVrR2VjamEr?=
- =?utf-8?B?VFVva1NVUjN0ZzFOeDgwOGZ0dVBBKzJwKzd3SnFXaTRNeGNFRUJydUx5ckdM?=
- =?utf-8?B?MTZ5NS84azE4cWpkTHMzUUpFT05IcktlVWh0bkVDL3pwRmdzVWtlZk5pT3h2?=
- =?utf-8?B?VUFFMEJxazdtU2NBUkRURS9hbWhjalpSMEtTcXJVSi9CbjliVzIwRnV6NDNL?=
- =?utf-8?B?NUNrYkRENjY1NDBrR2NYR0RlZzl1STFjb1R1dnhtNmM0b0NobnphUGpxU204?=
- =?utf-8?B?UjdCS2VqOVcwTmJKUDd1TXdoVC9jaTVCS0VKTHF0ZzE4VHZ5Z2J2QWFMZ2Jk?=
- =?utf-8?B?d0NWa2xtTzhBTkEwbjlTdGkvTmNiT2ZNUWxGMjl1aEdxZ3dvU0VOMDhjTFU4?=
- =?utf-8?B?cWQ2YVBXekJUZ0ZqV0VwSis1THkrNm5yckRnOXNRc0pBR0d5UzBXMjRHanVU?=
- =?utf-8?B?VWg4QnluRjZpSXhSek84Y3BJcFI0ZEJMR0VyWmFBcmJWZTg4YlJRaVg3bHZy?=
- =?utf-8?B?M0lQSmdGd21aR1BZbDlZSTNwVDhVKzd5YTQxNEZXMWRaLzJsSnh1U2xVOXE5?=
- =?utf-8?Q?waoFlGG9fEH7lXj+E4Z7IpE=3D?=
-X-OriginatorOrg: theobroma-systems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ace90edb-0f9e-4032-f6b2-08da9d3d3ee3
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8536.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 08:26:00.1133
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LMry42OR9WXPTFImM7krIjoio7mGpHzmBt/Wb5PeDq12gNPrUfvMo+Sj2YdU4yXIfUq1S8kDNblh2hPiKHse1x7ejURkFpN8qydId6TJw0glaAgplWLbswRrS7DREyFs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7712
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220921091359.25889-5-naoya.horiguchi@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-On 9/22/22 19:20, Jeff LaBundy wrote:
-> Hi Quentin,
-> 
-> On Thu, Sep 22, 2022 at 12:12:09PM +0200, Quentin Schulz wrote:
->> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
->>
->> This event code represents the firmware source to use at boot.
->> Value 0 means using "standard" firmware source, value 1 means using
->> "alternative" firmware source.
->>
->> For example, some hardware has the ability to force the BOOTROM to load
->> the bootloader from a secondary firmware source (say SD card) instead of
->> trying with the standard first and then the secondary. This event allows
->> the userspace to know which firmware source was requested *in hardware*.
->>
->> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> 
-> This does not seem like the right approach, especially since the switch
-> can easily be flipped after the state is already latched.
-> 
-> If the bootloader needs to pass information to the kernel (boot source or
-> otherwise), a safer and more flexible approach is to share some variables
-> in eMMC, or pass information using the kernel cmdline.
-> 
+Currently PageHWPoison flag does not behave well when experiencing memory
+hotremove/hotplug.  Any data field in struct page is unreliable when the
+associated memory is offlined, and the current mechanism can't tell whether
+a memory section is onlined because a new memory devices is installed or
+because previous failed offline operations are undone.  Especially if
+there's a hwpoisoned memory, it's unclear what the best option is.
 
-I made a terrible job at explaining what this switch is for, sorry.
+So introduce a new mechanism to make struct memory_block remember that
+a memory block has hwpoisoned memory inside it. And make any online event
+fail if the onlined memory block contains hwpoison.  struct memory_block
+is freed and reallocated over ACPI-based hotremove/hotplug, but not over
+sysfs-based hotremove/hotplug.  So it's desirable to implement hwpoison
+counter on this struct.
 
-Obviously, the state of the switch cannot represent which firmware boot 
-source was used as only the bootloader will be able to tell (since it 
-usually tries storage media in a specific order and the primary boot 
-source could get corrupted at one point in time). Anyway, like you 
-rightfully stated, this is useless "info" and the important one would be 
-passed by the bootloader to the kernel (possibly via Device Tree fixup 
-in case of Aarch64). U-Boot does this to set the memory node so this 
-could be done again with a different property or something like that. 
-Anyways, not something I'm really interested in.
+Note that clear_hwpoisoned_pages() is relocated to be called earlier than
+now, just before unregistering struct memory_block.  Otherwise, the
+per-memory_block hwpoison counter is freed and we fail to adjust global
+hwpoison counter properly.
 
-I have a switch on my devkit which implements the 
-BOOT_ALT#/BIOS_DISABLE# functionality from the Q7 standard, see section 
-3.1.17 Miscellaneous Signals in the specs: 
-https://sget.org/wp-content/uploads/2018/09/Qseven-Spec_2.1.pdf
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+---
+ChangeLog v3 -> v4:
+- fixed build error (https://lore.kernel.org/linux-mm/202209231134.tnhKHRfg-lkp@intel.com/)
+  by using memblk_nr_poison() to access to the member ->nr_hwpoison
+---
+ drivers/base/memory.c  | 41 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/memory.h |  3 +++
+ include/linux/mm.h     |  8 ++++++++
+ mm/internal.h          |  8 --------
+ mm/memory-failure.c    | 31 ++++++++++---------------------
+ mm/sparse.c            |  2 --
+ 6 files changed, 62 insertions(+), 31 deletions(-)
 
-"""
-BIOS_DISABLE#
-/BOOT_ALT#
-Module BIOS disable input signal. Pull low to disable
-module's on-board BIOS. Allows off-module BIOS
-implementations. This signal can also be used to disable
-standard boot firmware flash device and enable an alternative
-boot firmware source, for example a boot loader.
-"""
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 9aa0da991cfb..f470bbfc68d0 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -183,6 +183,9 @@ static int memory_block_online(struct memory_block *mem)
+ 	struct zone *zone;
+ 	int ret;
+ 
++	if (memblk_nr_poison(start_pfn))
++		return -EHWPOISON;
++
+ 	zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
+ 				  start_pfn, nr_pages);
+ 
+@@ -864,6 +867,7 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
+ 		mem = find_memory_block_by_id(block_id);
+ 		if (WARN_ON_ONCE(!mem))
+ 			continue;
++		clear_hwpoisoned_pages(memblk_nr_poison(start));
+ 		unregister_memory_block_under_nodes(mem);
+ 		remove_memory_block(mem);
+ 	}
+@@ -1164,3 +1168,40 @@ int walk_dynamic_memory_groups(int nid, walk_memory_groups_func_t func,
+ 	}
+ 	return ret;
+ }
++
++#ifdef CONFIG_MEMORY_FAILURE
++
++void memblk_nr_poison_inc(unsigned long pfn)
++{
++	const unsigned long block_id = pfn_to_block_id(pfn);
++	struct memory_block *mem = find_memory_block_by_id(block_id);
++
++	if (mem)
++		atomic_long_inc(&mem->nr_hwpoison);
++}
++
++void memblk_nr_poison_sub(unsigned long pfn, long i)
++{
++	const unsigned long block_id = pfn_to_block_id(pfn);
++	struct memory_block *mem = find_memory_block_by_id(block_id);
++
++	if (mem)
++		atomic_long_sub(i, &mem->nr_hwpoison);
++}
++
++unsigned long memblk_nr_poison(unsigned long pfn)
++{
++	const unsigned long block_id = pfn_to_block_id(pfn);
++	struct memory_block *mem = find_memory_block_by_id(block_id);
++
++	if (mem)
++		return atomic_long_read(&mem->nr_hwpoison);
++	return 0;
++}
++
++#else
++unsigned long memblk_nr_poison(unsigned long pfn)
++{
++	return 0;
++}
++#endif
+diff --git a/include/linux/memory.h b/include/linux/memory.h
+index aa619464a1df..74e6b3ad947f 100644
+--- a/include/linux/memory.h
++++ b/include/linux/memory.h
+@@ -85,6 +85,9 @@ struct memory_block {
+ 	unsigned long nr_vmemmap_pages;
+ 	struct memory_group *group;	/* group (if any) for this block */
+ 	struct list_head group_next;	/* next block inside memory group */
++#ifdef CONFIG_MEMORY_FAILURE
++	atomic_long_t nr_hwpoison;
++#endif
+ };
+ 
+ int arch_get_memory_phys_device(unsigned long start_pfn);
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 2bb5d1596041..5445943bbb4b 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3280,6 +3280,9 @@ extern int soft_offline_page(unsigned long pfn, int flags);
+ #ifdef CONFIG_MEMORY_FAILURE
+ extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
+ extern void num_poisoned_pages_inc(unsigned long pfn);
++extern void memblk_nr_poison_inc(unsigned long pfn);
++extern void memblk_nr_poison_sub(unsigned long pfn, long i);
++extern void clear_hwpoisoned_pages(long nr_poison);
+ #else
+ static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+ {
+@@ -3289,7 +3292,12 @@ static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+ static inline void num_poisoned_pages_inc(unsigned long pfn)
+ {
+ }
++
++static inline void clear_hwpoisoned_pages(long nr_poison)
++{
++}
+ #endif
++extern unsigned long memblk_nr_poison(unsigned long pfn);
+ 
+ #ifndef arch_memory_failure
+ static inline int arch_memory_failure(unsigned long pfn, int flags)
+diff --git a/mm/internal.h b/mm/internal.h
+index b3002e03c28f..42ba8b96cab5 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -708,14 +708,6 @@ extern u64 hwpoison_filter_flags_value;
+ extern u64 hwpoison_filter_memcg;
+ extern u32 hwpoison_filter_enable;
+ 
+-#ifdef CONFIG_MEMORY_FAILURE
+-void clear_hwpoisoned_pages(struct page *memmap, int nr_pages);
+-#else
+-static inline void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
+-{
+-}
+-#endif
+-
+ extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
+         unsigned long, unsigned long,
+         unsigned long, unsigned long);
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index a069d43bc87f..03479895086d 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -74,14 +74,17 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+ 
+ static bool hw_memory_failure __read_mostly = false;
+ 
+-static inline void num_poisoned_pages_inc(unsigned long pfn)
++void num_poisoned_pages_inc(unsigned long pfn)
+ {
+ 	atomic_long_inc(&num_poisoned_pages);
++	memblk_nr_poison_inc(pfn);
+ }
+ 
+ static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
+ {
+ 	atomic_long_sub(i, &num_poisoned_pages);
++	if (pfn != -1UL)
++		memblk_nr_poison_sub(pfn, i);
+ }
+ 
+ /*
+@@ -2414,6 +2417,10 @@ int unpoison_memory(unsigned long pfn)
+ unlock_mutex:
+ 	mutex_unlock(&mf_mutex);
+ 	if (!ret || freeit) {
++		/*
++		 * TODO: per-memory_block counter might break when the page
++		 * size to be unpoisoned is larger than a memory_block.
++		 */
+ 		num_poisoned_pages_sub(pfn, count);
+ 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
+ 				 page_to_pfn(p), &unpoison_rs);
+@@ -2618,25 +2625,7 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 	return ret;
+ }
+ 
+-void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
++void clear_hwpoisoned_pages(long nr_poison)
+ {
+-	int i, total = 0;
+-
+-	/*
+-	 * A further optimization is to have per section refcounted
+-	 * num_poisoned_pages.  But that would need more space per memmap, so
+-	 * for now just do a quick global check to speed up this routine in the
+-	 * absence of bad pages.
+-	 */
+-	if (atomic_long_read(&num_poisoned_pages) == 0)
+-		return;
+-
+-	for (i = 0; i < nr_pages; i++) {
+-		if (PageHWPoison(&memmap[i])) {
+-			total++;
+-			ClearPageHWPoison(&memmap[i]);
+-		}
+-	}
+-	if (total)
+-		num_poisoned_pages_sub(total);
++	num_poisoned_pages_sub(-1UL, nr_poison);
+ }
+diff --git a/mm/sparse.c b/mm/sparse.c
+index e5a8a3a0edd7..2779b419ef2a 100644
+--- a/mm/sparse.c
++++ b/mm/sparse.c
+@@ -926,8 +926,6 @@ void sparse_remove_section(struct mem_section *ms, unsigned long pfn,
+ 		unsigned long nr_pages, unsigned long map_offset,
+ 		struct vmem_altmap *altmap)
+ {
+-	clear_hwpoisoned_pages(pfn_to_page(pfn) + map_offset,
+-			nr_pages - map_offset);
+ 	section_deactivate(pfn, nr_pages, altmap);
+ }
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+-- 
+2.37.3.518.g79f2338b37
 
-This is basically the configuration of the firmware boot source to use 
-for *the next boot*. It does not represent which boot source was used, 
-nor which one will effectively be used.
-
-In our case, this switch electrically disables eMMC and SPI flashes and 
-only allow to boot from SD card (this switch is then electrically 
-overridden by another GPIO at runtime by the bootloader/Linux kernel, 
-but the state of the switch is still available to the user via another 
-GPIO).
-
-I have this switch on the board and I want to expose its state to the 
-user, if this new event code is not possible/a good idea what would you 
-suggest we could use?
-
-Note that we already support the same switch but in a different way: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts#n167
-We are just configuring the GPIOs into the GPIO mode with a pull-up, and 
-then it's up to the user to use gpiod or gpio-sysfs to check the state 
-of the GPIO used for this switch. I don't like this, very not 
-user-friendly and was looking for something better :)
-
-Hope I explained myself a bit better this time, lemme know if I can 
-clarify anything.
-
-Thanks!
-Quentin
