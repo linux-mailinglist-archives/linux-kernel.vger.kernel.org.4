@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CFA5E787F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802C75E7885
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiIWKhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S231661AbiIWKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiIWKhB (ORCPT
+        with ESMTP id S231645AbiIWKjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:37:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F381296B8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:37:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 131D82199A;
-        Fri, 23 Sep 2022 10:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663929419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2pKPKJLTiTkpoVATkLkUo2lNNjZ9DxfVfraEJnPgSY=;
-        b=f48byvyRbgUd85XZ2KjI+5ZndvyGLLT8PEuJT/MGvAALyTLjUTUnk3m7r+F2OZFhuRR8ln
-        +eNgic1L69JtTClxykx0ktOFX2FEgMAQ0QcID55GlRLr3TT91c6B4pjKE5ht2l0mUeEXxb
-        R5nOPqhyB8GNxjK7atWMlsXujP31HUc=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A25292C153;
-        Fri, 23 Sep 2022 10:36:58 +0000 (UTC)
-Date:   Fri, 23 Sep 2022 12:36:58 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 2/2 v3] lib/vsprintf: Initialize vsprintf's pointer hash
- once the random core is ready.
-Message-ID: <Yy2MSm1zIRWa2BT4@alley>
-References: <20220729154716.429964-1-bigeasy@linutronix.de>
- <20220729154716.429964-3-bigeasy@linutronix.de>
- <YuRtSGCfe2qxHrqT@zx2c4.com>
- <YueBnnnnvpxxjE4N@linutronix.de>
- <YueeIgPGUJgsnsAh@linutronix.de>
- <CAHmME9rZj9S62RngnYhkvj7is6Qi4wx0St-PiOwrLON-cW0OoA@mail.gmail.com>
+        Fri, 23 Sep 2022 06:39:14 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7B112EDA0;
+        Fri, 23 Sep 2022 03:39:13 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@breakpoint.cc>)
+        id 1obg5L-0004UW-7n; Fri, 23 Sep 2022 12:39:07 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@suse.com,
+        akpm@linux-foundation.org, urezki@gmail.com,
+        <netdev@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Martin Zaharinov <micron10@gmail.com>
+Subject: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
+Date:   Fri, 23 Sep 2022 12:38:58 +0200
+Message-Id: <20220923103858.26729-1-fw@strlen.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHmME9rZj9S62RngnYhkvj7is6Qi4wx0St-PiOwrLON-cW0OoA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-09-20 17:01:33, Jason A. Donenfeld wrote:
-> Hi,
-> 
-> On Mon, Aug 1, 2022 at 11:34 AM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
-> >
-> > The printk code invokes vnsprintf in order to compute the complete
-> > string before adding it into its buffer. This happens in an IRQ-off
-> > region which leads to a warning on PREEMPT_RT in the random code if the
-> > format strings contains a %p for pointer printing. This happens because
-> > the random core acquires locks which become sleeping locks on PREEMPT_RT
-> > which must not be acquired with disabled interrupts and or preemption
-> > disabled.
-> > By default the pointers are hashed which requires a random value on the
-> > first invocation (either by printk or another user which comes first.
-> >
-> > One could argue that there is no need for printk to disable interrupts
-> > during the vsprintf() invocation which would fix the just mentioned
-> > problem. However printk itself can be invoked in a context with
-> > disabled interrupts which would lead to the very same problem.
-> >
-> > Move the initialization of ptr_key into a worker and schedule it from
-> > subsys_initcall(). This happens early but after the workqueue subsystem
-> > is ready. Use get_random_bytes() to retrieve the random value if the RNG
-> > core is ready, otherwise schedule a worker in two seconds and try again.
-> >
-> > Reported-by: Mike Galbraith <efault@gmx.de>
-> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > ---
-> > v2…v3:
-> >    - schedule a worker every two seconds if the RNG core is not ready.
-> >
-> As we discussed at Plumbers, it seems like this is the least-awful way
-> forward. If we wind up with another case sufficiently similar to this,
-> I'll add back a notifier to random.c. But while there's only this one
-> special case, the ugly timer thing will have to do.
-> 
-> So Petr - feel free to queue this up this v3, with my objection now removed.
+Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+ kernel BUG at mm/vmalloc.c:2437!
+ invalid opcode: 0000 [#1] SMP
+ CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
+ [..]
+ RIP: 0010:__get_vm_area_node+0x120/0x130
+  __vmalloc_node_range+0x96/0x1e0
+  kvmalloc_node+0x92/0xb0
+  bucket_table_alloc.isra.0+0x47/0x140
+  rhashtable_try_insert+0x3a4/0x440
+  rhashtable_insert_slow+0x1b/0x30
+ [..]
 
-v3 is still using two patches and there was some discussion about
-adding __read_mostly.
+bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
+falls through to vmalloc and hits code paths that assume GFP_KERNEL.
 
-Sebastian, could you please re-send a cleaned up patch(set). Also it would
-be to get/add there also Acked-by from Jason.
+Revert the problematic change and stay with slab allocator.
 
-Thanks in advance.
+Reported-by: Martin Zaharinov <micron10@gmail.com>
+Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
+Cc: Michal Hocko <mhocko@suse.com>
+Link: https://lore.kernel.org/netdev/09BE0B8A-3ADF-458E-B75E-931B74996355@gmail.com/T/#u
 
-Best Regards,
-Petr
+Signed-off-by: Florian Westphal <fw@strlen.de>
+---
+ mm/util.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/mm/util.c b/mm/util.c
+index c9439c66d8cf..ba7fe1cb6846 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -593,6 +593,13 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+ 	gfp_t kmalloc_flags = flags;
+ 	void *ret;
+ 
++	/*
++	 * vmalloc uses GFP_KERNEL for some internal allocations (e.g page tables)
++	 * so the given set of flags has to be compatible.
++	 */
++	if ((flags & GFP_KERNEL) != GFP_KERNEL)
++		return kmalloc_node(size, flags, node);
++
+ 	/*
+ 	 * We want to attempt a large physically contiguous block first because
+ 	 * it is less likely to fragment multiple larger blocks and therefore
+-- 
+2.35.1
+
