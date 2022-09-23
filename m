@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E85E5E81CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4135E81D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiIWSdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S232216AbiIWSfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiIWSdm (ORCPT
+        with ESMTP id S229600AbiIWSfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:33:42 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0DE127C9A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:33:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id d42so1667033lfv.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FiSW1I+GEJuCXIUHNz2wmDxxaCfe5vMdELO2IRRAJ3I=;
-        b=cMDJcQ1lVnRuB1lsaVE6iFUDBndaW7olWZ36oe9s1FShL4+ZMJpKrBJaSf/dRhtaZK
-         m+OSu5KPcNtvqR5G+Ab2RrFXdB8eVxQN5mOAx1cQXukR38XZybeOxKpHKSXtK5PKT0Wh
-         0Y6lHIg+xZwB7Uetv677YKz4f+pU2+OpZ+pZ7uexgjbF3+MBLs0S3oO2KNdrOmRJ7Uud
-         Ear7Eqd5udi1PsC0eHKum7wXaMVbxcql/+zabSeicxcrBxmP2345XnNNosS2ZodiCzdG
-         kDV21zc8VA2y4V1xoUsvXJu/gRzyGa6R8fBNjlfvb1/kn1slaqSPJalZio5FPnpe8BER
-         du0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FiSW1I+GEJuCXIUHNz2wmDxxaCfe5vMdELO2IRRAJ3I=;
-        b=3JoE7JGNt+3EhZucHg0HhU6X4f79CsN+l/RI9U5k7CgTC09qlt7HCB5MSWPKngoXzL
-         OCT+qzDtaUv6jLlM0P/bROrP+e/P4Ckln2pMzn1ntA8H8g7t0kJDCT7POy+boL/vAg0M
-         iUsQ1htaax68s0S0OQfy2ab34v41u5b7YsLLfiw0hN21b/dPplcZthzodSF5UXiBW9jr
-         bsfMBnglFMXVSduUZpCG7WBZfvlHUSJJ5062t/2hN8pCgiFKgtzA3Y4W5WGFyEUlsQWf
-         TY3TjgL8F1G9u2CJX33Pb/P6Tnaf0w7TKXHNlMhOKhYKA36xgre2st2D1Kl6GONRHFhX
-         cnHA==
-X-Gm-Message-State: ACrzQf1LovvOUxmCfTRWZC1tk35cQYE/5BBybbkT/Ub1p/YtFnwCWjlb
-        bQyILoig0H/c9KHWJ+X4xMxDeg==
-X-Google-Smtp-Source: AMsMyM6tihMSw5uJwh8HNF2F0Nb/vBnx0C3F/8gVLKpFsziNvxSMc59CbjttGeEwka4wAu/G3d2crg==
-X-Received: by 2002:a05:6512:3184:b0:49d:6b29:201c with SMTP id i4-20020a056512318400b0049d6b29201cmr3694157lfe.363.1663958015117;
-        Fri, 23 Sep 2022 11:33:35 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512114700b004948497e07esm1565501lfg.15.2022.09.23.11.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 11:33:34 -0700 (PDT)
-Message-ID: <4f5824cd-f0be-13cd-b2ed-2c5ec30954ac@linaro.org>
-Date:   Fri, 23 Sep 2022 20:33:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v6 2/3] dt-bindings: interrupt-controller:
- realtek,rtl-intc: require parents
-Content-Language: en-US
-To:     Sander Vanheule <sander@svanheule.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1663617425.git.sander@svanheule.net>
- <ba3ae8e521ef82dd94f18a602ef53078f4a0d8d5.1663617425.git.sander@svanheule.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ba3ae8e521ef82dd94f18a602ef53078f4a0d8d5.1663617425.git.sander@svanheule.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 23 Sep 2022 14:35:44 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4275C115F48;
+        Fri, 23 Sep 2022 11:35:39 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id DE6833200931;
+        Fri, 23 Sep 2022 14:35:35 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Fri, 23 Sep 2022 14:35:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1663958135; x=1664044535; bh=9I
+        s0/LPmUsxjzbYzD5++5gX45pj0dKc4Qo4/sqE0ui4=; b=MuhqQswvFpv6biR9IA
+        bYxqzx2loe8Zt+4hzJ/a7xs6o0rNlVlh4/62Ge5nsGfj5tYaBq1hx9+puoTxwvc6
+        zoX5rPsJsS0r55Y5aiIHEIjwmzLKY8Gw69x0pZqAqcbJIZ9o+ohoBPPnvDQSv4Tf
+        ls/rAMFfnTaqPCYZtWy3Iqzwvw8WqMNwRav97O/MJ2pfj/IG8XcJeYRq1iqO8QoQ
+        Fn46VcnNjvZJPGRXtbmWWDXsO7wS2DfsNdFSsMFQRQj9olF4DVDpK0zzZOD9zpgR
+        tymO19YnphfuttoeZhzcWQn9Gv/7AGrBk3LMG2nSdYr9OWEy6vFyDcc204mWrfZf
+        Z1yA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663958135; x=1664044535; bh=9Is0/LPmUsxjzbYzD5++5gX45pj0
+        dKc4Qo4/sqE0ui4=; b=X32MIt+nVzx1ed2OhKdNdo22jK4YifmwnCPXFDqPb2eN
+        I/9/pdQG/lkSCO8SFEdJbDxV7dEOo3E+s0SpPgWfZUakerBUtNM1fomuuqYyPRc1
+        kFoduAf+YZ+xzvRBtHA/p9bJXr+Ws0DsRc6iqGfJeHI3HG9seSDQ8JnELhvLG/0l
+        ScjAWZCxc8umm6grYMcQgGSJLa9V7UiUdEGDIq9vX9JSAReuNGlEEvYuouyUuMWT
+        X3mYvSUHcIX0pSoUnAJWPPFctHD9/ybh3FxxC/fQjtDNUXTCJ6GM7/z6hN1gRV3Z
+        5huxKMg517nsrj5Rv3aO+1T5uR+QbWXLI5jt+l9ZsA==
+X-ME-Sender: <xms:dvwtY03JzSybG189idjTQ2SHo3YSztRkHrsXyDPISBL4nn0slpXadg>
+    <xme:dvwtY_H_a5cvn5OLsldriBsbI7lGZQp_WvC-xxf8a_hch-2Vrfpf3RxEyo5X05fMi
+    dhgl-wRjJ2LcteAVHs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
+    frrghtthgvrhhnpeekleekudelvddvhfefhfelgffffefgvdehjeegjefhheejjefgffef
+    ieejtdetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghr
+    rdguvghv
+X-ME-Proxy: <xmx:d_wtY87XemgnH80F3YCF6jqDtqMF_OVM6rWmH_KCHjb-VhQWfqjs_w>
+    <xmx:d_wtY91i_LQqEQApUw4K5LqVZEB2vK96oEY-Lnvjlcuesak9oYuDnw>
+    <xmx:d_wtY3FqSNbY_ZPCqIWPtYypa92Z2urhCsdIOPr_v7BLcU8Q82UfLw>
+    <xmx:d_wtY84bJL5maVVsK0L6APJHtred7z_Fsra-6uPcVWBJSxRDpGXTJA>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E09B7A6007C; Fri, 23 Sep 2022 14:35:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <ec9cc2c9-733c-4e72-b61f-d2ab3bf7a99b@app.fastmail.com>
+In-Reply-To: <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
+ <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+Date:   Fri, 23 Sep 2022 20:35:13 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Andrey Smirnov" <andrew.smirnov@gmail.com>,
+        "Andy Shevchenko" <andriy.shevchenko@intel.com>
+Cc:     "Ferry Toth" <fntoth@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Thinh Nguyen" <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 22:24, Sander Vanheule wrote:
-> The interrupt router has 32 inputs, and up to 15 outputs connected to
-> the MIPS CPU's interrupts. The way these are mapped to each other is
-> runtime configurable. This controller can also mask individual interrupt
-> sources, and has a status register to indicate pending interrupts. This
-> means the controller is not transparent, and the use of "interrupt-map"
-> inappropriate. Instead, a list of parent interrupts should be specified.
-> 
-> Two-part compatibles are introduced to be able to require "interrupts"
-> for new devicetrees. For backward compatibility "interrupt-map" is still
-> allowed on these new compatibles, but deprecated. The old compatible,
-> with required "interrupt-map" and "#address-cells", is also deprecated.
-> The relevant descriptions are added or extended to more clearly describe
-> the functionality of this controller.
-> 
-> To prevent spurious changes to the binding when more SoCs are added,
-> "allOf" is used with one "if", and the compatible enum only has one
-> item.
-> 
-> The example is updated to provide a correct example for RTL8380 SoCs.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
-> Changes in v6:
-> - Allow interrupt-map for backwards compatibility, but mark as
->   deprecated.
-> - Update commit message to explain forward/backward compatibility
-> - Drop Rob's Reviewed-by because of above changes
 
-Please, still wait a bit. I'll leave it to Rob (who should come online
-next week) for a review.
 
-Best regards,
-Krzysztof
+On Fri, Sep 23, 2022, at 20:23, Andrey Smirnov wrote:
+> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+>>
+>> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
+>> > On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+>> > > On 22-09-2022 12:08, Andy Shevchenko wrote:
+>> > > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+>>
+>> FYI: For now I sent a revert, but if we got a solution quicker we always
+>> can choose the course of actions.
+>>
+>
+> I think we have another problem. This patch happened in parallel to mine
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
+>
+> so my changes didn't have that fix in mind and I think your revert
+> will not preserve that fix. Can you update your revert to take care of
+> that too, please?
+>
+> I'm really confused how the above commit could be followed up by:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
+>
+> the diffs in dwc3_drd_init seem contradictory
 
+I noticed this a while ago when I finally rebased the M1 USB3 PHY WIP branch
+and have been meaning to send a fix. Then life unfortunately got in the way and
+I completely forgot about it again.
+
+Both patches were sent at approximately the same time and I think got merged into
+two separate branches. The conflict resolution [1] then went bad but I didn't notice
+until weeks later :(
+
+
+Best,
+
+Sven
+
+
+[1] https://lore.kernel.org/lkml/20220426150842.473be40e@canb.auug.org.au/
