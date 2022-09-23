@@ -2,152 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963105E731D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB835E7321
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiIWEwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 00:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S229603AbiIWEzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 00:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiIWEwt (ORCPT
+        with ESMTP id S229520AbiIWEzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:52:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8143E1257BB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663908768; x=1695444768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FkK4LgAPuTiz2ulFOO0KZI/5av2zSYi5/kTy4XL0vJc=;
-  b=BS4OZiv+Rn7EVWe8RTANPjjVLrjSbIcSZzu9HNu585qQl6XMR7MQIwhT
-   ZLHEdP4mF2mRygWZjEcbmwV6u2Pqo0alYPYVzTm4/AgGg76Agv4wzso07
-   T4AqfckzmiSYn5hm/AaFtObHudIvVfpSNFiA5Ku3Nl1WZiRBa5xcPSuBi
-   I6RuWClk0dWebUOgHQPI/YFLWxpw2x0gifFwsccZCOnw1FNhn7sAPV3ZQ
-   G4r3GOyjnMPrX+lGp3hEmTGHXOnnECgQqU0W3kvZ8ASIXkVWUaiw8JyrP
-   CYkyugZEFcRNQicr9jauYUad7RE7DsjLa58C76x0GYHUeGav/KXnfehqS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301389876"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="301389876"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:52:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="762485535"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 21:52:33 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obafw-0005Jk-2o;
-        Fri, 23 Sep 2022 04:52:32 +0000
-Date:   Fri, 23 Sep 2022 12:52:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 480/484]
- drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in
- 'struct memory_block'
-Message-ID: <202209231253.y7FHIu3q-lkp@intel.com>
+        Fri, 23 Sep 2022 00:55:45 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDE1115BF3;
+        Thu, 22 Sep 2022 21:55:43 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id fs14so11815554pjb.5;
+        Thu, 22 Sep 2022 21:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=DMY7HYkAo9zgeMOO5S3KtohOefOqFzrjWCOr/lBmUmU=;
+        b=HTq8Kfigc42bUsKkoQPRKB8JYBvkBiE88zo19G4EA85XzbeTRBq+xHSBHSGwJREsn8
+         6CDNEyOFfyU6NWdJlqLUHbcT6sfvy5AhiDtTJEcYw/ipshRw8ECAnRXZ+eGauVrcgisQ
+         OUcmzKID4mqNMqiloAp5ysn895x3Zj84iIyZW2AIzsSY1YXaRazGJN4h/LJGJKSTI6QX
+         UDUuO1nW4Wbs/pqUBNwoFcSXVIpSalMBKcIYA47YEb3pg6biJPB7ODsY3YTNHU6nHthk
+         Ahw1O/nzJJHOKOod9hyLLlcaLnLE5Ir2GJuOavmLQF7QokYsoi66UZjd6icts82y7uFr
+         cGkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DMY7HYkAo9zgeMOO5S3KtohOefOqFzrjWCOr/lBmUmU=;
+        b=ikKUXxeqr7W5IDhVvGhm+7N0/bjh3AsRzZolihnFtjnK/huPt4xivZnpUfju9G1Igs
+         YIVoDpVSTdKJfrS6mteb34FXenVMmZxOjZkXEkXgM5B+/a/EdVuHNZbIV9w/KgMWoGlu
+         blrNP+7PFr29kU5CL1x2QrEJWUB0WzObKHr3kUmAcFOhV3jRDong9wT21Xl+dXJ81GP/
+         LO3begid4d32dwCYLaAcr/BTfDXM2yfrC2Gy9KX/pIFZtES7KloQFqQpZQ5jka2Ou9fV
+         nF7VLRBWCoxF+dx4OmekqXRAeShO8N9fTwnceo2hInEuIpMMHMp53nI2MXp3Vrl7EyWr
+         /gIQ==
+X-Gm-Message-State: ACrzQf3Sb8SZsQTyyFtERZihwqHzz/yKbc74+mbVc+mAbOAhCmCEueDV
+        ZFEZCTOyCuOCNTCtlGIFPXxYs6OsNvA=
+X-Google-Smtp-Source: AMsMyM7tr+hwYpg333yQ9TaHzZEsD01IaKnhHAwBKRuWOfQMXeY0OkXW5nknMiPnNnXdBgrnxnrLNA==
+X-Received: by 2002:a17:90b:4a50:b0:203:1204:5bc4 with SMTP id lb16-20020a17090b4a5000b0020312045bc4mr19228855pjb.79.1663908943293;
+        Thu, 22 Sep 2022 21:55:43 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:8b46:be3c:2c54:68a5])
+        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b00178112ed1e5sm4988076plb.117.2022.09.22.21.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 21:55:42 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 21:55:40 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Lantiq: switch vmmc to use gpiod API
+Message-ID: <Yy08TBymyuQb27NU@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   1dee68cfead9a3a85e244a274b4e85620abd5331
-commit: 69b496f03bb46c7ce743aff0d976c078d753d6d6 [480/484] mm/hwpoison: introduce per-memory_block hwpoison counter
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220923/202209231253.y7FHIu3q-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/69b496f03bb46c7ce743aff0d976c078d753d6d6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout 69b496f03bb46c7ce743aff0d976c078d753d6d6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This switches vmmc to use gpiod API instead of OF-specific legacy gpio
+API that we want to stop exporting from gpiolib.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ arch/mips/lantiq/xway/vmmc.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/arch/mips/lantiq/xway/vmmc.c b/arch/mips/lantiq/xway/vmmc.c
+index 7a14da8d9d15..a1947306ac18 100644
+--- a/arch/mips/lantiq/xway/vmmc.c
++++ b/arch/mips/lantiq/xway/vmmc.c
+@@ -4,9 +4,10 @@
+  *  Copyright (C) 2012 John Crispin <john@phrozen.org>
+  */
+ 
++#include <linux/err.h>
+ #include <linux/export.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_gpio.h>
+ #include <linux/dma-mapping.h>
+ 
+ #include <lantiq_soc.h>
+@@ -25,6 +26,7 @@ EXPORT_SYMBOL(ltq_get_cp1_base);
+ static int vmmc_probe(struct platform_device *pdev)
+ {
+ #define CP1_SIZE       (1 << 20)
++	struct gpio_desc *gpio;
+ 	int gpio_count;
+ 	dma_addr_t dma;
+ 
+@@ -32,16 +34,18 @@ static int vmmc_probe(struct platform_device *pdev)
+ 		(void *) CPHYSADDR(dma_alloc_coherent(&pdev->dev, CP1_SIZE,
+ 						    &dma, GFP_KERNEL));
+ 
+-	gpio_count = of_gpio_count(pdev->dev.of_node);
++	gpio_count = gpiod_count(&pdev->dev, NULL);
+ 	while (gpio_count > 0) {
+-		enum of_gpio_flags flags;
+-		int gpio = of_get_gpio_flags(pdev->dev.of_node,
+-					     --gpio_count, &flags);
+-		if (gpio_request(gpio, "vmmc-relay"))
++		gpio = devm_gpiod_get_index(&pdev->dev,
++					    NULL, --gpio_count, GPIOD_OUT_HIGH);
++		if (IS_ERR(gpio)) {
++			dev_err(&pdev->dev,
++				"failed to request GPIO idx %d: %d\n",
++				gpio_count, PTR_ERR(gpio);
+ 			continue;
+-		dev_info(&pdev->dev, "requested GPIO %d\n", gpio);
+-		gpio_direction_output(gpio,
+-				      (flags & OF_GPIO_ACTIVE_LOW) ? (0) : (1));
++		}
++
++		gpio_consumer_set_name(gpio, "vmmc-relay");
+ 	}
+ 
+ 	dev_info(&pdev->dev, "reserved %dMB at 0x%p", CP1_SIZE >> 20, cp1_base);
+-- 
+2.37.3.998.g577e59143f-goog
 
->> drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in 'struct memory_block'
-           if (atomic_long_read(&mem->nr_hwpoison))
-                                 ~~~  ^
-   drivers/base/memory.c:870:49: error: no member named 'nr_hwpoison' in 'struct memory_block'
-                   clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
-                                                            ~~~  ^
-   2 errors generated.
-
-
-vim +186 drivers/base/memory.c
-
-   177	
-   178	static int memory_block_online(struct memory_block *mem)
-   179	{
-   180		unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
-   181		unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
-   182		unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
-   183		struct zone *zone;
-   184		int ret;
-   185	
- > 186		if (atomic_long_read(&mem->nr_hwpoison))
-   187			return -EHWPOISON;
-   188	
-   189		zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
-   190					  start_pfn, nr_pages);
-   191	
-   192		/*
-   193		 * Although vmemmap pages have a different lifecycle than the pages
-   194		 * they describe (they remain until the memory is unplugged), doing
-   195		 * their initialization and accounting at memory onlining/offlining
-   196		 * stage helps to keep accounting easier to follow - e.g vmemmaps
-   197		 * belong to the same zone as the memory they backed.
-   198		 */
-   199		if (nr_vmemmap_pages) {
-   200			ret = mhp_init_memmap_on_memory(start_pfn, nr_vmemmap_pages, zone);
-   201			if (ret)
-   202				return ret;
-   203		}
-   204	
-   205		ret = online_pages(start_pfn + nr_vmemmap_pages,
-   206				   nr_pages - nr_vmemmap_pages, zone, mem->group);
-   207		if (ret) {
-   208			if (nr_vmemmap_pages)
-   209				mhp_deinit_memmap_on_memory(start_pfn, nr_vmemmap_pages);
-   210			return ret;
-   211		}
-   212	
-   213		/*
-   214		 * Account once onlining succeeded. If the zone was unpopulated, it is
-   215		 * now already properly populated.
-   216		 */
-   217		if (nr_vmemmap_pages)
-   218			adjust_present_page_count(pfn_to_page(start_pfn), mem->group,
-   219						  nr_vmemmap_pages);
-   220	
-   221		mem->zone = zone;
-   222		return ret;
-   223	}
-   224	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Dmitry
