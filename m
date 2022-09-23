@@ -2,164 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE125E7802
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289035E7808
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbiIWKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S231256AbiIWKPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiIWKNk (ORCPT
+        with ESMTP id S231162AbiIWKPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:13:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E652128710;
-        Fri, 23 Sep 2022 03:13:38 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYntD5JZqzMmxq;
-        Fri, 23 Sep 2022 18:08:52 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 18:13:35 +0800
-Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
- open coded
-To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-7-yanaijie@huawei.com>
- <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
- <3c1aa262-7e9b-cb6c-e8a1-a1a201050a10@huawei.com>
- <6c299e8f-80be-0276-c8b1-9df1946434da@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <d3c7285f-6318-8254-2bfa-d836f12fcd88@huawei.com>
-Date:   Fri, 23 Sep 2022 18:13:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 23 Sep 2022 06:15:42 -0400
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450D92604;
+        Fri, 23 Sep 2022 03:15:40 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2940037wmb.0;
+        Fri, 23 Sep 2022 03:15:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=H3k8nwYg9LM+0smtYDMfCrY2rja+gudmrYIAx1+mEps=;
+        b=6/f8awuQNJ0pRmjE7SjNSRROM1eCeYPgvkSN0GPMjn/WBJh2zoeTL4X52y/aixVSss
+         Gh3Gu4AtDakwpyrL4N6e9RGJGxH282rc7fBov32flqvO8NsuIkHQh1lcm3Zvyk3oOWO2
+         Q1pMqEUqXKuWzb5hhckFN6qZ4NxYjSvARjA9E0ocpn2ZoaP9WQIHYSv/PGCy+PLpf8jM
+         Jc5q9TS997twPCVoLul0z861BwyEdlOlq06eWF8iUQFf6+dhVQXT/eRIpnypMRznRRCU
+         Ncx/K+dnJKt87AomFYiP6gK47WsCGUu+bQpk2GWflDxO8XE+N1AMZd445Z4qh7q0PUYa
+         Ov/w==
+X-Gm-Message-State: ACrzQf2sRJUDurHby/PhsWmfCgihioiQMGlDKDadTwyH1XdPq1hMyS7L
+        o2fA60EPUeXEW9DbuplPTucfuZHbh4A=
+X-Google-Smtp-Source: AMsMyM6uVc1utll1leFSA3Ob9+kmyV0+mvx+mZpkH4OV2fn7yg3XyYhCkjXBv8PD3H23g3832TOSOw==
+X-Received: by 2002:a05:600c:2b88:b0:3b4:8680:165b with SMTP id j8-20020a05600c2b8800b003b48680165bmr13130181wmc.113.1663928138757;
+        Fri, 23 Sep 2022 03:15:38 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h6-20020a05600c2ca600b003b4c40378casm2165673wmc.39.2022.09.23.03.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 03:15:38 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:15:36 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH] drm/hyperv: Don't overwrite dirt_needed value set by host
+Message-ID: <Yy2HSKb4AtcF+em6@liuwe-devbox-debian-v2>
+References: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <6c299e8f-80be-0276-c8b1-9df1946434da@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/9/23 18:00, John Garry wrote:
-> On 23/09/2022 10:44, Jason Yan wrote:
->>>>           for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
->>>
->>> This code seems the same between many libsas LLDDs - could we factor 
->>> it out into libsas? If so, then maybe those new helpers could be put 
->>> in sas_internal.h
->>
->> For the part of putting helpers in sas_internal.h, this needs to make 
->> the helpers exported.
+On Mon, Sep 12, 2022 at 08:32:46AM -0700, Saurabh Sengar wrote:
+> Existing code is causing a race condition where dirt_needed value is
+> already set by the host and gets overwritten with default value. Remove
+> this default setting of dirt_needed, to avoid overwriting the value
+> received in the channel callback set by vmbus_open. Removing this
+> setting also means the default value for dirt_needed is changed to false
+> as it's allocated by kzalloc which is similar to legacy hyperv_fb driver.
 > 
-> Please explain why.
-> 
-> I would assume that if those helpers were only used in libsas code (and 
-> not LLDDs) then they could be put in sas_internal.h and no need for export
-> 
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 
+Applied to hyperv-next. Thanks.
 
-Sorry, I did not make it clear. I mean we need to export 
-sas_find_attathed_phy() below. Not the sas address comparation helpers.
-
-
-
->> I think it's not worth to do this because they are very small. I'd 
->> still like to make them inline functions in libsas.h such as:
->>
->>
->> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
->> index 2dbead74a2af..e9e76c898287 100644
->> --- a/include/scsi/libsas.h
->> +++ b/include/scsi/libsas.h
->> @@ -648,6 +648,22 @@ static inline bool sas_is_internal_abort(struct 
->> sas_task *task)
->>          return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
->>   }
->>
->> +static inline int sas_find_attathed_phy(struct expander_device *ex_dev,
->> +                                       struct domain_device *dev)
->> +{
->> +       struct ex_phy *phy;
->> +       int phy_id;
->> +
->> +       for (phy_id = 0; phy_id < ex_dev->num_phys; phy_id++) {
->> +               phy = &ex_dev->ex_phy[phy_id];
->> +               if (SAS_ADDR(phy->attached_sas_addr)
->> +                       == SAS_ADDR(dev->sas_addr))
->> +                       return phy_id;
->> +       }
->> +
->> +       return ex_dev->num_phys;
-> 
-> I will note that this code does not use your new helpers
-> 
->> +}
->> +
->>   struct sas_domain_function_template {
->>          /* The class calls these to notify the LLDD of an event. */
->>          void (*lldd_port_formed)(struct asd_sas_phy *);
->>
->>
->>
->> And the LLDDs change like:
->>
->>
->> diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
->> b/drivers/scsi/pm8001/pm8001_sas.c
->> index 8e3f2f9ddaac..4e7350609b3d 100644
->> --- a/drivers/scsi/pm8001/pm8001_sas.c
->> +++ b/drivers/scsi/pm8001/pm8001_sas.c
->> @@ -645,16 +645,8 @@ static int pm8001_dev_found_notify(struct 
->> domain_device *dev)
->>          pm8001_device->dcompletion = &completion;
->>          if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
->>                  int phy_id;
->> -               struct ex_phy *phy;
->> -               for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
->> -               phy_id++) {
->> -                       phy = &parent_dev->ex_dev.ex_phy[phy_id];
->> -                       if (SAS_ADDR(phy->attached_sas_addr)
->> -                               == SAS_ADDR(dev->sas_addr)) {
->> -                               pm8001_device->attached_phy = phy_id;
->> -                               break;
->> -                       }
->> -               }
->> +
->> +               phy_id = sas_find_attathed_phy(&parent_dev->ex_dev, dev);
->>                  if (phy_id == parent_dev->ex_dev.num_phys) {
->>                          pm8001_dbg(pm8001_ha, FAIL,
->>                                     "Error: no attached dev:%016llx at 
->> ex:%016llx.\n",
->> @@ -662,6 +654,7 @@ static int pm8001_dev_found_notify(struct 
->> domain_device *dev)
->>                                     SAS_ADDR(parent_dev->sas_addr));
->>                          res = -1;
->>                  }
->> +               pm8001_device->attached_phy = phy_id;
->>          } else {
->>                  if (dev->dev_type == SAS_SATA_DEV) {
->>                          pm8001_device->attached_phy =
->>
->>
->> So I wonder if you have any reasons to insist exporting the helper
-> Thanks,
-> John
-> .
+I ended up reconstructing the patch myself since the said driver
+changed. It is only a one line change so that's fine. If the committed
+patch is wrong, please let me know.
