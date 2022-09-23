@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49B95E73CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A184F5E73D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbiIWGRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S230079AbiIWGRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiIWGQv (ORCPT
+        with ESMTP id S229636AbiIWGRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:16:51 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3885B125795;
-        Thu, 22 Sep 2022 23:16:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQVS1.N_1663913795;
-Received: from localhost.localdomain(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQVS1.N_1663913795)
+        Fri, 23 Sep 2022 02:17:42 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440541176CA;
+        Thu, 22 Sep 2022 23:17:41 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R291e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQVS12A_1663913802;
+Received: from localhost.localdomain(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQVS12A_1663913802)
           by smtp.aliyun-inc.com;
-          Fri, 23 Sep 2022 14:16:42 +0800
+          Fri, 23 Sep 2022 14:17:38 +0800
 From:   ZiyangZhang <ZiyangZhang@linux.alibaba.com>
 To:     ming.lei@redhat.com
 Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         joseph.qi@linux.alibaba.com,
         ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Subject: [RESEND PATCH V5 5/7] ublk_drv: support UBLK_F_USER_RECOVERY_REISSUE
-Date:   Fri, 23 Sep 2022 14:15:03 +0800
-Message-Id: <20220923061505.52007-6-ZiyangZhang@linux.alibaba.com>
+Subject: [RESEND PATCH V5 6/7] ublk_drv: add START_USER_RECOVERY and END_USER_RECOVERY support
+Date:   Fri, 23 Sep 2022 14:15:04 +0800
+Message-Id: <20220923061505.52007-7-ZiyangZhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220923061505.52007-1-ZiyangZhang@linux.alibaba.com>
 References: <20220923061505.52007-1-ZiyangZhang@linux.alibaba.com>
@@ -43,95 +43,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBLK_F_USER_RECOVERY_REISSUE implies that:
-With a dying ubq_daemon, ublk_drv let monitor_work requeues rq issued to
-userspace(ublksrv) before the ubq_daemon is dying.
+START_USER_RECOVERY and END_USER_RECOVERY are two new control commands
+to support user recovery feature.
 
-UBLK_F_USER_RECOVERY_REISSUE is designed for backends which:
-(1) tolerate double-write since ublk_drv may issue the same rq
-    twice.
-(2) does not let frontend users get I/O error, such as read-only FS
-    and VM backend.
+After a crash, user should send START_USER_RECOVERY, it will:
+(1) check if (a)current ublk_device is UBLK_S_DEV_QUIESCED which was
+    set by quiesce_work and (b)chardev is released
+(2) reinit all ubqs, including:
+    (a) put the task_struct and reset ->ubq_daemon to NULL.
+    (b) reset all ublk_io.
+(3) reset ub->mm to NULL.
+
+Then, user should start a new process and send FETCH_REQ on each
+ubq_daemon.
+
+Finally, user should send END_USER_RECOVERY, it will:
+(1) wait for all new ubq_daemons getting ready.
+(2) update ublksrv_pid
+(3) unquiesce the request queue and expect incoming ublk_queue_rq()
+(4) convert ub's state to UBLK_S_DEV_LIVE
+
+Note: we can handle STOP_DEV between START_USER_RECOVERY and
+END_USER_RECOVERY. This is helpful to users who cannot start new process
+after sending START_USER_RECOVERY ctrl-cmd.
 
 Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c      | 22 ++++++++++++++++++----
- include/uapi/linux/ublk_cmd.h |  2 ++
- 2 files changed, 20 insertions(+), 4 deletions(-)
+ drivers/block/ublk_drv.c      | 116 ++++++++++++++++++++++++++++++++++
+ include/uapi/linux/ublk_cmd.h |   3 +-
+ 2 files changed, 118 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 2a4891c3e5fd..3d7b067e0b99 100644
+index 3d7b067e0b99..f31d80f66fd6 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -50,7 +50,8 @@
- #define UBLK_F_ALL (UBLK_F_SUPPORT_ZERO_COPY \
- 		| UBLK_F_URING_CMD_COMP_IN_TASK \
- 		| UBLK_F_NEED_GET_DATA \
--		| UBLK_F_USER_RECOVERY)
-+		| UBLK_F_USER_RECOVERY \
-+		| UBLK_F_USER_RECOVERY_REISSUE)
- 
- /* All UBLK_PARAM_TYPE_* should be included here */
- #define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD)
-@@ -325,6 +326,15 @@ static inline int ublk_queue_cmd_buf_size(struct ublk_device *ub, int q_id)
- 			PAGE_SIZE);
+@@ -1862,6 +1862,116 @@ static int ublk_ctrl_set_params(struct io_uring_cmd *cmd)
+ 	return ret;
  }
  
-+static inline bool ublk_queue_can_use_recovery_reissue(
-+		struct ublk_queue *ubq)
++static void ublk_queue_reinit(struct ublk_device *ub, struct ublk_queue *ubq)
 +{
-+	if ((ubq->flags & UBLK_F_USER_RECOVERY) &&
-+			(ubq->flags & UBLK_F_USER_RECOVERY_REISSUE))
-+		return true;
-+	return false;
++	int i;
++
++	WARN_ON_ONCE(!(ubq->ubq_daemon && ubq_daemon_is_dying(ubq)));
++	/* All old ioucmds have to be completed */
++	WARN_ON_ONCE(ubq->nr_io_ready);
++	/* old daemon is PF_EXITING, put it now */
++	put_task_struct(ubq->ubq_daemon);
++	/* We have to reset it to NULL, otherwise ub won't accept new FETCH_REQ */
++	ubq->ubq_daemon = NULL;
++
++	for (i = 0; i < ubq->q_depth; i++) {
++		struct ublk_io *io = &ubq->ios[i];
++
++		/* forget everything now and be ready for new FETCH_REQ */
++		io->flags = 0;
++		io->cmd = NULL;
++		io->addr = 0;
++	}
 +}
 +
- static inline bool ublk_queue_can_use_recovery(
- 		struct ublk_queue *ubq)
++static int ublk_ctrl_start_recovery(struct io_uring_cmd *cmd)
++{
++	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
++	struct ublk_device *ub;
++	int ret = -EINVAL;
++	int i;
++
++	ub = ublk_get_device_from_id(header->dev_id);
++	if (!ub)
++		return ret;
++
++	mutex_lock(&ub->mutex);
++	if (!ublk_can_use_recovery(ub))
++		goto out_unlock;
++	/*
++	 * START_RECOVERY is only allowd after:
++	 *
++	 * (1) UB_STATE_OPEN is not set, which means the dying process is exited
++	 *     and related io_uring ctx is freed so file struct of /dev/ublkcX is
++	 *     released.
++	 *
++	 * (2) UBLK_S_DEV_QUIESCED is set, which means the quiesce_work:
++	 *     (a)has quiesced request queue
++	 *     (b)has requeued every inflight rqs whose io_flags is ACTIVE
++	 *     (c)has requeued/aborted every inflight rqs whose io_flags is NOT ACTIVE
++	 *     (d)has completed/camceled all ioucmds owned by ther dying process
++	 */
++	if (test_bit(UB_STATE_OPEN, &ub->state) ||
++			ub->dev_info.state != UBLK_S_DEV_QUIESCED) {
++		ret = -EBUSY;
++		goto out_unlock;
++	}
++	pr_devel("%s: start recovery for dev id %d.\n", __func__, header->dev_id);
++	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
++		ublk_queue_reinit(ub, ublk_get_queue(ub, i));
++	/* set to NULL, otherwise new ubq_daemon cannot mmap the io_cmd_buf */
++	ub->mm = NULL;
++	ub->nr_queues_ready = 0;
++	init_completion(&ub->completion);
++	ret = 0;
++ out_unlock:
++	mutex_unlock(&ub->mutex);
++	ublk_put_device(ub);
++	return ret;
++}
++
++static int ublk_ctrl_end_recovery(struct io_uring_cmd *cmd)
++{
++	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
++	int ublksrv_pid = (int)header->data[0];
++	struct ublk_device *ub;
++	int ret = -EINVAL;
++
++	ub = ublk_get_device_from_id(header->dev_id);
++	if (!ub)
++		return ret;
++
++	pr_devel("%s: Waiting for new ubq_daemons(nr: %d) are ready, dev id %d...\n",
++			__func__, ub->dev_info.nr_hw_queues, header->dev_id);
++	/* wait until new ubq_daemon sending all FETCH_REQ */
++	wait_for_completion_interruptible(&ub->completion);
++	pr_devel("%s: All new ubq_daemons(nr: %d) are ready, dev id %d\n",
++			__func__, ub->dev_info.nr_hw_queues, header->dev_id);
++
++	mutex_lock(&ub->mutex);
++	if (!ublk_can_use_recovery(ub))
++		goto out_unlock;
++
++	if (ub->dev_info.state != UBLK_S_DEV_QUIESCED) {
++		ret = -EBUSY;
++		goto out_unlock;
++	}
++	ub->dev_info.ublksrv_pid = ublksrv_pid;
++	pr_devel("%s: new ublksrv_pid %d, dev id %d\n",
++			__func__, ublksrv_pid, header->dev_id);
++	blk_mq_unquiesce_queue(ub->ub_disk->queue);
++	pr_devel("%s: queue unquiesced, dev id %d.\n",
++			__func__, header->dev_id);
++	blk_mq_kick_requeue_list(ub->ub_disk->queue);
++	ub->dev_info.state = UBLK_S_DEV_LIVE;
++	schedule_delayed_work(&ub->monitor_work, UBLK_DAEMON_MONITOR_PERIOD);
++	ret = 0;
++ out_unlock:
++	mutex_unlock(&ub->mutex);
++	ublk_put_device(ub);
++	return ret;
++}
++
+ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
+ 		unsigned int issue_flags)
  {
-@@ -629,13 +639,17 @@ static void ublk_complete_rq(struct request *req)
-  * Also aborting may not be started yet, keep in mind that one failed
-  * request may be issued by block layer again.
-  */
--static void __ublk_fail_req(struct ublk_io *io, struct request *req)
-+static void __ublk_fail_req(struct ublk_queue *ubq, struct ublk_io *io,
-+		struct request *req)
- {
- 	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
- 
- 	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
- 		io->flags |= UBLK_IO_FLAG_ABORTED;
--		blk_mq_end_request(req, BLK_STS_IOERR);
-+		if (ublk_queue_can_use_recovery_reissue(ubq))
-+			blk_mq_requeue_request(req, false);
-+		else
-+			blk_mq_end_request(req, BLK_STS_IOERR);
+@@ -1903,6 +2013,12 @@ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
+ 	case UBLK_CMD_SET_PARAMS:
+ 		ret = ublk_ctrl_set_params(cmd);
+ 		break;
++	case UBLK_CMD_START_USER_RECOVERY:
++		ret = ublk_ctrl_start_recovery(cmd);
++		break;
++	case UBLK_CMD_END_USER_RECOVERY:
++		ret = ublk_ctrl_end_recovery(cmd);
++		break;
+ 	default:
+ 		break;
  	}
- }
- 
-@@ -963,7 +977,7 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
- 			 */
- 			rq = blk_mq_tag_to_rq(ub->tag_set.tags[ubq->q_id], i);
- 			if (rq)
--				__ublk_fail_req(io, rq);
-+				__ublk_fail_req(ubq, io, rq);
- 		}
- 	}
- 	ublk_put_device(ub);
 diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
-index 340ff14bde49..332370628757 100644
+index 332370628757..8f88e3a29998 100644
 --- a/include/uapi/linux/ublk_cmd.h
 +++ b/include/uapi/linux/ublk_cmd.h
-@@ -76,6 +76,8 @@
- 
- #define UBLK_F_USER_RECOVERY	(1UL << 3)
- 
-+#define UBLK_F_USER_RECOVERY_REISSUE	(1UL << 4)
-+
- /* device state */
- #define UBLK_S_DEV_DEAD	0
- #define UBLK_S_DEV_LIVE	1
+@@ -17,7 +17,8 @@
+ #define	UBLK_CMD_STOP_DEV	0x07
+ #define	UBLK_CMD_SET_PARAMS	0x08
+ #define	UBLK_CMD_GET_PARAMS	0x09
+-
++#define	UBLK_CMD_START_USER_RECOVERY	0x10
++#define	UBLK_CMD_END_USER_RECOVERY	0x11
+ /*
+  * IO commands, issued by ublk server, and handled by ublk driver.
+  *
 -- 
 2.27.0
 
