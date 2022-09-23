@@ -2,263 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB22A5E7BA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670225E7BAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiIWNUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S232040AbiIWNVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiIWNUh (ORCPT
+        with ESMTP id S230285AbiIWNVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:20:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7E3AA4F2;
-        Fri, 23 Sep 2022 06:20:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04C03CE1FB0;
-        Fri, 23 Sep 2022 13:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FB4C433C1;
-        Fri, 23 Sep 2022 13:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663939232;
-        bh=m4s+ej4u+QgeEBi8DIicKwr72CdU2CLBWzQKqu6vTOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TAdQxdtOfPEbrimwRWe/Axk+8c9SVxUTqdQsyEbKt31vj9nH26Zavq9Mc5h5yRbd6
-         291RhwDEBQI41nlFTmBtVgVCHgzdewQPaDfRDJTE+460ZDVpK5fr4UXhzKrf6SfHwb
-         ssYSiHb5HpAW18JeD/5+im3tmLN5fso7zdt7skJJhCFdMF/+MIbvRRH5nndB8t8INa
-         IQfHw3uyl1Geib2tZBNWTKI9ARQWLndTawFVHLqk1xF3giVfWbTFyN8oZPLPRY/v07
-         KNNg/5ZyZxmT+tWzyq4nYJBufxIS+0Wuo9wK+l+kANMjPQJ6bs8wHlpVpy/zVoSOtg
-         wPUX+yd6FCKoQ==
-Date:   Fri, 23 Sep 2022 16:20:28 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH 04/20] x86/sgx: Add 'struct sgx_epc_lru' to
- encapsulate lru list(s)
-Message-ID: <Yy2ynLZ2KX6bOcHr@kernel.org>
-References: <20220922171057.1236139-1-kristen@linux.intel.com>
- <20220922171057.1236139-5-kristen@linux.intel.com>
+        Fri, 23 Sep 2022 09:21:08 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CCC13EE84;
+        Fri, 23 Sep 2022 06:21:06 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id g3so20363183wrq.13;
+        Fri, 23 Sep 2022 06:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=3BlIJMdluE47X3gFSDBJTgtvgj1lWndk79Vpp72Pjy0=;
+        b=MBEDfuXBdTsbV/hv3XTrJqWFYkjxxl6HISff1+YKyhS3Io6oRK3o0wiPDc3w8iUNV/
+         mJpBmbI/EOa5wXb6DzOaiER12JikN6Bkt51uICkzyJvzBDbmAuE5zP/ff3tJtp/YNO8H
+         Y4fyyujutSJxNnPmwp5yV18zma2k9h18wPK8zvjiTReP6lIwzT209kjHsIVo+K8Whyho
+         ARL3qqLNAC56fPXbpeeucpsub83JfWZx4UfbzVkW5/SyUXjKKozHOAi64GvoJBm/TCt4
+         D2fo6CLOgsQ3hobk7/CP/Mu92zMiSEAMWLU//uTgcNW5XSKbvhiJtqX5+JucmSv/VBwv
+         1/lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3BlIJMdluE47X3gFSDBJTgtvgj1lWndk79Vpp72Pjy0=;
+        b=Ug+yLzxN9atnHT8+2ZMpAPD49gOE4K96NunKsWPqzQS0aSQsBHZ7G/JyiaDvXmcLSy
+         rzQ9cHadet9baSiuyLoSjNk7cRoXEqaHms2ne1H885AReVqy+nHfpeC2S0EfuBip5nin
+         yxQbesiGZe4Z1W87NCwiqwDmrzxNiR+72/CS4kRkdqN6iCNUwZux5KgRYzFR0T5tGiqr
+         CUH8IukE89GSt68bzS7fPVHGWyYjxUnfNUuprRNVlVrs1Q7Njr4YHGMkqLJmPFThOb/h
+         ZRNJwTMb0kk6I7ua/oninJ3a2mTsCWP8zON5DXVVEZNBOjchOm1eLA3zIRPbUK9ik7oX
+         0Dpw==
+X-Gm-Message-State: ACrzQf3hJNOcKkNCA9jmfWANrs+V91zRria+yl0bz8DAXkrjnOCbvSg7
+        k+wUueZxL2AjQyOV0SJF1jHNR3IjKtgf3g==
+X-Google-Smtp-Source: AMsMyM5cQCGvanfiRlbu19EJsO6XJhMxjmSUCKtvA4aXuWso8uKHJoxvwLgD0/hF7za3Od9NlHd2kw==
+X-Received: by 2002:a5d:5b0f:0:b0:22a:f738:acdd with SMTP id bx15-20020a5d5b0f000000b0022af738acddmr5088852wrb.234.1663939264554;
+        Fri, 23 Sep 2022 06:21:04 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bx29-20020a5d5b1d000000b0021f131de6aesm7383168wrb.34.2022.09.23.06.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 06:21:04 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] s390/dasd: Fix spelling mistake "Ivalid" -> "Invalid"
+Date:   Fri, 23 Sep 2022 14:21:03 +0100
+Message-Id: <20220923132103.2486724-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922171057.1236139-5-kristen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:10:41AM -0700, Kristen Carlson Accardi wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> Wrap the existing reclaimable list and its spinlock in a struct to
-> minimize the code changes needed to handle multiple LRUs as well as
-> reclaimable and non-reclaimable lists, both of which will be introduced
-> and used by SGX EPC cgroups.
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> Cc: Sean Christopherson <seanjc@google.com>
+There is a spelling mistake in a pr_warn message. Fix it.
 
-The commit message could explicitly state the added data type.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/s390/block/dasd_ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The data type is not LRU: together with the LIFO list, i.e.
-a queue, the code implements LRU alike policy.
+diff --git a/drivers/s390/block/dasd_ioctl.c b/drivers/s390/block/dasd_ioctl.c
+index d0ddf2cc9786..484de696839c 100644
+--- a/drivers/s390/block/dasd_ioctl.c
++++ b/drivers/s390/block/dasd_ioctl.c
+@@ -401,7 +401,7 @@ dasd_ioctl_copy_pair_swap(struct block_device *bdev, void __user *argp)
+ 		return -EFAULT;
+ 	}
+ 	if (memchr_inv(data.reserved, 0, sizeof(data.reserved))) {
+-		pr_warn("%s: Ivalid swap data specified.\n",
++		pr_warn("%s: Invalid swap data specified.\n",
+ 			dev_name(&device->cdev->dev));
+ 		dasd_put_device(device);
+ 		return DASD_COPYPAIRSWAP_INVALID;
+-- 
+2.37.1
 
-I would name the data type as sgx_epc_queue because it is a 
-less confusing name.
-
-> ---
->  arch/x86/kernel/cpu/sgx/main.c | 37 +++++++++++++++++-----------------
->  arch/x86/kernel/cpu/sgx/sgx.h  | 11 ++++++++++
->  2 files changed, 30 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-> index 4cdeb915dc86..af68dc1c677b 100644
-> --- a/arch/x86/kernel/cpu/sgx/main.c
-> +++ b/arch/x86/kernel/cpu/sgx/main.c
-> @@ -26,10 +26,9 @@ static DEFINE_XARRAY(sgx_epc_address_space);
->  
->  /*
->   * These variables are part of the state of the reclaimer, and must be accessed
-> - * with sgx_reclaimer_lock acquired.
-> + * with sgx_global_lru.lock acquired.
->   */
-> -static LIST_HEAD(sgx_active_page_list);
-> -static DEFINE_SPINLOCK(sgx_reclaimer_lock);
-> +static struct sgx_epc_lru sgx_global_lru;
->  
->  static atomic_long_t sgx_nr_free_pages = ATOMIC_LONG_INIT(0);
->  
-> @@ -298,12 +297,12 @@ static void sgx_reclaim_pages(void)
->  	int ret;
->  	int i;
->  
-> -	spin_lock(&sgx_reclaimer_lock);
-> +	spin_lock(&sgx_global_lru.lock);
->  	for (i = 0; i < SGX_NR_TO_SCAN; i++) {
-> -		if (list_empty(&sgx_active_page_list))
-> +		if (list_empty(&sgx_global_lru.reclaimable))
->  			break;
->  
-> -		epc_page = list_first_entry(&sgx_active_page_list,
-> +		epc_page = list_first_entry(&sgx_global_lru.reclaimable,
->  					    struct sgx_epc_page, list);
->  		list_del_init(&epc_page->list);
->  		encl_page = epc_page->owner;
-> @@ -316,7 +315,7 @@ static void sgx_reclaim_pages(void)
->  			 */
->  			epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
->  	}
-> -	spin_unlock(&sgx_reclaimer_lock);
-> +	spin_unlock(&sgx_global_lru.lock);
->  
->  	for (i = 0; i < cnt; i++) {
->  		epc_page = chunk[i];
-> @@ -339,9 +338,9 @@ static void sgx_reclaim_pages(void)
->  		continue;
->  
->  skip:
-> -		spin_lock(&sgx_reclaimer_lock);
-> -		list_add_tail(&epc_page->list, &sgx_active_page_list);
-> -		spin_unlock(&sgx_reclaimer_lock);
-> +		spin_lock(&sgx_global_lru.lock);
-> +		list_add_tail(&epc_page->list, &sgx_global_lru.reclaimable);
-> +		spin_unlock(&sgx_global_lru.lock);
->  
->  		kref_put(&encl_page->encl->refcount, sgx_encl_release);
->  
-> @@ -374,7 +373,7 @@ static void sgx_reclaim_pages(void)
->  static bool sgx_should_reclaim(unsigned long watermark)
->  {
->  	return atomic_long_read(&sgx_nr_free_pages) < watermark &&
-> -	       !list_empty(&sgx_active_page_list);
-> +	       !list_empty(&sgx_global_lru.reclaimable);
->  }
->  
->  /*
-> @@ -427,6 +426,8 @@ static bool __init sgx_page_reclaimer_init(void)
->  
->  	ksgxd_tsk = tsk;
->  
-> +	sgx_lru_init(&sgx_global_lru);
-> +
->  	return true;
->  }
->  
-> @@ -502,10 +503,10 @@ struct sgx_epc_page *__sgx_alloc_epc_page(void)
->   */
->  void sgx_mark_page_reclaimable(struct sgx_epc_page *page)
->  {
-> -	spin_lock(&sgx_reclaimer_lock);
-> +	spin_lock(&sgx_global_lru.lock);
->  	page->flags |= SGX_EPC_PAGE_RECLAIMER_TRACKED;
-> -	list_add_tail(&page->list, &sgx_active_page_list);
-> -	spin_unlock(&sgx_reclaimer_lock);
-> +	list_add_tail(&page->list, &sgx_global_lru.reclaimable);
-> +	spin_unlock(&sgx_global_lru.lock);
->  }
->  
->  /**
-> @@ -520,18 +521,18 @@ void sgx_mark_page_reclaimable(struct sgx_epc_page *page)
->   */
->  int sgx_unmark_page_reclaimable(struct sgx_epc_page *page)
->  {
-> -	spin_lock(&sgx_reclaimer_lock);
-> +	spin_lock(&sgx_global_lru.lock);
->  	if (page->flags & SGX_EPC_PAGE_RECLAIMER_TRACKED) {
->  		/* The page is being reclaimed. */
->  		if (list_empty(&page->list)) {
-> -			spin_unlock(&sgx_reclaimer_lock);
-> +			spin_unlock(&sgx_global_lru.lock);
->  			return -EBUSY;
->  		}
->  
->  		list_del(&page->list);
->  		page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
->  	}
-> -	spin_unlock(&sgx_reclaimer_lock);
-> +	spin_unlock(&sgx_global_lru.lock);
->  
->  	return 0;
->  }
-> @@ -564,7 +565,7 @@ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim)
->  			break;
->  		}
->  
-> -		if (list_empty(&sgx_active_page_list))
-> +		if (list_empty(&sgx_global_lru.reclaimable))
->  			return ERR_PTR(-ENOMEM);
->  
->  		if (!reclaim) {
-> diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
-> index 5a7e858a8f98..7b208ee8eb45 100644
-> --- a/arch/x86/kernel/cpu/sgx/sgx.h
-> +++ b/arch/x86/kernel/cpu/sgx/sgx.h
-> @@ -83,6 +83,17 @@ static inline void *sgx_get_epc_virt_addr(struct sgx_epc_page *page)
->  	return section->virt_addr + index * PAGE_SIZE;
->  }
->  
-> +struct sgx_epc_lru {
-> +	spinlock_t lock;
-> +	struct list_head reclaimable;
-
-s/reclaimable/list/
-
-> +};
-> +
-> +static inline void sgx_lru_init(struct sgx_epc_lru *lru)
-> +{
-> +	spin_lock_init(&lru->lock);
-> +	INIT_LIST_HEAD(&lru->reclaimable);
-> +}
-> +
->  struct sgx_epc_page *__sgx_alloc_epc_page(void);
->  void sgx_free_epc_page(struct sgx_epc_page *page);
->  
-> -- 
-> 2.37.3
-> 
-
-Please also add these:
-
-/*
- * Must be called with queue->lock acquired.
- */
-static inline struct sgx_epc_page *__sgx_epc_queue_push(struct sgx_epc_queue *queue,
-                                                        struct sgx_page *page)
-{
-        list_add_tail(&page->list, &queue->list);
-}
-
-/*
- * Must be called with queue->lock acquired.
- */
-static inline struct sgx_epc_page *__sgx_epc_queue_pop(struct sgx_epc_queue *queue)
-{
-        struct sgx_epc_page *page;
-
-        if (list_empty(&queue->list)
-                return NULL;
-
-	page = list_first_entry(&queue->list, struct sgx_epc_page, list);
-  	list_del_init(&page->list);
-
-        return page;
-}
-
-And use them in existing sites. It ensures coherent behavior. You should be
-able to replace all uses with either, or combination of them (list_move).
-
-BR, Jarkko
