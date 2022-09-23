@@ -2,120 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D2D5E8119
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707F55E8121
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiIWRt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S232449AbiIWRvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIWRt0 (ORCPT
+        with ESMTP id S231340AbiIWRvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:49:26 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC83212385A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:49:24 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a8so1371786lff.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=HdvrftlRyQqTQoTlDeBTdBmMcZfxBFXOHDyKHrW5BYo=;
-        b=gEbo9/6Ij4ZqttNQUIKlqqcit/PgIMUSwwYj9Gn1owZSH3635JkSkfvBkRro5AHsgu
-         0vafFE4rhOHyLPgUGGZCHjWJa/IvHPn+M1TBiT3pagA4U92lm9V+mqLjP59R9BCNSoOA
-         wuiudFiEQZdf41trVSTP/0eMDO1wA0m/Z2UyYxB56yr2/7rB0QzoWhCFbOseuaGOAZvS
-         P8TCLzSTVwitVbSrpUIoNlbnoaU4cklnxJ6myXAxVGXE6EwJEznopZ7tF/LZPqqoZ8Nx
-         OJ+jJNVO0yY8/yRn/1n0eT3ddZ9CacZmAjUNRO7SnSj2J2uQMOQPKesFVLzDLNaGBV5C
-         OoUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HdvrftlRyQqTQoTlDeBTdBmMcZfxBFXOHDyKHrW5BYo=;
-        b=zDWFSjYLn20YR1SD99s2BIEfqS2g0l2JcaF6An9M6B1FeZZ+JFEopWiBF3u9CnPUAs
-         Ycmnsy8W2T9Q4BJc/AWOdBdxAhDQ9D8oQqrXp/3GEiY8rv95TlJ5h5xAM9h/8QTOR0Cm
-         MHx3eAy/uOsGtPO7mUJ9KsQrKb9beHtlpnIZTJtUNWeECAtze42dlBk24CS+gtokgZ/K
-         xMEDSOxBP9GykDshTqtT24cqC/fWCKG1hVJVCYmw1mLzCe+j5RrGN1HISVEfct3ZK9Cr
-         j1kZOEY4DGB4BMVz8Tfi36LWwV58TscVvNAbvcPhJ0/RK4sfpdtXQlHX8nJ/ehyWF/v1
-         Vo6A==
-X-Gm-Message-State: ACrzQf0t6IztQk0Al7hTTY0Dsukc52hUqNbr9T/7nZxdcE2iZHhO04HU
-        SCxOajqtytnz3YDHPyuvdalRuQ==
-X-Google-Smtp-Source: AMsMyM6fZ4WmmpIgtCAsa/zZUpZ4zWz5j4kJhqdHx6NUyFzaAoYpQPSOKNeOTiJWV0RMcGh/h7uEsw==
-X-Received: by 2002:a05:6512:3e14:b0:499:1f71:1680 with SMTP id i20-20020a0565123e1400b004991f711680mr3737503lfv.114.1663955363194;
-        Fri, 23 Sep 2022 10:49:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a8-20020a05651c010800b0026c3975f488sm1479001ljb.26.2022.09.23.10.49.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 10:49:22 -0700 (PDT)
-Message-ID: <966b46f5-ed3b-9daa-4cfb-602a534a8bfc@linaro.org>
-Date:   Fri, 23 Sep 2022 19:49:22 +0200
+        Fri, 23 Sep 2022 13:51:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE5E13A072
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:51:43 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e795329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e795:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9FCDF1EC0628;
+        Fri, 23 Sep 2022 19:51:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1663955497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NX0uxLsETnQjBDMbT8fMjsShz4e7A36/sdTSflSPHMk=;
+        b=Qz6+1YcTlhabcvK6hvgl2WvdnbLAEEEu5ONZfRUACRdJ8+1eYfR0LKY/z5tChIMM64E0JB
+        X5vNjpBUjQoTIzhu3UgxcIAbzY7WEhwRCYHr3jJ5xYvX00iXIvM6KQy/HrrPCaxl5eLBQr
+        6mmdMmEb1cErTFhu2yD0fSk2B1Q1bfU=
+Date:   Fri, 23 Sep 2022 19:51:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Daniel Verkamp <dverkamp@chromium.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH] x86: also disable FSRM if ERMS is disabled
+Message-ID: <Yy3yJfz213Lqo4KC@zn.tnic>
+References: <20220923005827.1533380-1-dverkamp@chromium.org>
+ <Yy2U2BW6Tx0imGpK@zn.tnic>
+ <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv2 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Content-Language: en-US
-To:     Dinh Nguyen <dinguyen@kernel.org>, jh80.chung@samsung.com
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220922220308.609422-1-dinguyen@kernel.org>
- <20220922220308.609422-2-dinguyen@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220922220308.609422-2-dinguyen@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 00:03, Dinh Nguyen wrote:
-> Document the optional "altr,sysmgr-syscon" binding that is used to
-> access the System Manager register that controls the SDMMC clock
-> phase.
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+On Fri, Sep 23, 2022 at 10:25:05AM -0700, Daniel Verkamp wrote:
+> Yes, we hit this in crosvm when booting the guest kernel with either
+> OVMF or u-boot on an Intel 12th Gen CPU. The guest kernel boots fine
+> when loaded directly (using the crosvm kernel loader and not running
+> any firmware setup in the guest), but it crashes when booting with
+> firmware inside the first forward memmove() after alternatives are set
+> up (which happens to be in printk). I haven't gotten to the bottom of
+> why exactly using firmware is causing this to be set up in an
+> inconsistent way, but this is a real-world situation, not just a
+> hypothetical.
 
-Thank you for your patch. There is something to discuss/improve.
+Sounds like broken virt firmware or so. And if that is not an issue on
+baremetal, then the virt stack should be fixed - not the kernel.
 
-> ---
-> v2: added
-> ---
->  .../devicetree/bindings/mmc/synopsys-dw-mshc.yaml    | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> index ae6d6fca79e2..aece6a337262 100644
-> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> @@ -38,6 +38,18 @@ properties:
->        - const: biu
->        - const: ciu
->  
-> +  altr,sysmgr-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      - items:
-> +          - description: phandle to the sysmgr node
-> +          - description: register offset that controls the SDMMC clock phase
-> +    description:
-> +      Contains the phandle to System Manager block that contains
-> +      the SDMMC clock-phase control register. The first value is the pointer
-> +      to the sysmgr and the 2nd value is the register offset for the SDMMC
-> +      clock phase register.
+> Now that I look at it with fresh eyes again, maybe we should instead
+> directly patch the memmove FSRM alternative so that the flag-set
+> version just does the same jmp as the ERMS one. I can prepare a patch
+> for that instead of (or in addition to) this one if that sounds
+> better.
 
-You need to restrict it per variant (altera). Move the allOf from top of
-the file to place above unevaluatedProperties and add if:then: making it
-false for other variants.
+So, if the virt firmware deviates from how the real hardware behaves,
+then the kernel needs no fixing.
 
-Best regards,
-Krzysztof
+So you'd have to figure out why is the virt firmware causing this and
+not baremetal.
 
+Then we can talk about fixes.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
