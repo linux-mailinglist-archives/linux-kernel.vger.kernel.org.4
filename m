@@ -2,166 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1130B5E7C7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A54C5E7C81
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiIWOFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S229993AbiIWOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiIWOFe (ORCPT
+        with ESMTP id S229910AbiIWOIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:05:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4817E9531
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:05:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82B0E614A4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:05:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E24CC433D6;
-        Fri, 23 Sep 2022 14:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663941932;
-        bh=gG8kc5EGZ32Hzl5KDr5xjlW/0iQb/qxEQ3HLHfN9NHI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GuYPIO0SLHM787PKj6eYLF+tylWGekRgu1nNBBX+OS6VbuUr2vRCS4YVOgIzdjTmS
-         uIwWBYRady4gONeZujOxwcGlVYDZTes0wBDlaFOCb49lfZaEyoZ5D5MaXyLuBRHFm/
-         y1OROyNBEcfd43g2ywN4krS3m+BYQVYjmSjAqTQzQSOMo6gQWRklz7YpYvZQqDM4xF
-         Kv+DIAXioHxqnq61JE1ng1hOay2JfQHCsNHgAsCvyEmn1n4QUdNynd9aN+LmgnP18w
-         acra5QC3daAJbJ1W5GG6mAulQy53ESJoKOhFKTdzVmTfYAZLoR2As1UTgtGvCT0BdI
-         QCLbX26yQ9ihg==
-Date:   Fri, 23 Sep 2022 23:05:27 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Yipeng Zou <zouyipeng@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <zanussi@kernel.org>,
-        <liaochang1@huawei.com>, <chris.zjh@huawei.com>
-Subject: Re: [PATCH 2/2] tracing: kprobe: make gen test module work in arm
- and riscv
-Message-Id: <20220923230527.6e3ac417a749ed22302d42ab@kernel.org>
-In-Reply-To: <20220919125629.238242-3-zouyipeng@huawei.com>
-References: <20220919125629.238242-1-zouyipeng@huawei.com>
-        <20220919125629.238242-3-zouyipeng@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 10:08:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB305145CA3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663942095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LBYIB5Hr/s79C5MbXbGY0mfsUxmhEdiC6zxTkuGSCwk=;
+        b=e/BXz5Xapq4s3pC2kT3QKRkV6RWRq6Hr2uZWd5oEduEc6OJLod7lun/dWD5FpzI5IsI/uV
+        LQKL+yzlxEEXH+/vOuQrQtC32AnMrCxvHiyUKvQ3Vrg8LxFdJJDbNCL/P4B8vvAYDH1jhb
+        v+R7n59y0s8E5sescrHadnuFsHCfL/0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-367-FajwVnjYNnG9QCVi7rya8Q-1; Fri, 23 Sep 2022 10:08:13 -0400
+X-MC-Unique: FajwVnjYNnG9QCVi7rya8Q-1
+Received: by mail-qk1-f197.google.com with SMTP id bp17-20020a05620a459100b006ce7f4bb0b7so109054qkb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:08:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LBYIB5Hr/s79C5MbXbGY0mfsUxmhEdiC6zxTkuGSCwk=;
+        b=0yx4Tzx47lSvol7Af9oDllcL+6RtLg7OvOroo2TNCMjUFAOQasJPiWQW3WOuumZQVS
+         wGUNQ9oVkBMVpT3Z5jy1HufwfqqAeyOTw3PrXRpgZUGHAVmD+eB8ixDfzM44KdRTwVEp
+         i3kgkziXzwkL9m1hmm96qCFnjAKtvqMaNRX6dvrM7JGVDSc8imr0Iz4U3m0xFXmL9iGK
+         9+JiToDcqhOcWNIFdI5l2W8jIiy+3yif1yQDjGE2rdBWMBDb2XnGqrMUFs2qGO5r2tZW
+         gHZHma9qitX4+qKnBBcUflrAqWz4SWqZIgjDFvZEN87cKrlDWSMObfJXfxOuX/+dFP6K
+         EibQ==
+X-Gm-Message-State: ACrzQf18x1F3mB0SRsfcctGpGdoF0DvJDwDvOjOC1wC19lSohZEo3eY3
+        F36Aghmf6rKMeu5UGQ8eWodT17oj9c7to4p2AM65M6HjJ7aOvGKfcV1RQbKxKn5KoT+HrljaUvy
+        0t5zuZ19HSUPWvqWVkF5fM6I=
+X-Received: by 2002:ac8:5dc9:0:b0:35c:dac8:a141 with SMTP id e9-20020ac85dc9000000b0035cdac8a141mr7271323qtx.229.1663942093315;
+        Fri, 23 Sep 2022 07:08:13 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4hP35ZcbFzjjav7W2Ml66N3dqlsgPCpf9kKzESU216uoZsCAsOatn0mJ4gZX5U/fSihe9dkw==
+X-Received: by 2002:ac8:5dc9:0:b0:35c:dac8:a141 with SMTP id e9-20020ac85dc9000000b0035cdac8a141mr7271263qtx.229.1663942092916;
+        Fri, 23 Sep 2022 07:08:12 -0700 (PDT)
+Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
+        by smtp.gmail.com with ESMTPSA id cq3-20020a05622a424300b0035ced0a8382sm5566028qtb.54.2022.09.23.07.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 07:08:12 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:08:11 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Daniil Lunev <dlunev@google.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        linux-kernel@vger.kernel.org, Gwendal Grignou <gwendal@google.com>,
+        virtualization@lists.linux-foundation.org, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-ext4@vger.kernel.org, Evan Green <evgreen@google.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH RFC 0/8] Introduce provisioning primitives for thinly
+ provisioned storage
+Message-ID: <Yy29y/jUvWM6GRZ5@redhat.com>
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <YyQTM5PRT2o/GDwy@fedora>
+ <CAG9=OMPHZqdDhX=M+ovdg5fa3x4-Q_1r5SWPa8pMTQw0mr5fPg@mail.gmail.com>
+ <Yylvvm3zVgqpqDrm@infradead.org>
+ <CAAKderPF5Z5QLxyEb80Y+90+eR0sfRmL-WfgXLp=eL=HxWSZ9g@mail.gmail.com>
+ <YymkSDsFVVg1nbDP@infradead.org>
+ <CAAKderNcHpbBqWqqd5-WuKLRCQQUt7a_4D4ti4gy15+fKGK0vQ@mail.gmail.com>
+ <Yy1zkMH0f9ski4Sg@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy1zkMH0f9ski4Sg@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 20:56:29 +0800
-Yipeng Zou <zouyipeng@huawei.com> wrote:
+On Fri, Sep 23 2022 at  4:51P -0400,
+Christoph Hellwig <hch@infradead.org> wrote:
 
-> For now, this selftest module can only work in x86 because of the
-> kprobe cmd was fixed use of x86 registers.
-> This patch adapted to register names under arm and riscv, So that
-> this module can be worked on those platform.
-
-This also looks good to me. (good & simple solution :))
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you,
-
+> On Wed, Sep 21, 2022 at 07:48:50AM +1000, Daniil Lunev wrote:
+> > > There is no such thing as WRITE UNAVAILABLE in NVMe.
+> > Apologize, that is WRITE UNCORRECTABLE. Chapter 3.2.7 of
+> > NVM Express NVM Command Set Specification 1.0b
 > 
-> Fixes: 64836248dda2 ("tracing: Add kprobe event command generation test module")
-> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
-> ---
->  kernel/trace/kprobe_event_gen_test.c | 47 +++++++++++++++++++++++++---
->  1 file changed, 43 insertions(+), 4 deletions(-)
+> Write uncorrectable is a very different thing, and the equivalent of the
+> horribly misnamed SCSI WRITE LONG COMMAND.  It injects an unrecoverable
+> error, and does not provision anything.
 > 
-> diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
-> index e023154be0f8..80e04a1e1977 100644
-> --- a/kernel/trace/kprobe_event_gen_test.c
-> +++ b/kernel/trace/kprobe_event_gen_test.c
-> @@ -35,6 +35,45 @@
->  static struct trace_event_file *gen_kprobe_test;
->  static struct trace_event_file *gen_kretprobe_test;
->  
-> +#define KPROBE_GEN_TEST_FUNC	"do_sys_open"
-> +
-> +/* X86 */
-> +#if defined(CONFIG_X86_64) || defined(CONFIG_X86_32)
-> +#define KPROBE_GEN_TEST_ARG0	"dfd=%ax"
-> +#define KPROBE_GEN_TEST_ARG1	"filename=%dx"
-> +#define KPROBE_GEN_TEST_ARG2	"flags=%cx"
-> +#define KPROBE_GEN_TEST_ARG3	"mode=+4($stack)"
-> +
-> +/* ARM64 */
-> +#elif defined(CONFIG_ARM64)
-> +#define KPROBE_GEN_TEST_ARG0	"dfd=%x0"
-> +#define KPROBE_GEN_TEST_ARG1	"filename=%x1"
-> +#define KPROBE_GEN_TEST_ARG2	"flags=%x2"
-> +#define KPROBE_GEN_TEST_ARG3	"mode=%x3"
-> +
-> +/* ARM */
-> +#elif defined(CONFIG_ARM)
-> +#define KPROBE_GEN_TEST_ARG0	"dfd=%r0"
-> +#define KPROBE_GEN_TEST_ARG1	"filename=%r1"
-> +#define KPROBE_GEN_TEST_ARG2	"flags=%r2"
-> +#define KPROBE_GEN_TEST_ARG3	"mode=%r3"
-> +
-> +/* RISCV */
-> +#elif defined(CONFIG_RISCV)
-> +#define KPROBE_GEN_TEST_ARG0	"dfd=%a0"
-> +#define KPROBE_GEN_TEST_ARG1	"filename=%a1"
-> +#define KPROBE_GEN_TEST_ARG2	"flags=%a2"
-> +#define KPROBE_GEN_TEST_ARG3	"mode=%a3"
-> +
-> +/* others */
-> +#else
-> +#define KPROBE_GEN_TEST_ARG0	NULL
-> +#define KPROBE_GEN_TEST_ARG1	NULL
-> +#define KPROBE_GEN_TEST_ARG2	NULL
-> +#define KPROBE_GEN_TEST_ARG3	NULL
-> +#endif
-> +
-> +
->  /*
->   * Test to make sure we can create a kprobe event, then add more
->   * fields.
-> @@ -58,14 +97,14 @@ static int __init test_gen_kprobe_cmd(void)
->  	 * fields.
->  	 */
->  	ret = kprobe_event_gen_cmd_start(&cmd, "gen_kprobe_test",
-> -					 "do_sys_open",
-> -					 "dfd=%ax", "filename=%dx");
-> +					 KPROBE_GEN_TEST_FUNC,
-> +					 KPROBE_GEN_TEST_ARG0, KPROBE_GEN_TEST_ARG1);
->  	if (ret)
->  		goto free;
->  
->  	/* Use kprobe_event_add_fields to add the rest of the fields */
->  
-> -	ret = kprobe_event_add_fields(&cmd, "flags=%cx", "mode=+4($stack)");
-> +	ret = kprobe_event_add_fields(&cmd, KPROBE_GEN_TEST_ARG2, KPROBE_GEN_TEST_ARG3);
->  	if (ret)
->  		goto free;
->  
-> @@ -128,7 +167,7 @@ static int __init test_gen_kretprobe_cmd(void)
->  	 * Define the kretprobe event.
->  	 */
->  	ret = kretprobe_event_gen_cmd_start(&cmd, "gen_kretprobe_test",
-> -					    "do_sys_open",
-> +					    KPROBE_GEN_TEST_FUNC,
->  					    "$retval");
->  	if (ret)
->  		goto free;
-> -- 
-> 2.17.1
+> > * Each application is potentially allowed to consume the entirety
+> >   of the disk space - there is no strict size limit for application
+> > * Applications need to pre-allocate space sometime, for which
+> >   they use fallocate. Once the operation succeeded, the application
+> >   assumed the space is guaranteed to be there for it.
+> > * Since filesystems on the volumes are independent, filesystem
+> >   level enforcement of size constraints is impossible and the only
+> >   common level is the thin pool, thus, each fallocate has to find its
+> >   representation in thin pool one way or another - otherwise you
+> >   may end up in the situation, where FS thinks it has allocated space
+> >   but when it tries to actually write it, the thin pool is already
+> >   exhausted.
+> > * Hole-Punching fallocate will not reach the thin pool, so the only
+> >   solution presently is zero-writing pre-allocate.
 > 
+> To me it sounds like you want a non-thin pool in dm-thin and/or
+> guaranted space reservations for it.
 
+What is implemented in this patchset: enablement for dm-thinp to
+actually provide guarantees which fallocate requires.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Seems you're getting hung up on the finishing details in HW (details
+which are _not_ the point of this patchset).
+
+The proposed changes are in service to _Linux_ code. The patchset
+implements the primitive from top (ext4) to bottom (dm-thinp, loop).
+It stops short of implementing handling everywhere that'd need it
+(e.g. in XFS, etc). But those changes can come as follow-on work once
+the primitive is established top to bottom.
+
+But you know all this ;)
+
+> > * Thus, a provisioning block operation allows an interface specific
+> >   operation that guarantees the presence of the block in the
+> >   mapped space. LVM Thin-pool itself is the primary target for our
+> >   use case but the argument is that this operation maps well to
+> >   other interfaces which allow thinly provisioned units.
+> 
+> I think where you are trying to go here is badly mistaken.  With flash
+> (or hard drive SMR) there is no such thing as provisioning LBAs.  Every
+> write is out of place, and a one time space allocation does not help
+> you at all.  So fundamentally what you try to here just goes against
+> the actual physics of modern storage media.  While there are some
+> layers that keep up a pretence, trying to that an an exposed API
+> level is a really bad idea.
+
+This doesn't need to be so feudal.  Reserving an LBA in physical HW
+really isn't the point.
+
+Fact remains: an operation that ensures space is actually reserved via
+fallocate is long overdue (just because an FS did its job doesn't mean
+underlying layers reflect that). And certainly useful, even if "only"
+benefiting dm-thinp and the loop driver. Like other block primitives,
+REQ_OP_PROVISION is filtered out by block core if the device doesn't
+support it.
+
+That said, I agree with Brian Foster that we need really solid
+documentation and justification for why fallocate mode=0 cannot be
+used (but the case has been made in this thread).
+
+Also, I do see an issue with the implementation (relative to stacked
+devices): dm_table_supports_provision() is too myopic about DM. It
+needs to go a step further and verify that some layer in the stack
+actually services REQ_OP_PROVISION. Will respond to DM patch too.
+
