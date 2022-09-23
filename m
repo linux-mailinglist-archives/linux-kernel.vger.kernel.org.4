@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCAC5E7A23
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA2A5E7A32
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiIWMGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S230292AbiIWMIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiIWMEQ (ORCPT
+        with ESMTP id S230448AbiIWMGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:04:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF892ED48
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663934389; x=1695470389;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=YaUg750lJnggz6KWmfaPEF4rvlW5TvJZSCMSaU800rA=;
-  b=bGKLUAv3RM4CScRs6oCBRHN7KODcnxOd2jUtFFqUv279OEUGdxLcDqM/
-   KZfDymiO9tWURARsrTmmx3vS/6JVko00U8VHF9WigBuryKp06FYuWJREg
-   kMlQFj9q2uoxMXvafgAubSRNZGbIzp/RBzK4BohtYHlRccI6XpcRCVPJZ
-   8lSvbuD+UEVxCGvyQpxfKDit3N9mrUWl5mLib17gnm4PDGLEmSHtzqRUT
-   MMAPZGzVNNrmG1khXPFNu2VM+HgBRUsmZt1LD/931VQ2f7bRcXY7S92W/
-   pt/D4s3W1W9APQPbUq+jrSegZUucWtmEku9AckZDbeR9NdGHMGTTdSzTm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280940884"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="280940884"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 04:59:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="865270599"
-Received: from armannov-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.61.93])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 04:59:42 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 13/33] drm/client: Add some tests for
- drm_connector_pick_cmdline_mode()
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-13-f733a0ed9f90@cerno.tech>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-13-f733a0ed9f90@cerno.tech>
-Date:   Fri, 23 Sep 2022 14:59:23 +0300
-Message-ID: <875yhe47z8.fsf@intel.com>
+        Fri, 23 Sep 2022 08:06:13 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C383131987;
+        Fri, 23 Sep 2022 05:00:49 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id C96892173;
+        Fri, 23 Sep 2022 11:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1663934318;
+        bh=nWecK01lWlm/+fHoFjSIP0puhvwdtsZ9P4N00vH53BU=;
+        h=Date:To:CC:From:Subject;
+        b=Wi67S3Us29uKLjNU2fF9bStc8sW3/Qg9pbpsfTE3wnDd1MOr6mHX2w5kulR4kZ1pM
+         VgHUxBfRDpcYiMZvk8RC0asedkSgb+7uXH7UFQGAUaYhBoZD6JpfDfuOmAMhL5UHOr
+         XCIFDA11wHKqHIwEKRhzqwRo97SGVEI2Eu0VLuBw=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B70BFDD;
+        Fri, 23 Sep 2022 12:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1663934447;
+        bh=nWecK01lWlm/+fHoFjSIP0puhvwdtsZ9P4N00vH53BU=;
+        h=Date:To:CC:From:Subject;
+        b=pgOx/Q2CFvwOhsvvpXltsxnXSu6qMKR/+TojPK6s3GyrnoOg2mK8AFrFIMdV0hXco
+         ga/gVYsm3Ie/thLjTNmVPqR9y1UGRe4migiObIqCjMF66KUOR9IeL+F3cGrfJeg0s4
+         Asn1jNuvgr/3tPydXs75cJnhUiRP0RBub+hFH5BI=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 23 Sep 2022 15:00:47 +0300
+Message-ID: <91c21f32-cc6f-2c2e-ebf7-d1d738090aef@paragon-software.com>
+Date:   Fri, 23 Sep 2022 15:00:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     <ntfs3@lists.linux.dev>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 0/2] fs/ntfs3: Add option "nocase" and refactoring
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022, Maxime Ripard <maxime@cerno.tech> wrote:
-> drm_connector_pick_cmdline_mode() is in charge of finding a proper
-> drm_display_mode from the definition we got in the video= command line
-> argument.
->
-> Let's add some unit tests to make sure we're not getting any regressions
-> there.
->
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->
-> diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
-> index bbc535cc50dd..d553e793e673 100644
-> --- a/drivers/gpu/drm/drm_client_modeset.c
-> +++ b/drivers/gpu/drm/drm_client_modeset.c
-> @@ -1237,3 +1237,7 @@ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode)
->  	return ret;
->  }
->  EXPORT_SYMBOL(drm_client_modeset_dpms);
-> +
-> +#ifdef CONFIG_DRM_KUNIT_TEST
-> +#include "tests/drm_client_modeset_test.c"
-> +#endif
-> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> new file mode 100644
-> index 000000000000..46335de7bc6b
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+[PATCH 0/2] fs/ntfs3: Add option "nocase" and refactoring
 
-[snip]
+Added another option that may be useful to users.
+I've noticed in fslog.c some linebreaks, that can be fixed with
+renaming, so I've done it in second commit.
 
-> +MODULE_AUTHOR("Maxime Ripard <mripard@kernel.org>");
-> +MODULE_LICENSE("GPL");
+Konstantin Komarov (2):
+   fs/ntfs3: Add option "nocase"
+   fs/ntfs3: Rename variables and add comment
 
-I think these annotations are incompatible with including the unit test,
-and, in this case, affect drm.ko.
-
-And we'll have two kinds of tests, those that get built via
-tests/Makefile, and those that get included, like this one, which should
-not be mentioned in tests/Makefile.
-
-BR,
-Jani.
+  fs/ntfs3/frecord.c |   1 +
+  fs/ntfs3/fslog.c   |  24 ++++----
+  fs/ntfs3/index.c   |   2 +-
+  fs/ntfs3/namei.c   | 139 +++++++++++++++++++++++++++++++++++++++++++++
+  fs/ntfs3/ntfs_fs.h |   4 ++
+  fs/ntfs3/super.c   |   6 ++
+  fs/ntfs3/upcase.c  |  12 ++++
+  7 files changed, 174 insertions(+), 14 deletions(-)
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.37.0
+
+
