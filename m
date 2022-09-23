@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990365E8164
+	by mail.lfdr.de (Postfix) with ESMTP id 436665E8163
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiIWSCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S232812AbiIWSCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiIWSCB (ORCPT
+        with ESMTP id S232611AbiIWSCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:02:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AACE13C847;
-        Fri, 23 Sep 2022 11:01:52 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 18:01:49 -0000
+        Fri, 23 Sep 2022 14:02:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D438013D1F5;
+        Fri, 23 Sep 2022 11:01:53 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:01:50 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663956110;
+        s=2020; t=1663956111;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aovbly4/A7xUlS7xCzDb0DiWoRe36nGpHkeo2qOdcDw=;
-        b=aZOwXfSqglQb8M/o9plrl7eISCIvxq8VfDw6AWi7N7hZMEkyedGknGVUWORT7/FcebU23h
-        FldWKWJ38D2qdT5U+nl1imGW2AioKxG9A93g7yv5LO4Ag/waXOA8pSNgKDTqrmGnv1oxsd
-        NKZlXo0ZDDrMOrtEBazQ07dTmeiLs+YL7lI8fnCwWtVH5HwzZrBNkZAANGOtzjnUCu8gF4
-        m/oD+lcArMt+KjxNUu8fk7UwDdnMvKeGHKM8WSm2h9gKIffXDxhBCkmSveLjAn+UcVv/M9
-        DduzITrdK/UnzmVgm82wPdmOEzy9u8h0PhJAu/i3p2OMlMsq0NcaoGQTmbYHIA==
+        bh=UQisyJdSmcWvo2Xaq8oC7WtjzDiyBUJ2LbnuZZ+gyqA=;
+        b=SQewCYx0PcmKefWP3V/z1ABCXtRJ3MqBzbEgNxFiiL7cQI14uZ16rRBjawYRU5HDZHzP68
+        LbxVNsq5wxE7U0HUvsb8BTARBqj7mmXUIx/nzKo/hAe24zCi2ZPJNc94h/LiCVl/xJL891
+        VA3Ijrws5MGdT9s41yDGrca0edjKhicL5XP0d1to/Ao1ZpbouwqqzLwns2XHhdHl13ZUtg
+        ayn8PcFYkVXub0KXXOiLmcGJdOmk6TBb+ebrU6aw93XjAjDARyXL8WmGVzhZLn0K73xBmo
+        rmfC9oqzNWGt9WnYMp/saAWpcCj/EJUBil+iExm8z3f66c7dMpoFOvPR3SDwJw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663956110;
+        s=2020e; t=1663956111;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aovbly4/A7xUlS7xCzDb0DiWoRe36nGpHkeo2qOdcDw=;
-        b=XJXdpiSWYQ/sEAXgWVqpTdQQgvCyWl2zgmc3jfMxarZQGrroqfrcaa31lJPOPM906eG5R6
-        1IAiELy3jWaFb+DQ==
+        bh=UQisyJdSmcWvo2Xaq8oC7WtjzDiyBUJ2LbnuZZ+gyqA=;
+        b=tUDIbJpWXGiW+dSqOh7HaTyqYXhzr5oTGWrEpQB94Q6e73w4/dFINM5Xwg/1sEfcpYJeq8
+        FUcyYJfSqoswwFCg==
 From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Calculate bandwidth from the previous
- __mon_event_count() chunks
+Subject: [tip: x86/cache] x86/resctrl: Allow update_mba_bw() to update
+ controls directly
 Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Shaopeng Tan <tan.shaopeng@fujitsu.com>,
@@ -52,10 +52,10 @@ Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Xin Hao <xhao@linux.alibaba.com>,
         Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220902154829.30399-13-james.morse@arm.com>
-References: <20220902154829.30399-13-james.morse@arm.com>
+In-Reply-To: <20220902154829.30399-12-james.morse@arm.com>
+References: <20220902154829.30399-12-james.morse@arm.com>
 MIME-Version: 1.0
-Message-ID: <166395610953.401.969948201916916421.tip-bot2@tip-bot2>
+Message-ID: <166395611058.401.2420168455987298880.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,34 +71,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     30442571ec81fb33f7bd8cea5a14afb10b8f442a
-Gitweb:        https://git.kernel.org/tip/30442571ec81fb33f7bd8cea5a14afb10b8f442a
+Commit-ID:     ff6357bb50023af2a1dc8f113930082c5252c753
+Gitweb:        https://git.kernel.org/tip/ff6357bb50023af2a1dc8f113930082c5252c753
 Author:        James Morse <james.morse@arm.com>
-AuthorDate:    Fri, 02 Sep 2022 15:48:20 
+AuthorDate:    Fri, 02 Sep 2022 15:48:19 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 22 Sep 2022 17:44:57 +02:00
+CommitterDate: Thu, 22 Sep 2022 17:43:44 +02:00
 
-x86/resctrl: Calculate bandwidth from the previous __mon_event_count() chunks
+x86/resctrl: Allow update_mba_bw() to update controls directly
 
-mbm_bw_count() is only called by the mbm_handle_overflow() worker once a
-second. It reads the hardware register, calculates the bandwidth and
-updates m->prev_bw_msr which is used to hold the previous hardware register
-value.
+update_mba_bw() calculates a new control value for the MBA resource
+based on the user provided mbps_val and the current measured
+bandwidth. Some control values need remapping by delay_bw_map().
 
-Operating directly on hardware register values makes it difficult to make
-this code architecture independent, so that it can be moved to /fs/,
-making the mba_sc feature something resctrl supports with no additional
-support from the architecture.
-Prior to calling mbm_bw_count(), mbm_update() reads from the same hardware
-register using __mon_event_count().
+It does this by calling wrmsrl() directly. This needs splitting
+up to be done by an architecture specific helper, so that the
+remainder can eventually be moved to /fs/.
 
-Change mbm_bw_count() to use the current chunks value most recently saved
-by __mon_event_count(). This removes an extra call to __rmid_read().
-Instead of using m->prev_msr to calculate the number of chunks seen,
-use the rr->val that was updated by __mon_event_count(). This removes an
-extra call to mbm_overflow_count() and get_corrected_mbm_count().
-Calculating bandwidth like this means mbm_bw_count() no longer operates
-on hardware register values directly.
+Add resctrl_arch_update_one() to apply one configuration value
+to the provided resource and domain. This avoids the staging
+and cross-calling that is only needed with changes made by
+user-space. delay_bw_map() moves to be part of the arch code,
+to maintain the 'percentage control' view of MBA resources
+in resctrl.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -108,98 +103,134 @@ Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Xin Hao <xhao@linux.alibaba.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20220902154829.30399-13-james.morse@arm.com
+Link: https://lore.kernel.org/r/20220902154829.30399-12-james.morse@arm.com
 ---
- arch/x86/kernel/cpu/resctrl/internal.h |  4 ++--
- arch/x86/kernel/cpu/resctrl/monitor.c  | 25 ++++++++++++++++---------
- 2 files changed, 18 insertions(+), 11 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c        |  2 +-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 21 +++++++++++++++++++++
+ arch/x86/kernel/cpu/resctrl/internal.h    |  1 -
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 13 ++++---------
+ include/linux/resctrl.h                   |  8 ++++++++
+ 5 files changed, 34 insertions(+), 11 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index f0e2820..90ebb7d 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -296,7 +296,7 @@ mba_wrmsr_amd(struct rdt_domain *d, struct msr_param *m, struct rdt_resource *r)
+  * that can be written to QOS_MSRs.
+  * There are currently no SKUs which support non linear delay values.
+  */
+-u32 delay_bw_map(unsigned long bw, struct rdt_resource *r)
++static u32 delay_bw_map(unsigned long bw, struct rdt_resource *r)
+ {
+ 	if (r->membw.delay_linear)
+ 		return MAX_MBA_BW - bw;
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index bf9d73c..0ab9232 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -282,6 +282,27 @@ static bool apply_config(struct rdt_hw_domain *hw_dom,
+ 	return false;
+ }
+ 
++int resctrl_arch_update_one(struct rdt_resource *r, struct rdt_domain *d,
++			    u32 closid, enum resctrl_conf_type t, u32 cfg_val)
++{
++	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
++	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
++	u32 idx = get_config_index(closid, t);
++	struct msr_param msr_param;
++
++	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
++		return -EINVAL;
++
++	hw_dom->ctrl_val[idx] = cfg_val;
++
++	msr_param.res = r;
++	msr_param.low = idx;
++	msr_param.high = idx + 1;
++	hw_res->msr_update(d, &msr_param, r);
++
++	return 0;
++}
++
+ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid)
+ {
+ 	struct resctrl_staged_config *cfg;
 diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 3b9e43b..4606209 100644
+index 373aaba..3b9e43b 100644
 --- a/arch/x86/kernel/cpu/resctrl/internal.h
 +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -289,7 +289,7 @@ struct rftype {
-  * struct mbm_state - status for each MBM counter in each domain
-  * @chunks:	Total data moved (multiply by rdt_group.mon_scale to get bytes)
-  * @prev_msr:	Value of IA32_QM_CTR for this RMID last time we read it
-- * @prev_bw_msr:Value of previous IA32_QM_CTR for bandwidth counting
-+ * @prev_bw_chunks: Previous chunks value read for bandwidth calculation
-  * @prev_bw:	The most recent bandwidth in MBps
-  * @delta_bw:	Difference between the current and previous bandwidth
-  * @delta_comp:	Indicates whether to compute the delta_bw
-@@ -297,7 +297,7 @@ struct rftype {
- struct mbm_state {
- 	u64	chunks;
- 	u64	prev_msr;
--	u64	prev_bw_msr;
-+	u64	prev_bw_chunks;
- 	u32	prev_bw;
- 	u32	delta_bw;
- 	bool	delta_comp;
+@@ -527,7 +527,6 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom,
+ void mbm_handle_overflow(struct work_struct *work);
+ void __init intel_rdt_mbm_apply_quirk(void);
+ bool is_mba_sc(struct rdt_resource *r);
+-u32 delay_bw_map(unsigned long bw, struct rdt_resource *r);
+ void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms);
+ void cqm_handle_limbo(struct work_struct *work);
+ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d);
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 3e69386..2d81b6c 100644
+index 16028b2..3e69386 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -315,7 +315,7 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
- 
- 	if (rr->first) {
- 		memset(m, 0, sizeof(struct mbm_state));
--		m->prev_bw_msr = m->prev_msr = tval;
-+		m->prev_msr = tval;
- 		return 0;
- 	}
- 
-@@ -329,27 +329,32 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
- }
- 
- /*
-+ * mbm_bw_count() - Update bw count from values previously read by
-+ *		    __mon_event_count().
-+ * @rmid:	The rmid used to identify the cached mbm_state.
-+ * @rr:		The struct rmid_read populated by __mon_event_count().
-+ *
-  * Supporting function to calculate the memory bandwidth
-- * and delta bandwidth in MBps.
-+ * and delta bandwidth in MBps. The chunks value previously read by
-+ * __mon_event_count() is compared with the chunks value from the previous
-+ * invocation. This must be called once per second to maintain values in MBps.
+@@ -420,10 +420,8 @@ void mon_event_count(void *info)
   */
- static void mbm_bw_count(u32 rmid, struct rmid_read *rr)
+ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
  {
- 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
- 	struct mbm_state *m = &rr->d->mbm_local[rmid];
--	u64 tval, cur_bw, chunks;
-+	u64 cur_bw, chunks, cur_chunks;
+-	u32 closid, rmid, cur_msr, cur_msr_val, new_msr_val;
++	u32 closid, rmid, cur_msr_val, new_msr_val;
+ 	struct mbm_state *pmbm_data, *cmbm_data;
+-	struct rdt_hw_resource *hw_r_mba;
+-	struct rdt_hw_domain *hw_dom_mba;
+ 	u32 cur_bw, delta_bw, user_bw;
+ 	struct rdt_resource *r_mba;
+ 	struct rdt_domain *dom_mba;
+@@ -433,8 +431,8 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 	if (!is_mbm_local_enabled())
+ 		return;
  
--	tval = __rmid_read(rmid, rr->evtid);
--	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL))
--		return;
-+	cur_chunks = rr->val;
-+	chunks = cur_chunks - m->prev_bw_chunks;
-+	m->prev_bw_chunks = cur_chunks;
- 
--	chunks = mbm_overflow_count(m->prev_bw_msr, tval, hw_res->mbm_width);
--	cur_bw = (get_corrected_mbm_count(rmid, chunks) * hw_res->mon_scale) >> 20;
-+	cur_bw = (chunks * hw_res->mon_scale) >> 20;
- 
- 	if (m->delta_comp)
- 		m->delta_bw = abs(cur_bw - m->prev_bw);
- 	m->delta_comp = false;
- 	m->prev_bw = cur_bw;
--	m->prev_bw_msr = tval;
- }
- 
- /*
-@@ -516,10 +521,12 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain *d, int rmid)
- 	 */
- 	if (is_mbm_total_enabled()) {
- 		rr.evtid = QOS_L3_MBM_TOTAL_EVENT_ID;
-+		rr.val = 0;
- 		__mon_event_count(rmid, &rr);
+-	hw_r_mba = &rdt_resources_all[RDT_RESOURCE_MBA];
+-	r_mba = &hw_r_mba->r_resctrl;
++	r_mba = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
++
+ 	closid = rgrp->closid;
+ 	rmid = rgrp->mon.rmid;
+ 	pmbm_data = &dom_mbm->mbm_local[rmid];
+@@ -444,7 +442,6 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 		pr_warn_once("Failure to get domain for MBA update\n");
+ 		return;
  	}
- 	if (is_mbm_local_enabled()) {
- 		rr.evtid = QOS_L3_MBM_LOCAL_EVENT_ID;
-+		rr.val = 0;
- 		__mon_event_count(rmid, &rr);
+-	hw_dom_mba = resctrl_to_arch_dom(dom_mba);
  
- 		/*
+ 	cur_bw = pmbm_data->prev_bw;
+ 	user_bw = dom_mba->mbps_val[closid];
+@@ -486,9 +483,7 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 		return;
+ 	}
+ 
+-	cur_msr = hw_r_mba->msr_base + closid;
+-	wrmsrl(cur_msr, delay_bw_map(new_msr_val, r_mba));
+-	hw_dom_mba->ctrl_val[closid] = new_msr_val;
++	resctrl_arch_update_one(r_mba, dom_mba, closid, CDP_NONE, new_msr_val);
+ 
+ 	/*
+ 	 * Delta values are updated dynamically package wise for each
+diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+index 93dfe55..f4c9101 100644
+--- a/include/linux/resctrl.h
++++ b/include/linux/resctrl.h
+@@ -197,6 +197,14 @@ struct resctrl_schema {
+ /* The number of closid supported by this resource regardless of CDP */
+ u32 resctrl_arch_get_num_closid(struct rdt_resource *r);
+ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
++
++/*
++ * Update the ctrl_val and apply this config right now.
++ * Must be called on one of the domain's CPUs.
++ */
++int resctrl_arch_update_one(struct rdt_resource *r, struct rdt_domain *d,
++			    u32 closid, enum resctrl_conf_type t, u32 cfg_val);
++
+ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
+ 			    u32 closid, enum resctrl_conf_type type);
+ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
