@@ -2,149 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1C25E84C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164165E84D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 23:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiIWVV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 17:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S231287AbiIWVZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 17:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiIWVVM (ORCPT
+        with ESMTP id S231340AbiIWVZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 17:21:12 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4048C120BDF;
-        Fri, 23 Sep 2022 14:21:11 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:46132)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1obq6g-000o8g-4w; Fri, 23 Sep 2022 15:21:10 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:49406 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1obq6f-002Jll-1i; Fri, 23 Sep 2022 15:21:09 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     cambda@linux.alibaba.com
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Dust Li <dust.li@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>
-References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
-        <87k05v5sqn.fsf@email.froward.int.ebiederm.org>
-        <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
-Date:   Fri, 23 Sep 2022 16:21:02 -0500
-In-Reply-To: <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
-        (cambda@linux.alibaba.com's message of "Fri, 23 Sep 2022 11:56:55
-        +0800")
-Message-ID: <874jwx4wjl.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 23 Sep 2022 17:25:22 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EC3122A53
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:25:19 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id cc5so1808639wrb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QYrS8aOXLdxfqH2E62RLs+f9pZwOFHbwNujxln9jHyA=;
+        b=Hi/H8ExZPdy/8PAaeHOmAMG4nWm4ghmynArm3W8PbYmlmyXQ3uIANZI82QLoqaM/LK
+         +BoF/anj5m2URzuhNwoMgMAMxabnMnq0TO2Mz77ywAMxXgtrWK1r0jmiNeCZaaH17+PQ
+         2HCNtgyOGG518WvjJ9V0TKkzJ5TBAUuYfyeN/vBZhTcNKOzzD+4+5D1xg3B6OTjW1T8K
+         HG8S3fcDIGgnHrdWp4sK+r4pIfxNjSkX7BW3xbZ4j4wvtHbQ7Za1Jveq2/M0Qdo0tZWS
+         95pG0iCzlH34rashvM5klN6fQaN0NnuvRo5txYugnQNmUZiwLK5xZN/0QlfY/dRrTLs6
+         HzCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QYrS8aOXLdxfqH2E62RLs+f9pZwOFHbwNujxln9jHyA=;
+        b=LpsK7PQJGNdHftixWGj8JgS5NwIIKjixWY/RlZsCsdMbnK8Fh2NOmkT37a3301OTvw
+         6QpU9+S93JAP9ap6qcaNMMLajtJNF6NBmYjfGUKn8qhxShWoIr0VXltq4McIhggAqnra
+         laeQg+l4QkESBG31xNbJ/tlZtImTKFuD0k1aI8MOSeh1ICrHcWswyVgJ3zL3YNyVHJOO
+         3TDvxuK0mV3F6B4Be6U/34vf+YAOiAZHPZw1JMgVnK7fHAoLOcdf8mZ2G6is1QDO8HUY
+         azrBLV3bPtV255RAoh71htPba7LAbOOCfKEH4Nfhf7974S6Ruty/5qa13erJ70rWQQ/k
+         RuSg==
+X-Gm-Message-State: ACrzQf3FFvdQ56Wos3zx4b6FenrqlKfo9HhSQcW8iHEB2aWS2vPeHOap
+        KO+k45Q+zYSqvL+NIyw5mtQRPUhrVrNTqA==
+X-Google-Smtp-Source: AMsMyM7gocVlrtj5dqu1OiHtiRCqcKRbRfs4z/zcbr9ci9j7iMZlVMSPxnq0HVdqw7xJsq30MrKBAA==
+X-Received: by 2002:a5d:47c5:0:b0:22a:6d4c:f21e with SMTP id o5-20020a5d47c5000000b0022a6d4cf21emr6462523wrc.417.1663968317189;
+        Fri, 23 Sep 2022 14:25:17 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id u9-20020a056000038900b002252884cc91sm8155982wrf.43.2022.09.23.14.25.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 14:25:16 -0700 (PDT)
+Message-ID: <3cf03d51-74db-675c-b392-e4647fa5b5a6@arista.com>
+Date:   Fri, 23 Sep 2022 22:25:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1obq6f-002Jll-1i;;;mid=<874jwx4wjl.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18HrC7RwvP/0Caif2Ktot5rOINy7T4j660=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 00/35] net/tcp: Add TCP-AO support
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Leonard Crestez <cdleonard@gmail.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+References: <20220923201319.493208-1-dima@arista.com>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20220923201319.493208-1-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: ; sa02 0; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;cambda@linux.alibaba.com
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 416 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 3.9 (0.9%), b_tie_ro: 2.7 (0.6%), parse: 0.68
-        (0.2%), extract_message_metadata: 9 (2.1%), get_uri_detail_list: 2.1
-        (0.5%), tests_pri_-1000: 10 (2.5%), tests_pri_-950: 1.07 (0.3%),
-        tests_pri_-900: 0.79 (0.2%), tests_pri_-90: 72 (17.2%), check_bayes:
-        70 (16.9%), b_tokenize: 7 (1.6%), b_tok_get_all: 9 (2.1%),
-        b_comp_prob: 1.86 (0.4%), b_tok_touch_all: 50 (12.0%), b_finish: 0.71
-        (0.2%), tests_pri_0: 309 (74.2%), check_dkim_signature: 0.40 (0.1%),
-        check_dkim_adsp: 1.71 (0.4%), poll_dns_idle: 0.38 (0.1%),
-        tests_pri_10: 1.77 (0.4%), tests_pri_500: 6 (1.5%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: Syscall kill() can send signal to thread ID
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"cambda@linux.alibaba.com" <cambda@linux.alibaba.com> writes:
+On 9/23/22 21:12, Dmitry Safonov wrote:
+> Changes from v1:
+> - Building now with CONFIG_IPV6=n (kernel test robot <lkp@intel.com>)
+> - Added missing static declarations for local functions
+>   (kernel test robot <lkp@intel.com>)
+> - Addressed static analyzer and review comments by Dan Carpenter
+>   (thanks, they were very useful!)
+> - Fix elif without defined() for !CONFIG_TCP_AO
+> - Recursively build selftests/net/tcp_ao (Shuah Khan), patches in:
+>   https://lore.kernel.org/all/20220919201958.279545-1-dima@arista.com/T/#u
+> - Don't leak crypto_pool reference when TCP-MD5 key is modified/changed
+> - Add TCP-AO support for nettest.c and fcnal-test.sh
+>   (will be used for VRF testing in later versions)
+> 
+> Version 1: https://lore.kernel.org/all/20220818170005.747015-1-dima@arista.com/T/#u
 
->> On Sep 22, 2022, at 23:33, Eric W. Biederman <ebiederm@xmission.com> wrote:
->> 
->> cambda@linux.alibaba.com writes:
->> 
->>> I found syscall kill() can send signal to a thread id, which is
->>> not the TGID. But the Linux manual page kill(2) said:
->>> 
->>> "The kill() system call can be used to send any signal to any
->>> process group or process."
->>> 
->>> And the Linux manual page tkill(2) said:
->>> 
->>> "tgkill() sends the signal sig to the thread with the thread ID
->>> tid in the thread group tgid.  (By contrast, kill(2) can be used
->>> to send a signal only to a process (i.e., thread group) as a
->>> whole, and the signal will be delivered to an arbitrary thread
->>> within that process.)"
->>> 
->>> I don't know whether the meaning of this 'process' should be
->>> the TGID? Because I found kill(tid, 0) will return ESRCH on FreeBSD,
->>> while Linux sends signal to the thread group that the thread belongs
->>> to.
->>> 
->>> If this is as expected, should we add a notice to the Linux manual
->>> page? Because it's a syscall and the pids not equal to tgid are not
->>> listed under /proc. This may be a little confusing, I guess.
->> 
->> How did you come across this?  Were you just experimenting?
->> 
->> I am wondering if you were tracking a bug, or a portability problem
->> or something else.  If the current behavior is causing problems in
->> some way instead of just being a detail that no one really cares about
->> either way it would be worth considering if we want to maintain the
->> current behavior.
->> 
->> Eric
->
-> I have found I can cd into /proc/tid, and the proc_pid_readdir()
-> uses next_tgid() to filter tid. Also the 'ps' command reads the
-> /proc dir to show processes. That's why I was confused with kill().
->
-> And yes, I'm tracking a bug. A service monitor, like systemd or
-> some watchdog, uses kill() to check if a pid is valid or not:
->   1. Store service pid into cache.
->   2. Check if pid in cache is valid by kill(pid, 0).
->   3. Check if pid in cache is the service to watch.
->
-> So if kill(pid, 0) returns success but no process info shows on 'ps'
-> command, the service monitor could be confused. The monitor could
-> check if pid is tid, but this means the odd behavior would be used
-> intentionally. And this workaround may be unsafe on other OS?
->
-> I'm agreed with you that this behavior shouldn't be removed, in case
-> some userspace applications use it now.
+I think it's worth answering the question: why am I continuing sending
+patches for TCP-AO support when there's already another proposal? [1]
+Pre-history how we end up with the second approach is here: [2]
+TLDR; we had a customer and a deadline to deliver, I've given reviews to
+Leonard, but in the end it seems to me what we got is worth submitting
+as it's better in my view in many aspects.
 
-As has already been mentioned using pids and api's like kill is
-fundamentally racy.  We try and to keep from reusing pids too quickly.
-Unfortunately what we have is that on average there will be some time
-between pid reuse not an kind of worst case guarantee.
+The biggest differences between two proposals, that I care about
+(design-decisions, not implementation details):
 
-We have slowly been introducing techniques into linux allow combatting
-that.  A directory processes directory in proc that you have open will
-never point to another process even after the pid is reused.  Similarly
-we have pidfd that will associate with a specific process and will not
-associate with any other process even if the processes pid is reused.
+1. Per-netns TCP-AO keys vs per-socket TCP-AO keys. The reasons why this
+proposal is using per-socket keys (that are added like TCP-MD5 keys with
+setsockopt()) are:
+- They scale better: you don't have to lookup in netns database for a
+key. This is a major thing for Arista: we have to support customers that
+want more than 1000 peers with possible multiple keys per-peer. This
+scales well when the keys are split by design for each socket on every
+established connection.
+- TCP-AO doesn't require CAP_NET_ADMIN for usage.
+- TCP-AO is not meant to be transparent (like ipsec tunnels) for
+applications. The users are BGP applications which already know what
+they need.
+- Leonard's proposal has weird semantics when setsockopt() on some
+socket will change keys on other sockets in that network namespace. It
+should have been rather netlink-managed API or something of the kind if
+the keys are per-netns.
 
-That is we have userspace pid value reuse, but we don't reuse struct pid
-in the kernel.
+2. This proposal seeks to do less in kernel space and leave more
+decision-making to the userspace. It is another major disagreement with
+Leonard's proposal, which seeks to add a key lifetime, key rotation
+logic and all other business-logic details into the kernel, while here
+those decisions are left for the userspace.
+If I understood Leonard correctly, he is placing more things in kernel
+to simplify migration for user applications from TCP-MD5 to TCP-AO. I
+rather think that would be a job for a shared library if that's needed.
+As per my perception (1) was also done to relieve userspace from the job
+of removing an outdated key simultaneously from all users in netns,
+while in this proposal this job is left for userspace to use available
+IPC methods. Essentially, I think TCP-AO in kernel should do only
+minimum that can't be done "reasonably" in userspace. By "reasonably" I
+mean without moving the TCP-IP stack into userspace.
 
-Unfortunately I don't think there is anything that allows these races to
-be addressed in a portable manner.
+3. Re-using existing kernel code vs copy'n'pasting it, leaving
+refactoring for later. I'm a big fan of reusing existing functions. I
+think lesser amount of code in the end reduces the burden of maintenance
+as well as simplifies the code (both reading and changing). I can see
+Leonard's point of simplifying backports to stable releases that he
+ships to customers, but I think any upstream proposal should add less
+code and try reusing more.
 
-Eric
+4. Following RFC5925 closer to text. RFC says that rnext_key from the
+peer MUST be respected, as well as that current_key MUST not be removed
+on an established connection. In this proposal if the requirements of
+RFC can be met, they are followed, rather than broken.
 
+5. Using ahash instead of shash. If there's a hardware accelerator - why
+not using it? This proposal uses crypto_ahash through per-CPU pool of
+crypto requests (crypto_pool).
+
+6. Hash algorithm UAPI: magic constants vs hash name as char *. This is
+a thing I've asked Leonard multiple times and what he refuses to change
+in his patches: let the UAPI have `char tcpa_alg_name[64]' and just pass
+it to crypto_* layer. There is no need for #define MY_HASHING_ALGO 0x2
+and another in-kernel array to convert the magic number to algorithm
+string in order to pass it to crypto.
+The algorithm names are flexible: we already have customer's request to
+use other than RFC5926 required hashing algorithms. And I don't see any
+value in this middle-layer. This is already what kernel does, see for
+example, include/uapi/linux/xfrm.h, grep for alg_name.
+
+7. Adding traffic keys from the beginning. The proposal would be
+incomplete without having traffic keys: they are pre-calculated in this
+proposal, so the TCP stack doesn't have to do hashing twice (first for
+calculation of the traffic key) for every segment on established
+connections. This proposal has them naturally per-socket.
+
+I think those are the biggest differences in the approaches and they are
+enough to submit a concurrent proposal. Salam, Francesco, please add if
+I've missed any other disagreement or major architectural/design
+difference in the proposals.
+
+> In TODO (expect in next versions):
+> - selftests on older kernels (or with CONFIG_TCP_AO=n) should exit with
+>   SKIP, not FAIL
+> - Support VRFs in setsockopt()
+> - setsockopt() UAPI padding + a test that structures are of the same
+>   size on 32-bit as on 64-bit platforms
+> - IPv4-mapped-IPv6 addresses (might be working, but no selftest now)
+> - Remove CONFIG_TCP_AO dependency on CONFIG_TCP_MD5SIG
+> - Add TCP-AO static key
+> - Measure/benchmark TCP-AO and regular TCP connections
+> - setsockopt(TCP_REPAIR) with TCP-AO
+[..]
+[1]:
+https://lore.kernel.org/linux-crypto/cover.1662361354.git.cdleonard@gmail.com/
+[2]:
+https://lore.kernel.org/all/8097c38e-e88e-66ad-74d3-2f4a9e3734f4@arista.com/T/#u
+
+Thanks,
+          Dmitry
