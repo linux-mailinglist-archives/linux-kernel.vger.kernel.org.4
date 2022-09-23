@@ -2,85 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEBB5E8052
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66FA5E8050
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiIWRE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S232310AbiIWREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiIWREI (ORCPT
+        with ESMTP id S231805AbiIWRDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:04:08 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE17814AD7A;
-        Fri, 23 Sep 2022 10:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663952642; x=1695488642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PTqQK6dYlkjIw/931CWXKps3JJ2u8fVVhXqBGqzRZKA=;
-  b=aq8FOnQEUA2FLFHjMpgirg0U5RsvXBYb4YJufK6ZsBfYr9u8OetGUWnd
-   Yj9cHxYiu7ntY0aC5FXN3bA4479z0dRdUlbI2690efOqQEm3zN4+9EouQ
-   rStqKSoB1P/y2LLoesD0jTumJxug8/LmbclkeyF7DJCmYNwFRaETYpSlx
-   oSivNfS/IV/Ob6UC3n6lSQxlYl1wEDFDp3H8OM4dbps9o7PeBQygZs1Lf
-   N338CnxlM1m0pqtVTNH/+dmSjlsrQWg1cC7WpFrTuisHoiIy3Pzs1GzUb
-   25IVKFjPS7LwLoeeYGRIzcIFBZy9QRucoZvWrjFPVCKxOFQXMguVuXAm+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="362450367"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="362450367"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 10:03:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="620275074"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 23 Sep 2022 10:03:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1obm5U-006a2K-0A;
-        Fri, 23 Sep 2022 20:03:40 +0300
-Date:   Fri, 23 Sep 2022 20:03:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v2 0/9] pwm: lpss: Clean up and convert to a pure library
-Message-ID: <Yy3m63T6P00SM5mp@smile.fi.intel.com>
-References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
+        Fri, 23 Sep 2022 13:03:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061FE1497AE
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:03:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 974B161255
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765EFC433C1;
+        Fri, 23 Sep 2022 17:03:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Dm53qBVV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663952631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OQrWhckICffwDFTmUv0mshNquiiM57TSKQlQI55dl6E=;
+        b=Dm53qBVVCaQiRu0vguuJDGbwQSdwks6RSiVhAXn0d0TEH+LMSGuoYmrGL9RqoJIN+xoa2i
+        sLX//Sn02lhbZKsgJvPUDZG8b8pmV2c9+VEUdHq342lWHAVLosyzSVsnsXpsa7mR41yITv
+        fLsRA6JADXpg/cKvPh6qJfgg7JXaTmY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 800fab4c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 23 Sep 2022 17:03:51 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH v3 3/3] m68k: rework BI_VIRT_RNG_SEED as BI_RNG_SEED
+Date:   Fri, 23 Sep 2022 19:03:40 +0200
+Message-Id: <20220923170340.4099226-3-Jason@zx2c4.com>
+In-Reply-To: <20220923170340.4099226-1-Jason@zx2c4.com>
+References: <20220923170340.4099226-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 04:56:49PM +0300, Andy Shevchenko wrote:
-> First of all, a set of cleanups and code deduplications (for better
-> maintenance) to the PWM LPSS driver.
-> 
-> Second, we may (re-)use the core part as a library in the future in
-> the devices that combine the same PWM IP in their address space. So
-> convert the core file to be a pure library which doesn't require any
-> special resource handling or alike.
+This is useful on !virt platforms for kexec, so change things from
+BI_VIRT_RNG_SEED to be BI_RNG_SEED, and simply remove BI_VIRT_RNG_SEED
+because it only ever lasted one release, and nothing is broken by not
+having it. At the same time, keep a comment noting that it's been
+removed, so that ID isn't reused.
 
-What happened to the PWM subsystem maintenance again?
-For weeks there is no reaction from the maintainer(s)... :-(
-If there is a lag of maintaining, perhaps we should mark it
-as Orphaned?
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/m68k/include/asm/bootinfo.h           |  2 ++
+ arch/m68k/include/uapi/asm/bootinfo-virt.h |  9 ++-------
+ arch/m68k/include/uapi/asm/bootinfo.h      |  8 +++++++-
+ arch/m68k/kernel/process.c                 | 10 ++++++++++
+ arch/m68k/kernel/setup_mm.c                | 14 ++++++++++++++
+ arch/m68k/virt/config.c                    | 21 ---------------------
+ 6 files changed, 35 insertions(+), 29 deletions(-)
 
+diff --git a/arch/m68k/include/asm/bootinfo.h b/arch/m68k/include/asm/bootinfo.h
+index 81c91af8ec6c..71103530839a 100644
+--- a/arch/m68k/include/asm/bootinfo.h
++++ b/arch/m68k/include/asm/bootinfo.h
+@@ -28,6 +28,8 @@ void process_uboot_commandline(char *commandp, int size);
+ static inline void process_uboot_commandline(char *commandp, int size) {}
+ #endif
+ 
++extern const struct bi_record *rng_seed_record;
++
+ #endif /* __ASSEMBLY__ */
+ 
+ 
+diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+index b091ee9b06e0..4032a14cc5c2 100644
+--- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
++++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+@@ -13,13 +13,8 @@
+ #define BI_VIRT_VIRTIO_BASE	0x8004
+ #define BI_VIRT_CTRL_BASE	0x8005
+ 
+-/*
+- * A random seed used to initialize the RNG. Record format:
+- *
+- *   - length       [ 2 bytes, 16-bit big endian ]
+- *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
+- */
+-#define BI_VIRT_RNG_SEED	0x8006
++/* No longer used -- replaced with BI_RNG_SEED -- but don't reuse this index:
++ * 	#define BI_VIRT_RNG_SEED	0x8006 */
+ 
+ #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
+ 
+diff --git a/arch/m68k/include/uapi/asm/bootinfo.h b/arch/m68k/include/uapi/asm/bootinfo.h
+index 95ecf3ae4c49..387f2a61e908 100644
+--- a/arch/m68k/include/uapi/asm/bootinfo.h
++++ b/arch/m68k/include/uapi/asm/bootinfo.h
+@@ -64,7 +64,13 @@ struct mem_info {
+ 					/* (struct mem_info) */
+ #define BI_COMMAND_LINE		0x0007	/* kernel command line parameters */
+ 					/* (string) */
+-
++/*
++ * A random seed used to initialize the RNG. Record format:
++ *
++ *   - length       [ 2 bytes, 16-bit big endian ]
++ *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
++ */
++#define BI_RNG_SEED		0x0008
+ 
+     /*
+      *  Linux/m68k Architectures (BI_MACHTYPE)
+diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+index 2cb4a61bcfac..f40cc6f47f09 100644
+--- a/arch/m68k/kernel/process.c
++++ b/arch/m68k/kernel/process.c
+@@ -29,6 +29,7 @@
+ #include <linux/reboot.h>
+ #include <linux/init_task.h>
+ #include <linux/mqueue.h>
++#include <linux/random.h>
+ #include <linux/rcupdate.h>
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
+@@ -36,6 +37,7 @@
+ #include <asm/traps.h>
+ #include <asm/machdep.h>
+ #include <asm/setup.h>
++#include <asm/bootinfo.h>
+ 
+ 
+ asmlinkage void ret_from_fork(void);
+@@ -51,8 +53,16 @@ void arch_cpu_idle(void)
+ #endif
+ }
+ 
++const struct bi_record *rng_seed_record;
++
+ void machine_restart(char * __unused)
+ {
++	if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
++		u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
++		get_random_bytes((u8 *)rng_seed_record->data + 2, len);
++		*(u16 *)rng_seed_record->data = cpu_to_be16(len);
++	}
++
+ 	if (mach_reset)
+ 		mach_reset();
+ 	for (;;);
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 7e7ef67cff8b..eacf734bea0e 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -25,6 +25,7 @@
+ #include <linux/module.h>
+ #include <linux/nvram.h>
+ #include <linux/initrd.h>
++#include <linux/random.h>
+ 
+ #include <asm/bootinfo.h>
+ #include <asm/byteorder.h>
+@@ -151,6 +152,19 @@ static void __init m68k_parse_bootinfo(const struct bi_record *record)
+ 				sizeof(m68k_command_line));
+ 			break;
+ 
++		case BI_RNG_SEED: {
++			u16 len = be16_to_cpup(data);
++			add_bootloader_randomness(data + 2, len);
++			/*
++			 * Zero the data to preserve forward secrecy, and zero the
++			 * length to prevent kexec from using it.
++			 */
++			memzero_explicit((void *)data, len + 2);
++			/* Store a reference to be filled in on reboot. */
++			rng_seed_record = record;
++			break;
++		}
++
+ 		default:
+ 			if (MACH_IS_AMIGA)
+ 				unknown = amiga_parse_bootinfo(record);
+diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
+index d4627840e35b..632ba200ad42 100644
+--- a/arch/m68k/virt/config.c
++++ b/arch/m68k/virt/config.c
+@@ -2,7 +2,6 @@
+ 
+ #include <linux/reboot.h>
+ #include <linux/serial_core.h>
+-#include <linux/random.h>
+ #include <clocksource/timer-goldfish.h>
+ 
+ #include <asm/bootinfo.h>
+@@ -45,18 +44,10 @@ static void virt_halt(void)
+ 		;
+ }
+ 
+-static const struct bi_record *rng_seed_record;
+-
+ static void virt_reset(void)
+ {
+ 	void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
+ 
+-	if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
+-		u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
+-		get_random_bytes((u8 *)rng_seed_record->data + 2, len);
+-		*(u16 *)rng_seed_record->data = cpu_to_be16(len);
+-	}
+-
+ 	iowrite32be(CMD_RESET, base + VIRT_CTRL_REG_CMD);
+ 	local_irq_disable();
+ 	while (1)
+@@ -101,18 +92,6 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
+ 		data += 4;
+ 		virt_bi_data.virtio.irq = be32_to_cpup(data);
+ 		break;
+-	case BI_VIRT_RNG_SEED: {
+-		u16 len = be16_to_cpup(data);
+-		add_bootloader_randomness(data + 2, len);
+-		/*
+-		 * Zero the data to preserve forward secrecy, and zero the
+-		 * length to prevent kexec from using it.
+-		 */
+-		memzero_explicit((void *)data, len + 2);
+-		/* Store a reference to be filled in on reboot. */
+-		rng_seed_record = record;
+-		break;
+-	}
+ 	default:
+ 		unknown = 1;
+ 		break;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
