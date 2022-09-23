@@ -2,321 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDBB5E7F3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11AA5E7F43
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiIWQB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S232380AbiIWQF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiIWQBS (ORCPT
+        with ESMTP id S231514AbiIWQFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:01:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1185147A3B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:01:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17FD9B81913
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:01:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C148FC433C1;
-        Fri, 23 Sep 2022 16:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663948872;
-        bh=IMPCQs0oP9bISwvvaMR6PDrEaL55VgGDCbMYJUBi59U=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IAY1p5Q12a2GBkpLsAofYkWaX2K+dayt1I4tjb61V9Cd7qOR9DbQPceL2F4F1EFpg
-         EY1rBMd3/6V530TyD4rD4OZ9yrzSvxSXXOgSmA9eZq/WSDkHo4Nd5A2AHTwRIawDIl
-         TDFqLsoYqMmYVayDCU0CYKI/uuDD0kms0ilCZQVZTlI7b5+sxCJIhnYx+E3mCO0k7q
-         jXvU0CjheHlIjKuJHbE04E6vi7U7blMGgh2XLt4oMb9YAYwSCMFH0VNK5lhRcsY7Uj
-         yAmTuEiLA0VKz+H2+D3IKbLnpcs1vyBlEkhSADT0bGJBIac0UxN25Bi58XHRKl7vsQ
-         DEj2xgAAzubcw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5EBE55C0829; Fri, 23 Sep 2022 09:01:12 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:01:12 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: RCU vs NOHZ
-Message-ID: <20220923160112.GT4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
- <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
- <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
- <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
- <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
- <20220921213644.GA1609461@paulmck-ThinkPad-P17-Gen-1>
- <16b11b78-245e-9db6-1d0f-267832b954ca@joelfernandes.org>
+        Fri, 23 Sep 2022 12:05:43 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376EBAE856
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:41 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so494671ilu.17
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=TNsKpikZ1ZBjh21h5HyuhGoaC1RZtRCLwpayxbe9ub8=;
+        b=O/V0y6siAGVOpIhA2qOatdfS0RarVHCccf1LFPTVW34ZCLaAG2WOlyqbcSba0pbLGD
+         73jTvD2j3c5DOkHI8mY2WXc3rUR9TvgsO7DCmJfqLOVucQ12M4X80sosMu1Ty/ehR+H7
+         9bUPG4/p/Lnz6Ow7Fs8t3JXDscxEgqLR9Kc3Jh05yLzqFPWg0hkDMYDh2btNIzIr0lce
+         fhiy45gEhf51brvbZlw2vjp6Mbrut0SPx5QexsiCsr1tMy5E/PwsCMJ+nr61imA8+roB
+         EWdLSnHrEP/lLVbWDaOpopNmaZ0SgIdwWJG3ByEWp31k7kHdYhrAhk3EiQojEkMbj7GJ
+         GeAg==
+X-Gm-Message-State: ACrzQf3dYAWX0jqgM7b6ho2qRM9//tScQKtZ7isHX78VoMN3hWOzb4Dp
+        nEH4iCFOa6j9+kq8lfgVam+nUFurnqEpxO6AvQ62ALHGgM8C
+X-Google-Smtp-Source: AMsMyM5C06VlRfRAIQIzUtiJevoUyui+Rnb+0VRKkrQ6jUfUuOn1evUbPQY6qFZvNdYweJ3XVYoj7ifHxCX/u+zywIjKaayteZGB
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16b11b78-245e-9db6-1d0f-267832b954ca@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1aa3:b0:2f1:d2a4:c7c3 with SMTP id
+ l3-20020a056e021aa300b002f1d2a4c7c3mr4416624ilv.292.1663949140447; Fri, 23
+ Sep 2022 09:05:40 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 09:05:40 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000070db2005e95a5984@google.com>
+Subject: [syzbot] WARNING in wireless_send_event
+From:   syzbot <syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:12:17AM -0400, Joel Fernandes wrote:
-> On 9/21/2022 5:36 PM, Paul E. McKenney wrote:
-> > On Sat, Sep 17, 2022 at 07:25:08AM -0700, Paul E. McKenney wrote:
-> >> On Fri, Sep 16, 2022 at 11:20:14AM +0200, Peter Zijlstra wrote:
-> >>> On Fri, Sep 16, 2022 at 12:58:17AM -0700, Paul E. McKenney wrote:
-> >>>
-> >>>> To the best of my knowledge at this point in time, agreed.  Who knows
-> >>>> what someone will come up with next week?  But for people running certain
-> >>>> types of real-time and HPC workloads, context tracking really does handle
-> >>>> both idle and userspace transitions.
-> >>>
-> >>> Sure, but idle != nohz. Nohz is where we disable the tick, and currently
-> >>> RCU can inhibit this -- rcu_needs_cpu().
-> >>
-> >> Exactly.  For non-nohz userspace execution, the tick is still running
-> >> anyway, so RCU of course won't be inhibiting its disabling.  And in that
-> >> case, RCU's hook is the tick interrupt itself.  RCU's hook is passed a
-> >> flag saying whether the interrupt came from userspace or from kernel.
-> >>
-> >>> AFAICT there really isn't an RCU hook for this, not through context
-> >>> tracking not through anything else.
-> >>
-> >> There is a directly invoked RCU hook for any transition that enables or
-> >> disables the tick, namely the ct_*_enter() and ct_*_exit() functions,
-> >> that is, those functions formerly known as rcu_*_enter() and rcu_*_exit().
-> >>
-> >>>> It wasn't enabled for ChromeOS.
-> >>>>
-> >>>> When fully enabled, it gave them the energy-efficiency advantages Joel
-> >>>> described.  And then Joel described some additional call_rcu_lazy()
-> >>>> changes that provided even better energy efficiency.  Though I believe
-> >>>> that the application should also be changed to avoid incessantly opening
-> >>>> and closing that file while the device is idle, as this would remove
-> >>>> -all- RCU work when nearly idle.  But some of the other call_rcu_lazy()
-> >>>> use cases would likely remain.
-> >>>
-> >>> So I'm thinking the scheme I outlined gets you most if not all of what
-> >>> lazy would get you without having to add the lazy thing. A CPU is never
-> >>> refused deep idle when it passes off the callbacks.
-> >>>
-> >>> The NOHZ thing is a nice hook for 'this-cpu-wants-to-go-idle-long-term'
-> >>> and do our utmost bestest to move work away from it. You *want* to break
-> >>> affinity at this point.
-> >>>
-> >>> If you hate on the global, push it to a per rcu_node offload list until
-> >>> the whole node is idle and then push it up the next rcu_node level until
-> >>> you reach the top.
-> >>>
-> >>> Then when the top rcu_node is full idle; you can insta progress the QS
-> >>> state and run the callbacks and go idle.
-> >>
-> >> Unfortunately, the overhead of doing all that tracking along with
-> >> resolving all the resulting race conditions will -increase- power
-> >> consumption.  With RCU, counting CPU wakeups is not as good a predictor
-> >> of power consumption as one might like.  Sure, it is a nice heuristic
-> >> in some cases, but with RCU it is absolutely -not- a replacement for
-> >> actually measuring power consumption on real hardware.  And yes, I did
-> >> learn this the hard way.  Why do you ask?  ;-)
-> >>
-> >> And that is why the recently removed CONFIG_RCU_FAST_NO_HZ left the
-> >> callbacks in place and substituted a 4x slower timer for the tick.
-> >> -That- actually resulted in significant real measured power savings on
-> >> real hardware.
-> >>
-> >> Except that everything that was building with CONFIG_RCU_FAST_NO_HZ
-> >> was also doing nohz_full on each and every CPU.  Which meant that all
-> >> that CONFIG_RCU_FAST_NO_HZ was doing for them was adding an additional
-> >> useless check on each transition to and from idle.  Which in turn is why
-> >> CONFIG_RCU_FAST_NO_HZ was removed.  No one was using it in any way that
-> >> made any sense.
-> >>
-> >> And more recent testing with rcu_nocbs on both ChromeOS and Android has
-> >> produced better savings than was produced by CONFIG_RCU_FAST_NO_HZ anyway.
-> >>
-> >> Much of the additional savings from Joel et al.'s work is not so much
-> >> from reducing the number of ticks, but rather from reducing the number
-> >> of grace periods, which are of course much heavier weight.
-> >>
-> >> And this of course means that any additional schemes to reduce RCU's
-> >> power consumption must be compared (with real measurements on real
-> >> hardware!) to Joel et al.'s work, whether in combination or as an
-> >> alternative.  And either way, the power savings must of course justify
-> >> the added code and complexity.
-> > 
-> > And here is an untested patch that in theory might allow much of the
-> > reduction in power with minimal complexity/overhead for kernels without
-> > rcu_nocbs CPUs.  On the off-chance you know of someone who would be
-> > willing to do a realistic evaluation of it.
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 80fc02e80a2dfb6c7468217cff2d4494a1c4b58d
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Wed Sep 21 13:30:24 2022 -0700
-> > 
-> >     rcu: Let non-offloaded idle CPUs with callbacks defer tick
-> >     
-> >     When a CPU goes idle, rcu_needs_cpu() is invoked to determine whether or
-> >     not RCU needs the scheduler-clock tick to keep interrupting.  Right now,
-> >     RCU keeps the tick on for a given idle CPU if there are any non-offloaded
-> >     callbacks queued on that CPU.
-> >     
-> >     But if all of these callbacks are waiting for a grace period to finish,
-> >     there is no point in scheduling a tick before that grace period has any
-> >     reasonable chance of completing.  This commit therefore delays the tick
-> >     in the case where all the callbacks are waiting for a specific grace
-> >     period to elapse.  In theory, this should result in a 50-70% reduction in
-> >     RCU-induced scheduling-clock ticks on mostly-idle CPUs.  In practice, TBD.
-> >     
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> >     Cc: Peter Zijlstra <peterz@infradead.org>
-> > 
-> > diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-> > index 9bc025aa79a3..84e930c11065 100644
-> > --- a/include/linux/rcutiny.h
-> > +++ b/include/linux/rcutiny.h
-> > @@ -133,7 +133,7 @@ static inline void rcu_softirq_qs(void)
-> >  		rcu_tasks_qs(current, (preempt)); \
-> >  	} while (0)
-> >  
-> > -static inline int rcu_needs_cpu(void)
-> > +static inline int rcu_needs_cpu(u64 basemono, u64 *nextevt)
-> >  {
-> >  	return 0;
-> >  }
-> > diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-> > index 70795386b9ff..3066e0975022 100644
-> > --- a/include/linux/rcutree.h
-> > +++ b/include/linux/rcutree.h
-> > @@ -19,7 +19,7 @@
-> >  
-> >  void rcu_softirq_qs(void);
-> >  void rcu_note_context_switch(bool preempt);
-> > -int rcu_needs_cpu(void);
-> > +int rcu_needs_cpu(u64 basemono, u64 *nextevt);
-> >  void rcu_cpu_stall_reset(void);
-> >  
-> >  /*
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 5ec97e3f7468..47cd3b0d2a07 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -676,12 +676,33 @@ void __rcu_irq_enter_check_tick(void)
-> >   * scheduler-clock interrupt.
-> >   *
-> >   * Just check whether or not this CPU has non-offloaded RCU callbacks
-> > - * queued.
-> > + * queued that need immediate attention.
-> >   */
-> > -int rcu_needs_cpu(void)
-> > +int rcu_needs_cpu(u64 basemono, u64 *nextevt)
-> >  {
-> > -	return !rcu_segcblist_empty(&this_cpu_ptr(&rcu_data)->cblist) &&
-> > -		!rcu_rdp_is_offloaded(this_cpu_ptr(&rcu_data));
-> > +	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-> > +	struct rcu_segcblist *rsclp = &rdp->cblist;
-> > +
-> > +	// Disabled, empty, or offloaded means nothing to do.
-> > +	if (!rcu_segcblist_is_enabled(rsclp) ||
-> > +	    rcu_segcblist_empty(rsclp) || rcu_rdp_is_offloaded(rdp)) {
-> > +		*nextevt = KTIME_MAX;
-> > +		return 0;
-> > +	}
-> > +
-> > +	// Callbacks ready to invoke or that have not already been
-> > +	// assigned a grace period need immediate attention.
-> > +	if (!rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ||
-> > +	    !rcu_segcblist_segempty(rsclp, RCU_NEXT_TAIL))
-> > +		return 1;> +
-> > +	// There are callbacks waiting for some later grace period.
-> > +	// Wait for about a grace period or two for the next tick, at which
-> > +	// point there is high probability that this CPU will need to do some
-> > +	// work for RCU.
-> > +	*nextevt = basemono + TICK_NSEC * (READ_ONCE(jiffies_till_first_fqs) > +					   READ_ONCE(jiffies_till_next_fqs) + 1);
-> 
-> Looks like nice idea. Could this race with the main GP thread on another CPU
-> completing the grace period, then on this CPU there is actually some work to do
-> but rcu_needs_cpu() returns 0.
-> 
-> I think it is plausible but not common, in which case the extra delay is
-> probably Ok.
+Hello,
 
-Glad you like it!
+syzbot found the following issue on:
 
-Yes, that race can happen, but it can also happen today.
-A scheduling-clock interrupt might arrive at a CPU just as a grace
-period finishes.  Yes, the delay is longer with this patch.  If this
-proves to be a problem, then the delay heuristic might expanded to
-include the age of the current grace period.
+HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1154ddd5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c196f080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f12618880000
 
-But keeping it simple to start with.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
 
-> Also, if the RCU readers take a long time, then we'd still wake up the system
-> periodically although with the above change, much fewer times, which is a good
-> thing.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
 
-And the delay heuristic could also be expanded to include a digitally
-filtered estimate of grace-period duration.  But again, keeping it simple
-to start with.  ;-)
+------------[ cut here ]------------
+memcpy: detected field-spanning write (size 8) of single field "&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
+WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623 wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
+Modules linked in:
+CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
+RIP: 0010:wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
+Code: fa ff ff e8 cd b9 db f8 b9 04 00 00 00 4c 89 e6 48 c7 c2 e0 56 11 8b 48 c7 c7 20 56 11 8b c6 05 94 8e 2a 05 01 e8 b8 b0 a6 00 <0f> 0b e9 9b fa ff ff e8 6f ef 27 f9 e9 a6 fd ff ff e8 c5 ef 27 f9
+RSP: 0018:ffffc90003b2fbc0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888021d157c0 RSI: ffffffff81620348 RDI: fffff52000765f6a
+RBP: ffff88801e15c780 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 20676e696e6e6170 R12: 0000000000000008
+R13: ffff888025a72640 R14: ffff8880225d402c R15: ffff8880225d4034
+FS:  0000555556bd9300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbda677dfb8 CR3: 000000007b976000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
+ wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
+ wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
+ wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
+ wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
+ sock_ioctl+0x285/0x640 net/socket.c:1220
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbda6736af9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd45e80138 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbda6736af9
+RDX: 0000000020000000 RSI: 0000000000008b04 RDI: 0000000000000003
+RBP: 00007fbda66faca0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbda66fad30
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-My guess is that offloading gets you more power savings, but I don't
-have a good way of testing this guess.
 
-							Thanx, Paul
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> Thanks,
-> 
->  - Joel
-> 
-> 
-> 
-> > +	return 0;
-> >  }
-> >  
-> >  /*
-> > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> > index b0e3c9205946..303ea15cdb96 100644
-> > --- a/kernel/time/tick-sched.c
-> > +++ b/kernel/time/tick-sched.c
-> > @@ -784,7 +784,7 @@ static inline bool local_timer_softirq_pending(void)
-> >  
-> >  static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
-> >  {
-> > -	u64 basemono, next_tick, delta, expires;
-> > +	u64 basemono, next_tick, next_tmr, next_rcu, delta, expires;
-> >  	unsigned long basejiff;
-> >  	unsigned int seq;
-> >  
-> > @@ -807,7 +807,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
-> >  	 * minimal delta which brings us back to this place
-> >  	 * immediately. Lather, rinse and repeat...
-> >  	 */
-> > -	if (rcu_needs_cpu() || arch_needs_cpu() ||
-> > +	if (rcu_needs_cpu(basemono, &next_rcu) || arch_needs_cpu() ||
-> >  	    irq_work_needs_cpu() || local_timer_softirq_pending()) {
-> >  		next_tick = basemono + TICK_NSEC;
-> >  	} else {
-> > @@ -818,8 +818,10 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
-> >  		 * disabled this also looks at the next expiring
-> >  		 * hrtimer.
-> >  		 */
-> > -		next_tick = get_next_timer_interrupt(basejiff, basemono);
-> > -		ts->next_timer = next_tick;
-> > +		next_tmr = get_next_timer_interrupt(basejiff, basemono);
-> > +		ts->next_timer = next_tmr;
-> > +		/* Take the next rcu event into account */
-> > +		next_tick = next_rcu < next_tmr ? next_rcu : next_tmr;
-> >  	}
-> >  
-> >  	/*
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
