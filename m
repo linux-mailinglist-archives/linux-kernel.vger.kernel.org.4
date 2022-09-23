@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73545E772D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA825E7730
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiIWJbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S231261AbiIWJbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiIWJbJ (ORCPT
+        with ESMTP id S231263AbiIWJbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:31:09 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D829E10B7;
-        Fri, 23 Sep 2022 02:30:13 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id b23so8000756qtr.13;
-        Fri, 23 Sep 2022 02:30:13 -0700 (PDT)
+        Fri, 23 Sep 2022 05:31:19 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0FED5ED
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:30:24 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id r7so19532001wrm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vOfuNjfQiyEloXtJTaSMMkcQA8aK6Y7PCNl4Uwk0PSk=;
-        b=qObvJ39iCzN4zRzPJEpMNadE83eBKVxHrHsJhPrDuuospVygmZPKzrm+aaizD9/Hcw
-         ac2Q2GZ9WEQLc6CrDL6KUuBXDsWMFstLWkYuCJs3FKeJRXO7zwvFXrzvv97shkqyQibK
-         8BU7r0Zk82VMWeyxFX8eNgR3NCtIDkwsqGfQaRRPu9jf4ieYwtvWCOxeLkyYZ63qFViu
-         YR5pqEaoKx61KPQr6KywTohmBwD2bAWKhBosFnTSsSgPCABq82991O8xX2yrvaYA2H5q
-         +ANITjCjz+0FEumYzxiGhhCuN1Av9UayyOAVK+QSd6qsiNQhEl2PxV5v6POwfNo/n6Ny
-         6adw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=NsCaxjSsnAPb9dr7jfz45Z2k7us6uvI3bad+ssBYPRY=;
+        b=kbAlmpgaEhf+5kfZd0SX24hWQBfs6lcGNXHiOLu0XLbPbbDq0VKm8G5TI+fPbE0Vm1
+         JomapF/69N/+VHhQNzJckRo24YdeHtN2fRdvUhLT/DUjRZv7hny8rK4zUIZStUCYN2Bh
+         wVUvQovR86bYYvrqW2XAIiCP7d2AszTLEftzWrTtOUP5E6SHsqL3tD+HHW6GfcIVPMzj
+         Pes9Bk7HYpkTskt9vLb7QCAb6XvOl6dCcssaqJwfalDPtBykq8O7KdtEdTJEB9U9VfcR
+         C4HRGXiUbojFb0hx6rCow34cFwi8wqHyx+P0OqGbC0ikFlnI/7iEt1nB82stw5N/CJpU
+         RtqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vOfuNjfQiyEloXtJTaSMMkcQA8aK6Y7PCNl4Uwk0PSk=;
-        b=iow+yPDW1GpPXYeF7/r8O/I91WtDvtfXwNKN9sMHdfTLufWyo7nrSduVj6Zo1NlyS6
-         jyX7HI070zoODDGawV5lwjf0lsgGo7y7wmfdgHY6JsBbrFSDZxVsai/tJGkajQoMcnP5
-         D00M//UiYoKV9J/Qb2zlcS6Pt2D7we3Nry1OoP+6cRPsORODhdwo5v16Ze5OIHxY5378
-         C41KgB8VZgOA9ceWv9intCAYLjRXD1n+n8eQEszgfu51aauU9pBg0JDUz2Aig+2QY/My
-         4H+py8jqJdrA43ga2q8Dx9E49028CsOUuwmLYmVA/zQKPrJUHJQThJFbMD2Sh+ggAys5
-         beSA==
-X-Gm-Message-State: ACrzQf2oMoI9DhqheJx31AT5KEhmCIGrwt7NgMj7f1qaSMiEm4ao4gkR
-        CbZzfaMH86P4mqEbUFLq/q0h+lfrZVfkttMpm8w=
-X-Google-Smtp-Source: AMsMyM7YBRy/ugzLt03xHCnOFOBsJFlgbHJx1WuVyIMhYryLnO1Tnm+Jhxk9n1/Ci2XZ+pnuwH3HaiqfcB4B+VHQdew=
-X-Received: by 2002:a05:622a:1701:b0:35b:b3bb:7c4e with SMTP id
- h1-20020a05622a170100b0035bb3bb7c4emr6186932qtk.195.1663925412410; Fri, 23
- Sep 2022 02:30:12 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=NsCaxjSsnAPb9dr7jfz45Z2k7us6uvI3bad+ssBYPRY=;
+        b=j7hKHSBs1hcji+dQCU0tHyTSBoGWJSl5wG1Km8octg9cyYKOFt7Hc8d4CsVqkKTH0L
+         6MG4KeCo9Q56xqKx/6aBPJYGQg8WwMu8mE427/If5owAfVFAwSRudJKRWi6VhyfOcnFO
+         CRWQYQLM0GkWqwWfRTHVrrL17SEW3UuRM02aq+PqrRlhLCadnvCktAmhFWjViZV2q3eJ
+         FRtEbA0VgjcGOG+Fit3WdwBn2aljFXld0vaBQR3+RKj2jEiKWVFjGsuKe7aK7HUmn6rP
+         ExwHVTtdlAU1F093CfnFRcrvdSmrylPLIiMNF1UO19/bFtZOjSbrjVSwyuBKJY2x0aXx
+         aFNQ==
+X-Gm-Message-State: ACrzQf3saYIwYH0DYqeyY+0stgc4lKjsSdYI9VSOU2cHXJl7pNH/TkX+
+        OJ9rhfnuZhKsnzVZzx/Us0OmZMZOACKSej7M
+X-Google-Smtp-Source: AMsMyM44w6e4lTsfnYrmAUHtoedhrpX4y0mRP2LzWbfviDNNggw30fENEV3+xEJfkW3hyLy2wWMfFg==
+X-Received: by 2002:a5d:53c8:0:b0:228:62ee:64cb with SMTP id a8-20020a5d53c8000000b0022862ee64cbmr4495871wrw.267.1663925423276;
+        Fri, 23 Sep 2022 02:30:23 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5990:ddf8:daac:3833? ([2a01:e0a:982:cbb0:5990:ddf8:daac:3833])
+        by smtp.gmail.com with ESMTPSA id r9-20020adff109000000b00229b76f872asm8619293wro.27.2022.09.23.02.30.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 02:30:22 -0700 (PDT)
+Message-ID: <b9aa1178-5848-70fd-2dc1-9f36d845985e@linaro.org>
+Date:   Fri, 23 Sep 2022 11:30:21 +0200
 MIME-Version: 1.0
-References: <20220922194639.1118971-1-marcus.folkesson@gmail.com>
- <a34d9ee8-8bf8-3158-7fe6-cbde513aa1a7@linaro.org> <CAHp75VcEGb3kS03QG0ebOJYH1X_D5EbBjL6iNWUxQ5j=aCu29A@mail.gmail.com>
- <2de38167-976b-6996-7929-a41a842991a2@linaro.org>
-In-Reply-To: <2de38167-976b-6996-7929-a41a842991a2@linaro.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 23 Sep 2022 12:29:36 +0300
-Message-ID: <CAHp75VdMNTVvk3hu9xSsntU6k6FJceS_4Ou6d-=ozmP3KMARxQ@mail.gmail.com>
-Subject: Re: [PATCH v7] iio: adc: mcp3911: add support to set PGA
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 5.15 247/779] drm/meson: encoder_hdmi: switch to bridge
+ DRM_BRIDGE_ATTACH_NO_CONNECTOR
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Stefan Agner <stefan@agner.ch>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-amlogic@lists.infradead.org
+References: <20220815180337.130757997@linuxfoundation.org>
+ <20220815180347.894058731@linuxfoundation.org>
+ <892a917454bd0bbfe8a4d34a5170fe50@agner.ch>
+ <685b64f60375b69c5c790286f1386be3@agner.ch> <YyBoACiWvW1UnfQA@kroah.com>
+ <db3b3082-5278-7ed8-4322-2422cec227a5@linaro.org>
+ <Yy154kHD7PPtj05W@kroah.com>
+Organization: Linaro Developer Services
+In-Reply-To: <Yy154kHD7PPtj05W@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 12:24 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/09/2022 23:07, Andy Shevchenko wrote:
-> > On Thu, Sep 22, 2022 at 11:00 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >> On 22/09/2022 21:46, Marcus Folkesson wrote:
-> >
-> > ...
-> >
-> >> No need to cc-us. Use scripts/get_maintainers.pl.
-> >
-> > While I understand your point it's much easier to Cc all related
-> > people for all patches in the series, given the fact that many (code)
-> > maintainers ask for that (Cc'ing them all patches). So I prefer to be
-> > on the contributor side for the sake of ease of contribution.
->
-> Then please explain me how I am related to this patchset (it's one
-> patch, BTW, not a patchset)...
+Hi,
 
-That is a good point! I was under the impression that this is a series
-with some DT changes.
+On 23/09/2022 11:18, Greg Kroah-Hartman wrote:
+> On Fri, Sep 23, 2022 at 11:12:02AM +0200, Neil Armstrong wrote:
+>> Hi Greg,
+>>
+>> On 13/09/2022 13:22, Greg Kroah-Hartman wrote:
+>>> On Mon, Sep 12, 2022 at 08:48:24PM +0200, Stefan Agner wrote:
+>>>> On 2022-09-12 18:08, Stefan Agner wrote:
+>>>>> On 2022-08-15 19:58, Greg Kroah-Hartman wrote:
+>>>>>> From: Neil Armstrong <narmstrong@baylibre.com>
+>>>>>>
+>>>>>> [ Upstream commit 0af5e0b41110e2da872030395231ab19c45be931 ]
+>>>>>>
+>>>>>> This implements the necessary change to no more use the embedded
+>>>>>> connector in dw-hdmi and use the dedicated bridge connector driver
+>>>>>> by passing DRM_BRIDGE_ATTACH_NO_CONNECTOR to the bridge attach call.
+>>>>>>
+>>>>>> The necessary connector properties are added to handle the same
+>>>>>> functionalities as the embedded dw-hdmi connector, i.e. the HDR
+>>>>>> metadata, the CEC notifier & other flags.
+>>>>>>
+>>>>>> The dw-hdmi output_port is set to 1 in order to look for a connector
+>>>>>> next bridge in order to get DRM_BRIDGE_ATTACH_NO_CONNECTOR working.
+>>>>>
+>>>>> HDMI on ODROID-N2+ was working with v5.15.60, and stopped working with
+>>>>> v5.15.61. Reverting this commit (and two dependent refcount leak) to be
+>>>>> the culprit. Reverting just the refcount leaks is not enough to get HDMI
+>>>>> working, so I assume it is this commit.
+>>>>>
+>>>>> I haven't investigated much beyond that, maybe its simple a case of a
+>>>>> missing kernel configuration? DRM_DISPLAY_CONNECTOR is compiled, and the
+>>>>> module display_connector is loaded, so that part seemed to have worked.
+>>>>>
+>>>>> Any ideas welcome.
+>>>>>
+>>>>> FWIW, I track the issue in the HAOS tracker at
+>>>>> https://github.com/home-assistant/operating-system/issues/2120.
+>>>>
+>>>> It seems that backporting commit 7cd70656d128 ("drm/bridge:
+>>>> display-connector: implement bus fmts callbacks") fixes the problem
+>>>> without reverting this commit.
+>>>>
+>>>> @Greg, can we backport this commit as well?
+>>>
+>>> sure, now queued up, thanks.
+>>
+>> Backport of 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks") is still missing in 5.15-stable.
+> 
+> I see it in the 5.15.68 release as commit 590b4f10e3a4.
+> 
+> What am I missing?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Nothing, must be tired, was looking git log in the wrong path...
+
+> 
+> confused,
+
+Sorry for the noise,
+Neil
+
+> 
+> greg k-h
+
