@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511F05E70C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF315E70D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiIWAk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        id S231388AbiIWAsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiIWAkS (ORCPT
+        with ESMTP id S229503AbiIWAsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8C99E2D7;
-        Thu, 22 Sep 2022 17:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72AE76235F;
-        Fri, 23 Sep 2022 00:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BCC35C433B5;
-        Fri, 23 Sep 2022 00:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663893616;
-        bh=13EVSZS5FYRrqSVbHrO/HLwp4UpHOU5Audrge3bRExo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=nnYwyKPkO1eOjJTgbx7qYq1WGj6nffroXV0urp+DkRzwmz7AD/kTSCY/vEINAalPZ
-         +wRi4wEBtzSVAcprou191yDfjv3ic/uYNpHE/isPI24xxmtPX87zX7FdieZzK5rWdX
-         3DkqV6hna59A6SYvGEDRmOM/X8nzos0Ib5Vt/2slTg2WUZBiR4i9p1PFCb5duQu5ys
-         9+H2BIGBGbJSGnZYaMHUEZD/e/BbFaHNBRiVtQJbd7lICIwwc/fVdBkcv5w7KonwBy
-         G/37eWW0BueGA1+yIlYSS7Aog3qtiauymnjyzxvc4f5cPlXjREzNyajhfQC1XmED5k
-         amdoddCEYZqSw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98FE0E4D03F;
-        Fri, 23 Sep 2022 00:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Sep 2022 20:48:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39601129CB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663894084; x=1695430084;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=D66fqEUBroJKd+9d6VDZZucMlLgMXnXc4WPgDREMliU=;
+  b=VsCRYDGASuerarmsSBkjxY8Gcvwgi9mEyBtd8/wDxu+HOIguHMCX2zeF
+   dRpXKsATQInrtJ8babKO+znC+PPfuPtBpN6aVl12rDV9YYcYZK5SQw7a2
+   u23Y9NzRIjGrB9yV2t0H7uvMc4kPn3HGQyD0h25oSeRlPaDZWY4NpNiOq
+   ew5OaPbT+swMWZU4nUiQcYbYu3KLd5tfoNDJ3YcG08yLSdw44Ap5XakSP
+   dj9srF4/Esr2I/xhq14Ly4CevixKOS0DO2UFA7Rwg7uCXBp5A/omdSXZr
+   15cROeHvumklb5lgY7iyq+UaIIBaz/URAx140z+hxgtwfuNMO0oHqSzqo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362278837"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="362278837"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 17:48:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="650759929"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 17:48:02 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] [PULL REQUEST] Intel IOMMU updates for Linux v6.1
+Date:   Fri, 23 Sep 2022 08:42:00 +0800
+Message-Id: <20220923004206.3630441-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net/sched: taprio: remove unnecessary
- taprio_list_lock
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166389361662.358.9640095235761157374.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Sep 2022 00:40:16 +0000
-References: <20220921095632.1379251-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20220921095632.1379251-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, vinicius.gomes@intel.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Joerg,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+This includes patches queued for v6.1. It includes:
 
-On Wed, 21 Sep 2022 12:56:31 +0300 you wrote:
-> The 3 functions that want access to the taprio_list:
-> taprio_dev_notifier(), taprio_destroy() and taprio_init() are all called
-> with the rtnl_mutex held, therefore implicitly serialized with respect
-> to each other. A spin lock serves no purpose.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> [...]
+ - Decouple PASID and PRI from SVA
+ - Add ESRTPS & ESIRTPS capability check
+ - Cleanups
 
-Here is the summary with links:
-  - [net-next] net/sched: taprio: remove unnecessary taprio_list_lock
-    https://git.kernel.org/netdev/net-next/c/a2c2a4ddc27d
+The whole series is also available at:
+https://github.com/LuBaolu/intel-iommu/commits/vtd-update-for-v6.1
 
-You are awesome, thank you!
+Please consider them for next.
+
+Best regards,
+Baolu
+
+Lu Baolu (5):
+  iommu/vt-d: Remove unnecessary SVA data accesses in page fault path
+  iommu/vt-d: Decouple PASID & PRI enabling from SVA
+  iommu/vt-d: Remove pasid_set_eafe()
+  iommu/vt-d: Avoid unnecessary global IRTE cache invalidation
+  iommu/vt-d: Avoid unnecessary global DMA cache invalidation
+
+Yi Liu (1):
+  iommu/vt-d: Rename cap_5lp_support to cap_fl5lp_support
+
+ drivers/iommu/intel/iommu.h         |  7 ++-
+ drivers/iommu/intel/cap_audit.c     |  4 +-
+ drivers/iommu/intel/iommu.c         | 87 ++++++++---------------------
+ drivers/iommu/intel/irq_remapping.c |  6 +-
+ drivers/iommu/intel/pasid.c         | 12 +---
+ drivers/iommu/intel/svm.c           | 62 +++-----------------
+ drivers/iommu/intel/Kconfig         |  5 +-
+ 7 files changed, 45 insertions(+), 138 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
