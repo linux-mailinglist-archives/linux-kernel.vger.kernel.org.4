@@ -2,155 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6EE5E7F86
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253AE5E7F8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIWQSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S231994AbiIWQSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiIWQRm (ORCPT
+        with ESMTP id S231642AbiIWQSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:17:42 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66B214B84C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:01 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so218398ioa.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:01 -0700 (PDT)
+        Fri, 23 Sep 2022 12:18:10 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E8135714
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:10 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d15so388035qka.9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=4qxMWjOIpMkOGtLLFe8WhdHhUlkbe7D+rolKd+h+uVk=;
+        b=lQQdTR/g32E0O34bdirpXaGLyHEcnk6cCeQel6YdaiOTT/IR8dPFCqfsqKwybbWJZO
+         pYFiHhn28GsbJNgLCwSQ36twulPuXMUOVa1lqsN0Ny+L1y3Uover2McV4+6mWQILnaTm
+         vYZS/drXJcjnB18YKhwd2uYjnnXExsznxosR0jfQYtXo5tJH3k17CSSeCnnj5o3Sku2m
+         6I90c4SN575CRQPhA7zopWvyUZDl106kRLCf6T41hPKKnvK7durJ0vZw6pqWeQ5vURRi
+         +pwudMB1EkYloh/r7kGt7/TgzmSOHJo36agtH2yKi74TYibb7ZGMZ8Pj+/4M/2iSDoOJ
+         BPKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=GMwDSGFnm2GFMzJ4MWSvEgNZvThA12X05V380Vfyex8=;
-        b=HpTkkiRtTATHh6FSfKo9nYLSa3bsfNx5TDZBSP3b15ckQ6W1krrgya8MMkBwVrevSA
-         y3FLjj4gJGO3Td/eiIrs3JnIe6UmWOYnrM3iKZABXxYdqGHthHUBWs24+sFdgqHeHLM8
-         fY4ZGSpUAa/uLsn0Pn3UM7pSNfNFT/I7YPKVDt2VPgOIhQh9EHOn96KTqZARsaI5Tmhh
-         uE+qoQEWkSZrhOzgmu/v2POrDH4MU66Vvu/ylwyACo028Mq2TvnJdtHpkvBphpiIyed3
-         7tF82GpbFSX61dct3R3AwKnEiwFpyw7xoHDt/+p5l4PIYLpaT3L6B7hyJ4EN/nRpvq6F
-         pnHw==
-X-Gm-Message-State: ACrzQf2KkEQfg73t57WY9oi3K+dLpQ4XVR0PZVkBwmHtgTUPB8Pg8HJF
-        Lk+IJATktRNOqAbQR7xK5NY/HhbY5AfWfT/fKpIwnEkusYNE
-X-Google-Smtp-Source: AMsMyM6SoStmsF7msAMqBk7Q1pOlrtqxoZZz9b2tVrTy+VGKGHSk42OkBLBaygCHIwVo5TVRpX5B7yzzsaBSWg5VVtcJiEWu/olB
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=4qxMWjOIpMkOGtLLFe8WhdHhUlkbe7D+rolKd+h+uVk=;
+        b=HtRFx8rYs7ZVtME2mqefiYvPEzoFdxjzJoiFZ54SwiGM8jx3V177+MyiZuoLVPx2E5
+         1kRRSd3vqPjEODBoIHNzh9GbsMPZGr+4u+24OHDnvL0VqWff0StLs2GJSFQa2GdbjMc2
+         1EDWG3rWTGSwPYy5VjGEjaJ+OrlHI4ZjkZOdaUTI0QvI1h+QSa+fZwRNrwizH+asGiJK
+         ORsLhqK1EcyLRjTJyiTVJAqDyfvQH1ExSvCGwDg2v7kSMPUKx/cl/2HJp98A+wroTj0Z
+         YAFCcXq8SPdTcgxTAMlK5+XnJRFHUkf1eCq5ouLqoyGIUeMK9mB8vtolA2AzzNqiHVBN
+         Nnkg==
+X-Gm-Message-State: ACrzQf0G3+3omJUkCzmWJ8gbrWcEvOzoaUu9mwIpbyBqe+ulYqkkJrZS
+        RDFYCSLPFrZIg9seZI35ndCaLA/ftZTM1w==
+X-Google-Smtp-Source: AMsMyM5ihNn7PNdTw/GoVp4V09U9sYJFPx5Pxro8xvFdOqUvnnUHwcsY7d/b4qmDimwdYHQp8FEq2Q==
+X-Received: by 2002:a05:620a:2204:b0:6ce:1589:7deb with SMTP id m4-20020a05620a220400b006ce15897debmr6165868qkh.327.1663949827972;
+        Fri, 23 Sep 2022 09:17:07 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05620a424f00b006af0ce13499sm5986159qko.115.2022.09.23.09.17.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 09:17:07 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 09:16:55 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jan Kara <jack@suse.cz>
+cc:     Hugh Dickins <hughd@google.com>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Song <liusong@linux.alibaba.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
+In-Reply-To: <20220923144303.fywkmgnkg6eken4x@quack3>
+Message-ID: <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com>
+References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com> <YyjdiKC0YYUkI+AI@kbusch-mbp> <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com> <20220921164012.s7lvklp2qk6occcg@quack3> <20220923144303.fywkmgnkg6eken4x@quack3>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bea:b0:2f6:5e61:bf0d with SMTP id
- y10-20020a056e021bea00b002f65e61bf0dmr4869815ilv.117.1663949805136; Fri, 23
- Sep 2022 09:16:45 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:16:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f316f05e95a815f@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in ni_write_inode
-From:   syzbot <syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 23 Sep 2022, Jan Kara wrote:
+> On Wed 21-09-22 18:40:12, Jan Kara wrote:
+> > On Mon 19-09-22 16:01:39, Hugh Dickins wrote:
+> > > On Mon, 19 Sep 2022, Keith Busch wrote:
+> > > > On Sun, Sep 18, 2022 at 02:10:51PM -0700, Hugh Dickins wrote:
+> > > > > I have almost no grasp of all the possible sbitmap races, and their
+> > > > > consequences: but using the same !waitqueue_active() check as used
+> > > > > elsewhere, fixes the lockup and shows no adverse consequence for me.
+> > > > 
+> > > >  
+> > > > > Fixes: 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+> > > > > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > > > > ---
+> > > > > 
+> > > > >  lib/sbitmap.c |    2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > --- a/lib/sbitmap.c
+> > > > > +++ b/lib/sbitmap.c
+> > > > > @@ -620,7 +620,7 @@ static bool __sbq_wake_up(struct sbitmap
+> > > > >  		 * function again to wakeup a new batch on a different 'ws'.
+> > > > >  		 */
+> > > > >  		if (cur == 0)
+> > > > > -			return true;
+> > > > > +			return !waitqueue_active(&ws->wait);
+> > > > 
+> > > > If it's 0, that is supposed to mean another thread is about to make it not zero
+> > > > as well as increment the wakestate index. That should be happening after patch
+> > > > 48c033314f37 was included, at least.
+> > > 
+> > > I believe that the thread about to make wait_cnt not zero (and increment the
+> > > wakestate index) is precisely this interrupted thread: the backtrace shows
+> > > that it had just done its wakeups, so has not yet reached making wait_cnt
+> > > not zero; and I suppose that either its wakeups did not empty the waitqueue
+> > > completely, or another waiter got added as soon as it dropped the spinlock.
+> 
+> I was trying to wrap my head around this but I am failing to see how we
+> could have wait_cnt == 0 for long enough to cause any kind of stall let
+> alone a lockup in sbitmap_queue_wake_up() as you describe. I can understand
+> we have:
+> 
+> CPU1						CPU2
+> sbitmap_queue_wake_up()
+>   ws = sbq_wake_ptr(sbq);
+>   cur = atomic_read(&ws->wait_cnt);
+>   do {
+> 	...
+> 	wait_cnt = cur - sub;	/* this will be 0 */
+>   } while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+>   ...
+> 						/* Gets the same waitqueue */
+> 						ws = sbq_wake_ptr(sbq);
+> 						cur = atomic_read(&ws->wait_cnt);
+> 						do {
+> 							if (cur == 0)
+> 								return true; /* loop */
+>   wake_up_nr(&ws->wait, wake_batch);
+>   smp_mb__before_atomic();
+>   sbq_index_atomic_inc(&sbq->wake_index);
+>   atomic_set(&ws->wait_cnt, wake_batch); /* This stops looping on CPU2 */
+> 
+> So until CPU1 reaches the atomic_set(), CPU2 can be looping. But how come
+> this takes so long that is causes a hang as you describe? Hum... So either
+> CPU1 takes really long to get to atomic_set():
+> - can CPU1 get preempted? Likely not at least in the context you show in
+>   your message
+> - can CPU1 spend so long in wake_up_nr()? Maybe the waitqueue lock is
+>   contended but still...
+> 
+> or CPU2 somehow sees cur==0 for longer than it should. The whole sequence
+> executed in a loop on CPU2 does not contain anything that would force CPU2
+> to refresh its cache and get new ws->wait_cnt value so we are at the mercy
+> of CPU cache coherency mechanisms to stage the write on CPU1 and propagate
+> it to other CPUs. But still I would not expect that to take significantly
+> long. Any other ideas?
 
-syzbot found the following issue on:
+Rushed reply (hoping) to help your thinking,
+I'll read you more closely two hours later.
 
-HEAD commit:    16c9f284e746 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e17bf8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
-dashboard link: https://syzkaller.appspot.com/bug?extid=f45957555ed4a808cc7a
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11827ec4880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1518404c880000
+You're writing of CPU1 and CPU2, but in my case it was just the one CPU
+interrupted - see again sbitmap_queue_wake_up twice in the backtrace:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fd8978a3a764/disk-16c9f284.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/73ab1c321ad6/vmlinux-16c9f284.xz
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
+scsi_end_request < scsi_io_completion < scsi_finish_command <
+scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
+__irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
+_raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
+blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
+__submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
+submit_bio < __swap_writepage < swap_writepage < pageout <
+shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
+shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
+__alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
+do_anonymous_page < __handle_mm_fault < handle_mm_fault <
+do_user_addr_fault < exc_page_fault < asm_exc_page_fault
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com
+And in one case I did study stack contents carefully, confirming
+the same sbq pointer used in upper and lower sbitmap_queue_wake_up.
 
-loop0: detected capacity change from 0 to 264192
-ntfs3: loop0: Failed to load $Extend.
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000016
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010af56000
-[0000000000000016] pgd=08000001090da003, p4d=08000001090da003, pud=08000001090ce003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3036 Comm: syz-executor206 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
-pc : ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
-lr : ni_write_inode+0xa0/0x798 fs/ntfs3/frecord.c:3226
-sp : ffff8000126c3800
-x29: ffff8000126c3860 x28: 0000000000000000 x27: ffff0000c8b02000
-x26: ffff0000c7502320 x25: ffff0000c7502288 x24: 0000000000000000
-x23: ffff80000cbec91c x22: ffff0000c8b03000 x21: ffff0000c8b02000
-x20: 0000000000000001 x19: ffff0000c75024d8 x18: 00000000000000c0
-x17: ffff80000dd1b198 x16: ffff80000db59158 x15: ffff0000c4b6b500
-x14: 00000000000000b8 x13: 0000000000000000 x12: ffff0000c4b6b500
-x11: ff80800008be1b60 x10: 0000000000000000 x9 : ffff0000c4b6b500
-x8 : 0000000000000000 x7 : ffff800008be1b50 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000008 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
- ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
- ntfs_evict_inode+0x54/0x84 fs/ntfs3/inode.c:1744
- evict+0xec/0x334 fs/inode.c:665
- iput_final fs/inode.c:1748 [inline]
- iput+0x2c4/0x324 fs/inode.c:1774
- ntfs_new_inode+0x7c/0xe0 fs/ntfs3/fsntfs.c:1660
- ntfs_create_inode+0x20c/0xe78 fs/ntfs3/inode.c:1278
- ntfs_create+0x54/0x74 fs/ntfs3/namei.c:100
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x804/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190
-Code: 97dafee4 340001b4 f9401328 2a1f03e0 (79402d14) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	97dafee4 	bl	0xffffffffff6bfb90
-   4:	340001b4 	cbz	w20, 0x38
-   8:	f9401328 	ldr	x8, [x25, #32]
-   c:	2a1f03e0 	mov	w0, wzr
-* 10:	79402d14 	ldrh	w20, [x8, #22] <-- trapping instruction
+And on Keith's points: yes, I do have preemption enabled; but no, this
+machine does not have nvme, and I never hit this on the nvme laptop.
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+Hugh
