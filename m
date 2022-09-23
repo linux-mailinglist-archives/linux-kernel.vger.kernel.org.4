@@ -2,173 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A54C5E7C81
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D122A5E7C85
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiIWOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S231808AbiIWOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiIWOIQ (ORCPT
+        with ESMTP id S229910AbiIWOJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:08:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB305145CA3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663942095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBYIB5Hr/s79C5MbXbGY0mfsUxmhEdiC6zxTkuGSCwk=;
-        b=e/BXz5Xapq4s3pC2kT3QKRkV6RWRq6Hr2uZWd5oEduEc6OJLod7lun/dWD5FpzI5IsI/uV
-        LQKL+yzlxEEXH+/vOuQrQtC32AnMrCxvHiyUKvQ3Vrg8LxFdJJDbNCL/P4B8vvAYDH1jhb
-        v+R7n59y0s8E5sescrHadnuFsHCfL/0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-367-FajwVnjYNnG9QCVi7rya8Q-1; Fri, 23 Sep 2022 10:08:13 -0400
-X-MC-Unique: FajwVnjYNnG9QCVi7rya8Q-1
-Received: by mail-qk1-f197.google.com with SMTP id bp17-20020a05620a459100b006ce7f4bb0b7so109054qkb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:08:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=LBYIB5Hr/s79C5MbXbGY0mfsUxmhEdiC6zxTkuGSCwk=;
-        b=0yx4Tzx47lSvol7Af9oDllcL+6RtLg7OvOroo2TNCMjUFAOQasJPiWQW3WOuumZQVS
-         wGUNQ9oVkBMVpT3Z5jy1HufwfqqAeyOTw3PrXRpgZUGHAVmD+eB8ixDfzM44KdRTwVEp
-         i3kgkziXzwkL9m1hmm96qCFnjAKtvqMaNRX6dvrM7JGVDSc8imr0Iz4U3m0xFXmL9iGK
-         9+JiToDcqhOcWNIFdI5l2W8jIiy+3yif1yQDjGE2rdBWMBDb2XnGqrMUFs2qGO5r2tZW
-         gHZHma9qitX4+qKnBBcUflrAqWz4SWqZIgjDFvZEN87cKrlDWSMObfJXfxOuX/+dFP6K
-         EibQ==
-X-Gm-Message-State: ACrzQf18x1F3mB0SRsfcctGpGdoF0DvJDwDvOjOC1wC19lSohZEo3eY3
-        F36Aghmf6rKMeu5UGQ8eWodT17oj9c7to4p2AM65M6HjJ7aOvGKfcV1RQbKxKn5KoT+HrljaUvy
-        0t5zuZ19HSUPWvqWVkF5fM6I=
-X-Received: by 2002:ac8:5dc9:0:b0:35c:dac8:a141 with SMTP id e9-20020ac85dc9000000b0035cdac8a141mr7271323qtx.229.1663942093315;
-        Fri, 23 Sep 2022 07:08:13 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4hP35ZcbFzjjav7W2Ml66N3dqlsgPCpf9kKzESU216uoZsCAsOatn0mJ4gZX5U/fSihe9dkw==
-X-Received: by 2002:ac8:5dc9:0:b0:35c:dac8:a141 with SMTP id e9-20020ac85dc9000000b0035cdac8a141mr7271263qtx.229.1663942092916;
-        Fri, 23 Sep 2022 07:08:12 -0700 (PDT)
-Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
-        by smtp.gmail.com with ESMTPSA id cq3-20020a05622a424300b0035ced0a8382sm5566028qtb.54.2022.09.23.07.08.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 07:08:12 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 10:08:11 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Daniil Lunev <dlunev@google.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        linux-kernel@vger.kernel.org, Gwendal Grignou <gwendal@google.com>,
-        virtualization@lists.linux-foundation.org, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-ext4@vger.kernel.org, Evan Green <evgreen@google.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH RFC 0/8] Introduce provisioning primitives for thinly
- provisioned storage
-Message-ID: <Yy29y/jUvWM6GRZ5@redhat.com>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <YyQTM5PRT2o/GDwy@fedora>
- <CAG9=OMPHZqdDhX=M+ovdg5fa3x4-Q_1r5SWPa8pMTQw0mr5fPg@mail.gmail.com>
- <Yylvvm3zVgqpqDrm@infradead.org>
- <CAAKderPF5Z5QLxyEb80Y+90+eR0sfRmL-WfgXLp=eL=HxWSZ9g@mail.gmail.com>
- <YymkSDsFVVg1nbDP@infradead.org>
- <CAAKderNcHpbBqWqqd5-WuKLRCQQUt7a_4D4ti4gy15+fKGK0vQ@mail.gmail.com>
- <Yy1zkMH0f9ski4Sg@infradead.org>
+        Fri, 23 Sep 2022 10:09:07 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB7113F283
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:09:05 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220923140904euoutp0285c2478e3c0c42fa1eac522e7c509ec7~XgpBrzf1W1149311493euoutp02W
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 14:09:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220923140904euoutp0285c2478e3c0c42fa1eac522e7c509ec7~XgpBrzf1W1149311493euoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663942144;
+        bh=lQSn8l24IYNJD7eLxVdJcmUxxS+Un9kRAvFcHMkoUME=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=pg6Ri2+UXwO3+0wou8ftnFe0/nVMqXskBWi0wI0vVv0OLOcScPQSgnoz4st6v06ji
+         eBGoyjXAoIQVrmTfvm2eLol+b7UGzU/WLvHj2KH94mkZcyouFktWdzk9RuQY6XvwBI
+         KvC1NBYuIgUPSKOnCQfKWnL4XXEhWCfLkYKeOoEA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220923140903eucas1p1e34813b42ffdb039d6bf577873312b00~XgpBes59x0569105691eucas1p1e;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id A8.5E.19378.FFDBD236; Fri, 23
+        Sep 2022 15:09:03 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220923140903eucas1p180002df0deb308d5148cc6004aef7efe~XgpA86H5Y1614516145eucas1p1p;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220923140903eusmtrp16c73bcfd918e5d9631e10148c3479bfc~XgpA8EQ-P1053310533eusmtrp1Z;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+X-AuditID: cbfec7f5-a4dff70000014bb2-30-632dbdffafc7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F5.57.07473.FFDBD236; Fri, 23
+        Sep 2022 15:09:03 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220923140902eusmtip26fc602160856b219e347381b00729c0d~XgpASuhRb0777607776eusmtip2B;
+        Fri, 23 Sep 2022 14:09:02 +0000 (GMT)
+Message-ID: <bc3a5137-b2be-0bfe-003a-db201a7a50e8@samsung.com>
+Date:   Fri, 23 Sep 2022 16:09:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yy1zkMH0f9ski4Sg@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v4 10/30] thermal/drivers/exynos: Replace
+ of_thermal_is_trip_valid() by thermal_zone_get_trip()
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220921094244.606948-11-daniel.lezcano@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFKsWRmVeSWpSXmKPExsWy7djP87r/9+omGxzdbWzxYN42NovD8yss
+        vm+5zmQx77Osxd7XW9ktNj2+xmpxedccNovPvUcYLWac38dkMffLVGaLJw/72By4PXbOusvu
+        sXjPSyaPTas62TzuXNvD5rF5Sb1H35ZVjB6fN8kFsEdx2aSk5mSWpRbp2yVwZazd3sZasEmj
+        Yv3pVYwNjPcUuxg5OSQETCRW7frO3MXIxSEksIJRom3FZhYI5wujxIdv+6Aynxklnt3YyQrT
+        cvjnCqiq5YwSjZfeMUE4Hxklpm+fxARSxStgJ7Hr3m4WEJtFQFXiyLwb7BBxQYmTM5+AxUUF
+        kiVmHTvGCGILC5RKzL24mhnEZhYQl7j1ZD7YHBEBR4kvfxexgyxgFtjLLHGg/wJYM5uAoUTX
+        2y62LkYODk6gopdPtCB65SWat84GO1tCoJ1TYu+BecwQZ7tINK7uZoKwhSVeHd/CDmHLSJye
+        3MMC1cAoseD3fSYIZwKjRMPzW4wQVdYSd879AtvGLKApsX6XPkTYUWLynvnsIGEJAT6JG28F
+        IY7gk5i0bTozRJhXoqNNCKJaTWLW8XVwaw9euMQ8gVFpFlKwzELy/iwk78xC2LuAkWUVo3hq
+        aXFuemqxcV5quV5xYm5xaV66XnJ+7iZGYPI6/e/41x2MK1591DvEyMTBeIhRgoNZSYR39h3N
+        ZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8bDO0koUE0hNLUrNTUwtSi2CyTBycUg1Mm0/senO2
+        peROcvjMPqmAvpoHlXe3vvAsVd/mWZg1yfZRS7b02/O1NfW/SxYHqLM9mT8/RXJHwIrzf+J3
+        Wq2eeMdtqdu9jdseSp5aGsqgXjXbWss08e1yN3VhgfJ8oeRZWfoT/utX+cROmzr77b2GMuPE
+        PZcvLKx2uvDoR6/0p3j3xYW3OqbePs2dv3CDoz+3uc32kiw+DpvP9dIhf5mat0k2NB30/S//
+        4fjk2eI/wl5mLWE5v+/27DsRfi/XXe+6zrrzxe6K4IsGM2c33VrD/3s57/dX2Qyiu9j2itba
+        fHeOePWKeZt+sejamU2906+2X9imovVU0l702m6Wyvpzx0X2O4XbcsdffKzHHXrmkBJLcUai
+        oRZzUXEiAPluUezNAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsVy+t/xe7r/9+omGzy4z23xYN42NovD8yss
+        vm+5zmQx77Osxd7XW9ktNj2+xmpxedccNovPvUcYLWac38dkMffLVGaLJw/72By4PXbOusvu
+        sXjPSyaPTas62TzuXNvD5rF5Sb1H35ZVjB6fN8kFsEfp2RTll5akKmTkF5fYKkUbWhjpGVpa
+        6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZazd3sZasEmjYv3pVYwNjPcUuxg5OSQETCQO
+        /1zB0sXIxSEksJRRouXLAyaIhIzEyWkNrBC2sMSfa11sEEXvGSXeNp9hB0nwCthJ7Lq3mwXE
+        ZhFQlTgy7wZUXFDi5MwnYHFRgWSJJQ33wQYJC5RKzL24mhnEZhYQl7j1ZD7YMhEBR4kvfxex
+        gyxgFtjLLNHzvB2oiANoW5nE9E8yIDVsAoYSXW9BjuDg4ASqf/lEC2KMmUTX1i5GCFteonnr
+        bOYJjEKzkFwxC8m2WUhaZiFpWcDIsopRJLW0ODc9t9hQrzgxt7g0L10vOT93EyMwUrcd+7l5
+        B+O8Vx/1DjEycTAeYpTgYFYS4Z19RzNZiDclsbIqtSg/vqg0J7X4EKMpMCgmMkuJJucDU0Ve
+        SbyhmYGpoYmZpYGppZmxkjivZ0FHopBAemJJanZqakFqEUwfEwenVAOTcd79b0aCFk5VU73e
+        3JGYGuy8UTPt9CkTlWslFwT/KFytvNtpeML/pstl/YNbt5YtY7dp/Xq5cO5c9R0uXJPZU+cn
+        PXu3sULfvdtTeV0dD29BVUfVGWmGeslV7qWH2PUOeuv9nTn7tlyU0Yq8yAytX79Niu69nrxR
+        N2FnC29hj8DTkvKlBgK/S8Xv/e75e/p22wO5n2uX+C4MCHKf7xxZ2szn5vm5ndcjsu6bTdBN
+        qZ/3U45wnnmiHPGpPPvs3dJGrrln/hfM3rmo7VWE5buK3J15QVEHFHbJPJ1n1VnQ+De/c0lc
+        N2/ZIh02Hd7CpNz7S8sfygi8ecm3stO69utcRTVGzqxvrt1th/fuM1RiKc5INNRiLipOBAD2
+        1GJkXQMAAA==
+X-CMS-MailID: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+        <20220921094244.606948-11-daniel.lezcano@linaro.org>
+        <CGME20220923140903eucas1p180002df0deb308d5148cc6004aef7efe@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23 2022 at  4:51P -0400,
-Christoph Hellwig <hch@infradead.org> wrote:
+Hi Daniel,
 
-> On Wed, Sep 21, 2022 at 07:48:50AM +1000, Daniil Lunev wrote:
-> > > There is no such thing as WRITE UNAVAILABLE in NVMe.
-> > Apologize, that is WRITE UNCORRECTABLE. Chapter 3.2.7 of
-> > NVM Express NVM Command Set Specification 1.0b
-> 
-> Write uncorrectable is a very different thing, and the equivalent of the
-> horribly misnamed SCSI WRITE LONG COMMAND.  It injects an unrecoverable
-> error, and does not provision anything.
-> 
-> > * Each application is potentially allowed to consume the entirety
-> >   of the disk space - there is no strict size limit for application
-> > * Applications need to pre-allocate space sometime, for which
-> >   they use fallocate. Once the operation succeeded, the application
-> >   assumed the space is guaranteed to be there for it.
-> > * Since filesystems on the volumes are independent, filesystem
-> >   level enforcement of size constraints is impossible and the only
-> >   common level is the thin pool, thus, each fallocate has to find its
-> >   representation in thin pool one way or another - otherwise you
-> >   may end up in the situation, where FS thinks it has allocated space
-> >   but when it tries to actually write it, the thin pool is already
-> >   exhausted.
-> > * Hole-Punching fallocate will not reach the thin pool, so the only
-> >   solution presently is zero-writing pre-allocate.
-> 
-> To me it sounds like you want a non-thin pool in dm-thin and/or
-> guaranted space reservations for it.
+On 21.09.2022 11:42, Daniel Lezcano wrote:
+> The thermal_zone_get_trip() does the same check as
+> of_thermal_is_trip_valid(). Replace the call to
+> of_thermal_is_trip_valid() by thermal_zone_get_trip().
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-What is implemented in this patchset: enablement for dm-thinp to
-actually provide guarantees which fallocate requires.
+This patch landed in linux next-20220923 as commit 4a71bb8005ba 
+("thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
+thermal_zone_get_trip()"). Unfortunately it causes deadlock on all 
+Exynos based board:
 
-Seems you're getting hung up on the finishing details in HW (details
-which are _not_ the point of this patchset).
+============================================
+WARNING: possible recursive locking detected
+6.0.0-rc1-00062-g4a71bb8005ba #12855 Not tainted
+--------------------------------------------
+swapper/0/1 is trying to acquire lock:
+c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x114/0x538
 
-The proposed changes are in service to _Linux_ code. The patchset
-implements the primitive from top (ext4) to bottom (dm-thinp, loop).
-It stops short of implementing handling everywhere that'd need it
-(e.g. in XFS, etc). But those changes can come as follow-on work once
-the primitive is established top to bottom.
+but task is already holding lock:
+c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x3c/0x538
 
-But you know all this ;)
+other info that might help us debug this:
+  Possible unsafe locking scenario:
 
-> > * Thus, a provisioning block operation allows an interface specific
-> >   operation that guarantees the presence of the block in the
-> >   mapped space. LVM Thin-pool itself is the primary target for our
-> >   use case but the argument is that this operation maps well to
-> >   other interfaces which allow thinly provisioned units.
-> 
-> I think where you are trying to go here is badly mistaken.  With flash
-> (or hard drive SMR) there is no such thing as provisioning LBAs.  Every
-> write is out of place, and a one time space allocation does not help
-> you at all.  So fundamentally what you try to here just goes against
-> the actual physics of modern storage media.  While there are some
-> layers that keep up a pretence, trying to that an an exposed API
-> level is a really bad idea.
+        CPU0
+        ----
+   lock(&tz->lock);
+   lock(&tz->lock);
 
-This doesn't need to be so feudal.  Reserving an LBA in physical HW
-really isn't the point.
+  *** DEADLOCK ***
 
-Fact remains: an operation that ensures space is actually reserved via
-fallocate is long overdue (just because an FS did its job doesn't mean
-underlying layers reflect that). And certainly useful, even if "only"
-benefiting dm-thinp and the loop driver. Like other block primitives,
-REQ_OP_PROVISION is filtered out by block core if the device doesn't
-support it.
+  May be due to missing lock nesting notation
 
-That said, I agree with Brian Foster that we need really solid
-documentation and justification for why fallocate mode=0 cannot be
-used (but the case has been made in this thread).
+2 locks held by swapper/0/1:
+  #0: c1d5248c (&dev->mutex){....}-{3:3}, at: __driver_attach+0xe4/0x1f0
+  #1: c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x3c/0x538
 
-Also, I do see an issue with the implementation (relative to stacked
-devices): dm_table_supports_provision() is too myopic about DM. It
-needs to go a step further and verify that some layer in the stack
-actually services REQ_OP_PROVISION. Will respond to DM patch too.
+stack backtrace:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-00062-g4a71bb8005ba 
+#12855
+Hardware name: Samsung Exynos (Flattened Device Tree)
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x58/0x70
+  dump_stack_lvl from __lock_acquire+0x146c/0x2a7c
+  __lock_acquire from lock_acquire+0x124/0x3e4
+  lock_acquire from __mutex_lock+0x90/0x948
+  __mutex_lock from mutex_lock_nested+0x1c/0x24
+  mutex_lock_nested from thermal_zone_device_update.part.0+0x114/0x538
+  thermal_zone_device_update.part.0 from 
+thermal_zone_device_set_mode+0x70/0x98
+  thermal_zone_device_set_mode from thermal_of_zone_register+0x424/0x69c
+  thermal_of_zone_register from devm_thermal_of_zone_register+0x58/0x94
+  devm_thermal_of_zone_register from exynos_tmu_probe+0x29c/0x728
+  exynos_tmu_probe from platform_probe+0x5c/0xb8
+  platform_probe from really_probe+0xe0/0x414
+  really_probe from __driver_probe_device+0xa0/0x208
+  __driver_probe_device from driver_probe_device+0x30/0xc0
+  driver_probe_device from __driver_attach+0xf0/0x1f0
+  __driver_attach from bus_for_each_dev+0x70/0xb0
+  bus_for_each_dev from bus_add_driver+0x174/0x218
+  bus_add_driver from driver_register+0x88/0x11c
+  driver_register from do_one_initcall+0x64/0x380
+  do_one_initcall from kernel_init_freeable+0x1c0/0x224
+  kernel_init_freeable from kernel_init+0x18/0x12c
+  kernel_init from ret_from_fork+0x14/0x2c
+Exception stack(0xf082dfb0 to 0xf082dff8)
+
+[deadlock]
+
+Something is wrong in locking in the functions from the above stacktrace.
+
+
+>   drivers/thermal/samsung/exynos_tmu.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index 91e6860b5ec4..34b460092308 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -554,13 +554,14 @@ static void exynos4210_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+> @@ -584,13 +585,14 @@ static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, pd_det_en, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+> @@ -615,13 +617,14 @@ static void exynos7_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
