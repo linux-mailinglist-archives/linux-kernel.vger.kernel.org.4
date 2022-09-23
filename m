@@ -2,149 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACDF5E729D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B275E728C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 05:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiIWEAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 00:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S232454AbiIWDrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 23:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiIWEAf (ORCPT
+        with ESMTP id S231823AbiIWDrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:00:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E11B9FA96
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663905633; x=1695441633;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pxYjuu3lxvrOnic49rQLuDK3YaKaCbJs6u697F/+o2k=;
-  b=h5n6RrLuteQz9OI1CjJKajFlXMu1oTTFCALdPwdMQl+TFkHXmchYkude
-   vfvXdSjYKsoYeS8OK/o9qaNwSmF70Zv5SOa/xQR6aGEtDNngpcV29hYG3
-   3tU6hjNqUyvSw+PtnYpAiBTPe2jqGHXFdjqrOkYNNAbW1c9EhIwGoCO/I
-   1dHPLQmDGQYuajUovwrL89EGunZkJqBIeEo6tImXNEjNCNnPx8YJYOWOy
-   vxKP7qsUO4hA5yrgNSEVwuGN0P5gZqqnPggNxn0oaQVZwbwG0ZlT36Wna
-   UQzL0EDdfD0YnIyDZ0GGUdr79ngvMdrIOh4XuUgU2dr7tFC9CW0f6j8ob
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362309294"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="362309294"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:00:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="597727579"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 21:00:30 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obZra-0005I8-0L;
-        Fri, 23 Sep 2022 04:00:30 +0000
-Date:   Fri, 23 Sep 2022 12:00:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 480/484]
- drivers/base/memory.c:186:34: error: 'struct memory_block' has no member
- named 'nr_hwpoison'
-Message-ID: <202209231134.tnhKHRfg-lkp@intel.com>
+        Thu, 22 Sep 2022 23:47:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C58116C3E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:47:29 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYdJh6zmSzMpQF;
+        Fri, 23 Sep 2022 11:42:44 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 11:47:28 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
+ 2022 11:47:27 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Liu Zixian <liuzixian4@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH v3] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+Date:   Fri, 23 Sep 2022 12:21:13 +0800
+Message-ID: <20220923042113.137273-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   1dee68cfead9a3a85e244a274b4e85620abd5331
-commit: 69b496f03bb46c7ce743aff0d976c078d753d6d6 [480/484] mm/hwpoison: introduce per-memory_block hwpoison counter
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220923/202209231134.tnhKHRfg-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/69b496f03bb46c7ce743aff0d976c078d753d6d6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout 69b496f03bb46c7ce743aff0d976c078d753d6d6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The vma_lock and hugetlb_fault_mutex are dropped before handling
+userfault and reacquire them again after handle_userfault(), but
+reacquire the vma_lock could lead to UAF[1,2] due to the following
+race,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+hugetlb_fault
+  hugetlb_no_page
+    /*unlock vma_lock */
+    hugetlb_handle_userfault
+      handle_userfault
+        /* unlock mm->mmap_lock*/
+                                           vm_mmap_pgoff
+                                             do_mmap
+                                               mmap_region
+                                                 munmap_vma_range
+                                                   /* clean old vma */
+        /* lock vma_lock again  <--- UAF */
+    /* unlock vma_lock */
 
-All errors (new ones prefixed by >>):
+Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+the issue.
 
-   drivers/base/memory.c: In function 'memory_block_online':
->> drivers/base/memory.c:186:34: error: 'struct memory_block' has no member named 'nr_hwpoison'
-     186 |         if (atomic_long_read(&mem->nr_hwpoison))
-         |                                  ^~
-   drivers/base/memory.c: In function 'remove_memory_block_devices':
-   drivers/base/memory.c:870:61: error: 'struct memory_block' has no member named 'nr_hwpoison'
-     870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
-         |                                                             ^~
+[1] https://lore.kernel.org/linux-mm/000000000000d5e00a05e834962e@google.com/
+[2] https://lore.kernel.org/linux-mm/20220921014457.1668-1-liuzixian4@huawei.com/
+Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
+Reported-by: Liu Zixian <liuzixian4@huawei.com>
+Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
+CC: stable@vger.kernel.org # 4.14+
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+---
+v1->v2: add reported-by and link [1].
+v2->v3: add comment to explain why unlock in hugetlb_no_page.
 
+ mm/hugetlb.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
 
-vim +186 drivers/base/memory.c
-
-   177	
-   178	static int memory_block_online(struct memory_block *mem)
-   179	{
-   180		unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
-   181		unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
-   182		unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
-   183		struct zone *zone;
-   184		int ret;
-   185	
- > 186		if (atomic_long_read(&mem->nr_hwpoison))
-   187			return -EHWPOISON;
-   188	
-   189		zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
-   190					  start_pfn, nr_pages);
-   191	
-   192		/*
-   193		 * Although vmemmap pages have a different lifecycle than the pages
-   194		 * they describe (they remain until the memory is unplugged), doing
-   195		 * their initialization and accounting at memory onlining/offlining
-   196		 * stage helps to keep accounting easier to follow - e.g vmemmaps
-   197		 * belong to the same zone as the memory they backed.
-   198		 */
-   199		if (nr_vmemmap_pages) {
-   200			ret = mhp_init_memmap_on_memory(start_pfn, nr_vmemmap_pages, zone);
-   201			if (ret)
-   202				return ret;
-   203		}
-   204	
-   205		ret = online_pages(start_pfn + nr_vmemmap_pages,
-   206				   nr_pages - nr_vmemmap_pages, zone, mem->group);
-   207		if (ret) {
-   208			if (nr_vmemmap_pages)
-   209				mhp_deinit_memmap_on_memory(start_pfn, nr_vmemmap_pages);
-   210			return ret;
-   211		}
-   212	
-   213		/*
-   214		 * Account once onlining succeeded. If the zone was unpopulated, it is
-   215		 * now already properly populated.
-   216		 */
-   217		if (nr_vmemmap_pages)
-   218			adjust_present_page_count(pfn_to_page(start_pfn), mem->group,
-   219						  nr_vmemmap_pages);
-   220	
-   221		mem->zone = zone;
-   222		return ret;
-   223	}
-   224	
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9b8526d27c29..38f3c7097e89 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5489,7 +5489,6 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 						  unsigned long addr,
+ 						  unsigned long reason)
+ {
+-	vm_fault_t ret;
+ 	u32 hash;
+ 	struct vm_fault vmf = {
+ 		.vma = vma,
+@@ -5507,18 +5506,14 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 	};
+ 
+ 	/*
+-	 * vma_lock and hugetlb_fault_mutex must be
+-	 * dropped before handling userfault.  Reacquire
+-	 * after handling fault to make calling code simpler.
++	 * vma_lock and hugetlb_fault_mutex must be dropped before handling
++	 * userfault. Also mmap_lock could be dropped due to handling
++	 * userfault, any vma operation should be careful from here.
+ 	 */
+ 	hugetlb_vma_unlock_read(vma);
+ 	hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+-	ret = handle_userfault(&vmf, reason);
+-	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+-	hugetlb_vma_lock_read(vma);
+-
+-	return ret;
++	return handle_userfault(&vmf, reason);
+ }
+ 
+ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+@@ -5537,6 +5532,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	unsigned long haddr = address & huge_page_mask(h);
+ 	bool new_page, new_pagecache_page = false;
+ 	bool reserve_alloc = false;
++	u32 hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 
+ 	/*
+ 	 * Currently, we are forced to kill the process in the event the
+@@ -5547,7 +5543,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	if (is_vma_resv_set(vma, HPAGE_RESV_UNMAPPED)) {
+ 		pr_warn_ratelimited("PID %d killed due to inadequate hugepage pool\n",
+ 			   current->pid);
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -5561,12 +5557,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (idx >= size)
+ 			goto out;
+ 		/* Check for page in userfault range */
+-		if (userfaultfd_missing(vma)) {
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++		if (userfaultfd_missing(vma))
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MISSING);
+-			goto out;
+-		}
+ 
+ 		page = alloc_huge_page(vma, haddr, 0);
+ 		if (IS_ERR(page)) {
+@@ -5634,10 +5628,9 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (userfaultfd_minor(vma)) {
+ 			unlock_page(page);
+ 			put_page(page);
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MINOR);
+-			goto out;
+ 		}
+ 	}
+ 
+@@ -5695,6 +5688,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 
+ 	unlock_page(page);
+ out:
++	hugetlb_vma_unlock_read(vma);
++	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 	return ret;
+ 
+ backout:
+@@ -5792,11 +5787,13 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	entry = huge_ptep_get(ptep);
+ 	/* PTE markers should be handled the same way as none pte */
+-	if (huge_pte_none_mostly(entry)) {
+-		ret = hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
++	if (huge_pte_none_mostly(entry))
++		/*
++		 * hugetlb_no_page will drop vma lock and hugetlb fault
++		 * mutex internally, which make us return immediately.
++		 */
++		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
+ 				      entry, flags);
+-		goto out_mutex;
+-	}
+ 
+ 	ret = 0;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
