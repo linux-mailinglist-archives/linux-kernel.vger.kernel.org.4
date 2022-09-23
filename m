@@ -2,306 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3915E77F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B82F5E77FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiIWKJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S231893AbiIWKKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiIWKJW (ORCPT
+        with ESMTP id S231844AbiIWKKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:09:22 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234CC91D96;
-        Fri, 23 Sep 2022 03:09:19 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NA31Q6018917;
-        Fri, 23 Sep 2022 12:09:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=fknyyhIlHGjzzk+MjxTZmqYQGCNZC6WJzQMhRqLApDk=;
- b=rnSIO2vLboEkRJQX5ucMwo+3YwnIXIrhEHZwGTf9s+AWcOTWcBPclkG6FcBz6AP3tqLq
- FmRBNw5loylsajy1hQGbQHSSjnrVhrbj/OFBXqfAwU0C/QVyuXaxCFYxNT0AV5rgJ3Zd
- aPv5FU2XnhmUJfDlRdcf0gj0m9lt+4n3NRllXwuk/1N1wb55pSUxaueUgF+WMFJqx3SK
- Evl87Jvvjgu2UrYNNVMGCSsFzpCzWB8SExhfIqSbuhjjanBWzd5DalKs19+689i4KOAS
- S4+/BIMYRztp3NCGnBP/tl5dTjjWO51vbSDsw7eWa3C2lYur10dj0iN2Yd2UjgRUoYga 6g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jr11xeura-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 12:09:02 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9D1CA10002A;
-        Fri, 23 Sep 2022 12:09:01 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8671821D3ED;
-        Fri, 23 Sep 2022 12:09:01 +0200 (CEST)
-Received: from [10.211.7.228] (10.75.127.44) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 12:09:00 +0200
-Message-ID: <a449a357-467f-972a-ca88-220b773157a9@foss.st.com>
-Date:   Fri, 23 Sep 2022 12:08:59 +0200
+        Fri, 23 Sep 2022 06:10:31 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5238410F702;
+        Fri, 23 Sep 2022 03:10:28 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3378303138bso126811037b3.9;
+        Fri, 23 Sep 2022 03:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=KHwdpEvOx7gVgi3OOaFkocFydR4YH+tf96jUOZ54ZC8=;
+        b=MOfzZdAtnOrddbif5UM03puYUJ2xZNbYEXgfaOA/TrtbsYxCZthqtPW1+Tmd9mCNNR
+         IinHaJ9tK3A8toUCGoMDnhD9I2CkgRKSFm9oEKHN+iurdhErR6netHkFBZams96NfU1X
+         3PjB7H+gEP8qFUDteVoJdgPI5ExyfAoBw4AKm+YZpjlgILn1NWUj0ZCri4WLrU5s3aaE
+         KlXaqITkl5cCevB0/IczeD5O6+eEHFPM0ErXw04hAfracYxKl+Pw0uu+AeQuHyQm9n/s
+         hIVXLNvAUpR3yX1v8kSThHyVDuRMWI7ToiGzkp4DyCvy/L3b0juyorJpYt9sTr6lDEeB
+         7o9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KHwdpEvOx7gVgi3OOaFkocFydR4YH+tf96jUOZ54ZC8=;
+        b=ETSOswhTg65U78f8OVOxaMTVUrNuM83IyLenGFFu0sSt3xMlsTnOXCDpkWfK0aUPwK
+         SzY2ol8jykhFF/0DTbnIQvE9ncYMzjm/l0Ww3e6f6IYeGLuLjrPbhW6PiX94CBqWXVVs
+         d67P4bjhiHCAy3fMBsxMbVpC6rn5AscM9WmUVxQItqbHi+8SBn+pxj02Y08BOaTyGO1L
+         InWsXPh3I4o5VK/B/+rGH/0EAKzVdKWxAVe4C0QwK7dDFoJYFT3HLuUHDSbbEX3JA4MP
+         0f2/1HzdHEALA4Kgg2AI0j/61poYzps0Xo1W/wz12oeUHH9fIKgnpVb8TxbHP5W8iwrC
+         z5uQ==
+X-Gm-Message-State: ACrzQf01Fyv00X74jm0GkTH6VBD0tNsgFjJjwBoVFyYt1g8xDQlNBGYs
+        saLXp3VH0G98M1l02aExkBgGwXodFRnXzO+I93c=
+X-Google-Smtp-Source: AMsMyM67iiYBDFck8lbsxqi6yDBwVgDc9EFgKUL6juPYQqcT0Z6xPPFTQXCdw9sWl0DkBJhAPCpHHOjfFY5tVSUekz8=
+X-Received: by 2002:a81:6e45:0:b0:349:ef9c:123b with SMTP id
+ j66-20020a816e45000000b00349ef9c123bmr7588236ywc.104.1663927826846; Fri, 23
+ Sep 2022 03:10:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 0/4] remoteproc: restructure the remoteproc VirtIO
- device
-Content-Language: en-US
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-To:     Peng Fan <peng.fan@nxp.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-References: <20220826115232.2163130-1-arnaud.pouliquen@foss.st.com>
- <DU0PR04MB9417BE00D9CA0185660A4EB9884F9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <3a197588-fa74-acce-d17c-a2c2556b1fe1@foss.st.com>
-In-Reply-To: <3a197588-fa74-acce-d17c-a2c2556b1fe1@foss.st.com>
+References: <b7aa8d89-09cb-4fd3-a74c-2742a7254b82n@googlegroups.com>
+ <CACT4Y+b6pVopdR9cASZOza3zx=fKqEBCOKE2NfOuV3nC9Oc95w@mail.gmail.com> <29071f9e-8cd8-424f-b149-243a09890942n@googlegroups.com>
+In-Reply-To: <29071f9e-8cd8-424f-b149-243a09890942n@googlegroups.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 23 Sep 2022 12:10:16 +0200
+Message-ID: <CAKXUXMxzLQgjFhps9XreqO3OZW_D2CHDHen0XqmYMXc=aT8Kpg@mail.gmail.com>
+Subject: Re: WARNING in dev_watchdog with 5.19 kernel
+To:     Tushar Vyavahare <tush133@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        gregkh@linuxfoundation.org,
+        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_02,2022-09-22_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+Tushar, this is most likely not going to reach anyone either.
 
-On 9/21/22 16:07, Arnaud POULIQUEN wrote:
-> Hi Peng,
-> 
-> On 9/21/22 10:54, Peng Fan wrote:
->> Hi Arnaud,
->>
->>> Subject: [PATCH v8 0/4] remoteproc: restructure the remoteproc VirtIO
->>> device
->>
->> Sorry to get in at this late time, just try to catch up.
->> Not reviewing comments, just have a question,
->> Does remote core firmware requires changes to use this new feature?
-> 
-> For this series, it is not.
-> For the whole work, it should not, but it will probably depend on the
-> evolutions related to the reviews and requirements that will come.
-> 
->> Does your 4 branches listed below still work with linux-6.x?
-> 
-> I have to rebase them. Today my github branches are based on v5.18.rc1
-> I plan to do this end of this week or next week.
->    
->> Could the multiple vdev still share same mbox channel?
-> 
-> Yes I'm trying to keep the legacy support of the mailbox in the
-> remoteproc platform driver.
-> If no mailbox is declared in the virtio subnode it calls the rproc->ops->kick
-> 
->>
->> I not own i.MX remote core firmware development, so if no need
->> firmware change, I would like give a try and see how it works.
-> 
-> Great! That would be nice to have your feedback. 
-> Mailbox management is one point, I'm also ineterested in having feedback on 
-> the memory regions management
-> I will ping you when my work will be rebased on 6.0
+The linux-kernel mailing list is a general kernel-related mailing
+list, but it is unlikely to reach the one person (the one group of
+people) you would like to reach with your mail.
 
-My github branches have been rebased on top of thre rproc_next(1d7b61c06dc3)
+Greg KH is the stable maintainer, but not the "bugfixing maintainer
+for all bugs in stable". The bugs are fixed in mainline; Greg KH only
+takes care that reported backports are properly collected and released
+in timely manner.
 
-As a first step you should be able to rebase on my step4-virtio-mailboxes[1]
-without any update of your driver. If I did my dev well, I kept the
-compatibility with the legacy.
+You need to figure out which subsystem this bug report shall be forwarded to.
 
-[1] https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+Generally, you will probably get very little feedback by others:
 
-Regards,
-Arnaud
+- The kernel has been exposed to fuzzing for many years by now---if I
+recall correctly, syzkaller/syzbot has been running and reporting
+since 2017 or even before.
+- There is a long list of known issues with C reproducers that have
+not been fixed. They are probably of higher interest to the kernel
+developers.
+- There is a similarly long list of reports without reproducers. These
+are difficult to analyze and fix. It is difficult to trigger, bisect,
+confirm a fix etc.
+- So far, we do not know if your report without a reproducer is yet
+another duplicate of the long list.
+- Fuzzing reports are not identical to bugs reported by real users. We
+simply do not know if the sequence you triggered is in any way
+sensible for a real user to come up with.
+- We do not know even some basic information precisely enough to guide
+you to some next steps in your work to make others consider looking at
+the report.
 
-> 
-> Thanks,
-> Arnaud
-> 
->>
->> Thanks,
->> Peng.
->>
->>>
->>> 1) Update from V7 [1]:
->>>
->>> - rebase on rproc-next branch [2], commit 729c16326b7f ("remoteproc:
->>> imx_dsp_rproc: fix argument 2 of rproc_mem_entry_init")
->>>   The updates take into account the integration of the
->>>   commit 1404acbb7f68 ("remoteproc: Fix dma_mem leak after
->>> rproc_shutdown")
->>> - add Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org> according
->>> to reviews on V7
->>>
->>>
->>> [1]
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.
->>> org%2Flkml%2F2022%2F7%2F13%2F663&amp;data=05%7C01%7Cpeng.fan%
->>> 40nxp.com%7Ce0e5200d739a48e7439508da87599d14%7C686ea1d3bc2b4c
->>> 6fa92cd99c5c301635%7C0%7C0%7C637971116202643149%7CUnknown%7C
->>> TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiL
->>> CJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=77pEuwAI7Lh61hx1%2B
->>> Hs79Cu0G5KOa6mzQ0PnTC5r8Xk%3D&amp;reserved=0
->>> [2]
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.ke
->>> rnel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fremoteproc%2Flinux.g
->>> it%2Flog%2F%3Fh%3Dfor-
->>> next&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7Ce0e5200d739a48e7
->>> 439508da87599d14%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7
->>> C637971116202643149%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
->>> wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7
->>> C%7C&amp;sdata=iWUSzKkN9BpHwqbO62awIcyVf9PXcftcdt2kytWVR78%3D
->>> &amp;reserved=0
->>>
->>> 2) Patchset description:
->>>
->>> This series is a part of the work initiated a long time ago in the series
->>> "remoteproc: Decorelate virtio from core"[3]
->>>
->>> Objective of the work:
->>> - Update the remoteproc VirtIO device creation (use platform device)
->>> - Allow to declare remoteproc VirtIO device in DT
->>>     - declare resources associated to a remote proc VirtIO
->>>     - declare a list of VirtIO supported by the platform.
->>> - Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
->>>   For instance be able to declare a I2C device in a virtio-i2C node.
->>> - Keep the legacy working!
->>> - Try to improve the picture about concerns reported by Christoph Hellwing
->>> [4][5]
->>>
->>> [3]
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.
->>> org%2Flkml%2F2020%2F4%2F16%2F1817&amp;data=05%7C01%7Cpeng.fan
->>> %40nxp.com%7Ce0e5200d739a48e7439508da87599d14%7C686ea1d3bc2b4
->>> c6fa92cd99c5c301635%7C0%7C0%7C637971116202643149%7CUnknown%7
->>> CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWw
->>> iLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=oPWSfUweLdhUFK5X9
->>> 2YcGHem8s%2Bfelcr%2FHx9JAlKG%2BI%3D&amp;reserved=0
->>> [4]
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.
->>> org%2Flkml%2F2021%2F6%2F23%2F607&amp;data=05%7C01%7Cpeng.fan%
->>> 40nxp.com%7Ce0e5200d739a48e7439508da87599d14%7C686ea1d3bc2b4c
->>> 6fa92cd99c5c301635%7C0%7C0%7C637971116202643149%7CUnknown%7C
->>> TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiL
->>> CJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=HPpnlaykes8R1Kz1dEN
->>> nirEHkDNr7JvRs%2FcsaDPuLdI%3D&amp;reserved=0
->>> [5]
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatc
->>> hwork.kernel.org%2Fproject%2Flinux-
->>> remoteproc%2Fpatch%2FAOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E
->>> %40cp7-web-
->>> 042.plabs.ch%2F&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7Ce0e520
->>> 0d739a48e7439508da87599d14%7C686ea1d3bc2b4c6fa92cd99c5c301635%
->>> 7C0%7C0%7C637971116202643149%7CUnknown%7CTWFpbGZsb3d8eyJWIj
->>> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
->>> 3000%7C%7C%7C&amp;sdata=GtNruefDreOoogL%2BlntAC7GBfk6E1Goq4j%
->>> 2BYXt36RdI%3D&amp;reserved=0
->>>
->>> In term of device tree this would result in such hierarchy (stm32mp1
->>> example with 2 virtio RPMSG):
->>>
->>> 	m4_rproc: m4@10000000 {
->>> 		compatible = "st,stm32mp1-m4";
->>> 		reg = <0x10000000 0x40000>,
->>> 		      <0x30000000 0x40000>,
->>> 		      <0x38000000 0x10000>;
->>>         memory-region = <&retram>, <&mcuram>,<&mcuram2>;
->>>         mboxes = <&ipcc 2>, <&ipcc 3>;
->>>         mbox-names = "shutdown", "detach";
->>>         status = "okay";
->>>
->>>         #address-cells = <1>;
->>>         #size-cells = <0>;
->>>
->>>         vdev@0 {
->>> 		compatible = "rproc-virtio";
->>> 		reg = <0>;
->>> 		virtio,id = <7>;  /* RPMSG */
->>> 		memory-region = <&vdev0vring0>, <&vdev0vring1>,
->>> <&vdev0buffer>;
->>> 		mboxes = <&ipcc 0>, <&ipcc 1>;
->>> 		mbox-names = "vq0", "vq1";
->>> 		status = "okay";
->>>         };
->>>
->>>         vdev@1 {
->>> 		compatible = "rproc-virtio";
->>> 		reg = <1>;
->>> 		virtio,id = <7>;  /*RPMSG */
->>> 		memory-region = <&vdev1vring0>, <&vdev1vring1>,
->>> <&vdev1buffer>;
->>> 		mboxes = <&ipcc 4>, <&ipcc 5>;
->>> 		mbox-names = "vq0", "vq1";
->>> 		status = "okay";
->>>         };
->>> };
->>>
->>> I have divided the work in 4 steps to simplify the review, This series
->>> implements only the step 1:
->>> step 1: Redefine the remoteproc VirtIO device as a platform device
->>>   - migrate rvdev management in remoteproc virtio.c,
->>>   - create a remotproc virtio config ( can be disabled for platform that not
->>> use VirtIO IPC.
->>> step 2: Add possibility to declare and probe a VirtIO sub node
->>>   - VirtIO bindings declaration,
->>>   - multi DT VirtIO devices support,
->>>   - introduction of a remote proc virtio bind device mechanism , =>
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithu
->>> b.com%2Farnopo%2Flinux%2Fcommits%2Fstep2-virtio-in-
->>> DT&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7Ce0e5200d739a48e74
->>> 39508da87599d14%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C
->>> 637971116202643149%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
->>> MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C
->>> %7C&amp;sdata=XtF%2FQnml3QXFL7rgqST1Z2FotUzoj%2FD57WfiuAVMnr8
->>> %3D&amp;reserved=0
->>> step 3: Add memory declaration in VirtIO subnode =>
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithu
->>> b.com%2Farnopo%2Flinux%2Fcommits%2Fstep3-virtio-
->>> memories&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7Ce0e5200d739
->>> a48e7439508da87599d14%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
->>> C0%7C637971116202643149%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->>> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
->>> 7C%7C%7C&amp;sdata=6gq28c6a1TJ%2FdkvokcEjgy6FKQcKTXSz%2BNAbJPo
->>> mjac%3D&amp;reserved=0
->>> step 4: Add mailbox declaration in VirtIO subnode =>
->>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithu
->>> b.com%2Farnopo%2Flinux%2Fcommits%2Fstep4-virtio-
->>> mailboxes&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7Ce0e5200d739
->>> a48e7439508da87599d14%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
->>> C0%7C637971116202643149%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->>> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
->>> 7C%7C%7C&amp;sdata=wfy2euuOPoMmBMIH3BOsGcsEYGSTWsDaRr7ENN
->>> QCK70%3D&amp;reserved=0
->>>
->>> Arnaud Pouliquen (4):
->>>   remoteproc: core: Introduce rproc_rvdev_add_device function
->>>   remoteproc: core: Introduce rproc_add_rvdev function
->>>   remoteproc: Move rproc_vdev management to remoteproc_virtio.c
->>>   remoteproc: virtio: Create platform device for the remoteproc_virtio
->>>
->>>  drivers/remoteproc/remoteproc_core.c     | 154 +++---------------
->>>  drivers/remoteproc/remoteproc_internal.h |  23 ++-
->>>  drivers/remoteproc/remoteproc_virtio.c   | 189 ++++++++++++++++++++---
->>>  include/linux/remoteproc.h               |   6 +-
->>>  4 files changed, 210 insertions(+), 162 deletions(-)
->>>
->>> --
->>> 2.24.3
->>
+I can only advise you to understand how to report issues in the kernel
+community before continuing to report something you identified with
+fuzzing, and learn how others in this community have successfully
+reported something they identified with fuzzing and why some types of
+reports are just better to be ignored by others.
+
+Anyway, thanks for trying out syzkaller and good luck for the future.
+
+
+Lukas
+
+On Fri, Sep 23, 2022 at 11:27 AM Tushar Vyavahare <tush133@gmail.com> wrote:
+>
+>
+>
+> ---------- Forwarded message ---------
+> From: dvy...@google.com <dvyukov@google.com>
+> Date: Friday, September 23, 2022 at 2:46:18 PM UTC+5:30
+> Subject: Re: WARNING in dev_watchdog with 5.19 kernel
+> To: Tushar Vyavahare <tush133@gmail.com>
+> Cc: syzkaller <syzkaller@googlegroups.com>
+>
+>
+> On Fri, 23 Sept 2022 at 11:09, Tushar Vyavahare <tus...@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > I've got the following error report while fuzzing the kernel with syzkaller(added custom driver as a part of it).
+> > Kernel Version: V5.19 standard
+> > Unfortunately, I dont have reproducible program for it.
+>
+> Hi Tushar,
+>
+> There are no kernel developers on syzkaller mailing list. You need to
+> report this to the kernel mailing lists.
+>
+>
+> > -----------[ cut here ]-----------
+> > NETDEV WATCHDOG: eth0 (e1000): transmit queue 0 timed out
+> > WARNING: CPU: 1 PID: 1869 at net/sched/sch_generic.c:525 dev_watchdog+0x79b/0x8f0 net/sched/sch_generic.c:525
+> > Modules linked in:
+> > CPU: 1 PID: 1869 Comm: syz-executor.21 Not tainted 6.0.0-rc3-00107-g42e66b1cc3a0-dirty #2
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > RIP: 0010:dev_watchdog+0x79b/0x8f0 net/sched/sch_generic.c:525
+> > Code: b4 c9 fd 48 8b 1c 24 c6 05 07 8a 94 02 01 48 89 df e8 49 18 ea ff 89 e9 48 89 de 48 c7 c7 e0 17 e3 84 48 89 c2 e8 f3 fe a8 00 <0f> 0b e9 7d fd ff ff e8 29 b4 c9 fd 0f 0b e9 18 fd ff ff 48 c7 c7
+> > RSP: 0018:ffffc900001e8cc0 EFLAGS: 00010286
+> > RAX: 0000000000000000 RBX: ffff8880113f0000 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffff88805d4f8000 RDI: fffff5200003d18a
+> > RBP: 0000000000000000 R08: ffffffff812c7328 R09: 0000000000000000
+> > R10: 0000000000000005 R11: ffffed100d954ef1 R12: 0000000000000001
+> > R13: ffff8880113f04c8 R14: ffff88800cb42000 R15: ffff8880113f03e0
+> > FS: 0000555555af8980(0000) GS:ffff88806ca80000(0000) knlGS:0000000000000000
+> > CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007ffc02e6cbd8 CR3: 000000005d465000 CR4: 0000000000150ee0
+> > Call Trace:
+> > <IRQ>
+> > call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+> > expire_timers kernel/time/timer.c:1519 [inline]
+> > __run_timers.part.0+0x69c/0xad0 kernel/time/timer.c:1790
+> > __run_timers kernel/time/timer.c:1768 [inline]
+> > run_timer_softirq+0xb6/0x1d0 kernel/time/timer.c:1803
+> > __do_softirq+0x1c7/0x921 kernel/softirq.c:571
+> > invoke_softirq kernel/softirq.c:445 [inline]
+> > __irq_exit_rcu kernel/softirq.c:650 [inline]
+> > irq_exit_rcu+0xe2/0x120 kernel/softirq.c:662
+> > sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1106
+> > </IRQ>
+> > <TASK>
+> > asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+> > RIP: 0010:get_current arch/x86/include/asm/current.h:15 [inline]
+> > RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x40 kernel/kcov.c:199
+> > Code: cc bc 7e 81 e2 00 01 ff 00 75 10 65 48 8b 04 25 c0 6e 02 00 48 8b 80 b0 14 00 00 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 <65> 48 8b 0c 25 c0 6e 02 00 bf 02 00 00 00 48 89 ce 4c 8b 04 24 e8
+> > RSP: 0018:ffffc900026ff8e0 EFLAGS: 00000246
+> > RAX: 0000000000000000 RBX: 0000000000000200 RCX: ffff88805d4f8000
+> > RDX: 0000000000000000 RSI: ffff88805d4f8000 RDI: 0000000000000002
+> > RBP: ffffc900026ff9f8 R08: ffffffff818dcb2b R09: 0000000000000000
+> > R10: 0000000000000007 R11: fffffbfff0ffb4e5 R12: 0000000000000000
+> > R13: 0000000000000000 R14: dffffc0000000000 R15: 0000000000000000
+> > __seqprop_spinlock_sequence include/linux/seqlock.h:275 [inline]
+> > read_seqbegin include/linux/seqlock.h:836 [inline]
+> > read_seqbegin_or_lock include/linux/seqlock.h:1140 [inline]
+> > read_seqbegin_or_lock include/linux/seqlock.h:1137 [inline]
+> > prepend_path.isra.0+0x3a1/0xdd0 fs/d_path.c:170
+> > d_absolute_path+0xf3/0x1a0 fs/d_path.c:233
+> > tomoyo_get_absolute_path security/tomoyo/realpath.c:101 [inline]
+> > tomoyo_realpath_from_path+0x282/0x620 security/tomoyo/realpath.c:276
+> > tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+> > tomoyo_path_perm+0x219/0x420 security/tomoyo/file.c:822
+> > tomoyo_path_unlink+0x8e/0xd0 security/tomoyo/tomoyo.c:149
+> > security_path_unlink+0xd7/0x150 security/security.c:1173
+> > do_unlinkat+0x36c/0x660 fs/namei.c:4293
+> > __do_sys_unlink fs/namei.c:4345 [inline]
+> > __se_sys_unlink fs/namei.c:4343 [inline]
+> > __x64_sys_unlink+0x3e/0x50 fs/namei.c:4343
+> > do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+> > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7f4ebd9af2cb
+> > ================================
+> > WARNING: inconsistent lock state
+> > 6.0.0-rc3-00107-g42e66b1cc3a0-dirty #2 Not tainted
+> > --------------------------------
+> > inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+> > syz-executor.21/1869 [HC0[0]:SC1[1]:HE1:SE0] takes:
+> > ffffffff857877b8 (vmap_area_lock){+.?.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+> > ffffffff857877b8 (vmap_area_lock){+.?.}-{2:2}, at: find_vmap_area+0x1c/0x130 mm/vmalloc.c:1836 {SOFTIRQ-ON-W}
+> >
+> > state was registered at:
+> > lock_acquire kernel/locking/lockdep.c:5666 [inline]
+> > lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
+> > __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+> > _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+> > spin_lock include/linux/spinlock.h:349 [inline]
+> > alloc_vmap_area mm/vmalloc.c:1617 [inline]
+> > alloc_vmap_area+0xa05/0x1e30 mm/vmalloc.c:1569
+> > __get_vm_area_node+0x142/0x3f0 mm/vmalloc.c:2484
+> > get_vm_area_caller+0x43/0x50 mm/vmalloc.c:2537
+> > __ioremap_caller.constprop.0+0x32d/0x600 arch/x86/mm/ioremap.c:280
+> > acpi_os_ioremap include/acpi/acpi_io.h:13 [inline]
+> > acpi_map drivers/acpi/osl.c:296 [inline]
+> > acpi_os_map_iomem+0x463/0x550 drivers/acpi/osl.c:355
+> > acpi_tb_acquire_table+0xd8/0x209 drivers/acpi/acpica/tbdata.c:142
+> > acpi_tb_validate_table drivers/acpi/acpica/tbdata.c:317 [inline]
+> > acpi_tb_validate_table+0x50/0x8c drivers/acpi/acpica/tbdata.c:308
+> > acpi_tb_verify_temp_table+0x84/0x674 drivers/acpi/acpica/tbdata.c:504
+> > acpi_reallocate_root_table+0x374/0x3e0 drivers/acpi/acpica/tbxface.c:180
+> > acpi_early_init+0x13a/0x438 drivers/acpi/bus.c:1214
+> > start_kernel+0x3d4/0x494 init/main.c:1099
+> > secondary_startup_64_no_verify+0xce/0xdb
+> > irq event stamp: 53942274
+> > hardirqs last enabled at (53942274): [<ffffffff812c0d1e>] __up_console_sem+0xae/0xc0 kernel/printk/printk.c:264
+> > hardirqs last disabled at (53942273): [<ffffffff812c0d03>] __up_console_sem+0x93/0xc0 kernel/printk/printk.c:262
+> > softirqs last enabled at (53940998): [<ffffffff8109bec6>] fpu_clone+0x396/0xf90 arch/x86/kernel/fpu/core.c:608
+> > softirqs last disabled at (53941505): [<ffffffff81164212>] invoke_softirq kernel/softirq.c:445 [inline]
+> > softirqs last disabled at (53941505): [<ffffffff81164212>] __irq_exit_rcu kernel/softirq.c:650 [inline]
+> > softirqs last disabled at (53941505): [<ffffffff81164212>] irq_exit_rcu+0xe2/0x120 kernel/softirq.c:662
+> > other info that might help us debug this:
+> > Possible unsafe locking scenario:
+> > CPU0
+> > ----
+> > lock(vmap_area_lock);
+> > <Interrupt>
+> > lock(vmap_area_lock);
+> > *** DEADLOCK ***
+> > 7 locks held by syz-executor.21/1869:
+> > #0: ffff8880114fe438 (sb_writers#4){..}-{0:0}, at: do_unlinkat+0x17f/0x660 fs/namei.c:4276
+> > #1: ffff888018304990 (&type->i_mutex_dir_key#3/1){..}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
+> > #1: ffff888018304990 (&type->i_mutex_dir_key#3/1){..}-{3:3}, at: do_unlinkat+0x26c/0x660 fs/namei.c:4280
+> > #2: ffffffff8591c728 (tomoyo_ss){....}-{0:0}, at: tomoyo_path_perm+0x1c1/0x420 security/tomoyo/file.c:847
+> > #3: ffffffff85695b20 (rcu_read_lock){....}-{1:2}, at: prepend_path.isra.0+0x0/0xdd0 fs/d_path.c:368
+> > #4: ffffffff85695b20 (rcu_read_lock){....}-{1:2}, at: read_seqbegin include/linux/seqlock.h:840 [inline]
+> > #4: ffffffff85695b20 (rcu_read_lock){....}-{1:2}, at: read_seqbegin_or_lock include/linux/seqlock.h:1140 [inline]
+> > #4: ffffffff85695b20 (rcu_read_lock){....}-{1:2}, at: read_seqbegin_or_lock include/linux/seqlock.h:1137 [inline]
+> > #4: ffffffff85695b20 (rcu_read_lock){....}-{1:2}, at: prepend_path.isra.0+0x254/0xdd0 fs/d_path.c:165
+> > #5: ffffc900001e8d68 ((&dev->watchdog_timer)){+..}{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
+> > #5: ffffc900001e8d68 ((&dev->watchdog_timer)){+..}{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1464
+> > #6: ffff8880113f03f8 (&dev->tx_global_lock){+..}{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+> > #6: ffff8880113f03f8 (&dev->tx_global_lock){+..}{2:2}, at: dev_watchdog+0x30/0x8f0 net/sched/sch_generic.c:500
+> > stack backtrace:
+> > CPU: 1 PID: 1869 Comm: syz-executor.21 Not tainted 6.0.0-rc3-00107-g42e66b1cc3a0-dirty #2
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > Call Trace:
+> > <IRQ>
+> > __dump_stack lib/dump_stack.c:88 [inline]
+> > dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > print_usage_bug kernel/locking/lockdep.c:3961 [inline]
+> > valid_state kernel/locking/lockdep.c:3973 [inline]
+> > mark_lock_irq kernel/locking/lockdep.c:4176 [inline]
+> > mark_lock.part.0.cold+0x19/0x46 kernel/locking/lockdep.c:4632
+> > mark_lock kernel/locking/lockdep.c:4596 [inline]
+> > mark_usage kernel/locking/lockdep.c:4527 [inline]
+> > __lock_acquire+0x139f/0x5830 kernel/locking/lockdep.c:5007
+> > lock_acquire kernel/locking/lockdep.c:5666 [inline]
+> > lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
+> > __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+> > _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+> > spin_lock include/linux/spinlock.h:349 [inline]
+> > find_vmap_area+0x1c/0x130 mm/vmalloc.c:1836
+> > check_heap_object mm/usercopy.c:176 [inline]
+> > __check_object_size mm/usercopy.c:250 [inline]
+> > __check_object_size+0x1f8/0x700 mm/usercopy.c:212
+> > check_object_size include/linux/thread_info.h:199 [inline]
+> > __copy_from_user_inatomic include/linux/uaccess.h:62 [inline]
+> > copy_from_user_nmi arch/x86/lib/usercopy.c:47 [inline]
+> > copy_from_user_nmi+0xcb/0x130 arch/x86/lib/usercopy.c:31
+> > copy_code arch/x86/kernel/dumpstack.c:91 [inline]
+> > show_opcodes+0x5b/0xb0 arch/x86/kernel/dumpstack.c:121
+> > show_iret_regs+0xd/0x33 arch/x86/kernel/dumpstack.c:149
+> > __show_regs+0x1e/0x60 arch/x86/kernel/process_64.c:74
+> > show_trace_log_lvl+0x265/0x2bb arch/x86/kernel/dumpstack.c:292
+> > __warn+0xe2/0x190 kernel/panic.c:621
+> > report_bug+0x272/0x300 lib/bug.c:198
+> > handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
+> > exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
+> > asm_exc_invalid_op+0x16/0x20 arch/x86/include/asm/idtentry.h:568
+> > RIP: 0010:dev_watchdog+0x79b/0x8f0 net/sched/sch_generic.c:525
+> > Code: b4 c9 fd 48 8b 1c 24 c6 05 07 8a 94 02 01 48 89 df e8 49 18 ea ff 89 e9 48 89 de 48 c7 c7 e0 17 e3 84 48 89 c2 e8 f3 fe a8 00 <0f> 0b e9 7d fd ff ff e8 29 b4 c9 fd 0f 0b e9 18 fd ff ff 48 c7 c7
+> > RSP: 0018:ffffc900001e8cc0 EFLAGS: 00010286
+> > RAX: 0000000000000000 RBX: ffff8880113f0000 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffff88805d4f8000 RDI: fffff5200003d18a
+> > RBP: 0000000000000000 R08: ffffffff812c7328 R09: 0000000000000000
+> > R10: 0000000000000005 R11: ffffed100d954ef1 R12: 0000000000000001
+> > R13: ffff8880113f04c8 R14: ffff88800cb42000 R15: ffff8880113f03e0
+> > call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+> > expire_timers kernel/time/timer.c:1519 [inline]
+> > __run_timers.part.0+0x69c/0xad0 kernel/time/timer.c:1790
+> > __run_timers kernel/time/timer.c:1768 [inline]
+> > run_timer_softirq+0xb6/0x1d0 kernel/time/timer.c:1803
+> > __do_softirq+0x1c7/0x921 kernel/softirq.c:571
+> > invoke_softirq kernel/softirq.c:445 [inline]
+> > __irq_exit_rcu kernel/softirq.c:650 [inline]
+> > irq_exit_rcu+0xe2/0x120 kernel/softirq.c:662
+> > sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1106
+> > </IRQ>
+> > <TASK>
+> > asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+> > RIP: 0010:get_current arch/x86/include/asm/current.h:15 [inline]
+> > RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x40 kernel/kcov.c:199
+> > Code: cc bc 7e 81 e2 00 01 ff 00 75 10 65 48 8b 04 25 c0 6e 02 00 48 8b 80 b0 14 00 00 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 <65> 48 8b 0c 25 c0 6e 02 00 bf 02 00 00 00 48 89 ce 4c 8b 04 24 e8
+> > RSP: 0018:ffffc900026ff8e0 EFLAGS: 00000246
+> > RAX: 0000000000000000 RBX: 0000000000000200 RCX: ffff88805d4f8000
+> > RDX: 0000000000000000 RSI: ffff88805d4f8000 RDI: 0000000000000002
+> > RBP: ffffc900026ff9f8 R08: ffffffff818dcb2b R09: 0000000000000000
+> > R10: 0000000000000007 R11: fffffbfff0ffb4e5 R12: 0000000000000000
+> > R13: 0000000000000000 R14: dffffc0000000000 R15: 0000000000000000
+> > __seqprop_spinlock_sequence include/linux/seqlock.h:275 [inline]
+> > read_seqbegin include/linux/seqlock.h:836 [inline]
+> > read_seqbegin_or_lock include/linux/seqlock.h:1140 [inline]
+> > read_seqbegin_or_lock include/linux/seqlock.h:1137 [inline]
+> > prepend_path.isra.0+0x3a1/0xdd0 fs/d_path.c:170
+> > d_absolute_path+0xf3/0x1a0 fs/d_path.c:233
+> > tomoyo_get_absolute_path security/tomoyo/realpath.c:101 [inline]
+> > tomoyo_realpath_from_path+0x282/0x620 security/tomoyo/realpath.c:276
+> > tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+> > tomoyo_path_perm+0x219/0x420 security/tomoyo/file.c:822
+> > tomoyo_path_unlink+0x8e/0xd0 security/tomoyo/tomoyo.c:149
+> > security_path_unlink+0xd7/0x150 security/security.c:1173
+> > do_unlinkat+0x36c/0x660 fs/namei.c:4293
+> > __do_sys_unlink fs/namei.c:4345 [inline]
+> > __se_sys_unlink fs/namei.c:4343 [inline]
+> > __x64_sys_unlink+0x3e/0x50 fs/namei.c:4343
+> > do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+> > entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7f4ebd9af2cb
+> > Code: 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 57 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffc02e6d318 EFLAGS: 00000206 ORIG_RAX: 0000000000000057
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4ebd9af2cb
+> > RDX: 00007ffc02e6d350 RSI: 00007ffc02e6d350 RDI: 00007ffc02e6d3e0
+> > RBP: 00007ffc02e6d3e0 R08: 0000000000000001 R09: 00007ffc02e6d1a0
+> > R10: 00000000fffffff8 R11: 0000000000000206 R12: 00007f4ebda1b3ff
+> > R13: 00007ffc02e6e480 R14: 0000555555afa080 R15: 0000000000000032
+> > </TASK>
+> > Code: 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 57 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffc02e6d318 EFLAGS: 00000206 ORIG_RAX: 0000000000000057
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4ebd9af2cb
+> > RDX: 00007ffc02e6d350 RSI: 00007ffc02e6d350 RDI: 00007ffc02e6d3e0
+> > RBP: 00007ffc02e6d3e0 R08: 0000000000000001 R09: 00007ffc02e6d1a0
+> > R10: 00000000fffffff8 R11: 0000000000000206 R12: 00007f4ebda1b3ff
+> > R13: 00007ffc02e6e480 R14: 0000555555afa080 R15: 0000000000000032
+> > </TASK>
+> > ----------------
+> > Code disassembly (best guess):
+> > 0: cc int3
+> > 1: bc 7e 81 e2 00 mov $0xe2817e,%esp
+> > 6: 01 ff add %edi,%edi
+> > 8: 00 75 10 add %dh,0x10(%rbp)
+> > b: 65 48 8b 04 25 c0 6e mov %gs:0x26ec0,%rax
+> > 12: 02 00
+> > 14: 48 8b 80 b0 14 00 00 mov 0x14b0(%rax),%rax
+> > 1b: c3 retq
+> > 1c: 66 66 2e 0f 1f 84 00 data16 nopw %cs:0x0(%rax,%rax,1)
+> > 23: 00 00 00 00
+> > 27: 0f 1f 00 nopl (%rax)
+> >
+> > 2a: 65 48 8b 0c 25 c0 6e mov %gs:0x26ec0,%rcx <-- trapping instruction
+> > 31: 02 00
+> > 33: bf 02 00 00 00 mov $0x2,%edi
+> > 38: 48 89 ce mov %rcx,%rsi
+> > 3b: 4c 8b 04 24 mov (%rsp),%r8
+> > 3f: e8 .byte 0xe8
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "syzkaller" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller+...@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller/b7aa8d89-09cb-4fd3-a74c-2742a7254b82n%40googlegroups.com.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller/29071f9e-8cd8-424f-b149-243a09890942n%40googlegroups.com.
