@@ -2,89 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12455E79D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF00D5E79DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiIWLmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S230359AbiIWLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiIWLmm (ORCPT
+        with ESMTP id S229733AbiIWLnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:42:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA6B139430;
-        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id g3so19955693wrq.13;
-        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
-        b=NknAA532T2w2I12EWWoVE0IuVNlt0YadBipCxkk3Ope2yQ0W6Wyyu2LuIncxTuFOkk
-         Li/n9zJVTkGncwR/zWPt3uN2Q5y1oNUJ14gWD376d8XTHA5P2zMlGdmfQ0cBHSpztyxP
-         VUXKcUvNdXO35E38CaxmdLeDjFpqYrkPpUodZ/1IJk5fBfB4oeSiZwiQOKsZoRmWrKTh
-         Z6v3KWfpbGMeYAX9LeDQlETM9a/KZ5M3A9R8ZQfa6wTLAEFUtnVP71IzUDT8FIKQgYOF
-         h18vIDou369nrWST5DRrb7CiapqsDMT6McMXnsK8A+qTmxjftsdTiJeAHX2I+li5vkRH
-         qS/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
-        b=v6m7o4uK0rxYO7jiM6iyjZkC6CjtJMYHGS+2HQnj88o1yRESK6qyP94xT2/+RhgKZj
-         Q1l+wlHMDEFyElv02JwXcJnRpG64eN28Ans0Oiqy1218D/rbtAGpeXUmKbX+bgAOfECo
-         36MmOTo/jUk4SKLZL5d4nv4RIK0iqx1WsZklj+HSMqoI2125TPXx602nQTZJbWYVZiOH
-         6PLwSrltZmH2UOwb+1CFbYgEld4ADQA5SJ8Zh23ULVbYfB42QJsgKdp919YT4gemiE7X
-         TpXxqRXf5hOb4NaM5oV+SlSNwVXIMGWUNqggbDet5tLIiauge7AOfPqTFhgsdMKxql4s
-         gF/w==
-X-Gm-Message-State: ACrzQf2k/2O6lV0t72S7gWpzKRf25ENO1XaAq3beQnupSb80moVwue87
-        kUSzWC4DkiY0fHKL01nCtS4=
-X-Google-Smtp-Source: AMsMyM42pwRjd6ykyQSHUhJseiAJeHfZDyk7MCvtj7lm3nQnnqHmG83zdL5DA+11iBZmFzt0kCkgXA==
-X-Received: by 2002:adf:f00b:0:b0:22a:906d:358d with SMTP id j11-20020adff00b000000b0022a906d358dmr5033191wro.464.1663933359634;
-        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id p21-20020a1c5455000000b003b27f644488sm2231717wmi.29.2022.09.23.04.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 12:42:37 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     James Clark <james.clark@arm.com>, Mark Brown <broonie@kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Fri, 23 Sep 2022 07:43:13 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44B71E9502;
+        Fri, 23 Sep 2022 04:43:12 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 0A00B1E80D97;
+        Fri, 23 Sep 2022 19:39:36 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0Jz4Zr8rHdcv; Fri, 23 Sep 2022 19:39:33 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id BDBB11E80D94;
+        Fri, 23 Sep 2022 19:39:31 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        arnd@arndb.de
+Cc:     x86@kernel.org, linux-hyperv@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220923 due to cbb0c02caf4b ("perf: arm64:
- Add SVE vector granule register to user regs")
-Message-ID: <Yy2braL3vc0SYDGl@debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arch@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH v3] hyperv: simplify and rename generate_guest_id
+Date:   Fri, 23 Sep 2022 19:42:59 +0800
+Message-Id: <20220923114259.2945-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+The generate_guest_id function is more suitable for use after the
+following modifications.
+1. Modify the type of the guest_id variable to u64, which is compatible
+with the caller.
+2. Remove all parameters from the function, and write the parameter
+(LINUX_VERSION_CODE) passed in by the actual call into the function
+implementation.
+3. Rename the function to make it clearly a Hyper-V related function,
+and modify it to hv_generate_guest_id.
 
-A native build of next-20220923 on arm64 host has failed with the error:
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
 
-./usr/include/asm/perf_regs.h:42:26: error: C++ style comments are not allowed in ISO C90
-   42 |  PERF_REG_ARM64_VG = 46, // SVE Vector Granule
-      |                          ^
-./usr/include/asm/perf_regs.h:42:26: note: (this will be reported only once per input file)
+--------
+ v2: Fix generate_guest_id to hv_generate_guest_id.
+ v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: simp
+     lify ... and remove extra spaces 
+---
+ arch/arm64/hyperv/mshyperv.c   |  2 +-
+ arch/x86/hyperv/hv_init.c      |  2 +-
+ include/asm-generic/mshyperv.h | 12 +++++-------
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-I have not bisected but I think it will be from cbb0c02caf4b ("perf: arm64: Add SVE vector granule register to user regs").
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index bbbe351e9045..3863fd226e0e 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+ 		return 0;
+ 
+ 	/* Setup the guest ID */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
+ 
+ 	/* Get the features and hints from Hyper-V */
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 3de6d8b53367..93770791b858 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -426,7 +426,7 @@ void __init hyperv_init(void)
+ 	 * 1. Register the guest ID
+ 	 * 2. Enable the hypercall and register the hypercall page
+ 	 */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+ 
+ 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index c05d2ce9b6cd..7f4a23cee56f 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -25,6 +25,7 @@
+ #include <linux/nmi.h>
+ #include <asm/ptrace.h>
+ #include <asm/hyperv-tlfs.h>
++#include <linux/version.h>
+ 
+ struct ms_hyperv_info {
+ 	u32 features;
+@@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+ }
+ 
+ /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+-static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
+-				       __u64 d_info2)
++static inline u64 hv_generate_guest_id(void)
+ {
+-	__u64 guest_id = 0;
++	u64 guest_id;
+ 
+-	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
+-	guest_id |= (d_info1 << 48);
+-	guest_id |= (kernel_version << 16);
+-	guest_id |= d_info2;
++	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
++	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
+ 
+ 	return guest_id;
+ }
 -- 
-Regards
-Sudip
+2.18.2
+
