@@ -2,164 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F3E5E7ABC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A61F5E7ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiIWM1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S231176AbiIWM23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiIWM0o (ORCPT
+        with ESMTP id S230462AbiIWM2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:26:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5A513505E;
-        Fri, 23 Sep 2022 05:22:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 141DA1F92C;
-        Fri, 23 Sep 2022 12:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663935764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uWHeuxh4DhTU4e8+sDFIgUuNnvFHgGUFoyEReSRgGTY=;
-        b=GaS3P1mTSVy7nSKrfrj/ufMsJsJTty09ODjZQD7Oil8VPuL9kb5L9beX55XjUmTXKt1Khg
-        C9qw8QX+RAXmqHhFkH98ZIxe2yS2l4qcpdJz70A6dQonZHj9MTnoX7Mc1FhsCrWsw0JYCy
-        8Oga72G9TOuH67EiyKlPNlYkr81TbLQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663935764;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uWHeuxh4DhTU4e8+sDFIgUuNnvFHgGUFoyEReSRgGTY=;
-        b=B9eWBL1C7tXZz2ObeTj77PXquEvf2OzUBEKJwPMz5GnRUw5EvSKpLvEKLIx65rjNnBrrVL
-        b0EHoJAfEr5c3dCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E508513A00;
-        Fri, 23 Sep 2022 12:22:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cwLLNxOlLWO9cgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 12:22:43 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 78FD3A0685; Fri, 23 Sep 2022 14:22:43 +0200 (CEST)
-Date:   Fri, 23 Sep 2022 14:22:43 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <20220923122243.bbw6agvopkhz5yud@quack3>
-References: <YxhaJktqtHw3QTSG@infradead.org>
- <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
- <YyIEgD8ksSZTsUdJ@ZenIV>
- <20220915081625.6a72nza6yq4l5etp@quack3>
- <YyvG+Oih2A37Grcf@ZenIV>
- <a6f95605-c2d5-6ec5-b85c-d1f3f8664646@nvidia.com>
- <20220922112935.pep45vfqfw5766gq@quack3>
- <Yy0lztxfwfGXFme4@ZenIV>
- <7e652ba4-8b03-59e0-a9ef-1118c4bbd492@nvidia.com>
+        Fri, 23 Sep 2022 08:28:09 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC02B139F63
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:23:56 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id c11so8244425qtw.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:23:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mxDZwKAzNZt2zRVC0wtLoWkTnhHiobHwZDxR8SDLM4U=;
+        b=A5DNYS+kppZgra8amf5fCa4Y7kTZEslMR6HrxyzWWflHFZdx11zgm48XvA1qBmJYaP
+         oLWT+k1eCfL4It2pBLmPCEQXav/7I1VikB9FPbb4vwHWrZR+isd3mnCLpITXRFDQursL
+         jlOaoxfcJOhKheBRY830Kqh27fbkCch+dASn+eGmt3gmdOaJA9jByK0DT0VJ8eGUa49W
+         VU7tcGa3L/aHY8BaU6hNNn6Un5ipW71ZmFnxS+WOyiW8CSK2C9DHyhmFulpHcPZcrOZc
+         tqlZljTu2lIdJHR7RBXN/ewo3/DpDKC5fsd1zAhRM2bwBjZQ1YOjaG8fqSfHrcJrKjnL
+         OsQQ==
+X-Gm-Message-State: ACrzQf3ThO8vY0lB1hAwQHBlB0pIIZhYNsxlq4rBJMbWgy3BLVt+hMz6
+        lIcQs7GYz6cUvKWQejoNMa2HO07Upkz4jA==
+X-Google-Smtp-Source: AMsMyM7ud1VgIC553gxL0SYtQJ4RgdHi0aDgcKk+4JeFX1eeR7hT6FZKaLv6BtAr1vKkHqNjySUwIQ==
+X-Received: by 2002:ac8:5a41:0:b0:35c:fa93:f227 with SMTP id o1-20020ac85a41000000b0035cfa93f227mr6844316qta.102.1663935834439;
+        Fri, 23 Sep 2022 05:23:54 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id u2-20020ae9d802000000b006ce407b996asm5602362qkf.69.2022.09.23.05.23.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 05:23:53 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 135so5116683ybl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:23:53 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr8375558ybl.604.1663935833560; Fri, 23
+ Sep 2022 05:23:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e652ba4-8b03-59e0-a9ef-1118c4bbd492@nvidia.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220921185208.3549140-1-Jason@zx2c4.com> <20220921185208.3549140-2-Jason@zx2c4.com>
+ <CAMuHMdUuM85s1APoxRmXnw13hHHEGgo8Z9EKvpV6maaZPaVUfA@mail.gmail.com> <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
+In-Reply-To: <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 23 Sep 2022 14:23:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUSF=ARvKTP33psHNWEqvSeUUDuWLRsUUA7LHa+12agng@mail.gmail.com>
+Message-ID: <CAMuHMdUSF=ARvKTP33psHNWEqvSeUUDuWLRsUUA7LHa+12agng@mail.gmail.com>
+Subject: Re: [PATCH 2/2] m68k: virt: generate new RNG seed on reboot
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 22-09-22 21:05:16, John Hubbard wrote:
-> On 9/22/22 20:19, Al Viro wrote:
-> > On Thu, Sep 22, 2022 at 01:29:35PM +0200, Jan Kara wrote:
-> > 
-> >>> This rule would mostly work, as long as we can relax it in some cases, to
-> >>> allow pinning of both source and dest pages, instead of just destination
-> >>> pages, in some cases. In particular, bio_release_pages() has lost all
-> >>> context about whether it was a read or a write request, as far as I can
-> >>> tell. And bio_release_pages() is the primary place to unpin pages for
-> >>> direct IO.
-> >>
-> >> Well, we already do have BIO_NO_PAGE_REF bio flag that gets checked in
-> >> bio_release_pages(). I think we can easily spare another bio flag to tell
-> >> whether we need to unpin or not. So as long as all the pages in the created
-> >> bio need the same treatment, the situation should be simple.
-> > 
-> > Yes.  Incidentally, the same condition is already checked by the creators
-> > of those bio - see the assorted should_dirty logics.
-> 
-> Beautiful!
-> 
-> > 
-> > While we are at it - how much of the rationale around bio_check_pages_dirty()
-> > doing dirtying is still applicable with pinning pages before we stick them
-> > into bio?  We do dirty them before submitting bio, then on completion
-> > bio_check_pages_dirty() checks if something has marked them clean while
-> > we'd been doing IO; if all of them are still dirty we just drop the pages
-> > (well, unpin and drop), otherwise we arrange for dirty + unpin + drop
-> > done in process context (via schedule_work()).  Can they be marked clean by
-> > anyone while they are pinned?  After all, pinning is done to prevent
-> > writeback getting done on them while we are modifying the suckers...
-> 
-> I certainly hope not. And in fact, we should really just say that that's
-> a rule: the whole time the page is pinned, it simply must remain dirty
-> and writable, at least with the way things are right now.
+Hi Jason,
 
-I agree the page should be staying dirty the whole time it is pinned. I
-don't think it is feasible to keep it writeable in the page tables because
-that would mean you would need to block e.g. munmap() until the pages gets
-unpinned and that will almost certainly upset some current userspace.
+On Fri, Sep 23, 2022 at 1:53 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Fri, Sep 23, 2022 at 1:30 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > +static struct bi_record *rng_seed_record;
+> >
+> > This can be const...
+> > >                 memzero_explicit((void *)data, len + 2);
+> > > +                /* Store a reference to be filled in on reboot. */
+> > > +               rng_seed_record = (void *)record;
+> >
+> > ... so this cast can be dropped.
+>
+> Will do.
+>
+> >
+> > > +
+> > >  static void virt_reset(void)
+> > >  {
+> > >         void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
+> > >
+> > > +       if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
+> > > +               u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
+> > > +               get_random_bytes((u8 *)rng_seed_record->data + 2, len);
+> > > +               *(u16 *)rng_seed_record->data = len;
 
-But keeping page dirty should be enough so that we can get rid of all these
-nasty calls to set_page_dirty() from IO completion.
+Storing the length should use the proper cpu_to_be16 accessor.
 
-> This reminds me that I'm not exactly sure what the rules for
-> FOLL_LONGTERM callers should be, with respect to dirtying. At the
-> moment, most, if not all of the code that does "set_page_dirty_lock();
-> unpin_user_page()" is wrong.
+> > Wouldn't it be simpler to just use the existing length?
+> >
+> >     if (rnd_seed_record) {
+> >            u16 len = be16_to_cpup(data);
+> >            get_random_bytes((u8 *)rng_seed_record->data + 2, len);
+> >     }
+>
+> No, that would not work. len is 0 there, since we zero out the bytes
+> after use for forward secrecy, and we zero out the length, so that we
+> don't wind up feeding it zeros.
 
-Right.
+You're right. I misread the location of the "+ 2" in the clearing code.
 
-> To fix those cases, IIUC, the answer is: you must make the page dirty
-> properly, with page_mkwrite(), not just with set_page_dirty_lock(). And
+> > However, I have my doubts this will actually work. Was this tested?
+> > The bootinfo is passed from userspace, usually by reading
+> > /proc/bootinfo, and adapting it where needed.
+> > So I think you should implement this in kexec-tools instead.
+>
+> Yes, this was tested. This is to handle the reboot case, just as the
+> commit subject says. Specifically, calling `reboot(RB_AUTOBOOT);`.
 
-Correct, and GUP (or PUP) actually does that under the hood so I don't
-think we need to change anything there.
+OK.
 
-> that has to be done probably a lot earlier, for reasons that I'm still
-> vague on. But perhaps right after pinning the page. (Assuming that we
-> hold off writeback while the page is pinned.)
+> It does *not* handle kexec. For that, indeed, kexec-tools needs to be
+> augmented, but that's a separate patch that doesn't need to interact
+> with this one.
+>
+> The way I tested this is by having my initramfs just call
+> `reboot(RB_AUTOBOOT);`, and having add_bootloader_randomness() print
+> its contents to the console. I checked that it was both present and
+> different every time.
 
-Holding off writeback is not always doable - as Christoph mentions, for
-data integrity writeback we'll have to get the data to disk before the page
-is unpinned (as for longterm users it can take days for the page to be
-unpinned). But we can just writeback the page without clearing the dirty
-bit in these cases. We may need to use bounce pages to be able to safely
-writeback pinned pages but that's another part of the story...
+Are you sure the new kernel did receive the same randomness as prepared
+by get_random_bytes()? I would expect it to just reboot into qemu,
+reload the kernel from disk, and recreate a new bootinfo from scratch,
+including generating a new random seed.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> I'll send a v2 with that const fix.
+
+OK, thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
