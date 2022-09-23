@@ -2,100 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EB55E77AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63C05E77AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiIWJva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S231506AbiIWJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiIWJvD (ORCPT
+        with ESMTP id S231263AbiIWJx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:51:03 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3636DB6D78;
-        Fri, 23 Sep 2022 02:50:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MYnR63schzKFvw;
-        Fri, 23 Sep 2022 17:48:50 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgDXKXN5gS1jPI4UBQ--.6826S3;
-        Fri, 23 Sep 2022 17:50:51 +0800 (CST)
-Subject: Re: [PATCH v3 3/5] block, bfq: don't disable wbt if
- CONFIG_BFQ_GROUP_IOSCHED is disabled
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220922113558.1085314-1-yukuai3@huawei.com>
- <20220922113558.1085314-4-yukuai3@huawei.com>
- <Yy10vjnxAvca8Ee1@infradead.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <988a86f2-e960-ba59-4d41-f4c8a6345ee9@huaweicloud.com>
-Date:   Fri, 23 Sep 2022 17:50:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 23 Sep 2022 05:53:56 -0400
+X-Greylist: delayed 45074 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Sep 2022 02:53:55 PDT
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B39B5159;
+        Fri, 23 Sep 2022 02:53:55 -0700 (PDT)
+Message-ID: <ad36710b-af7d-f9ca-fa04-cbb9acb5f123@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1663926833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gn6QZKyXCWPIw+IVFSiZn7BPyYuukt8qvGTzGCzdE74=;
+        b=qGx+rQKBiZpQYiOOhw61gYJMEMTi5KCbHoaWhDkr8vvIBNKNPnxaoxwdnqIMz7BiK75/LB
+        d/fIsv1MGiK821W8tNH1KTVnWTxvTLxoaOMxxciy1BcRQDgUZECRxdYcoPFnLhi6qgwAo5
+        mzycAHBmVztNl0D/toxAwxgnrnkqFu7frIeULSHDFfRI0RTeAxrwo9QifB1Aj0Zx167u4Z
+        3ai99uAdNtazNwCi+Mahi8vWwTGkiHfQ4UBgwI6x6TuXZZyGY0QGjii0B0vvFiNFyGvRu/
+        WSkn35dqslVd7O+qL/0TUWL4teDlXBK5DC1glHcIgdCkni6YjiJdVYxDF+urHg==
+Date:   Fri, 23 Sep 2022 11:53:52 +0200
 MIME-Version: 1.0
-In-Reply-To: <Yy10vjnxAvca8Ee1@infradead.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDXKXN5gS1jPI4UBQ--.6826S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1xXry8uw15Gw4rGw1UGFg_yoWfKFcEqF
-        WYgrWDC3y7Ww1kX3Waqrs8XrWvgrWrurZ5ArWSq3ySyryDWF48AF4vyrZIvw1fJ3y8KFsx
-        Wa9xXrW2vr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: rockchip: Enable HDMI and GPU on quartz64-b
+Content-Language: da-DK
+To:     Heiko Stuebner <heiko@sntech.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220920143446.633956-1-frattaroli.nicolas@gmail.com>
+ <659fc2fe-f820-04ad-8a4f-224b4d4bd97b@manjaro.org> <2198677.PYKUYFuaPT@phil>
+From:   Dan Johansen <strit@manjaro.org>
+Organization: Manjaro ARM
+In-Reply-To: <2198677.PYKUYFuaPT@phil>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christoph
 
-ÔÚ 2022/09/23 16:56, Christoph Hellwig Ð´µÀ:
-> On Thu, Sep 22, 2022 at 07:35:56PM +0800, Yu Kuai wrote:
->> wbt and bfq should work just fine if CONFIG_BFQ_GROUP_IOSCHED is disabled.
-> 
-> Umm, wouldn't this be something decided at runtime, that is not
-> if CONFIG_BFQ_GROUP_IOSCHED is enable/disable in the kernel build
-> if the hierarchical cgroup based scheduling is actually used for a
-> given device?
-> .
-> 
+Den 23.09.2022 kl. 11.45 skrev Heiko Stuebner:
+> Hi,
+>
+> Am Donnerstag, 22. September 2022, 23:22:37 CEST schrieb Dan Johansen:
+>> This seems to be based against linux-next and not mainline. It fails to
+>> apply on mainline for me.
+> I would not expect things any other way though :-) .
+> I.e. in the current cycle everything new is of course targetting
+> v6.1 and the Quartz boards already saw some other changes.
 
-That's a good point,
+Ah okay. I have misunderstood the submitting process then.
 
-Before this patch wbt is simply disabled if elevator is bfq.
+I was under the impression that a patch should always target the latest 
+-rc1, in this case 6.0-rc1.
 
-With this patch, if elevator is bfq while bfq doesn't throttle
-any IO yet, wbt still is disabled unnecessarily.
+I did not know that when you are at rc6/rc7 it's okay to target 
+linux-next without
+mentioning it.
 
-I have an idle to enable/disable wbt while tracking how many bfq_groups
-are activated, which will rely on my another patchset, which is not
-applied yet...
+Sorry for my noise.
 
-support concurrent sync io for bfq on a specail occasion.
-
-I think currently this patch do make sense, perhaps I can do more work
-after the above patchset finally applied?
-
-Thanks,
-Kuai
-
+>
+>
+>> Den 20.09.2022 kl. 16.34 skrev Nicolas Frattaroli:
+>>> This enables the GPU and HDMI output (including HDMI audio) on
+>>> the PINE64 Quartz64 Model B single board computer.
+>>>
+>>> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+>>> ---
+>>>    .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 60 +++++++++++++++++++
+>>>    1 file changed, 60 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+>>> index 0f623198970f..77b179cd20e7 100644
+>>> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+>>> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+>>> @@ -4,6 +4,7 @@
+>>>    
+>>>    #include <dt-bindings/gpio/gpio.h>
+>>>    #include <dt-bindings/pinctrl/rockchip.h>
+>>> +#include <dt-bindings/soc/rockchip,vop2.h>
+>>>    #include "rk3566.dtsi"
+>>>    
+>>>    / {
+>>> @@ -28,6 +29,17 @@ gmac1_clkin: external-gmac1-clock {
+>>>    		#clock-cells = <0>;
+>>>    	};
+>>>    
+>>> +	hdmi-con {
+>>> +		compatible = "hdmi-connector";
+>>> +		type = "a";
+>>> +
+>>> +		port {
+>>> +			hdmi_con_in: endpoint {
+>>> +				remote-endpoint = <&hdmi_out_con>;
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +
+>>>    	leds {
+>>>    		compatible = "gpio-leds";
+>>>    
+>>> @@ -183,6 +195,33 @@ &gmac1m1_clkinout
+>>>    	status = "okay";
+>>>    };
+>>>    
+>>> +&gpu {
+>>> +	mali-supply = <&vdd_gpu>;
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&hdmi {
+>>> +	avdd-0v9-supply = <&vdda0v9_image>;
+>>> +	avdd-1v8-supply = <&vcca1v8_image>;
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&hdmi_in {
+>>> +	hdmi_in_vp0: endpoint {
+>>> +		remote-endpoint = <&vp0_out_hdmi>;
+>>> +	};
+>>> +};
+>>> +
+>>> +&hdmi_out {
+>>> +	hdmi_out_con: endpoint {
+>>> +		remote-endpoint = <&hdmi_con_in>;
+>>> +	};
+>>> +};
+>>> +
+>>> +&hdmi_sound {
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>>    &i2c0 {
+>>>    	status = "okay";
+>>>    
+>>> @@ -456,6 +495,10 @@ &i2c5 {
+>>>    	status = "disabled";
+>>>    };
+>>>    
+>>> +&i2s0_8ch {
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>>    &i2s1_8ch {
+>>>    	pinctrl-names = "default";
+>>>    	pinctrl-0 = <&i2s1m0_sclktx
+>> The above part does not seem to exist in the current mainline (rc6) git
+>> repo.
+> which is of course already in linux-next, so this
+> patch just applied nicely.
+>
+>
+> Heiko
+>
+>>> @@ -677,3 +720,20 @@ &usb_host0_ehci {
+>>>    &usb_host0_ohci {
+>>>    	status = "okay";
+>>>    };
+>>> +
+>>> +&vop {
+>>> +	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
+>>> +	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&vop_mmu {
+>>> +	status = "okay";
+>>> +};
+>>> +
+>>> +&vp0 {
+>>> +	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
+>>> +		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
+>>> +		remote-endpoint = <&hdmi_in_vp0>;
+>>> +	};
+>>> +};
+>
+>
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+-- 
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
