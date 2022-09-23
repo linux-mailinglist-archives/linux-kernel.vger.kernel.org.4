@@ -2,87 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841E45E7CBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D939F5E7D37
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiIWOTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S232322AbiIWOfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiIWOTO (ORCPT
+        with ESMTP id S231770AbiIWOel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:19:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01913F739;
-        Fri, 23 Sep 2022 07:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663942753; x=1695478753;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cF3OhXh4Ydj3/v5de8W7g+mdWwMq2bsCnZD5n0V16R0=;
-  b=PX+fgqNm7CziKI2E3Pi1edLqgMPGv2Zd/5JYLIhnbL45QlXx2vzeZdrN
-   wgUC09ALG6NroOHjMDCE7c/Y8GMq+1AzO6aaj6X3DaBoDMIou36xiWJct
-   qFFmZQTOSX+zUKOwsnmDtSrMpWpEFvR8OlJjlc/kSeJlr3HvSQpwkFijl
-   ftEQbV1HfjZAxLx9BvwQJCEtf5BD82nJM4X85c5t5unBM0ISQDYe7qwZA
-   sXvIlTnwowDJKOzJVmz8qL9ueZaJK7sY0Su7SyjmHtSl9xjv0Q9mANkCl
-   N24rR73gYP8obd04F+Cl7veNhpd0fojBNnjn7NjAqeSaz+3oTPzcx7rjK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="302048901"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="302048901"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:19:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="688728079"
-Received: from weiyeeta-mobl.gar.corp.intel.com ([10.213.40.75])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 07:19:09 -0700
-Message-ID: <c1d4ec94cc666897d8e493364352bd1442bdb819.camel@intel.com>
-Subject: Re: [PATCH v4 02/30] thermal/sysfs: Do not make get_trip_hyst
- optional
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Date:   Fri, 23 Sep 2022 22:19:05 +0800
-In-Reply-To: <20220921094244.606948-3-daniel.lezcano@linaro.org>
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
-         <20220921094244.606948-3-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 23 Sep 2022 10:34:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FCB7E2;
+        Fri, 23 Sep 2022 07:34:33 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NDx8tV026081;
+        Fri, 23 Sep 2022 14:33:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Amh2W25vG622JwDCDmZuOupC0Zg1Foj/eEoyphdMAS8=;
+ b=ZDQ0t2RdHHOc4K74nEIKRrclnpRoQIPoDvtRY6RsiNluzgAwDRT97zKmuaj+brDB4iJk
+ TSZK5woDXrUMYWdGcgy6RQMuicy4qzguj/E2SUyPWvSav1KYPNcgVtAZUu8JQGIrHiiM
+ xijtdqdeFn4++LpPiTQzqiKJ3/FbjEwp7icbAtuYLGCmGpGhDdEYMLB5sLOPEth2dK3j
+ MUboDEuKZgDDcx3w8l8rYSdjnvUB0F8XZZCsNCora26Kesu/KEiz0lYnZqpJGNJuB6vR
+ QXEcVjD+qVYo9NtecmpjeGtlCDJBkm61wnc7x9NenNEp33cJY7kDqjbJhCZVfXAR4DRX 5g== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3js67nhxys-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 14:33:58 +0000
+Received: from pps.filterd (NASANPPMTA05.qualcomm.com [127.0.0.1])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28NEKWlp018414;
+        Fri, 23 Sep 2022 14:20:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jsbsa1gh5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 14:20:32 +0000
+Received: from NASANPPMTA05.qualcomm.com (NASANPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28NEKW4p018408;
+        Fri, 23 Sep 2022 14:20:32 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 28NEKWlj018407
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 14:20:32 +0000
+Received: from [10.216.63.150] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 23 Sep
+ 2022 07:20:23 -0700
+Message-ID: <e6153b89-1f41-3fff-241b-a767e41a1e7e@quicinc.com>
+Date:   Fri, 23 Sep 2022 19:50:04 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>
+CC:     Tejun Heo <tj@kernel.org>,
+        Jing-Ting Wu <jing-ting.wu@mediatek.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Jonathan.JMChen@mediatek.com>,
+        "chris.redpath@arm.com" <chris.redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Donnefort <vdonnefort@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        <cgroups@vger.kernel.org>, <lixiong.liu@mediatek.com>,
+        <wenju.xu@mediatek.com>
+References: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
+ <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
+ <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
+ <YxeR0RoiTdm8sWCJ@slm.duckdns.org>
+ <02b8e7b3-941d-8bb9-cd0e-992738893ba3@redhat.com>
+ <36a73401-7011-834a-7949-c65a2f66246c@redhat.com>
+ <YxeylMvgc/wKcJqk@hirez.programming.kicks-ass.net>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <YxeylMvgc/wKcJqk@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EClpNyz9Q2SNicq3qJPb5J2Yh_clS8D0
+X-Proofpoint-GUID: EClpNyz9Q2SNicq3qJPb5J2Yh_clS8D0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-23_04,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=572 adultscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209230094
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-21 at 11:42 +0200, Daniel Lezcano wrote:
-> The get_trip_hyst() ops is optional. It results all around the
-> thermal
-> framework code a check against the ops pointer and different action
-> adding more complexity and making the code less readable and
-> understandable.
+Hi Peter,
+
+
+On 9/7/2022 2:20 AM, Peter Zijlstra wrote:
+> On Tue, Sep 06, 2022 at 04:40:03PM -0400, Waiman Long wrote:
 > 
-> A zero hysteresis value is perfectly valid, so instead of adding more
-> circumvolutions in the code, create unconditionnaly the hysteresis
-> and
-> use the thermal_zone_get_trip() function which returns a zero
-> hysteresis if the get_trip_hyst() is not defined.
+> I've not followed the earlier stuff due to being unreadable; just
+> reacting to this..
 
-I think an alternative way is to use the .is_visible() callback to make
-this cleanup transparent to userspace.
+We are able to reproduce this issue explained at this link
 
-With this, we can remove the
-	if (tz->ops->set_trip_hyst)check in create_trip_attrs() as well.
-
-But you make the cal. :)
-
-thanks,
-rui
+https://lore.kernel.org/lkml/88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com/
 
 
+> 
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 838623b68031..5d9ea1553ec0 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -2794,9 +2794,9 @@ static int __set_cpus_allowed_ptr_locked(struct
+>> task_struct *p,
+>>                  if (cpumask_equal(&p->cpus_mask, new_mask))
+>>                          goto out;
+>>
+>> -               if (WARN_ON_ONCE(p == current &&
+>> -                                is_migration_disabled(p) &&
+>> -                                !cpumask_test_cpu(task_cpu(p), new_mask)))
+>> {
+>> +               if (is_migration_disabled(p) &&
+>> +                   !cpumask_test_cpu(task_cpu(p), new_mask)) {
+>> +                       WARN_ON_ONCE(p == current);
+>>                          ret = -EBUSY;
+>>                          goto out;
+>>                  }
+>> @@ -2818,7 +2818,11 @@ static int __set_cpus_allowed_ptr_locked(struct
+>> task_struct *p,
+>>          if (flags & SCA_USER)
+>>                  user_mask = clear_user_cpus_ptr(p);
+>>
+>> -       ret = affine_move_task(rq, p, rf, dest_cpu, flags);
+>> +       if (!is_migration_disabled(p) || (flags & SCA_MIGRATE_ENABLE)) {
+>> +               ret = affine_move_task(rq, p, rf, dest_cpu, flags);
+>> +       } else {
+>> +               task_rq_unlock(rq, p, rf);
+>> +       }
+> 
+> This cannot be right. There might be previous set_cpus_allowed_ptr()
+> callers that are blocked and waiting for the task to land on a valid
+> CPU.
+> 
+
+Was thinking if just skipping as below will help here, well i am not sure .
+
+But thinking what if we keep the task as it is on the same cpu and let's 
+wait for migration to be enabled for the task to take care of it later.
+
+------------------->O------------------------------------------
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d90d37c..7717733 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2390,8 +2390,10 @@ static int migration_cpu_stop(void *data)
+          * we're holding p->pi_lock.
+          */
+         if (task_rq(p) == rq) {
+-               if (is_migration_disabled(p))
++               if (is_migration_disabled(p)) {
++                       complete = true;
+                         goto out;
++               }
+
+                 if (pending) {
+
+
+-Mukesh
