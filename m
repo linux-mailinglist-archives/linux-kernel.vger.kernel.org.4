@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D73D5E7A0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E775E7A1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiIWL6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S230226AbiIWMEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiIWL6K (ORCPT
+        with ESMTP id S230448AbiIWMCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:58:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3AEE1D;
-        Fri, 23 Sep 2022 04:58:09 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 11:58:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663934287;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=i03ueGjuv9MXq9D254vKOx55F55SuESMpzw6hrHEEi0=;
-        b=rppYjrSk7/wgCe2lu4BqRuaTxn2l1tme1m+87lVna4P8r3zz2JnhR4OtnkqKcfsMCW25OM
-        0jkqnUQghaY/UA3q0HE8nIBkAinmIrE+XBuIx6UVkS+o4fs2WVfVkR3kKVC+jsViAmQL5R
-        mrZw2ChXLkuWOr2FsccZIw3k/WBdwJVq7QS5+fV95934JxhpxKJVopS1vACvpa7nE5Llvj
-        1+cpIcju1yQU887hghmFfUgNivgLjej9ia1vAO25d9ymro2NcRgYu54DrSL31bAOadL2bN
-        B8o9imF9hlkCHBDF2lGQ0UWzrmIdhwZAH30VtbE5uDkPXgONW0L3nmkD1fdFiA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663934287;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=i03ueGjuv9MXq9D254vKOx55F55SuESMpzw6hrHEEi0=;
-        b=iyX/i3nWH8cO7WxOMKGgW5HayOY6sNuh73cHg6qPNkHNnMzNk7S9bQRjMQpf09UveyQqjw
-        oOOtLGKp6bP+tEBw==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/AMD: Track patch allocation size
- explicitly
-Cc:     Daniel Micay <danielmicay@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Fri, 23 Sep 2022 08:02:18 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1E7138F24
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:58:30 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id m66so13397783vsm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=QeQ7A4/9L+jEYAB7JYehSX041AgzGfugJpwYzn3Do9w=;
+        b=VquBpd+zr50F8AZS1TFzN1h5qDzc9WwVKODyal6EIJnH4X+/1gwiBObkfNpNRSEMG9
+         KSaeUgxbA+liR8gK2VrcRrCXWMvWfBUGMgIKV5hNJSCzUu06XDr1y45DAdH4CsdUfQpj
+         7AzRKSqiPK5Dg3vYt/iyOssCnuU5vBqxce+PAEOJZblV0YapdYwk5XX2MxDFc68uu1j0
+         O3q72XiOZ4pijjM4e7SXtPKyr7RwWbP3IwHe2MZmWQiZUSeLgqF90DDKvOSwQmrxRcpe
+         NCcgEwc0Stxhd6DtszFOHvua7Qm9vR+eqShUyTkvsY9uZZjFyx8+r0EKTASKu6aOH379
+         OaMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QeQ7A4/9L+jEYAB7JYehSX041AgzGfugJpwYzn3Do9w=;
+        b=NKrlxsTUTkHoDWoijIRWBZwKReeTaEoizFsMbTPIHu7dql0LvsXHpWw81AHy/4QKnU
+         0Ul6I0etgmWKImtDjrW2bGXxRy2NaE7wRIeWvxJdoDTiJpxsiOSLGSl64Uc1MaYcrizp
+         M5aetU0ijegWCTUJEbTJ7Td6zsvTzT80W7X1jShng8s+lp2hO5k7ihtBjVZLa58X5QyH
+         IX1ynuMCHNF1000wwFWmxSpv8LYEHIIDohwJPqJC0p8y4gvj1HUADt3LsbDOA3I9QQPC
+         22rX/HUO6uHQpWdfi9OwFbL5UQIKTt15ujVx0GxL/NSrVQEQx5897JcdiezUjWWQFyuW
+         eIlg==
+X-Gm-Message-State: ACrzQf1nN/mEm6GtpfXtWiuGxrT0DCq4TFjd6bO7dH3g6KW6q8XEGw19
+        NegqllzS9dAdI5zWTyDzSjBz6uDIj5JhCo9C+kNFmw==
+X-Google-Smtp-Source: AMsMyM4wNBgRFhR9QN2CLs+N2DMAyXkeajMXUi7qhlHpVLRsXH+CQLu+0IC3/E+9n3rhEt1e/aLHqj9Lz4KjioPoAuQ=
+X-Received: by 2002:a67:a202:0:b0:39b:181d:bd20 with SMTP id
+ l2-20020a67a202000000b0039b181dbd20mr3110464vse.51.1663934309305; Fri, 23 Sep
+ 2022 04:58:29 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166393428565.401.8875317837868783254.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000f8b5ef05dd25b963@google.com> <4b37f037-3b10-b4e4-0644-73441c8fa0af@I-love.SAKURA.ne.jp>
+ <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org> <423b1fa6-10fa-3ff9-52bc-1262643c62d9@I-love.SAKURA.ne.jp>
+In-Reply-To: <423b1fa6-10fa-3ff9-52bc-1262643c62d9@I-love.SAKURA.ne.jp>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 23 Sep 2022 13:58:18 +0200
+Message-ID: <CANp29Y7fSsjqKbFiMZDG_w-ERigQOk_6Zw3L9rw5erpP3rRU0g@mail.gmail.com>
+Subject: Re: [PATCH] fs/ntfs3: fix negative shift size in true_sectors_per_clst()
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>,
+        "'Aleksandr Nogikh' via syzkaller-bugs" 
+        <syzkaller-bugs@googlegroups.com>, ntfs3@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
+Hi Tetsuo,
 
-Commit-ID:     712f210a457d9c32414df246a72781550bc23ef6
-Gitweb:        https://git.kernel.org/tip/712f210a457d9c32414df246a72781550bc23ef6
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Wed, 21 Sep 2022 20:10:10 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 23 Sep 2022 13:46:26 +02:00
+Thank you very much for providing the feedback!
 
-x86/microcode/AMD: Track patch allocation size explicitly
+On Fri, Sep 23, 2022 at 3:26 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> On 2022/09/23 9:38, Randy Dunlap wrote:
+> > I slightly prefer the earlier patch:
+> >
+> > https://lore.kernel.org/all/20220823144625.1627736-1-syoshida@redhat.com/
+> >
+> > but it appears that the NTFS3 maintainer is MIA again. :(
+> >
+>
+> Shigeru Yoshida posted a patch against https://syzkaller.appspot.com/bug?extid=35b87c668935bb55e666
+> and I posted a patch against https://syzkaller.appspot.com/bug?extid=1631f09646bc214d2e76 .
+> We didn't realize that these are the same problem.
+>
+> It seems that sending to not only syzbot+XXXXXXXXXXXXXXXXXXXX@syzkaller.appspotmail.com
+> but also syzkaller-bugs@googlegroups.com is required for proposed patches to be recorded
+> (in order to avoid duplicated works) into a page linked from "Status:" in each bug page.
 
-In preparation for reducing the use of ksize(), record the actual
-allocation size for later memcpy(). This avoids copying extra
-(uninitialized!) bytes into the patch buffer when the requested
-allocation size isn't exactly the size of a kmalloc bucket.
-Additionally, fix potential future issues where runtime bounds checking
-will notice that the buffer was allocated to a smaller value than
-returned by ksize().
+We do have plans to start inspecting LKML messages for the patches
+that mention syzbot-reported bugs. It will be possible then to display
+them all on the bug page and somehow mark bugs with a PATCH sent on
+the list.
 
-Fixes: 757885e94a22 ("x86, microcode, amd: Early microcode patch loading support for AMD")
-Suggested-by: Daniel Micay <danielmicay@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/lkml/CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com/
----
- arch/x86/include/asm/microcode.h    | 1 +
- arch/x86/kernel/cpu/microcode/amd.c | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> Since https://syzkaller.appspot.com/upstream does not have a column for tracking intermediate
+> status between "Open" and "Fixed" (e.g. cause identified, patch proposed) because it can take
+> long time until patches are accepted into one of git trees syzbot is tracking, we need to
+> utilize "Last activity" in the list page and a page linked from "Status:" in each bug page.
+> Time to boost priority for implementing user-supplied comment column (e.g. "#syz memo:" command)
+> to each bug?
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index 7f7800e..74ecc2b 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -9,6 +9,7 @@
- struct ucode_patch {
- 	struct list_head plist;
- 	void *data;		/* Intel uses only this one */
-+	unsigned int size;
- 	u32 patch_id;
- 	u16 equiv_cpu;
- };
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index 5f38dd7..e7410e9 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -788,6 +788,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
- 		kfree(patch);
- 		return -EINVAL;
- 	}
-+	patch->size = *patch_size;
- 
- 	mc_hdr      = (struct microcode_header_amd *)(fw + SECTION_HDR_SIZE);
- 	proc_id     = mc_hdr->processor_rev_id;
-@@ -869,7 +870,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
- 		return ret;
- 
- 	memset(amd_ucode_patch, 0, PATCH_MAX_SIZE);
--	memcpy(amd_ucode_patch, p->data, min_t(u32, ksize(p->data), PATCH_MAX_SIZE));
-+	memcpy(amd_ucode_patch, p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
- 
- 	return ret;
- }
+And then syzbot should just display all such received comments on the
+bug's web page, right?
+
+--
+Best Regards,
+Aleksandr
+
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/423b1fa6-10fa-3ff9-52bc-1262643c62d9%40I-love.SAKURA.ne.jp.
