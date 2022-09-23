@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254CC5E8174
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BD55E8175
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiIWSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
+        id S232797AbiIWSD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiIWSCm (ORCPT
+        with ESMTP id S232784AbiIWSCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 14:02:42 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014AA13EEB7;
-        Fri, 23 Sep 2022 11:02:02 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 18:01:59 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA77B13F2A4;
+        Fri, 23 Sep 2022 11:02:03 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 18:02:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663956121;
+        s=2020; t=1663956122;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lH/wU8qKai82u9onQ/8vIrAKuz/6rH0e9hId46dJGZY=;
-        b=c5EP/xDVIs1GUne7Za/h113RTj45h69yLPJRe9oGqpmetLi8j27hb2PGclVYsJq7Qne74m
-        VRxjKQlJxzlw67MkDAUMwbPpWrDMraD6ILA6IxmwlxiAHzlk/7ceZvrfdr6kDMGkgHbElM
-        FanGDKtuXX/iCneE0G8T5XIMGvcdWgmhetLqAfmcXv85/GRh7W57wDjOSncd0WHEtE0yXt
-        9FymVMWWXnlqDJ7yMjgiwdpZURhPgJ5T9ApZgqmK9/Ff+4/IOjvTaSUlQiS8/LAp0egXS/
-        hv23OyMBiRfx0DNDQo+aSuoJxE4vSLlVVFpbY2W7LqAyxv5Q9hX7d2XEZa8cMA==
+        bh=yWCnCkgnXnQ1QFm5gHOD1n8FGl//INPyzvlMa1UZ2Gk=;
+        b=ecGeCvBYebvIV2RAUHtl7StlCi7j7VGK+UOX8okTYELxqAVBrOT5amGfCEc/xq51UAQ5Kl
+        nFQoFrH9PrZXL/q8pbXPkeAW32WTaGIYwtoGoRKepmvPv1wwYGw48a2Cbdz8/dgiYmZ6ST
+        SAx6pRMdE6Z5eR5U36jyg3qOENWHBXz2J3Yn2bWq0F+unfbKeX5SetQYCc0HPbptGJvR2Z
+        YWjEaBxDIa6rxZO8dRG+TMlCVuclbj8G1ClgPfvuQkSY85pV0bqHYOqOZp5+5xzRwXTgY5
+        EAlxUQrGkQ1JNGWJtBlRClC7PbiS0PGBbuhmE1miv1lbd16Ul83mj7GPkpe4Iw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663956121;
+        s=2020e; t=1663956122;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lH/wU8qKai82u9onQ/8vIrAKuz/6rH0e9hId46dJGZY=;
-        b=zBJJ0sNy2WF6UL3FTBEKqrWz9s/r92l+HNmXklVh8rnIYjJqsx0bYMXT/5qeXqc0mjhOIT
-        CIgNmOe66M0pVQBA==
+        bh=yWCnCkgnXnQ1QFm5gHOD1n8FGl//INPyzvlMa1UZ2Gk=;
+        b=HAuzYSzBdZghds57RIk8iaF6mcpK0I3/2fi29Ksmtmr5HFQfPhgkk4VZ9/FNrgMM8HZF4E
+        mJCX3rTuTS38BwAA==
 From:   "tip-bot2 for James Morse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Merge mon_capable and mon_enabled
+Subject: [tip: x86/cache] x86/resctrl: Kill off alloc_enabled
 Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Shaopeng Tan <tan.shaopeng@fujitsu.com>,
@@ -51,10 +51,10 @@ Cc:     James Morse <james.morse@arm.com>, Borislav Petkov <bp@suse.de>,
         Xin Hao <xhao@linux.alibaba.com>,
         Cristian Marussi <cristian.marussi@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220902154829.30399-3-james.morse@arm.com>
-References: <20220902154829.30399-3-james.morse@arm.com>
+In-Reply-To: <20220902154829.30399-2-james.morse@arm.com>
+References: <20220902154829.30399-2-james.morse@arm.com>
 MIME-Version: 1.0
-Message-ID: <166395611999.401.11964148666220209989.tip-bot2@tip-bot2>
+Message-ID: <166395612107.401.8030282404908961714.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,21 +70,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cache branch of tip:
 
-Commit-ID:     bab6ee736873becc0216ba5fd159394e272d01b2
-Gitweb:        https://git.kernel.org/tip/bab6ee736873becc0216ba5fd159394e272d01b2
+Commit-ID:     4d269ed485298e8a09485a664e7b35b370ab4ada
+Gitweb:        https://git.kernel.org/tip/4d269ed485298e8a09485a664e7b35b370ab4ada
 Author:        James Morse <james.morse@arm.com>
-AuthorDate:    Fri, 02 Sep 2022 15:48:10 
+AuthorDate:    Fri, 02 Sep 2022 15:48:09 
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 22 Sep 2022 14:43:08 +02:00
+CommitterDate: Thu, 22 Sep 2022 14:34:33 +02:00
 
-x86/resctrl: Merge mon_capable and mon_enabled
+x86/resctrl: Kill off alloc_enabled
 
-mon_enabled and mon_capable are always set as a pair by
-rdt_get_mon_l3_config().
+rdt_resources_all[] used to have extra entries for L2CODE/L2DATA.
+These were hidden from resctrl by the alloc_enabled value.
 
-There is no point having two values.
+Now that the L2/L2CODE/L2DATA resources have been merged together,
+alloc_enabled doesn't mean anything, it always has the same value as
+alloc_capable which indicates allocation is supported by this resource.
 
-Merge them together.
+Remove alloc_enabled and its helpers.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
@@ -94,98 +96,127 @@ Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Tested-by: Xin Hao <xhao@linux.alibaba.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20220902154829.30399-3-james.morse@arm.com
+Link: https://lore.kernel.org/r/20220902154829.30399-2-james.morse@arm.com
 ---
- arch/x86/kernel/cpu/resctrl/internal.h | 4 ----
- arch/x86/kernel/cpu/resctrl/monitor.c  | 1 -
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 8 ++++----
- include/linux/resctrl.h                | 2 --
- 4 files changed, 4 insertions(+), 11 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c        | 4 ----
+ arch/x86/kernel/cpu/resctrl/internal.h    | 4 ----
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c | 2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 6 +++---
+ include/linux/resctrl.h                   | 2 --
+ 5 files changed, 4 insertions(+), 14 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index bb1c3f5..2f87177 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -147,7 +147,6 @@ static inline void cache_alloc_hsw_probe(void)
+ 	r->cache.shareable_bits = 0xc0000;
+ 	r->cache.min_cbm_bits = 2;
+ 	r->alloc_capable = true;
+-	r->alloc_enabled = true;
+ 
+ 	rdt_alloc_capable = true;
+ }
+@@ -211,7 +210,6 @@ static bool __get_mem_config_intel(struct rdt_resource *r)
+ 	thread_throttle_mode_init();
+ 
+ 	r->alloc_capable = true;
+-	r->alloc_enabled = true;
+ 
+ 	return true;
+ }
+@@ -242,7 +240,6 @@ static bool __rdt_get_mem_config_amd(struct rdt_resource *r)
+ 	r->data_width = 4;
+ 
+ 	r->alloc_capable = true;
+-	r->alloc_enabled = true;
+ 
+ 	return true;
+ }
+@@ -261,7 +258,6 @@ static void rdt_get_cache_alloc_cfg(int idx, struct rdt_resource *r)
+ 	r->cache.shareable_bits = ebx & r->default_ctrl;
+ 	r->data_width = (r->cache.cbm_len + 3) / 4;
+ 	r->alloc_capable = true;
+-	r->alloc_enabled = true;
+ }
+ 
+ static void rdt_get_cdp_config(int level)
 diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 53f3d27..8828b5c 100644
+index 1d64718..53f3d27 100644
 --- a/arch/x86/kernel/cpu/resctrl/internal.h
 +++ b/arch/x86/kernel/cpu/resctrl/internal.h
 @@ -459,10 +459,6 @@ int resctrl_arch_set_cdp_enabled(enum resctrl_res_level l, bool enable);
  	for_each_rdt_resource(r)					      \
  		if (r->mon_capable)
  
--#define for_each_mon_enabled_rdt_resource(r)				      \
+-#define for_each_alloc_enabled_rdt_resource(r)				      \
 -	for_each_rdt_resource(r)					      \
--		if (r->mon_enabled)
+-		if (r->alloc_enabled)
 -
- /* CPUID.(EAX=10H, ECX=ResID=1).EAX */
- union cpuid_0x10_1_eax {
- 	struct {
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index eaf25a2..497cadf 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -717,7 +717,6 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
- 	l3_mon_evt_init(r);
- 
- 	r->mon_capable = true;
--	r->mon_enabled = true;
- 
- 	return 0;
- }
+ #define for_each_mon_enabled_rdt_resource(r)				      \
+ 	for_each_rdt_resource(r)					      \
+ 		if (r->mon_enabled)
+diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
+index 4d83989..d961ae3 100644
+--- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
++++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
+@@ -837,7 +837,7 @@ bool rdtgroup_pseudo_locked_in_hierarchy(struct rdt_domain *d)
+ 	 * First determine which cpus have pseudo-locked regions
+ 	 * associated with them.
+ 	 */
+-	for_each_alloc_enabled_rdt_resource(r) {
++	for_each_alloc_capable_rdt_resource(r) {
+ 		list_for_each_entry(d_i, &r->domains, list) {
+ 			if (d_i->plr)
+ 				cpumask_or(cpu_with_psl, cpu_with_psl,
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 526eb93..def7c66 100644
+index f276aff..526eb93 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -1765,7 +1765,7 @@ static int rdtgroup_create_info_dir(struct kernfs_node *parent_kn)
- 			goto out_destroy;
- 	}
+@@ -1756,7 +1756,7 @@ static int rdtgroup_create_info_dir(struct kernfs_node *parent_kn)
+ 	if (ret)
+ 		goto out_destroy;
  
--	for_each_mon_enabled_rdt_resource(r) {
-+	for_each_mon_capable_rdt_resource(r) {
- 		fflags =  r->fflags | RF_MON_INFO;
- 		sprintf(name, "%s_MON", r->name);
- 		ret = rdtgroup_mkdir_info_resdir(r, name, fflags);
-@@ -2504,7 +2504,7 @@ void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r, unsigned int dom_id)
- 	struct rdtgroup *prgrp, *crgrp;
- 	char name[32];
+-	/* loop over enabled controls, these are all alloc_enabled */
++	/* loop over enabled controls, these are all alloc_capable */
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
+ 		r = s->res;
+ 		fflags =  r->fflags | RF_CTRL_INFO;
+@@ -2106,7 +2106,7 @@ static int schemata_list_create(void)
+ 	struct rdt_resource *r;
+ 	int ret = 0;
  
--	if (!r->mon_enabled)
-+	if (!r->mon_capable)
- 		return;
+-	for_each_alloc_enabled_rdt_resource(r) {
++	for_each_alloc_capable_rdt_resource(r) {
+ 		if (resctrl_arch_get_cdp_enabled(r->rid)) {
+ 			ret = schemata_list_add(r, CDP_CODE);
+ 			if (ret)
+@@ -2452,7 +2452,7 @@ static void rdt_kill_sb(struct super_block *sb)
+ 	set_mba_sc(false);
  
- 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
-@@ -2572,7 +2572,7 @@ void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
- 	struct rdtgroup *prgrp, *crgrp;
- 	struct list_head *head;
- 
--	if (!r->mon_enabled)
-+	if (!r->mon_capable)
- 		return;
- 
- 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
-@@ -2642,7 +2642,7 @@ static int mkdir_mondata_all(struct kernfs_node *parent_kn,
- 	 * Create the subdirectories for each domain. Note that all events
- 	 * in a domain like L3 are grouped into a resource whose domain is L3
- 	 */
--	for_each_mon_enabled_rdt_resource(r) {
-+	for_each_mon_capable_rdt_resource(r) {
- 		ret = mkdir_mondata_subdir_alldom(kn, r, prgrp);
- 		if (ret)
- 			goto out_destroy;
+ 	/*Put everything back to default values. */
+-	for_each_alloc_enabled_rdt_resource(r)
++	for_each_alloc_capable_rdt_resource(r)
+ 		reset_all_ctrls(r);
+ 	cdp_disable_all();
+ 	rmdir_all_sub();
 diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 386ab3a..8180c53 100644
+index 21deb52..386ab3a 100644
 --- a/include/linux/resctrl.h
 +++ b/include/linux/resctrl.h
 @@ -130,7 +130,6 @@ struct resctrl_schema;
  /**
   * struct rdt_resource - attributes of a resctrl resource
   * @rid:		The index of the resource
-- * @mon_enabled:	Is monitoring enabled for this feature
+- * @alloc_enabled:	Is allocation enabled on this machine
+  * @mon_enabled:	Is monitoring enabled for this feature
   * @alloc_capable:	Is allocation available on this machine
   * @mon_capable:	Is monitor feature available on this machine
-  * @num_rmid:		Number of RMIDs available
-@@ -149,7 +148,6 @@ struct resctrl_schema;
+@@ -150,7 +149,6 @@ struct resctrl_schema;
   */
  struct rdt_resource {
  	int			rid;
--	bool			mon_enabled;
+-	bool			alloc_enabled;
+ 	bool			mon_enabled;
  	bool			alloc_capable;
  	bool			mon_capable;
- 	int			num_rmid;
