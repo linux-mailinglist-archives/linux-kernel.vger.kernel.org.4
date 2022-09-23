@@ -2,124 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEBE5E70A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A95A5E70B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiIWAVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S231302AbiIWAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiIWAUz (ORCPT
+        with ESMTP id S231190AbiIWAfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:20:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1937DCDCFB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:20:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id q3so11379348pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=fE8nCD0AAGL6m11CnMBfi2PNly3cqHNqiT4DGj6b5Gc=;
-        b=ZcgEPa5GX4lJbCqdaQIoVzgDaAGB2ncYfRY5U+Q2yAy9IywhwFoEoy1uuMIfswt3ny
-         794u3NbJDIPlXO3iAM9o8Z2XldjYuBr70GXIXXMpFKlmSoVyLitAOvWbioDxzj83ipsx
-         dnX65KS5JpCN9hZliXHZZTTpOarXoM17UEoGc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=fE8nCD0AAGL6m11CnMBfi2PNly3cqHNqiT4DGj6b5Gc=;
-        b=iXFFv8Dise1WvyzbY3c3hdu0f0Rn3sh3mIiwjxD2GzpZXTkSJ+buQsg6neoMqscnvR
-         ddBGn2bbPVptrDH66ecmcq9yWY8BEMaRjtpKrkxCtmjKsKLvNuOnZZRZKKoH30dY2Xxj
-         x0pSgKOKNsaoExzdKbOR6GyanqRnLn7sndQi6efelIAE0P2koXsQWXIHZ9AaBae+FTpA
-         1oNe9SjKNIQsqBX2YrroxG03DUGbXmJLzXR30/viTtVWZgfKygjMWLs04rF2nzVAQgbf
-         yRpq8gdRppoqRbNXEEZiWsNDruKVkhStmJ0C81fzqFVxRUe+u1ZySa6txgfgfSV0H2Bx
-         71Qg==
-X-Gm-Message-State: ACrzQf3ZP7Ih+XEKS2eAAzuOISrIlAIiT0ctS1nyqLKu1vGasJrH64/d
-        bT4G15ZD6/KYcnoryQQYrTgKtg==
-X-Google-Smtp-Source: AMsMyM7i+eNakcX48qpc7Mn5PvOUozzI8YxksEJeQObNVkyr/89+42nVUtZy0igEPuZyD7dfedjxXw==
-X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr6397691pjb.241.1663892453590;
-        Thu, 22 Sep 2022 17:20:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k60-20020a17090a4cc200b002006f15ad4fsm378261pjh.10.2022.09.22.17.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 17:20:52 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 17:20:51 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Siddhesh Poyarekar <siddhesh@gotplt.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/4] fortify: Use __builtin_dynamic_object_size() when
- available
-Message-ID: <202209221714.1D792FE6@keescook>
-References: <20220920192202.190793-1-keescook@chromium.org>
- <e2a0debe-e99f-2259-1cb9-35193c387c82@gotplt.org>
+        Thu, 22 Sep 2022 20:35:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B1610195D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663893350; x=1695429350;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k9s9+DMJ/i/LrduLk4l7gHizU0+NduUdUkypqP+R8N4=;
+  b=NBTK0pGyjXeGjHqznqTKv+KbCk6XPcVJynvT915xNkLnaNxd8u9XqNLj
+   qTymMG0xRfER6sXKHpcSugRay6MlOHY83NZnuofI6eug0MepnNDe41Bx1
+   ZRKPy+eNeVHIxTiIbNq57iktOPSQMkQtoHmZwPjfHEb0nz/sFEBhDQUAZ
+   6iV0qVW9ONqQ2sFpwO0erSDGX0mGi7chlj9YLxWOSTG/gQ8ESRzmdSjof
+   f+Scb26h6sw7T6eDkMCnT7vGxzwbWC6UXSEV111vaTMr/HuQIzbv1pCC+
+   sD29oFaLj4F0ghvjWEmKSyFm903IDyzYV51+PMUsfVH6nckS087czqYer
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301350815"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="301350815"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 17:35:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="709110107"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 17:35:49 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obWfU-00057l-1R;
+        Fri, 23 Sep 2022 00:35:48 +0000
+Date:   Fri, 23 Sep 2022 08:35:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kas:lam 5/13] drivers/input/serio/serio_raw.c:178:29: sparse:
+ sparse: incorrect type in assignment (different address spaces)
+Message-ID: <202209230804.CMXykb9S-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e2a0debe-e99f-2259-1cb9-35193c387c82@gotplt.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:26:54PM -0400, Siddhesh Poyarekar wrote:
-> On 2022-09-20 15:21, Kees Cook wrote:
-> > Hi,
-> > 
-> > This adjusts CONFIG_FORTIFY_SOURCE's coverage to include greater runtime
-> > size checking from GCC and Clang's __builtin_dynamic_object_size(), which
-> > the compilers can track either via code flow or from __alloc_size() hints.
-> > 
-> 
-> FTR, I ran a linux build using gcc with allyesconfig and fortify-metrics[1]
-> to get a sense of how much object size coverage would improve with
-> __builtin_dynamic_object_size.  With a total of 3,877 __builtin_object_size
-> calls, about 11.37% succeed in getting a result that is not (size_t)-1.  If
-> they were replaced by __builtin_dynamic_object_size as this patch proposes,
-> the success rate improves to 16.25%, which is a ~1.4x improvement.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+head:   8836fbd6cd3120383a0bc63cd54c7dd55639ed49
+commit: 2600a472582e2968633831d430c2a1366ad3e8b1 [5/13] x86/uaccess: Provide untagged_addr() and remove tags before address check
+config: x86_64-randconfig-s023-20220919 (https://download.01.org/0day-ci/archive/20220923/202209230804.CMXykb9S-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=2600a472582e2968633831d430c2a1366ad3e8b1
+        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
+        git fetch --no-tags kas lam
+        git checkout 2600a472582e2968633831d430c2a1366ad3e8b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/ drivers/input/serio/ drivers/platform/x86/
 
-Thanks for check that! Yeah, a 40% increase in coverage is nice. :0
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> This is a decent improvement by itself but it can be amplified further by
-> adding __attribute__((access (...)))[2] to function prototypes and
-> definitions, especially for functions that take in buffers and their sizes
-> as arguments since __builtin_dynamic_object_size in gcc is capable of
-> recognizing that and using it for object size determination (and hence to
-> fortify calls) within those functions.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/input/serio/serio_raw.c:178:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __user *__ptr_clean @@     got char * @@
+   drivers/input/serio/serio_raw.c:178:29: sparse:     expected char [noderef] __user *__ptr_clean
+   drivers/input/serio/serio_raw.c:178:29: sparse:     got char *
+>> drivers/input/serio/serio_raw.c:219:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
+   drivers/input/serio/serio_raw.c:219:21: sparse:     expected char const [noderef] __user *__ptr_clean
+   drivers/input/serio/serio_raw.c:219:21: sparse:     got char const *
+--
+>> drivers/input/serio/serport.c:216:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   drivers/input/serio/serport.c:216:21: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   drivers/input/serio/serport.c:216:21: sparse:     got unsigned long *
 
-Yeah, this could be another interest set of additions. It seems like it
-might be more "coder friendly" if, in the future that has the
-__element_count__ attribute, it could be used in function parameters
-too, like:
+vim +178 drivers/input/serio/serio_raw.c
 
-If we had:
+^1da177e4c3f415 Linus Torvalds   2005-04-16  156  
+15a564d8dbfc942 Dmitry Torokhov  2011-10-10  157  static ssize_t serio_raw_read(struct file *file, char __user *buffer,
+15a564d8dbfc942 Dmitry Torokhov  2011-10-10  158  			      size_t count, loff_t *ppos)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  159  {
+7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  160  	struct serio_raw_client *client = file->private_data;
+7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  161  	struct serio_raw *serio_raw = client->serio_raw;
+3f649ab728cda80 Kees Cook        2020-06-03  162  	char c;
+7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  163  	ssize_t read = 0;
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  164  	int error;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  165  
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  166  	for (;;) {
+85f5b35da86bcd6 Dmitry Torokhov  2011-10-10  167  		if (serio_raw->dead)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  168  			return -ENODEV;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  169  
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  170  		if (serio_raw->head == serio_raw->tail &&
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  171  		    (file->f_flags & O_NONBLOCK))
+^1da177e4c3f415 Linus Torvalds   2005-04-16  172  			return -EAGAIN;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  173  
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  174  		if (count == 0)
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  175  			break;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  176  
+7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  177  		while (read < count && serio_raw_fetch_byte(serio_raw, &c)) {
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02 @178  			if (put_user(c, buffer++))
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  179  				return -EFAULT;
+7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  180  			read++;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  181  		}
+^1da177e4c3f415 Linus Torvalds   2005-04-16  182  
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  183  		if (read)
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  184  			break;
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  185  
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  186  		if (!(file->f_flags & O_NONBLOCK)) {
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  187  			error = wait_event_interruptible(serio_raw->wait,
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  188  					serio_raw->head != serio_raw->tail ||
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  189  					serio_raw->dead);
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  190  			if (error)
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  191  				return error;
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  192  		}
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  193  	}
+486c8aba39e5f19 Dmitry Torokhov  2012-04-20  194  
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  195  	return read;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  196  }
+^1da177e4c3f415 Linus Torvalds   2005-04-16  197  
+15a564d8dbfc942 Dmitry Torokhov  2011-10-10  198  static ssize_t serio_raw_write(struct file *file, const char __user *buffer,
+15a564d8dbfc942 Dmitry Torokhov  2011-10-10  199  			       size_t count, loff_t *ppos)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  200  {
+7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  201  	struct serio_raw_client *client = file->private_data;
+7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  202  	struct serio_raw *serio_raw = client->serio_raw;
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  203  	int retval = 0;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  204  	unsigned char c;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  205  
+c4e32e9faaaa833 Arjan van de Ven 2006-02-19  206  	retval = mutex_lock_interruptible(&serio_raw_mutex);
+^1da177e4c3f415 Linus Torvalds   2005-04-16  207  	if (retval)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  208  		return retval;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  209  
+85f5b35da86bcd6 Dmitry Torokhov  2011-10-10  210  	if (serio_raw->dead) {
+^1da177e4c3f415 Linus Torvalds   2005-04-16  211  		retval = -ENODEV;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  212  		goto out;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  213  	}
+^1da177e4c3f415 Linus Torvalds   2005-04-16  214  
+^1da177e4c3f415 Linus Torvalds   2005-04-16  215  	if (count > 32)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  216  		count = 32;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  217  
+^1da177e4c3f415 Linus Torvalds   2005-04-16  218  	while (count--) {
+^1da177e4c3f415 Linus Torvalds   2005-04-16 @219  		if (get_user(c, buffer++)) {
+^1da177e4c3f415 Linus Torvalds   2005-04-16  220  			retval = -EFAULT;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  221  			goto out;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  222  		}
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  223  
+7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  224  		if (serio_write(serio_raw->serio, c)) {
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  225  			/* Either signal error or partial write */
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  226  			if (retval == 0)
+^1da177e4c3f415 Linus Torvalds   2005-04-16  227  				retval = -EIO;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  228  			goto out;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  229  		}
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  230  
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  231  		retval++;
+d89c9bcb3390956 Che-Liang Chiou  2012-01-10  232  	}
+^1da177e4c3f415 Linus Torvalds   2005-04-16  233  
+^1da177e4c3f415 Linus Torvalds   2005-04-16  234  out:
+c4e32e9faaaa833 Arjan van de Ven 2006-02-19  235  	mutex_unlock(&serio_raw_mutex);
+46f49b7a223ac74 Dmitry Torokhov  2012-05-02  236  	return retval;
+^1da177e4c3f415 Linus Torvalds   2005-04-16  237  }
+^1da177e4c3f415 Linus Torvalds   2005-04-16  238  
 
-int do_something(struct context *ctx, u32 *data, int count)
+:::::: The code at line 178 was first introduced by commit
+:::::: 46f49b7a223ac7493e7cf619fb583d11edefc2c2 Input: serio_raw - signal EFAULT even if read/write partially succeeds
 
-this seems less easy to read to me:
-
-int __access(read_write, 2, 3) do_something(struct context *ctx, u32 *data, int count)
-
-as this seems more readable to me, though I guess the access-mode
-information is lost:
-
-int do_something(struct context *ctx, u32 * __element_count(count) data, int count)
-
-But yes, this would be excellent to start adding!
-
--Kees
+:::::: TO: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
