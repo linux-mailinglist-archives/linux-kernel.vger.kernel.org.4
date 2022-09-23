@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1312F5E7F42
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD2F5E7F44
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiIWQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S232651AbiIWQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiIWQFn (ORCPT
+        with ESMTP id S232091AbiIWQFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:05:43 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1412AC261
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:40 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id h205-20020a6bb7d6000000b006a1e6bef9c7so174350iof.17
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:40 -0700 (PDT)
+        Fri, 23 Sep 2022 12:05:44 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BCFABF20
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:41 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id e14-20020a6b500e000000b006a13488a320so185262iob.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:05:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=+Kcl3/2lVeEfyVip4L1rMeXIn8tGANryRAg7CHpn59s=;
-        b=ZT7WzAAL0GXFhSrVxjK/07hIm/xLpbCaZiUKB1bjrxFiarArayPu6rQyaqCo9//RQu
-         b/XtsK5n74fMdvNiLrpwr1RsWV0Mn+Hw7JHhX6neYYJjZ4IQz4KzAGm5Vylx8922ggKu
-         4lyI0PwBkBrvAGGSMC6vBvYgIwbfuB2tY90OYgLzAsNtjqrFnp3DC9UAhG2soHhifYnt
-         zWOTEVw9+RYfBOCszbYefg5lQszN3dGCjKn0/ya2poRCDdJc9+VCB9hOI3YX+9/enDM6
-         VwVjwSWMymDpC3OAlsMYgs7VwIMv0AxK08rNxwcT042rak8Y90cu16evRQEOp9ikWnHa
-         KXtg==
-X-Gm-Message-State: ACrzQf3hvWKYFb2NrGtV9kQnrwWLuFWLAcdJkmbeajdYvGg6jc7WahXF
-        FgaMKMYmEH5jEMDX83Hu+PQTr/aBEzlb2fIRtBbqYkvXvPRp
-X-Google-Smtp-Source: AMsMyM4Pr2YHz+Bkb1+3ezzw7OUpNDWtGNZ/oCvrs+RmnV2aFwQuP2T25aGhBy/WSgiuJkWiQpZpVDZrrLLH7G+ayiG3iGHSOfci
+        bh=xvB57lWg96bipqQd7JSN013EXMYj71I2FBKSizlUzC0=;
+        b=eW7SOe1NmF0Yda+E8ZyP30ouxVZTh5U9HUf0lCS6w1412GQwYe0zOFVPtHHkoc5oaT
+         KAro3XHiNku9O9LExJxkD70t3PSJj+m+f49bENnEQ3wop/+ST/DoUjjzApFnQhN2nsh7
+         yzvuWQBUah9oHvHN7sejvOxugDT/7nCRz2zOS489J4n4QnqJnN+RfHdThISjKyuiC7cW
+         O4954iawnFlJ3i5rpoOZHdl7bXySCNpexsJSG7qGwEA657aQNqWayoOyQUcDIPmoKVem
+         SxAMoqv/M3g3t5dYFibNYRyRz8Zej0aIFLdFaFPzHeSejBphdH3ESEyOWqA9bPnW8vDY
+         bJaA==
+X-Gm-Message-State: ACrzQf1tPZIL6eJKsW325uqX3rb4zUwSzpaafTzyaQz53kvFRWwBio/u
+        fyk6ZnkA/tI6768Iz9HzPZ9XGiq2g+0rDscvs1OQMO2JPiXT
+X-Google-Smtp-Source: AMsMyM52Oi8jyoZPEsoqS27Q6toMMPpMDlP6zQbILEV2ExwDH0GrD15bw4aEQaFt3U3+FvzWjuMZ+igCfEutSaYGKGxN8NYCC/9Q
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1644:b0:35a:5304:f19f with SMTP id
- a4-20020a056638164400b0035a5304f19fmr5396371jat.270.1663949140142; Fri, 23
- Sep 2022 09:05:40 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1d84:b0:2f6:9a05:2230 with SMTP id
+ h4-20020a056e021d8400b002f69a052230mr4575455ila.32.1663949140799; Fri, 23 Sep
+ 2022 09:05:40 -0700 (PDT)
 Date:   Fri, 23 Sep 2022 09:05:40 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c300705e95a59db@google.com>
-Subject: [syzbot] general protection fault in PageHeadHuge
-From:   syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
+Message-ID: <000000000000763a6c05e95a5985@google.com>
+Subject: [syzbot] WARNING in ovl_fh_to_dentry
+From:   syzbot <syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,118 +59,60 @@ syzbot found the following issue on:
 
 HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16f0a418880000
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13b13f30880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-dashboard link: https://syzkaller.appspot.com/bug?extid=152d76c44ba142f8992b
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d14351a171d0d1c7955
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b97b64880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fb9040880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14283ac4880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=156da4ef080000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com
+Reported-by: syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 3617 Comm: syz-executor722 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
+------------[ cut here ]------------
+memcpy: detected field-spanning write (size 93) of single field "&fh->fb" at fs/overlayfs/export.c:799 (size 21)
+WARNING: CPU: 0 PID: 3608 at fs/overlayfs/export.c:799 ovl_fid_to_fh fs/overlayfs/export.c:799 [inline]
+WARNING: CPU: 0 PID: 3608 at fs/overlayfs/export.c:799 ovl_fh_to_dentry+0x880/0x950 fs/overlayfs/export.c:812
+Modules linked in:
+CPU: 1 PID: 3608 Comm: syz-executor365 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
-RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
-RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
-Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
-RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
-R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
-FS:  00007f5642262700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+RIP: 0010:ovl_fid_to_fh fs/overlayfs/export.c:799 [inline]
+RIP: 0010:ovl_fh_to_dentry+0x880/0x950 fs/overlayfs/export.c:812
+Code: f9 ff ff e8 62 b6 ab fe b9 15 00 00 00 4c 89 f6 48 c7 c2 a0 0f 28 8a 48 c7 c7 00 10 28 8a c6 05 a7 86 fa 0a 01 e8 4d ad 76 06 <0f> 0b e9 ec f8 ff ff 49 c7 c6 ea ff ff ff bb ea ff ff ff c7 44 24
+RSP: 0018:ffffc90003d7fb30 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000060 RCX: 0000000000000000
+RDX: ffff88801f9f8000 RSI: ffffffff81620348 RDI: fffff520007aff58
+RBP: ffff88801798b900 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 203a7970636d656d R12: 00000000000000fb
+R13: 1ffff920007aff6e R14: 000000000000005d R15: ffff88801798b903
+FS:  0000555555748300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000203f4ef0 CR3: 000000007adcc000 CR4: 00000000003506e0
+CR2: 00007f2ec877aa70 CR3: 0000000021a2b000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- folio_test_hugetlb include/linux/page-flags.h:831 [inline]
- folio_file_page include/linux/pagemap.h:683 [inline]
- shmem_fault+0x27c/0x8a0 mm/shmem.c:2130
- __do_fault+0x107/0x600 mm/memory.c:4191
- do_shared_fault mm/memory.c:4597 [inline]
- do_fault mm/memory.c:4675 [inline]
- handle_pte_fault mm/memory.c:4943 [inline]
- __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5085
- handle_mm_fault+0x1c8/0x780 mm/memory.c:5206
- do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
- handle_page_fault arch/x86/mm/fault.c:1519 [inline]
- exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1575
- asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0010:__put_user_nocheck_4+0x3/0x11
-Code: 00 00 48 39 d9 73 54 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 34 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb f9 ef ff ff ff 7f
-RSP: 0018:ffffc90003e7fa00 EFLAGS: 00050293
-RAX: 0000000000000000 RBX: ffffc90003e7fdf4 RCX: 00000000203f4ef0
-RDX: ffff888020c51d40 RSI: ffffffff8726d52f RDI: 0000000000000005
-RBP: ffffc90003e7fdb0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000002 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000002 R14: 00000000203f4ef0 R15: 0000000000000000
- ____sys_recvmsg+0x3ba/0x610 net/socket.c:2714
- ___sys_recvmsg+0xf2/0x180 net/socket.c:2743
- do_recvmmsg+0x25e/0x6e0 net/socket.c:2837
- __sys_recvmmsg net/socket.c:2916 [inline]
- __do_sys_recvmmsg net/socket.c:2939 [inline]
- __se_sys_recvmmsg net/socket.c:2932 [inline]
- __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2932
+ exportfs_decode_fh_raw+0x127/0x7d0 fs/exportfs/expfs.c:435
+ exportfs_decode_fh+0x38/0x90 fs/exportfs/expfs.c:575
+ do_handle_to_path fs/fhandle.c:152 [inline]
+ handle_to_path fs/fhandle.c:207 [inline]
+ do_handle_open+0x2b6/0x8b0 fs/fhandle.c:223
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f56422dabb9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5642262208 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-RAX: ffffffffffffffda RBX: 00007f564235c4b8 RCX: 00007f56422dabb9
-RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000003
-RBP: 00007f564235c4b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000002 R11: 0000000000000246 R12: 00007f564235c4bc
-R13: 00007fffbde3618f R14: 00007f5642262300 R15: 0000000000022000
+RIP: 0033:0x7fa84bf85cc9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd45ccfbd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa84bf85cc9
+RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000000000003
+RBP: 00007fa84bf49e70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000073 R11: 0000000000000246 R12: 00007fa84bf49f00
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
-RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
-RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
-Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
-RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
-R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
-FS:  00007f5642262700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f56419ff718 CR3: 000000007adcc000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	ff 66 66             	jmpq   *0x66(%rsi)
-   3:	2e 0f 1f 84 00 00 00 	nopl   %cs:0x0(%rax,%rax,1)
-   a:	00 00
-   c:	90                   	nop
-   d:	41 54                	push   %r12
-   f:	55                   	push   %rbp
-  10:	48 89 fd             	mov    %rdi,%rbp
-  13:	53                   	push   %rbx
-  14:	e8 54 c9 b9 ff       	callq  0xffb9c96d
-  19:	48 89 ea             	mov    %rbp,%rdx
-  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  23:	fc ff df
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 a2 01 00 00    	jne    0x1d6
-  34:	48 8b 5d 00          	mov    0x0(%rbp),%rbx
-  38:	48 c7 c7 ff ff ff ff 	mov    $0xffffffffffffffff,%rdi
-  3f:	48                   	rex.W
 
 
 ---
