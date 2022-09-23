@@ -2,226 +2,781 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC5F5E73DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458005E742F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiIWGS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S230318AbiIWGdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiIWGSV (ORCPT
+        with ESMTP id S230357AbiIWGde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:18:21 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D612518E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:18:19 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w10so9997043pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=k1Ok2pKp1PJzTuNyx2UWy/icamUoRGaVMBaasc2ZnkA=;
-        b=ROWTJ0drnsPC8a77DJkvBYf7pyqF8Pk3gzs+pbtHsFFvE/nL0A8mrYUYzaNoZrg+it
-         qNbqKd8hOSkKoK1DNVIxzDJxGgvaRe2owSaSUupMyGfwkOIUSb6b3HGtv+LLCHthCjQL
-         SusP8zrHmFFAfmsDJTLz53CzuEmghT5qI0SkIHboaqQ08w03KhLujd0qeesOs0NG6W/x
-         UIAJCrxXtlRtaUCHdVPJYLhKDZW34Qjv7IbjpBt0bcw9ZDcEFCc2x/apCuYBWvxvKqF1
-         KNsb8k4USIoGK0R6UfO7cZvZVuIDyLHc8jAfkuwhJusSaNjZqgYiRSjY2psrKqrdZnbF
-         SNVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=k1Ok2pKp1PJzTuNyx2UWy/icamUoRGaVMBaasc2ZnkA=;
-        b=r2/myU2wZ4UsOVW08YK2KYzys2dGxgxQ3cCADczNrwCWHCTS3gJxErp1J5/d8GrVBP
-         w1jRL3YmYW9oK6unuvMnFkLVYBwzVRzuanwzzjHrLtq5+Ll4kezDYfoi8xLJ1A8/H5B0
-         SEd6X/8y2eInAmv8eptC8mIv8c7IH21J5KVbEktQpLnW+/AIOrry2q2blx2wWPakQcWT
-         9xQPM7qTXDv8zfnDdfVn2NDReLtMIpHgZDIqf3UmBOpbVok0RfJ9F6ZzKs6KpJKYP4tA
-         uwwl6eezlH6MuxzVTgSGKpDQ5HsKuN3e36WFyfXz+tBnSJv0kWYYYJR1/n/VMH/neN0Q
-         C86Q==
-X-Gm-Message-State: ACrzQf1Yi3ulV8T6RwiPrQFRiKJjlOOkXVYEYRQ9CBOFqHu0tiJGmt/l
-        fcbdtfakBWUt+FmJVPHEVTMQkhH0ys7xkg==
-X-Google-Smtp-Source: AMsMyM4zrECVQG8lTi2qMC8SAzIUhUN+ue0hAX+KzeSnaY4AaWMkG9EDSeKt1n/ALSGBiljeWMrKWg==
-X-Received: by 2002:a17:90a:fe6:b0:203:7c29:6e0d with SMTP id 93-20020a17090a0fe600b002037c296e0dmr7595214pjz.181.1663913898328;
-        Thu, 22 Sep 2022 23:18:18 -0700 (PDT)
-Received: from liang-Predator-PH517-52.. (60-250-232-247.hinet-ip.hinet.net. [60.250.232.247])
-        by smtp.gmail.com with ESMTPSA id c190-20020a624ec7000000b00540f3ac5fb8sm5515248pfb.69.2022.09.22.23.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 23:18:17 -0700 (PDT)
-From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     dianders@chromium.org,
-        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 2/2] arm64: dts: qcom: Add LTE SKU for sc7280-evoker family
-Date:   Fri, 23 Sep 2022 14:17:56 +0800
-Message-Id: <20220923141624.v2.2.I1454364ac3d8ecc64677884d6b7d2f3e334e4b4a@changeid>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220923061756.2557403-1-sheng-liang.pan@quanta.corp-partner.google.com>
-References: <20220923061756.2557403-1-sheng-liang.pan@quanta.corp-partner.google.com>
+        Fri, 23 Sep 2022 02:33:34 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D9DB48B;
+        Thu, 22 Sep 2022 23:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663914812; x=1695450812;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TxEyJl+mtmn2EtXiEJwp0WUw2QXY6BuGXPm/sb3NDL8=;
+  b=CVoFoQMz9O9JsLJTguCuW4e2A6IRFtqrWv+lqKBWMIPx5iw6tVJUOfr9
+   6jdgHcZhLTU0eUEf7BhFSzadXaHT/hiR0NUsBwRrquD+I2eh0eJfC8EeR
+   FmojqzYt/arYeHdwUrDGSlV1r6zdTePWLIQ8/M/YRF9cPpmuo9VscLgxO
+   v4vsi7JPGiX+W53zgV/NDNTkYpt/q5ZlKH1FAEzwn//VPW/tFN6lgr55e
+   GceW7WRcE+R5APzUohu2eZeDTiXdrurabfTM9GsguE2KCVAAJosSUgmUq
+   LdMkmAOc1bzp5jDV2kICvQnTK0qwno+HsPdb1TrEUPQWzYFhqbmsxUgga
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364538861"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="364538861"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 23:33:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="597763566"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 23:33:28 -0700
+Date:   Fri, 23 Sep 2022 14:24:46 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v12 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Yy1RLvxTJhGUuJJ2@yilunxu-OptiPlex-7050>
+References: <20220919134750.25197-1-i.bornyakov@metrotek.ru>
+ <20220919134750.25197-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919134750.25197-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-evoker have wifi/lte sku, add different dts for each sku.
+On 2022-09-19 at 16:47:49 +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
+> 
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  drivers/fpga/Kconfig                 |  11 +
+>  drivers/fpga/Makefile                |   2 +
+>  drivers/fpga/lattice-sysconfig-spi.c | 153 ++++++++++
+>  drivers/fpga/lattice-sysconfig.c     | 408 +++++++++++++++++++++++++++
+>  drivers/fpga/lattice-sysconfig.h     |  40 +++
+>  5 files changed, 614 insertions(+)
+>  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.h
+> 
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 6c416955da53..d1a8107fdcb3 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -263,4 +263,15 @@ config FPGA_MGR_MICROCHIP_SPI
+>  	  programming over slave SPI interface with .dat formatted
+>  	  bitstream image.
+>  
+> +config FPGA_MGR_LATTICE_SYSCONFIG
+> +	tristate
+> +
+> +config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+> +	tristate "Lattice sysCONFIG SPI FPGA manager"
+> +	depends on SPI
+> +	select FPGA_MGR_LATTICE_SYSCONFIG
+> +	help
+> +	  FPGA manager driver support for Lattice FPGAs programming over slave
+> +	  SPI sysCONFIG interface.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 42ae8b58abce..72e554b4d2f7 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -20,6 +20,8 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG)	+= lattice-sysconfig.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+>  
+> diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
+> new file mode 100644
+> index 000000000000..d015b796adf7
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig-spi.c
+> @@ -0,0 +1,153 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA programming over slave SPI sysCONFIG interface.
+> + */
+> +
+> +#include <linux/of_device.h>
+> +#include <linux/spi/spi.h>
+> +
+> +#include "lattice-sysconfig.h"
+> +
+> +static const u32 ecp5_spi_max_speed_hz = 60000000;
+> +
+> +static int sysconfig_spi_cmd_write(struct sysconfig_priv *priv,
+> +				   const void *tx_buf, size_t tx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write(spi, tx_buf, tx_len);
+> +}
+> +
+> +static int sysconfig_spi_cmd_read(struct sysconfig_priv *priv,
+> +				  const void *tx_buf, size_t tx_len,
+> +				  void *rx_buf, size_t rx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write_then_read(spi, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = lsc_bitstream_burst,
+> +		.len = sizeof(lsc_bitstream_burst),
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +	int ret;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	/*
+> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> +	 */
+> +	spi_bus_lock(spi->controller);
+> +
+> +	ret = spi_sync_locked(spi, &msg);
+> +	if (ret)
+> +		spi_bus_unlock(spi->controller);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_write(struct sysconfig_priv *priv,
+> +					       const char *buf, size_t len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = buf,
+> +		.len = len,
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	return spi_sync_locked(spi, &msg);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_complete(struct sysconfig_priv *priv)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	/* Bitstream burst write is done, release SPI bus */
+> +	spi_bus_unlock(spi->controller);
+> +
+> +	/* Toggle CS to finish bitstream write */
+> +	return spi_write(spi, NULL, 0);
+> +}
+> +
+> +static int sysconfig_spi_probe(struct spi_device *spi)
+> +{
+> +	const struct spi_device_id *dev_id;
+> +	struct device *dev = &spi->dev;
+> +	struct sysconfig_priv *priv;
+> +	const u32 *spi_max_speed;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	spi_max_speed = of_device_get_match_data(dev);
 
-Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
----
+Just device_get_match_data would be OK?
 
-(no changes since v1)
+> +	if (!spi_max_speed) {
+> +		dev_id = spi_get_device_id(spi);
+> +		if (!dev_id)
+> +			return -ENODEV;
+> +
+> +		spi_max_speed = (const u32 *)dev_id->driver_data;
+> +	}
+> +
+> +	if (!spi_max_speed)
+> +		return -EINVAL;
+> +
+> +	if (spi->max_speed_hz > *spi_max_speed) {
+> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
+> +			spi->max_speed_hz, *spi_max_speed);
+> +		return -EINVAL;
+> +	}
+> +
+> +	priv->dev = dev;
+> +	priv->command_write = sysconfig_spi_cmd_write;
+> +	priv->command_read = sysconfig_spi_cmd_read;
+> +	priv->bitstream_burst_write_init = sysconfig_spi_bitstream_burst_init;
+> +	priv->bitstream_burst_write = sysconfig_spi_bitstream_burst_write;
+> +	priv->bitstream_burst_write_complete = sysconfig_spi_bitstream_burst_complete;
+> +
+> +	return sysconfig_probe(priv);
+> +}
+> +
+> +static const struct spi_device_id sysconfig_spi_ids[] = {
+> +	{
+> +		.name = "sysconfig-ecp5",
+> +		.driver_data = (kernel_ulong_t)&ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id sysconfig_of_ids[] = {
+> +	{
+> +		.compatible = "lattice,sysconfig-ecp5",
+> +		.data = &ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver lattice_sysconfig_driver = {
+> +	.probe = sysconfig_spi_probe,
+> +	.id_table = sysconfig_spi_ids,
+> +	.driver = {
+> +		.name = "lattice_sysconfig_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(sysconfig_of_ids),
+> +	},
+> +};
+> +
 
- arch/arm64/boot/dts/qcom/Makefile             |  3 ++-
- .../dts/qcom/sc7280-herobrine-evoker-lte.dts  | 14 ++++++++++
- .../boot/dts/qcom/sc7280-herobrine-evoker.dts | 16 ++++++++++++
- ...er-r0.dts => sc7280-herobrine-evoker.dtsi} | 26 +++++--------------
- 4 files changed, 39 insertions(+), 20 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
- rename arch/arm64/boot/dts/qcom/{sc7280-herobrine-evoker-r0.dts => sc7280-herobrine-evoker.dtsi} (93%)
+delete the blank line please.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d7669a7cee9f7..76390301a76c0 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -104,7 +104,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-r0.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
-new file mode 100644
-index 0000000000000..3af9224a7492e
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Evoker board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+#include "sc7280-herobrine-evoker.dts"
-+#include "sc7280-herobrine-lte-sku.dtsi"
-+
-+/ {
-+	model = "Google Evoker with LTE";
-+	compatible = "google,evoker-sku512", "qcom,sc7280";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
-new file mode 100644
-index 0000000000000..f490b2bb26df8
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Evoker board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7280-herobrine-evoker.dtsi"
-+
-+/ {
-+	model = "Google Evoker";
-+	compatible = "google,evoker", "qcom,sc7280";
-+};
-+
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-similarity index 93%
-rename from arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-rename to arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-index ccbe50b6249ab..561bb1ee77eee 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-@@ -5,15 +5,8 @@
-  * Copyright 2022 Google LLC.
-  */
- 
--/dts-v1/;
--
- #include "sc7280-herobrine.dtsi"
- 
--/ {
--	model = "Google Evoker";
--	compatible = "google,evoker", "qcom,sc7280";
--};
--
- /*
-  * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
-  *
-@@ -30,16 +23,15 @@ ap_tp_i2c: &i2c0 {
- 	status = "okay";
- 	clock-frequency = <400000>;
- 
--	trackpad: trackpad@2c {
--		compatible = "hid-over-i2c";
--		reg = <0x2c>;
-+	trackpad: trackpad@15 {
-+		compatible = "elan,ekth3000";
-+		reg = <0x15>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&tp_int_odl>;
- 
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
- 
--		hid-descr-addr = <0x20>;
- 		vcc-supply = <&pp3300_z1>;
- 
- 		wakeup-source;
-@@ -50,18 +42,15 @@ ts_i2c: &i2c13 {
- 	status = "okay";
- 	clock-frequency = <400000>;
- 
--	ap_ts: touchscreen@10 {
--		compatible = "elan,ekth6915";
--		reg = <0x10>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&ts_int_conn>, <&ts_rst_conn>;
-+	touchscreen: touchscreen@5d {
-+		compatible = "goodix,gt7375p";
-+		reg = <0x5d>;
- 
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <55 IRQ_TYPE_LEVEL_LOW>;
- 
- 		reset-gpios = <&tlmm 54 GPIO_ACTIVE_LOW>;
--
--		vcc33-supply = <&ts_avdd>;
-+		vdd-supply = <&ts_avdd>;
- 	};
- };
- 
-@@ -90,7 +79,6 @@ &pcie1 {
- 	status = "okay";
- };
- 
--/* For nvme */
- &pcie1_phy {
- 	status = "okay";
- };
--- 
-2.34.1
+> +module_spi_driver(lattice_sysconfig_driver);
+> +
+> +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/fpga/lattice-sysconfig.c b/drivers/fpga/lattice-sysconfig.c
+> new file mode 100644
+> index 000000000000..9c878281b199
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig.c
+> @@ -0,0 +1,408 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA sysCONFIG interface functions independent of port type.
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/gpio/consumer.h>
+> +
+> +#include "lattice-sysconfig.h"
+> +
+> +static int sysconfig_cmd_write(struct sysconfig_priv *priv, const void *buf,
+> +			       size_t buf_len)
+> +{
+> +	return priv->command_write(priv, buf, buf_len);
+> +}
+> +
+> +static int sysconfig_cmd_read(struct sysconfig_priv *priv, const void *tx_buf,
+> +			      size_t tx_len, void *rx_buf, size_t rx_len)
+> +{
+> +	return priv->command_read(priv, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
+> +	u8 busy;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
+> +				 &busy, sizeof(busy));
+> +
+> +	return ret ? : busy;
+> +}
+> +
+> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+> +{
+> +	size_t retries = SYSCONFIG_POLL_RETRIES;
+> +	int ret;
+> +
+> +	while (retries--) {
 
+Could you implement it in a time measurable way for the poll timeout, I
+think for now the actual timeout values for command polling & gpio
+polling are much different.
+
+> +		ret = sysconfig_read_busy(priv);
+> +		if (ret <= 0)
+> +			return ret;
+> +
+> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+
+It's good to make cpu relax on polling, but why we just sleep for
+command poll but not for gpio poll.
+
+> +	}
+> +
+> +	return -EBUSY;
+> +}
+> +
+> +static int sysconfig_read_status(struct sysconfig_priv *priv, u32 *status)
+> +{
+> +	const u8 lsc_read_status[] = SYSCONFIG_LSC_READ_STATUS;
+> +	__be32 device_status;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_read_status, sizeof(lsc_read_status),
+> +				 &device_status, sizeof(device_status));
+> +	if (ret)
+> +		return ret;
+> +
+> +	*status = be32_to_cpu(device_status);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_poll_status(struct sysconfig_priv *priv, u32 *status)
+> +{
+> +	int ret = sysconfig_poll_busy(priv);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sysconfig_read_status(priv, status);
+> +}
+> +
+> +static int sysconfig_poll_gpio(struct gpio_desc *gpio, bool is_active)
+> +{
+> +	size_t retries = SYSCONFIG_POLL_RETRIES;
+> +	int value;
+> +
+> +	while (retries--) {
+
+Same concern.
+
+> +		value = gpiod_get_value(gpio);
+> +		if (value < 0)
+> +			return value;
+> +
+> +		if ((is_active && value) || (!is_active && !value))
+> +			return 0;
+> +	}
+> +
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static int sysconfig_gpio_refresh(struct sysconfig_priv *priv)
+> +{
+> +	struct gpio_desc *program = priv->program;
+> +	struct gpio_desc *init = priv->init;
+> +	struct gpio_desc *done = priv->done;
+> +	int ret;
+> +
+> +	/* Enter init mode */
+> +	gpiod_set_value(program, 1);
+> +
+> +	ret = sysconfig_poll_gpio(init, true);
+> +	if (!ret)
+> +		ret = sysconfig_poll_gpio(done, false);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Enter program mode */
+> +	gpiod_set_value(program, 0);
+> +
+> +	return sysconfig_poll_gpio(init, false);
+> +}
+> +
+> +static int sysconfig_lsc_refresh(struct sysconfig_priv *priv)
+> +{
+> +	static const u8 lsc_refresh[] = SYSCONFIG_LSC_REFRESH;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_write(priv, lsc_refresh, sizeof(lsc_refresh));
+> +	if (ret)
+> +		return ret;
+> +
+> +	usleep_range(4000, 8000);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_refresh(struct sysconfig_priv *priv)
+> +{
+> +	struct gpio_desc *program = priv->program;
+> +	struct gpio_desc *init = priv->init;
+> +	struct gpio_desc *done = priv->done;
+> +
+> +	if (program && init && done)
+> +		return sysconfig_gpio_refresh(priv);
+> +
+> +	return sysconfig_lsc_refresh(priv);
+> +}
+> +
+> +static int sysconfig_isc_enable(struct sysconfig_priv *priv)
+> +{
+> +	u8 isc_enable[] = SYSCONFIG_ISC_ENABLE;
+> +	u32 status;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_write(priv, isc_enable, sizeof(isc_enable));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sysconfig_poll_status(priv, &status);
+> +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
+> +		return ret ? : -EFAULT;
+
+If (ret == 0 && status == SYSCONFIG_STATUS_FAIL), still return 0?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_isc_erase(struct sysconfig_priv *priv)
+> +{
+> +	u8 isc_erase[] = SYSCONFIG_ISC_ERASE;
+> +	u32 status;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_write(priv, isc_erase, sizeof(isc_erase));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sysconfig_poll_status(priv, &status);
+> +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
+
+Same concern.
+
+> +		return ret ? : -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_isc_init(struct sysconfig_priv *priv)
+> +{
+> +	int ret = sysconfig_isc_enable(priv);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sysconfig_isc_erase(priv);
+> +}
+> +
+> +static int sysconfig_lsc_init_addr(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_init_addr[] = SYSCONFIG_LSC_INIT_ADDR;
+> +
+> +	return sysconfig_cmd_write(priv, lsc_init_addr, sizeof(lsc_init_addr));
+> +}
+> +
+> +static int sysconfig_burst_write_init(struct sysconfig_priv *priv)
+> +{
+> +	if (priv->bitstream_burst_write_init)
+
+Check these callbacks on probe rather than on every writing.
+
+> +		return priv->bitstream_burst_write_init(priv);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_burst_write_complete(struct sysconfig_priv *priv)
+> +{
+> +	if (priv->bitstream_burst_write_complete)
+
+Same concern.
+
+> +		return priv->bitstream_burst_write_complete(priv);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_bitstream_burst_write(struct sysconfig_priv *priv,
+> +					   const char *buf, size_t count)
+> +{
+> +	int ret;
+> +
+> +	if (priv->bitstream_burst_write)
+
+Same concern.
+
+> +		ret = priv->bitstream_burst_write(priv, buf, count);
+> +	else
+> +		ret = -EOPNOTSUPP;
+> +
+> +	if (ret)
+> +		sysconfig_burst_write_complete(priv);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sysconfig_isc_disable(struct sysconfig_priv *priv)
+> +{
+> +	const u8 isc_disable[] = SYSCONFIG_ISC_DISABLE;
+> +
+> +	return sysconfig_cmd_write(priv, isc_disable, sizeof(isc_disable));
+> +}
+> +
+> +static void sysconfig_cleanup(struct sysconfig_priv *priv)
+> +{
+> +	sysconfig_isc_erase(priv);
+> +	sysconfig_refresh(priv);
+> +}
+> +
+> +static int sysconfig_isc_finish(struct sysconfig_priv *priv)
+> +{
+> +	struct gpio_desc *done_gpio = priv->done;
+> +	u32 status;
+> +	int ret;
+> +
+> +	if (done_gpio) {
+> +		ret = sysconfig_isc_disable(priv);
+> +		if (ret)
+> +			return ret;
+> +
+> +		return sysconfig_poll_gpio(done_gpio, true);
+> +	}
+> +
+> +	ret = sysconfig_poll_status(priv, &status);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if ((status & SYSCONFIG_STATUS_DONE) &&
+> +	    !(status & SYSCONFIG_STATUS_BUSY) &&
+> +	    !(status & SYSCONFIG_STATUS_ERR))
+> +		return sysconfig_isc_disable(priv);
+> +
+> +	return -EFAULT;
+> +}
+> +
+> +static enum fpga_mgr_states sysconfig_ops_state(struct fpga_manager *mgr)
+> +{
+> +	struct sysconfig_priv *priv = mgr->priv;
+> +	struct gpio_desc *done = priv->done;
+> +	u32 status;
+> +	int ret;
+> +
+> +	if (done && (gpiod_get_value(done) > 0))
+> +		return FPGA_MGR_STATE_OPERATING;
+> +
+> +	ret = sysconfig_read_status(priv, &status);
+> +	if (!ret && (status & SYSCONFIG_STATUS_DONE))
+> +		return FPGA_MGR_STATE_OPERATING;
+> +
+> +	return FPGA_MGR_STATE_UNKNOWN;
+> +}
+> +
+> +static int sysconfig_ops_write_init(struct fpga_manager *mgr,
+> +				    struct fpga_image_info *info,
+> +				    const char *buf, size_t count)
+> +{
+> +	struct sysconfig_priv *priv = mgr->priv;
+> +	struct device *dev = &mgr->dev;
+> +	int ret;
+> +
+> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> +		dev_err(dev, "Partial reconfiguration is not supported\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	/* Enter program mode */
+> +	ret = sysconfig_refresh(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to go to program mode\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Enter ISC mode */
+> +	ret = sysconfig_isc_init(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to go to ISC mode\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Initialize the Address Shift Register */
+> +	ret = sysconfig_lsc_init_addr(priv);
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"Failed to initialize the Address Shift Register\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Prepare for bitstream burst write */
+> +	ret = sysconfig_burst_write_init(priv);
+> +	if (ret)
+> +		dev_err(dev, "Failed to prepare for bitstream burst write\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int sysconfig_ops_write(struct fpga_manager *mgr, const char *buf,
+> +			       size_t count)
+> +{
+> +	return sysconfig_bitstream_burst_write(mgr->priv, buf, count);
+> +}
+> +
+> +static int sysconfig_ops_write_complete(struct fpga_manager *mgr,
+> +					struct fpga_image_info *info)
+> +{
+> +	struct sysconfig_priv *priv = mgr->priv;
+> +	struct device *dev = &mgr->dev;
+> +	int ret;
+> +
+> +	ret = sysconfig_burst_write_complete(priv);
+> +	if (!ret)
+> +		ret = sysconfig_poll_busy(priv);
+> +
+> +	if (ret) {
+> +		dev_err(dev, "Error while waiting bitstream write to finish\n");
+> +		goto fail;
+> +	}
+> +
+> +	ret = sysconfig_isc_finish(priv);
+> +
+> +fail:
+> +	if (ret)
+> +		sysconfig_cleanup(priv);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct fpga_manager_ops sysconfig_fpga_mgr_ops = {
+> +	.state = sysconfig_ops_state,
+> +	.write_init = sysconfig_ops_write_init,
+> +	.write = sysconfig_ops_write,
+> +	.write_complete = sysconfig_ops_write_complete,
+> +};
+> +
+> +int sysconfig_probe(struct sysconfig_priv *priv)
+> +{
+> +	struct gpio_desc *program, *init, *done;
+> +	struct device *dev = priv->dev;
+> +	struct fpga_manager *mgr;
+> +	int ret;
+> +
+> +	if (!dev)
+> +		return -ENODEV;
+> +
+> +	program = devm_gpiod_get_optional(dev, "program", GPIOD_OUT_LOW);
+> +	if (IS_ERR(program)) {
+> +		ret = PTR_ERR(program);
+> +		dev_err(dev, "Failed to get PROGRAM GPIO: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	init = devm_gpiod_get_optional(dev, "init", GPIOD_IN);
+> +	if (IS_ERR(init)) {
+> +		ret = PTR_ERR(init);
+> +		dev_err(dev, "Failed to get INIT GPIO: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	done = devm_gpiod_get_optional(dev, "done", GPIOD_IN);
+> +	if (IS_ERR(done)) {
+> +		ret = PTR_ERR(done);
+> +		dev_err(dev, "Failed to get DONE GPIO: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	priv->program = program;
+> +	priv->init = init;
+> +	priv->done = done;
+> +
+> +	mgr = devm_fpga_mgr_register(dev, "Lattice sysCONFIG FPGA Manager",
+> +				     &sysconfig_fpga_mgr_ops, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(mgr);
+> +}
+> +EXPORT_SYMBOL(sysconfig_probe);
+> +
+> +MODULE_DESCRIPTION("Lattice sysCONFIG FPGA Manager Core");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/fpga/lattice-sysconfig.h b/drivers/fpga/lattice-sysconfig.h
+> new file mode 100644
+> index 000000000000..e85c2ae65965
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef	__LATTICE_SYSCONFIG_H
+> +#define	__LATTICE_SYSCONFIG_H
+> +
+> +#define	SYSCONFIG_ISC_ENABLE		{0xC6, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_ISC_DISABLE		{0x26, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_ISC_ERASE		{0x0E, 0x01, 0x00, 0x00}
+> +#define	SYSCONFIG_LSC_READ_STATUS	{0x3C, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_LSC_CHECK_BUSY	{0xF0, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_LSC_REFRESH		{0x79, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_LSC_INIT_ADDR		{0x46, 0x00, 0x00, 0x00}
+> +#define	SYSCONFIG_LSC_BITSTREAM_BURST	{0x7a, 0x00, 0x00, 0x00}
+> +
+> +#define	SYSCONFIG_STATUS_DONE		BIT(8)
+> +#define	SYSCONFIG_STATUS_BUSY		BIT(12)
+> +#define	SYSCONFIG_STATUS_FAIL		BIT(13)
+> +#define	SYSCONFIG_STATUS_ERR		(BIT(23) | BIT(24) | BIT(25))
+
+If you don't want to specify every bit, then GENMASK(25, 23),
+or define every bit and '|' them.
+
+Thanks,
+Yilun
+
+> +
+> +#define	SYSCONFIG_POLL_RETRIES		1000000
+> +#define	SYSCONFIG_POLL_INTERVAL_US	30
+> +
+> +struct sysconfig_priv {
+> +	struct gpio_desc *program;
+> +	struct gpio_desc *init;
+> +	struct gpio_desc *done;
+> +	struct device *dev;
+> +	int (*command_write)(struct sysconfig_priv *priv,
+> +			     const void *tx_buf, size_t tx_len);
+> +	int (*command_read)(struct sysconfig_priv *priv, const void *tx_buf,
+> +			    size_t tx_len, void *rx_buf, size_t rx_len);
+> +	int (*bitstream_burst_write_init)(struct sysconfig_priv *priv);
+> +	int (*bitstream_burst_write)(struct sysconfig_priv *priv,
+> +				     const char *tx_buf, size_t tx_len);
+> +	int (*bitstream_burst_write_complete)(struct sysconfig_priv *priv);
+> +};
+> +
+> +int sysconfig_probe(struct sysconfig_priv *priv);
+> +
+> +#endif /* __LATTICE_SYSCONFIG_H */
+> -- 
+> 2.37.3
+> 
+> 
