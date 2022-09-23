@@ -2,158 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8CF5E78A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEDC5E78AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbiIWKtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S231863AbiIWKuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiIWKtF (ORCPT
+        with ESMTP id S231844AbiIWKtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC041162F4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:49:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AE42616DA
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B854BC433B5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:49:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="i09TvaXH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663930140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g5BvvWn/c9J8DtEiYiWxSvAf3bCW8cJkf2I6iaXDLvo=;
-        b=i09TvaXHY5OGcaQ/soqd/tqkZ9LQohDI4QIiRxAEx+sTCLZpowaYfG46+DP8y49VNgv3lx
-        QN9Zd8rnejCFyg9PFUPQzCIPHPrFHenglVY6MAoK5Pjl1gQcLRf8ZuZzlSmUen++HKElSY
-        h5xcTZ8NLnOF1gfy0XJfDI6VvLn0ncc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 29ac7f10 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 23 Sep 2022 10:49:00 +0000 (UTC)
-Received: by mail-vs1-f51.google.com with SMTP id k2so13222480vsk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:48:59 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0EAhe0l2KWH/KIG64AqVjW3Afn9UR0Vq2lgRdZC9AFRiUdbpWh
-        F455vjVdZuyBI9KsNwRecTvGA0xonUHJQaz6Tms=
-X-Google-Smtp-Source: AMsMyM4AmtUGWDcJ69P3APwiFbOIO+3oYByDQpOjEMcykoaLJ5BH7bLoemcEC4f5HVxbvBPzMjT20NkajQmY7uX1XAw=
-X-Received: by 2002:a67:c289:0:b0:398:cdc:c3ef with SMTP id
- k9-20020a67c289000000b003980cdcc3efmr3354381vsj.76.1663930139018; Fri, 23 Sep
- 2022 03:48:59 -0700 (PDT)
+        Fri, 23 Sep 2022 06:49:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39DB13F5F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663930189; x=1695466189;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Frrn/uI59Fb5x+Vyv8/aK9jxiEYhtFvtdq/l1l5uTnc=;
+  b=nNVAAH2IwUsyD5eDXmmk0qoLjmKmslwfJ1Pz6u8S2J/RqlQvg3eGlA7q
+   uUQnmszul6iIrjOpxVaP9z0a1WEZOSlIRgWo5Y5F00dDA3/CZLJSj4hrN
+   B4oqSprTMT9iqVACgM8X83KQvMrRC9ru4kESxRQkiDgP2QoQKCP5SR30T
+   tpGqXsdPF2BSAj1jd7sYbpPzZVRcdMGvpKdFPS7ArKMiDhLYpFO9E2WiT
+   3UhYbnbnSSCPNTGZshIUBhWmMUdjylaCOlKzhkIOIY5MYWv5hlMYbN0Eg
+   5SKmEgdZ2q1SMP+SP17+3Els4aWu4JMIRHPtBxDr1XS/p9FEW4uN4Cw9I
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283663219"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="283663219"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 03:49:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="709261031"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Sep 2022 03:49:46 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obgFd-0005aW-1F;
+        Fri, 23 Sep 2022 10:49:45 +0000
+Date:   Fri, 23 Sep 2022 18:49:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gwendal Grignou <gwendal@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>
+Subject: [linux-stable-rc:linux-5.15.y 4824/9999] undefined reference to
+ `fb_set_suspend'
+Message-ID: <202209231837.lURoaR04-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220923100621.3888015-1-Jason@zx2c4.com> <Yy2MDWCHTW0M3Z6i@smile.fi.intel.com>
- <CAHmME9osJiKg8-o-OdfCPS6t_fZ=zgGKZdy0CgybaK2NDv8XLA@mail.gmail.com>
-In-Reply-To: <CAHmME9osJiKg8-o-OdfCPS6t_fZ=zgGKZdy0CgybaK2NDv8XLA@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 23 Sep 2022 12:48:48 +0200
-X-Gmail-Original-Message-ID: <CAHmME9p+SKTHzniw=TsC=vnQsyCuBa08+LcK-CsFcjA58K+ifA@mail.gmail.com>
-Message-ID: <CAHmME9p+SKTHzniw=TsC=vnQsyCuBa08+LcK-CsFcjA58K+ifA@mail.gmail.com>
-Subject: Re: [PATCH] minmax: clamp more efficiently by avoiding extra comparison
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey again,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   16d41e601858766935e69e3f9d62db810e5d277d
+commit: 81e5b16de862866e7f09a1b00b49f97a9bc23a78 [4824/9999] platform: chrome: Split trace include file
+config: ia64-randconfig-r026-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231837.lURoaR04-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=81e5b16de862866e7f09a1b00b49f97a9bc23a78
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 81e5b16de862866e7f09a1b00b49f97a9bc23a78
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-On Fri, Sep 23, 2022 at 12:40 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Andy,
->
-> On Fri, Sep 23, 2022 at 12:36 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Fri, Sep 23, 2022 at 12:06:21PM +0200, Jason A. Donenfeld wrote:
-> > > Currently the clamp algorithm does:
-> > >
-> > >       if (val > hi)
-> > >               val = hi;
-> > >       if (val < lo)
-> > >               val = lo;
-> > >
-> > > But since hi > lo by definition, this can be made more efficient with:
-> >
-> > It's strongly speaking, but we have to proof that, right?
-> > So, while I haven't checked the code, this change should also
-> > include (does it?) the corresponding compile-time checks (for
-> > constant arguments) in similar way how it's done for GENMASK().
-> >
-> > Otherwise I have no objections.
->
-> I think most cases are with compile time constants, but some cases are
-> with variables. What should we do in that case? Checking variables at
-> runtime incurs the same cost as the old code. I guess we could do this
-> fast thing for constants and the slower old thing for non-constants?
-> Or not do either, keep this commit as is, and just accept that if you
-> pass bogus bounds to clamp, you're going to end up with something
-> weird, which is already the case now so not a big deal?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Actually, yea, I think we should keep this commit as-is and not add
-additional checking becauseeeee not only is hi>lo by definition, but
-both for the old code and for the new code, the result of lo>hi is
-total nonsense:
+All errors (new ones prefixed by >>):
 
-Assuming hi > lo, these snippets all yield the same result:
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_set_suspend':
+>> (.text+0x912): undefined reference to `fb_set_suspend'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_resume_worker':
+   drm_fb_helper.c:(.text+0x972): undefined reference to `fb_set_suspend'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_unregister_fbi':
+>> (.text+0xab2): undefined reference to `unregister_framebuffer'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_fini':
+>> (.text+0xb82): undefined reference to `fb_dealloc_cmap'
+>> ia64-linux-ld: (.text+0xb92): undefined reference to `framebuffer_release'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_read':
+>> (.text+0xd52): undefined reference to `fb_sys_read'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fbdev_cleanup':
+   drm_fb_helper.c:(.text+0x2b12): undefined reference to `fb_deferred_io_cleanup'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_alloc_fbi':
+>> (.text+0x35d2): undefined reference to `framebuffer_alloc'
+>> ia64-linux-ld: (.text+0x3622): undefined reference to `fb_alloc_cmap'
+>> ia64-linux-ld: (.text+0x3672): undefined reference to `fb_dealloc_cmap'
+   ia64-linux-ld: (.text+0x36d2): undefined reference to `framebuffer_release'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_generic_probe':
+   drm_fb_helper.c:(.text+0x39f2): undefined reference to `fb_deferred_io_init'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `__drm_fb_helper_initial_config_and_unlock':
+   drm_fb_helper.c:(.text+0x3e32): undefined reference to `register_framebuffer'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_set_suspend_unlocked':
+   (.text+0x5a42): undefined reference to `fb_set_suspend'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_imageblit':
+>> (.text+0x6742): undefined reference to `cfb_imageblit'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_copyarea':
+>> (.text+0x67d2): undefined reference to `cfb_copyarea'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_cfb_fillrect':
+>> (.text+0x6862): undefined reference to `cfb_fillrect'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_imageblit':
+>> (.text+0x68f2): undefined reference to `sys_imageblit'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_copyarea':
+>> (.text+0x6a22): undefined reference to `sys_copyarea'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_fillrect':
+>> (.text+0x6b52): undefined reference to `sys_fillrect'
+   ia64-linux-ld: drivers/gpu/drm/drm_fb_helper.o: in function `drm_fb_helper_sys_write':
+>> (.text+0x6c82): undefined reference to `fb_sys_write'
 
-        if (val > hi)
-                val = hi;
-        if (val < lo)
-                val = lo;
-
-        if (val > hi)
-                val = hi;
-        else if (val < lo)
-                val = lo;
-
-        if (val < lo)
-                val = lo;
-        if (val > hi)
-                val = hi;
-
-        if (val < lo)
-                val = lo;
-        else if (val > hi)
-                val = hi;
-
-Assuming lo > hi, and the first condition triggers, these snippets all
-yield different results, all of which are undefined nonsense:
-
-        if (val > hi)
-                val = hi;
-        if (val < lo)
-                val = lo;
---> val is lo
-
-        if (val > hi)
-                val = hi;
-        else if (val < lo)
-                val = lo;
---> val is hi
-
-        if (val < lo)
-                val = lo;
-        if (val > hi)
-                val = hi;
---> val is hi
-
-        if (val < lo)
-                val = lo;
-        else if (val > hi)
-                val = hi;
---> val is lo
-
-Jason
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
