@@ -2,44 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8DE5E7AF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9907D5E7B01
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiIWMjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S231344AbiIWMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIWMjg (ORCPT
+        with ESMTP id S231221AbiIWMmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:39:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5248F638C;
-        Fri, 23 Sep 2022 05:39:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA1D3139F;
-        Fri, 23 Sep 2022 05:39:39 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.80.223])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D2B323F73B;
-        Fri, 23 Sep 2022 05:39:30 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 13:39:28 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, mhiramat@kernel.org, rostedt@goodmis.org,
-        maz@kernel.org, alexandru.elisei@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 3/3] arm64/kprobe: Optimize the performance of patching
- single-step slot
-Message-ID: <Yy2pAEvWKVloVr3U@FVFF77S0Q05N>
-References: <20220923084658.99304-1-liaochang1@huawei.com>
- <20220923084658.99304-4-liaochang1@huawei.com>
+        Fri, 23 Sep 2022 08:42:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A71132FF1;
+        Fri, 23 Sep 2022 05:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663936923; x=1695472923;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=clNq8dpfrkH+SH9w6jXyZ7MWDXW18Peooue3eo5KpHE=;
+  b=Ab70J8IVb/lJBswTapg3vuIizgdN8mgkuM3UODM41z6nUES7Z9j3djd8
+   c7Mq9lTf8iR6jmiCHxDhoEZpYI/Wt+ARscU1RRxUmox9BwVGxqf2Gfm3F
+   C2gXvS7HUDdNniHJuEOkXym3WwfqlD2m/aD/DwGIy9tnq2VCpXV+tJ283
+   /RSP1KRzWVoZ6Dgj3WWiE8Kl71OmMzMqKKNZVMrdnuge88frJxFMYORVf
+   xrWglKDgMkA4OQdOJbz4Udcew8Afc4jYNAfo33ISPI73tnL5h0usUW8h9
+   ifqOY7MN9CmFDQOIXOeNx8/SkaoP8U47E14z2fkcTCifgKkkdVnUYUGH8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="362394485"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="362394485"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 05:42:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="653387301"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.140]) ([10.254.214.140])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 05:41:58 -0700
+Message-ID: <a0b43338-183b-3ece-c85a-e904bee27eef@linux.intel.com>
+Date:   Fri, 23 Sep 2022 20:41:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923084658.99304-4-liaochang1@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 07/13] iommu/vt-d: Add SVA domain support
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
+ <20220906124458.46461-8-baolu.lu@linux.intel.com>
+ <YyyECCbmfsaDpDgJ@nvidia.com>
+ <075278e0-77ce-2361-8ded-6cd6bb20216f@linux.intel.com>
+ <Yy2jbsaXuoxgR+fj@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yy2jbsaXuoxgR+fj@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,58 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 04:46:58PM +0800, Liao Chang wrote:
-> Single-step slot would not be used until kprobe is enabled, that means
-> no race condition occurs on it under SMP, hence it is safe to pacth ss
-> slot without stopping machine.
-
-I think this is correct, but this depends on a couple of subtleties,
-importantly:
-
-* That the I-cache maintenance for these instructions is complete *before* the
-  kprobe BRK is written (and aarch64_insn_patch_text_nosync() ensures this, but
-  just omits causing a Context-Synchronization-Event on all CPUS).
-
-* That the kprobe BRK results in an exception (and consequently a
-  Context-Synchronoization-Event), which ensures that the CPU will fetch the
-  single-step slot instructions *after* this, ensuring that the new
-  instructions are used.
-
-It would be good if we could call that out explicitly.
-
-Thanks,
-Mark.
-
-> Since I and D caches are coherent within single-step slot from
-> aarch64_insn_patch_text_nosync(), hence no need to do it again via
-> flush_icache_range().
+On 2022/9/23 20:15, Jason Gunthorpe wrote:
+> On Fri, Sep 23, 2022 at 10:21:51AM +0800, Baolu Lu wrote:
 > 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->  arch/arm64/kernel/probes/kprobes.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>> At the beginning of this project, I wanted to consolidate the mm
+>> notifications into the core. However, ARM SMMUv3 and Intel handle the mm
+>> notifications a little differently. Then I decided to do this work
+>> separately from the current series.
 > 
-> diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> index d1d182320245..29b98bc12833 100644
-> --- a/arch/arm64/kernel/probes/kprobes.c
-> +++ b/arch/arm64/kernel/probes/kprobes.c
-> @@ -44,13 +44,10 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
->  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
->  {
->  	kprobe_opcode_t *addr = p->ainsn.api.insn;
-> -	void *addrs[] = {addr, addr + 1};
-> -	u32 insns[] = {p->opcode, BRK64_OPCODE_KPROBES_SS};
->  
->  	/* prepare insn slot */
-> -	aarch64_insn_patch_text(addrs, insns, 2);
-> -
-> -	flush_icache_range((uintptr_t)addr, (uintptr_t)(addr + MAX_INSN_SIZE));
-> +	aarch64_insn_patch_text_nosync(addr, p->opcode);
-> +	aarch64_insn_patch_text_nosync(addr + 1, BRK64_OPCODE_KPROBES_SS);
->  
->  	/*
->  	 * Needs restoring of return address after stepping xol.
-> -- 
-> 2.17.1
+> It doesn't look really different..
+
+They are essentially the same, but slightly different. For example, arm
+smmuv3 provides .free_notifier, and I don't think it could be merged to
+the release callback.
+
 > 
+> The SVA iommu domain needs two new ops triggered by the notifier:
+> 
+>   - 'stop using the mm, subsitute a blocking domain' tied to release
+>   - Cache invalidate a range, maybe this is just iotlb_sync_map()
+> 
+> And we could even think about the first as the core code literally
+> attaching a dummy blocking domain and releasing the SVA domain. There
+> is no reason we need to have every driver do this tricky bit of
+> lifecycle management.
+
+Yes. I have similar ideas. We can further discuss it with the real code
+later.
+
+Best regards,
+baolu
