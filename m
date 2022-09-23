@@ -2,186 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089425E71D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DA45E71D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 04:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiIWCVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 22:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S231309AbiIWCWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 22:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiIWCVI (ORCPT
+        with ESMTP id S230144AbiIWCV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 22:21:08 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2068.outbound.protection.outlook.com [40.107.244.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576621181CA;
-        Thu, 22 Sep 2022 19:21:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SDYOz74rPWZLbwKe57CRQ6O/66rwXEVfrtWsgqWM83toDZg+fYTHG/YmAHhto6zNYT2zppJEGJEbPJxXkkO0+lR/6VsXO+6crux9w5WK80nGjXFZnjLXCypkEGNZbViYHw2awWNxUVjrtTwMnFZE5RSB2vX4m72/29ksmJYZvfLLLDHqLgF9Q1pfn7aLk8N/qJYTjTltXHv9Hu9UoeP1NNd4PbcssU3voaTtH2t1zAyeHo2BDer8HWMK3RGtbU+Zt8YesfMexN0B10OJvhP3/sZ2THB6g4tiaF7OheYbwdY/V4gJx/DUmR2tN1yAlXLlWwR7SX+NFisMi3pGyedENQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N8iioLFs6B92++I0DhPs9LAeQLfXw03cABUKMTkRccE=;
- b=hJbaKrg6keBmq1ubA++mAzzB6BUb6aqZwNOldfl/gNFX2rv3X9q5a8thB5B5yP81dzzpKIiv9xmL5PNNA0ybMWYOq8E3l8sSxRdGIDNmElu3Hvu3Uf8D5EmPliucCRggTtZVlUt8EWixr3sk8ZNW0QhhqQE1vtwriZCNd3Fo7LQV9TSeYz672X72Ab2y+Qb0Njju1Ct+jVF91hjwBXp/nDwqRiqEojRPdi8x42JFYMobhsfftdrVAwownqq1uB0gX7/Ws4hVUhwXLGO++6GmyAKUeYixhVYC5akjR5WlLTZUgzWm237iIQb9I0bZ+SbqjImtT/Vb5uVBRS6xydJdtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N8iioLFs6B92++I0DhPs9LAeQLfXw03cABUKMTkRccE=;
- b=DHqAZ4CPhMaA2lRIukd9d/+LgMrKHOtEa2HsoBvbqsnmJB0QDMCekfRAOb2eqMMme8Oei4W7PE67rBM9oVKoKzMY0ZRlgpqpTvy4lO67kKlQbh+XbBrkYN1K3tj+0ILtypTp4y4X96eYCQG1Mubkiy9MiR25d2iT4QGyWzAMz3wYlI9AIqm+GSrZ5gaeTVYhfzHdWI8fWHuRreBd71SynHys7EuSl3tW2USbESc5V4Jmb3cSIaAGJ/kNf3LLwVllZK9gKwCTs5iYU0w5o6zVPMtZgAu+ccHmqxSOBHDviQ1drgdUl266lBVap3XL+z4iNZzzNoZ0VzCnwzrtvBfAYw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
- by BL1PR12MB5898.namprd12.prod.outlook.com (2603:10b6:208:396::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.18; Fri, 23 Sep
- 2022 02:20:59 +0000
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
- 02:20:59 +0000
-Message-ID: <60fa5b16-021e-1e54-7e06-39bbb871eaef@nvidia.com>
-Date:   Thu, 22 Sep 2022 19:20:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 3/3] checkpatch: warn on usage of VM_BUG_ON() and other
- BUG variants
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20220920122302.99195-1-david@redhat.com>
- <20220920122302.99195-4-david@redhat.com>
- <d0c59eb8-baca-26fd-5f10-4a1f89bcf7b9@nvidia.com>
- <3179f4545d3f71358da3e6c6ee18085af601b2eb.camel@perches.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <3179f4545d3f71358da3e6c6ee18085af601b2eb.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0036.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::49) To DM6PR12MB4140.namprd12.prod.outlook.com
- (2603:10b6:5:221::13)
+        Thu, 22 Sep 2022 22:21:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132581181CF;
+        Thu, 22 Sep 2022 19:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663899719; x=1695435719;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=UwDG7pDg4q+ikiSIyDkSSay/EkxC20ZvQE0rFh71LXs=;
+  b=iSwyTWNSeLffzQzp5pTUMUGSvqDdVDcvuUdNhPYhKCrD4W3DTx9Z2tx8
+   EHVDDUPdrE9sTmwqPWPPecC2IKgZQ4BHNJhzcE9tSl7ybqCkjFjDM5TGx
+   RClO5kGjCoDuyN9eXWfD+kz+E0xvjVh2QvKmIIZAjJWURQ/cvOjJ26Bum
+   3IclQio2IIR5n0BfsQGnD5Pg58Ay6uSXSpA323hFX0Q0IMIm9l5TpnXed
+   OGcjvKJb/Qsy19mlSts+GzfhJ0cVNjPCqYksAjdAIDT4fSlJ88mcUWfWR
+   iTSqxwN1jeLk2tVcjj9PJBPvwC+jaB4CPNGRGx/CCVdua3J5zjrzRe1Vz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298089181"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="298089181"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:21:58 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="653238520"
+Received: from ningqu-mobl1.ccr.corp.intel.com (HELO [10.254.210.156]) ([10.254.210.156])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:21:53 -0700
+Message-ID: <075278e0-77ce-2361-8ded-6cd6bb20216f@linux.intel.com>
+Date:   Fri, 23 Sep 2022 10:21:51 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4140:EE_|BL1PR12MB5898:EE_
-X-MS-Office365-Filtering-Correlation-Id: 656eeae4-ef55-4292-2707-08da9d0a4129
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +xOLqGb4p1VKLVTGD21TQU6Bq4wNvaw4KTI8gOG7l/Yk+5wb4bhGu2dQEJe8aLIskop+JDzu9hah49vXnmifCpYebnaQOmrX7XQ2TKYM6b7VIrdVleSjm73BgbARqkwcDyjMTKVWkv3SKgPGuqaak+fAX+0XjvrjqPuxDGJqcKU6gj8Dz1kaGkwoKoaZbfGyka0PZmbsD2jcYJ1oNEw41q208pUvyqSf4WGMXJNh0n2K6t6/trc1So8EyFX+1Me3HCwOFb5shboaFWlEDCyekkpb1QepGOwLgiF9uvp26I9nF0I3dUri0UX5jBZlZc0TAjSUMND15/ZlXdXFdA3VxNaBEEWAZtIwD8iI0qnlk0ubhSrgJ0SKbshipKC3hkl3abqNhnhvfboJ2vNb9WIqjJ4adBfaYi3NSLaeHXox39oriE6FFtxHEDur4CycqqGz28Noq2egnQWik5KRrMG+f96eoREbiDyVShDJgbBdii9uDWFAFtXvQbqRYF5VwEoiaasYv2kC8hTUheUreA77L8q6rwayTKICzjAQenuoofBellX6riUAMeSfDqv1N4U8ApbLXa1z9S/Gy5Y+QvpDzuzrG5pR+WPoeLxdGBEydlrHXixWStj0DtpJRIFXSB0Nd2uSlg5JEChQm4SmvAeYh/pasIIL9ZT4BoRfv05Pu0WiXLIQ8PvqbxiJBE3UiNns/q9gF0B5VSQIptS4AQ4+vgt1Ro8Ystuicgq9+M+dJfbWT+n3GQJayw0FtARcNnajTV/xpSoNtDincQosTrbbUlbc3vvhs53OiJRsb677F5Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(451199015)(6506007)(26005)(53546011)(6666004)(6486002)(41300700001)(6512007)(478600001)(2616005)(83380400001)(186003)(5660300002)(2906002)(7416002)(316002)(110136005)(8936002)(54906003)(66946007)(4326008)(8676002)(66476007)(66556008)(66899012)(38100700002)(31686004)(86362001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RnNPaGtGSjhjQ1d3VGlhNjVkVVRsQU96Rm4rc295eTJ4dFRyOUZYRlExTjBi?=
- =?utf-8?B?T2hNQlRObXVQZFhtNlBFckVXQXVFNDR1TURld010Wm96YU1ad1lEa2tjRjds?=
- =?utf-8?B?ODNObHM3NlJXZEt4K1JZeVFYa3FCbXZKcmZGK2J0K0lZSk9PWCsvYXo1UDlB?=
- =?utf-8?B?UEpYeDJadmExaElvK1NTUlFzTnlyWEM0d3RWT0pkTVIvd1dRWDlncGdmcjBr?=
- =?utf-8?B?UkIrd0Npbkxxc1NtVHlmM3N5aEJ5VUFzdmZHVkNEWmZzTEJVVStSdHYyOE92?=
- =?utf-8?B?cGJ6VzAyWFRpRjRzSjNCeGtndGdQNkR0NUZsbmdzVE5ZNlB1SG1DMGl2c0VP?=
- =?utf-8?B?bUpEbkE3TkNMZzUrZU0vVWFDMHk4dk9OL3hYaUxmdEY1d0UrdVBzM2svRDJB?=
- =?utf-8?B?RG92UlpyS3ArcFJMRXlydzJjS2g3K3lmQXR3alZzamJ3UVNtcW9rblJDVzlT?=
- =?utf-8?B?OGQ2UDVGUmxuUlJJVkNxY1ZtQW84dGdacTJuS2VRd2FXSkNEYzRQZlFqc3Z0?=
- =?utf-8?B?emZTc1laSU8vMU1HNHUySDFjRnNoOTdnUDhTWmVFL0NOZEI2U1hpU0N4UUZ4?=
- =?utf-8?B?UTBuSk9aeit6Q3MwYUtPbEVQSlIzR24wMkVIazlvcTJwUUNNUG1XcmJJS3lL?=
- =?utf-8?B?VVlKeC9OaUI1UDFBbkhhTDdQeTVwckl6YWxjUUVZQXJObHZ6VGdpdk9OUGt2?=
- =?utf-8?B?T3M0UkY3MWJwaENPaUVOd1RaODdxTm9TWXczV2JPby9aUFBPbmlWcGwrT1Qr?=
- =?utf-8?B?dUZveDV4ZkVYNStmWWVIWUNzMnhTZkxqTE1KSVYrVUEvRDgxaUh6NldmamdC?=
- =?utf-8?B?dlphSmlhc056NGpsUXM0OVNSVWFvdUlNaUxIckFPNHRUQmRCQkxsT0dDMzRx?=
- =?utf-8?B?WS9lSjJmT3JoNlZkcFpEcDgralFkakt2TjducTdsbUF3dVlSdzBhdlcvbG9o?=
- =?utf-8?B?SkZnSHlXYTYwakR6WG5VUlBFaG41UFRhTjFTTk9DNFFJWi95TTRjTjV3M1Bp?=
- =?utf-8?B?NWhja0U2SUJvMkduc3BFRW5LcWFCTW94aExFb21vRHJvRFFETXZsR3B2c2ds?=
- =?utf-8?B?M3ZqcXFTMlNYR3V4cDRvSVRxK2JGTzd2blE1eWFqUlVaTkxEd3FxY0NYalRv?=
- =?utf-8?B?YWRiKzE0MCtSTWZuWmxlTUxZeWc3QWJGQ09EL0FVZE5yZDY2V2xjc0trelA0?=
- =?utf-8?B?QnowRHVwYk45cm5MVHhoZGxDSHhIWnAxNUZYZ2RQVGVJMTVkb3QxUzB0ckRq?=
- =?utf-8?B?UG1xWEpvVWNwcVFmSUlEM2FaSzNjYVpvU2l4NlltTGFtN3h5a2s3bS9oNGZV?=
- =?utf-8?B?ZXZCVVJ4a1BzSWVpQWJudkFlWDhGOTlxQnRHZWczMEhreVFpcjVpR29CVlBP?=
- =?utf-8?B?Q2ZsQ0lJZEtzMDRuZWVLRlhBVzBOcG9hUDZleDJYS1plclRzOGpGYjFHaCty?=
- =?utf-8?B?UVpWdzZrdDR5NmpNcEVjSHJIVVN1dzNmbk13OVFtb2d3MWFRbTAvQXk1VVZ4?=
- =?utf-8?B?S25sS1FXVUczNDdRbjg4cnN4M1FtbU4wYUFUeXFqVEdwczEzYVdmb0NvRTBX?=
- =?utf-8?B?dGtyUXp3QWx4amJQai9sdjhBcHJyNFU0bDNvWXNjczB3Ryt3YW1TbjRhL21M?=
- =?utf-8?B?Z1pkSkZKL00vTW9hZUdidUZ0bG1CU1Zoa0lERE05UDR1eVByUi9GUzFwRlpT?=
- =?utf-8?B?eDZZV21pUTBSOHlmaTlqc0tIY3h4ajVsN2VvWXo3ZExzbW54YjYwV2QrZ1Vh?=
- =?utf-8?B?cEZoT3E4MExNZXAwTjh1eEU2SFliTy9kWUpFb2NXZ25mLzhUSTJyTFdCQWpq?=
- =?utf-8?B?SzlBaytUUWx1RHNXejVjNnZ4QndJTDhzam02S3NFdWtkSlR4VzJETVhoUFhU?=
- =?utf-8?B?MmFXclV4TW9FTWdMYjZzMnljR1RxWWxqdWtTNWlIdHJNNlBleURtUnJhTnpB?=
- =?utf-8?B?eVpTT1cvdTNZcFdZMC9TK0tuL1Z2eGlEU01VSUZrUHFpTGtBMjFsdjlwZXp5?=
- =?utf-8?B?anN1eTV3d0RVamp2OTU5YzNiem5YUHQ3YzdLYmxDdzFWc3Z2TWRyZDZESmx0?=
- =?utf-8?B?YlJ2MlFRbFQzVnR0ZUFQQ1A3cUppd3U2SnRlRVdEUVRURWhYYTdkYU40eWpC?=
- =?utf-8?Q?wl5QOo/fHbq7/Qgzz577BLjMy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 656eeae4-ef55-4292-2707-08da9d0a4129
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 02:20:59.6670
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Te6oJrffCtnTSwx97hzHDtGYOfEYDQxNqnZIZglKsfH5kYBcYqvW7K3yniZbDdSQohZYqLnINEda3LKPdJJUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5898
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
+ <20220906124458.46461-8-baolu.lu@linux.intel.com>
+ <YyyECCbmfsaDpDgJ@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v13 07/13] iommu/vt-d: Add SVA domain support
+In-Reply-To: <YyyECCbmfsaDpDgJ@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 19:11, Joe Perches wrote:
->> Should this be a separate patch? Adding a bunch of exceptions to the BUG() rules is 
->> a separate and distinct thing from adding VM_BUG_ON() and other *BUG*() variants to
->> the mix.
+On 2022/9/22 23:49, Jason Gunthorpe wrote:
+> On Tue, Sep 06, 2022 at 08:44:52PM +0800, Lu Baolu wrote:
+>> +static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>> +{
+>> +	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
+>> +	struct iommu_domain *domain;
+>> +
+>> +	/* Domain type specific cleanup: */
+>> +	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+>> +	if (domain) {
+>> +		switch (domain->type) {
+>> +		case IOMMU_DOMAIN_SVA:
+>> +			intel_svm_remove_dev_pasid(dev, pasid);
+>> +			break;
+>> +		default:
+>> +			/* should never reach here */
+>> +			WARN_ON(1);
+>> +			break;
 > 
-> Not in my opinion.
+> This is eventually going to need a lot more cleaning up to split out
+> the PASID from the SVM stuff.
+> 
+> SVA should *only* be a set of predefined handlers (in the core code!)
+> for the generic PRI mechanism, it shouldn't be entangled deeply into
+> PASID or the drivers like this.
+> 
+> When we get done with this, the flow should have the core code attach
+> a SVA domain to a PASID with PRI enabled and the core code should
+> supply a generic PRI implementation that does the mmu_notifier
+> stuff.
 
-OK, then. :)
+Yes. Agreed.
+
+At the beginning of this project, I wanted to consolidate the mm
+notifications into the core. However, ARM SMMUv3 and Intel handle the mm
+notifications a little differently. Then I decided to do this work
+separately from the current series.
 
 > 
->>>  			my $msg_level = \&WARN;
->>>  			$msg_level = \&CHK if ($file);
->>>  			&{$msg_level}("AVOID_BUG",
->>> -				      "Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()\n" . $herecurr);
->>> +				      "Do not crash the kernel unless it is unavoidable - use WARN_ON_ONCE & recovery code (if reasonable) rather than BUG() or variants.\n" . $herecurr);
->>
->> Here's a requested tweak, to clean up the output and fix punctuation:
->>
->> "Avoid crashing the kernel--use WARN_ON_ONCE() plus recovery code (if feasible) instead of BUG() or variants.\n" . $herecurr);
+> Also, stuff like this:
 > 
-> Fixing punctuation here would be removing the trailing period as checkpatch
-> only has periods for multi-sentence output messages.
+> 				/* We mandate that no page faults may be outstanding
+> 				 * for the PASID when intel_svm_unbind_mm() is called.
+> 				 * If that is not obeyed, subtle errors will happen.
+> 				 * Let's make them less subtle... */
+> 
+> Are going to be problematic for VFIO as well. In a VFIO world the
+> entire RID and its entire PASID table has to be owned by VFIO and
+> never shared - so these sequencing issues should be solvable.
+> 
+> But this is all for further series..
 
-OK, let's do that too. 
+Yes. All these sound interesting future series.
 
 > 
-> And I think that "Do not crash" is a stronger statement than "Avoid crashing"
-> so I prefer the original suggestion but it's not a big deal either way.
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Yes, stronger wording is better. So how about this:
+I'm very appreciated for your time.
 
-"Do not crash the kernel unless it is absolutely unavoidable--use WARN_ON_ONCE() plus recovery code (if feasible) instead of BUG() or variants\n" . $herecurr);
-
-
-thanks,
-
--- 
-John Hubbard
-NVIDIA
-
+Best regards,
+baolu
