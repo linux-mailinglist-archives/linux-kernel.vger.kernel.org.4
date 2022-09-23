@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D125E75CF
+	by mail.lfdr.de (Postfix) with ESMTP id 495A65E75CE
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiIWI2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S231270AbiIWI3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiIWI2S (ORCPT
+        with ESMTP id S230421AbiIWI23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:28:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D9912384B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663921668; x=1695457668;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8kkjxfQ7mUK/V9Lc34jug0CHMM+mOcD38YV9RoicTgI=;
-  b=VVwCgRoSCc1z4x2S6ORZabGBhOxqSeP5HAyY71y+Fg9Py2RVSfhMfMi7
-   1+99RyJ6sz37d0bOLjMg56P3Bb0rg+vM1CkmzniFe+ekjUCOBflbVNYyP
-   yO9OtPAK1EFe+K41vW6hPXeCpMj6BFLfChKp7gL9QzzOcxmEG1K4LLTsz
-   8iGc0Unb6iBb13YhfNECa9U9ZMKfCC+iGlkbMXEsw3qm8VrKKyP35vjrl
-   tFfPydYomZzUbCx1JpcqjM7kGqrkc4LT++7alPzCGFxdgFYdQhIJtKKPP
-   fPSILUah8rlV/x9CBc5Bhbuo87yWz18Xt1xK7EksY8SJ9dx6Yg/xCor5C
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="386833597"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="386833597"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:27:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="622444299"
-Received: from ngoncia-mobl2.ger.corp.intel.com (HELO paris.ger.corp.intel.com) ([10.249.143.58])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:27:35 -0700
-From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        mchehab@kernel.org, chris@chris-wilson.co.uk,
-        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
-        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@redhat.com,
-        daniel@ffwll.ch, andi.shyti@linux.intel.com,
-        andrzej.hajda@intel.com, keescook@chromium.org,
-        mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
-        vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com
-Subject: [PATCH v11 9/9] drm/i915: Remove truncation warning for large objects
-Date:   Fri, 23 Sep 2022 11:26:28 +0300
-Message-Id: <20220923082628.3061408-10-gwan-gyeong.mun@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220923082628.3061408-1-gwan-gyeong.mun@intel.com>
-References: <20220923082628.3061408-1-gwan-gyeong.mun@intel.com>
+        Fri, 23 Sep 2022 04:28:29 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563333B70E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:28:14 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id nb11so1673863ejc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QezEKz77/Db/GC+vdqhiQIwuhY+qNfYlF6o+mILXDdY=;
+        b=k3xKkqK8d6xfCj8E+OcF6B57KkJM4PkkFSPrCN8YRj8etjrJ2J8YzY825ZZU8dxHwL
+         A+MPdmk3bf2WsT1rXQIDlNruJhs03w+hTzKmKMMnt738/sd+Peg/rj/IgXLmdH2y94o7
+         1cjPh1h6pFjTlzwjGY4NDb6z+53VjEkcKdUqC7cIEMDUErSVdrxd/wUbDsIZ5/7kXZhR
+         ozh4KghWE2CABfnkoSLFLL63nDyFO4MGWt5CTkUNxiViz3+ZquowLQqEDwRdrAiOFrRx
+         Hy8r22W8r5Fhsc42ShLeiF9o3KV+Cp4AKLOOAcshSRXhsO7mBK9TYAc6XoDB2DdXi8eV
+         o4KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QezEKz77/Db/GC+vdqhiQIwuhY+qNfYlF6o+mILXDdY=;
+        b=YaD6N0/wT4pg3pcS70uMe2HllCq5HpTfd1bNaBa/+N+NKthsNoltTMHQ11nfukhPvw
+         b5sT2fpqubeSOTrpqM+LfAa/WLDa+JcgIDMVzYT9z69t9SJNd2Z/rfyPd8ac5QL/kjXC
+         gL5g36QsK4RZZKZD6DjBZFoOK9aQgVn1Al/YKBMBC58pSgXtMWpnOsij/uzdPE/02ZPx
+         cpeM3pf/d42luFZ3L4Wo9yIOzqKX1VGti1AAYQa2MfkIZPXjgad7nF+2XCZ1HHKxBqSB
+         JSa4eagZwsIhB4MY4N131vm11XgEIM1dAK8naH/qqmLulE6LmHvq+LywwwuRI7Crwhma
+         AaYg==
+X-Gm-Message-State: ACrzQf2M7Y0KxMgIrcgJVGDehuGZzFwQoWlmicpuNr4YMM1TNhWrhiu7
+        pxAoj7oZIZPa2F+3JQlUfkAu5w==
+X-Google-Smtp-Source: AMsMyM6qOD/x5bbY9+p6d3Z6Xp/kb+CsMY8Y5mdn24hKcbasvvISebmD2bgJKHB0R1CScIPpjJ0mvA==
+X-Received: by 2002:a17:906:8454:b0:772:7b02:70b5 with SMTP id e20-20020a170906845400b007727b0270b5mr6092325ejy.114.1663921692676;
+        Fri, 23 Sep 2022 01:28:12 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:5e2b:69ae:ba71:ae54? ([2a02:578:8593:1200:5e2b:69ae:ba71:ae54])
+        by smtp.gmail.com with ESMTPSA id t22-20020a056402021600b00443d657d8a4sm5050904edv.61.2022.09.23.01.28.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 01:28:11 -0700 (PDT)
+Message-ID: <1ccfd999-7cb6-3243-20c6-54299bc1b8a1@tessares.net>
+Date:   Fri, 23 Sep 2022 10:28:10 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+References: <20220921110437.5b7dbd82@canb.auug.org.au>
+ <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
+ <20220922125908.28efd4b4@kernel.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220922125908.28efd4b4@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
+Hi Jakub,
 
-Having addressed the issues surrounding incorrect types for local
-variables and potential integer truncation in using the scatterlist API,
-we have closed all the loop holes we had previously identified with
-dangerously large object creation. As such, we can eliminate the warning
-put in place to remind us to complete the review.
+On 22/09/2022 21:59, Jakub Kicinski wrote:
+> On Wed, 21 Sep 2022 11:18:17 +0200 Matthieu Baerts wrote:
+>> Hi Stephen,
+>>
+>> On 21/09/2022 03:04, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Today's linux-next merge of the net-next tree got a conflict in:
+>>>
+>>>   tools/testing/selftests/drivers/net/bonding/Makefile
+>>>
+>>> between commit:
+>>>
+>>>   bbb774d921e2 ("net: Add tests for bonding and team address list management")
+>>>
+>>> from the net tree and commit:
+>>>
+>>>   152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
+>>>
+>>> from the net-next tree.
+>>>
+>>> I fixed it up (see below) and can carry the fix as necessary.  
+>> Thank you for sharing this fix (and all the others!).
+>>
+>> I also had this conflict on my side[1] and I resolved it differently,
+>> more like what is done in the -net tree I think, please see the patch
+>> attached to this email.
+>>
+>> I guess I should probably use your version. It is just I saw it after
+>> having resolved the conflict on my side :)
+>> I will check later how the network maintainers will resolve this
+>> conflict and update my tree if needed.
+> 
+> I took this opportunity to sort 'em:
+> 
+> - TEST_PROGS := bond-break-lacpdu-tx.sh
+> - TEST_PROGS += bond-lladdr-target.sh
+>  -TEST_PROGS := bond-break-lacpdu-tx.sh \
+>  -            dev_addr_lists.sh \
+>  -            bond-arp-interval-causes-panic.sh
+> ++TEST_PROGS := \
+> ++      bond-arp-interval-causes-panic.sh \
+> ++      bond-break-lacpdu-tx.sh \
+> ++      dev_addr_lists.sh
+> + 
+> + TEST_FILES := lag_lib.sh
+> 
+> Here's to hoping there are no more bond selftests before final..
 
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: Brian Welty <brian.welty@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Testcase: igt@gem_create@create-massive
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4991
-Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_object.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+Good idea to sort them!
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.h b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-index b1f89b1cc0b2..9a77fa95e771 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_object.h
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-@@ -20,25 +20,10 @@
- 
- enum intel_region_id;
- 
--/*
-- * XXX: There is a prevalence of the assumption that we fit the
-- * object's page count inside a 32bit _signed_ variable. Let's document
-- * this and catch if we ever need to fix it. In the meantime, if you do
-- * spot such a local variable, please consider fixing!
-- *
-- * We can check for invalidly typed locals with typecheck(), see for example
-- * i915_gem_object_get_sg().
-- */
--#define GEM_CHECK_SIZE_OVERFLOW(sz) \
--	GEM_WARN_ON((sz) >> PAGE_SHIFT > INT_MAX)
--
- static inline bool i915_gem_object_size_2big(u64 size)
- {
- 	struct drm_i915_gem_object *obj;
- 
--	if (GEM_CHECK_SIZE_OVERFLOW(size))
--		return true;
--
- 	if (overflows_type(size, obj->base.size))
- 		return true;
- 
+It looks like you accidentally removed 'bond-lladdr-target.sh' from the
+list. Most probably because there was yet another conflict in this file,
+see commit 2ffd57327ff1 ("selftests: bonding: cause oops in
+bond_rr_gen_slave_id") :)
+
+Or maybe because you were again disappointed by Lewandowski's
+performance yesterday when you were resolving the conflicts at the same
+time :-D
+
+Anyway I just sent a small patch to fix this:
+
+https://lore.kernel.org/netdev/20220923082306.2468081-1-matthieu.baerts@tessares.net/T/
+https://patchwork.kernel.org/project/netdevbpf/patch/20220923082306.2468081-1-matthieu.baerts@tessares.net/
+
+Cheers,
+Matt
 -- 
-2.37.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
