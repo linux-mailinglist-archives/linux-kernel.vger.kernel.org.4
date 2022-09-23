@@ -2,188 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A95A5E70B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0031C5E70B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiIWAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S231192AbiIWAiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiIWAfw (ORCPT
+        with ESMTP id S229771AbiIWAiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:35:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B1610195D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663893350; x=1695429350;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=k9s9+DMJ/i/LrduLk4l7gHizU0+NduUdUkypqP+R8N4=;
-  b=NBTK0pGyjXeGjHqznqTKv+KbCk6XPcVJynvT915xNkLnaNxd8u9XqNLj
-   qTymMG0xRfER6sXKHpcSugRay6MlOHY83NZnuofI6eug0MepnNDe41Bx1
-   ZRKPy+eNeVHIxTiIbNq57iktOPSQMkQtoHmZwPjfHEb0nz/sFEBhDQUAZ
-   6iV0qVW9ONqQ2sFpwO0erSDGX0mGi7chlj9YLxWOSTG/gQ8ESRzmdSjof
-   f+Scb26h6sw7T6eDkMCnT7vGxzwbWC6UXSEV111vaTMr/HuQIzbv1pCC+
-   sD29oFaLj4F0ghvjWEmKSyFm903IDyzYV51+PMUsfVH6nckS087czqYer
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301350815"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="301350815"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 17:35:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="709110107"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 17:35:49 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obWfU-00057l-1R;
-        Fri, 23 Sep 2022 00:35:48 +0000
-Date:   Fri, 23 Sep 2022 08:35:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kas:lam 5/13] drivers/input/serio/serio_raw.c:178:29: sparse:
- sparse: incorrect type in assignment (different address spaces)
-Message-ID: <202209230804.CMXykb9S-lkp@intel.com>
+        Thu, 22 Sep 2022 20:38:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE1D106A07
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663893493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zk1+EgBiZaGHGemzxW1+05s07p+KTnrxlBzg9GZkgF4=;
+        b=RL3gRldBFbP/CGZeyF6+Gr6fxnHUaqnHAM8NbwVbD5rINNVHVXnFMhetdA1V8rDL4IkSEr
+        7zPWwlIsgZbGD05J0Q+p4C1AvKqybuTUd1pMxUbbJ6EeoBulaMVBvktoLNX/19LKbbmNcj
+        UAvQS75odQ44VXaHqIstc9Qi0BMZvRA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-258-Hbh2bazNPWqKme8RzUCvqA-1; Thu, 22 Sep 2022 20:38:08 -0400
+X-MC-Unique: Hbh2bazNPWqKme8RzUCvqA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8651C85A5A6;
+        Fri, 23 Sep 2022 00:38:08 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4727240C6EC2;
+        Fri, 23 Sep 2022 00:38:08 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 20:38:06 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
+ nodes
+Message-ID: <Yyz/7gWdP+ftQdIO@lorien.usersys.redhat.com>
+References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-head:   8836fbd6cd3120383a0bc63cd54c7dd55639ed49
-commit: 2600a472582e2968633831d430c2a1366ad3e8b1 [5/13] x86/uaccess: Provide untagged_addr() and remove tags before address check
-config: x86_64-randconfig-s023-20220919 (https://download.01.org/0day-ci/archive/20220923/202209230804.CMXykb9S-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=2600a472582e2968633831d430c2a1366ad3e8b1
-        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
-        git fetch --no-tags kas lam
-        git checkout 2600a472582e2968633831d430c2a1366ad3e8b1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/ drivers/input/serio/ drivers/platform/x86/
+Hi Andy,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Sep 22, 2022 at 10:49:54PM +0300 Andy Shevchenko wrote:
+> Currently the approximation is used which wastes the more memory
+> the more CPUs are present on the system. Proposed change calculates
+> the exact maximum needed in the worst case:
+> 
+>   NR_CPUS	old		new
+>   -------	---		---
+>   1 .. 1170	4096		4096
+>   1171 .. 1860	4098 ..	6510	4096
+>   ...		...		...
+>   2*4096	28672		19925
+>   4*4096	57344		43597
+>   8*4096	114688		92749
+>   16*4096	229376		191053
+>   32*4096	458752		403197
+>   64*4096	917504		861949
+>   128*4096	1835008		1779453
+>   256*4096	3670016		3670016
+> 
+> Under the hood the reccurent formula is being used:
+>   (5 - 0) * 2 +
+>     (50 - 5) * 3 +
+>       (500 - 50) * 4 +
+>         (5000 - 500) * 5 +
+>           ...
+>             (X[i] - X[i-1]) * i
+> 
+> which allows to count the exact maximum length in the worst case,
+> i.e. when each second CPU is being listed. For backward compatibility
+> for more than 1170 and less than 1861 CPUs the page size is preserved.
+> 
+> For less than 1171 and more than 1 million CPUs the old is being used.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/input/serio/serio_raw.c:178:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __user *__ptr_clean @@     got char * @@
-   drivers/input/serio/serio_raw.c:178:29: sparse:     expected char [noderef] __user *__ptr_clean
-   drivers/input/serio/serio_raw.c:178:29: sparse:     got char *
->> drivers/input/serio/serio_raw.c:219:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
-   drivers/input/serio/serio_raw.c:219:21: sparse:     expected char const [noderef] __user *__ptr_clean
-   drivers/input/serio/serio_raw.c:219:21: sparse:     got char const *
---
->> drivers/input/serio/serport.c:216:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
-   drivers/input/serio/serport.c:216:21: sparse:     expected unsigned long [noderef] __user *__ptr_clean
-   drivers/input/serio/serport.c:216:21: sparse:     got unsigned long *
+The memory is not really wasted since it's probably temporary in userspace
+and in the kernel it _is_ temporary and is only the length of the kasprintf
+string, which is most of the time much less.
 
-vim +178 drivers/input/serio/serio_raw.c
+But that said, it is more accurate than the previous estimate.
 
-^1da177e4c3f415 Linus Torvalds   2005-04-16  156  
-15a564d8dbfc942 Dmitry Torokhov  2011-10-10  157  static ssize_t serio_raw_read(struct file *file, char __user *buffer,
-15a564d8dbfc942 Dmitry Torokhov  2011-10-10  158  			      size_t count, loff_t *ppos)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  159  {
-7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  160  	struct serio_raw_client *client = file->private_data;
-7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  161  	struct serio_raw *serio_raw = client->serio_raw;
-3f649ab728cda80 Kees Cook        2020-06-03  162  	char c;
-7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  163  	ssize_t read = 0;
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  164  	int error;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  165  
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  166  	for (;;) {
-85f5b35da86bcd6 Dmitry Torokhov  2011-10-10  167  		if (serio_raw->dead)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  168  			return -ENODEV;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  169  
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  170  		if (serio_raw->head == serio_raw->tail &&
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  171  		    (file->f_flags & O_NONBLOCK))
-^1da177e4c3f415 Linus Torvalds   2005-04-16  172  			return -EAGAIN;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  173  
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  174  		if (count == 0)
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  175  			break;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  176  
-7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  177  		while (read < count && serio_raw_fetch_byte(serio_raw, &c)) {
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02 @178  			if (put_user(c, buffer++))
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  179  				return -EFAULT;
-7a0a27d2ce38aee Che-Liang Chiou  2012-02-01  180  			read++;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  181  		}
-^1da177e4c3f415 Linus Torvalds   2005-04-16  182  
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  183  		if (read)
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  184  			break;
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  185  
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  186  		if (!(file->f_flags & O_NONBLOCK)) {
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  187  			error = wait_event_interruptible(serio_raw->wait,
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  188  					serio_raw->head != serio_raw->tail ||
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  189  					serio_raw->dead);
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  190  			if (error)
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  191  				return error;
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  192  		}
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  193  	}
-486c8aba39e5f19 Dmitry Torokhov  2012-04-20  194  
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  195  	return read;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  196  }
-^1da177e4c3f415 Linus Torvalds   2005-04-16  197  
-15a564d8dbfc942 Dmitry Torokhov  2011-10-10  198  static ssize_t serio_raw_write(struct file *file, const char __user *buffer,
-15a564d8dbfc942 Dmitry Torokhov  2011-10-10  199  			       size_t count, loff_t *ppos)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  200  {
-7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  201  	struct serio_raw_client *client = file->private_data;
-7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  202  	struct serio_raw *serio_raw = client->serio_raw;
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  203  	int retval = 0;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  204  	unsigned char c;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  205  
-c4e32e9faaaa833 Arjan van de Ven 2006-02-19  206  	retval = mutex_lock_interruptible(&serio_raw_mutex);
-^1da177e4c3f415 Linus Torvalds   2005-04-16  207  	if (retval)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  208  		return retval;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  209  
-85f5b35da86bcd6 Dmitry Torokhov  2011-10-10  210  	if (serio_raw->dead) {
-^1da177e4c3f415 Linus Torvalds   2005-04-16  211  		retval = -ENODEV;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  212  		goto out;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  213  	}
-^1da177e4c3f415 Linus Torvalds   2005-04-16  214  
-^1da177e4c3f415 Linus Torvalds   2005-04-16  215  	if (count > 32)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  216  		count = 32;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  217  
-^1da177e4c3f415 Linus Torvalds   2005-04-16  218  	while (count--) {
-^1da177e4c3f415 Linus Torvalds   2005-04-16 @219  		if (get_user(c, buffer++)) {
-^1da177e4c3f415 Linus Torvalds   2005-04-16  220  			retval = -EFAULT;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  221  			goto out;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  222  		}
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  223  
-7c5bbb2eb7ad047 Dmitry Torokhov  2011-10-10  224  		if (serio_write(serio_raw->serio, c)) {
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  225  			/* Either signal error or partial write */
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  226  			if (retval == 0)
-^1da177e4c3f415 Linus Torvalds   2005-04-16  227  				retval = -EIO;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  228  			goto out;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  229  		}
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  230  
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  231  		retval++;
-d89c9bcb3390956 Che-Liang Chiou  2012-01-10  232  	}
-^1da177e4c3f415 Linus Torvalds   2005-04-16  233  
-^1da177e4c3f415 Linus Torvalds   2005-04-16  234  out:
-c4e32e9faaaa833 Arjan van de Ven 2006-02-19  235  	mutex_unlock(&serio_raw_mutex);
-46f49b7a223ac74 Dmitry Torokhov  2012-05-02  236  	return retval;
-^1da177e4c3f415 Linus Torvalds   2005-04-16  237  }
-^1da177e4c3f415 Linus Torvalds   2005-04-16  238  
+I was wondering if you were going to try to come up with a suitable
+compile time macro :)
 
-:::::: The code at line 178 was first introduced by commit
-:::::: 46f49b7a223ac7493e7cf619fb583d11edefc2c2 Input: serio_raw - signal EFAULT even if read/write partially succeeds
+I tested 2, 8192 and 16k since the kernel does not want to build for other
+reasons with NR_CPUS at 32k.
 
-:::::: TO: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+Tested-by: Phil Auld <pauld@redhat.com>
+
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: described better the advantage for 1171..1860 CPUs cases
+>  include/linux/cpumask.h | 48 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+> 
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index 1b442fb2001f..12cf0905ca74 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -1122,6 +1122,21 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+>   *
+>   * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
+>   *
+> + * for cpulist the reccurent formula is being used:
+> + *   (5 - 0) * 2 +
+> + *     (50 - 5) * 3 +
+> + *       (500 - 50) * 4 +
+> + *         (5000 - 500) * 5 +
+> + *           ...
+> + *             (X[i] - X[i-1]) * i
+> + *
+> + * which allows to count the exact maximum length in the worst case,
+> + * i.e. when each second CPU is being listed. For backward compatibility
+> + * for more than 1170 and less than 1861 CPUs the page size is preserved.
+> + *
+> + * For less than 1171 and more than 1 million CPUs the old is being used
+> + * as described below:
+> + *
+>   * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
+>   * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
+>   * cover a worst-case of every other cpu being on one of two nodes for a
+> @@ -1132,6 +1147,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+>   */
+>  #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
+>  					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
+> +
+> +#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
+> +#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
+> +#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
+> +#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
+> +#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
+> +#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
+> +
+> +#if NR_CPUS < 1861
+> +#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
+> +#elif NR_CPUS < 10000
+> +#define CPULIST_FILE_MAX_BYTES			\
+> +	 (__CPULIST_FOR_10(10) +		\
+> +	  __CPULIST_FOR_100(100) +		\
+> +	  __CPULIST_FOR_1000(1000) +		\
+> +	  __CPULIST_FOR_10000(NR_CPUS))
+> +#elif NR_CPUS < 100000
+> +#define CPULIST_FILE_MAX_BYTES			\
+> +	 (__CPULIST_FOR_10(10) +		\
+> +	  __CPULIST_FOR_100(100) +		\
+> +	  __CPULIST_FOR_1000(1000) +		\
+> +	  __CPULIST_FOR_10000(10000) +		\
+> +	  __CPULIST_FOR_100000(NR_CPUS))
+> +#elif NR_CPUS < 1000000
+> +#define CPULIST_FILE_MAX_BYTES			\
+> +	 (__CPULIST_FOR_10(10) +		\
+> +	  __CPULIST_FOR_100(100) +		\
+> +	  __CPULIST_FOR_1000(1000) +		\
+> +	  __CPULIST_FOR_10000(10000) +		\
+> +	  __CPULIST_FOR_100000(100000) +	\
+> +	  __CPULIST_FOR_1000000(NR_CPUS))
+> +#else
+>  #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
+> +#endif
+>  
+>  #endif /* __LINUX_CPUMASK_H */
+> -- 
+> 2.35.1
+> 
+
+
+Cheers,
+Phil
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
