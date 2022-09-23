@@ -2,209 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DA35E757E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34645E75A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiIWIOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S231282AbiIWIXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiIWIOg (ORCPT
+        with ESMTP id S231368AbiIWIXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:14:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9644E659D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:14:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F07E219EA;
-        Fri, 23 Sep 2022 08:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663920873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ASXCkFRUbJoE/3F2MFFGTXhkMManE2dYFW0GYJD/cpw=;
-        b=hX7ZnecbxTw1+rDyK3XIV8ndl+eV0INnbmwoBCpAdcc8sIRnfPq88fVvgW/XfUCVLboscM
-        nRtK31aaa+NuiUGtM4s+ryqLcxa14hIStpe31xNnzsLZtSe5oqBOeudKqD6fcpoYvn4Xvc
-        KTKHcGVbRUXQTEG1VtIy0exaeq5UGJI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663920873;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ASXCkFRUbJoE/3F2MFFGTXhkMManE2dYFW0GYJD/cpw=;
-        b=Uehs1yrqW0GtDjBo7GapG5yDH+hBjisr5sqnZKvg5xfE27+vQp4fx+h4Wct7fM+vuuOAa7
-        /fIjtGxFsep9B0Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B042D13AA5;
-        Fri, 23 Sep 2022 08:14:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9pYMKuhqLWMkBAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 23 Sep 2022 08:14:32 +0000
-Message-ID: <5792db62-f23a-851d-0225-b9d6f3709bee@suse.de>
-Date:   Fri, 23 Sep 2022 10:14:32 +0200
+        Fri, 23 Sep 2022 04:23:36 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3950D11E5C5;
+        Fri, 23 Sep 2022 01:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663921415; x=1695457415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8wjyemK5gwgei+mgv8kiIJRrmNDzkRo2TJsHSll3itM=;
+  b=HB1VXrb+1cEjGyHVRjIBnBcFPHIHOOZIMtXkqek6G5OOaUx9t/76crnT
+   Pwrr5sTH4PGjOH7UJNvVKoqew+gUg+s8gGhK5sBdBg/NgTwCKgH8dHiQ8
+   XbI6fkEuzHSq49JxPTwbrZVZhrJH3iUn3eGr7AsnXgq9bLaCch9Ty/Atp
+   +Zt2ORjaffkAp5JgEgzzQ91ZDSIn2D1QAeSjxl8eLlmf7by4zAmCPelTN
+   3BeXuKOMTVX5ZX4mzYge3b0Leg5F2YH6Phzv7aoO3c37ZDBkO77sRGb0E
+   /wamhJ2PnjHM1ADf3m+/UE8EZHdw3u6mF6p+b3SVfeGijM6VLGyeqP13F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="287658149"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="287658149"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 01:23:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="650871383"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 01:23:31 -0700
+Date:   Fri, 23 Sep 2022 16:14:49 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v12 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Yy1q+XYOBlMzlrg6@yilunxu-OptiPlex-7050>
+References: <20220919134750.25197-1-i.bornyakov@metrotek.ru>
+ <20220919134750.25197-2-i.bornyakov@metrotek.ru>
+ <Yy1RLvxTJhGUuJJ2@yilunxu-OptiPlex-7050>
+ <20220923071638.45hylqvajn74j6mk@h-e2.ddg>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 04/33] drm/connector: Rename subconnector state
- variable
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-4-f733a0ed9f90@cerno.tech>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-4-f733a0ed9f90@cerno.tech>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------QHL5rTevXG8tYdO6fBAXCMDm"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923071638.45hylqvajn74j6mk@h-e2.ddg>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------QHL5rTevXG8tYdO6fBAXCMDm
-Content-Type: multipart/mixed; boundary="------------dN9WZxEPP0gMtWMFmfo7iqhC";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Maxime Ripard <maxime@cerno.tech>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Ben Skeggs <bskeggs@redhat.com>,
- David Airlie <airlied@linux.ie>, Maxime Ripard <mripard@kernel.org>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Emma Anholt <emma@anholt.net>, Karol Herbst <kherbst@redhat.com>,
- Samuel Holland <samuel@sholland.org>,
- Jani Nikula <jani.nikula@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
- Lyude Paul <lyude@redhat.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Chen-Yu Tsai <wens@csie.org>
-Cc: Dom Cobley <dom@raspberrypi.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
- Phil Elwell <phil@raspberrypi.com>, linux-arm-kernel@lists.infradead.org
-Message-ID: <5792db62-f23a-851d-0225-b9d6f3709bee@suse.de>
-Subject: Re: [PATCH v2 04/33] drm/connector: Rename subconnector state
- variable
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-4-f733a0ed9f90@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-4-f733a0ed9f90@cerno.tech>
+On 2022-09-23 at 10:16:38 +0300, Ivan Bornyakov wrote:
+> On Fri, Sep 23, 2022 at 02:24:46PM +0800, Xu Yilun wrote:
+> > On 2022-09-19 at 16:47:49 +0300, Ivan Bornyakov wrote:
+> > > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> > > slave SPI sysCONFIG interface.
+> > > 
+> > > sysCONFIG interface core functionality is separate from both ECP5 and
+> > > SPI specifics, so support for other FPGAs with different port types can
+> > > be added in the future.
+> > > 
+> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > > ---
+> > >  drivers/fpga/Kconfig                 |  11 +
+> > >  drivers/fpga/Makefile                |   2 +
+> > >  drivers/fpga/lattice-sysconfig-spi.c | 153 ++++++++++
+> > >  drivers/fpga/lattice-sysconfig.c     | 408 +++++++++++++++++++++++++++
+> > >  drivers/fpga/lattice-sysconfig.h     |  40 +++
+> > >  5 files changed, 614 insertions(+)
+> > >  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+> > >  create mode 100644 drivers/fpga/lattice-sysconfig.c
+> > >  create mode 100644 drivers/fpga/lattice-sysconfig.h
+> > > 
+> > > diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
+> > > new file mode 100644
+> > > index 000000000000..d015b796adf7
+> > > --- /dev/null
+> > > +++ b/drivers/fpga/lattice-sysconfig-spi.c
+> > > 
+> > > ... snip ...
+> > > 
+> > > +static int sysconfig_isc_enable(struct sysconfig_priv *priv)
+> > > +{
+> > > +	u8 isc_enable[] = SYSCONFIG_ISC_ENABLE;
+> > > +	u32 status;
+> > > +	int ret;
+> > > +
+> > > +	ret = sysconfig_cmd_write(priv, isc_enable, sizeof(isc_enable));
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret = sysconfig_poll_status(priv, &status);
+> > > +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
+> > > +		return ret ? : -EFAULT;
+> > 
+> > If (ret == 0 && status == SYSCONFIG_STATUS_FAIL), still return 0?
+> > 
+> 
+> No, -EFAULT should be returned in that case. Am I overlooked something?
 
---------------dN9WZxEPP0gMtWMFmfo7iqhC
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+My mistake, it's good.
 
-SGkNCg0KQW0gMjIuMDkuMjIgdW0gMTY6MjUgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPiBU
-aGVyZSBpcyB0d28gVFYgc3ViY29ubmVjdG9yIHJlbGF0ZWQgcHJvcGVydGllcyByZWdpc3Rl
-cmVkIGJ5DQo+IGRybV9tb2RlX2NyZWF0ZV90dl9wcm9wZXJ0aWVzKCk6IHN1YmNvbm5lY3Rv
-ciBhbmQgc2VsZWN0IHN1YmNvbm5lY3Rvci4NCj4gDQo+IFdoaWxlIHRoZSBzZWxlY3Qgc3Vi
-Y29ubmVjdG9yIHByb3BlcnR5IGlzIHN0b3JlZCBpbiB0aGUga2VybmVsIGJ5IHRoZQ0KPiBk
-cm1fdHZfY29ubmVjdG9yX3N0YXRlIHN0cnVjdHVyZSwgdGhlIHN1YmNvbm5lY3RvciBwcm9w
-ZXJ0eSBpc24ndCBzdG9yZWQNCj4gYW55d2hlcmUuDQo+IA0KPiBXb3JzZSwgdGhlIHNlbGVj
-dCBzdWJjb25uZWN0b3IgcHJvcGVydHkgaXMgc3RvcmVkIGluIGEgZmllbGQgY2FsbGVkDQo+
-IHN1YmNvbm5lY3RvciwgY3JlYXRpbmcgc29tZSBhbWJpZ3VpdHkgYWJvdXQgd2hpY2ggcHJv
-cGVydHkgY29udGVudCB3ZSdyZQ0KPiBhY2Nlc3NpbmcuDQo+IA0KPiBMZXQncyByZW5hbWUg
-dGhhdCBmaWVsZCB0byBvbmUgY2FsbGVkIHNlbGVjdF9zdWJjb25uZWN0b3IgdG8gbWFrZSBp
-dCBtb3ZlDQo+IG9idmlvdXMgd2hhdCBpdCdzIGFib3V0Lg0KDQpJcyB0aGlzIHRoZSBwbGFj
-ZSB3aGVyZSB0aGF0IGV4dHJhIGNodWNrIGluIHBhdGNoIDMgYmVsb25nIHRvPw0KDQo+IA0K
-PiBSZXZpZXdlZC1ieTogTm9yYWxmIFRyw7hubmVzIDxub3JhbGZAdHJvbm5lcy5vcmc+DQo+
-IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNoPg0KDQpB
-Y2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCj4g
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2F0b21pY191YXBpLmMgYi9k
-cml2ZXJzL2dwdS9kcm0vZHJtX2F0b21pY191YXBpLmMNCj4gaW5kZXggNzk3MzBmYTFkZDhl
-Li5jNzRjNzhhMjgxNzEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fYXRv
-bWljX3VhcGkuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2F0b21pY191YXBpLmMN
-Cj4gQEAgLTY4Nyw3ICs2ODcsNyBAQCBzdGF0aWMgaW50IGRybV9hdG9taWNfY29ubmVjdG9y
-X3NldF9wcm9wZXJ0eShzdHJ1Y3QgZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9yLA0KPiAgIAkJ
-ICovDQo+ICAgCQlyZXR1cm4gLUVJTlZBTDsNCj4gICAJfSBlbHNlIGlmIChwcm9wZXJ0eSA9
-PSBjb25maWctPnR2X3NlbGVjdF9zdWJjb25uZWN0b3JfcHJvcGVydHkpIHsNCj4gLQkJc3Rh
-dGUtPnR2LnN1YmNvbm5lY3RvciA9IHZhbDsNCj4gKwkJc3RhdGUtPnR2LnNlbGVjdF9zdWJj
-b25uZWN0b3IgPSB2YWw7DQo+ICAgCX0gZWxzZSBpZiAocHJvcGVydHkgPT0gY29uZmlnLT50
-dl9sZWZ0X21hcmdpbl9wcm9wZXJ0eSkgew0KPiAgIAkJc3RhdGUtPnR2Lm1hcmdpbnMubGVm
-dCA9IHZhbDsNCj4gICAJfSBlbHNlIGlmIChwcm9wZXJ0eSA9PSBjb25maWctPnR2X3JpZ2h0
-X21hcmdpbl9wcm9wZXJ0eSkgew0KPiBAQCAtNzk1LDcgKzc5NSw3IEBAIGRybV9hdG9taWNf
-Y29ubmVjdG9yX2dldF9wcm9wZXJ0eShzdHJ1Y3QgZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9y
-LA0KPiAgIAkJZWxzZQ0KPiAgIAkJCSp2YWwgPSBjb25uZWN0b3ItPmRwbXM7DQo+ICAgCX0g
-ZWxzZSBpZiAocHJvcGVydHkgPT0gY29uZmlnLT50dl9zZWxlY3Rfc3ViY29ubmVjdG9yX3By
-b3BlcnR5KSB7DQo+IC0JCSp2YWwgPSBzdGF0ZS0+dHYuc3ViY29ubmVjdG9yOw0KPiArCQkq
-dmFsID0gc3RhdGUtPnR2LnNlbGVjdF9zdWJjb25uZWN0b3I7DQo+ICAgCX0gZWxzZSBpZiAo
-cHJvcGVydHkgPT0gY29uZmlnLT50dl9sZWZ0X21hcmdpbl9wcm9wZXJ0eSkgew0KPiAgIAkJ
-KnZhbCA9IHN0YXRlLT50di5tYXJnaW5zLmxlZnQ7DQo+ICAgCX0gZWxzZSBpZiAocHJvcGVy
-dHkgPT0gY29uZmlnLT50dl9yaWdodF9tYXJnaW5fcHJvcGVydHkpIHsNCj4gZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvZHJtL2RybV9jb25uZWN0b3IuaCBiL2luY2x1ZGUvZHJtL2RybV9jb25u
-ZWN0b3IuaA0KPiBpbmRleCAyMzExMmYwYzExY2YuLjYwYjU2NjJkZWM3YyAxMDA2NDQNCj4g
-LS0tIGEvaW5jbHVkZS9kcm0vZHJtX2Nvbm5lY3Rvci5oDQo+ICsrKyBiL2luY2x1ZGUvZHJt
-L2RybV9jb25uZWN0b3IuaA0KPiBAQCAtNzAzLDcgKzcwMyw3IEBAIHN0cnVjdCBkcm1fY29u
-bmVjdG9yX3R2X21hcmdpbnMgew0KPiAgICAqIEBodWU6IGh1ZSBpbiBwZXJjZW50DQo+ICAg
-ICovDQo+ICAgc3RydWN0IGRybV90dl9jb25uZWN0b3Jfc3RhdGUgew0KPiAtCWVudW0gZHJt
-X21vZGVfc3ViY29ubmVjdG9yIHN1YmNvbm5lY3RvcjsNCj4gKwllbnVtIGRybV9tb2RlX3N1
-YmNvbm5lY3RvciBzZWxlY3Rfc3ViY29ubmVjdG9yOw0KPiAgIAlzdHJ1Y3QgZHJtX2Nvbm5l
-Y3Rvcl90dl9tYXJnaW5zIG1hcmdpbnM7DQo+ICAgCXVuc2lnbmVkIGludCBtb2RlOw0KPiAg
-IAl1bnNpZ25lZCBpbnQgYnJpZ2h0bmVzczsNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
-bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
-IEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55
-DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRv
-dGV2DQo=
+Thanks,
+Yilun
 
---------------dN9WZxEPP0gMtWMFmfo7iqhC--
-
---------------QHL5rTevXG8tYdO6fBAXCMDm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMtaugFAwAAAAAACgkQlh/E3EQov+Bw
-0A/6A+Pc3rBIE/qFCPxn78w/5RhK/MGIjeL/c7L8SZ3YEdw6KpzJMhwXsKropaMaYB/sx7nUdrdB
-besBtgFMIHGZEbEUbTp3kkoOuCZuDkvZBiZg7xDecO9+gXh/bhLyNORPj8Q+idY/kr7rcUG40liS
-KcLcVQxje3nZBW0uzYYTAY5zg53rFC6ystEpFywm62ZA1zL/anwOuaSVUzzT4ScbIkZZZG7VH9uM
-NeGxEnsTj5gB5NmMgiv8srB6d77cYTmgB0tV23+j2IBVOGE3fehG6rbK0Z9beCK95JUI5gOYdHZ6
-ip6Ymsh+SFKKYsnAlyBGve1z30m4mX+BtljhvgCTqngKYR0qtyIi8wgDBcADfHgCZfRWfLHZmWz4
-gY5FVEk4bk8fxOORQrFKs5uiIVoVV1XqpnQQsHRUeefmnAFogHmwH+NP/+C4A3CpOKpz7muGKP3P
-zCn3+JTq5lUujdlR0BDFxIcVLGK6WcCO6V4TVoI5GWlIX9HqbUDHUzoy1jIYx/Xv3bs7zxpbxTYc
-VdOZrpleDaC1DRQZDdr/tS+DvAX9yjBsAukSG8BavHCF6sVgCmOipkVdvXeofhDPjQM3awUGe242
-Uh0cCZ/1IhUkOlVacvKbpos4Tb9XxhsF/kC1Qh5TEkgscCZ//uhuD+dH6F1+Ovjh2xtZLG3dNr78
-9k8=
-=RARJ
------END PGP SIGNATURE-----
-
---------------QHL5rTevXG8tYdO6fBAXCMDm--
+> 
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int sysconfig_isc_erase(struct sysconfig_priv *priv)
+> > > +{
+> > > +	u8 isc_erase[] = SYSCONFIG_ISC_ERASE;
+> > > +	u32 status;
+> > > +	int ret;
+> > > +
+> > > +	ret = sysconfig_cmd_write(priv, isc_erase, sizeof(isc_erase));
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret = sysconfig_poll_status(priv, &status);
+> > > +	if (ret || (status & SYSCONFIG_STATUS_FAIL))
+> > 
+> > Same concern.
+> > 
+> > > +		return ret ? : -EFAULT;
+> > > +
+> > > +	return 0;
+> > > +}
+> 
