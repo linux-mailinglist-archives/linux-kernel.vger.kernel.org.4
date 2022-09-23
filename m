@@ -2,206 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EF95E7D8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9715E7D8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiIWOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S230025AbiIWOun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbiIWOtl (ORCPT
+        with ESMTP id S230055AbiIWOuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:49:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67C7220E3;
-        Fri, 23 Sep 2022 07:49:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE9A6113E;
-        Fri, 23 Sep 2022 07:49:44 -0700 (PDT)
-Received: from [10.57.3.23] (unknown [10.57.3.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CBAE3F73B;
-        Fri, 23 Sep 2022 07:49:37 -0700 (PDT)
-Message-ID: <564e6fc6-4734-a60e-d578-a15247a32c5f@arm.com>
-Date:   Fri, 23 Sep 2022 15:49:35 +0100
+        Fri, 23 Sep 2022 10:50:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FB7F1D50;
+        Fri, 23 Sep 2022 07:50:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 38501219F9;
+        Fri, 23 Sep 2022 14:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663944637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YQrlWL6wNFbRYikCHxQb3xp14YQTW/zz/u0eDQpZh5U=;
+        b=SY5dKo+2rGkQTOEJ6mJAnQ1z7MCFJtli2MQp5nmsRex8xjp7v03xwyrhY2kHDXdPeeS/MU
+        co/OMVRGrRhufxs/ZnRKTinTQTD/DsVhCUj7kQl3DgQTZdDSBW2dUOoXGRCyI2SRdVes4U
+        KX8UwNmsmX0TN6cAsz1CvT7EwZeNrKM=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 1290C2C15A;
+        Fri, 23 Sep 2022 14:50:37 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 16:50:36 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com
+Subject: Re: [PATCH v3 0/2] add sysfs entry "patched" for each klp_object
+Message-ID: <Yy3HvGe/kcW2OCam@alley>
+References: <20220902205208.3117798-1-song@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 05/30] thermal/core/governors: Use
- thermal_zone_get_trip() instead of ops functions
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
-        rafael@kernel.org
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
- <20220921094244.606948-6-daniel.lezcano@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220921094244.606948-6-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902205208.3117798-1-song@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-
-On 9/21/22 10:42, Daniel Lezcano wrote:
-> The governors are using the ops->get_trip_* functions, Replace these
-> calls with thermal_zone_get_trip().
+On Fri 2022-09-02 13:52:06, Song Liu wrote:
+> I was debugging an issue that a livepatch appears to be attached, but
+> actually not. It turns out that there is a mismatch in module name
+> (abc-xyz vs. abc_xyz), klp_find_object_module failed to find the module.
+> Add a sysfs entry for each klp_object, so that it is easier to debug
+> such issues.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/thermal/gov_bang_bang.c       | 23 +++++-------
->   drivers/thermal/gov_fair_share.c      | 18 ++++------
->   drivers/thermal/gov_power_allocator.c | 51 ++++++++++++---------------
->   drivers/thermal/gov_step_wise.c       | 22 ++++++------
->   4 files changed, 47 insertions(+), 67 deletions(-)
+> Changes v2 => v3:
+> 1. Improve selftest. (Petr Mladek and Joe Lawrence)
 > 
+> Changes v1 => v2:
+> 1. Add selftest. (Petr Mladek)
+> 2. Update documentation. (Petr Mladek)
+> 3. Use sysfs_emit. (Petr Mladek)
+> 
+> Song Liu (2):
+>   livepatch: add sysfs entry "patched" for each klp_object
+>   selftests/livepatch: add sysfs test
 
-[snip]
+For both patches:
 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 2d1aeaba38a8..2ef86ced4c7c 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -125,16 +125,15 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
->   				   u32 sustainable_power, int trip_switch_on,
->   				   int control_temp)
->   {
-> +	struct thermal_trip trip;
-> +	u32 temperature_threshold = control_temp;
->   	int ret;
-> -	int switch_on_temp;
-> -	u32 temperature_threshold;
->   	s32 k_i;
->   
-> -	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
-> -	if (ret)
-> -		switch_on_temp = 0;
-> +	ret = thermal_zone_get_trip(tz, trip_switch_on, &trip);
-> +	if (!ret)
-> +		temperature_threshold -= trip.temperature;
->   
-> -	temperature_threshold = control_temp - switch_on_temp;
->   	/*
->   	 * estimate_pid_constants() tries to find appropriate default
->   	 * values for thermal zones that don't provide them. If a
-> @@ -520,10 +519,10 @@ static void get_governor_trips(struct thermal_zone_device *tz,
->   	last_passive = INVALID_TRIP;
->   
->   	for (i = 0; i < tz->num_trips; i++) {
-> -		enum thermal_trip_type type;
-> +		struct thermal_trip trip;
->   		int ret;
->   
-> -		ret = tz->ops->get_trip_type(tz, i, &type);
-> +		ret = thermal_zone_get_trip(tz, i, &trip);
->   		if (ret) {
->   			dev_warn(&tz->device,
->   				 "Failed to get trip point %d type: %d\n", i,
-> @@ -531,14 +530,14 @@ static void get_governor_trips(struct thermal_zone_device *tz,
->   			continue;
->   		}
->   
-> -		if (type == THERMAL_TRIP_PASSIVE) {
-> +		if (trip.type == THERMAL_TRIP_PASSIVE) {
->   			if (!found_first_passive) {
->   				params->trip_switch_on = i;
->   				found_first_passive = true;
->   			} else  {
->   				last_passive = i;
->   			}
-> -		} else if (type == THERMAL_TRIP_ACTIVE) {
-> +		} else if (trip.type == THERMAL_TRIP_ACTIVE) {
->   			last_active = i;
->   		} else {
->   			break;
-> @@ -633,7 +632,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
->   {
->   	int ret;
->   	struct power_allocator_params *params;
-> -	int control_temp;
-> +	struct thermal_trip trip;
->   
->   	ret = check_power_actors(tz);
->   	if (ret)
-> @@ -659,13 +658,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
->   	get_governor_trips(tz, params);
->   
->   	if (tz->num_trips > 0) {
-> -		ret = tz->ops->get_trip_temp(tz,
-> -					params->trip_max_desired_temperature,
-> -					&control_temp);
-> +		ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
-> +					    &trip);
->   		if (!ret)
->   			estimate_pid_constants(tz, tz->tzp->sustainable_power,
->   					       params->trip_switch_on,
-> -					       control_temp);
-> +					       trip.temperature);
->   	}
->   
->   	reset_pid_controller(params);
-> @@ -695,11 +693,11 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
->   	tz->governor_data = NULL;
->   }
->   
-> -static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
-> +static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
->   {
-> -	int ret;
-> -	int switch_on_temp, control_temp;
->   	struct power_allocator_params *params = tz->governor_data;
-> +	struct thermal_trip trip;
-> +	int ret;
->   	bool update;
->   
->   	lockdep_assert_held(&tz->lock);
-> @@ -708,13 +706,12 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
->   	 * We get called for every trip point but we only need to do
->   	 * our calculations once
->   	 */
-> -	if (trip != params->trip_max_desired_temperature)
-> +	if (trip_id != params->trip_max_desired_temperature)
->   		return 0;
->   
-> -	ret = tz->ops->get_trip_temp(tz, params->trip_switch_on,
-> -				     &switch_on_temp);
-> -	if (!ret && (tz->temperature < switch_on_temp)) {
-> -		update = (tz->last_temperature >= switch_on_temp);
-> +	ret = thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
-> +	if (!ret && (tz->temperature < trip.temperature)) {
-> +		update = (tz->last_temperature >= trip.temperature);
->   		tz->passive = 0;
->   		reset_pid_controller(params);
->   		allow_maximum_power(tz, update);
-> @@ -723,16 +720,14 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
->   
->   	tz->passive = 1;
->   
-> -	ret = tz->ops->get_trip_temp(tz, params->trip_max_desired_temperature,
-> -				&control_temp);
-> +	ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature, &trip);
->   	if (ret) {
-> -		dev_warn(&tz->device,
-> -			 "Failed to get the maximum desired temperature: %d\n",
-> +		dev_warn(&tz->device, "Failed to get the maximum desired temperature: %d\n",
->   			 ret);
->   		return ret;
->   	}
->   
-> -	return allocate_power(tz, control_temp);
-> +	return allocate_power(tz, trip.temperature);
->   }
->   
->   static struct thermal_governor thermal_gov_power_allocator = {
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-this part of IPA LGTM
+And I have pushed the patchset into livepatching.git,
+for-6.1/sysfs-patched-object.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Best Regards,
+Petr
