@@ -2,100 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A185E8127
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FF25E8129
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiIWRxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        id S229550AbiIWRxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiIWRxU (ORCPT
+        with ESMTP id S229539AbiIWRxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:53:20 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C3412E43C;
-        Fri, 23 Sep 2022 10:53:19 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id c11so521190qtw.8;
-        Fri, 23 Sep 2022 10:53:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=NJsiFZ5EkaqkYkdQzgbiH8ipS+OzqKKEfbtsstj+7NI=;
-        b=yUAlKfPu8Dl9BWqxru2vrKitzXubSaxiFHxSe4kOzwJxEhaggG+l46w+2IVM51N2DX
-         +b/43STWIHPaxoU9drMmn8NSGN+HjFZjLnp3cCRpk9IlAXReZ3CFvuwC7uEBycubmcDt
-         NyXHnjwOwj/uUkSEYl3UezxHqQBAUqCSbU2EIO+hx8gpM9dSvV/IzyjgMA1jWzPbGqlL
-         7lyvkqNE17kivYnFH6m2f4kVfeUgLB92Z4wOdWX2THqVfOth9jW29xlieyKkGchiFDy1
-         olLRP4iQDHy/OXcPiY376tFQzR7StrCAM0Uo/olAG/skz0fC5eI/dT/DxLG2FJ89Yz2+
-         KzXA==
-X-Gm-Message-State: ACrzQf0OQICtz76RoIuA/MDjT0qo3E0sgzJyRHJfufW4/TY0aq+ihwzf
-        QzlAgKkUo4uN8UOD0zOKsFL/EBHagRQ6og==
-X-Google-Smtp-Source: AMsMyM4vSLkmesqxkMZjsSNxC6AuBsXciBgMbI6Cd2BkylQ+6SPIT8UmeMNOiz1gWjmmhk7RtPkbeg==
-X-Received: by 2002:a05:622a:284:b0:35c:f655:9cd3 with SMTP id z4-20020a05622a028400b0035cf6559cd3mr8255520qtw.595.1663955598598;
-        Fri, 23 Sep 2022 10:53:18 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::2c58])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05622a058c00b0035bafecff78sm6357589qtb.74.2022.09.23.10.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 10:53:18 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 12:53:19 -0500
-From:   David Vernet <void@manifault.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Kees Cook <keescook@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2 1/7] docs: promote the title of process/index.html
-Message-ID: <Yy3yjxs4Ylwpn2ue@maniforge.dhcp.thefacebook.com>
-References: <20220922204138.153146-1-corbet@lwn.net>
- <20220922204138.153146-2-corbet@lwn.net>
+        Fri, 23 Sep 2022 13:53:47 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D67112C6A1;
+        Fri, 23 Sep 2022 10:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663955626; x=1695491626;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=t6K0dRAorrnNaUoJ2fzA0TiDE5e3dyyKs6gmKdLULpg=;
+  b=Cm7twJx/L5O5oj/JDhwDpU/PxYR/7rvUSDeXCa/VWeqGxknuutc26GvE
+   Ldv3QaJKhYclgmnqYi09sws/gOixcR62F3iNtZmBLO9m2Wht0VZ3pGVoS
+   s/K8MndVSMk3jSC7giPx9kHTikL7CzY3El+p2nAnSuyYHGgIDvjV8raIF
+   kBU7cgNjQQouSVQ2/uTpc7OgFv3nncRasqtw4kfHn1BI/S00yYZSjH2xn
+   Sla/6KhCi0iNQYZK1BvW2mAeK/MdhjJ0E12QMsDC2DWxx0xzRwEOeeE5y
+   +n0eF2gKZra/JvJvNM7C840n+YbseHc+mBrZhwbMywIrJEYKZi9AhVTvM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299373724"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="299373724"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 10:53:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="949104142"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 10:53:44 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id EFD1BF7; Fri, 23 Sep 2022 20:54:01 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] mfd: twl4030: Add missed linux/device.h header
+Date:   Fri, 23 Sep 2022 20:54:01 +0300
+Message-Id: <20220923175401.8723-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922204138.153146-2-corbet@lwn.net>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:41:32PM -0600, Jonathan Corbet wrote:
-> ...otherwise Sphinx won't cooperate when trying to list it explicitly in
-> the top-level index.rst file
-> 
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+With compile testing on non-OMAP platforms compiler might be not happy:
 
-Should the commit summary title say:
+In function ‘twl4030_sih_setup’:
+  error: implicit declaration of function ‘dev_err’ [-Werror=implicit-function-declaration]
+  error: implicit declaration of function ‘dev_info’ [-Werror=implicit-function-declaration]
+In function ‘twl4030_init_irq’:
+  error: invalid use of undefined type ‘struct device’
 
-docs: promote the title of process/index.rst
+Add missed header.
 
-In other words, s/html/rst
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/mfd/twl4030-irq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Otherwise:
+diff --git a/drivers/mfd/twl4030-irq.c b/drivers/mfd/twl4030-irq.c
+index 4f576f0160a9..87496c1cb8bc 100644
+--- a/drivers/mfd/twl4030-irq.c
++++ b/drivers/mfd/twl4030-irq.c
+@@ -14,6 +14,7 @@
+  * by syed khasim <x0khasim@ti.com>
+  */
+ 
++#include <linux/device.h>
+ #include <linux/export.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+-- 
+2.35.1
 
-Reviewed-by: David Vernet <void@manifault.com>
-
-> ---
->  Documentation/process/index.rst | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/process/index.rst b/Documentation/process/index.rst
-> index 2ba2a1582bbe..d4b6217472b0 100644
-> --- a/Documentation/process/index.rst
-> +++ b/Documentation/process/index.rst
-> @@ -5,6 +5,7 @@
->  
->  .. _process_index:
->  
-> +=============================================
->  Working with the kernel development community
->  =============================================
->  
-> -- 
-> 2.37.2
-> 
