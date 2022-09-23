@@ -2,260 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF855E7E8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852515E7E91
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiIWPhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S232720AbiIWPie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiIWPh3 (ORCPT
+        with ESMTP id S229810AbiIWPi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:37:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EC22BD2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id nb11so1516105ejc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
-        b=U/jIWxOgoFz/4fL9IY1kUApVA9JT478amyvIMeWn+/9l5MAalm8L5UP7GL2AGnSeMl
-         7CBbhsMsGSptl1Oun9YGw0Zmrf99ZTtyT5p8SyCAZBw6AOWz30Jk92GSJSruLxlFcDdc
-         xUL80VdSuztcNx/54xsQrJ46sp580eOx6lIpE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
-        b=ktU0muMUlx1GL0L2LtPpt/wkaujxPwCE2pa79tHZ7Yn6CBD9wfzUw7a1yuz7/als4s
-         5XAuASqwFyFud8pnnR2O+rjzRVUlhXkCpe0cWNW19DaoFW7qU5zGYCMHXmYu94JwMJlE
-         Jq6LChJdv5wdYp8bpDzKmnSsG9ICJ9ABvUWXh9tpcqkFDXlAifSL/m13cckmof65TLhA
-         VQGU7as3+Rmpu6jW0WkxofnRhmHmcCoEKsiUff3qXOWOCzziOx8OXI3NzRDYL8ZMtXLi
-         ijPrx3Zj4XZWiO95KPTxOozGi1vbD9evoRQGnlutYdsSNuGEmVDzDBPw7wHck8PP/kNL
-         mCPQ==
-X-Gm-Message-State: ACrzQf1Ub9GUQxrplwx7MJbQ0Z2eaU2rx/OBvvIGvtJSzSj1GXSAAnOf
-        t4B0kzuMwqRemfVBvRTGtb9d3Cfe48PJga3yg/A=
-X-Google-Smtp-Source: AMsMyM5k8u3n+MpqYIBKC70rRlZcl5RaPiiZqQN1xIA4OapISvHzfTJ2nLiJ2EI1HtnTd8rem49+kA==
-X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id g4-20020a1709065d0400b00722f46cb891mr7647728ejt.4.1663947446052;
-        Fri, 23 Sep 2022 08:37:26 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id mf24-20020a170906cb9800b0077fc446aaf6sm4065921ejb.202.2022.09.23.08.37.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id s14so665290wro.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
-X-Received: by 2002:a05:6512:ba1:b0:498:9890:1bb4 with SMTP id
- b33-20020a0565120ba100b0049898901bb4mr3294634lfv.122.1663947434871; Fri, 23
- Sep 2022 08:37:14 -0700 (PDT)
+        Fri, 23 Sep 2022 11:38:29 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1951B14597B;
+        Fri, 23 Sep 2022 08:38:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A4BB9nlYD1dASQgheQN3f+2t0ug9ZNE+Mj2O622Mjiupi3g78NyN52I8bL44PTh4p0aXnjVQSSeVyhZf83W1kOpESwD7s2aF3SADY7pox0ILAW232xTQaSGCwVF2Vhz5CRDrLRfV42mz2e/O3J4Y6NICaAJDt1OGOrJ0S0Oe1D/7mpHlGk06RNlvrNEiqt2M5XKn9YFyi3aQ7wA+DCNjzKmpoYUArTD16Sfb4KRCQhx8zW44uZyfAB4ONICsSN/WXTpJVHcKB3nIgIjhSINl8J8LS5Gzex2oDGh/1wC9ODEyBZvEjrsjVxRyR6B4sb2QvsTFAX+PHiK7J+dzMMnjUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vaDOp18KZgjGCatwH/nGibVybsVFQicr0BZkwpxA2ZM=;
+ b=JZQQjMtmN5siPVhLeiIl2U/ns99/03rIoBrOrwuLpWxl0m2QngY3HeqLAesqFlCJP/0wKU4NE111B2N+oit9EsKjW4gUTvsd4gskpinCxq57VUEzI7SJYb+PRZVLLuIqOQNCYioEP7loGsEwfjH4cyr6eCEumQ1oY5zAM/O3M/C7PRE+sBRxjNcTplUdZmrItsFruxvIF7gfbywGsziU5fMo2yQwc8EhRMQOB8RLH0BMSgxbM8vf5HAxSxhs0eZfHoMCcymV3sNPC1J2mXuFi2C4hX4MVZjfi/up3LkRurVSzMbX1Y0Ie0nn2XZNCNUshAwFXiMN7AfdXABtFRdC3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vaDOp18KZgjGCatwH/nGibVybsVFQicr0BZkwpxA2ZM=;
+ b=p4ZrM55sB2bHADC2rRTBNDRZbcVnT154NEaxuVy5YBAvprnryCb4TteuiF7gAK/4JM08qW1KfvkGWqRGe8MdDF2a1vfX1icHqkuqCYZRE3Gi09hKn7JggccFCHB8lKCq2V3MkN8SnihCrwbOnz6bbXSpmEOC9JydX7wfwRXdrfk=
+Received: from BN9PR03CA0358.namprd03.prod.outlook.com (2603:10b6:408:f6::33)
+ by DM6PR12MB4044.namprd12.prod.outlook.com (2603:10b6:5:21d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 15:38:25 +0000
+Received: from BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f6:cafe::8b) by BN9PR03CA0358.outlook.office365.com
+ (2603:10b6:408:f6::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20 via Frontend
+ Transport; Fri, 23 Sep 2022 15:38:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT050.mail.protection.outlook.com (10.13.177.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Fri, 23 Sep 2022 15:38:24 +0000
+Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 23 Sep
+ 2022 10:38:15 -0500
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <dave.hansen@linux.intel.com>, <bp@alien8.de>,
+        <tglx@linutronix.de>, <andi@lisas.de>, <puwen@hygon.cn>,
+        <mario.limonciello@amd.com>, <peterz@infradead.org>,
+        <rui.zhang@intel.com>, <gpiccoli@igalia.com>,
+        <daniel.lezcano@linaro.org>, <ananth.narayan@amd.com>,
+        <gautham.shenoy@amd.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Calvin Ong" <calvin.ong@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD and Intel processors
+Date:   Fri, 23 Sep 2022 21:08:01 +0530
+Message-ID: <20220923153801.9167-1-kprateek.nayak@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220921155205.1332614-1-rrangel@chromium.org> <Yyw12S3pstNrbGFO@smile.fi.intel.com>
-In-Reply-To: <Yyw12S3pstNrbGFO@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Fri, 23 Sep 2022 09:37:03 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
-Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and
- ExclusiveAndWake to enable wake irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tim Van Patten <timvp@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Angela Czubak <acz@semihalf.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT050:EE_|DM6PR12MB4044:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3ef8b6c-2281-47ab-aeab-08da9d79a733
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XSsr5Ru4gijz6wsHkTTtpjNDNTZrGTqvXOgkUYPj6ov5zPUvgeCH9/4QJSt5EnMEQ0YZ5uJifY4tza1vIfHaVXqqccuWcS04X/SboimKUD+UgXOrZbzEJBvrgeLceV4l/Rhck+uDS6d/I3iw8ntVpsaPs52g8A+ZJCltBELhQZceiKpRJ871E03VA0BgYhpGnxtB4QxLdaaqkrrFbPwDhbjuD2c+itHQxwJWtUT458CqrY0mI0eO7KlyaHmlY60kUcRpvTqJD9/hpHvKusdYdc6WQp7I/9KtuzWbGm0NG7G7dnHNb/1o7B/5+diBQkcS/HplJuAjE3GKY/u25f8UW/Rrwvi0HJ48Ns0bkVXa+xyc7jTT0mPrYSStQqIrKPUNicKLY1o8PDR3Aom2e+wyZXe0dhtfKisZAErI068GySn4vGPL9NWkVR35jo04qL3BMc4DJ8ydfqYavgpVg34fJLCRjZy4i7U5C0MHVzf1BTu9HXfWE2Gg7pLVLF7atJFFjeQHwOuZ8Ykh4nB1T+LZoo1eKULblFgfsolmlRZAhnuPRWDtgjbzIRWIOLSWsUJ22Fc/luWyl5ZZjwlXDxEmeTCe8pFQFTkdKFJxXj2RXdCbKdScvwR06nCnv9XDDexKP6K93mULsOOIZBXiWQzoSP4I8L0z9JhgKdcQRx7iV5kGhN97rzv0+L0jHjQL6h7OR7nUUb+CUZ+J2YGUWkEo8V9fb9N7+NPBmu27OkivhrRodLocSv+bYOOvv34mhElkzpxoF25sJY0B+9LSWkUrH9ZmyQuPO/a8RMM43j9pn2DX3RbXkdA7P5v6fV2gBwT+TcOi+oSpYzJCygYgiukFL7qZ7+xfcxEdjk3RSQ6D3QvmFZCmuHBSxBP7gZxckZgq
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(26005)(966005)(6916009)(2906002)(6666004)(7696005)(36756003)(54906003)(1076003)(16526019)(186003)(2616005)(86362001)(70206006)(70586007)(83380400001)(4326008)(47076005)(426003)(336012)(36860700001)(316002)(40480700001)(41300700001)(8936002)(8676002)(5660300002)(7416002)(81166007)(82310400005)(478600001)(40460700003)(82740400003)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 15:38:24.7507
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3ef8b6c-2281-47ab-aeab-08da9d79a733
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4044
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 4:16 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Sep 21, 2022 at 09:51:52AM -0600, Raul E Rangel wrote:
-> > Today, i2c drivers are making the assumption that their IRQs can also
-> > be used as wake IRQs. This isn't always the case and it can lead to
-> > spurious wakes. This has recently started to affect AMD Chromebooks.
-> > With the introduction of
-> > d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
-> > controller gained the capability to set the wake bit on each GPIO. The
-> > ACPI specification defines two ways to inform the system if a device is
-> > wake capable:
-> > 1) The _PRW object defines the GPE that can be used to wake the system.
-> > 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
-> >
-> > Currently only the first method is supported. The i2c drivers don't have
-> > any indication that the IRQ is wake capable, so they guess. This causes
-> > spurious interrupts, for example:
-> > * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
-> >   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
-> >   system.
-> > * The IRQ line is active level low for this device and is pulled up by
-> >   the power resource defined in `_PR0`/`_PR3`.
-> > * The i2c driver will (incorrectly) arm the GPIO for wake by calling
-> >   `enable_irq_wake` as part of its suspend hook.
-> > * ACPI will power down the device since it doesn't have a wake GPE
-> >   associated with it.
-> > * When the device is powered down, the IRQ line will drop, and it will
-> >   trigger a wake event.
-> >
-> > See the following debug log:
-> > [   42.335804] PM: Suspending system (s2idle)
-> > [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
-> > [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
-> > [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
-> > [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
-> > [   42.535293] PM: Wakeup unrelated to ACPI SCI
-> > [   42.535294] PM: resume from suspend-to-idle
-> >
-> > In order to fix this, we need to take into account the wake capable bit
-> > defined on the Interrupt/GpioInt. This is accomplished by:
-> > * Migrating some of the i2c drivers over to using the PM subsystem to
-> >   manage the wake IRQ.
-> > * Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
-> >   to the  i2c core.
-> > * Use the wake_capable bit in the i2c core to call
-> >   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
-> > * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
-> >   handled by the i2c core.
-> > * Make the ACPI device PM system aware of the wake_irq. This is
-> >   necessary so the device doesn't incorrectly get powered down when a
-> >   wake_irq is enabled.
-> >
-> > I've tested this code with various combinations of having _PRW,
-> > ExclusiveAndWake and power resources all defined or not defined, but it
-> > would be great if others could test this out on their hardware.
-> >
-> > I'm sure this will surface some devices where the IRQs were not
-> > correctly marked as wake capable. Ideally the firmware can be fixed, but
-> > if not we can work around this in the kernel by providing a board
-> > specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
-> > See `chromeos_laptop.c` for an example of matching DMI properties and
-> > setting the `I2C_CLIENT_WAKE` override.
-> >
-> > Thanks,
-> > Raul
-> >
-> > Changes in v5:
-> > - Added Acked-by: Benjamin Tissoires
-> > - Removed clang-format white space changes
-> > - Check irq return value before updating wake_capable pointer
->
+Processors based on the Zen microarchitecture support IOPORT based deeper
+C-states. The ACPI idle driver reads the
+acpi_gbl_FADT.xpm_timer_block.address in the IOPORT based C-state exit
+path which is claimed to be a "Dummy wait op" and has been around since
+ACPI's introduction to Linux dating back to Andy Grover's Mar 14, 2002
+posting [1].
 
-> You are too fast with a new versions... I have comment on the v4 and I believe
-> it applicable here (not settled yet).
->
+Old, circa 2002 chipsets have a bug which was elaborated by Andreas Mohr
+back in 2006 in commit b488f02156d3d ("ACPI: restore comment justifying
+'extra' P_LVLx access") where the commit log claims:
+"this dummy read was about: STPCLK# doesn't get asserted in time on
+(some) chipsets, which is why we need to have a dummy I/O read to delay
+further instruction processing until the CPU is fully stopped."
 
-I'll send out a new series with the change.
+This workaround is very painful on modern systems with a large number of
+cores. The "inl()" can take thousands of cycles. Sampling certain
+workloads with IBS on AMD Zen3 system shows that a significant amount of
+time is spent in the dummy op, which incorrectly gets accounted as
+C-State residency. A large C-State residency value can prime the cpuidle
+governor to recommend a deeper C-State during the subsequent idle
+instances, starting a vicious cycle, leading to performance degradation
+on workloads that rapidly switch between busy and idle phases.
+(For the extent of the performance degradation refer link [2])
 
-> > - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
-> > - Fix a typo in comment
-> >
-> > Changes in v4:
-> > - Added Reviewed-by
-> > - Reformatted with 96 char limit
-> > - Added Reviewed-by
-> > - Reformatted with 96 char limit
-> > - Removed unnecessary !!
-> > - Removed unrelated whitespace change
-> > - Added Reviewed-by
-> > - Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
-> > - Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
-> >
-> > Changes in v3:
-> > - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
-> >   unrelated drivers.
-> > - Converted wake_capable parameter to bool.
-> > - Fixed bad indent
-> > - Convert wake_capable to bool
-> > - Only update wake_capable pointer once
-> > - Move wake_capable local into local block
-> >
-> > Changes in v2:
-> > - Added elants_i2c to series
-> > - Added raydium_ts_i2c to series
-> > - Fixed call site in mlxbf_gige_probe
-> > - Added ability to extract wake bit from Interrupt/IRQ resources
-> > - Look at wake_cabple bit for IRQ/Interrupt resources
-> > - I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
-> >
-> > Raul E Rangel (13):
-> >   HID: i2c-hid: Use PM subsystem to manage wake irq
-> >   Input: elan_i2c - Use PM subsystem to manage wake irq
-> >   Input: elants_i2c - Use PM subsystem to manage wake irq
-> >   Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
-> >   gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
-> >   ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-> >   i2c: acpi: Use ACPI wake capability bit to set wake_irq
-> >   ACPI: PM: Take wake IRQ into consideration when entering
-> >     suspend-to-idle
-> >   HID: i2c-hid: acpi: Stop setting wakeup_capable
-> >   HID: i2c-hid: Don't set wake_capable and wake_irq
-> >   Input: elan_i2c - Don't set wake_capable and wake_irq
-> >   Input: elants_i2c - Don't set wake_capable and wake_irq
-> >   Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
-> >
-> >  drivers/acpi/device_pm.c                   | 19 +++++++++--
-> >  drivers/acpi/irq.c                         |  8 +++--
-> >  drivers/acpi/resource.c                    | 16 +++++++---
-> >  drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
-> >  drivers/gpio/gpiolib-acpi.h                |  2 ++
-> >  drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
-> >  drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
-> >  drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
-> >  drivers/i2c/i2c-core-base.c                |  6 +++-
-> >  drivers/i2c/i2c-core.h                     |  4 +--
-> >  drivers/input/mouse/elan_i2c_core.c        | 15 +--------
-> >  drivers/input/touchscreen/elants_i2c.c     | 13 ++------
-> >  drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
-> >  drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
-> >  include/linux/acpi.h                       | 23 +++++++++++---
-> >  include/linux/ioport.h                     |  3 +-
-> >  16 files changed, 112 insertions(+), 92 deletions(-)
-> >
-> > --
-> > 2.37.3.968.ga6b4b080e4-goog
-> >
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+The dummy wait is unnecessary on processors based on the Zen
+microarchitecture (AMD family 17h+ and HYGON). Skip it to prevent
+polluting the C-state residency information. Among the pre-family 17h
+AMD processors, there has been at least one report of an AMD Athlon on a
+VIA chipset (circa 2006) where this this problem was seen (see [3] for
+report by Andreas Mohr).
+
+Modern Intel processors use MWAIT based C-States in the intel_idle driver
+and are not impacted by this code path. For older Intel processors that
+use the acpi_idle driver, a workaround was suggested by Dave Hansen and
+Rafael J. Wysocki to regard all Intel chipsets using the IOPORT based
+C-state management as being affected by this problem (see [4] for
+workaround proposed).
+
+For these reasons, mark all the Intel processors and pre-family 17h
+AMD processors with x86_BUG_STPCLK. In the acpi_idle driver, restrict the
+dummy wait during IOPORT based C-state transitions to only these
+processors.
+
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=972c16130d9dc182cedcdd408408d9eacc7d6a2d [1]
+Link: https://lore.kernel.org/lkml/20220921063638.2489-1-kprateek.nayak@amd.com/ [2]
+Link: https://lore.kernel.org/lkml/Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de/ [3]
+Link: https://lore.kernel.org/lkml/88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com/ [4]
+
+Suggested-by: Calvin Ong <calvin.ong@amd.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+CC: Pu Wen <puwen@hygon.cn>
+Cc: stable@vger.kernel.org
+Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+---
+v1->v2:
+o Introduce X86_BUG_STPCLK to mark chipsets as being affected by the
+  STPCLK# signal assertion issue.
+o Mark all Intel chipsets and pre fam-17h AMD chipsets as being affected
+  by the X86_BUG_STPCLK.
+o Skip dummy xpm_timer_block read in IOPORT based C-state exit path in
+  ACPI processor_idle if chipset is not affected by X86_BUG_STPCLK.
+---
+ arch/x86/include/asm/cpufeatures.h |  1 +
+ arch/x86/kernel/cpu/amd.c          | 12 ++++++++++++
+ arch/x86/kernel/cpu/intel.c        | 12 ++++++++++++
+ drivers/acpi/processor_idle.c      |  8 ++++++++
+ 4 files changed, 33 insertions(+)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index ef4775c6db01..fcd3617ed315 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -460,5 +460,6 @@
+ #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
+ #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+ #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
++#define X86_BUG_STPCLK			X86_BUG(29) /* STPCLK# signal does not get asserted in time during IOPORT based C-state entry */
+ 
+ #endif /* _ASM_X86_CPUFEATURES_H */
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 48276c0e479d..8cb5887a53a3 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -988,6 +988,18 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 	if (!cpu_has(c, X86_FEATURE_XENPV))
+ 		set_cpu_bug(c, X86_BUG_SYSRET_SS_ATTRS);
+ 
++	/*
++	 * CPUs based on the Zen microarchitecture (Fam 17h onward) can
++	 * guarantee that STPCLK# signal is asserted in time after the
++	 * P_LVL2 read to freeze execution after an IOPORT based C-state
++	 * entry. Among the older AMD processors, there has been at least
++	 * one report of an AMD Athlon processor on a VIA chipset
++	 * (circa 2006) having this issue. Mark all these older AMD
++	 * processor families as being affected.
++	 */
++	if (c->x86 < 0x17)
++		set_cpu_bug(c, X86_BUG_STPCLK);
++
+ 	/*
+ 	 * Turn on the Instructions Retired free counter on machines not
+ 	 * susceptible to erratum #1054 "Instructions Retired Performance
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 2d7ea5480ec3..96fe1320c238 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -696,6 +696,18 @@ static void init_intel(struct cpuinfo_x86 *c)
+ 		((c->x86_model == INTEL_FAM6_ATOM_GOLDMONT)))
+ 		set_cpu_bug(c, X86_BUG_MONITOR);
+ 
++	/*
++	 * Intel chipsets prior to Nehalem used the ACPI processor_idle
++	 * driver for C-state management. Some of these processors that
++	 * used IOPORT based C-states could not guarantee that STPCLK#
++	 * signal gets asserted in time after P_LVL2 read to freeze
++	 * execution properly. Since a clear cut-off point is not known
++	 * as to when this bug was solved, mark all the chipsets as
++	 * being affected. Only the ones that use IOPORT based C-state
++	 * transitions via the acpi_idle driver will be impacted.
++	 */
++	set_cpu_bug(c, X86_BUG_STPCLK);
++
+ #ifdef CONFIG_X86_64
+ 	if (c->x86 == 15)
+ 		c->x86_cache_alignment = c->x86_clflush_size * 2;
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index 16a1663d02d4..493f9ccdb72d 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -528,6 +528,14 @@ static int acpi_idle_bm_check(void)
+ static void wait_for_freeze(void)
+ {
+ #ifdef	CONFIG_X86
++	/*
++	 * A dummy wait operation is only required for those chipsets
++	 * that cannot assert STPCLK# signal in time after P_LVL2 read.
++	 * If a chipset is not affected by this problem, skip it.
++	 */
++	if (!static_cpu_has_bug(X86_BUG_STPCLK))
++		return;
++
+ 	/* No delay is needed if we are in guest */
+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
+ 		return;
+-- 
+2.25.1
+
