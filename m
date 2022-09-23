@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8549B5E76B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD8C5E76B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbiIWJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        id S231360AbiIWJUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiIWJTr (ORCPT
+        with ESMTP id S229512AbiIWJUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:19:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B9AB42
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:19:45 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 23 Sep 2022 05:20:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7030ECDCD0;
+        Fri, 23 Sep 2022 02:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 555AC6601BDF;
-        Fri, 23 Sep 2022 10:19:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663924784;
-        bh=L8D1yTEhULRIAS6lI51HY0j9CE5jcl5Cm2AEs0nABTw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PdlxoKsr0n4pUp6rXaoDv1z95wkQwSDLj9HW9GDDCwAMWLOUl9PsJd4qls4Cpb/zv
-         a0nz1P8zzsvcGgGVH0CDWqBUGSgyngy5l9j4nunNfT7s1nqZKct0uyoUSoVik5cPUr
-         +O4B0I7GsgWdV6H12y1pS5TMwWIX5c9j/ZUmjhbh1DAENlhoKJUtUF2/gLTFAGUspz
-         uS1af1SK84lFDivPwjqXIwHqBgtMS80rJIBXgCXnYEYuy9VD5Csxt3iHrjWayudeX/
-         ZsCHnKRrIWeHIc2b9er2iWh4Nx8SFdrUu4VakhREUKGspz5ZheGVbROEpK5V1dyLyL
-         lAfVid34fkaUg==
-Message-ID: <b11fec5e-0725-be3c-4b4b-0e68bf00c10d@collabora.com>
-Date:   Fri, 23 Sep 2022 11:19:40 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7CA6148B;
+        Fri, 23 Sep 2022 09:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59A74C433B5;
+        Fri, 23 Sep 2022 09:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663924816;
+        bh=TvQUkU9wLBDJe9UEXwaoYiDBAF49/D8jb+Tu/1pZPSg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IOYhfcsiBYPoSULBGzttWGuqDNqw32h/TvddzwcYhrtQHEnetZ0Snqg8dKnTe45sk
+         x26OuThyh9GcuIIJqDVcKZSylDXFRba3/qzVnFQ3+1AJmRQwXfHvp+OeNZGsKaNC+s
+         boxCSCeomjcHQufoIl8w+9wqTRIHRID9mtjxN+LtKuCtU8l38G36UKlR5ovefuUd+9
+         gzPH2rJUnrJ0QlqYNLzsmIarLqZcRcGDBOmAgCcja6CWILWR92olfUy/PA9sO+MTf7
+         ROEjDPtBhs1tlCKTEcZ2og75twhJsU190yRo8uAsMajNgyKjoFNbggXjzewesL06Lz
+         2Dug9ADyKTUVw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3CEC2E50D69;
+        Fri, 23 Sep 2022 09:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9,0/3] Add dpi output format control for MT8186
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, matthias.bgg@gmail.com,
-        jason-jh.lin@mediatek.com, rex-bc.chen@mediatek.com,
-        ck.hu@mediatek.com, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jitao.shi@mediatek.com
-References: <1663922440-20242-1-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1663922440-20242-1-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/5] Add QoS offload support for sparx5
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166392481624.15254.1338546530470864801.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Sep 2022 09:20:16 +0000
+References: <20220920101432.139323-1-daniel.machon@microchip.com>
+In-Reply-To: <20220920101432.139323-1-daniel.machon@microchip.com>
+To:     Daniel Machon <daniel.machon@microchip.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, Steen.Hegelund@microchip.com,
+        UNGLinuxDriver@microchip.com, casper.casan@gmail.com,
+        horatiu.vultur@microchip.com, rmk+kernel@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/09/22 10:40, xinlei.lee@mediatek.com ha scritto:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue, 20 Sep 2022 12:14:27 +0200 you wrote:
+> This patch series adds support for offloading QoS features with the tc
+> command suite, to the sparx5 switch. The new offloadable QoS features
+> introduced in this patch series are:
 > 
-> Base on the branch of ck-linux-next/mediatek-drm-fixes.
+>   - tc-mqprio for mapping traffic class to hardware queue. Queues are by
+>     default mapped 1:1  in hardware, as such the mqprio qdisc is used as
+>     an attachment point for qdiscs tbf and ets.
 > 
+> [...]
 
-Hello Xinlei,
+Here is the summary with links:
+  - [net-next,v2,1/5] net: microchip: sparx5: add tc setup hook
+    https://git.kernel.org/netdev/net-next/c/65ec1bbe0297
+  - [net-next,v2,2/5] net: microchip: sparx5: add support for offloading mqprio qdisc
+    https://git.kernel.org/netdev/net-next/c/ab0e493e75bd
+  - [net-next,v2,3/5] net: microchip: sparx5: add support for offloading tbf qdisc
+    https://git.kernel.org/netdev/net-next/c/e02a5ac6bf77
+  - [net-next,v2,4/5] net: microchip: sparx5: add support for offloading ets qdisc
+    https://git.kernel.org/netdev/net-next/c/211225428d65
+  - [net-next,v2,5/5] maintainers: update MAINTAINERS file.
+    https://git.kernel.org/netdev/net-next/c/d91a6d049010
 
-I've reviewed v8 just some minutes before you pushed this v9.
-
-Can you please make the requested changes from v8 on patch [2/3] and
-push a v10 retaining the Reviewed-by tags that I released on v8?
-
-Thanks,
-Angelo
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
