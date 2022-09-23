@@ -2,221 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AC45E7B6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C425E7B70
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiIWNHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S232372AbiIWNHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiIWNHX (ORCPT
+        with ESMTP id S232180AbiIWNH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:07:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D03C13AF2C;
-        Fri, 23 Sep 2022 06:07:22 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NB6nwP024859;
-        Fri, 23 Sep 2022 13:06:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=GydqGb27+64RCFiRn5sh0uPuMhU2BApFJTl+xlbCWOM=;
- b=X8FqxCa/jjX//YgR+Jud6OI+OJA+ZPqrkgsF/Nms7eo8k0wuQMPeM1wQOcIbVH4MjUiu
- eYhGmUWOjraHF2Rj2UfkCKYbtM0tcrLEoZ8nfXpgN3niJPam9KV3IX6zggziSFlzK13F
- 68CdCe3w4sZSGVg0Tz97yjjG/OzVKQAnXHyrSGWAPgtAliptz2BigbUVhULXWEtakRIq
- nS5mFkGWVtjBevvIi8PhOpT/D5szBfzOnJU7hBmK4oAbB/d3ZLUTKmI/p7o5vCzvtegz
- 9M0zv+VZ2LaBdzjfekEPapA3Hh/w3YNvmIMTa0jAlNM4rKgy6wAhwpS/i+QcPWIJ5uvA iQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jsbmxrg5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 13:06:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28ND6e16018478
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 13:06:40 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 23 Sep 2022 06:06:35 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v8 7/7] remoteproc: qcom: Add support for memory sandbox
-Date:   Fri, 23 Sep 2022 18:35:40 +0530
-Message-ID: <1663938340-24345-8-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1663938340-24345-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1663938340-24345-1-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 23 Sep 2022 09:07:26 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A6513AF38;
+        Fri, 23 Sep 2022 06:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C2eGGsu+I0KstWP8Dpfoooe3GkI0OqWO4zymeR8Nka7+NfQSHRt8AaWHCIrBZf+7G8+HqJ4cz6v5myfRtHanGvR6gTJLq6nU+FMPBgy/M3kAhU9ptoTTUUznrpnPEyZavaqYeZksFuhnG8DzCPUR1PE7KJRptjVtqXhK7P5RwVNcvYyAqxQuwkNdKDMhdNS+dHy5pocK7Y6e1Ed9RYSsfsWz0YsTu/PY6KAU9mdgHxwKUSiCgJUN/x8qZhTRfVRk19EgezTXCO8KeZngPhfoMEfc5czuF0dyYF72MBeikBBjg4OPrUZozSaWQvM7brDUHP6xang3vG7WQgVouhdaRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BaRz4SYLupJPrRskOvLpbXV2tVRAhgYqLiSkphmqa+w=;
+ b=BmlCJhV5dID1OGxOqoyTb9FeqrGCrkuBINU+UQQD0WIR5UpgFzX/vYNKgsVbyD3dnJhl2T77gjruS5hI9VZ66nUnsASs6BfV61HaTo+ksi7h5Jjc2324gar8lVGmdMglct0bCy1OtoKikOxdGQ2fBaH7ulVWetb09yiAXCAHXtUS2DpoW14GAE9Y/tsmWkdtx/rMI0sxTySnDrucPMYFi3cmETUk5C9XlwCLIsiTWHRNRQzZ9v4ha1pV9K/O1nhztF8dCB2t9GOJQorytZ1YsDXXMxZkWFRl8T50O0CFr22iJJoru4xHi4RzfIVnyHU7ml2GWyj5xUyaQqCza7T8Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BaRz4SYLupJPrRskOvLpbXV2tVRAhgYqLiSkphmqa+w=;
+ b=iQwZbDc8DBOscCg7cv3ag4XHQwwqzhf9ZigufLQWCnNyNg9UIdKLXUljdOE8H05vJDhA1e0IlTguJQBVPlYNfrlWmwwRFwnBK4YM8FSAGj6E8Gx9zrqUaf+a6OB0G/Do8uIbAFQYfC7XhWVJTG6EVLDIBk6EsQL7Ib0bnwldsBxSo8rVbC5WH9fQLtl/Kb2gTGfX/XF0efcQgt++ENfm0cupOvAqURiJKmgHLuDi43/OmX/K8XVl96boT96ZYLhRGNy/SzogGAp4gTpnmxn4v6oOj0ujHyVzsfylcEoLTpiE6nXB/ta97RYbr0OSvisrFphUOJdfHf6wGHnzoT/6jA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BL1PR12MB5175.namprd12.prod.outlook.com (2603:10b6:208:318::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.22; Fri, 23 Sep
+ 2022 13:07:23 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
+ 13:07:23 +0000
+Date:   Fri, 23 Sep 2022 10:07:21 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 07/13] iommu/vt-d: Add SVA domain support
+Message-ID: <Yy2viUjvZsW6gx9/@nvidia.com>
+References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
+ <20220906124458.46461-8-baolu.lu@linux.intel.com>
+ <YyyECCbmfsaDpDgJ@nvidia.com>
+ <075278e0-77ce-2361-8ded-6cd6bb20216f@linux.intel.com>
+ <Yy2jbsaXuoxgR+fj@nvidia.com>
+ <a0b43338-183b-3ece-c85a-e904bee27eef@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0b43338-183b-3ece-c85a-e904bee27eef@linux.intel.com>
+X-ClientProxiedBy: BL1PR13CA0161.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::16) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZeHd-5lPbccMqPHsi-KEwZ2cnqmRZp6N
-X-Proofpoint-ORIG-GUID: ZeHd-5lPbccMqPHsi-KEwZ2cnqmRZp6N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_04,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 phishscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209230085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|BL1PR12MB5175:EE_
+X-MS-Office365-Filtering-Correlation-Id: a04cf4b3-b2ca-41ab-d436-08da9d648de9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uEwj9xulSgOk7A/TUcuD20rZDvnQ0JL685b5wnqLHxvyWYf56mhhaTq2wKOadAUWQxhM3rQDmyBg4GHXnkiOpHZE6+P4TbN4uyUlM/RFteTlbQj6WDKzmMS277IvtHv9HIsH/7P00AWVkzMRJMhWwnmb609S8PSLQ5s0KkdEF21WPDBEFxOqzsjlI5g41q9/S9D3BNkG9G+NtebFlXodARoABsCHqh5FI4Nyo5fZ4XZtDD4W/wlKyxz/CnBz+KR9kbKiBILD/U1QoDbNFmlXDZecwzf9JbLthB2FrZYZN6cRAimdVXAlJLjZy0Fq0144qfg1eL+l2WxWjF0Oq+DHeckIo18jn+FR3OWA+EyIF9oKZBgyKWa/jSV12oPyWUTCm0kdG8XCqWmkmHEWIH/NWFhIOQOHlOn4DG5/ivyW/Cn3Jv5RPj8ghZNoEqSVxDOSEFKS6J0786mzRFKeaRxhOA+suL7oRCMo6if6lt6MgSvN81+HILvziQxp5fIkPSBQMovkyUkEQMRjG1ivpBdLLuNGACS7ynRhmNzRBD8Sd5vzYqya+mXd3oBf97R+hX2d0jerwLs/ocqZKlQfK6Pb1ndNw6rdFHcQiccmvvBDSdbcZ7BIzgN03TuRm7jf+a3KKufOF+moYqu7iZjoUWDcGEynmMo1QUF3kJKCKg2VR/7BgzyiJ9dmKlRzwhN2NxDDFqFI2MK0oZyYUxRlRqn8jw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(451199015)(38100700002)(478600001)(41300700001)(6486002)(6916009)(54906003)(66556008)(2906002)(53546011)(66476007)(6512007)(26005)(36756003)(8676002)(4326008)(4744005)(316002)(66946007)(8936002)(2616005)(5660300002)(6506007)(83380400001)(186003)(7416002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d0HVc+/mbK4WVvzKTekqhY2bHtZpgd2Iroa8MB5lXOlHvqGBEQaRcAeIwTvf?=
+ =?us-ascii?Q?+WUlUrnPxI6bTO7v1VcaIk+QQ/z8RhyQLyxVg5kbpnhcZ5gXT5aTO3es4hWn?=
+ =?us-ascii?Q?GqjjSfDV3ISdArffK58jUTkE8HIb5K3C7ECucYPdFxnaqaNx0CmnyP9/Nd70?=
+ =?us-ascii?Q?zeVgSg3b9B+ZlpR/taSrStRcRpJuillfQcQAAl75P99SAAWCCA+vSrwChTdD?=
+ =?us-ascii?Q?L4ipSqROletNO8O/X7cNR5+YVYmPoiiwTtTGk5F/zanoofG7XPv1huBYD8Mu?=
+ =?us-ascii?Q?2/g9rlZA59JdlAhccsZv5+qqPg9MukQsAQ7evbkhI6BKiIDrt2e4WaHwSQ0g?=
+ =?us-ascii?Q?ELmTfv01E7sEhsyJ6OX8iShlCl8ZSracGkBMnQcZ+jd1Uy2oDBndKpIdSiym?=
+ =?us-ascii?Q?m7ukaFyA7+6s+aQt4sMANNstD5AhcIE6CxCW4OToD5UokeNyfNMGFEli6j6M?=
+ =?us-ascii?Q?SIoynQMhfdwU9wNAj4Rzl4xGWakhLRwKWSabYe2j9AbAM0r570WOjKuc3Wg8?=
+ =?us-ascii?Q?+nq9ShpQHXH2/uUdj33Wy3zsZDc3R05Gj7av2H3PlIAJrZUDdQK55Lxihzh0?=
+ =?us-ascii?Q?Mo7PeW1EbUiKW4lMRE7Nk2yN/qpIxIXhm56SW3n3Xei+HFDw+UJ6PUa6jq7V?=
+ =?us-ascii?Q?MD+Jp6cmvVlYWpb44w3oBUjme89dcX5ZDS6oiG8dcQndQvJYL0ioKxWj5qGb?=
+ =?us-ascii?Q?VVB5WDq2blsojti/t3ybpVE0FbAZIq8M92uEXAzMfdE8uqRrm/o0CD6KhKmU?=
+ =?us-ascii?Q?A0O+UB5ZsDJhly0zs1ykuQM/dN0NoDlOw8oQpfTwDLssc41WJOkpyoAc4Fx1?=
+ =?us-ascii?Q?gfSuUUEHeoJN1lxzjRWn8rh8o8zvqMwAE6DtJDImNsGPrmrOoYIQTQO6KieV?=
+ =?us-ascii?Q?PEJNWXGSOyO/MTAwo8p+oSs02j6KbDu0KLdbqf/zMV55upKMiNnwaxkPmf7C?=
+ =?us-ascii?Q?CW8sDs+uGGLNh+StIM+Hsqe+iwuTiI94oKf0GBLN1FAhKbsRFN8oMMPy6IFi?=
+ =?us-ascii?Q?Wj8mKbjuK7Xgy+eQi9R4IQMzwVVLB3ZChw1OFys6EhtiJzOesbNjSGJb52xd?=
+ =?us-ascii?Q?uCmrytxoD7YZafi2mhFUESQ0AMzGH0QR9KspKI/enUhwtE3M5qS8Mvd8rJIX?=
+ =?us-ascii?Q?6ModLqP7X3SYzrY8Hu3NS+RotoyIXF+Sqwd+ZYBj4KseRdxOkFd0SabpDj0h?=
+ =?us-ascii?Q?VxUVc5CaR0swVPl7q/BwEHn52hwG4pjmKUxOPG2XAuQTdGgZyLqufiUGzAqY?=
+ =?us-ascii?Q?N0PcdEzBQnTDtV5qs/tw1j8vogzPcm4ArbSvutBhG8LNiZwGSbphlE/kTaCE?=
+ =?us-ascii?Q?YQHp214EN6W/cSgDfROGu982gWbXEvgQ8AM+1soejj82lOecAasWsZLm5pqP?=
+ =?us-ascii?Q?ZIBceDC4tGRnbRGdkwp/RePvsNQMIM11fSvD/tWKw3HnC7unvL6rswLIBSB5?=
+ =?us-ascii?Q?5w/j9+jlvol/y1mLStpEnB9hXYtZ8q2q+4OjQ7gppJw+e/ikrS95kNYCV9Zk?=
+ =?us-ascii?Q?N16UnJC1f19dhWo2RtNHYj5hAqtP4/fU9HCAcNHAPMwRjhNnhZw33lliC9fG?=
+ =?us-ascii?Q?mLXg3m+5rk8d4DBl0Z9SUKERhfaLhdV1z7j+JZqL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a04cf4b3-b2ca-41ab-d436-08da9d648de9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 13:07:23.1110
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 91CmBzeYufA7aqpDeT3lRbHlJGzddz/B5cahT5qEeKCUkNENvBdveoBKEJKBJR4T
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5175
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update pil driver with SMMU mapping for allowing authorised
-memory access to ADSP firmware, by carveout reserved adsp memory
-region from device tree file.
+On Fri, Sep 23, 2022 at 08:41:56PM +0800, Baolu Lu wrote:
+> On 2022/9/23 20:15, Jason Gunthorpe wrote:
+> > On Fri, Sep 23, 2022 at 10:21:51AM +0800, Baolu Lu wrote:
+> > 
+> > > At the beginning of this project, I wanted to consolidate the mm
+> > > notifications into the core. However, ARM SMMUv3 and Intel handle the mm
+> > > notifications a little differently. Then I decided to do this work
+> > > separately from the current series.
+> > 
+> > It doesn't look really different..
+> 
+> They are essentially the same, but slightly different. For example, arm
+> smmuv3 provides .free_notifier, and I don't think it could be merged to
+> the release callback.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
-Changes since V6:
-	-- Update smmu map and unmap function names.
-	-- Revert adsp_ops const change.
-	-- Move iommu check to within smmu map/unmap functions.
-Changes since V5:
-	-- Remove adsp_rproc_unmap_smmu, adsp_of_unmap_smmu, adsp_of_map_smmu and 
-	   adsp_rproc_map_smmu functions.
-	-- Remove find_loaded_rsc_table call back initialization.
-	-- Rename adsp_sandbox_needed to has_iommu.
-Changes since V4:
-	-- Split the code and add appropriate APIs for resource allocation and free.
-	-- Update adsp_unmap_smmu with missing free ops call.
-	-- Update normalizing length value in adsp_of_unmap_smmu.
-Changes since V3:
-	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
-	-- Add smmu unmapping in error case and in adsp stop.
-Changes since V2:
-	-- Replace platform_bus_type with adsp->dev->bus.
-	-- Use API of_parse_phandle_with_args() instead of of_parse_phandle_with_fixed_args().
-	-- Replace adsp->is_wpss with adsp->is_adsp.
-	-- Update error handling in adsp_start().
+free_notifier allows to use mmu_notifier_put() instead of
+mmu_notifier_unregister() which avoids a synchronize_rcu() penalty on
+teardown. Intel should copy the same design.
 
- drivers/remoteproc/qcom_q6v5_adsp.c | 56 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index e463fbc..d89f3fa 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -9,6 +9,7 @@
- #include <linux/firmware.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iommu.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
-@@ -48,6 +49,8 @@
- #define LPASS_PWR_ON_REG		0x10
- #define LPASS_HALTREQ_REG		0x0
- 
-+#define SID_MASK_DEFAULT        0xF
-+
- #define QDSP6SS_XO_CBCR		0x38
- #define QDSP6SS_CORE_CBCR	0x20
- #define QDSP6SS_SLEEP_CBCR	0x3c
-@@ -333,6 +336,47 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
- 	return 0;
- }
- 
-+static void adsp_unmap_carveout(struct rproc *rproc)
-+{
-+	struct qcom_adsp *adsp = rproc->priv;
-+
-+	if (adsp->has_iommu)
-+		iommu_unmap(rproc->domain, adsp->mem_phys, adsp->mem_size);
-+}
-+
-+static int adsp_map_carveout(struct rproc *rproc)
-+{
-+	struct qcom_adsp *adsp = rproc->priv;
-+	struct of_phandle_args args;
-+	long long sid;
-+	unsigned long iova;
-+	int ret;
-+
-+	if (!adsp->has_iommu)
-+		return 0;
-+
-+	if (!rproc->domain)
-+		return -EINVAL;
-+
-+	ret = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
-+	if (ret < 0)
-+		return ret;
-+
-+	sid = args.args[0] & SID_MASK_DEFAULT;
-+
-+	/* Add SID configuration for ADSP Firmware to SMMU */
-+	iova =  adsp->mem_phys | (sid << 32);
-+
-+	ret = iommu_map(rproc->domain, iova, adsp->mem_phys,
-+			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
-+	if (ret) {
-+		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int adsp_start(struct rproc *rproc)
- {
- 	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-@@ -343,9 +387,15 @@ static int adsp_start(struct rproc *rproc)
- 	if (ret)
- 		return ret;
- 
-+	ret = adsp_map_carveout(rproc);
-+	if (ret) {
-+		dev_err(adsp->dev, "ADSP smmu mapping failed\n");
-+		goto disable_irqs;
-+	}
-+
- 	ret = clk_prepare_enable(adsp->xo);
- 	if (ret)
--		goto disable_irqs;
-+		goto adsp_smmu_unmap;
- 
- 	ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
- 				    adsp->proxy_pd_count);
-@@ -401,6 +451,8 @@ static int adsp_start(struct rproc *rproc)
- 	qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
- disable_xo_clk:
- 	clk_disable_unprepare(adsp->xo);
-+adsp_smmu_unmap:
-+	adsp_unmap_carveout(rproc);
- disable_irqs:
- 	qcom_q6v5_unprepare(&adsp->q6v5);
- 
-@@ -429,6 +481,8 @@ static int adsp_stop(struct rproc *rproc)
- 	if (ret)
- 		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
- 
-+	adsp_unmap_carveout(rproc);
-+
- 	handover = qcom_q6v5_unprepare(&adsp->q6v5);
- 	if (handover)
- 		qcom_adsp_pil_handover(&adsp->q6v5);
--- 
-2.7.4
-
+Jason
