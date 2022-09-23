@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDD05E706F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA205E7075
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiIWABC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S230092AbiIWACZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiIWAAn (ORCPT
+        with ESMTP id S230392AbiIWACE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:00:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54888F8584;
-        Thu, 22 Sep 2022 17:00:21 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q3so11345187pjg.3;
-        Thu, 22 Sep 2022 17:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date;
-        bh=doTF54kxpUq01XVd1M1z4LBvecAkGoOPNNz/NgZ0K5o=;
-        b=VjR+jvn8JGBYrkohscDoaleGHBdC7mA2kaT3LFTttWGJ8FF7BFhJbZ4w2TUfjh6jE5
-         epQLPkRy/4XSLL1ss/R6uy0skzav1Kht5pEpkcUssi3BbyPDn95GFsf3TvQujqMWbli8
-         gEEu3oWQm/ajmsq1ClEGHlJL4ljd2gHussTQiDE5wM/5rCTbAEAuGmKYA8wxmxR5wqIJ
-         KGMi5jps7c++ZhWTXN2szoD7WmDsEt5f8GqN7ClZZBcZ3oUqeICfwNzLL5DG2UOeOtSZ
-         QviHQYNQ+Cw9vg8CLROmLxelBvBGeQHmHQ/3rjlPam+xFAgaAREL3FTQh40tPCoyW2kj
-         enQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=doTF54kxpUq01XVd1M1z4LBvecAkGoOPNNz/NgZ0K5o=;
-        b=dM/fJOd5zVBOdZ9mlSy+vcI1GifMrOfPYt+6X2oucQ6e0GVf1lYfvSDSz9QtH4338N
-         X+P8Z8cOx6MOMf9LSwFdRrsR8Jz99a2F83Vm0m39IZVJG2yiYj1/lFVydF0XvX3paPvp
-         aVNc0+H3bCPhiAiFpae8PZIWyKVsh7yHNfKkHWxW+O98yJIv2f1c89qJr+X2ENGNHcgz
-         SSfyI2TAMqbRf3EYrGLbxNzEeQEwJs1mt++wtnO6wORg7iRpR5x/C7hwjZ9UHXPtCjBy
-         TBKxklBByrmQcVS9LMovAZS/OcVUWke+05XyeWfJ62vY+11k5PH+jO1ojgf4AlBiA9BV
-         VP7A==
-X-Gm-Message-State: ACrzQf2Ar1Winln45jMilhcOohjYpPTBLGpjoZAYja6RpGHN9iU6ETGm
-        8s58GnfNEU8kMUbTST5S1TRISeGwEiY=
-X-Google-Smtp-Source: AMsMyM5qT8sENZqnzkT5Z0IjzEeVY8nzXYzQOb9lsFr6dsdMc6GfRU/vk422OpVuoGJPjp5Lu7J6hg==
-X-Received: by 2002:a17:90a:c258:b0:202:b93b:cb89 with SMTP id d24-20020a17090ac25800b00202b93bcb89mr17606585pjx.126.1663891220689;
-        Thu, 22 Sep 2022 17:00:20 -0700 (PDT)
-Received: from [192.168.0.128] ([98.97.37.164])
-        by smtp.googlemail.com with ESMTPSA id m7-20020a17090aab0700b002008ba3a74csm324645pjq.52.2022.09.22.17.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 17:00:20 -0700 (PDT)
-Message-ID: <c6454874c531dd9e6c50c2110d47903b87a1e165.camel@gmail.com>
-Subject: Re: [PATCH v2] headers: Remove some left-over license text
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>, yhs@fb.com,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Thu, 22 Sep 2022 17:00:18 -0700
-In-Reply-To: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
-References: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 22 Sep 2022 20:02:04 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD754D33CA;
+        Thu, 22 Sep 2022 17:02:00 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id D6C7A32005BC;
+        Thu, 22 Sep 2022 20:01:56 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 22 Sep 2022 20:01:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663891316; x=1663977716; bh=pmQnrRO+YK
+        fhpWQuVqOuHDw/6wiCkHQT8p9p2hxI6qE=; b=S8QYp+FSGIccsiXTDaT9HCp441
+        NKzEttVXecalr+5ZS0EFhHvxhhv9IvZR35rX7i4WXQ7zH/8ayLOBBhZzWsw8Cm4k
+        bkIJZHdbv7Eg7s6xGy9ZFOZyfJJkFtw1utl0yu7d+XBvhc1nzyStinEOdRGmlS9S
+        tAWA83s+LdN7lwEEzvKfoeHFd2HeLKKgTIM9Ds1FT1uT6WhfjKUOYLZKHgiWgPDM
+        6ubhfrjudqbbABcme/PSaZ0eGE/69qaKye4JFn1/kOHewQK/HC8uM766zN8VAX2A
+        LtMRLbUtaymmon13J046/hRV0jD8zKOQLD8rcoBYJG9S83mxkIYHdBiW4ZXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663891316; x=1663977716; bh=pmQnrRO+YKfhpWQuVqOuHDw/6wiC
+        kHQT8p9p2hxI6qE=; b=orfYQBJ1pytAksSkKRLZ3sBoocKIilnia7ne4njSwYB7
+        /cqcO0VuW4GbaVoOIA6s80/l6m7dJmvHPSSOV2+2KnO2ZANueyuZC9YNmYf62ayJ
+        p/fP4QoYcSnmTKOV7MYgCOxeqisnXDkGRMFdoX8Ws42GWLkcxaCk+fhhiSeLV3/4
+        veG0HMQxehLQmeD/zUshe2chC0Em1P8kGtXc75vBdLLIM8RMMyLR5FP/77Tg3lWY
+        zpx0eHCmEFLTOukLVmIvl5W0I2SirlGyjYJnehYym47SLpO5RmFECoa/xQLxbs4a
+        pbfSuSQ8o5350FkSd/bW7rwPqN4IXvLD8NVLgB84GQ==
+X-ME-Sender: <xms:c_csY4DplRPJ651SbyZOH5thr8emuqozyd5WGS3jhqKjvbeVAYpFtw>
+    <xme:c_csY6iHk5BrALSqLSzq6DIokAFxFv6ZoAmul9mDHoSTH4RTE3FuwpyaGOvH53spP
+    QTSlPCdC4S-Hlfsbw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefhedgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:c_csY7kK8tDnUwqngQKrhXZzpN9Zmq0ACf5pCNlzJ5QljTcAmr53iA>
+    <xmx:c_csY-wyIAJN4vDyPK5aHH37fXPUMT6KYYGxxLJsRcx1tY6f-2CbDg>
+    <xmx:c_csY9R6SasczO49or0xuj2iUM_EM08o_w2mhBIkPnavyEeJVpJwLg>
+    <xmx:dPcsY-RLDkfflhLixkEOqC19p-VAjDiOb6JLYKpT_dKxNftZC8hRVw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C610E1700083; Thu, 22 Sep 2022 20:01:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <c5acf780-7a9d-442c-a41c-efc69e5d0ed3@app.fastmail.com>
+In-Reply-To: <1c33bf6d-b458-b2bb-3116-ed20b9cadc0e@linaro.org>
+References: <20220811062953.5976-1-krzysztof.kozlowski@linaro.org>
+ <1c33bf6d-b458-b2bb-3116-ed20b9cadc0e@linaro.org>
+Date:   Fri, 23 Sep 2022 09:31:35 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Joel Stanley" <joel@jms.id.au>, linux-aspeed@lists.ozlabs.org
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        "Jae Hyun Yoo" <quic_jaehyoo@quicinc.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        "Rob Herring" <robh@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible
+ after rename
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +89,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 20:41 +0200, Christophe JAILLET wrote:
-> Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPD=
-X
-> license identifier to uapi header files with a license")
->=20
-> When the SPDX-License-Identifier tag has been added, the corresponding
-> license text has not been removed.
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Changes since v1:
->   - add tools/include/uapi/linux/tc_act/tc_bpf.h   [Yonghong Song <yhs@fb=
-.com>]
->=20
-> v1: https://lore.kernel.org/all/2a15aba72497e78ff08c8b8a8bfe3cf5a3e6ee18.=
-1662897019.git.christophe.jaillet@wanadoo.fr/
-> ---
->  include/uapi/linux/tc_act/tc_bpf.h        |  5 -----
->  include/uapi/linux/tc_act/tc_skbedit.h    | 13 -------------
->  include/uapi/linux/tc_act/tc_skbmod.h     |  7 +------
->  include/uapi/linux/tc_act/tc_tunnel_key.h |  5 -----
->  include/uapi/linux/tc_act/tc_vlan.h       |  5 -----
->  tools/include/uapi/linux/tc_act/tc_bpf.h  |  5 -----
->  6 files changed, 1 insertion(+), 39 deletions(-)
->=20
->=20
 
-<snip>
 
-> diff --git a/include/uapi/linux/tc_act/tc_skbedit.h b/include/uapi/linux/=
-tc_act/tc_skbedit.h
-> index 6cb6101208d0..64032513cc4c 100644
-> --- a/include/uapi/linux/tc_act/tc_skbedit.h
-> +++ b/include/uapi/linux/tc_act/tc_skbedit.h
-> @@ -2,19 +2,6 @@
->  /*
->   * Copyright (c) 2008, Intel Corporation.
->   *
-> - * This program is free software; you can redistribute it and/or modify =
-it
-> - * under the terms and conditions of the GNU General Public License,
-> - * version 2, as published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope it will be useful, but WITHOU=
-T
-> - * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> - * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License=
- for
-> - * more details.
-> - *
-> - * You should have received a copy of the GNU General Public License alo=
-ng with
-> - * this program; if not, write to the Free Software Foundation, Inc., 59=
- Temple
-> - * Place - Suite 330, Boston, MA 02111-1307 USA.
-> - *
->   * Author: Alexander Duyck <alexander.h.duyck@intel.com>
->   */
-> =20
+On Thu, 22 Sep 2022, at 16:19, Krzysztof Kozlowski wrote:
+> On 11/08/2022 08:29, Krzysztof Kozlowski wrote:
+>> The Nuvia DC-SCM BMC board compatible was renamed in commit
+>> 7f058112873e ("ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom"),
+>> so adjust the bindings as well.
+>> 
+>> Fixes: f77024c80147 ("dt-bindings: arm: aspeed: document board compatibles")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Acked-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+>> Acked-by: Rob Herring <robh@kernel.org>
+>> 
+>> ---
+>> 
+>> Changes since v2:
+>> 1. Fix typo in commit msg.
+>> 2. Add Acks.
+>> 
+>> Changes since v1:
+>> 1. Use proper qcom compatible.
+>
+> Andrew, Joel,
+>
+> Do you have any more comments on this patch? Do you plan to pick it up?
+> 5 weeks passed..
 
-Looks good to me.
+Sorry, things have been a bit complicated recently. Looks okay to me, 
+but Joel needs to pick it up.
 
-Acked-by: Alexander Duyck <alexanderduyck@fb.com>
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
