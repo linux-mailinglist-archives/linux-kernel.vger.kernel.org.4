@@ -2,170 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF805E79B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7085E79B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiIWLgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S231462AbiIWLgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbiIWLfe (ORCPT
+        with ESMTP id S231912AbiIWLge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:35:34 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23654E3EEB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:35:32 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-12b542cb1d3so17791068fac.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nT8tPOMFRWVw211AA5Gp025zMU5m9umHWApmQQ1G5i4=;
-        b=FwGbXtmcEgYiPRiho8i2fABRQ3M1PG0BR/flX9jn0JvuSTGOz7Ar8N+o+/dl+bLnqZ
-         SvLJKZchPKu72zXcGClNjZgQ/yNccJeIauW6NPj0gSINHwl4HJ4xJ7EQa4BdkidSjr5C
-         U+x9ja2kkYPeD+/OS5RmeZ49dBxNlYoM2GYmJi+v5eOblg7y14OMyu9hy4l7UOXPAIzJ
-         z4SKCtQUbxIhAMZWY7EikZnd6dCzSyK5bWu8Ir/5tt52nSJcIN0bXj+JCAusEQXOcXCA
-         FZdhQkFNYA6Utj0xMOG9tBTcxnp/ziGhCDzNetOxR0Kq/iZpdyQkAf5ByIcg3T8sft0M
-         IqrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nT8tPOMFRWVw211AA5Gp025zMU5m9umHWApmQQ1G5i4=;
-        b=j9V+djuloY8nIoh/WWLa8X+cPdvchVGgLMnqCUu2u/PadYLWCk7t8yiN0ZB0+Kk/b6
-         KAu/iMxfELzL/YKIBCGelhf9G1zWKdSdXY0gmqF+0xcY/tTj1jz0GeWvzKFGL6WLp6wV
-         bw41H50x1R8rLbZY/Fy7xFXxVPey815DjOwRprGlg19CA/sfkacwoN37MpzD97qfNauv
-         RdrmfRzpuTrbm4KgBZjkqsFSZcSKgkzNlit9QflPQafpsywCQg/Fg5fKuQMyFEEcsyVY
-         dzIG5lb3Rg/MPrsIaBLliC0v/8gEmLQg1riz0eFChbM+Ywh/TNhx/g6wShX0Fsz67F/j
-         1zkw==
-X-Gm-Message-State: ACrzQf3sDFUWNejA2NF7KAih1y9Iyd5rkFpUsDXELcMFNIIpq7/TksVh
-        Yspel+1Uk/ilOrBzB3tMLJ8XcA==
-X-Google-Smtp-Source: AMsMyM60YTJG3Kuk2a0mtZaWPWTvi+BIMBeMOkLgSWmjRCZqsZ7ArPaxrxv8436uU26PoVCEWazcVg==
-X-Received: by 2002:a05:6870:c34b:b0:12b:3ba8:1a92 with SMTP id e11-20020a056870c34b00b0012b3ba81a92mr11190562oak.114.1663932931409;
-        Fri, 23 Sep 2022 04:35:31 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id k7-20020acaba07000000b0034fef49812dsm3633202oif.30.2022.09.23.04.35.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 04:35:30 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 07:35:28 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: Re: [PATCH v8 3/4] counter: ti-ecap-capture: capture driver support
- for ECAP
-Message-ID: <Yy2aAMv5PRjsJ4s2@fedora>
-References: <20220922170402.403683-1-jpanis@baylibre.com>
- <20220922170402.403683-4-jpanis@baylibre.com>
- <Yy0G9a5S3OzwyEwW@fedora>
- <2f3e5036-caab-f892-a4ad-b852f72db331@baylibre.com>
+        Fri, 23 Sep 2022 07:36:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5333FEBBDF
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663932991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mOHpTuGN5DOMMNWH0NmUPxzqv5nz6PGhQAZTRWn7VQg=;
+        b=Y3msL0SCZ4wGcMR2vjGY64U7tim0kORTxwcX/1F0uymk0RrlnKA7LTEzrWGwxE/9htkGj1
+        EUZly2OrYrB3I9lyhaokA1YMpyHfXxvJuiChzFqCNE0gPgPM/x3xwj2o5R+13MOKCFi6tb
+        y6LTrHpY+d5IjhiMugXgfma0yiOb6bM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-dkKUK5YMPImOjgC9slVhQg-1; Fri, 23 Sep 2022 07:36:28 -0400
+X-MC-Unique: dkKUK5YMPImOjgC9slVhQg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E8AC80029D;
+        Fri, 23 Sep 2022 11:36:27 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.16.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1948D140EBF3;
+        Fri, 23 Sep 2022 11:36:27 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 07:36:25 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
+ nodes
+Message-ID: <Yy2aOddpMQn0M0QB@lorien.usersys.redhat.com>
+References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
+ <Yyz/7gWdP+ftQdIO@lorien.usersys.redhat.com>
+ <CAAH8bW9+hGMALooLtJGtYNDWw-tBXEspn8oQ_WLrBArMaD9SZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jebUT/7FaLb8aGNO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2f3e5036-caab-f892-a4ad-b852f72db331@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAAH8bW9+hGMALooLtJGtYNDWw-tBXEspn8oQ_WLrBArMaD9SZA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 22, 2022 at 06:45:27PM -0700 Yury Norov wrote:
+> On Thu, Sep 22, 2022 at 5:38 PM Phil Auld <pauld@redhat.com> wrote:
+> >
+> > Hi Andy,
+> >
+> > On Thu, Sep 22, 2022 at 10:49:54PM +0300 Andy Shevchenko wrote:
+> > > Currently the approximation is used which wastes the more memory
+> > > the more CPUs are present on the system. Proposed change calculates
+> > > the exact maximum needed in the worst case:
+> > >
+> > >   NR_CPUS     old             new
+> > >   -------     ---             ---
+> > >   1 .. 1170   4096            4096
+> > >   1171 .. 1860        4098 .. 6510    4096
+> > >   ...         ...             ...
+> > >   2*4096      28672           19925
+> > >   4*4096      57344           43597
+> > >   8*4096      114688          92749
+> > >   16*4096     229376          191053
+> > >   32*4096     458752          403197
+> > >   64*4096     917504          861949
+> > >   128*4096    1835008         1779453
+> > >   256*4096    3670016         3670016
+> > >
+> > > Under the hood the reccurent formula is being used:
+> > >   (5 - 0) * 2 +
+> > >     (50 - 5) * 3 +
+> > >       (500 - 50) * 4 +
+> > >         (5000 - 500) * 5 +
+> > >           ...
+> > >             (X[i] - X[i-1]) * i
+> > >
+> > > which allows to count the exact maximum length in the worst case,
+> > > i.e. when each second CPU is being listed. For backward compatibility
+> > > for more than 1170 and less than 1861 CPUs the page size is preserved.
+> > >
+> > > For less than 1171 and more than 1 million CPUs the old is being used.
+> >
+> > The memory is not really wasted since it's probably temporary in userspace
+> > and in the kernel it _is_ temporary and is only the length of the kasprintf
+> > string, which is most of the time much less.
+> >
+> > But that said, it is more accurate than the previous estimate.
+> >
+> > I was wondering if you were going to try to come up with a suitable
+> > compile time macro :)
+> >
+> > I tested 2, 8192 and 16k since the kernel does not want to build for other
+> > reasons with NR_CPUS at 32k.
+> >
+> > Reviewed-by: Phil Auld <pauld@redhat.com>
+> > Tested-by: Phil Auld <pauld@redhat.com>
+> 
+> By the way, why don't we use nr_cpu_ids? It's set at boot-time, or even
+> at compile-time in some cases and never changed at runtime.
+> 
+> nr_cpu_ids is set very early, when ACPI tables are parsed. I don't think
+> it's possible for a userspace to observe it uninitialized. Am I wrong?
+> 
 
---jebUT/7FaLb8aGNO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I very much wanted it to be compile time so there was no overhead.
 
-On Fri, Sep 23, 2022 at 09:23:26AM +0200, Julien Panis wrote:
->=20
->=20
-> On 23/09/2022 03:08, William Breathitt Gray wrote:
-> > On Thu, Sep 22, 2022 at 07:04:01PM +0200, Julien Panis wrote:
-> > > ECAP hardware on TI AM62x SoC supports capture feature. It can be used
-> > > to timestamp events (falling/rising edges) detected on input signal.
-> > >=20
-> > > This commit adds capture driver support for ECAP hardware on AM62x So=
-C.
-> > >=20
-> > > In the ECAP hardware, capture pin can also be configured to be in
-> > > PWM mode. Current implementation only supports capture operating mode.
-> > > Hardware also supports timebase sync between multiple instances, but
-> > > this driver supports simple independent capture functionality.
-> > >=20
-> > > Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> > Hello Julien,
-> >=20
-> > Comments follow inline below.
-> >=20
-> > > +/**
-> > > + * struct ecap_cnt_dev - device private data structure
-> > > + * @enabled: device state
-> > > + * @clk:     device clock
-> > > + * @regmap:  device register map
-> > > + * @nb_ovf:  number of overflows since capture start
-> > > + * @pm_ctx:  device context for PM operations
-> > > + */
-> > > +struct ecap_cnt_dev {
-> > > +	bool enabled;
-> > > +	struct clk *clk;
-> > > +	struct regmap *regmap;
-> > > +	atomic_t nb_ovf;
-> > > +	struct {
-> > > +		u8 ev_mode;
-> > > +		u32 time_cntr;
-> > > +	} pm_ctx;
-> > > +};
-> > Provide documentation for the ev_mode and time_cntr members. You
-> > probably need a lock as well to protect access to this structure or
-> > you'll end up with race problems.
->=20
-> Hi William,
->=20
-> How can I end up with race problems ? pm_ctx members are only accessed at
-> suspend (after capture/IRQ are disabled) and resume (before capture/IRQ a=
-re
-> re-enabled).
-> Is there any risk I did not identify ?
->=20
-> Julien
+Is there a good place to init these bin_attrs at boottime, anyway?
+I didn't dig into it farther, but it looks like the size is set
+when declared. I suppose we could adjust it at the first read if
+there was a way to do that. It's sort of all abstracted away to
+common code though.
 
-I was thinking of the ecap_cnt_dev enabled member. The Counter callbacks
-may execute in concurrent threads, so races can appear when you access
-members of the ecap_cnt_dev structure in these callbacks.
+The fact that the values are larger than actually needed doesn't really
+cause any harm.  In the kernel no extra memory is allocated since it uses
+the size of the sprintf of the actual data.  And it's only allocated
+while being read.
 
-Take for example this section of ecap_cnt_enable_write():
+In userspace it may be a little extra memory while doing a read. But that's
+also likely to be just temporary.
 
-        if (enable =3D=3D ecap_dev->enabled)
-                return 0;
-        if (enable)
-                ecap_cnt_capture_enable(counter);
-        else
-                ecap_cnt_capture_disable(counter);
-        ecap_dev->enabled =3D enable
+And if you have NR_CPUS 10000 you probably have a lot of wasted percpu
+space anyway...
 
-Suppose two threads try to enable the count capture. A race condition is
-present where the two threads could see ecap_dev->enabled as false and
-both proceed to call ecap_cnt_capture_enable(). This results in
-pm_runtime_get_sync() bumping the usage count twice and we're left with
-a mismatch the next time ecap_cnt_capture_disable() is called.
 
-William Breathitt Gray
+Cheers,
+Phil
 
---jebUT/7FaLb8aGNO
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYy2aAAAKCRC1SFbKvhIj
-Kw8hAQDnJHeoUXmuYd86jmDVtiA+OtkSm2xmaMjJ7pEZy2FTTQEA7eVCAgFOZvx5
-v6x390GPFK+hp/bcUo6N3p/IoWKVrQg=
-=oFnJ
------END PGP SIGNATURE-----
-
---jebUT/7FaLb8aGNO--
