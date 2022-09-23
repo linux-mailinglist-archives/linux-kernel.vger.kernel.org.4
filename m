@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A935E76DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2A05E76E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiIWJZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S231809AbiIWJZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiIWJZC (ORCPT
+        with ESMTP id S231708AbiIWJZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:25:02 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EE16C74F;
-        Fri, 23 Sep 2022 02:25:00 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7A1A3580C6D;
-        Fri, 23 Sep 2022 05:24:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 23 Sep 2022 05:24:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663925097; x=1663928697; bh=t50zxbg1je
-        01zo3yx+LqGItWRVx6GNoJo4k1q5aGeVg=; b=mnD6w11k5nxhH9/kQW48EZGzp7
-        5oOwVtxHS6LcB154wnimw3mI+61b/xqSLY+QBAbhAcYTfAhf1Z75Az0+dlaLASIT
-        ZJxsHkU5+BpVsi8bTH2HUIo7V1gKzXNElLI3N1/3JFYPVS8S9+SZYkNXCoFYOe4U
-        E+P3B+9VCSs1Gzq9UcghvFSgtG2I4ygXTbHxUNLIiTuYxIcOYOcWxI8NyvK7sHUZ
-        sZXhBlaAA4PXrz2DdYp5b4nABQ0l6BU2MSTBPIB2l/cRsNLbo4Y2t3itUoWN8gCC
-        9zvEFKQ5/zvH5MYV1/HQP1BDLvODbjTeYUiWFs9UYI2gAhwPyzYNJkohDNGw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663925097; x=1663928697; bh=t50zxbg1je01zo3yx+LqGItWRVx6
-        GNoJo4k1q5aGeVg=; b=AuZv+USLGde8oMEu1C58bKJrB412oxQvNHao8ZeMUfQA
-        3toGUYt/r6EojSrXcwB0kK6RKwLEa8e92tPItzAJVadNejYiYoli5mtQtl3GZVjO
-        gcELQKqq6mIy+AK5DS90bqj9AMWCr6HLIIerihmtnrIVkVOaLgbPTgESdKOLhG5S
-        Cz9e8fwsXCsEZF9zc4jiXrjt8wcgokE8d36g+zCmzH3joAX9UJDzVw9tFlmBP52T
-        RRlA2xQYUPVuywC6rmh5ueQJPySYTHdHddIO62mEA2531U1xP2OAR2PIDDMD8Saf
-        tQyKLWOUXqZZtIl62/irkpR1v3qLMWgduT9FHg508Q==
-X-ME-Sender: <xms:aHstY4szl5GIsEFYIiS2sJA_UVG8lRBrC5A_cdRWcoGzj12EVm_YAA>
-    <xme:aHstY1fwySuIAyVgk3_9DwIprKGKkLV4Xd2MQ4v0q68Tl2u0Rta2YzjDse0zDj_y8
-    keovKRs2RiQou6EsSc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefiedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:aHstYzzXfQxH_vMDVl727RCMx_hb65deJ2mAjHwMn64_NpcF4z5tXg>
-    <xmx:aHstY7P4Jxlg5fiUf627VeJ-R2e0c-P24NY8T1ocFRr8ml9FqA8mxw>
-    <xmx:aHstY496vVr6AFLOsJDE2NH7eLEa9xItKfpOogRnPsV7bbwRqB-EBQ>
-    <xmx:aXstYzasSKHab3iuVHBdN2X__vEhRyRwYTn5EggrEGNXyiSLREbS-A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DA519B60086; Fri, 23 Sep 2022 05:24:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <230d397d-1bf8-422b-8ce0-4a63bb451394@www.fastmail.com>
-In-Reply-To: <f6a27b077f8b595e9c74152f1fa3c780@ext.kapsi.fi>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-4-maukka@ext.kapsi.fi>
- <89f85393-c767-4c0c-90db-d78a2927d465@www.fastmail.com>
- <f6a27b077f8b595e9c74152f1fa3c780@ext.kapsi.fi>
-Date:   Fri, 23 Sep 2022 11:24:35 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mauri Sandberg" <maukka@ext.kapsi.fi>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Olof Johansson" <olof@lixom.net>, "Andrew Lunn" <andrew@lunn.ch>,
-        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device Tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 05:25:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773F29FAB8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:25:20 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id x18so13460862wrm.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=MRMPaYOZfRCFMzm//UQtHGBmnKZ92vWhPYsR/JQQCX8=;
+        b=xPAwfG4lwIZe1N2CQA2b5d58frzx6XaqGIgTIPpkeutE3qwSyOnJA4iwB1gE6wejAm
+         ECZVSlIB+AJ0IrTt8Db5oZOkm/Sl/htleP4s8l5fkAkG/4FgD3TMRO1H4RAH3pXFCVTp
+         0CFtcooCmg8YZ0YAwwlUhfI4i3gTDQfqsc9S6bEjDR21ZljvfV8MihhdUbP81Y+EVzIq
+         kwH+sPTJitlezkxCc60MV8Wo8WBYbvCfX6qJrAfod2VcBm2QwnlauNKJCTIlMNlLA3ix
+         awG7sYa0cV8DWPhGVivGj+3bRgTIFSTltsZ7TRQBZPSkfu1g0/f4c/a9ZOUmeU6Ejr06
+         83bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=MRMPaYOZfRCFMzm//UQtHGBmnKZ92vWhPYsR/JQQCX8=;
+        b=xZa2nlGUkQ6reI4rs+ARiHTPZk6B2exffdBC6sA0puwHgXYWuRCPFUgLzo9/41b+Mf
+         j1p8Vsh5GuukI2GVg57xJhs00Un3WFoXjnb5XekqwT3atQe8oaRolXmdkETplm/i3DP5
+         7zEu/Txjq9YrAlYtZrfqBMWWmggi2GrndQ6p/C8VKEprPn+pcoaYsc/ePlxOLEQZqooL
+         0MlVGO4GPJwV1yGj0bzLafXLY55WBNdcQEPvJwmoxKT3+u21r0CGGh8hShHgalq0iwlm
+         vEdIHp4aYCNzMa34PROZJ37ZGnZ0WhFyY2Fp8kZwgCvCTpEVESknpFGdGWnbIViungVz
+         Br1Q==
+X-Gm-Message-State: ACrzQf3kPLiF6TllyFkz9AvjKAKiXNm2JPWdO/3PT01DEi3JvLoYPJhK
+        nBviYGWJkoDpoqnwW6u21PnqlQ==
+X-Google-Smtp-Source: AMsMyM4l58g79jGtvMO+UdAXgSJqnb8aVzNb7Eb1oWURmqua3q3sfZwcBOixGa/oM2iNe+lXwCYqUQ==
+X-Received: by 2002:adf:f385:0:b0:228:dbf1:d731 with SMTP id m5-20020adff385000000b00228dbf1d731mr4374900wro.364.1663925118554;
+        Fri, 23 Sep 2022 02:25:18 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id u7-20020a056000038700b002258235bda3sm7493347wrf.61.2022.09.23.02.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 02:25:17 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     dri-devel@lists.freedesktop.org,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Philippe Schenker <dev@pschenker.ch>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org, Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>
+Subject: Re: (subset) [PATCH 0/4] drm/bridge: lt8912b: Fix corrupt display output due to wrong bridge config
+Date:   Fri, 23 Sep 2022 09:25:15 +0000
+Message-Id: <166392509385.2599200.1091239047831409182.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220922124306.34729-1-dev@pschenker.ch>
+References: <20220922124306.34729-1-dev@pschenker.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022, at 11:13 AM, maukka@ext.kapsi.fi wrote:
-> On 23.9.2022 00:39, Arnd Bergmann wrote:
->> Can you use simple_strntoull() to parse the address into a u64 instead?
->> 
-> Nice idea. Its current replacement seems to be kstrtoull().
+Hi,
 
-Right.
+On Thu, 22 Sep 2022 14:43:02 +0200, Philippe Schenker wrote:
+> From: Philippe Schenker <philippe.schenker@toradex.com>
+> 
+> This patch-set fixes the lt8912b driver that currently does not take
+> care whether or not the attached display has postiive or negative syncs
+> and or reports on EDID if it needs HDMI mode or DVI.
+> 
+> This series addresses also an issue where the LVDS startup sequence was
+> written to the wrong I2C address (the lt8912 has three). This caused
+> writing into reserved registers and causing an unstable HDMI picture
+> that manifests itself only sometimes and depending on the monitor with a
+> flickering and a repeating of going black and coming up again. While at
+> it move also some sensible comments to the sequence.
+> 
+> [...]
 
-> I'll have to do
-> it byte by byte, right? Or what do you have in mind with 64bit unsigned?
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-I misread your code and assumed it was stored as a 12-digit
-hexadecimal number, but you are right: with the colons you still
-need to iterate the bytes.
+[4/4] drm/bridge: lt8912b: clarify lvds output status
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=fc44f3636a4db6544fd1532280e8adcd1ef13ba2
 
-I looked a little further and found the mac_pton() function
-that I think does exactly what you need.
-
-      Arnd
+-- 
+Neil
