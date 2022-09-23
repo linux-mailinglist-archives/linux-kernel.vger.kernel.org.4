@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8235E766C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FA65E7676
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiIWJF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S231557AbiIWJIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiIWJF4 (ORCPT
+        with ESMTP id S229512AbiIWJIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:05:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CD0DF688
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663923955; x=1695459955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+RS8gtw78MU2eUZxM6E3oPsf/znOD0PyzrjZ9NyLwOw=;
-  b=L1jSVc3jjfpvh0csZ/HuiCC9ZPx5Dy1vBgszVR4EWN8ys3qeYxn1BJXW
-   q7RliOsX2vW+ArtqCNSB7vyMrYnvtElB3FryDMn6Ym+N8dPO+9DpAim5X
-   U3YReR3Pg+yi/b8gnPEcHYtZ0HgMG3Sb1NCLAauwQwWvAkB4YPoT0QAFd
-   JOtnc+sWWFBpSgNk3GsmODsmTvbIN6CBXSomZHIUE077RJE4HcDzhIEKO
-   vS8Lr4/uNCQIlkfgcLVVdubv4XOIMjoDJJ3D39vMJMRqZl0QFuD3DHRaK
-   wRt1uyfrBC0jqJLjWyqHBtolHhymQD73gU3D9grPWQBIHjVlp8AQFA661
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300535560"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300535560"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:05:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="622455883"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga007.fm.intel.com with SMTP; 23 Sep 2022 02:05:52 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Fri, 23 Sep 2022 12:05:51 +0300
-Date:   Fri, 23 Sep 2022 12:05:51 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/ssd130x: Use drm_atomic_get_new_plane_state()
-Message-ID: <Yy1271xW1SOlL41e@intel.com>
-References: <20220923083447.1679780-1-javierm@redhat.com>
+        Fri, 23 Sep 2022 05:08:02 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C4C212873F;
+        Fri, 23 Sep 2022 02:07:59 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 23 Sep 2022 17:07:51
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.162.98.155]
+Date:   Fri, 23 Sep 2022 17:07:51 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jakub Kicinski" <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        isdn@linux-pingi.de
+Subject: Re: [PATCH] mISDN: fix use-after-free bugs in l1oip timer handlers
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220922063510.3d241df4@kernel.org>
+References: <20220920115716.125741-1-duoming@zju.edu.cn>
+ <20220922063510.3d241df4@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220923083447.1679780-1-javierm@redhat.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <748522b6.ec147.183699a6dfb.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCXnP1ndy1jGriGBg--.14911W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggCAVZdtbnHCAAAsB
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 10:34:47AM +0200, Javier Martinez Canillas wrote:
-> The struct drm_plane .state shouldn't be accessed directly but instead the
-> drm_atomic_get_new_plane_state() helper function should be used.
-> 
-> This is based on a similar patch from Thomas Zimmermann for the simpledrm
-> driver. No functional changes.
-> 
-> Suggested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-
-I wonder how many naked obj->state dereferences are still
-left in places where they should be using the get_{new,old}()
-stuff. Might have to write a bit of cocci to find out...
-
-
-Btw on a somewhat related note, I've been thinking about bringing
-for_each_crtc_in_state() & co. back (got removed in commit
-77ac3b00b131 ("drm/atomic: Remove deprecated accessor macros"))
-but this time without any object state iterator variable. Now that
-we're more often just plumbing the full atomic state through I
-think there are bunch of places that don't need the object state(s)
-within the loop at all, so having to have those variables around
-makes the whole thing a bit noisy. Also IIRC we had to add some
-(void) casts into the current macros to hide some compiler warnings
-about unused variables. Could get rid of at least some of those extra
-casts again.
-
-I don't suppose there's anyone interested in doing that so I don't
-have to? ;)
-
->---
-> 
->  drivers/gpu/drm/solomon/ssd130x.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-> index 7fae9480aa11..a537692100d1 100644
-> --- a/drivers/gpu/drm/solomon/ssd130x.c
-> +++ b/drivers/gpu/drm/solomon/ssd130x.c
-> @@ -566,10 +566,10 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
->  }
->  
->  static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
-> -						       struct drm_atomic_state *old_state)
-> +						       struct drm_atomic_state *state)
->  {
-> -	struct drm_plane_state *plane_state = plane->state;
-> -	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(old_state, plane);
-> +	struct drm_plane_state *plane_state = drm_atomic_get_new_plane_state(state, plane);
-> +	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(state, plane);
->  	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
->  	struct drm_device *drm = plane->dev;
->  	struct drm_rect src_clip, dst_clip;
-> @@ -591,7 +591,7 @@ static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
->  }
->  
->  static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
-> -							struct drm_atomic_state *old_state)
-> +							struct drm_atomic_state *state)
->  {
->  	struct drm_device *drm = plane->dev;
->  	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
-> -- 
-> 2.37.3
-
--- 
-Ville Syrjälä
-Intel
+SGVsbG8sCgpPbiBUaHUsIDIyIFNlcCAyMDIyIDA2OjM1OjEwIC0wNzAwIEpha3ViIEtpY2luc2tp
+IHdyb3RlOgoKPiBPbiBUdWUsIDIwIFNlcCAyMDIyIDE5OjU3OjE2ICswODAwIER1b21pbmcgWmhv
+dSB3cm90ZToKPiA+IC0JaWYgKHRpbWVyX3BlbmRpbmcoJmhjLT5rZWVwX3RsKSkKPiA+IC0JCWRl
+bF90aW1lcigmaGMtPmtlZXBfdGwpOwo+ID4gKwlkZWxfdGltZXJfc3luYygmaGMtPmtlZXBfdGwp
+Owo+ID4gIAo+ID4gLQlpZiAodGltZXJfcGVuZGluZygmaGMtPnRpbWVvdXRfdGwpKQo+ID4gLQkJ
+ZGVsX3RpbWVyKCZoYy0+dGltZW91dF90bCk7Cj4gPiArCWRlbF90aW1lcl9zeW5jKCZoYy0+dGlt
+ZW91dF90bCk7Cj4gPiAgCj4gPiAgCWNhbmNlbF93b3JrX3N5bmMoJmhjLT53b3JrcSk7Cj4gCj4g
+VGhlcmUgbmVlZHMgdG8gYmUgc29tZSBtb3JlIGNsZXZlcm5lc3MgaGVyZS4KPiBoYy0+d29ya3Eg
+YW5kIGhjLT5zb2NrZXRfdGhyZWFkIGNhbiBraWNrIHRob3NlIHRpbWVycyByaWdodCBiYWNrIGlu
+LgoKSW4gb3JkZXIgdG8gc3RvcCBoYy0+a2VlcF90bCB0aW1lciwgSSB0aGluayBhZGRpbmcgZGVs
+X3RpbWVyX3N5bmMoJmhjLT5rZWVwX3RsKQphbmQgY2FuY2VsX3dvcmtfc3luYygmaGMtPndvcmtx
+KSBhZ2FpbiBiZWhpbmQgY2FuY2VsX3dvcmtfc3luYygmaGMtPndvcmtxKSBhbmQKbW92ZSB0aGUg
+ZGVsX3RpbWVyX3N5bmMoJmhjLT50aW1lb3V0X3RsKSBiZWhpbmQgbDFvaXBfc29ja2V0X2Nsb3Nl
+KGhjKSBpcyBhCmJldHRlciBzb2x1dGlvbi4gVGhlIGRldGFpbCBpcyBzaG93biBiZWxvdzoKCmRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2lzZG4vbUlTRE4vbDFvaXBfY29yZS5jIGIvZHJpdmVycy9pc2Ru
+L21JU0ROL2wxb2lwX2NvcmUuYwppbmRleCAyYzQwNDEyNDY2ZS4uN2I4OWQ5OGE3ODEgMTAwNjQ0
+Ci0tLSBhL2RyaXZlcnMvaXNkbi9tSVNETi9sMW9pcF9jb3JlLmMKKysrIGIvZHJpdmVycy9pc2Ru
+L21JU0ROL2wxb2lwX2NvcmUuYwpAQCAtMTIzMiwxNyArMTIzMiwxNiBAQCByZWxlYXNlX2NhcmQo
+c3RydWN0IGwxb2lwICpoYykKIHsKICAgICAgICBpbnQgICAgIGNoOwoKLSAgICAgICBpZiAodGlt
+ZXJfcGVuZGluZygmaGMtPmtlZXBfdGwpKQotICAgICAgICAgICAgICAgZGVsX3RpbWVyKCZoYy0+
+a2VlcF90bCk7Ci0KLSAgICAgICBpZiAodGltZXJfcGVuZGluZygmaGMtPnRpbWVvdXRfdGwpKQot
+ICAgICAgICAgICAgICAgZGVsX3RpbWVyKCZoYy0+dGltZW91dF90bCk7Ci0KKyAgICAgICBkZWxf
+dGltZXJfc3luYygmaGMtPmtlZXBfdGwpOworICAgICAgIGNhbmNlbF93b3JrX3N5bmMoJmhjLT53
+b3JrcSk7CisgICAgICAgZGVsX3RpbWVyX3N5bmMoJmhjLT5rZWVwX3RsKTsKICAgICAgICBjYW5j
+ZWxfd29ya19zeW5jKCZoYy0+d29ya3EpOwoKICAgICAgICBpZiAoaGMtPnNvY2tldF90aHJlYWQp
+CiAgICAgICAgICAgICAgICBsMW9pcF9zb2NrZXRfY2xvc2UoaGMpOwoKKyAgICAgICBkZWxfdGlt
+ZXJfc3luYygmaGMtPnRpbWVvdXRfdGwpOworCiAgICAgICAgaWYgKGhjLT5yZWdpc3RlcmVkICYm
+IGhjLT5jaGFuW2hjLT5kX2lkeF0uZGNoKQogICAgICAgICAgICAgICAgbUlTRE5fdW5yZWdpc3Rl
+cl9kZXZpY2UoJmhjLT5jaGFuW2hjLT5kX2lkeF0uZGNoLT5kZXYpOwogICAgICAgIGZvciAoY2gg
+PSAwOyBjaCA8IDEyODsgY2grKykgewoKVGhlIGhjLT53b3JrcSBpcyBzY2hlZHVsZWQgaW4ga2Vl
+cF90bCB0aW1lcjoKCnN0YXRpYyB2b2lkCmwxb2lwX2tlZXBhbGl2ZShzdHJ1Y3QgdGltZXJfbGlz
+dCAqdCkKewoJc3RydWN0IGwxb2lwICpoYyA9IGZyb21fdGltZXIoaGMsIHQsIGtlZXBfdGwpOwoK
+CXNjaGVkdWxlX3dvcmsoJmhjLT53b3JrcSk7Cn0KClNvIHdlIHNob3VsZCB1c2UgZGVsX3RpbWVy
+X3N5bmMoKSB0byBzdG9wIHRoZSB0aW1lcnMgYW5kIHVzZQpjYW5jZWxfd29ya19zeW5jKCkgdG8g
+c3RvcCB0aGUgaGMtPndvcmtxLgoKSWYgdGhlIGhjLT53b3JrcSBoYXMgY29tcGxldGVkLCB0aGUg
+aGMtPmtlZXBfdGwuZXhwaXJlcyBpcyBzZXR0ZWQgdG8KamlmZmllcyArIEwxT0lQX0tFRVBBTElW
+RSAqIEhaIGFuZCB0aGUga2VlcF90bCB3aWxsIHJlc3RhcnQuIFRoZSBkZXRhaWwKaXMgc2hvd24g
+YmVsb3c6CgpzdGF0aWMgaW50Cmwxb2lwX3NvY2tldF9zZW5kKHN0cnVjdCBsMW9pcCAqaGMsIHU4
+IGxvY2FsY29kZWMsIHU4IGNoYW5uZWwsIHUzMiBjaGFubWFzaywKCQkgIHUxNiB0aW1lYmFzZSwg
+dTggKmJ1ZiwgaW50IGxlbikKewogICAgICAgIC4uLi4KCgkvKiByZXN0YXJ0IHRpbWVyICovCglp
+ZiAodGltZV9iZWZvcmUoaGMtPmtlZXBfdGwuZXhwaXJlcywgamlmZmllcyArIDUgKiBIWikpCgkJ
+bW9kX3RpbWVyKCZoYy0+a2VlcF90bCwgamlmZmllcyArIEwxT0lQX0tFRVBBTElWRSAqIEhaKTsK
+CWVsc2UKCQloYy0+a2VlcF90bC5leHBpcmVzID0gamlmZmllcyArIEwxT0lQX0tFRVBBTElWRSAq
+IEhaOwogICAgICAgIC4uLgp9CgpTbyB3ZSBuZWVkIGFkZCBkZWxfdGltZXJfc3luYygmaGMtPmtl
+ZXBfdGwpIGFnYWluIGFmdGVyIGNhbmNlbF93b3JrX3N5bmMoJmhjLT53b3JrcSkKdG8gc3RvcCBo
+Yy0+a2VlcF90MSB0aW1lci4gVGhlIGhjLT53b3JrcSBjb3VsZCBhbHNvIGJlIHJlc2NoZWR1bGVk
+LCBidXQgdGhlIGtlZXBfdGwgCnRpbWVyIHdpbGwgbm90IGJlIHJlc3RhcnRlZCBhZ2Fpbi4gQmVj
+YXVzZSB0aGUgaGMtPmtlZXBfdGwuZXhwaXJlcyBlcXVhbHMgdG8gCkwxT0lQX0tFRVBBTElWRSAq
+IEhaIHRoYXQgaXMgbGFyZ2VyIHRoYW4gamlmZmllcyArIDUgKiBIWi4gCgpGaW5hbGx5LCB3ZSB1
+c2UgY2FuY2VsX3dvcmtfc3luYygpIHRvIGNhbmNlbCB0aGUgaGMtPndvcmtxLiBOb3csIEJvdGgg
+dGhlIGhjLT53b3JrcSAKYW5kIGhjLT5rZWVwX3RsIGNvdWxkIGJlIHN0b3BwZWQuCgpJbiBvcmRl
+ciB0byBzdG9wIHRpbWVvdXRfdGwgdGltZXIsIHdlIG1vdmUgZGVsX3RpbWVyX3N5bmMoJmhjLT50
+aW1lb3V0X3RsKSBiZWhpbmQKbDFvaXBfc29ja2V0X2Nsb3NlKCkuIEJlY2F1c2UgdGhlIGhjLT5z
+b2NrZXRfdGhyZWFkIGNvdWxkIHN0YXJ0IHRoZSB0aW1lb3V0X3RsIHRpbWVyLgoKQmVzdCByZWdh
+cmRzLApEdW9taW5nIFpob3U=
