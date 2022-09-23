@@ -2,243 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924CB5E7E80
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF855E7E8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiIWPew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S232691AbiIWPhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiIWPeq (ORCPT
+        with ESMTP id S229810AbiIWPh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:34:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17828357DF;
-        Fri, 23 Sep 2022 08:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663947284; x=1695483284;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=7SQbpKKz8VanXGTPlKzllewliUqrbY7ICoQto0yQ8eA=;
-  b=RYveBZjwTB5GqO0tDKXpGLjfgv1/+4pNJgxsVvMT+PM2z2ST0j2Its6J
-   Op3t3n6b9/P6W1IqZKLym7npQta6UEF2J0173HLE0OKWaIslVIT/RdJgm
-   sqwPU1TrkVgDbQeo+lre7raKwlW9Gc+cck/rJHfMGnRuBL8YD93jnrhtz
-   aNI58O2ybiTrSQpr45GDejv5vb1DDUyWejRaJywx6dT2bKO54rRu4JU0T
-   GNM9VBC6gjm0cvQMcGDZdP/aK0JvSJg7VpPFgMxMqgpOYafU3Vt8Kk5Xj
-   8C+GUswHD2VHSYCZUE4ol/eYi6sZBa2eXUP9laFn234HxoFwZ+A8+dEWu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="298215486"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="298215486"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:34:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="762651177"
-Received: from alutz-mobl.ger.corp.intel.com ([10.252.35.146])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:34:38 -0700
-Date:   Fri, 23 Sep 2022 18:34:31 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 6/6] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <20220923121745.129167-7-matthew.gerlach@linux.intel.com>
-Message-ID: <6eb563c0-2811-f152-544d-392da0cbb65b@linux.intel.com>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-7-matthew.gerlach@linux.intel.com>
+        Fri, 23 Sep 2022 11:37:29 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EC22BD2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id nb11so1516105ejc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=U/jIWxOgoFz/4fL9IY1kUApVA9JT478amyvIMeWn+/9l5MAalm8L5UP7GL2AGnSeMl
+         7CBbhsMsGSptl1Oun9YGw0Zmrf99ZTtyT5p8SyCAZBw6AOWz30Jk92GSJSruLxlFcDdc
+         xUL80VdSuztcNx/54xsQrJ46sp580eOx6lIpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=ktU0muMUlx1GL0L2LtPpt/wkaujxPwCE2pa79tHZ7Yn6CBD9wfzUw7a1yuz7/als4s
+         5XAuASqwFyFud8pnnR2O+rjzRVUlhXkCpe0cWNW19DaoFW7qU5zGYCMHXmYu94JwMJlE
+         Jq6LChJdv5wdYp8bpDzKmnSsG9ICJ9ABvUWXh9tpcqkFDXlAifSL/m13cckmof65TLhA
+         VQGU7as3+Rmpu6jW0WkxofnRhmHmcCoEKsiUff3qXOWOCzziOx8OXI3NzRDYL8ZMtXLi
+         ijPrx3Zj4XZWiO95KPTxOozGi1vbD9evoRQGnlutYdsSNuGEmVDzDBPw7wHck8PP/kNL
+         mCPQ==
+X-Gm-Message-State: ACrzQf1Ub9GUQxrplwx7MJbQ0Z2eaU2rx/OBvvIGvtJSzSj1GXSAAnOf
+        t4B0kzuMwqRemfVBvRTGtb9d3Cfe48PJga3yg/A=
+X-Google-Smtp-Source: AMsMyM5k8u3n+MpqYIBKC70rRlZcl5RaPiiZqQN1xIA4OapISvHzfTJ2nLiJ2EI1HtnTd8rem49+kA==
+X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id g4-20020a1709065d0400b00722f46cb891mr7647728ejt.4.1663947446052;
+        Fri, 23 Sep 2022 08:37:26 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id mf24-20020a170906cb9800b0077fc446aaf6sm4065921ejb.202.2022.09.23.08.37.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id s14so665290wro.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
+X-Received: by 2002:a05:6512:ba1:b0:498:9890:1bb4 with SMTP id
+ b33-20020a0565120ba100b0049898901bb4mr3294634lfv.122.1663947434871; Fri, 23
+ Sep 2022 08:37:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921155205.1332614-1-rrangel@chromium.org> <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+In-Reply-To: <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Fri, 23 Sep 2022 09:37:03 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and
+ ExclusiveAndWake to enable wake irq
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tim Van Patten <timvp@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Angela Czubak <acz@semihalf.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bartosz Szczepanek <bsz@semihalf.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+On Thu, Sep 22, 2022 at 4:16 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:51:52AM -0600, Raul E Rangel wrote:
+> > Today, i2c drivers are making the assumption that their IRQs can also
+> > be used as wake IRQs. This isn't always the case and it can lead to
+> > spurious wakes. This has recently started to affect AMD Chromebooks.
+> > With the introduction of
+> > d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+> > controller gained the capability to set the wake bit on each GPIO. The
+> > ACPI specification defines two ways to inform the system if a device is
+> > wake capable:
+> > 1) The _PRW object defines the GPE that can be used to wake the system.
+> > 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
+> >
+> > Currently only the first method is supported. The i2c drivers don't have
+> > any indication that the IRQ is wake capable, so they guess. This causes
+> > spurious interrupts, for example:
+> > * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+> >   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+> >   system.
+> > * The IRQ line is active level low for this device and is pulled up by
+> >   the power resource defined in `_PR0`/`_PR3`.
+> > * The i2c driver will (incorrectly) arm the GPIO for wake by calling
+> >   `enable_irq_wake` as part of its suspend hook.
+> > * ACPI will power down the device since it doesn't have a wake GPE
+> >   associated with it.
+> > * When the device is powered down, the IRQ line will drop, and it will
+> >   trigger a wake event.
+> >
+> > See the following debug log:
+> > [   42.335804] PM: Suspending system (s2idle)
+> > [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+> > [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+> > [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+> > [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+> > [   42.535293] PM: Wakeup unrelated to ACPI SCI
+> > [   42.535294] PM: resume from suspend-to-idle
+> >
+> > In order to fix this, we need to take into account the wake capable bit
+> > defined on the Interrupt/GpioInt. This is accomplished by:
+> > * Migrating some of the i2c drivers over to using the PM subsystem to
+> >   manage the wake IRQ.
+> > * Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+> >   to the  i2c core.
+> > * Use the wake_capable bit in the i2c core to call
+> >   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+> > * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+> >   handled by the i2c core.
+> > * Make the ACPI device PM system aware of the wake_irq. This is
+> >   necessary so the device doesn't incorrectly get powered down when a
+> >   wake_irq is enabled.
+> >
+> > I've tested this code with various combinations of having _PRW,
+> > ExclusiveAndWake and power resources all defined or not defined, but it
+> > would be great if others could test this out on their hardware.
+> >
+> > I'm sure this will surface some devices where the IRQs were not
+> > correctly marked as wake capable. Ideally the firmware can be fixed, but
+> > if not we can work around this in the kernel by providing a board
+> > specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+> > See `chromeos_laptop.c` for an example of matching DMI properties and
+> > setting the `I2C_CLIENT_WAKE` override.
+> >
+> > Thanks,
+> > Raul
+> >
+> > Changes in v5:
+> > - Added Acked-by: Benjamin Tissoires
+> > - Removed clang-format white space changes
+> > - Check irq return value before updating wake_capable pointer
+>
 
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
-> v2: clean up error messages
->     alphabetize header files
->     fix 'missing prototype' error by making function static
->     tried to sort Makefile and Kconfig better
-> ---
->  drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig    |   9 ++
->  drivers/tty/serial/8250/Makefile   |   1 +
->  include/linux/dfl.h                |   7 ++
->  4 files changed, 194 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> 
-> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-> new file mode 100644
-> index 000000000000..539ca6138eda
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_dfl.c
-> @@ -0,0 +1,177 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for FPGA UART
-> + *
-> + * Copyright (C) 2022 Intel Corporation, Inc.
-> + *
-> + * Authors:
-> + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/dfl.h>
-> +#include <linux/io-64-nonatomic-lo-hi.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/serial.h>
-> +#include <linux/serial_8250.h>
-> +
-> +struct dfl_uart {
-> +	void __iomem   *csr_base;
-> +	struct device  *dev;
-> +	u64             uart_clk;
-> +	u64             fifo_len;
-> +	unsigned int    fifo_size;
-> +	unsigned int    reg_shift;
+> You are too fast with a new versions... I have comment on the v4 and I believe
+> it applicable here (not settled yet).
+>
 
-Why to make this intermediate storage for these values, wouldn't it be 
-simpler to just fill them into the uart_port directly?
+I'll send out a new series with the change.
 
-> +	unsigned int    line;
-> +};
-> +
-> +static int feature_uart_walk(struct dfl_uart *dfluart, resource_size_t max)
-> +{
-> +	void __iomem *param_base;
-> +	int off;
-> +	u64 v;
-> +
-> +	v = readq(dfluart->csr_base + DFHv1_CSR_SIZE_GRP);
-> +
-> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> +		dev_err(dfluart->dev, "missing required DFH parameters\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	param_base = dfluart->csr_base + DFHv1_PARAM_HDR;
-
-Are all callers of dfl_find_param() expected to run these same checks and
-calculations? Perhaps some helper to find param base would be useful and
-it could also run those checks.
-
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing CLK_FRQ param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dfluart->uart_clk = readq(param_base + off + DFHv1_PARAM_DATA);
-> +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
-> +
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing FIFO_LEN param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dfluart->fifo_len = readq(param_base + off + DFHv1_PARAM_DATA);
-> +	dev_dbg(dfluart->dev, "UART_FIFO_ID fifo_len %llu\n", dfluart->fifo_len);
-> +
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing REG_LAYOUT param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	v = readq(param_base + off + DFHv1_PARAM_DATA);
-> +	dfluart->fifo_size = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-
-???
-
-> +	dfluart->reg_shift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> +	dev_dbg(dfluart->dev, "UART_LAYOUT_ID width %d shift %d\n",
-> +		dfluart->fifo_size, dfluart->reg_shift);
-> +
-> +	return 0;
-> +}
-> +
-> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
-> +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	struct uart_8250_port uart;
-> +	struct dfl_uart *dfluart;
-> +	int ret;
-> +
-> +	memset(&uart, 0, sizeof(uart));
-> +
-> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-> +	if (!dfluart)
-> +		return -ENOMEM;
-> +
-> +	dfluart->dev = dev;
-> +
-> +	dfluart->csr_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> +	if (IS_ERR(dfluart->csr_base)) {
-> +		return PTR_ERR(dfluart->csr_base);
-> +	}
-
-No need for braces.
-
-> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
-> +{
-> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-> +
-> +	if (dfluart->line > 0)
-
-Line 0 is valid uart port. Perhaps you'd never see it here due to how the 
-8250 driver allocs ports but it would be better to not make this kind of 
-assumption.
-
-> +		serial8250_unregister_port(dfluart->line);
-> +}
-
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 7d74ef8d1d20..a17aeccc501e 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -67,6 +67,13 @@
->  #define DFHv1_PARAM_MSIX_STARTV	0x8
->  #define DFHv1_PARAM_MSIX_NUMV	0xc
->  
-> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
-> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
-> +
-> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
-> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
-> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
-
-Should UART be included into these names or are they intended to be more 
-generic parameters (for non-UART uses)?
-
-
--- 
- i.
-
+> > - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+> > - Fix a typo in comment
+> >
+> > Changes in v4:
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Removed unnecessary !!
+> > - Removed unrelated whitespace change
+> > - Added Reviewed-by
+> > - Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+> > - Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
+> >
+> > Changes in v3:
+> > - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+> >   unrelated drivers.
+> > - Converted wake_capable parameter to bool.
+> > - Fixed bad indent
+> > - Convert wake_capable to bool
+> > - Only update wake_capable pointer once
+> > - Move wake_capable local into local block
+> >
+> > Changes in v2:
+> > - Added elants_i2c to series
+> > - Added raydium_ts_i2c to series
+> > - Fixed call site in mlxbf_gige_probe
+> > - Added ability to extract wake bit from Interrupt/IRQ resources
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> > - I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+> >
+> > Raul E Rangel (13):
+> >   HID: i2c-hid: Use PM subsystem to manage wake irq
+> >   Input: elan_i2c - Use PM subsystem to manage wake irq
+> >   Input: elants_i2c - Use PM subsystem to manage wake irq
+> >   Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+> >   gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+> >   ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+> >   i2c: acpi: Use ACPI wake capability bit to set wake_irq
+> >   ACPI: PM: Take wake IRQ into consideration when entering
+> >     suspend-to-idle
+> >   HID: i2c-hid: acpi: Stop setting wakeup_capable
+> >   HID: i2c-hid: Don't set wake_capable and wake_irq
+> >   Input: elan_i2c - Don't set wake_capable and wake_irq
+> >   Input: elants_i2c - Don't set wake_capable and wake_irq
+> >   Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+> >
+> >  drivers/acpi/device_pm.c                   | 19 +++++++++--
+> >  drivers/acpi/irq.c                         |  8 +++--
+> >  drivers/acpi/resource.c                    | 16 +++++++---
+> >  drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
+> >  drivers/gpio/gpiolib-acpi.h                |  2 ++
+> >  drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+> >  drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
+> >  drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
+> >  drivers/i2c/i2c-core-base.c                |  6 +++-
+> >  drivers/i2c/i2c-core.h                     |  4 +--
+> >  drivers/input/mouse/elan_i2c_core.c        | 15 +--------
+> >  drivers/input/touchscreen/elants_i2c.c     | 13 ++------
+> >  drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+> >  drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+> >  include/linux/acpi.h                       | 23 +++++++++++---
+> >  include/linux/ioport.h                     |  3 +-
+> >  16 files changed, 112 insertions(+), 92 deletions(-)
+> >
+> > --
+> > 2.37.3.968.ga6b4b080e4-goog
+> >
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
