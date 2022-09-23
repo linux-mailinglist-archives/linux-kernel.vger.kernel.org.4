@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6775E7AA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94195E7AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiIWMZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S231872AbiIWMZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiIWMY0 (ORCPT
+        with ESMTP id S232196AbiIWMYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:24:26 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A152413EADA
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:19:20 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y3so330720ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=u32wzLxrZs/mi8kueHNrXwiGsYayMHcA5H98ffopLtw=;
-        b=EMG5EtZs7vBbTCuvQM21M/UpaapxJxcexsDTE9ow6dwxlQbCF/SkGGNmEXpBZ1bloX
-         gtYEYA/jfyAb9BiN+TmFc559FftkFOdaOHpxeXB2Wq0+jhI9/6cGG++xA/1eGjHmBNpN
-         L1SJte0BM55ZTQeZiHZSkwZvNHg2uyYeKepog=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=u32wzLxrZs/mi8kueHNrXwiGsYayMHcA5H98ffopLtw=;
-        b=ehig/KgqeLjsAhta+17TbW1MpGuBnZsshLeSsuP1ZPBYJUDK3GHV7HDnjwBoKYX7p1
-         PzhK8DhnVENj2RQc5O8nN72888A4dJsi2miAk7hRMXgkNfdJis5ET+k+qUbVUw+eZ47H
-         FiGfN6QBNEFjwLC5gT5T80ePsjMkcDmeZf6/SKwhV+XfaXyPMY8EINpuuVMwLYTgEV7X
-         w4BDa22FnkqC+0Rd5qso0DYg7xppYWGMhTffVyMgAZjQomoADBI9REq49ALMfoGM9YvE
-         X3oZYkUlp5dorVrk8k3cGAWOFsdk1Ds+6VNcQmPD5XJ8/j2Rggd8vxbidmalmtbliV0e
-         n+HA==
-X-Gm-Message-State: ACrzQf17ApSLejMPf4VeFUgIzuAwfXuXpNIoc86AP+9U/dG1ea2WTtj/
-        2lW/8JvxyuwvhXjPmhsQPrlaEQ==
-X-Google-Smtp-Source: AMsMyM5eqSnSwOTzWZgkrF6u/fPzLIP1nivW1c9nergAV/bMnz4F/njbuRATbefl0jYiv2GGHkUZYQ==
-X-Received: by 2002:a17:906:8a7b:b0:781:8016:2de1 with SMTP id hy27-20020a1709068a7b00b0078180162de1mr6856309ejc.54.1663935557305;
-        Fri, 23 Sep 2022 05:19:17 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170906b08d00b0073dbfd33a8dsm3998397ejy.21.2022.09.23.05.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 05:19:16 -0700 (PDT)
-Message-ID: <36fc5ec8-12a3-fc04-a8da-59d4e08e41b6@rasmusvillemoes.dk>
-Date:   Fri, 23 Sep 2022 14:19:14 +0200
+        Fri, 23 Sep 2022 08:24:32 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A15140AB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:19:41 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e795329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e795:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B3CAB1EC0662;
+        Fri, 23 Sep 2022 14:19:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1663935575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5WxiEVsdSnBKX75aGLfGHyVaPvzL4y03SbUL80DEg/Q=;
+        b=Oy6jw/q35/CLrIyjCoPHYLdpnIFDIhIu+VeZxXXctD9q3kJnsTCZj7VolWnElExYLA2lO1
+        nSpkcWz6gjAOALwv4n/qqk84sbPKMmZhVFf7YjZPlAY17kobQNuGbd2yxFE0n6mO+bnbRS
+        IFnhpGcvzv7FZnr0nbCxa7Z2Q5iZhps=
+Date:   Fri, 23 Sep 2022 14:19:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, venu.busireddy@oracle.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] x86/sev: Remove unused variable "err" in
+ enforce_vmpl0()
+Message-ID: <Yy2kU7lZuArVMC5p@zn.tnic>
+References: <20220923113209.3046960-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
- nodes
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Phil Auld <pauld@redhat.com>
-References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220923113209.3046960-1-lizetao1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 21.49, Andy Shevchenko wrote:
+On Fri, Sep 23, 2022 at 11:32:09AM +0000, Li Zetao wrote:
+> Gcc report warning as follows:
+> 
+> arch/x86/boot/compressed/sev.c: In function ‘enforce_vmpl0’:
+> arch/x86/boot/compressed/sev.c:256:13: error: unused variable ‘err’
+>  [-Werror=unused-variable]
 
-> + * which allows to count the exact maximum length in the worst case,
-> + * i.e. when each second CPU is being listed.
+How do you trigger this? Compiler version and .config?
 
-I don't think that's actually the worst case. I think that would be
-where 2 out of 3 cpus are listed. I.e., with 16 cpus
+I haven't seen this one in any of my builds until now...
 
-0-1,3-4,6-7,9-10,12-13,15
+Thx.
 
-is certainly longer than
+-- 
+Regards/Gruss,
+    Boris.
 
-0,2,4,6,8,10,12,14
-
-It's trivial to see that no bitmap with four consecutive bits can be a
-worst-case, and any bitmap with some three consecutive bits is as bad as
-the same one with the middle bit cleared (the rep just changes a - to a
-,), so the worst case is definitely obtained among bitmaps with at most
-two consecutive bits.
-
-Rasmus
+https://people.kernel.org/tglx/notes-about-netiquette
