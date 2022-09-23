@@ -2,174 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5AE5E8019
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69D95E801A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiIWQnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
+        id S230421AbiIWQn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiIWQmt (ORCPT
+        with ESMTP id S231863AbiIWQnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:42:49 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114DF109522;
-        Fri, 23 Sep 2022 09:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663951366; x=1695487366;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vq/+1HI102LsXNNK8DNNAtktfl0zaPdHOJaQaPsJxVo=;
-  b=jlxSc4HLyyve3aUL3YZRXJPVlpFdvL+enrK3dlnQ2ulxrfc50N25S+em
-   HAaWbR0UV1jrzBbu5uonLe4PjMC9CyRaGarGuGibu3r0PWuTPC+i9AYOP
-   1TkpCb6k8/7KxF4yzFlHEX7T3BulV1I0Po97gEnACogfx7k+7m/IQHdn6
-   MfIf9FaxwnSmxL88TtXYckW5na4Pfd6tmVpVF9HXDleMopsSw88WFbaX5
-   RBNmbngU5BYUVQctkgy2qZgn+aijOxC4AjdC5KzvLdcHW3Pt3qwCX5fxj
-   Y2XjGs9PQKvz4zS5JVbHMA1NFXw8dEW3Md0/M6eGW9/byirT5Nep5Qcue
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="326962394"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="326962394"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 09:42:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="724190234"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Sep 2022 09:42:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1obllA-006Z7Y-1e;
-        Fri, 23 Sep 2022 19:42:40 +0300
-Date:   Fri, 23 Sep 2022 19:42:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
- is present
-Message-ID: <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+        Fri, 23 Sep 2022 12:43:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D5C139F6D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:43:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C5D562889
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF1BC433C1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 16:43:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="N88L+RZZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663951388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NfPwWGJjSuA+aMD8WMtVroU4oVr5n6lPjI6B2paPxWA=;
+        b=N88L+RZZ8+vQLdqb99iNZe2lmMXScpUvJ4HDomkEtFU2h4SW548QPMAAwjpo+Kxs9vqc98
+        AxhaRGY65gyU07npdNmpiMMuYKgfsn/hzgMwBdvsBsugscYyJMxO1f7fIhUyD2cn/wVQKM
+        AebsRldou7pLLE1YlUPml2VfyUN1o0Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4a082f9a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 23 Sep 2022 16:43:08 +0000 (UTC)
+Received: by mail-vs1-f48.google.com with SMTP id k2so503651vsk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:43:08 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3fYYuzdplNOlcv/DzAup2mEhQx466yaM/s8zZuey1WzBL4/EIv
+        432fuyHhjAOAI9YpkBY9VeS6oBnkvA0F6YFYsqw=
+X-Google-Smtp-Source: AMsMyM76a4mvOF9kxM3jRLuKNgLrz0bWouKv2zOcUzhq6oS6ufEq+TrMYCNEgeZz1hLi9i8XiqKzAxHFI7d1q3MZdlM=
+X-Received: by 2002:a67:d81e:0:b0:398:2c98:229b with SMTP id
+ e30-20020a67d81e000000b003982c98229bmr3941431vsj.73.1663951387659; Fri, 23
+ Sep 2022 09:43:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com>
+ <20220923154001.4074849-1-Jason@zx2c4.com> <202209230932.1FA2FF39@keescook>
+In-Reply-To: <202209230932.1FA2FF39@keescook>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 23 Sep 2022 18:42:56 +0200
+X-Gmail-Original-Message-ID: <CAHmME9oySGYZ=r5P6dUJnWp5R9TbwGGXLNWm8O5oyES2dn-PwQ@mail.gmail.com>
+Message-ID: <CAHmME9oySGYZ=r5P6dUJnWp5R9TbwGGXLNWm8O5oyES2dn-PwQ@mail.gmail.com>
+Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra comparison
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
-> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
-> > On 22-09-2022 12:08, Andy Shevchenko wrote:
-> > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
-
-FYI: For now I sent a revert, but if we got a solution quicker we always
-can choose the course of actions.
-
-> > If the extcon device exists, get the mode from the extcon device. If
-> > the controller is DRD and the driver is unable to determine the mode,
-> > only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+On Fri, Sep 23, 2022 at 6:41 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Sep 23, 2022 at 05:40:01PM +0200, Jason A. Donenfeld wrote:
+> > Currently the clamp algorithm does:
 > >
-> > According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
-> > share bisect log?
+> >       if (val > hi)
+> >               val = hi;
+> >       if (val < lo)
+> >               val = lo;
 > >
-> > I can but not right now. But what I did was bisect between 5.18.0 (good) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit before that (good).
+> > But since hi > lo by definition, this can be made more efficient with:
 > >
-> > The effect of the patch is that on Merrifield (I tested with Intel Edison Arduino board which has a HW switch to select between host and device mode) device mode works but in host mode USB is completely not working.
+> >       if (val > hi)
+> >               val = hi;
+> >       else if (val < lo)
+> >               val = lo;
 > >
-> > Currently on host mode - when working - superfluous error messages from tusb1210 appear. When host mode is not working there are no tusb1210 messages in the logs / on the console at all. Seemingly tusb1210 is not probed, which points in the direction of a relation to extcon.
+> > So fix up the clamp and clamp_t functions to do this, adding the same
+> > argument checking as for min and min_t.
 > >
-> > Taking into account the late cycle, I would like to revert the change. And
-> > Ferry and I would help to test any other (non-regressive) approach).
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  include/linux/minmax.h | 25 +++++++++++++++++++++++--
+> >  1 file changed, 23 insertions(+), 2 deletions(-)
 > >
-> > I have not yet tested if a simple revert fixes the problem but will tonight.
+> > diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+> > index 5433c08fcc68..30e2e2cd0f44 100644
+> > --- a/include/linux/minmax.h
+> > +++ b/include/linux/minmax.h
+> > @@ -37,6 +37,27 @@
+> >               __cmp(x, y, op), \
+> >               __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
 > >
+> > +#define __clamp(val, lo, hi)                                                 \
+> > +     ((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
+> > +
+> > +#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({               \
+> > +             typeof(val) unique_val = (val);                                 \
+> > +             typeof(lo) unique_lo = (lo);                                    \
+> > +             typeof(hi) unique_hi = (hi);                                    \
+> > +             __clamp(unique_val, unique_lo, unique_hi); })
+> > +
+> > +#define __clamp_input_check(lo, hi)                                          \
+> > +        (BUILD_BUG_ON_ZERO(__builtin_choose_expr(                            \
+> > +                __is_constexpr((lo) > (hi)), (lo) > (hi), false)))
+>
+> Nice. :)
+>
+> > +
+> > +#define __careful_clamp(val, lo, hi) ({                                              \
+> > +     __clamp_input_check(lo, hi) +                                           \
+> > +     __builtin_choose_expr(__typecheck(val, lo) && __typecheck(val, hi) &&   \
+> > +                           __typecheck(hi, lo) && __is_constexpr(val) &&     \
+> > +                           __is_constexpr(lo) && __is_constexpr(hi),         \
+>
+> I really like it! I might have used:
+>
+>         __safe_cmp(val, lo) && __safe_cmp(val, hi)
+>
+> instead of the "open coded" __typecheck()s and __is_constexpr()s, but
+> it's the same result.
+>
+> > +             __clamp(val, lo, hi),                                           \
+> > +             __clamp_once(val, lo, hi, __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
+>
+> *complaint about line being >100 characters, but I don't really care* If
+> anyone is really bothered, this looks fine, too:
+>
+>                 __clamp_once(val, lo, hi,                                       \
+>                              __UNIQUE_ID(__val), __UNIQUE_ID(__lo), __UNIQUE_ID(__hi))); })
+>
+> *shrug*
+>
+> > +
+> >  /**
+> >   * min - return minimum of two values of the same or compatible types
+> >   * @x: first value
+> > @@ -86,7 +107,7 @@
+> >   * This macro does strict typechecking of @lo/@hi to make sure they are of the
+> >   * same type as @val.  See the unnecessary pointer comparisons.
+> >   */
+> > -#define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
+> > +#define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
 > >
-> > I would be happy to test other approaches too.
-> 
-> 
-> It's a bit hard for me to suggest an alternative approach without
-> knowing how things are breaking in this case. I'd love to order one of
-> those boards to repro and fix this on my end, but it looks like this
-> HW is EOLed and out of stock in most places. If you guys know how to
-> get my hands on those boards I'm all ears.
+> >  /*
+> >   * ..and if you can't take the strict
+> > @@ -121,7 +142,7 @@
+> >   * This macro does no typechecking and uses temporary variables of type
+> >   * @type to make all the comparisons.
+> >   */
+> > -#define clamp_t(type, val, lo, hi) min_t(type, max_t(type, val, lo), hi)
+> > +#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+> >
+> >  /**
+> >   * clamp_val - return a value clamped to a given range using val's type
+> > --
+> > 2.37.3
+> >
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> I can take this unless akpm wants it?
 
-There are still some second hand Intel Edison boards flying around
-(but maybe cost a bit more than expected) and there are also
-Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
-option though requires more actions in order something to be boot
-there.
-
-In any case, it's probably quicker to ask Ferry or me for testing.
-(Although currently I have no access to the board to test OTG, it's
- remote device which I can only power on and off and it has always
- be in host mode.)
-
-> Barring that, Ferry can you dig more into this failure? E.g. is it this hunk
-> 
-> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->                  * mode. If the controller supports DRD but the dr_mode is not
->                  * specified or set to OTG, then set the mode to peripheral.
->                  */
-> -               if (mode == USB_DR_MODE_OTG &&
-> +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
->                     (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
->                      !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
->                     !DWC3_VER_IS_PRIOR(DWC3, 330A))
-> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
->         }
->  }
-> 
-> that's problematic or moving
-
-I think you wanted to revert only this line and test?
-
->  static int dwc3_probe(struct platform_device *pdev)
->  {
->         struct device           *dev = &pdev->dev;
-> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
->                 goto err2;
->         }
-> 
-> +       dwc->edev = dwc3_get_extcon(dwc);
-> +       if (IS_ERR(dwc->edev)) {
-> +               ret = PTR_ERR(dwc->edev);
-> +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
-> +               goto err3;
-> +       }
-> +
->         ret = dwc3_get_dr_mode(dwc);
->         if (ret)
->                 goto err3;
-> 
-> to happen earlier?
-
-It is not always possible to have an extcon driver available, that's why in
-some cases the probe of it defers. I dunno how your patch supposed to work
-in that case.
-
-> Does tracing the "mrfld_bcove_pwrsrc" driver (the
-> excton provider in this case AFIACT) show anything interesting?
-
-I believe there is nothing interesting.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Fine by me.
