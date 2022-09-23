@@ -2,133 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D01F5E8264
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0F05E8267
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiIWTIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S231409AbiIWTNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbiIWTIm (ORCPT
+        with ESMTP id S231426AbiIWTNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 15:08:42 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582A124C1A;
-        Fri, 23 Sep 2022 12:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=ZQmZb+lXFhX7pnMcsk23AOR4qV5DlMOOudYTRaQuI38=; b=iyj5atjf9mY5DRHI6pWs1X4Bi6
-        i7VWXXFHJq6mQF3UhKDCt1azxiYmU/3In5EAKRjGznKha0IhkHuKd/7hnByYfIMa0A10xryy3cNSI
-        9/HmYFmTyE4XR1neliZtOrRXXnkaJ9R21hyg32c9fhQFArWvSxFVueJNleIU1j2erseIiSoUWDXbG
-        tOhWjlXnaPU8ESbjgzqPj71YG3maPzlUvgOVWPqFkAVKrS7NJZv9TfQKrhcACp5dMGStbB6KGjxO+
-        eKaMDd7tJjeaipjxYkgs+FEV1joq4uNiT2sAhEOHHWDyXHWLYIghjVmN8Fujqsk6/dLFSMh9Fta85
-        HjoSW77g==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1obo2O-008xXP-NI; Fri, 23 Sep 2022 13:08:37 -0600
-Message-ID: <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
-Date:   Fri, 23 Sep 2022 13:08:31 -0600
+        Fri, 23 Sep 2022 15:13:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A21F115BEB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663960420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1kL1sKvWl7toJq/naTSlRJEPH2yxVO7xF2IQr8yMOBc=;
+        b=Ilk1Vurt1NeIvIw5sMdoWxBXa2ZFncxgvk2LiK7xztBP3K7y7/C6zLVTyg5zQ9zMdvnaCI
+        IM09aOHQNNoxUmTBfFn2wea/gpYUgBFN4EQQvJZQ8cI7BI9ecrd/dsd529FqmWTTwruX1H
+        YMOpRSrTKq30UmMGIms8oZwLcxaQmPk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-648-8WcRCV6nP12m3PPUG1KmFw-1; Fri, 23 Sep 2022 15:13:39 -0400
+X-MC-Unique: 8WcRCV6nP12m3PPUG1KmFw-1
+Received: by mail-qv1-f70.google.com with SMTP id lq8-20020a0562145b8800b004ad7229e4e9so490537qvb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:13:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1kL1sKvWl7toJq/naTSlRJEPH2yxVO7xF2IQr8yMOBc=;
+        b=CAhTyxY6tnPdZUtCL40nZP3wZ7t60e4juDVE4uufMb+8yuhC8zMWij7FP8XoHZtH2h
+         Nb4m7aFojw4K3Ec+F4B5Qi+UZXLkDvFiqribhkkPj42qlhdF4NTGBS9rVWZz1nz8AxUX
+         Qcj/R9jzi9oDxf9xbUigAlPKxTkj0XJxlXcZFxIbtfPY6d6C8Vhn3qHc3GIbishwh4AD
+         fIxoEM7agwQLmOCTddVom3T/woKQIyjIQJYTzlq7xNm+Mlt7Ak41E5fCZv73m05DBoJR
+         hnC5ACbRT0nkKIvFM+di5cMARkVesiP9y0uysdgmDOVS4NOFpBH9ukXLs+OeJHAgo4DS
+         RUjQ==
+X-Gm-Message-State: ACrzQf194CiuxWDZSPr0aS1NJtp6yllmdV94gNRnLJOJx84lk0LYHJCz
+        wn46br5iulC9NYwTo7jffX2eSQuQTctOJNOA9h2Jy3efxesmaO/wBuVxcEo8R5RwAZWt4+aA9eN
+        yT/M3H7b786OLKGLEooOQOMDs
+X-Received: by 2002:a05:620a:294a:b0:6ce:9944:f65a with SMTP id n10-20020a05620a294a00b006ce9944f65amr6694294qkp.434.1663960418792;
+        Fri, 23 Sep 2022 12:13:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM77DHnyJvaE6za+YOcsEoyOQZgd8Rm22c/EKhemffNRu+daj/GqP44WuMHgeOFroeF2XhsNwQ==
+X-Received: by 2002:a05:620a:294a:b0:6ce:9944:f65a with SMTP id n10-20020a05620a294a00b006ce9944f65amr6694280qkp.434.1663960418592;
+        Fri, 23 Sep 2022 12:13:38 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c48:e00::feb? ([2600:4040:5c48:e00::feb])
+        by smtp.gmail.com with ESMTPSA id y17-20020a37f611000000b006b5cc25535fsm6158496qkj.99.2022.09.23.12.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 12:13:37 -0700 (PDT)
+Message-ID: <e63a16f8c89e33078966ba518576eafb075b5012.camel@redhat.com>
+Subject: Re: [PATCH 1/9] Input: synaptics-rmi4 - fix firmware update
+ operations with bootloader v8
+From:   Lyude Paul <lyude@redhat.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 23 Sep 2022 15:13:36 -0400
+In-Reply-To: <b2c30a8cd1ad8c40d16a25e3a4f190cab214dc4c.camel@ew.tq-group.com>
+References: <20220608124808.51402-1-matthias.schiffer@ew.tq-group.com>
+         <20220608124808.51402-2-matthias.schiffer@ew.tq-group.com>
+         <3da8a0c9ae4e6d8a1d772498e4d4186bf969fd76.camel@redhat.com>
+         <b2c30a8cd1ad8c40d16a25e3a4f190cab214dc4c.camel@ew.tq-group.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-CA
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-References: <20220922163926.7077-1-logang@deltatee.com>
- <20220922163926.7077-2-logang@deltatee.com> <Yy33LUqvDLSOqoKa@ziepe.ca>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <Yy33LUqvDLSOqoKa@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, gregkh@linuxfoundation.org, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting PCI
- P2PDMA pages
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-09-23 12:13, Jason Gunthorpe wrote:
-> On Thu, Sep 22, 2022 at 10:39:19AM -0600, Logan Gunthorpe wrote:
->> GUP Callers that expect PCI P2PDMA pages can now set FOLL_PCI_P2PDMA to
->> allow obtaining P2PDMA pages. If GUP is called without the flag and a
->> P2PDMA page is found, it will return an error.
->>
->> FOLL_PCI_P2PDMA cannot be set if FOLL_LONGTERM is set.
+On Fri, 2022-09-23 at 11:12 +0200, Matthias Schiffer wrote:
+> On Thu, 2022-09-22 at 16:06 -0400, Lyude Paul wrote:
+> > Would add a Cc: stable@vger.kernel.org for this
+> > 
+> > With that fixed: Reviewed-by: Lyude Paul <lyude@redhat.com>
 > 
-> What is causing this? It is really troublesome, I would like to fix
-> it. eg I would like to have P2PDMA pages in VFIO iommu page tables and
-> in RDMA MR's - both require longterm.
-
-You had said it was required if we were relying on unmap_mapping_range()...
-
-https://lore.kernel.org/all/20210928200506.GX3544071@ziepe.ca/T/#u
-
-> Is it just because ZONE_DEVICE was created for DAX and carried that
-> revocable assumption over? Does anything in your series require
-> revocable?
-
-We still rely on unmap_mapping_range() indirectly in the unbind path.
-So I expect if something takes a LONGERM mapping that would block until
-whatever process holds the pin releases it. That's less than ideal and
-I'm not sure what can be done about it.
-
->> @@ -2383,6 +2392,10 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->>  		VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
->>  		page = pte_page(pte);
->>  
->> +		if (unlikely(!(flags & FOLL_PCI_P2PDMA) &&
->> +			     is_pci_p2pdma_page(page)))
->> +			goto pte_unmap;
->> +
->>  		folio = try_grab_folio(page, 1, flags);
->>  		if (!folio)
->>  			goto pte_unmap;
+> Thanks for the review!
 > 
-> On closer look this is not in the right place, we cannot touch the
-> content of *page without holding a ref, and that doesn't happen until
-> until try_grab_folio() completes.
+> Should I reroll with the added Cc? In my experience, patches will end
+> up queued for stable through AUTOSEL anyways as soon as the word "fix"
+> appears somewhere in the commit message.
+
+Ahhh, totally forgot about this. Nevermind then, it should be fine as-is :)
+
 > 
-> It would be simpler to put this check in try_grab_folio/try_grab_page
-> after the ref has been obtained. That will naturally cover all the
-> places that need it.
+> 
+> > 
+> > On Wed, 2022-06-08 at 14:48 +0200, Matthias Schiffer wrote:
+> > > Commit a6977d758fed ("Input: synaptics-rmi4 - support bootloader v8 in
+> > > f34v7") allowed the F34v7 driver to probe with bootloader v8, but it did
+> > > not update various other bootloader version checks in the F34 code.
+> > > 
+> > > Fixes: a6977d758fed ("Input: synaptics-rmi4 - support bootloader v8 in f34v7")
+> > > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > > ---
+> > >  drivers/input/rmi4/rmi_f34.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/input/rmi4/rmi_f34.c b/drivers/input/rmi4/rmi_f34.c
+> > > index e5dca9868f87..3afc94f679ed 100644
+> > > --- a/drivers/input/rmi4/rmi_f34.c
+> > > +++ b/drivers/input/rmi4/rmi_f34.c
+> > > @@ -370,7 +370,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+> > >  
+> > >  	f34 = dev_get_drvdata(&data->f34_container->dev);
+> > >  
+> > > -	if (f34->bl_version == 7) {
+> > > +	if (f34->bl_version >= 7) {
+> > >  		if (data->pdt_props & HAS_BSR) {
+> > >  			dev_err(dev, "%s: LTS not supported\n", __func__);
+> > >  			return -ENODEV;
+> > > @@ -382,7 +382,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+> > >  	}
+> > >  
+> > >  	/* Enter flash mode */
+> > > -	if (f34->bl_version == 7)
+> > > +	if (f34->bl_version >= 7)
+> > >  		ret = rmi_f34v7_start_reflash(f34, fw);
+> > >  	else
+> > >  		ret = rmi_f34_enable_flash(f34);
+> > > @@ -413,7 +413,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
+> > >  	f34 = dev_get_drvdata(&data->f34_container->dev);
+> > >  
+> > >  	/* Perform firmware update */
+> > > -	if (f34->bl_version == 7)
+> > > +	if (f34->bl_version >= 7)
+> > >  		ret = rmi_f34v7_do_reflash(f34, fw);
+> > >  	else
+> > >  		ret = rmi_f34_update_firmware(f34, fw);
+> 
 
-Ok, I can make that change.
-
-Logan
-
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
