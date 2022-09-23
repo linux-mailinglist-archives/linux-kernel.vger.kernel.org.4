@@ -2,187 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596A95E731B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963105E731D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiIWEvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 00:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S229730AbiIWEwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 00:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiIWEvm (ORCPT
+        with ESMTP id S229578AbiIWEwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:51:42 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1AE1257B8;
-        Thu, 22 Sep 2022 21:51:41 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v186so3396912pfv.11;
-        Thu, 22 Sep 2022 21:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=b35zRPzYTW3YcMFjPUs7tbt9oJmqYvqFZz+zcYoQ4SA=;
-        b=XpSM0Sf4ZC24Je5xMvD+SDVxbUX0lEnIkxsGtODtvE+eMRXNZzTdD3Ws9AwnsQQM3a
-         Ic5NL0WAgNgzQTXp871xmt+DdbE6Q6NxORG/G+yKdHmoKWv7KH2MeCI4bGPJqKmeGri7
-         1xgRW5y9D60FYZHeeQy/3xWAmqhKcdLXCwHatMIRAeGIf7/wVXfDyGh1b2Lx3TbbyPuj
-         F3n2lb6WjM92NLzh+8QxjrDXRTbxrvuX6Jgzr9FYa1WL8W4nMtY7VwtRmmCWY95kc9pq
-         kjcRkqOibrDvBC/KM9hFFnngPNXAstrdD5Pb7p8+OQz2sFmyvFskvfLe7GHMO2JN3AON
-         J05A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=b35zRPzYTW3YcMFjPUs7tbt9oJmqYvqFZz+zcYoQ4SA=;
-        b=A5APAiK7ta+qZEvVtqbPbzuboTPySy7MSpOpuv+8O9kkh55okJCQpyfti6LzlvB23M
-         et1IDhZE733ZxbPUobincZfOf1/mBZshv7wzaYjPL2kna5uAZKR3J36Gh7SpxTWE9O0T
-         t6k51gBuA+mieil3Ti+UUFoQ1iV0o7EDrBavOiZQNLiUMHcrJYX3QZan/bT3TjvcX0oR
-         WF9tOaXJLHyTQsXINqLBVcrFeMV1QsTHV8VRVjnQNs3ZK1fW3X3Cv/1JyVbP0qH3J6NL
-         Msw0wlTYZraOI2bZfQ3jWEBFaIVf2dfWIH1QRcJH/Q6gHOHRWIWDngh1JLfO3VG370S0
-         QA4g==
-X-Gm-Message-State: ACrzQf0s0fqSRWTXvlleYXYViL0BipnxYYCeEI7MeXD6RyLF1JXZaEBE
-        IrK9xqB9drIAXomwuTu0beKLYLMqDbE=
-X-Google-Smtp-Source: AMsMyM6iGcFzVme/eCS5PUnUwsXSzLPtUfbNkfKMDz8cHzNprEyTkSBT3N1reKkidr+y5mmKuj9hjw==
-X-Received: by 2002:a62:e911:0:b0:555:8c06:c9eb with SMTP id j17-20020a62e911000000b005558c06c9ebmr5089529pfh.52.1663908700891;
-        Thu, 22 Sep 2022 21:51:40 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:8b46:be3c:2c54:68a5])
-        by smtp.gmail.com with ESMTPSA id i2-20020a17090332c200b0017834a6966csm5156120plr.176.2022.09.22.21.51.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 21:51:40 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 21:51:37 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-mpc52xx: switch to using gpiod API
-Message-ID: <Yy07WbMAG4bPgYNd@google.com>
+        Fri, 23 Sep 2022 00:52:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8143E1257BB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663908768; x=1695444768;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FkK4LgAPuTiz2ulFOO0KZI/5av2zSYi5/kTy4XL0vJc=;
+  b=BS4OZiv+Rn7EVWe8RTANPjjVLrjSbIcSZzu9HNu585qQl6XMR7MQIwhT
+   ZLHEdP4mF2mRygWZjEcbmwV6u2Pqo0alYPYVzTm4/AgGg76Agv4wzso07
+   T4AqfckzmiSYn5hm/AaFtObHudIvVfpSNFiA5Ku3Nl1WZiRBa5xcPSuBi
+   I6RuWClk0dWebUOgHQPI/YFLWxpw2x0gifFwsccZCOnw1FNhn7sAPV3ZQ
+   G4r3GOyjnMPrX+lGp3hEmTGHXOnnECgQqU0W3kvZ8ASIXkVWUaiw8JyrP
+   CYkyugZEFcRNQicr9jauYUad7RE7DsjLa58C76x0GYHUeGav/KXnfehqS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301389876"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="301389876"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:52:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="762485535"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 21:52:33 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obafw-0005Jk-2o;
+        Fri, 23 Sep 2022 04:52:32 +0000
+Date:   Fri, 23 Sep 2022 12:52:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 480/484]
+ drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in
+ 'struct memory_block'
+Message-ID: <202209231253.y7FHIu3q-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This switches the driver to use gpiod API instead of legacy gpio API,
-which will brings us close to removing of_get_gpio() and other
-OF-specific old APIs.
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   1dee68cfead9a3a85e244a274b4e85620abd5331
+commit: 69b496f03bb46c7ce743aff0d976c078d753d6d6 [480/484] mm/hwpoison: introduce per-memory_block hwpoison counter
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220923/202209231253.y7FHIu3q-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/69b496f03bb46c7ce743aff0d976c078d753d6d6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout 69b496f03bb46c7ce743aff0d976c078d753d6d6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-No functional change intended beyond some differences in error messages.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/spi/spi-mpc52xx.c | 32 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
-index 97cdd6545ee1..cb075c1acbee 100644
---- a/drivers/spi/spi-mpc52xx.c
-+++ b/drivers/spi/spi-mpc52xx.c
-@@ -11,6 +11,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/of_platform.h>
- #include <linux/interrupt.h>
-@@ -18,7 +19,6 @@
- #include <linux/gpio/consumer.h>
- #include <linux/spi/spi.h>
- #include <linux/io.h>
--#include <linux/of_gpio.h>
- #include <linux/slab.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
-@@ -90,7 +90,7 @@ struct mpc52xx_spi {
- 	const u8 *tx_buf;
- 	int cs_change;
- 	int gpio_cs_count;
--	unsigned int *gpio_cs;
-+	struct gpio_desc **gpio_cs;
- };
- 
- /*
-@@ -102,9 +102,10 @@ static void mpc52xx_spi_chipsel(struct mpc52xx_spi *ms, int value)
- 
- 	if (ms->gpio_cs_count > 0) {
- 		cs = ms->message->spi->chip_select;
--		gpio_set_value(ms->gpio_cs[cs], value ? 0 : 1);
--	} else
-+		gpiod_set_value(ms->gpio_cs[cs], value);
-+	} else {
- 		out_8(ms->regs + SPI_PORTDATA, value ? 0 : 0x08);
-+	}
- }
- 
- /*
-@@ -386,10 +387,10 @@ static int mpc52xx_spi_probe(struct platform_device *op)
- {
- 	struct spi_master *master;
- 	struct mpc52xx_spi *ms;
-+	struct gpio_desc *gpio_cs;
- 	void __iomem *regs;
- 	u8 ctrl1;
- 	int rc, i = 0;
--	int gpio_cs;
- 
- 	/* MMIO registers */
- 	dev_dbg(&op->dev, "probing mpc5200 SPI device\n");
-@@ -451,23 +452,16 @@ static int mpc52xx_spi_probe(struct platform_device *op)
- 		}
- 
- 		for (i = 0; i < ms->gpio_cs_count; i++) {
--			gpio_cs = of_get_gpio(op->dev.of_node, i);
--			if (!gpio_is_valid(gpio_cs)) {
--				dev_err(&op->dev,
--					"could not parse the gpio field in oftree\n");
--				rc = -ENODEV;
--				goto err_gpio;
--			}
--
--			rc = gpio_request(gpio_cs, dev_name(&op->dev));
-+			gpio_cs = gpiod_get_index(&op->dev,
-+						  NULL, i, GPIOD_OUT_LOW);
-+			rc = PTR_ERR_OR_ZERO(gpio_cs);
- 			if (rc) {
- 				dev_err(&op->dev,
--					"can't request spi cs gpio #%d on gpio line %d\n",
--					i, gpio_cs);
-+					"failed to get spi cs gpio #%d: %d\n",
-+					i, rc);
- 				goto err_gpio;
- 			}
- 
--			gpio_direction_output(gpio_cs, 1);
- 			ms->gpio_cs[i] = gpio_cs;
- 		}
- 	}
-@@ -508,7 +502,7 @@ static int mpc52xx_spi_probe(struct platform_device *op)
- 	dev_err(&ms->master->dev, "initialization failed\n");
-  err_gpio:
- 	while (i-- > 0)
--		gpio_free(ms->gpio_cs[i]);
-+		gpiod_put(ms->gpio_cs[i]);
- 
- 	kfree(ms->gpio_cs);
-  err_alloc_gpio:
-@@ -529,7 +523,7 @@ static int mpc52xx_spi_remove(struct platform_device *op)
- 	free_irq(ms->irq1, ms);
- 
- 	for (i = 0; i < ms->gpio_cs_count; i++)
--		gpio_free(ms->gpio_cs[i]);
-+		gpiod_put(ms->gpio_cs[i]);
- 
- 	kfree(ms->gpio_cs);
- 	spi_unregister_master(master);
--- 
-2.37.3.998.g577e59143f-goog
+>> drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in 'struct memory_block'
+           if (atomic_long_read(&mem->nr_hwpoison))
+                                 ~~~  ^
+   drivers/base/memory.c:870:49: error: no member named 'nr_hwpoison' in 'struct memory_block'
+                   clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
+                                                            ~~~  ^
+   2 errors generated.
 
+
+vim +186 drivers/base/memory.c
+
+   177	
+   178	static int memory_block_online(struct memory_block *mem)
+   179	{
+   180		unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
+   181		unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
+   182		unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
+   183		struct zone *zone;
+   184		int ret;
+   185	
+ > 186		if (atomic_long_read(&mem->nr_hwpoison))
+   187			return -EHWPOISON;
+   188	
+   189		zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
+   190					  start_pfn, nr_pages);
+   191	
+   192		/*
+   193		 * Although vmemmap pages have a different lifecycle than the pages
+   194		 * they describe (they remain until the memory is unplugged), doing
+   195		 * their initialization and accounting at memory onlining/offlining
+   196		 * stage helps to keep accounting easier to follow - e.g vmemmaps
+   197		 * belong to the same zone as the memory they backed.
+   198		 */
+   199		if (nr_vmemmap_pages) {
+   200			ret = mhp_init_memmap_on_memory(start_pfn, nr_vmemmap_pages, zone);
+   201			if (ret)
+   202				return ret;
+   203		}
+   204	
+   205		ret = online_pages(start_pfn + nr_vmemmap_pages,
+   206				   nr_pages - nr_vmemmap_pages, zone, mem->group);
+   207		if (ret) {
+   208			if (nr_vmemmap_pages)
+   209				mhp_deinit_memmap_on_memory(start_pfn, nr_vmemmap_pages);
+   210			return ret;
+   211		}
+   212	
+   213		/*
+   214		 * Account once onlining succeeded. If the zone was unpopulated, it is
+   215		 * now already properly populated.
+   216		 */
+   217		if (nr_vmemmap_pages)
+   218			adjust_present_page_count(pfn_to_page(start_pfn), mem->group,
+   219						  nr_vmemmap_pages);
+   220	
+   221		mem->zone = zone;
+   222		return ret;
+   223	}
+   224	
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp
