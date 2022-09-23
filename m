@@ -2,139 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B285E8258
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76FA5E825A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiIWTFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S232310AbiIWTGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiIWTFJ (ORCPT
+        with ESMTP id S230449AbiIWTGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 15:05:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CAA3D75
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663959904; x=1695495904;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YkbF167qKa4BtHKOjrejr/KpiaR+fUFgfEok5NmFkLw=;
-  b=QFRrCCj3bA960FlIjNzC1AHG/Pcu0IdsjF/SMSVJ8fXh3wxuJK9YAQTE
-   ek0RpeyNiqeZbqPWQkvtz8L4PykltdR/fKqysF45mBqTQNPQnyV1Gak7v
-   h/HPp4J/WOEEtsOwQet1rG+c/AwYZKJFkemty8fvSHBp7njcUxtlUezSA
-   yNIJvN3d8Xfl084XMKpEZyQqXOZ8jUzTX93KBXDLB84VlrFgWFNaqlHrz
-   ABPdSSNC7X4HGIDWMdbqTz60c6PMcIIeckbdfTZtx/avtsCHBpX+oW7MS
-   OYMW3ef0hlOMRPh1sHSeWj83iBjHd+A4nlgJ/TVh3nFsH9uQD1S+eQXsO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="287791599"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="287791599"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 12:05:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="949133577"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 12:05:02 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obnyw-0005sS-0N;
-        Fri, 23 Sep 2022 19:05:02 +0000
-Date:   Sat, 24 Sep 2022 03:04:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [peterz-queue:call-depth-tracking 59/60]
- ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
-Message-ID: <202209240243.vRVXCjW9-lkp@intel.com>
+        Fri, 23 Sep 2022 15:06:17 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13217124C06;
+        Fri, 23 Sep 2022 12:06:17 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A7153735;
+        Fri, 23 Sep 2022 19:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A7153735
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1663959976; bh=QCxlk2C203yiZmH3NcY7ljKSsBSBefRBwRjTA6IL/TQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ICp5cAvPkCiRqpGuumh0+rH/JABU12A+n9wQLyG7X7Bs1ur7+B402rlZAh53DfOpn
+         5Z82QY3IN9UYrzy2bptcQS2p3Y/BdTGGKvXJC0H7YyrdQIi1pWxArxqGIMVllTxz4b
+         b5A7SX/9Kf+fPBPEXx+hrdMx2g9REUoJVNaMM1DetPOKbgxYTJiH/2pw44ojn89YWS
+         cFUXdiRVAtPfudHZvaQVDykeD277fwcLAAQZz1d9Wg26HWUoU3xy0iSqizbU8W4xd5
+         gKdUkvy4Y42djnkoXbO7TB76cxqmKxT7fdlrgsqaf9QL0jZQGLAgNUs2HjU1qJQz6U
+         aMieER5Ny2MtQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2 7/7] docs: put atomic*.txt and memory-barriers.txt
+ into the core-api book
+In-Reply-To: <a22ed923-754a-b757-e0ca-87b6d6e6e8d2@infradead.org>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <20220922204138.153146-8-corbet@lwn.net>
+ <a22ed923-754a-b757-e0ca-87b6d6e6e8d2@infradead.org>
+Date:   Fri, 23 Sep 2022 13:06:15 -0600
+Message-ID: <874jwx9ahk.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git call-depth-tracking
-head:   856304fc062b9ad34742a604b98cc775846c0cb3
-commit: 46f9bf3269a589dc0258ae68c32e064e25a0a149 [59/60] x86/ftrace: Make it call depth tracking aware
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220924/202209240243.vRVXCjW9-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=46f9bf3269a589dc0258ae68c32e064e25a0a149
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue call-depth-tracking
-        git checkout 46f9bf3269a589dc0258ae68c32e064e25a0a149
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/trace/
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> When I look at https://static.lwn.net/kerneldoc/,
+> I want to move these 3 from "Other documentation":
+> Atomic Types
+> Atomic bitops
+> Memory Barriers
+>
+> to "Internal API Manuals", then I saw this patch...
+> Maybe I am misunderstanding. Is this patch supposed to move those 3 items
+> from Other or not?
 
-All warnings (new ones prefixed by >>):
+*Sigh*  I somehow pushed an intermediate build of the web pages to that
+site.  That is fixed now; apologies for the confusion.
 
-   kernel/trace/trace.c: In function 'trace_check_vprintf':
-   kernel/trace/trace.c:3846:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    3846 |                 trace_seq_vprintf(&iter->seq, iter->fmt, ap);
-         |                 ^~~~~~~~~~~~~~~~~
-   kernel/trace/trace.c:3913:17: warning: function 'trace_check_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    3913 |                 trace_seq_vprintf(&iter->seq, p, ap);
-         |                 ^~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/asm-offsets.h:1,
-                    from kernel/trace/trace_selftest.c:10,
-                    from kernel/trace/trace.c:8672:
-   ./include/generated/asm-offsets.h: At top level:
->> ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
-      81 | #define TASK_SIZE -1342177280 /* TASK_SIZE */
-         | 
-   In file included from arch/powerpc/include/asm/processor.h:73,
-                    from arch/powerpc/include/asm/thread_info.h:46,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:7,
-                    from include/linux/mm.h:7,
-                    from include/linux/ring_buffer.h:5,
-                    from kernel/trace/trace.c:15:
-   arch/powerpc/include/asm/task_size_32.h:9: note: this is the location of the previous definition
-       9 | #define TASK_SIZE (CONFIG_TASK_SIZE)
-         | 
---
-   In file included from arch/powerpc/include/asm/asm-offsets.h:1,
-                    from kernel/trace/trace_selftest.c:10,
-                    from kernel/trace/trace.c:8672:
->> ./include/generated/asm-offsets.h:81: warning: "TASK_SIZE" redefined
-      81 | #define TASK_SIZE -1342177280 /* TASK_SIZE */
-         | 
-   In file included from arch/powerpc/include/asm/processor.h:73,
-                    from arch/powerpc/include/asm/thread_info.h:46,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:7,
-                    from include/linux/mm.h:7,
-                    from include/linux/ring_buffer.h:5,
-                    from kernel/trace/trace.c:15:
-   arch/powerpc/include/asm/task_size_32.h:9: note: this is the location of the previous definition
-       9 | #define TASK_SIZE (CONFIG_TASK_SIZE)
-         | 
+Thanks for taking a look,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+jon
