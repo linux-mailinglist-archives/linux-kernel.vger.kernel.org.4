@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACFC5E80B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7015E80BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 19:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiIWRaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 13:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S231627AbiIWRcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 13:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiIWRaW (ORCPT
+        with ESMTP id S231474AbiIWRcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 13:30:22 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4B191DA9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:30:21 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-12c8312131fso1213687fac.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:30:21 -0700 (PDT)
+        Fri, 23 Sep 2022 13:32:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AA012BD98;
+        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 78so825838pgb.13;
+        Fri, 23 Sep 2022 10:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+N5oyJcUF3g1nnHU8kFVJBXuR6Tvqo+haLUBkWOmg1k=;
-        b=cbYNEyjgOIPQtU2o5K7hMM8JO4382oIKH0Sk7l/bQecXKjHVzblInrltQc1kaeTuL3
-         nUlEg/vcaK+KRt+6Xh/j9ty9gXqxBfDu+ftIF6MhLUv5lsOGNYU9kwinFlAC6AgadvAx
-         N9+AWcNagwT31KeH1mluHfkjjceYjzf3hdiB0=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=JCv6sv00YaO4tU61lqZx/ARNo7oEKPFV016dlURUeFc=;
+        b=OdN3pbQpOZktYmS2WG5YnbAEMZ+Bq1ZGT50wjJhl7V1Nb2ALsjFJW2xHgUWspChrEy
+         uTTknjZNvhsfUKAi1+b0JYNLjuNH8B5sk645HZtEXikdHZQhnIBucAuKfS36vPRsR/g/
+         UC/KFaQmtzjhd6e0AQpCphmwcaP+DaurqEU4jgOSlhRc4tiW2IMqt8Zdx/rxypjvVkK2
+         Crdvge3dM5kERkGVL1F+dqp/YiMHSs2FQtvaF34wtsWJplhaZVmPhrwJxATY8NHhb9Fw
+         dkJJK+h3tXtP762bCAI/NSzNsQ/3VrTPwXujPXa/5dJW9zxkjlHkbmHNOjllZWnGUSP8
+         W0yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+N5oyJcUF3g1nnHU8kFVJBXuR6Tvqo+haLUBkWOmg1k=;
-        b=l7vBd+CFtkMpkuG3DAavO9wJCKv8T8DIZiwDprzx0jAkoSchokOppbIk6NYQw6R9Bm
-         hvlw9CFEFBt5T6j9ie6L+5PI8ith92M08ugWLRt2xVCMBoMZx2pSlpJVa8D0c+f6+es2
-         kkC9wDIrIyxPP3r8Aaw/c5sxq4TS3c2tsdnDVgrkAxh/7kQ1IQJj/409hJZaqWPSnw5c
-         7hLsmjUOZ6791y/Enr2wfbsmX8h9c6AMZTcquViG9u1onIQwV+BEAhfeAIoiyfzyRUw0
-         ZJx+v9wDwZxohOpAmLOXfTq7WCRVvgQFdAMCvXBb5Ep+8EYbQr0XNAVqJte0I8mVxOho
-         4VWw==
-X-Gm-Message-State: ACrzQf2WjN7S0x8eNInEcTjB3Gm1NJNvM4ivT5+gTbLFqENbxARXYUHb
-        5ymastizKG9kHpegB2WKvYsLTCoUO6LVmg==
-X-Google-Smtp-Source: AMsMyM4ZRZQ0iFy/rdL/ZDsuHaKTgou0QWgVFL1H5PFvlzbIllPBQ3LYPUUR/TOVAinOLfDhRdIVAA==
-X-Received: by 2002:a05:6871:98:b0:12c:8f0d:c868 with SMTP id u24-20020a056871009800b0012c8f0dc868mr11900684oaa.295.1663954219345;
-        Fri, 23 Sep 2022 10:30:19 -0700 (PDT)
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
-        by smtp.gmail.com with ESMTPSA id 5-20020a9d0685000000b00655bab150d6sm4189501otx.59.2022.09.23.10.30.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 10:30:15 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id 102-20020a9d0bef000000b0065a08449ab3so477904oth.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 10:30:15 -0700 (PDT)
-X-Received: by 2002:a9d:3623:0:b0:655:dae2:6852 with SMTP id
- w32-20020a9d3623000000b00655dae26852mr4667060otb.176.1663954214778; Fri, 23
- Sep 2022 10:30:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220923170218.1188423-1-ndesaulniers@google.com>
-In-Reply-To: <20220923170218.1188423-1-ndesaulniers@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Sep 2022 10:29:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com>
-Message-ID: <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com>
-Subject: Re: [PATCH] x86, mem: move memmove to out of line assembler
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=JCv6sv00YaO4tU61lqZx/ARNo7oEKPFV016dlURUeFc=;
+        b=K/pkr//ZcosbSyZiJ3aMSDLVkp6ZrLR4vQXy2aGTMhKUMUlsIRqQNWYsTeKfYxuvh/
+         h91DeEzw0o5MtU9VZfCQkJUuyJ9tL7C6P0o4eQitfftkZG1pnBLi8NI5QQzoDuR17CA0
+         yLRQ/754MMaQH6IjMqto0zlLmjR1kS12eWQqkeTdH0/DxKYge5jnM2l90EQ4Ey4QB46x
+         k8NJcAZ6n14GbpxTPJUSXWNC79ywrDPjN1uAh6sYzO1MvfjJwB2oRjaApn2SRfK8J1iH
+         XIFkxlKmJz4JZ2hyNRWKxt5GeejaG9jaXJvY6vrL4z1SbETdlVWOu+SH2HKy0PA4fjwJ
+         WWJA==
+X-Gm-Message-State: ACrzQf1xx1Pkf5yl8kGeRd2Q04xSO6Z+JW+p0jS9II6uiozN/75ZCtHu
+        nXWyLjm04U5icCPSbAYibbw01sWJxOI=
+X-Google-Smtp-Source: AMsMyM5W/Nnz+Ei6eaOF7Zd7e9mvoKj+Rge261fAN0/i8Plgv3bz9R+bB+3VUn2IJEMdw3NoXrflrg==
+X-Received: by 2002:a05:6a00:1248:b0:548:2e34:65e1 with SMTP id u8-20020a056a00124800b005482e3465e1mr10484417pfi.82.1663954322999;
+        Fri, 23 Sep 2022 10:32:02 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:c716:a857:50ee:f56e])
+        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm6719499pfu.2.2022.09.23.10.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 10:32:02 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Andy Lutomirski <luto@kernel.org>, Ma Ling <ling.ma@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: [PATCH 0/4] perf tools: Assorted random fixes and updates
+Date:   Fri, 23 Sep 2022 10:31:38 -0700
+Message-Id: <20220923173142.805896-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 10:02 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> memmove is quite large and probably shouldn't be inlined due to size
-> alone. A noinline function attribute would be the simplest fix, but
-> there's a few things that stand out with the current definition:
+Hello,
 
-I don't think your patch is wrong, and it's not that different from
-what the x86-64 code did long ago back in 2011 in commit 9599ec0471de
-("x86-64, mem: Convert memmove() to assembly file and fix return value
-bug")
+This is collection of random fixes and updates.
+And I'm resending them as they seem to be lost in the list.
 
-But I wonder if we might be better off getting rid of that horrid
-memmove thing entirely. The original thing seems to be from 2010,
-where commit 3b4b682becdf ("x86, mem: Optimize memmove for small size
-and unaligned cases") did this thing for both 32-bit and 64-bit code.
+Thanks,
+Namhyung
 
-And it's really not likely used all that much - memcpy is the *much*
-more important function, and that's the one that has actually been
-updated for modern CPU's instead of looking like it's some copy from
-glibc or whatever.
 
-To make things even stranger, on the x86-64 side, we actually have
-*two* copies of 'memmove()' - it looks like memcpy_orig() is already a
-memmove, in that it does that
+Namhyung Kim (4):
+  perf record: Fix a segfault in record__read_lost_samples()
+  perf inject: Clarify build-id options a little bit
+  perf tools: Add 'addr' sort key
+  perf annotate: Toggle full address <-> offset display
 
-        cmp  %dil, %sil
-        jl .Lcopy_backward
+ tools/perf/Documentation/perf-inject.txt |  6 ++--
+ tools/perf/Documentation/perf-report.txt |  3 +-
+ tools/perf/builtin-record.c              |  6 ++++
+ tools/perf/ui/browsers/annotate.c        |  6 +++-
+ tools/perf/util/annotate.c               | 19 +++++++++++-
+ tools/perf/util/annotate.h               |  4 ++-
+ tools/perf/util/hist.c                   |  1 +
+ tools/perf/util/hist.h                   |  1 +
+ tools/perf/util/sort.c                   | 38 ++++++++++++++++++++++++
+ tools/perf/util/sort.h                   |  1 +
+ 10 files changed, 79 insertions(+), 6 deletions(-)
 
-thing that seems to mean that it already handles the overlapping case.
+-- 
+2.37.3.998.g577e59143f-goog
 
-Anyway, that 32-bit memmove() implemented (badly) as inline asm does
-need to go. As you point out, it seems to get the clobbers wrong too,
-so it's actively buggy and just happens to work because there's
-nothing else in that function, and it clobbers %bx that is supposed to
-be callee-saved, but *presumably* the compile has to allocate %bx one
-of the other registers, so it will save and restore %bx anyway.
-
-So that current memmove() seems to be truly horrendously buggy, but in
-a "it happens to work" way. Your patch seems an improvement, but I get
-the feeling that it could be improved a lot more...
-
-              Linus
