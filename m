@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E9E5E77A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350825E77A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiIWJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        id S231835AbiIWJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiIWJu0 (ORCPT
+        with ESMTP id S231902AbiIWJvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:50:26 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01542F646;
-        Fri, 23 Sep 2022 02:50:23 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id CEEA01250;
-        Fri, 23 Sep 2022 11:50:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663926620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rsjnwaPBUJPxsfvMj/cndZRq66fUnmrOrL2fxzRC6eM=;
-        b=Vo/KwCDEpx4d40kwWFj++T4igYTLUw9NzlU2K1j6bQCcPM1bDONFO0p0SdHvB15ph73J5+
-        ljXz7N5HJuJQbLXYxoYUN54ohBOjysdyQF3yVM3BsPZC9rorCg6hABoPxsAnTYup5yiXug
-        T0D0FgvjxrI0iuZr09OgUs0UKDHA5/+b54VFiCrNQdkJF8D8UStNpcu6ROLR7i0ic2oZjm
-        sxqrNAKm70I51CL6hiM4JpwlI9ULLO+imFkBFHiAV12naDwWmehQZMomlcS+DzN6j8eYWv
-        tUWgjDh4kteHN/ud1yuB1WOyP15OgfD/ANhT3bh2kmORbw+JHgj/eTCn7nP9HA==
-From:   Michael Walle <michael@walle.cc>
-To:     sfr@canb.auug.org.au
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, naoya.horiguchi@nec.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Date:   Fri, 23 Sep 2022 11:50:13 +0200
-Message-Id: <20220923095013.1151252-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220923175554.59431f7b@canb.auug.org.au>
-References: <20220923175554.59431f7b@canb.auug.org.au>
+        Fri, 23 Sep 2022 05:51:00 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEDAB6576
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:50:51 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id s6so18952523lfo.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=2qrmcRDZqwi31YkwdnR1i4dWD3broD3YXrZDrzvOyNI=;
+        b=HUxqy2qr6OehzXQV16cjRzMAJLPs/TetH4FTDBvm0rMCiSbnTphIo8EU9i/v/KWhQU
+         LdI6Y4dYmb5NJRoIOG8YxLP39MyVpJN6J8CsrfYeSTOyysVydX6yvtqOhMu53sxVtTbI
+         r2lf6sa5iuecDbLEQSKLMUizIfVKdfNz7oBBWMqTLoATSAEKywHXjZh6vSPOyTrJrhMi
+         XMf2c+aGRl33DaChy10V/vmFx8GG2qLjVtmig2vjft9qPMTXEBIr55jvHHVx5rn3YRf9
+         8He0YBJH73p0Akx0R25MPi7LM/IpR6buresc0aaPoVJN+g9hWnp6GCizDKZg/RSJQ+gF
+         8rfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2qrmcRDZqwi31YkwdnR1i4dWD3broD3YXrZDrzvOyNI=;
+        b=p42QrSPx7wMhvZ/pG4NWp/qZicyzT7mfgahBZkKYlWzkFfIiOhpGY0a5Rnw9W4zruB
+         buwoiN+FMksTgAjPNUNOCCEVPMyeHo332rLfzwJs0WOABIm1orGjnfcYSbAmkbrE0Aux
+         LCxdKCgBXwyl3rKMDb4xkCq1O8YwdCE5lr+q8vwk3B/BxmN3Q2jAaqKFyw9N5KujsvVn
+         FMESAiQXGmsO54c5igQdm07cISR/hQLOs0sletw1E65Vve8JRmw0Ln9+4m96waRpERVB
+         W3LFzFqXA76xtnOGVeFLdBxV6mmnhrtqjmWbyCgLs2AjSusCLg2N5VylFoV2zLJZqZeG
+         OgGQ==
+X-Gm-Message-State: ACrzQf0cGuwYF6LbVZOA9Ok6rLt5o9IRlFlOr3iDLlYrIysYyElaQ+0z
+        8Epk2iXyc3ApHpoqh7aD76twBjm+wKjUwpbpu3g=
+X-Google-Smtp-Source: AMsMyM6eCIScuuP2Zhj89/HCtI/dYMQioFerBO5zcg2vxxpqEeLVc+qrUz3tMl3UfXEAR98MjKb94uUfEttyeM4ZGCo=
+X-Received: by 2002:a05:6512:e9f:b0:498:f1e5:26e5 with SMTP id
+ bi31-20020a0565120e9f00b00498f1e526e5mr3103316lfb.517.1663926650299; Fri, 23
+ Sep 2022 02:50:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6504:80c:b0:1e7:be54:c292 with HTTP; Fri, 23 Sep 2022
+ 02:50:49 -0700 (PDT)
+Reply-To: markwillima00@gmail.com
+From:   Mark <muhammadabdulrahma999@gmail.com>
+Date:   Fri, 23 Sep 2022 02:50:49 -0700
+Message-ID: <CAOhTmf4CMHGL6g=PXp9s-vz1NL2qSB57edUiadUwKbLz5gQr1A@mail.gmail.com>
+Subject: Re: Greetings!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:143 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6574]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [markwillima00[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-> After merging the mm tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> drivers/base/memory.c: In function 'memory_block_online':
-> drivers/base/memory.c:186:34: error: 'struct memory_block' has no member na=
-> med 'nr_hwpoison'
->   186 |         if (atomic_long_read(&mem->nr_hwpoison))
->       |                                  ^~
-> drivers/base/memory.c: In function 'remove_memory_block_devices':
-> drivers/base/memory.c:870:61: error: 'struct memory_block' has no member na=
-> med 'nr_hwpoison'
->   870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hw=
-> poison));
->       |                                                             ^~
-> 
-> Caused by commit
-> 
->   69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
-> 
-> This build has CONFIG_MEMORY_FAILURE not set.
 
-There also seems be more missing stubs. I'm getting:
+The HSBC Bank is a financial institution in United Kingdom. We
+promotes long-term,sustainable and broad-based economic growth in
+developing and emerging countries by providing financial support like
+loans and investment to large, small and
+medium-sized companies (SMEs) as well as fast-growing enterprises
+which in turn helps to create secure and permanent jobs and reduce
+poverty.
 
-aarch64-linux-gnu-ld: mm/memory-failure.o: in function `unpoison_memory':
-memory-failure.c:(.text+0x1c38): undefined reference to `memblk_nr_poison_sub'
-aarch64-linux-gnu-ld: mm/memory-failure.o: in function `num_poisoned_pages_inc':
-memory-failure.c:(.text+0x2c8c): undefined reference to `memblk_nr_poison_inc'
-aarch64-linux-gnu-ld: memory-failure.c:(.text+0x2cbc): undefined reference to `memblk_nr_poison_inc'
+If you need fund to promotes your business, project(Project Funding),
+Loan, planning, budgeting and expansion of your business(s) , do not
+hesitate to indicate your interest as we are here to serve you better
+by granting your request.
 
-On a board where CONFIG_MEMORY_HOTPLUG is not set, but
-CONFIG_MEMORY_FAILURE is. So either there are stubs missing or
-MEMORY_FAILURE should depend MEMORY_HOTPLUG (?!).
 
--michael
+Thank you
+Mr:Mark
