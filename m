@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183A55E7B25
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC95D5E7B28
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbiIWMtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S230033AbiIWMue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiIWMt0 (ORCPT
+        with ESMTP id S230015AbiIWMua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:49:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07FB135730;
-        Fri, 23 Sep 2022 05:49:25 -0700 (PDT)
+        Fri, 23 Sep 2022 08:50:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AA51166D4;
+        Fri, 23 Sep 2022 05:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CB1260F95;
-        Fri, 23 Sep 2022 12:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFE6C433C1;
-        Fri, 23 Sep 2022 12:49:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16F98B8317C;
+        Fri, 23 Sep 2022 12:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7673C433D7;
+        Fri, 23 Sep 2022 12:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663937364;
-        bh=jKlwvRhlqKpZTB/gIibghWfeoMWb/cK+eUxT5ZBJaPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MrhvdNPpP+JywPO2T9ln/RgYCZIbIzVq90Mx1nB2fOuCzGy1floh4sLu4wv+NoHNi
-         z9HysZ2PnFFUWuZWeHR+IjcNrMaFx8irxsZO4x/aKeXQmRoZyElqN1GuxRhNgQQF8M
-         EjnTOloP2xj2W/0uKhzMmth6nznNZIAw+Pb5iSOiAjRWCVf6gSzQGhdwh5AHZZ1mSx
-         z63drz+QkBm3dm1tpmWhlMCY1QM1mpLroSEcE59NTY0jmxyHv8OUSfHvB0swyGyj7c
-         FoFQFWicf4U0STOGrH8aLmr4G9/81GNq+Q4nroSPTl/oA4osU8REAgSRUWY3uQLrIF
-         SnX/XMeHtavAw==
-Date:   Fri, 23 Sep 2022 15:49:20 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH 02/20] x86/sgx: Store EPC page owner as a 'void *' to
- handle multiple users
-Message-ID: <Yy2rUH7i05qEoOIx@kernel.org>
-References: <20220922171057.1236139-1-kristen@linux.intel.com>
- <20220922171057.1236139-3-kristen@linux.intel.com>
+        s=k20201202; t=1663937414;
+        bh=Amqa2Q5rxGYINkTmRz3S+7GGUX2jay5F7luuA9oDrz4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NpBx67rcaEbRExl7Rrtvvi/Rk2DXY55ms2Df41p4FU18Fm9xolS3Qh6MBtYWB+quw
+         fGU6Qz0skAj20GSoADbAil6v34L53qqqbP1xnGoL/SQvKa8dFDnQky9UQoIpFI3BZp
+         zY8uSZ8Brb15IJ54NpvUJ7igcevJjf1mpzeH/FB5GRChgYC0YNl3qMTUr5XS1aM4nT
+         1vGmorLK5Q5zLjeDC/ST7r/Ojd2QYz6qGqQ05Xk7a7YAXQ9s/7nGCY5LexsxQKyHM+
+         tgmy+RI72a3Omt31OOOFZImwQa9FtynZSOQ1BoldI3NmoQJCRh4cRyMeKi2RbfD4pO
+         9O/eRkx3a1kng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9CC34E4D03D;
+        Fri, 23 Sep 2022 12:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922171057.1236139-3-kristen@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] MAINTAINERS: rectify file entry in TEAM DRIVER
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166393741463.6856.17054212763990591343.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Sep 2022 12:50:14 +0000
+References: <20220922114053.10883-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220922114053.10883-1-lukas.bulwahn@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     bpoirier@nvidia.com, davem@davemloft.net, netdev@vger.kernel.org,
+        jiri@resnulli.us, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,36 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:10:39AM -0700, Kristen Carlson Accardi wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> A future patch will use the owner field for either a pointer to
-> a struct sgx_encl, or a struct sgx_encl_page.
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kernel/cpu/sgx/sgx.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
-> index 0f2020653fba..5a7e858a8f98 100644
-> --- a/arch/x86/kernel/cpu/sgx/sgx.h
-> +++ b/arch/x86/kernel/cpu/sgx/sgx.h
-> @@ -33,7 +33,7 @@ struct sgx_epc_page {
->  	unsigned int section;
->  	u16 flags;
->  	u16 poison;
-> -	struct sgx_encl_page *owner;
-> +	void *owner;
->  	struct list_head list;
->  };
->  
-> -- 
-> 2.37.3
-> 
+Hello:
 
-Conflicts with https://lore.kernel.org/linux-sgx/20220920063948.3556917-1-zhiquan1.li@intel.com/T/#m5c911085eb350df564db2c18e344ce036e269749
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-BR, Jarkko
+On Thu, 22 Sep 2022 13:40:53 +0200 you wrote:
+> Commit bbb774d921e2 ("net: Add tests for bonding and team address list
+> management") adds the net team driver tests in the directory:
+> 
+>   tools/testing/selftests/drivers/net/team/
+> 
+> The file entry in MAINTAINERS for the TEAM DRIVER however refers to:
+> 
+> [...]
+
+Here is the summary with links:
+  - MAINTAINERS: rectify file entry in TEAM DRIVER
+    https://git.kernel.org/netdev/net/c/f8497b3e9650
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
