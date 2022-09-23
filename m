@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A17E5E7D23
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77B15E7D29
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiIWOdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S231848AbiIWOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiIWOdN (ORCPT
+        with ESMTP id S232416AbiIWOdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:33:13 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB7513F739
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:11 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z13so435466edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:11 -0700 (PDT)
+        Fri, 23 Sep 2022 10:33:45 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3837140190
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:43 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id b35so560845edf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=JcLccmLtichVQvIjuBsBYfgR6Tl0L9ItGMwduiQP5RU=;
-        b=N1FDyXNxx7GKDn5pw04aLrkqj3YsfyCHDjiwdabJmWdWqWNQhUTpo+fPEN2XRVXhe1
-         ejCiZnSnNoANy2V1T3Mueo4FY01XvPX14egCssivRzTNQV1IC2BNigQkH1xYkvpKO9CU
-         LMQHhQ+fgqXS4JBTLSKrGCTEkcTdIMgxan9/E=
+        bh=5YJNawVCB64KpIAstvsKw73aAH2yj+Relp5ZFDa3MaI=;
+        b=JJbRfx9cLZf7rfabp1oQDbdQ5l8dhYb9U34ueRVV9VAbDSSqorTUwrEx5FVDjKYjLR
+         8bHiK+VB0iExV4IvICu/qPuW+1QbSMAJHdJW5VY8lt6zEZET+YXzJobrV4G5o1xnTBbU
+         5ZVuqhXzXm59CxvMlFGNyhjAq0k4bwsIxbch0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JcLccmLtichVQvIjuBsBYfgR6Tl0L9ItGMwduiQP5RU=;
-        b=IdDOFvAMmEiBdTopbHiSWgcPflDkK+Whz5IX+hwghjBcYfdFIVH2gr0aldZiKs6coe
-         ozYGup32uq7bOQnJwzFYvLzDEqqb538LHIZR9mJF4ym317fKMv3YL1mwDBdGj65+/Lqh
-         G0EpQHk6KIicq10DcDmxw/DNqXrPHFQsAc6Z61lrgNy3xKHGpIBAVPKmAlIBcTXvCkaJ
-         BFIMCfCni1sWH/QwgWG4PBQO3oIcjWWZ5TLu1qBtTTmYOsNor4I6n1pjT+gVt01YhPHq
-         qQSKbX5E7A5lbkQfYOC7ieodDs80zmc5XE2+OXr88L69oHJ5YgyBst1tnjpZiGPgXbb0
-         MUCw==
-X-Gm-Message-State: ACrzQf2Ov5CQe6K6ZOuSWwdsnLu330QJOULa125mlCbRaraRDfrgVBTH
-        TccBLzy867+RSfne5hjUPXACQ4+b8asRkLsw
-X-Google-Smtp-Source: AMsMyM6t5soANWB002FsF5ez5EwKkr9MIaaneXIbecAPbqO4waG49CBA8ikGF0ZHDZUsVMPTKeImRA==
-X-Received: by 2002:aa7:cc13:0:b0:453:52dc:1bbf with SMTP id q19-20020aa7cc13000000b0045352dc1bbfmr8727486edt.30.1663943590382;
-        Fri, 23 Sep 2022 07:33:10 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id h23-20020a170906399700b00773f3cb67ffsm4045911eje.28.2022.09.23.07.33.09
+        bh=5YJNawVCB64KpIAstvsKw73aAH2yj+Relp5ZFDa3MaI=;
+        b=bXIAlcWkmZgEeh/pRamtQFKXkGd14XS3RtLMdVn/E3RL4riH4ImtstairSjI+UpTWI
+         jWj2eUEllJxvjQIEhELbHaPzkOcih6hfTkXb4S8ic33kiO1tb2egMIcVH/azLp4fnIcY
+         AqQ9csptfOyEN0KdUSRyN7LIQGU1M6GahhwUrpy1F/Cb67t1d6iDwIrjW6KD92Y4Kklz
+         vwjV+WQ2Oy5F4lN6HNxASNaJpaZN92+yTSmAyekiXUtBmfkaAYwAHJJAWCTc2GecwtLc
+         EWKlXo4twsaJg66zb7gxzKvu9v4qkwvWN6Cu4Y/Vz2dLuxzJt8WkLQ7B42iI2t8C1BcA
+         yotA==
+X-Gm-Message-State: ACrzQf21ZU+xswvbBnUuLFoI2Mctw7nw3z9imQEXQ/vRJpNZOXxQw1KQ
+        FLL0c6rdrwQ98RZdaes+wWJ3i/34Vd7I6OGv
+X-Google-Smtp-Source: AMsMyM4WU94siZS5kthaZ0tcVBQfztXsZUol3BrXzptXfbQgh69P/61e1VzDufCNM+Q8B/4u1aEVhQ==
+X-Received: by 2002:a05:6402:1f0e:b0:453:a419:b3a0 with SMTP id b14-20020a0564021f0e00b00453a419b3a0mr8635255edb.124.1663943622116;
+        Fri, 23 Sep 2022 07:33:42 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b00780a26edfcesm4109453ejh.60.2022.09.23.07.33.41
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 07:33:09 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so878696wml.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:09 -0700 (PDT)
-X-Received: by 2002:a05:600c:5488:b0:3b5:634:731 with SMTP id
- iv8-20020a05600c548800b003b506340731mr4723210wmb.188.1663943588804; Fri, 23
- Sep 2022 07:33:08 -0700 (PDT)
+        Fri, 23 Sep 2022 07:33:41 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id e18so348500wmq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:33:41 -0700 (PDT)
+X-Received: by 2002:a05:600c:500d:b0:3b5:234:d7e9 with SMTP id
+ n13-20020a05600c500d00b003b50234d7e9mr5982543wmr.57.1663943621242; Fri, 23
+ Sep 2022 07:33:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220923085028.306790-1-sean.hong@quanta.corp-partner.google.com>
-In-Reply-To: <20220923085028.306790-1-sean.hong@quanta.corp-partner.google.com>
+References: <20220923054614.302440-1-sean.hong@quanta.corp-partner.google.com>
+In-Reply-To: <20220923054614.302440-1-sean.hong@quanta.corp-partner.google.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 23 Sep 2022 07:32:57 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WQs1EcafhPL0jh0Uj=LHumL1AT_YriibzGY6hvhxBNYA@mail.gmail.com>
-Message-ID: <CAD=FV=WQs1EcafhPL0jh0Uj=LHumL1AT_YriibzGY6hvhxBNYA@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: Add BOE NT116WHM-N21 (HW: V8.1)
+Date:   Fri, 23 Sep 2022 07:33:29 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xje=_kFShMCZ_WbzLBnkehvOp3DQ5p_RsdAPi+SSvAnA@mail.gmail.com>
+Message-ID: <CAD=FV=Xje=_kFShMCZ_WbzLBnkehvOp3DQ5p_RsdAPi+SSvAnA@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel-edp: Add BOE NT116WHM-N21
 To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         dri-devel <dri-devel@lists.freedesktop.org>,
@@ -77,10 +78,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Fri, Sep 23, 2022 at 1:50 AM Sean Hong
+On Thu, Sep 22, 2022 at 10:46 PM Sean Hong
 <sean.hong@quanta.corp-partner.google.com> wrote:
 >
-> Add support for the BOE - NT116WHM-N21 (HW: V8.1) panel.
+> Add support for the BOE - NT116WHM-N21 (HW: V8.2) panel.
 >
 > Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
 > ---
@@ -91,4 +92,4 @@ As with previous trivial patches that just add an entry to this
 structure, there's no reason to wait before applying. Pushed to
 drm-misc-next:
 
-43bee41415a6 drm/panel-edp: Add BOE NT116WHM-N21 (HW: V8.1)
+9d6b59478cc5 drm/panel-edp: Add BOE NT116WHM-N21
