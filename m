@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BFE5E8198
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46895E819C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbiIWSNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S231705AbiIWSOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiIWSNF (ORCPT
+        with ESMTP id S231701AbiIWSOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:13:05 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95897FA0E7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:13:03 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id j10so569694qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:13:03 -0700 (PDT)
+        Fri, 23 Sep 2022 14:14:12 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00396FFA7A
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:14:10 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id g20so935996ljg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ESjxMV4FxoH+Qzt/uSGYOPflTsCgLENu7dcc3YowE6k=;
-        b=kY7MMNDmdRDXgBREGl1n+cj9EEOun4Jy+ls14IMPSV0csWh1NDhj6Y4IB13T7BfdUg
-         Wi26eUp33Pa5tk7zFyBI2Mq+szalxQ6Q7xLkG63kAED5icqyWvausogbFqMjBz0Q3OAh
-         8jqc4H2+05KPQwocTeDkku8kSoajsIwV/5IYLvCARPSewr33UpGNeEeIiU9QvvDqKKWA
-         39NJUXg4YGPg3p8VI/Tc5XyFrJVFGr/E8X/vqYnNdWZ2ScfDLSTdMHKUBAKg0NCPBOg6
-         IuCIVAumakjRmdj960aYL4S9ORJZ+CwZb7srEB3nY3ZBFIp+qJ2V46gkbAaTq221ryrS
-         b8jg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=oMvGRyf6B1xSW6jldiB/4L2hCW2oiTVar6DgwfxZevA=;
+        b=joMXbDUN23NrSPuFVRuQxyZ18+85jHWvFlgB5rHkyQB6MuTQv+11Blst3Emk2PKY+n
+         nQnCehdvxQMvsQA4btPpAyPP7A2rskO/wpWNTd326VLi8qNLiaxtGTsbjoX+ObpiCpJm
+         J0XwvrZycGuZOZVovoupWtzvwrgXa8V/+Stgj+L2zVD5+vIf8S8/dQGNT4ECX7/na9dK
+         5ZrHOBzj5+T0zFen0C0YlgJjDGjqrrYvSllJnoBgLL1qLQEjpVVCO3efy9H6SOOqBcm7
+         TV+wstyMe4wWuqQKw6QpkQHV2tLOj0lk3tSZefrxu3+P5luZKiLRGS3ChfdurG1sEBAZ
+         2YfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ESjxMV4FxoH+Qzt/uSGYOPflTsCgLENu7dcc3YowE6k=;
-        b=tkEy80tUS0X/RSbVRJIxDliSCNE/7VRQZOvFPHfTwucvH/FeMYedFp+bbBjSiPtR4v
-         a7n0BLdymjorWx5I4GBeQXx0SB+4PaqH2Zl3Mz9lYY1vgTOBhAJi5C/dGJmcT06QgGVh
-         1PJdlndqI4RGRAcfes2J8ik5851iTYLQ4FhvmLMkbzp4JWBE8sAoaWy3KULIsTr30Lct
-         NjWSry8kMjRyiPW5eXhU0vP3Jew17rI3y1ZF1CYPCmE2l9mvZ0PqiaHoeJYeB1nLPmNJ
-         cP0jROEskHbbvD2WQLjuLALtEMZTIzVGWaQV+DIvzfue2o/xgMBBsLbeixYp9Sheyvon
-         +T5g==
-X-Gm-Message-State: ACrzQf1hc5qZ1fziWmLcg0N+rUYPzulNYQDlyYzjhTGPegpsVkO1u2Zb
-        K85DSeH+jMzzztMgUPlWCOgFrg==
-X-Google-Smtp-Source: AMsMyM70jy04UOYomyiLCRjAafYD9I2h2rthRpjbDcZ+gaI+Pe3GK1nBzDBvaI6cptEThcPFiSijKQ==
-X-Received: by 2002:a05:622a:1053:b0:35c:bab4:bd80 with SMTP id f19-20020a05622a105300b0035cbab4bd80mr8343380qte.189.1663956782680;
-        Fri, 23 Sep 2022 11:13:02 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac87eed000000b0034035e73be0sm5730575qtc.4.2022.09.23.11.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 11:13:01 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1obnAb-002jAI-6N;
-        Fri, 23 Sep 2022 15:13:01 -0300
-Date:   Fri, 23 Sep 2022 15:13:01 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting
- PCI P2PDMA pages
-Message-ID: <Yy33LUqvDLSOqoKa@ziepe.ca>
-References: <20220922163926.7077-1-logang@deltatee.com>
- <20220922163926.7077-2-logang@deltatee.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oMvGRyf6B1xSW6jldiB/4L2hCW2oiTVar6DgwfxZevA=;
+        b=vThYk04FHOpmCclegyWs8c977Y6og88722NHx4YcdbowhPtGJMc1Ci+yR8b1lfUEuk
+         jmmhnvfmV4IQkCm/PXq+rirMKPL9cs8B3tIuh+MgNkgg33CmRV7JcJXpa1vkoyhKESIS
+         yhwI+BNPGCp4DhgV6rSzoDHP5WE1xoaXICZLPDqJrK4gW+pFo+L9yVzB0pEGoOxkiv+D
+         1XPT/vIDS94bF5W/tz3nVYL9t25R6GRUKjv3B5HTNMdqHeQvTJFQFqoKj9mxk+CfTUbt
+         ZZU9ktbZ04qXjlFyb283Bm4DelOxVA+sRbjc/P+vBBNkcnFrrSCLXlswI4FrbaPD+rxN
+         GRKw==
+X-Gm-Message-State: ACrzQf04tgjw01N/ZBm81dVp/G9GyfhSPbq7ga37nCsG0F+l1ILaXP3h
+        bnFY+5thvV7D5dNPjzB0yhMgrg==
+X-Google-Smtp-Source: AMsMyM6ZNkXX2AkLZWL390O0wf6Nou5HbOXvCjEuUZ/Qb6dNDl3VBmNR01p6Z/h5HcJXrDEEqprZhA==
+X-Received: by 2002:a05:651c:19a6:b0:26c:4a66:aa42 with SMTP id bx38-20020a05651c19a600b0026c4a66aa42mr3624111ljb.231.1663956849278;
+        Fri, 23 Sep 2022 11:14:09 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056512368800b004a0526b11ffsm415225lfs.133.2022.09.23.11.14.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 11:14:08 -0700 (PDT)
+Message-ID: <ac24dc0f-0038-5068-3ce6-bbace55c7027@linaro.org>
+Date:   Fri, 23 Sep 2022 20:14:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922163926.7077-2-logang@deltatee.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 4/4] net: stmmac: Update the name of property 'clk_csr'
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jianguo Zhang <jianguo.zhang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220923052828.16581-1-jianguo.zhang@mediatek.com>
+ <20220923052828.16581-5-jianguo.zhang@mediatek.com>
+ <e0fa3ddf-575d-9e25-73d8-e0858782b73f@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e0fa3ddf-575d-9e25-73d8-e0858782b73f@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,39 +93,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:39:19AM -0600, Logan Gunthorpe wrote:
-> GUP Callers that expect PCI P2PDMA pages can now set FOLL_PCI_P2PDMA to
-> allow obtaining P2PDMA pages. If GUP is called without the flag and a
-> P2PDMA page is found, it will return an error.
+On 23/09/2022 11:10, AngeloGioacchino Del Regno wrote:
+> Il 23/09/22 07:28, Jianguo Zhang ha scritto:
+>> Update the name of property 'clk_csr' as 'snps,clk-csr' to align with
+>> the property name in the binding file.
+>>
+>> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+>> ---
+>>   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+>> index 9f5cac4000da..18f9952d667f 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+>> @@ -444,7 +444,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+>>   	 * or get clk_csr from device tree.
+>>   	 */
+>>   	plat->clk_csr = -1;
+>> -	of_property_read_u32(np, "clk_csr", &plat->clk_csr);
+>> +	of_property_read_u32(np, "snps,clk-csr", &plat->clk_csr);
 > 
-> FOLL_PCI_P2PDMA cannot be set if FOLL_LONGTERM is set.
+> This is going to break MT2712e on old devicetrees.
+> 
+> The right way of doing that is to check the return value of of_property_read_u32()
+> for "snps,clk-csr": if the property is not found, fall back to the old "clk_csr".
 
-What is causing this? It is really troublesome, I would like to fix
-it. eg I would like to have P2PDMA pages in VFIO iommu page tables and
-in RDMA MR's - both require longterm.
+I must admit - I don't care. That's the effect when submitter bypasses
+DT bindings review (81311c03ab4d ("net: ethernet: stmmac: add management
+of clk_csr property")).
 
-Is it just because ZONE_DEVICE was created for DAX and carried that
-revocable assumption over? Does anything in your series require
-revocable?
+If anyone wants ABI, please document the properties.
 
-> @@ -2383,6 +2392,10 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  		VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
->  		page = pte_page(pte);
->  
-> +		if (unlikely(!(flags & FOLL_PCI_P2PDMA) &&
-> +			     is_pci_p2pdma_page(page)))
-> +			goto pte_unmap;
-> +
->  		folio = try_grab_folio(page, 1, flags);
->  		if (!folio)
->  			goto pte_unmap;
+If out-of-tree users complain, please upstream your DTS or do not use
+undocumented features...
 
-On closer look this is not in the right place, we cannot touch the
-content of *page without holding a ref, and that doesn't happen until
-until try_grab_folio() completes.
+Best regards,
+Krzysztof
 
-It would be simpler to put this check in try_grab_folio/try_grab_page
-after the ref has been obtained. That will naturally cover all the
-places that need it.
-
-Jason
