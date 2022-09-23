@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE05E7E0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DB35E7E13
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiIWPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S229666AbiIWPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbiIWPPp (ORCPT
+        with ESMTP id S232543AbiIWPQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:15:45 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B15282D;
-        Fri, 23 Sep 2022 08:15:43 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 85B38100004;
-        Fri, 23 Sep 2022 15:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663946141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1MLy2biFNhN4y1hvJT+YxVTZvdJ5W+EL1YAq5Upuf8=;
-        b=PCkWkpfy5DuDQbTHSosAcLn/Kaijc0XM6bknacy7YXCMaAezv2es9CPbc55CP/KrAKbn4N
-        2CLl5tgM0bsE52rLwvVXkwym+8PFVKMk7JUYkZkL18CcCP5rOSrAZp3kM8Gs0vP1Y4xJcd
-        wVX16yRGeFTiq/qg2CR9VSzaqat4O4OBCHrrnWdr0+xItLAeiXBA4usA/lU66OtXIQRuTR
-        7FCQnmf8HMrgyQQmMcp4k1nCxgO0CI+2a+C7XbnN2ZpnbzyhOHtpMba9ciqsUuuMbUX/ap
-        o5I2oG6iebkRrlULGrCy+I+fm5bQJgN2WxfgvjMoC2U2qcBCJ6ptN1/mG8zZtA==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Behun <marek.behun@nic.cz>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add label for wan port
-In-Reply-To: <20220921115037.30246-1-pali@kernel.org>
-References: <20220921115037.30246-1-pali@kernel.org>
-Date:   Fri, 23 Sep 2022 16:15:38 +0100
-Message-ID: <87k05uxgth.fsf@BL-laptop>
+        Fri, 23 Sep 2022 11:16:35 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4691C139F73
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:16:29 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1278a61bd57so691948fac.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=pfqzhxoDqZ2/NYD5A7pwGfa+JPITfCvTXCsSvsUAv5s=;
+        b=QxnkDTuqoJwr5/HCeQYNaAwi56BjaaM2etnE6calfD/OGQZlqUW7HnfWz6U3vDLKvB
+         we2lFUG44Eh+zp1w1zGOwpcDy5mOyHEMQrG4gy56nJD25yHBQ9MEju8eE+rDMbN0XL+b
+         MBwjMhwFuzWc/KFIU//WvB7vdj8NgUN2SZ+6E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=pfqzhxoDqZ2/NYD5A7pwGfa+JPITfCvTXCsSvsUAv5s=;
+        b=Qkm4K7SAvQJe1PIOhJMdM9sJlyf73jvxNwsvgqIslSUMd0IHnJJJ171eAgoxMVxCJa
+         EhC4e1dDsJvFV+t+lrpXF+m+CEk/nie3PWpQcd8b9los+fjA472t1mffRlvcw+qH4Otn
+         Lk+bWqY/Wni/hjmBwYlheTcRLBoBr140SBUpXfflNHRQZLkwflBoXYbKqlSLRVD5EqUR
+         F04f8YfFfjmujI9OVc8L5+eKvb7v8uz96UpryV9igW5OeiZrr5GTjZeSir2IImKj4N0X
+         vkV48JgUbqhBVsb+/Ha9lhC+2Ke0zDGna2SrG64FeFlXqyeZuVYDWQdt2OHiVMWq6yA8
+         u/Yg==
+X-Gm-Message-State: ACrzQf2GxdDSQUcKJyiV7B3G4V1WKS9e84hxpU23B/FtHnAaxQW3o2jY
+        wAlFhHIot9SfA4Xo6pr6PgqeeTy/a8ovUQ==
+X-Google-Smtp-Source: AMsMyM5zrIEJdp0odG23wNRBWScEOQwBlx1IYjii9tNPktY4oTjWpmht2ID/AoymmT0eSpixRTkoLA==
+X-Received: by 2002:a05:6870:1494:b0:12a:fadc:c6ce with SMTP id k20-20020a056870149400b0012afadcc6cemr12243013oab.283.1663946187333;
+        Fri, 23 Sep 2022 08:16:27 -0700 (PDT)
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com. [209.85.160.51])
+        by smtp.gmail.com with ESMTPSA id l5-20020a9d7a85000000b00638ef9bb847sm4055580otn.79.2022.09.23.08.16.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 08:16:26 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-127ba06d03fso715736fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:16:26 -0700 (PDT)
+X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
+ e9-20020a056870c0c900b00127c4df5b50mr5247692oad.126.1663946185877; Fri, 23
+ Sep 2022 08:16:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220910221947.171557773@linutronix.de> <87h71cr1gb.fsf@jogness.linutronix.de>
+ <875yheqh6v.fsf@jogness.linutronix.de>
+In-Reply-To: <875yheqh6v.fsf@jogness.linutronix.de>
+From:   Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Fri, 23 Sep 2022 08:16:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wieXPMGEm7E=Sz2utzZdW1d=9hJBwGYAaAipxnMXr0Hvg@mail.gmail.com>
+Message-ID: <CAHk-=wieXPMGEm7E=Sz2utzZdW1d=9hJBwGYAaAipxnMXr0Hvg@mail.gmail.com>
+Subject: Re: printk meeting at LPC 2022
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        John Kacur <jkacur@redhat.com>,
+        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-
-> Device tree label property should contain label from the box/stick.
-> Labels for other ports are already specified in DT but wan is missing.
-> So add missing label for wan port.
+On Fri, Sep 23, 2022 at 7:49 AM John Ogness <john.ogness@linutronix.de> wrote:
 >
-> Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> - Printing the backlog is important! If some emergency situation occurs,
+>   make sure the backlog gets printed.
 
-Applied on mvebu/dt
+Yeah, I really liked the notion of doing the oops with just filling
+the back buffer but still getting it printed out if something goes
+wrong in the middle.
 
-Thanks,
+That said, I'm sure we can tweak the exact "how much of the back log
+we print" if there are any real life issues that look even remotely
+like the demo did.
 
-Gregory
+It's not like you couldn't do a "skipping lines" message if there are
+thousands of old non-emergency lines in the back buffer, and
+prioritize getting the recent ones out first.
 
-> ---
->  arch/arm/boot/dts/armada-385-turris-omnia.dts | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boo=
-t/dts/armada-385-turris-omnia.dts
-> index 8215ffb6a795..c4bf3ca0784b 100644
-> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> @@ -166,6 +166,7 @@
->  	buffer-manager =3D <&bm>;
->  	bm,pool-long =3D <2>;
->  	bm,pool-short =3D <3>;
-> +	label =3D "wan";
->  };
->=20=20
->  &i2c0 {
-> --=20
-> 2.20.1
->
+I doubt it ends up being an issue in practice, but basically I wanted
+to just pipe up and say that the exact details of how much of the back
+buffer needs to be flushed first _could_ be tweaked if it ever does
+come up as an issue.
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+                    Linus
