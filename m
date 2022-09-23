@@ -2,256 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182625E718F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2DB5E7190
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiIWBtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S231178AbiIWBt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiIWBtH (ORCPT
+        with ESMTP id S230229AbiIWBt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:49:07 -0400
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54CCEBD42
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:49:04 -0700 (PDT)
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1obXoM-002R66-5o
-        for linux-kernel@vger.kernel.org; Fri, 23 Sep 2022 03:49:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References
-        :Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-        bh=Zb+Ndi6hr3zgnjOrbLIzoHacaBvMqQUP3vkITYGJe5I=; b=Ewm7OpFGDPfREfqbSPGkFZa853
-        MyMbGYi1Plb5bUsXOAxS3pnhGcDNyUSN6qSiQ6OhJdqZKDfuHm9LnEhpYrRlV9Jyzao6E8ZZMsjPa
-        Qqa5bGRHKYlxWTxo0JxIYNxrN3eZfWap8f0sJNyQryFWZGPBqAb9nn1gd/myzmZ5BHYPAQSMA6TA4
-        H7C3DbyGAeYg9/W5RfsOmA5zFrCItMibjd1t8JxX58pvqMLr6bE6pBKguLH3pn2aZWiOlkDJEB9Mr
-        w8DzYQghq8/aKi9N93COsgZmoM7rO0jvaBF8yu+luFEVFLkkOhH+EzWOJ5cUkFnsSWEI0dyN94DJ+
-        /H1TsaaA==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1obXoL-0003T8-BT; Fri, 23 Sep 2022 03:49:01 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1obXoI-0001g4-Ni; Fri, 23 Sep 2022 03:48:58 +0200
-Message-ID: <1bc60f1c-2aa7-2d4a-a6a2-c8592ed83486@runbox.com>
-Date:   Thu, 22 Sep 2022 21:48:56 -0400
+        Thu, 22 Sep 2022 21:49:26 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF662EBD43
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:49:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VQUVO-6_1663897756;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VQUVO-6_1663897756)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Sep 2022 09:49:22 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] erofs: introduce partial-referenced pclusters
+Date:   Fri, 23 Sep 2022 09:49:15 +0800
+Message-Id: <20220923014915.4362-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-Subject: Re: [PATCH 1/2] xen/gntdev: Prevent leaking grants
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-References: <20220912040002.198191-1-m.v.b@runbox.com>
- <20220912040002.198191-2-m.v.b@runbox.com>
- <cd175db2-432d-af09-7634-fbedd7c4febb@suse.com>
-Content-Language: en-CA
-In-Reply-To: <cd175db2-432d-af09-7634-fbedd7c4febb@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-19 05:52, Juergen Gross wrote:
-> On 12.09.22 06:00, M. Vefa Bicakci wrote:
->> Prior to this commit, if a grant mapping operation failed partially,
->> some of the entries in the map_ops array would be invalid, whereas all
->> of the entries in the kmap_ops array would be valid. This in turn would
->> cause the following logic in gntdev_map_grant_pages to become invalid:
->>
->>    for (i = 0; i < map->count; i++) {
->>      if (map->map_ops[i].status == GNTST_okay) {
->>        map->unmap_ops[i].handle = map->map_ops[i].handle;
->>        if (!use_ptemod)
->>          alloced++;
->>      }
->>      if (use_ptemod) {
->>        if (map->kmap_ops[i].status == GNTST_okay) {
->>          if (map->map_ops[i].status == GNTST_okay)
->>            alloced++;
->>          map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
->>        }
->>      }
->>    }
->>    ...
->>    atomic_add(alloced, &map->live_grants);
->>
->> Assume that use_ptemod is true (i.e., the domain mapping the granted
->> pages is a paravirtualized domain). In the code excerpt above, note that
->> the "alloced" variable is only incremented when both kmap_ops[i].status
->> and map_ops[i].status are set to GNTST_okay (i.e., both mapping
->> operations are successful).  However, as also noted above, there are
->> cases where a grant mapping operation fails partially, breaking the
->> assumption of the code excerpt above.
->>
->> The aforementioned causes map->live_grants to be incorrectly set. In
->> some cases, all of the map_ops mappings fail, but all of the kmap_ops
->> mappings succeed, meaning that live_grants may remain zero. This in turn
->> makes it impossible to unmap the successfully grant-mapped pages pointed
->> to by kmap_ops, because unmap_grant_pages has the following snippet of
->> code at its beginning:
->>
->>    if (atomic_read(&map->live_grants) == 0)
->>      return; /* Nothing to do */
->>
->> In other cases where only some of the map_ops mappings fail but all
->> kmap_ops mappings succeed, live_grants is made positive, but when the
->> user requests unmapping the grant-mapped pages, __unmap_grant_pages_done
->> will then make map->live_grants negative, because the latter function
->> does not check if all of the pages that were requested to be unmapped
->> were actually unmapped, and the same function unconditionally subtracts
->> "data->count" (i.e., a value that can be greater than map->live_grants)
->> from map->live_grants. The side effects of a negative live_grants value
->> have not been studied.
->>
->> The net effect of all of this is that grant references are leaked in one
->> of the above conditions. In Qubes OS v4.1 (which uses Xen's grant
->> mechanism extensively for X11 GUI isolation), this issue manifests
->> itself with warning messages like the following to be printed out by the
->> Linux kernel in the VM that had granted pages (that contain X11 GUI
->> window data) to dom0: "g.e. 0x1234 still pending", especially after the
->> user rapidly resizes GUI VM windows (causing some grant-mapping
->> operations to partially or completely fail, due to the fact that the VM
->> unshares some of the pages as part of the window resizing, making the
->> pages impossible to grant-map from dom0).
->>
->> The fix for this issue involves counting all successful map_ops and
->> kmap_ops mappings separately, and then adding the sum to live_grants.
->> During unmapping, only the number of successfully unmapped grants is
->> subtracted from live_grants. To determine which grants were successfully
->> unmapped, their status fields are set to an arbitrary positive number
->> (1), as was done in commit ebee0eab0859 ("Xen/gntdev: correct error
->> checking in gntdev_map_grant_pages()"). The code is also modified to
->> check for negative live_grants values after the subtraction and warn the
->> user.
->>
->> Link: https://github.com/QubesOS/qubes-issues/issues/7631
->> Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->> ---
->>   drivers/xen/gntdev.c | 32 +++++++++++++++++++++++++++-----
->>   1 file changed, 27 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
->> index 84b143eef395..485fa9c630aa 100644
->> --- a/drivers/xen/gntdev.c
->> +++ b/drivers/xen/gntdev.c
->> @@ -367,8 +367,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
->>       for (i = 0; i < map->count; i++) {
->>           if (map->map_ops[i].status == GNTST_okay) {
->>               map->unmap_ops[i].handle = map->map_ops[i].handle;
->> -            if (!use_ptemod)
->> -                alloced++;
->> +            alloced++;
->>           } else if (!err)
->>               err = -EINVAL;
->> @@ -377,8 +376,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
->>           if (use_ptemod) {
->>               if (map->kmap_ops[i].status == GNTST_okay) {
->> -                if (map->map_ops[i].status == GNTST_okay)
->> -                    alloced++;
->> +                alloced++;
->>                   map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
->>               } else if (!err)
->>                   err = -EINVAL;
->> @@ -394,8 +392,13 @@ static void __unmap_grant_pages_done(int result,
->>       unsigned int i;
->>       struct gntdev_grant_map *map = data->data;
->>       unsigned int offset = data->unmap_ops - map->unmap_ops;
->> +    int successful_unmaps = 0;
->> +    int live_grants;
->>       for (i = 0; i < data->count; i++) {
->> +        if (map->unmap_ops[offset + i].status == GNTST_okay)
->> +            successful_unmaps++;
-> 
+Due to deduplication for compressed data, pclusters can be partially
+referenced with their prefixes.
 
-Hi,
+Together with the user-space implementation, it enables EROFS
+variable-length global compressed data deduplication with rolling
+hash.
 
-Sorry for the delay, and thank you for reviewing my patches!
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/decompressor_lzma.c | 3 +++
+ fs/erofs/erofs_fs.h          | 7 ++++++-
+ fs/erofs/internal.h          | 4 ++++
+ fs/erofs/super.c             | 2 ++
+ fs/erofs/sysfs.c             | 2 ++
+ fs/erofs/zdata.c             | 1 +
+ fs/erofs/zmap.c              | 6 +++++-
+ 7 files changed, 23 insertions(+), 2 deletions(-)
 
-> Shouldn't this test include "&& handle != INVALID_GRANT_HANDLE" ?
-> 
-> This should enable you to drop setting status to 1 below.
+diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+index 5e59b3f523eb..091fd5adf818 100644
+--- a/fs/erofs/decompressor_lzma.c
++++ b/fs/erofs/decompressor_lzma.c
+@@ -217,6 +217,9 @@ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
+ 			strm->buf.out_size = min_t(u32, outlen,
+ 						   PAGE_SIZE - pageofs);
+ 			outlen -= strm->buf.out_size;
++			if (!rq->out[no] && rq->fillgaps)	/* deduped */
++				rq->out[no] = erofs_allocpage(pagepool,
++						GFP_KERNEL | __GFP_NOFAIL);
+ 			if (rq->out[no])
+ 				strm->buf.out = kmap(rq->out[no]) + pageofs;
+ 			pageofs = 0;
+diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+index 5d8fefd8b3fb..0e6c6a234438 100644
+--- a/fs/erofs/erofs_fs.h
++++ b/fs/erofs/erofs_fs.h
+@@ -26,6 +26,7 @@
+ #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
+ #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
+ #define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
++#define EROFS_FEATURE_INCOMPAT_DEDUPE		0x00000020
+ #define EROFS_ALL_FEATURE_INCOMPAT		\
+ 	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
+@@ -34,7 +35,8 @@
+ 	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
+ 	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
+-	 EROFS_FEATURE_INCOMPAT_FRAGMENTS)
++	 EROFS_FEATURE_INCOMPAT_FRAGMENTS | \
++	 EROFS_FEATURE_INCOMPAT_DEDUPE)
+ 
+ #define EROFS_SB_EXTSLOT_SIZE	16
+ 
+@@ -371,6 +373,9 @@ enum {
+ #define Z_EROFS_VLE_DI_CLUSTER_TYPE_BITS        2
+ #define Z_EROFS_VLE_DI_CLUSTER_TYPE_BIT         0
+ 
++/* (noncompact only, HEAD) This pcluster refers to partial decompressed data */
++#define Z_EROFS_VLE_DI_PARTIAL_REF		(1 << 15)
++
+ /*
+  * D0_CBLKCNT will be marked _only_ at the 1st non-head lcluster to store the
+  * compressed block count of a compressed extent (in logical clusters, aka.
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 9f89c1da6229..db8466f2a918 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -291,6 +291,7 @@ EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
+ EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
+ EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
+ EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
++EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
+ EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
+ 
+ /* atomic flag definitions */
+@@ -392,6 +393,7 @@ enum {
+ 	BH_Encoded = BH_PrivateStart,
+ 	BH_FullMapped,
+ 	BH_Fragment,
++	BH_Partialref,
+ };
+ 
+ /* Has a disk mapping */
+@@ -404,6 +406,8 @@ enum {
+ #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
+ /* Located in the special packed inode */
+ #define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
++/* the extent refers to partial compressed data */
++#define EROFS_MAP_PARTIAL_REF	(1 << BH_Partialref)
+ 
+ struct erofs_map_blocks {
+ 	struct erofs_buf buf;
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 4a55908ad37b..6bc45403ea5e 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -424,6 +424,8 @@ static int erofs_read_superblock(struct super_block *sb)
+ 		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+ 	if (erofs_sb_has_fragments(sbi))
+ 		erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
++	if (erofs_sb_has_dedupe(sbi))
++		erofs_info(sb, "EXPERIMENTAL global deduplication feature in use. Use at your own risk!");
+ out:
+ 	erofs_put_metabuf(&buf);
+ 	return ret;
+diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+index dd6eb7eccf9a..783bb7b21b51 100644
+--- a/fs/erofs/sysfs.c
++++ b/fs/erofs/sysfs.c
+@@ -77,6 +77,7 @@ EROFS_ATTR_FEATURE(compr_head2);
+ EROFS_ATTR_FEATURE(sb_chksum);
+ EROFS_ATTR_FEATURE(ztailpacking);
+ EROFS_ATTR_FEATURE(fragments);
++EROFS_ATTR_FEATURE(dedupe);
+ 
+ static struct attribute *erofs_feat_attrs[] = {
+ 	ATTR_LIST(zero_padding),
+@@ -88,6 +89,7 @@ static struct attribute *erofs_feat_attrs[] = {
+ 	ATTR_LIST(sb_chksum),
+ 	ATTR_LIST(ztailpacking),
+ 	ATTR_LIST(fragments),
++	ATTR_LIST(dedupe),
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(erofs_feat);
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index c92a72f5bca6..cce56dde135c 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -814,6 +814,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 		fe->pcl->multibases = true;
+ 
+ 	if ((map->m_flags & EROFS_MAP_FULL_MAPPED) &&
++	    !(map->m_flags & EROFS_MAP_PARTIAL_REF) &&
+ 	    fe->pcl->length == map->m_llen)
+ 		fe->pcl->partial = false;
+ 	if (fe->pcl->length < offset + end - map->m_la) {
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 6830999529d7..5ce63326aa7d 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -167,6 +167,7 @@ struct z_erofs_maprecorder {
+ 	u16 delta[2];
+ 	erofs_blk_t pblk, compressedblks;
+ 	erofs_off_t nextpackoff;
++	bool partialref;
+ };
+ 
+ static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
+@@ -225,6 +226,8 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	case Z_EROFS_VLE_CLUSTER_TYPE_PLAIN:
+ 	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD1:
+ 	case Z_EROFS_VLE_CLUSTER_TYPE_HEAD2:
++		if (advise & Z_EROFS_VLE_DI_PARTIAL_REF)
++			m->partialref = true;
+ 		m->clusterofs = le16_to_cpu(di->di_clusterofs);
+ 		m->pblk = le32_to_cpu(di->di_u.blkaddr);
+ 		break;
+@@ -688,7 +691,8 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 		err = -EOPNOTSUPP;
+ 		goto unmap_out;
+ 	}
+-
++	if (m.partialref)
++		map->m_flags |= EROFS_MAP_PARTIAL_REF;
+ 	map->m_llen = end - map->m_la;
+ 
+ 	if (flags & EROFS_GET_BLOCKS_FINDTAIL) {
+-- 
+2.24.4
 
-I had not thought of the approach you suggested. Just now, I applied
-your suggestion to my local kernel tree, and I am building a new kernel
-for testing now. I hope to publish a newer version of this patch set
-over the weekend.
-
-Thanks again,
-
-Vefa
-
-> 
->> +
->>           WARN_ON(map->unmap_ops[offset + i].status != GNTST_okay &&
->>               map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
->>           pr_debug("unmap handle=%d st=%d\n",
->> @@ -403,6 +406,9 @@ static void __unmap_grant_pages_done(int result,
->>               map->unmap_ops[offset+i].status);
->>           map->unmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
->>           if (use_ptemod) {
->> +            if (map->kunmap_ops[offset + i].status == GNTST_okay)
->> +                successful_unmaps++;
->> +
->>               WARN_ON(map->kunmap_ops[offset + i].status != GNTST_okay &&
->>                   map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
->>               pr_debug("kunmap handle=%u st=%d\n",
->> @@ -411,11 +417,15 @@ static void __unmap_grant_pages_done(int result,
->>               map->kunmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
->>           }
->>       }
->> +
->>       /*
->>        * Decrease the live-grant counter.  This must happen after the loop to
->>        * prevent premature reuse of the grants by gnttab_mmap().
->>        */
->> -    atomic_sub(data->count, &map->live_grants);
->> +    live_grants = atomic_sub_return(successful_unmaps, &map->live_grants);
->> +    if (WARN_ON(live_grants < 0))
->> +        pr_err("%s: live_grants became negative (%d) after unmapping %d pages!\n",
->> +               __func__, live_grants, successful_unmaps);
->>       /* Release reference taken by __unmap_grant_pages */
->>       gntdev_put_map(NULL, map);
->> @@ -424,6 +434,8 @@ static void __unmap_grant_pages_done(int result,
->>   static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
->>                      int pages)
->>   {
->> +    int idx;
->> +
->>       if (map->notify.flags & UNMAP_NOTIFY_CLEAR_BYTE) {
->>           int pgno = (map->notify.addr >> PAGE_SHIFT);
->> @@ -436,6 +448,16 @@ static void __unmap_grant_pages(struct gntdev_grant_map *map, int offset,
->>           }
->>       }
->> +    /* Set all unmap/kunmap status fields to an arbitrary positive value,
->> +     * so that it is possible to determine which grants were successfully
->> +     * unmapped by inspecting the status fields.
->> +     */
->> +    for (idx = offset; idx < offset + pages; idx++) {
->> +        map->unmap_ops[idx].status = 1;
->> +        if (use_ptemod)
->> +            map->kunmap_ops[idx].status = 1;
->> +    }
->> +
->>       map->unmap_data.unmap_ops = map->unmap_ops + offset;
->>       map->unmap_data.kunmap_ops = use_ptemod ? map->kunmap_ops + offset : NULL;
->>       map->unmap_data.pages = map->pages + offset;
-> 
-> Juergen
