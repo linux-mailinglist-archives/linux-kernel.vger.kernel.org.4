@@ -2,162 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4195E7BE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CEE5E7BFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiIWNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S232176AbiIWNfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiIWNeP (ORCPT
+        with ESMTP id S229726AbiIWNfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:34:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E99EE131F54;
-        Fri, 23 Sep 2022 06:34:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFD3A1042;
-        Fri, 23 Sep 2022 06:34:19 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.80.223])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2712F3F73B;
-        Fri, 23 Sep 2022 06:34:10 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 14:34:07 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, guoren@kernel.org, frederic@kernel.org,
-        vincent.chen@sifive.com, ardb@kernel.org, mhiramat@kernel.org,
-        rostedt@goodmis.org, keescook@chromium.org,
-        catalin.marinas@arm.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH for-next v2 0/4] riscv: Improvments for stacktrace
-Message-ID: <Yy21z0NgBgJXF1Km@FVFF77S0Q05N>
-References: <20220921125128.33913-1-chenzhongjin@huawei.com>
- <YysZf2Y37QMBDt8n@FVFF77S0Q05N>
- <7834a259-4bd7-a955-acaa-21c36c7c22c2@huawei.com>
+        Fri, 23 Sep 2022 09:35:19 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A934997ECC;
+        Fri, 23 Sep 2022 06:35:17 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1obipk-0005LV-7v; Fri, 23 Sep 2022 15:35:12 +0200
+Date:   Fri, 23 Sep 2022 15:35:12 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Florian Westphal <fw@strlen.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, urezki@gmail.com,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Martin Zaharinov <micron10@gmail.com>
+Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
+Message-ID: <20220923133512.GE22541@breakpoint.cc>
+References: <20220923103858.26729-1-fw@strlen.de>
+ <Yy20toVrIktiMSvH@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7834a259-4bd7-a955-acaa-21c36c7c22c2@huawei.com>
+In-Reply-To: <Yy20toVrIktiMSvH@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:22:23PM +0800, Chen Zhongjin wrote:
-> Hi,
-> 
-> On 2022/9/21 22:02, Mark Rutland wrote:
-> > On Wed, Sep 21, 2022 at 08:51:23PM +0800, Chen Zhongjin wrote:
-> > > Currently, the stacktrace with FRAME_POINTER on riscv has some problem:
-> > > 
-> > > 1. stacktrace will stop at irq so it can't get the stack frames before
-> > > irq entry.
-> > > 2. stacktrace can't unwind all the real stack frames when there is
-> > > k{ret}probes or ftrace.
-> > > 
-> > > These are mainly becase when there is a pt_regs on stack, we can't unwind
-> > > the stack frame as normal function.
-> > > 
-> > > Some architectures (e.g. arm64) create a extra stackframe inside pt_regs.
-> > > However this doesn't work for riscv because the ra is not ensured to be
-> > > pushed to stack. As explained in:
-> > > commit f766f77a74f5("riscv/stacktrace: Fix stack output without ra on the stack top")
-> > FWIW, this is also a latent problem on arm64, since we don't know whether the
-> > LR is live at an exception boundary (and we currently always ignore it).
-> 
-> In fact this is still a problem for riscv, I didn't unwind the caller of
-> ftrace or probed func
-> 
-> of kretprobe because they are inside function pro/epilogue.
-> 
-> The problem on riscv is a little more complex, for leaf function, ra will
-> always not be pushed to stack and fp will be pushed to ra slot. This patch
-> solved this problem.
-
-That's the same on arm64, our `LR` is equivalent to your `RA`.
-
-I have a series at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/stacktrace/metadata
-
-... which explciitly indicates pt_regs::pc and pt_regs::lr in the stack trace
-output (and for RELIABLE_STACKTRACE we'd mark the LR entries as unreliable).
-
-> > My plan to fix that on arm64 is to push an empty frame record to the stack upon
-> > an exception, and use that to find the pt_regs, from which we can get the PC
-> > and LR (and then we can report the later as unreliable). That should be roughly
-> > equivalent to what you do in this series (where use use the LSB to identify
-> > that the pointer is actually a pt_regs).
-> 
-> IIRC, this solution looks like:
-> 
-> =====
-> 
-> Func1     { lr, fp } or { nothing }
-> 
-> irq entry { pt_regs & empty stackframe[2] }
-> 
-> handler   { lr, fp }
-> 
-> ======
-> 
-> handler->fp points to stackframe, and when we find stackframe is empty, we
-> know we are inside
-> 
-> an pt_regs and can find registers by offset.
-> 
-> I think it's available, there no other scenario will cause the frame list
-> contains zero (unless stack is clobbered).
-
-That's basically what I do in my series; see:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/stacktrace/metadata&id=7394a825bc4f8243b28261517999793acb6f11cd
-
-... but I haven't posted that to the list yet as I *also* want to add code to
-check that we were at an exception boundary when we saw this (based on the
-prior PC/LR being in the entry text, using some metadata I have yet to add).
-
-> And it seems only fp slot should be zero, lr will be clobbered after
-> function call, we cannot use lr inside pt_regs.
-
-I'm not sure what you mean here.
-
-I agree that the LR in the pt_regs isn't *reliable*, and won't *always* be
-valid, but it will sometimes be valid.
-
-> > One important thing to note is that when crossing an exception boundary you
-> > won't know whether RA is live, and so you might try to consume an address twice
-> > (if it has also been pushed to the stack). That could be problematic for
-> > unwinding ftrace or kretprobes. On arm64 we had to implement
-> > HAVE_FUNCTION_GRAPH_RET_ADDR_PTR so that we could reliably unwind ftrace. See
-> > commit:
+Michal Hocko <mhocko@suse.com> wrote:
+> On Fri 23-09-22 12:38:58, Florian Westphal wrote:
+> > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+> >  kernel BUG at mm/vmalloc.c:2437!
+> >  invalid opcode: 0000 [#1] SMP
+> >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
+> >  [..]
+> >  RIP: 0010:__get_vm_area_node+0x120/0x130
+> >   __vmalloc_node_range+0x96/0x1e0
+> >   kvmalloc_node+0x92/0xb0
+> >   bucket_table_alloc.isra.0+0x47/0x140
+> >   rhashtable_try_insert+0x3a4/0x440
+> >   rhashtable_insert_slow+0x1b/0x30
+> >  [..]
 > > 
-> >    c6d3cd32fd0064af ("arm64: ftrace: use HAVE_FUNCTION_GRAPH_RET_ADDR_PTR")
+> > bucket_table_alloc uses kvzallocGPF_ATOMIC).  If kmalloc fails, this now
+> > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
 > > 
-> > ... and we haven't yet come up with something similar for kretprobes (though I
-> > suspect we'll need to).
+> > Revert the problematic change and stay with slab allocator.
 > 
-> Can we test the sp and fp inside pt_regs? Because luckily arm64 saves lr, fp
-> and moves sp together.
-> 
-> Before sp is moved we will have fp == sp from last frame 'mov x29, sp'. So
-> if they are same, we uses the lr in pt_regs, conversely we use lr on stack.
+> Why don't you simply fix the caller?
 
-The frame record (which FP points to) can live anywhere in a stack frame, so
-comparing aginst SP doesn't tell us anything. Regardless of whether FP == SP,
-the LTR might be valid or invalid.
+Uh, not following?
 
-There is no way of knowing if LR is live without information from the compiler
-that we don't have today (though from LPC 2022, it seems like CTF *might* be
-sufficient -- that's on my list of things to look at).
+kvzalloc(GFP_ATOMIC) was perfectly fine, is this illegal again?
 
-Thanks,
-Mark.
+I can revert 93f976b5190df32793908d49165f78e67fcb66cf instead
+but that change is from 2018.
