@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB495E794D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399BC5E7951
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiIWLUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S230055AbiIWLUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiIWLUL (ORCPT
+        with ESMTP id S229975AbiIWLUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:20:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17562A7A8C;
-        Fri, 23 Sep 2022 04:20:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A812062150;
-        Fri, 23 Sep 2022 11:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15548C433D6;
-        Fri, 23 Sep 2022 11:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663932008;
-        bh=lzkcfA8lwY431cGoFaoDpZ054pCCOOU4vMeBaieOALo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CFFgso3bs6An9nGUhg/DG6R6EN9niEPLr2bcvNvSIZeH5Ca/4zD5HH3MAQwNJ5mc9
-         +Hc567HPd6/20p6YaNX/Zvv6xT/ckjT9jLPQvD/WGz8mFXi9wWGc+5xCpFYC4T4XZw
-         J2QCchDnSDhacfqP44aIabXsMgDbC1DrzUvn9pDZ1hvVgL7+QgzJhX1ywAwW83QAff
-         5tr++tEQUnIFI/6oMtIWKFC+RtQAUJUrpM3ED/pvVcV6Y/GAKzQaMKcRFEC7DztYOH
-         Au8CuF0rW5ZOStR6byQQubKH+EDX0QcQvObkvdsoCIqJ2ivv7nIVDarHsRqR3Li0Ww
-         tr6LGpBwCOQ2w==
-Date:   Fri, 23 Sep 2022 14:19:47 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Doug Berger <opendmb@gmail.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Zi Yan <ziy@nvidia.com>, Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        - <devicetree-spec@vger.kernel.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux.dev
-Subject: Re: [PATCH 00/21] mm: introduce Designated Movable Blocks
-Message-ID: <Yy2WUypD5qVmqB0k@kernel.org>
-References: <20220913195508.3511038-1-opendmb@gmail.com>
- <b610a7b3-d740-8d45-c270-4c638deb1cfa@redhat.com>
- <02561695-df44-4df6-c486-1431bf152650@gmail.com>
+        Fri, 23 Sep 2022 07:20:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C930AC9977;
+        Fri, 23 Sep 2022 04:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663932051; x=1695468051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6Qbcmzx6oXxdj+twPmsuaKBP/DBj7kMJ9vSNnRiPopw=;
+  b=Jx09fmYbd3leCnsaK7ykSyCj+NtQm2vqBxCbKIFhFwrIvXHKKnnKkJC7
+   MU3FGa38bsGuL+aZcslHi51Tb00obG1UATZM8ZBOQwVYf2pHR2jruHryr
+   FljnNXG27tMWuO7Vzbq5Oq9DhohcYpHaDl3eYoHM3SS7aZyfQDJHBK9LI
+   K5hUt7Qr0STjxYU90401nCgM2t3k87WgzuYIOu8HzzG29MgxoDgGPHakx
+   7Ft51dckYCQlnaJCtO7dcYfuxJLTxuYG/DLci4O2Pcm3rCoYCSUQdykJt
+   t+8kp+EXkOssGlDEqKOz2ne5Yp6skfC8cUjS5LMnqdLd1GOAt8CYVnJtA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301453230"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="301453230"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 04:20:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="622489619"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2022 04:20:47 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obgjf-0005c0-15;
+        Fri, 23 Sep 2022 11:20:47 +0000
+Date:   Fri, 23 Sep 2022 19:20:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>, jiri@mellanox.com,
+        moshe@mellanox.com, davem@davemloft.net, kuba@kernel.org,
+        idosch@nvidia.com
+Cc:     kbuild-all@lists.01.org, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huangguangbin2@huawei.com, lipeng321@huawei.com,
+        chenhao418@huawei.com
+Subject: Re: [PATCH net-next 2/2] net: hns3: PF add support setting
+ parameters of congestion control algorithm by devlink param
+Message-ID: <202209231935.JRvKASjh-lkp@intel.com>
+References: <20220923013818.51003-3-huangguangbin2@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <02561695-df44-4df6-c486-1431bf152650@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220923013818.51003-3-huangguangbin2@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug,
+Hi Guangbin,
 
-I only had time to skim through the patches and before diving in I'd like
-to clarify a few things.
+Thank you for the patch! Perhaps something to improve:
 
-On Mon, Sep 19, 2022 at 06:03:55PM -0700, Doug Berger wrote:
-> On 9/19/2022 2:00 AM, David Hildenbrand wrote:
-> > 
-> > How is this memory currently presented to the system?
->
-> The 7278 device has four ARMv8 CPU cores in an SMP cluster and two memory
-> controllers (MEMCs). Each MEMC is capable of controlling up to 8GB of DRAM.
-> An example 7278 system might have 1GB on each controller, so an arm64 kernel
-> might see 1GB on MEMC0 at 0x40000000-0x7FFFFFFF and 1GB on MEMC1 at
-> 0x300000000-0x33FFFFFFF.
-> 
-> The base capability described in commits 7-15 of this V1 patch set is to
-> allow a 'movablecore' block to be created at a particular base address
-> rather than solely at the end of addressable memory.
+[auto build test WARNING on net-next/master]
 
-I think this capability is only useful when there is non-uniform access to
-different memory ranges. Otherwise it wouldn't matter where the movable
-pages reside. The system you describe looks quite NUMA to me, with two
-memory controllers, each for accessing a partial range of the available
-memory.
- 
-> > > expressed the desire to locate ZONE_MOVABLE memory on each
-> > > memory controller to allow user space intensive processing to
-> > > make better use of the additional memory bandwidth.
-> > 
-> > Can you share some more how exactly ZONE_MOVABLE would help here to make
-> > better use of the memory bandwidth?
->
-> ZONE_MOVABLE memory is effectively unusable by the kernel. It can be used by
-> user space applications through both the page allocator and the Hugetlbfs.
-> If a large 'movablecore' allocation is defined and it can only be located at
-> the end of addressable memory then it will always be located on MEMC1 of a
-> 7278 system. This will create a tendency for user space accesses to consume
-> more bandwidth on the MEMC1 memory controller and kernel space accesses to
-> consume more bandwidth on MEMC0. A more even distribution of ZONE_MOVABLE
-> memory between the available memory controllers in theory makes more memory
-> bandwidth available to user space intensive loads.
+url:    https://github.com/intel-lab-lkp/linux/commits/Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git bcff1a37bafc144d67192f2f5e1f4b9c49b37bd6
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220923/202209231935.JRvKASjh-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fc0ab8f22c924e963b0e0a2723cbb49acc1d3bb3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
+        git checkout fc0ab8f22c924e963b0e0a2723cbb49acc1d3bb3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/
 
-The theory makes perfect sense, but is there any practical evidence of
-improvement?
-Some benchmark results that illustrate the difference would be nice.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> > > BACKGROUND:
-> > > NUMA architectures support distributing movablecore memory
-> > > across each node, but it is undesirable to introduce the
-> > > overhead and complexities of NUMA on systems that don't have a
-> > > Non-Uniform Memory Architecture.
-> > 
-> > How exactly would that look like? I think I am missing something :)
->
-> The notion would be to consider each memory controller as a separate node,
-> but as stated it is not desirable.
+All warnings (new ones prefixed by >>):
 
-Why?
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_get_algo_param_value':
+>> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:418:35: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+     418 |         char *value, *value_tmp, *tmp;
+         |                                   ^~~
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_algo_param_set':
+>> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:690:13: warning: variable 'cnt' set but not used [-Wunused-but-set-variable]
+     690 |         int cnt = 0;
+         |             ^~~
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c: In function 'hclge_devlink_is_algo_param_valid':
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c:727:35: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+     727 |         char *value, *value_tmp, *tmp;
+         |                                   ^~~
 
-> Thanks for your consideration,
-> Dough Baker ... I mean Doug Berger :).
+
+vim +/tmp +418 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+
+   415	
+   416	static int hclge_devlink_get_algo_param_value(const char *str, u64 *param_value)
+   417	{
+ > 418		char *value, *value_tmp, *tmp;
+   419		int ret = 0;
+   420		int i;
+   421	
+   422		value = kmalloc(sizeof(char) * __DEVLINK_PARAM_MAX_STRING_VALUE,
+   423				GFP_KERNEL);
+   424		if (!value)
+   425			return -ENOMEM;
+   426	
+   427		strncpy(value, str, __DEVLINK_PARAM_MAX_STRING_VALUE);
+   428		value_tmp = value;
+   429	
+   430		tmp = strsep(&value, "@");
+   431	
+   432		for (i = 0; i < strlen(value); i++) {
+   433			if (!(value[i] >= '0' && value[i] <= '9')) {
+   434				kfree(value_tmp);
+   435				return -EINVAL;
+   436			}
+   437		}
+   438	
+   439		ret = kstrtou64(value, 0, param_value);
+   440	
+   441		kfree(value_tmp);
+   442		return ret;
+   443	}
+   444	
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://01.org/lkp
