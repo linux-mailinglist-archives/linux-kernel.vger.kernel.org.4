@@ -2,124 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627E85E76A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B855E769F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiIWJQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S230229AbiIWJQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiIWJQk (ORCPT
+        with ESMTP id S231145AbiIWJQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:16:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7357D12EDA8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:16:39 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E438D6601BDF;
-        Fri, 23 Sep 2022 10:16:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663924598;
-        bh=COcbVBmwh8xUSsJeO6kEeMrbFW6tyt7j4/rcy5e8aTk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ifBr8/l2q7/LqvQpfV2K/U2NRx0B+a7wLFHep1xJ/4F+w9SovfhlhasDI8SugMkVq
-         ZhpDjSAJEY2cXK1CJb+ivJcRpW1UL/IS0Ymg/IlzIoSw07gFdM0qv5iUKSoIX3G6vo
-         Liq01thJUcoX4g7TU12sbvsPqC0yn4jk4VijGpIgQ+4c1+6OrOV0odFuE0ysi91v7u
-         Pj/YIOnEn1hpnyMnw696McjHHTSRZMm5RODGCQ7zXKlj1+QhU0gy5eLkw1vtGVymeO
-         yHOhEY34MmsnE0E5e2bo2S0IMf4Dmy6Y4wAGcIB2hVRzm4AtSIN1n1DvZjSuUgXmLZ
-         f9XjR8vev2nXg==
-Message-ID: <ad7e399f-9fd9-371e-48d1-4f590b6e8a68@collabora.com>
-Date:   Fri, 23 Sep 2022 11:16:34 +0200
+        Fri, 23 Sep 2022 05:16:34 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7152D12E43B;
+        Fri, 23 Sep 2022 02:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663924593; x=1695460593;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HfmuNTF9PCvY3XjUF0ERD/w3l40lUTylJCwpgx7Bsdo=;
+  b=PqFXmmGXPvHqcXBC5IEf1lnoIhDWnFBJ0W9hD4NNTucPatCV4boflG3a
+   5fB+mEo4etJOBo1X7D0zZ9PlkvIJwB42rfHLh9oo54VpD4vBZZPZoO01O
+   eQxzSYS6Im7+P9CDIjbn3xqqvzUuEkLoC1Xc/ZiK6uQ1pZ7FOklhZMNea
+   n2Tq+Qg6xY/i6pBsg7f51Gcmax5hOezzcQrnewFjv/fhbJxPaZOHb0iVa
+   QgAxyKERxUv2kHNIeYa4HONpMiA0B7Thr1YK2+04+fCDd+Ieo58m1Fa2D
+   5CiGppF28q1joiFNerB61uGE/Ir/C8qJidpUkvdr6Tdx0PCAzkQTYD+K7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300537200"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="300537200"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:16:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="865230721"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Sep 2022 02:16:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id F3082F7; Fri, 23 Sep 2022 12:16:48 +0300 (EEST)
+Date:   Fri, 23 Sep 2022 12:16:48 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>, stable@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] thunderbolt: Explicitly enable lane adapter hotplug
+ events at startup
+Message-ID: <Yy15gKzHyMcitY/N@black.fi.intel.com>
+References: <20220922160730.898-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v8,2/3]drm: mediatek: Adjust the dpi output format to
- MT8186
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, matthias.bgg@gmail.com,
-        jason-jh.lin@mediatek.com, rex-bc.chen@mediatek.com,
-        ck.hu@mediatek.com, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jitao.shi@mediatek.com
-References: <1663850702-26529-1-git-send-email-xinlei.lee@mediatek.com>
- <1663850702-26529-3-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1663850702-26529-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922160730.898-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/09/22 14:45, xinlei.lee@mediatek.com ha scritto:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+Hi Mario,
+
+On Thu, Sep 22, 2022 at 11:07:29AM -0500, Mario Limonciello wrote:
+> Software that has run before the USB4 CM in Linux runs may have disabled
+> hotplug events for a given lane adapter.
 > 
-> Due to the mt8186  hardware changes, we need to modify the dpi output
-> format corresponding to the mmsys register(mmsys_base+0x400).
+> Other CMs such as that one distributed with Windows 11 will enable hotplug
+> events. Do the same thing in the Linux CM which fixes hotplug events on
+> "AMD Pink Sardine".
 > 
-> Because different sink ICs may support other output formats.
-> The current DRM architecture supports retrieving the output format of
-> all bridges (eg dpi is implemented via DRM's .atomic_check and
-> .atomic_get_output_bus_fmts and .atomic_get_input_bus_fmts).
-> If no unified output format is found, the default soc format
-> (MEDIA_BUS_FMT_RGB888_2X12_LE in mt8186) is used.
-> 
-> Therefore, if there are other format sink ICs (RGB888_DDR/RGB888_SDR) in
-> the future, the sink IC needs to add the func implementation mentioned
-> above needs to be added.
-> And the drm architecture will select the appropriate format to change
-> the dpi output.
-> 
-> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->   drivers/gpu/drm/mediatek/mtk_dpi.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+> v1->v2:
+>  * Only send second patch as first was merged already
+>  * s/usb4_enable_hotplug/usb4_port_hotplug_enable/
+>  * Clarify intended users in documentation comment
+>  * Only call for lane adapters
+>  * Add stable tag
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 630a4e301ef6..bd1870a8504a 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -15,6 +15,7 @@
->   #include <linux/of_graph.h>
->   #include <linux/pinctrl/consumer.h>
->   #include <linux/platform_device.h>
-> +#include <linux/soc/mediatek/mtk-mmsys.h>
->   #include <linux/types.h>
->   
->   #include <video/videomode.h>
-> @@ -30,6 +31,7 @@
->   #include "mtk_disp_drv.h"
->   #include "mtk_dpi_regs.h"
->   #include "mtk_drm_ddp_comp.h"
-> +#include "mtk_drm_drv.h"
->   
->   enum mtk_dpi_out_bit_num {
->   	MTK_DPI_OUT_BIT_NUM_8BITS,
-> @@ -82,6 +84,7 @@ struct mtk_dpi {
->   	struct pinctrl_state *pins_dpi;
->   	u32 output_fmt;
->   	int refcount;
-> +	struct device *mmsys_dev;
+>  drivers/thunderbolt/switch.c  |  4 ++++
+>  drivers/thunderbolt/tb.h      |  1 +
+>  drivers/thunderbolt/tb_regs.h |  1 +
+>  drivers/thunderbolt/usb4.c    | 20 ++++++++++++++++++++
+>  4 files changed, 26 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 77d7f07ca075..3213239d12c8 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -778,6 +778,10 @@ static int tb_init_port(struct tb_port *port)
+>  
+>  			if (!tb_port_read(port, &hop, TB_CFG_HOPS, 0, 2))
+>  				port->ctl_credits = hop.initial_credits;
+> +
+> +			res = usb4_port_hotplug_enable(port);
+> +			if (res)
 
-Please place this after `struct device *dev;` and not here at the end.
+I think this does not belong here in tb_init_port(). This is called from
+both FW and SW CM paths and we don't want to confuse the FW CM more than
+necessary ;-)
 
-Thanks,
-Angelo
+So instead I think this should be added to tb_plug_events_active().
 
+Otherwise looks good to me.
 
+> +				return res;
+>  		}
+>  		if (!port->ctl_credits)
+>  			port->ctl_credits = 2;
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 5db76de40cc1..332159f984fc 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -1174,6 +1174,7 @@ int usb4_switch_add_ports(struct tb_switch *sw);
+>  void usb4_switch_remove_ports(struct tb_switch *sw);
+>  
+>  int usb4_port_unlock(struct tb_port *port);
+> +int usb4_port_hotplug_enable(struct tb_port *port);
+>  int usb4_port_configure(struct tb_port *port);
+>  void usb4_port_unconfigure(struct tb_port *port);
+>  int usb4_port_configure_xdomain(struct tb_port *port);
+> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+> index 166054110388..bbe38b2d9057 100644
+> --- a/drivers/thunderbolt/tb_regs.h
+> +++ b/drivers/thunderbolt/tb_regs.h
+> @@ -308,6 +308,7 @@ struct tb_regs_port_header {
+>  #define ADP_CS_5				0x05
+>  #define ADP_CS_5_LCA_MASK			GENMASK(28, 22)
+>  #define ADP_CS_5_LCA_SHIFT			22
+> +#define ADP_CS_5_DHP				BIT(31)
+>  
+>  /* TMU adapter registers */
+>  #define TMU_ADP_CS_3				0x03
+> diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+> index 3a2e7126db9d..f0b5a8f1ed3a 100644
+> --- a/drivers/thunderbolt/usb4.c
+> +++ b/drivers/thunderbolt/usb4.c
+> @@ -1046,6 +1046,26 @@ int usb4_port_unlock(struct tb_port *port)
+>  	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_4, 1);
+>  }
+>  
+> +/**
+> + * usb4_port_hotplug_enable() - Enables hotplug for a port
+> + * @port: USB4 port to operate on
+> + *
+> + * Enables hot plug events on a given port. This is only intended
+> + * to be used on lane, DP-IN, and DP-OUT adapters.
+> + */
+> +int usb4_port_hotplug_enable(struct tb_port *port)
+> +{
+> +	int ret;
+> +	u32 val;
+> +
+> +	ret = tb_port_read(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val &= ~ADP_CS_5_DHP;
+> +	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
+> +}
+> +
+>  static int usb4_port_set_configured(struct tb_port *port, bool configured)
+>  {
+>  	int ret;
+> -- 
+> 2.34.1
