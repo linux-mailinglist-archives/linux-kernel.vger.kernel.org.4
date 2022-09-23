@@ -2,600 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B925E797E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C455E7952
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbiIWLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S230504AbiIWLVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiIWLWD (ORCPT
+        with ESMTP id S231316AbiIWLVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:22:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039FA127576;
-        Fri, 23 Sep 2022 04:22:01 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYqPn2fzqzlXWG;
-        Fri, 23 Sep 2022 19:17:49 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:59 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:58 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v5 10/10] kallsyms: Add self-test facility
-Date:   Fri, 23 Sep 2022 19:20:33 +0800
-Message-ID: <20220923112033.1958-11-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220923112033.1958-1-thunder.leizhen@huawei.com>
-References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
+        Fri, 23 Sep 2022 07:21:09 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F88A12754B
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:21:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u18so19267411lfo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=rCHuExPyw34E49pRLOmhVp4keZrznuThXnXRZMaWCCg=;
+        b=ZQd7rxG9iEDwOsocem0C/3t0VsE0KCJVYhftLV0TGGmQ9+0enEqM8lrABD1DgiArNx
+         QThG6exTX6toUTXFb9m+SWCEtWwS/0sCxapWIIN9UNRw7qzcjg0WRYRDiDQ+RTbdYpFh
+         /YQXUh6SVU3iGD9DnhqtLhSHSKXHqJmYnJlIUVJnNtJwmGmYDm2MGaNDvOmw6mIa6821
+         sSiiXfUIL9I6EP+C6nV1dQpBEV88/Xqg3ldRJVd4e/UGeW6qQYibasQfssvhkm2u8HxN
+         y+U2S9Cg/Rz9iZJK4ufO0WN08A7S55wJvGmSnbp4S1KsVwKoYQu0RvUXwxL3cmcoBc1V
+         bQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rCHuExPyw34E49pRLOmhVp4keZrznuThXnXRZMaWCCg=;
+        b=hrbR1yLIVvhaO08XYS9KvZOZF9j0w245xvP9EgJVhBhcAhUG8IsM/xjrf/UcFsJi6A
+         Zd6jR+33Cck2rspna75XICcdfAUtlCWLv1m0E7/PEphltmKT/FWkv9uVC23c+PrgjU/U
+         jf+iKOGkko80RZdt6HLedJsFHI1wOijb/J38BpYN/noeQc4L/rkf5HOO7reQqAD9sG5M
+         UcsVmkfC9mJFFI5B+AZkcO3SFUwc7F2tJPH2auiI7vO/I4bQ9QJ7DlrfVff6q/F/UEUn
+         QlMUgaCzlHgm5PnJU6YabCgL9nU6dcZqlg2LI69rhpuLmnLrihZVWYf9B8m7JmdRqLiZ
+         2bdw==
+X-Gm-Message-State: ACrzQf3vYTguUAG8V1EOYqM5shvC9g34rmbmDQnTo+d4FWxl3Au13Bfr
+        zY3tz94fUhkN2zO/cTALs31klQ==
+X-Google-Smtp-Source: AMsMyM66ZBHC4h0SEgXf3jOTu/Lfs2tP185KjXaslJjWK0qEoSuOeg/RQHaj34Vp8XvoyNzQYc0ohg==
+X-Received: by 2002:a05:6512:2286:b0:49e:eb:ea19 with SMTP id f6-20020a056512228600b0049e00ebea19mr3122982lfu.645.1663932064944;
+        Fri, 23 Sep 2022 04:21:04 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t3-20020ac25483000000b0049a5a59aa68sm1408105lfk.10.2022.09.23.04.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 04:21:04 -0700 (PDT)
+Message-ID: <29fb0a59-8685-89b2-74de-2ccdce1c925c@linaro.org>
+Date:   Fri, 23 Sep 2022 13:21:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [net-next PATCH] dt-bindings: net: marvell,pp2: convert to
+ json-schema
+Content-Language: en-US
+To:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>,
+        devicetree@vger.kernel.org
+Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com
+References: <20220922211026.34462-1-mig@semihalf.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220922211026.34462-1-mig@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added test cases for basic functions and performance of functions
-kallsyms_lookup_name(), kallsyms_on_each_symbol() and
-kallsyms_on_each_match_symbol(). It also calculates the compression rate
-of the kallsyms compression algorithm for the current symbol set.
+On 22/09/2022 23:10, Michał Grzelak wrote:
+> This converts the marvell,pp2 bindings from text to proper schema.
+> 
+> Move 'marvell,system-controller' and 'dma-coherent' properties from
+> port up to the controller node, to match what is actually done in DT.
+> 
+> Signed-off-by: Michał Grzelak <mig@semihalf.com>
+> ---
+>  .../devicetree/bindings/net/marvell,pp2.yaml  | 292 ++++++++++++++++++
+>  .../devicetree/bindings/net/marvell-pp2.txt   | 141 ---------
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 293 insertions(+), 142 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/marvell,pp2.yaml b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> new file mode 100644
+> index 000000000000..b4589594a0cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> @@ -0,0 +1,292 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/marvell,pp2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell CN913X / Marvell Armada 375, 7K, 8K Ethernet Controller
+> +
+> +maintainers:
+> +  - Marcin Wojtas <mw@semihalf.com>
+> +  - Russell King <linux@armlinux.org>
+> +
+> +description: |
+> +  Marvell Armada 375 Ethernet Controller (PPv2.1)
+> +  Marvell Armada 7K/8K Ethernet Controller (PPv2.2)
+> +  Marvell CN913X Ethernet Controller (PPv2.3)
+> +
 
-The basic functions test begins by testing a set of symbols whose address
-values are known. Then, traverse all symbol addresses and find the
-corresponding symbol name based on the address. It's impossible to
-determine whether these addresses are correct, but we can use the above
-three functions along with the addresses to test each other. Due to the
-traversal operation of kallsyms_on_each_symbol() is too slow, only 60
-symbols can be tested in one second, so let it test on average once
-every 128 symbols. The other two functions validate all symbols.
+properties go first.
 
-If the basic functions test is passed, print only performance test
-results. If the test fails, print error information, but do not perform
-subsequent performance tests.
+> +patternProperties:
+> +
 
-Start self-test automatically after system startup if
-CONFIG_KALLSYMS_SELFTEST=y.
+no need for blank line.
 
-Example of output content: (prefix 'kallsyms_selftest:' is omitted)
- start
-  ---------------------------------------------------------
- | nr_symbols | compressed size | original size | ratio(%) |
- |---------------------------------------------------------|
- |     174099 |       1960154   |      3750756  |  52.26   |
-  ---------------------------------------------------------
- kallsyms_lookup_name() looked up 174099 symbols
- The time spent on each symbol is (ns): min=5250, max=726560, avg=302132
- kallsyms_on_each_symbol() traverse all: 16659500 ns
- kallsyms_on_each_match_symbol() traverse all: 557400 ns
- finish
+> +  '^interrupt': true
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- include/linux/kallsyms.h   |   1 +
- init/Kconfig               |  13 ++
- kernel/Makefile            |   1 +
- kernel/kallsyms.c          |   2 +-
- kernel/kallsyms_selftest.c | 421 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 437 insertions(+), 1 deletion(-)
- create mode 100644 kernel/kallsyms_selftest.c
+This is not a pattern..
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 015c7685765978e..c7219d74e29000c 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -66,6 +66,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- }
- 
- #ifdef CONFIG_KALLSYMS
-+unsigned long kallsyms_sym_address(int idx);
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
- 			    void *data);
- int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-diff --git a/init/Kconfig b/init/Kconfig
-index 532362fcfe31fd3..60193fd185fb6e6 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1716,6 +1716,19 @@ config KALLSYMS
- 	  symbolic stack backtraces. This increases the size of the kernel
- 	  somewhat, as all symbols have to be loaded into the kernel image.
- 
-+config KALLSYMS_SELFTEST
-+	bool "Test the basic functions and performance of kallsyms"
-+	depends on KALLSYMS
-+	default n
-+	help
-+	  Test the basic functions and performance of some interfaces, such as
-+	  kallsyms_lookup_name. It also calculates the compression rate of the
-+	  kallsyms compression algorithm for the current symbol set.
-+
-+	  Start self-test automatically after system startup. Suggest executing
-+	  "dmesg | grep kallsyms_selftest" to collect test results. "finish" is
-+	  displayed in the last line, indicating that the test is complete.
-+
- config KALLSYMS_ALL
- 	bool "Include all symbols in kallsyms"
- 	depends on DEBUG_KERNEL && KALLSYMS
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 318789c728d3290..122a5fed457bd98 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -68,6 +68,7 @@ endif
- obj-$(CONFIG_UID16) += uid16.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-+obj-$(CONFIG_KALLSYMS_SELFTEST) += kallsyms_selftest.o
- obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
- obj-$(CONFIG_CRASH_CORE) += crash_core.o
- obj-$(CONFIG_KEXEC_CORE) += kexec_core.o
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 69e040204ed4ebd..19cd9c56df6aecc 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -208,7 +208,7 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	return name - kallsyms_names;
- }
- 
--static unsigned long kallsyms_sym_address(int idx)
-+unsigned long kallsyms_sym_address(int idx)
- {
- 	if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
- 		return kallsyms_addresses[idx];
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-new file mode 100644
-index 000000000000000..f7538a70d36c531
---- /dev/null
-+++ b/kernel/kallsyms_selftest.c
-@@ -0,0 +1,421 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Test the function and performance of kallsyms
-+ *
-+ * Copyright (C) Huawei Technologies Co., Ltd., 2022
-+ *
-+ * Authors: Zhen Lei <thunder.leizhen@huawei.com> Huawei
-+ */
-+
-+#define pr_fmt(fmt) "kallsyms_selftest: " fmt
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kallsyms.h>
-+#include <linux/random.h>
-+#include <linux/sched/clock.h>
-+#include <linux/kthread.h>
-+#include <linux/vmalloc.h>
-+
-+#include "kallsyms_internal.h"
-+
-+
-+#define MAX_NUM_OF_RECORDS		64
-+
-+struct test_stat {
-+	int min;
-+	int max;
-+	int save_cnt;
-+	int real_cnt;
-+	u64 sum;
-+	char *name;
-+	unsigned long addr;
-+	unsigned long addrs[MAX_NUM_OF_RECORDS];
-+};
-+
-+struct test_item {
-+	char *name;
-+	unsigned long addr;
-+};
-+
-+#define ITEM_FUNC(s)				\
-+	{					\
-+		.name = #s,			\
-+		.addr = (unsigned long)s,	\
-+	}
-+
-+#define ITEM_DATA(s)				\
-+	{					\
-+		.name = #s,			\
-+		.addr = (unsigned long)&s,	\
-+	}
-+
-+static int test_var_bss_static;
-+static int test_var_data_static = 1;
-+int test_var_bss;
-+int test_var_data = 1;
-+
-+static int test_func_static(void)
-+{
-+	test_var_bss_static++;
-+	test_var_data_static++;
-+
-+	return 0;
-+}
-+
-+int test_func(void)
-+{
-+	return test_func_static();
-+}
-+
-+__weak int test_func_weak(void)
-+{
-+	test_var_bss++;
-+	test_var_data++;
-+	return 0;
-+}
-+
-+static struct test_item test_items[] = {
-+	ITEM_FUNC(test_func_static),
-+	ITEM_FUNC(test_func),
-+	ITEM_FUNC(test_func_weak),
-+	ITEM_FUNC(vmalloc),
-+	ITEM_FUNC(vfree),
-+#ifdef CONFIG_KALLSYMS_ALL
-+	ITEM_DATA(test_var_bss_static),
-+	ITEM_DATA(test_var_data_static),
-+	ITEM_DATA(test_var_bss),
-+	ITEM_DATA(test_var_data),
-+	ITEM_DATA(vmap_area_list),
-+#endif
-+};
-+
-+static char stub_name[KSYM_NAME_LEN];
-+
-+static int stat_symbol_len(void *data, const char *name, unsigned long addr)
-+{
-+	*(u32 *)data += strlen(name);
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_compression_ratio(void)
-+{
-+	int i;
-+	const u8 *name;
-+	u32 pos;
-+	u32 ratio, total_size, total_len = 0;
-+
-+	kallsyms_on_each_symbol(stat_symbol_len, &total_len);
-+
-+	/*
-+	 * A symbol name cannot start with a number. This stub name helps us
-+	 * traverse the entire symbol table without finding a match. It's used
-+	 * for subsequent performance tests, and its length is the average
-+	 * length of all symbol names.
-+	 */
-+	memset(stub_name, '4', sizeof(stub_name));
-+	pos = total_len / kallsyms_num_syms;
-+	stub_name[pos] = 0;
-+
-+	pos = kallsyms_num_syms - 1;
-+	name = &kallsyms_names[kallsyms_markers[pos >> 8]];
-+	for (i = 0; i <= (pos & 0xff); i++)
-+		name = name + (*name) + 1;
-+
-+	/*
-+	 * 1. The length fields is not counted
-+	 * 2. The memory occupied by array kallsyms_token_table[] and
-+	 *    kallsyms_token_index[] needs to be counted.
-+	 */
-+	total_size = (name - kallsyms_names) - kallsyms_num_syms;
-+	pos = kallsyms_token_index[0xff];
-+	total_size += pos + strlen(&kallsyms_token_table[pos]) + 1;
-+	total_size += 0x100 * sizeof(u16);
-+
-+	pr_info(" ---------------------------------------------------------\n");
-+	pr_info("| nr_symbols | compressed size | original size | ratio(%%) |\n");
-+	pr_info("|---------------------------------------------------------|\n");
-+	ratio = 10000ULL * total_size / total_len;
-+	pr_info("| %10d |    %10d   |   %10d  |  %2d.%-2d   |\n",
-+		kallsyms_num_syms, total_size, total_len, ratio / 100, ratio % 100);
-+	pr_info(" ---------------------------------------------------------\n");
-+}
-+
-+static int lookup_name(void *data, const char *name, unsigned long addr)
-+{
-+	u64 t0, t1, t;
-+	unsigned long flags;
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	(void)kallsyms_lookup_name(name);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+
-+	t = t1 - t0;
-+	if (t < stat->min)
-+		stat->min = t;
-+
-+	if (t > stat->max)
-+		stat->max = t;
-+
-+	stat->real_cnt++;
-+	stat->sum += t;
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_lookup_name(void)
-+{
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.min = INT_MAX;
-+	kallsyms_on_each_symbol(lookup_name, &stat);
-+	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
-+	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
-+		stat.min, stat.max, stat.sum / stat.real_cnt);
-+}
-+
-+static int find_symbol(void *data, const char *name, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	if (strcmp(name, stat->name) == 0) {
-+		stat->real_cnt++;
-+		stat->addr = addr;
-+
-+		if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
-+			stat->addrs[stat->save_cnt] = addr;
-+			stat->save_cnt++;
-+		}
-+
-+		if (stat->real_cnt == stat->max)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_on_each_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.max = INT_MAX;
-+	stat.name = stub_name;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_symbol(find_symbol, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
-+}
-+
-+static int match_symbol(void *data, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	stat->real_cnt++;
-+	stat->addr = addr;
-+
-+	if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
-+		stat->addrs[stat->save_cnt] = addr;
-+		stat->save_cnt++;
-+	}
-+
-+	if (stat->real_cnt == stat->max)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_on_each_match_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.max = INT_MAX;
-+	stat.name = stub_name;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
-+}
-+
-+static int test_kallsyms_basic_function(void)
-+{
-+	int i, j, ret;
-+	int next = 0, nr_failed = 0;
-+	char *prefix;
-+	unsigned short rand;
-+	unsigned long addr;
-+	char namebuf[KSYM_NAME_LEN];
-+	struct test_stat stat, stat1, stat2;
-+
-+	prefix = "kallsyms_lookup_name() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		addr = kallsyms_lookup_name(test_items[i].name);
-+		if (addr != test_items[i].addr) {
-+			nr_failed++;
-+			pr_info("%s %s failed: addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name, addr, test_items[i].addr);
-+		}
-+	}
-+
-+	prefix = "kallsyms_on_each_symbol() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		memset(&stat, 0, sizeof(stat));
-+		stat.max = INT_MAX;
-+		stat.name = test_items[i].name;
-+		kallsyms_on_each_symbol(find_symbol, &stat);
-+		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
-+			nr_failed++;
-+			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name,
-+				stat.real_cnt, stat.addr, test_items[i].addr);
-+		}
-+	}
-+
-+	prefix = "kallsyms_on_each_match_symbol() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		memset(&stat, 0, sizeof(stat));
-+		stat.max = INT_MAX;
-+		stat.name = test_items[i].name;
-+		kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
-+		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
-+			nr_failed++;
-+			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name,
-+				stat.real_cnt, stat.addr, test_items[i].addr);
-+		}
-+	}
-+
-+	if (nr_failed)
-+		return -ESRCH;
-+
-+	for (i = 0; i < kallsyms_num_syms; i++) {
-+		addr = kallsyms_sym_address(i);
-+		if (!is_ksym_addr(addr))
-+			continue;
-+
-+		ret = lookup_symbol_name(addr, namebuf);
-+		if (unlikely(ret)) {
-+			namebuf[0] = 0;
-+			goto failed;
-+		}
-+
-+		stat.addr = kallsyms_lookup_name(namebuf);
-+
-+		memset(&stat1, 0, sizeof(stat1));
-+		stat1.max = INT_MAX;
-+		kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat1);
-+
-+		/*
-+		 * kallsyms_on_each_symbol() is too slow, randomly select some
-+		 * symbols for test.
-+		 */
-+		if (i >= next) {
-+			memset(&stat2, 0, sizeof(stat2));
-+			stat2.max = INT_MAX;
-+			stat2.name = namebuf;
-+			kallsyms_on_each_symbol(find_symbol, &stat2);
-+
-+			/*
-+			 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
-+			 * need to get the same traversal result.
-+			 */
-+			if (stat1.addr != stat2.addr ||
-+			    stat1.real_cnt != stat2.real_cnt ||
-+			    memcmp(stat1.addrs, stat2.addrs,
-+				   stat1.save_cnt * sizeof(stat1.addrs[0])))
-+				goto failed;
-+
-+			/*
-+			 * The average of random increments is 128, that is, one of
-+			 * them is tested every 128 symbols.
-+			 */
-+			get_random_bytes(&rand, sizeof(rand));
-+			next = i + (rand & 0xff) + 1;
-+		}
-+
-+		/* Need to be found at least once */
-+		if (!stat1.real_cnt)
-+			goto failed;
-+
-+		/*
-+		 * kallsyms_lookup_name() returns the address of the first
-+		 * symbol found and cannot be NULL.
-+		 */
-+		if (!stat.addr || stat.addr != stat1.addrs[0])
-+			goto failed;
-+
-+		/*
-+		 * If the addresses of all matching symbols are recorded, the
-+		 * target address needs to be exist.
-+		 */
-+		if (stat1.real_cnt <= MAX_NUM_OF_RECORDS) {
-+			for (j = 0; j < stat1.save_cnt; j++) {
-+				if (stat1.addrs[j] == addr)
-+					break;
-+			}
-+
-+			if (j == stat1.save_cnt)
-+				goto failed;
-+		}
-+	}
-+
-+	return 0;
-+
-+failed:
-+	pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
-+	return -ESRCH;
-+}
-+
-+static int test_entry(void *p)
-+{
-+	int ret;
-+
-+	do {
-+		schedule_timeout(5 * HZ);
-+	} while (system_state != SYSTEM_RUNNING);
-+
-+	pr_info("start\n");
-+	ret = test_kallsyms_basic_function();
-+	if (ret) {
-+		pr_info("abort\n");
-+		return 0;
-+	}
-+
-+	test_kallsyms_compression_ratio();
-+	test_perf_kallsyms_lookup_name();
-+	test_perf_kallsyms_on_each_symbol();
-+	test_perf_kallsyms_on_each_match_symbol();
-+	pr_info("finish\n");
-+
-+	return 0;
-+}
-+
-+static int __init kallsyms_test_init(void)
-+{
-+	struct task_struct *t;
-+
-+	t = kthread_create(test_entry, NULL, "kallsyms_test");
-+	if (IS_ERR(t)) {
-+		pr_info("Create kallsyms selftest task failed\n");
-+		return PTR_ERR(t);
-+	}
-+	kthread_bind(t, 0);
-+	wake_up_process(t);
-+
-+	return 0;
-+}
-+late_initcall(kallsyms_test_init);
--- 
-2.25.1
+> +  '^#.*-cells$': true
+
+??? Nope. Please start from scratch either from recent similar bindings
+or from example-schema.
+
+> +
+> +  '^eth[0-9a-f]*(@.*)?$':
+> +    type: object
+> +    properties:
+> +
+> +      interrupts:
+> +        minItems: 1
+> +        maxItems: 10
+> +        description: interrupt(s) for the port
+> +
+> +      interrupt-names:
+> +        minItems: 1
+> +        maxItems: 10
+> +
+> +        items:
+> +          oneOf:
+> +            - pattern: "^hif[0-8]$"
+> +            - pattern: "^tx-cpu[0-3]$"
+> +              deprecated: true
+> +            - const: link
+> +            - const: rx-shared
+> +              deprecated: true
+
+List hast to be specific.
+
+> +
+> +        description: >
+> +          if more than a single interrupt for is given, must be the
+> +          name associated to the interrupts listed. Valid names are:
+> +          "hifX", with X in [0..8], and "link". The names "tx-cpu0",
+> +          "tx-cpu1", "tx-cpu2", "tx-cpu3" and "rx-shared" are supported
+> +          for backward compatibility but shouldn't be used for new
+> +          additions.
+> +
+> +      port-id:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: ID of the port from the MAC point of view.
+> +
+> +      phy-mode:
+> +        $ref: "ethernet-controller.yaml#/properties/phy-mode"
+> +
+> +      marvell,loopback:
+> +        $ref: /schemas/types.yaml#/definitions/flag
+> +        description: port is loopback mode.
+> +
+> +      phy:
+> +        $ref: /schemas/types.yaml#/definitions/phandle
+> +        description: >
+> +          a phandle to a phy node defining the PHY address
+> +          (as the reg property, a single integer).
+> +
+> +    required:
+> +      - interrupts
+> +      - port-id
+> +      - phy-mode
+> +
+> +properties:
+> +
+> +  dma-coherent: true
+> +
+> +  compatible:
+
+This goes first.
+
+> +    enum:
+> +      - marvell,armada-375-pp2
+> +      - marvell,armada-7k-pp2
+> +
+> +  reg:
+> +    minItems: 3
+> +    maxItems: 4
+> +
+> +  marvell,system-controller:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: a phandle to the system controller.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +allOf:
+> +
+
+No need for blank line.
+
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +  - if:
+> +      not:
+> +        patternProperties:
+> +          '^eth[0-9a-f]*(@.*)?$':
+> +            properties:
+> +              interrupts:
+> +                maxItems: 1
+> +
+> +    then:
+> +      patternProperties:
+> +        '^eth[0-9a-f]*(@.*)?$':
+> +          required:
+> +            - interrupt-names
+
+Skip this.
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: marvell,armada-375-pp2
+> +
+> +    then:
+> +      properties:
+> +
+
+Skip the blank lines after each new block.
+
+> +        clocks:
+> +          items:
+> +            - description: main controller clock
+> +            - description: GOP clock
+> +
+> +        clock-names:
+> +          minItems: 2
+> +          maxItems: 2
+> +          items:
+> +            enum:
+> +              - pp_clk
+> +              - gop_clk
+> +
+> +        reg:
+> +          description: |
+> +            For "marvell,armada-375-pp2", must contain the following register sets:
+> +              - common controller registers
+> +              - LMS registers
+> +              - one register area per Ethernet port
+> +
+> +    else:
+> +
+> +      patternProperties:
+> +        '^eth[0-9a-f]*(@.*)?$':
+> +          properties:
+> +            gop-port-id:
+> +              $ref: /schemas/types.yaml#/definitions/uint32
+> +              description: >
+> +                only for marvell,armada-7k-pp2, ID of the port from the
+> +                GOP (Group Of Ports) point of view. This ID is used to index the
+> +                per-port registers in the second register area.
+> +
+> +          required:
+> +            - gop-port-id
+> +
+> +      properties:
+> +
+> +        clocks:
+> +          items:
+> +            - description: main controller clock
+> +            - description: GOP clock
+> +            - description: MG clock
+> +            - description: MG Core clock
+> +            - description: AXI clock
+
+Why clocks appear only here? All devices require clocks, so this should
+be in top level.
+
+> +
+> +        clock-names:
+> +          minItems: 5
+> +          maxItems: 5
+> +          items:
+> +            enum:
+> +              - gop_clk
+> +              - pp_clk
+> +              - mg_clk
+> +              - mg_core_clk
+> +              - axi_clk
+> +
+> +        reg:
+> +          description: |
+> +            For "marvell,armada-7k-pp2" used by 7K/8K and CN913X, must contain the following register sets:
+> +              - packet processor registers
+> +              - networking interfaces registers
+> +              - CM3 address space used for TX Flow Control
+
+Do not define properties in allOf:if:then, but in top-level place.
+
+Really, start with example-schema. This deviates too much from existing
+coding style.
+
+Best regards,
+Krzysztof
 
