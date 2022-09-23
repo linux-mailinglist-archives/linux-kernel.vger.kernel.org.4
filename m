@@ -2,103 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8915E73E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA7E5E73A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiIWGWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S229822AbiIWGDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiIWGVr (ORCPT
+        with ESMTP id S229570AbiIWGDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:21:47 -0400
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BC21257B8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:21:45 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 76E4620135F;
-        Fri, 23 Sep 2022 06:21:43 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 6EDEA8090C; Thu, 22 Sep 2022 16:46:59 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 16:46:59 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pcmcia: Add __init/__exit annotations to module
- init/exit funcs
-Message-ID: <Yyx1Y6OuLmYMQL6O@owl.dominikbrodowski.net>
-References: <20220922112323.26353-1-xiujianfeng@huawei.com>
+        Fri, 23 Sep 2022 02:03:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA1FAA3F5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:03:43 -0700 (PDT)
+X-UUID: 7b71bd66c7894af6bb8a13f03fbb95b4-20220923
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=whEo3FlJzvrCgsZU2Vky7sq+5FTXkctNcdlBeQtXQAo=;
+        b=gSGirSlJfwnn1YUrcEkshxTt6ZFu6sBBZWKGmBhBlVUb3OznoLDEsrGzGI3mCqmYj2wUpZBB4EnlW62PY85dmLpf8b+Tu7WiEGYUvp5zyo6aCtd45sX2w5UygLeLlKRyC5MSP5lz2/ydVMWIbECot4evBKhxWh9RcdYCy+tEQtA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:41bf1696-eca2-48a3-96f8-ebf9d2ff84b7,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+        N:release,TS:73
+X-CID-INFO: VERSION:1.1.11,REQID:41bf1696-eca2-48a3-96f8-ebf9d2ff84b7,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:73
+X-CID-META: VersionHash:39a5ff1,CLOUDID:8606c506-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:220922103633QJL9KCK0,BulkQuantity:135,Recheck:0,SF:28|17|19|48|823|8
+        24,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40|20,QS:nil,BEC:
+        nil,COL:0
+X-UUID: 7b71bd66c7894af6bb8a13f03fbb95b4-20220923
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 375317930; Fri, 23 Sep 2022 14:03:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 23 Sep 2022 14:03:36 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 23 Sep 2022 14:03:35 +0800
+Message-ID: <50c77b7b4854037f927880dc8775392a7b2e59fc.camel@mediatek.com>
+Subject: Re: [PATCH 01/18] phy: mediatek: add a new helper to update bitfield
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        "Stanley Chu" <stanley.chu@mediatek.com>
+Date:   Fri, 23 Sep 2022 14:03:35 +0800
+In-Reply-To: <3d8fdcf5-c2cb-be63-48d5-d84d50aeace3@collabora.com>
+References: <20220920090038.15133-1-chunfeng.yun@mediatek.com>
+         <20220920090038.15133-2-chunfeng.yun@mediatek.com>
+         <2d13b383-7d25-240b-bdbb-e53848df4d47@collabora.com>
+         <a3f98aa1d3d10b76b1fb5e6c2e3d64cedd0bf127.camel@mediatek.com>
+         <3d8fdcf5-c2cb-be63-48d5-d84d50aeace3@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922112323.26353-1-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, Sep 22, 2022 at 07:23:23PM +0800 schrieb Xiu Jianfeng:
-> Add missing __init/__exit annotations to module init/exit funcs.
+On Thu, 2022-09-22 at 09:17 +0200, AngeloGioacchino Del Regno wrote:
+> Il 22/09/22 04:36, Chunfeng Yun ha scritto:
+> > On Wed, 2022-09-21 at 10:15 +0200, AngeloGioacchino Del Regno
+> > wrote:
+> > > Il 20/09/22 11:00, Chunfeng Yun ha scritto:
+> > > > Due to FIELD_PREP() macro can be used to prepare a bitfield
+> > > > value,
+> > > > local ones can be remove; add the new helper to make bitfield
+> > > > update
+> > > > easier.
+> > > > 
+> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > ---
+> > > >    drivers/phy/mediatek/phy-mtk-io.h | 7 +++++++
+> > > >    1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/phy/mediatek/phy-mtk-io.h
+> > > > b/drivers/phy/mediatek/phy-mtk-io.h
+> > > > index 500fcdab165d..a723d4afc9b4 100644
+> > > > --- a/drivers/phy/mediatek/phy-mtk-io.h
+> > > > +++ b/drivers/phy/mediatek/phy-mtk-io.h
+> > > > @@ -8,6 +8,7 @@
+> > > >    #ifndef __PHY_MTK_H__
+> > > >    #define __PHY_MTK_H__
+> > > >    
+> > > > +#include <linux/bitfield.h>
+> > > >    #include <linux/io.h>
+> > > >    
+> > > >    static inline void mtk_phy_clear_bits(void __iomem *reg, u32
+> > > > bits)
+> > > > @@ -35,4 +36,10 @@ static inline void mtk_phy_update_bits(void
+> > > > __iomem *reg, u32 mask, u32 val)
+> > > >    	writel(tmp, reg);
+> > > >    }
+> > > >    
+> > > > +/* field @mask should be constant and continuous */
+> > > 
+> > > "Field @mask shall be [...]"
+> > >                ^^^^^
+> > 
+> > Ok, will modify it
+> > 
+> > > 
+> > > > +static inline void mtk_phy_update_field(void __iomem *reg, u32
+> > > > mask, u32 val)
+> > > 
+> > > ...so, (void __iomem *reg, const u32 mask, u32 val)
+> > 
+> > Maybe no need const, @mask will be checked it in compile time when
+> > use FIELD_PREP(), means @mask is a constant value, but not a
+> > variable.
+> > 
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Adding const is not *required*, but `mask` is, effectively, a
+> constant, hence
+> it fully makes sense to add const.
+Prefer to leave it unchanged, there is no 'const' in
+function mtk_phy_update_bits(), if add 'const', will cause build
+warning. and FIELD_PREP() already do many checks in compile time.
 
-Applied to the pcmcia tree, sans the patch to vrc4171_card.c which is
-already on its way out of the kernel.
+Thanks
 
-Thanks,
-	Dominik
-
-> ---
->  drivers/pcmcia/i82092.c       | 4 ++--
->  drivers/pcmcia/vrc4171_card.c | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/pcmcia/i82092.c b/drivers/pcmcia/i82092.c
-> index 192c9049d654..a335748bdef5 100644
-> --- a/drivers/pcmcia/i82092.c
-> +++ b/drivers/pcmcia/i82092.c
-> @@ -661,12 +661,12 @@ static int i82092aa_set_mem_map(struct pcmcia_socket *socket,
->  	return 0;
->  }
->  
-> -static int i82092aa_module_init(void)
-> +static int __init i82092aa_module_init(void)
->  {
->  	return pci_register_driver(&i82092aa_pci_driver);
->  }
->  
-> -static void i82092aa_module_exit(void)
-> +static void __exit i82092aa_module_exit(void)
->  {
->  	pci_unregister_driver(&i82092aa_pci_driver);
->  	if (sockets[0].io_base > 0)
-> diff --git a/drivers/pcmcia/vrc4171_card.c b/drivers/pcmcia/vrc4171_card.c
-> index 177d77892144..ebaeb582539a 100644
-> --- a/drivers/pcmcia/vrc4171_card.c
-> +++ b/drivers/pcmcia/vrc4171_card.c
-> @@ -699,7 +699,7 @@ static struct platform_driver vrc4171_card_driver = {
->  	},
->  };
->  
-> -static int vrc4171_card_init(void)
-> +static int __init vrc4171_card_init(void)
->  {
->  	int retval;
->  
-> @@ -733,7 +733,7 @@ static int vrc4171_card_init(void)
->  	return 0;
->  }
->  
-> -static void vrc4171_card_exit(void)
-> +static void __exit vrc4171_card_exit(void)
->  {
->  	free_irq(vrc4171_irq, vrc4171_sockets);
->  	vrc4171_remove_sockets();
-> -- 
-> 2.17.1
+> > Thanks
+> > 
+> > > 
+> > > > +{
+> > > > +	mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val));
+> > > > +}
+> > > > +
+> > > >    #endif
+> > > 
+> > > 
 > 
+> 
+> 
+
