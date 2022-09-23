@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765095E79A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3345E79B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiIWLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S231848AbiIWLgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiIWLeZ (ORCPT
+        with ESMTP id S231610AbiIWLgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:34:25 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E263712DEF0;
-        Fri, 23 Sep 2022 04:34:23 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id AAA691883FE5;
-        Fri, 23 Sep 2022 11:34:20 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 96BC42500261;
-        Fri, 23 Sep 2022 11:34:20 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 89B6B9EC0005; Fri, 23 Sep 2022 11:34:15 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 23 Sep 2022 07:36:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D7D3207B;
+        Fri, 23 Sep 2022 04:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663932968; x=1695468968;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A1t0eWZyyRcxoNYSibGgAxGV8DMRZ+q9ar+XSQ1FnLs=;
+  b=2WATOtN+P85c5cioARZtCL2u+w8vb4x+LiZGlO/No/p7maP01UeQbgo6
+   nfEf6Bi0jjjnxFtCJij5R+vcQN/Hu53+QAMCsbkfcHIp5ANQDPF3KVHJa
+   hNFgOvWVtlTCbAkVI3AW2yzbQVNImGNZAHH9PR1Y/IYZGRUK2Dso2JLwk
+   BeaBr89F+MDgucHvvT3X6IL/SpGlsGNO+KUP4kX6xQG7D4RG10H23cF39
+   hvMG7cei/MSTRlCJoSY52warIhbcIZG8kVO6Na6kwe4JlobiIJCk11y+0
+   bs8tsoFbOH0VH5yqMrWljrXbICqMmd8t3Xc8V4DOgezkA3OQrDNZyCclm
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="178580950"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Sep 2022 04:36:07 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 23 Sep 2022 04:36:07 -0700
+Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 23 Sep 2022 04:36:05 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <gregkh@linuxfoundation.org>, <krzk@kernel.org>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MAINTAINERS: Solve warning regarding inexistent atmel-usart binding
+Date:   Fri, 23 Sep 2022 14:34:18 +0300
+Message-ID: <20220923113415.90236-1-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Fri, 23 Sep 2022 13:34:15 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
-References: <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <546f96aa592aec4d64bdfc45d4618c05@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-21 09:15, Ido Schimmel wrote:
+After the conversion to json-schema, what was previously known as
+`Documentation/devicetree/bindings/mfd/atmel-usart.txt`
+has been moved to another bindings directory and renamed to
+`Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml`.
+Thus, make `MAINTAINERS` reflect this change.
 
-> 	# Check blackhole entries can be replaced.
-> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
-> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-> 	check_fail $? "Blackhole entry found after replacement"
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+ MAINTAINERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-There seems to be a problem with replacing blackhole fdb entries as 
-fdb_find_rcu() does not find the associated fdb entry (addr, vid) and I 
-don't know why that is the case?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d30f26e07cd3..7308dfba6f0e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13292,7 +13292,7 @@ F:	include/dt-bindings/dma/at91.h
+ MICROCHIP AT91 SERIAL DRIVER
+ M:	Richard Genoud <richard.genoud@gmail.com>
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
++F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+ F:	drivers/tty/serial/atmel_serial.c
+ F:	drivers/tty/serial/atmel_serial.h
+ 
+@@ -13300,7 +13300,7 @@ MICROCHIP AT91 USART MFD DRIVER
+ M:	Radu Pirea <radu_nicolae.pirea@upb.ro>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
++F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+ F:	drivers/mfd/at91-usart.c
+ F:	include/dt-bindings/mfd/at91-usart.h
+ 
+@@ -13308,7 +13308,7 @@ MICROCHIP AT91 USART SPI DRIVER
+ M:	Radu Pirea <radu_nicolae.pirea@upb.ro>
+ L:	linux-spi@vger.kernel.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/mfd/atmel-usart.txt
++F:	Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+ F:	drivers/spi/spi-at91-usart.c
+ 
+ MICROCHIP AUDIO ASOC DRIVERS
+-- 
+2.34.1
 
