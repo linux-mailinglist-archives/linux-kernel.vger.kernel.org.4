@@ -2,153 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F3F5E7F58
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DA65E7F5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbiIWQOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S232606AbiIWQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIWQOE (ORCPT
+        with ESMTP id S232216AbiIWQQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:14:04 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439E91280F1;
-        Fri, 23 Sep 2022 09:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YgHH6pk3nJLXW2jbXtGoxm+4FKcaifQJYVKj+aRwkxg=; b=ELnSTSol/sfK6s31ClYuS8gszF
-        sgXyMtpRrY266URjhhF2+1SDFZPQ78gjuIuhX2IKz28nBNhRVMvO+lvdYB0u9QfxT77iP5VaWVadQ
-        XQ7c8C2XILfSmvEUEZNndcp74iadwyK5fGrJ2BFrCVFtzqPwlVzV8idNgG0D9vuRVL5c60jrYWDzq
-        7t0rwxdFdeOKfLhnBFBDnyEJQ9KRzGyGnf7Y6ovolAFvEL3wYKawkB7tGYFSqpHRkMjTbebYoWz82
-        P+56yyxTj49Ngg8b0QDC7L5mid0UQH+ffCszwa9c1DnG3p+HPNkrve7pWm/ViH77+sQ5wQ2HwLSDK
-        1uOznKEw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oblJ8-002uO3-0s;
-        Fri, 23 Sep 2022 16:13:42 +0000
-Date:   Fri, 23 Sep 2022 17:13:42 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <Yy3bNjaiUoGv/djG@ZenIV>
-References: <20220906102106.q23ovgyjyrsnbhkp@quack3>
- <YxhaJktqtHw3QTSG@infradead.org>
- <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
- <YyIEgD8ksSZTsUdJ@ZenIV>
- <20220915081625.6a72nza6yq4l5etp@quack3>
- <YyvG+Oih2A37Grcf@ZenIV>
- <YyxzYTlyGhbb2MOu@infradead.org>
- <Yy00eSjyxvUIp7D5@ZenIV>
- <Yy1x8QE9YA4HHzbQ@infradead.org>
+        Fri, 23 Sep 2022 12:16:11 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B83112E409
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:08 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a8so1003658lff.13
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=4ZxFhAtlkmVi+zyjgne0H/PaIcc4S2ELDkPdgjxjFQI=;
+        b=qqV26RwCK1Rl2eHTO4j/EIi2hWLVPqcd6bL061LH0aVd0FEdQOjsCOPHBaiBLaEXv7
+         f18WO40/a17eQX9Z2uvUZkpbqN5j0q5B5Nixg5PokmYn9Dy4JeIy/YXUEu5FzX92L/9f
+         qwGg+jamXznw56s4ta4p1k3j0F7pElYUNcbQDO7IdCoWCqGGLvGtKAYRBVqziF7jGn7f
+         jVtGVC6XktFQnD0IuFB7xLzp4eja/6GuaHgrrFM6aWxihT3VhPrD+YjUlPkmXnI3sxJD
+         V4UJZLVkZJCHth2oq0doFxfFBxLErNzGuipIYBnm/uHqrhB63Ysy64xmFr9ZEF2/iBmV
+         V5WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=4ZxFhAtlkmVi+zyjgne0H/PaIcc4S2ELDkPdgjxjFQI=;
+        b=o2p5DVJO7yeo9qTS07G9u5832oCHs/x6iiB12gJIDRIfSkcz3hJvwY7C9Kw1zPNieF
+         Q/W+aHonbGSaGNtExUC3o4p+A0Z/ezNOY00fjBHgEMJWBf3vemXez9VjmJTPatOr7vO6
+         uoRdv0WcRVkCBAJNi1PSInIFcnpacvHl6av9uRw7rTjUHvI+A4+4xF8l/w6DBV+76/+r
+         8SQfnvhbrzeFthh+z7IHapYUEWHDm9rtK59GqeTosv5nVC+qcsnSTnjlF76URuEvMbFq
+         /sPdwW5/U7mXa0ZlUTSUpL2mQUsuLkhR5NQUHZgJZrkDUw8liKW7oMTmyIrLbCip5Y0N
+         SaNw==
+X-Gm-Message-State: ACrzQf2jj7UL47K63LCh0EGwkQj2Hmd7C+hG7MT6wQFerW7Pz0Za0gxk
+        z+hrbrC5qbRmRGyojjYo61H6MJYVQ+2e+Q==
+X-Google-Smtp-Source: AMsMyM6RJAQLHoe8yznAY7iJUvmbip9ShKX8pvPR2ghx8rYTi8cfMFRZI5+EFgBrkzxtHjbVox0GXw==
+X-Received: by 2002:ac2:5469:0:b0:497:ed1:97c6 with SMTP id e9-20020ac25469000000b004970ed197c6mr3344005lfn.248.1663949766969;
+        Fri, 23 Sep 2022 09:16:06 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac25cc9000000b00492f45cbbfcsm1493491lfq.302.2022.09.23.09.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 09:16:06 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 00/11] arm64/slimbus/dt-bindings: convert to DT Schema, minor cleanups
+Date:   Fri, 23 Sep 2022 18:14:42 +0200
+Message-Id: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yy1x8QE9YA4HHzbQ@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 01:44:33AM -0700, Christoph Hellwig wrote:
+Hi,
 
-> Why would I?  We generall do have or should have the iov_iter around.
+Shall slimbus.yaml go to dtschema repo?
 
-Not for async IO.
+Dependencies
+============
+1. Binding patches are independent from DTS.
 
-> And for the common case where we don't (bios) we can carry that
-> information in the bio as it needs a special unmap helper anyway.
+Best regards,
+Krzysztof
 
-*Any* async read_iter is like that.
+Krzysztof Kozlowski (11):
+  arm64: dts: qcom: sdm845: drop unused slimbus properties
+  arm64: dts: qcom: msm8996: drop unused slimbus reg-mames
+  arm64: dts: qcom: sdm845: correct slimbus children unit addresses
+  arm64: dts: qcom: mms8996: correct slimbus children unit addresses
+  arm64: dts: qcom: sdm845: drop unused slimbus dmas
+  arm64: dts: qcom: msm8996: drop unused slimbus dmas
+  arm64: dts: qcom: sdm8458: align node names with DT schema
+  arm64: dts: qcom: msm8996: align node names with DT schema
+  dt-bindings: slimbus: convert bus description to DT schema
+  dt-bindings: slimbus: qcom,slim: convert to DT schema
+  dt-bindings: slimbus: qcom,slim-ngd: convert to DT schema
 
-> > Where are they getting
-> > dropped and what guarantees that IO is complete by that point?
-> 
-> The exact place depens on the exact taaraget frontend of which we have
-> a few.  But it happens from the end_io callback that is triggered
-> through a call to target_complete_cmd.
+ .../devicetree/bindings/slimbus/bus.txt       |  60 ---------
+ .../bindings/slimbus/qcom,slim-ngd.yaml       | 120 ++++++++++++++++++
+ .../bindings/slimbus/qcom,slim.yaml           |  86 +++++++++++++
+ .../bindings/slimbus/slim-ngd-qcom-ctrl.txt   |  84 ------------
+ .../bindings/slimbus/slim-qcom-ctrl.txt       |  39 ------
+ .../devicetree/bindings/slimbus/slimbus.yaml  |  95 ++++++++++++++
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  18 ++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  16 +--
+ 8 files changed, 315 insertions(+), 203 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/bus.txt
+ create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim-ngd.yaml
+ create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim.yaml
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/slimbus/slimbus.yaml
 
-OK...
+-- 
+2.34.1
 
-> > The reason I'm asking is that here you have an ITER_BVEC possibly fed to
-> > __blkdev_direct_IO_async(), with its
-> >         if (iov_iter_is_bvec(iter)) {
-> >                 /*
-> >                  * Users don't rely on the iterator being in any particular
-> >                  * state for async I/O returning -EIOCBQUEUED, hence we can
-> >                  * avoid expensive iov_iter_advance(). Bypass
-> >                  * bio_iov_iter_get_pages() and set the bvec directly.
-> >                  */
-> >                 bio_iov_bvec_set(bio, iter);
-> > which does *not* grab the page referneces.  Sure, bio_release_pages() knows
-> > to leave those alone and doesn't drop anything.  However, what is the
-> > mechanism preventing the pages getting freed before the IO completion
-> > in this case?
-> 
-> The contract that callers of bvec iters need to hold their own
-> references as without that doing I/O do them would be unsafe.  It they
-> did not hold references the pages could go away before even calling
-> bio_iov_iter_get_pages (or this open coded bio_iov_bvec_set).
-
-You are mixing two issues here - holding references to pages while using
-iov_iter instance is obvious; holding them until async IO is complete, even
-though struct iov_iter might be long gone by that point is a different
-story.
-
-And originating iov_iter instance really can be long-gone by the time
-of IO completion - requirement to keep it around would be very hard to
-satisfy.  I've no objections to requiring the pages in ITER_BVEC to be
-preserved at least until the IO completion by means independent of
-whatever ->read_iter/->write_iter does to them, but
-	* that needs to be spelled out very clearly and
-	* we need to verify that it is, indeed, the case for all existing
-iov_iter_bvec callers, preferably with comments next to non-obvious ones
-(something that is followed only by the sync IO is obvious)
-
-That goes not just for bio - if we make get_pages *NOT* grab references
-on ITER_BVEC (and I'm all for it), we need to make sure that those
-pages won't be retained after the original protection runs out.  Which
-includes the reference put into struct nfs_request, for example, as well
-as whatever ceph transport is doing, etc.  Another thing that needs to
-be sorted out is __zerocopy_sg_from_iter() and its callers - AFAICS,
-all of those are in ->sendmsg() with MSG_ZEROCOPY in flags.
-
-It's a non-trivial amount of code audit - we have about 40 iov_iter_bvec()
-callers in the tree, and while many are clearly sync-only... the ones
-that are not tend to balloon into interesting analysis of call chains, etc.
-
-Don't get me wrong - that analysis needs to be done, just don't expect
-it to be trivial.  And it will require quite a bit of cooperation from the
-folks familiar with e.g. drivers/target, or with ceph transport layer,
-etc.
-
-FWIW, my preference would be along the lines of
-
-	Backing memory for any non user-backed iov_iter should be protected
-	from reuse by creator of iov_iter and that protection should continue
-	through not just all synchronous operations with iov_iter in question
-	- it should last until all async operations involving that memory are
-	finished.  That continued protection must not depend upon taking
-	extra page references, etc. while we are working with iov_iter.
-
-But getting there will take quite a bit of code audit and probably some massage
-as well.
