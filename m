@@ -2,210 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D172D5E77DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52965E77E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiIWKCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S229926AbiIWKEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiIWKC2 (ORCPT
+        with ESMTP id S230504AbiIWKEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:02:28 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A296B1280CC;
-        Fri, 23 Sep 2022 03:02:25 -0700 (PDT)
-Received: from p508fdb48.dip0.t-ipconnect.de ([80.143.219.72] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1obfVi-0005d7-QY; Fri, 23 Sep 2022 12:02:18 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dan Johansen <strit@manjaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Enable HDMI and GPU on quartz64-b
-Date:   Fri, 23 Sep 2022 12:02:18 +0200
-Message-ID: <2218487.usQuhbGJ8B@phil>
-In-Reply-To: <ad36710b-af7d-f9ca-fa04-cbb9acb5f123@manjaro.org>
-References: <20220920143446.633956-1-frattaroli.nicolas@gmail.com> <2198677.PYKUYFuaPT@phil> <ad36710b-af7d-f9ca-fa04-cbb9acb5f123@manjaro.org>
+        Fri, 23 Sep 2022 06:04:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18F132FDD
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663927437; x=1695463437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tyqPzskNPVwT5t1P1vdNGzVL76ul4459fMZhNXWkdXw=;
+  b=maFOh9KcQzj+VhHuA2XyevsvERoAqEOyyfEP270vMBphY8r5ocAFM172
+   EU0z5KoAK0S2HbA+WNO3mI85VbwJq/hM9oRf78ykric4DRAurIP8R13/T
+   ydulwWtIfhcZ8VxVlYJ5BD1WhKdl3jsPNxCScbGYAJW29gmsDunkFFjjJ
+   cc20Ax3dfMF9xfoVOKmwINqt+SVnyouYA5EFl/YvXxdMZN0E0oNmbCMcS
+   a/AzyOZ5sMHqxcePzYHwb9XxMHDBcFYTQAN420xjRjdLef65hT6JEaxHe
+   L1f32iDBnijc661reUjOdo/7wnPlRki1qOKtPVuB/1hUkNjbdqBq1sWku
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="386850027"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="386850027"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 03:03:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="571327271"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 23 Sep 2022 03:03:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obfXG-006PeU-21;
+        Fri, 23 Sep 2022 13:03:54 +0300
+Date:   Fri, 23 Sep 2022 13:03:54 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
+ nodes
+Message-ID: <Yy2EiqQQR1oWf7Nd@smile.fi.intel.com>
+References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
+ <Yyz/7gWdP+ftQdIO@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyz/7gWdP+ftQdIO@lorien.usersys.redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Freitag, 23. September 2022, 11:53:52 CEST schrieb Dan Johansen:
+On Thu, Sep 22, 2022 at 08:38:06PM -0400, Phil Auld wrote:
+> On Thu, Sep 22, 2022 at 10:49:54PM +0300 Andy Shevchenko wrote:
+> > Currently the approximation is used which wastes the more memory
+> > the more CPUs are present on the system. Proposed change calculates
+> > the exact maximum needed in the worst case:
+> > 
+> >   NR_CPUS	old		new
+> >   -------	---		---
+> >   1 .. 1170	4096		4096
+> >   1171 .. 1860	4098 ..	6510	4096
+> >   ...		...		...
+> >   2*4096	28672		19925
+> >   4*4096	57344		43597
+> >   8*4096	114688		92749
+> >   16*4096	229376		191053
+> >   32*4096	458752		403197
+> >   64*4096	917504		861949
+> >   128*4096	1835008		1779453
+> >   256*4096	3670016		3670016
+> > 
+> > Under the hood the reccurent formula is being used:
+> >   (5 - 0) * 2 +
+> >     (50 - 5) * 3 +
+> >       (500 - 50) * 4 +
+> >         (5000 - 500) * 5 +
+> >           ...
+> >             (X[i] - X[i-1]) * i
+> > 
+> > which allows to count the exact maximum length in the worst case,
+> > i.e. when each second CPU is being listed. For backward compatibility
+> > for more than 1170 and less than 1861 CPUs the page size is preserved.
+> > 
+> > For less than 1171 and more than 1 million CPUs the old is being used.
 > 
-> Den 23.09.2022 kl. 11.45 skrev Heiko Stuebner:
-> > Hi,
-> >
-> > Am Donnerstag, 22. September 2022, 23:22:37 CEST schrieb Dan Johansen:
-> >> This seems to be based against linux-next and not mainline. It fails to
-> >> apply on mainline for me.
-> > I would not expect things any other way though :-) .
-> > I.e. in the current cycle everything new is of course targetting
-> > v6.1 and the Quartz boards already saw some other changes.
+> The memory is not really wasted since it's probably temporary in userspace
+> and in the kernel it _is_ temporary and is only the length of the kasprintf
+> string, which is most of the time much less.
 > 
-> Ah okay. I have misunderstood the submitting process then.
+> But that said, it is more accurate than the previous estimate.
 > 
-> I was under the impression that a patch should always target the latest 
-> -rc1, in this case 6.0-rc1.
+> I was wondering if you were going to try to come up with a suitable
+> compile time macro :)
 > 
-> I did not know that when you are at rc6/rc7 it's okay to target 
-> linux-next without
-> mentioning it.
+> I tested 2, 8192 and 16k since the kernel does not want to build for other
+> reasons with NR_CPUS at 32k.
 > 
-> Sorry for my noise.
+> Reviewed-by: Phil Auld <pauld@redhat.com>
+> Tested-by: Phil Auld <pauld@redhat.com>
 
-no worries - just to clarify a bit more, the issue gets slightly
-more complex :-) .
+Thank you!
 
-I.e. patches should always target the maintainer-branch you're expecting
-them getting applied to. During the whole development cycle there is a
-lot of movement happening in each maintainer tree, so targetting some
-completely separate rc-kernel won't really make sense.
-
-Most of the time targetting -rc1 might work in the beginning, but when
-there are other changes already applied you need to take these into
-account too.
-
-Heiko
-
-
-> >> Den 20.09.2022 kl. 16.34 skrev Nicolas Frattaroli:
-> >>> This enables the GPU and HDMI output (including HDMI audio) on
-> >>> the PINE64 Quartz64 Model B single board computer.
-> >>>
-> >>> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> >>> ---
-> >>>    .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 60 +++++++++++++++++++
-> >>>    1 file changed, 60 insertions(+)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> >>> index 0f623198970f..77b179cd20e7 100644
-> >>> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> >>> @@ -4,6 +4,7 @@
-> >>>    
-> >>>    #include <dt-bindings/gpio/gpio.h>
-> >>>    #include <dt-bindings/pinctrl/rockchip.h>
-> >>> +#include <dt-bindings/soc/rockchip,vop2.h>
-> >>>    #include "rk3566.dtsi"
-> >>>    
-> >>>    / {
-> >>> @@ -28,6 +29,17 @@ gmac1_clkin: external-gmac1-clock {
-> >>>    		#clock-cells = <0>;
-> >>>    	};
-> >>>    
-> >>> +	hdmi-con {
-> >>> +		compatible = "hdmi-connector";
-> >>> +		type = "a";
-> >>> +
-> >>> +		port {
-> >>> +			hdmi_con_in: endpoint {
-> >>> +				remote-endpoint = <&hdmi_out_con>;
-> >>> +			};
-> >>> +		};
-> >>> +	};
-> >>> +
-> >>>    	leds {
-> >>>    		compatible = "gpio-leds";
-> >>>    
-> >>> @@ -183,6 +195,33 @@ &gmac1m1_clkinout
-> >>>    	status = "okay";
-> >>>    };
-> >>>    
-> >>> +&gpu {
-> >>> +	mali-supply = <&vdd_gpu>;
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>> +&hdmi {
-> >>> +	avdd-0v9-supply = <&vdda0v9_image>;
-> >>> +	avdd-1v8-supply = <&vcca1v8_image>;
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>> +&hdmi_in {
-> >>> +	hdmi_in_vp0: endpoint {
-> >>> +		remote-endpoint = <&vp0_out_hdmi>;
-> >>> +	};
-> >>> +};
-> >>> +
-> >>> +&hdmi_out {
-> >>> +	hdmi_out_con: endpoint {
-> >>> +		remote-endpoint = <&hdmi_con_in>;
-> >>> +	};
-> >>> +};
-> >>> +
-> >>> +&hdmi_sound {
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>>    &i2c0 {
-> >>>    	status = "okay";
-> >>>    
-> >>> @@ -456,6 +495,10 @@ &i2c5 {
-> >>>    	status = "disabled";
-> >>>    };
-> >>>    
-> >>> +&i2s0_8ch {
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>>    &i2s1_8ch {
-> >>>    	pinctrl-names = "default";
-> >>>    	pinctrl-0 = <&i2s1m0_sclktx
-> >> The above part does not seem to exist in the current mainline (rc6) git
-> >> repo.
-> > which is of course already in linux-next, so this
-> > patch just applied nicely.
-> >
-> >
-> > Heiko
-> >
-> >>> @@ -677,3 +720,20 @@ &usb_host0_ehci {
-> >>>    &usb_host0_ohci {
-> >>>    	status = "okay";
-> >>>    };
-> >>> +
-> >>> +&vop {
-> >>> +	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
-> >>> +	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>> +&vop_mmu {
-> >>> +	status = "okay";
-> >>> +};
-> >>> +
-> >>> +&vp0 {
-> >>> +	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
-> >>> +		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
-> >>> +		remote-endpoint = <&hdmi_in_vp0>;
-> >>> +	};
-> >>> +};
-> >
-> >
-> >
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> 
-
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
