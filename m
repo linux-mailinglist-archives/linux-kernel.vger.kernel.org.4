@@ -2,142 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AC85E7E35
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC2E5E7E32
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiIWPV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        id S232482AbiIWPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiIWPVd (ORCPT
+        with ESMTP id S232537AbiIWPVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:21:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9393DF192C;
-        Fri, 23 Sep 2022 08:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663946491; x=1695482491;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=knBQ7zAmYT9oqE/HB/kSwqI8AwDgZ/tNqaN2kNiG/Dc=;
-  b=FM8izTCSgK6EaEHmAAemZhpfH8bVe4mwHrWxO9B2ZYdnV4UHQY830Qjt
-   S8eTJlsB1ypbsuK33Neg2AMZzr6BkwIVeH2KlhsU1q63lNUgZSle5b1uy
-   /dkQITGYQFUaMIC23jaC7p0WH8JChmzfhQJoYlpLTkdM9OHPYg5cjiWWC
-   69uKUO4ohlqQNuUiewNi2+kI7sReHeKh4FI2jmT146zMjf8CJDqoOrwyh
-   olJkKh2iMHiXEySu0bKgLjFG3nRlhYU0r3plgBep/wVuBHIqTctOmat0D
-   iJSrAAH2ayaKd28i8Q3ieiEy8/jtg5lMXzdHFt0emNFQ5/tK7CtTvK1fw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="283713146"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="283713146"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="762647111"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Sep 2022 08:21:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1obkUH-006WBG-0B;
-        Fri, 23 Sep 2022 18:21:09 +0300
-Date:   Fri, 23 Sep 2022 18:21:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX interrupts
-Message-ID: <Yy3O5OeDjJ99g/M2@smile.fi.intel.com>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
- <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
+        Fri, 23 Sep 2022 11:21:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6851432BD;
+        Fri, 23 Sep 2022 08:21:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 951C9B82262;
+        Fri, 23 Sep 2022 15:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB207C433C1;
+        Fri, 23 Sep 2022 15:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663946481;
+        bh=AMZ3inSGZV5OrcGYLzh5KGNiffZgtOou0tt0f3HvGlg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2X7zt//NkB40O1aMKJTGAbK4XfPetHPPFGz0WW9DBdnL+8LTuw5+Gn8s/8JZevy/m
+         +iC7556NR+rHqa0lwr3FNB2yTBtyplSqAmVpS8q1p0HIJNBXwETVIxHhl3CxF6EybL
+         6TcIUJiiZNPBDbfr7as/Yf1+IdlKhtG0WWqfQA1A=
+Date:   Fri, 23 Sep 2022 17:21:18 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        balbi@kernel.org
+Subject: Re: KASAN: use-after-free Read in f_hidg_read
+Message-ID: <Yy3O7sHsaSpdUQ1z@kroah.com>
+References: <CAB7eex+oUZ2Vfa1ZvTkXCYf94k_-6t1v4XzMaoMRaxhk+QCp3Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAB7eex+oUZ2Vfa1ZvTkXCYf94k_-6t1v4XzMaoMRaxhk+QCp3Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 05:17:43AM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Fri, Sep 23, 2022 at 11:13:39PM +0800, Rondreis wrote:
+> Hello,
 > 
-> Define and use a DFHv1 parameter to add generic support for MSIX
-> interrupts for DFL devices.
+> When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> triggered.
+> 
+> HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> git tree: upstream
+> 
+> kernel config: https://pastebin.com/raw/xtrgsXP3
+> C reproducer: https://pastebin.com/raw/NeCr7cX0
+> console output: https://pastebin.com/raw/4uH5CL2k
+> 
+> Basically, in the c reproducer, we use the gadget module to emulate
+> attaching a USB device(vendor id: 0x5ac, product id: 0x30a) and
+> executing some simple sequence of system calls.
+> To reproduce this crash, we utilize a third-party library to emulate
+> the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+> Just clone this repository, install it, and compile the c
+> reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
+> the trick.
+> 
+> I would appreciate it if you have any idea how to solve this bug.
 
-...
+Please see my response to other recent syzbot-found-issues on this
+mailing list in the past few days as to what I would recommend doing
+here.
 
-> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
-> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+thanks,
 
-> +
-
-Unneeded blank line.
-
-> +		v = FIELD_GET(DFH_VERSION, readq(base));
-> +		switch (v) {
-
-This v...
-
-> +		case 0:
-> +			break;
-> +
-> +		case 1:
-> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
-
-Extra space.
-
-...and this v are semantically different. It's quite hard to deduce their
-semantics.
-
-> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
-> +						     DFHv1_PARAM_ID_MSIX);
-
-I guess I have suggested to use temporary variable(s) here.
-
-			void __iomem *dfhv1 = base + DFHv1...;
-			void __iomem *nth;
-
-> +				if (off >= 0) {
-
-					nth = dfhv1 + off;
-
-> +					ibase = readl(base + DFHv1_PARAM_HDR +
-> +						      off + DFHv1_PARAM_MSIX_STARTV);
-> +					inr = readl(base + DFHv1_PARAM_HDR +
-> +						    off + DFHv1_PARAM_MSIX_NUMV);
-
-					ibase = readl(nth + DFHv1_PARAM_MSIX_STARTV);
-					inr = readl(nth + DFHv1_PARAM_MSIX_NUMV);
-
-> +					dev_dbg(binfo->dev, "start %d num %d fid 0x%x\n",
-> +						ibase, inr, fid);
-> +				}
-> +			}
-> +			break;
-> +
-> +		default:
-> +			dev_warn(binfo->dev, "unexpected DFH version %lld\n", v);
-> +			break;
-> +		}
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
