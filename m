@@ -2,166 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9935E742B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED635E7431
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiIWGcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S230359AbiIWGej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIWGcN (ORCPT
+        with ESMTP id S230338AbiIWGeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:32:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E95286DA;
-        Thu, 22 Sep 2022 23:32:08 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c7so11353254pgt.11;
-        Thu, 22 Sep 2022 23:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=WxUdEGsTik62n83zEbnQyADA3Q8HNpRJ7Vr3hU7nFw0=;
-        b=PB8Yxyqu1cIZcHpdPwqeaHjRmkAABHhkwP3yW/+hbyJjzahc7UuNkwT1sbRtAPt6Lg
-         +KUyviXuQmaOchCHZ0JLrMBF25g0GBT7QBa+RDp7K53VkJp4u81WBg2UMU/fneJZ3RRl
-         qcD5RSQzO2tM1hgrgrY6lpEk702AUh5xwBkyvFdf9fMQ2qPf4sC90m6Tm0Els7MvJ8vP
-         5qgeuWezWuK4kEvcqMp3zyKdvxzAvX+KxtGQjWNQ3pdyPtgwcP8TuTkT5CwZm82fBqfQ
-         /1eOPveorjOZG/kQ+PD2b3LC0N9EtbzxfKd9XI7zOx0qj7AmyzTxEsZp63WedPHS0ev9
-         lcyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=WxUdEGsTik62n83zEbnQyADA3Q8HNpRJ7Vr3hU7nFw0=;
-        b=oIViQA02km2Dk4vsWQAZsFPEwEr00RbPEBtabvqjHNuox90/79ZM4rEX8OymLZhD+f
-         KIXrCxhGj/bcEcuvkMHvIcdMHbSNGFduHxO7a2qKO5KmyChgsB7qg7VTmiMs67Vq2Hoj
-         E8pw7cNa2SqSICSFxaUbugJPgK4UN3aOUKJy5hUXyQULXRhUx8IIulj4rrZCdMUHz4X3
-         ZaMyV51jLkEP73D3Yus5d+SESBVfRYgFlS+LZZTW+tJVtNhB5jqfg2eB2DuISCTKOqJn
-         f6ZqheJZ2O0O77z3lbi77lYXR7OkvO2cZTaEXTdS78C+hx+CTde4BW2vOHuwj0e5041v
-         Cibg==
-X-Gm-Message-State: ACrzQf3LBvT8Hf3ONu6vU/krx1h9ekaz2/cPVqf5RgRQTjQ+R1vl5Ap0
-        opckDbvmFd7QSnr+3ovZuME=
-X-Google-Smtp-Source: AMsMyM6hUweZRrI93R9swAaBczAnHNHAfr1wi+miQizHQWMHV5ieI1kRO1XhGpOptNaz6D4vD8lOlw==
-X-Received: by 2002:a63:fd0c:0:b0:42b:93a2:af0b with SMTP id d12-20020a63fd0c000000b0042b93a2af0bmr6340661pgh.315.1663914727687;
-        Thu, 22 Sep 2022 23:32:07 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:5e8b:4a9e:477b:b254])
-        by smtp.gmail.com with ESMTPSA id y23-20020aa78f37000000b0053e61633057sm5535477pfr.132.2022.09.22.23.32.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 23:32:07 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: [PATCH v4] perf tools: Get a perf cgroup more portably in BPF
-Date:   Thu, 22 Sep 2022 23:32:05 -0700
-Message-Id: <20220923063205.772936-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+        Fri, 23 Sep 2022 02:34:36 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D326392;
+        Thu, 22 Sep 2022 23:34:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VQViWnv_1663914871;
+Received: from 30.97.56.82(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQViWnv_1663914871)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Sep 2022 14:34:32 +0800
+Message-ID: <882f5629-a6e2-5fcc-7d26-b3de77ca2985@linux.alibaba.com>
+Date:   Fri, 23 Sep 2022 14:34:29 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [RESEND PATCH V5 6/7] ublk_drv: add START_USER_RECOVERY and
+ END_USER_RECOVERY support
+Content-Language: en-US
+To:     ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220923061505.52007-1-ZiyangZhang@linux.alibaba.com>
+ <20220923061505.52007-7-ZiyangZhang@linux.alibaba.com>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <20220923061505.52007-7-ZiyangZhang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The perf_event_cgrp_id can be different on other configurations.
-To be more portable as CO-RE, it needs to get the cgroup subsys id
-using the bpf_core_enum_value() helper.
+On 2022/9/23 14:15, ZiyangZhang wrote:
+> START_USER_RECOVERY and END_USER_RECOVERY are two new control commands
+> to support user recovery feature.
+> 
+> After a crash, user should send START_USER_RECOVERY, it will:
+> (1) check if (a)current ublk_device is UBLK_S_DEV_QUIESCED which was
+>     set by quiesce_work and (b)chardev is released
+> (2) reinit all ubqs, including:
+>     (a) put the task_struct and reset ->ubq_daemon to NULL.
+>     (b) reset all ublk_io.
+> (3) reset ub->mm to NULL.
+> 
+> Then, user should start a new process and send FETCH_REQ on each
+> ubq_daemon.
+> 
+> Finally, user should send END_USER_RECOVERY, it will:
+> (1) wait for all new ubq_daemons getting ready.
+> (2) update ublksrv_pid
+> (3) unquiesce the request queue and expect incoming ublk_queue_rq()
+> (4) convert ub's state to UBLK_S_DEV_LIVE
+> 
+> Note: we can handle STOP_DEV between START_USER_RECOVERY and
+> END_USER_RECOVERY. This is helpful to users who cannot start new process
+> after sending START_USER_RECOVERY ctrl-cmd.
+> 
+> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
 
-Suggested-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
-v4 changes)
- * add a missing check in the off_cpu
+Let me explain why we still need two ctrl-cmds: START_USER_RECOVERY
+and END_USER_RECOVERY:
 
-v3 changes)
- * check compiler features for enum value
+(1) They are easy to use and understand. Just like calling
+    a)ADD_DEV, b)start daemon c)START_DEV, we can recover a device by
+    a)START_USER_RECOVERY b)start new daemon c)END_USER_RECOVERY.
+    IMO, START_USER_RECOVERY can guide user whether to start a new daemon.
+    Without it, user must directly start a new daemon. He may fail here
+    because /dev/ublkc* is not released. So a retry is necessary here.
+    But I think that let the user retry by sending START_USER_RECOVERY
+    instead of opening /dev/ublkc* is more reasonable.
 
-v2 changes)
- * fix off_cpu.bpf.c too
- * get perf_subsys_id only once
+(2) Handling put_task_struct(ubq_daemon) is hard in ublk_ch_release().
+    Assume all ioucmds have been issued back to userspace and a crash happens,
+    ublk_ch_release() can be called immediately here and ubq_daemon is
+    freed. But monoitor_work may be running now. Dealing with UAF on
+    ubq_daemon in monitor_work may be difficult. But handling
+    put_task_struct(ubq_daemon) in START_USER_RECOVERY solves the problem
+    because monitor_work is sure to be canceled. Besides, here is no race
+    with ublk_deinit_queue() since it cannot be called if ub's state is
+    QUIESCED.
 
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
- tools/perf/util/bpf_skel/off_cpu.bpf.c      | 18 ++++++++++++++----
- 2 files changed, 24 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-index 292c430768b5..8e7520e273db 100644
---- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-@@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
- 
- int enabled = 0;
- int use_cgroup_v2 = 0;
-+int perf_subsys_id = -1;
- 
- static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
- {
-@@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
- 	int level;
- 	int cnt;
- 
--	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-+	if (perf_subsys_id == -1) {
-+#if __has_builtin(__builtin_preserve_enum_value)
-+		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-+						     perf_event_cgrp_id);
-+#else
-+		perf_subsys_id = perf_event_cgrp_id;
-+#endif
-+	}
-+	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
- 	level = BPF_CORE_READ(cgrp, level);
- 
- 	for (cnt = 0; i < MAX_LEVELS; i++) {
-diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-index c4ba2bcf179f..38e3b287dbb2 100644
---- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-+++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-@@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
- const volatile bool needs_cgroup = false;
- const volatile bool uses_cgroup_v1 = false;
- 
-+int perf_subsys_id = -1;
-+
- /*
-  * Old kernel used to call it task_struct->state and now it's '__state'.
-  * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-@@ -119,11 +121,19 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
- {
- 	struct cgroup *cgrp;
- 
--	if (uses_cgroup_v1)
--		cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
--	else
--		cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
-+	if (!uses_cgroup_v1)
-+		return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
-+
-+	if (perf_subsys_id == -1) {
-+#if __has_builtin(__builtin_preserve_enum_value)
-+		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-+						     perf_event_cgrp_id);
-+#else
-+		perf_subsys_id = perf_event_cgrp_id;
-+#endif
-+	}
- 
-+	cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
- 	return BPF_CORE_READ(cgrp, kn, id);
- }
- 
--- 
-2.37.3.998.g577e59143f-goog
-
+Regards,
+Zhang
