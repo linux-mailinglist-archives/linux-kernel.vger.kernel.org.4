@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915115E7EF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159465E7F00
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 17:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiIWPu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 11:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S232163AbiIWPxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 11:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbiIWPtv (ORCPT
+        with ESMTP id S231235AbiIWPxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 11:49:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E04DF1D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663948176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sIY1eBZsBzz38sEKJdEiK7k2L4IYric1woaCS3V87Qo=;
-        b=g2qbeb/OmlCCGfTQzccNZ/NTL3/DfZjbgh0hf4xuzPLCKecwrsXczYzpx3vRysN3P6bPOI
-        YjTQSnij7udzCyxBuKBQ7mzVnOBmhNL7p3faggye9Jjyk/Ff/YIEbeehDroTAtx9mn9P8i
-        jFnNF7DRuCGqn+RhJn7g6/AVaIiEZ+o=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-148-IWqIw1wwPbK-PFo-d1HAgA-1; Fri, 23 Sep 2022 11:49:35 -0400
-X-MC-Unique: IWqIw1wwPbK-PFo-d1HAgA-1
-Received: by mail-wm1-f71.google.com with SMTP id 62-20020a1c0241000000b003b4922046e5so303443wmc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 08:49:34 -0700 (PDT)
+        Fri, 23 Sep 2022 11:53:11 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F33D13E7F2;
+        Fri, 23 Sep 2022 08:53:10 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id b23so271201qtr.13;
+        Fri, 23 Sep 2022 08:53:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=sIY1eBZsBzz38sEKJdEiK7k2L4IYric1woaCS3V87Qo=;
-        b=xpwzEiYxzVVJUj7aV3/og6m77e2OckLUA3E68OXhpGQM4IUqjcx7tmvoGU+V4o/UyF
-         6KhOeGQZdEeX2q3qYqU2deVT8Og7fq2QMRr8/WUS5uKFwVoZE5U1+witazFWN3MyfQFN
-         +g+S/u3BFbymhmxPvj5dW6hhsFKpBWa3+qnCTEeVSyi5Fm+RpPS9HzuE2M3y2PAd14I+
-         AMXd/f0hVUypsgQgGvUF1322ZMsprsPrSbpIl2lDxzXmV4tfIsaoJ+vEzXqd+wUC6aM1
-         OTRm4Ngxt1BOfimVx9LnBIwcF1f77FO4wu7v5IW0FnA0WBU8TED5AZ72ZN6rZNPzr6q3
-         0Ifw==
-X-Gm-Message-State: ACrzQf1g29YtA4t+o3M4JTlb1UATTsmo8eXNE5FKgWBtuc5bEpEbkugO
-        4emvJJeymwq1UZ+n9nOfA6CHr+McvHUmbAcs4MbNiP3e2lxPrU6sDmYyqoLLxeNx9FH/S/FPdoU
-        ZoEGsiP2JmkCIn2qzcTY0+8Ue
-X-Received: by 2002:a05:600c:3511:b0:3b4:bb85:f1dd with SMTP id h17-20020a05600c351100b003b4bb85f1ddmr6454474wmq.42.1663948173920;
-        Fri, 23 Sep 2022 08:49:33 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5EwlrxtrnxSx8Q8kPS8TBsY7xJXhkXVvbmyinO8Tsf5qvESW6LDIgdQTJC4yP+lKasW6ZmBw==
-X-Received: by 2002:a05:600c:3511:b0:3b4:bb85:f1dd with SMTP id h17-20020a05600c351100b003b4bb85f1ddmr6454455wmq.42.1663948173744;
-        Fri, 23 Sep 2022 08:49:33 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id l8-20020a5d5268000000b0022a839d053csm7796856wrc.98.2022.09.23.08.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 08:49:33 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v4 0/7] sched, net: NUMA-aware CPU spreading interface
-In-Reply-To: <Yy3UYPU3noB7UtGX@yury-laptop>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
- <Yy3UYPU3noB7UtGX@yury-laptop>
-Date:   Fri, 23 Sep 2022 16:49:32 +0100
-Message-ID: <xhsmhtu4y146r.mognet@vschneid.remote.csb>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=0dJpb5MWD5OFoxFjAN4WXBXMWt5frU6fa7KgoPfQt1I=;
+        b=buOuEYXhTB4fIN/oM539S0Tg9+hJd9TzWQNViMD1KYsQrUM1JgXcc8olMG4tR4CSb2
+         YzqG2cHC4fyE36gwF+hA+mWi4JYZLrHz2O0s6P6eG5v3mEpEXAxAa8PpWlSe5DfszlVW
+         FWsq6H/WlprzfMA6KWtq5bYH2puhhh5tVd7HaTf4/4yPhdTGCS7fSu/CmDmIMgVmfgSg
+         A40OUQKLDNdVG1aCaD1tiFB7koUYLIVueFBKyjl3/yEOFjqwM3gwFiohg4METlNAlZ5J
+         0CFCROlu5uMKTxZydgSEntkRdhC2OuNFH7l+/Iv91Mz4kDygf1hSagOfNyeDrnvsJCrw
+         D3CQ==
+X-Gm-Message-State: ACrzQf36GT8RUQcjgJuiOTr3VEFmGAY1Fghnnq+CvwUZJBLgRJ3FbZng
+        JLZyVoSH4JfjA3Emy3n1NkRWEGm5+8snKaJJcds=
+X-Google-Smtp-Source: AMsMyM5HXEy/DfIFTw8F++3sSJPs9PyjUYoUrAq1mN7uQ5wf99vUksC1RaGhT0Dy8uwDYFrICj7zEoAA8wPQlt68fcA=
+X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
+ n8-20020a05622a11c800b0035ce912a8eamr7790926qtk.17.1663948389073; Fri, 23 Sep
+ 2022 08:53:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <12079576.O9o76ZdvQC@kreacher> <CAPDyKFpVMnxCd9bMg=Wd7_TpSsNM6699NG0QLz8q=KWXk9G9hw@mail.gmail.com>
+In-Reply-To: <CAPDyKFpVMnxCd9bMg=Wd7_TpSsNM6699NG0QLz8q=KWXk9G9hw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Sep 2022 17:52:58 +0200
+Message-ID: <CAJZ5v0h5atuB5mdedfste5EiZKRFgz+7QGQUgWs+=sme4EKbig@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Return -EINPROGRESS from rpm_resume() in the
+ RPM_NOWAIT case
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/22 08:44, Yury Norov wrote:
-> On Fri, Sep 23, 2022 at 02:25:20PM +0100, Valentin Schneider wrote:
->> Hi folks,
+On Fri, Sep 23, 2022 at 3:26 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Hi,
+> On Thu, 22 Sept 2022 at 20:04, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The prospective callers of rpm_resume() passing RPM_NOWAIT to it may
+> > be confused when it returns 0 without actually resuming the device
+> > which may happen if the device is suspending at the given time and it
+> > will only resume when the suspend in progress has completed.  To avoid
+> > that confusion, return -EINPROGRESS from rpm_resume() in that case.
+> >
+> > Since none of the current callers passing RPM_NOWAIT to rpm_resume()
+> > check its return value, this change has no functional impact.
 >
-> I received only 1st patch of the series. Can you give me a link for
-> the full series so that I'll see how the new API is used?
+> Sounds like there are additional improvements that can be made around
+> this, right?
+
+This allows RPM_NOWAIT to be used in places where the caller doesn't
+want to wait, because it might deadlock or similar, but they still
+need to know whether or not the device can be accessed safely.
+
+Or do you mean something else?
+
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
+> Looks good to me!
+>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Sigh, I got this when sending these out:
+Thanks!
 
-  4.3.0 Temporary System Problem.  Try again later (10)
-
-I'm going to re-send the missing ones and *hopefully* have them thread
-properly. Sorry about that.
-
+> > ---
+> >  drivers/base/power/runtime.c |    7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -792,10 +792,13 @@ static int rpm_resume(struct device *dev
+> >                 DEFINE_WAIT(wait);
+> >
+> >                 if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
+> > -                       if (dev->power.runtime_status == RPM_SUSPENDING)
+> > +                       if (dev->power.runtime_status == RPM_SUSPENDING) {
+> >                                 dev->power.deferred_resume = true;
+> > -                       else
+> > +                               if (rpmflags & RPM_NOWAIT)
+> > +                                       retval = -EINPROGRESS;
+> > +                       } else {
+> >                                 retval = -EINPROGRESS;
+> > +                       }
+> >                         goto out;
+> >                 }
+> >
+> >
+> >
+> >
