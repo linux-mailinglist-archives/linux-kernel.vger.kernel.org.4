@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09265E8214
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A215E8216
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbiIWSuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S229550AbiIWSvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbiIWSum (ORCPT
+        with ESMTP id S229515AbiIWSvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:50:42 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C20120BF8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id v186so941104pfv.11
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
-        b=OTfy5Nwpn08IcUaVlU1KJ27X+N3yWZ/VpCrAZjSpjUbsjTe/slddbrLCSNWyrUEUf+
-         hKFo3f2nFf90BAG6jEHb+7lo8EJfEwNPirhgwBNLji96jC6KqEyl6t0+uMZVhfPqRt/6
-         nRku1i36Slqm6llnH2++9t4exlSoETdRFUkh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
-        b=fwH4z1Uz3vLPNjwPN7/hgRmlX2SaEq6l/F8B3tL44NvfoLFj24Gro8VVEJaei7EGjm
-         YJcf5tMCoPur5FhQ3gFmRkyfdIuL0ThQFaF4DG9lzIWMe3p4olTBBJ57S4XsKhacwsR4
-         +g59tKcHY6/zzWy4Qw4mpGc3vv26hHpfnx6VK24C3vlZNRn1XqzgIjCKPkxrGJcQU4M7
-         hySFlz4Ka9SFewtz/H5XMGmtTTbxJ01A/IYjWat1FmpcPRi/UGNRnwqgunhIVk+s9/9J
-         ha+EivzIWt4shSGXbG4rX4TDfI9O43u0BjTPG/VhhZogB9Ytj7/4U6Knl9aqDbtUncww
-         yTyA==
-X-Gm-Message-State: ACrzQf12zatmjE6ilB04bvl7zNuN6KOzDqpFE8fum5nSx3dl/r+ebO7c
-        ZLGGHLz2e3fkHjloBRoLxiwWSg==
-X-Google-Smtp-Source: AMsMyM5BOkxT7dmLhP+9f8RXqZTh1AjF61zhu3wqGKFHMmPuMGgEdboAX7cqSq5H5AVVbN7wJUrI2g==
-X-Received: by 2002:a63:6a47:0:b0:439:be00:7607 with SMTP id f68-20020a636a47000000b00439be007607mr8719395pgc.301.1663959039042;
-        Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b0016dc6279ab7sm6423837plg.149.2022.09.23.11.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 11:50:38 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 11:50:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Feng Tang <feng.tang@intel.com>, Vlastimil Babka <vbabka@suse.cz>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian K??nig <christian.koenig@amd.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "dev@openvswitch.org" <dev@openvswitch.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 01/12] slab: Introduce kmalloc_size_roundup()
-Message-ID: <202209231145.7654767ED5@keescook>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-2-keescook@chromium.org>
- <YyxDFfKmSNNkHBFi@hyeyoo>
- <Yy0JJV4c3DffCF+4@feng-clx>
+        Fri, 23 Sep 2022 14:51:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41E5120BFE;
+        Fri, 23 Sep 2022 11:51:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD47B819FE;
+        Fri, 23 Sep 2022 18:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FC0C433D6;
+        Fri, 23 Sep 2022 18:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663959103;
+        bh=AfmJuFAhQ53hPbrPwULtlYaeFWnbOCfCu4ZiIdx+G9w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OZ4JsFfgi0OG+lLzGvLwX7BI94AaPDBaEpyvaShqvBCPfqO9/DVbDFXVtgwSkpohm
+         CRUKwf9AEuV4FFt/N1/kbtVOMIpLYuYeQhZXmDCxCGES4GD2dvVjj8y33C/kPH/cZy
+         R6TDHTHYjhvLQ2R45+kztLNdjWR/C4Ni1lfdQom02nxsQoBrIUIOk9fBMIT/DviwmF
+         A5oNRXA38492wNpq81xzX5OAlWgX+F0m4NeovP9NbCJppuP3bBnffM9tqdShUtFgK/
+         WE3RxcaM+gftqTxG4YtyH/tckcgKw9vnCuhrYmFIMAsIBpR/VjvhKEGLh+mHny4M8f
+         QdercMTtmK3ww==
+Date:   Fri, 23 Sep 2022 13:51:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     will@kernel.org, Jonathan.Cameron@Huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Message-ID: <20220923185141.GA1407035@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yy0JJV4c3DffCF+4@feng-clx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f67b3c4e-f60e-ec69-bf29-c34604aa0eff@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:17:25AM +0800, Feng Tang wrote:
-> On Thu, Sep 22, 2022 at 07:12:21PM +0800, Hyeonggon Yoo wrote:
-> > On Wed, Sep 21, 2022 at 08:10:02PM -0700, Kees Cook wrote:
-> > > [...]
-> > > Introduce kmalloc_size_roundup(), to serve this function so we can start
-> > > replacing the "anticipatory resizing" uses of ksize().
-> > [...]
-> >
-> > This looks okay.
-> > [...]
-> > Cc-ing Feng Tang who may welcome this series ;)
->  
-> Indeed! This will help our work of extending slub redzone check,
-> as we also ran into some trouble with ksize() users when extending
-> the redzone support to this extra allocated space than requested
-> size [1], and have to disable the redzone sanity for all ksize()
-> users [2].
+On Fri, Sep 23, 2022 at 10:46:09PM +0800, Shuai Xue wrote:
+> 在 2022/9/23 AM1:36, Bjorn Helgaas 写道:
+> > On Sat, Sep 17, 2022 at 08:10:35PM +0800, Shuai Xue wrote:
+
+> >> +static struct device_attribute dwc_pcie_pmu_cpumask_attr =
+> >> +__ATTR(cpumask, 0444, dwc_pcie_pmu_cpumask_show, NULL);
+> > 
+> > DEVICE_ATTR_RO()?
+
+> DEVICE_ATTR_RO may a good choice. But does it fit the code style to use
+> DEVICE_ATTR_RO in drivers/perf? As far as know, CCN, CCI, SMMU,
+> qcom_l2_pmu use "struct device_attribute" directly.
+
+DEVICE_ATTR_RO is just newer, and I think CCN, CCI, SMMU, etc. would
+be using it if they were written today.  Of course, the drivers/perf
+maintainers may have a different opinion :)
+
+> > I think every caller of dwc_pcie_pmu_read_dword() makes the same check
+> > and prints the same message; maybe the message should be moved inside
+> > dwc_pcie_pmu_read_dword()?
+> > 
+> > Same with dwc_pcie_pmu_write_dword(); moving the message there would
+> > simplify all callers.
 > 
-> [1]. https://lore.kernel.org/lkml/20220719134503.GA56558@shbuild999.sh.intel.com/
-> [2]. https://lore.kernel.org/lkml/20220913065423.520159-5-feng.tang@intel.com/
+> I would like to wrap dwc_pcie_pmu_{write}_dword out, use
+> pci_{read}_config_dword and drop the snaity check of return value as
+> Jonathan suggests.  How did you like it?
 
-Thanks for the feedback! I'll send my v2 series -- I'm hoping at least
-this patch can land in v6.1 so the various other patches would be clear
-to land via their separate trees, etc.
+Sounds good.  Not sure the error checking is worthwhile since
+pci_read_config_dword() really doesn't return meaningful errors
+anyway.
 
--- 
-Kees Cook
+> >> +static struct dwc_pcie_info_table *pmu_to_pcie_info(struct pmu *pmu)
+> >> +{
+> >> +	struct dwc_pcie_info_table *pcie_info;
+> >> +	struct dwc_pcie_pmu *pcie_pmu = to_pcie_pmu(pmu);
+> >> +
+> >> +	pcie_info = container_of(pcie_pmu, struct dwc_pcie_info_table, pcie_pmu);
+> >> +	if (pcie_info == NULL)
+> >> +		pci_err(pcie_info->pdev, "Can't get pcie info\n");
+> > 
+> > It shouldn't be possible to get here for a pmu with no pcie_info, and
+> > callers don't check for a NULL pointer return value before
+> > dereferencing it, so I guess all this adds is an error message before
+> > a NULL pointer oops?  Not sure the code clutter is worth it.
+> 
+> Do you mean to drop the snaity check of container_of?
+
+Yes.  I'm suggesting that the NULL pointer oops itself has enough
+information to debug this problem, even without the pci_err().
+
+Bjorn
