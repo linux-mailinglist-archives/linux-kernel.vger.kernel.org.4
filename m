@@ -2,186 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B455E784A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447C25E7857
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiIWK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S231234AbiIWK3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiIWK1b (ORCPT
+        with ESMTP id S231879AbiIWK2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:27:31 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BD1128883
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:27:30 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id t70so11856831pgc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/w7UwzbnmRu6xEONdwmcsNTVMZbCIcvKyFDV77tAiGg=;
-        b=mehSYMeQH8vOgqAOnwXfGbYx+IpqCu5xdiL89kkg46DrWR8EVIhDqlVLrMK84WfLBB
-         EHRTcIyurlarGnPmFcwDx8g577B7xFhNLIciS6F3ctrEJNt5dnDTSB7nX47utcyLCLGb
-         H5+diuZ6d+2QxalKWw8jC8ohSt5uMVqaJMdRtv3q//TFHgVub4QkReED8S1/BQcmjRdk
-         9/WclkM2Nft0LF2S4C5Kal3Rx2P8kXhTJYCEUHrYmfTm9NgMzD0/cnJ+tYTAcmOedKmS
-         aco1p239ISkaZXkLq5qNtemNoaM6VjC6WJ5PQUQi10Kd+BEtqsHjhcckZkAyem8aFq8Y
-         3mJg==
+        Fri, 23 Sep 2022 06:28:41 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2317F12ED86;
+        Fri, 23 Sep 2022 03:28:40 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id t7so19672815wrm.10;
+        Fri, 23 Sep 2022 03:28:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/w7UwzbnmRu6xEONdwmcsNTVMZbCIcvKyFDV77tAiGg=;
-        b=oyCrPjynH8qCrnxps4Nk5zhyHWBM5EYZhltISdW7d+sMrMTP8ze39y+/MVq4sArNKO
-         uy85OMpuGueby+b8rMtamiFil8I1LjABfJQKf6mUvBY/6+klqDcnZ+G6uykis6YgMkJk
-         DjFuVS8xUaFdPhB7P8oHVSkUgsToru9s2PzIFk/Sz4AzDkJmQBIOsqlmYko60qJrQTLa
-         sYrDmCjuS5YOe7HcAEGPMNjD4JrijsAEAjdDssV/J5xcZdss3MIuKPLK9L9w6s4clCvO
-         ycIGZZ1OxRXCRDfy4gd/t9pBIAt25WvtoIvB2F+kAseI2nzaAT9j4hhF3UnWlMWPtnZZ
-         xIfQ==
-X-Gm-Message-State: ACrzQf2gIJ13SOc2qDAuYl4A5yJpKP5LIzjXAh2wCjKZsVc2+hamZvM+
-        /HIW+fSFbqIvLu1ta67UJvk=
-X-Google-Smtp-Source: AMsMyM56YedmD5V4tFh9GW+U5G0/uzoj2JAE4AJoZh+GDlKD73vrBZx+LRvm/XOrqzuRLehduaT9KQ==
-X-Received: by 2002:a63:cc4a:0:b0:439:1c48:2fed with SMTP id q10-20020a63cc4a000000b004391c482fedmr7158359pgi.618.1663928849810;
-        Fri, 23 Sep 2022 03:27:29 -0700 (PDT)
-Received: from localhost ([223.104.44.30])
-        by smtp.gmail.com with ESMTPSA id ij29-20020a170902ab5d00b00172e19c5f8bsm5669042plb.168.2022.09.23.03.27.28
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=OCZ/F0HrnTTtm97NDW9M9Tgyn70w4D8p3nQznpQwDv8=;
+        b=mDRFLfmWFzqbUrpb3WKlPhSxhZ1xOsM2YL/VPBETqEJX9MTOhZlcMpQLZkxOvDC5ZI
+         EEYjEhvhYSZQ9ihjkgQS1sgEXqntDiQiNv0kDdZOW/DoWg/pd/uj1cGvBqvbQ8E4C+tS
+         SG4QXpAflEei7eCl1FdUnWOBkjIc4GvpGRlD8k1X1PwARNCfm5k8VUHmJGhwPjQt0FY5
+         i7Z0ayY+fRgxXyB7cHJpKEKLzspw52SHnpHOhlBAqmWgGoEpwbcU+qEE12zLoNp4bkvi
+         4Vn6kwJSpRq6BLo2wfmY0qgfYSKLLD/bzGmQSItEEVodLegM8udaPhkC7+GUzCkf0n3G
+         /b9w==
+X-Gm-Message-State: ACrzQf2e/Bd9ST+1lA/dD0rmBYSlh+DzY81YKU2HHDHtLd+SvDoYIk1U
+        fOXWY1x8WeagY8IV6AwHHjg=
+X-Google-Smtp-Source: AMsMyM6ReHmiL0VAv9tsouVLQLi1H9NIY57WE7jvQxO0L+Gqhf49wPXtahs+x4ZQsAC7C8GqzibFfw==
+X-Received: by 2002:a5d:64e5:0:b0:22a:3cae:93bf with SMTP id g5-20020a5d64e5000000b0022a3cae93bfmr4833236wri.323.1663928918727;
+        Fri, 23 Sep 2022 03:28:38 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id x12-20020adfffcc000000b0022ac672654dsm6976948wrs.58.2022.09.23.03.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 03:27:29 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     yin31149@gmail.com
-Cc:     18801353760@163.com, almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] fs/ntfs3: fix slab-out-of-bounds Read in run_unpack
-Date:   Fri, 23 Sep 2022 18:27:21 +0800
-Message-Id: <20220923102721.32425-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220923084917.17666-1-yin31149@gmail.com>
-References: <20220923084917.17666-1-yin31149@gmail.com>
+        Fri, 23 Sep 2022 03:28:38 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:28:36 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, linux-hyperv@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2] asm-generic: Remove the parameters of the
+ generate_guest_id function and modify the return type and modify the
+ function name
+Message-ID: <Yy2KVM08HMiv46d6@liuwe-devbox-debian-v2>
+References: <20220920032837.69469-1-kunyu@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920032837.69469-1-kunyu@nfschina.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sept 2022 at 16:51, Hawkins Jiawei <yin31149@gmail.com> wrote:
->
-> Syzkaller reports slab-out-of-bounds bug as follows:
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
-> Read of size 1 at addr ffff88801bbdff02 by task syz-executor131/3611
->
-> [...]
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:317 [inline]
->  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
->  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
->  run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
->  run_unpack_ex+0xb0/0x7c0 fs/ntfs3/run.c:1057
->  ntfs_read_mft fs/ntfs3/inode.c:368 [inline]
->  ntfs_iget5+0xc20/0x3280 fs/ntfs3/inode.c:501
->  ntfs_loadlog_and_replay+0x124/0x5d0 fs/ntfs3/fsntfs.c:272
->  ntfs_fill_super+0x1eff/0x37f0 fs/ntfs3/super.c:1018
->  get_tree_bdev+0x440/0x760 fs/super.c:1323
->  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
->  do_new_mount fs/namespace.c:3040 [inline]
->  path_mount+0x1326/0x1e20 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  [...]
->  </TASK>
->
-> The buggy address belongs to the physical page:
-> page:ffffea00006ef600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bbd8
-> head:ffffea00006ef600 order:3 compound_mapcount:0 compound_pincount:0
-> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->  ffff88801bbdfe00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff88801bbdfe80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >ffff88801bbdff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->                    ^
->  ffff88801bbdff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff88801bbe0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
->
-> Kernel will tries to read record and parse MFT from disk in
-> ntfs_read_mft().
->
-> Yet the problem is that during enumerating attributes in record,
-> kernel doesn't check whether run_off field loading from the disk
-> is a valid value.
->
-> To be more specific, if attr->nres.run_off is larger than attr->size,
-> kernel will passes an invalid argument run_buf_size in
-> run_unpack_ex(), which having an integer overflow. Then this invalid
-> argument will triggers the slab-out-of-bounds Read bug as above.
->
-> This patch solves it by adding the sanity check between
-> the offset to packed runs and attribute size.
->
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+Hi Kunyu
+
+The subject line is far too long.
+
+Please change it to
+
+hyperv: simplify and rename generate_guest_id
+
+On Tue, Sep 20, 2022 at 11:28:37AM +0800, Li kunyu wrote:
+> The generate_guest_id function is more suitable for use after the
+> following modifications.
+> 1. Modify the type of the guest_id variable to u64, which is compatible
+> with the caller.
+> 2. Remove all parameters from the function, and write the parameter
+> (LINUX_VERSION_CODE) passed in by the actual call into the function
+> implementation.
+> 3. Rename the function to make it clearly a Hyper-V related function,
+> and modify it to hv_generate_guest_id.
+> 
+> v2:
+>   Fix generate_guest_id to hv_generate_guest_id.
+
+The patch version information shouldn't be part of the commit message.
+You can use scissors to separate them
+
+---8<---
+ v2: ...
+
+When the patch gets applied, text after the scissors will be stripped
+automatically.
+
+> 
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+
+BTW, the previous patch was submitted by Li Zeming. Did you two agree on
+who to take this forward?
+
 > ---
->  fs/ntfs3/inode.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-> index 51363d4e8636..443a32f789ff 100644
-> --- a/fs/ntfs3/inode.c
-> +++ b/fs/ntfs3/inode.c
-> @@ -365,6 +365,11 @@ static struct inode *ntfs_read_mft(struct inode *inode,
->         roff = le16_to_cpu(attr->nres.run_off);
->
->         t64 = le64_to_cpu(attr->nres.svcn);
-> +
-> +       /* offset to packed runs is out-of-bounds */
-> +       if (roff > asize)
-> +               goto out;
-> +
->         err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
->                             t64, Add2Ptr(attr, roff), asize - roff);
->         if (err < 0)
-> --
-> 2.25.1
->
-return -EINVAL when roff is out-of-bounds
+>  arch/arm64/hyperv/mshyperv.c   |  2 +-
+>  arch/x86/hyperv/hv_init.c      |  2 +-
+>  include/asm-generic/mshyperv.h | 12 +++++-------
+>  3 files changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index bbbe351e9045..3863fd226e0e 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+>  		return 0;
+>  
+>  	/* Setup the guest ID */
+> -	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id = hv_generate_guest_id();
+>  	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
+>  
+>  	/* Get the features and hints from Hyper-V */
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 3de6d8b53367..93770791b858 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -426,7 +426,7 @@ void __init hyperv_init(void)
+>  	 * 1. Register the guest ID
+>  	 * 2. Enable the hypercall and register the hypercall page
+>  	 */
+> -	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id = hv_generate_guest_id();
+>  	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+>  
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+> index c05d2ce9b6cd..7f4a23cee56f 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -25,6 +25,7 @@
+>  #include <linux/nmi.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/hyperv-tlfs.h>
+> +#include <linux/version.h>
+>  
+>  struct ms_hyperv_info {
+>  	u32 features;
+> @@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+>  }
+>  
+>  /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+> -static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
+> -				       __u64 d_info2)
+> +static inline  u64 hv_generate_guest_id(void)
+                ^^
+		There are two spaces. We only need one.
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-master
+I know it is not introduced by you, but since you're modifying the code
+anyway, you may as well drop the extraneous space.
 
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 51363d4e8636..10723231e482 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -365,6 +365,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
- 	roff = le16_to_cpu(attr->nres.run_off);
- 
- 	t64 = le64_to_cpu(attr->nres.svcn);
-+
-+	/* offset to packed runs is out-of-bounds */
-+	if (roff > asize) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
- 	err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
- 			    t64, Add2Ptr(attr, roff), asize - roff);
- 	if (err < 0)
+>  {
+> -	__u64 guest_id = 0;
+> +	u64 guest_id;
+>  
+> -	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
+> -	guest_id |= (d_info1 << 48);
+> -	guest_id |= (kernel_version << 16);
+> -	guest_id |= d_info2;
+> +	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
+> +	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
+>  
+>  	return guest_id;
+>  }
+> -- 
+> 2.18.2
+> 
