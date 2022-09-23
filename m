@@ -2,234 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B095E8593
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2085E8599
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiIWWJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S232514AbiIWWKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiIWWI7 (ORCPT
+        with ESMTP id S231387AbiIWWKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:08:59 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DE9147F36
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:08:57 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id b5so1437643pgb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:08:57 -0700 (PDT)
+        Fri, 23 Sep 2022 18:10:48 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DF2115A49;
+        Fri, 23 Sep 2022 15:10:46 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id i3so986792qkl.3;
+        Fri, 23 Sep 2022 15:10:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=v+eLs7CX4OpYnGq5AL+vslir6j393s7nqOXABwCSSN0=;
-        b=T0exYYNLRfZvRHGGnonPlRcz4rs9tZG9YwGsSEW7t8vPvHQlfdYZdBBRU8YWHsT1LX
-         dt4G48PS/iuXBqG58OC4k55CkVAiD8Ymp7w+ukqNanMqh2dGpvRPwGTbTalJSEY18VYi
-         i0AYx1Y4nXHKFokzWzuagim5oVMnJV01o1aaE=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Konhfb7mLO3dA0pHkfbX9G7WZYTlrwd05Msn8eCZhsI=;
+        b=DDvg7k75uWgmVeFyrGBonH6mSsCY3m3x9tny22LtoPZP6dUqAXHS1mMKsG219opQwl
+         XaO0ZmS5LtDqG1UY+eUw9UMYKepHVeDgWd4c1Q5ECrzU/EFRkPnMDgv2R02eCuB4JtER
+         Rrw8uXflmfpBIj0E/q+G3U9mS6iJGd1QlKuTXp4iVT6mqmwufzp2vNnuhlCmSF03XK6j
+         GxKqp3YR6HgYXmXe2aIjKtF8cWWLXPoXcOYuFbQ/UwaVfJlVwMlT2VcpRxfuX6Ze/rFy
+         PTfyhyhReK5zeBUAdmSJxq8dg8gDKOKrgJAOoCKFiiM/gHjWpAuACW5EzYvfqwAN3wJ3
+         MY7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=v+eLs7CX4OpYnGq5AL+vslir6j393s7nqOXABwCSSN0=;
-        b=vNYlCLA6HFPJW0//BOLEvZKarUJ/h+x9nppCGSAgo322/ii0jy0Q7PpndPU+D0wOHM
-         R2B+tRMeq/15SdaocyOJKgd6eKspxqvWF79ZDCYbnzkaxMOm91OfRzrB0ZTrtgR/JN7l
-         s03bhWjP+U1ORZrmDx/zzig6StO81G7kl8KoJz5Ua+8ICzMllqIwV/JzI8E/DUY5LF0/
-         0KjlM208M/rBeSu8So+cHlHYMTVNedo6XDnRN3m/RR4ZNHkSvpoWOo6tWjWVdpCfvX/q
-         w3VWdtihJ+uKs8cjIgHvREFpojOVeSTPnTq0UzCARXrkddarYObOcVSHKfQ3tNfplUa9
-         QzRQ==
-X-Gm-Message-State: ACrzQf1xzdet6mysll2tJDSqvS8AqCiyAX7bpaLUebKJ9f6AWqBCcr6D
-        xfc6XRCjeISDBUo3K+DX26xoHw==
-X-Google-Smtp-Source: AMsMyM4QU5bjIY/3gea6HILQpt2UH44D4+cROND1jUXN6yrwB0csIEr8R/Bl50VJHW//p4ryuu7uLg==
-X-Received: by 2002:a62:1d56:0:b0:557:8233:7442 with SMTP id d83-20020a621d56000000b0055782337442mr2729924pfd.33.1663970936972;
-        Fri, 23 Sep 2022 15:08:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l15-20020a17090a72cf00b001f22647cb56sm2039792pjk.27.2022.09.23.15.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 15:08:56 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Gregory Greenman <gregory.greenman@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Ilan Peer <ilan.peer@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Nathan Errera <nathan.errera@intel.com>,
-        Mordechay Goodstein <mordechay.goodstein@intel.com>,
-        Mike Golant <michael.golant@intel.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Avraham Stern <avraham.stern@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] iwlwifi: Track scan_cmd allocation size explicitly
-Date:   Fri, 23 Sep 2022 15:08:53 -0700
-Message-Id: <20220923220853.3302056-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Konhfb7mLO3dA0pHkfbX9G7WZYTlrwd05Msn8eCZhsI=;
+        b=bnAwb5IR0sc+K04vrEX5hOz6Pvpwwk5XaZKS4Kp4DHlK8Q2hV/7hdQcimc8GnQxmTD
+         hMix4YkVKZRlGzTGVUyIB2oKA9nDekK3EHZU0v5gQSTvBhCGOp9M9gf3+TWJ6gdBq273
+         jeMdKy0ZDuZip7ap+huO/ftEg2674bRhzVuF6Y0iRDyuzZppoXOdh48tavoKlpKbb6r7
+         4YUu9fE8OFm7p+q0tdpKmHvjGUR6bb8nF/nfipv4g4cXdnXA+u+yOS2NmsDOCNm1ViAA
+         ldfukFS3jGY7zX2vRG/8zXwx4wVMQJFcIR8qdQdEBYs/+hI1W1HBHagY3JZ+n9EXLhB1
+         PNuQ==
+X-Gm-Message-State: ACrzQf19rWVsob7D2RWpTMrIxFT/++X5jqZuccFKn/FRU9nvTsaVNkLF
+        1CeJz3V+iEn2O41Aeb0BTtI=
+X-Google-Smtp-Source: AMsMyM7FKlXyKVqSTdVI2DxXiaKG4fG/6+zKpBhWkLb1EYAiXtdb3lpAblOu5oCMtiZC9oP922BfcQ==
+X-Received: by 2002:a05:620a:2a0d:b0:6b6:6c75:f050 with SMTP id o13-20020a05620a2a0d00b006b66c75f050mr7195534qkp.199.1663971045712;
+        Fri, 23 Sep 2022 15:10:45 -0700 (PDT)
+Received: from [10.69.40.226] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g19-20020ac87f53000000b0031ef0081d77sm6663771qtk.79.2022.09.23.15.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 15:10:45 -0700 (PDT)
+Message-ID: <59ddaa5a-e47d-f542-f7a7-2c437e1c2808@gmail.com>
+Date:   Fri, 23 Sep 2022 15:10:40 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6506; h=from:subject; bh=ZdFtQJrir9vmHjhQgHQJ0oFJQhgmS1Ici2jkyPvaoPg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLi51GpveMhHnnbBVQ18uTL45Sqd7dxnR38G6tGOq txB5j4OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4udQAKCRCJcvTf3G3AJpHaEA Caye3Bg8AVD0wB7ecF37jyKUkpUro86N+brzREvIRbWC/jURR7U5WS+VOkm5TykDE2Nw7ht7Fmbwds 3lUsm/IhhujEHQyzFy6blO9Tip7rLpfgsKicKR5D121Hen6bAkwuLP0qNRJOAAjlqTSJlXQwfkR1aD tTt6EvXU7el7XtIzigrSAd7eSxJXwx7DS4TiANkvnmv2adjoNoF2XqFBeSpVWgCmdGvq9SqSXMxIPs bmYh1c1LhRcmUBnSFam8JV2AC23wbYGnQFjbK8fboy8s4Y0h3kzt80PR0UdG5ISItyX13Y5qRT/ZzY mmBqz6GP0nBrjPeEZekZOBhAXBGkVKgT8fwmU5Dbgy6BdIOfxl3J4b2RmQKO6yXon3Qokou/9bdnt+ ZsC64cbUSRMZgd/I1NG8bNRmK7ocrzxkjTlvudYRmguhct/ExgRmZWL0PPR43p+ZGBcu5Mv8T6Ktmg C5qi1CMJZqbNaDJyWFwLWgUIj4zzHFIQSJJadAmgkQ+5a6shlQjiQUOV6PMUV38tWpkEctn26qFBc4 Hd/cCfJqXgb2p9AjbrdoNHBahslkU/TpIcYcdL8Ptb8OPYMBpVCDT8adxCc5vLur5VKjrMJJQyEBRw UAaAEuAR4+IzT0ye1E38MbqKQzuoxosBwcmSCjaE0rH/oQ1/CSz+w3cKWcFA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 00/21] mm: introduce Designated Movable Blocks
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Zi Yan <ziy@nvidia.com>, Oscar Salvador <osalvador@suse.de>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        - <devicetree-spec@vger.kernel.org>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux.dev
+References: <20220913195508.3511038-1-opendmb@gmail.com>
+ <b610a7b3-d740-8d45-c270-4c638deb1cfa@redhat.com>
+ <02561695-df44-4df6-c486-1431bf152650@gmail.com>
+ <Yy2WUypD5qVmqB0k@kernel.org>
+Content-Language: en-US
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <Yy2WUypD5qVmqB0k@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for reducing the use of ksize(), explicitly track the
-size of scan_cmd allocations. This also allows for noticing if the scan
-size changes unexpectedly. Note that using ksize() was already incorrect
-here, in the sense that ksize() would not match the actual allocation
-size, which would trigger future run-time allocation bounds checking.
-(In other words, memset() may know how large scan_cmd was allocated for,
-but ksize() will return the upper bounds of the actually allocated memory,
-causing a run-time warning about an overflow.)
+On 9/23/2022 4:19 AM, Mike Rapoport wrote:
+> Hi Doug,
+> 
+> I only had time to skim through the patches and before diving in I'd like
+> to clarify a few things.
+Thanks for taking the time. Any input is appreciated.
 
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Luca Coelho <luciano.coelho@intel.com>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-Cc: Ilan Peer <ilan.peer@intel.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Sending this stand-alone for the wireless tree, since it does not
-explicitly depend on the ksize() series.
----
- drivers/net/wireless/intel/iwlwifi/dvm/dev.h  |  1 +
- drivers/net/wireless/intel/iwlwifi/dvm/scan.c | 10 ++++++++--
- drivers/net/wireless/intel/iwlwifi/mvm/mvm.h  |  3 ++-
- drivers/net/wireless/intel/iwlwifi/mvm/ops.c  |  3 ++-
- drivers/net/wireless/intel/iwlwifi/mvm/scan.c |  6 +++---
- 5 files changed, 16 insertions(+), 7 deletions(-)
+> 
+> On Mon, Sep 19, 2022 at 06:03:55PM -0700, Doug Berger wrote:
+>> On 9/19/2022 2:00 AM, David Hildenbrand wrote:
+>>>
+>>> How is this memory currently presented to the system?
+>>
+>> The 7278 device has four ARMv8 CPU cores in an SMP cluster and two memory
+>> controllers (MEMCs). Each MEMC is capable of controlling up to 8GB of DRAM.
+>> An example 7278 system might have 1GB on each controller, so an arm64 kernel
+>> might see 1GB on MEMC0 at 0x40000000-0x7FFFFFFF and 1GB on MEMC1 at
+>> 0x300000000-0x33FFFFFFF.
+>>
+>> The base capability described in commits 7-15 of this V1 patch set is to
+>> allow a 'movablecore' block to be created at a particular base address
+>> rather than solely at the end of addressable memory.
+> 
+> I think this capability is only useful when there is non-uniform access to
+> different memory ranges. Otherwise it wouldn't matter where the movable
+> pages reside.
+I think that is a fair assessment of the described capability. However, 
+the non-uniform access is a result of the current Linux architecture 
+rather than the hardware architecture.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-index bbd574091201..1a9eadace188 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-@@ -696,6 +696,7 @@ struct iwl_priv {
- 	/* Scan related variables */
- 	unsigned long scan_start;
- 	unsigned long scan_start_tsf;
-+	size_t scan_cmd_size;
- 	void *scan_cmd;
- 	enum nl80211_band scan_band;
- 	struct cfg80211_scan_request *scan_request;
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/scan.c b/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
-index 2d38227dfdd2..a7e85c5c8c72 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
-@@ -626,7 +626,7 @@ static int iwlagn_request_scan(struct iwl_priv *priv, struct ieee80211_vif *vif)
- 	u8 active_chains;
- 	u8 scan_tx_antennas = priv->nvm_data->valid_tx_ant;
- 	int ret;
--	int scan_cmd_size = sizeof(struct iwl_scan_cmd) +
-+	size_t scan_cmd_size = sizeof(struct iwl_scan_cmd) +
- 			    MAX_SCAN_CHANNEL * sizeof(struct iwl_scan_channel) +
- 			    priv->fw->ucode_capa.max_probe_length;
- 	const u8 *ssid = NULL;
-@@ -649,9 +649,15 @@ static int iwlagn_request_scan(struct iwl_priv *priv, struct ieee80211_vif *vif)
- 				       "fail to allocate memory for scan\n");
- 			return -ENOMEM;
- 		}
-+		priv->scan_cmd_size = scan_cmd_size;
-+	}
-+	if (priv->scan_cmd_size < scan_cmd_size) {
-+		IWL_DEBUG_SCAN(priv,
-+			       "memory needed for scan grew unexpectedly\n");
-+		return -ENOMEM;
- 	}
- 	scan = priv->scan_cmd;
--	memset(scan, 0, scan_cmd_size);
-+	memset(scan, 0, priv->scan_cmd_size);
- 
- 	scan->quiet_plcp_th = IWL_PLCP_QUIET_THRESH;
- 	scan->quiet_time = IWL_ACTIVE_QUIET_TIME;
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-index bf35e130c876..214b8a525cc6 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-@@ -860,6 +860,7 @@ struct iwl_mvm {
- 
- 	/* Scan status, cmd (pre-allocated) and auxiliary station */
- 	unsigned int scan_status;
-+	size_t scan_cmd_size;
- 	void *scan_cmd;
- 	struct iwl_mcast_filter_cmd *mcast_filter_cmd;
- 	/* For CDB this is low band scan type, for non-CDB - type. */
-@@ -1705,7 +1706,7 @@ int iwl_mvm_update_quotas(struct iwl_mvm *mvm, bool force_upload,
- int iwl_mvm_reg_scan_start(struct iwl_mvm *mvm, struct ieee80211_vif *vif,
- 			   struct cfg80211_scan_request *req,
- 			   struct ieee80211_scan_ies *ies);
--int iwl_mvm_scan_size(struct iwl_mvm *mvm);
-+size_t iwl_mvm_scan_size(struct iwl_mvm *mvm);
- int iwl_mvm_scan_stop(struct iwl_mvm *mvm, int type, bool notify);
- int iwl_mvm_max_scan_ie_len(struct iwl_mvm *mvm);
- void iwl_mvm_report_scan_aborted(struct iwl_mvm *mvm);
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-index db43c8a83a31..b9cbb18b0dcb 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-@@ -1065,7 +1065,7 @@ iwl_op_mode_mvm_start(struct iwl_trans *trans, const struct iwl_cfg *cfg,
- 	static const u8 no_reclaim_cmds[] = {
- 		TX_CMD,
- 	};
--	int scan_size;
-+	size_t scan_size;
- 	u32 min_backoff;
- 	struct iwl_mvm_csme_conn_info *csme_conn_info __maybe_unused;
- 
-@@ -1299,6 +1299,7 @@ iwl_op_mode_mvm_start(struct iwl_trans *trans, const struct iwl_cfg *cfg,
- 	mvm->scan_cmd = kmalloc(scan_size, GFP_KERNEL);
- 	if (!mvm->scan_cmd)
- 		goto out_free;
-+	mvm->scan_cmd_size = scan_size;
- 
- 	/* invalidate ids to prevent accidental removal of sta_id 0 */
- 	mvm->aux_sta.sta_id = IWL_MVM_INVALID_STA;
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-index 582a95ffc7ab..acd8803dbcdd 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-@@ -2626,7 +2626,7 @@ static int iwl_mvm_build_scan_cmd(struct iwl_mvm *mvm,
- 	u8 scan_ver;
- 
- 	lockdep_assert_held(&mvm->mutex);
--	memset(mvm->scan_cmd, 0, ksize(mvm->scan_cmd));
-+	memset(mvm->scan_cmd, 0, mvm->scan_cmd_size);
- 
- 	if (!fw_has_capa(&mvm->fw->ucode_capa, IWL_UCODE_TLV_CAPA_UMAC_SCAN)) {
- 		hcmd->id = SCAN_OFFLOAD_REQUEST_CMD;
-@@ -3091,7 +3091,7 @@ static int iwl_mvm_scan_stop_wait(struct iwl_mvm *mvm, int type)
- 				     1 * HZ);
- }
- 
--static int iwl_scan_req_umac_get_size(u8 scan_ver)
-+static size_t iwl_scan_req_umac_get_size(u8 scan_ver)
- {
- 	switch (scan_ver) {
- 	case 12:
-@@ -3104,7 +3104,7 @@ static int iwl_scan_req_umac_get_size(u8 scan_ver)
- 	return 0;
- }
- 
--int iwl_mvm_scan_size(struct iwl_mvm *mvm)
-+size_t iwl_mvm_scan_size(struct iwl_mvm *mvm)
- {
- 	int base_size, tail_size;
- 	u8 scan_ver = iwl_fw_lookup_cmd_ver(mvm->fw, SCAN_REQ_UMAC,
--- 
-2.34.1
+> The system you describe looks quite NUMA to me, with two
+> memory controllers, each for accessing a partial range of the available
+> memory.
+NUMA was created to deal with non-uniformity in the hardware 
+architecture where a CPU and/or other hardware device can make more 
+efficient use of some nodes than other nodes. NUMA attempts to allocate 
+from "closer" nodes to improve the operational efficiency of the system.
+
+If we consider how an arm64 architecture Linux kernel will apply zones 
+to the above example system we find that Linux will place MEMC0 in 
+ZONE_DMA and MEMC1 in ZONE_NORMAL. This allows both kernel and user 
+space to compete for bandwidth on MEMC1, but largely excludes user space 
+from MEMC0. It is possible for user space to get memory from ZONE_DMA 
+through fallback when ZONE_NORMAL has been consumed, but there is a 
+pretty clear bias against user space use of MEMC0. This non-uniformity 
+doesn't come from the bus architecture since each CPU has equal costs to 
+access MEMC0 and MEMC1. They compete for bandwidth, but there is no 
+hardware bias for one node over another. Creating ZONE_MOVABLE memory on 
+MEMC0 can help correct for the Linux bias.
+
+>   
+>>>> expressed the desire to locate ZONE_MOVABLE memory on each
+>>>> memory controller to allow user space intensive processing to
+>>>> make better use of the additional memory bandwidth.
+>>>
+>>> Can you share some more how exactly ZONE_MOVABLE would help here to make
+>>> better use of the memory bandwidth?
+>>
+>> ZONE_MOVABLE memory is effectively unusable by the kernel. It can be used by
+>> user space applications through both the page allocator and the Hugetlbfs.
+>> If a large 'movablecore' allocation is defined and it can only be located at
+>> the end of addressable memory then it will always be located on MEMC1 of a
+>> 7278 system. This will create a tendency for user space accesses to consume
+>> more bandwidth on the MEMC1 memory controller and kernel space accesses to
+>> consume more bandwidth on MEMC0. A more even distribution of ZONE_MOVABLE
+>> memory between the available memory controllers in theory makes more memory
+>> bandwidth available to user space intensive loads.
+> 
+> The theory makes perfect sense, but is there any practical evidence of
+> improvement?
+> Some benchmark results that illustrate the difference would be nice.
+I agree that benchmark results would be nice. Unfortunately, I am not 
+part of the constituency that uses these Linux features so I have no 
+representative user space work loads to measure. I can only say that I 
+was asked to implement this capability, this is the approach I took, and 
+customers of Broadcom are making use of it. I am submitting it upstream 
+with the hope that: its/my sanity can be better reviewed, it will not 
+get broken by future changes in the kernel, and it will be useful to others.
+
+This "narrow" capability may have limited value to others, but it should 
+not create issues for those that do not actively wish to use it. I would 
+hope that makes it easier to review and get accepted.
+
+However, I believe "other opportunities" exist that may have broader 
+appeal so I have suggested some along with the "narrow" capability to 
+hopefully give others motivation to consider accepting the narrow 
+capability and to help shape how these "other capabilities" should be 
+implemented.
+
+One "other opportunity" that I have realized may be more interesting 
+than I originally anticipated comes from the recognition that the 
+Devicetree Specification includes support for Reserved Memory regions 
+that can contain the 'reusable' property to allow the OS to make use of 
+the memory. Currently, Linux only takes advantage of that capability for 
+reserved memory nodes that are compatible with 'shared-dma-pool' where 
+CMA is used to allow the memory to be used by the OS and by device 
+drivers. CMA is a great concept, but we have observed shortcomings that 
+become more apparent as the size of the CMA region grows. Specifically, 
+the Linux memory management works very hard to keep half of the CMA 
+memory free. A number of submissions have been made over the years to 
+alter the CMA implementation to allow more aggressive use of the memory 
+by the OS, but there are users that desire the current behavior so the 
+submissions have been rejected.
+
+No other types of reserved memory nodes can take advantage of sharing 
+the memory with the Linux operating system because there is insufficient 
+specification of how device drivers can reclaim the reserved memory when 
+it is needed. The introduction of Designated Movable Block support 
+provides a mechanism that would allow this capability to be realized. 
+Because DMBs are in ZONE_MOVABLE their pages are reclaimable, and 
+because they can be located anywhere they can satisfy DMA constraints of 
+owning devices. In the simplest case, device drivers can use the 
+dmb_intersects() function to determine whether their reserved memory 
+range is within a DMB and can use the alloc_contig_range() function to 
+reclaim the pages. This simple API could certainly be improved upon 
+(e.g. the CMA allocator seems like an obvious choice), but it doesn't 
+need to be defined by me so I would be happy to hear other people's ideas.
+
+> 
+>>>> BACKGROUND:
+>>>> NUMA architectures support distributing movablecore memory
+>>>> across each node, but it is undesirable to introduce the
+>>>> overhead and complexities of NUMA on systems that don't have a
+>>>> Non-Uniform Memory Architecture.
+>>>
+>>> How exactly would that look like? I think I am missing something :)
+>>
+>> The notion would be to consider each memory controller as a separate node,
+>> but as stated it is not desirable.
+> 
+> Why?
+In my opinion this is an inappropriate application of NUMA because the 
+hardware does not impose any access non-uniformity to justify the 
+complexity and overhead associated with NUMA. It would only be 
+shoe-horned into the implementation to add some logical notion of memory 
+nodes being associated with memory controllers. I would expect such an 
+approach to receive a lot of push back from the Android Common Kernel 
+users which may not be relevant to everyone, but is to many.
+
+Thanks for your consideration,
+-Doug
 
