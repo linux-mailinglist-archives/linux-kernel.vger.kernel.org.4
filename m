@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0E05E7F77
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E52F5E7F72
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiIWQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S232136AbiIWQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbiIWQQR (ORCPT
+        with ESMTP id S232731AbiIWQQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 12:16:17 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E812E133CBA
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:13 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 10so1061540lfy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:13 -0700 (PDT)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DDF135047
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:14 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id k10so1065742lfm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=BjjTPJSzqgBsq5wMwT+ax/tFG7nlLkeOxNbMd9/sTdQ=;
-        b=PK9B28z08bhUKIQgM+yNx9Wz2ylSZRVEfmOQsW+mJVB0NcNNX0BhQFpVZGcnS4Wuo7
-         XNB70x4DchMy/KTiKyXIkQPPEqyXaKBOKrx3rgNcbkRmGlIqWLMOcHGwQcRw5RDi5Pxd
-         Q03XGAWPYkmybfnO6SoChG2NrYyRcpOoz2+eSdYbAyvpgsnxaBNHkch3HRxex1zG0day
-         mJt4wtUWnXCCYQQxqZSHDa2mSGDgdJxyb8N/KMxV9bTxkNEnUeteOU+WKj4D1i58zE9t
-         axWIQ1VHUPJNnpXmRU99tTSnF0GQZASHrPD0fPybzLhBGDikJO6gQ0wdnVzts6UKXBpg
-         hvRQ==
+        bh=Fxkwow1Xm3fK1Et6nbVH+mRVG5q33XL6HKbPhtZeFeU=;
+        b=zVQQekk/Mlp72KLlSivea4gGYJ3+w8T0iZz9rqlmj1KrQoqhrt5CMvAKI+3nytIvf1
+         b6PHZ7jbhUZWnZHnLm8zYMZo7jScJv5N+k1SIAWM4gUduDVyapl0IpqVTcguifIgJDyu
+         2WxK1oNB9kTTAqUPljJvjjZK0l6emoxCpd59vCKRxMlMHSVkrMCHYXKsH674AwvVNO6A
+         1STnB9IJIh47ZHxyS1Z6vXe2NNamlMgvzv4H4S41vzaX8nuVPBnHm0IyaH6yFTOqpTZU
+         hfPqIbix3VMl/R8F7Ynh79ME2INbUWU15CBagKknzqbz7JtGDF0+qxSLQJ7GKfMHuzfP
+         5RPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=BjjTPJSzqgBsq5wMwT+ax/tFG7nlLkeOxNbMd9/sTdQ=;
-        b=t4iBwkSvBhz3i2gipgSGOJGcBRXm172+rEnHcDqVgyD+dNa2m9mc40JOWCvrB0E5E6
-         Vhhz9gaQFTT07skOL6eEavomJTKUvwftEeI3TPuvtvlGcZvLqeOSK+BDS6fL5NbM6Rte
-         B+c/VXXMeWyiqoeiyWvHJUznplR4K7QVH0tYJ4bOPZCIXFGBI3xELol+Qbw/7fB0xB39
-         G3aEqY39Qj6gpAe10sQnAb75NXVaJK/z1qmPqfVdHv7rWe8BFFHxtZJY926BKVobLLsj
-         mjP5/b5iPiw8DMyfx1CX9bcqHo1lCFTzN9SMV/8D4XgAFMbgs5L5L7q9efTDcsB/30x8
-         wtvQ==
-X-Gm-Message-State: ACrzQf30M/sxCi1lzlWKTWJnXGNoX7KLkbHecrRRC/gMzKtMJuts15KN
-        JrzqOcuPnT5rZUmZitXFta/CvA==
-X-Google-Smtp-Source: AMsMyM4yHwMG3ruTD0WvINGKfD4sELqhnfdUFK2QastRqloWz8MQ19+ebjdIznviMQ8MP2sJziO0SA==
-X-Received: by 2002:a05:6512:3d17:b0:497:9e34:94f2 with SMTP id d23-20020a0565123d1700b004979e3494f2mr3391894lfv.285.1663949771853;
-        Fri, 23 Sep 2022 09:16:11 -0700 (PDT)
+        bh=Fxkwow1Xm3fK1Et6nbVH+mRVG5q33XL6HKbPhtZeFeU=;
+        b=4EIZvQOblDEdkWD6YqoEBi084qmwadc+eBU7byMIQ4wIs9Klg+xO5UTZJAH3fXdPcI
+         gcZiSeLOcv5/JGm3raKKfrwcd/swUB8OP6BDsnSfcpxoDXTJZR78RyKAxIICZNrEHxln
+         MQaxhpa8DKCVCMu1hUPmsPvlUmkkV3mtVKY2Eauvktgw4mnMg+TLdDZJ6P7PSnz8shyB
+         q0ZDlN71KrC1ph3TjV9lHHp+7tbQKzAkCojT+Y/pqgLFQrGpqiMTqZH42XOrHzpfaRxK
+         AN1WqKzM/EoFYHdLuAYXeAaGuuf0QVzgWnyBsoInULjo2iU4xdfjuBoJ8BgwLtYtih3w
+         prlQ==
+X-Gm-Message-State: ACrzQf19lg9YLZdWYGVKvOI1mTZP0sfDbHcNdBiES4SAPiiwHWd4mTNc
+        JSh0eOYFaGX2BblhzFC3XyTECQ==
+X-Google-Smtp-Source: AMsMyM7DOObn6h8MdzBToiTAMWV4GmPp6zELz5cw/q+cXHcV8zqF8A6H+UUYK65xFZ/CBSUZ2fa2/g==
+X-Received: by 2002:a05:6512:10ce:b0:49e:ad1f:3d7 with SMTP id k14-20020a05651210ce00b0049ead1f03d7mr3327874lfg.609.1663949772788;
+        Fri, 23 Sep 2022 09:16:12 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
         by smtp.gmail.com with ESMTPSA id f9-20020ac25cc9000000b00492f45cbbfcsm1493491lfq.302.2022.09.23.09.16.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 09:16:11 -0700 (PDT)
+        Fri, 23 Sep 2022 09:16:12 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,9 +59,9 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 05/11] arm64: dts: qcom: sdm845: drop unused slimbus dmas
-Date:   Fri, 23 Sep 2022 18:14:47 +0200
-Message-Id: <20220923161453.469179-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 06/11] arm64: dts: qcom: msm8996: drop unused slimbus dmas
+Date:   Fri, 23 Sep 2022 18:14:48 +0200
+Message-Id: <20220923161453.469179-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
 References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
@@ -82,25 +82,25 @@ remaining rx2/tx2.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 ++---
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 2264bba69f84..1213f78a8b7a 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3828,9 +3828,8 @@ slim: slim@171c0000 {
- 			reg = <0 0x171c0000 0 0x2c000>;
- 			interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
- 
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 2c5908d104f7..8b31f4655cb8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -3313,9 +3313,8 @@ slim_msm: slim@91c0000 {
+ 			compatible = "qcom,slim-ngd-v1.5.0";
+ 			reg = <0x091c0000 0x2C000>;
+ 			interrupts = <0 163 IRQ_TYPE_LEVEL_HIGH>;
 -			dmas = <&slimbam 3>, <&slimbam 4>,
 -				<&slimbam 5>, <&slimbam 6>;
 -			dma-names = "rx", "tx", "tx2", "rx2";
 +			dmas = <&slimbam 3>, <&slimbam 4>;
 +			dma-names = "rx", "tx";
- 
- 			iommus = <&apps_smmu 0x1806 0x0>;
  			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			ngd@1 {
 -- 
 2.34.1
 
