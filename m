@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19B55E8610
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAA65E8613
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiIWWug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
+        id S232716AbiIWWui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiIWWud (ORCPT
+        with ESMTP id S232438AbiIWWuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:50:33 -0400
-X-Greylist: delayed 2346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Sep 2022 15:50:31 PDT
+        Fri, 23 Sep 2022 18:50:35 -0400
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765A5A0268;
-        Fri, 23 Sep 2022 15:50:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DA8DCCD1;
+        Fri, 23 Sep 2022 15:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pfvJ513xEuv8iXDNoGYIRg2YAS3obpRNQdZvIOCM8eg=; b=o+Gkqdq4QWxrzQO/05DchGBbyl
-        oo6f/Q2IWcIG8f9EujS6xysMoWGeZIgJs8VZe3bxWxZ3uqQr2YNR6Ukwp3qREsBBl4kDTvq9a3McU
-        +VkNPaBGUpCQxbCTxTGBjncKtYHPIkvk62soprDu1EO55cKnrcn4pgT6PjhPiTMJfVjoU35jy08Tl
-        TSDwI1KoW3tXisGQQ8K9Cze34ncq4uFFsAyRP7HxYyhc/0lwY7FgBv4qWq5S68ItmGIpllKfbcCeE
-        9EStNx/62sfWvJ/n7gXpRH0jcZvE1PZuodfAsf8+0eNVUxDqZXQwG8tq4zfowpiWBmOXb96WK3Wy/
-        IJF9Cm4g==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pS74WwurnFXgea5j4m9IeYCBGZWvGqaiJv/a7MKUJMY=; b=xr5wCoH0pl7kGbvh5DTkn3+BAm
+        7UJXu2Pk0zMIJpTo4Rx4N68cyDd0KL6GANsHz/oC9z/qcDTs5UuiGV23ePrT1WUw90FmllLtHjEvS
+        dIksjRKuFcQui+3+8PyI67cHHvJS+5UsIHBbR2HK4NHBnFqVfc7emdd9KJFoN679twkcroSF4/IoK
+        VPcgDwx8JIsCk6YRE+2omEVMWJPkOn1qMoqaOmVKuZ6NYDgekxXtr5OC9h1v27mbJO6BV1Q24ocdc
+        Pol/tDiRrp9GynMXfasBpaMcc5tH5D5RATnDnDFtk1HoTyIuobNbXDXNlSF5KVSrKuPvc9e7Mp1kC
+        9txuyn9A==;
 Received: from p200300ccff0974001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:7400:1a3d:a2ff:febf:d33a] helo=aktux)
         by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <andreas@kemnade.info>)
-        id 1obqt9-0004Jq-Lk; Sat, 24 Sep 2022 00:11:15 +0200
+        id 1obqtD-0004K6-Ef; Sat, 24 Sep 2022 00:11:19 +0200
 Received: from andi by aktux with local (Exim 4.94.2)
         (envelope-from <andreas@kemnade.info>)
-        id 1obqt9-0070ol-5h; Sat, 24 Sep 2022 00:11:15 +0200
+        id 1obqtC-0070or-Vs; Sat, 24 Sep 2022 00:11:18 +0200
 From:   Andreas Kemnade <andreas@kemnade.info>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         arnd@arndb.de, olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
@@ -44,11 +43,14 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com,
         m.felsch@pengutronix.de
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3 0/2] ARM: dts: add Kobo Aura 2
-Date:   Sat, 24 Sep 2022 00:11:10 +0200
-Message-Id: <20220923221112.1671392-1-andreas@kemnade.info>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 1/2] dt-bindings: arm: fsl: add compatible string for Kobo Aura 2
+Date:   Sat, 24 Sep 2022 00:11:11 +0200
+Message-Id: <20220923221112.1671392-2-andreas@kemnade.info>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220923221112.1671392-1-andreas@kemnade.info>
+References: <20220923221112.1671392-1-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Score: -1.0 (-)
@@ -61,19 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a basic device tree for the Kobo Aura 2 Ebook reader.
-It is equipped with an i.MX6SL SoC.
+This adds a compatible string for the Kobo Aura 2 eBook reader.
 
-Andreas Kemnade (2):
-  dt-bindings: arm: fsl: add compatible string for Kobo Aura 2
-  ARM: dts: imx: Add devicetree for Kobo Aura 2
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/arm/fsl.yaml          |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/imx6sl-kobo-aura2.dts       | 556 ++++++++++++++++++
- 3 files changed, 558 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 7431579ab0e8..fd2a5732f755 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -520,6 +520,7 @@ properties:
+         items:
+           - enum:
+               - fsl,imx6sl-evk            # i.MX6 SoloLite EVK Board
++              - kobo,aura2
+               - kobo,tolino-shine2hd
+               - kobo,tolino-shine3
+               - kobo,tolino-vision5
 -- 
 2.30.2
 
