@@ -2,138 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C015E7FF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7FA5E7FF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiIWQfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S232596AbiIWQh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiIWQd6 (ORCPT
+        with ESMTP id S229910AbiIWQhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:33:58 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60069.outbound.protection.outlook.com [40.107.6.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7613EEA1;
-        Fri, 23 Sep 2022 09:33:57 -0700 (PDT)
+        Fri, 23 Sep 2022 12:37:36 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70042.outbound.protection.outlook.com [40.107.7.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F231314C9F0;
+        Fri, 23 Sep 2022 09:35:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IIScERnkdRU/Lx7MS4Dhpv56N/84hHiqcRF9/TFLVRugix/9b+SOdNwDZOfErY+WNH5WkPJ9UMs8acoBca7wOaXZKJtcRdaERSD8RouYABs86aeViTYOweCPERahHnAlJa8VDcXPXinFYnvGzFI5fvUg1wSBFXRdm6umPuqRj9Kb74OBbGSvvTY2UBQBDbttlWeDnG/66yvWOUv+Dqgw/DD7JDLuS8DKoVG0z+LT1ttbKcPclJHR1V3hVsktcNNcbUCwV3NjPAOiyrGk4d9wcYaBiGb/Mt6I56jaPWQc800gmqq8wDXIH+hoQ4ZR3W8C+vq0wLJsJ6AvOOKMvKQLbQ==
+ b=md8Yxue+SO/L/5pmw9YmA4bkwoq6z/oZZoXXMrgjOZbtgbn/k5/jjjgkZbBFkP5M+tBO/SlzMfVEFbhf9aa2wOP2CAj7daGiciR5K3+2rHReSvnH97yfY9cr60vqSjtHpvlF7WhjVktiI2qBc2a0S8wZ5CLITcdedSB2OaXIY4NZr09ffJykwjCVSirjRziKJE1Tbmjx9+ZcPCRj9TYeIxCrKeXFuiVS3qzTGJzQM77qZplZrX7To42scQHMp/0/oaeM2HZ7E4vcYVJ3zki69CYOn+N1O1j2pLKzZCsMrac52rUDgfTXTMpEmLNzr6TqV722rZdbtPfa0ilHdTtrcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KjrRv+/2Z5PEvV78C1tgl9XWbataohtmabNPuk+XUnA=;
- b=W8mqhC7ElEJwuFQ0G9nUYux+Q3+o71Z07eOPHZr8EwbxZjXQC2FRts8r4oa1QtSehcE7r81/UaTCEqJXoho9tDbQDwrPixNWzp8oTa6oGbSmWJPDB65DNtRJWprFH9btJO/lDh5KfB472c4ATo8W3r4tYK5S742y/bUwfH/CuLxaZVE9ls5RM3EPqpc7gecih4yXSsBHf/qZLa2mPAzk7gcSWXVK4KuhVMsmwq6fpyhZOTzEkemCTmmx16PaI7ixwC2a8QltLXSxjjD/CPeXCe1KnaIIuYGNKjI4fZ4bgIUSlwp3+4WDQKT+uaBq0b2tE/55Nj0RpXYxFmW6RYdDkA==
+ bh=h8qvM2/fXIf3bkW58Qd44st1VcymDqprufHaShR5y0Y=;
+ b=JprsVMf5ZmKojtEvFb+T2euTulf+WGAx/FgmPkiBeEAthMPNvUbTfchNTmbimBdiUdAMx1kfSJkbVTKdHv4fSJ3xnJIxD04/RM1hTw4eiUrBMNhONFIoIhLEIKG3TerGP9tlzcY2cyWgiL3sCgD8JTux3ScmnlX7aNtopZnLGcnJBbv20TWaEB7DMcDilpMZSeFH0d4viRQL+CJ3KqrhrEDvU4JqqNLsn6TpBfAYywXyfvIEZA9Xx3zu6bi81+aThaZBhpGiZ28qQcpCEsbbnBuLT1eYOgPMBVr83guvURMpAUDW4cXbk8gKjWoRygtr7ouje/+GV/ZqwkILJy8DXg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KjrRv+/2Z5PEvV78C1tgl9XWbataohtmabNPuk+XUnA=;
- b=j4DLP2LvybvzIsr3WDJXHtwuPM2nAQlf9Q19B6OoaOAymO7DZ+jHLac6+qcvcq8PGUnF4voaI7juGTMqSxQdrg0Itlo0wcIXyv+7OE9rNpjZNK2Syli6bbveeyQJxoSIz0PIwjLtgxh+0gbH+Ftb4R1isnb/LSaVd8Kv/f0qjI8=
+ bh=h8qvM2/fXIf3bkW58Qd44st1VcymDqprufHaShR5y0Y=;
+ b=0x8/29vCVAamWckrGYo07aHVyjHCT0kzpS0DZ9lQYIDW87+0XHuS+MyslS3QR3sEZ4LEoVrADmukwgU4tSz02Xhg0d2vjwPWkibhTkms2mQJUc52MFWWzlZXP5h86C3Se2cS17iBYbdz9CXJ+kj5HrfcZ2Radn6xiYTVryX3IQANf4v7MZng3b/35Mj0y/LMeCELrH/fv8NSOZk6vzRquf7oVJeZI0cob++Mzk0d0eCZaT0BmbuWOM0KAnVYqCGd8CYx5LVLNI8JjpKsIV1ArMPp6QtSMMDaYwd1gOjCSuBDZ0JOjC2bjfqi/XW7wxk08GKsj+ZL8RBS/jZ9UZ6+Rg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR04MB7023.eurprd04.prod.outlook.com (2603:10a6:800:12f::16) with
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by DU2PR03MB8123.eurprd03.prod.outlook.com (2603:10a6:10:2f2::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Fri, 23 Sep
- 2022 16:33:56 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.021; Fri, 23 Sep 2022
- 16:33:56 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net-next 12/12] net: enetc: offload per-tc max SDU from tc-taprio
-Date:   Fri, 23 Sep 2022 19:33:10 +0300
-Message-Id: <20220923163310.3192733-13-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
-References: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM0PR10CA0029.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:17c::39) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19; Fri, 23 Sep
+ 2022 16:35:04 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d%6]) with mapi id 15.20.5654.014; Fri, 23 Sep 2022
+ 16:35:04 +0000
+Subject: Re: [PATCH v2 5/9] arm64: dts: ls1046a: make dma-coherent global to
+ the SoC
+To:     Leo Li <leoyang.li@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+References: <20220915233432.31660-1-leoyang.li@nxp.com>
+ <20220915233432.31660-6-leoyang.li@nxp.com>
+ <e27d295b-abbf-716c-5e0d-97dd63ce07df@seco.com>
+ <AM0PR04MB6289919428F12CD125357D4F8F519@AM0PR04MB6289.eurprd04.prod.outlook.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <1db9ffaa-3c93-9e09-8966-73aba061f52e@seco.com>
+Date:   Fri, 23 Sep 2022 12:35:00 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <AM0PR04MB6289919428F12CD125357D4F8F519@AM0PR04MB6289.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0094.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::9) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|VI1PR04MB7023:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa189bbe-fbbe-47ec-d6f9-08da9d8168c5
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|DU2PR03MB8123:EE_
+X-MS-Office365-Filtering-Correlation-Id: d397c17a-62d1-4a81-8863-08da9d819181
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8Ll5WYzOjUwHgL70dJLRg7+jgYkAKNKPX1NRI2DvSFUh/fCbCr0ZpAafG6hyn4Mfm4HjJxENtvXEX8PfKjzHnOYofOGZyqQwy3Sg5kBnjb8cp0UMgPWUq61tjK/AXYEMcAIep6hKkqp18VxozvV8fuC6BcQDb6XEnzGwVvsVQ2E2mJfvouTROud5ufjdozlvlMSYCcUVq7sNUzJ3JHs5R7POpAx0MAshP4hCBvoLeflhowNs3KU347IEb/E73rTUHYIp65s1yaL2iUhbwnOYkccUHU+rCnHo2bYiRWnO5YIaJclXZ+wmHqU3oT8sSDCpbklByS8U1uP5kDYxPkhEEdPdJwwmIbt0HjZiXaaZKA/4zpN2o2xaZPiworOTHEXjivoRRm2Au3sM6fppeuu/sTYHw+Qg/eE/cTRyuslb4onNFMPHxhfS+0lEDtCRw8nBgcu14kgVNAsXNCM0pYSc3Q/IkMJq3nmsvu/MrS+qYWmLjCUkKnp3q35E94wej0S6bsCuZSKUseySsCx4B5xN9Ua9PrvD5mukBmEVqBGbATvHTwAOfN8mUHVlNuTNMZC9Vn0I+O9AfgDdv6DQAyt0dt3DdDAl+TDjEUqvepChee4xgrqXUWs+a3nU3vJS/gW2EyeUZUMQZVM5kT/bNCwWa7FrlhDhoW5stwAAhZBtuswMcFkpWiLPxN+udVtlKxxdam2dgDsVuqIih4FGP0EUarcBhPsVxuGvh4u4w3XCxyh/8LabxbltK4cZjpDYxDwVOtIUWzJ/fPJEXh8fXB2EmA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(478600001)(6486002)(54906003)(4326008)(66556008)(66946007)(6512007)(6506007)(8936002)(66476007)(41300700001)(6666004)(26005)(7416002)(44832011)(8676002)(316002)(5660300002)(36756003)(6916009)(186003)(2906002)(2616005)(86362001)(52116002)(83380400001)(38350700002)(38100700002)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eUo+jRIz7kY+lv0LpGBSzY4TUIP7QZejdtRqE8bh7aBbjpzG489IpCZqfqadpvMI28nxbogHMnZHz4NNJf9GJC74hlL/Ok1uAlUL/LqMIzMqXErV+FZ2Ibj1yrLUcRDDQrezxdNgBdSEcEMoqktVjg4+qDcbNI2I3F9rli4KIqd6GTYpACvFO5YOd3M7Q0sNDiCufpW8cbdotfB5aB9e3gKiPmmiEazPiy+fLBw8/fcpdYh4D26KG/5XgpQEkM+LuCn91/DEzVUky+XqTr6jLPL5btGE45kgIC2jFcV2hlhF+RltJ6UhwFpNmGhAyt+dlqiDLQybysoeGcSbMXXYtHvQUm9yvQTFkKS7pARKv9Itor2Q+jRzVlKPW+TOxwblFFei1pKzzKnlDesW/5suTfXPwUCbd+uy4GihUV7kh7P5SQcssie6Hio43ETcllfLw9gIQCfJbVgI96oVMCWPqJLGSBf30RMNIVJGofcVfH9QohsdJy6wx+CFUeEP+cTztD25OLOIwlDbyI01poTeHSejI9uAOmRzD48IfeMQ7D2H11Sx11oMz4sEP579pbKtOfwa7dWTEPh4C5qtVfylgmgJqh5o/x5lINA3Dd+EINIK1gjq3jejiNp8gjov+5gxuNfWLjtQkBPdOw+lQk9PBXrgSGFGmODwKpIp+f6DYWt9mBl52VicnniuIwzHxJ34yT9lAJtjGtH5kL0lssgSCCmScGk8PZxpC/TCv0JybUt1KQqvB9ea60TYyf32bnJIerAz0edpGPjMn4O7g1yZYwMHRp3Bj9M2R4M0uZuEsybNnmRx7f5miT8Pwxn/cfvCIupzv1XjFCrbDIRFrMjBEg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39850400004)(136003)(366004)(346002)(376002)(451199015)(110136005)(316002)(54906003)(66946007)(6506007)(83380400001)(478600001)(6486002)(2616005)(36756003)(38350700002)(44832011)(6512007)(31696002)(2906002)(5660300002)(8936002)(52116002)(53546011)(26005)(186003)(38100700002)(4326008)(8676002)(66476007)(6666004)(66556008)(41300700001)(31686004)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?biK1ccJf3aW+UHkhPMaVKCS0tloyblEYFiPOhYuF1lIEliIC3PUxrY4btMGh?=
- =?us-ascii?Q?nyan17wUWT3GAcyXOeHfTy92/fITlNZbdenVuowXF269/yvQzN4Ldmp12Igh?=
- =?us-ascii?Q?y4g+/P3rw9a6YJaw1ZeSKTTXbUcqJ0kwY2dGO+hqY6ersBN9MooKSuv7YQDg?=
- =?us-ascii?Q?XAMA+TvTa5ViXPI4D+IvZCXZz6qLsGACbQWOX5+1gaQDkY0ACB0BLSmxICvI?=
- =?us-ascii?Q?wSTEl+MAgrBTEgNpRzhHQAJODhhYEo60uno2PPD5tLm58h3qhfZjB6bxsXTh?=
- =?us-ascii?Q?rNL/oHf5hzjqPpedhYjztJSGTPvYgF2bNiA0P92tbtNjW7ZoXEbCsSn2EFBZ?=
- =?us-ascii?Q?SJf/tWzy3lGJnsh0BI1fEubEq9ijgsrC/2uDQSYKQhY/PXcUyJuoT0RTvD5s?=
- =?us-ascii?Q?CMkyfir2hWXZYIpfgFHRVflx4tN8VEbJHkQQnn8COvtndCcJhasmZeKw7TI5?=
- =?us-ascii?Q?wBNjUeUbV46QvCIvnj5qkl0Wz+d+Pdb+7wmjvR+CXdD1VXxcd+9RsNDLHyn4?=
- =?us-ascii?Q?9zI/A9UGbJO9uckc4KXLuY0Ket3ix1v+FDFpjifw2yXE3Wp1Aj+sbIREEHEM?=
- =?us-ascii?Q?7t69pTxIoUjSCrpBG0g7W90XYvKXt/we8wWGG7H7Uo/AZReXCB/XAUFSQLu5?=
- =?us-ascii?Q?Jx2Hi7ff8gNnTrR1qG/NEypDRXH4o1jm5stfWPUtJE6/3N7hLkZagcOZk5DI?=
- =?us-ascii?Q?lhZE0IUsE3gnv0SEh/CxnL5Luk63swJf8EW8c/J0995nZd3v0jfpslQUGFee?=
- =?us-ascii?Q?bmavZ4Ac8wV8EKpp32Z4xvPh8bnDmgQruTCtROEi+DvUUE9PzSKjejsYHk+M?=
- =?us-ascii?Q?VfF+e62YiGCmDs8r3wc73F5bozJ7tjwYse+bhYvoBfGSQYdYojhVfyGAWJ+B?=
- =?us-ascii?Q?AlohLmXTlDq/DPQF4Er6k2OITg8prZUNzyiYuTxo1ekK8btGE+t1xLqITytf?=
- =?us-ascii?Q?P1lsqdYTyPtm61s9IzQHF/WdJl9qso6zJY0AP+wguTIl6Zt9RAbDd9pj70ZK?=
- =?us-ascii?Q?ETP7MYNA7yzDcol2nHsPkFzK+OUXPiWYQZzQAyhoLREuTJxuJdGzQztHpCy2?=
- =?us-ascii?Q?pqOZGvkDsyyeVBizqcTGdmR5DxJI2j0uYCSmORfU8XmQiskXWMGf1eC5szT2?=
- =?us-ascii?Q?5ixQZzbGwbDWIiWqsuCK+TWXALWMyhox0lVDbwW1zZaJoCT8B2yMmvWzzkAY?=
- =?us-ascii?Q?VieWbfTxrGw698WssMSIEypuP6utIFviBU2/p5xEgkGIKqQwRQ7vYYjpjEI9?=
- =?us-ascii?Q?Kxf87AeWh85ABn4Ksx39bw47FOmzjXrC3q252ClmrXcO/k0UJdjPitO1CJXD?=
- =?us-ascii?Q?7b3svgMVJ5pVVlbKrMb2X/jtcuMzlPDj7HttQgOS3c9RoOGYFPvVgAVIyetH?=
- =?us-ascii?Q?vewDj1RessZEDH5Pd2h+nJCRR2RdlypGm5YxdJ0xkj7b4DDBaQgof88BQDYL?=
- =?us-ascii?Q?Gg6OKD+Rd900U/wj2Z+Wr971FbrqOsXaDpx1GkGMqU2aZj3sQ2fCwIbOPadY?=
- =?us-ascii?Q?9RtnGnVjVjPsoDnfAStoev8/LEu1dLeJbs35FXpIHgi20C+1G6Qqg+uKQhuv?=
- =?us-ascii?Q?YTqbtr+DZo6nZblh58eJRD/DTAW7WPgYbZeOml8Yne63iaz0araaoWai5I6S?=
- =?us-ascii?Q?XA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa189bbe-fbbe-47ec-d6f9-08da9d8168c5
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M0Q0aTF4WmdodDVvT24rZjVQNjRzRlh1dGdsbkZmaDBSQkdPbGJBQjlJbzBZ?=
+ =?utf-8?B?VmJlWS9Ud3U1K3FjVTBFTmZwMmU4SXhmOEllZTdWN3BxN1Bzajl3Sjc3Z1pu?=
+ =?utf-8?B?L2UwKzc3SzhxZW9obUFMMlBkRndaVk53R0tBUE9EUjFCZnZTN1lpMXRVaC9D?=
+ =?utf-8?B?Qlh1YVJoeWkvY3hxK0RQNWhxd2pjNTBxYUhYaTFUK3JETWxYME41aFFEU0ht?=
+ =?utf-8?B?cUZIREpwa0EyTzdrSU8xemJ3dks0TS92TWFuWUM2TUZYNHJycVVxY0ZqMlZW?=
+ =?utf-8?B?NlIydTVIdi9vdmluOGhnOGg4QjNwNU10ZnB5VmU0eGhvTmVkNzJMVGVIMWh2?=
+ =?utf-8?B?dFptRml6N3lUVUw2VjdBMklwKzBpclRVb2czQnBIeUE2UEE3MjhNRWQ3TDhY?=
+ =?utf-8?B?d3FCTGw2UmQ2eXFodEF6R211RERxeUwvMHJYSTd2WWorWHlmRGszMXF4WUhR?=
+ =?utf-8?B?SGIwMmVYN1JjR1ZvY0hTbHFBWmgzZVczVjFPY1ovMlNXVHlvN0o2Q0JtY0V4?=
+ =?utf-8?B?cjFRcWlSMXpBdmxOeXVkQ0hEbmluS2lDUkxlNGlua3M5NjkwSjZlK3hyUnhP?=
+ =?utf-8?B?dVdobzhmTktCb0p2VTF2Q0cvM0RTczlvUXMzY3VCZVhrVk5jdWt5K1YwWHNK?=
+ =?utf-8?B?R0JZMy9lclpOcmJNOVNMNk4vSFFiY3JDaVZCN01ndEtrTVJtRzhkaW1tV1Fp?=
+ =?utf-8?B?V2ltdmplZ1BpUm04RjNRcXR2SU40YXlLMWVwQWZOaTNQMVFqWC9pUSt5YlVK?=
+ =?utf-8?B?aEJTSnJVc2xJaHlIMURFUWlEMWZsRXhxVFFLWUpFVmxSZmtSeTdaR3NCcTcv?=
+ =?utf-8?B?T2xuSjZodnJwWWtKbnN1TVBDOG5GbG9oNmxVaGtNTTJhNGFWaFZRclFZK3Fs?=
+ =?utf-8?B?VS9HQTkvOFlLUDNwcHZoUHFQUXNVS2FnL29SOThSVTVvdjdzWkVXZXdwYXZJ?=
+ =?utf-8?B?ZzVaMFJzV1RXM25obHhWaUg0eExGbUVHcWY0TVBTMU85Vyt2aTlNenFMdGp0?=
+ =?utf-8?B?TEFKL2ZzZnFlQ2RjMmpSY25zUktoYjlndDdPWXZNVlhtRUlQbzAzNGpqcUlO?=
+ =?utf-8?B?RzN2bE9YK0RNakMvcStIRno2Q3BYNC8vTjQvQjNuRkwrTzZoTEh2UVJvMVFr?=
+ =?utf-8?B?cWNjMmRQUzJGSCswNEoxZHJTNDdsVVhFNkxOOWRHZTFzTnJic3J5WkN3S3Vv?=
+ =?utf-8?B?WXBsZTZmbU8zbTIxWEsrejBERjBTMzNoTzNDK2NJT3I1RmJlMVlBbTVjV0Nk?=
+ =?utf-8?B?VkgrNml6ZkVwbnBJU1VxaHl6RldreHpYa0xjV2VXcXFmTk0rRmFuT3gvZzVp?=
+ =?utf-8?B?RmdvMWpuUjJBMFJxcFo3dWtsbnR6NWhCREF6MDBjYm1OZW9pbWlvUm12bFMw?=
+ =?utf-8?B?UXdYNFhjelJIL2JvQ0d4bk9INkVnRHdocDdmeWFlR3M1eExxeVdkdnM2eU9Y?=
+ =?utf-8?B?R3lYdFhQQWJDSEFscncyczMyOGZ6bVF3SDNxUVNFcEVObXlCRmJNVXBnWExr?=
+ =?utf-8?B?THNmb0tsTEhhdDNIbEo2UXYzZVl2NFhQMzdZb3U5WXNxNnZuSmw1dWw4eGcx?=
+ =?utf-8?B?cUVPRUJHNXVvL2g0eHZHWFozMnY3cmlCVXZiby92Vit2bDY0V044cXRsN1c1?=
+ =?utf-8?B?Y0xYelpBclJzNDh4ODhNOGRQemFRQU4yODFOa3F1TzdMWEZGVlVySGhrV01B?=
+ =?utf-8?B?M3NoUVZSaklkQm0xYzR4MkRIamo5OXBCbUlNQlg1NGl1N2w5R0ZFOVltT3pm?=
+ =?utf-8?B?M3RBZGVrSktDMHZEMHhmTXUzaXNva25uRWZ5dkNGN3dldkdXR2VxeG5mUm1D?=
+ =?utf-8?B?WWJGYWdhdjR3SzZuRmN0dUVBbFNFZFR0a2xTM3o4UjJGdXJQaVVndGZlQUMz?=
+ =?utf-8?B?T3pGMGtPUXV2aG83K0YyWkN5M2IzYjNHb3dVTngzTklRUXdlSzh3YnBLNTBC?=
+ =?utf-8?B?Qi9kSGRkV2RYZEtBckZ1UWtlMGRTL2E5bWdmNklzd3FPM016a2ovclU5NjQ2?=
+ =?utf-8?B?d2NobFB0OXVHMDFuVGtsZVp2RnBjSk5hNkVEd2ExWGF5Ym1MZ0R6OUNVcWhr?=
+ =?utf-8?B?b3lwY0dwTHdZYWlKV1BPQ0NzZHZEc3NHQXZ1QVBDOXJSTGEyRzNkeXVIUCtn?=
+ =?utf-8?B?c3Y3dW1EN1JMTVFVUWVYVFNseGVLN0FaaUpJell6UkYvd2xNTmM4WEFhMU45?=
+ =?utf-8?B?THc9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d397c17a-62d1-4a81-8863-08da9d819181
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 16:33:56.2359
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 16:35:04.4967
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZplryeaEA6jeQhh7LJNuuse8KPOVu8h5EzUJpDrGPPDWmirS/QckNPY8McYoL/YkDn91JVcpcp5B6exwAIf7Lw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7023
+X-MS-Exchange-CrossTenant-UserPrincipalName: fCffODS3kAaFCcpk/dbTTbiXc5DwM5GXf8CSQ9AVEoUTexRfLZJyIYl3PoDPTv557sCFdFX6zWGZ+zQ11VNBrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR03MB8123
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -142,105 +134,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver currently sets the PTCMSDUR register statically to the max
-MTU supported by the interface. Keep this logic if tc-taprio is absent
-or if the max_sdu for a traffic class is 0, and follow the requested max
-SDU size otherwise.
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-v1->v2: none
 
- drivers/net/ethernet/freescale/enetc/enetc.h  |  3 +++
- .../net/ethernet/freescale/enetc/enetc_pf.c   | 25 ++++++++++++++++---
- .../net/ethernet/freescale/enetc/enetc_qos.c  | 10 +++++---
- 3 files changed, 32 insertions(+), 6 deletions(-)
+On 9/23/22 12:26 PM, Leo Li wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Sean Anderson <sean.anderson@seco.com>
+>> Sent: Friday, September 23, 2022 11:11 AM
+>> To: Leo Li <leoyang.li@nxp.com>; shawnguo@kernel.org;
+>> devicetree@vger.kernel.org
+>> Cc: robh+dt@kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; Laurentiu Tudor <laurentiu.tudor@nxp.com>
+>> Subject: Re: [PATCH v2 5/9] arm64: dts: ls1046a: make dma-coherent global
+>> to the SoC
+>> 
+>> 
+>> Hi All,
+>> 
+>> On 9/15/22 7:34 PM, Li Yang wrote:
+>> > These SoCs are really completely dma coherent in their entirety so add
+>> > the dma-coherent property at the soc level in the device tree and drop
+>> > the instances where it's specifically added to a few select devices.
+>> >
+>> > Signed-off-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+>> > Signed-off-by: Li Yang <leoyang.li@nxp.com>
+>> > ---
+>> >  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 5 +----
+>> >  1 file changed, 1 insertion(+), 4 deletions(-)
+>> >
+>> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+>> > b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+>> > index 27033c558e3e..e406499a26b4 100644
+>> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+>> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+>> > @@ -273,6 +273,7 @@ soc: soc {
+>> >  		#size-cells = <2>;
+>> >  		ranges;
+>> >  		dma-ranges = <0x0 0x0 0x0 0x0 0x10000 0x00000000>;
+>> > +		dma-coherent;
+>> >
+>> >  		ddr: memory-controller@1080000 {
+>> >  			compatible = "fsl,qoriq-memory-controller"; @@ -
+>> 355,7 +356,6 @@
+>> > crypto: crypto@1700000 {
+>> >  			ranges = <0x0 0x00 0x1700000 0x100000>;
+>> >  			reg = <0x00 0x1700000 0x0 0x100000>;
+>> >  			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+>> > -			dma-coherent;
+>> >
+>> >  			sec_jr0: jr@10000 {
+>> >  				compatible = "fsl,sec-v5.4-job-ring", @@ -
+>> 794,7 +794,6 @@ pcie1:
+>> > pcie@3400000 {
+>> >  			#address-cells = <3>;
+>> >  			#size-cells = <2>;
+>> >  			device_type = "pci";
+>> > -			dma-coherent;
+>> >  			num-viewport = <8>;
+>> >  			bus-range = <0x0 0xff>;
+>> >  			ranges = <0x81000000 0x0 0x00000000 0x40
+>> 0x00010000 0x0 0x00010000   /* downstream I/O */
+>> > @@ -834,7 +833,6 @@ pcie2: pcie@3500000 {
+>> >  			#address-cells = <3>;
+>> >  			#size-cells = <2>;
+>> >  			device_type = "pci";
+>> > -			dma-coherent;
+>> >  			num-viewport = <8>;
+>> >  			bus-range = <0x0 0xff>;
+>> >  			ranges = <0x81000000 0x0 0x00000000 0x48
+>> 0x00010000 0x0 0x00010000   /* downstream I/O */
+>> > @@ -874,7 +872,6 @@ pcie3: pcie@3600000 {
+>> >  			#address-cells = <3>;
+>> >  			#size-cells = <2>;
+>> >  			device_type = "pci";
+>> > -			dma-coherent;
+>> >  			num-viewport = <8>;
+>> >  			bus-range = <0x0 0xff>;
+>> >  			ranges = <0x81000000 0x0 0x00000000 0x50
+>> 0x00010000 0x0 0x00010000   /* downstream I/O */
+>> >
+>> 
+>> I'd like to summarize the conclusions of [1] below. This patch breaks I2C0,
+>> which is the only user of eDMA at the moment. eDMA is noncoherent
+>> because snooping is not enabled for it. I have submitted a patch [2] to U-
+>> Boot to enable snooping for eDMA. For now, this patch must add dma-
+>> noncoherent to the i2c0 node.
+> 
+> I have sent a V3 yesterday to set dma-noncoherent on edma node.  But are you saying that the dma-noncoherent need to be added to the i2c node to make it work?
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
-index 748677b2ce1f..d7edc04f4bfc 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.h
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.h
-@@ -453,6 +453,9 @@ static inline void enetc_cbd_free_data_mem(struct enetc_si *si, int size,
- 			  data, *dma);
- }
- 
-+void enetc_reset_ptcmsdur(struct enetc_hw *hw);
-+void enetc_set_ptcmsdur(struct enetc_hw *hw, u32 *queue_max_sdu);
-+
- #ifdef CONFIG_FSL_ENETC_QOS
- int enetc_setup_tc_taprio(struct net_device *ndev, void *type_data);
- void enetc_sched_speed_set(struct enetc_ndev_priv *priv, int speed);
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc_pf.c b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-index bb7750222691..de39d9ba7534 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-@@ -516,15 +516,34 @@ static void enetc_port_si_configure(struct enetc_si *si)
- 	enetc_port_wr(hw, ENETC_PSIVLANFMR, ENETC_PSIVLANFMR_VS);
- }
- 
--static void enetc_configure_port_mac(struct enetc_hw *hw)
-+void enetc_set_ptcmsdur(struct enetc_hw *hw, u32 *max_sdu)
- {
- 	int tc;
- 
--	enetc_port_wr(hw, ENETC_PM0_MAXFRM,
--		      ENETC_SET_MAXFRM(ENETC_RX_MAXFRM_SIZE));
-+	for (tc = 0; tc < 8; tc++) {
-+		u32 val = ENETC_MAC_MAXFRM_SIZE;
-+
-+		if (max_sdu[tc])
-+			val = max_sdu[tc] + VLAN_ETH_HLEN;
-+
-+		enetc_port_wr(hw, ENETC_PTCMSDUR(tc), val);
-+	}
-+}
-+
-+void enetc_reset_ptcmsdur(struct enetc_hw *hw)
-+{
-+	int tc;
- 
- 	for (tc = 0; tc < 8; tc++)
- 		enetc_port_wr(hw, ENETC_PTCMSDUR(tc), ENETC_MAC_MAXFRM_SIZE);
-+}
-+
-+static void enetc_configure_port_mac(struct enetc_hw *hw)
-+{
-+	enetc_port_wr(hw, ENETC_PM0_MAXFRM,
-+		      ENETC_SET_MAXFRM(ENETC_RX_MAXFRM_SIZE));
-+
-+	enetc_reset_ptcmsdur(hw);
- 
- 	enetc_port_wr(hw, ENETC_PM0_CMD_CFG, ENETC_PM0_CMD_PHY_TX_EN |
- 		      ENETC_PM0_CMD_TXP	| ENETC_PM0_PROMISC);
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-index ee28cb62afe8..f89623792916 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-@@ -67,6 +67,7 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 	tge = enetc_rd(hw, ENETC_PTGCR);
- 	if (!admin_conf->enable) {
- 		enetc_wr(hw, ENETC_PTGCR, tge & ~ENETC_PTGCR_TGE);
-+		enetc_reset_ptcmsdur(hw);
- 
- 		priv->active_offloads &= ~ENETC_F_QBV;
- 
-@@ -122,10 +123,13 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 
- 	enetc_cbd_free_data_mem(priv->si, data_size, tmp, &dma);
- 
--	if (!err)
--		priv->active_offloads |= ENETC_F_QBV;
-+	if (err)
-+		return err;
- 
--	return err;
-+	enetc_set_ptcmsdur(hw, admin_conf->max_sdu);
-+	priv->active_offloads |= ENETC_F_QBV;
-+
-+	return 0;
- }
- 
- int enetc_setup_tc_taprio(struct net_device *ndev, void *type_data)
--- 
-2.34.1
+I believe dma coherency is a property of the consumer, not the provider. See
+e.g. really_probe/platform_dma_configure/of_dma_configure/of_dma_is_coherent.
 
+> For the u-boot patch, I will check with the hardware team to see if it is safe to set the reserved bit for edma snooping.
+
+Thanks. I'm curious as to whether this omission is intentional or not.
+
+> There is a problem with this is that it breaks the i2c for older u-boot.  Probably the best way is to make the default to be non-coherent in dts and update it in u-boot when snooping is enabled?
+
+Yes, that is what I propose.
+
+--Sean
