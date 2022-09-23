@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56C85E72D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDE55E72E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 06:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiIWEWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 00:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S231144AbiIWEZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 00:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiIWEWe (ORCPT
+        with ESMTP id S229810AbiIWEZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:22:34 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741B711D60C;
-        Thu, 22 Sep 2022 21:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+/f7rQqEMYVFzSTEHMH7lncMBYm3L3Qg9syncr2dQT4=; b=jSbZR1B9zaw3IUb4LnQOM9P7W9
-        LWABTG8h+HtJQW6NV9vx5y/twluuZRVUmrCCh7vfod5xUnH84BVWs3C53GmfJdKih08M3KET39+OV
-        /DiwEDkwJYzJ9OFj5CRG/i10mcWEy2Dsxq5VdNfJas7JLzHoMtlNNj5Z7Bn0xYwAypvZmx1V6kU9/
-        TYTUGLCLztQVdWXDEkeoLoB/T7psEB/BVae2Ro8rnO1vWb+4MO3iEITxpiFWCwjJGZNYhJpiYo6Dg
-        71aOuNRb/D4sTZm3Odz8kSPVcikla0nUG3tCH7dRS5kfySFrrRtCGJ8TvsiqtlJKtx/CiIo4RWlI4
-        P6BRgcFw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1obaCf-002fhY-2m;
-        Fri, 23 Sep 2022 04:22:17 +0000
-Date:   Fri, 23 Sep 2022 05:22:17 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <Yy00eSjyxvUIp7D5@ZenIV>
-References: <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
- <Yxb7YQWgjHkZet4u@infradead.org>
- <20220906102106.q23ovgyjyrsnbhkp@quack3>
- <YxhaJktqtHw3QTSG@infradead.org>
- <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
- <YyIEgD8ksSZTsUdJ@ZenIV>
- <20220915081625.6a72nza6yq4l5etp@quack3>
- <YyvG+Oih2A37Grcf@ZenIV>
- <YyxzYTlyGhbb2MOu@infradead.org>
+        Fri, 23 Sep 2022 00:25:49 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E430115A63;
+        Thu, 22 Sep 2022 21:25:42 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y136so11292449pfb.3;
+        Thu, 22 Sep 2022 21:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hd3EpiDY5Yp5kjyghC+w8xTY5Gtmr6LFsGwoEFrFfQQ=;
+        b=jaTSYnPiUKQJZpq63Nj3ZjxDcZtrSwU9JNlC09jquN4REPFd7hg759VNephG44c4en
+         SID+SdrMn15447U9frGUH7T1JmQuEGa5vQArpl4FeViseJ0Xycp22E98hQNCJt09g7Q0
+         ejOyTO4sCcRdY4LWI806i4o2/73MDzBH0uPYF5i/D43wNTNpBZWppQOCa6i1MHxc+hxb
+         2O3konf5Fb4wM9Ha632TB17rGJisAdsp/OrldNf0oMYSXe06MwzymZP8AhC9SPSMMJDd
+         7JrZVz5PsMZHntkt89RaZZoiqB4TeiiHRkf6zU3RWfAfrLnO78h/XhfU/QveEBLzOnkD
+         EiUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hd3EpiDY5Yp5kjyghC+w8xTY5Gtmr6LFsGwoEFrFfQQ=;
+        b=elfBs4THGvNt7BBcPAj0kv42urosWfIKCByd8HqTeSAHfjpWPXCs7MKJOuo8lqjkRm
+         LtqDsUzxygd4XnW0k1NSTHKgLo/zNxgRxRMUHzGqsXCAjeANH2rihN3tz1qkFzFGBaVw
+         oFNQpcd4zYWHhae/Eov6sgqOc9WrTp00EkP78hNS5srLlxtJKs2+zwfdsUxQl9ENJme/
+         kHXJjzkv6rVlYGnZzTgxW2z4551GhQ2eoQnM3Xkyw2Gsjv/nO1UKgSjlhL2s6Hffka92
+         AG+Q5DIfVrG1nKu4fuvVjPPevZIHhhVD2S1oLtYau4ZQl4Y1EMPQkvjLYrgfPOqbJ6O6
+         BedA==
+X-Gm-Message-State: ACrzQf18+DDl+ZwLGl9gEwvdJktsTbKMvD/rzdPhQag1iODI9MONsIYt
+        FCVE7rGwwYGhTlouLRYPtq8=
+X-Google-Smtp-Source: AMsMyM68aod5tm2PwBh0vxUAIo5yNFhUrzCMAEhsDmjtNgN2CrPCApVUdgUYjV+6Rex1yw95h644Ww==
+X-Received: by 2002:a63:1215:0:b0:43a:827d:dd with SMTP id h21-20020a631215000000b0043a827d00ddmr6141561pgl.98.1663907142045;
+        Thu, 22 Sep 2022 21:25:42 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-23.three.co.id. [116.206.28.23])
+        by smtp.gmail.com with ESMTPSA id o126-20020a625a84000000b0053e84617fe7sm5247361pfb.106.2022.09.22.21.25.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 21:25:41 -0700 (PDT)
+Message-ID: <0ce29b47-1e4b-6c3a-27fa-47e442f1f21e@gmail.com>
+Date:   Fri, 23 Sep 2022 11:25:35 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyxzYTlyGhbb2MOu@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 7/7] docs: put atomic*.txt and memory-barriers.txt into
+ the core-api book
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <20220922204138.153146-8-corbet@lwn.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220922204138.153146-8-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 07:38:25AM -0700, Christoph Hellwig wrote:
-> On Thu, Sep 22, 2022 at 03:22:48AM +0100, Al Viro wrote:
-> > What I'd like to have is the understanding of the places where we drop
-> > the references acquired by iov_iter_get_pages().  How do we decide
-> > whether to unpin?
-> 
-> Add a iov_iter_unpin_pages that does the right thing based on the
-> type.  (block will need a modified copy of it as it doesn't keep
-> the pages array around, but logic will be the same).
+On 9/23/22 03:41, Jonathan Corbet wrote:
+> @@ -0,0 +1,18 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +   This is a simple wrapper to bring atomic_bitops.txt into the RST world
+> +   until such a time as that file can be converted directly.
+> +
+> +=============
+> +Atomic bitops
+> +=============
+> +
+> +.. raw:: latex
+> +
+> +    \footnotesize
+> +
+> +.. include:: ../../atomic_bitops.txt
+> +   :literal:
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
 
-Huh?  You want to keep the type (+ direction) of iov_iter in any structure
-a page reference coming from iov_iter_get_pages might end up in?  IDGI...
+Shouldn't warning like "This documentation isn't in RST format and included
+as literal block" be added?
 
-BTW, speaking of lifetime rules - am I right assuming that fd_execute_rw()
-does IO on pages of the scatterlist passed to it?  Where are they getting
-dropped and what guarantees that IO is complete by that point?
-
-The reason I'm asking is that here you have an ITER_BVEC possibly fed to
-__blkdev_direct_IO_async(), with its
-        if (iov_iter_is_bvec(iter)) {
-                /*
-                 * Users don't rely on the iterator being in any particular
-                 * state for async I/O returning -EIOCBQUEUED, hence we can
-                 * avoid expensive iov_iter_advance(). Bypass
-                 * bio_iov_iter_get_pages() and set the bvec directly.
-                 */
-                bio_iov_bvec_set(bio, iter);
-which does *not* grab the page referneces.  Sure, bio_release_pages() knows
-to leave those alone and doesn't drop anything.  However, what is the
-mechanism preventing the pages getting freed before the IO completion
-in this case?
+-- 
+An old man doll... just what I always wanted! - Clara
