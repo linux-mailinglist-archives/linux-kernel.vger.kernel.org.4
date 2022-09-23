@@ -2,137 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DF25E7910
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87EE5E7904
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiIWLG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S231854AbiIWLEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiIWLGY (ORCPT
+        with ESMTP id S231162AbiIWLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:06:24 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B9C1176ED
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:06:22 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id u28so7994711qku.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date;
-        bh=sTF6dQakgPpXr5iVRpqW1hla4CNVgTWr0VvcWgxpoec=;
-        b=JplPongremwXfMLNMuFB9TRiXndsKpa20Si/rBZJExuW8d2I8wkjfDhjjPYTcwrJX9
-         EHEtdGe3dYCok9azXtooPkn+ef3dHY9umZcxXgkri4OT/CwLS/PNs28YOAaencl50C6T
-         UxOt83dqJE6uiOA+f/tvKMaRrlmoqaaVtWZTEWr7WyLcKqYgZt71SV5xLAwCj/cyXrCF
-         uW04wPD0Q5P97bi8UulSpHp074fhDCSXRp1/1rs59Osf2iHSzY1n6iaw82YwlgaDE2qw
-         n7NCtlFbKN5HJqfxH3f26dO/JpT7lq6DZnXtASDqLSN/w+HhwkZdK1+qnnyGlh1NMVBs
-         HjrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=sTF6dQakgPpXr5iVRpqW1hla4CNVgTWr0VvcWgxpoec=;
-        b=iM2PM75G7VMtqFeupun+Z0M5qOdEIPv6I4qU5E09g6z4BzRq+BSx5XRv4qcKAircj/
-         GNsX88I+ZW+ht6rEGWKKhvQgBm57XVZtg0EmDmJBldvjH3A2FpP+a71zehVUDd3kMo/i
-         LHf088X5DX9/4zbWWdYJQagomBnKCxo/ylO/XJpS0ib8taEsZmYLTFi2ogfZkJqijEnn
-         bmNGFyUCaERoqeAQaGWUgojqzhKwEhdehnoJO/4NanXmU2bPmfe/A8BThTw2E4zrfo4/
-         B54LoSB785cbC+D1G05LmtB8sN4YQbLpZBJJML4/6vP0ch2Prpn22Ghr/NTaHdVd9OSe
-         53Dw==
-X-Gm-Message-State: ACrzQf2MkF6g8jF3bF3IlF3/ZewvhnEe05mUi0CjfbjEV04sA4zBZCd8
-        t2ZDOMYonGcHgBkmDwE/Z32zzRcHto8yAg==
-X-Google-Smtp-Source: AMsMyM5lb2LvBdnigMd7hllUOPEPao8jlNwyP6bwRJRTIolZLgXUzmG841seTQ6rWJkiIDIezzBsGw==
-X-Received: by 2002:a05:620a:2785:b0:6ce:7dc2:2b2 with SMTP id g5-20020a05620a278500b006ce7dc202b2mr5113978qkp.395.1663931181444;
-        Fri, 23 Sep 2022 04:06:21 -0700 (PDT)
-Received: from localhost.localdomain ([154.16.192.108])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05620a244700b006ce7316f361sm5694313qkn.118.2022.09.23.04.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 04:06:21 -0700 (PDT)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     masahiroy@kernel.org, unixbhaskar@gmail.com,
-        danielmentz@google.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] kernel:gen_kheaders:Replace md5sum to sha256sum
-Date:   Fri, 23 Sep 2022 16:33:32 +0530
-Message-Id: <20220923110332.24090-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 23 Sep 2022 07:03:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6ABAF4B6;
+        Fri, 23 Sep 2022 04:03:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0982F21A58;
+        Fri, 23 Sep 2022 11:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663931035; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GU8qV+B2ZKvUdTAXMobiB6JH0oB4dT1GnLJpPgO8j64=;
+        b=Zy0kQhA9dNgG4p5J0GwslHwxTpOi46lHulcx3VTmQ3u3fif2Nxpl1F/7eGW8y3ND/hfc0j
+        9YaPTK5lH4Zd+YyHhrFgtioymOHSbgiODEAbM6JvohZuDEt2v5IlucDMoQaKVB+3Lbraht
+        Wyc4ayvbXmJEhKMVKe2DRlIiT53+En0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663931035;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GU8qV+B2ZKvUdTAXMobiB6JH0oB4dT1GnLJpPgO8j64=;
+        b=S1tgiVO89dhDZmOvNBH246l5lGk4b4mL1cQQarAoo830ItGFZXQD4MgRTpOO1Fa42ZX/bV
+        xraaLnNuQsmATMDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA19913AA5;
+        Fri, 23 Sep 2022 11:03:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mDvFOJqSLWPaTgAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 23 Sep 2022 11:03:54 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6D239A0685; Fri, 23 Sep 2022 13:03:54 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 13:03:54 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@infradead.org>,
+        paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v3 3/5] block, bfq: don't disable wbt if
+ CONFIG_BFQ_GROUP_IOSCHED is disabled
+Message-ID: <20220923110354.czvzm6rjm7mtqyh3@quack3>
+References: <20220922113558.1085314-1-yukuai3@huawei.com>
+ <20220922113558.1085314-4-yukuai3@huawei.com>
+ <Yy10vjnxAvca8Ee1@infradead.org>
+ <988a86f2-e960-ba59-4d41-f4c8a6345ee9@huaweicloud.com>
+ <20220923100659.a3atdanlvygffuxt@quack3>
+ <95998ae6-8bbf-b438-801b-7033ceaf9c36@huaweicloud.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <95998ae6-8bbf-b438-801b-7033ceaf9c36@huaweicloud.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thought to apply a better encryption mechanism.
+Hi Kuai!
 
-Replace all occurance of md5sum to sha256sum .
+On Fri 23-09-22 18:23:03, Yu Kuai wrote:
+> 在 2022/09/23 18:06, Jan Kara 写道:
+> > On Fri 23-09-22 17:50:49, Yu Kuai wrote:
+> > > Hi, Christoph
+> > > 
+> > > 在 2022/09/23 16:56, Christoph Hellwig 写道:
+> > > > On Thu, Sep 22, 2022 at 07:35:56PM +0800, Yu Kuai wrote:
+> > > > > wbt and bfq should work just fine if CONFIG_BFQ_GROUP_IOSCHED is disabled.
+> > > > 
+> > > > Umm, wouldn't this be something decided at runtime, that is not
+> > > > if CONFIG_BFQ_GROUP_IOSCHED is enable/disable in the kernel build
+> > > > if the hierarchical cgroup based scheduling is actually used for a
+> > > > given device?
+> > > > .
+> > > > 
+> > > 
+> > > That's a good point,
+> > > 
+> > > Before this patch wbt is simply disabled if elevator is bfq.
+> > > 
+> > > With this patch, if elevator is bfq while bfq doesn't throttle
+> > > any IO yet, wbt still is disabled unnecessarily.
+> > 
+> > It is not really disabled unnecessarily. Have you actually tested the
+> > performance of the combination? I did once and the results were just
+> > horrible (which is I made BFQ just disable wbt by default). The problem is
+> > that blk-wbt assumes certain model of underlying storage stack and hardware
+> > behavior and BFQ just does not fit in that model. For example BFQ wants to
+> > see as many requests as possible so that it can heavily reorder them,
+> > estimate think times of applications, etc. On the other hand blk-wbt
+> > assumes that if request latency gets higher, it means there is too much IO
+> > going on and we need to allow less of "lower priority" IO types to be
+> > submitted. These two go directly against one another and I was easily
+> > observing blk-wbt spiraling down to allowing only very small number of
+> > requests submitted while BFQ was idling waiting for more IO from the
+> > process that was currently scheduled.
+> > 
+> 
+> Thanks for your explanation, I understand that bfq and wbt should not
+> work together.
+> 
+> However, I wonder if CONFIG_BFQ_GROUP_IOSCHED is disabled, or service
+> guarantee is not needed, does the above phenomenon still exist? I find
+> it hard to understand... Perhaps I need to do some test.
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- kernel/gen_kheaders.sh | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+Well, BFQ implements for example idling on sync IO queues which is one of
+the features that upsets blk-wbt. That does not depend on
+CONFIG_BFQ_GROUP_IOSCHED in any way. Also generally the idea that BFQ
+assigns storage *time slots* to different processes and IO from other
+processes is just queued at those times increases IO completion
+latency (for IOs of processes that are not currently scheduled) and this
+tends to confuse blk-wbt.
 
-diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-index 0c78e64f747d..1abf2d83039c 100755
---- a/kernel/gen_kheaders.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -3,6 +3,7 @@
-
- # This script generates an archive consisting of kernel headers
- # for CONFIG_IKHEADERS.
-+# Replace md5sum to sha256sum
- set -e
- sfile="$(readlink -f "$0")"
- outdir="$(pwd)"
-@@ -37,22 +38,22 @@ all_dirs="$all_dirs $dir_list"
- # When Kconfig regenerates include/generated/autoconf.h, its timestamp is
- # updated, but the contents might be still the same. When any CONFIG option is
- # changed, Kconfig touches the corresponding timestamp file include/config/*.
--# Hence, the md5sum detects the configuration change anyway. We do not need to
-+# Hence, the sha256sum detects the configuration change anyway. We do not need to
- # check include/generated/autoconf.h explicitly.
- #
--# Ignore them for md5 calculation to avoid pointless regeneration.
--headers_md5="$(find $all_dirs -name "*.h"			|
-+# Ignore them for sha256 calculation to avoid pointless regeneration.
-+headers_sha256="$(find $all_dirs -name "*.h"			|
- 		grep -v "include/generated/compile.h"	|
- 		grep -v "include/generated/autoconf.h"	|
--		xargs ls -l | md5sum | cut -d ' ' -f1)"
-+		xargs ls -l | sha256sum| cut -d ' ' -f1)"
-
- # Any changes to this script will also cause a rebuild of the archive.
--this_file_md5="$(ls -l $sfile | md5sum | cut -d ' ' -f1)"
--if [ -f $tarfile ]; then tarfile_md5="$(md5sum $tarfile | cut -d ' ' -f1)"; fi
--if [ -f kernel/kheaders.md5 ] &&
--	[ "$(head -n 1 kernel/kheaders.md5)" = "$headers_md5" ] &&
--	[ "$(head -n 2 kernel/kheaders.md5 | tail -n 1)" = "$this_file_md5" ] &&
--	[ "$(tail -n 1 kernel/kheaders.md5)" = "$tarfile_md5" ]; then
-+this_file_sha256="$(ls -l $sfile | sha256sum| cut -d ' ' -f1)"
-+if [ -f $tarfile ]; then tarfile_sha256="$(sha256sum $tarfile | cut -d ' ' -f1)"; fi
-+if [ -f kernel/kheaders.sha256 ] &&
-+	[ "$(head -n 1 kernel/kheaders.sha256)" = "$headers_sha256" ] &&
-+	[ "$(head -n 2 kernel/kheaders.sha256 | tail -n 1)" = "$this_file_sha256" ] &&
-+	[ "$(tail -n 1 kernel/kheaders.sha256)" = "$tarfile_sha256" ]; then
- 		exit
- fi
-
-@@ -88,8 +89,8 @@ find $cpio_dir -printf "./%P\n" | LC_ALL=C sort | \
-     --owner=0 --group=0 --numeric-owner --no-recursion \
-     -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
-
--echo $headers_md5 > kernel/kheaders.md5
--echo "$this_file_md5" >> kernel/kheaders.md5
--echo "$(md5sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.md5
-+echo $headers_sha256 > kernel/kheaders.sha256
-+echo "$this_file_sha256" >> kernel/kheaders.sha256
-+echo "$(sha256sum $tarfile | cut -d ' ' -f1)" >> kernel/kheaders.sha256
-
- rm -rf $cpio_dir
---
-2.35.1
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
