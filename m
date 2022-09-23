@@ -2,299 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265535E7799
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141BA5E7798
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiIWJr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S231592AbiIWJrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiIWJqj (ORCPT
+        with ESMTP id S230055AbiIWJqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:46:39 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA94E368F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663926347; x=1695462347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yQ/gbyEh98eRxOWv8HgC0KvOUOa4qIrZGDQmAl+Ttfk=;
-  b=B6Hf1d3RrfsXEAyNBCv94pgJzv3LFOemOhmfB0V4eBslzde/Q1zER17g
-   sc34caKkFXsEuiAX/sbtiZMNFfRljc6ol1W8jRv5eEzv00d+TNHt2/dhc
-   dmsm3OIyn1rtjePzb8RXlP26kD4w/tg/qAneLyncuRcrBR3RLlbY/gHY3
-   fsWxwpUd7f5pe0ZDuczFh68M1/rGx2jYff5sSkdXsewex+XsnOmp/S5vH
-   8CT7ltV9lC4lz/4OgRBWc/Ksh813GW4BqmJh0SIK7M767ucKqWaHFil8o
-   7R76zNozGQ/zkk3p0iIqD8MshoLMOnEfnRRHpnRz6x6Nkdj1YqN0F1lA6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301439141"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="301439141"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:45:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="948963001"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 02:45:44 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obfFf-0005Xs-2p;
-        Fri, 23 Sep 2022 09:45:43 +0000
-Date:   Fri, 23 Sep 2022 17:44:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Subject: s390x-linux-ld: kallsyms.c:undefined reference to `__tsan_memcpy'
-Message-ID: <202209231726.eAy8Z0ZF-lkp@intel.com>
+        Fri, 23 Sep 2022 05:46:38 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31833E3680;
+        Fri, 23 Sep 2022 02:45:44 -0700 (PDT)
+Received: from p508fdb48.dip0.t-ipconnect.de ([80.143.219.72] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1obfFV-0005Wv-T2; Fri, 23 Sep 2022 11:45:33 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dan Johansen <strit@manjaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: Enable HDMI and GPU on quartz64-b
+Date:   Fri, 23 Sep 2022 11:45:33 +0200
+Message-ID: <2198677.PYKUYFuaPT@phil>
+In-Reply-To: <659fc2fe-f820-04ad-8a4f-224b4d4bd97b@manjaro.org>
+References: <20220920143446.633956-1-frattaroli.nicolas@gmail.com> <659fc2fe-f820-04ad-8a4f-224b4d4bd97b@manjaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bf682942cd26ce9cd5e87f73ae099b383041e782
-commit: 647cafa22349026a8435030e9157074ab7fe5710 bpf: add a ksym BPF iterator
-date:   2 months ago
-config: s390-buildonly-randconfig-r001-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231726.eAy8Z0ZF-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=647cafa22349026a8435030e9157074ab7fe5710
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 647cafa22349026a8435030e9157074ab7fe5710
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Am Donnerstag, 22. September 2022, 23:22:37 CEST schrieb Dan Johansen:
+> This seems to be based against linux-next and not mainline. It fails to 
+> apply on mainline for me.
 
-All errors (new ones prefixed by >>):
+I would not expect things any other way though :-) .
+I.e. in the current cycle everything new is of course targetting
+v6.1 and the Quartz boards already saw some other changes.
 
-   hrtimer.c:(.text+0x1e92): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/hrtimer.o: in function `hrtimer_nanosleep':
-   hrtimer.c:(.text+0x332c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/hrtimer.o: in function `__se_sys_nanosleep':
-   hrtimer.c:(.text+0x350a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/hrtimer.o:hrtimer.c:(.text+0x36be): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `tk_set_wall_to_mono':
-   timekeeping.c:(.text+0x3a7e): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_update':
-   timekeeping.c:(.text+0x3d64): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_inject_offset':
-   timekeeping.c:(.text+0x3f64): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x417a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_clock64':
-   timekeeping.c:(.text+0x4de2): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
-   timekeeping.c:(.text+0x517e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x5190): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/timekeeping.o:timekeeping.c:(.text+0x5432): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
-   timekeeping.c:(.text+0x54c8): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: timekeeping.c:(.text+0x55fc): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x5620): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_suspend':
-   timekeeping.c:(.text+0x584e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x58c0): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x5956): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x597c): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: timekeeping.c:(.text+0x59b0): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: timekeeping.c:(.text+0x5a5a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_advance':
-   timekeeping.c:(.text+0x5f92): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x6572): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.text+0x66f2): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `getboottime64':
-   timekeeping.c:(.text+0x67b4): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `do_adjtimex':
-   timekeeping.c:(.text+0x7382): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `update_fast_timekeeper':
-   timekeeping.c:(.text+0x794c): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: timekeeping.c:(.text+0x7970): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_wall_and_boot_offset':
-   timekeeping.c:(.init.text+0x46): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_init':
-   timekeeping.c:(.init.text+0x7e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x90): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x146): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x198): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x1b6): undefined reference to `__tsan_memset'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x1da): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: timekeeping.c:(.init.text+0x34a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/ntp.o: in function `__do_adjtimex':
-   ntp.c:(.text+0xf8c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: ntp.c:(.text+0xf9e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/clocksource.o: in function `sysfs_get_uname':
-   clocksource.c:(.text+0xdd0): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/clocksource.o: in function `current_clocksource_store':
-   clocksource.c:(.text+0x10d0): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/clocksource.o: in function `unbind_clocksource_store':
-   clocksource.c:(.text+0x1142): undefined reference to `__tsan_memset'
-   s390x-linux-ld: clocksource.c:(.text+0x118c): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/clocksource.o: in function `boot_override_clocksource':
-   clocksource.c:(.init.text+0x128): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/jiffies.o: in function `register_refined_jiffies':
-   jiffies.c:(.text+0x36): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarmtimer_suspend':
-   alarmtimer.c:(.text+0x26a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarm_class':
-   alarmtimer.c:(.text+0x35a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/alarmtimer.o: in function `get_boottime_timespec':
-   alarmtimer.c:(.text+0x149e): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/alarmtimer.o: in function `alarmtimer_init':
-   alarmtimer.c:(.init.text+0xaa): undefined reference to `__tsan_memset'
-   s390x-linux-ld: alarmtimer.c:(.init.text+0xd8): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_settime':
-   posix-stubs.c:(.text+0x56): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/posix-stubs.o: in function `do_clock_gettime':
-   posix-stubs.c:(.text+0xfe): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_gettime':
-   posix-stubs.c:(.text+0x16c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_nanosleep':
-   posix-stubs.c:(.text+0x2c4): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/clockevents.o: in function `unbind_device_store':
-   clockevents.c:(.text+0x1808): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/tick-sched.o: in function `tick_cancel_sched_timer':
-   tick-sched.c:(.text+0x1f62): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/test_udelay.o: in function `udelay_test_write':
-   test_udelay.c:(.text+0x30): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/time/test_udelay.o:test_udelay.c:(.text+0x15c): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/smp.o: in function `smp_call_function_single':
-   smp.c:(.text+0x1084): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: smp.c:(.text+0x167a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: smp.c:(.text+0x1bf0): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/smp.o: in function `smp_call_function_many_cond':
-   smp.c:(.text+0x295e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: smp.c:(.text+0x30b6): undefined reference to `__tsan_memset'
-   s390x-linux-ld: smp.c:(.text+0x395a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/smp.o:smp.c:(.text+0x3fae): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/kallsyms.o: in function `update_iter':
-   kallsyms.c:(.text+0x1370): undefined reference to `__tsan_memcpy'
->> s390x-linux-ld: kallsyms.c:(.text+0x13a2): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kallsyms.c:(.text+0x148c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/acct.o: in function `__se_sys_acct':
-   acct.c:(.text+0x390): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/acct.o: in function `do_acct_process':
-   acct.c:(.text+0xf50): undefined reference to `__tsan_memset'
-   s390x-linux-ld: acct.c:(.text+0xfd6): undefined reference to `__tsan_memset'
-   s390x-linux-ld: acct.c:(.text+0x10ee): undefined reference to `__tsan_memset'
->> s390x-linux-ld: acct.c:(.text+0x112c): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/crash_core.o: in function `append_elf_note':
-   crash_core.c:(.text+0x72): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: crash_core.c:(.text+0xa2): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/crash_core.o: in function `final_note':
-   crash_core.c:(.text+0xde): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/crash_core.o: in function `crash_update_vmcoreinfo_safecopy':
-   crash_core.c:(.text+0x13a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo':
-   crash_core.c:(.text+0x228): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/crash_core.o: in function `vmcoreinfo_append_str':
-   crash_core.c:(.text+0x260): undefined reference to `__tsan_memset'
-   s390x-linux-ld: crash_core.c:(.text+0x272): undefined reference to `__tsan_memset'
-   s390x-linux-ld: crash_core.c:(.text+0x30c): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo_init':
-   crash_core.c:(.init.text+0x9fa): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/kexec_core.o: in function `kimage_load_segment':
-   kexec_core.c:(.text+0x1126): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kexec_core.c:(.text+0x1272): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kexec_core.c:(.text+0x1290): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kexec_core.c:(.text+0x13bc): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kexec_core.c:(.text+0x14d6): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kexec_core.c:(.text+0x14f2): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
-   kexec_core.c:(.text+0x15b4): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/kexec_core.o: in function `kimage_alloc_pages':
-   kexec_core.c:(.text+0x1ca2): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/kexec.o: in function `__se_sys_kexec_load':
-   kexec.c:(.text+0x240): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/backtracetest.o: in function `backtrace_regression_test':
-   backtracetest.c:(.text+0x9e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_root':
-   cgroup.c:(.text+0x778): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup':
-   cgroup.c:(.text+0x8ca): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_migrate':
-   cgroup.c:(.text+0xa60): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_event':
-   cgroup.c:(.text+0xc7a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x1c5c): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `task_cgroup_path':
-   cgroup.c:(.text+0x61b0): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_finish':
-   cgroup.c:(.text+0x67ee): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_prepare_dst':
-   cgroup.c:(.text+0x6d76): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `find_css_set':
-   cgroup.c:(.text+0x6f8c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup.c:(.text+0x6f9e): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup.c:(.text+0x7676): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup.c:(.text+0x76f4): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_attach_task':
-   cgroup.c:(.text+0x8ad2): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `css_task_iter_start':
-   cgroup.c:(.text+0x9f76): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_mkdir':
-   cgroup.c:(.text+0xa992): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_addrm_files':
-   cgroup.c:(.text+0x103aa): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup.c:(.text+0x1048a): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x10654): more undefined references to `__tsan_memset' follow
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `features_show':
-   cgroup.c:(.text+0x17c54): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init_subsys':
-   cgroup.c:(.init.text+0x246): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init':
-   cgroup.c:(.init.text+0xc48): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_transfer_tasks':
-   cgroup-v1.c:(.text+0x1c4): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup-v1.c:(.text+0x1d6): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_pidlist_start':
-   cgroup-v1.c:(.text+0x930): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_release_agent_write':
-   cgroup-v1.c:(.text+0x142a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroupstats_build':
-   cgroup-v1.c:(.text+0x1588): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_release_agent':
-   cgroup-v1.c:(.text+0x1d60): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup-v1.c:(.text+0x1d72): undefined reference to `__tsan_memset'
-   s390x-linux-ld: cgroup-v1.c:(.text+0x1e7a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_parse_param':
-   cgroup-v1.c:(.text+0x1fa0): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_reconfigure':
-   cgroup-v1.c:(.text+0x2640): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/cgroup/freezer.o: in function `cgroup_freeze':
-   freezer.c:(.text+0x123c): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_read':
-   legacy_freezer.c:(.text+0x956): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_apply_state':
-   legacy_freezer.c:(.text+0x1834): undefined reference to `__tsan_memset'
-   s390x-linux-ld: legacy_freezer.c:(.text+0x18da): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/kheaders.o: in function `ikheaders_read':
-   kheaders.c:(.text+0x3a): undefined reference to `__tsan_memcpy'
-   s390x-linux-ld: kernel/stop_machine.o: in function `stop_one_cpu':
-   stop_machine.c:(.text+0x70): undefined reference to `__tsan_memset'
-   s390x-linux-ld: stop_machine.c:(.text+0x82): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/stop_machine.o: in function `cpu_stop_init_done':
-   stop_machine.c:(.text+0x110): undefined reference to `__tsan_memset'
-   s390x-linux-ld: kernel/stop_machine.o: in function `stop_two_cpus':
-   stop_machine.c:(.text+0x334): undefined reference to `__tsan_memset'
-   s390x-linux-ld: stop_machine.c:(.text+0x3b8): undefined reference to `__tsan_memset'
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Den 20.09.2022 kl. 16.34 skrev Nicolas Frattaroli:
+> > This enables the GPU and HDMI output (including HDMI audio) on
+> > the PINE64 Quartz64 Model B single board computer.
+> >
+> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > ---
+> >   .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 60 +++++++++++++++++++
+> >   1 file changed, 60 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> > index 0f623198970f..77b179cd20e7 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> > @@ -4,6 +4,7 @@
+> >   
+> >   #include <dt-bindings/gpio/gpio.h>
+> >   #include <dt-bindings/pinctrl/rockchip.h>
+> > +#include <dt-bindings/soc/rockchip,vop2.h>
+> >   #include "rk3566.dtsi"
+> >   
+> >   / {
+> > @@ -28,6 +29,17 @@ gmac1_clkin: external-gmac1-clock {
+> >   		#clock-cells = <0>;
+> >   	};
+> >   
+> > +	hdmi-con {
+> > +		compatible = "hdmi-connector";
+> > +		type = "a";
+> > +
+> > +		port {
+> > +			hdmi_con_in: endpoint {
+> > +				remote-endpoint = <&hdmi_out_con>;
+> > +			};
+> > +		};
+> > +	};
+> > +
+> >   	leds {
+> >   		compatible = "gpio-leds";
+> >   
+> > @@ -183,6 +195,33 @@ &gmac1m1_clkinout
+> >   	status = "okay";
+> >   };
+> >   
+> > +&gpu {
+> > +	mali-supply = <&vdd_gpu>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&hdmi {
+> > +	avdd-0v9-supply = <&vdda0v9_image>;
+> > +	avdd-1v8-supply = <&vcca1v8_image>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&hdmi_in {
+> > +	hdmi_in_vp0: endpoint {
+> > +		remote-endpoint = <&vp0_out_hdmi>;
+> > +	};
+> > +};
+> > +
+> > +&hdmi_out {
+> > +	hdmi_out_con: endpoint {
+> > +		remote-endpoint = <&hdmi_con_in>;
+> > +	};
+> > +};
+> > +
+> > +&hdmi_sound {
+> > +	status = "okay";
+> > +};
+> > +
+> >   &i2c0 {
+> >   	status = "okay";
+> >   
+> > @@ -456,6 +495,10 @@ &i2c5 {
+> >   	status = "disabled";
+> >   };
+> >   
+> > +&i2s0_8ch {
+> > +	status = "okay";
+> > +};
+> > +
+> >   &i2s1_8ch {
+> >   	pinctrl-names = "default";
+> >   	pinctrl-0 = <&i2s1m0_sclktx
+> The above part does not seem to exist in the current mainline (rc6) git 
+> repo.
+
+which is of course already in linux-next, so this
+patch just applied nicely.
+
+
+Heiko
+
+> > @@ -677,3 +720,20 @@ &usb_host0_ehci {
+> >   &usb_host0_ohci {
+> >   	status = "okay";
+> >   };
+> > +
+> > +&vop {
+> > +	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
+> > +	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&vop_mmu {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&vp0 {
+> > +	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
+> > +		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
+> > +		remote-endpoint = <&hdmi_in_vp0>;
+> > +	};
+> > +};
+> 
+
+
+
+
