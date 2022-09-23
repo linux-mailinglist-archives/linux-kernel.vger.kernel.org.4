@@ -2,66 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001545E7D88
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EF95E7D8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiIWOtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S231991AbiIWOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiIWOte (ORCPT
+        with ESMTP id S232245AbiIWOtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:49:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB816173
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:49:32 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663944569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6vWV1NcdsRT1G0MkTaLGR8EOz2Gy1O+tFM9kXzKnCA=;
-        b=2B0ML79ULrTrCXYGVxfZlXQlg/bWv6Oe/6n7YfZZRm5tchsC81j/GhTnsqnLScyZSfir9P
-        1nZdQdK368kNz4pWdlwAkFTOOMCqqzNOi3SijstQpwtlgCwjjg+PxZXBTNujGme1jtg71x
-        5q1k1YjR650k9fLDNRjG0e5rq6Qobp/KL2VIGqy1FAN+d/KmfmjW5WDKzG9dcNSwJhTqgB
-        XF5pSiyglAU4C+qntSKCNC1zN1wD5gCC+sgpNm8ubg1EpL6Fkme6av9fdVXCt/z5cvtNAQ
-        R7hJa4ENPcYMEmGx6/HlOpHjqVV3LS1erIK/lcraqAsdpuw2/3gs/ZQRs7pXjA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663944569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6vWV1NcdsRT1G0MkTaLGR8EOz2Gy1O+tFM9kXzKnCA=;
-        b=mcCUidEUwuH7VNWJ/nrqvswAbJUDsLUtEBhti+33YssyXHNm3dVzX3P3ovjCt1Bc1oQENd
-        M3NnRHNpDphaCnDQ==
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        John Kacur <jkacur@redhat.com>,
-        "John B. Wyatt IV" <jbwyatt4@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: printk meeting at LPC 2022
-In-Reply-To: <87h71cr1gb.fsf@jogness.linutronix.de>
-References: <20220910221947.171557773@linutronix.de>
- <87h71cr1gb.fsf@jogness.linutronix.de>
-Date:   Fri, 23 Sep 2022 16:55:28 +0206
-Message-ID: <875yheqh6v.fsf@jogness.linutronix.de>
+        Fri, 23 Sep 2022 10:49:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67C7220E3;
+        Fri, 23 Sep 2022 07:49:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE9A6113E;
+        Fri, 23 Sep 2022 07:49:44 -0700 (PDT)
+Received: from [10.57.3.23] (unknown [10.57.3.23])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CBAE3F73B;
+        Fri, 23 Sep 2022 07:49:37 -0700 (PDT)
+Message-ID: <564e6fc6-4734-a60e-d578-a15247a32c5f@arm.com>
+Date:   Fri, 23 Sep 2022 15:49:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 05/30] thermal/core/governors: Use
+ thermal_zone_get_trip() instead of ops functions
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        rafael@kernel.org
+References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+ <20220921094244.606948-6-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220921094244.606948-6-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +48,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Daniel,
 
-On 2022-09-12, John Ogness <john.ogness@linutronix.de> wrote:
-> We now have a room/timeslot [0] where Thomas and I will be presenting
-> and discussing this new approach [1] for bringing kthread and atomic
-> console printing to the kernel.
 
-Thanks to everyone who attended the meeting (in person and virtually)!
-It was a productive and fun discussion that left me thinking we will get
-the printk threading right this time.
+On 9/21/22 10:42, Daniel Lezcano wrote:
+> The governors are using the ops->get_trip_* functions, Replace these
+> calls with thermal_zone_get_trip().
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/gov_bang_bang.c       | 23 +++++-------
+>   drivers/thermal/gov_fair_share.c      | 18 ++++------
+>   drivers/thermal/gov_power_allocator.c | 51 ++++++++++++---------------
+>   drivers/thermal/gov_step_wise.c       | 22 ++++++------
+>   4 files changed, 47 insertions(+), 67 deletions(-)
+> 
 
-Here are the main points that I took away from the meeting:
+[snip]
 
-- Printing the backlog is important! If some emergency situation occurs,
-  make sure the backlog gets printed.
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 2d1aeaba38a8..2ef86ced4c7c 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -125,16 +125,15 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>   				   u32 sustainable_power, int trip_switch_on,
+>   				   int control_temp)
+>   {
+> +	struct thermal_trip trip;
+> +	u32 temperature_threshold = control_temp;
+>   	int ret;
+> -	int switch_on_temp;
+> -	u32 temperature_threshold;
+>   	s32 k_i;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+> -	if (ret)
+> -		switch_on_temp = 0;
+> +	ret = thermal_zone_get_trip(tz, trip_switch_on, &trip);
+> +	if (!ret)
+> +		temperature_threshold -= trip.temperature;
+>   
+> -	temperature_threshold = control_temp - switch_on_temp;
+>   	/*
+>   	 * estimate_pid_constants() tries to find appropriate default
+>   	 * values for thermal zones that don't provide them. If a
+> @@ -520,10 +519,10 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+>   	last_passive = INVALID_TRIP;
+>   
+>   	for (i = 0; i < tz->num_trips; i++) {
+> -		enum thermal_trip_type type;
+> +		struct thermal_trip trip;
+>   		int ret;
+>   
+> -		ret = tz->ops->get_trip_type(tz, i, &type);
+> +		ret = thermal_zone_get_trip(tz, i, &trip);
+>   		if (ret) {
+>   			dev_warn(&tz->device,
+>   				 "Failed to get trip point %d type: %d\n", i,
+> @@ -531,14 +530,14 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+>   			continue;
+>   		}
+>   
+> -		if (type == THERMAL_TRIP_PASSIVE) {
+> +		if (trip.type == THERMAL_TRIP_PASSIVE) {
+>   			if (!found_first_passive) {
+>   				params->trip_switch_on = i;
+>   				found_first_passive = true;
+>   			} else  {
+>   				last_passive = i;
+>   			}
+> -		} else if (type == THERMAL_TRIP_ACTIVE) {
+> +		} else if (trip.type == THERMAL_TRIP_ACTIVE) {
+>   			last_active = i;
+>   		} else {
+>   			break;
+> @@ -633,7 +632,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>   {
+>   	int ret;
+>   	struct power_allocator_params *params;
+> -	int control_temp;
+> +	struct thermal_trip trip;
+>   
+>   	ret = check_power_actors(tz);
+>   	if (ret)
+> @@ -659,13 +658,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>   	get_governor_trips(tz, params);
+>   
+>   	if (tz->num_trips > 0) {
+> -		ret = tz->ops->get_trip_temp(tz,
+> -					params->trip_max_desired_temperature,
+> -					&control_temp);
+> +		ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
+> +					    &trip);
+>   		if (!ret)
+>   			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>   					       params->trip_switch_on,
+> -					       control_temp);
+> +					       trip.temperature);
+>   	}
+>   
+>   	reset_pid_controller(params);
+> @@ -695,11 +693,11 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+>   	tz->governor_data = NULL;
+>   }
+>   
+> -static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+> +static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   {
+> -	int ret;
+> -	int switch_on_temp, control_temp;
+>   	struct power_allocator_params *params = tz->governor_data;
+> +	struct thermal_trip trip;
+> +	int ret;
+>   	bool update;
+>   
+>   	lockdep_assert_held(&tz->lock);
+> @@ -708,13 +706,12 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+>   	 * We get called for every trip point but we only need to do
+>   	 * our calculations once
+>   	 */
+> -	if (trip != params->trip_max_desired_temperature)
+> +	if (trip_id != params->trip_max_desired_temperature)
+>   		return 0;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, params->trip_switch_on,
+> -				     &switch_on_temp);
+> -	if (!ret && (tz->temperature < switch_on_temp)) {
+> -		update = (tz->last_temperature >= switch_on_temp);
+> +	ret = thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
+> +	if (!ret && (tz->temperature < trip.temperature)) {
+> +		update = (tz->last_temperature >= trip.temperature);
+>   		tz->passive = 0;
+>   		reset_pid_controller(params);
+>   		allow_maximum_power(tz, update);
+> @@ -723,16 +720,14 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+>   
+>   	tz->passive = 1;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, params->trip_max_desired_temperature,
+> -				&control_temp);
+> +	ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature, &trip);
+>   	if (ret) {
+> -		dev_warn(&tz->device,
+> -			 "Failed to get the maximum desired temperature: %d\n",
+> +		dev_warn(&tz->device, "Failed to get the maximum desired temperature: %d\n",
+>   			 ret);
+>   		return ret;
+>   	}
+>   
+> -	return allocate_power(tz, control_temp);
+> +	return allocate_power(tz, trip.temperature);
+>   }
+>   
+>   static struct thermal_governor thermal_gov_power_allocator = {
 
-- When an emergency occurs, put the full backtrace into the ringbuffer
-  before flushing any backlog. This ensures that the backtrace makes it
-  into the ringbuffer in case a panic occurs while flushing the backlog.
+this part of IPA LGTM
 
-- A newline should be added when an atomic console takes over from a
-  threaded console. This improves readability. We may decide later that
-  the atomic console prints some extra information upon takeover, or
-  that it completes the line the threaded console was printing. But for
-  now we will just use a newline to keep things simple.
-
-- It should be visible to users and in crash reports if legacy consoles
-  were in use. It was suggested that a new TAINT flag could be used for
-  this.
-
-- There will need to be new console flags introduced so that safe
-  printing decisions can be made in emergency and panic situations.
-
-  For example, upon panic, intially only the consoles marked RELIABLE
-  would be used. If any of the RELIABLE consoles required a hostile
-  takeover, they would only be used if they are labeled to support safe
-  hostile takeovers.
-
-  All other consoles could then be tried as a "last hope" at the very
-  end of panic(), after all records have been flushed to reliable
-  consoles and when it no longer matters if a console kills the CPU. For
-  non-panic emergencies (warn, rcu stalls, etc), there may be other
-  flags that would be needed.
-
-  Initially we do not plan to have any such flags. We can add them on an
-  as-needed basis as console drivers are moved over to the new
-  thread/atomic interface.
-
-If I have missed anything relevant, please let me know.
-
-John Ogness
-
-> [0] https://lpc.events/event/16/contributions/1394/
-> [1] https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
