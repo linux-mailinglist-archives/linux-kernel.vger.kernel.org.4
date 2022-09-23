@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D268D5E7890
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B065E7891
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 12:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiIWKnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 06:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S231732AbiIWKnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 06:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiIWKnc (ORCPT
+        with ESMTP id S231726AbiIWKnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 06:43:32 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029A210CA52
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 03:43:29 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MYpf75bC2zMqBrF;
-        Fri, 23 Sep 2022 12:43:27 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MYpf71WHBzMpnPk;
-        Fri, 23 Sep 2022 12:43:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1663929807;
-        bh=uSg7A5h8Ds8U3JESiel2hWeoIMHZGPIKjv8p4UrWwvg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jEVqym8Jnw4LyNOzTSRyROirzSZM4326S4ySqaLhO4Q/w1O3hJXCepNHYNlQjHkqi
-         sVgCHGcw0pzAq6tEN2S01B0jYRyZ+Gm4j+R3z2vRXaImC247k91d6q1vAo3Q+uuOxw
-         GjHOLZS0Zhd0Wm3s+WgOiCU/piIULJSfcUaNA0h4=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [GIT PULL] Landlock fix for v6.0 #2
-Date:   Fri, 23 Sep 2022 12:43:22 +0200
-Message-Id: <20220923104322.3182116-1-mic@digikod.net>
+        Fri, 23 Sep 2022 06:43:39 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CC7106F7B;
+        Fri, 23 Sep 2022 03:43:36 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso3022965wmq.4;
+        Fri, 23 Sep 2022 03:43:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=eNfIgiLSNV6f0ZyHgCkJcOePoKamQ5V91T6STNV4q+w=;
+        b=sy29S1qDwGnYjHNxfg/JFv955zHVaHrCpAt2CjhRuhwb/YQtICPPMvVWb4Y7/34P21
+         TKi2Pk5C+vot8P07Tsnhu4aPjvssuNpWD89ZsEMcRUXfX7VKpF/aNXh18H3lDUCh3W4J
+         VO7wOgRtsuddN4xxOipuCZtAyY09tNxkbwJyFYkdOg1WVYVfIBK1dGZmEqrhUApMjutH
+         LdsPffgAwbZJAPiH4V7iFb9YmQ+gc9J7SSOJlv7WutuqjW2hIM6F9hqsmCmHLnsNhv4D
+         CZ0PAuUQhWgB2Y0P03KRREBVb1w+Uu6Bu2nz1EkSN3SIBTLEyN20c/PK8mKNCMjVzpyd
+         8N5Q==
+X-Gm-Message-State: ACrzQf3E3sFIiysDwrtdDhJOFdhug391yFSr4WXUShXgMfVYU624MpaK
+        207X3v715diQSvaW4notLRc=
+X-Google-Smtp-Source: AMsMyM4j0IYUy0eqBd/jiz7HRuaIDFcUisGkN52qei1q/PDTAzwzRA4KgNW7F2Vb71cpjUnlKm6jiQ==
+X-Received: by 2002:a05:600c:4e90:b0:3b4:cb93:7d11 with SMTP id f16-20020a05600c4e9000b003b4cb937d11mr5425540wmq.43.1663929814791;
+        Fri, 23 Sep 2022 03:43:34 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003b47b913901sm10472621wms.1.2022.09.23.03.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 03:43:34 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 10:43:32 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH] drivers/scsi: fix repeated words in comments
+Message-ID: <Yy2N1JhuuR3+B9eI@liuwe-devbox-debian-v2>
+References: <20220908130754.34999-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908130754.34999-1-wangjianli@cdjrlc.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Sep 08, 2022 at 09:07:54PM +0800, wangjianli wrote:
+> Delete the redundant word 'to'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
-This change fixes out-of-tree builds for Landlock tests, which was
-initially identified here:
-https://lore.kernel.org/r/CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com
+I changed the commit message a bit and pushed this patch to hyperv-next.
+Thanks.
 
-Please pull this Landlock fix for v6.0-rc7 .  This change merged
-cleanly with your tree, and have been successfully tested in the latest
-linux-next releases for a week.
-
-Regards,
- Mickaël
-
---
-The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
-
-  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.0-rc7
-
-for you to fetch changes up to a52540522c9541bfa3e499d2edba7bc0ca73a4ca:
-
-  selftests/landlock: Fix out-of-tree builds (2022-09-14 16:37:38 +0200)
-
-----------------------------------------------------------------
-Landlock fix for v6.0-rc7
-
-----------------------------------------------------------------
-Mickaël Salaün (1):
-      selftests/landlock: Fix out-of-tree builds
-
- tools/testing/selftests/landlock/Makefile | 19 ++++++++++---------
- tools/testing/selftests/lib.mk            |  4 ++++
- 2 files changed, 14 insertions(+), 9 deletions(-)
+> ---
+>  drivers/scsi/storvsc_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index 573f89eade3b..9f7c71a8c80e 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -2059,7 +2059,7 @@ static int storvsc_probe(struct hv_device *device,
+>  err_out2:
+>  	/*
+>  	 * Once we have connected with the host, we would need to
+> -	 * to invoke storvsc_dev_remove() to rollback this state and
+> +	 * invoke storvsc_dev_remove() to rollback this state and
+>  	 * this call also frees up the stor_device; hence the jump around
+>  	 * err_out1 label.
+>  	 */
+> -- 
+> 2.36.1
+> 
