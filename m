@@ -2,168 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4733E5E8443
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D8D5E8449
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 22:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiIWUmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 16:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S233191AbiIWUqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 16:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbiIWUmE (ORCPT
+        with ESMTP id S232677AbiIWUnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 16:42:04 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B63153ED5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:36:37 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c7so1260590ljm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=KoW18gfscBQcQUXjtlxACzOxZxKFFsSFNG1iDxVv0fY=;
-        b=pS8XJfqzelQCdvzS1E9w49f9BAuXPH4IFj2tGe55LfT5QkwIpfe3WA1zjRs4j4/TEv
-         +gk9k+QIIaFgEvoyEnaIPxjcQfLKRJvHutADsOmimJRPX1X1a4l9BvorRl61gaa+mYuA
-         szisxwZ1PRBzjCUdf14nTpXrOGjIGhuCL4gBBld+i70nyL69CAoqlo+ZX+LIIjNw8o1+
-         xj8fyphG9FV+Bs6/3GZjqZcz+kHcFPvNyzWN3fqMsI9idPnB6yts+B4hp3R5CEyjhHzj
-         xHJ89wcRWePuQPb1NtGHHfY9aOFYCFmfky81CSHEW5Bve+hhwW1A0lqohA8al7tx8IMb
-         bbbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=KoW18gfscBQcQUXjtlxACzOxZxKFFsSFNG1iDxVv0fY=;
-        b=HE2d/m0gRRT7VxxgdKija7c/mp6p6XY/7YFhdFKgjPwqRNSCaSFiSvaX9OO/4NBLRG
-         Xue1b8PRY4ei52ZcSnkj5KlKSeRt8u98RBbbs8XzwCbOx+vwE4mpe0SkHa5E3oNvq0BS
-         lpy+hpkuH0ZYxBA4eE+zHEl3IHMyqcL5PX5BH/sGCduEZC6wzOfTYrFMZvFevZ/2hiOC
-         c+afDysi1t9H7bqR81d2L2MO5SNupmbT3OPl8epEMN14v0JHXuDlD6zfxCo4EhBgOyY9
-         icEbm+UhwCTc4Ojo8uMSH7wO0VAxOxoZrshAUtddg38DpCVb5AEJOGHOGdtW5AykWxLJ
-         vhrA==
-X-Gm-Message-State: ACrzQf14KKA75SEPp1jTS6YGvd4ywWepLSdDIeKyE+1y7Cpfelg+RWuX
-        f49X/80VMdOFyB8bBz2Wz4JH2A==
-X-Google-Smtp-Source: AMsMyM7GhWlynnQdutL3KMj7KJU7muxHjPCQgkEQscantEEdFOBqQQQul7FOp5bGs7CUT261VsbgMw==
-X-Received: by 2002:a05:651c:1548:b0:26c:61b3:7129 with SMTP id y8-20020a05651c154800b0026c61b37129mr3306128ljp.381.1663965365155;
-        Fri, 23 Sep 2022 13:36:05 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05651201c900b0048af397c827sm1584099lfp.218.2022.09.23.13.36.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 13:36:04 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: power: reset: restart-handler: add common schema
-Date:   Fri, 23 Sep 2022 22:36:03 +0200
-Message-Id: <20220923203603.515714-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 23 Sep 2022 16:43:15 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C204613D857
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:40 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NIGV28006874
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=uMW05ntqhTxnqydbjTlEBEZMb68OIqoNaDlQ3mavUhM=;
+ b=PjvXvgInDOcO0zsYqAlpPNRgpxm75fc4q3PSV8XFhZR7cEr0BJWsL1nthv/Tgi9QLzJW
+ jTwJ4dZo4J406ivdTkl012y0CFyogyKVNCLsgizDB6LM9wRn9wbA5zMUKhALn4n2PgBY
+ 46G/U30j5sJW7+y9+DReAYOBGi+DXuewj7Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jrenwpgxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 13:37:16 -0700
+Received: from twshared22593.02.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 13:37:14 -0700
+Received: by devvm8797.prn0.facebook.com (Postfix, from userid 2982)
+        id 94901B2B7691; Fri, 23 Sep 2022 13:37:02 -0700 (PDT)
+From:   Tomislav Novak <tnovak@fb.com>
+To:     Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+CC:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tomislav Novak <tnovak@fb.com>,
+        Samuel Gosselin <sgosselin@fb.com>
+Subject: [PATCH] hw_breakpoint: fix single-stepping when using bpf_overflow_handler
+Date:   Fri, 23 Sep 2022 13:36:45 -0700
+Message-ID: <20220923203644.2731604-1-tnovak@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: zaFUCxm0i5UWzUJ4lEpv1loneSiDHsZp
+X-Proofpoint-ORIG-GUID: zaFUCxm0i5UWzUJ4lEpv1loneSiDHsZp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-23_09,2022-09-22_02,2022-06-22_01
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add common schema for restart and shutdown handlers, so they all use
-same meaning of "priority" field.  The Linux drivers already have this
-property and some systems want to customize it per-board in DTS.
+On ARM platforms is_default_overflow_handler() is used to determine if
+hw_breakpoint code should single-step over the watchpoint trigger or
+let the custom handler deal with it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Attaching a BPF program to a watchpoint replaces the handler with
+bpf_overflow_handler, which isn't recognized as a default handler so we
+never step over the instruction triggering the data abort exception (the
+watchpoint keeps firing):
 
+  # bpftrace -e 'watchpoint:0x10000000:4:w { printf("hit\n"); }' ./wp_tes=
+t
+  Attaching 1 probe...
+  hit
+  hit
+  hit
+  [...]
+
+(wp_test performs a single 4-byte store to address 0x10000000)
+
+This patch replaces the check with uses_default_overflow_handler(), which
+accounts for the bpf_overflow_handler() case by also testing if the handl=
+er
+invokes one of the perf_event_output functions via orig_default_handler.
+
+Signed-off-by: Tomislav Novak <tnovak@fb.com>
+Tested-by: Samuel Gosselin <sgosselin@fb.com> # arm64
 ---
+ arch/arm/kernel/hw_breakpoint.c   |  8 ++++----
+ arch/arm64/kernel/hw_breakpoint.c |  4 ++--
+ include/linux/perf_event.h        | 22 +++++++++++++++++++---
+ 3 files changed, 25 insertions(+), 9 deletions(-)
 
-Changes since v1:
-1. Use double ':'
-
-v1 was marked as changes-requested in Rob's patchwork, but I think there
-was not actual consensus on any other changes to make.
-
-v1:
-https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220907123630.57383-1-krzysztof.kozlowski@linaro.org/
-
-See also:
-https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
-https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
----
- .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
- .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
- 2 files changed, 33 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-
-diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-index a72d5c721516..d3d18e0f5db3 100644
---- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-@@ -25,6 +25,9 @@ description: >
-   inactive-delay, the GPIO is driven active again.  After a delay specified by wait-delay, the
-   restart handler completes allowing other restart handlers to be attempted.
- 
-+allOf:
-+  - $ref: restart-handler.yaml#
+diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpo=
+int.c
+index 054e9199f30d..dc0fb7a81371 100644
+--- a/arch/arm/kernel/hw_breakpoint.c
++++ b/arch/arm/kernel/hw_breakpoint.c
+@@ -626,7 +626,7 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
+ 	hw->address &=3D ~alignment_mask;
+ 	hw->ctrl.len <<=3D offset;
+=20
+-	if (is_default_overflow_handler(bp)) {
++	if (uses_default_overflow_handler(bp)) {
+ 		/*
+ 		 * Mismatch breakpoints are required for single-stepping
+ 		 * breakpoints.
+@@ -798,7 +798,7 @@ static void watchpoint_handler(unsigned long addr, un=
+signed int fsr,
+ 		 * Otherwise, insert a temporary mismatch breakpoint so that
+ 		 * we can single-step over the watchpoint trigger.
+ 		 */
+-		if (!is_default_overflow_handler(wp))
++		if (!uses_default_overflow_handler(wp))
+ 			continue;
+ step:
+ 		enable_single_step(wp, instruction_pointer(regs));
+@@ -811,7 +811,7 @@ static void watchpoint_handler(unsigned long addr, un=
+signed int fsr,
+ 		info->trigger =3D addr;
+ 		pr_debug("watchpoint fired: address =3D 0x%x\n", info->trigger);
+ 		perf_bp_event(wp, regs);
+-		if (is_default_overflow_handler(wp))
++		if (uses_default_overflow_handler(wp))
+ 			enable_single_step(wp, instruction_pointer(regs));
+ 	}
+=20
+@@ -886,7 +886,7 @@ static void breakpoint_handler(unsigned long unknown,=
+ struct pt_regs *regs)
+ 			info->trigger =3D addr;
+ 			pr_debug("breakpoint fired: address =3D 0x%x\n", addr);
+ 			perf_bp_event(bp, regs);
+-			if (is_default_overflow_handler(bp))
++			if (uses_default_overflow_handler(bp))
+ 				enable_single_step(bp, addr);
+ 			goto unlock;
+ 		}
+diff --git a/arch/arm64/kernel/hw_breakpoint.c b/arch/arm64/kernel/hw_bre=
+akpoint.c
+index b29a311bb055..9659a9555c63 100644
+--- a/arch/arm64/kernel/hw_breakpoint.c
++++ b/arch/arm64/kernel/hw_breakpoint.c
+@@ -654,7 +654,7 @@ static int breakpoint_handler(unsigned long unused, u=
+nsigned long esr,
+ 		perf_bp_event(bp, regs);
+=20
+ 		/* Do we need to handle the stepping? */
+-		if (is_default_overflow_handler(bp))
++		if (uses_default_overflow_handler(bp))
+ 			step =3D 1;
+ unlock:
+ 		rcu_read_unlock();
+@@ -733,7 +733,7 @@ static u64 get_distance_from_watchpoint(unsigned long=
+ addr, u64 val,
+ static int watchpoint_report(struct perf_event *wp, unsigned long addr,
+ 			     struct pt_regs *regs)
+ {
+-	int step =3D is_default_overflow_handler(wp);
++	int step =3D uses_default_overflow_handler(wp);
+ 	struct arch_hw_breakpoint *info =3D counter_arch_bp(wp);
+=20
+ 	info->trigger =3D addr;
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index ee8b9ecdc03b..f174b77437f5 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1105,15 +1105,31 @@ extern int perf_event_output(struct perf_event *e=
+vent,
+ 			     struct pt_regs *regs);
+=20
+ static inline bool
+-is_default_overflow_handler(struct perf_event *event)
++__is_default_overflow_handler(perf_overflow_handler_t overflow_handler)
+ {
+-	if (likely(event->overflow_handler =3D=3D perf_event_output_forward))
++	if (likely(overflow_handler =3D=3D perf_event_output_forward))
+ 		return true;
+-	if (unlikely(event->overflow_handler =3D=3D perf_event_output_backward)=
+)
++	if (unlikely(overflow_handler =3D=3D perf_event_output_backward))
+ 		return true;
+ 	return false;
+ }
+=20
++#define is_default_overflow_handler(event) \
++	__is_default_overflow_handler((event)->overflow_handler)
 +
- properties:
-   compatible:
-     const: gpio-restart
-@@ -41,16 +44,6 @@ properties:
-       in its inactive state.
- 
-   priority:
--    $ref: /schemas/types.yaml#/definitions/uint32
--    description: |
--      A priority ranging from 0 to 255 (default 129) according to the following guidelines:
--
--        0:   Restart handler of last resort, with limited restart capabilities.
--        128: Default restart handler; use if no other restart handler is expected to be available,
--             and/or if restart functionality is sufficient to restart the entire system.
--        255: Highest priority restart handler, will preempt all other restart handlers.
--    minimum: 0
--    maximum: 255
-     default: 129
- 
-   active-delay:
-diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-new file mode 100644
-index 000000000000..1f9a2aac53c0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++#ifdef CONFIG_BPF_SYSCALL
++static inline bool uses_default_overflow_handler(struct perf_event *even=
+t)
++{
++	if (likely(is_default_overflow_handler(event)))
++		return true;
 +
-+title: Restart and shutdown handler generic binding
++	return __is_default_overflow_handler(event->orig_overflow_handler);
++}
++#else
++#define uses_default_overflow_handler(event) \
++	is_default_overflow_handler(event)
++#endif
 +
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description:
-+  Restart and shutdown handler device is responsible for powering off the
-+  system, e.g. my cutting off the power.  System might have several restart
-+  handlers, which usually are tried from most precise to last resort.
-+
-+properties:
-+  priority:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      A priority ranging from 0 to 255 according to the following guidelines::
-+        0::   Restart handler of last resort, with limited restart capabilities.
-+        128:: Typical, default restart handler; use if no other restart handler
-+              is expected to be available, and/or if restart functionality is
-+              sufficient to restart the entire system.
-+        255:: Highest priority restart handler, will preempt all other restart handlers.
-+    minimum: 0
-+    maximum: 255
-+
-+additionalProperties: true
--- 
-2.34.1
+ extern void
+ perf_event_header__init_id(struct perf_event_header *header,
+ 			   struct perf_sample_data *data,
+--=20
+2.30.2
 
