@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26EB5E8241
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990285E8240
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiIWTCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        id S230194AbiIWTCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiIWTCE (ORCPT
+        with ESMTP id S230387AbiIWTCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 15:02:04 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E3121E5F;
-        Fri, 23 Sep 2022 12:02:04 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bh13so1081228pgb.4;
-        Fri, 23 Sep 2022 12:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2k6HWGdDwy1kgtlm0Nt4fQqupyR8236/Bu1w1by3LAs=;
-        b=dVrRFyyuNGoSyIKd5EN9JP6JaufLfb+hAWGRoCqCrISYhk/gq4U6bTsDPFueKEWbWm
-         5/9cBqBNcYnemStf4MKPcyT8w9p5TkmRAWcEOnlxVdi8k8nTZN49hz6UFhwDOGSPxxE1
-         05bmzTSnk/eNwKsZbT7cgfp7uLMdV4/dSUTvjPzVUhLc2+yEbLeTKETOxa+Lxu8MaMK4
-         Byex7s1zT5Bv/YB1iaOa7jciZGkUyMureB3YF2NOpaD3LbRfDCjfkgTLTJjpV5VOx6xf
-         SLt+55+SsZExgY89hl8nOzOTy4Dgmn9VgDAHRgrCT92B7Dff4WKbLXLNvWTymAmBRaF/
-         wsUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2k6HWGdDwy1kgtlm0Nt4fQqupyR8236/Bu1w1by3LAs=;
-        b=0PB4a5Vr8u+oR2FH2HDK2nQ7YrgUkaicaABSQE2De7n/2dnFgu+KyziQ6HNJzK3AmW
-         tJsCr+GNsfNriDww9g520TfbdsoGiQVYdGbEW2hEBIsZbsiNXH2eoRyIe1iWEMcSpnj8
-         lZjik/u1eSAKvr413JF6ijwZHgR9wGWVG7HcVyAgdVcG+56/9b0Jv+GjTky/3xXicpaS
-         vvM6utBB4rJPugdtM+6kVqvBPbY37s3pcVACya3SrHxryP0qkqpYuGOz2wt+3PTxFP+r
-         cWIv/EL7caaZUQEvrkHpDURL7FW1dIHRjAxjUe8wB6vC/2LuYD5VpEphxSaK8swn5DKO
-         oyoQ==
-X-Gm-Message-State: ACrzQf1XQ/XMmMFFBM09Ial7w7Gy3xE6oiyCYt2uEi1+tocYo+G8zXVQ
-        RSqPv9NOMlhS/l2Dk+5MU4I=
-X-Google-Smtp-Source: AMsMyM6r1vIyoygUuNBLpDm42819FRt1OzlwGdTpj9n71z/BhQxDlC0COTYkXQ/fDNbF56Hsfzp8/g==
-X-Received: by 2002:a05:6a00:1a94:b0:548:8ce8:db93 with SMTP id e20-20020a056a001a9400b005488ce8db93mr10686430pfv.13.1663959723347;
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F42311D0C9;
         Fri, 23 Sep 2022 12:02:03 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:8b46:be3c:2c54:68a5])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b00172d0c7edf4sm6380657plh.106.2022.09.23.12.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 12:02:02 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 12:01:59 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] Input: matrix_keypad - add missed header inclusion
-Message-ID: <Yy4Cp/BPH/75oFb1@google.com>
-References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=shcg4WjPwUQd4grLAK6y7B//HQOlI365zxAI+CXvxxY=; b=RS4B0wtrtJLyhr1dcWtKXBsjbe
+        K89o5e0i5uHjdOzta7PHaf+vUCW7v0D4iSptCxPJGUAnn6+zSJgx8mPRNHZrAl51sr+pjVYoNrRVP
+        pGkDn73DXmMSUsnnF2tVAWMyWECJ95MVnmhEDtoaER3Jo60Ysij3/+tetpd9ekFtbXm3Y893djlyv
+        iPlJ1Fp6fLtvK4IPee8Le9DpCuQHA3aUzvUoycULuEZ7YMJyZFIa+jaPiNPflxOQDfkbEVYfdkgkf
+        diXpBtEM2k5cqG0EpW3oCDFZmcBAOGgA72/HdSuo/T021yyXXzqN58/TWjtwHiGIsGXtkMfOPFKFW
+        ISrkoYJQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obnw3-005Tle-8J; Fri, 23 Sep 2022 19:02:03 +0000
+Message-ID: <f5830658-9cd7-4d44-6fd6-d031da1a3442@infradead.org>
+Date:   Fri, 23 Sep 2022 12:02:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/7] docs: Rewrite the front page
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <20220922204138.153146-3-corbet@lwn.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220922204138.153146-3-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:46:31PM +0300, Andy Shevchenko wrote:
-> The gpiod_count() API is defined in gpio/consumer.h. Include it.
-> 
-> Fixes: f8f7f47d576f ("Input: matrix_keypad - replace of_gpio_named_count() by gpiod_count()")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Jonathan,
 
-Applied, thank you.
+On 9/22/22 13:41, Jonathan Corbet wrote:
+> The front page is the entry point to the documentation, especially for
+> people who read it online.  It's a big mess of everything we could think to
+> toss into it.  Rewrite the page with an eye toward simplicity and making it
+> easy for readers to get going toward what they really want to find.
+> 
+> This is only a beginning, but it makes our docs more approachable than
+> before.
+> 
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> ---
+>  Documentation/index.rst          | 150 +++++++++++--------------------
+>  Documentation/subsystem-apis.rst |  58 ++++++++++++
+>  2 files changed, 111 insertions(+), 97 deletions(-)
+>  create mode 100644 Documentation/subsystem-apis.rst
+
+I don't see a kernel version listed anywhere on the front page
+(maybe it depends on what theme is used?) at
+https://static.lwn.net/kerneldoc/, so I think it needs something like
+this.
+
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -18,6 +18,8 @@ documents into a coherent whole.  Please
+ documentation are welcome; join the linux-doc list at vger.kernel.org if
+ you want to help out.
+ 
++This documentation is for Linux kernel $(KERNELRELEASE).
++
+ Licensing documentation
+ -----------------------
+ 
+
+The line numbering is probably off a bit, but the big problem is in
+using $(KERNELRELEASE). Would using $(version) [with 'version' coming
+from conf.py] work here? Nope, that doesn't work either.
 
 -- 
-Dmitry
+~Randy
