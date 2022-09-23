@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDBA5E7CFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290475E7D0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiIWO1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S230046AbiIWOap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbiIWO1S (ORCPT
+        with ESMTP id S230054AbiIWOad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:27:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603FB1438E3;
-        Fri, 23 Sep 2022 07:27:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE27160FD6;
-        Fri, 23 Sep 2022 14:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E004C433D6;
-        Fri, 23 Sep 2022 14:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663943233;
-        bh=2XcBEi6sl5jLoQf2kpZ1tFVwF2yN3kZuQICilWnHJOo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XYsZ9J+mR0Zcv10kewzN94+9JE951kQlpB82LXIOrOBrSRJtjtZltwvsUfgRRtV3u
-         c1kildVVsH0i5wA29/UrLv/eabwtolE9QejdMbi/2eYhFoiT1tmyzFOEUx8fE+7RQs
-         Ng7U2UwT81EeMDdzWtpzJtiBEvFN5SvKP80cu3F7hBdwpnf14+l/FDLWSagyPqrFhC
-         NlMo4dN/+P84g3bCMRvvcLih8eZsrbswvunaA7jmJnp5lDusFbY01jk4+Md/PM0zGi
-         NPKhCB3KYMQ9OOgC5aphWJl1y1G8tsmbVSgedWPfoUPdRjRlYMh3cfencYiay2AgNG
-         ze+inArKURvNg==
-Received: by mail-lf1-f53.google.com with SMTP id a8so497307lff.13;
-        Fri, 23 Sep 2022 07:27:13 -0700 (PDT)
-X-Gm-Message-State: ACrzQf01EBk27DGUwajMpzVcriivvZG4cwWjgv5i9J2kv7h28VNd2xfi
-        OYEx0SH4cz3jObn98V+UgmqmLGyPJashU1XsTS8=
-X-Google-Smtp-Source: AMsMyM7E7aByjpZXJMTswU8EnGOXh5IrEyH1tJljrSfMNdGVaHgE3T0bQpcX07+4yO+Hj1gnlBTfZSpfYV0Een+Xu5w=
-X-Received: by 2002:a05:6512:3d09:b0:497:ab35:fd12 with SMTP id
- d9-20020a0565123d0900b00497ab35fd12mr3476720lfv.539.1663943231231; Fri, 23
- Sep 2022 07:27:11 -0700 (PDT)
+        Fri, 23 Sep 2022 10:30:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEEFFA0EF
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:30:32 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1objh1-0002rt-OC; Fri, 23 Sep 2022 16:30:15 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1objgz-00016D-Gx; Fri, 23 Sep 2022 16:30:13 +0200
+Date:   Fri, 23 Sep 2022 16:30:13 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
+        sakari.ailus@linux.intel.com, jacopo@jmondi.org,
+        hverkuil@xs4all.nl, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v3 4/4] media: tc358746: add Toshiba TC358746 Parallel to
+ CSI-2 bridge driver
+Message-ID: <20220923143013.vymstztawb3wb2nf@pengutronix.de>
+References: <20220922134843.3108267-1-m.felsch@pengutronix.de>
+ <20220922134843.3108267-5-m.felsch@pengutronix.de>
+ <Yyyq7CRB3Tg8508B@pendragon.ideasonboard.com>
+ <20220923092726.mrurgoylqdlw3ena@pengutronix.de>
+ <Yy24k5OQGcuZvcSo@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
- <20220922193157.1673623-1-dave.hansen@linux.intel.com> <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
- <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net> <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
- <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
-In-Reply-To: <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 23 Sep 2022 16:26:58 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
-Message-ID: <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy24k5OQGcuZvcSo@pendragon.ideasonboard.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,92 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sept 2022 at 15:58, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 9/23/22 02:49, Ard Biesheuvel wrote:
-> > (cc Kees)
-> >
-> > On Fri, 23 Sept 2022 at 09:00, Peter Zijlstra <peterz@infradead.org> wrote:
-> >>
-> >> On Fri, Sep 23, 2022 at 12:08:57AM +0200, Ard Biesheuvel wrote:
-> >>> On Thu, 22 Sept 2022 at 21:32, Dave Hansen <dave.hansen@linux.intel.com> wrote:
-> >>>>
-> >>>> From: Peter Zijlstra <peterz@infradead.org>
-> >>>>
-> >>>> I'm planning on sticking this in x86/mm so that it goes upstream
-> >>>> along with the W+X detection code.
-> >>>>
-> >>>> --
-> >>>>
-> >>>> A recent x86/mm change warns and refuses to create W+X mappings.
-> >>>>
-> >>>> The 32-bit EFI code tries to create such a mapping and trips over
-> >>>> the new W+X refusal.
-> >>>>
-> >>>> Make the EFI_RUNTIME_SERVICES_CODE mapping read-only to fix it.
-> >>>>
-> >>>
-> >>> This is not safe. EFI_RUNTIME_SERVICES_CODE covers both .text and
-> >>> .data sections of the EFI runtime PE/COFF executables in memory, so
-> >>> you are essentially making .data and .bss read-only. (Whether those
-> >>> executables actually modify their .data and .bss at runtime is a
-> >>> different matter, but the point is that it used to be possible)
-> >>>
-> >>> More recent firmwares may provide a 'memory attributes table'
-> >>> separately which describes the individual sections, but older 32-bit
-> >>> firmwares are not even built with 4k section alignment, so code and
-> >>> data may share a single page. Note that we haven't wired up this
-> >>> memory attributes table on i386 at the moment, and I seriously doubt
-> >>> that 32-bit firmware in the field exposes it.
-> >>>
-> >>> Can we just turn off this feature for 32-bit?
-> >>
-> >> Goodie; some seriously security minded people who did that EFI turd :/
-> >
-> > To be fair, most people tended to care more about memory footprint
-> > than about security at the time. And I don't recall a lot of
-> > enthusiasm in the Linux community either for rounding up kernel
-> > sections so they could be mapped with W^X permissions. And without
-> > PAE, all memory is executable anyway.
-> >
-> >> Let's just heap it on the pile of 32bit sucks and should not be
-> >> considered a security target anymore and indeed kill this feature.
-> >>
-> >
-> > I take it this issue is triggered by the fact that i386 maps the EFI
-> > runtime regions into the kernel page tables, and are therefore always
-> > mapped, right? If anyone cares enough about this to go and fix it, we
-> > could switch to the approach we use everywhere else, i.e., treat EFI
-> > memory as user space mappings, and activate them only while a runtime
-> > service is in progress.
-> >
-> > But frankly, why would anyone still be running this? With the EFI
-> > mixed mode support, only systems with CPUs that don't actually
-> > implement long mode still need this, and I am skeptical that such
-> > deployments would use recent kernels.
->
-> It is supported, thus I run qemu tests for it. That is the whole point
-> of testing, after all.
+On 22-09-23, Laurent Pinchart wrote:
+> Hi Marco,
+> 
+> On Fri, Sep 23, 2022 at 11:27:26AM +0200, Marco Felsch wrote:
 
-I completely agree with that, and I think all the testing you do is
-extremely valuable.
+...
 
-> If PAE (assuming that is what you are talking about)
+> > > > +static int tc358746_write(struct tc358746 *tc358746, u32 reg, u32 val)
+> > > > +{
+> > > > +	size_t count;
+> > > > +	int err;
+> > > > +
+> > > > +	/* 32-bit registers starting from CLW_DPHYCONTTX */
+> > > > +	count = reg < CLW_DPHYCONTTX_REG ? 1 : 2;
+> > > > +
+> > > > +	err = regmap_bulk_write(tc358746->regmap, reg, &val, count);
+> > > > +	if (err)
+> > > > +		dev_dbg(tc358746->sd.dev,
+> > > > +			"Failed to write reg:0x%04x val:0x%04x\n", reg, val);
+> > > 
+> > > I'm not sure if the value is relevant here, but I'd add the error, it's
+> > > useful to know what kind of I2C issue occurred. Same for read().
+> > 
+> > Yeah.. I'm not sure, since you told me to not flood the kernel log. If
+> > someone recognised error while probing or streaming the debug will be
+> > turned on anyways. However, I will make it a dev_err() since this
+> > shouldnt appear normally, you're right.
+> 
+> Sorry, I meant printing the value of the error code in the message, the
+> err variable. dev_err() is probably good too actually, as this isn't
+> meant to happen.
 
-Not at all - I was referring to i386 support in general.
+Sorry that was my fault, I misread your comment.. Anyway since we agree
+with dev_err() and I added the err value into the message, everything is
+fine :)
 
-I was basically making the point that we still support i386 without
-PAE (which is a prerequisite for supporting non-executable mappings),
-and if we are going to be pedantic about security on this
-architecture, we should probably make PAE mandatory as well.
-
-If we are ok with the current state, enabling this permission check on
-i386 makes no sense.
-
-> is no longer supported or supportable, its support should be
-> removed. If so, I'll be very happy to stop testing it.
->
-
-I'd say there are better ways to spend those cycles, but for the time
-being, I think we should continue testing it, as otherwise it will
-just bit rot.
+Regards,
+  Marco
