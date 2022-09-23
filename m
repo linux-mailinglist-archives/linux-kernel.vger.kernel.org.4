@@ -2,176 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C234D5E73B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FED5E73BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiIWGNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        id S229982AbiIWGPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIWGNl (ORCPT
+        with ESMTP id S229953AbiIWGOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:13:41 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AEB1191A2;
-        Thu, 22 Sep 2022 23:13:39 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1279948d93dso16973530fac.10;
-        Thu, 22 Sep 2022 23:13:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rji+pfwL3rQYH9KftarRBcRHruKKw+WaXEF8zxspQUo=;
-        b=t9hB2AnQpXAyZIGpLahKAScyiXXShtXmkUtWe1KFKoAbJ/V3oiNiWPq5jN8PuE32O1
-         w01w+vzxcpe2XX4b/1m3jiD907/1ynFP70uFq/QV99kMMteYBaggZRECLjjkCU9zghi7
-         VuWWs8T2hC6prOuPiIqo9BmlVQL/pOXua6TFYFXqfurHI+ChFHg4QBLJb8HG3uTO2iLd
-         ON1DymnZoAgQEE0SXOmEyC15skeg5lLhj1pdLnPuMT5lAhiDTmD5TGxOStqiDwGgZMyc
-         DAMqZUXMNc3h/uNx+vbe+wU4DlvoWeXhGeYshRxLZJDFFXlLvaQ6GLIYTB87jDOZXwvo
-         twrw==
-X-Gm-Message-State: ACrzQf2CuiYrXNrHtXLl7MYGf4yoEmtyYLYWjdZdIs5KZVSlWtyTObm8
-        VAKRIHlxg7W1ZLhkMrCWBUETErWlrjPOABfDPQzh7POr
-X-Google-Smtp-Source: AMsMyM7/a5MYAYQQxnQQ6yfKc2MsuXYZzmH6H18gLRP1gNB02M4mT1N94UMS114mCiy8+RmdDKU6GSHPtlKMSUyR4E0=
-X-Received: by 2002:a05:6870:524b:b0:12c:cfd2:81c0 with SMTP id
- o11-20020a056870524b00b0012ccfd281c0mr4049188oai.209.1663913618712; Thu, 22
- Sep 2022 23:13:38 -0700 (PDT)
+        Fri, 23 Sep 2022 02:14:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14E736DDE;
+        Thu, 22 Sep 2022 23:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663913692; x=1695449692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lXSwP6og/ifxpWP/EGCyBAwoeYKaiCrVRuMGlHz6n0A=;
+  b=IvHnMYI9n4Al7rg8Nq02b+AHoOrI3n46aIb8CKEEaYlrufsfSSp4Fe6B
+   rCkyMlVhQuiwloKVp/JyUTMu1CsJ3SPWsg4h1icf6W5YvAFwNIJlV/r2h
+   Z9nCSgmGaoBwj2IVXa8v5A7zzjchU7RPmQjqt/AQ0j0rqzjiYwMmiMVzf
+   z9BVQ+kjv2b82Qe7UaIaxeAtpPs4/rQXkV+DY2IA6AtIsGaInz7lDCNRB
+   tswdTtSvzH7NKJnDBXriaZFKvKedlcqfOlJ4Ki31xVQf8t/EyaHyIV2DO
+   UVFYGNdYS+Nf2oGYvpjsdpBx0cu5fGUAxfP1GThJ1/BzvXJvOYt6u473f
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362329709"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="362329709"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 23:14:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="688607032"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 23:14:36 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obbxL-0005Nk-1v;
+        Fri, 23 Sep 2022 06:14:35 +0000
+Date:   Fri, 23 Sep 2022 14:13:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>, jiri@mellanox.com,
+        moshe@mellanox.com, davem@davemloft.net, kuba@kernel.org,
+        idosch@nvidia.com
+Cc:     kbuild-all@lists.01.org, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huangguangbin2@huawei.com, lipeng321@huawei.com,
+        chenhao418@huawei.com
+Subject: Re: [PATCH net-next 1/2] devlink: expand
+ __DEVLINK_PARAM_MAX_STRING_VALUE to 256
+Message-ID: <202209231438.WCQ3Wu5L-lkp@intel.com>
+References: <20220923013818.51003-2-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-References: <20220922205302.749274-1-namhyung@kernel.org> <CAP-5=fXAS+QpkncLqLeS=MOeqOyrFy3Gev=F8vet4r6xjmCJ4g@mail.gmail.com>
-In-Reply-To: <CAP-5=fXAS+QpkncLqLeS=MOeqOyrFy3Gev=F8vet4r6xjmCJ4g@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 22 Sep 2022 23:13:27 -0700
-Message-ID: <CAM9d7cj_LOi+1aKfw7iFLyyWUiNeH2FXr8RMYumTSBzz2tDnwg@mail.gmail.com>
-Subject: Re: [PATCH v3] perf tools: Get a perf cgroup more portably in BPF
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923013818.51003-2-huangguangbin2@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 4:55 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Thu, Sep 22, 2022 at 1:53 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The perf_event_cgrp_id can be different on other configurations.
-> > To be more portable as CO-RE, it needs to get the cgroup subsys id
-> > using the bpf_core_enum_value() helper.
-> >
-> > Suggested-by: Ian Rogers <irogers@google.com>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> > v3 changes)
-> >  * check compiler features for enum value
-> >
-> > v2 changes)
-> >  * fix off_cpu.bpf.c too
-> >  * get perf_subsys_id only once
-> >
-> >  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
-> >  tools/perf/util/bpf_skel/off_cpu.bpf.c      | 12 ++++++++----
-> >  2 files changed, 18 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > index 292c430768b5..8e7520e273db 100644
-> > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > @@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
-> >
-> >  int enabled = 0;
-> >  int use_cgroup_v2 = 0;
-> > +int perf_subsys_id = -1;
-> >
-> >  static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
-> >  {
-> > @@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
-> >         int level;
-> >         int cnt;
-> >
-> > -       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> > +       if (perf_subsys_id == -1) {
-> > +#if __has_builtin(__builtin_preserve_enum_value)
-> > +               perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-> > +                                                    perf_event_cgrp_id);
-> > +#else
-> > +               perf_subsys_id = perf_event_cgrp_id;
-> > +#endif
-> > +       }
-> > +       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
-> >         level = BPF_CORE_READ(cgrp, level);
-> >
-> >         for (cnt = 0; i < MAX_LEVELS; i++) {
-> > diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> > index c4ba2bcf179f..e917ef7b8875 100644
-> > --- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> > @@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
-> >  const volatile bool needs_cgroup = false;
-> >  const volatile bool uses_cgroup_v1 = false;
-> >
-> > +int perf_subsys_id = -1;
-> > +
-> >  /*
-> >   * Old kernel used to call it task_struct->state and now it's '__state'.
-> >   * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-> > @@ -119,11 +121,13 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
-> >  {
-> >         struct cgroup *cgrp;
-> >
-> > -       if (uses_cgroup_v1)
-> > -               cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> > -       else
-> > -               cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
-> > +       if (!uses_cgroup_v1)
-> > +               return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
-> > +
-> > +       if (perf_subsys_id == -1)
-> > +               perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
->
-> Should the "#if __has_builtin(__builtin_preserve_enum_value)" test also be here?
+Hi Guangbin,
 
-Ouch!  Will send v4.
+Thank you for the patch! Perhaps something to improve:
 
->
-> It feels a shame that bpf_core_enum_value isn't defined something like:
->
-> #if __has_builtin(__builtin_preserve_enum_value)
-> #define bpf_core_enum_value(enum_type, enum_value) \
-> __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value,
-> BPF_ENUMVAL_VALUE)
-> #else
-> #define bpf_core_enum_value(enum_type, enum_value) enum_value
-> #endif
+[auto build test WARNING on net-next/master]
 
-Yeah, that would be much easier to use.
+url:    https://github.com/intel-lab-lkp/linux/commits/Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git bcff1a37bafc144d67192f2f5e1f4b9c49b37bd6
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220923/202209231438.WCQ3Wu5L-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e503c1118546fbb4e0d1274058f5ca0851f4b9a0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guangbin-Huang/net-hns3-add-support-setting-parameters-of-congestion-control-algorithm-by-devlink-param/20220923-094236
+        git checkout e503c1118546fbb4e0d1274058f5ca0851f4b9a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash net/core/
 
-Thanks,
-Namhyung
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   net/core/devlink.c: In function 'devlink_nl_param_fill.constprop':
+>> net/core/devlink.c:5382:1: warning: the frame size of 1060 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    5382 | }
+         | ^
 
 
->
-> for backward clang compatibility, but I could see why an error would
-> be preferable.
->
-> Thanks,
-> Ian
->
-> >
-> > +       cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
-> >         return BPF_CORE_READ(cgrp, kn, id);
-> >  }
-> >
-> > --
-> > 2.37.3.998.g577e59143f-goog
-> >
+vim +5382 net/core/devlink.c
+
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5293  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5294  static int devlink_nl_param_fill(struct sk_buff *msg, struct devlink *devlink,
+f4601dee25d5fe Vasundhara Volam 2019-01-28  5295  				 unsigned int port_index,
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5296  				 struct devlink_param_item *param_item,
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5297  				 enum devlink_command cmd,
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5298  				 u32 portid, u32 seq, int flags)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5299  {
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5300  	union devlink_param_value param_value[DEVLINK_PARAM_CMODE_MAX + 1];
+7c62cfb8c5744b Jiri Pirko       2019-02-07  5301  	bool param_value_set[DEVLINK_PARAM_CMODE_MAX + 1] = {};
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5302  	const struct devlink_param *param = param_item->param;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5303  	struct devlink_param_gset_ctx ctx;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5304  	struct nlattr *param_values_list;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5305  	struct nlattr *param_attr;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5306  	int nla_type;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5307  	void *hdr;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5308  	int err;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5309  	int i;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5310  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5311  	/* Get value from driver part to driverinit configuration mode */
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5312  	for (i = 0; i <= DEVLINK_PARAM_CMODE_MAX; i++) {
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5313  		if (!devlink_param_cmode_is_supported(param, i))
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5314  			continue;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5315  		if (i == DEVLINK_PARAM_CMODE_DRIVERINIT) {
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5316  			if (!param_item->driverinit_value_valid)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5317  				return -EOPNOTSUPP;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5318  			param_value[i] = param_item->driverinit_value;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5319  		} else {
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5320  			ctx.cmode = i;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5321  			err = devlink_param_get(devlink, param, &ctx);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5322  			if (err)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5323  				return err;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5324  			param_value[i] = ctx.val;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5325  		}
+7c62cfb8c5744b Jiri Pirko       2019-02-07  5326  		param_value_set[i] = true;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5327  	}
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5328  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5329  	hdr = genlmsg_put(msg, portid, seq, &devlink_nl_family, flags, cmd);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5330  	if (!hdr)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5331  		return -EMSGSIZE;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5332  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5333  	if (devlink_nl_put_handle(msg, devlink))
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5334  		goto genlmsg_cancel;
+f4601dee25d5fe Vasundhara Volam 2019-01-28  5335  
+c1e5786d6771c6 Vasundhara Volam 2019-01-28  5336  	if (cmd == DEVLINK_CMD_PORT_PARAM_GET ||
+c1e5786d6771c6 Vasundhara Volam 2019-01-28  5337  	    cmd == DEVLINK_CMD_PORT_PARAM_NEW ||
+c1e5786d6771c6 Vasundhara Volam 2019-01-28  5338  	    cmd == DEVLINK_CMD_PORT_PARAM_DEL)
+f4601dee25d5fe Vasundhara Volam 2019-01-28  5339  		if (nla_put_u32(msg, DEVLINK_ATTR_PORT_INDEX, port_index))
+f4601dee25d5fe Vasundhara Volam 2019-01-28  5340  			goto genlmsg_cancel;
+f4601dee25d5fe Vasundhara Volam 2019-01-28  5341  
+ae0be8de9a53cd Michal Kubecek   2019-04-26  5342  	param_attr = nla_nest_start_noflag(msg, DEVLINK_ATTR_PARAM);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5343  	if (!param_attr)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5344  		goto genlmsg_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5345  	if (nla_put_string(msg, DEVLINK_ATTR_PARAM_NAME, param->name))
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5346  		goto param_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5347  	if (param->generic && nla_put_flag(msg, DEVLINK_ATTR_PARAM_GENERIC))
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5348  		goto param_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5349  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5350  	nla_type = devlink_param_type_to_nla_type(param->type);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5351  	if (nla_type < 0)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5352  		goto param_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5353  	if (nla_put_u8(msg, DEVLINK_ATTR_PARAM_TYPE, nla_type))
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5354  		goto param_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5355  
+ae0be8de9a53cd Michal Kubecek   2019-04-26  5356  	param_values_list = nla_nest_start_noflag(msg,
+ae0be8de9a53cd Michal Kubecek   2019-04-26  5357  						  DEVLINK_ATTR_PARAM_VALUES_LIST);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5358  	if (!param_values_list)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5359  		goto param_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5360  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5361  	for (i = 0; i <= DEVLINK_PARAM_CMODE_MAX; i++) {
+7c62cfb8c5744b Jiri Pirko       2019-02-07  5362  		if (!param_value_set[i])
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5363  			continue;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5364  		err = devlink_nl_param_value_fill_one(msg, param->type,
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5365  						      i, param_value[i]);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5366  		if (err)
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5367  			goto values_list_nest_cancel;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5368  	}
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5369  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5370  	nla_nest_end(msg, param_values_list);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5371  	nla_nest_end(msg, param_attr);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5372  	genlmsg_end(msg, hdr);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5373  	return 0;
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5374  
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5375  values_list_nest_cancel:
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5376  	nla_nest_end(msg, param_values_list);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5377  param_nest_cancel:
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5378  	nla_nest_cancel(msg, param_attr);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5379  genlmsg_cancel:
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5380  	genlmsg_cancel(msg, hdr);
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5381  	return -EMSGSIZE;
+45f05def5c44c8 Moshe Shemesh    2018-07-04 @5382  }
+45f05def5c44c8 Moshe Shemesh    2018-07-04  5383  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
