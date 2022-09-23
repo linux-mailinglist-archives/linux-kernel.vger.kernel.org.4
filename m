@@ -2,102 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF925E7C5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344DB5E7C64
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 15:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbiIWNzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 09:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S231903AbiIWN4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 09:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiIWNzE (ORCPT
+        with ESMTP id S229496AbiIWN4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:55:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0244C8421;
-        Fri, 23 Sep 2022 06:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663941303; x=1695477303;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=V1fz6/vC2sj2jrgIWsxGg8EggzrRY1LkDCnTvuxjcm8=;
-  b=avL6sR5FjUsIMZg3fUJtJ5WU88+GvyC3MQsCIv3NpzyoGKRqfsUGp13+
-   EwUQ3y9Pfch2Id6Nh2x+BvlM07oAI+F5bv0X4WvAoPaTYdwH9tNoQxY46
-   5aH2pMFKmtJJh9Bf7OD7UtWfgBOx1b1DSUeMRGOIc+a74uT+rzYfLBxjB
-   Vcw+tYMXvMQfzHG6CWQMQOSk6va+9yiuRKgQoH0/STfZBVSrzVemPOKFD
-   0bzHEmxIc7kM7ZwSZ9jDEZPyOoEvTTXeN3DuTtn0d6mhcsKbFm3ZyqiPu
-   bSzNN29xy/K1Z342CX3jjjn0CisOKMTfo0+Iri3U+695aYaWl0jdhH+bI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="280317634"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="280317634"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 06:54:50 -0700
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="597873609"
-Received: from weiyeeta-mobl.gar.corp.intel.com ([10.213.40.75])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 06:54:47 -0700
-Message-ID: <0559b5420b0d2019ff47ad408ed35a6b2c0c1907.camel@intel.com>
-Subject: Re: [PATCH v4 01/30] thermal/core: Add a generic
- thermal_zone_get_trip() function
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Date:   Fri, 23 Sep 2022 21:54:43 +0800
-In-Reply-To: <20220921094244.606948-2-daniel.lezcano@linaro.org>
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
-         <20220921094244.606948-2-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 23 Sep 2022 09:56:01 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BC313D1F5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 06:56:00 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id n12so99592wrx.9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 06:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=S/p8TvXlsMGXG51CkXeBekBV47MmYMaNjH+nwQik6mo=;
+        b=pesQIkJa1x9mg8LE7c1BamUwx4uzYPg0MQOvF7vkEfvtp0xDXdNWK4UsxwdeYxqP1G
+         f5lXAOWWPOITHbY2gdNkFN7/IsH5pu+axiN8GES5mepjN+IAWBGkMYSkXFG9h2d3hgME
+         T+UOpQi4Vvp9qxmkK3+IXptPL8pBBH782k8y6fTghfF7kPK2muCQfKu9ox11hKgvVm8j
+         vBOqaOiTKtiiE0ekdqBpg6AB407tl+GtSV30SyWW7CsJBiYWtGtGKitpIu8NG7tZ7gHW
+         O1a2s8TQS1Tc4zC7PaGuTjDzgY2V3EWfF14CTgQb6abAp9h2DDbR7Z00ljb01PAm8n11
+         LDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=S/p8TvXlsMGXG51CkXeBekBV47MmYMaNjH+nwQik6mo=;
+        b=JieoYMz5sTIgDKwj6FVHueII/sdDrFk8W3k5X/FKlG7SkMCiKh476GYz6X+MIC/fzn
+         fvrIhrHkDw0Sg+4RT2GSEclZb9/dIkQcnr4IQyBNnARp0w7iwKI9ZUqHRHqUTJo5WW/b
+         LUZKLx0nWUcSZ8ZgtSAC4fwHo059lQFWtLSVfK+atP+5wxDUPOIZcFDDogpWU6P/FZX3
+         TWMSzqolNqF41vqSMDD2KWMWOVrOT1LOveXViEfUBKQUAMv2P51AdQ2ndGBxSFDq42rA
+         e+SMozY+o1yPpNAiF/z94eHs7s/TE/8MVVe1WsAXvkF4JPxaH6Rn5e6SNhLTO/F8wMW6
+         S3kw==
+X-Gm-Message-State: ACrzQf03yzJmgWNysg7cmjlM0YSWsDXyWUIdLpnVFJOXF2SKX/5ys5Hu
+        jK6B8A8R7odd3Lo8YyfNNf/cIl1Gtyyy/4+u60laUA==
+X-Google-Smtp-Source: AMsMyM5JD0LHLzdgiPuW93f49BMsTWiW6nyvuGbZbM+xrf5PUIHPYMm+BgwIrZTLBwTvkItjALXG7xZhx/Y05gOiULI=
+X-Received: by 2002:a5d:588f:0:b0:22b:5cc:e1d3 with SMTP id
+ n15-20020a5d588f000000b0022b05cce1d3mr5073130wrf.142.1663941358489; Fri, 23
+ Sep 2022 06:55:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+ <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+ <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
+ <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm> <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
+ <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm>
+In-Reply-To: <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 23 Sep 2022 15:55:21 +0200
+Message-ID: <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -1142,6 +1138,52 @@ static void thermal_set_delay_jiffies(unsigned
-> long *delay_jiffies, int delay_ms
->  		*delay_jiffies = round_jiffies(*delay_jiffies);
->  }
->  
-> +int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
-> +{
-> +	return tz->num_trips;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_get_num_trips);
-> +
-> +static int __thermal_zone_get_trip(struct thermal_zone_device *tz,
-> int trip_id,
-> +				   struct thermal_trip *trip)
-> +{
-> +	int ret;
-> +
-> +	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
-> +		return -EINVAL;
-> +
-> +	if (tz->trips) {
-> +		*trip = tz->trips[trip_id];
-> +		return 0;
-> +	}
-> +
-> +	if (tz->ops->get_trip_hyst) {
-> +		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip-
-> >hysteresis);
-> +		if (ret)
-> +			return ret;
-> +	} else trip->hysteresis = 0;
+On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
+<martin.kepplinger@puri.sm> wrote:
+>
+> Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
+> > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
+> > <martin.kepplinger@puri.sm> wrote:
+> > >
+> > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
+> > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
+> > > > <martin.kepplinger@puri.sm> wrote:
+> > > > >
+> > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
+> > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> > > > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > > >
+> > > > > > > If for example the power-domains' power-supply node
+> > > > > > > (regulator)
+> > > > > > > needs
+> > > > > > > interrupts to work, the current setup with noirq callbacks
+> > > > > > > cannot
+> > > > > > > work; for example a pmic regulator on i2c, when suspending,
+> > > > > > > usually
+> > > > > > > already
+> > > > > > > times out during suspend_noirq:
+> > > > > > >
+> > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > > > > > >
+> > > > > > > So fix system suspend and resume for these power-domains by
+> > > > > > > using
+> > > > > > > the
+> > > > > > > "outer" suspend/resume callbacks instead. Tested on the
+> > > > > > > imx8mq-
+> > > > > > > librem5 board,
+> > > > > > > but by looking at the dts, this will fix imx8mq-evk and
+> > > > > > > possibly
+> > > > > > > many other
+> > > > > > > boards too.
+> > > > > > >
+> > > > > > > This is designed so that genpd providers just say "this
+> > > > > > > genpd
+> > > > > > > needs
+> > > > > > > interrupts" (by setting the flag) - without implying an
+> > > > > > > implementation.
+> > > > > > >
+> > > > > > > Initially system suspend problems had been discussed at
+> > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > > > > > > which led to discussing the pmic that contains the
+> > > > > > > regulators
+> > > > > > > which
+> > > > > > > serve as power-domain power-supplies:
+> > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > > > > > >
+> > > > > > > Signed-off-by: Martin Kepplinger
+> > > > > > > <martin.kepplinger@puri.sm>
+> > > > > > > ---
+> > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
+> > > > > > >  include/linux/pm_domain.h   |  5 +++++
+> > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/base/power/domain.c
+> > > > > > > b/drivers/base/power/domain.c
+> > > > > > > index 5a2e0232862e..58376752a4de 100644
+> > > > > > > --- a/drivers/base/power/domain.c
+> > > > > > > +++ b/drivers/base/power/domain.c
+> > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
+> > > > > > > genpd_spin_ops = {
+> > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
+> > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> > > > > > > GENPD_FLAG_CPU_DOMAIN)
+> > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
+> > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
+> > > > > > > GENPD_FLAG_IRQ_ON)
+> > > > > > >
+> > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
+> > > > > > > device
+> > > > > > > *dev,
+> > > > > > >                 const struct generic_pm_domain *genpd)
+> > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
+> > > > > > > generic_pm_domain
+> > > > > > > *genpd,
+> > > > > > >         genpd->domain.ops.runtime_suspend =
+> > > > > > > genpd_runtime_suspend;
+> > > > > > >         genpd->domain.ops.runtime_resume =
+> > > > > > > genpd_runtime_resume;
+> > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
+> > > > > > > -       genpd->domain.ops.suspend_noirq =
+> > > > > > > genpd_suspend_noirq;
+> > > > > > > -       genpd->domain.ops.resume_noirq =
+> > > > > > > genpd_resume_noirq;
+> > > > > > > +
+> > > > > > > +       if (genpd_irq_on(genpd)) {
+> > > > > > > +               genpd->domain.ops.suspend =
+> > > > > > > genpd_suspend_noirq;
+> > > > > > > +               genpd->domain.ops.resume =
+> > > > > > > genpd_resume_noirq;
+> > > > > > > +       } else {
+> > > > > > > +               genpd->domain.ops.suspend_noirq =
+> > > > > > > genpd_suspend_noirq;
+> > > > > > > +               genpd->domain.ops.resume_noirq =
+> > > > > > > genpd_resume_noirq;
+> > > > > >
+> > > > > > As we discussed previously, I am thinking that it may be
+> > > > > > better
+> > > > > > to
+> > > > > > move to using genpd->domain.ops.suspend_late and
+> > > > > > genpd->domain.ops.resume_early instead.
+> > > > >
+> > > > > Wouldn't that better be a separate patch (on top)? Do you
+> > > > > really
+> > > > > want
+> > > > > me to change the current behaviour (default case) to from noirq
+> > > > > to
+> > > > > late? Then I'll resend this series with such a patch added.
+> > > >
+> > > > Sorry, I wasn't clear enough, the default behaviour should remain
+> > > > as
+> > > > is.
+> > > >
+> > > > What I meant was, when genpd_irq_on() is true, we should use the
+> > > > genpd->domain.ops.suspend_late and genpd-
+> > > > >domain.ops.resume_early.
+> > >
+> > > Testing that shows that this isn't working. I can provide the logs
+> > > later, but suspend fails and I think it makes sense: "suspend_late"
+> > > is
+> > > simply already too late when i2c (or any needed driver) uses
+> > > "suspend".
+> >
+> > Okay, I see.
+> >
+> > The reason why I suggested moving the callbacks to "suspend_late",
+> > was
+> > that I was worried that some of the attached devices to genpd could
+> > use "suspend_late" themselves. This is the case for some drivers for
+> > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
+> > curious to look at the DT files for the platform you are running,
+> > would you mind giving me a pointer?
+>
+> I'm running
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+> with these (small) patches on top:
+> https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
 
-a separate line?
+Thanks for sharing the information!
 
-Other than that,
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+>
+> >
+> > So, this made me think about this a bit more. In the end, just using
+> > different levels (suspend, suspend_late, suspend_noirq) of callbacks
+> > are just papering over the real *dependency* problem.
+>
+> true, it doesn't feel like a stable solution.
+>
+> >
+> > What we need for the genpd provider driver, is to be asked to be
+> > suspended under the following conditions:
+> > 1. All consumer devices (and child-domains) for its corresponding PM
+> > domain have been suspended.
+> > 2. All its supplier devices supplies must remain resumed, until the
+> > genpd provider has been suspended.
+> >
+> > Please allow me a few more days to think in more detail about this.
+>
+> Thanks a lot for thinking about this!
 
-thanks,
-rui
+I have made some more thinking, but it's been a busy period for me, so
+unfortunately I need some additional time (another week). It seems
+like I also need to do some prototyping, to convince myself about the
+approach.
 
+So, my apologies for the delay!
+
+Kind regards
+Uffe
