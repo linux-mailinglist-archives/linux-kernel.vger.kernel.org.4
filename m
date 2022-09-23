@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7DD5E82A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6101C5E829F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 21:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiIWTpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 15:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S232675AbiIWTpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 15:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiIWTpB (ORCPT
+        with ESMTP id S232535AbiIWTpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 15:45:01 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EC583F0B
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:44:58 -0700 (PDT)
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28NJigKM029622
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:44:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28NJigKM029622
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1663962283;
-        bh=NbCGtSdbG3oqkI66EnHd+jvnGku05D5DfnQbs9zZVLQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=x3AlN+6O4X9CLT/N/7ZyrW06jeAzLkdBWhD7QRycVtcysFmSD0ITESQgBNVO6rD0h
-         JYui6PIm3GqoAhIOaxxrcYdHfjc6SQQuYjx2GEq5T9r/ivNcnCilFYSxHPliFgpxSw
-         w7z+Cd8FNL2AJFGyzDC27uIZ3H3JN1Bm+GPPu5hJbBVvt85X2MPxEzyOv320oIbpQL
-         7txS0Sof7x64RslwTy8YpPGGVIRMnxXtIdlUIuOJG2/9nv4uP0k62QY/7mA+115kGd
-         knpH0CD/9NlMOExcZvpW8+rzCHItIuRv5nt24y/pqDHgxFZv7JmsBPHgAGBx9yx9IW
-         r0uX9yaeC9cZw==
-X-Nifty-SrcIP: [209.85.167.179]
-Received: by mail-oi1-f179.google.com with SMTP id g130so1027168oia.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:44:42 -0700 (PDT)
-X-Gm-Message-State: ACrzQf161tHNMI9zuMhrSj2iGM7fbv6roLCIQ+wTb8wo6Ajq/q3OIVAq
-        Ayp/RaUnhO8LLYoWQwBEPP5CSk295Q0u0La8vkk=
-X-Google-Smtp-Source: AMsMyM4vcr/Sug/Gk/8SieMnzcAA6gpJvAs6fyFex07yhjwvQa+N4xU9WsDe4RAkBzwftz4MHWUhlgA3q0Zd//wh+AY=
-X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
- cj5-20020a0568081b8500b0034d8ce1d5b0mr9560936oib.194.1663962281705; Fri, 23
- Sep 2022 12:44:41 -0700 (PDT)
+        Fri, 23 Sep 2022 15:45:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7538A98A6E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 12:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663962305; x=1695498305;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rvMaEnnDfV0eR04REb0kqB7qVMdo6Smwhj5xMuMIRtg=;
+  b=GaB32Px9LeU9Myb1EuABEdD/1l0lmfF6EgDfZ1u78tfPsMJSeCfrOdJU
+   fJBwj9ikmltZV7pqkXan3x2jVoRUxv/f+KUaOsS7jOuu0gFMynKDmZak0
+   CyUTgRA0uY4wXj0U5AHZyYJr7y5OE6TVQ6JAGlX0+nwAXtZ2gaRYiESEb
+   5pSHVPsrn8X9TiPhDT56WVXi+cBTs9aYcFXTCb2q2nAWnUXbn4WZEu1yJ
+   SNRlWfegEjQ148UEk0GQK8GKYXH9SqtXfSF6vXLhF5wcQI+f9kycZPraY
+   8rA2af6sGAQMPWSExv03S93dginv3RFbz2QYm+129s1XMhD2Iq2o7Wwj4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="281044220"
+X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
+   d="scan'208";a="281044220"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 12:45:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
+   d="scan'208";a="651073636"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 12:45:03 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obobe-0005tM-2I;
+        Fri, 23 Sep 2022 19:45:02 +0000
+Date:   Sat, 24 Sep 2022 03:44:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.19 22/33]
+ drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not
+ used
+Message-ID: <202209240308.kzupccnl-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
-In-Reply-To: <20220919170828.3718437-1-ndesaulniers@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 24 Sep 2022 04:44:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
-Message-ID: <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 2:08 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> cc-ifversion is GCC specific. Replace it with compiler specific
-> variants. Update the users of cc-ifversion to use these new macros.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/350
-> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-> Suggested-by: Bill Wendling <morbo@google.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Changes v3 -> v4:
-> * Split into its own patch again from series, as per Masahiro.
-> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
->   clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.19
+head:   9888f771c3a964ede02767e7e913ede0d1d44f0e
+commit: f5bcd98c2411532e84a225f26b235a1cdd2cb9c7 [22/33] usb: dwc3: qcom: fix peripheral and OTG suspend
+config: csky-randconfig-r021-20220924 (https://download.01.org/0day-ci/archive/20220924/202209240308.kzupccnl-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f5bcd98c2411532e84a225f26b235a1cdd2cb9c7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.19
+        git checkout f5bcd98c2411532e84a225f26b235a1cdd2cb9c7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/usb/dwc3/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
+>> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
+     313 |         struct usb_hcd *hcd;
+         |                         ^~~
 
 
-Applied to linux-kbuild.
-Thanks.
+vim +/hcd +313 drivers/usb/dwc3/dwc3-qcom.c
 
-
+   308	
+   309	static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+   310	{
+   311		struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+   312		struct usb_device *udev;
+ > 313		struct usb_hcd *hcd;
+   314	
+   315		/*
+   316		 * FIXME: Fix this layering violation.
+   317		 */
+   318		hcd = platform_get_drvdata(dwc->xhci);
+   319	
+   320		/*
+   321		 * It is possible to query the speed of all children of
+   322		 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+   323		 * currently supports only 1 port per controller. So
+   324		 * this is sufficient.
+   325		 */
+   326	#ifdef CONFIG_USB
+   327		udev = usb_hub_find_child(hcd->self.root_hub, 1);
+   328	#else
+   329		udev = NULL;
+   330	#endif
+   331		if (!udev)
+   332			return USB_SPEED_UNKNOWN;
+   333	
+   334		return udev->speed;
+   335	}
+   336	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
