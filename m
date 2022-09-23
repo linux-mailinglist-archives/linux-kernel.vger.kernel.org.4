@@ -2,128 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8A05E85AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B095E8593
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 00:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiIWWPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 18:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S231819AbiIWWJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 18:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiIWWPs (ORCPT
+        with ESMTP id S229666AbiIWWI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 18:15:48 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6254CEEB72
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:15:47 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id k10so2327024lfm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:15:47 -0700 (PDT)
+        Fri, 23 Sep 2022 18:08:59 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DE9147F36
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:08:57 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id b5so1437643pgb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=MjCIyVdNYTTKoVP4OLhW9xb+LVRJMI4IX/LyQztjHfk=;
-        b=kHahx/UiGoRabYsHqSdNGerJopUg3qLNerV0gP8BGZNyPpFBTKJKBOOTPuJQY3qpyt
-         KX4UQe6BGRb5PTDAmfRmbbpLtmT2ZEsyv+bYu0wvIulGGlmV5fhB7fXPCkqVhNj+JZaa
-         7kt33yzmC36KDZeTuf3xRpqjuFM2SofHQSTIQ=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=v+eLs7CX4OpYnGq5AL+vslir6j393s7nqOXABwCSSN0=;
+        b=T0exYYNLRfZvRHGGnonPlRcz4rs9tZG9YwGsSEW7t8vPvHQlfdYZdBBRU8YWHsT1LX
+         dt4G48PS/iuXBqG58OC4k55CkVAiD8Ymp7w+ukqNanMqh2dGpvRPwGTbTalJSEY18VYi
+         i0AYx1Y4nXHKFokzWzuagim5oVMnJV01o1aaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MjCIyVdNYTTKoVP4OLhW9xb+LVRJMI4IX/LyQztjHfk=;
-        b=SUL6Bk7ALeRtYyOL2eU01tMvI9oJNMdULi9jfOIN1mncRf0eAxFxQ6ASgESOrfeZpu
-         ickzKi6wOLiopaxBnE3JoOO8JwyIUKgCGNqOmM27/cxSFc9wV0D8jqfpJbHPdekcDXVi
-         syPTM+NjUynqOyuqcovrYllTnrAkB8mO6PdX1e6Ylew59pDUG9B2ecxQUS0r3TVsqrCn
-         FXr2RaIbMYWm9/GhFgNdjsR5JnTVL9uhhfcEcZ67hOjjQzxKkvA9cStYREtUcL4OqFm3
-         Ggb8DkToULgH6Z6VyXeifz2jwZvpBS5Et/ENLlYvvegrgQyKQnQPYmyc8Rho0N2fW1l5
-         mTFw==
-X-Gm-Message-State: ACrzQf022gjAW63LtJeKllQEboHrr/DYoZDAazow9mQvu7RE5gtU+gvt
-        8FA/CPuC/2s9U3LJ5bA5Utc/QQr+ltT4hPYDnCM=
-X-Google-Smtp-Source: AMsMyM6IttRRCWxa+Mwjxr5UicVpIRPOGIXxGKOJ60qfVmXfQ3atYctP7/9pWuyY7NTNtNTnYhEMJQ==
-X-Received: by 2002:a05:6512:eaa:b0:497:a1ed:6fa5 with SMTP id bi42-20020a0565120eaa00b00497a1ed6fa5mr3875961lfb.108.1663971345521;
-        Fri, 23 Sep 2022 15:15:45 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05651204c200b0049487818dd9sm1632970lfq.60.2022.09.23.15.15.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 15:15:45 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id z25so2347882lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 15:15:45 -0700 (PDT)
-X-Received: by 2002:a05:6000:168c:b0:226:f4c2:d6db with SMTP id
- y12-20020a056000168c00b00226f4c2d6dbmr6348292wrd.659.1663970856526; Fri, 23
- Sep 2022 15:07:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=v+eLs7CX4OpYnGq5AL+vslir6j393s7nqOXABwCSSN0=;
+        b=vNYlCLA6HFPJW0//BOLEvZKarUJ/h+x9nppCGSAgo322/ii0jy0Q7PpndPU+D0wOHM
+         R2B+tRMeq/15SdaocyOJKgd6eKspxqvWF79ZDCYbnzkaxMOm91OfRzrB0ZTrtgR/JN7l
+         s03bhWjP+U1ORZrmDx/zzig6StO81G7kl8KoJz5Ua+8ICzMllqIwV/JzI8E/DUY5LF0/
+         0KjlM208M/rBeSu8So+cHlHYMTVNedo6XDnRN3m/RR4ZNHkSvpoWOo6tWjWVdpCfvX/q
+         w3VWdtihJ+uKs8cjIgHvREFpojOVeSTPnTq0UzCARXrkddarYObOcVSHKfQ3tNfplUa9
+         QzRQ==
+X-Gm-Message-State: ACrzQf1xzdet6mysll2tJDSqvS8AqCiyAX7bpaLUebKJ9f6AWqBCcr6D
+        xfc6XRCjeISDBUo3K+DX26xoHw==
+X-Google-Smtp-Source: AMsMyM4QU5bjIY/3gea6HILQpt2UH44D4+cROND1jUXN6yrwB0csIEr8R/Bl50VJHW//p4ryuu7uLg==
+X-Received: by 2002:a62:1d56:0:b0:557:8233:7442 with SMTP id d83-20020a621d56000000b0055782337442mr2729924pfd.33.1663970936972;
+        Fri, 23 Sep 2022 15:08:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l15-20020a17090a72cf00b001f22647cb56sm2039792pjk.27.2022.09.23.15.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 15:08:56 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Gregory Greenman <gregory.greenman@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Ilan Peer <ilan.peer@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Nathan Errera <nathan.errera@intel.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Mike Golant <michael.golant@intel.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Avraham Stern <avraham.stern@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] iwlwifi: Track scan_cmd allocation size explicitly
+Date:   Fri, 23 Sep 2022 15:08:53 -0700
+Message-Id: <20220923220853.3302056-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220923140918.2825043-1-judyhsiao@chromium.org>
-In-Reply-To: <20220923140918.2825043-1-judyhsiao@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 23 Sep 2022 15:07:24 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UABpfLRehYT78mPdzgwVBhV_-uBQnkrtbbDbUH-6o8tg@mail.gmail.com>
-Message-ID: <CAD=FV=UABpfLRehYT78mPdzgwVBhV_-uBQnkrtbbDbUH-6o8tg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Add dtsi for sc7280 boards that using rt5682
-To:     Judy Hsiao <judyhsiao@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
-        Judy Hsiao <judyhsiao@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6506; h=from:subject; bh=ZdFtQJrir9vmHjhQgHQJ0oFJQhgmS1Ici2jkyPvaoPg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLi51GpveMhHnnbBVQ18uTL45Sqd7dxnR38G6tGOq txB5j4OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4udQAKCRCJcvTf3G3AJpHaEA Caye3Bg8AVD0wB7ecF37jyKUkpUro86N+brzREvIRbWC/jURR7U5WS+VOkm5TykDE2Nw7ht7Fmbwds 3lUsm/IhhujEHQyzFy6blO9Tip7rLpfgsKicKR5D121Hen6bAkwuLP0qNRJOAAjlqTSJlXQwfkR1aD tTt6EvXU7el7XtIzigrSAd7eSxJXwx7DS4TiANkvnmv2adjoNoF2XqFBeSpVWgCmdGvq9SqSXMxIPs bmYh1c1LhRcmUBnSFam8JV2AC23wbYGnQFjbK8fboy8s4Y0h3kzt80PR0UdG5ISItyX13Y5qRT/ZzY mmBqz6GP0nBrjPeEZekZOBhAXBGkVKgT8fwmU5Dbgy6BdIOfxl3J4b2RmQKO6yXon3Qokou/9bdnt+ ZsC64cbUSRMZgd/I1NG8bNRmK7ocrzxkjTlvudYRmguhct/ExgRmZWL0PPR43p+ZGBcu5Mv8T6Ktmg C5qi1CMJZqbNaDJyWFwLWgUIj4zzHFIQSJJadAmgkQ+5a6shlQjiQUOV6PMUV38tWpkEctn26qFBc4 Hd/cCfJqXgb2p9AjbrdoNHBahslkU/TpIcYcdL8Ptb8OPYMBpVCDT8adxCc5vLur5VKjrMJJQyEBRw UAaAEuAR4+IzT0ye1E38MbqKQzuoxosBwcmSCjaE0rH/oQ1/CSz+w3cKWcFA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In preparation for reducing the use of ksize(), explicitly track the
+size of scan_cmd allocations. This also allows for noticing if the scan
+size changes unexpectedly. Note that using ksize() was already incorrect
+here, in the sense that ksize() would not match the actual allocation
+size, which would trigger future run-time allocation bounds checking.
+(In other words, memset() may know how large scan_cmd was allocated for,
+but ksize() will return the upper bounds of the actually allocated memory,
+causing a run-time warning about an overflow.)
 
-On Fri, Sep 23, 2022 at 7:09 AM Judy Hsiao <judyhsiao@chromium.org> wrote:
->
-> Put sound node and lpass_cpu node settings for boards that use rt5682
-> codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
-> choices of headset codec for herobrine projects. Common audio setting
-> for the internal speaker is in sc7280-herobrine.dtsi.
->
-> Change Since V4
-> - Rebase and include sc7280-herobrine-villager-r0.dts change.
->
-> Changes Since V3:
-> - Remove Change-Id in the commit message.
-> - Add dependency in cover letter.
->
-> Changes Since V2:
-> - Fix sc7280-herobrine-audio-rt5682.dtsi syntax.
->
-> Changes Since V1:
-> - Not to include the herobrine-villager-r0.dts changes in this patch
->   series to avoid conflict.
->
-> Judy Hsiao (3):
->   arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
->   arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
->   arm64: dts: qcom: sc7280: Include sc7280-herobrine-audio-rt5682.dtsi
->     in herobrine-r1 and villager-r0
->
->  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 122 ++++++++++++++++++
->  .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
->  .../dts/qcom/sc7280-herobrine-villager-r0.dts |   1 +
->  .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  30 +++++
->  4 files changed, 154 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+Cc: Gregory Greenman <gregory.greenman@intel.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Luca Coelho <luciano.coelho@intel.com>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Cc: Miri Korenblit <miriam.rachel.korenblit@intel.com>
+Cc: Ilan Peer <ilan.peer@intel.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Sending this stand-alone for the wireless tree, since it does not
+explicitly depend on the ksize() series.
+---
+ drivers/net/wireless/intel/iwlwifi/dvm/dev.h  |  1 +
+ drivers/net/wireless/intel/iwlwifi/dvm/scan.c | 10 ++++++++--
+ drivers/net/wireless/intel/iwlwifi/mvm/mvm.h  |  3 ++-
+ drivers/net/wireless/intel/iwlwifi/mvm/ops.c  |  3 ++-
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c |  6 +++---
+ 5 files changed, 16 insertions(+), 7 deletions(-)
 
-Please sync the Qualcomm tree upstream. I can tell you didn't since
-you had the wrong email address for Bjorn. Mailmap should have
-converted it to the kernel.org one.
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
+index bbd574091201..1a9eadace188 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
+@@ -696,6 +696,7 @@ struct iwl_priv {
+ 	/* Scan related variables */
+ 	unsigned long scan_start;
+ 	unsigned long scan_start_tsf;
++	size_t scan_cmd_size;
+ 	void *scan_cmd;
+ 	enum nl80211_band scan_band;
+ 	struct cfg80211_scan_request *scan_request;
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/scan.c b/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
+index 2d38227dfdd2..a7e85c5c8c72 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/scan.c
+@@ -626,7 +626,7 @@ static int iwlagn_request_scan(struct iwl_priv *priv, struct ieee80211_vif *vif)
+ 	u8 active_chains;
+ 	u8 scan_tx_antennas = priv->nvm_data->valid_tx_ant;
+ 	int ret;
+-	int scan_cmd_size = sizeof(struct iwl_scan_cmd) +
++	size_t scan_cmd_size = sizeof(struct iwl_scan_cmd) +
+ 			    MAX_SCAN_CHANNEL * sizeof(struct iwl_scan_channel) +
+ 			    priv->fw->ucode_capa.max_probe_length;
+ 	const u8 *ssid = NULL;
+@@ -649,9 +649,15 @@ static int iwlagn_request_scan(struct iwl_priv *priv, struct ieee80211_vif *vif)
+ 				       "fail to allocate memory for scan\n");
+ 			return -ENOMEM;
+ 		}
++		priv->scan_cmd_size = scan_cmd_size;
++	}
++	if (priv->scan_cmd_size < scan_cmd_size) {
++		IWL_DEBUG_SCAN(priv,
++			       "memory needed for scan grew unexpectedly\n");
++		return -ENOMEM;
+ 	}
+ 	scan = priv->scan_cmd;
+-	memset(scan, 0, scan_cmd_size);
++	memset(scan, 0, priv->scan_cmd_size);
+ 
+ 	scan->quiet_plcp_th = IWL_PLCP_QUIET_THRESH;
+ 	scan->quiet_time = IWL_ACTIVE_QUIET_TIME;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+index bf35e130c876..214b8a525cc6 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+@@ -860,6 +860,7 @@ struct iwl_mvm {
+ 
+ 	/* Scan status, cmd (pre-allocated) and auxiliary station */
+ 	unsigned int scan_status;
++	size_t scan_cmd_size;
+ 	void *scan_cmd;
+ 	struct iwl_mcast_filter_cmd *mcast_filter_cmd;
+ 	/* For CDB this is low band scan type, for non-CDB - type. */
+@@ -1705,7 +1706,7 @@ int iwl_mvm_update_quotas(struct iwl_mvm *mvm, bool force_upload,
+ int iwl_mvm_reg_scan_start(struct iwl_mvm *mvm, struct ieee80211_vif *vif,
+ 			   struct cfg80211_scan_request *req,
+ 			   struct ieee80211_scan_ies *ies);
+-int iwl_mvm_scan_size(struct iwl_mvm *mvm);
++size_t iwl_mvm_scan_size(struct iwl_mvm *mvm);
+ int iwl_mvm_scan_stop(struct iwl_mvm *mvm, int type, bool notify);
+ int iwl_mvm_max_scan_ie_len(struct iwl_mvm *mvm);
+ void iwl_mvm_report_scan_aborted(struct iwl_mvm *mvm);
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+index db43c8a83a31..b9cbb18b0dcb 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+@@ -1065,7 +1065,7 @@ iwl_op_mode_mvm_start(struct iwl_trans *trans, const struct iwl_cfg *cfg,
+ 	static const u8 no_reclaim_cmds[] = {
+ 		TX_CMD,
+ 	};
+-	int scan_size;
++	size_t scan_size;
+ 	u32 min_backoff;
+ 	struct iwl_mvm_csme_conn_info *csme_conn_info __maybe_unused;
+ 
+@@ -1299,6 +1299,7 @@ iwl_op_mode_mvm_start(struct iwl_trans *trans, const struct iwl_cfg *cfg,
+ 	mvm->scan_cmd = kmalloc(scan_size, GFP_KERNEL);
+ 	if (!mvm->scan_cmd)
+ 		goto out_free;
++	mvm->scan_cmd_size = scan_size;
+ 
+ 	/* invalidate ids to prevent accidental removal of sta_id 0 */
+ 	mvm->aux_sta.sta_id = IWL_MVM_INVALID_STA;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+index 582a95ffc7ab..acd8803dbcdd 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -2626,7 +2626,7 @@ static int iwl_mvm_build_scan_cmd(struct iwl_mvm *mvm,
+ 	u8 scan_ver;
+ 
+ 	lockdep_assert_held(&mvm->mutex);
+-	memset(mvm->scan_cmd, 0, ksize(mvm->scan_cmd));
++	memset(mvm->scan_cmd, 0, mvm->scan_cmd_size);
+ 
+ 	if (!fw_has_capa(&mvm->fw->ucode_capa, IWL_UCODE_TLV_CAPA_UMAC_SCAN)) {
+ 		hcmd->id = SCAN_OFFLOAD_REQUEST_CMD;
+@@ -3091,7 +3091,7 @@ static int iwl_mvm_scan_stop_wait(struct iwl_mvm *mvm, int type)
+ 				     1 * HZ);
+ }
+ 
+-static int iwl_scan_req_umac_get_size(u8 scan_ver)
++static size_t iwl_scan_req_umac_get_size(u8 scan_ver)
+ {
+ 	switch (scan_ver) {
+ 	case 12:
+@@ -3104,7 +3104,7 @@ static int iwl_scan_req_umac_get_size(u8 scan_ver)
+ 	return 0;
+ }
+ 
+-int iwl_mvm_scan_size(struct iwl_mvm *mvm)
++size_t iwl_mvm_scan_size(struct iwl_mvm *mvm)
+ {
+ 	int base_size, tail_size;
+ 	u8 scan_ver = iwl_fw_lookup_cmd_ver(mvm->fw, SCAN_REQ_UMAC,
+-- 
+2.34.1
 
-In any case, with the correct address for Bjorn, I'd note that I think
-this patch series is ready to land if you're planning a 2nd pull
-request this cycle.
-
--Doug
