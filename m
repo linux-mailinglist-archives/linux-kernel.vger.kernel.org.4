@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA75E5E7140
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FCC5E7147
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiIWBNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S231896AbiIWBPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiIWBMs (ORCPT
+        with ESMTP id S231886AbiIWBPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:12:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3FD11E;
-        Thu, 22 Sep 2022 18:12:46 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYYx52FqDzHqFv;
-        Fri, 23 Sep 2022 09:10:33 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 09:12:44 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH next v2] i2c: hisi: Add support to get clock frequency from clock property
-Date:   Fri, 23 Sep 2022 09:14:17 +0800
-Message-ID: <20220923011417.78994-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        Thu, 22 Sep 2022 21:15:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA6482740
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=rsTGS41jSRpa3ny7/TEXpba94yI95UsUdciPuDQ763I=; b=RIGqpEPBKNh+D/oBqszjqJgKNh
+        uWz1lSnZzfgwj1bKzGe8vjLIpWCt9Pwq5TAmhrnia71uNx9PXHm9kzK9wG6PXZcjmiNbvkSihOIj9
+        BwAH7pr9BUEI50ZqHSoAxsgQ7d5B/mUkQe4OlRJvw6nYFKxVHkaebAuHOQFdUTDZQhM3LH+/t8hAl
+        N0iWwNXqwTM8XsnHJKy/p3jzAsyCU/geQbsqi5vjEl8LKHB8Uzt4XY2gWTOGfTj0NggqFzzbbtXzZ
+        nW8SzS4kpqndLEWhhEhN5BvtCfzaBViq3SaHFnTZsxMdAyk10TId+tVeDqO6ypqcj7XE7Lwe337ct
+        OeoODnTw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obXHD-000wCR-2w; Fri, 23 Sep 2022 01:14:47 +0000
+Message-ID: <d61b11b9-620e-698a-b826-22b2604a9234@infradead.org>
+Date:   Thu, 22 Sep 2022 18:14:45 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] fs/ntfs3: fix negative shift size in
+ true_sectors_per_clst()
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Shigeru Yoshida <syoshida@redhat.com>
+Cc:     syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, ntfs3@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+References: <000000000000f8b5ef05dd25b963@google.com>
+ <4b37f037-3b10-b4e4-0644-73441c8fa0af@I-love.SAKURA.ne.jp>
+ <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
+ <34b60d0ed48e4384e82a29020702ee2471092fb1.camel@perches.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <34b60d0ed48e4384e82a29020702ee2471092fb1.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support the driver to obtain clock information by clk_rate or
-clock property. Find clock first, if not, fall back to clk_rate.
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
-Change since v1:
-- Ordered struct field to inverted triangle.
-- Use devm_clk_get_optional_enabled().
-- Use IS_ERR_OR_NULL.
-Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
 
- drivers/i2c/busses/i2c-hisi.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+On 9/22/22 17:47, Joe Perches wrote:
+> On Thu, 2022-09-22 at 17:38 -0700, Randy Dunlap wrote:
+>> it appears that the NTFS3 maintainer is MIA again. :(
+> 
+> (I've no affiliation with the NTFS3 maintainer or paragon)
+> 
+> Perhaps the expectation of prioritized immediate turnaround is unrealistic.
+> 
+> It's free.  Be patient.
+> 
 
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 67031024217c..b3bcce71dd2c 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -8,6 +8,7 @@
- #include <linux/acpi.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -90,6 +91,7 @@ struct hisi_i2c_controller {
- 	struct i2c_adapter adapter;
- 	void __iomem *iobase;
- 	struct device *dev;
-+	struct clk *clk;
- 	int irq;
- 
- 	/* Intermediates for recording the transfer process */
-@@ -456,10 +458,16 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
--	if (ret) {
--		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
--		return ret;
-+	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-+	if (IS_ERR_OR_NULL(ctlr->clk)) {
-+		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-+			return ret;
-+		}
-+	} else {
-+
-+		clk_rate_hz = clk_get_rate(ctlr->clk);
- 	}
- 
- 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
+Yes Joe, I get that.
+
+https://lore.kernel.org/all/da20d32b-5185-f40b-48b8-2986922d8b25@stargateuniverse.net/
+
+
 -- 
-2.31.GIT
-
+~Randy
