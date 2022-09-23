@@ -2,242 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E290E5E7FD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367835E7FD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbiIWQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S232873AbiIWQb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiIWQap (ORCPT
+        with ESMTP id S232990AbiIWQbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:30:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4B13747F;
-        Fri, 23 Sep 2022 09:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663950644; x=1695486644;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oJ04UJqZ2SFWOpbly7/JeyXWxxXb1XM3+BXpIQEuFgg=;
-  b=TJX9snQuyjpIhqS2zUYYty77nob9FdBvN8L0ayh83ePmiOdk7DOmay+u
-   4m+ZASFescO2LwK4TX0J7OTBiDQuhpXMR2Mc1rZFo/9tR7mWSuGyDzGN8
-   XPPPGjjcOdVwzCVBMkupoQlf4MIBcG3ROy4D7jC2OfjwdaxUwmjs4+PSy
-   2RUirQ+o5Ah//xBx9RCEshbwSvHpkiKCTg3YYU9bcHsoUyONUjGIhuRnz
-   0clOqzkRxkav3nISj+YsvmYiAkSrgJVNffb8ZUyrZRE2fqDNZ3mrS63TK
-   wbHPaLGjXrshr/Aj6uTlI6dH2EUxWPN92Aqq4FWtW0EsBRsKi52FL3rBU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="326959510"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="326959510"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 09:30:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="651005944"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 09:30:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CDDDE238; Fri, 23 Sep 2022 19:30:58 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: [PATCH v1 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"
-Date:   Fri, 23 Sep 2022 19:30:51 +0300
-Message-Id: <20220923163051.36288-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220923163051.36288-1-andriy.shevchenko@linux.intel.com>
-References: <20220923163051.36288-1-andriy.shevchenko@linux.intel.com>
+        Fri, 23 Sep 2022 12:31:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E63A414A7A7;
+        Fri, 23 Sep 2022 09:31:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9487313D5;
+        Fri, 23 Sep 2022 09:31:16 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0EA53F73B;
+        Fri, 23 Sep 2022 09:31:09 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 17:31:08 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        viresh.kumar@linaro.org, robert.moore@intel.com,
+        punit.agrawal@bytedance.com, lukasz.luba@arm.com,
+        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Message-ID: <Yy3fTFVyAEx9R/qQ@arm.com>
+References: <20220912203722.205185-1-jeremy.linton@arm.com>
+ <20220912203722.205185-2-jeremy.linton@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912203722.205185-2-jeremy.linton@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 0f01017191384e3962fa31520a9fd9846c3d352f.
+Hi Jeremy,
 
-As pointed out by Ferry this breaks Dual Role support on
-Intel Merrifield platforms.
+On Monday 12 Sep 2022 at 15:37:22 (-0500), Jeremy Linton wrote:
+> PCC regions utilize a mailbox to set/retrieve register values used by
+> the CPPC code. This is fine as long as the operations are
+> infrequent. With the FIE code enabled though the overhead can range
+> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> based machines.
+> 
+> So, before enabling FIE assure none of the registers used by
+> cppc_get_perf_ctrs() are in the PCC region. Finally, add a module
+> parameter which can override the PCC region detection at boot or
+> module reload.
+> 
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/acpi/cppc_acpi.c       | 42 ++++++++++++++++++++++++++++++++++
+>  drivers/cpufreq/cppc_cpufreq.c | 25 ++++++++++++++++----
+>  include/acpi/cppc_acpi.h       |  5 ++++
+>  3 files changed, 68 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 1e15a9f25ae9..55693e6f7153 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1240,6 +1240,48 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
+>  
+> +/**
+> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
+> + *
+> + * CPPC has flexibility about how CPU performance counters are accessed.
+> + * One of the choices is PCC regions, which can have a high access latency. This
+> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
+> + *
+> + * Return: true if any of the counters are in PCC regions, false otherwise
+> + */
+> +bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_present_cpu(cpu) {
+> +		struct cpc_register_resource *ref_perf_reg;
+> +		struct cpc_desc *cpc_desc;
+> +
+> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +
+> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> +			return true;
+> +
+> +
+> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> +
+> +		/*
+> +		 * If reference perf register is not supported then we should
+> +		 * use the nominal perf value
+> +		 */
+> +		if (!CPC_SUPPORTED(ref_perf_reg))
+> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> +
+> +		if (CPC_IN_PCC(ref_perf_reg))
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> +
+>  /**
+>   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>   * @cpunum: CPU from which to read counters.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 24eaf0ec344d..9e2a48ac5830 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>  
+>  static struct cpufreq_driver cppc_cpufreq_driver;
+>  
+> +static enum {
+> +	FIE_UNSET = -1,
+> +	FIE_ENABLED,
+> +	FIE_DISABLED
+> +} fie_disabled = FIE_UNSET;
+> +
+>  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+> +module_param(fie_disabled, int, 0444);
 
-Reported-by: Ferry Toth <fntoth@gmail.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/dwc3/core.c | 55 +----------------------------------------
- drivers/usb/dwc3/drd.c  | 50 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 51 insertions(+), 54 deletions(-)
+Why 'int' and not 'bool' here?
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index b3ae53be2112..695e92b8b925 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -23,7 +23,6 @@
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/of.h>
--#include <linux/of_graph.h>
- #include <linux/acpi.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/reset.h>
-@@ -86,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
- 		 * mode. If the controller supports DRD but the dr_mode is not
- 		 * specified or set to OTG, then set the mode to peripheral.
- 		 */
--		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
-+		if (mode == USB_DR_MODE_OTG &&
- 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
- 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
- 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-@@ -1668,51 +1667,6 @@ static void dwc3_check_params(struct dwc3 *dwc)
- 	}
- }
- 
--static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
--{
--	struct device *dev = dwc->dev;
--	struct device_node *np_phy;
--	struct extcon_dev *edev = NULL;
--	const char *name;
--
--	if (device_property_read_bool(dev, "extcon"))
--		return extcon_get_edev_by_phandle(dev, 0);
--
--	/*
--	 * Device tree platforms should get extcon via phandle.
--	 * On ACPI platforms, we get the name from a device property.
--	 * This device property is for kernel internal use only and
--	 * is expected to be set by the glue code.
--	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
--		edev = extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
--
--	/*
--	 * Try to get an extcon device from the USB PHY controller's "port"
--	 * node. Check if it has the "port" node first, to avoid printing the
--	 * error message from underlying code, as it's a valid case: extcon
--	 * device (and "port" node) may be missing in case of "usb-role-switch"
--	 * or OTG mode.
--	 */
--	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
--	if (of_graph_is_present(np_phy)) {
--		struct device_node *np_conn;
--
--		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
--		if (np_conn)
--			edev = extcon_find_edev_by_node(np_conn);
--		of_node_put(np_conn);
--	}
--	of_node_put(np_phy);
--
--	return edev;
--}
--
- static int dwc3_probe(struct platform_device *pdev)
- {
- 	struct device		*dev = &pdev->dev;
-@@ -1848,13 +1802,6 @@ static int dwc3_probe(struct platform_device *pdev)
- 		goto err2;
- 	}
- 
--	dwc->edev = dwc3_get_extcon(dwc);
--	if (IS_ERR(dwc->edev)) {
--		ret = PTR_ERR(dwc->edev);
--		dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
--		goto err3;
--	}
--
- 	ret = dwc3_get_dr_mode(dwc);
- 	if (ret)
- 		goto err3;
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 039bf241769a..04a569a3cbab 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/extcon.h>
-+#include <linux/of_graph.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
-@@ -438,6 +439,51 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
- 
-+static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
-+{
-+	struct device *dev = dwc->dev;
-+	struct device_node *np_phy;
-+	struct extcon_dev *edev = NULL;
-+	const char *name;
-+
-+	if (device_property_read_bool(dev, "extcon"))
-+		return extcon_get_edev_by_phandle(dev, 0);
-+
-+	/*
-+	 * Device tree platforms should get extcon via phandle.
-+	 * On ACPI platforms, we get the name from a device property.
-+	 * This device property is for kernel internal use only and
-+	 * is expected to be set by the glue code.
-+	 */
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-+		edev = extcon_get_extcon_dev(name);
-+		if (!edev)
-+			return ERR_PTR(-EPROBE_DEFER);
-+
-+		return edev;
-+	}
-+
-+	/*
-+	 * Try to get an extcon device from the USB PHY controller's "port"
-+	 * node. Check if it has the "port" node first, to avoid printing the
-+	 * error message from underlying code, as it's a valid case: extcon
-+	 * device (and "port" node) may be missing in case of "usb-role-switch"
-+	 * or OTG mode.
-+	 */
-+	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
-+	if (of_graph_is_present(np_phy)) {
-+		struct device_node *np_conn;
-+
-+		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
-+		if (np_conn)
-+			edev = extcon_find_edev_by_node(np_conn);
-+		of_node_put(np_conn);
-+	}
-+	of_node_put(np_phy);
-+
-+	return edev;
-+}
-+
- #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
- #define ROLE_SWITCH 1
- static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
-@@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
- 	int ret, irq;
- 
-+	dwc->edev = dwc3_get_extcon(dwc);
-+	if (IS_ERR(dwc->edev))
-+		return PTR_ERR(dwc->edev);
-+
- 	if (ROLE_SWITCH &&
- 	    device_property_read_bool(dwc->dev, "usb-role-switch"))
- 		return dwc3_setup_role_switch(dwc);
--- 
-2.35.1
+IIUC, if you use 'bool' the user can pass any int/0/1/y/n/Y/N, which
+will result in fie_disabled properly having either the value 0 or 1
+(or default FIE_UNSET) if a parameter is not passed.
 
+Then
+'if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED)'
+can become
+'if (fie_disabled == FIE_UNSET)' or 'if (fie_disabled < 0)'.
+
+I feel I'm missing something, otherwise you would have done this
+already.
+
+Otherwise FWIW, it looks good to me.
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+Thanks,
+Ionela.
+
+> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>  
+>  /* Frequency invariance support */
+>  struct cppc_freq_invariance {
+> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu, ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	for_each_cpu(cpu, policy->cpus) {
+> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	/* policy->cpus will be empty here, use related_cpus instead */
+> @@ -229,7 +237,15 @@ static void __init cppc_freq_invariance_init(void)
+>  	};
+>  	int ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
+> +		fie_disabled = FIE_ENABLED;
+> +		if (cppc_perf_ctrs_in_pcc()) {
+> +			pr_info("FIE not enabled on systems with registers in PCC\n");
+> +			fie_disabled = FIE_DISABLED;
+> +		}
+> +	}
+> +
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kworker_fie = kthread_create_worker(0, "cppc_fie");
+> @@ -247,7 +263,7 @@ static void __init cppc_freq_invariance_init(void)
+>  
+>  static void cppc_freq_invariance_exit(void)
+>  {
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kthread_destroy_worker(kworker_fie);
+> @@ -936,6 +952,7 @@ static void cppc_check_hisi_workaround(void)
+>  		    wa_info[i].oem_revision == tbl->oem_revision) {
+>  			/* Overwrite the get() callback */
+>  			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+> +			fie_disabled = FIE_DISABLED;
+>  			break;
+>  		}
+>  	}
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index f73d357ecdf5..c5614444031f 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_enable(int cpu, bool enable);
+>  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> +extern bool cppc_perf_ctrs_in_pcc(void);
+>  extern bool acpi_cpc_valid(void);
+>  extern bool cppc_allow_fast_switch(void);
+>  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+>  {
+>  	return -ENOTSUPP;
+>  }
+> +static inline bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	return false;
+> +}
+>  static inline bool acpi_cpc_valid(void)
+>  {
+>  	return false;
+> -- 
+> 2.37.1
+> 
