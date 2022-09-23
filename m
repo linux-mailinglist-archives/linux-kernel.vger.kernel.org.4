@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08A35E803B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08EF5E803E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 18:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiIWQ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 12:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
+        id S230369AbiIWQ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 12:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiIWQ64 (ORCPT
+        with ESMTP id S229525AbiIWQ7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 12:58:56 -0400
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Sep 2022 09:58:52 PDT
-Received: from omta33.uswest2.a.cloudfilter.net (omta33.uswest2.a.cloudfilter.net [35.89.44.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7DA148A0E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 09:58:52 -0700 (PDT)
-Received: from eig-obgw-6001a.ext.cloudfilter.net ([10.0.30.140])
-        by cmsmtp with ESMTP
-        id ba3TouGAasYJKblzOoXilM; Fri, 23 Sep 2022 16:57:22 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id blzModnmlJzQ5blzMoIcOQ; Fri, 23 Sep 2022 16:57:21 +0000
-X-Authority-Analysis: v=2.4 cv=MaV/Brzf c=1 sm=1 tr=0 ts=632de571
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=FqOIB2A0pCpItkPd+H5VLg==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10
- a=wYkD_t78qR0A:10 a=1Vq8JeZ7YxIarabX38cA:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FLY2ZY7ymRr6++gvseBT22t1fbdbp4dMhqB4jOqPPM8=; b=JfrxsHO/L0pRqzR5yIPhwxR8tC
-        PSS37c4n08S2ZiudUSufuraw+SgKPf8+MkA1dUQmo8Gm8OtQ7K2B+HM0EdWMSNFDu+Pm9L+Rn2bFb
-        OS9JoS29kihy6g/Z4Y/kABajSDd+o92IszuhMmcytgmETEy70wrbu6VcILf6k+IXagWtZSJHieFi/
-        bKzd3XbNaOo3LrqAHGwbttQChLl/dAgrHWEsaeC+bMcQaCsIATwgJMx6vZnLSTZk9mv2IWLWMmYxd
-        fItcyeKzD1loGySu8CLY+EmFzvxWJTx+NYrEMSNUg+Nmm3nD7/q0+5+5dFzEQpFXRjZycD3K+81rV
-        eD6acjLA==;
-Received: from 187.184.158.46.cable.dyn.cableonline.com.mx ([187.184.158.46]:65034 helo=[192.168.0.24])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1oblzL-0014A3-2i;
-        Fri, 23 Sep 2022 11:57:19 -0500
-Message-ID: <80657fb9-97cf-0677-bc2d-0dbbac2b610a@embeddedor.com>
-Date:   Fri, 23 Sep 2022 11:57:15 -0500
+        Fri, 23 Sep 2022 12:59:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C831497A1;
+        Fri, 23 Sep 2022 09:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663952349; x=1695488349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CIRBiJPRHh+0D1EeS0RX65F9gDuYu+hhf6z3sGzOoSM=;
+  b=Es6xcQ46ards3kmV+xJB+aj0QiV+afDKisD3xstyIb7hEXKnEtyMKCN7
+   EeWV4NV9Vd/Sfi+FZdz2Rx52iV5U7kDfxFay7zuVcwznhdoA0SXCxIr8W
+   w5r0p3cDVkwe6ODXxYGF9jYTZvCjUWpuBjBanB5Sdmuej/zMF5svv/5mD
+   hRc8Meg1+W1HT0lbYd5KvsgSqI4JVX1M5eDT4JCcaVuZs1Y4Z/x4Otsb6
+   AcvZegd5B0POwbtinqowlAuwklhh0XuEJneRcdbOHH95xzjRFJMpGH8LX
+   Qvp5rsHXGfiMSIDLiEMO3kFH2hIw80pUQg5ALQc9SOT769LAYWk3MQhqs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="362448428"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="362448428"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 09:59:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="709359851"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Sep 2022 09:59:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1obm12-006ZuO-2Q;
+        Fri, 23 Sep 2022 19:59:04 +0300
+Date:   Fri, 23 Sep 2022 19:59:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        yangyicong@hisilicon.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH] libfs: fix negative value support in simple_attr_write()
+Message-ID: <Yy3l2IIFEjDWGNlF@smile.fi.intel.com>
+References: <20220918135036.33595-1-farbere@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH][next] powerpc: Fix fall-through warning for Clang
-Content-Language: en-US
-To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Scott Wood <oss@buserror.net>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-hardening@vger.kernel.org
-References: <Yxe8XTY5C9qJLd0Z@work>
- <166393161454.498456.8335142306216879652.b4-ty@ellerman.id.au>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <166393161454.498456.8335142306216879652.b4-ty@ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.158.46
-X-Source-L: No
-X-Exim-ID: 1oblzL-0014A3-2i
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187.184.158.46.cable.dyn.cableonline.com.mx ([192.168.0.24]) [187.184.158.46]:65034
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMTcb++bZ/Fx5eIm4TsSDXd9R9AqoZd9ermxdIaPrDh/tSwhAgq6gASJ6sCecV4vHa3K1XmM+l3bCtlQ1HRD4gaLjdiLAVDtxltXIp3Z01T90VjImiWj
- EcXOkCl1ada1mkx2tiVGd1ahKg7RcarFviNmD1N1qb7RSdUaH1nWQUyI+FwitR+zzxRzRnm2XqRD2Zw8zJiujBPKMNJHxX0DmKMK7YSAYz7bXUs4Tg7u2vXI
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220918135036.33595-1-farbere@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Sep 18, 2022 at 01:50:36PM +0000, Eliav Farber wrote:
+> After commit 488dac0c9237 ("libfs: fix error cast of negative value in
+> simple_attr_write()"), a user trying set a negative value will get a
+> '-EINVAL' error, because simple_attr_write() was modified to use
+> kstrtoull() which can handle only unsigned values, instead of
+> simple_strtoll().
+> 
+> This breaks all the places using DEFINE_DEBUGFS_ATTRIBUTE() with format
+> of a signed integer.
+> 
+> The u64 value which attr->set() receives is not an issue for negative
+> numbers.
+> The %lld and %llu in any case are for 64-bit value. Representing it as
+> unsigned simplifies the generic code, but it doesn't mean we can't keep
+> their signed value if we know that.
+> 
+> This change basically reverts the mentioned commit, but uses kstrtoll()
+> instead of simple_strtoll() which is obsolete.
 
-> Applied to powerpc/next.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 
-Great. :)
+and I prefer this one over spreading more macros with redundant formatting
+parameter.
 
-Thanks, Michael.
---
-Gustavo
+> Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  fs/libfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/libfs.c b/fs/libfs.c
+> index 31b0ddf01c31..3bccd75815db 100644
+> --- a/fs/libfs.c
+> +++ b/fs/libfs.c
+> @@ -1016,7 +1016,7 @@ ssize_t simple_attr_write(struct file *file, const char __user *buf,
+>  		goto out;
+>  
+>  	attr->set_buf[size] = '\0';
+> -	ret = kstrtoull(attr->set_buf, 0, &val);
+> +	ret = kstrtoll(attr->set_buf, 0, &val);
+>  	if (ret)
+>  		goto out;
+>  	ret = attr->set(attr->data, val);
+> -- 
+> 2.37.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
