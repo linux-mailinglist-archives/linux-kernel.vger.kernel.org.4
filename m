@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84465E764F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FA45E7653
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 10:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiIWI4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 04:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S231472AbiIWI6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 04:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiIWI4e (ORCPT
+        with ESMTP id S231433AbiIWI6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 04:56:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1966812C6BC;
-        Fri, 23 Sep 2022 01:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SkqBatrA9DneO/UKQ0v5tMtiBd8FB0TJQs5jyjIjxvk=; b=0aKjtOPMYPRnmvlt7yGemeYy5A
-        zF2Jjz7sYTNx0Cqn3rlVnsF487Xfhi/Na+iy2zzkh/4g/Zf8gAcB7ZhSzuPoGvpm18Ai3jjH9x7gv
-        NPBycYy/hluSQU0hswWjgAJke1l7RcVUFc2dY+LU3hunt0oGaO7jG7/ldyGZqyEc+y320Kf5quwH/
-        BeOtlgib4VVrcAfRCWOVLTNMVbe1nexHFf/RWf5oZq5JhK+68Yj+/qAmz/lyk6ZWthqQY94W8oD/d
-        h3RyBdjgYR0U4yWZlK1eIX6YSmQyIMfVOgUPR+dpWpUcVXxJdHSl/TIkw5oG5RP5mlz/hURa/VgT6
-        6acfMZcQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obeU2-0036FW-Pe; Fri, 23 Sep 2022 08:56:30 +0000
-Date:   Fri, 23 Sep 2022 01:56:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v3 3/5] block, bfq: don't disable wbt if
- CONFIG_BFQ_GROUP_IOSCHED is disabled
-Message-ID: <Yy10vjnxAvca8Ee1@infradead.org>
-References: <20220922113558.1085314-1-yukuai3@huawei.com>
- <20220922113558.1085314-4-yukuai3@huawei.com>
+        Fri, 23 Sep 2022 04:58:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E612412CC8F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 01:58:05 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8481660223B;
+        Fri, 23 Sep 2022 09:58:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663923484;
+        bh=HojcwP0javbKhpGvdwYvvMIBYQZE3Xeo/wFOgWUndY8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iD16nnr+RBRce4iSEjLfgXsSPpjxVUhKVYNDIXj/tboj1LMFvkL2WS4pBlSJH/Wj3
+         JIzxEDdPjGy0cQxcs/wWIQwfxLLn3KpQ3DWI0EHTSJ+DM0sgJuYpQQTTooQjBC5ync
+         V+jtcIxZWGSJwPBpRmWLzSCC4EIFR7EigEopN26wCAZxAsUsMzqMCZnaL3Of4+yfIL
+         45wDe9NSPnTFsVNdDOHEOlgT1imX6pPELEQPQKDUpdbv4sMj5gyYgGAbbGYGgpq7TR
+         5dL9kwI+BZSq/5PU8wd7MWc66JnIOTlQzF7TIe/EEZF+jA4FfCNKU5arfF2gZL95jb
+         RMyhMhX7rjMiA==
+Message-ID: <c8205995-5398-6b23-7e35-c441c42232d1@collabora.com>
+Date:   Fri, 23 Sep 2022 10:58:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922113558.1085314-4-yukuai3@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 6/6] ASoC: mediatek: mt8186-rt5682: Expose individual
+ headset jack pins
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        "chunxu.li" <chunxu.li@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220922235951.252532-1-nfraprado@collabora.com>
+ <20220922235951.252532-7-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220922235951.252532-7-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 07:35:56PM +0800, Yu Kuai wrote:
-> wbt and bfq should work just fine if CONFIG_BFQ_GROUP_IOSCHED is disabled.
+Il 23/09/22 01:59, Nícolas F. R. A. Prado ha scritto:
+> The rt5682 codec is able to distinguish between two event types:
+> headphone insertion/removal and headset microphone insertion/removal.
+> However, currently, the mt8186-rt5682 driver exposes a single kcontrol
+> for the headset jack, so userspace isn't able to differentiate between
+> the two events.
+> 
+> Add a definition for the headset jack pins, so that a separate jack
+> kcontrol is created for each one, allowing userspace to track and handle
+> them individually.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Umm, wouldn't this be something decided at runtime, that is not
-if CONFIG_BFQ_GROUP_IOSCHED is enable/disable in the kernel build
-if the hierarchical cgroup based scheduling is actually used for a
-given device?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
