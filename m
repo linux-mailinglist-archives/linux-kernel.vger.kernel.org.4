@@ -2,175 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623005E7A04
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17E25E7A05
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 13:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiIWLxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 07:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S229993AbiIWLxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 07:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiIWLxE (ORCPT
+        with ESMTP id S232082AbiIWLxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:53:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C285138F0D;
-        Fri, 23 Sep 2022 04:53:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 23 Sep 2022 07:53:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC63138F0D
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYrBP425Hz4wgr;
-        Fri, 23 Sep 2022 21:53:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1663933981;
-        bh=5zdv+RLQqAtc8v2pEpSSPDxmbj5GL+BOe3bxhxAoGfc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qETfDxGu9ZXwu/AumnaN7OPLzZMy3Bxe8dM6D4G+xnu7ltnDBA4AUdpjz5I5AC+f1
-         /wa1yRlaR7KUJyny//UTSZqrMeLiJ+QUG6/YKiq0lNX1bOdb8OjgcuxFlHZvaiznk6
-         EYGyh8YYZyuYs/ilfvNFNsMyCpVkUOWOjbAff88Hx3I0lKZPjX2Yjqs73vg+AK+Fa4
-         oxi+0pKawM04MeLCMpzWgBCTWFg3/Gr+qSgsK2LQKfw9e5MGrzcxq9A3uBbzNNLKS5
-         cUlHWkBaJ4KdAyPvSXG2WRLITbnHJzle4P8BJnBRMXgwO8iZ8LC0pesN1PxXQfaW44
-         83DLl+D8ZhgeQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Helge Deller <deller@gmx.de>, Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-parisc@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.0-rc5
-In-Reply-To: <a26ed5e3-1b87-22c5-2761-141a0bdb55e6@gmx.de>
-References: <CAHk-=wjG0js0MpsoH3-yvp05u_gXHu+uhkvqdAZDVb=9xUmX=g@mail.gmail.com>
- <20220912091325.1780524-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2209121120590.1176514@ramsan.of.borg>
- <647e2197-8f89-f5a0-a60b-476aff2fd134@gmx.de>
- <d54e7e26-7797-bedb-142a-2101a4e497de@infradead.org>
- <812d649c-380b-8a7e-1584-891c7e643656@gmx.de>
- <a26ed5e3-1b87-22c5-2761-141a0bdb55e6@gmx.de>
-Date:   Fri, 23 Sep 2022 21:52:57 +1000
-Message-ID: <87r102z4rq.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D55CB82EEF
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E3FC433D7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 11:53:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OWdhdAy6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663934013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hx2pBFFQZ2hQiwU5v3ghPr4Q2vXv/4ROSWTFrLQojKc=;
+        b=OWdhdAy6461hrSZDn1oOkxuOWPdoHmDlAyhAR9s4fY/kVfJ4I9ukjzBUusvQycSrzMgMvB
+        O1BEZPXgIalatIb5SLNR7B6fEwvfXlcxxyinprynMp48Udrf1PrAhZPwoVqRdZHAJHZqhY
+        Xxe5e+D3bbTO1xa73JDRphp0Pv79ONo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b8acf6da (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 23 Sep 2022 11:53:33 +0000 (UTC)
+Received: by mail-ua1-f52.google.com with SMTP id i17so4779232uaq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 04:53:32 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0A0NqNTC81vxa5qoR+wCJZF7aY0YZee9elK4wDuMEBn+izPQr5
+        nx407aegDvRm5mjFcsbqMdvlt2kXp0OGVcpG1Uw=
+X-Google-Smtp-Source: AMsMyM6JgQZl7kN56NJPsJMgp1u5o38zeZ+Zm6L/2SbaH3FXXFcNFbp0pTGCriZr4LvCxpR7U8wCLl+nQ8DIK8eOEVY=
+X-Received: by 2002:ab0:6154:0:b0:398:c252:23d8 with SMTP id
+ w20-20020ab06154000000b00398c25223d8mr3488274uan.65.1663934012143; Fri, 23
+ Sep 2022 04:53:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921185208.3549140-1-Jason@zx2c4.com> <20220921185208.3549140-2-Jason@zx2c4.com>
+ <CAMuHMdUuM85s1APoxRmXnw13hHHEGgo8Z9EKvpV6maaZPaVUfA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUuM85s1APoxRmXnw13hHHEGgo8Z9EKvpV6maaZPaVUfA@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 23 Sep 2022 13:53:21 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
+Message-ID: <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] m68k: virt: generate new RNG seed on reboot
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Helge Deller <deller@gmx.de> writes:
-> On 9/20/22 23:07, Helge Deller wrote:
->> On 9/20/22 22:29, Randy Dunlap wrote:
->>>
->>>
->>> On 9/20/22 13:23, Helge Deller wrote:
->>>> On 9/12/22 11:22, Geert Uytterhoeven wrote:
->>>>> On Mon, 12 Sep 2022, Geert Uytterhoeven wrote:
->>>>>> JFYI, when comparing v6.0-rc5[1] to v6.0-rc4[3], the summaries are:
->>>>>> =C2=A0=C2=A0- build errors: +16/-1
->>>>>
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: .cfi_endproc without corresponding .cfi_startproc:=C2=A0 =
-=3D> 32
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: bad or irreducible absolute expression:=C2=A0 =3D> 16
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: junk at end of line, first unrecognized character is `:':=
-=C2=A0 =3D> 16
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':=C2=A0 =3D> 29
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: no such instruction: `ldi 0,%r20':=C2=A0 =3D> 30
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_sy=
-scall.S: Error: no such instruction: `ldw 0(%sp),%r31':=C2=A0 =3D> 26
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: no such instruction: `ble 0x100(%sr2,%r0)':=C2=A0 =3D> 46, 51
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: no such instruction: `ldi 0,%r25':=C2=A0 =3D> 44
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: no such instruction: `ldi 1,%r25':=C2=A0 =3D> 49
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: no such instruction: `ldi 173,%r20':=C2=A0 =3D> 45, 50
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.callinfo':=C2=A0 =3D> 40
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.entry':=C2=A0 =3D> 41
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.exit':=C2=A0 =3D> 54
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.proc':=C2=A0 =3D> 39
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.procend':=C2=A0 =3D> 55
->>>>> =C2=A0=C2=A0=C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S=
-: Error: unknown pseudo-op: `.stringz':=C2=A0 =3D> 76
->>>>>
->>>>> parisc-gcc8/generic-32bit_defconfig
->>>>>
->>>>>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/80e78fcce8=
-6de0288793a0ef0f6acf37656ee4cf/ (all 135 configs)
->>>>>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e18e42e4b=
-280c85b76967a9106a13ca61c16179/ (all 135 configs)
->>>>
->>>> I see those errors on the kiss website, but I'm unable to reproduce th=
-em.
->>>> Downloaded that .config, used same compiler (from https://mirrors.edge=
-.kernel.org/pub/tools/crosstool/files/bin/x86_64/8.5.0/)....
->>>> Not sure how to get this fixed.
->>>> If someone has an idea or can reproduce, please let me know.
->>>
->>> Hi,
->>> I can reproduce it using the (x86_64 hosted) crosstool gcc-12.1.0 from =
-kernel.org that Arnd builds/provides.
->>> https://mirrors.edge.kernel.org/pub/tools/crosstool/
->>
->> Ah....
->> Building with "make=C2=A0 ARCH=3Dparisc=C2=A0 CROSS_COMPILE=3D/some/path=
-/nolibc/hppa-linux/bin/hppa-linux-"
->> uses this CROSS_COMPILE prefix for compiling the .c files, but not for t=
-he .S files.
->> So, you will end up with the default hppa-linux-gcc installed on the sys=
-tem, not the one provided
->> by CROSS_COMPILE.
->
-> Ok, it seems CROSS_COMPILE doesn't work as one would expect (and as it di=
-d in the past).
-> I'm not sure if this can be fixed.
->
-> Since kernel v5.18 the parisc kernel comes with a 32-bit and a 64-bit vDS=
-O.
-> On parisc we have two compilers:
-> - hppa-linux-gnu-gcc for 32-bit, and
-> - hppa64-linux-gnu-gcc for 64-bit code.
-> There is no -m64 flag like on x86 which can be used to just use one compi=
-ler for both targets.
-> If you provide a CROSS_COMPILE command, you can only provide either a 32-=
- or 64-bit compiler,
-> so e.g. you won't be able to build the 64-bit kernel and a 32-bit vDSO wi=
-th the same compiler.
->
-> Instead of using CROSS_COMPILE, please just install your compiler(s) and =
-make sure that
-> the compiler(s) can be found via the PATH environment variable.
-> In arch/parisc/Makefile (line 42ff) various variants like hppa-linux-gnu-=
-gcc or
-> hppa1.1-unknown-linux-gnu-gcc will be searched.
->
-> So, instead of
->   make ARCH=3Dparisc CROSS_COMPILE=3D/opt/cross/kisskb/korg/gcc-8.5.0-nol=
-ibc/hppa-linux/bin/hppa-linux-
-> please use for 32-bit:
->   PATH=3D/opt/cross/kisskb/korg/gcc-8.5.0-nolibc/hppa-linux/bin/:$PATH   =
-  make ARCH=3Dparisc
-> or for 64-bit:
->   PATH=3D/opt/cross/kisskb/korg/gcc-8.5.0-nolibc/hppa64-linux/bin/:$PATH =
-  make ARCH=3Dparisc64
+Hi Geert,
 
-I actually did that change a while back, but hadn't pushed it to one of
-the builders -_-
+On Fri, Sep 23, 2022 at 1:30 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > +static struct bi_record *rng_seed_record;
+>
+> This can be const...
+> >                 memzero_explicit((void *)data, len + 2);
+> > +                /* Store a reference to be filled in on reboot. */
+> > +               rng_seed_record = (void *)record;
+>
+> ... so this cast can be dropped.
 
-I've done that now, so we shouldn't see this error in future.
+Will do.
 
-Sorry for the noise.
+>
+> > +
+> >  static void virt_reset(void)
+> >  {
+> >         void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
+> >
+> > +       if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
+> > +               u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
+> > +               get_random_bytes((u8 *)rng_seed_record->data + 2, len);
+> > +               *(u16 *)rng_seed_record->data = len;
+>
+> Wouldn't it be simpler to just use the existing length?
+>
+>     if (rnd_seed_record) {
+>            u16 len = be16_to_cpup(data);
+>            get_random_bytes((u8 *)rng_seed_record->data + 2, len);
+>     }
 
-cheers
+No, that would not work. len is 0 there, since we zero out the bytes
+after use for forward secrecy, and we zero out the length, so that we
+don't wind up feeding it zeros.
+
+>
+> However, I have my doubts this will actually work. Was this tested?
+> The bootinfo is passed from userspace, usually by reading
+> /proc/bootinfo, and adapting it where needed.
+> So I think you should implement this in kexec-tools instead.
+
+Yes, this was tested. This is to handle the reboot case, just as the
+commit subject says. Specifically, calling `reboot(RB_AUTOBOOT);`.
+
+It does *not* handle kexec. For that, indeed, kexec-tools needs to be
+augmented, but that's a separate patch that doesn't need to interact
+with this one.
+
+The way I tested this is by having my initramfs just call
+`reboot(RB_AUTOBOOT);`, and having add_bootloader_randomness() print
+its contents to the console. I checked that it was both present and
+different every time.
+
+I'll send a v2 with that const fix.
+
+Jason
