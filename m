@@ -2,173 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF295E7795
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265535E7799
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 11:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbiIWJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S232036AbiIWJr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 05:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbiIWJp7 (ORCPT
+        with ESMTP id S231402AbiIWJqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:45:59 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6267B5FDA;
-        Fri, 23 Sep 2022 02:44:34 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYnGs5qj0zpVMc;
-        Fri, 23 Sep 2022 17:41:41 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 17:44:32 +0800
-Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
- open coded
-To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-7-yanaijie@huawei.com>
- <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <3c1aa262-7e9b-cb6c-e8a1-a1a201050a10@huawei.com>
-Date:   Fri, 23 Sep 2022 17:44:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 23 Sep 2022 05:46:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA94E368F
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 02:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663926347; x=1695462347;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yQ/gbyEh98eRxOWv8HgC0KvOUOa4qIrZGDQmAl+Ttfk=;
+  b=B6Hf1d3RrfsXEAyNBCv94pgJzv3LFOemOhmfB0V4eBslzde/Q1zER17g
+   sc34caKkFXsEuiAX/sbtiZMNFfRljc6ol1W8jRv5eEzv00d+TNHt2/dhc
+   dmsm3OIyn1rtjePzb8RXlP26kD4w/tg/qAneLyncuRcrBR3RLlbY/gHY3
+   fsWxwpUd7f5pe0ZDuczFh68M1/rGx2jYff5sSkdXsewex+XsnOmp/S5vH
+   8CT7ltV9lC4lz/4OgRBWc/Ksh813GW4BqmJh0SIK7M767ucKqWaHFil8o
+   7R76zNozGQ/zkk3p0iIqD8MshoLMOnEfnRRHpnRz6x6Nkdj1YqN0F1lA6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301439141"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="301439141"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 02:45:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="948963001"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2022 02:45:44 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obfFf-0005Xs-2p;
+        Fri, 23 Sep 2022 09:45:43 +0000
+Date:   Fri, 23 Sep 2022 17:44:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Subject: s390x-linux-ld: kallsyms.c:undefined reference to `__tsan_memcpy'
+Message-ID: <202209231726.eAy8Z0ZF-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bf682942cd26ce9cd5e87f73ae099b383041e782
+commit: 647cafa22349026a8435030e9157074ab7fe5710 bpf: add a ksym BPF iterator
+date:   2 months ago
+config: s390-buildonly-randconfig-r001-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231726.eAy8Z0ZF-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=647cafa22349026a8435030e9157074ab7fe5710
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 647cafa22349026a8435030e9157074ab7fe5710
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-On 2022/9/22 22:24, John Garry wrote:
-> On 17/09/2022 11:43, Jason Yan wrote:
->> The sas address comparation of domain device and expander phy is open
->> coded. Now we can replace it with dev_and_phy_addr_same().
->>
->> Signed-off-by: Jason Yan <yanaijie@huawei.com>
->> ---
->>   drivers/scsi/pm8001/pm8001_sas.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
->> b/drivers/scsi/pm8001/pm8001_sas.c
->> index 8e3f2f9ddaac..bb1b1722f3ee 100644
->> --- a/drivers/scsi/pm8001/pm8001_sas.c
->> +++ b/drivers/scsi/pm8001/pm8001_sas.c
->> @@ -649,8 +649,7 @@ static int pm8001_dev_found_notify(struct 
->> domain_device *dev)
->>           for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
-> 
-> This code seems the same between many libsas LLDDs - could we factor it 
-> out into libsas? If so, then maybe those new helpers could be put in 
-> sas_internal.h
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-For the part of putting helpers in sas_internal.h, this needs to make 
-the helpers exported. I think it's not worth to do this because they are 
-very small. I'd still like to make them inline functions in libsas.h 
-such as:
+All errors (new ones prefixed by >>):
 
+   hrtimer.c:(.text+0x1e92): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/hrtimer.o: in function `hrtimer_nanosleep':
+   hrtimer.c:(.text+0x332c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/hrtimer.o: in function `__se_sys_nanosleep':
+   hrtimer.c:(.text+0x350a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/hrtimer.o:hrtimer.c:(.text+0x36be): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `tk_set_wall_to_mono':
+   timekeeping.c:(.text+0x3a7e): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_update':
+   timekeeping.c:(.text+0x3d64): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_inject_offset':
+   timekeeping.c:(.text+0x3f64): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x417a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_clock64':
+   timekeeping.c:(.text+0x4de2): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
+   timekeeping.c:(.text+0x517e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x5190): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/timekeeping.o:timekeeping.c:(.text+0x5432): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
+   timekeeping.c:(.text+0x54c8): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: timekeeping.c:(.text+0x55fc): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x5620): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_suspend':
+   timekeeping.c:(.text+0x584e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x58c0): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x5956): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x597c): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: timekeeping.c:(.text+0x59b0): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: timekeeping.c:(.text+0x5a5a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_advance':
+   timekeeping.c:(.text+0x5f92): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x6572): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.text+0x66f2): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `getboottime64':
+   timekeeping.c:(.text+0x67b4): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `do_adjtimex':
+   timekeeping.c:(.text+0x7382): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `update_fast_timekeeper':
+   timekeeping.c:(.text+0x794c): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: timekeeping.c:(.text+0x7970): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_wall_and_boot_offset':
+   timekeeping.c:(.init.text+0x46): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_init':
+   timekeeping.c:(.init.text+0x7e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x90): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x146): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x198): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x1b6): undefined reference to `__tsan_memset'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x1da): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: timekeeping.c:(.init.text+0x34a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/ntp.o: in function `__do_adjtimex':
+   ntp.c:(.text+0xf8c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: ntp.c:(.text+0xf9e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/clocksource.o: in function `sysfs_get_uname':
+   clocksource.c:(.text+0xdd0): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/clocksource.o: in function `current_clocksource_store':
+   clocksource.c:(.text+0x10d0): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/clocksource.o: in function `unbind_clocksource_store':
+   clocksource.c:(.text+0x1142): undefined reference to `__tsan_memset'
+   s390x-linux-ld: clocksource.c:(.text+0x118c): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/clocksource.o: in function `boot_override_clocksource':
+   clocksource.c:(.init.text+0x128): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/jiffies.o: in function `register_refined_jiffies':
+   jiffies.c:(.text+0x36): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarmtimer_suspend':
+   alarmtimer.c:(.text+0x26a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarm_class':
+   alarmtimer.c:(.text+0x35a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/alarmtimer.o: in function `get_boottime_timespec':
+   alarmtimer.c:(.text+0x149e): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/alarmtimer.o: in function `alarmtimer_init':
+   alarmtimer.c:(.init.text+0xaa): undefined reference to `__tsan_memset'
+   s390x-linux-ld: alarmtimer.c:(.init.text+0xd8): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_settime':
+   posix-stubs.c:(.text+0x56): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/posix-stubs.o: in function `do_clock_gettime':
+   posix-stubs.c:(.text+0xfe): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_gettime':
+   posix-stubs.c:(.text+0x16c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_nanosleep':
+   posix-stubs.c:(.text+0x2c4): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/clockevents.o: in function `unbind_device_store':
+   clockevents.c:(.text+0x1808): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/tick-sched.o: in function `tick_cancel_sched_timer':
+   tick-sched.c:(.text+0x1f62): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/test_udelay.o: in function `udelay_test_write':
+   test_udelay.c:(.text+0x30): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/time/test_udelay.o:test_udelay.c:(.text+0x15c): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/smp.o: in function `smp_call_function_single':
+   smp.c:(.text+0x1084): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: smp.c:(.text+0x167a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: smp.c:(.text+0x1bf0): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/smp.o: in function `smp_call_function_many_cond':
+   smp.c:(.text+0x295e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: smp.c:(.text+0x30b6): undefined reference to `__tsan_memset'
+   s390x-linux-ld: smp.c:(.text+0x395a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/smp.o:smp.c:(.text+0x3fae): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/kallsyms.o: in function `update_iter':
+   kallsyms.c:(.text+0x1370): undefined reference to `__tsan_memcpy'
+>> s390x-linux-ld: kallsyms.c:(.text+0x13a2): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kallsyms.c:(.text+0x148c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/acct.o: in function `__se_sys_acct':
+   acct.c:(.text+0x390): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/acct.o: in function `do_acct_process':
+   acct.c:(.text+0xf50): undefined reference to `__tsan_memset'
+   s390x-linux-ld: acct.c:(.text+0xfd6): undefined reference to `__tsan_memset'
+   s390x-linux-ld: acct.c:(.text+0x10ee): undefined reference to `__tsan_memset'
+>> s390x-linux-ld: acct.c:(.text+0x112c): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/crash_core.o: in function `append_elf_note':
+   crash_core.c:(.text+0x72): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: crash_core.c:(.text+0xa2): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/crash_core.o: in function `final_note':
+   crash_core.c:(.text+0xde): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/crash_core.o: in function `crash_update_vmcoreinfo_safecopy':
+   crash_core.c:(.text+0x13a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo':
+   crash_core.c:(.text+0x228): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/crash_core.o: in function `vmcoreinfo_append_str':
+   crash_core.c:(.text+0x260): undefined reference to `__tsan_memset'
+   s390x-linux-ld: crash_core.c:(.text+0x272): undefined reference to `__tsan_memset'
+   s390x-linux-ld: crash_core.c:(.text+0x30c): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo_init':
+   crash_core.c:(.init.text+0x9fa): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/kexec_core.o: in function `kimage_load_segment':
+   kexec_core.c:(.text+0x1126): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kexec_core.c:(.text+0x1272): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kexec_core.c:(.text+0x1290): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kexec_core.c:(.text+0x13bc): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kexec_core.c:(.text+0x14d6): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kexec_core.c:(.text+0x14f2): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
+   kexec_core.c:(.text+0x15b4): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/kexec_core.o: in function `kimage_alloc_pages':
+   kexec_core.c:(.text+0x1ca2): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/kexec.o: in function `__se_sys_kexec_load':
+   kexec.c:(.text+0x240): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/backtracetest.o: in function `backtrace_regression_test':
+   backtracetest.c:(.text+0x9e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_root':
+   cgroup.c:(.text+0x778): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup':
+   cgroup.c:(.text+0x8ca): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_migrate':
+   cgroup.c:(.text+0xa60): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_event':
+   cgroup.c:(.text+0xc7a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x1c5c): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `task_cgroup_path':
+   cgroup.c:(.text+0x61b0): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_finish':
+   cgroup.c:(.text+0x67ee): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_prepare_dst':
+   cgroup.c:(.text+0x6d76): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `find_css_set':
+   cgroup.c:(.text+0x6f8c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup.c:(.text+0x6f9e): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup.c:(.text+0x7676): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup.c:(.text+0x76f4): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_attach_task':
+   cgroup.c:(.text+0x8ad2): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `css_task_iter_start':
+   cgroup.c:(.text+0x9f76): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_mkdir':
+   cgroup.c:(.text+0xa992): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_addrm_files':
+   cgroup.c:(.text+0x103aa): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup.c:(.text+0x1048a): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x10654): more undefined references to `__tsan_memset' follow
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `features_show':
+   cgroup.c:(.text+0x17c54): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init_subsys':
+   cgroup.c:(.init.text+0x246): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init':
+   cgroup.c:(.init.text+0xc48): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_transfer_tasks':
+   cgroup-v1.c:(.text+0x1c4): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup-v1.c:(.text+0x1d6): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_pidlist_start':
+   cgroup-v1.c:(.text+0x930): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_release_agent_write':
+   cgroup-v1.c:(.text+0x142a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroupstats_build':
+   cgroup-v1.c:(.text+0x1588): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_release_agent':
+   cgroup-v1.c:(.text+0x1d60): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup-v1.c:(.text+0x1d72): undefined reference to `__tsan_memset'
+   s390x-linux-ld: cgroup-v1.c:(.text+0x1e7a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_parse_param':
+   cgroup-v1.c:(.text+0x1fa0): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_reconfigure':
+   cgroup-v1.c:(.text+0x2640): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/cgroup/freezer.o: in function `cgroup_freeze':
+   freezer.c:(.text+0x123c): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_read':
+   legacy_freezer.c:(.text+0x956): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_apply_state':
+   legacy_freezer.c:(.text+0x1834): undefined reference to `__tsan_memset'
+   s390x-linux-ld: legacy_freezer.c:(.text+0x18da): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/kheaders.o: in function `ikheaders_read':
+   kheaders.c:(.text+0x3a): undefined reference to `__tsan_memcpy'
+   s390x-linux-ld: kernel/stop_machine.o: in function `stop_one_cpu':
+   stop_machine.c:(.text+0x70): undefined reference to `__tsan_memset'
+   s390x-linux-ld: stop_machine.c:(.text+0x82): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/stop_machine.o: in function `cpu_stop_init_done':
+   stop_machine.c:(.text+0x110): undefined reference to `__tsan_memset'
+   s390x-linux-ld: kernel/stop_machine.o: in function `stop_two_cpus':
+   stop_machine.c:(.text+0x334): undefined reference to `__tsan_memset'
+   s390x-linux-ld: stop_machine.c:(.text+0x3b8): undefined reference to `__tsan_memset'
 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..e9e76c898287 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -648,6 +648,22 @@ static inline bool sas_is_internal_abort(struct 
-sas_task *task)
-         return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
-  }
-
-+static inline int sas_find_attathed_phy(struct expander_device *ex_dev,
-+                                       struct domain_device *dev)
-+{
-+       struct ex_phy *phy;
-+       int phy_id;
-+
-+       for (phy_id = 0; phy_id < ex_dev->num_phys; phy_id++) {
-+               phy = &ex_dev->ex_phy[phy_id];
-+               if (SAS_ADDR(phy->attached_sas_addr)
-+                       == SAS_ADDR(dev->sas_addr))
-+                       return phy_id;
-+       }
-+
-+       return ex_dev->num_phys;
-+}
-+
-  struct sas_domain_function_template {
-         /* The class calls these to notify the LLDD of an event. */
-         void (*lldd_port_formed)(struct asd_sas_phy *);
-
-
-
-And the LLDDs change like:
-
-
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
-b/drivers/scsi/pm8001/pm8001_sas.c
-index 8e3f2f9ddaac..4e7350609b3d 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -645,16 +645,8 @@ static int pm8001_dev_found_notify(struct 
-domain_device *dev)
-         pm8001_device->dcompletion = &completion;
-         if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
-                 int phy_id;
--               struct ex_phy *phy;
--               for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
--               phy_id++) {
--                       phy = &parent_dev->ex_dev.ex_phy[phy_id];
--                       if (SAS_ADDR(phy->attached_sas_addr)
--                               == SAS_ADDR(dev->sas_addr)) {
--                               pm8001_device->attached_phy = phy_id;
--                               break;
--                       }
--               }
-+
-+               phy_id = sas_find_attathed_phy(&parent_dev->ex_dev, dev);
-                 if (phy_id == parent_dev->ex_dev.num_phys) {
-                         pm8001_dbg(pm8001_ha, FAIL,
-                                    "Error: no attached dev:%016llx at 
-ex:%016llx.\n",
-@@ -662,6 +654,7 @@ static int pm8001_dev_found_notify(struct 
-domain_device *dev)
-                                    SAS_ADDR(parent_dev->sas_addr));
-                         res = -1;
-                 }
-+               pm8001_device->attached_phy = phy_id;
-         } else {
-                 if (dev->dev_type == SAS_SATA_DEV) {
-                         pm8001_device->attached_phy =
-
-
-So I wonder if you have any reasons to insist exporting the helper?
-
-> 
-> Thanks,
-> John
-> 
->>           phy_id++) {
->>               phy = &parent_dev->ex_dev.ex_phy[phy_id];
->> -            if (SAS_ADDR(phy->attached_sas_addr)
->> -                == SAS_ADDR(dev->sas_addr)) {
->> +            if (dev_and_phy_addr_same(dev, phy)) {
->>                   pm8001_device->attached_phy = phy_id;
->>                   break;
->>               }
-> 
-> .
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
