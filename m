@@ -2,167 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C3A5E7AD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1715E7AD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiIWMdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S231171AbiIWMdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiIWMcl (ORCPT
+        with ESMTP id S229608AbiIWMcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:32:41 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D6491DBA
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:32:30 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n10so20172422wrw.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 05:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=A1LMoIfsTe6u029K1CPYtu/kaJlbv/4M38rW9dvy7HY=;
-        b=NHbiC/QqL7pTKM1IF3LOs4Z+fbWIgHLyuBeQPgKYqB3bQcp3/q+IMjkSXBKbsozqdY
-         Z1VVzcJmeZI50GAA6nBWhJAeWN3AUOJ3OSJRXzlEg9y1ns19t8CEnDtOEwfOfIh+FVij
-         y5oM/8RCBoA4Hc8QBxhmiaYdFmC4H8YwS2+k8Y9XHr10wGKPKcErWowZQewsqtmK4IBY
-         DY4Pm59H7a+eLTGmmgz7wLqg908E5AVhHjonsJaaFBa5UDqNZdhHNEKBfK+ewZoxf5pF
-         iaX+uFjMtQzzqdxGPhcrIL0vreo1uGL2xxjzkT+BkywU5mrZxZGyyVHx6d74Cd81Yh2H
-         6sRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=A1LMoIfsTe6u029K1CPYtu/kaJlbv/4M38rW9dvy7HY=;
-        b=1YVWHq3NX/9yMA9duYJPqdb2sRKFgPD3eVvDxRr1vYDPJcwrliUYKiFnX8VNOB+RgD
-         YW4SFzuAb1TYgukUDFjb4DV1DgDtu3wL1TlWjlC71sRS0wnGUsVxilS5bJG8bSR2YGub
-         5NDIXbNB0dtcjUv8Rgs8N9ptmYJWOipfqT6g473+cXOUTMQsJR49I8ZXo4vwq1aNqeKI
-         hybzI1ZrpM/vnn8Ani93A9jqBonV/GH3M9dpIjp6QGjLER12KkQuKVv29NykAgCxxp5P
-         7+zDR1B8duN+CkTW2Xg3FQV4e/sA/3eIPVsDtZSVjVSGHNAW02CIRKOcDts8uvJiOMlL
-         cGOA==
-X-Gm-Message-State: ACrzQf2jM+/tA0J12w8y/7Wh6RnQJArEjGU6ELoh6U/9gPA8wgGtYqqY
-        pHXiKVu1UQGq5+y3wB9l+JplfcHWqoLPXA==
-X-Google-Smtp-Source: AMsMyM6E8vC9t2uADbYYSK/mHlDsXZdsxKkElFLeNjosFG11bZI0H0Nq92OMKhLygh41xfh1Y4GJgw==
-X-Received: by 2002:a05:6000:1acf:b0:22b:ed0:71b1 with SMTP id i15-20020a0560001acf00b0022b0ed071b1mr5410058wry.51.1663936348653;
-        Fri, 23 Sep 2022 05:32:28 -0700 (PDT)
-Received: from [192.168.1.70] (32.31.102.84.rev.sfr.net. [84.102.31.32])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003b491f99a25sm2673286wmq.22.2022.09.23.05.32.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 05:32:28 -0700 (PDT)
-Message-ID: <8a60b6a0-9289-0d89-c543-02386a721bca@baylibre.com>
-Date:   Fri, 23 Sep 2022 14:32:26 +0200
+        Fri, 23 Sep 2022 08:32:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899AC1F61A;
+        Fri, 23 Sep 2022 05:32:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E74866240F;
+        Fri, 23 Sep 2022 12:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E6BC433C1;
+        Fri, 23 Sep 2022 12:32:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663936364;
+        bh=Fev/xAbFy6dCF9ucIYtx19kMsRsV2B9GzILLEMxl7KU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i8VrLusZ5uePvQXxY5Mcd7BGi1YUArVfDQPr1NkwhErQ0EigpIyVeNCaC68a2fuxI
+         dcPh5rTB8eooSjAoj0sQvmq6Y10oempGoRFrFXZJDPcPCIQvbIggRJS+16m0upMLdD
+         /J9yLiwnUENhZ8NoRmXgZ9Ann7bcrOjt4O6+Qi8U/gj4IgGqmzWqpMTbUOAz6Myx/P
+         666EfrDI/guIroOhYeWlaxz1Vbvy0ZgvKxc1zvlJV7Fm+bGmx6H+e3t/eRPv0gdZ0z
+         RwXkofn7VRGdJpGtwKU6sCGr2zyYf6m8P+SSnTyDnbZSf22aIQk8gGNKBcDGXpKQRC
+         n1wa9E/VBs53w==
+Date:   Fri, 23 Sep 2022 15:32:40 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH 01/20] x86/sgx: Call cond_resched() at the end of
+ sgx_reclaim_pages()
+Message-ID: <Yy2naAZfiAyP5H/a@kernel.org>
+References: <20220922171057.1236139-1-kristen@linux.intel.com>
+ <20220922171057.1236139-2-kristen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v8 3/4] counter: ti-ecap-capture: capture driver support
- for ECAP
-Content-Language: en-US
-From:   Julien Panis <jpanis@baylibre.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-References: <20220922170402.403683-1-jpanis@baylibre.com>
- <20220922170402.403683-4-jpanis@baylibre.com> <Yy0G9a5S3OzwyEwW@fedora>
- <2f3e5036-caab-f892-a4ad-b852f72db331@baylibre.com> <Yy2aAMv5PRjsJ4s2@fedora>
- <923f5876-d692-7e0e-f351-f0e05869ccd8@baylibre.com>
-In-Reply-To: <923f5876-d692-7e0e-f351-f0e05869ccd8@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922171057.1236139-2-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 22, 2022 at 10:10:38AM -0700, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> Move the invocation of post-reclaim cond_resched() from the callers of
+> sgx_reclaim_pages() into the reclaim path itself.   sgx_reclaim_pages()
+> is always called in a loop and is always followed by a call to
+> cond_resched().  This will hold true for the EPC cgroup as well, which
+> adds even more calls to sgx_reclaim_pages() and thus cond_resched().
 
+This would be in my opinion better:
 
-On 23/09/2022 14:17, Julien Panis wrote:
->
->
-> On 23/09/2022 13:35, William Breathitt Gray wrote:
->> On Fri, Sep 23, 2022 at 09:23:26AM +0200, Julien Panis wrote:
->>>
->>> On 23/09/2022 03:08, William Breathitt Gray wrote:
->>>> On Thu, Sep 22, 2022 at 07:04:01PM +0200, Julien Panis wrote:
->>>>> ECAP hardware on TI AM62x SoC supports capture feature. It can be 
->>>>> used
->>>>> to timestamp events (falling/rising edges) detected on input signal.
->>>>>
->>>>> This commit adds capture driver support for ECAP hardware on AM62x 
->>>>> SoC.
->>>>>
->>>>> In the ECAP hardware, capture pin can also be configured to be in
->>>>> PWM mode. Current implementation only supports capture operating 
->>>>> mode.
->>>>> Hardware also supports timebase sync between multiple instances, but
->>>>> this driver supports simple independent capture functionality.
->>>>>
->>>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
->>>> Hello Julien,
->>>>
->>>> Comments follow inline below.
->>>>
->>>>> +/**
->>>>> + * struct ecap_cnt_dev - device private data structure
->>>>> + * @enabled: device state
->>>>> + * @clk:     device clock
->>>>> + * @regmap:  device register map
->>>>> + * @nb_ovf:  number of overflows since capture start
->>>>> + * @pm_ctx:  device context for PM operations
->>>>> + */
->>>>> +struct ecap_cnt_dev {
->>>>> +    bool enabled;
->>>>> +    struct clk *clk;
->>>>> +    struct regmap *regmap;
->>>>> +    atomic_t nb_ovf;
->>>>> +    struct {
->>>>> +        u8 ev_mode;
->>>>> +        u32 time_cntr;
->>>>> +    } pm_ctx;
->>>>> +};
->>>> Provide documentation for the ev_mode and time_cntr members. You
->>>> probably need a lock as well to protect access to this structure or
->>>> you'll end up with race problems.
->>> Hi William,
->>>
->>> How can I end up with race problems ? pm_ctx members are only 
->>> accessed at
->>> suspend (after capture/IRQ are disabled) and resume (before 
->>> capture/IRQ are
->>> re-enabled).
->>> Is there any risk I did not identify ?
->>>
->>> Julien
->> I was thinking of the ecap_cnt_dev enabled member. The Counter callbacks
->> may execute in concurrent threads, so races can appear when you access
->> members of the ecap_cnt_dev structure in these callbacks.
->>
->> Take for example this section of ecap_cnt_enable_write():
->>
->>          if (enable == ecap_dev->enabled)
->>                  return 0;
->>          if (enable)
->>                  ecap_cnt_capture_enable(counter);
->>          else
->>                  ecap_cnt_capture_disable(counter);
->>          ecap_dev->enabled = enable
->>
->> Suppose two threads try to enable the count capture. A race condition is
->> present where the two threads could see ecap_dev->enabled as false and
->> both proceed to call ecap_cnt_capture_enable(). This results in
->> pm_runtime_get_sync() bumping the usage count twice and we're left with
->> a mismatch the next time ecap_cnt_capture_disable() is called.
->>
->> William Breathitt Gray
->
-> OK, If I understand well there's the same problem with IO access with 
-> regmap ?
-> Julien
+"
+In order to avoid repetion of cond_sched() in ksgxd() and
+sgx_alloc_epc_page(), move the call inside sgx_reclaim_pages().
 
-[ERRATUM] It seems that some spinlock is already used by regmap API.
-So, only the 'enabled' member needs a lock.
+This will hold true for the EPC cgroup as well, which adds more
+call sites sgx_reclaim_pages().
+"
+
+This way it is dead obvious and is better description because
+it enumerates the consequences (i.e. call sites).
+
+BR, Jarkko
+
