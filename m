@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCB35E7475
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30D05E7476
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 08:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiIWG6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 02:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S230074AbiIWG7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 02:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiIWG6w (ORCPT
+        with ESMTP id S229997AbiIWG7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:58:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EAD11D0C9;
-        Thu, 22 Sep 2022 23:58:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYjft0mtwz4xFt;
-        Fri, 23 Sep 2022 16:58:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1663916329;
-        bh=uAgDDCHFgO5WnTB/PX3kiltH+MoaVOlY4LZAn4+ojd0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=CGRO2nd5HVsZlZziX5awok6Bq3jjzY8rZ8KXBWjYG7SJmZpbcsTAQrszCGzIr2XoJ
-         VJVEyIOeJVxAMUPqP3dq0bvAtm3Tk7um5oIOCZquXQWM29XLhDKBgo6f/BcLtMe0qG
-         BYPV1f09oZqqTIvLjyWMwsT4zo0ZPhr0fxrTiV+pdqyJB0iz3hvzp7GLGyNh3Yt9zV
-         2rMpU8tJyvZ2NTq0bQUVa1dQb7movhkYZns9vg2MBwFJgBhJobK2U66vckbse4llHo
-         czDNFXkIADQkilGBEocmKDbBuWxUiZL0xIxidbjJwoU6hrgWMo3V2znrei4/eE+eVX
-         U9s6ZbNEr6qvA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, linuxppc-dev@lists.ozlabs.org,
-        Fabiano Rosas <farosas@linux.ibm.com>
-Subject: Re: [PATCH v5 27/30] RFC: KVM: powerpc: Move processor
- compatibility check to hardware setup
-In-Reply-To: <574ca90fdaec0f37c197d9600d47d48a74f324bd.1663869838.git.isaku.yamahata@intel.com>
-References: <cover.1663869838.git.isaku.yamahata@intel.com>
- <574ca90fdaec0f37c197d9600d47d48a74f324bd.1663869838.git.isaku.yamahata@intel.com>
-Date:   Fri, 23 Sep 2022 16:58:41 +1000
-Message-ID: <8735ci1sri.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
+        Fri, 23 Sep 2022 02:59:14 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D6F11DFFF
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 23:59:12 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 756E7580AAE;
+        Fri, 23 Sep 2022 02:59:09 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 23 Sep 2022 02:59:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663916349; x=1663919949; bh=H3fOWVl1nr
+        ig8yAtZx8mZuIdwLAEktoa3iURSPLFlcg=; b=igscA/O5rNCv1EWzl6YZVFYWCR
+        Z/8wvTN0PbFRnUMFifQah81ScsX1HNVehK7auPpEd4QzzfsbpuanXPUUEtZAPYy6
+        63TiKgQALoogMroK4HEaYwkSTNwY+vQ54z1hBaqiGrivJvPZcOolHNPVLj66GKzf
+        xIAjVdgZuyBxILlCx2quUwHlBDLLT4Lc4UW3L+hfwMMFt/hbv6qOCmQ/XUtDBsmG
+        61ARK31dQF/IgCETRhzK6Yr6LWzGhw4jI2IQX+vTIHbeFzQGjlNnfP+0jDzvkqoy
+        L2XPiQNmmNsX9kg20u38lyatYaF3wonDNqssiRZ8v7dJtgOdatagixuvIh0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663916349; x=1663919949; bh=H3fOWVl1nrig8yAtZx8mZuIdwLAE
+        ktoa3iURSPLFlcg=; b=ue1+Nh7OsCQGWIfSgWTo102eKge/+gYTvvZkSzUhJGCy
+        NTJ8YGCL2olpRVlrxRJfIyl47vYdiPHngv48n2F6XLfTZr0PlQkyRCGsC/fECPZR
+        SM+naeFr+mrSR3JjHrupuCihtSvMLvDVCcRZO+eWqgz4lmjCJbZNcrUvJfv4p/gt
+        Pzo4NlrCltAfuHc81mKU9fXrGkt1SGulDE3vH8neqJTOYy+cHC2IFOtjZMnXpOJP
+        on6IZ8nLFoguyi8fPvwfGizHtp2jEVGZtphj6LYxxkvjEe66e3RI3PkRQPeRdOtR
+        iLS3TtO3EJ3MyJUS0jhLcyDaqpzNOgTVDAJGfpMmxQ==
+X-ME-Sender: <xms:PFktY3dlY5dH_HEWnmJvqJIFIStXjt-qaEbqLfLhcl2iXxgafEjljg>
+    <xme:PFktY9M5JcaNHi6PT0fw0UBU6jM-VD0mFCnf2GtwKpdHgE7t3fAy2C_KFXgzPdc_K
+    NdDLqvrXd06Tq6ym2k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefhedgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:PFktYwiJsQ9xKYhvDrufxE4Ij44oKpOEH_0gaE_FmlTk8tyLU0mctA>
+    <xmx:PFktY4_097ePiM3q2eWqQsISupR-QZu86GRV9W05cey-D_w-rlUO3w>
+    <xmx:PFktYztfY8zRSv5QZFm4RmGVxgS76t16SyRMlhrxe_fZdglx8BZbrw>
+    <xmx:PVktY874RjaqKcvQAWfPTBIJKuovUXPvpXwf1HtmCRFMZiqOr5kg8A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F02A2B60086; Fri, 23 Sep 2022 02:59:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <ae8041cd-0f20-47e9-a4be-92159785e8a8@www.fastmail.com>
+In-Reply-To: <YyxzrjA7hW6gdV5e@owl.dominikbrodowski.net>
+References: <20220725012955.4928-1-jrdr.linux@gmail.com>
+ <YyxzrjA7hW6gdV5e@owl.dominikbrodowski.net>
+Date:   Fri, 23 Sep 2022 08:58:47 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        "Souptick Joarder" <jrdr.linux@gmail.com>
+Cc:     "Tony Lindgren" <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        "kernel test robot" <lkp@intel.com>
+Subject: Re: [PATCH] pcmcia: Removed unused variable control.
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-isaku.yamahata@intel.com writes:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Thu, Sep 22, 2022, at 4:39 PM, Dominik Brodowski wrote:
+> Am Mon, Jul 25, 2022 at 06:59:55AM +0530 schrieb Souptick Joarder:
+>> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>> 
+>> Kernel test robot throws below warning ->
+>> drivers/pcmcia/omap_cf.c:127:7: warning: variable 'control'
+>> set but not used [-Wunused-but-set-variable]
+>> 
+>> Removed unused variable control.
 >
-> Move processor compatibility check from kvm_arch_processor_compat() into
-                                          ^ 
-                                          kvm_arch_check_processor_compat()
+> From a code-generation standpoint, this is obiously correct, and probably
+> the compiler removes that omap_readw() already.
 
-> kvm_arch_hardware_setup().  The check does model name comparison with a
-> global variable, cur_cpu_spec.  There is no point to check it at run time
-> on all processors.
+omap_readw() is an 'extern' function, so it does not get removed.
 
-A key detail I had to look up is that both kvm_arch_hardware_setup() and
-kvm_arch_check_processor_compat() are called from kvm_init(), one after
-the other. But the latter is called on each CPU.
+Even if it was inline, it's still "and volatile" read that gets
+left in because it may (and probably does) have side-effects.
 
-And because the powerpc implementation of kvm_arch_check_processor_compat()
-just checks a global, there's no need to call it on every CPU.
+> But, to be honest, I'm not
+> perfectly sure on what the device expects -- and whether it's required to
+> write back the control register (or parts of it). Does anyone still have the
+> hardware (or specs)? If not, I'm tempted to apply this patch on the basis
+> that the compiler might remove that omap_readw() anyway.
 
-> kvmppc_core_check_processor_compat() checks the global variable.  There are
-> five implementation for it as follows.
+I think assigning to an unused variable was at some point needed to
+avoid a compiler warning because otherwise omap_readw() was just a
+pointer dereference. The safe way to transform the code should be to
+drop the variable but leave the function call.
 
-There are three implementations not five.
+Note that the driver is only used on the 'osk' reference board,
+not on any devices that were in mass-production.
 
->   arch/powerpc/include/asm/cputable.h: extern struct cpu_spec *cur_cpu_spec;
->   arch/powerpc/kvm/book3s.c: return 0
->   arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
->   arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
->                              strcmp(cur_cpu_spec->cpu_name, "e5500")
->                              strcmp(cur_cpu_spec->cpu_name, "e6500")
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: Fabiano Rosas <farosas@linux.ibm.com>
-> ---
->  arch/powerpc/kvm/powerpc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 7b56d6ccfdfb..31dc4f231e9d 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -444,12 +444,12 @@ int kvm_arch_hardware_enable(void)
->  
->  int kvm_arch_hardware_setup(void *opaque)
->  {
-> -	return 0;
-> +	return kvmppc_core_check_processor_compat();
->  }
->  
->  int kvm_arch_check_processor_compat(void)
->  {
-> -	return kvmppc_core_check_processor_compat();
-> +	return 0;
->  }
-
-The actual change seems OK. I gave it a quick test boot and ran some
-VMs, everything seems to work as before.
-
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-
-cheers
+     Arnd
