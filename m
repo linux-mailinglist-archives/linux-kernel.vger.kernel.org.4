@@ -2,86 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4565E87C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D77C5E87C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiIXCxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 22:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S233044AbiIXCzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 22:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiIXCwu (ORCPT
+        with ESMTP id S233093AbiIXCzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 22:52:50 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CEA1401B6;
-        Fri, 23 Sep 2022 19:52:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d10so637292pfh.6;
-        Fri, 23 Sep 2022 19:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=P8vaI21b92NWGEjpnCZy/ODfb54d6FrqhksNG5cepIM=;
-        b=caLduk/X8w4TnrVwSePAZCEH+FzRhkWjC4M0DPcbbDsa5BILOuhtNcXGd8A3oh66UR
-         lriiKxLvcTpSIy3D7eh0T2sQzbH3DgktH3gfWckNZn+hkFuNO2zPI6iqQlh0P/h5R0yU
-         R7Ahpl/xjHazmSLed2t/OvNlLchNTmnymyQuuy5N3EMhG0dJ7tbCkosPH5/jrMuAVSbU
-         doGSVQjEm/Pe1RlEFPg2mZYTAwosPvOW3KPWLP7JY66NdTuGuAQPjap4ie2VbxhmW+N1
-         EX9y7Ha/HGTltUUoM6yrSCxi8vNKpcT84nl6N/oVoMSIVhdYdB9VupgIZ5F6W2ZX5dby
-         IW4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=P8vaI21b92NWGEjpnCZy/ODfb54d6FrqhksNG5cepIM=;
-        b=K9JlRblKtfF0Ot0R3ck8bEnNR23nyk6JfGohTv+cQ29z+puOE8VU9dpqQHvxp7ycWZ
-         srN07R35wUbdmr3y2M9Jl+ioU8KSr0COOJv2/2IP0xalCdEdeZSC/IXXmy9iZB67VG7f
-         OwHceBOa80MHu07GP/8cCO+4fd/fsfazevmCHAAwpq0cJL/NWBplDSaQpyBM9u2sA6WL
-         ghcKBcEMCI/0B2Vn9+BQmYdB7ZJweJHARp0S3GYLsxuhloaaW4G6rsJ68lYfcmnfV8DY
-         1YBgay/VoZSDVSFmWcj9ftLFZwSgTwnLbMfn6ZLegb0IHYmwBJE3MzDYLw3acCwxZS3k
-         moAg==
-X-Gm-Message-State: ACrzQf0Hj3sw5N/IJLi7qr4DWEFbZfQnptWrDdf1Z647VABoYbRPTnAE
-        KMfOc9NR0oFevwggb6NszOo=
-X-Google-Smtp-Source: AMsMyM73X9SwgU7Ji9ZeLmVqmwAFGfH3m2Y91JsApW2XQ9bXHlKHeDOdWU7GNItQJbygDa5tjePLHg==
-X-Received: by 2002:a63:4918:0:b0:439:1802:dda3 with SMTP id w24-20020a634918000000b004391802dda3mr10015022pga.467.1663987958803;
-        Fri, 23 Sep 2022 19:52:38 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b0016bf5557690sm6627633plg.4.2022.09.23.19.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 19:52:38 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 23 Sep 2022 16:52:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     williamsukatube@163.com
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] cgroup: simplify code in cgroup_apply_control
-Message-ID: <Yy5w9YFfmZX+9Vq+@slm.duckdns.org>
-References: <20220917084039.3177-1-williamsukatube@163.com>
+        Fri, 23 Sep 2022 22:55:02 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0408B2EF1C;
+        Fri, 23 Sep 2022 19:55:00 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MZD6J3FVRz1P6ln;
+        Sat, 24 Sep 2022 10:50:48 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 10:54:58 +0800
+Message-ID: <e8e01508-fe2d-a9f8-c260-fb8c6d7bcdcb@huawei.com>
+Date:   Sat, 24 Sep 2022 10:54:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220917084039.3177-1-williamsukatube@163.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH -next] wifi: brcmfmac: pcie: add missing
+ pci_disable_device() in brcmf_pcie_get_resource()
+Content-Language: en-US
+To:     Franky Lin <franky.lin@broadcom.com>
+CC:     <aspriel@gmail.com>, <hante.meuleman@broadcom.com>,
+        <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <marcan@marcan.st>,
+        <linus.walleij@linaro.org>, <rmk+kernel@armlinux.org.uk>,
+        <soontak.lee@cypress.com>, <linux-wireless@vger.kernel.org>,
+        <SHA-cyfmac-dev-list@infineon.com>,
+        <brcm80211-dev-list.pdl@broadcom.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220923093806.3108119-1-ruanjinjie@huawei.com>
+ <CA+8PC_eCwv321DxoCMOrWNLw7NWkT9F0sD-=8GzygEXPJHFWWA@mail.gmail.com>
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+In-Reply-To: <CA+8PC_eCwv321DxoCMOrWNLw7NWkT9F0sD-=8GzygEXPJHFWWA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.254]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 04:40:39PM +0800, williamsukatube@163.com wrote:
-> From: William Dean <williamsukatube@163.com>
+
+
+On 2022/9/24 0:50, Franky Lin wrote:
+> On Fri, Sep 23, 2022 at 2:42 AM ruanjinjie <ruanjinjie@huawei.com> wrote:
+>>
+>> Add missing pci_disable_device() if brcmf_pcie_get_resource() fails.
 > 
-> It could directly return 'cgroup_update_dfl_csses' to simplify code.
+> Did you encounter any issue because of the absensent
+> pci_disable_device? A bit more context will be very helpful.
 > 
-> Signed-off-by: William Dean <williamsukatube@163.com>
+>>
+>> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+>> ---
+>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 9 +++++++--
+>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> index f98641bb1528..25fa69793d86 100644
+>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> @@ -1725,7 +1725,8 @@ static int brcmf_pcie_get_resource(struct brcmf_pciedev_info *devinfo)
+>>         if ((bar1_size == 0) || (bar1_addr == 0)) {
+>>                 brcmf_err(bus, "BAR1 Not enabled, device size=%ld, addr=%#016llx\n",
+>>                           bar1_size, (unsigned long long)bar1_addr);
+>> -               return -EINVAL;
+>> +               err = -EINVAL;
+>> +               goto err_disable;
+>>         }
+>>
+>>         devinfo->regs = ioremap(bar0_addr, BRCMF_PCIE_REG_MAP_SIZE);
+>> @@ -1734,7 +1735,8 @@ static int brcmf_pcie_get_resource(struct brcmf_pciedev_info *devinfo)
+>>         if (!devinfo->regs || !devinfo->tcm) {
+>>                 brcmf_err(bus, "ioremap() failed (%p,%p)\n", devinfo->regs,
+>>                           devinfo->tcm);
+>> -               return -EINVAL;
+>> +               err = -EINVAL;
+>> +               goto err_disable;
+>>         }
+>>         brcmf_dbg(PCIE, "Phys addr : reg space = %p base addr %#016llx\n",
+>>                   devinfo->regs, (unsigned long long)bar0_addr);
+>> @@ -1743,6 +1745,9 @@ static int brcmf_pcie_get_resource(struct brcmf_pciedev_info *devinfo)
+>>                   (unsigned int)bar1_size);
+>>
+>>         return 0;
+>> +err_disable:
+>> +       pci_disable_device(pdev);
+> 
+> Isn't brcmf_pcie_release_resource() a better choice which also unmap
+> the io if any was mapped?
+> 
 
-Applied to cgroup/for-6.1.
+That is a better choice to call pci_disable_device() in
+brcmf_pcie_release_resource()!
 
-Thanks.
-
--- 
-tejun
+> Regards,
+> - Franky
+> 
+>> +       return err;
+>>  }
+>>
+>>
+>> --
+>> 2.25.1
+>>
