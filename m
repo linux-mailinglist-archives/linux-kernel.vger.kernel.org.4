@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DE35E866A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BEC5E866E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiIXACa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S232958AbiIXAEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiIXAC2 (ORCPT
+        with ESMTP id S232959AbiIXAE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 20:02:28 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92CDE9CDC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:02:27 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d82so1514003pfd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:02:27 -0700 (PDT)
+        Fri, 23 Sep 2022 20:04:27 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5235013A942
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:04:26 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so8851296pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=uwWHKTBUfGcFVTaOUVwPmGZghDdGoVP1x2kZ8BP8vOM=;
-        b=RKRcCCQOEegIGp9Kp5ycDoiHOP//JJ9+RoMWBBE/tT+ADQ1xSXeFaHdMRAdeeOVdjv
-         JNyMNVtYA8GaY/PMBnlrlZfd71KOTONFtaxCaEQylEg7aCR/AM77hxjqr4MyKdW6YFNr
-         Xv2o/4YNvWpqI2hO6BJEwWbV0Xm44BemCPUEs=
+        bh=BEWBQ/N1eOSJUx4cKeNRYsp1Xg+eINoB3Vsyk1Ms/PM=;
+        b=DHIBNaSzUY2QBwMW/mTvWLgwOCjfKVRV16zgUnhARd9o6Kc5V6a1QVhMaqvxQF7xtC
+         jL4jDkZr9JtLjvPiXipG++74X6CSAJ+uVES3b0308HiZU8x0yj98zb8btJPr6iUAavrY
+         bcCSOlon43h/N21/TMgK2xg/Qvxaqo3ducGhY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=uwWHKTBUfGcFVTaOUVwPmGZghDdGoVP1x2kZ8BP8vOM=;
-        b=R+H//y3YbqFimECFxMjJLT45Ixo7IM6AlYK/PacprUxTlbSDOQ1FcpKJ1RjDLnfGMj
-         rdWSZXtz5JNulvTp5pMmFIZPJzrMrSEgJL5RMAOvy08KZQnbcRrzovE6kbojYu/Yi1nA
-         MepsMJu7vrvY5ikz3yIPiPmtn1mrnOLAHGgU0Kp6Cvc2HoFjtFo1jzore8XjL9G0bhcr
-         rDXugNf1j24G7fqzpi+FUTffwkKLVO+VARQVuB23AeROiy9OCk6l4pHfemJIZx/+WoCp
-         2/BdyET1ylgSbZThq4IXEK6cdo5XNP9/TyTxDXKZTELJUydIPYnqFVV5U/2Ud+aYb3PU
-         HUow==
-X-Gm-Message-State: ACrzQf3h1PcF5WbUYDsYDQs16/rBDF7xYiuse8lO5zb/dXUhIPUKcBgf
-        4Xq9pjpwrFU78XbvC2pffmbS29Foz7Wa4w==
-X-Google-Smtp-Source: AMsMyM7eId/9umQhWkkXNHCXUCgFjcCZku4cRPDA9BzG7uU7l0yzvR3cw2z0nS/D0pyoCCRO6H9QCQ==
-X-Received: by 2002:a05:6a02:309:b0:434:efcb:ccf4 with SMTP id bn9-20020a056a02030900b00434efcbccf4mr9579548pgb.304.1663977747203;
-        Fri, 23 Sep 2022 17:02:27 -0700 (PDT)
+        bh=BEWBQ/N1eOSJUx4cKeNRYsp1Xg+eINoB3Vsyk1Ms/PM=;
+        b=Sw1e2s//fouCBvmne9u/KxtRfB9mRCcmCey/IT96517lSS414CYhmmwAM042UXPiAB
+         1PGbMAMwwYTM1CTolrNcFZEiePC9DG0i7TRaXwq1GMXZ+59yKyBjYQ6fcGUINzn3t5HW
+         Pe23zr9STE9OKkbWJEGc01SytgEvJSv2rkEcmATraikP4UlnFozPun27DGd6K6j20V/R
+         9Q02HKNZ/yrNbw7OuSFFs4AyilORdQPb+HzEaq9GQoWpdWwLcqHU/cGy/HqYre1/qYTa
+         f52iWWiSob0bvPEhB1BbXbJ+xKBbIYLaSCiDNeXEN3n23SMfnugMUGB6xMwIbi0sujGi
+         c3Xw==
+X-Gm-Message-State: ACrzQf3Jch578Cakn0zp+zohMiEhEZZp3lUPnm5idAPuxnkPy28jKzEj
+        arjXEy6+SzdnSlJYJG9LMkIdEQ==
+X-Google-Smtp-Source: AMsMyM50Dva1p2XQnnTrxohMW/JBpO1aFwkp6xQNzsqiQrvAdn8RC+aULR1XI9rPbsS7xZtcN69cvQ==
+X-Received: by 2002:a17:90b:4f45:b0:203:6d82:205c with SMTP id pj5-20020a17090b4f4500b002036d82205cmr23141222pjb.224.1663977865777;
+        Fri, 23 Sep 2022 17:04:25 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l23-20020a17090a071700b002005fcd2cb4sm2198979pjl.2.2022.09.23.17.02.25
+        by smtp.gmail.com with ESMTPSA id w35-20020a17090a6ba600b002031264a864sm2134200pjj.41.2022.09.23.17.04.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 17:02:26 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 17:02:24 -0700
+        Fri, 23 Sep 2022 17:04:24 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 17:04:23 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] minmax: clamp more efficiently by avoiding extra
- comparison
-Message-ID: <202209231656.AD14FB6@keescook>
-References: <CAHmME9rH47UFp6sXbDU0UZrTosFrDAa+m_FtqMqRFFNzmOzTdA@mail.gmail.com>
- <20220923154001.4074849-1-Jason@zx2c4.com>
- <20220923155412.b0132fc62eca18817a023cd2@linux-foundation.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH] x86/mm+efi: Avoid creating W+X mappings
+Message-ID: <202209231702.DC9FB5860@keescook>
+References: <20220922193157.1673623-1-dave.hansen@linux.intel.com>
+ <CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com>
+ <Yy1ZadE6Vnnc2dNf@hirez.programming.kicks-ass.net>
+ <CAMj1kXEvt-TQzO5jO6srkC8jW5fbou95VKu=os3gt_y87ZPJWg@mail.gmail.com>
+ <5f443915-b38a-c78d-cccd-876501434cef@roeck-us.net>
+ <CAMj1kXEt1RwYbkBOFa=KsML0KvJ6Zuu9eJ_=jQA7BTW-N2BSeA@mail.gmail.com>
+ <202209231126.6855D54@keescook>
+ <CAMj1kXHckEg6rwBSEc6piu=-JZzyDh7j+pvGSFp1OBUQuofrEQ@mail.gmail.com>
+ <202209231417.F73F40060@keescook>
+ <69e00173-087e-6a22-7a02-0c1212f42065@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923155412.b0132fc62eca18817a023cd2@linux-foundation.org>
+In-Reply-To: <69e00173-087e-6a22-7a02-0c1212f42065@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 03:54:12PM -0700, Andrew Morton wrote:
-> On Fri, 23 Sep 2022 17:40:01 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+On Fri, Sep 23, 2022 at 03:15:15PM -0700, Dave Hansen wrote:
+> On 9/23/22 14:19, Kees Cook wrote:
+> >> But currently, PAE is not even enabled in the i386_defconfig, and
+> >> defaults to off. This means people that are unaware of this won't
+> >> enable it, and will be running without NX support.
+> > And they all make me cry. ;)
 > 
-> > Currently the clamp algorithm does:
-> > 
-> > 	if (val > hi)
-> > 		val = hi;
-> > 	if (val < lo)
-> > 		val = lo;
-> > 
-> > But since hi > lo by definition, this can be made more efficient with:
-> > 
-> > 	if (val > hi)
-> > 		val = hi;
-> > 	else if (val < lo)
-> > 		val = lo;
-> > 
-> > So fix up the clamp and clamp_t functions to do this, adding the same
-> > argument checking as for min and min_t.
-> > 
+> It's been like that for a long time, presumably because the defconfig
+> should *boot* in as many cases as possible.  It wouldn't be hard to
+> change.  It also wouldn't be hard to default to HIGHMEM4G (non-PAE) on
+> targeted builds for CPUs that don't support it.  Patch attached to do
+> that, if anyone else has an opinion.
 > 
-> The patch adds 140 bytes of text to mm/memblock.o, for example. 
-> Presumably from the additional branch.  Larger text means larger cache
-> footprint means slower.
+> We should probably just leave i386 alone, but it breaks my heart to see
+> Kees in tears.
 
-Oh, interesting. I had spot-checked one clamp-using function (update_cfs_group)
-and it produced the same output just with some register swapping and other
-ordering changes. Hmm.
+*dabs his eyes with tissue*
 
-But yes, text is bigger, but bss is smaller. This are my allmodconfig builds:
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..fad978c7b7c5 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1363,9 +1363,14 @@ config X86_CPUID
+>  	  with major 203 and minors 0 to 31 for /dev/cpu/0/cpuid to
+>  	  /dev/cpu/31/cpuid.
+>  
+> +config CPU_HAS_PAE
+> +	def_bool y
+> +	depends on !M486SX && !M486 && !M586 && !M586TSC && !M586MMX && !MGEODE_LX && !MGEODEGX1 && !MCYRIXIII && !MELAN && !MWINCHIPC6 && !MWINCHIP3D && !MK6
+> +
+>  choice
+>  	prompt "High Memory Support"
+>  	default HIGHMEM4G
+> +	default HIGHMEM64G if CPU_HAS_PAE
+>  	depends on X86_32
+>  
+>  config NOHIGHMEM
+> @@ -1412,7 +1417,7 @@ config HIGHMEM4G
+>  
+>  config HIGHMEM64G
+>  	bool "64GB"
+> -	depends on !M486SX && !M486 && !M586 && !M586TSC && !M586MMX && !MGEODE_LX && !MGEODEGX1 && !MCYRIXIII && !MELAN && !MWINCHIPC6 && !MWINCHIP3D && !MK6
+> +	depends on CPU_HAS_PAE
+>  	select X86_PAE
+>  	help
+>  	  Select this if you have a 32-bit processor and more than 4
 
-   text        data         bss          dec       hex  filename
-43779952    59510881    28684428    131975261   7ddc85d vmlinux.before
-43781295    59510889    28676236    131968420   7ddada4 vmlinux
-
-> So where's the proof that this change gives us a more efficient kernel?
-
-A reasonable question. :)
+I feel happy now! :)
 
 -- 
 Kees Cook
