@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECE95E8B55
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF0B5E8B5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiIXKKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S233764AbiIXKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiIXKJ5 (ORCPT
+        with ESMTP id S233320AbiIXKN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:09:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230721E34
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:09:54 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc26a-0001Dj-Ht; Sat, 24 Sep 2022 12:09:52 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc26a-002che-Rp; Sat, 24 Sep 2022 12:09:51 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oc26Y-003Bz8-GK; Sat, 24 Sep 2022 12:09:50 +0200
-Date:   Sat, 24 Sep 2022 12:09:47 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 8/9] pwm: lpss: Add a comment to the bypass field
-Message-ID: <20220924100947.jogxxhcl4cudjs4o@pengutronix.de>
-References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
- <20220908135658.64463-9-andriy.shevchenko@linux.intel.com>
+        Sat, 24 Sep 2022 06:13:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1EE9F760;
+        Sat, 24 Sep 2022 03:13:23 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MZPtP0KDgzHqQL;
+        Sat, 24 Sep 2022 18:11:09 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 18:13:21 +0800
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 24 Sep
+ 2022 18:13:20 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yanan@huawei.com>, <wuchangye@huawei.com>,
+        <xiesongyang@huawei.com>, <zhudi2@huawei.com>,
+        <kongweibin2@huawei.com>, <liuxin350@huawei.com>
+Subject: [PATCH 0/2] ebpf: improves bpftool security
+Date:   Sat, 24 Sep 2022 18:12:07 +0800
+Message-ID: <20220924101209.50653-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3y6kkrc3c7quwozr"
-Content-Disposition: inline
-In-Reply-To: <20220908135658.64463-9-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,43 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset is designed to enhance the security of libbpf and bpf
+tool, adding fPIC and fPIE options.
 
---3y6kkrc3c7quwozr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  - patch #1 add the fPIC options for dynamic library and static
+    library.
 
-On Thu, Sep 08, 2022 at 04:56:57PM +0300, Andy Shevchenko wrote:
-> Add a comment to the bypass field based on the commit b997e3edca4f
-> ("pwm: lpss: Set enable-bit before waiting for update-bit
-> to go low").
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  - patch #2 add the fPIE options for bpftool.
 
-Looks good, added Hans (i.e. the author of b997e3edca4f) to Cc.
+Xin Liu (2):
+  libbpf: add fPIC option for static library
+  bpftool: add fPIE option for bpftool
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+ tools/bpf/bpftool/Makefile | 1 +
+ tools/lib/bpf/Makefile     | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-thanks
-Uwe
+-- 
+2.33.0
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3y6kkrc3c7quwozr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMu12gACgkQwfwUeK3K
-7AluPAgAiEGytYa5X0P7nhaL18oXbooe44qRPWKQPOnYCaXiIU8Xb6Wx6VRq5s/w
-mZ/oKIwEBvxgovDzbIWH9ZEqZZBKVM289SQO4dupes6JwDFcEadc608PYDAzVW6H
-ZFxhR2IQeYoLIow/d3erBcSBBvwjzQm5QbLi4IBdJ70JjWDwfxC63+SAQgRkRs80
-WagGnS1tEokkrACfE1iQ56Q4D1Zl1ZFlda/dlQQwVmn+pxtOCgNjGO1uluOHIDpE
-h8rnSEq4WtQJWG5fKVO36MeOdbGQPbP9emlPwW7ZofktMrwNOrj8MibDa36uDFEn
-OfcWliKa4DbO591bqyEmdrb5VnfdyA==
-=Zsui
------END PGP SIGNATURE-----
-
---3y6kkrc3c7quwozr--
