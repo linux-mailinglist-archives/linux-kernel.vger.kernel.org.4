@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C29A5E8BC7
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7945E8BC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiIXL1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S233416AbiIXLeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbiIXL1Q (ORCPT
+        with ESMTP id S232263AbiIXLd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:27:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931F1102520;
-        Sat, 24 Sep 2022 04:27:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31B96601B6;
-        Sat, 24 Sep 2022 11:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C8DC433D6;
-        Sat, 24 Sep 2022 11:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664018833;
-        bh=Om3IK1bSFGWtUAzinAij84ISOXU5jRFjWepJ6S7ZPoU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=thpRP6w5I7RcLrD4BizGi7ev+8Xqh3ETHfXT9nShw8Vlfoka9G7ZbcyzblpAKZBz1
-         k+8cky7x+3CGolZrDtqRH3zIR2+D87w5jPMj6/baLJi+1coB3UimhJXmJCrRcdkGn1
-         WS6qCcBaN38LukWRTPvE0tu45W8c5I5+QnY1aYslzfFTWRJpshlAxIP/OU7wzVCdjB
-         0chhGLIiP/sdE6+InY8hIeTjYp0gviltbL/RXM8ickQe5CNozNaiuuvB5joV/iiZtG
-         JG1SR9ngqatbb9ybL0v6MnCNGC1CneUe9zJi/PAmObYb3+Yf6CUVTXXxomO4XnbFTL
-         uPFl3p2zjK3wQ==
-Date:   Sat, 24 Sep 2022 14:27:09 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Guangbin Huang <huangguangbin2@huawei.com>, kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lipeng321@huawei.com, lanhao@huawei.com
-Subject: Re: [PATCH net-next 00/14] redefine some macros of feature abilities
- judgement
-Message-ID: <Yy7pjTX8VLLIiA0G@unreal>
-References: <20220924023024.14219-1-huangguangbin2@huawei.com>
+        Sat, 24 Sep 2022 07:33:58 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607FF386AF
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:33:57 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jm5so2292175plb.13
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=0DmqEWVeIfx21hMNe6tukUIZuj/O+XKYgF8Y5KtyMa4=;
+        b=JPyGb0q6RLf+jbIkzwyIgs5Ss1fu4pPv6esvZIq9Qu3L5VGrPOsDFsm4MTiRI+IB6m
+         MVxh7FWmdZ576ow4jtG6BBUs+2SHlJwZZShfA1ylPVqV3O3yE5wNaBiYkAck1gwfIl5n
+         lKsCzJ/8jkuwM1CYsiRuJDFXvH+7V2Lpw/sMfm9UG7QC4CvaTBp7jYYTm2MAfluQJ5ky
+         J3qUkt+bJPrtJSb7Z9rMYj5XHry9cxTBmhxKC0hlCDl/NnwiWAwFBzBGgKfUsYajGQ5c
+         vMBKoLLHQ5vYy097/9hgUtki9gvQ/3asTjkNbkl2lw3sOgwOEvcg/y/ZBuAuP66gnbOz
+         59EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=0DmqEWVeIfx21hMNe6tukUIZuj/O+XKYgF8Y5KtyMa4=;
+        b=fQEBUcoJ0/hV6SKNnHZiAPcoEKLLVf0JA4iwxsrZ4VOXqhNR83HF7QdQ7j7CjVl1dB
+         4cZovEHc6xrSufNiorp/loPydRQcusGlqFyqAi1KtHqgzu3UImvkuQ81lLAIdWZLChPw
+         Sib2PhSBOD4lWp6TnlzTTn5mtbvAwouVMtLfxPidaMLBpQwKeU7fy0+R35n00o5rnqXx
+         jilBZSJ5aSLD7x0CFlEKFuzW4HZenVLYjdATej0Rai4m5eGpcAsUzmDzZbD91PMpCDYo
+         DmCBN9VYxBHWW6z0g1zTdhoFLV9vj0ANSYDxsioUB0u9HHeJxnGbvCo4Pz4TYmKszPav
+         q2ig==
+X-Gm-Message-State: ACrzQf04zLkMKL03N8ozUvdbz9Su9JE88T977loskqgxLj17QHFliJCG
+        KSr12Zyqlhp2iUzgqK2HbQJjBQ==
+X-Google-Smtp-Source: AMsMyM7lZ/jA2HDaObnwd/XVY+VvWfjkRDpLlk7c4s+b8a2DrNg6bDCiWP0CZ6QPossorwONi1+w7A==
+X-Received: by 2002:a17:90b:1642:b0:203:1630:c54d with SMTP id il2-20020a17090b164200b002031630c54dmr25673580pjb.122.1664019236793;
+        Sat, 24 Sep 2022 04:33:56 -0700 (PDT)
+Received: from leoy-huanghe.lan (ec2-13-52-75-203.us-west-1.compute.amazonaws.com. [13.52.75.203])
+        by smtp.gmail.com with ESMTPSA id i3-20020a170902c94300b00176acd80f69sm7654540pla.102.2022.09.24.04.33.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 04:33:56 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH] perf record: Fix segmentation fault in record__read_lost_samples()
+Date:   Sat, 24 Sep 2022 19:33:46 +0800
+Message-Id: <20220924113346.1110909-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924023024.14219-1-huangguangbin2@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,51 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 10:30:10AM +0800, Guangbin Huang wrote:
-> The macros hnae3_dev_XXX_supported just can be used in hclge layer, but
-> hns3_enet layer may need to use, so this serial redefine these macros.
+Commit a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
+causes segmentation fault when run the "perf mem record" command in
+unprivileged mode, the output log is:
 
-IMHO, you shouldn't add new obfuscated code, but delete it.
+  $ ./perf mem record --all-user -o perf_test.data -- ./test_program
+  Error:
+  Access to performance monitoring and observability operations is limited.
+  Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+  access to performance monitoring and observability operations for processes
+  without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+  More information can be found at 'Perf events and tool security' document:
+  https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+  perf_event_paranoid setting is 4:
+    -1: Allow use of (almost) all events by all users
+        Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+  >= 0: Disallow raw and ftrace function tracepoint access
+  >= 1: Disallow CPU event access
+  >= 2: Disallow kernel profiling
+  To make the adjusted perf_event_paranoid setting permanent preserve it
+  in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
+  perf: Segmentation fault
+  Obtained 16 stack frames.
+  ./perf(dump_stack+0x31) [0x55b7aa1e8070]
+  ./perf(sighandler_dump_stack+0x36) [0x55b7aa1e815e]
+  ./perf(+0xc9120) [0x55b7aa0a9120]
+  /lib/x86_64-linux-gnu/libc.so.6(+0x4251f) [0x7fd03ef8151f]
+  ./perf(+0xccaca) [0x55b7aa0acaca]
+  ./perf(+0xcf4ab) [0x55b7aa0af4ab]
+  ./perf(cmd_record+0xd50) [0x55b7aa0b28df]
+  ./perf(+0x112f77) [0x55b7aa0f2f77]
+  ./perf(cmd_mem+0x53b) [0x55b7aa0f406c]
+  ./perf(+0x19979c) [0x55b7aa17979c]
+  ./perf(+0x199a37) [0x55b7aa179a37]
+  ./perf(+0x199b95) [0x55b7aa179b95]
+  ./perf(main+0x2c7) [0x55b7aa179fbd]
+  /lib/x86_64-linux-gnu/libc.so.6(+0x29d8f) [0x7fd03ef68d8f]
+  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x7f) [0x7fd03ef68e3f]
+  ./perf(_start+0x24) [0x55b7aa089974]
+  Segmentation fault (core dumped)
 
-Jakub,
+In the unprivileged mode perf fails to open PMU event, the function
+record__open() returns error and "session->evlist" is NULL; this leads
+to segmentation fault when iterates "session->evlist" in the function
+record__read_lost_samples().
 
-The more drivers authors will obfuscate in-kernel primitives and reinvent
-their own names, macros e.t.c, the less external reviewers you will be able
-to attract.
+This patch checks "session->evlist" in record__read_lost_samples(), if
+"session->evlist" is NULL then the function directly bails out to avoid
+segmentation fault.
 
-IMHO, netdev should have more active position do not allow obfuscated code.
+Fixes: a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+ tools/perf/builtin-record.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 02e38f50a138..012b46dd4999 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1888,6 +1888,10 @@ static void record__read_lost_samples(struct record *rec)
+ 	struct perf_record_lost_samples *lost;
+ 	struct evsel *evsel;
+ 
++	/* No any event is opened, directly bail out */
++	if (!session->evlist)
++		return;
++
+ 	lost = zalloc(PERF_SAMPLE_MAX_SIZE);
+ 	if (lost == NULL) {
+ 		pr_debug("Memory allocation failed\n");
+-- 
+2.34.1
 
-> 
-> Guangbin Huang (14):
->   net: hns3: modify macro hnae3_dev_fec_supported
->   net: hns3: modify macro hnae3_dev_udp_gso_supported
->   net: hns3: modify macro hnae3_dev_qb_supported
->   net: hns3: modify macro hnae3_dev_fd_forward_tc_supported
->   net: hns3: modify macro hnae3_dev_ptp_supported
->   net: hns3: modify macro hnae3_dev_int_ql_supported
->   net: hns3: modify macro hnae3_dev_hw_csum_supported
->   net: hns3: modify macro hnae3_dev_tx_push_supported
->   net: hns3: modify macro hnae3_dev_phy_imp_supported
->   net: hns3: modify macro hnae3_dev_ras_imp_supported
->   net: hns3: delete redundant macro hnae3_dev_tqp_txrx_indep_supported
->   net: hns3: modify macro hnae3_dev_hw_pad_supported
->   net: hns3: modify macro hnae3_dev_stash_supported
->   net: hns3: modify macro hnae3_dev_pause_supported
-> 
->  drivers/net/ethernet/hisilicon/hns3/hnae3.h   | 55 +++++++++----------
->  .../hns3/hns3_common/hclge_comm_cmd.c         |  2 +-
->  .../hns3/hns3_common/hclge_comm_cmd.h         |  3 -
->  .../ethernet/hisilicon/hns3/hns3_debugfs.c    |  2 +-
->  .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 10 ++--
->  .../ethernet/hisilicon/hns3/hns3_ethtool.c    | 14 ++---
->  .../hisilicon/hns3/hns3pf/hclge_debugfs.c     |  2 +-
->  .../hisilicon/hns3/hns3pf/hclge_main.c        | 38 ++++++-------
->  .../hisilicon/hns3/hns3pf/hclge_ptp.c         |  2 +-
->  .../hisilicon/hns3/hns3vf/hclgevf_main.c      |  2 +-
->  10 files changed, 62 insertions(+), 68 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
