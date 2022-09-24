@@ -2,96 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460EC5E8A0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFC35E8A04
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiIXISN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 04:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
+        id S233958AbiIXITG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 04:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiIXIRo (ORCPT
+        with ESMTP id S233949AbiIXISc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 04:17:44 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E014C88B1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:15:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id s10so2332394ljp.5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nQomz4ut+7sjfQrrU1jIFAnyWatFfjECi53D3yczEIE=;
-        b=KI9bvqb1+pvOBd4LUHBVRiy4ZY0slRCTRZZlpbG/wkf5BfzAwgC4tzlqpiFF6oyV8H
-         D7v79qgnbhBTO6d2uDyYHRhhdOOhBfa6EEXzsR1OAGK0jLsPlfD7cA9BCk+dEYTkPA3D
-         wWtwWaAoPO0/uTRDdef7+H6/fPQ584Q/+VF22lUeYetTvqY4NLRzWkfcrMuUKAwvI8Ur
-         HORX0nTGI2VWAa2VLCpjSTjWJtDJGVfm/4NoDwUwRQY3sCzLDgDtibX9udsLmyhZz/Ab
-         UsteBe0vnTvVHno/YLL9xbDupvnLo0yMlhWvaVPU8HJaxwp4Vvg2Oz/Cql9apCVP7xpg
-         yn0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nQomz4ut+7sjfQrrU1jIFAnyWatFfjECi53D3yczEIE=;
-        b=3/z4qesJdUa3zXEg5WWhYOLLiUH7Njfqla7Cu0kNzmdU73Y0Hl077bVR/Sb961UGHt
-         DbFRczDgak3gge4a+o5zXi3+joT5dcqMtexJU1qHWmpjvirf0XTkYZRuYGMo4IerlmQZ
-         03Eedqsf4UHAJfBn+edJkf6V7ypNLaa22n4MBD3dg6wtyTLSXIIj2XmfHU22c6ohOY3e
-         Ka3RZVyGsmBrGl7RHsXr8ZYLUKREMDhhuBS9RA6ljWBq/U2co87QkaMDhX29fW6x7fH7
-         UfVh7UqI/wtyJaA+dBzWAu/DCWL4fvrDhQyFWQnUOcssE94zbZspR5fHp8j3+ZwIMctV
-         +J8Q==
-X-Gm-Message-State: ACrzQf3pnOwBPn+nZ99QfhhiChJ4awIYAzkj3dV1RGLkBBvp503tjNOr
-        IKYfAZSpgajOiBU6XJO4h8NcBt1PinMKLhj7APYJ9A==
-X-Google-Smtp-Source: AMsMyM51jSACu0ueivCRHFSALnMRIGDYekDLNBr6hGK18mYNepOD+DBZDwtrPTKiiVk4AIl/66dQQBc8ZJ/gjsu15yk=
-X-Received: by 2002:a2e:be8d:0:b0:26c:f4b:47a0 with SMTP id
- a13-20020a2ebe8d000000b0026c0f4b47a0mr4030821ljr.92.1664007329396; Sat, 24
- Sep 2022 01:15:29 -0700 (PDT)
+        Sat, 24 Sep 2022 04:18:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D07E220FC;
+        Sat, 24 Sep 2022 01:17:12 -0700 (PDT)
+Received: from [192.168.0.74] ([84.175.93.28]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MIbzB-1oWj0Z08jl-00EcnP; Sat, 24 Sep 2022 10:16:34 +0200
+From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+To:     mathias.nyman@intel.com
+Subject: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96
+ controller
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 24 Sep 2022 08:16:34 +0000
+Message-Id: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
+Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+User-Agent: eM_Client/9.1.2109.0
 MIME-Version: 1.0
-References: <20220923202822.2667581-1-keescook@chromium.org> <20220923202822.2667581-15-keescook@chromium.org>
-In-Reply-To: <20220923202822.2667581-15-keescook@chromium.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 24 Sep 2022 10:15:18 +0200
-Message-ID: <CACT4Y+bg=j9VdteQwrJTNFF_t4EE5uDTMLj07+uMJ9-NcooXGQ@mail.gmail.com>
-Subject: Re: [PATCH v2 14/16] kasan: Remove ksize()-related tests
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/mixed; boundary="------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA"
+X-Antivirus: Avast (VPS 220923-4, 23.9.2022), Outbound message
+X-Antivirus-Status: Clean
+X-Provags-ID: V03:K1:j/CgaF6gU18/AcFhUknKikKnBu+yAZ48N2wNrAkx2SvBu4RXOPC
+ irE21aSuxaAISjZ40nLpitJ7UXFcep/vcuPKm/CkPNP4WmC4v6sdcLMeB8w+Br/StOE/rFW
+ FS6MR71Fakfj8ww0yhh871FGILgkSbSd+VUIZK1e2T//z4sO0Koqmm9VrodM5B11+1x308l
+ 0evbaHvgLLV5WuKTt4nsw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kDHwy07K4eU=:bDS06RWxE4m6Bwlz5sA+v8
+ 9OOEu6bOOxz928GOog/RN1LDgd0aIsHIZyiaVgaAeM2/cSusyBX06pDu7vpxkqxIZZsnugDx+
+ otZmqDeX7kTcHuo5ojUJOiuRB7FYEZRUICGOieG34IjdC3b3ByNXUTD9W9BJ4zFs+DJ8XuXL4
+ HkpJMsSwPIoP5ipWItzBCzGdwMfenbfp5f+00hmPQx/CmAXepLVm76Oo4g9GM1VlOqG4WAlqH
+ ov+UoRl0ogpL/GYs+A42S74zH2MVb3iJI1gofzdpy1loEofN1WNQg3m/BmoVNyECmhDlx487t
+ bNIcvjdYQZcpR8CY16hTiojeDrTbjbFnt59+jqO1CwMtsXF0IXc/X5oOmC/28hOomYg4Pm3pl
+ gv30U6FMUU83eIG/PBXO2BVGl0WrWGYyId1XQOIHRg04IkyUH7UwiF70cHZ9iY7xeszCMiks5
+ 292YCN79GpZ83nPlvyk3ry0KG7r0gRV5A0PbAskmKKbSQxUaf8y7zBFHlHuEKo/u25VBQahR/
+ ru3m0jI6p/ptETvafDbfTqk67ajHDKZCSbmGg2FNoFRExQZlNEp8atLZWnZF7gziJIR7tIQYO
+ S6NZviNXjO3pPVxuQBClBcTpg3k+8MC4toLmgbfOTN+iN4Ur/AEd0vj3htT2jqcmd9Oec3Alf
+ 1TlT8kJ42f2P03zJ2l74afVLG1OLIHTJXPtMkqgNK/mFfKLzPUi9L3rq/nP/WR3zzRmKKcBlK
+ U8JULpJT2xbTGUVgMnadPVLs67T8eY7VZS0l+46n5k8/qmzLdsZT0zqZlwkm70lKLL9EEfTee
+ bnenRJ9uCYBpxA6ZCx1xNU3VWDslw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,108 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sept 2022 at 22:28, Kees Cook <keescook@chromium.org> wrote:
->
-> In preparation for no longer unpoisoning in ksize(), remove the behavioral
-> self-tests for ksize().
->
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: kasan-dev@googlegroups.com
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  lib/test_kasan.c  | 42 ------------------------------------------
->  mm/kasan/shadow.c |  4 +---
->  2 files changed, 1 insertion(+), 45 deletions(-)
->
-> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-> index 58c1b01ccfe2..bdd0ced8f8d7 100644
-> --- a/lib/test_kasan.c
-> +++ b/lib/test_kasan.c
-> @@ -753,46 +753,6 @@ static void kasan_global_oob_left(struct kunit *test)
->         KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
->  }
->
-> -/* Check that ksize() makes the whole object accessible. */
-> -static void ksize_unpoisons_memory(struct kunit *test)
-> -{
-> -       char *ptr;
-> -       size_t size = 123, real_size;
-> -
-> -       ptr = kmalloc(size, GFP_KERNEL);
-> -       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-> -       real_size = ksize(ptr);
-> -
-> -       OPTIMIZER_HIDE_VAR(ptr);
-> -
-> -       /* This access shouldn't trigger a KASAN report. */
- > -       ptr[size] = 'x';
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-I would rather keep the tests and update to the new behavior. We had
-bugs in ksize, we need test coverage.
-I assume ptr[size] access must now produce an error even after ksize.
+Hi there,
 
+second try at a patch which was an actual pain with my Lenovo T500 notebook=
+, augmented with an USB3 PCMCIA card that has an ASM1042 chip. Inspired by=
+ this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
 
-> -       /* This one must. */
-> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
-> -
-> -       kfree(ptr);
-> -}
-> -
-> -/*
-> - * Check that a use-after-free is detected by ksize() and via normal accesses
-> - * after it.
-> - */
-> -static void ksize_uaf(struct kunit *test)
-> -{
-> -       char *ptr;
-> -       int size = 128 - KASAN_GRANULE_SIZE;
-> -
-> -       ptr = kmalloc(size, GFP_KERNEL);
-> -       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-> -       kfree(ptr);
-> -
-> -       OPTIMIZER_HIDE_VAR(ptr);
-> -       KUNIT_EXPECT_KASAN_FAIL(test, ksize(ptr));
+ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event erro=
+rs with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally settin=
+g quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this case.
 
-This is still a bug that should be detected, right? Calling ksize on a
-freed pointer is a bug.
+with best regards
 
-> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[0]);
-> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[size]);
-> -}
-> -
->  static void kasan_stack_oob(struct kunit *test)
->  {
->         char stack_array[10];
-> @@ -1392,8 +1352,6 @@ static struct kunit_case kasan_kunit_test_cases[] = {
->         KUNIT_CASE(kasan_stack_oob),
->         KUNIT_CASE(kasan_alloca_oob_left),
->         KUNIT_CASE(kasan_alloca_oob_right),
-> -       KUNIT_CASE(ksize_unpoisons_memory),
-> -       KUNIT_CASE(ksize_uaf),
->         KUNIT_CASE(kmem_cache_double_free),
->         KUNIT_CASE(kmem_cache_invalid_free),
->         KUNIT_CASE(kmem_cache_double_destroy),
-> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-> index 0e3648b603a6..0895c73e9b69 100644
-> --- a/mm/kasan/shadow.c
-> +++ b/mm/kasan/shadow.c
-> @@ -124,9 +124,7 @@ void kasan_unpoison(const void *addr, size_t size, bool init)
->         addr = kasan_reset_tag(addr);
->
->         /*
-> -        * Skip KFENCE memory if called explicitly outside of sl*b. Also note
-> -        * that calls to ksize(), where size is not a multiple of machine-word
-> -        * size, would otherwise poison the invalid portion of the word.
-> +        * Skip KFENCE memory if called explicitly outside of sl*b.
->          */
->         if (is_kfence_address(addr))
->                 return;
-> --
-> 2.34.1
+Jens Glathe
+
+---
+
+v1->v2
+
+intensive use of scripts/checkpatch.pl, reformatted the code
+reformatted the commit text for line wraps
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
+Content-Type: text/plain;
+ name=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch;
+ charset=iso-8859-1
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch
+
+RnJvbSBmZmIzYTcwYTQ4YjkxYjc5OTQzYTAxMzFkZGQ0NzBlNWYwOWMwZjQxIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBKZW5zIEdsYXRoZSA8amVucy5nbGF0aGVAb2xkc2Nob29sc29s
+dXRpb25zLmJpej4KRGF0ZTogU3VuLCAyOCBBdWcgMjAyMiAxNjoyMzo0MSArMDIwMApTdWJqZWN0
+OiBbUEFUQ0hdIGZpeDogYWRkIFhIQ0lfU1BVUklPVVNfU1VDQ0VTUyB0byBBU00xMDQyIGRlc3Bp
+dGUgYmVpbmcgYQogVjAuOTYgY29udHJvbGxlcgoKb25seSBpZiBpdCByZXBvcnRzIGFzIGEgVjAu
+OTYgWEhDSSBjb250cm9sbGVyLiBBcHBlYXJzIHRvIGZpeCB0aGUgZXJyb3JzCiJ4aGNpX2hjZCA8
+YWRkcmVzcz47IEVSUk9SIFRyYW5zZmVyIGV2ZW50IFRSQiBETUEgcHRyIG5vdCBwYXJ0IG9mCmN1
+cnJlbnQgVEQgZXBfaW5kZXggMiBjb21wX2NvZGUgMTMiIHRoYXQgYXBwZWFyIHNwdXJpb3VzbHkg
+KG9yIHByZXR0eQpvZnRlbikgd2hlbiB1c2luZyBhIHI4MTUyIFVTQjMgZXRoZXJuZXQgYWRhcHRl
+ciB3aXRoIGludGVncmF0ZWQgaHViLgoKU2lnbmVkLW9mZi1ieTogSmVucyBHbGF0aGUgPGplbnMu
+Z2xhdGhlQG9sZHNjaG9vbHNvbHV0aW9ucy5iaXo+Ci0tLQogZHJpdmVycy91c2IvaG9zdC94aGNp
+LXBjaS5jIHwgMTAgKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwg
+MyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMg
+Yi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKaW5kZXggZGNlNmMwZWM4ZDM0Li5mOGIzYjM0
+ZDI1N2UgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1wY2kuYworKysgYi9kcml2
+ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKQEAgLTMwNSw5ICszMDUsMTMgQEAgc3RhdGljIHZvaWQg
+eGhjaV9wY2lfcXVpcmtzKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHhoY2lfaGNkICp4aGNp
+KQogCQl4aGNpLT5xdWlya3MgfD0gWEhDSV9FUF9DVFhfQlJPS0VOX0RDUzsKIAl9CiAKLQlpZiAo
+cGRldi0+dmVuZG9yID09IFBDSV9WRU5ET1JfSURfQVNNRURJQSAmJgotCQlwZGV2LT5kZXZpY2Ug
+PT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEwNDJfWEhDSSkKLQkJeGhjaS0+cXVpcmtzIHw9IFhI
+Q0lfQlJPS0VOX1NUUkVBTVM7CisgIGlmIChwZGV2LT52ZW5kb3IgPT0gUENJX1ZFTkRPUl9JRF9B
+U01FRElBICYmCisgICAgICBwZGV2LT5kZXZpY2UgPT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEw
+NDJfWEhDSSkgeworICAgIC8qIHRyeSB0byB0YW1lIHRoZSBBU01lZGlhIDEwNDIgY29udHJvbGxl
+ciB3aGljaCBpcyAwLjk2ICovCisgICAgaWYgKHhoY2ktPmhjaV92ZXJzaW9uID09IDB4OTYpCisg
+ICAgICB4aGNpLT5xdWlya3MgfD0gWEhDSV9TUFVSSU9VU19TVUNDRVNTOworICAgIHhoY2ktPnF1
+aXJrcyB8PSBYSENJX0JST0tFTl9TVFJFQU1TOworICB9CiAJaWYgKHBkZXYtPnZlbmRvciA9PSBQ
+Q0lfVkVORE9SX0lEX0FTTUVESUEgJiYKIAkJcGRldi0+ZGV2aWNlID09IFBDSV9ERVZJQ0VfSURf
+QVNNRURJQV8xMDQyQV9YSENJKSB7CiAJCXhoY2ktPnF1aXJrcyB8PSBYSENJX1RSVVNUX1RYX0xF
+TkdUSDsKLS0gCjIuMjUuMQoK
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA--
+
