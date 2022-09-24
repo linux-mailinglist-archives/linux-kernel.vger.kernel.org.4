@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0382D5E8DA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 16:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EE85E8DA5
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbiIXO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 10:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S230236AbiIXPAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIXO66 (ORCPT
+        with ESMTP id S229495AbiIXPAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 10:58:58 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE081B29
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 07:58:56 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id l10so2584101plb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 07:58:56 -0700 (PDT)
+        Sat, 24 Sep 2022 11:00:13 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F49B41
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:00:12 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id e67so2781664pgc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=A4T+kyw377orQQtPiOvYt9e0D29BYPUlLzt2R5wjAss=;
-        b=R1sH2TkWj77H3g/bP3nEOSG0YjWqrb+dM9Ntz02b5KBX5jfO3NsMPm5ze66YWrNR9f
-         kdRjg9teybAjH55Wkx5f24ieS2aYd4fqgbCfkeFroTeLH1t3Gbef/8x5f4zvcu1YAVzo
-         ABxk2hoi5oOIk4sKmgcOCR0iftwfAYJmOwySE=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
+        bh=/ZxmoZGavmWNlrZnawkbXveh01Wn367vmE/VNkXmIdw=;
+        b=s25ZCs1tSDwZADqqqf1Vm4xt2zv7eMrlkQYv4xQaqPF3mPJzzvhB2mzxAqxPkb32pK
+         NHAqqy/qx4pNcfeO5zqFmmWF2ufBVP1cOVbbxVTdLQvPTSHxLDM+xweoWGa34eoy6rDG
+         dyyruF1ntIIDA6CvCIvQDTZADmji0DJAHX5s0Vhfrhdfq4gt11Qo5ttrdt7FnYlOgmiM
+         g8G3lY1JxPY4sBzH8MwvY9x6UDIuc8ekZ8AqGfJh5wk+r/EmtPVkEnjYkiP/kHjK9ETv
+         OYDkJBXcuZFyiUKv4Aw+s8K/uMug7rbzVAcHajZOqT5eH86LKpfotHSrJsWWt7a+AOji
+         zcSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=A4T+kyw377orQQtPiOvYt9e0D29BYPUlLzt2R5wjAss=;
-        b=mTyVvAcbQRIvme6ZMFZ0W4DYeLsNTV6746DYygEy13kCyuXWiBkoqtWuSUFFURBQu4
-         7jkNSQxK3H7TzOD+yIUjxnjssDP9qrxFTMMKUBZhAyK2vQpIjYqzyQsXxBqxzR3l81pU
-         ZbW5DqziPBy1vQ0aR4scB3LAhC84KVeBktFQE0Gx0asyie0ihlo65OqeOJtyruLk1DSK
-         GKQSdVS1nozSX7vsc2DfJcwc5/+VpdShQIIoSeLYwt64cX/jjKwA96cD4cNRu5gNbE97
-         eHbpid6TR23j0LFH3gxpDOj6bbDnhe1IB9EnSBo1ISA6Yo+0BbxUozDqMpji+JuREzoJ
-         ywXw==
-X-Gm-Message-State: ACrzQf0gEx+zUmWdniFEbCKlngaBVkFfHUUQWG5I7TRoUnxA5X8/k5a0
-        r2f/X7MDwf/7dATSgWMPWdWbxQ==
-X-Google-Smtp-Source: AMsMyM7kevo+f32kAEhGZsgaVY0iUt0RhFVuHM/4Cd8FeTJRnT4o/Efhy/oEyMRjra2SK2TrSMG3cw==
-X-Received: by 2002:a17:90b:194a:b0:202:e6eb:4b62 with SMTP id nk10-20020a17090b194a00b00202e6eb4b62mr27737434pjb.33.1664031536143;
-        Sat, 24 Sep 2022 07:58:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902edc500b0017534ffd491sm7875331plk.163.2022.09.24.07.58.55
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/ZxmoZGavmWNlrZnawkbXveh01Wn367vmE/VNkXmIdw=;
+        b=f8i1W0fmlvreQ7nfn9ncPfAukOfkMQPKLzyeRMWVP/c0twKG8td5G51iWJ+Lo5bI7L
+         C8qgd2icVb573mEoVyCnCex7OwG+V41LqVYz7AaYkLlm4zqfjfNUmyPlABvBaKOTTGeM
+         //fkLdKsiGcj0ENfix91qYhUFmj/LEcTeaZ4xFMMqWtga4JV6Bu+S0zOf+Bmt0P+uJuV
+         kcQNqM5I8/StzIqbTluXVKtu/WrlWYDauLyq+UP1qElDq5XuGW5QyPB/HrdxhEw9hTxY
+         XHMvALKCza9+Y2xILiSYVNElbmc3FXLljiPY85hxUdXJ2/09EgqjSjQ2TIoH6dNefcQp
+         jm7g==
+X-Gm-Message-State: ACrzQf1XZYrFntyk60DHI5DzhMl/Os39XidJoNnkA8ugy+CkWlgc7qnx
+        GVa2lS08J/9RykRNbvxnLBCOiA==
+X-Google-Smtp-Source: AMsMyM5+ef+aw0XcysL1aexhvPjDjgsey9VsVY7POoHb/1mlXyhvyLCmIyCeSI3bLtHy1j0OgNAhEA==
+X-Received: by 2002:a63:5d48:0:b0:43a:390b:2183 with SMTP id o8-20020a635d48000000b0043a390b2183mr12204841pgm.29.1664031611841;
+        Sat, 24 Sep 2022 08:00:11 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902760100b0017870f471f6sm7848200pll.226.2022.09.24.08.00.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 07:58:55 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 07:58:54 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Compiler Attributes: Introduce __access_*() function
- attribute
-Message-ID: <202209240757.3AC47AC6@keescook>
-References: <20220923235424.3303486-1-keescook@chromium.org>
- <CANiq72n6zK=sXn2j71bAEUUYwRse2dT9f8kLrYzncnPjN1XTow@mail.gmail.com>
+        Sat, 24 Sep 2022 08:00:11 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com
+In-Reply-To: <20220921095309.1481289-1-yukuai1@huaweicloud.com>
+References: <20220921095309.1481289-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH 0/2] blk-throttle: improve bypassing bios checkings
+Message-Id: <166403161084.5171.274436515046613194.b4-ty@kernel.dk>
+Date:   Sat, 24 Sep 2022 09:00:10 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72n6zK=sXn2j71bAEUUYwRse2dT9f8kLrYzncnPjN1XTow@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-355bd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 12:06:31PM +0200, Miguel Ojeda wrote:
-> On Sat, Sep 24, 2022 at 1:54 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > are specified. While it is legal to provide only the pointer argument
-> > position and access type, design the kernel macros to require also the
-> > bounds (element count) argument position: if a function has no bounds
-> > argument, refactor the code to include one.
+On Wed, 21 Sep 2022 17:53:07 +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> Should this bit be included in the comment of the attribute? (since it
-> is specific to the kernel)
-
-Sure; good idea!
-
+> Currently, "tg->has_rules" and "tg->flags & THROTL_TG_HAS_IOPS_LIMIT"
+> both try to bypass bios that don't need to be throttled, however, they are
+> a little redundant and both not perfect:
 > 
-> > These can be used multiple times. For example:
-> >
-> > __access_wo(2, 3) __access_ro(4, 5)
-> > int copy_something(struct context *ctx, u32 *dst, size_t dst_count,
-> >                    u8 *src, int src_len);
-> >
-> > (And if "dst" will also be read, it could use __access_rw(2, 3) instead.)
+> 1) "tg->has_rules" only distinguish read and write, but not iops and bps
+>    limit.
+> 2) "tg->flags & THROTL_TG_HAS_IOPS_LIMIT" only check if iops limit
+>    exist, read and write is not distinguished, and bps limit is not
+>    checked.
 > 
-> Also maybe the example could be nice there too, since it uses the
-> syntax for the kernel and you took the time to write it :)
-> 
-> By the way, shouldn't `src` typically be `const u8 *`? Given it is an
-> example, I would qualify it.
+> [...]
 
-Yeah, I will update this.
+Applied, thanks!
 
-> 
-> > +#if __has_attribute(__access__)
-> > +#define __access_rw(ptr, count)        __attribute__((__access__(read_write, ptr, count)))
-> > +#define __access_ro(ptr, count)        __attribute__((__access__(read_only,  ptr, count)))
-> > +#define __access_wo(ptr, count)        __attribute__((__access__(write_only, ptr, count)))
-> > +#else
-> > +#define __access_rw(ptr, count)
-> > +#define __access_ro(ptr, count)
-> > +#define __access_wo(ptr, count)
-> > +#endif
-> 
-> If you do a v2 for the above, please take the chance to indent with a
-> single space after the `#` (like `# define`) for consistency.
+[1/2] blk-throttle: remove THROTL_TG_HAS_IOPS_LIMIT
+      commit: 85496749904016f36b69332f73a1cf3ecfee828f
+[2/2] blk-throttle: improve bypassing bios checkings
+      commit: 81c7a63abc7c0be572b4f853e913ce93a34f6e1b
 
-Fixed! I will send a v2.
-
+Best regards,
 -- 
-Kees Cook
+Jens Axboe
+
+
