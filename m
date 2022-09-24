@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C8F5E8F99
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF785E8F9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbiIXUNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 16:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S229737AbiIXUX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 16:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiIXUNd (ORCPT
+        with ESMTP id S229558AbiIXUX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 16:13:33 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13D25467B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:13:31 -0700 (PDT)
+        Sat, 24 Sep 2022 16:23:27 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E140BDB
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:23:25 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664050408;
+        t=1664051004;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=EcbtpHcwl1Nm1cXUQncscydMAW3SGpJ+fUyDvKUD0nQ=;
-        b=CcFOjNnKphgG+wY7I/0DvqEcGZ5n7WzssWBxwk/AvymIZh5IV2os3XuTWymxLHwrVXKk4M
-        V6UC2WdeIHc53aLIVcygXEoXq/zKzE9dIU7sW0+RmU85ZR+0UrSI0NaEuFbZt4fLsi2GZB
-        nKTzhjVfnhH3j/5Cb/JapNV49ktpch8=
+        bh=nC3nuVqN+jtEUN74Nl68oDoRxZZaXpDu+Kubg+3Y4uE=;
+        b=K5b/cTkQVPZHrmVwC5a5EZ6fbHafwPdgOTRisgbxnFrlDyFsNV8EppN8s8pwk3WvoYaKMh
+        2jMjRVOcQmLC7gpvopmtr3Sjin8ubOEGUnRny9AGIWZGq0fj7LCCb784kCWrUGCCFlpiDQ
+        mFqrQzCTdUdXXfuIweR95PiUh6ngdA4=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -37,9 +37,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH mm] kasan: fix array-bounds warnings in tests
-Date:   Sat, 24 Sep 2022 22:13:27 +0200
-Message-Id: <288e31a608ba707ea6de47fc6b43d8d79bb2d252.1664050397.git.andreyknvl@google.com>
+Subject: [PATCH mm v2] kasan: fix array-bounds warnings in tests
+Date:   Sat, 24 Sep 2022 22:23:21 +0200
+Message-Id: <9c0210393a8da6fb6887a111a986eb50dfc1b895.1664050880.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -65,35 +65,39 @@ instead of a volatile variable.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
 ---
- mm/kasan/kasan_test.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+
+Changes v1->v2:
+- Hide ptr2 instead of size1 and size2 to be consistent with other
+  uses of OPTIMIZER_HIDE_VAR in KASAN tests.
+---
+ mm/kasan/kasan_test.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 71cb402c404f..1d51efe131db 100644
+index 71cb402c404f..dbb0a672380f 100644
 --- a/mm/kasan/kasan_test.c
 +++ b/mm/kasan/kasan_test.c
-@@ -324,6 +324,9 @@ static void krealloc_more_oob_helper(struct kunit *test,
- 	char *ptr1, *ptr2;
- 	size_t middle;
+@@ -333,6 +333,8 @@ static void krealloc_more_oob_helper(struct kunit *test,
+ 	ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
  
-+	OPTIMIZER_HIDE_VAR(size1);
-+	OPTIMIZER_HIDE_VAR(size2);
++	OPTIMIZER_HIDE_VAR(ptr2);
 +
- 	KUNIT_ASSERT_LT(test, size1, size2);
- 	middle = size1 + (size2 - size1) / 2;
+ 	/* All offsets up to size2 must be accessible. */
+ 	ptr2[size1 - 1] = 'x';
+ 	ptr2[size1] = 'x';
+@@ -365,6 +367,8 @@ static void krealloc_less_oob_helper(struct kunit *test,
+ 	ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
  
-@@ -356,6 +359,9 @@ static void krealloc_less_oob_helper(struct kunit *test,
- 	char *ptr1, *ptr2;
- 	size_t middle;
- 
-+	OPTIMIZER_HIDE_VAR(size1);
-+	OPTIMIZER_HIDE_VAR(size2);
++	OPTIMIZER_HIDE_VAR(ptr2);
 +
- 	KUNIT_ASSERT_LT(test, size2, size1);
- 	middle = size2 + (size1 - size2) / 2;
+ 	/* Must be accessible for all modes. */
+ 	ptr2[size2 - 1] = 'x';
  
-@@ -578,13 +584,14 @@ static void kmalloc_memmove_invalid_size(struct kunit *test)
+@@ -578,13 +582,14 @@ static void kmalloc_memmove_invalid_size(struct kunit *test)
  {
  	char *ptr;
  	size_t size = 64;
