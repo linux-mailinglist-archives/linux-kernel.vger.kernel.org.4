@@ -2,95 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80805E880C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 05:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80D15E87DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 05:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiIXDtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 23:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S233032AbiIXDPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 23:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiIXDtA (ORCPT
+        with ESMTP id S231833AbiIXDPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 23:49:00 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8A51AD95
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 20:48:59 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id iw17so1810151plb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 20:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date;
-        bh=5gbEClK9s7xDqhnWZ1bay1FHi2n5R6lkU3pCYbHsSb0=;
-        b=Y5R55I5B+bFNxsxiALnhY4BI4W6kuohHcmNJJ4vrl0oUr/wcy5NXXrda4EglsjxTM9
-         Uwucld3fEuufo4iaC1vvaS9WlxTW63RwpQTtxDwtm+r4eqhECKqN1y4o4SDRK608MHxp
-         0nbQAPUPU9tCohr1EZfi3OSSeGIewXx8bTaEGjlNNEG2uHlN4QLo6owq/XpeDJG0U/zu
-         VK8iaoTj4LXFEu52eoZJSo42OyBzIRFcYAmm3/o6YL9/WB5UdSbLuJak8l2l3xm68p4V
-         8I2itRlnWI+4pOfIjb5OjKfVcdml8Q21uEDMBIo0RRscUotZNgqpjiWjvDoovMvYDxWp
-         5ojA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=5gbEClK9s7xDqhnWZ1bay1FHi2n5R6lkU3pCYbHsSb0=;
-        b=KHpUbj0m+bHIN+Uif7BqAYWaBcQoj9M2RlUv+rgHPJIRSiP4o9qRZxckblkWSqblxN
-         LRTmtBlGPKrooVSdhQxocELyMMuKNiyCi6VSDB941wPwtYVcDoVAPwmrLneN8ZNn0fzC
-         F5J+7qiRPqoV6bLUL/DZ2jnZop90U9Nx/RblGo/gP3I8jVg8/MxF9Wdq/WV2Eir2GbBs
-         2PISksgiPcrPCxZ2tuyLl767nXKH9YYT3+EwtNY/9VpJyyQMGCZd0NwP2RUIZFHZqB+d
-         VHhtpQM7wWzW3zmu4/f/3qHbBalb/ziL8TKhddoukOX1UNqDU4GUIPiRTDhYJXvbvfkL
-         fO+g==
-X-Gm-Message-State: ACrzQf1IDt2mR/EtY4ckifHGPXAgJPMUTalToRC8lOM8GIGGwyS0iOUC
-        HvEyWu3Qf9rFTwQw7UqyWFXE7weNpon0KQ==
-X-Google-Smtp-Source: AMsMyM7Ny4ce4H/XvdurTVN5pKYzBigrbYkd/yrkOEN2tAnnGOSskB5nXEIHAA+dMHr6Hb1XjNwCeA==
-X-Received: by 2002:a17:90b:1c07:b0:202:ff6e:6015 with SMTP id oc7-20020a17090b1c0700b00202ff6e6015mr13379165pjb.210.1663991339009;
-        Fri, 23 Sep 2022 20:48:59 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id r10-20020a63e50a000000b00438c0571456sm6343814pgh.24.2022.09.23.20.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 20:48:58 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 23 Sep 2022 17:48:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] workqueue fixes for v6.0-rc6
-Message-ID: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
+        Fri, 23 Sep 2022 23:15:35 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D6D12C9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 20:15:30 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MZDYy3qNcz1P6ln;
+        Sat, 24 Sep 2022 11:11:18 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 11:15:28 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 24 Sep
+ 2022 11:15:28 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Liu Zixian <liuzixian4@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH v4] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+Date:   Sat, 24 Sep 2022 11:49:05 +0800
+Message-ID: <20220924034905.2694686-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+The vma_lock and hugetlb_fault_mutex are dropped before handling
+userfault and reacquire them again after handle_userfault(), but
+reacquire the vma_lock could lead to UAF[1,2] due to the following
+race,
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+hugetlb_fault
+  hugetlb_no_page
+    /*unlock vma_lock */
+    hugetlb_handle_userfault
+      handle_userfault
+        /* unlock mm->mmap_lock*/
+                                           vm_mmap_pgoff
+                                             do_mmap
+                                               mmap_region
+                                                 munmap_vma_range
+                                                   /* clean old vma */
+        /* lock vma_lock again  <--- UAF */
+    /* unlock vma_lock */
 
-are available in the Git repository at:
+Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+the issue.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.0-rc6-fixes
+[1] https://lore.kernel.org/linux-mm/000000000000d5e00a05e834962e@google.com/
+[2] https://lore.kernel.org/linux-mm/20220921014457.1668-1-liuzixian4@huawei.com/
+Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
+Reported-by: Liu Zixian <liuzixian4@huawei.com>
+Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
+CC: stable@vger.kernel.org # 4.14+
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+---
+v1->v2: add reported-by and link [1].
+v2->v3: add comment to explain why unlock in hugetlb_no_page.
+v3->v4: Rebase on mainline.
 
-for you to fetch changes up to c0feea594e058223973db94c1c32a830c9807c86:
+ mm/hugetlb.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
 
-  workqueue: don't skip lockdep work dependency in cancel_work_sync() (2022-08-16 06:27:35 -1000)
-
-----------------------------------------------------------------
-Workqueue fixes for v6.0-rc6
-
-Just one patch to improve flush lockdep coverage.
-
-----------------------------------------------------------------
-Tetsuo Handa (1):
-      workqueue: don't skip lockdep work dependency in cancel_work_sync()
-
- kernel/workqueue.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index e070b8593b37..477e3c2369d2 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5476,7 +5476,6 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 						  unsigned long addr,
+ 						  unsigned long reason)
+ {
+-	vm_fault_t ret;
+ 	u32 hash;
+ 	struct vm_fault vmf = {
+ 		.vma = vma,
+@@ -5494,18 +5493,14 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 	};
+ 
+ 	/*
+-	 * hugetlb_fault_mutex and i_mmap_rwsem must be
+-	 * dropped before handling userfault.  Reacquire
+-	 * after handling fault to make calling code simpler.
++	 * vma_lock and hugetlb_fault_mutex must be dropped before handling
++	 * userfault. Also mmap_lock will be dropped during handling
++	 * userfault, any vma operation should be careful from here.
+ 	 */
+ 	hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 	i_mmap_unlock_read(mapping);
+-	ret = handle_userfault(&vmf, reason);
+-	i_mmap_lock_read(mapping);
+-	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+-
+-	return ret;
++	return handle_userfault(&vmf, reason);
+ }
+ 
+ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+@@ -5523,6 +5518,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	spinlock_t *ptl;
+ 	unsigned long haddr = address & huge_page_mask(h);
+ 	bool new_page, new_pagecache_page = false;
++	u32 hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 
+ 	/*
+ 	 * Currently, we are forced to kill the process in the event the
+@@ -5533,7 +5529,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	if (is_vma_resv_set(vma, HPAGE_RESV_UNMAPPED)) {
+ 		pr_warn_ratelimited("PID %d killed due to inadequate hugepage pool\n",
+ 			   current->pid);
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -5550,12 +5546,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	page = find_lock_page(mapping, idx);
+ 	if (!page) {
+ 		/* Check for page in userfault range */
+-		if (userfaultfd_missing(vma)) {
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++		if (userfaultfd_missing(vma))
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MISSING);
+-			goto out;
+-		}
+ 
+ 		page = alloc_huge_page(vma, haddr, 0);
+ 		if (IS_ERR(page)) {
+@@ -5615,10 +5609,9 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (userfaultfd_minor(vma)) {
+ 			unlock_page(page);
+ 			put_page(page);
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MINOR);
+-			goto out;
+ 		}
+ 	}
+ 
+@@ -5676,6 +5669,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 
+ 	unlock_page(page);
+ out:
++	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
++	i_mmap_unlock_read(mapping);
+ 	return ret;
+ 
+ backout:
+@@ -5774,11 +5769,13 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	entry = huge_ptep_get(ptep);
+ 	/* PTE markers should be handled the same way as none pte */
+-	if (huge_pte_none_mostly(entry)) {
+-		ret = hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
++	if (huge_pte_none_mostly(entry))
++		/*
++		 * hugetlb_no_page will drop vma lock and hugetlb fault
++		 * mutex internally, which make us return immediately.
++		 */
++		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
+ 				      entry, flags);
+-		goto out_mutex;
+-	}
+ 
+ 	ret = 0;
+ 
 -- 
-tejun
+2.25.1
+
