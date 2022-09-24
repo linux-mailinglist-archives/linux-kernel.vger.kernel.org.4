@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E51B5E89B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ED75E8988
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiIXIFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 04:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S233669AbiIXIFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 04:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiIXIFY (ORCPT
+        with ESMTP id S233627AbiIXIFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 04:05:24 -0400
+        Sat, 24 Sep 2022 04:05:25 -0400
 Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529DCF1855
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFC811CB1B
         for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:05:15 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s6so3513452lfo.7
+Received: by mail-lf1-x129.google.com with SMTP id j16so3555324lfg.1
         for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=IKv3EVCnm3OfvhFspuLmPC8QUak40NUPqPQWboNeqpg=;
-        b=a8Ih4jJzos8myLFJ8pH81tEyuv87eenShm0w5oCV1MWiN68B7AjI9AR4VrP9BRBQc6
-         WdgY6Lvl9ipYAxq//zlfGDH+lizqFDE8YEjQtFpG34uhY6NyxXFgZ69A/Q5JvVy/mlgi
-         z4IsijSji6hyVGS5fH1KKGQrKjRcCl1YL70dXObjY4SvqyXnuunf64B/HtXHPc4W2Uof
-         Q/rDX3RJZ6LFCIbCSCRTTPfMkU1f5A3kXbCi4td7ae8B9lfqvQx/7rPpiUHZf6bei7sc
-         ylkLwZzutyMvQPzhDFNS7CwMDBhOt1jA6IkbiN6zrVjOAEQGOFVQmbJOg6NReJi6yloh
-         dXBA==
+        bh=2SQmi2lgJlQQmepGaN3TdkXlKQrqpQ5shsgKmrI88Zw=;
+        b=NtpudLGRDnzyPMtOFsTv4CpJvpK4iNb4FDcaotlQ7UN24Dfdg5f1qu02+XANNODwe0
+         hHFFu7qKTO+KLRsn/NQsPu3Pci+HGJIXf5wCL9DNVG000yTpI/4fNwIXbMqH2N95F9Ag
+         2B2NWq+2hpU+azqkE+xog1QW2c6OHnF5oI+dTL3sJrkEZezCprK/Zi5boU+rudTrfzXy
+         T25OyrRnrb1l4ce70Psa5qRw8SUZbMW6hWUXGSIv9anxxMM+20ih41ywDiD88QhtC17p
+         XYSkj0/MzozoPI+skokVkpoY5hweLr8GXt9I6D2azjivSV0j1SHomK2X+zB7n0jUCR+p
+         +j5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=IKv3EVCnm3OfvhFspuLmPC8QUak40NUPqPQWboNeqpg=;
-        b=RMRdoXogGuX0dMN2axUv0qWYSKnUt0XxBB3NNSjBJA9yaXVuDZP78ntgNjeobKbD2x
-         NInuhN612YU4fAg1BgHDi2Ksb/BRD/4i+2urEWJHDyQGzOm6CZkQ5BgTbfaLIULtbqWd
-         7+yHoDpf11D8yqUNUQX5ojFC+odi3PbnUG9SiX+Q0PjdPR+LP/85OdojVwC2mV4wouGb
-         VWZXWQAZGDjzBdCsbvA2zII1G0vcMgeOs/EvcB4c9hd95LlDFkweJmmRxLkGABEJMwl5
-         lYDhO16mQ5EciILchk3JsalqXeEAf5fVTXnOGwXC81gC+PXs4bUJ6xG5hoj1nkI44b3f
-         NeAw==
-X-Gm-Message-State: ACrzQf2ZSs1gWCWOchHIYCYNTujs2YC2lctGX+1c1MO/tLBsGpewpHDI
-        IIDqQK3EfCk0pvWGYhZnyK8Nlg==
-X-Google-Smtp-Source: AMsMyM56Tg1k54SLIQ6/YlCLFkRW7fBNyJBNCnRzZ4FQqsLY8/b5KE5vm8sMWM+LGw1tMp4TdS3mkA==
-X-Received: by 2002:a05:6512:1283:b0:499:d0a3:3ca8 with SMTP id u3-20020a056512128300b00499d0a33ca8mr4607380lfs.665.1664006713675;
-        Sat, 24 Sep 2022 01:05:13 -0700 (PDT)
+        bh=2SQmi2lgJlQQmepGaN3TdkXlKQrqpQ5shsgKmrI88Zw=;
+        b=03Pa5Fp1Wq61UWoTQHOkXzVzR+9bhNXdx4ZDgRpa9ipgb570FscSNicXZsEjfL55aV
+         CXCWd2WATzI9IcAtVSiRbaAseYROH0fqQOzjeCPwPmiMhiCAb3WwTDQX+KxPcjy6teDD
+         /EfeAW+HIRfHClnErn9XDqEKxLrtrFOj1lMSAX30eapJAyVmkgzTN+xO8+JRr1ldUmQQ
+         mIU+YevCih2FWOGdrVB7OQo6QkRaxZ7PgB4FllJvOrsNOtSG3BQwdPlSAma+arIPAHjQ
+         gdGZJ+BO4fjr1CsA6rkYhfW/jrTJGSnLkCfcd3Bcvo+0k6F6/cSsx/XUxC+/lfcByl59
+         Ts3A==
+X-Gm-Message-State: ACrzQf0XRj7dinPLTRjV0alBu/OmMdWD03hMFADmTHkh+yfZyccraJwj
+        7n1NwlxiyYHhClGja/2W1kk91w==
+X-Google-Smtp-Source: AMsMyM6ZA66X/TF+zcgrWpyJ7uQ9V5Ok1vcOS7zx0HebEDIz65e+UpM/H6cVFHRHi/tjEEjmsmwAkg==
+X-Received: by 2002:a05:6512:c1c:b0:499:acb9:5788 with SMTP id z28-20020a0565120c1c00b00499acb95788mr4478702lfu.347.1664006714973;
+        Sat, 24 Sep 2022 01:05:14 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y2-20020a2e5442000000b0026c41574790sm1696668ljd.30.2022.09.24.01.05.12
+        by smtp.gmail.com with ESMTPSA id y2-20020a2e5442000000b0026c41574790sm1696668ljd.30.2022.09.24.01.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 01:05:13 -0700 (PDT)
+        Sat, 24 Sep 2022 01:05:14 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -65,9 +65,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 05/32] ARM: dts: qcom: msm8226: align TLMM pin configuration with DT schema
-Date:   Sat, 24 Sep 2022 10:04:32 +0200
-Message-Id: <20220924080459.13084-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 06/32] ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
+Date:   Sat, 24 Sep 2022 10:04:33 +0200
+Message-Id: <20220924080459.13084-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
 References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
@@ -88,136 +88,106 @@ DT schema expects TLMM pin configuration nodes to be named with
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts |  6 +++---
- arch/arm/boot/dts/qcom-msm8226.dtsi         | 24 ++++++++++-----------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ .../qcom-msm8974-lge-nexus5-hammerhead.dts    | 30 +++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-index 193569f0ca5f..02bef5870526 100644
---- a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-@@ -299,8 +299,8 @@ bluetooth_default_state: bluetooth-default-state {
+diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+index 6daceaa87802..8138f37233aa 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+@@ -573,43 +573,43 @@ bcrmf@1 {
+ };
+ 
+ &tlmm {
+-	sdc1_on: sdc1-on {
+-		clk {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <16>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc2_on: sdc2-on {
+-		clk {
++	sdc2_on: sdc2-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <6>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	mpu6515_pin: mpu6515 {
++	mpu6515_pin: mpu6515-state {
+ 		pins = "gpio73";
+ 		function = "gpio";
+ 		bias-disable;
  		input-enable;
  	};
  
--	touch_pins: touch {
--		irq {
-+	touch_pins: touch-state {
-+		irq-pins {
- 			pins = "gpio17";
+-	touch_pin: touch {
+-		int {
++	touch_pin: touch-state {
++		int-pins {
+ 			pins = "gpio5";
  			function = "gpio";
  
-@@ -309,7 +309,7 @@ irq {
+@@ -618,7 +618,7 @@ int {
  			input-enable;
  		};
  
 -		reset {
 +		reset-pins {
- 			pins = "gpio16";
+ 			pins = "gpio8";
  			function = "gpio";
  
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index cf2d56929428..3b6e746a4af9 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -354,35 +354,35 @@ tlmm: pinctrl@fd510000 {
- 			#interrupt-cells = <2>;
- 			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+@@ -627,25 +627,25 @@ reset {
+ 		};
+ 	};
  
--			blsp1_i2c1_pins: blsp1-i2c1 {
-+			blsp1_i2c1_pins: blsp1-i2c1-state {
- 				pins = "gpio2", "gpio3";
- 				function = "blsp_i2c1";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
+-	panel_pin: panel {
++	panel_pin: panel-state {
+ 		pins = "gpio12";
+ 		function = "mdp_vsync";
+ 		drive-strength = <2>;
+ 		bias-disable;
+ 	};
  
--			blsp1_i2c2_pins: blsp1-i2c2 {
-+			blsp1_i2c2_pins: blsp1-i2c2-state {
- 				pins = "gpio6", "gpio7";
- 				function = "blsp_i2c2";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
+-	bt_pin: bt {
+-		hostwake {
++	bt_pin: bt-state {
++		hostwake-pins {
+ 			pins = "gpio42";
+ 			function = "gpio";
+ 		};
  
--			blsp1_i2c3_pins: blsp1-i2c3 {
-+			blsp1_i2c3_pins: blsp1-i2c3-state {
- 				pins = "gpio10", "gpio11";
- 				function = "blsp_i2c3";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
+-		devwake {
++		devwake-pins {
+ 			pins = "gpio62";
+ 			function = "gpio";
+ 		};
  
--			blsp1_i2c4_pins: blsp1-i2c4 {
-+			blsp1_i2c4_pins: blsp1-i2c4-state {
- 				pins = "gpio14", "gpio15";
- 				function = "blsp_i2c4";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp1_i2c5_pins: blsp1-i2c5 {
-+			blsp1_i2c5_pins: blsp1-i2c5-state {
- 				pins = "gpio18", "gpio19";
- 				function = "blsp_i2c5";
- 				drive-strength = <2>;
-@@ -390,13 +390,13 @@ blsp1_i2c5_pins: blsp1-i2c5 {
- 			};
- 
- 			sdhc1_default_state: sdhc1-default-state {
--				clk {
-+				clk-pins {
- 					pins = "sdc1_clk";
- 					drive-strength = <10>;
- 					bias-disable;
- 				};
- 
--				cmd-data {
-+				cmd-data-pins {
- 					pins = "sdc1_cmd", "sdc1_data";
- 					drive-strength = <10>;
- 					bias-pull-up;
-@@ -404,13 +404,13 @@ cmd-data {
- 			};
- 
- 			sdhc2_default_state: sdhc2-default-state {
--				clk {
-+				clk-pins {
- 					pins = "sdc2_clk";
- 					drive-strength = <10>;
- 					bias-disable;
- 				};
- 
--				cmd-data {
-+				cmd-data-pins {
- 					pins = "sdc2_cmd", "sdc2_data";
- 					drive-strength = <10>;
- 					bias-pull-up;
-@@ -418,21 +418,21 @@ cmd-data {
- 			};
- 
- 			sdhc3_default_state: sdhc3-default-state {
--				clk {
-+				clk-pins {
- 					pins = "gpio44";
- 					function = "sdc3";
- 					drive-strength = <8>;
- 					bias-disable;
- 				};
- 
--				cmd {
-+				cmd-pins {
- 					pins = "gpio43";
- 					function = "sdc3";
- 					drive-strength = <8>;
- 					bias-pull-up;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio39", "gpio40", "gpio41", "gpio42";
- 					function = "sdc3";
- 					drive-strength = <8>;
+-		shutdown {
++		shutdown-pins {
+ 			pins = "gpio41";
+ 			function = "gpio";
+ 		};
 -- 
 2.34.1
 
