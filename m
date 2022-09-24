@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26935E8E81
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9485E8E86
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiIXQdZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Sep 2022 12:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S233751AbiIXQjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiIXQdX (ORCPT
+        with ESMTP id S231324AbiIXQjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:33:23 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C121D6F559
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:33:20 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id x22-20020a6bda16000000b006a123cb02beso1629679iob.18
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:33:20 -0700 (PDT)
+        Sat, 24 Sep 2022 12:39:03 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8316F7CB67
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:39:02 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a8so4683673lff.13
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=UN7dIy5bKqPGCHAvZ6RCx2KKfneFm8jKTHL6ecufoDA=;
+        b=mVderDBC0HH08MVkJlNWWaMuX9Uy+dZ09IDw5z/QycijWXh4HJdYAakyKlkZVqZltK
+         ib+yGSQXrCRHVF24k8Z8r1/6/BwogwRVz0y3Nn6aNO/suC0R+PpAY/bw2edm1EHOd4EX
+         fDakEc4Mjb9wd4T3ew3OebRtfB96/0TfQUeilsx+P5AF0Re0F6i3vYBR2Tw8EYnjNnNL
+         WDq3Bzzr6oioNdAe2h3GzgIai4NZ8W0Hogj/uj1iM4zIfraw6GrHxANDdXJq6evs1d5k
+         ZIr6dHheJABrNzwiIyUjmzkh1GsbnzBf1M4PTh0wiveN8bZRoLHYS98q2uUgnKksh2iw
+         WiAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=S6Nhu5PI5Z0XvBDHUm/86UYsvskU1VKEXNdpoZG2ghw=;
-        b=iTWgL4SAnHG0ERv40FihH552jmzFc+1KgRjlEEHrnzA4stiqYLw7qYRsl8YspSSOPK
-         4Ivv5NIDeYJcEByd2ytKg3wDmJZsf9TqqHrW4qtlFn13+OLEQzp/6HktiLr1DeIWFexX
-         tRt7iwdHV6cY+khmPOtCQNEwYzosicJt1gxn0Z0eXUS1asluqiATX5bMx4+OrVBe8bzX
-         f3rcFLOfG3g+gzT+t3+Fif4lC0XlS0hP1g3IKgStUNokO6mZSGIQ2EVLtjKmTYQCQHOq
-         ljSTrNyTUdB1sjd2MxNwsTH5tx+FKTaVccZJcnZEup/TenK0QJeVvF+zJzadJIB/9FDB
-         rtxg==
-X-Gm-Message-State: ACrzQf1WIWs0CG9wNER9GgosRDdDp4UmRHQ9d60nga4XpdPuX12l8StP
-        mq6CB9zCAeLQCObxb/2Xfnc0yt5AyiGMXAAfHU2fmEbH8D/f
-X-Google-Smtp-Source: AMsMyM6G82M3m2Sn/yF/jBIYC2sHRCRHmjZ3Gqt32JHmrzrNpmIrR77lh54ux3fVEhaVTxlwwbEBSl6ylYPFQbN9Ht6DCJMlw2Km
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UN7dIy5bKqPGCHAvZ6RCx2KKfneFm8jKTHL6ecufoDA=;
+        b=YUcntMlR0T2Rf+HrXrxrCCMutjkkAyE30KAiitaqWlydISlxHjh1BCdDnvbWAHNj4X
+         CYoFfaDSKci1Blp6cHLn2ArEg2eqndoKCCsKjNiEjJFGRG6fg54WGrLLtV2OaF7ulDC8
+         HKK4leUM3oNsK7MKeQl7As+5kooeOHjRoD45py2sE8MLY6hE3lWuGyoV9k2bE87msFv9
+         CMqhl/QkwqYk9n7reP+TY1dkkHj8W3ktHXEaPqsYbDlUjT+EUoKguVVYJDEa0zzCgvpi
+         WRZn/O6hpNCT8xWsjSx8HGZ5iLynXccuQfy7cMWQmgXYFjQtUgjN3ItsRdZEaC+WxF6W
+         aZaA==
+X-Gm-Message-State: ACrzQf1E6z46vKpx2YJnzUKIToLiMvxczDLIdoPz1KDBSIjHDHKO7NCe
+        sIsa4/bKLXucCFXOls2lBPX2LRTkC7LXaw==
+X-Google-Smtp-Source: AMsMyM4LUkwxRtPvLlV/99Vshl39R68/lx1p+A7GnsUxLlQYo5FCnzw6uQgxz4o7vtVVbIQ7nmPieg==
+X-Received: by 2002:a05:6512:308f:b0:49a:5a59:aa25 with SMTP id z15-20020a056512308f00b0049a5a59aa25mr5220074lfd.44.1664037540847;
+        Sat, 24 Sep 2022 09:39:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056512344c00b00494a1b242dasm1946332lfr.14.2022.09.24.09.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 09:39:00 -0700 (PDT)
+Message-ID: <9ef673f2-4296-8761-4d7a-dca323ba272e@linaro.org>
+Date:   Sat, 24 Sep 2022 19:38:58 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a92:c26f:0:b0:2f5:738d:ea72 with SMTP id
- h15-20020a92c26f000000b002f5738dea72mr6654936ild.275.1664037200125; Sat, 24
- Sep 2022 09:33:20 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 09:33:20 -0700
-In-Reply-To: <20220924161357.33193-1-yin31149@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000034e78e05e96eda0d@google.com>
-Subject: Re: [syzbot] WARNING in wireless_send_event
-From:   syzbot <syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com>
-To:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, keescook@chromium.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] thermal: qcom: tsens-v0_1: Fix MSM8939 fourth sensor
+ hw_id
+Content-Language: en-GB
+To:     Vincent Knecht <vincent.knecht@mailoo.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bryan.odonoghue@linaro.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+References: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/08/2022 13:50, Vincent Knecht wrote:
+> Reading temperature from this sensor fails with 'Invalid argument'.
+> 
+> Looking at old vendor dts [1], its hw_id should be 3 instead of 4.
+> Change this hw_id accordingly.
+> 
+> [1] https://github.com/msm8916-mainline/android_kernel_qcom_msm8916/blob/master/arch/arm/boot/dts/qcom/msm8939-common.dtsi#L511
+> 
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-failed to create VM pool: failed to create GCE image: create image operation failed: &{Code:PERMISSIONS_ERROR ErrorDetails:[] Location: Message:Required 'read' permission for 'disks/ci-upstream-linux-next-kasan-gce-root-test-job-test-job-image.tar.gz' ForceSendFields:[] NullFields:[]}.
+Daniel, gracious ping for getting this patch into 6.1.
 
-syzkaller build log:
-go env (err=<nil>)
-GO111MODULE="auto"
-GOARCH="amd64"
-GOBIN=""
-GOCACHE="/syzkaller/.cache/go-build"
-GOENV="/syzkaller/.config/go/env"
-GOEXE=""
-GOEXPERIMENT=""
-GOFLAGS=""
-GOHOSTARCH="amd64"
-GOHOSTOS="linux"
-GOINSECURE=""
-GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
-GONOPROXY=""
-GONOSUMDB=""
-GOOS="linux"
-GOPATH="/syzkaller/jobs/linux/gopath"
-GOPRIVATE=""
-GOPROXY="https://proxy.golang.org,direct"
-GOROOT="/usr/local/go"
-GOSUMDB="sum.golang.org"
-GOTMPDIR=""
-GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
-GOVCS=""
-GOVERSION="go1.17"
-GCCGO="gccgo"
-AR="ar"
-CC="gcc"
-CXX="g++"
-CGO_ENABLED="1"
-GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
-CGO_CFLAGS="-g -O2"
-CGO_CPPFLAGS=""
-CGO_CXXFLAGS="-g -O2"
-CGO_FFLAGS="-g -O2"
-CGO_LDFLAGS="-g -O2"
-PKG_CONFIG="pkg-config"
-GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build4239397487=/tmp/go-build -gno-record-gcc-switches"
+> ---
+> Fixes reading GPU temperature on msm8939 idol3 with current WIP dtsi
+> ---
+>   drivers/thermal/qcom/tsens-v0_1.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..327f37202c69 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -604,7 +604,7 @@ static const struct tsens_ops ops_8939 = {
+>   struct tsens_plat_data data_8939 = {
+>   	.num_sensors	= 10,
+>   	.ops		= &ops_8939,
+> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 4, 5, 6, 7, 8, 9, 10 },
+> +	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, 10 },
+>   
+>   	.feat		= &tsens_v0_1_feat,
+>   	.fields	= tsens_v0_1_regfields,
 
-git status (err=<nil>)
-HEAD detached at 380f82fb6
-nothing to commit, working tree clean
-
-
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
-make .descriptions
-bin/syz-sysgen
-touch .descriptions
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
-mkdir -p ./bin/linux_amd64
-gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
-	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"380f82fb6ebefdaa2b4e4f84d34a9019900f0b89\"
-
-
-
-Tested on:
-
-commit:         aaa11ce2 Add linux-next specific files for 20220923
-git tree:       linux-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15585edf080000
+-- 
+With best wishes
+Dmitry
 
