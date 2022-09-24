@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16405E8E9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6E05E8EA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiIXQwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S233853AbiIXQyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbiIXQwb (ORCPT
+        with ESMTP id S229786AbiIXQxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:52:31 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C52D1F4;
-        Sat, 24 Sep 2022 09:52:27 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id c11so1824863qtw.8;
-        Sat, 24 Sep 2022 09:52:27 -0700 (PDT)
+        Sat, 24 Sep 2022 12:53:54 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2682E9E0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:53:53 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i26so4720958lfp.11
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=m0PT28nsrsAiwm+d/SfcMr5Oex6iVxmoaq7Jg5RhoYA=;
+        b=OSbBCdmJ840xiC5/OHQSoqvFn95W0ajXt/DNwc/tRirbedoIFm/N7Nx++vvO9YRTqP
+         309dI/NKQ0+CRMfTtDURVpvPnL5AMlMU6fm4IxTH4CNzddZ7mDUbBOIKWDvPsTF2DI1Y
+         F6qg6zST94UzoDXRgLms1g31i+7FQtO4O5aqKin+9AzuQ4EpgJpbJqyOf6edWIuTNsAk
+         PQF61sHcdCNd4eanGSS3Cwd57PSRaHhNqTP0clz8HRFfqFBQrs24e5mP3yXH5fImA5KW
+         gX1di2yiRzghvTAxN45N+Tm+ssyS/paBYeOPPpOXZxrfhwwcSTw/Rkx48lrxW2Fw0/xw
+         cKfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=P6Yp7bWFgW/ocrevyMc619Inz7oF6cbIjoDxngEHtYA=;
-        b=Qrul35aIxs7a0HrK1H/sEfQcujOG+dJtnJa/oex0XiG3mZsfct5D/ovvJAKVJpeTxn
-         2sCeV+4QU+6xSCRnyb6q8pd9d6ZSMA6kheaIFpmU6MBsl+AwAd8lMDv2fMFFZb0BnLOR
-         w/Cb6F37YaGhmMrtA7+gvNatoIAbHKlpcZ1JOw3hchRpDhFyuhOUs87xDZJN4m1Rc7eM
-         nQ5nJs7jL32n6w4zcinI2v0NGKb8aBQVRs1ekrxz/+gG8HreJJeQo5i38iggCGMRvsJZ
-         L7dGCZKSKz2QDCj6PgInn0WLTgAJtKyerJGgpSxq+VlSo9HqvW1rwf8nSJjF0kGw0U5X
-         qEPA==
-X-Gm-Message-State: ACrzQf1HxqMXj1rVXK1cPOkLZcD8AFiubk6nkGuTwZoaQuiUkbebKG3m
-        deCG5BkK/t3fS/EdhpuOj03j3NRc60JYsWisH2I=
-X-Google-Smtp-Source: AMsMyM7xeNJROoTBrySCo1JRHAKCLj3mT51z155UY84Z7zgFHGGlCNmlBFrkYNGY7SJNxZ8Q5qP6oYKa4tqNqSSOMsY=
-X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
- n8-20020a05622a11c800b0035ce912a8eamr11829694qtk.17.1664038346630; Sat, 24
- Sep 2022 09:52:26 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m0PT28nsrsAiwm+d/SfcMr5Oex6iVxmoaq7Jg5RhoYA=;
+        b=1Ib8XAXCDBdlARUtCpxnfP9/RdI4i7rVIlUe7PE0r3VV/Xc6OHSXvNFby0gI64VREH
+         L6gjaceggub6es38eqzJjRtDeQ6HbcPQtCfbZ74Nu+9GVKbrt0sc5T8VRcLsEM3/b5bN
+         eZ6LzOPD1GGc5FwRnA/QxqUuWHvWfxRErDsrIQNpjKiIw7OokrLwcF1tQBQ9tSRmVt/f
+         5ssPVZ7f+y5sYqqK6nuuY3jp7D+Tu65l7VOFdKKL6jrfwokzkYwZYOd668sRUSLWuEr7
+         RGRnUflw8cvpS8CRc8nWBnk8hLkB2s+Hx6dHIEvJKtUtW3S8mbFWO7jXeez+IDiVT6/Z
+         /P2g==
+X-Gm-Message-State: ACrzQf1IexHjU6nQwBTQjlVt4x3EwNX0P04HtXxqgamOMQfx9XSTTFs2
+        rUMPDHEB4cbcbMhwNozMvnIRYQ==
+X-Google-Smtp-Source: AMsMyM7tSptZVBxYgc9j7wkrPycfKbhavRuvgF/a/6bf63nz7er5iXO2CeeNjWP9twazsberkj1TxA==
+X-Received: by 2002:a05:6512:3f08:b0:4a1:af5e:5643 with SMTP id y8-20020a0565123f0800b004a1af5e5643mr935183lfa.86.1664038432279;
+        Sat, 24 Sep 2022 09:53:52 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k9-20020a05651239c900b00492b494c4e8sm1925202lfu.298.2022.09.24.09.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 09:53:51 -0700 (PDT)
+Message-ID: <daf1b77c-e752-70d9-c0eb-81d5a9adaa86@linaro.org>
+Date:   Sat, 24 Sep 2022 18:53:50 +0200
 MIME-Version: 1.0
-References: <20220921092834.230356-1-ye.xingchen@zte.com.cn>
-In-Reply-To: <20220921092834.230356-1-ye.xingchen@zte.com.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 18:52:15 +0200
-Message-ID: <CAJZ5v0jVgb3dzqUj5QLgxcJacOxGWqJm4BvyO081cHBpV63XRg@mail.gmail.com>
-Subject: Re: [PATCH linux-next v2] ACPI: APEI: Remove the unneeded result variable
-To:     cgel.zte@gmail.com
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] dt-bindings: marvell: Update Armada 37xx platform
+ bindings
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220713200123.22612-1-pali@kernel.org>
+ <20220808202352.iimhb2q6yawi35y6@pali>
+ <3b80983d-93e9-9663-f569-7dda5b738cf1@linaro.org>
+ <20220924143004.evsnw3xaplc57aot@pali>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220924143004.evsnw3xaplc57aot@pali>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 11:28 AM <cgel.zte@gmail.com> wrote:
->
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->
-> Return the value erst_get_record_id_begin() and apei_exec_write_register()
->  directly instead of storing it in another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
-> v1 -> v2
-> combine the patchs in APEI.
->  drivers/acpi/apei/apei-base.c | 5 +----
->  drivers/acpi/apei/erst.c      | 6 +-----
->  2 files changed, 2 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/acpi/apei/apei-base.c b/drivers/acpi/apei/apei-base.c
-> index 9f49272cad39..9b52482b4ed5 100644
-> --- a/drivers/acpi/apei/apei-base.c
-> +++ b/drivers/acpi/apei/apei-base.c
-> @@ -125,12 +125,9 @@ EXPORT_SYMBOL_GPL(apei_exec_write_register);
->  int apei_exec_write_register_value(struct apei_exec_context *ctx,
->                                    struct acpi_whea_header *entry)
->  {
-> -       int rc;
-> -
->         ctx->value = entry->value;
-> -       rc = apei_exec_write_register(ctx, entry);
->
-> -       return rc;
-> +       return apei_exec_write_register(ctx, entry);
->  }
->  EXPORT_SYMBOL_GPL(apei_exec_write_register_value);
->
-> diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
-> index 31b077eedb58..247989060e29 100644
-> --- a/drivers/acpi/apei/erst.c
-> +++ b/drivers/acpi/apei/erst.c
-> @@ -1020,14 +1020,10 @@ static int reader_pos;
->
->  static int erst_open_pstore(struct pstore_info *psi)
->  {
-> -       int rc;
-> -
->         if (erst_disable)
->                 return -ENODEV;
->
-> -       rc = erst_get_record_id_begin(&reader_pos);
-> -
-> -       return rc;
-> +       return erst_get_record_id_begin(&reader_pos);
->  }
->
->  static int erst_close_pstore(struct pstore_info *psi)
-> --
+On 24/09/2022 16:30, Pali Rohár wrote:
+> On Saturday 24 September 2022 15:50:38 Krzysztof Kozlowski wrote:
+>> On 08/08/2022 22:23, Pali Rohár wrote:
+>>> PING?
+>>>
+>>
+>> You got the ack, what are you pinging us for?
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> So, who can take this patch?
 
-Applied as 6.1 material with some edits in the subject and changelog, thanks!
+This looks like platform bindings, so the platform maintainers. Would be
+easier for them to pick it up, if they were CCed. :)
+
+I actually hoped they will pick up also fix for maintainers entry:
+https://lore.kernel.org/all/875yi5g96s.fsf@BL-laptop/
+...
+
+Best regards,
+Krzysztof
+
