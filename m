@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D024E5E8EC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 19:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F0A5E8EC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 19:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbiIXRDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 13:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S233924AbiIXRIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 13:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbiIXRDR (ORCPT
+        with ESMTP id S229683AbiIXRIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 13:03:17 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728D795693;
-        Sat, 24 Sep 2022 10:03:15 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id g2so1908280qkk.1;
-        Sat, 24 Sep 2022 10:03:15 -0700 (PDT)
+        Sat, 24 Sep 2022 13:08:01 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A791E25E91;
+        Sat, 24 Sep 2022 10:08:00 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id c6so1901722qvn.6;
+        Sat, 24 Sep 2022 10:08:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5Oj5RA8rn9Qktt9kVPsACHjRhcWrRSHzXz4A/CK+Liw=;
-        b=6yAaGmXSumeLVR8G2xvx9Ya3NiQVmpN7pFZsQTWK3Eckg1ok4SXiH//1Muo+gK0Z5U
-         +IhIpSmeghqaptqvwLairOeN7DG5FFNDOfgFCJGf5NEDIue6qFxMATQRds9eUp9IQxpc
-         MVYmZgMXcG8zx1xeFEez4RmyNB53dyxMoZ2UkKzOPBzgh9olZEGT+ZvJaV7swI8W973E
-         50abTXNHMHj62Nyri2pWfI2K38K5tuHYLJpokp/VwGXUHFlztCIYLsBRpEoLYyrOtAqb
-         rz2GIU7JWeOXgruIG4QnGgBmTosB8SD4DxJvHOW77XBcxMaecDEC0LdEEYgLK5ThPSWl
-         vxag==
-X-Gm-Message-State: ACrzQf1jXWztseM6xYAQpLnqvsnrTYuYz8OVU9j6d46wnGQIg0/jhhUE
-        Mt2T5yAUdWlaBGiaeHohDu+pGCC2YFeRu6UySgk=
-X-Google-Smtp-Source: AMsMyM4PKak5RBjro7zyF3T/ozZ4Ns7hvTHmw/i4M3UzGNXZnHxLb/Cw+WdoUwRK9GCoJcKj088HrWSqtt7Z+pWPsBU=
-X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id
- h8-20020a05620a400800b006ce87250cb7mr9665355qko.480.1664038994620; Sat, 24
- Sep 2022 10:03:14 -0700 (PDT)
+        bh=V/3GhR988gPDS6E2QDOzA/8y9R+/aGZbwIz06arVHDw=;
+        b=yTOdkapCj3V5WNvIkZf5U7aYUlGUyqzS0zJ+ZziLkVaVqnduqAeY6Tfq4uDOcpkYQs
+         UE+GSEtY4Ijrb5KBtx+7V67Tx/Gaf+ejpSId6nHAcXXKlLTHlj8AR6sHCGWeUaJGAZcS
+         bSJc30owyo/NEFV81vV6tufb/OdrJPZG2e4N/oh88knntuVOiSb5Dj3vJxCZ/Pt/MvXY
+         7raOfmCkNcOjAsxDd70fMpzzox/3Q2sbmNx1LrVLvtHOi41mgYgPo7ZKChFbdeqpE6sC
+         UAY8p/U8R71Jn3E0DKnGbBMhFpj5v9n0VCsFEHA/OHhaaIaF78/bODLpVIMuCh3ffhMN
+         YTfw==
+X-Gm-Message-State: ACrzQf1HM7hWudXcrWyRY9iE9r9CgifuVSsJhqenUWX7oxr+alRPNaWJ
+        laOohoGxFCDjvEzwKaTcVK6T+NDjw7k8Pt05cF0=
+X-Google-Smtp-Source: AMsMyM4uLhgwFaeBlTpnO7Ux4sRZ+3+Xo3VmMtiR+I3wbVBzxzR2JNCThNcNnwzXWrLVBQNaaB3BTVMUN/26CfLw39c=
+X-Received: by 2002:a0c:da14:0:b0:4aa:aad9:e450 with SMTP id
+ x20-20020a0cda14000000b004aaaad9e450mr11681294qvj.130.1664039279863; Sat, 24
+ Sep 2022 10:07:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220921172422.650880-1-kellen.renshaw@canonical.com>
-In-Reply-To: <20220921172422.650880-1-kellen.renshaw@canonical.com>
+References: <20220921204055.22889-1-mario.limonciello@amd.com>
+In-Reply-To: <20220921204055.22889-1-mario.limonciello@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 19:03:03 +0200
-Message-ID: <CAJZ5v0g=x2cBoFjOufOD6_4nLHhRqoFmM+4BHtWFifVGgNcKUQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: resources: Add ASUS model S5402ZA to quirks
-To:     Kellen Renshaw <kellen.renshaw@canonical.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Hui Wang <hui.wang@canonical.com>
+Date:   Sat, 24 Sep 2022 19:07:49 +0200
+Message-ID: <CAJZ5v0jAOWbqdPRDfUeheD2EVZVeUxUwShqMr125Qn4zbMwdAg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] Fixups for s2idle on various Rembrandt laptops
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, travisghansen@yahoo.com,
+        catalin@antebit.com, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Matthew Anderson <ruinairas1992@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        "Sebastian S ." <iam@decentr.al>,
+        Hans de Goede <hdegoede@redhat.com>, davidedp91@gmail.com,
+        marko.cekrlic.26@gmail.com, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,43 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 7:24 PM Kellen Renshaw
-<kellen.renshaw@canonical.com> wrote:
+On Wed, Sep 21, 2022 at 10:40 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> The Asus Vivobook S5402ZA has the same keyboard issue as Asus Vivobook
-> K3402ZA/K3502ZA. The kernel overrides IRQ 1 to Edge_High when it
-> should be Active_Low.
+> It was reported that an ASUS Rembrandt laptop has problems with seemingly
+> unrelated ACPI events after resuming from s2idle. Debugging the issue
+> proved it's because ASUS has ASL that is only called when using the
+> Microsoft GUID, not the AMD GUID.
 >
-> This patch adds the S5402ZA model to the quirk list.
+> This is a bug from ASUS firmware but this series reworks the s2idle
+> handling for AMD to allow accounting for this in a quirk.
 >
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216158
-> Tested-by: Kellen Renshaw <kellen.renshaw@canonical.com>
-> Signed-off-by: Kellen Renshaw <kellen.renshaw@canonical.com>
-> ---
-> Follows e12dee373673 (ACPI: resource: Skip IRQ override on Asus Vivobook
-> K3402ZA/K3502ZA).
+> Additionally as this is a problem that may pop up again on other models
+> add a module parameter that can be used to try the Microsoft GUID on a
+> given system.
 >
->  drivers/acpi/resource.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> This module parameter intentionally applies to both Intel and AMD systems
+> as the same problem could potentially exist on Intel systems that support
+> both the Intel GUID or the Microsoft GUID.
 >
-> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> index 8b4faec8cae7..5d688e546239 100644
-> --- a/drivers/acpi/resource.c
-> +++ b/drivers/acpi/resource.c
-> @@ -414,6 +414,13 @@ static const struct dmi_system_id asus_laptop[] = {
->                         DMI_MATCH(DMI_BOARD_NAME, "K3502ZA"),
->                 },
->         },
-> +       {
-> +               .ident = "Asus Vivobook S5402ZA",
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "S5402ZA"),
-> +               },
-> +       },
->         { }
->  };
+> v3->v4:
+>  * Absorb tags
+>  * minor URL correction
+>  * Rename module parameter per Rafael's request
+> v2->v3:
+>  * Add more systems
+> v1->v2:
+>  * Add two more systems that are reported to be helped by this series.
+>
+> Mario Limonciello (7):
+>   acpi/x86: s2idle: Move _HID handling for AMD systems into structures
+>   acpi/x86: s2idle: If a new AMD _HID is missing assume Rembrandt
+>   acpi/x86: s2idle: Add module parameter to prefer Microsoft GUID
+>   acpi/x86: s2idle: Add a quirk for ASUS TUF Gaming A17 FA707RE
+>   acpi/x86: s2idle: Add a quirk for ASUS ROG Zephyrus G14
+>   acpi/x86: s2idle: Add a quirk for Lenovo Slim 7 Pro 14ARH7
+>   acpi/x86: s2idle: Add a quirk for ASUSTeK COMPUTER INC. ROG Flow X13
+
+All applied as 6.1 material, thanks!
+
+>  drivers/acpi/x86/s2idle.c | 136 +++++++++++++++++++++++++++++++-------
+>  1 file changed, 112 insertions(+), 24 deletions(-)
 >
 > --
-
-Applied as 6.1 material, thanks!
