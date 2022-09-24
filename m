@@ -2,137 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16F45E86E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1B05E86EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbiIXBDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 21:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S232817AbiIXBHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 21:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiIXBDN (ORCPT
+        with ESMTP id S231701AbiIXBH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 21:03:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6EA124C0B;
-        Fri, 23 Sep 2022 18:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663981392; x=1695517392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OBLqHu4HrfxZrshSMCaixAcofJF9yzq0ARl2qAoeSc8=;
-  b=IaK6lJuBlyv1yFE6WKSNewwcNklMZOU+dDbn+dyJsIze8u33GW0q3cnt
-   44yGqHSrd2FlotsJ8glsAE1aFPzAmMH7PijkOXC+4VH9EUtiXQe2FHFJi
-   d7NitaJ4nkDzv8yfTQxAOBatp3Ek1oIIJietz8qtIY2tbBS+2arZJM1cB
-   TnNpN9syFusVk9SlZZicvUNU5p5U5DZpr6oHleX6xq23ywyX/P7RjH1q0
-   HeLIOxIqB205ycw4zwYTu/8flQgiN82Y6y8jrlGqMNRT9wIScuARTqBKD
-   A/PFCIGx5XYOI++QxU/sjcdcInC6Ut9IiWmMGLnu8xHhHtCrB8iqsEc7B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="301620728"
-X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
-   d="scan'208";a="301620728"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 18:03:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,340,1654585200"; 
-   d="scan'208";a="724350159"
-Received: from pameiner-mobl2.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.58.236])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 18:03:05 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D7FE51028F1; Sat, 24 Sep 2022 04:03:02 +0300 (+03)
-Date:   Sat, 24 Sep 2022 04:03:02 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Message-ID: <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
-References: <20220810141959.ictqchz7josyd7pt@techsingularity.net>
- <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
- <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com>
- <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
- <984e07ed-914f-93ca-a141-3fc8677878e0@intel.com>
- <CAAH4kHawguTEuDVyz1ysSbH0X_mT=SvxLi=UhwEzXM0abbWefg@mail.gmail.com>
- <YxncAElGrPEGRYg1@linux.ibm.com>
- <CAAH4kHaP8JUh0Z4rF83=2RZTGMATT5MHot6rAnAwt79PL64mVQ@mail.gmail.com>
- <YxpCaQARczhZQmq2@linux.ibm.com>
- <f72f7325-adc6-89d5-7cbc-647442308233@amd.com>
+        Fri, 23 Sep 2022 21:07:28 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1544132D4C;
+        Fri, 23 Sep 2022 18:07:26 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v2so1379231edc.7;
+        Fri, 23 Sep 2022 18:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=xcDTvjZ0q27K7CTovDd27RZ5rVcQpUYfL5Oluu9qcWk=;
+        b=ZHMM35zmDsoNcviYlaumSdDZ66s1ggrM42M2jAbkiXjURn+xZMQP0xB7lqAsAz/UMC
+         iI0gEsnrYBsg/gTWf0sD9HBDcinPcCP34tUdJ09Lpd3EOnBUOliCsuruM7NBkfwwiYcd
+         uRQblFg9bQgFczhbTw9NMHE8SxbLV1gndAclmItIJJ4lX03CXK+WrDLtR0OF/W3hpMCA
+         P7Cs5Yld5yNwyfuf/UMyb5kE7ftBcvmFG3L2N7qoubjDsmGWAMbu09GoC0R4k8gwdQ2W
+         qc6ahMhI9sBoGcp6sy1yhG530TCVJMUvtgslkiiBG3cDCPJwjLNVOlyzKK3AY4wfsJBI
+         xqNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=xcDTvjZ0q27K7CTovDd27RZ5rVcQpUYfL5Oluu9qcWk=;
+        b=pksj/x+mxOXwZ0SvbAE0YpOr8MXW4uBv2kwi32dAUKrIK9vZvMrhJWm2cp2IEaVUb5
+         CrjHfcJED9Y/WdkNJAWoevquSKVfT+ZMo46P7PtZ2TSz/H6nL1MPYfKq3QRszMv/w9MB
+         pssJ3BFZySJr7YRDeoV/rJM3GdKUeovBEMedXi3Ul+oRbR5tT20tWPItNr/VyE9Mzv9l
+         ne6RoTiVpY5JMvv8KiRxwvFEsSTc+dysHv5cCBzhhsrpwTIkmZ6RilRtpaMW8T5cNzJv
+         rWV9kfdrjrDiY42IoqgsPDo7ktn5TJKJnqHu8npzMAkvulrY8hypn16OTRbiXL7VsAg6
+         Xd5A==
+X-Gm-Message-State: ACrzQf0Kdkj3h+WE4L+8kTwcVr7/l7ff1R4rl1o5CNvTq7wE/WdUCH0Q
+        wMirhY1I3xNONJ7SFxa5Sl+ENO9rwKKtvU2VkP8=
+X-Google-Smtp-Source: AMsMyM6r+ddKU2IOMFiBvjgbAnyXFSkValEp0ui7PmPGKCBOeQQTfkBzFc5wo3uv6Vp5IHtFSvY3Bn82moqC3MdYIkk=
+X-Received: by 2002:a05:6402:27ca:b0:451:7b58:1b01 with SMTP id
+ c10-20020a05640227ca00b004517b581b01mr11476263ede.61.1663981644987; Fri, 23
+ Sep 2022 18:07:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f72f7325-adc6-89d5-7cbc-647442308233@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com> <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+ <ec9cc2c9-733c-4e72-b61f-d2ab3bf7a99b@app.fastmail.com> <Yy4Bw+jqDxshX4Dg@smile.fi.intel.com>
+In-Reply-To: <Yy4Bw+jqDxshX4Dg@smile.fi.intel.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Fri, 23 Sep 2022 18:07:13 -0700
+Message-ID: <CAHQ1cqHO+EWJP0TV2EQzrcqq=20dqagC-ThrTYQurKrWuZYnvQ@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ferry Toth <fntoth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:31:12AM -0500, Tom Lendacky wrote:
-> On 9/8/22 14:28, Mike Rapoport wrote:
-> > On Thu, Sep 08, 2022 at 09:23:07AM -0700, Dionna Amalie Glaze wrote:
-> > > > 
-> > > > Looks like the first access to the memory map fails, although I think
-> > > > it's not in INIT_LIST_HEAD() but rather in init_page_count().
-> > > > 
-> > > > I'd start with making sure that page_alloc::memmap_alloc() actually returns
-> > > > accepted memory. If you build kernel with CONFIG_DEBUG_VM=y the memory map
-> > > > will poisoned in this function, so my guess is it'd crash there.
-> > > > 
-> > > 
-> > > That's a wonderful hint, thank you! I did not run this test
-> > > CONFIG_DEBUG_VM set, but you think it's possible it could still be
-> > > here?
-> > 
-> > It depends on how you configured your kernel. Say, defconfig does not set
-> > it.
-> > 
-> 
-> I also hit the issue at 256GB. My config is using CONFIG_SPARSEMEM_VMEMMAP
-> and fails in memmap_init_range() when attempting to add the first PFN. It
-> looks like the underlying page that is backing the vmemmap has not been
-> accepted (I receive a #VC 0x404 => page not validated).
-> 
-> Kirill, is this a path that you've looked at? It would appear that somewhere
-> in the vmemmap_populate_hugepages() path, some memory acceptance needs to be
-> done for the pages that are used to back vmemmap. I'm not very familiar with
-> this code, so I'm not sure why everything works for a guest with 255GB of
-> memory, but then fails for a guest with 256GB of memory.
+On Fri, Sep 23, 2022 at 11:58 AM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
+>
+> +Stephen to help to realize what the mess we have now...
+>
+> On Fri, Sep 23, 2022 at 08:35:13PM +0200, Sven Peter wrote:
+> > On Fri, Sep 23, 2022, at 20:23, Andrey Smirnov wrote:
+> > > On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
+> > > <andriy.shevchenko@intel.com> wrote:
+> > >>
+> > >> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
+> > >> > On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+> > >> > > On 22-09-2022 12:08, Andy Shevchenko wrote:
+> > >> > > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+> > >>
+> > >> FYI: For now I sent a revert, but if we got a solution quicker we always
+> > >> can choose the course of actions.
+> > >>
+> > >
+> > > I think we have another problem. This patch happened in parallel to mine
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
+> > >
+> > > so my changes didn't have that fix in mind and I think your revert
+> > > will not preserve that fix. Can you update your revert to take care of
+> > > that too, please?
+> > >
+> > > I'm really confused how the above commit could be followed up by:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
+> > >
+> > > the diffs in dwc3_drd_init seem contradictory
+> >
+> > I noticed this a while ago when I finally rebased the M1 USB3 PHY WIP branch
+> > and have been meaning to send a fix. Then life unfortunately got in the way and
+> > I completely forgot about it again.
+> >
+> > Both patches were sent at approximately the same time and I think got merged into
+> > two separate branches. The conflict resolution [1] then went bad but I didn't notice
+> > until weeks later :(
+>
+> Folks, I have no idea what you are talking about. Can you check that revert
+> series [2] gets your change still in? Because I have no clue how it's involved at
+> all into discussion.
+>
+> > [1] https://lore.kernel.org/lkml/20220426150842.473be40e@canb.auug.org.au/
+>
+> [2]: https://lore.kernel.org/linux-usb/20220923163051.36288-1-andriy.shevchenko@linux.intel.com/
+>
 
-Hm. I don't have machine that large at hands at the moment. And I have not
-looked at the codepath before.
+Here's Sven's diff:
 
-I will try to look into the issue.
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index b60b5f7b6dff4..8cad9e7d33687 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -584,16 +584,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
+{
+int ret, irq;
++ if (ROLE_SWITCH &&
++ device_property_read_bool(dwc->dev, "usb-role-switch"))
++ return dwc3_setup_role_switch(dwc);
++
+dwc->edev = dwc3_get_extcon(dwc);
+if (IS_ERR(dwc->edev))
+return PTR_ERR(dwc->edev);
+- if (ROLE_SWITCH &&
+- device_property_read_bool(dwc->dev, "usb-role-switch")) {
+- ret = dwc3_setup_role_switch(dwc);
+- if (ret < 0)
+- return ret;
+- } else if (dwc->edev) {
++ if (dwc->edev) {
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+
+Here's your revert of my patch:
+
+@@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+        int ret, irq;
+
++       dwc->edev = dwc3_get_extcon(dwc);
++       if (IS_ERR(dwc->edev))
++               return PTR_ERR(dwc->edev);
++
+        if (ROLE_SWITCH &&
+            device_property_read_bool(dwc->dev, "usb-role-switch"))
+                return dwc3_setup_role_switch(dwc);
+
+
+There's an order of operations difference. Dwc3_get_extcon() Needs to
+be happening after if (ROLE_SWITCH
