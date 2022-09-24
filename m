@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F37A5E8C1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746455E8C1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiIXMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S233799AbiIXMOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiIXMNH (ORCPT
+        with ESMTP id S229897AbiIXMOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:13:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D97EE11F1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:13:06 -0700 (PDT)
+        Sat, 24 Sep 2022 08:14:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D85E171C;
+        Sat, 24 Sep 2022 05:14:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 193DD6126D
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 12:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446ECC433D6;
-        Sat, 24 Sep 2022 12:13:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E35E3B80D1B;
+        Sat, 24 Sep 2022 12:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84222C433C1;
+        Sat, 24 Sep 2022 12:14:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664021585;
-        bh=VyLMxWfneZ3rJhbjfHMq7D9mfK6vAql+dCxazpz2FcU=;
+        s=k20201202; t=1664021642;
+        bh=6LjcZLlfXDajYf+UxU5rviBR8j+wzEQGyunyc6QKoJ8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=re+t2boxpL4KVGkisBN5BsjQuz0oxSeAZYXyheiKOY4pi1sR6kSKdqafy0/9Y9czJ
-         IFvQKjmJFcjRv9upiokhfKYhkzetKVnMfem+ElegOP8XMcd7/Dq9LQpikwmNdEG7Qw
-         X9f/Yr7Y7Bks8cmqkkbmR34kKF8SWDx3/tk/b4tVrtCvLWZbYCSmGLBZC2+7sbS0ht
-         32qdiqTqwzFFXoO2T/U7ujnGFrUI9LxinHsQ5pTtF+1RQB+u6BAXQr38w6u6g9FPEG
-         IIqt0/3/3M2EAi2tWF35dPxu0xZR42XXD8xtQQ2KoHCWAc7xQHldDOzMraqT1X9wVb
-         MVvl2y/+8LvDQ==
+        b=BrLRVunGElBOmBjPOJi/u8HwrCVMk3XLMhps9+hUd2oivlgXczbi1FAftsfRKYLR6
+         yc6IeQ+baKSEwTYTzgHoXYzdv7qatwOGGfI4DdwgKpZRgnnh3MhEsJ2hLhAz6sSSVk
+         PIyhY2yi/HYweVQXxTgf+NAEY9PVdAj8HPjklA7q62WpwdQkVVWaC4Yhse9dekO/7a
+         7Kvk+QH1V3FA3QqIG6cUZ1n6tCDixZnpp2c3e8mc/OeSDyXPhUkVPb/3JEq7Tk5EpT
+         Ky7NFFPLl+SCnx0fOfKjrV7zwB6QuFU5QO73JPESGfZcoPgTbkaDkpDjQKqJ84EjGG
+         wFw1JxBhL/dQA==
 Received: by pali.im (Postfix)
-        id B23168A2; Sat, 24 Sep 2022 14:13:02 +0200 (CEST)
-Date:   Sat, 24 Sep 2022 14:13:02 +0200
+        id 24E058A2; Sat, 24 Sep 2022 14:14:00 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 14:14:00 +0200
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add ethernet aliases
-Message-ID: <20220924121302.jtm4qv6vgpc33tav@pali>
-References: <20220727130926.1874-1-pali@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Subject: Re: [PATCH] ARM: dts: turris-omnia: Add switch port 6 node
+Message-ID: <20220924121400.dhpybxi2u2nyhtlq@pali>
+References: <20220825122102.18634-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220727130926.1874-1-pali@kernel.org>
+In-Reply-To: <20220825122102.18634-1-pali@kernel.org>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,32 +64,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 PING?
 
-On Wednesday 27 July 2022 15:09:26 Pali Rohár wrote:
-> This allows bootloader to correctly pass MAC addresses used by bootloader
-> to individual interfaces into kernel device tree.
+On Thursday 25 August 2022 14:21:02 Pali Rohár wrote:
+> Switch port 6 is connected to eth0, so add appropriate device tree node for it.
 > 
+> Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
 > Signed-off-by: Pali Rohár <pali@kernel.org>
 > ---
->  arch/arm/boot/dts/armada-385-turris-omnia.dts | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  arch/arm/boot/dts/armada-385-turris-omnia.dts | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
 > diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> index f4eb6898aa6b..d2afa466e29a 100644
+> index f655e9229d68..8215ffb6a795 100644
 > --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
 > +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> @@ -23,6 +23,12 @@
->  		stdout-path = &uart0;
->  	};
+> @@ -463,7 +463,17 @@
+>  				};
+>  			};
 >  
-> +	aliases {
-> +		ethernet0 = &eth0;
-> +		ethernet1 = &eth1;
-> +		ethernet2 = &eth2;
-> +	};
+> -			/* port 6 is connected to eth0 */
+> +			ports@6 {
+> +				reg = <6>;
+> +				label = "cpu";
+> +				ethernet = <&eth0>;
+> +				phy-mode = "rgmii-id";
 > +
->  	memory {
->  		device_type = "memory";
->  		reg = <0x00000000 0x40000000>; /* 1024 MB */
+> +				fixed-link {
+> +					speed = <1000>;
+> +					full-duplex;
+> +				};
+> +			};
+>  		};
+>  	};
+>  };
 > -- 
 > 2.20.1
 > 
