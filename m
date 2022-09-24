@@ -2,340 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B0B5E8E2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC1C5E8E36
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbiIXPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S233891AbiIXPzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiIXPwj (ORCPT
+        with ESMTP id S229704AbiIXPz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 11:52:39 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5EA1A41
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Gl/EkK4Jsie8hOn3DIyAp+lhBrA+QwGp/EnPgaDUSgU=; b=L42JHZz4V3wZoYF2pOkkEIEkJm
-        cxjcz+xk/OLVLFmqew8U+AYRHrJg3l1E+CY5ss0Hwrmsq4srirUjZD8qeE3ibeykGg6EDWTIRIOzZ
-        OxOcQ/I5udFaFPrmnvBTkDeIZhgaT6nI4nr4qYlxnOkPiU116iZXm2CQpdqGoVkhPX1acCVY/LVeZ
-        J6RAeiD5pYDeIPVspsn64uWim8nAhT5QYYljqaKRCB3qwi4MBxUdAkP88AkfBjYoRcPc21Vhut4DH
-        0ZyQh2P4497oMFU7AcT8d5vsQjc4RSTWKcAWXp6zyVnaPRhKtLQ9rGQsPDlx7RWWcaHmKOHJsZk+s
-        7wo514Jw==;
-Received: from [2a01:799:961:d200:8cf6:761:40ec:1ff7] (port=52904)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oc7SF-0007Oc-Ed; Sat, 24 Sep 2022 17:52:35 +0200
-Message-ID: <80138f62-faec-5f7e-a8bd-235318a4e4c2@tronnes.org>
-Date:   Sat, 24 Sep 2022 17:52:29 +0200
+        Sat, 24 Sep 2022 11:55:26 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415724332A;
+        Sat, 24 Sep 2022 08:55:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso2947637pjm.5;
+        Sat, 24 Sep 2022 08:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=cs0QkmZUUr7nWbgPAvNYeJNXUhclRCkJienF0o0fNiU=;
+        b=XXi+Pq+fTtGiwAkRZHj3j8z6R1ZILd1tkR5mx9cBxEwgihPFgvQYBqgtz+E71o/8hO
+         QcEHsvMJvNhpkJjmCVAh4yR8G8zrgIYR/5FPyAFNIBZ9kOfI6QUduRLaQTDoZviQxCHW
+         DBYTUFrfcksDc45zrIW/pLlLvi/RQWL5CA2fm87VpZWXxp3Zw3c3addVx6/vaoxmdeYc
+         7di5O4RX+hJ9yNUDUriwDkIzhP3O26AmpID/wUVV9/MxWvAPaQjdTqXzuOU28GcVXdbR
+         kOujQCs4w5Z3R1R8IadiWfbO4Kng+qytbz1P/tJFPIy2CA5oHEnG+FnThLBCJ+LBQd12
+         AyIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=cs0QkmZUUr7nWbgPAvNYeJNXUhclRCkJienF0o0fNiU=;
+        b=ujbASAJevmXDctjPdyrKVkJ5TuqGCNJ2uwVQhkhBs/vdlU0uq1FbdL6GuZyJfSlh35
+         RJEZYjwimIGnsAbgR7ZGmhhgDxnotOE+7y9VJlnZ0MxlggoKocHrkzavonQoSNV/rucN
+         WsbTisf8ckiUbJcCUKURK+fXrG6IVGPibiyxaeCbisOKdbl6qy97i3mcDkuHOie9GaE4
+         HnqA/Mq3hVvAuOYqGSBcFZlsYLbmnsL2FGIXF32FsitMOncs4UGkSmjX/u+MOjPzIjRC
+         mPT0xXw9h/uQrO6c7uhNRbQSfC2SxpKKh+vK7/e5Q/afxUANa8Q3EiN0lznJkgUfXuqt
+         augA==
+X-Gm-Message-State: ACrzQf2oxViEwl1QDkYtESx2sv2N9M9XL7STUh9Os6FzstftPn+0Kf0W
+        R9qspNhMCM8NO9V8FFNCqxY=
+X-Google-Smtp-Source: AMsMyM5e3CawAYKjjF4r/lzd5YYEliI7HTynMugTW+m3Oyit+qVYXqNcbwNMo41xZPlNnO/Y7+trzw==
+X-Received: by 2002:a17:90b:3b47:b0:202:a81f:4059 with SMTP id ot7-20020a17090b3b4700b00202a81f4059mr27872793pjb.150.1664034922627;
+        Sat, 24 Sep 2022 08:55:22 -0700 (PDT)
+Received: from localhost ([36.112.206.177])
+        by smtp.gmail.com with ESMTPSA id l1-20020a635701000000b00439dfe09770sm1252475pgb.12.2022.09.24.08.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 08:55:22 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     yin31149@gmail.com
+Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, keescook@chromium.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] Add linux-next specific files for 20220923
+Date:   Sat, 24 Sep 2022 23:55:14 +0800
+Message-Id: <20220924155514.32408-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220924114425.95553-1-yin31149@gmail.com>
+References: <20220924114425.95553-1-yin31149@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 09/33] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-9-f733a0ed9f90@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-9-f733a0ed9f90@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On Sat, 24 Sept 2022 at 19:44, Hawkins Jiawei <yin31149@gmail.com> wrote:
+>
+> Hi Kees,
+> On Sat, 24 Sept 2022 at 15:26, Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Sat, Sep 24, 2022 at 03:10:34PM +0800, Hawkins Jiawei wrote:
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
+> > > > git tree:       linux-next
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1154ddd5080000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c196f080000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f12618880000
+> > > >
+> > > > Downloadable assets:
+> > > > disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
+> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
+> > > >
+> > > > ------------[ cut here ]------------
+> > > > memcpy: detected field-spanning write (size 8) of single field "&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
+> > > > WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623 wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
+> > > > Modules linked in:
+> > > > CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
+> > > > RIP: 0010:wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
+> > > > Code: fa ff ff e8 cd b9 db f8 b9 04 00 00 00 4c 89 e6 48 c7 c2 e0 56 11 8b 48 c7 c7 20 56 11 8b c6 05 94 8e 2a 05 01 e8 b8 b0 a6 00 <0f> 0b e9 9b fa ff ff e8 6f ef 27 f9 e9 a6 fd ff ff e8 c5 ef 27 f9
+> > > > RSP: 0018:ffffc90003b2fbc0 EFLAGS: 00010286
+> > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> > > > RDX: ffff888021d157c0 RSI: ffffffff81620348 RDI: fffff52000765f6a
+> > > > RBP: ffff88801e15c780 R08: 0000000000000005 R09: 0000000000000000
+> > > > R10: 0000000080000000 R11: 20676e696e6e6170 R12: 0000000000000008
+> > > > R13: ffff888025a72640 R14: ffff8880225d402c R15: ffff8880225d4034
+> > > > FS:  0000555556bd9300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 00007fbda677dfb8 CR3: 000000007b976000 CR4: 00000000003506e0
+> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
+> > > >  wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
+> > > >  wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
+> > > >  wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
+> > > >  wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
+> > > >  sock_ioctl+0x285/0x640 net/socket.c:1220
+> > > >  vfs_ioctl fs/ioctl.c:51 [inline]
+> > > >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> > > >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> > > >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > RIP: 0033:0x7fbda6736af9
+> > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > RSP: 002b:00007ffd45e80138 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbda6736af9
+> > > > RDX: 0000000020000000 RSI: 0000000000008b04 RDI: 0000000000000003
+> > > > RBP: 00007fbda66faca0 R08: 0000000000000000 R09: 0000000000000000
+> > > > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbda66fad30
+> > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > >  </TASK>
+> > >
+> > > I think this is the samiliar problem as what Kees Cook pointed out in
+> > > https://lore.kernel.org/linux-next/202209211250.3049C29@keescook/
+> > >
+> > > It seems that memcpy() will performs run-time buffer bounds
+> > > checking, which triggers this warning.
+> > >
+> > > #syz test git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > > master
+> > >
+> > >
+> > > diff --git a/include/linux/wireless.h b/include/linux/wireless.h
+> > > index 2d1b54556eff..81603848b0aa 100644
+> > > --- a/include/linux/wireless.h
+> > > +++ b/include/linux/wireless.h
+> > > @@ -26,7 +26,10 @@ struct compat_iw_point {
+> > >  struct __compat_iw_event {
+> > >       __u16           len;                    /* Real length of this stuff */
+> > >       __u16           cmd;                    /* Wireless IOCTL */
+> > > -     compat_caddr_t  pointer;
+> > > +     union {
+> > > +             compat_caddr_t  pointer;
+> > > +             __DECLARE_FLEX_ARRAY(__u8, pointer_flex);
+> > > +     };
+> >
+> > Is this expected to be dynamically sized? I assume so, given the "Real
+> > length" comment. :)
+> I think this is dynamically sized.
+>
+>         hdr_len = compat_event_type_size[descr->header_type];
+>         event_len = hdr_len + extra_len;
+>
+>         [...]
+>
+>         /* Add the wireless events in the netlink packet */
+>         nla = nla_reserve(compskb, IFLA_WIRELESS, event_len);
+>         if (!nla) {
+>                 kfree_skb(skb);
+>                 kfree_skb(compskb);
+>                 return;
+>         }
+>         compat_event = nla_data(nla);
+>
+>         [...]
+>
+>         if (descr->header_type == IW_HEADER_TYPE_POINT) {
+>                 compat_wrqu.length = wrqu->data.length;
+>                 compat_wrqu.flags = wrqu->data.flags;
+>                 memcpy(&compat_event->pointer,
+>                         ((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
+>                         hdr_len - IW_EV_COMPAT_LCP_LEN);
+>                 if (extra_len)
+>                         memcpy(((char *) compat_event) + hdr_len,
+>                                 extra, extra_len);
+>         } else {
+>                 /* extra_len must be zero, so no if (extra) needed */
+>                 memcpy(&compat_event->pointer, wrqu,
+>                         hdr_len - IW_EV_COMPAT_LCP_LEN);
+>         }
+>
+> according to the above code, it seems that this structure is used to
+> parse ths payload from buffer, so the field **pointer** should just
+> be a position label to the unused bytes in buffer. Its unused bytes will be
+> parsed as different structure according to event type.
+>
+> >
+> > >  };
+> > >  #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
+> > >  #define IW_EV_COMPAT_POINT_OFF offsetof(struct compat_iw_point, length)
+> > > diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
+> > > index 76a80a41615b..9d0b50abbe09 100644
+> > > --- a/net/wireless/wext-core.c
+> > > +++ b/net/wireless/wext-core.c
+> > > @@ -620,7 +620,7 @@ void wireless_send_event(struct net_device *      dev,
+> >
+> > adding in more context code:
+> >
+> >                 memcpy(&compat_event->pointer,
+> >                         ((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
+> >                         hdr_len - IW_EV_COMPAT_LCP_LEN);
+> >                 if (extra_len)
+> >                         memcpy(((char *) compat_event) + hdr_len,
+> >                                 extra, extra_len);
+> >
+> > The code above has "pointer" as a memcpy destination as well. I think
+> > that should be changed to pointer_flex as well, as the length calculation
+> > is the same. I wonder what FORTIFY will think about the second memcpy
+> > above. If I'm reading the math correctly, it might need to be:
+> >
+> >                 if (extra_len) {
+> >                         size_t offset = hdr_len - offsetof(typeof(*compat_event), pointer_flex);
+> >                         memcpy(&compat_event->pointer_flex[offset], extra, extra_len);
+> >                 }
+> >
+> I agree with you. It seems that in this situation,
+> the event type has been cleared, the unuesd bytes start from **pointer**
+> field should be parsed as struct iw_point type as below, which is a bigger
+> structure than **pointer**, it will also triggers the memcpy() warning.
+> /*
+>          * The problem for 64/32 bit.
+>          *
+>          * On 64-bit, a regular event is laid out as follows:
+>          * An iw_point event is laid out like this instead:
+>          *      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
+>          *      | event.len | event.cmd |     p a d d i n g     |
+>          *      | iwpnt.len | iwpnt.flg |     p a d d i n g     |
+>          *      | extra data  ...
+>          *
+>          * The second padding exists because struct iw_point is extended,
+>          * but this depends on the platform...
+>          *
+>          * On 32-bit, all the padding shouldn't be there.
+>          */
+>
+> And as for the value of offsetof in calculating **offset**,
+> I wonder if we can use the macro defined in
+> include/linux/wireless.h as below, which makes code simplier:
+> #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
+>
+>
+> >
+> > >       } else {
+> > >               /* extra_len must be zero, so no if (extra) needed */
+> > > -             memcpy(&compat_event->pointer, wrqu,
+> > > +             memcpy(&compat_event->pointer_flex, wrqu,
+> > >                       hdr_len - IW_EV_COMPAT_LCP_LEN);
+> > >       }
+> > >
+> >
+> > But otherwise, yes, looks like the right modification. Thanks for tackling
+> > this! It is quite a weird structure! :)
+> >
+> > -Kees
+> >
+> > --
+> > Kees Cook
+
+	hdr_len = compat_event_type_size[descr->header_type];
+	event_len = hdr_len + extra_len;
+
+	[...]
+
+	/* Add the wireless events in the netlink packet */
+	nla = nla_reserve(compskb, IFLA_WIRELESS, event_len);
+	if (!nla) {
+		kfree_skb(skb);
+		kfree_skb(compskb);
+		return;
+	}
+	compat_event = nla_data(nla);
+
+	if (descr->header_type == IW_HEADER_TYPE_POINT) {
+		[...]
+		memcpy(&compat_event->pointer,
+			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
+			hdr_len - IW_EV_COMPAT_LCP_LEN);
+		if (extra_len)
+			memcpy(((char *) compat_event) + hdr_len,
+				extra, extra_len);
+	} else {
+		/* extra_len must be zero, so no if (extra) needed */
+		memcpy(&compat_event->pointer, wrqu,
+			hdr_len - IW_EV_COMPAT_LCP_LEN);
+	}
 
 
-Den 22.09.2022 16.25, skrev Maxime Ripard:
-> The TV mode property has been around for a while now to select and get the
-> current TV mode output on an analog TV connector.
-> 
-> Despite that property name being generic, its content isn't and has been
-> driver-specific which makes it hard to build any generic behaviour on top
-> of it, both in kernel and user-space.
-> 
-> Let's create a new enum tv norm property, that can contain any of the
-> analog TV standards currently supported by kernel drivers. Each driver can
-> then pass in a bitmask of the modes it supports, and the property
-> creation function will filter out the modes not supported.
-> 
-> We'll then be able to phase out the older tv mode property.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
+According to above code, it seems that kernel will saves enough memory
+(hdr_len + extra_len bytes) for payload structure in
+nla_reserve()(Please correct me if I am wrong), pointed by compat_event.
+So I wonder if we can use unsafe_memcpy(), to avoid unnecessary
+memory() check as below, which seems more simple:
 
-Please can you add per patch changelogs, it's hard to review when I have
-to recall what might have happened with each patch. If you do it drm
-style and put in the commit message it should be easy enough to do.
+#syz test git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index 4e4fbc9e0049..e7aa8de08f5b 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -980,6 +980,18 @@ static const struct drm_prop_enum_list drm_dvi_i_subconnector_enum_list[] = {
->  DRM_ENUM_NAME_FN(drm_get_dvi_i_subconnector_name,
->  		 drm_dvi_i_subconnector_enum_list)
->  
-> +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] = {
-> +	{ DRM_MODE_TV_MODE_NONE, "None" },
-> +	{ DRM_MODE_TV_MODE_NTSC, "NTSC" },
-
-I think going back to plain NTSC and PAL is a good choice for the common
-variants.
-
-> +	{ DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
-> +	{ DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
-> +	{ DRM_MODE_TV_MODE_PAL, "PAL" },
-> +	{ DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
-> +	{ DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
-> +	{ DRM_MODE_TV_MODE_SECAM, "SECAM" },
-> +};
-> +DRM_ENUM_NAME_FN(drm_get_tv_mode_name, drm_tv_mode_enum_list)
-> +
->  static const struct drm_prop_enum_list drm_tv_select_enum_list[] = {
->  	{ DRM_MODE_SUBCONNECTOR_Automatic, "Automatic" }, /* DVI-I and TV-out */
->  	{ DRM_MODE_SUBCONNECTOR_Composite, "Composite" }, /* TV-out */
-> @@ -1645,6 +1657,10 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
->   * responsible for allocating a list of format names and passing them to
->   * this routine.
->   *
-> + * NOTE: This functions registers the deprecated "mode" connector
-> + * property to select the analog TV mode (ie, NTSC, PAL, etc.). New
-> + * drivers must use drm_mode_create_tv_properties() instead.
-> + *
->   * Returns:
->   * 0 on success or a negative error code on failure.
->   */
-> @@ -1686,7 +1702,6 @@ int drm_mode_create_tv_properties_legacy(struct drm_device *dev,
->  	if (drm_mode_create_tv_margin_properties(dev))
->  		goto nomem;
->  
-> -
->  	if (num_modes) {
->  		dev->mode_config.legacy_tv_mode_property =
->  			drm_property_create(dev, DRM_MODE_PROP_ENUM,
-> @@ -1735,6 +1750,49 @@ int drm_mode_create_tv_properties_legacy(struct drm_device *dev,
->  }
->  EXPORT_SYMBOL(drm_mode_create_tv_properties_legacy);
->  
-> +/**
-> + * drm_mode_create_tv_properties - create TV specific connector properties
-> + * @dev: DRM device
-> + * @supported_tv_modes: Bitmask of TV modes supported (See DRM_MODE_TV_MODE_*)
-> +
-> + * Called by a driver's TV initialization routine, this function creates
-> + * the TV specific connector properties for a given device.  Caller is
-> + * responsible for allocating a list of format names and passing them to
-> + * this routine.
-
-Copy-paste error, there are no format names in this version.
-
-> + *
-> + * Returns:
-> + * 0 on success or a negative error code on failure.
-> + */
-> +int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_modes)
-> +{
-> +	struct drm_prop_enum_list tv_mode_list[DRM_MODE_TV_MODE_MAX];
-> +	struct drm_property *tv_mode;
-> +	unsigned int i, len = 0;
-> +
-> +	if (dev->mode_config.tv_mode_property)
-> +		return 0;
-> +
-> +	for (i = 0; i < DRM_MODE_TV_MODE_MAX; i++) {
-> +		if (!(supported_tv_modes & BIT(i)))
-> +			continue;
-> +
-> +		tv_mode_list[len].type = i;
-> +		tv_mode_list[len].name = drm_get_tv_mode_name(i);
-> +		len++;
-> +	}
-> +
-> +	tv_mode = drm_property_create_enum(dev, 0, "TV mode",
-> +					   tv_mode_list, len);
-> +	if (!tv_mode)
-> +		return -ENOMEM;
-> +
-> +	dev->mode_config.tv_mode_property = tv_mode;
-> +
-> +	return drm_mode_create_tv_properties_legacy(dev, 0, NULL);
-> +}
-> +EXPORT_SYMBOL(drm_mode_create_tv_properties);
-> +
->  /**
->   * drm_mode_create_scaling_mode_property - create scaling mode property
->   * @dev: DRM device
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index d566b4a4709c..fffacbfd0a45 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -143,6 +143,71 @@ enum subpixel_order {
->  
->  };
->  
-> +/**
-> + * enum drm_connector_tv_mode - Analog TV output mode
-> + *
-> + * This enum is used to indicate the TV output mode used on an analog TV
-> + * connector.
-> + *
-> + * WARNING: The values of this enum is uABI since they're exposed in the
-> + * "TV mode" connector property.
-> + */
-> +enum drm_connector_tv_mode {
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_NONE: Placeholder to not default on one
-> +	 * variant or the other when nothing is set.
-> +	 */
-> +	DRM_MODE_TV_MODE_NONE = 0,
-
-How is this supposed to be used?
-
-Noralf.
-
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_NTSC: CCIR System M (aka 525-lines)
-> +	 * together with the NTSC Color Encoding.
-> +	 */
-> +	DRM_MODE_TV_MODE_NTSC,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_NTSC_443: Variant of
-> +	 * @DRM_MODE_TV_MODE_NTSC. Uses a color subcarrier frequency
-> +	 * of 4.43 MHz.
-> +	 */
-> +	DRM_MODE_TV_MODE_NTSC_443,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_NTSC_J: Variant of @DRM_MODE_TV_MODE_NTSC
-> +	 * used in Japan. Uses a black level equals to the blanking
-> +	 * level.
-> +	 */
-> +	DRM_MODE_TV_MODE_NTSC_J,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_PAL: CCIR System B together with the PAL
-> +	 * color system.
-> +	 */
-> +	DRM_MODE_TV_MODE_PAL,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_PAL_M: CCIR System M (aka 525-lines)
-> +	 * together with the PAL color encoding
-> +	 */
-> +	DRM_MODE_TV_MODE_PAL_M,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_PAL_N: CCIR System N together with the PAL
-> +	 * color encoding. It uses 625 lines, but has a color subcarrier
-> +	 * frequency of 3.58MHz, the SECAM color space, and narrower
-> +	 * channels compared to most of the other PAL variants.
-> +	 */
-> +	DRM_MODE_TV_MODE_PAL_N,
-> +
-> +	/**
-> +	 * @DRM_MODE_TV_MODE_SECAM: CCIR System B together with the
-> +	 * SECAM color system.
-> +	 */
-> +	DRM_MODE_TV_MODE_SECAM,
-> +
-> +	DRM_MODE_TV_MODE_MAX,
-> +};
-> +
->  /**
->   * struct drm_scrambling: sink's scrambling support.
->   */
-> @@ -696,6 +761,7 @@ struct drm_connector_tv_margins {
->   * @subconnector: detected subconnector
->   * @margins: TV margins
->   * @legacy_mode: Legacy TV mode, driver specific value
-> + * @mode: TV mode
->   * @brightness: brightness in percent
->   * @contrast: contrast in percent
->   * @flicker_reduction: flicker reduction in percent
-> @@ -708,6 +774,7 @@ struct drm_tv_connector_state {
->  	enum drm_mode_subconnector subconnector;
->  	struct drm_connector_tv_margins margins;
->  	unsigned int legacy_mode;
-> +	unsigned int mode;
->  	unsigned int brightness;
->  	unsigned int contrast;
->  	unsigned int flicker_reduction;
-> @@ -1789,6 +1856,7 @@ const char *drm_get_subpixel_order_name(enum subpixel_order order);
->  const char *drm_get_dpms_name(int val);
->  const char *drm_get_dvi_i_subconnector_name(int val);
->  const char *drm_get_dvi_i_select_name(int val);
-> +const char *drm_get_tv_mode_name(int val);
->  const char *drm_get_tv_subconnector_name(int val);
->  const char *drm_get_tv_select_name(int val);
->  const char *drm_get_dp_subconnector_name(int val);
-> @@ -1802,6 +1870,8 @@ int drm_mode_create_tv_margin_properties(struct drm_device *dev);
->  int drm_mode_create_tv_properties_legacy(struct drm_device *dev,
->  					 unsigned int num_modes,
->  					 const char * const modes[]);
-> +int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_modes);
->  void drm_connector_attach_tv_margin_properties(struct drm_connector *conn);
->  int drm_mode_create_scaling_mode_property(struct drm_device *dev);
->  int drm_connector_attach_content_type_property(struct drm_connector *dev);
-> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-> index 35a827175c24..10a6f7d1df0d 100644
-> --- a/include/drm/drm_mode_config.h
-> +++ b/include/drm/drm_mode_config.h
-> @@ -718,9 +718,17 @@ struct drm_mode_config {
->  	/**
->  	 * @legacy_tv_mode_property: Optional TV property to select
->  	 * the output TV mode.
-> +	 *
-> +	 * Superseeded by @tv_mode_property
->  	 */
->  	struct drm_property *legacy_tv_mode_property;
->  
-> +	/**
-> +	 * @tv_mode_property: Optional TV property to select the TV
-> +	 * standard output on the connector.
-> +	 */
-> +	struct drm_property *tv_mode_property;
-> +
->  	/**
->  	 * @tv_left_margin_property: Optional TV property to set the left
->  	 * margin (expressed in pixels).
-> 
+diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
+index 76a80a41615b..a967da647e2b 100644
+--- a/net/wireless/wext-core.c
++++ b/net/wireless/wext-core.c
+@@ -609,19 +609,26 @@ void wireless_send_event(struct net_device *	dev,
+ 
+ 	compat_event->len = event_len;
+ 	compat_event->cmd = cmd;
++
++	/* kernel reserves event_len's bytes for compat_event,
++	 * so we don't need memcpy()'s bounds check
++	 */
+ 	if (descr->header_type == IW_HEADER_TYPE_POINT) {
+ 		compat_wrqu.length = wrqu->data.length;
+ 		compat_wrqu.flags = wrqu->data.flags;
+-		memcpy(&compat_event->pointer,
++		unsafe_memcpy(&compat_event->pointer,
+ 			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
+-			hdr_len - IW_EV_COMPAT_LCP_LEN);
++			hdr_len - IW_EV_COMPAT_LCP_LEN,
++			/* compat_event has enough room */);
+ 		if (extra_len)
+-			memcpy(((char *) compat_event) + hdr_len,
+-				extra, extra_len);
++			unsafe_memcpy(((char *) compat_event) + hdr_len,
++				extra, extra_len,
++				/* compat_event has enough room */);
+ 	} else {
+ 		/* extra_len must be zero, so no if (extra) needed */
+-		memcpy(&compat_event->pointer, wrqu,
+-			hdr_len - IW_EV_COMPAT_LCP_LEN);
++		unsafe_memcpy(&compat_event->pointer, wrqu,
++			hdr_len - IW_EV_COMPAT_LCP_LEN,
++			/* compat_event has enough room */);
+ 	}
+ 
+ 	nlmsg_end(compskb, nlh);
