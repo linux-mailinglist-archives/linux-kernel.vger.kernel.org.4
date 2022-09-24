@@ -2,197 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8055E906E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 01:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDC85E9072
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 01:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiIXX2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 19:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S233991AbiIXXgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 19:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiIXX2T (ORCPT
+        with ESMTP id S234033AbiIXXgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 19:28:19 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EC7474FE
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 16:28:18 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id c6so2261256qvn.6
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 16:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date;
-        bh=OhH30xzwA4dmz340BVUkylIq/5//Pt8HpJ0yMHqpHUA=;
-        b=DPaAM66mjM+JGEaO0sq92daxkcYM0tS4ttLW06nPi47nlaRbqu5JPPyMaOck2U/iu8
-         o97yRw80nMtMQDHcJjb/N7+XX4iBvttO1011GpEYVMJj+kdasSj27bFnpZCvF+YT5sJK
-         a9muK4I7wjGZL8VI/tHk1WqMPdEMF7FXN5kdo=
+        Sat, 24 Sep 2022 19:36:05 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF31939BB5
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 16:36:02 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id o5-20020a056e02102500b002ddcc65029cso2682853ilj.8
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 16:36:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=OhH30xzwA4dmz340BVUkylIq/5//Pt8HpJ0yMHqpHUA=;
-        b=Sgy3/fcuS1pL5Yb0xfK1Q9JakFKgL0mWMJFc2l/AIcQ5szA08kp3UUxF8qSaF1Ow9K
-         XCN0E5z4J/iJGEQp27CEBvCKtLHH9xP2zlszLmmjVMLUb7lGKbgNybf5RQlnsDDqdi9H
-         iYXIJc/+5jHHNnQEFYGV8gBEr3vfhxUxI0hFPjoIBYf1yXzRW66063dEWuAu7Y7SMlO/
-         NCd8WRyQtPyPSRF0r2A9ogRfDBewO2Fq9VOttLpVEZb06quSxPsIvibyyf6e3lggNXDi
-         BN5Er1fjH155elp7Ka/Wr+wVsA6/a8SG2bbEeGiYWtRLCpuh1t1K6lgdp7AQM+mb98sq
-         CRyw==
-X-Gm-Message-State: ACrzQf3lmJaoLzVZ3ZJEr2pLpYflkCBSn8XYnb8fd/3LeCYXV/TWAt0v
-        tnOTdOAHvjArBRsDYWwFx0RYEK69iebsUOYtL+A=
-X-Google-Smtp-Source: AMsMyM4Dy9vBZHLKd593zq563DCXiSEGGIltB+0yYKgk+TWcNFMTh1KWwfjZCNhyqSJIDOGhciBt/Q==
-X-Received: by 2002:a05:6214:2686:b0:4af:630c:78f2 with SMTP id gm6-20020a056214268600b004af630c78f2mr2201673qvb.52.1664062097575;
-        Sat, 24 Sep 2022 16:28:17 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id o1-20020a05622a008100b003431446588fsm8711259qtw.5.2022.09.24.16.28.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 16:28:17 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Date:   Sat, 24 Sep 2022 19:28:16 -0400
-Message-Id: <19217A4C-7183-4D78-A714-FBFE7BB20742@joelfernandes.org>
-References: <20220924224637.GA161871@lothringen>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org
-In-Reply-To: <20220924224637.GA161871@lothringen>
-To:     Frederic Weisbecker <frederic@kernel.org>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=yTVKjYEt6Qsc4Nk9uruEWmQ7qup20JIbZji1PM3bE+8=;
+        b=a+DMnkzBjvyX2h6yGUPCnWQBINM6vb0Moxm1VxpZO3TE2oimrvoVMESuYAtXOfGaxP
+         exeMzIC/WkTd2aPEr+jtXxzK2zkZvhYzhGbgIcwyFtBZ0d+w6U3O/zO7HtU0kSJOU3Re
+         MUOb92Oh4Smqk5jFYG8m7He5UuaAQeVP3Vxqt5+WwTxnln/Nqbe91y8xQa+A7T8NDEKq
+         k49KyuV85bjH8yM8N2vxeY/3weOHRhfRw0yWYoFWkcLarxsIOxbrOv5bd3cNTKy7c8MT
+         obExbs08AgaUJYYhhGkZOeE5bWJ5xjHNjYkejQnCZLNyuM/ju/aWPI5KxwlDbjnLzv7c
+         HaaA==
+X-Gm-Message-State: ACrzQf0c0mMEMXAmRrR08I7tN+BdWteI1+WdYWvGNu4YMIeHHCPRUTzV
+        JCmUuVBqnosWWuZWF0VqA2qVPc8BZ7RBbZRaglCVsJvrpyxA
+X-Google-Smtp-Source: AMsMyM5G4iJY3OHLuYXGnWxUIu9foPRwWGpgDMstOdWr2d67mKjdTwg6LGHP4TYg1Ir6Ob8Ch9NwNGp8FsGkpqXZGRLKLPSwuXRi
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:1687:b0:6a4:d44:74bf with SMTP id
+ s7-20020a056602168700b006a40d4474bfmr5232265iow.80.1664062561998; Sat, 24 Sep
+ 2022 16:36:01 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 16:36:01 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e4630c05e974c1eb@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in evict
+From:   syzbot <syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederic, thanks for the response, replies
-below courtesy fruit company=E2=80=99s device:
+Hello,
 
-> On Sep 24, 2022, at 6:46 PM, Frederic Weisbecker <frederic@kernel.org> wro=
-te:
->=20
-> =EF=BB=BFOn Thu, Sep 22, 2022 at 10:01:01PM +0000, Joel Fernandes (Google)=
- wrote:
->> @@ -3902,7 +3939,11 @@ static void rcu_barrier_entrain(struct rcu_data *r=
-dp)
->>    rdp->barrier_head.func =3D rcu_barrier_callback;
->>    debug_rcu_head_queue(&rdp->barrier_head);
->>    rcu_nocb_lock(rdp);
->> -    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
->> +    /*
->> +     * Flush the bypass list, but also wake up the GP thread as otherwis=
-e
->> +     * bypass/lazy CBs maynot be noticed, and can cause real long delays=
-!
->> +     */
->> +    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, FLUSH_BP_WAK=
-E));
->=20
-> This fixes an issue that goes beyond lazy implementation. It should be don=
-e
-> in a separate patch, handling rcu_segcblist_entrain() as well, with "Fixes=
-: " tag.
+syzbot found the following issue on:
 
-I wanted to do that, however on discussion with
-Paul I thought of making this optimization only for
-all lazy bypass CBs. That makes it directly related
-this patch since the laziness notion is first
-introduced here. On the other hand I could make
-this change in a later patch since we are not
-super bisectable anyway courtesy of the last
-patch (which is not really an issue if the CONFIG
-is kept off during someone=E2=80=99s bisection.
+HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=163e7eb6080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b74cf8fcd7378d8be7c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> And then FLUSH_BP_WAKE is probably not needed anymore.=20
+Unfortunately, I don't have any reproducer for this issue yet.
 
-It is needed as the API is in tree_nocb.h and we
-have to have that handle the details of laziness
-there rather than tree.c. We could add new apis
-to get rid of flag but it=E2=80=99s cleaner (and Paul seemed
-to be ok with it).
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com
 
->>    if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
->>        atomic_inc(&rcu_state.barrier_cpu_count);
->>    } else {
->> @@ -269,10 +294,14 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp=
-, int waketype,
->>    raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
->>=20
->>    /*
->> -     * Bypass wakeup overrides previous deferments. In case
->> -     * of callback storm, no need to wake up too early.
->> +     * Bypass wakeup overrides previous deferments. In case of
->> +     * callback storm, no need to wake up too early.
->>     */
->> -    if (waketype =3D=3D RCU_NOCB_WAKE_BYPASS) {
->> +    if (waketype =3D=3D RCU_NOCB_WAKE_LAZY
->> +        && READ_ONCE(rdp->nocb_defer_wakeup) =3D=3D RCU_NOCB_WAKE_NOT) {=
+BUG: unable to handle page fault for address: ffffffffffffffc8
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD ba8f067 P4D ba8f067 PUD ba91067 PMD 0 
+Oops: 0002 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 10298 Comm: syz-executor.4 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:lock_acquire kernel/locking/lockdep.c:5666 [inline]
+RIP: 0010:lock_acquire+0x1aa/0x570 kernel/locking/lockdep.c:5631
+Code: 48 81 64 24 08 00 02 00 00 44 89 fe 6a 00 4c 89 f7 6a 00 ff b4 24 f8 00 00 00 ff 74 24 18 41 0f 94 c1 45 0f b6 c9 e8 b5 94 ff <ff> 48 c7 c7 a0 8a cc 89 48 83 c4 20 e8 25 68 19 08 b8 ff ff ff ff
+RSP: 0018:ffffc90013b2f9e8 EFLAGS: 00010092
+RAX: 0000000000000001 RBX: 1ffff92002765f43 RCX: ffffffff815e4bee
+RDX: 1ffff11003c8b8ae RSI: 0000000000000001 RDI: ffffffff8f67d5d8
+RBP: 0000000000000001 R08: 0000000000000000 R09: ffffffff9068e94f
+R10: fffffbfff20d1d29 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88801dac49d8 R15: 0000000000000000
+FS:  00007fc2d48ce700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 000000002043b000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ inode_sb_list_del fs/inode.c:502 [inline]
+ evict+0x179/0x6b0 fs/inode.c:653
+ iput_final fs/inode.c:1744 [inline]
+ iput.part.0+0x562/0x820 fs/inode.c:1770
+ iput+0x58/0x70 fs/inode.c:1760
+ ntfs_fill_super+0x2d75/0x3750 fs/ntfs3/super.c:1180
+ get_tree_bdev+0x440/0x760 fs/super.c:1292
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc2d368a73a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc2d48cdf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007fc2d368a73a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc2d48cdfe0
+RBP: 00007fc2d48ce020 R08: 00007fc2d48ce020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007fc2d48cdfe0 R15: 000000002007aa80
+ </TASK>
+Modules linked in:
+CR2: ffffffffffffffc8
+---[ end trace 0000000000000000 ]---
+RIP: 0010:lock_acquire kernel/locking/lockdep.c:5666 [inline]
+RIP: 0010:lock_acquire+0x1aa/0x570 kernel/locking/lockdep.c:5631
+Code: 48 81 64 24 08 00 02 00 00 44 89 fe 6a 00 4c 89 f7 6a 00 ff b4 24 f8 00 00 00 ff 74 24 18 41 0f 94 c1 45 0f b6 c9 e8 b5 94 ff <ff> 48 c7 c7 a0 8a cc 89 48 83 c4 20 e8 25 68 19 08 b8 ff ff ff ff
+RSP: 0018:ffffc90013b2f9e8 EFLAGS: 00010092
+RAX: 0000000000000001 RBX: 1ffff92002765f43 RCX: ffffffff815e4bee
+RDX: 1ffff11003c8b8ae RSI: 0000000000000001 RDI: ffffffff8f67d5d8
+RBP: 0000000000000001 R08: 0000000000000000 R09: ffffffff9068e94f
+R10: fffffbfff20d1d29 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88801dac49d8 R15: 0000000000000000
+FS:  00007fc2d48ce700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 000000002043b000 CR4: 0000000000350ef0
 
->=20
-> This can be a plain READ since ->nocb_defer_wakeup is only written under -=
->nocb_gp_lock.
 
-Yes makes sense, will do.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
->> +        mod_timer(&rdp_gp->nocb_timer, jiffies + jiffies_till_flush);
->> +        WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
->> +    } else if (waketype =3D=3D RCU_NOCB_WAKE_BYPASS) {
->>        mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
->>        WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
->>    } else {
->> @@ -512,9 +598,16 @@ static void __call_rcu_nocb_wake(struct rcu_data *rd=
-p, bool was_alldone,
->>    }
->>    // Need to actually to a wakeup.
->>    len =3D rcu_segcblist_n_cbs(&rdp->cblist);
->> +    bypass_len =3D rcu_cblist_n_cbs(&rdp->nocb_bypass);
->> +    lazy_len =3D READ_ONCE(rdp->lazy_len);
->>    if (was_alldone) {
->>        rdp->qlen_last_fqs_check =3D len;
->> -        if (!irqs_disabled_flags(flags)) {
->> +        // Only lazy CBs in bypass list
->> +        if (lazy_len && bypass_len =3D=3D lazy_len) {
->> +            rcu_nocb_unlock_irqrestore(rdp, flags);
->> +            wake_nocb_gp_defer(rdp, RCU_NOCB_WAKE_LAZY,
->> +                       TPS("WakeLazy"));
->=20
-> I'm trying to think of a case where rcu_nocb_try_bypass() returns false
-> (queue to regular list) but then call_rcu() -> __call_rcu_nocb_wake() ends=
- up
-> seeing a lazy bypass queue even though we are queueing a non-lazy callback=
-
-> (should have flushed in this case).
->=20
-> Looks like it shouldn't happen, even with concurrent (de-offloading) but j=
-ust
-> in case, can we add:
-
-Yes I also feel this couldn=E2=80=99t happen because irq is
-off and nocb lock is held throughout the calls to
-the above 2 functions. Unless I missed the race
-you=E2=80=99re describing?
-
->=20
->      WARN_ON_ONCE(lazy_len !=3D len)
-
-But this condition can be true even in normal
-circumstances? len also contains DONE CBs
-which are ready to be invoked. Or did I miss
-something?
-
-Thanks,
-
-  - Joel
-
->=20
->> +        } else if (!irqs_disabled_flags(flags)) {
->>            /* ... if queue was empty ... */
->>            rcu_nocb_unlock_irqrestore(rdp, flags);
->>            wake_nocb_gp(rdp, false);
->=20
-> Thanks.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
