@@ -2,137 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2115E8FB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7215D5E8FBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiIXUhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 16:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S230248AbiIXUpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 16:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiIXUgy (ORCPT
+        with ESMTP id S229502AbiIXUpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 16:36:54 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0218E558F2;
-        Sat, 24 Sep 2022 13:36:54 -0700 (PDT)
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4MZgmP58bLzDql0;
-        Sat, 24 Sep 2022 20:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1664051813; bh=3Lmze+y4ow8RjdXy3tEKHIH76EW/OpNHSEnEmix0YB8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NvGSyfnvzULtUALcYWOvWQEi7u90RWlsjLVucLDpq2GOt9VHbnZGJxS5yBT8ic+Oe
-         xtBQ/NUKvY3AYRz+JZwETcetOqenNAvvBO/HiTrYlleEyY+URt4l00gSwNQbm0dKlM
-         hi5lXdZB3o24H8zlsZ3eSCuXxN7bhNvOV6Fqq0XQ=
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MZgmP10TQz9scc;
-        Sat, 24 Sep 2022 20:36:53 +0000 (UTC)
-X-Riseup-User-ID: 11C1C95C2AC08897474174FB8F2D07A1F8A57F8FAAF9842FC1697C4FCB0DAFD4
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4MZgmM0JTZz1y9N;
-        Sat, 24 Sep 2022 20:36:50 +0000 (UTC)
-From:   Nia Espera <a5b6@riseup.net>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Nia Espera <a5b6@riseup.net>
-Subject: [PATCH 2/2] drivers: gpu: drm: remove support for sofef00 driver on s6e3fc2x01 panel
-Date:   Sat, 24 Sep 2022 22:36:16 +0200
-Message-Id: <20220924203616.63325-3-a5b6@riseup.net>
-In-Reply-To: <20220924203616.63325-1-a5b6@riseup.net>
-References: <20220924203616.63325-1-a5b6@riseup.net>
+        Sat, 24 Sep 2022 16:45:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB031EFC;
+        Sat, 24 Sep 2022 13:45:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ECEFB80E93;
+        Sat, 24 Sep 2022 20:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682E3C433D6;
+        Sat, 24 Sep 2022 20:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664052339;
+        bh=O4PbDKTtpy6qRBsB+BHtbJmVM+QtJb6NDgwWW8WotYo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kBc37i8aL3fstiHYnKPQciBNgD2LhPKHukDRAhkmjmvC6yv7mfAeiG5g9LSTtEMlJ
+         Io+N1LA1Wzl67/FJKnDquKb/zOq5uHgrpn4GOmNYkkPDtjXveK55jSgd3uThuf3tis
+         lMQ4nUb9FLwZT3t0tufI12Y61rewxqiHqXKL4YRTU3eNW4qPRCL4WrHwUc4AhdNcLC
+         y9T9GsweyMDJN1JF7zQI8oO6qSgIfZdjD4UF+/2rN8bfMSJxVUtKY91vxiYK+p1Izg
+         LEP3Hiw5rYji9hGKJuZWXeixUOSB7fNeaOLswcNwooKzuZec4J8PuZTdPmNbUngjSX
+         x1ISqhgoQ6YbQ==
+Date:   Sat, 24 Sep 2022 22:45:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.0-rc7
+Message-ID: <Yy9sbyqEvO8OqESO@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UkGlNBYXi8k9VDno"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removes functionality from sofef00 panel driver which allowed it to
-drive the s6e3fc2x01 panel
 
-Signed-off-by: Nia Espera <a5b6@riseup.net>
----
- drivers/gpu/drm/panel/Kconfig                 |  6 +++---
- drivers/gpu/drm/panel/panel-samsung-sofef00.c | 18 ------------------
- 2 files changed, 3 insertions(+), 21 deletions(-)
+--UkGlNBYXi8k9VDno
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index ee62d5d8828a..62b9cb6acd05 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -547,16 +547,16 @@ config DRM_PANEL_SAMSUNG_S6E8AA0
- 	select VIDEOMODE_HELPERS
- 
- config DRM_PANEL_SAMSUNG_SOFEF00
--	tristate "Samsung sofef00/s6e3fc2x01 OnePlus 6/6T DSI cmd mode panels"
-+	tristate "Samsung sofef00 OnePlus 6 DSI cmd mode panel"
- 	depends on OF
- 	depends on DRM_MIPI_DSI
- 	depends on BACKLIGHT_CLASS_DEVICE
- 	select VIDEOMODE_HELPERS
- 	help
- 	  Say Y or M here if you want to enable support for the Samsung AMOLED
--	  command mode panels found in the OnePlus 6/6T smartphones.
-+	  command mode panel found in the OnePlus 6 smartphone.
- 
--	  The panels are 2280x1080@60Hz and 2340x1080@60Hz respectively
-+	  The panel is 2280x1080@60Hz
- 
- config DRM_PANEL_SAMSUNG_S6E3FC2X01
- 	tristate "Samsung s6e3fc2x01 OnePlus 6T DSI cmd mode panel"
-diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef00.c b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-index bd02af81a4fe..68e58b9b8c5c 100644
---- a/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-@@ -181,20 +181,6 @@ static const struct drm_display_mode enchilada_panel_mode = {
- 	.height_mm = 145,
- };
- 
--static const struct drm_display_mode fajita_panel_mode = {
--	.clock = (1080 + 72 + 16 + 36) * (2340 + 32 + 4 + 18) * 60 / 1000,
--	.hdisplay = 1080,
--	.hsync_start = 1080 + 72,
--	.hsync_end = 1080 + 72 + 16,
--	.htotal = 1080 + 72 + 16 + 36,
--	.vdisplay = 2340,
--	.vsync_start = 2340 + 32,
--	.vsync_end = 2340 + 32 + 4,
--	.vtotal = 2340 + 32 + 4 + 18,
--	.width_mm = 68,
--	.height_mm = 145,
--};
--
- static int sofef00_panel_get_modes(struct drm_panel *panel, struct drm_connector *connector)
- {
- 	struct drm_display_mode *mode;
-@@ -327,10 +313,6 @@ static const struct of_device_id sofef00_panel_of_match[] = {
- 		.compatible = "samsung,sofef00",
- 		.data = &enchilada_panel_mode,
- 	},
--	{ // OnePlus 6T / fajita
--		.compatible = "samsung,s6e3fc2x01",
--		.data = &fajita_panel_mode,
--	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, sofef00_panel_of_match);
--- 
-2.37.3
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
 
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.0-rc7
+
+for you to fetch changes up to b7af938f4379a884f15713319648a7653497a907:
+
+  i2c: mux: harden i2c_mux_alloc() against integer overflows (2022-09-21 22=
+:12:06 +0200)
+
+----------------------------------------------------------------
+I2C driver bugfixes for mlxbf and imx, a few documentation fixes after
+the rework this cycle, and one hardening for the i2c-mux core
+
+----------------------------------------------------------------
+Asmaa Mnebhi (3):
+      i2c: mlxbf: incorrect base address passed during io write
+      i2c: mlxbf: prevent stack overflow in mlxbf_i2c_smbus_start_transacti=
+on()
+      i2c: mlxbf: Fix frequency calculation
+
+Dan Carpenter (1):
+      i2c: mux: harden i2c_mux_alloc() against integer overflows
+
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: imx: If pm_runtime_get_sync() returned 1 device access is possib=
+le
+
+Wolfram Sang (2):
+      MAINTAINERS: remove Nehal Shah from AMD MP2 I2C DRIVER
+      Documentation: i2c: fix references to other documents
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Gustavo A. R. Silva (1):
+      (Rev.) i2c: mux: harden i2c_mux_alloc() against integer overflows
+
+Khalil Blaiech (3):
+      (Rev.) i2c: mlxbf: Fix frequency calculation
+      (Rev.) i2c: mlxbf: prevent stack overflow in mlxbf_i2c_smbus_start_tr=
+ansaction()
+      (Rev.) i2c: mlxbf: incorrect base address passed during io write
+
+Luca Ceresoli (2):
+      (Rev.) Documentation: i2c: fix references to other documents
+      (Test) Documentation: i2c: fix references to other documents
+
+ Documentation/i2c/dev-interface.rst   |  2 +-
+ Documentation/i2c/slave-interface.rst |  6 ++--
+ Documentation/i2c/writing-clients.rst |  4 +--
+ MAINTAINERS                           |  1 -
+ drivers/i2c/busses/i2c-imx.c          |  2 +-
+ drivers/i2c/busses/i2c-mlxbf.c        | 68 ++++++++++++++-----------------=
+----
+ drivers/i2c/i2c-mux.c                 |  5 +--
+ 7 files changed, 37 insertions(+), 51 deletions(-)
+
+--UkGlNBYXi8k9VDno
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMvbG8ACgkQFA3kzBSg
+KbZ5rhAAm9WUfoJEFjFfc5lrJx52WqxIqb9hL6HKcseMe/sxozVgO3XexZ9aZrVN
+LvqZz7z1gil3kHJvDEQ0qHKpsCJDvLU/LdDLJV6u8tqPvFj8hB5nlF7mvOA3Lu0U
+BxQT049uePB70JvTjYI8wW9QeAiNZsqBWK6m6CLo7jv2s4yzPDnOKS+AwDHPQWBX
+g9YO60IEIE15ouu+XjpV/1601YDi1ZHcPyGeszHTd0cOYNPAxjj88mA5kGvEC9Rh
+lXVAlm3kIGucz4MLP4b29RTZFH0pNnXJrZBkt1cHjpn0AYcarmnZydlo211wDUyv
+u2AHFPSngX5CwgKzUfe+pvvZ/Lqia5NSwKLLYWVxdh7W5CWpYoabmLxMsx9dJDQ4
+Xq7qcNEnX+9HxmLqfvQnXjKjPVtKKaxXIwqU7eu0WVjjgPhST41qOy7SUk5b4Jam
+4P5uu01ymlvtbVhaFNQNlDqc2uVEQn6Xrk+31m/UpVaNlZrJpN1YmS9CHW5DfXvR
+dynWtme2vEreHgnVK6xLr5cy1NYGTtbU1yxqvrt8AkGATSRC8vOtLtt0wboMrwPJ
+eUSi7socSdK600HJ+U9bT7hU6mcDGPOQXVXePX+4VzENYJAKyMg9mr8qxNd/CvnB
+33cjJJnvOlwUd/PDBFdWZDjNwW9eEKC1LIHyMGbpxA/xWxYc5j4=
+=9PQi
+-----END PGP SIGNATURE-----
+
+--UkGlNBYXi8k9VDno--
