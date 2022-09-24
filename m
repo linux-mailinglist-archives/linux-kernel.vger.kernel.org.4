@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213175E8B80
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED915E8B84
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiIXKeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S230131AbiIXKeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIXKeW (ORCPT
+        with ESMTP id S229934AbiIXKeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:34:22 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E24128A31;
-        Sat, 24 Sep 2022 03:34:16 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id cc5so3439433wrb.6;
-        Sat, 24 Sep 2022 03:34:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=lWWSF5r7ARtTOClsK9sXEb7aJbRhNSyG93pnZwDgR5I=;
-        b=KSyEDPTrERDbPHgI3yKjQwFOuoePdyYavdVYJm/tY+ThFTOwq8HOCNLpP89t/EYIBK
-         tavLNvSlBhj9s5L4jrDB85fgqtLdE4Fstx/MZZIw4niSkjG7OKFraYC5KBarHHydAwcr
-         2apbgZDmNREUwKQ++sYU8ZyWG43oTIZ+D/z7NRvSdfu8rFV0wJrrlgsIXnS2UofV+DnK
-         +MbLVv5WMRkB/JOpRBhdwmnD4CVcq1cr7yBnxFTt9gvzkboFsCKTO8nG5L5CIssPLK49
-         69U/B0Ke03Fdu33v0nZ56wlueeMJBdW6K/7zDIF0sutm2scnrGqu7lXViebI+8omHlv8
-         GWkQ==
-X-Gm-Message-State: ACrzQf0vxyCPkvz0qVKMuduANVNNgK7qLH/9Tk+YpbVGfruvdMbD7WYk
-        xmQ2hFg0lF+oyGtl1/mcWhDEniv2rRI=
-X-Google-Smtp-Source: AMsMyM5wNBvhEnQyq1UtD7jkcm6hZPvgsbB9LvwMs+u55ik/lB3hZLEDCOipgXROVhNjvYZFhZT5zw==
-X-Received: by 2002:a05:6000:912:b0:229:9bc1:27ed with SMTP id bz18-20020a056000091200b002299bc127edmr7554875wrb.546.1664015655105;
-        Sat, 24 Sep 2022 03:34:15 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c4fc300b003a5ca627333sm4961389wmq.8.2022.09.24.03.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 03:34:14 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 10:34:12 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Split memcpy of flex-array
-Message-ID: <Yy7dJP4p0FMQfPl5@liuwe-devbox-debian-v2>
-References: <20220924030741.3345349-1-keescook@chromium.org>
- <Yy58rt9N0+dHrNtt@work>
- <202209232119.E32C14857@keescook>
+        Sat, 24 Sep 2022 06:34:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2041C18363;
+        Sat, 24 Sep 2022 03:34:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A9F4B80185;
+        Sat, 24 Sep 2022 10:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D15C433D6;
+        Sat, 24 Sep 2022 10:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664015680;
+        bh=oisNXHG20hbajKiTp7wbgvOV+P1rIP3yuHleqV2SUGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IK0TEg1YwTI9ms7ZKiFlbOQt4D3uUDAMwVdNi1bg7uy/dJrbZ352sBasUwNI0IFKG
+         lz6x25YPz+qDvnWUvU4kefzAPuucREiEKHKlsPtZu4xpDQ9CLZXFWBbqk3hH3yjyqf
+         VRxP1wX0y61CjfSbBG0DQO6zhEP3snF1nWWzODVMvKGCoPWzN/SD4vthrSw+odq4Y0
+         xL796yT+neUWPb37yHs/Ox1QLCq2jT/MHqlD7eVVC1lDQkY7kCYHdvXWeH9W5TpmQa
+         sdwALYh3pjcCv5iVO1OXtLYmOARTOh86VD2+95zDQ+oFDmnaH+KR7pPKxVFXQFxOPs
+         bjMdd4t6Xu70Q==
+Received: by pali.im (Postfix)
+        id 0D45F8A2; Sat, 24 Sep 2022 12:34:37 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 12:34:37 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] gpio: mvebu: Fix check for pwm support on non-A8K
+ platforms
+Message-ID: <20220924103437.ww4urmq6cnhzj373@pali>
+References: <20220714115515.5748-1-pali@kernel.org>
+ <20220714183328.4137-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202209232119.E32C14857@keescook>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714183328.4137-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees
+PING?
 
-On Fri, Sep 23, 2022 at 09:22:55PM -0700, Kees Cook wrote:
-> On Fri, Sep 23, 2022 at 10:42:38PM -0500, Gustavo A. R. Silva wrote:
-> > On Fri, Sep 23, 2022 at 08:07:41PM -0700, Kees Cook wrote:
-> > > To work around a misbehavior of the compiler's ability to see into
-> > > composite flexible array structs (as detailed in the coming memcpy()
-> > > hardening series[1]), split the memcpy() of the header and the payload
-> > > so no false positive run-time overflow warning will be generated. As it
-> > > turns out, this appears to actually reduce the text size:
+On Thursday 14 July 2022 20:33:25 Pali Rohár wrote:
+> pwm support incompatible with Armada 80x0/70x0 API is not only in
+> Armada 370, but also in Armada XP, 38x and 39x. So basically every non-A8K
+> platform. Fix check for pwm support appropriately.
 > 
-> Er, actually, I can't read/math. ;) It _does_ grow the text size. (That's
-> 2_3_ not 22 at the start of the text size...) On examination, it appears
-> to unroll the already inlined memcpy further.
-
-Can you provide an updated commit message? No need to resend.
-
-Thanks,
-Wei.
-
+> Fixes: 85b7d8abfec7 ("gpio: mvebu: add pwm support for Armada 8K/7K")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 > 
-> > > 
-> > > $ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
-> > >    text    data     bss     dec     hex filename
-> > >   22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
-> > >   23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
->        ^
+> ---
+> Changes in v2:
+> * reverse the if/else order per Baruch request
+> ---
+>  drivers/gpio/gpio-mvebu.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 > 
-> -Kees
-> 
+> diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+> index 2db19cd640a4..de1e7a1a76f2 100644
+> --- a/drivers/gpio/gpio-mvebu.c
+> +++ b/drivers/gpio/gpio-mvebu.c
+> @@ -793,8 +793,12 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+>  	u32 offset;
+>  	u32 set;
+>  
+> -	if (of_device_is_compatible(mvchip->chip.of_node,
+> -				    "marvell,armada-370-gpio")) {
+> +	if (mvchip->soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K) {
+> +		int ret = of_property_read_u32(dev->of_node,
+> +					       "marvell,pwm-offset", &offset);
+> +		if (ret < 0)
+> +			return 0;
+> +	} else {
+>  		/*
+>  		 * There are only two sets of PWM configuration registers for
+>  		 * all the GPIO lines on those SoCs which this driver reserves
+> @@ -804,13 +808,6 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+>  		if (!platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwm"))
+>  			return 0;
+>  		offset = 0;
+> -	} else if (mvchip->soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K) {
+> -		int ret = of_property_read_u32(dev->of_node,
+> -					       "marvell,pwm-offset", &offset);
+> -		if (ret < 0)
+> -			return 0;
+> -	} else {
+> -		return 0;
+>  	}
+>  
+>  	if (IS_ERR(mvchip->clk))
 > -- 
-> Kees Cook
+> 2.20.1
+> 
