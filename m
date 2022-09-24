@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA89B5E8CB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7B95E8CBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIXMwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S229834AbiIXMyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIXMwt (ORCPT
+        with ESMTP id S229798AbiIXMyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:52:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8779B2BB09;
-        Sat, 24 Sep 2022 05:52:48 -0700 (PDT)
+        Sat, 24 Sep 2022 08:54:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDC1A19D
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:54:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42599B80C72;
-        Sat, 24 Sep 2022 12:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97759C433C1;
-        Sat, 24 Sep 2022 12:52:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB8260B23
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 12:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C15C433C1;
+        Sat, 24 Sep 2022 12:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664023966;
-        bh=gciZ9wNlGlmVdPTB7MobqtBOhMAqcyRa5gn7TyGTTVg=;
+        s=korg; t=1664024071;
+        bh=iTo+23ABRQoYs4KDb6OqCvvhIifHYjMgkR/mvdZEnZE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0lFP26fo6xeUC9GgUJ/O8UYXKUkyBsg78y+mQyGpzZWM9FBJFmTLx3bpNfGgI9wYC
-         LnbfVNF6CB3wHBWH+z8qAq+qxfI8OovkPd4Veqyw2OtLwyLlnCjmWK3SamDZNKwZ4G
-         xxgTqL6khVxz19o5LRPOiL79uF10O0ETa/7RuHDg=
-Date:   Sat, 24 Sep 2022 14:52:43 +0200
+        b=Txy57F92um38s+iFx0Gy+MK+KjGQCbO/rsYUU+vJ3pCYh8QbfJ1baYTBZzhi/923t
+         f5zMCaUD1YRkAxa/oPixtwW6o+3Qaq56NFDOYar/fJjgjHgX8oUMDvwcpAC+4vLNO8
+         Q3AcUbNY9fk7zkaYcED91bOWU6sTnUzUC56RqtTU=
+Date:   Sat, 24 Sep 2022 14:54:28 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Gaosheng Cui <cuigaosheng1@huawei.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] nvmem: core: Fix memleak in nvmem_register()
-Message-ID: <Yy79m+NcW2tmbH5E@kroah.com>
-References: <20220916120402.38753-1-srinivas.kandagatla@linaro.org>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org
+Subject: Re: [PATCH] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+Message-ID: <Yy7+BCQnGaQiNlyF@kroah.com>
+References: <20220919143205.207353-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220916120402.38753-1-srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220919143205.207353-1-zyytlz.wz@163.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,28 +52,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 01:04:02PM +0100, Srinivas Kandagatla wrote:
-> From: Gaosheng Cui <cuigaosheng1@huawei.com>
+On Mon, Sep 19, 2022 at 10:32:05PM +0800, Zheng Wang wrote:
+> In grufile.c, gru_file_unlocked_ioctl function can be called by user.
 > 
-> dev_set_name will alloc memory for nvmem->dev.kobj.name in
-> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
-> memory will be freed and return, but nobody will free memory
-> for nvmem->dev.kobj.name, there will be memleak, so moving
-> nvmem_validate_keepouts() after device_register() and let
-> the device core deal with cleaning name in error cases.
+> If the req is GRU_SET_CONTEXT_OPTION, it will call gru_set_context_option.
 > 
-> Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
-> Hi Greg,
+> In gru_set_context_option, as req can be controlled by user,
 > 
-> Here is a fix in nvmem core which can possibly go in next rc.
-> Could you please pick this up.
+> We can reach gru_check_context_placement function call.
+> 
+> In gru_check_context_placement function, if the error path was steped,
+> 
+> say gru_check_chiplet_assignment return 0,
+> 
+> Then it will fall into gru_unload_context function.
+> 
+> And it will finnaly call kfree gts in gts_drop function.
+> 
+> Then gru_unlock_gts will be called in gru_set_context_option function.
+> 
+> This is a typical Use after free.
+> 
+> The same problem exists in gru_handle_user_call_os and gru_fault.
+> 
+> Fix it by introduce the return value to see if gts is in good case or not.
+> 
+> Free the gts in caller when gru_check_chiplet_assignment check failed.
 
-I missed this for 6.0-final, but as it's only on a not-ever-hit error
-path, it can wait for 6.1-rc1.
+Your text formatting is a bit odd, don't you think?
+
+> 
+> Reported-by: Zheng Wang <hackerzheng666@gmail.com> Zhuorao Yang <alex000young@gmail.com>
+
+Why twice?
+
+Should be two different reported-by lines, right?
+
+Otherwise looks good, can you fix that up and resend?
 
 thanks,
 
