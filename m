@@ -2,148 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E395E88D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09FC5E88CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbiIXGpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 02:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S233245AbiIXGoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 02:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbiIXGom (ORCPT
+        with ESMTP id S232228AbiIXGoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 02:44:42 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6AA17E2E
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 23:44:39 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id u131so2341361oie.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 23:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=RCkEsVbeznfy3hGllYd4J9hMBx6L/Y7BiAwihKpP1pk=;
-        b=OUgcN9vb3eut5Guh4bfVyMwNyJ6f8mIzLeChl1dsz/iQWRw/SXnluaVQbuc8jBI6cj
-         uh13zPYuJE+w4tDMjaXolg7JTSGxl28rgglvKfKdcgwmimhPw2bC/9La5JBxYKFUfVyP
-         rqU4i6S7stsB5NUV7ffvBl0bzo2HBFioqEoFpdOTlc0Q8Mpgd7F3kAcxMIPlCF4/1dLj
-         cdrK/0CqeAQgPdLH/U0ubIEZB95qXnjrxnS4GavcYGk9Dyss4u9LAJKqLbjcxish13Qr
-         uy6CnMfZMm5chgwuAq0fAFig0p64EjCc3gLuBgLszCCPfGVCGTXvN5Wty5+pANXzHsIe
-         y/5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=RCkEsVbeznfy3hGllYd4J9hMBx6L/Y7BiAwihKpP1pk=;
-        b=Eak8Eurw3npDPx1eJwTG5sg+1Dnvv5biilMCRiDdeBNR/3j5C95nCnAL7/adTPW5xn
-         1tWcnV2rc32wFTfJ/x0yyu3rEDWV6uSZZ9nqSonqZwbwpZhqcCZCvMWKES090fP9YzmB
-         eyOyMVKqcqp1uVz3Qfq7qnoZakYnvO9R865Q0VH+kWs7PBfxZTDJoX8ySSYJeM33Spo+
-         MNLfcecmgQuydFrKm+p+nLFSn01593T5zapYq8luMxrMLhWnWcjxlEal1iskgPrBx7qe
-         N8DgW1GamD8sW5ibuJjy5Iv0vEEDINkfdW78AW/8ZeHfMP2uhQL+jU7ZgiO/iRt9zltc
-         pjlw==
-X-Gm-Message-State: ACrzQf2LN2w1HzwHYh3J0kViIi5GgouDvGBuguswUVtQx1TpONl5eTcx
-        nop4q26KclF1vQOmw8rBZO0wSR5uJa0JXXLnbF/75A==
-X-Google-Smtp-Source: AMsMyM6SohY0/noulPxN0RnC/n0u7h1UZCCdXoeObMuI4vV7W6pt1PB8Hci5zbZr4EPtbkjIlxU1/pVk1EyZFC+3So0=
-X-Received: by 2002:a05:6808:2012:b0:34f:c816:cdf5 with SMTP id
- q18-20020a056808201200b0034fc816cdf5mr10546397oiw.45.1664001879213; Fri, 23
- Sep 2022 23:44:39 -0700 (PDT)
+        Sat, 24 Sep 2022 02:44:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1504811D0D1;
+        Fri, 23 Sep 2022 23:44:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EDA4DCE0A1D;
+        Sat, 24 Sep 2022 06:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B217FC433D6;
+        Sat, 24 Sep 2022 06:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664001847;
+        bh=XU+g1TD85eu+F7lKIDh9lt03VNI1wjjOGHmpCB5PpDQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DuBuothuIcm+Rf/8d4hwbhg/hA+Gss6N8vAry1R91LV411DY530k21Lse+D8jK9GG
+         RpObjQM3WoK71AFU96BN6LRe54sLdG/uz1FMIPcnkAD74N/BuW+r/s/f/dz+lbhX0r
+         cXIqKeTiJ/jKqhCUt4kEWx27bLxhdSydHSx5SXog=
+Date:   Sat, 24 Sep 2022 08:44:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Sven Schnelle <svens@stackframe.org>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        linux-parisc@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH printk 00/18] preparation for threaded/atomic printing
+Message-ID: <Yy6nVpd3+yogT5pJ@kroah.com>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20220922211026.34462-1-mig@semihalf.com>
-In-Reply-To: <20220922211026.34462-1-mig@semihalf.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Sat, 24 Sep 2022 08:44:28 +0200
-Message-ID: <CAPv3WKeX0xNPS-+C8iMc8WU66735JuR0PiMkc9JeDdb0sR9ckg@mail.gmail.com>
-Subject: Re: [net-next PATCH] dt-bindings: net: marvell,pp2: convert to json-schema
-To:     =?UTF-8?Q?Micha=C5=82_Grzelak?= <mig@semihalf.com>
-Cc:     devicetree@vger.kernel.org, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Sep 24, 2022 at 02:10:36AM +0206, John Ogness wrote:
+> Hi,
+> 
+> This series is essentially the first 18 patches of tglx's RFC series
+> [0] with only minor changes in comments and commit messages. It's
+> purpose is to lay the groundwork for the upcoming threaded/atomic
+> console printing posted as the RFC series and demonstrated at
+> LPC2022 [1].
+> 
+> This series is interesting for mainline because it cleans up various
+> code and documentation quirks discovered while working on the new
+> console printing implementation.
+> 
+> Aside from cleanups, the main features introduced here are:
+> 
+> - Converts the console's DIY linked list implementation to hlist.
+> 
+> - Introduces a console list lock (mutex) so that readers (such as
+>   /proc/consoles) can safely iterate the consoles without blocking
+>   console printing.
+> 
+> - Adds SRCU support to the console list to prepare for safe console
+>   list iterating from any context.
+> 
+> - Refactors buffer handling to prepare for per-console, per-cpu,
+>   per-context atomic printing.
+> 
+> The series has the following parts:
+> 
+>    Patches  1 - 5:   Cleanups
+> 
+>    Patches  6 - 12:  Locking and list conversion
+> 
+>    Patches 13 - 18:  Improved output buffer handling to prepare for
+>                      code sharing
+> 
 
-Thank you for the patch.
+These all look great to me, thanks for resending them.
 
+Do you want them to go through my serial/tty tree, or is there some
+other tree to take them through (printk?)
 
-> +
-> +properties:
-> +
-> +  dma-coherent: true
-> +
-> +  compatible:
-> +    enum:
-> +      - marvell,armada-375-pp2
-> +      - marvell,armada-7k-pp2
+If they are to go through someone else's tree, feel free to add:
 
-I double checked with armada-cp11x.dtsi and the driver. Please
-s/marvell,armada-7k-pp2/marvell,armada-7k-pp22/ in all occurrences.
-
-
-> +
-> +  reg:
-> +    minItems: 3
-> +    maxItems: 4
-> +
-> +examples:
-> +  - |
-> +    // For Armada 375 variant
-> +    #include <dt-bindings/interrupt-controller/mvebu-icu.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    ethernet@f0000 {
-> +      interrupt-controller;
-> +      #interrupt-cells = <3>;
-
-interrupt-controller and #interrupt-cells are not valid properties for
-this controller.
-
-> +      compatible = "marvell,armada-375-pp2";
-> +      reg = <0xf0000 0xa000>,
-> +            <0xc0000 0x3060>,
-> +            <0xc4000 0x100>,
-> +            <0xc5000 0x100>;
-> +      clocks = <&gateclk 3>, <&gateclk 19>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      clock-names = "pp_clk", "gop_clk";
-> +
-> +      eth0: eth0@c4000 {
-> +        reg = <0xc4000>;
-> +        interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-> +        port-id = <0>;
-> +        phy = <&phy0>;
-> +        phy-mode = "gmii";
-> +      };
-> +
-> +      eth1: eth1@c5000 {
-> +        reg = <0xc5000>;
-> +        interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-> +        port-id = <1>;
-> +        phy = <&phy3>;
-> +        phy-mode = "gmii";
-> +      };
-> +    };
-> +
-> +  - |
-> +    // For Armada 7k/8k and Cn913x variants
-> +    #include <dt-bindings/interrupt-controller/mvebu-icu.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    cpm_ethernet: ethernet@0 {
-> +      interrupt-controller;
-> +      #interrupt-cells = <3>;
-
-interrupt-controller and #interrupt-cells are not valid properties for
-this controller.
-
-Best regards,
-Marcin
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
