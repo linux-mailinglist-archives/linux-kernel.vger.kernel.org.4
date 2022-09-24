@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501815E8696
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68415E8695
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiIXALl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S232589AbiIXALh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiIXALN (ORCPT
+        with ESMTP id S232814AbiIXALM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 20:11:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D928832BBF;
-        Fri, 23 Sep 2022 17:09:50 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NNJkTx032306;
-        Sat, 24 Sep 2022 00:09:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=a7nDO7ohfYGnTWh7ONt+gbaTWPaULiS/JkfZBmleIpc=;
- b=lYChOzqnjiGhJxskAVQ8Jo1G7s+TkmFNu7ZVWFdL+qqIlBHWujZ12RkNw+m2M3h+nzIn
- 546efAq+g98DnDPvGNfUuOjOQSrG9jvvXpwkyYxx6eNOiBJkIaYNcoH4stXGOM/LnLt2
- m0MQ02uDlAm2YiS0yDWDB94HVxYaztwq+2Dq0P9tLUfWVyt1IPVgAQYv0SqCdaBZYHiw
- 8VYOCGQiUZsiqIx/KEos//6tDbqUWP7RIeF3xROSSUvLT7QwixCbJ4GjgUQ+P7tz1PSm
- qGniACNCPkENmudBzopIT06U/9odAb41o31uiuhpzUM/0vCTAZZ92P2l7z7Zf8+wNfEi SA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrpqnvpyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Sep 2022 00:09:35 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28O09YZb019390
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Sep 2022 00:09:34 GMT
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 23 Sep
- 2022 17:09:33 -0700
-Date:   Fri, 23 Sep 2022 17:09:32 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <martin.botka@somainline.org>,
-        <angelogioacchino.delregno@somainline.org>,
-        <marijn.suijten@somainline.org>, <jamipkettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
-Message-ID: <20220924000932.GA1450@quicinc.com>
-References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
- <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
- <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
+        Fri, 23 Sep 2022 20:11:12 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1B110FF4;
+        Fri, 23 Sep 2022 17:09:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id fs14so1408742pjb.5;
+        Fri, 23 Sep 2022 17:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=Wy0ZAB6jF2RLgatMO2ipKaVR//CFOKWia2M42iS8znI=;
+        b=W/98zSk0vPJr1V+ETrctpZlkYfX/A44q9wVPlqgd55ybOj8kIlIFNDYejFhI77ChF3
+         O3Bbe91Wnb0tZqQMGQIPhd0Sa3s0DUL4r/5ZQPC+rXJjDO9Q5nqyYRSNcwiPQxzwFuEY
+         Y2UuAYQ07iS94QLQT0m8YE2JMfgT9Ixf9svmaHi/BKPC3+amGR0ST/KP5QBXQ20tGhgg
+         la5VjOzrJ9yhXwgUHmwFijNtjo8+kN7f+GbnlgbTjbutwchsa+aOSyOnhP/9eu5szQDr
+         nI4TiX2A5FzM8+Q7Ayibh1GD/sldGc2vCqzYBeU8x53tQncGxvt9drOp6QBDAr9wVvnS
+         rqtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Wy0ZAB6jF2RLgatMO2ipKaVR//CFOKWia2M42iS8znI=;
+        b=6iqBpgsIBxbzY2214lEtVHHnMsfnqSMAIQKx+XFVPK8mIXXxe7M7aKz2Wazk4ziNVM
+         eWIZ1xeRD6kJ+5+CZwRlza0QyxBmSJ9xYj6Y6FtSeAxLp+ryUMT7gkEZdoNvOnH5i/e7
+         v/Dh0I5AnRM1kmE+6q0o6LSvFUfcCOTydKFXlJMNmMuKqLgaWkT+qM1l8GbKv4ntf5ew
+         N+3Jv+uO9tr9cGuqWIFVZfe3jQNTmlpvkU2GXX1CUKYBUyiF+6K6Iv1Quk2YOEn2jjQv
+         sr2cTWnIrQp+6AHZ+eRJCCrcuBZ9MqrIYADT3LTfGZSdBP5oRiEnjMm2f9MCY2+Eytd3
+         TWwg==
+X-Gm-Message-State: ACrzQf2eP2ZrwiRnvOF6hKD0R3kn0nnAp8OuwcdpXfzt8CmhcR6zI9VU
+        wJNaBG9fnYPNC0M3u0eCu2k=
+X-Google-Smtp-Source: AMsMyM65YYdlW2MKPfRWZgKby/urX4EoVy0wZEoLJ3Udyhk0jf2Mu3O7Tt7gSuEYp2NI2WLHfNqZtw==
+X-Received: by 2002:a17:90a:4f4f:b0:202:7ab1:46ec with SMTP id w15-20020a17090a4f4f00b002027ab146ecmr12470877pjl.32.1663978180682;
+        Fri, 23 Sep 2022 17:09:40 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 143-20020a621695000000b0052d2b55be32sm7153459pfw.171.2022.09.23.17.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 17:09:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 23 Sep 2022 14:09:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH 00/20] Add Cgroup support for SGX EPC memory
+Message-ID: <Yy5KwnRTbFjmKE9X@slm.duckdns.org>
+References: <20220922171057.1236139-1-kristen@linux.intel.com>
+ <YyyeSVSk/lWdo/W4@slm.duckdns.org>
+ <4b8605533e5deade739249bfb341ab9c06d56a1e.camel@linux.intel.com>
+ <YyyykUJQtYbPVctn@slm.duckdns.org>
+ <7ff6d114-a6cc-e3c5-5edb-8ac0e527d8a9@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: t7244SlhJEQ1FUYFuitfzHvBzA_Hi1C-
-X-Proofpoint-GUID: t7244SlhJEQ1FUYFuitfzHvBzA_Hi1C-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_10,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxlogscore=927
- lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209230155
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7ff6d114-a6cc-e3c5-5edb-8ac0e527d8a9@intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sep 21 2022 20:43, Konrad Dybcio wrote:
-> Does it? I did not define this compatible in the driver, so it does
-> not consume any clocks.
+Hello,
 
-The bindings should describe only those compatibles that the driver supports -
-that is, both the driver and its bindings should be in sync.
+On Thu, Sep 22, 2022 at 02:03:52PM -0700, Dave Hansen wrote:
+> On 9/22/22 12:08, Tejun Heo wrote:
+> > Can you please give more concrete examples? I'd love to hear how the SGX EPC
+> > memory is typically used in what amounts and what's the performance
+> > implications when they get reclaimed and so on. ie. Please describe a
+> > realistic usage scenario of contention with sufficient details on how the
+> > system is set up, what the applications are using the SGX EPC memory for and
+> > how much, how the contention on memory affects the users and so on.
+> 
+> One wrinkle is that the apps that use SGX EPC memory are *normal* apps.
+>  There are frameworks that some folks are very excited about that allow
+> you to run mostly unmodified app stacks inside SGX.  For example:
+> 
+> 	https://github.com/gramineproject/graphene
+> 
+> In fact, Gramine users are the troublesome ones for overcommit.  Most
+> explicitly-written SGX applications are quite austere in their SGX
+> memory use; they're probably never going to see overcommit.  These
+> Gramine-wrapped apps are (relative) pigs.  They've been the ones finding
+> bugs in the existing SGX overcommit code.
+> 
+> So, where does all the SGX memory go?  It's the usual suspects:
+> memcached and redis. ;)
 
-Could you please update the driver with this compatible as well? Let's not
-merge this change without that first.
+Hey, so, I'm a bit weary that this doesn't seem to have a strong demand at
+this point. When there's clear shared demand, I usually hear from multiple
+parties about their use cases and the practical problems they're trying to
+solve and so on. This, at least to me, seems primarily driven by producers
+than consumers.
 
-Thank you.
+There's nothing wrong with projecting future usages and jumping ahead the
+curve but there's a balance to hit, and going full-on memcg-style controller
+with three control knobs seems to be jumping the gun and may create
+commitments which we end up looking back on with a bit of regret.
 
-Guru Das.
+Given that, how about this? We can easily add the functionality of .max
+through the misc controller. Add a new key there, trycharge when allocating
+new memory, if fails, try reclaim and then fail allocation if reclaim fails
+hard enough. I belive that should give at least a reasonable place to start
+especially given that memcg only had limits with similar semantics for quite
+a while at the beginning.
+
+That way, we avoid creating a big interface commitments while providing a
+feature which should be able to serve and test out the immediate usecases.
+If, for some reason, many of us end up running hefty applications in SGX, we
+can revisit the issue and build up something more complete with provisions
+for backward compatibility.
+
+Thanks.
+
+-- 
+tejun
