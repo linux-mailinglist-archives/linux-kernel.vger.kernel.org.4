@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEC35E8B8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E533E5E8B90
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbiIXKoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S229762AbiIXKpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiIXKoH (ORCPT
+        with ESMTP id S229649AbiIXKpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:44:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40B3EE32;
-        Sat, 24 Sep 2022 03:44:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BF8560BB9;
-        Sat, 24 Sep 2022 10:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82AAAC433C1;
-        Sat, 24 Sep 2022 10:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664016245;
-        bh=aiDjtGcub9TCH2Zjr7EGsrufP9lbe/sjAusroWPF83U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JxbZHCwcGlguzXoumgpZIEHUCy97ZKx3zzCz4liJ3+mMigUXDff6LmnEk0mWi6tLL
-         GRKmT2EiynmzAUPX2d61mKeOT3qv+AL490cuq5OgAfTb/XponJKwEvJLo/M/MwLreM
-         pYsEvVCXq8RbCPoEWoRsgPeaOg5BK7sceGO/3CXY5Y6jm5vwqUYboOCGV0tLKZI5Lo
-         zSYwvzuBME8ydqHB78G4+Rxuenab7h5wSlTY3r2vPVH8gtPCv0zoFrRVMMmMATQUDq
-         JpOmC46f33DcxEISg9U0FEh9pWHlA0wtKLRIlhmsxpiQ8YrKkGlrY/rP9WCOT0cNrX
-         yyogV6r7afwJw==
-Received: by pali.im (Postfix)
-        id 071018A2; Sat, 24 Sep 2022 12:44:03 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: 8250: Fix restoring termios speed after suspend
-Date:   Sat, 24 Sep 2022 12:43:24 +0200
-Message-Id: <20220924104324.4035-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Sat, 24 Sep 2022 06:45:31 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB73B734
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:45:30 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 3so2459174pga.1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=XQtmD1kYTWA0kK4vzMRdQp3IUqgbZJuOpl78iMvfgJg=;
+        b=FMUsbNfsXtj74D8HJndDTn6TS692PVwW3d6p0sSoEx+UEtDMfFYWc2AEMJwmq6TLp/
+         hb9nL4mMgiykNavd2rynA2WQKac8HUBaZExB4LcKguID7eSbPRsbWOl0WF9zK67eIuLu
+         b6lIj+XodMLxMnVwgEjloQ+gboSPa2K9P8P6/u5lHoDEpFUXYPlRSdeex9DhAXCOZ6a3
+         D15w+ChL1erl4cZWFJ0M12xNRoMe3mVrd8k0upBkq9D5J+Q4YZhYb9tTUDuwRTs4ClK+
+         fQ/lhmZBkwLXfiNROdsURFx9FHR8RMP7uB66jtLlXX+p/D5ftcVtNTQRUue8/wdj7q2Q
+         E+hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=XQtmD1kYTWA0kK4vzMRdQp3IUqgbZJuOpl78iMvfgJg=;
+        b=G+Q9621tpVgdE3KoAsH/O1uKahr/7ENv79BB92ukxQyI8/L1nnUmHHbU37eqSOJbQL
+         pb2D/Wug2twwFPuKZRe86Un3Zvic/pXG8bZUsuN4g0qBk8lYkX2Ow+VkOYJHF8pmDrdl
+         vnG0VqmOZSzwFqT0r32dYUUQa5Xl4PHv9xQFa4JNJ88EFk1bjYFEJLxzttiSVhxdOtxY
+         i7BtE5LAJ3xSDMr/TR0t4FTJVDNwDz4ymhSB2CYxFU9xIBdbxcni4KHBNEv0HuaDzAuo
+         lI6z2MonpN865JP7xmMYhLetOea7C/PsAmJ+onogk769CgPUyw5BKq+IU9PumiktVSkk
+         MhQA==
+X-Gm-Message-State: ACrzQf3ferIDKFbcQ5DRIk4ajA67N5NtgCkTZI3tMcbaG/6EhGqTylgU
+        NQr75oFrFvJbYGnFiRg68Xr4KfjdQQBO0w==
+X-Google-Smtp-Source: AMsMyM7qvV712FrkeRUD6TCJS1cYUAnq1jTj3wnHlMyE9YxVR+GO7upDWv3p6+85qxGdEP/C71OklA==
+X-Received: by 2002:a05:6a00:c91:b0:540:f165:b049 with SMTP id a17-20020a056a000c9100b00540f165b049mr13643042pfv.76.1664016329392;
+        Sat, 24 Sep 2022 03:45:29 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa78f32000000b0053e56165f42sm8336090pfr.146.2022.09.24.03.45.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 03:45:28 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     netdev@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, Biao Huang <biao.huang@mediatek.com>,
+        David Miller <davem@davemloft.net>
+Subject: [PATCH net-next] net: stmmac: Minor spell fix related to 'stmmac_clk_csr_set()'
+Date:   Sat, 24 Sep 2022 16:15:14 +0530
+Message-Id: <20220924104514.1666947-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,42 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit edc6afc54968 ("tty: switch to ktermios and new framework")
-termios speed is no longer stored only in c_cflag member but also in new
-additional c_ispeed and c_ospeed members. If BOTHER flag is set in c_cflag
-then termios speed is stored only in these new members.
+Minor spell fix related to 'stmmac_clk_csr_set()' inside a
+comment used in the 'stmmac_probe_config_dt()' function.
 
-Since commit 027b57170bf8 ("serial: core: Fix initializing and restoring
-termios speed") termios speed is available also in struct console.
-
-So properly restore also c_ispeed and c_ospeed members after suspend to fix
-restoring termios speed which is not represented by Bnnn constant.
-
-Fixes: 4516d50aabed ("serial: 8250: Use canary to restart console after suspend")
-Signed-off-by: Pali Rohár <pali@kernel.org>
+Cc: Biao Huang <biao.huang@mediatek.com>
+Cc: David Miller <davem@davemloft.net>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- drivers/tty/serial/8250/8250_port.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 39b35a61958c..441f317c55af 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -3314,8 +3314,13 @@ static void serial8250_console_restore(struct uart_8250_port *up)
- 	unsigned int baud, quot, frac = 0;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 9f5cac4000da..b0b09c77711d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -440,7 +440,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+ 	/* Default to phy auto-detection */
+ 	plat->phy_addr = -1;
  
- 	termios.c_cflag = port->cons->cflag;
--	if (port->state->port.tty && termios.c_cflag == 0)
-+	termios.c_ispeed = port->cons->ispeed;
-+	termios.c_ospeed = port->cons->ospeed;
-+	if (port->state->port.tty && termios.c_cflag == 0) {
- 		termios.c_cflag = port->state->port.tty->termios.c_cflag;
-+		termios.c_ispeed = port->state->port.tty->termios.c_ispeed;
-+		termios.c_ospeed = port->state->port.tty->termios.c_ospeed;
-+	}
- 
- 	baud = serial8250_get_baud_rate(port, &termios, NULL);
- 	quot = serial8250_get_divisor(port, baud, &frac);
+-	/* Default to get clk_csr from stmmac_clk_crs_set(),
++	/* Default to get clk_csr from stmmac_clk_csr_set(),
+ 	 * or get clk_csr from device tree.
+ 	 */
+ 	plat->clk_csr = -1;
 -- 
-2.20.1
+2.37.1
 
