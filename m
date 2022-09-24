@@ -2,92 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE115E8EF7
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 19:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E675E8EFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 19:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiIXRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 13:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S233874AbiIXRed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 13:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiIXRdk (ORCPT
+        with ESMTP id S229837AbiIXRe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 13:33:40 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7185EDEA
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 10:33:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ofi5K3fFwceCBJlY2USt6UC7a4OGt4MfcqNSVv/LCgI=; b=A1HBxiJj4kGU61DTtvPYAgJxx6
-        L5JyG0dJKNSoN9rffofhL74LDRFZz2zPiZJ1yYlhR+IDfbZBWOI6me/EkLkunyzN3h+IZrfME0m9P
-        C3rFV1QHeoIK/XYN2VUkoch3mnYfH+xIm9tncn++OJ2QVlT749hC8SByc+zSKfAw+WeHdiwlKfLzP
-        S7pNJ7aDFeElM3SM4DjNAxRpf6ToCVTPvk6i32CByZ6a+sno578+56lVX052rUpsdxZZGYoNz0rhp
-        gViABZqxRMUZ+6Cy6xuKTrGO2BzKKVgxLGGtE1eHQcPn9M+5orzdVTfWpEreMT/imqpnZMZ6sQ4rS
-        CNqJygfw==;
-Received: from [2a01:799:961:d200:8cf6:761:40ec:1ff7] (port=59442)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oc921-0004w2-2E; Sat, 24 Sep 2022 19:33:37 +0200
-Message-ID: <59eb7faf-f6bc-7af5-6719-4bd3c3acec18@tronnes.org>
-Date:   Sat, 24 Sep 2022 19:33:31 +0200
+        Sat, 24 Sep 2022 13:34:29 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8ED5F13D;
+        Sat, 24 Sep 2022 10:34:28 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id g4so1953543qvo.3;
+        Sat, 24 Sep 2022 10:34:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4NKVQm5+gPk97+fTxA5IogZyj0x078QM4McdZgTzSus=;
+        b=FoPM+2pFtHF/swIAvtU2jVg8m0rUrZf88rBBSpP36irONk0FKkTUHddfpseC8m7HcW
+         1LGIxAr5G3sg7bKabiQibzg1ffS9bed8ZGPBLuUyVPFyDVby6vZsHgaX72F4uOJ4JOkh
+         XNx8i7eP+jES5SvJJ3AQwrOQJUDNr0EIog/L962uu7qkO9tQj/eCRcm2SMNfb42nQ0ms
+         aeyaUXY8BUUqorit3NG5VDTdkWhIYfwLq+N3ZxPGkypzANmQk9BNXszVzR9lIMUBbYZI
+         oacHg4Pjtid+GwXLENlBMnxcTV8L6Ttaly9OJsyGN3xG/0PP5NO6NoiW/cykCgO0dv+5
+         FFNQ==
+X-Gm-Message-State: ACrzQf2B+TzlxqsgBzg8Z34BY9eWbCu1poyJU9bNKAzhmksKKCTlslRr
+        24TI0M7701qGf1WaD3ccw3vy0MY+124BuBw7nGM=
+X-Google-Smtp-Source: AMsMyM7rjAEH5MFY6rzj6ABQ2aeHnRXAUZ3VKJTzUS/hx0hQe+AhmaDLkivzhofaw85caCHDKcDTSlldTyc3t72cg4E=
+X-Received: by 2002:a05:6214:d8d:b0:4ad:5d9d:bda8 with SMTP id
+ e13-20020a0562140d8d00b004ad5d9dbda8mr11450858qve.85.1664040867821; Sat, 24
+ Sep 2022 10:34:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 01/33] drm/tests: Order Kunit tests in Makefile
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-1-f733a0ed9f90@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220924054738.12076-1-rui.zhang@intel.com> <20220924054738.12076-2-rui.zhang@intel.com>
+In-Reply-To: <20220924054738.12076-2-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 24 Sep 2022 19:34:17 +0200
+Message-ID: <CAJZ5v0gQpdoSPwCeuM3eDHB_rs63GN9_24iM3tCvzhSR99tj4g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] powercap: intel_rapl: Use standard Energy Unit for
+ SPR Dram RAPL domain
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Sep 24, 2022 at 7:45 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
+> Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
+> energy resolution as described in MSR_RAPL_POWER_UNIT.
+>
+> Remove the SPR dram_domain_energy_unit quirk.
+>
+> Fixes: 2d798d9f5967 ("powercap: intel_rapl: add support for Sapphire Rapids")
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Wang Wendy <wendy.wang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 949eb90f5733..d8eaa04bf2af 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1035,7 +1035,6 @@ static const struct rapl_defaults rapl_defaults_spr_server = {
+>         .check_unit = rapl_check_unit_core,
+>         .set_floor_freq = set_floor_freq_default,
+>         .compute_time_window = rapl_compute_time_window_core,
+> -       .dram_domain_energy_unit = 15300,
+>         .psys_domain_energy_unit = 1000000000,
+>         .spr_psys_bits = true,
+>  };
+> --
 
-
-Den 22.09.2022 16.25, skrev Maxime Ripard:
-> Since we've recently added a ton of tests, the list starts to be a bit
-> of a mess and creates unneeded conflicts.
-> 
-> Let's order it alphabetically.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-
-Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
+Applied as 6.1 material, thanks!
