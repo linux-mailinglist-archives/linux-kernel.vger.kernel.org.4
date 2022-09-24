@@ -2,61 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1385E5E8905
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CE35E8921
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbiIXHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S233517AbiIXH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiIXHSg (ORCPT
+        with ESMTP id S233491AbiIXH1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:18:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478F313B03F;
-        Sat, 24 Sep 2022 00:18:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4524B80DB0;
-        Sat, 24 Sep 2022 07:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C485AC433C1;
-        Sat, 24 Sep 2022 07:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664003912;
-        bh=WYcPEBIbFsLgcirOxORHxczcQ1qEYSvFDeSAKl0GsoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MUnMKX06OXEQtjj6TrOXPUGYJOSPl8c0/z4c/LcAqbs4lYAsqs0aMTlPGdhgY99dn
-         uapU1niSg/8mfJR1qbFbhKe+gNiZ9RNSStgNRQwt2HfCxXsKqQZUtGEDkdBSjNrTFn
-         CEKzj0hE0pJzRifgkJ0gTAXLE6tpsET7VQFxuhLEjdaBm0pzdrS/PCrXKj4Kl51/1G
-         KlQ5hbgPECCsldIaXDntphans183VJuEhIjRoZOXD+W3ctoIc8hLW0fasZEWcNARPv
-         rYNbcdIyhwR7nAak/2wwuB90/nMPY8KKPyFyhe8balrROGOUQrFnz/J/3XXINgDbeX
-         lg8TdAJtZAFHQ==
-Date:   Sat, 24 Sep 2022 12:48:28 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: qualcomm:  call clk_disable_unprepare in the error
- handling
-Message-ID: <Yy6vRNfEBDUqebqX@matsya>
-References: <20220914051334.69282-1-dzm91@hust.edu.cn>
+        Sat, 24 Sep 2022 03:27:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CBA24094;
+        Sat, 24 Sep 2022 00:26:16 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZL8p75N5zpTrN;
+        Sat, 24 Sep 2022 15:23:22 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 15:26:14 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 15:26:14 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-modules@vger.kernel.org>
+CC:     <mcgrof@kernel.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH -next] module: Remove unused macros module_addr_min/max
+Date:   Sat, 24 Sep 2022 15:22:16 +0800
+Message-ID: <20220924072216.103876-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914051334.69282-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,24 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-09-22, 13:13, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> Smatch reports the following error:
-> 
-> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
-> warn: 'uphy->cal_clk' from clk_prepare_enable() not released on lines:
-> 58.
-> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
-> warn: 'uphy->cal_sleep_clk' from clk_prepare_enable() not released on
-> lines: 58.
-> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
-> warn: 'uphy->phy_clk' from clk_prepare_enable() not released on lines:
-> 58.
-> 
-> Fix this by calling proper clk_disable_unprepare calls.
+Unused macros reported by [-Wunused-macros].
 
-Applied, thanks
+These macros are introduced to record the bound address of modules.
 
+'80b8bf436990 ("module: Always have struct mod_tree_root")'
+This commit has made struct mod_tree_root always exist, which means
+we can always referencing mod_tree derectly rather than using this
+macro.
+
+So they are useless, remove them for code cleaning.
+
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ kernel/module/main.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a4e4d84b6f4e..96dcc950da60 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -84,9 +84,6 @@ struct mod_tree_root mod_data_tree __cacheline_aligned = {
+ };
+ #endif
+ 
+-#define module_addr_min mod_tree.addr_min
+-#define module_addr_max mod_tree.addr_max
+-
+ struct symsearch {
+ 	const struct kernel_symbol *start, *stop;
+ 	const s32 *crcs;
 -- 
-~Vinod
+2.17.1
+
