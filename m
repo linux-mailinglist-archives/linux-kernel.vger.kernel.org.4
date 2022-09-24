@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03DA5E9059
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AE65E905A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbiIXWqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S234006AbiIXWvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiIXWqp (ORCPT
+        with ESMTP id S229458AbiIXWvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:46:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856FA491FF;
-        Sat, 24 Sep 2022 15:46:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9888BCE02C7;
-        Sat, 24 Sep 2022 22:46:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E7FC433C1;
-        Sat, 24 Sep 2022 22:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664059600;
-        bh=eHSWTYnYsyVR2UjL5XkSiNfNQCN0O0WOvvT2T6zd9/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TTvEy692J7m3Bc7aiAqp/ud5O+dnXdHo/ejW4MEq5xuFjGRMJ1CVmrDxHY97EIM4f
-         uEi4e5HAjI4b5hiyg6C5hcKV+Gp1dhP76ZnGquDWlh0aEdVzIEkkVOib4HNgrEOfnh
-         kOFr1VVbKZr3ZaF/J1bR8Zaffs3LPMnuX+6yTdegwSa23UrFLE9VkfouZIHSF1Yw81
-         FK732zZDV2BzCJNLIeggo8Hfen6mzyfj529ec2PMtJJHjITRNZXmp76sZPv26fZsWF
-         eRbj0RU8yMOEzZQxmsrGuMjOto5s56x5eO5297Ihf/SQhPoWVRk+we26xbLKSXhqW7
-         L3zfXLvL8w7DA==
-Date:   Sun, 25 Sep 2022 00:46:37 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <20220924224637.GA161871@lothringen>
-References: <20220922220104.2446868-1-joel@joelfernandes.org>
- <20220922220104.2446868-2-joel@joelfernandes.org>
+        Sat, 24 Sep 2022 18:51:37 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6BA4505B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:51:32 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so2757738wml.5
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=heMq8ZyNcby7A2cMF3qI/WZaLnJ9T+jpUMoUVSz+v/Q=;
+        b=eT0jFR8ExgGkkw3jXjOsHCjkqf/punsrb1XIJ5x6mSgxSDmahwOF/et/MWA+50l4kW
+         w8/nykJZTYoJfyOIuIJir9xSjF0wUz8eGR4h7JRLs7bW/y+M7A/0fTeat99zH9V/p0il
+         EQqOjn78Z7KphXqYezcIIfTuQ0uDa2KkXf+BADX1Vapohvbjt6UYiS/7CsmAERn+ZeRi
+         6avYoDhmetxD3TOQbm1P/S0My6VKDqmQvDtZsT0aeoAz4GQK5ltfyeKVr4mh/2ikgFcV
+         jPa7P4mprdXyGAIyaUVHbSJC16b4PCdZlS+Rq87X7exBWSE942f0Kq/Nqhxf/EA8KxV9
+         pMfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=heMq8ZyNcby7A2cMF3qI/WZaLnJ9T+jpUMoUVSz+v/Q=;
+        b=e03KOhd0VLwTz+fVnVz6RsqXUazWP1s7Pr9WXjh7sG0Dxxo2/kuY3PFcaYh8c3sbdE
+         mtkP+cDptPvCNWy5JlGMC6yNXZ1XneIIHpuKdfg7SoQYSXhS027RYtiwh/XuGn9aFaBa
+         PPyAqnUujhD+NZ/n2ltrwcs/CuQ9kffRxg6ZhQm3R9A2KGDpjV6INFLwbluuk5v8B+ay
+         ayIlYtdxPSu6L0trM4fLYZ7ZLQ3q+9Zda9dIJ/gyjnYGg2R7n+Rn8s9Kk8m+uwhzHO8N
+         Juq4PEOk1JYkierk/El7Y0W9j09tXzoRJtsh10wFaGUC2kLXnzOdImAK/im8g+rgc1hK
+         Ha5w==
+X-Gm-Message-State: ACrzQf2ETv0yHqW0z97jep4p+n3o6lojrzSqxgISERPfhEeb4ypznz+v
+        oskrnTH+fJPifEpmn9Z72Vw=
+X-Google-Smtp-Source: AMsMyM5hJfDdbCxRzZdmGTtj+Cg22JT701S+ABKtsJzDOkw7JaxxGN2ZtCiWp+NgFF90PlI26RlBsw==
+X-Received: by 2002:a05:600c:284:b0:3b5:3360:3f8c with SMTP id 4-20020a05600c028400b003b533603f8cmr29380wmk.83.1664059890910;
+        Sat, 24 Sep 2022 15:51:30 -0700 (PDT)
+Received: from localhost.localdomain ([176.61.123.135])
+        by smtp.gmail.com with ESMTPSA id bj4-20020a0560001e0400b0022a403954c3sm11143165wrb.42.2022.09.24.15.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 15:51:30 -0700 (PDT)
+From:   Dragan Cvetic <dragan.m.cvetic@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dragan Cvetic <dragan.m.cvetic@gmail.com>
+Subject: [PATCH] staging: rtl8192e: Rename Tx_Retry_Count_Reg
+Date:   Sat, 24 Sep 2022 23:51:26 +0100
+Message-Id: <20220924225126.10527-1-dragan.m.cvetic@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922220104.2446868-2-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:01:01PM +0000, Joel Fernandes (Google) wrote:
-> @@ -3902,7 +3939,11 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
->  	rdp->barrier_head.func = rcu_barrier_callback;
->  	debug_rcu_head_queue(&rdp->barrier_head);
->  	rcu_nocb_lock(rdp);
-> -	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
-> +	/*
-> +	 * Flush the bypass list, but also wake up the GP thread as otherwise
-> +	 * bypass/lazy CBs maynot be noticed, and can cause real long delays!
-> +	 */
-> +	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, FLUSH_BP_WAKE));
+Rename: Current_Tx_Rate_Reg to CURRENT_TX_RATE_REG, Initial_Tx_Rate_Reg to
+INITIAL_TX_RATE_REG and Tx_Retry_Count_Reg to TX_RETRY_COUNT_REG to avoid
+CamelCase which is not accepted by checkpatch.pl.
 
-This fixes an issue that goes beyond lazy implementation. It should be done
-in a separate patch, handling rcu_segcblist_entrain() as well, with "Fixes: " tag.
+Signed-off-by: Dragan Cvetic <dragan.m.cvetic@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 11 +++--------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.h |  6 +++---
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-And then FLUSH_BP_WAKE is probably not needed anymore. 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index 3ee52147960e..9fefa1a7ae75 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -2499,14 +2499,9 @@ static void _rtl92e_dm_check_txrateandretrycount(struct net_device *dev)
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 	struct rtllib_device *ieee = priv->rtllib;
+ 
+-	ieee->softmac_stats.CurrentShowTxate = rtl92e_readb(dev,
+-						 Current_Tx_Rate_Reg);
+-
+-	ieee->softmac_stats.last_packet_rate = rtl92e_readb(dev,
+-						 Initial_Tx_Rate_Reg);
+-
+-	ieee->softmac_stats.txretrycount = rtl92e_readl(dev,
+-						 Tx_Retry_Count_Reg);
++	ieee->softmac_stats.CurrentShowTxate = rtl92e_readb(dev, CURRENT_TX_RATE_REG);
++	ieee->softmac_stats.last_packet_rate = rtl92e_readb(dev, INITIAL_TX_RATE_REG);
++	ieee->softmac_stats.txretrycount = rtl92e_readl(dev, TX_RETRY_COUNT_REG);
+ }
+ 
+ static void _rtl92e_dm_send_rssi_to_fw(struct net_device *dev)
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
+index ea1b14bbcdcd..51e295d389a8 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
+@@ -42,9 +42,9 @@
+ #define	 TX_POWER_ATHEROAP_THRESH_HIGH	   78
+ #define		TX_POWER_ATHEROAP_THRESH_LOW		72
+ 
+-#define			Current_Tx_Rate_Reg	 0x1e0
+-#define			Initial_Tx_Rate_Reg	 0x1e1
+-#define			Tx_Retry_Count_Reg	 0x1ac
++#define		CURRENT_TX_RATE_REG		0x1e0
++#define		INITIAL_TX_RATE_REG		0x1e1
++#define		TX_RETRY_COUNT_REG		0x1ac
+ #define		RegC38_TH				 20
+ 
+ #define		DM_Type_ByDriver		1
+-- 
+2.25.1
 
->  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
->  		atomic_inc(&rcu_state.barrier_cpu_count);
->  	} else {
-> @@ -269,10 +294,14 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
->  	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
->  
->  	/*
-> -	 * Bypass wakeup overrides previous deferments. In case
-> -	 * of callback storm, no need to wake up too early.
-> +	 * Bypass wakeup overrides previous deferments. In case of
-> +	 * callback storm, no need to wake up too early.
->  	 */
-> -	if (waketype == RCU_NOCB_WAKE_BYPASS) {
-> +	if (waketype == RCU_NOCB_WAKE_LAZY
-> +		&& READ_ONCE(rdp->nocb_defer_wakeup) == RCU_NOCB_WAKE_NOT) {
-
-This can be a plain READ since ->nocb_defer_wakeup is only written under ->nocb_gp_lock.
-
-> +		mod_timer(&rdp_gp->nocb_timer, jiffies + jiffies_till_flush);
-> +		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
-> +	} else if (waketype == RCU_NOCB_WAKE_BYPASS) {
->  		mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
->  		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
->  	} else {
-> @@ -512,9 +598,16 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
->  	}
->  	// Need to actually to a wakeup.
->  	len = rcu_segcblist_n_cbs(&rdp->cblist);
-> +	bypass_len = rcu_cblist_n_cbs(&rdp->nocb_bypass);
-> +	lazy_len = READ_ONCE(rdp->lazy_len);
->  	if (was_alldone) {
->  		rdp->qlen_last_fqs_check = len;
-> -		if (!irqs_disabled_flags(flags)) {
-> +		// Only lazy CBs in bypass list
-> +		if (lazy_len && bypass_len == lazy_len) {
-> +			rcu_nocb_unlock_irqrestore(rdp, flags);
-> +			wake_nocb_gp_defer(rdp, RCU_NOCB_WAKE_LAZY,
-> +					   TPS("WakeLazy"));
-
-I'm trying to think of a case where rcu_nocb_try_bypass() returns false
-(queue to regular list) but then call_rcu() -> __call_rcu_nocb_wake() ends up
-seeing a lazy bypass queue even though we are queueing a non-lazy callback
-(should have flushed in this case).
-
-Looks like it shouldn't happen, even with concurrent (de-offloading) but just
-in case, can we add:
-
-      WARN_ON_ONCE(lazy_len != len)
-
-> +		} else if (!irqs_disabled_flags(flags)) {
->  			/* ... if queue was empty ... */
->  			rcu_nocb_unlock_irqrestore(rdp, flags);
->  			wake_nocb_gp(rdp, false);
-
-Thanks.
