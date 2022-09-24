@@ -2,189 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130B95E8E23
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAE95E8E24
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbiIXPq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S233837AbiIXPqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiIXPq0 (ORCPT
+        with ESMTP id S233838AbiIXPqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 11:46:26 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35FB33378;
-        Sat, 24 Sep 2022 08:46:25 -0700 (PDT)
-Received: from g550jk.fritz.box (212095005231.public.telering.at [212.95.5.231])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 85591C5454;
-        Sat, 24 Sep 2022 15:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1664034384; bh=2qVah0NTVzbzDmE2/bG0X7crY2tbomDl2Bsriq7bfVM=;
-        h=From:To:Cc:Subject:Date;
-        b=ZCmY2e/dvACM4fMeFCaj/E8z8TMVUQFogGUwlMrcGwz5EOznVbct/ROW5QOe01KTc
-         iGBVBXGp06ZruhwGCOHYMFKBcvCEFZz1peZUjBK2kxNkqr2FnqbnKrjI4D8AiYGQdP
-         pYT4e/walVnXFzEB6r9mf6m8Dv/J1l0qYijhz/Ys=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: add 'chassis-type' property
-Date:   Sat, 24 Sep 2022 17:44:22 +0200
-Message-Id: <20220924154422.9896-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.37.3
+        Sat, 24 Sep 2022 11:46:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADDE83071
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664034402; x=1695570402;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nI52OXEFcx36co4Nof9iUlNp/cbMWTn6Ymk+WGqLkso=;
+  b=PX7vgNK8F1YeqbWe58wEr6SRc0rmQ1HQSOrPIy7tbi5U72ZfMge0ceGS
+   Iptdje61S6TIZGdYUzreuOPep2hNKtx0tXnJrb8PGYrbdAt022dIcYWRN
+   q5a/bQPmYF+pMqsqr/Sjz0AuMc1gerjffUR2PSNGkPiCNCxGVXPHm5WUH
+   /P6alnJfhk20VL3ZNxXnHrhlzgElrw9+Bmsv5E1x4TujtKnqakYlJupHa
+   00o4SGUZpWA36J5WqMB0AvYnZ/0ombo7hqsM0azzYnagixgAdSd7o07ap
+   X2roKFLpz0Wg9cXwFqsXSjY4c78ASsdrOXMGePKJfAOeKDqjChBSDpbFd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="287915607"
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="287915607"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 08:46:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="683008485"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Sep 2022 08:46:40 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oc7MV-0006j6-1p;
+        Sat, 24 Sep 2022 15:46:39 +0000
+Date:   Sat, 24 Sep 2022 23:46:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cache] BUILD SUCCESS
+ f7b1843eca6fe295ba0c71fc02a3291954078f2b
+Message-ID: <632f2639.93s1k0OAFpkdgrDR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the chassis-type property to arm32 Qualcomm watches, phones and
-tablets.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
+branch HEAD: f7b1843eca6fe295ba0c71fc02a3291954078f2b  x86/resctrl: Make resctrl_arch_rmid_read() return values in bytes
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts                      | 1 +
- arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts               | 1 +
- arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts        | 1 +
- arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts                | 1 +
- arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts         | 1 +
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dts       | 1 +
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dts      | 1 +
- arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts              | 1 +
- arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts               | 1 +
- arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts | 1 +
- 10 files changed, 10 insertions(+)
+elapsed time: 1291m
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-index 193569f0ca5f..bda9f6d84510 100644
---- a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-@@ -13,6 +13,7 @@
- / {
- 	model = "LG G Watch R";
- 	compatible = "lg,lenok", "qcom,apq8026";
-+	chassis-type = "watch";
- 	qcom,board-id = <132 0x0a>;
- 	qcom,msm-id = <199 0x20000>;
- 
-diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-index fee278e32cb6..94fbc94dc7c8 100644
---- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-@@ -6,6 +6,7 @@
- / {
- 	model = "Asus Nexus7(flo)";
- 	compatible = "asus,nexus7-flo", "qcom,apq8064";
-+	chassis-type = "tablet";
- 
- 	aliases {
- 		serial0 = &gsbi7_serial;
-diff --git a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-index c07c5474750d..dcf735c6a842 100644
---- a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-@@ -8,6 +8,7 @@
- / {
- 	model = "Sony Xperia Z";
- 	compatible = "sony,xperia-yuga", "qcom,apq8064";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		serial0 = &gsbi5_serial;
-diff --git a/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts b/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-index 290e1df631f0..6a082ad4418a 100644
---- a/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-+++ b/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-@@ -8,6 +8,7 @@
- / {
- 	model = "Samsung Galaxy S III Neo";
- 	compatible = "samsung,s3ve3g", "qcom,msm8226";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		serial0 = &blsp1_uart3;
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 6daceaa87802..fdbcf84f173c 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -9,6 +9,7 @@
- / {
- 	model = "LGE MSM 8974 HAMMERHEAD";
- 	compatible = "lge,hammerhead", "qcom,msm8974";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		serial0 = &blsp1_uart1;
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dts b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dts
-index 68d5626bf491..9f2ab5c122d0 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dts
-@@ -4,6 +4,7 @@
- / {
- 	model = "Sony Xperia Z1 Compact";
- 	compatible = "sony,xperia-amami", "qcom,msm8974";
-+	chassis-type = "handset";
- };
- 
- &smbb {
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dts b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dts
-index ea6a941d8f8c..9028f17e5c4a 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dts
-@@ -4,4 +4,5 @@
- / {
- 	model = "Sony Xperia Z1";
- 	compatible = "sony,xperia-honami", "qcom,msm8974";
-+	chassis-type = "handset";
- };
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index ff6e0066768b..c4680358aaa3 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -9,6 +9,7 @@
- / {
- 	model = "Fairphone 2";
- 	compatible = "fairphone,fp2", "qcom,msm8974";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		mmc0 = &sdhc_1;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-index 983e10c3d863..08c43bf86b92 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-@@ -8,6 +8,7 @@
- / {
- 	model = "Samsung Galaxy S5";
- 	compatible = "samsung,klte", "qcom,msm8974";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		serial0 = &blsp1_uart1;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 3f45f5c5d37b..85348562e861 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -9,6 +9,7 @@
- / {
- 	model = "Sony Xperia Z2 Tablet";
- 	compatible = "sony,xperia-castor", "qcom,msm8974";
-+	chassis-type = "tablet";
- 
- 	aliases {
- 		serial0 = &blsp1_uart2;
+configs tested: 120
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+arc                  randconfig-r043-20220923
+s390                 randconfig-r044-20220923
+riscv                randconfig-r042-20220923
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             allmodconfig
+sh                               allmodconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+xtensa                              defconfig
+powerpc                     tqm8555_defconfig
+arc                      axs103_smp_defconfig
+i386                          randconfig-c001
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220923
+nios2                            allyesconfig
+m68k                        stmark2_defconfig
+um                               alldefconfig
+arm                         axm55xx_defconfig
+powerpc                 mpc8540_ads_defconfig
+xtensa                       common_defconfig
+ia64                            zx1_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                         ap325rxa_defconfig
+nios2                         10m50_defconfig
+sh                          sdk7780_defconfig
+m68k                         apollo_defconfig
+arm                            hisi_defconfig
+sh                          rsk7201_defconfig
+nios2                         3c120_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+sh                        edosk7760_defconfig
+sh                        sh7785lcr_defconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm64                               defconfig
+ia64                             allyesconfig
+arm                              allmodconfig
+m68k                                defconfig
+ia64                                defconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+
+clang tested configs:
+hexagon              randconfig-r041-20220923
+hexagon              randconfig-r045-20220923
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                           sama7_defconfig
+powerpc                    gamecube_defconfig
+arm                         s3c2410_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+mips                       lemote2f_defconfig
+powerpc                     ppa8548_defconfig
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-k001
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220923
+i386                          randconfig-c001
+s390                 randconfig-c005-20220923
+riscv                randconfig-c006-20220923
+mips                 randconfig-c004-20220923
+powerpc              randconfig-c003-20220923
+powerpc                 mpc836x_mds_defconfig
+mips                     cu1830-neo_defconfig
+arm                       netwinder_defconfig
+
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
