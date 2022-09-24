@@ -2,57 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0145E8CAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA89B5E8CB7
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiIXMmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S229567AbiIXMwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIXMmO (ORCPT
+        with ESMTP id S229483AbiIXMwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:42:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D98C47E
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:42:14 -0700 (PDT)
+        Sat, 24 Sep 2022 08:52:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8779B2BB09;
+        Sat, 24 Sep 2022 05:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A764B60B0A
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 12:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB10FC433D6;
-        Sat, 24 Sep 2022 12:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664023333;
-        bh=6iWK7MK63UXpCUFl7W57m3jhiTiWw7+4+ckgt+e0Lts=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42599B80C72;
+        Sat, 24 Sep 2022 12:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97759C433C1;
+        Sat, 24 Sep 2022 12:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664023966;
+        bh=gciZ9wNlGlmVdPTB7MobqtBOhMAqcyRa5gn7TyGTTVg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fjOn8i6tQaf/A+OxVzTK+jqElgTlTWlTxWeN2RIMCAp8qYHIz6ChUbHzcJeHPlgWZ
-         H8AG3/5CGf1BxosP3gUgw0V4ZZxlbNIUKzT2m3qvrsed9HAxjZo2bCEIpNCOLEHfg1
-         k/TqzXbD0yryl8eaVn5StOaq+Amd9aAYvmI94sBrnkHJ8cVeih73gWCbbXC2ZtbExi
-         SkLUuue5oDGgqWgUWwxE3lunOiuiwya2ZRzDioZr0vpwya7lAq8EQArsdD64d+0TOc
-         y1Q67VmIO3d8FZALNL1D9knLvTnnXuqoSC52WI5q0VQ8moKLksPk4UnP0NaTMDN35o
-         ea8S/1mojVTog==
-Received: by pali.im (Postfix)
-        id 0F31C8A2; Sat, 24 Sep 2022 14:42:10 +0200 (CEST)
-Date:   Sat, 24 Sep 2022 14:42:09 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sinan Akman <sinan@writeme.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] powerpc/85xx: p2020: Create one unified machine
- description
-Message-ID: <20220924124209.7vxsvfdoxbtntegs@pali>
-References: <20220819191557.28116-1-pali@kernel.org>
+        b=0lFP26fo6xeUC9GgUJ/O8UYXKUkyBsg78y+mQyGpzZWM9FBJFmTLx3bpNfGgI9wYC
+         LnbfVNF6CB3wHBWH+z8qAq+qxfI8OovkPd4Veqyw2OtLwyLlnCjmWK3SamDZNKwZ4G
+         xxgTqL6khVxz19o5LRPOiL79uF10O0ETa/7RuHDg=
+Date:   Sat, 24 Sep 2022 14:52:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Gaosheng Cui <cuigaosheng1@huawei.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] nvmem: core: Fix memleak in nvmem_register()
+Message-ID: <Yy79m+NcW2tmbH5E@kroah.com>
+References: <20220916120402.38753-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220819191557.28116-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20220916120402.38753-1-srinivas.kandagatla@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,36 +50,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello! Any comments for these patches?
+On Fri, Sep 16, 2022 at 01:04:02PM +0100, Srinivas Kandagatla wrote:
+> From: Gaosheng Cui <cuigaosheng1@huawei.com>
+> 
+> dev_set_name will alloc memory for nvmem->dev.kobj.name in
+> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+> memory will be freed and return, but nobody will free memory
+> for nvmem->dev.kobj.name, there will be memleak, so moving
+> nvmem_validate_keepouts() after device_register() and let
+> the device core deal with cleaning name in error cases.
+> 
+> Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+> Hi Greg,
+> 
+> Here is a fix in nvmem core which can possibly go in next rc.
+> Could you please pick this up.
 
-On Friday 19 August 2022 21:15:50 Pali Rohár wrote:
-> This patch series unifies all P2020 boards and machine descriptions into
-> one generic unified P2020 machine description. With this generic machine
-> description, kernel can boot on any P2020-based board with correct DTS
-> file.
-> 
-> Tested on CZ.NIC Turris 1.1 board with has Freescale P2020 processor.
-> Kernel during booting correctly detects P2020 and prints:
-> [    0.000000] Using Freescale P2020 machine description
-> 
-> Pali Rohár (7):
->   powerpc/85xx: Mark mpc85xx_rdb_pic_init() as static
->   powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
->   powerpc/85xx: p2020: Move all P2020 machine descriptions to p2020.c
->   powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
->   powerpc/85xx: p2020: Define just one machine description
->   powerpc/85xx: p2020: Enable boards by new config option CONFIG_P2020
->   powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
-> 
->  arch/powerpc/boot/dts/turris1x.dts            |   2 +-
->  arch/powerpc/platforms/85xx/Kconfig           |  22 ++-
->  arch/powerpc/platforms/85xx/Makefile          |   1 +
->  arch/powerpc/platforms/85xx/mpc85xx_ds.c      |  25 +--
->  arch/powerpc/platforms/85xx/mpc85xx_rdb.c     |  46 +-----
->  .../platforms/85xx/{mpc85xx_ds.c => p2020.c}  | 144 +++++++-----------
->  6 files changed, 75 insertions(+), 165 deletions(-)
->  copy arch/powerpc/platforms/85xx/{mpc85xx_ds.c => p2020.c} (53%)
-> 
-> -- 
-> 2.20.1
-> 
+I missed this for 6.0-final, but as it's only on a not-ever-hit error
+path, it can wait for 6.1-rc1.
+
+thanks,
+
+greg k-h
