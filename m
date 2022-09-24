@@ -2,117 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B7E5E86CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0B85E86CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiIXAhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S232360AbiIXAm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiIXAhQ (ORCPT
+        with ESMTP id S231701AbiIXAm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 20:37:16 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF75F3126;
-        Fri, 23 Sep 2022 17:37:14 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NNNQWc009738;
-        Sat, 24 Sep 2022 00:37:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=dTyaY1rjGMwDiJdQPQAA5lbzlz5wBfBZoikRMNyQRyc=;
- b=WmL9Tbp9zSppk5P0MyYmi3cQqeD25nxZ/eVL35hlUMwXG7LxFIxV71T6BtwGhMCTFFYZ
- VvUmGmHpqAdLouJTEIRwOeoA6KoS5V7WZqSmTnwFXBJ4g1+5LWverNI8gDlwMqCKhJnv
- ojPl0aQeLWuAekd365l2jqlfRNtZ8fIKkcXAWqs9uF8l6uqOPrJKjCdQhdNbHJSBDxmu
- uneXknNmEAkOdM9rP3jR0WvEKfWrUlwJwC8VR68VlA79z1raTC61DvXCYwSiCPH3W+E3
- 2wDSIPhQAxH6yexjRAqs+grU767ua/ePXdQMHwgoIiLeiDOcvGoHor9BQ1zLUha4TJsh jQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3js67nketh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Sep 2022 00:37:04 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28O0b3Wp019484
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Sep 2022 00:37:03 GMT
-Received: from hu-gurus-sd.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 23 Sep 2022 17:37:03 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Subject: [PATCH] bindings: Update maintainer's email address
-Date:   Fri, 23 Sep 2022 17:36:57 -0700
-Message-ID: <1663979817-1078-1-git-send-email-quic_gurus@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 23 Sep 2022 20:42:26 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02568115BC2;
+        Fri, 23 Sep 2022 17:42:25 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b75so1580946pfb.7;
+        Fri, 23 Sep 2022 17:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=gspQs1QxEjtC7bSEvRo4TJDBF3NPEEStSRBNzrI3ftQ=;
+        b=WCAmjSzEYYB2ZiNbehzODWOC+xQAyg6HZiWcRjqce9eJnPGJDQ9m4RyWxS0FNTZDHt
+         O3D2lldIS53pjj5bbdZenDE1lRX5lZLUhrP/CVH8yR7SlZjvcIyo4VezjTqFlJRFnRpp
+         NxPqOGfqh1PhYUo0wjq1XHGI5m4V6nhzG3mbSeU0kV9smFBeUZ3o0wy7t7xTL4AiSX5O
+         BgmVqbwIpaevFr3ppE7gPkseKkx6M11YEdD4ibpE4j9R9HVY0X0CU77iJjT1finUhVse
+         LZ4LNdyNJXtbbHWgXtGzsLhdm1HWxfC7yLy+YaZuWvXRoLl/mq2RcjDJUB8VYeSPeEVR
+         5c2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=gspQs1QxEjtC7bSEvRo4TJDBF3NPEEStSRBNzrI3ftQ=;
+        b=C4uhsmrzHP54+BpBltZvPzC9SDH7cx1YbcbFIQmHXLIepNv7n7KiZSa9xuahP97Sq7
+         MB9GnU/Tdwd64xJ4HUZ8s9qFX2G6c5HJsCRP4XpjE+llD4HnB6fH4DBBBVwD1IbUiJoQ
+         igUaQAPGprtl3WNO+8kGz//YPyW+OCJE9+2KIBTjG45LJ2KnorDkwHZG34gJFR058r41
+         R7e3D5Ea2nrN/oD1tQqPdpYJh0LOiOXnjRImlmdQO9ZMCA6pbz+x88guJqsPL77sEWWB
+         JVZsWsl2Jl++PgvQ2CKa8zFDPZ4ah8mvoA6ZpfNXmznUMUSLGHMwlStE9oN1jmi26ry2
+         bmmg==
+X-Gm-Message-State: ACrzQf3FdJQtSvO5tR3TTDX+8bM4APLs1gyo0QldS6vQXOGQGzE5+0T4
+        LsqsGk/js7ohVAXtXnVANIk=
+X-Google-Smtp-Source: AMsMyM5hIlGpGGuYrjto56F3dA1+95TXjX6OoTHeX1RAwE2C3V08eCUp6c6ADnoqueCHDuUov47BJA==
+X-Received: by 2002:a63:6a03:0:b0:43a:18ce:7473 with SMTP id f3-20020a636a03000000b0043a18ce7473mr10280198pgc.616.1663980144377;
+        Fri, 23 Sep 2022 17:42:24 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:9987:f0b9:ad5:1fe7])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm6639516plx.281.2022.09.23.17.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 17:42:23 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 1/3] perf lock: Add -E/--entries option
+Date:   Fri, 23 Sep 2022 17:42:19 -0700
+Message-Id: <20220924004221.841024-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Uwn_ozhGbLW6Xf7XKm32DFj30eO09btj
-X-Proofpoint-GUID: Uwn_ozhGbLW6Xf7XKm32DFj30eO09btj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_10,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=598 adultscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209240002
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Guru Das Srinagesh's email address.
+Like perf top, the -E option can limit number of entries to print.
+It can be useful when users want to see top N contended locks only.
 
-Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 2 +-
- Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/Documentation/perf-lock.txt | 10 ++++++++++
+ tools/perf/builtin-lock.c              | 20 +++++++++++++++-----
+ 2 files changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-index 6a9c96f..480e4fb 100644
---- a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-+++ b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm Technologies, Inc. PM8941 USB ID Extcon device
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 5f2dc634258e..b23e76200ac2 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -94,6 +94,11 @@ REPORT OPTIONS
+          EventManager_De       1845          1             636
+          futex-default-S       1609          0               0
  
- maintainers:
--  - Guru Das Srinagesh <gurus@codeaurora.org>
-+  - Guru Das Srinagesh <quic_gurus@quicinc.com>
++-E::
++--entries=<value>::
++	Display this many entries.
++
++
+ INFO OPTIONS
+ ------------
  
- description: |
-   Some Qualcomm PMICs have a "misc" module that can be used to detect when
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
-index ec3138c..1f3ac59 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm Technologies, Inc. PM8008 PMIC bindings
+@@ -105,6 +110,7 @@ INFO OPTIONS
+ --map::
+ 	dump map of lock instances (address:name table)
  
- maintainers:
--  - Guru Das Srinagesh <gurus@codeaurora.org>
-+  - Guru Das Srinagesh <quic_gurus@quicinc.com>
++
+ CONTENTION OPTIONS
+ --------------
  
- description: |
-   Qualcomm Technologies, Inc. PM8008 is a dedicated camera PMIC that integrates
+@@ -154,6 +160,10 @@ CONTENTION OPTIONS
+ --stack-skip
+ 	Number of stack depth to skip when finding a lock caller (default: 3).
+ 
++-E::
++--entries=<value>::
++	Display this many entries.
++
+ 
+ SEE ALSO
+ --------
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 25d75fa09b90..1c0d52384d9e 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -58,6 +58,7 @@ static bool use_bpf;
+ static unsigned long bpf_map_entries = 10240;
+ static int max_stack_depth = CONTENTION_STACK_DEPTH;
+ static int stack_skip = CONTENTION_STACK_SKIP;
++static int print_nr_entries = INT_MAX / 2;
+ 
+ static enum {
+ 	LOCK_AGGR_ADDR,
+@@ -1266,14 +1267,14 @@ static void print_result(void)
+ 	struct lock_stat *st;
+ 	struct lock_key *key;
+ 	char cut_name[20];
+-	int bad, total;
++	int bad, total, printed;
+ 
+ 	pr_info("%20s ", "Name");
+ 	list_for_each_entry(key, &lock_keys, list)
+ 		pr_info("%*s ", key->len, key->header);
+ 	pr_info("\n\n");
+ 
+-	bad = total = 0;
++	bad = total = printed = 0;
+ 	while ((st = pop_from_result())) {
+ 		total++;
+ 		if (st->broken)
+@@ -1311,6 +1312,9 @@ static void print_result(void)
+ 			pr_info(" ");
+ 		}
+ 		pr_info("\n");
++
++		if (++printed >= print_nr_entries)
++			break;
+ 	}
+ 
+ 	print_bad_events(bad, total);
+@@ -1476,7 +1480,7 @@ static void print_contention_result(struct lock_contention *con)
+ {
+ 	struct lock_stat *st;
+ 	struct lock_key *key;
+-	int bad, total;
++	int bad, total, printed;
+ 
+ 	list_for_each_entry(key, &lock_keys, list)
+ 		pr_info("%*s ", key->len, key->header);
+@@ -1486,7 +1490,7 @@ static void print_contention_result(struct lock_contention *con)
+ 	else
+ 		pr_info("  %10s   %s\n\n", "type", "caller");
+ 
+-	bad = total = 0;
++	bad = total = printed = 0;
+ 	if (use_bpf)
+ 		bad = bad_hist[BROKEN_CONTENDED];
+ 
+@@ -1507,7 +1511,7 @@ static void print_contention_result(struct lock_contention *con)
+ 			/* st->addr contains tid of thread */
+ 			t = perf_session__findnew(session, pid);
+ 			pr_info("  %10d   %s\n", pid, thread__comm_str(t));
+-			continue;
++			goto next;
+ 		}
+ 
+ 		pr_info("  %10s   %s\n", get_type_str(st), st->name);
+@@ -1527,6 +1531,10 @@ static void print_contention_result(struct lock_contention *con)
+ 				pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
+ 			}
+ 		}
++
++next:
++		if (++printed >= print_nr_entries)
++			break;
+ 	}
+ 
+ 	print_bad_events(bad, total);
+@@ -1878,6 +1886,7 @@ int cmd_lock(int argc, const char **argv)
+ 		    "combine locks in the same class"),
+ 	OPT_BOOLEAN('t', "threads", &show_thread_stats,
+ 		    "show per-thread lock stats"),
++	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
+ 	OPT_PARENT(lock_options)
+ 	};
+ 
+@@ -1905,6 +1914,7 @@ int cmd_lock(int argc, const char **argv)
+ 	OPT_INTEGER(0, "stack-skip", &stack_skip,
+ 		    "Set the number of stack depth to skip when finding a lock caller, "
+ 		    "Default: " __stringify(CONTENTION_STACK_SKIP)),
++	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
+ 	OPT_PARENT(lock_options)
+ 	};
+ 
 -- 
-2.7.4
+2.37.3.998.g577e59143f-goog
 
