@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E533E5E8B90
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5145E8B96
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiIXKpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S233390AbiIXKvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiIXKpb (ORCPT
+        with ESMTP id S233342AbiIXKvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:45:31 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB73B734
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:45:30 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 3so2459174pga.1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=XQtmD1kYTWA0kK4vzMRdQp3IUqgbZJuOpl78iMvfgJg=;
-        b=FMUsbNfsXtj74D8HJndDTn6TS692PVwW3d6p0sSoEx+UEtDMfFYWc2AEMJwmq6TLp/
-         hb9nL4mMgiykNavd2rynA2WQKac8HUBaZExB4LcKguID7eSbPRsbWOl0WF9zK67eIuLu
-         b6lIj+XodMLxMnVwgEjloQ+gboSPa2K9P8P6/u5lHoDEpFUXYPlRSdeex9DhAXCOZ6a3
-         D15w+ChL1erl4cZWFJ0M12xNRoMe3mVrd8k0upBkq9D5J+Q4YZhYb9tTUDuwRTs4ClK+
-         fQ/lhmZBkwLXfiNROdsURFx9FHR8RMP7uB66jtLlXX+p/D5ftcVtNTQRUue8/wdj7q2Q
-         E+hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=XQtmD1kYTWA0kK4vzMRdQp3IUqgbZJuOpl78iMvfgJg=;
-        b=G+Q9621tpVgdE3KoAsH/O1uKahr/7ENv79BB92ukxQyI8/L1nnUmHHbU37eqSOJbQL
-         pb2D/Wug2twwFPuKZRe86Un3Zvic/pXG8bZUsuN4g0qBk8lYkX2Ow+VkOYJHF8pmDrdl
-         vnG0VqmOZSzwFqT0r32dYUUQa5Xl4PHv9xQFa4JNJ88EFk1bjYFEJLxzttiSVhxdOtxY
-         i7BtE5LAJ3xSDMr/TR0t4FTJVDNwDz4ymhSB2CYxFU9xIBdbxcni4KHBNEv0HuaDzAuo
-         lI6z2MonpN865JP7xmMYhLetOea7C/PsAmJ+onogk769CgPUyw5BKq+IU9PumiktVSkk
-         MhQA==
-X-Gm-Message-State: ACrzQf3ferIDKFbcQ5DRIk4ajA67N5NtgCkTZI3tMcbaG/6EhGqTylgU
-        NQr75oFrFvJbYGnFiRg68Xr4KfjdQQBO0w==
-X-Google-Smtp-Source: AMsMyM7qvV712FrkeRUD6TCJS1cYUAnq1jTj3wnHlMyE9YxVR+GO7upDWv3p6+85qxGdEP/C71OklA==
-X-Received: by 2002:a05:6a00:c91:b0:540:f165:b049 with SMTP id a17-20020a056a000c9100b00540f165b049mr13643042pfv.76.1664016329392;
-        Sat, 24 Sep 2022 03:45:29 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5])
-        by smtp.gmail.com with ESMTPSA id y18-20020aa78f32000000b0053e56165f42sm8336090pfr.146.2022.09.24.03.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 03:45:28 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     netdev@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, Biao Huang <biao.huang@mediatek.com>,
-        David Miller <davem@davemloft.net>
-Subject: [PATCH net-next] net: stmmac: Minor spell fix related to 'stmmac_clk_csr_set()'
-Date:   Sat, 24 Sep 2022 16:15:14 +0530
-Message-Id: <20220924104514.1666947-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
+        Sat, 24 Sep 2022 06:51:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880E4248DC;
+        Sat, 24 Sep 2022 03:51:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D2D260C07;
+        Sat, 24 Sep 2022 10:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57490C433C1;
+        Sat, 24 Sep 2022 10:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664016708;
+        bh=fJw46oiVDsrdRUBDbHBnpknkTEoz2vA2Oe6A+Tlnjhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atP3qtEXWF7U0jZKg8roHJOnr5mgJ+ewNB562GRr67Wd7dns9IN42+x2ZzETWkozY
+         ZklGsW3HNtp5QuzmXHQiGeTK2iZ0ywknqm7O9ebdIr5K5JI8jn1YWRhmVu133XJwsB
+         Njzkt2oCP27oE/PDsZemtuT18FFhY8Q78njbrbxgB141gVVoGUVt8lJPLzdviwuJ31
+         BBflbYJ/sy6zJ4Mey/x4CR7uFn3drs3XD5byCtjtdk1ROJKNqVb/YDzAPKFH6auZOJ
+         rZtW1MQKaA/ZgATf98wqD5jIl+wfyQLNN8Z//9QZlH3kX6a+iy25hnyxRM2YDXYQq5
+         Isa9jSo1kn3IA==
+Received: by pali.im (Postfix)
+        id EDE888A2; Sat, 24 Sep 2022 12:51:45 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 12:51:45 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: armada_37xx_wdt: Fix .set_timeout callback
+Message-ID: <20220924105145.spzn32xvz6mvyksi@pali>
+References: <20220726085612.10672-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220726085612.10672-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,29 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minor spell fix related to 'stmmac_clk_csr_set()' inside a
-comment used in the 'stmmac_probe_config_dt()' function.
+PING?
 
-Cc: Biao Huang <biao.huang@mediatek.com>
-Cc: David Miller <davem@davemloft.net>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 9f5cac4000da..b0b09c77711d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -440,7 +440,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
- 	/* Default to phy auto-detection */
- 	plat->phy_addr = -1;
- 
--	/* Default to get clk_csr from stmmac_clk_crs_set(),
-+	/* Default to get clk_csr from stmmac_clk_csr_set(),
- 	 * or get clk_csr from device tree.
- 	 */
- 	plat->clk_csr = -1;
--- 
-2.37.1
-
+On Tuesday 26 July 2022 10:56:12 Pali Rohár wrote:
+> ioctl(WDIOC_SETTIMEOUT) calls .set_timeout and .ping callbacks and it is
+> expected that it changes current watchdog timeout.
+> 
+> armada_37xx_wdt's .ping callback just reping counter 0 and does not touch
+> counter 1 used for timeout. So it is needed to set counter 1 to the new
+> value in .set_timeout callback to ensure ioctl(WDIOC_SETTIMEOUT)
+> functionality. Fix it.
+> 
+> Fixes: 54e3d9b518c8 ("watchdog: Add support for Armada 37xx CPU watchdog")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  drivers/watchdog/armada_37xx_wdt.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada_37xx_wdt.c
+> index 1635f421ef2c..b84cba94b135 100644
+> --- a/drivers/watchdog/armada_37xx_wdt.c
+> +++ b/drivers/watchdog/armada_37xx_wdt.c
+> @@ -179,6 +179,8 @@ static int armada_37xx_wdt_set_timeout(struct watchdog_device *wdt,
+>  	dev->timeout = (u64)dev->clk_rate * timeout;
+>  	do_div(dev->timeout, CNTR_CTRL_PRESCALE_MIN);
+>  
+> +	set_counter_value(dev, CNTR_ID_WDOG, dev->timeout);
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.20.1
+> 
