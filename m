@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B2B5E8E15
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C625C5E8E14
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiIXPl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S233913AbiIXPlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiIXPlw (ORCPT
+        with ESMTP id S233921AbiIXPlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 24 Sep 2022 11:41:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C0163C8
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:41:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880576AA01;
+        Sat, 24 Sep 2022 08:41:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 257BAB80DE0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA225C433D6;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43310B80E52;
+        Sat, 24 Sep 2022 15:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6635C433D7;
         Sat, 24 Sep 2022 15:41:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664034108;
-        bh=M3+cOc7Iqi1w0+AS5uJ8P/hWru//sv+TXcl6puqGrA4=;
+        s=k20201202; t=1664034109;
+        bh=veuerdAVOK4AGVI2s09VktzG6lI4Wh5dRvCojYk+5PY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WdGHji8mj4qKrMKlz+2mj7idrpmbdB3E4kmZhWqy6x73XqKmXrDQ4uyIgEGs2dFkd
-         dp1UeKvd0TydsIuGL9EQFYaI8akeeioZT8tb2gsHp9Kd2pPnvjaC2BStMPfAh2gymc
-         f8pnB4mo0ty81qfXDK8NsJfEPU303vquFFxDrbq6Y5l//9HbZ0xeaY1UlX9XaiFrml
-         hTvqvWMtXVINPnsGsd7WiiKvEp+14tObybgODN8rjKFlZRZgHD5gHczTDWgNzBVniW
-         dFntjrX70sYc2YjyAVBOLo3155J8YzzC0QJzUTvwungGSKt9n4hRJI+mDURXLvPFRz
-         0PkADsJM2Jqxg==
+        b=lbEfE+X/gJ2dTmCoEmQfZ8rKVcCui+Eu21msiyZnmhh+CaXvGAj6hjqtWzyNNp8Ns
+         uJzvAbs0sbOF65mGeYjI6i02lm1KY4oDa7t0S2alHK1hbdQtzP7BIJAkkhv6nhgy0L
+         1zYdt2JBnARcxWdv4WWhVq8kc8y3HXUcc5n4sSqTdObtBM4KbAJiQBUQzzaI2fCzxW
+         3budMkFM4z/b+6mOjdYn/RfHwp622TnEIQS5BwXn0hWMgwNAE4/J9i+TVWMiQHWDYc
+         C6j2vBrG2UshwvHunXSb7ma2Jy+4u7QOKe1pMPTR0TBAQTl3LVFIjM5dQSC9JmCmDf
+         cQs9Z+KT1rrVg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C04AEE21ECF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBC8CE4D03A;
         Sat, 24 Sep 2022 15:41:48 +0000 (UTC)
-Subject: Re: [GIT PULL] workqueue fixes for v6.0-rc6
+Subject: Re: [GIT PULL] cgroup fixes for v6.0-rc6
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
-References: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
+In-Reply-To: <Yy5/MV8BvP+M5Fmi@slm.duckdns.org>
+References: <Yy5/MV8BvP+M5Fmi@slm.duckdns.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.0-rc6-fixes
-X-PR-Tracked-Commit-Id: c0feea594e058223973db94c1c32a830c9807c86
+X-PR-Tracked-Message-Id: <Yy5/MV8BvP+M5Fmi@slm.duckdns.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc6-fixes
+X-PR-Tracked-Commit-Id: df02452f3df069a59bc9e69c84435bf115cb6e37
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: aae8dda51964ff9d3f1dc96528b853826667efad
-Message-Id: <166403410877.30824.2365999891805066767.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 1772094f12a7b180aa9ab849586f891b14d06d1f
+Message-Id: <166403410883.30824.4959463978058826483.pr-tracker-bot@kernel.org>
 Date:   Sat, 24 Sep 2022 15:41:48 +0000
 To:     Tejun Heo <tj@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Waiman Long <longman@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 23 Sep 2022 17:48:57 -1000:
+The pull request you sent on Fri, 23 Sep 2022 17:53:21 -1000:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.0-rc6-fixes
+> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc6-fixes
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/aae8dda51964ff9d3f1dc96528b853826667efad
+https://git.kernel.org/torvalds/c/1772094f12a7b180aa9ab849586f891b14d06d1f
 
 Thank you!
 
