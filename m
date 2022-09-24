@@ -2,206 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3DB5E8702
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21DF5E8706
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiIXBfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 21:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S232966AbiIXBjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 21:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiIXBfM (ORCPT
+        with ESMTP id S231844AbiIXBjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 21:35:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96133F1FD;
-        Fri, 23 Sep 2022 18:35:10 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l14so3911729eja.7;
-        Fri, 23 Sep 2022 18:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=FmXNgKNiR6L03MR28liqOUt594RqBBZGOnZhnHELJMk=;
-        b=avhlzXJiFl2JtY7A4VK/eK93CT8mXZlE6+Iq/5dEiB/Lle6blMlzLEkbYwfYxBk6Ue
-         0pp8WoSyp/jlDPIQ/lGRRLJq9YMlK5AbPfJylxuEeEPBYxdFbBiyE0RdfGnLwP7usIsq
-         y21X27Lrc6nrMCqx7V8i1r/KJgBeyvn+o+ZxtOUrll8zvluM3cP4jzvKa4NJWEUwIrF3
-         t7XwqgqddovyphLBUHTJXoFYdMPJzhGzMUh+QeivE/8HFOXjnOUs4Ckr9AvVgt6GCGnf
-         sM342dsszjWMDJxMnvEOshZpQ4zwbq3vt4BoqrZGNG16OFHkLMJpbubmQiEmRAeLNwn5
-         XziQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=FmXNgKNiR6L03MR28liqOUt594RqBBZGOnZhnHELJMk=;
-        b=zZayATP3IO4LgUG2iARRBdadTTu1ugeMqDCF1dRilZDOoOfJYxLkKC38PZyQG98jLo
-         GhsmMYss0ziumCpytzO/HXfhv3b6Z0FwcytGAE3UuvUpzFvrzUGyXqr0Z3l+CbhseHBR
-         oV2us7yq9hV3OWd9BNU08jJw9ze/KIgR6SOhg04x9Xam/Et28k469Rjg6mBi2Bcg9KzZ
-         UdgC6IaE2tvdFXrlqfuxIPNceJdGBKCkMr2y1hwL0+FblohP9VVIZpnYIeo1d2MCHsKd
-         Pc4ZTsq/nCH9LUtenGAPDq6KEwqgL6StWKc5OrnWNoJMt9ovUuGWgFE6IfsJYNbUUvqm
-         zIDQ==
-X-Gm-Message-State: ACrzQf2FykeMgk0nD7jVmaHtxgf8HY54CSYW9p6lw3QFHMyhFqCLd1IK
-        UVl3Yd5Ty+0kQzojnffd+KTM5Fh6upKBFa+xXqs=
-X-Google-Smtp-Source: AMsMyM7Ld7YZrjF5QB6UKRako5m2ln0sKbieW6A9jlXcekzi/caJ9Tjf/T5TNvHdq7Ng+jWnaf9cBPpwfSFfO9RGQHI=
-X-Received: by 2002:a17:907:6e27:b0:782:9f5f:fb5a with SMTP id
- sd39-20020a1709076e2700b007829f5ffb5amr5064100ejc.75.1663983309293; Fri, 23
- Sep 2022 18:35:09 -0700 (PDT)
+        Fri, 23 Sep 2022 21:39:17 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E840614594E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 18:39:14 -0700 (PDT)
+Message-ID: <9b671fc8-ae48-0486-ada5-04cc8c63f814@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663983552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a2JkmKoUry4ovxXmuL+E163gFx1UPsFjlVihzTo9W7Q=;
+        b=OQvSOzsQ7y6NWygitMF7BjyfLrET7v+dZXvfnA4hcvaI0fbLkMtFdZX2uHLhqBF8s5RR+/
+        MOhD5Zox9joRqQLmOJV8rfxDBv8OAYzZMwjIANGx+MArwv7WMM2IAAGS+cJmgMW3bbhViD
+        4K+7z6ydzntnbn9TrP+JRBnqrzEMbG8=
+Date:   Fri, 23 Sep 2022 21:39:08 -0400
 MIME-Version: 1.0
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com> <47a0249c-e129-7e98-503d-4254f216e485@gmail.com>
-In-Reply-To: <47a0249c-e129-7e98-503d-4254f216e485@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Fri, 23 Sep 2022 18:34:57 -0700
-Message-ID: <CAHQ1cqG7oL2sn=SRxp9se_h=rm+C6qYTkjp_DD1hPLBRPJpoGg@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v5 00/32] Printbufs
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        John Ogness <john.ogness@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220808024128.3219082-1-willy@infradead.org>
+ <Yy1b9KzPycxTa8OW@alley>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+In-Reply-To: <Yy1b9KzPycxTa8OW@alley>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 2:12 PM Ferry Toth <fntoth@gmail.com> wrote:
->
-> Hi,
->
-> Op 23-09-2022 om 18:42 schreef Andy Shevchenko:
-> > On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
-> >> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
-> >>> On 22-09-2022 12:08, Andy Shevchenko wrote:
-> >>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
-> > FYI: For now I sent a revert, but if we got a solution quicker we alway=
-s
-> > can choose the course of actions.
-> >
-> >>> If the extcon device exists, get the mode from the extcon device. If
-> >>> the controller is DRD and the driver is unable to determine the mode,
-> >>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
-> >>>
-> >>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferr=
-y, can you
-> >>> share bisect log?
-> >>>
-> >>> I can but not right now. But what I did was bisect between 5.18.0 (go=
-od) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based=
- on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "us=
-b: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and com=
-mit before that (good).
-> >>>
-> >>> The effect of the patch is that on Merrifield (I tested with Intel Ed=
-ison Arduino board which has a HW switch to select between host and device =
-mode) device mode works but in host mode USB is completely not working.
-> >>>
-> >>> Currently on host mode - when working - superfluous error messages fr=
-om tusb1210 appear. When host mode is not working there are no tusb1210 mes=
-sages in the logs / on the console at all. Seemingly tusb1210 is not probed=
-, which points in the direction of a relation to extcon.
-> >>>
-> >>> Taking into account the late cycle, I would like to revert the change=
-. And
-> >>> Ferry and I would help to test any other (non-regressive) approach).
-> >>>
-> >>> I have not yet tested if a simple revert fixes the problem but will t=
-onight.
-> >>>
-> >>>
-> >>> I would be happy to test other approaches too.
-> >>
-> >> It's a bit hard for me to suggest an alternative approach without
-> >> knowing how things are breaking in this case. I'd love to order one of
-> >> those boards to repro and fix this on my end, but it looks like this
-> >> HW is EOLed and out of stock in most places. If you guys know how to
-> >> get my hands on those boards I'm all ears.
-> > There are still some second hand Intel Edison boards flying around
-> > (but maybe cost a bit more than expected) and there are also
-> > Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
-> > option though requires more actions in order something to be boot
-> > there.
-> >
-> > In any case, it's probably quicker to ask Ferry or me for testing.
-> > (Although currently I have no access to the board to test OTG, it's
-> >   remote device which I can only power on and off and it has always
-> >   be in host mode.)
-> >
-> >> Barring that, Ferry can you dig more into this failure? E.g. is it thi=
-s hunk
-> >>
-> >> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
-> >>                   * mode. If the controller supports DRD but the dr_mo=
-de is not
-> >>                   * specified or set to OTG, then set the mode to peri=
-pheral.
-> >>                   */
-> >> -               if (mode =3D=3D USB_DR_MODE_OTG &&
-> >> +               if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
-> >>                      (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
-> >>                       !device_property_read_bool(dwc->dev, "usb-role-s=
-witch")) &&
-> >>                      !DWC3_VER_IS_PRIOR(DWC3, 330A))
-> >> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
-> >>          }
-> >>   }
-> >>
-> >> that's problematic or moving
-> > I think you wanted to revert only this line and test?
->
-> On v6.0-rc6 and reverting manually only this line
->
-> - if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
->
-> + if (mode =3D=3D USB_DR_MODE_OTG &&
->
-> host mode still does not work (no change visible).
+On 9/23/22 03:10, Petr Mladek wrote:
+> It seems that the motivation for the pretty print is to allow
+> printing more pretty/fancy multi-line debug messages. The API
+> should be usable inside vsprintf.c and also outside.
+> 
+> 1. vsprintf() is very important core API. It is used (not only for)
+>     when kernel wants to provide a human readable feedback, for
+>     example, via printk(), trace_printk(), procfs, sysfs, debugfs.
+> 
+>     If a bug in vsprintf() blocks printk()/trace_printk() then
+>     crash_dump might be the only way to debug the kernel.
 
-Cool, thanks for checking that. Don't think I have any more
-experiments off the top of my head to run. I'll have to go read that
-code more. I'll reply in the thread if I have something new to
-try/say.
+All the more reason for that code to be written with safe APIs, wouldn't 
+you say?
 
->
-> >
-> >>   static int dwc3_probe(struct platform_device *pdev)
-> >>   {
-> >>          struct device           *dev =3D &pdev->dev;
-> >> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *p=
-dev)
-> >>                  goto err2;
-> >>          }
-> >>
-> >> +       dwc->edev =3D dwc3_get_extcon(dwc);
-> >> +       if (IS_ERR(dwc->edev)) {
-> >> +               ret =3D PTR_ERR(dwc->edev);
-> >> +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n")=
-;
-> >> +               goto err3;
-> >> +       }
-> >> +
-> >>          ret =3D dwc3_get_dr_mode(dwc);
-> >>          if (ret)
-> >>                  goto err3;
-> >>
-> >> to happen earlier?
-> > It is not always possible to have an extcon driver available, that's wh=
-y in
-> > some cases the probe of it defers. I dunno how your patch supposed to w=
-ork
-> > in that case.
-> >
-> >> Does tracing the "mrfld_bcove_pwrsrc" driver (the
-> >> excton provider in this case AFIACT) show anything interesting?
-> > I believe there is nothing interesting.
-> >
+> 2. My experience with printk() is that external APIs are big source of
+>     problems. Some of them are even solved by hacks, for example:
+> 
+>       + Console drivers have to check oops_in_progress before taking
+>         port->lock to prevent a deadlock.
+> 
+>       + printk_deferred() or printk_once() have to be used by code that
+>         might be called by printk().
+> 
+>      This patchset adds another external API.
+
+We should differentiate between sprintf and printk.
+
+sprintf is _just_ for formatting strings, it doesn't have the same 
+concerns as printk re: locking the output buffer - or any locking 
+concerns whatsover, it's a pure function that doesn't mutate outside 
+system state.
+
+This patch series is about introducing a safe common API for sprintf and 
+other code that outputs to strings, and I'd also note that even Linus 
+agreed on the need for such an API, because it gets rid of the separate 
+stack-allocated buffers that have been a problem in the past.
+
+There's no impact on printk. The extra feature that printbufs add - heap 
+allocation - isn't used by printk.
+
+
+>      The %pf feature allows writing crazy callbacks called inside
+>      vsprintf()/printk() without any proper review and self-tests.
+
+I came to similar conclusions about %pf after the discussion with Linus; 
+that part has been dropped from the patch set for now.
+
+I do think we can do it safely in the future, and in the meantime it 
+_may_ be worthwhile for use in a much more limited - probably not, I'd 
+rather hold off and do it right. But since it hasn't been in the patch 
+set the last few times I posted it, let's leave this out of the discussion.
+
+(I think the way to make it safe will be to output to a heap allocated 
+buffer instead of the printk buffer directly; however, that's not an 
+option currently because we'd need to plumb through a gfp flags 
+parameter and obviously we're not going to do that to printk. However, 
+we're looking at switching from gfp flags to the memalloc_*() API, which 
+would make this work).
+
+>      People would want to extend the pretty print API for a
+>      profs/sysfs/debugfs use-case. They would take it easily.
+>      There is a lower risk in this case because only a particular
+>      file is affected, the API is called in a well defined context.
+>      But it looks like a call for problems if we allow to call
+>      the same complicated code also from vsprintf() or printk()
+>      in any context.
+
+Since %pf isn't getting added, this isn't a concern.
+
+_But_, introducing a common API so that we can use the same code for 
+outputting to the system console, or procfs, or debugfs, is precisely 
+what this is all about! We've got a fair amount of code duplication 
+(some of which this patch series addresses; see the hexdump patches) 
+because of this lack of a common API - often messily, with subtle 
+differences for absolutely no reason.
+
+We _want_ common, reusable, generic code.
+
+Without %pf, to use printbuf code for outputting to the console the 
+standard approach is going to be something like
+
+struct printbuf buf = PRINTBUF;
+
+prt_foo(&buf, foo);
+printk("%s\n", buf.buf);
+printbuf_exit(&buf);
+
+Obviously, this isn't the greatest ergonomic-wise, %pf would be better 
+in that respect. But this is still quite a bit better than completely 
+duplicated code - one for outputting to a seq_buf, another set for 
+seq_file, another for printk()...
+
+I also have a patch series in the works for a printbuf based replacement 
+for seq_file - eliminating that API fragmentation as well. I've just 
+been waiting for movement on this patch series...
+
+> 3. Features usually complicate the code immediately or later.
+> 
+>     For example, the record based ring buffer complicated the printk()
+>     code a lot. It introduced many regressions. Development of the
+>     lockless variant was a real challenge. And it did not solve
+>     everything. Peple still complain that pr_cont() is not reliable.
+>     Multi-line output might be mixed, ...
+
+I'm not seeing the complications this patch series introduces in its 
+current form. There's heap allocation, which replaces open-coded output 
+buffer allocation that's currently done all over the place. And there's 
+tabstops and indenting; given the amount of columnar data presented in 
+procfs and debugfs, I think those are reasonable additions.
+
+In return, you get a whole ton of code that was previously using raw 
+pointer arithmetic converted to safe APIs, and we have a start on 
+standardizing a lot of different code on a common API.
+
+And, the sprintf code ends up a whole lot more readable and easier to 
+work on.
+
+>     The pretty print API is actually designed for multi-line output.
+>     But it will not help when used with printk() that uses 1k buffers
+>     internally. And adding support for "unlimited" printk() messages
+>     would be another challenge. It would bring new problems,
+>     for example, one printk() caller might block others for too long, ...
+
+I'm not seeing that this is a real difficulty, since we're not doing %pf 
+at this time.
+
+  - add a printk_string_as_lines(), which takes a string buffer (not a 
+format string) and calls printk() on it one line at a time. This would 
+be an easy way around the current 1k buffer.
+  - or, if the printk code wants to keep the output lines together and 
+not have them interspersed with other output, that should be easier when 
+we're presenting you the output already formatted and all you need to do 
+is memcpy().
+
+Basically, we've got broad agreement that calling arbitrary 
+pretty-printers from printk() context is a bad idea, so since we won't 
+be doing that this looks like a non-issue to me as well.
+
+>      A more detailed review of the patchset would help me to have
+>      stronger opinion about it. I am not clever and experienced enough
+>      to see all the consequences on the first look.
+
+There's really not a lot in the way of functional changes, since %pf has 
+been dropped - it's just refactoring and converting to common APIs, and 
+it was pretty mechanical as far as refactorings go.
+
+Besides what we've talked about, the other thing I was doing that might 
+be worth discussing was working on separating the pretty-printers in 
+vsprintf.c from the format string parsing code. What I was seeing was a 
+lot of code mixing parsing of the format string, and I think that code 
+would be _much_ easier to read and work on with the format string 
+parsing confined to pointer(), and having it call pretty-printers with a 
+normal function call interface with well-typed arguments.
+
+I have additional patches finishing this work for around half of the 
+pretty-printers in vsprintf.c, but you were complaining about the patch 
+series growing, so I haven't posted them yet...
+
+Anyways, I hope this addresses some concerns.
+
+Cheers,
+Kent
