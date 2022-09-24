@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63EC5E903C
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D565E903D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234014AbiIXWDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S230201AbiIXWDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbiIXWD1 (ORCPT
+        with ESMTP id S234039AbiIXWDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:03:27 -0400
+        Sat, 24 Sep 2022 18:03:31 -0400
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3583386AE
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:19 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id z13so7143021ejp.6
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7001533350
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id 13so7169506ejn.3
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date;
-        bh=cUeH3XmhsuVxox+WBK0EztC3Vn4IiIlYe/BsguLKMHs=;
-        b=gKBMNAlNq3Gi7IwncL+Ps63cJySgz67Aktgne9qw8BKsUp3UBvc4QeP5aGUo8Bi4Xr
-         lN1cgGV4d0pV4XDQ1exkMpIfz3g/dvUsgKTn0swyCuc2MlNl9NUM5qdPiiitlUjMcRxw
-         rBlV7lqyLB5i+id1TWoPkn859gxI687U/1TT49eaFA8cyPTtD6aT0X4AqKBQ8uAZE73t
-         w9BynRNOfYVja4jSIUZOeTq8Hvr9CyaduRNNVXlzIg4zWzlLpV/W8vsE+5pnCLKyAXsD
-         lvJVY9J9ZrYqcrOPyufOc4qUuR0Ly0dLQ0MhwH0t8Y48gEyMtx2/0N/HUih3pkvn/QUO
-         x+tw==
+        bh=2vbRnOhD8TPYnS7wkqyA/FaN1lEvknTEkNYcBwkBWSw=;
+        b=lyabth+2ha6CI/abNAc0A4hmmYmtoIj9qZeycWPA6WTN8GPMch3AIIeBePGKAWY3uE
+         vYUst9GsmyMzTIwDLv7PdBWHz4Qt+EFDNVwhpN0Qre/vaM9Xu5UxcsOKNRLGNxjUmFj8
+         U6F4mDW1fzy2JtzS91Jm9mpBnr0uNH8AXKpAvyWQQcykRsPphCCyvoz+leFzaYuVkmi0
+         2ChoaYV7q/JKYjRI49OrgDgdQO9b063QrlAmOtuUgkCZbuwXVpd/NJdGOBZZu7On61PX
+         1G/Qi7TpxopspgiquyKl5k7pD4D3B9XVAOOY5LvAzBTFq7bf9FydYiZljs8kx6phqSUO
+         JEPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cUeH3XmhsuVxox+WBK0EztC3Vn4IiIlYe/BsguLKMHs=;
-        b=ZsyDNzwLEubrBjUFY/zo9AMbCG1524ZdpppFOiJ7DDU1KpVe3VXGzEov9DGAs1lP5w
-         7jJyoDPBGNdC7X9mEjSav2NbNAEMf72JDJpwYmB49YBLjfzKXywLPeaTbwdhweEieukt
-         9nsX31df5ovr2HdjSKqYdg3Y5IrQQj2A/lPRUL0zjiDu3/dRIbA1oWC1062+RC/vy+AP
-         eZx89o2fJkL7ZOn2X2c4+sYRyBilFf4tmYxNiWlKaWjMwEfI251x/wufyDIZhqMswcbQ
-         fbtTR7n78/tSr3gWBp2MUFvThem1ed2MshszQtGJKoubvYnttlFoQjEKKXgrweUq4OYy
-         UGww==
-X-Gm-Message-State: ACrzQf2OiIflYYyond16YQL/ywM3oxjF5Kd1sRC10z/VJjw0s3FeMVH6
-        sZbHHcA4phcjUmymy47oyYY=
-X-Google-Smtp-Source: AMsMyM6JmiDDITrLR3FWvlnQMtesj2GEBMqXXK/832ldINi7QpgcQaeeY1a3Zla8se+EZdOc0HRzyA==
-X-Received: by 2002:a17:907:3e28:b0:782:81d:a4f9 with SMTP id hp40-20020a1709073e2800b00782081da4f9mr12409527ejc.558.1664056998352;
-        Sat, 24 Sep 2022 15:03:18 -0700 (PDT)
+        bh=2vbRnOhD8TPYnS7wkqyA/FaN1lEvknTEkNYcBwkBWSw=;
+        b=UjlhQkQyG4ouNnTs0KGrO61333fDYSOgtiXFfzD8c1vzgyVmz7jlG3FewieUaVQloN
+         GyPy1cyQcxXa7kPQskgExDY4DNNK39egpxZz363HSnGJS7PT29NtQYPx0nZNzZCWST2D
+         UfLNMAFOL5td1qebfiNR4Dlo3Tzqn0VjaHbf1Giqa0aUKOA+VOtb+I4JXyXpgDGdmV8u
+         fintvijG41YIOCVMgF//DFXKd5noiM8IwSwF9XH4pC0/4RtpH7wCSttM9uinZFF+z0TR
+         cTsUk2kxA2/fvTponBN+TdYMbHYWPT7j5t0yA+UXOv1B0JyClC3QaHpEXtTpoRnF8Qwh
+         VppQ==
+X-Gm-Message-State: ACrzQf0w/jP9ruX+m9ZZNw7Agw2Df1I3SvJEAVcMLNYOqWvamK5n5NEi
+        RpdDq4w880+HfiwgfsatmetLEWC8bog=
+X-Google-Smtp-Source: AMsMyM75+lCEo4sIZEtqv3OQJGS+riGN/VQQDAADNF5SBwOIs7cNPV2yiT7jUVqGWs8gqmsNCerDNw==
+X-Received: by 2002:a17:907:75e7:b0:77a:2378:91bb with SMTP id jz7-20020a17090775e700b0077a237891bbmr12425293ejc.329.1664057008012;
+        Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id r10-20020a17090609ca00b0073cb0801104sm6021615eje.147.2022.09.24.15.03.17
+        by smtp.gmail.com with ESMTPSA id i21-20020aa7c9d5000000b00452878cba5bsm8114026edt.97.2022.09.24.15.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 15:03:17 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 00:03:16 +0200
+        Sat, 24 Sep 2022 15:03:26 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 00:03:24 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/10] staging: rtl8192e: Rename eRfSleep, eRfPowerStateToSet
- and RfOffReason
-Message-ID: <58e21e5cf86270edae93162db2395e6348c9c424.1664055213.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 03/10] staging: rtl8192e: Rename dot11Cur..., bCurTxBW40MHz
+ and bCurrentRT2...
+Message-ID: <97c4f62da9a98b0ddcdaafae68182e3eb47f9a17.1664055213.git.philipp.g.hortmann@gmail.com>
 References: <cover.1664055213.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,241 +70,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable eRfSleep to rf_sleep, eRfPowerStateToSet to
-rf_power_state_to_set and RfOffReason to rf_off_reason to avoid CamelCase
-which is not accepted by checkpatch. Omit the upfront "e" as no RfSleep
-and RfPowerStateToSet exist and it makes the variables unnecessary long.
+Rename variable dot11CurrentPreambleMode to dot11_current_preamble_mode,
+bCurTxBW40MHz to cur_tx_bw40mhz and bCurrentRT2RTLongSlotTime to
+current_rt2rt_long_slot_time to avoid CamelCase which is not accepted
+by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 10 +++++-----
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  2 +-
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c    |  2 +-
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 16 ++++++++--------
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 10 +++++-----
- drivers/staging/rtl8192e/rtl8192e/rtl_ps.c     |  6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_wx.c     |  4 ++--
- drivers/staging/rtl8192e/rtllib.h              |  4 ++--
- 8 files changed, 27 insertions(+), 27 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  6 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 14 +++++++-------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   |  2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     |  4 ++--
+ drivers/staging/rtl8192e/rtl819x_HT.h          |  4 ++--
+ drivers/staging/rtl8192e/rtl819x_HTProc.c      | 12 ++++++------
+ drivers/staging/rtl8192e/rtllib_tx.c           |  2 +-
+ 7 files changed, 22 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index cb8b5fd7ab86..bd2696cdaccd 100644
+index bd2696cdaccd..7391d7cb7a58 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -758,13 +758,13 @@ bool rtl92e_start_adapter(struct net_device *dev)
+@@ -822,7 +822,7 @@ static void _rtl92e_net_update(struct net_device *dev)
  
- 	if (priv->RegRfOff) {
- 		rtl92e_set_rf_state(dev, rf_off, RF_CHANGE_BY_SW);
--	} else if (priv->rtllib->RfOffReason > RF_CHANGE_BY_PS) {
--		rtl92e_set_rf_state(dev, rf_off, priv->rtllib->RfOffReason);
--	} else if (priv->rtllib->RfOffReason >= RF_CHANGE_BY_IPS) {
--		rtl92e_set_rf_state(dev, rf_off, priv->rtllib->RfOffReason);
-+	} else if (priv->rtllib->rf_off_reason > RF_CHANGE_BY_PS) {
-+		rtl92e_set_rf_state(dev, rf_off, priv->rtllib->rf_off_reason);
-+	} else if (priv->rtllib->rf_off_reason >= RF_CHANGE_BY_IPS) {
-+		rtl92e_set_rf_state(dev, rf_off, priv->rtllib->rf_off_reason);
- 	} else {
- 		priv->rtllib->rf_power_state = rf_on;
--		priv->rtllib->RfOffReason = 0;
-+		priv->rtllib->rf_off_reason = 0;
+ 	net = &priv->rtllib->current_network;
+ 	rtl92e_config_rate(dev, &rate_config);
+-	priv->dot11CurrentPreambleMode = PREAMBLE_AUTO;
++	priv->dot11_current_preamble_mode = PREAMBLE_AUTO;
+ 	priv->basic_rate = rate_config &= 0x15f;
+ 	rtl92e_writew(dev, BSSIDR, *(u16 *)net->bssid);
+ 	rtl92e_writel(dev, BSSIDR + 2, *(u32 *)(net->bssid + 2));
+@@ -1998,10 +1998,10 @@ void rtl92e_update_ratr_table(struct net_device *dev)
+ 		break;
  	}
- 
- 	if (priv->rtllib->FwRWRF)
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index c81907d31af8..594db05b6558 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1363,7 +1363,7 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
- 
- 			break;
- 
--		case eRfSleep:
-+		case rf_sleep:
- 			if (priv->rtllib->rf_power_state == rf_off)
- 				break;
- 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-index 5faf17d8d536..4226bbaaca44 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-@@ -83,7 +83,7 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
- 	rt_state = priv->rtllib->rf_power_state;
- 	if (priv->rtllib->PowerSaveControl.bInactivePs) {
- 		if (rt_state == rf_off) {
--			if (priv->rtllib->RfOffReason > RF_CHANGE_BY_IPS) {
-+			if (priv->rtllib->rf_off_reason > RF_CHANGE_BY_IPS) {
- 				netdev_warn(dev, "%s(): RF is OFF.\n",
- 					    __func__);
- 				return;
+ 	ratr_value &= 0x0FFFFFFF;
+-	if (ieee->pHTInfo->bCurTxBW40MHz &&
++	if (ieee->pHTInfo->cur_tx_bw40mhz &&
+ 	    ieee->pHTInfo->bCurShortGI40MHz)
+ 		ratr_value |= 0x80000000;
+-	else if (!ieee->pHTInfo->bCurTxBW40MHz &&
++	else if (!ieee->pHTInfo->cur_tx_bw40mhz &&
+ 		  ieee->pHTInfo->bCurShortGI20MHz)
+ 		ratr_value |= 0x80000000;
+ 	rtl92e_writel(dev, RATR0+rate_index*4, ratr_value);
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 8954d1e4534c..52b25df99642 100644
+index 52b25df99642..89bc989cffba 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -170,13 +170,13 @@ bool rtl92e_set_rf_state(struct net_device *dev,
+@@ -287,16 +287,16 @@ static void _rtl92e_update_cap(struct net_device *dev, u16 cap)
+ 	bool		ShortPreamble;
  
- 	switch (state_to_set) {
- 	case rf_on:
--		priv->rtllib->RfOffReason &= (~change_source);
-+		priv->rtllib->rf_off_reason &= (~change_source);
- 
- 		if ((change_source == RF_CHANGE_BY_HW) && priv->hw_radio_off)
- 			priv->hw_radio_off = false;
- 
--		if (!priv->rtllib->RfOffReason) {
--			priv->rtllib->RfOffReason = 0;
-+		if (!priv->rtllib->rf_off_reason) {
-+			priv->rtllib->rf_off_reason = 0;
- 			action_allowed = true;
- 
- 			if (rt_state == rf_off &&
-@@ -189,7 +189,7 @@ bool rtl92e_set_rf_state(struct net_device *dev,
- 
- 		if ((priv->rtllib->iw_mode == IW_MODE_INFRA) ||
- 		    (priv->rtllib->iw_mode == IW_MODE_ADHOC)) {
--			if ((priv->rtllib->RfOffReason > RF_CHANGE_BY_IPS) ||
-+			if ((priv->rtllib->rf_off_reason > RF_CHANGE_BY_IPS) ||
- 			    (change_source > RF_CHANGE_BY_IPS)) {
- 				if (ieee->state == RTLLIB_LINKED)
- 					priv->blinked_ingpio = true;
-@@ -201,12 +201,12 @@ bool rtl92e_set_rf_state(struct net_device *dev,
+ 	if (cap & WLAN_CAPABILITY_SHORT_PREAMBLE) {
+-		if (priv->dot11CurrentPreambleMode != PREAMBLE_SHORT) {
++		if (priv->dot11_current_preamble_mode != PREAMBLE_SHORT) {
+ 			ShortPreamble = true;
+-			priv->dot11CurrentPreambleMode = PREAMBLE_SHORT;
++			priv->dot11_current_preamble_mode = PREAMBLE_SHORT;
+ 			priv->rtllib->SetHwRegHandler(dev, HW_VAR_ACK_PREAMBLE,
+ 					(unsigned char *)&ShortPreamble);
  		}
- 		if ((change_source == RF_CHANGE_BY_HW) && !priv->hw_radio_off)
- 			priv->hw_radio_off = true;
--		priv->rtllib->RfOffReason |= change_source;
-+		priv->rtllib->rf_off_reason |= change_source;
- 		action_allowed = true;
- 		break;
+ 	} else {
+-		if (priv->dot11CurrentPreambleMode != PREAMBLE_LONG) {
++		if (priv->dot11_current_preamble_mode != PREAMBLE_LONG) {
+ 			ShortPreamble = false;
+-			priv->dot11CurrentPreambleMode = PREAMBLE_LONG;
++			priv->dot11_current_preamble_mode = PREAMBLE_LONG;
+ 			priv->rtllib->SetHwRegHandler(dev, HW_VAR_ACK_PREAMBLE,
+ 					      (unsigned char *)&ShortPreamble);
+ 		}
+@@ -307,7 +307,7 @@ static void _rtl92e_update_cap(struct net_device *dev, u16 cap)
+ 		u8	cur_slot_time = priv->slot_time;
  
--	case eRfSleep:
--		priv->rtllib->RfOffReason |= change_source;
-+	case rf_sleep:
-+		priv->rtllib->rf_off_reason |= change_source;
- 		action_allowed = true;
- 		break;
+ 		if ((cap & WLAN_CAPABILITY_SHORT_SLOT_TIME) &&
+-		   (!priv->rtllib->pHTInfo->bCurrentRT2RTLongSlotTime)) {
++		   (!priv->rtllib->pHTInfo->current_rt2rt_long_slot_time)) {
+ 			if (cur_slot_time != SHORT_SLOT_TIME) {
+ 				slot_time_val = SHORT_SLOT_TIME;
+ 				priv->rtllib->SetHwRegHandler(dev,
+@@ -341,7 +341,7 @@ static void _rtl92e_update_beacon(void *data)
  
-@@ -882,7 +882,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	priv->RegRfOff = false;
- 	priv->isRFOff = false;
- 	priv->bInPowerSaveMode = false;
--	priv->rtllib->RfOffReason = 0;
-+	priv->rtllib->rf_off_reason = 0;
- 	priv->rf_change_in_progress = false;
- 	priv->bHwRfOffAction = 0;
- 	priv->SetRFPowerStateInProgress = false;
+ 	if (ieee->pHTInfo->bCurrentHTSupport)
+ 		HT_update_self_and_peer_setting(ieee, net);
+-	ieee->pHTInfo->bCurrentRT2RTLongSlotTime = net->bssht.bd_rt2rt_long_slot_time;
++	ieee->pHTInfo->current_rt2rt_long_slot_time = net->bssht.bd_rt2rt_long_slot_time;
+ 	ieee->pHTInfo->RT2RT_HT_Mode = net->bssht.rt2rt_ht_mode;
+ 	_rtl92e_update_cap(dev, net->capability);
+ }
+@@ -833,7 +833,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+ 	u8 i;
+ 
+ 	priv->AcmMethod = eAcmWay2_SW;
+-	priv->dot11CurrentPreambleMode = PREAMBLE_AUTO;
++	priv->dot11_current_preamble_mode = PREAMBLE_AUTO;
+ 	priv->rtllib->status = 0;
+ 	priv->polling_timer_on = 0;
+ 	priv->up_first_time = 1;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 093887bcd463..7021f9c435d9 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -430,7 +430,7 @@ struct r8192_priv {
+ 
+ 	u16 basic_rate;
+ 	u8 short_preamble;
+-	u8 dot11CurrentPreambleMode;
++	u8 dot11_current_preamble_mode;
+ 	u8 slot_time;
+ 	u16 SifsTime;
+ 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 92bf4bac31f1..a4bffc081857 100644
+index a4bffc081857..2394faba3940 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -1665,7 +1665,7 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
- 				  struct r8192_priv, gpio_change_rf_wq);
- 	struct net_device *dev = priv->rtllib->dev;
- 	u8 tmp1byte;
--	enum rt_rf_power_state eRfPowerStateToSet;
-+	enum rt_rf_power_state rf_power_state_to_set;
- 	bool bActuallySet = false;
- 	char *argv[3];
- 	static const char RadioPowerPath[] = "/etc/acpi/events/RadioPower.sh";
-@@ -1684,13 +1684,13 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
+@@ -343,9 +343,9 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
  
- 	tmp1byte = rtl92e_readb(dev, GPI);
+ 	if (priv->rtllib->state == RTLLIB_LINKED) {
  
--	eRfPowerStateToSet = (tmp1byte&BIT1) ?  rf_on : rf_off;
-+	rf_power_state_to_set = (tmp1byte&BIT1) ?  rf_on : rf_off;
+-		bshort_gi_enabled = (pHTInfo->bCurTxBW40MHz &&
++		bshort_gi_enabled = (pHTInfo->cur_tx_bw40mhz &&
+ 				     pHTInfo->bCurShortGI40MHz) ||
+-				    (!pHTInfo->bCurTxBW40MHz &&
++				    (!pHTInfo->cur_tx_bw40mhz &&
+ 				     pHTInfo->bCurShortGI20MHz);
  
--	if (priv->hw_radio_off && (eRfPowerStateToSet == rf_on)) {
-+	if (priv->hw_radio_off && (rf_power_state_to_set == rf_on)) {
- 		netdev_info(dev, "gpiochangeRF  - HW Radio ON\n");
- 		priv->hw_radio_off = false;
- 		bActuallySet = true;
--	} else if (!priv->hw_radio_off && (eRfPowerStateToSet == rf_off)) {
-+	} else if (!priv->hw_radio_off && (rf_power_state_to_set == rf_off)) {
- 		netdev_info(dev, "gpiochangeRF  - HW Radio OFF\n");
- 		priv->hw_radio_off = true;
- 		bActuallySet = true;
-@@ -1699,7 +1699,7 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
- 	if (bActuallySet) {
- 		mdelay(1000);
- 		priv->bHwRfOffAction = 1;
--		rtl92e_set_rf_state(dev, eRfPowerStateToSet, RF_CHANGE_BY_HW);
-+		rtl92e_set_rf_state(dev, rf_power_state_to_set, RF_CHANGE_BY_HW);
- 		if (priv->hw_radio_off)
- 			argv[1] = "RFOFF";
- 		else
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
-index b43454320606..8c00b111ddb2 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
-@@ -26,7 +26,7 @@ static void _rtl92e_hw_sleep(struct net_device *dev)
+ 		pra->upper_rssi_threshold_ratr =
+diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
+index ce13b41074a7..2ab04469ef4b 100644
+--- a/drivers/staging/rtl8192e/rtl819x_HT.h
++++ b/drivers/staging/rtl8192e/rtl819x_HT.h
+@@ -148,7 +148,7 @@ struct rt_hi_throughput {
+ 	u8				PeerMimoPs;
+ 
+ 	enum ht_extchnl_offset CurSTAExtChnlOffset;
+-	u8				bCurTxBW40MHz;
++	u8 cur_tx_bw40mhz;
+ 	u8				PeerBandwidth;
+ 
+ 	u8				bSwBwInProgress;
+@@ -157,7 +157,7 @@ struct rt_hi_throughput {
+ 	u8				bRegRT2RTAggregation;
+ 	u8				RT2RT_HT_Mode;
+ 	u8				bCurrentRT2RTAggregation;
+-	u8				bCurrentRT2RTLongSlotTime;
++	u8 current_rt2rt_long_slot_time;
+ 	u8				szRT2RTAggBuffer[10];
+ 
+ 	u8				bRegRxReorderEnable;
+diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+index 3b8efaf9b88c..1e1364c56163 100644
+--- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
++++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+@@ -543,7 +543,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
+ #endif
+ 	HTSetConnectBwMode(ieee, (enum ht_channel_width)(pPeerHTCap->ChlWidth),
+ 			  (enum ht_extchnl_offset)(pPeerHTInfo->ExtChlOffset));
+-	pHTInfo->bCurTxBW40MHz = ((pPeerHTInfo->RecommemdedTxWidth == 1) ?
++	pHTInfo->cur_tx_bw40mhz = ((pPeerHTInfo->RecommemdedTxWidth == 1) ?
+ 				 true : false);
+ 
+ 	pHTInfo->bCurShortGI20MHz = ((pHTInfo->bRegShortGI20MHz) ?
+@@ -633,7 +633,7 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
+ 	pHTInfo->bCurrentHTSupport = false;
+ 
+ 	pHTInfo->bCurBW40MHz = false;
+-	pHTInfo->bCurTxBW40MHz = false;
++	pHTInfo->cur_tx_bw40mhz = false;
+ 
+ 	pHTInfo->bCurShortGI20MHz = false;
+ 	pHTInfo->bCurShortGI40MHz = false;
+@@ -660,7 +660,7 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
+ 	pHTInfo->ePeerHTSpecVer = HT_SPEC_VER_IEEE;
+ 
+ 	pHTInfo->bCurrentRT2RTAggregation = false;
+-	pHTInfo->bCurrentRT2RTLongSlotTime = false;
++	pHTInfo->current_rt2rt_long_slot_time = false;
+ 	pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
+ 
+ 	pHTInfo->IOTPeer = 0;
+@@ -720,12 +720,12 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
+ 		if (pHTInfo->bRegRT2RTAggregation) {
+ 			pHTInfo->bCurrentRT2RTAggregation =
+ 				 pNetwork->bssht.bd_rt2rt_aggregation;
+-			pHTInfo->bCurrentRT2RTLongSlotTime =
++			pHTInfo->current_rt2rt_long_slot_time =
+ 				 pNetwork->bssht.bd_rt2rt_long_slot_time;
+ 			pHTInfo->RT2RT_HT_Mode = pNetwork->bssht.rt2rt_ht_mode;
+ 		} else {
+ 			pHTInfo->bCurrentRT2RTAggregation = false;
+-			pHTInfo->bCurrentRT2RTLongSlotTime = false;
++			pHTInfo->current_rt2rt_long_slot_time = false;
+ 			pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
+ 		}
+ 
+@@ -757,7 +757,7 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
+ 	} else {
+ 		pHTInfo->bCurrentHTSupport = false;
+ 		pHTInfo->bCurrentRT2RTAggregation = false;
+-		pHTInfo->bCurrentRT2RTLongSlotTime = false;
++		pHTInfo->current_rt2rt_long_slot_time = false;
+ 		pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
+ 
+ 		pHTInfo->IOTAction = 0;
+diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
+index 9da83531932f..595f9b92ac83 100644
+--- a/drivers/staging/rtl8192e/rtllib_tx.c
++++ b/drivers/staging/rtl8192e/rtllib_tx.c
+@@ -384,7 +384,7 @@ static void rtllib_query_BandwidthMode(struct rtllib_device *ieee,
+ 
+ 	if ((tcb_desc->data_rate & 0x80) == 0)
  		return;
- 	}
- 	spin_unlock_irqrestore(&priv->rf_ps_lock, flags);
--	rtl92e_set_rf_state(dev, eRfSleep, RF_CHANGE_BY_PS);
-+	rtl92e_set_rf_state(dev, rf_sleep, RF_CHANGE_BY_PS);
+-	if (pHTInfo->bCurBW40MHz && pHTInfo->bCurTxBW40MHz &&
++	if (pHTInfo->bCurBW40MHz && pHTInfo->cur_tx_bw40mhz &&
+ 	    !ieee->bandwidth_auto_switch.bforced_tx20Mhz)
+ 		tcb_desc->bPacketBW = true;
  }
- 
- void rtl92e_hw_sleep_wq(void *data)
-@@ -139,7 +139,7 @@ void rtl92e_ips_leave(struct net_device *dev)
- 	if (pPSC->bInactivePs) {
- 		rt_state = priv->rtllib->rf_power_state;
- 		if (rt_state != rf_on  && !pPSC->bSwRfProcessing &&
--		    priv->rtllib->RfOffReason <= RF_CHANGE_BY_IPS) {
-+		    priv->rtllib->rf_off_reason <= RF_CHANGE_BY_IPS) {
- 			pPSC->eInactivePowerState = rf_on;
- 			priv->bInPowerSaveMode = false;
- 			_rtl92e_ps_update_rf_state(dev);
-@@ -168,7 +168,7 @@ void rtl92e_rtllib_ips_leave_wq(struct net_device *dev)
- 
- 	if (priv->rtllib->PowerSaveControl.bInactivePs) {
- 		if (rt_state == rf_off) {
--			if (priv->rtllib->RfOffReason > RF_CHANGE_BY_IPS) {
-+			if (priv->rtllib->rf_off_reason > RF_CHANGE_BY_IPS) {
- 				netdev_warn(dev, "%s(): RF is OFF.\n",
- 					    __func__);
- 				return;
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-index 4c9ff1b1dfe1..4920cb49e381 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-@@ -254,7 +254,7 @@ static int _rtl92e_wx_set_mode(struct net_device *dev,
- 	    ieee->bNetPromiscuousMode) {
- 		if (priv->rtllib->PowerSaveControl.bInactivePs) {
- 			if (rt_state == rf_off) {
--				if (priv->rtllib->RfOffReason >
-+				if (priv->rtllib->rf_off_reason >
- 				    RF_CHANGE_BY_IPS) {
- 					netdev_warn(dev, "%s(): RF is OFF.\n",
- 						    __func__);
-@@ -416,7 +416,7 @@ static int _rtl92e_wx_set_scan(struct net_device *dev,
- 	if (priv->rtllib->state != RTLLIB_LINKED) {
- 		if (priv->rtllib->PowerSaveControl.bInactivePs) {
- 			if (rt_state == rf_off) {
--				if (priv->rtllib->RfOffReason >
-+				if (priv->rtllib->rf_off_reason >
- 				    RF_CHANGE_BY_IPS) {
- 					netdev_warn(dev, "%s(): RF is OFF.\n",
- 						    __func__);
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 6b5c5962ae14..f7c786c8117e 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1245,7 +1245,7 @@ enum ips_callback_function {
- 
- enum rt_rf_power_state {
- 	rf_on,
--	eRfSleep,
-+	rf_sleep,
- 	rf_off
- };
- 
-@@ -1435,7 +1435,7 @@ struct rtllib_device {
- 	bool be_scan_inprogress;
- 	bool beinretry;
- 	enum rt_rf_power_state rf_power_state;
--	RT_RF_CHANGE_SOURCE	RfOffReason;
-+	RT_RF_CHANGE_SOURCE rf_off_reason;
- 	bool is_set_key;
- 	bool wx_set_enc;
- 	struct rt_hi_throughput *pHTInfo;
 -- 
 2.37.3
 
