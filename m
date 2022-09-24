@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094B85E8829
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 06:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5474E5E882D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 06:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiIXEIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 00:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S233316AbiIXEK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 00:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiIXEIk (ORCPT
+        with ESMTP id S233296AbiIXEKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 00:08:40 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3413FB60
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 21:08:39 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d24so1794708pls.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 21:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=KTpXWyUfll++z7HAP03By+eA9GIaY84D+3kNuRJY2h8=;
-        b=EKUUevtGtyBMzrNFQzypBqYj20XXKLIIjEykNJuC6WbBX77P4whhxWmu/HidER0vfh
-         hY47+ITassozPqvsIj5G6eOmByCur8iVlGihQ4EscY8gDO9VX8tiSb/aDKgWOwCIt9Ab
-         JO8de+j0fVZPNG+xGUc1ofG17CXcmR2YFe364=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=KTpXWyUfll++z7HAP03By+eA9GIaY84D+3kNuRJY2h8=;
-        b=sb2l4DWpwrSSt8tCrrizjBpKV4X2sY/GaxYHpJO/EZ1pTCxxzDXnowkRxM921utug8
-         Qtd+/xE9k+3SYgym07sOao2RG62P6vIYZePJosxCUqx71AQhPH+mJ/d0hRUM+445n6Qy
-         wKU1NIoFzjmOTv0cufxZirt3oIiFOf6cTgTkZBH5U0FR7bqsM72tRIOhkYQOzLKhRx4D
-         ZKxOWMczcl1bs77SH3C5Z4F0VBwBHlIQXjiwqyGKpoTo2WYG3SQFfy17V39T4hmqE4jE
-         aflxhmAYNy7EmSrUfoTvtF3weKDCHvQdwOiVXj/I3Q9oKkTjaaxSpJftyX4Ns/T34XMn
-         uGhw==
-X-Gm-Message-State: ACrzQf0oPuteCO/PndkPym7h5ovVRKHJYOd48IhL7mMDQuQrdKoHlDmM
-        z3nzBElURFrdRBijcbtbEwV8Tw==
-X-Google-Smtp-Source: AMsMyM71MzhI6cppP1wRrRHYJPrClOj8l4ZKb0OLA8RhQdAePaq9ZRI4HNFyzeBwHwsstrixVbdU2A==
-X-Received: by 2002:a17:902:e494:b0:178:5b6d:636 with SMTP id i20-20020a170902e49400b001785b6d0636mr11292050ple.64.1663992518563;
-        Fri, 23 Sep 2022 21:08:38 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z12-20020a6553cc000000b0041d6d37deb5sm6413190pgr.81.2022.09.23.21.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 21:08:37 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] NFC: hci: Split memcpy() of struct hcp_message flexible array
-Date:   Fri, 23 Sep 2022 21:08:35 -0700
-Message-Id: <20220924040835.3364912-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 24 Sep 2022 00:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E106AE9D;
+        Fri, 23 Sep 2022 21:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBFDE6020F;
+        Sat, 24 Sep 2022 04:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BAB3C433B5;
+        Sat, 24 Sep 2022 04:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663992621;
+        bh=tFrlN0Ws0MZlv3K/NFJQ7H0ktz5/Fq6FKEEhVnJy0Pc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tVAO99igDi2lZ/6zIpbaII5pMVVHQ6kLYNCEir6ZgknPSTX5Ts6ih+WsOk7z7wCRK
+         DtcYn3SxnSZyYcsxumZnGhrHuVafBJWHZWCZGDg/6f+sGpjWWfSXHh5yf+VK3RViQ8
+         HorjgX+ognm8I7MW0UZIkXPFWBQKc9uyyQovQW+awDLIcBMoWRVyMaXfI9MFP0WkPJ
+         6oWJ5xqA01mcwhUpoctYB5cTeRfQt3DPXk6ytYbBR0SyXFQwcqHKHbVN9ED/D/2CLm
+         Zu/UPFndgzX5vQBH9C3WfBFJxvhxLh1gvRJQGHCfAarnMGLfgbDzjRT/E0F6JoOy9I
+         e2FH1dIp0OIUQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 476A8C072E7;
+        Sat, 24 Sep 2022 04:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1692; h=from:subject; bh=L3jycFmba5E2CH09pA5cygiCtitH/bmlm+CqI6heXOk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLoLD0YsYw2J2xQ0tZE9KGrEoJ8NYLRlKPkcvzZqz yQEQEbyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy6CwwAKCRCJcvTf3G3AJk4LEA ClWkoy6IOy1qfx50hwizKTjj+BKE2WJ46hPcko+MF5I0MZ6Q4ZATjEiGbraCyQGgtwYzk8cLV9p8gQ 8GKPpSW0UJojL6M7Hc3ucQo7yVKecKiBbJnVHX41ZLSARp5binAPgqa5RbCttvbBwbznrihcKb7DTs w/5Wkc0UBwh+yUMHTpvzMGwtamUHlQXDKNIoS26Osa4pBT5M3AD3rsJWcuDEVTSrQOMxBvcJwHkaIY xvXsS00hHt1OK/JRz290YhG0SN/sORY5owHBJAUGwoRo7lwoqcJPWyG/ejOCJLk1wOxXFdAUE2sUMY mTt3ewUROH/wBSuhk3tjZbEVGrzokGmfhiLLoMRZyBvc96zzi34I3JuEU1rOWaC05ufU2FLv7yIwur UrwkV3GHMIxXi0+Yx37Ty5KhZaQydPHbZwLfaJnpaIq3FU0ay2BGVnI1eaPQzewRe/Z6XixsBh5tBs d5Qx3+G46QMvlLNIPsRYn+tuH+6tUuCKPPA6ySkZaSfp3a69YISMghumcZLBFMTh9TPejpmy8/ECWq IgqQ6y0Jq4xC1WE06cgdkiHTJNpAC85uTT8hj+wCOSqtbkjpoSPyUAbHn/DtjyEhXoWsf0QsRdC+t2 rIQSEM25WqhwuUwEipx/MEvW3e8Jhwd/X8f4lmiT5SfwTV4GuVeqO820uA5g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next 0/8] net: ipa: another set of cleanups
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166399262128.11836.2543789042465500261.git-patchwork-notify@kernel.org>
+Date:   Sat, 24 Sep 2022 04:10:21 +0000
+References: <20220922222100.2543621-1-elder@linaro.org>
+In-Reply-To: <20220922222100.2543621-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To work around a misbehavior of the compiler's ability to see into
-composite flexible array structs (as detailed in the coming memcpy()
-hardening series[1]), split the memcpy() of the header and the payload
-so no false positive run-time overflow warning will be generated. This
-split already existed for the "firstfrag" case, so just generalize the
-logic further.
+Hello:
 
-[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- net/nfc/hci/hcp.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+On Thu, 22 Sep 2022 17:20:52 -0500 you wrote:
+> This series contains another set of cleanups done in preparation for
+> an upcoming series that reworks how IPA registers and their fields
+> are defined.
+> 
+> The first replaces the use of u32_replace_bits() with a simple
+> logical AND operation in two places.
+> 
+> [...]
 
-diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
-index 05c60988f59a..4902f5064098 100644
---- a/net/nfc/hci/hcp.c
-+++ b/net/nfc/hci/hcp.c
-@@ -73,14 +73,12 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
- 		if (firstfrag) {
- 			firstfrag = false;
- 			packet->message.header = HCP_HEADER(type, instruction);
--			if (ptr) {
--				memcpy(packet->message.data, ptr,
--				       data_link_len - 1);
--				ptr += data_link_len - 1;
--			}
- 		} else {
--			memcpy(&packet->message, ptr, data_link_len);
--			ptr += data_link_len;
-+			packet->message.header = *ptr++;
-+		}
-+		if (ptr) {
-+			memcpy(packet->message.data, ptr, data_link_len - 1);
-+			ptr += data_link_len - 1;
- 		}
- 
- 		/* This is the last fragment, set the cb bit */
+Here is the summary with links:
+  - [net-next,1/8] net: ipa: don't use u32p_replace_bits()
+    https://git.kernel.org/netdev/net-next/c/a50d37b7565e
+  - [net-next,2/8] net: ipa: introduce ipa_qtime_val()
+    https://git.kernel.org/netdev/net-next/c/8be440e17bdb
+  - [net-next,3/8] net: ipa: rearrange functions for similarity
+    (no matching commit)
+  - [net-next,4/8] net: ipa: define BCR values using an enum
+    https://git.kernel.org/netdev/net-next/c/21ab2078ff37
+  - [net-next,5/8] net: ipa: tidy up register enum definitions
+    https://git.kernel.org/netdev/net-next/c/73e0c9efb5ed
+  - [net-next,6/8] net: ipa: encapsulate setting the FILT_ROUT_HASH_EN register
+    https://git.kernel.org/netdev/net-next/c/b24627b1d9b2
+  - [net-next,7/8] net: ipa: encapsulate updating the COUNTER_CFG register
+    https://git.kernel.org/netdev/net-next/c/1e5db0965ef5
+  - [net-next,8/8] net: ipa: encapsulate updating three more registers
+    https://git.kernel.org/netdev/net-next/c/92073b1648cb
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
