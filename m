@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008A95E8B9C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795995E8B9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiIXKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S233509AbiIXK46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiIXKyH (ORCPT
+        with ESMTP id S232228AbiIXK4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:54:07 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ABCDDDA5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:54:06 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so8145587pjk.4
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2T/nAXofM+cBGCCzdK/WhAhFJ6YKGhgXDN2daZJ21cQ=;
-        b=RrYv3vma8l+uA3BgIPpdjCQlzwFxeVsVyO30kx+88rAIAa7gpFLg4iObx7k3VcN/IC
-         4qNSedKcnXVWzGuLPpldSaHpXaIZo60/f+f/+F9dY3BXCmXoq7QTzFuQdSp0OqDFgvU6
-         0/6oRZNMcaC6u0wEny+s+Sf6jsJR2wfkwfeVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2T/nAXofM+cBGCCzdK/WhAhFJ6YKGhgXDN2daZJ21cQ=;
-        b=u+FccsF+1Z7Sx8iPugCfP3xin6tHeypgdCWxsRFKOpkwcVZvhcNW37TNs3yecMxim0
-         OR0fa3u/jJmhwAq6Vqn67Fd6udT7sj66ChAWkSjnxu8MdZBmb06stT4DhSzDNsFxfgoz
-         op6iESJpEaBbzNpWYsbZZEnzX77Gz1jtnoGyp0rQ2GtpaKQG2EeCy2ShOchzy2dzaBFd
-         QnPB87/BRavq7SNbfeOF+JdHVIMbvR4uWbERyqW4f7E5tZKiwtZOzsxVe8svZe4yS8O5
-         5I3UbWWy5mLApzPux7CBijW0YXPQE9ODlCwkfjj1BnkG88EvW5rl6uBOiec/ahskiCW/
-         chtg==
-X-Gm-Message-State: ACrzQf26FKb9vSfc2ih2sDD7Os2BL2oWjlkxzkshrnWSiY8PIoHuBnvw
-        iWl1rUtQZOeKvDkPTogU8GXn3w==
-X-Google-Smtp-Source: AMsMyM71AQgkf5TJ0FexsQnrVew9TRRjvxzcx0KaOzhnhIf9ge1do5GUeDCFKOKWjtZ7mpRdlQOLyA==
-X-Received: by 2002:a17:90b:4b49:b0:202:e09c:6662 with SMTP id mi9-20020a17090b4b4900b00202e09c6662mr14180414pjb.138.1664016845708;
-        Sat, 24 Sep 2022 03:54:05 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:f4de:2419:efa3:8fed])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b00177e5d83d3dsm7575087pla.170.2022.09.24.03.54.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 03:54:04 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 19:53:59 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-parisc@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH printk 11/18] printk: Convert console_drivers list to
- hlist
-Message-ID: <Yy7hxxJVzY6GYHkG@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-12-john.ogness@linutronix.de>
+        Sat, 24 Sep 2022 06:56:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B43F1EAF3;
+        Sat, 24 Sep 2022 03:56:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9939E60D2D;
+        Sat, 24 Sep 2022 10:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02904C43470;
+        Sat, 24 Sep 2022 10:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664017013;
+        bh=V4Q7joVq4Vh28mV5JoGwZY9Fr4z3XEyNHjibZkJ6xM4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XdysJCEuXc5cvgbcvmOqzfh/Tntg3OJpYkLUjv4xCp6KqMXMsUZ1doFoS6Iy4ItVz
+         O7Qzq3us/5mhsukwWTaqD9autRwqAx2N2K44iDqdovBgnl8+M+4cCvGCblmTRnNs8Q
+         xbxUDewfMG5SoTByCOFybq5ftocddJNdJbFayCan36kYuj0FGY47EF/Lfz9XtpP0+6
+         Wsj3DreWLlQY41Mm5+2KAe5A2AZhjhxjgluKZ0BB3ykWuA+SRrmHDJ3GzKnHhU2DBK
+         zFVBQbMhwKv3faWKGsBbpX73hFiTotXTveq0+6zWzfydZBX01e66DDQtkYeg52LWGM
+         9tpoQTVVMNM4A==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-12b542cb1d3so3397994fac.13;
+        Sat, 24 Sep 2022 03:56:52 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3R7dyKYNw1awv9v9WlWrGs7/d6H5IkfsLebC9dDXCRBhlYyUGU
+        FeJS7zynvB7Tcb6ekLPcUOsgGaNND/Hc5jvOjZc=
+X-Google-Smtp-Source: AMsMyM7okz2g4+Eu8G2Vgq5ZMGTyNCaXzvu5bWg1+8D0MA3PwS8EAeFcqVNA5Op6Tyhd+HCgMYihgYioopETaTo0aSQ=
+X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
+ r3-20020a056870580300b0012cc3e099dcmr13275175oap.19.1664017012091; Sat, 24
+ Sep 2022 03:56:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-12-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220921033134.3133319-1-guoren@kernel.org> <20220921033134.3133319-4-guoren@kernel.org>
+ <5594014.Sb9uPGUboI@phil>
+In-Reply-To: <5594014.Sb9uPGUboI@phil>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 24 Sep 2022 18:56:39 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQqWFfcJsAn_UPaXVdC6HQecnLyFPBOrnpxrJfWJMsOeQ@mail.gmail.com>
+Message-ID: <CAJF2gTQqWFfcJsAn_UPaXVdC6HQecnLyFPBOrnpxrJfWJMsOeQ@mail.gmail.com>
+Subject: Re: [PATCH V4 3/3] arch: crash: Remove duplicate declaration in smp.h
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
+        palmer@rivosinc.com, liaochang1@huawei.com, jszhang@kernel.org,
+        arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +68,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/24 02:10), John Ogness wrote:
-[..]
->  static int console_unregister_locked(struct console *console)
->  {
-> -	struct console *con;
->  	int res;
->  
->  	con_printk(KERN_INFO, console, "disabled\n");
-> @@ -3274,32 +3287,28 @@ static int console_unregister_locked(struct console *console)
->  	if (res > 0)
->  		return 0;
->  
-> -	res = -ENODEV;
->  	console_lock();
-> -	if (console_drivers == console) {
-> -		console_drivers=console->next;
-> -		res = 0;
-> -	} else {
-> -		for_each_console(con) {
-> -			if (con->next == console) {
-> -				con->next = console->next;
-> -				res = 0;
-> -				break;
-> -			}
-> -		}
-> -	}
->  
-> -	if (res)
-> -		goto out_disable_unlock;
-> +	/* Disable it unconditionally */
-> +	console->flags &= ~CON_ENABLED;
-> +
-> +	if (hlist_unhashed(&console->node))
-> +		goto out_unlock;
+On Fri, Sep 23, 2022 at 7:00 PM Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> Am Mittwoch, 21. September 2022, 05:31:34 CEST schrieb guoren@kernel.org:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Remove crash_smp_send_stop declarations in arm64, x86 asm/smp.h which
+> > has been done in include/linux/smp.h.
+>
+> nit: the commit message could reference the commit that brought in the
+> generic declarations, which was
+>         6f1f942cd5fb ("smp: kernel/panic.c - silence warnings")
+Good advice, thx.
 
-Shouldn't this set `ret` to -ENODEV before goto? Otherwise it will always
-return 0 (which is set by _braille_unregister_console()).
+>
+> other than that
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+>
+>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > ---
+> >  arch/arm64/include/asm/smp.h | 1 -
+> >  arch/x86/include/asm/crash.h | 1 -
+> >  2 files changed, 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
+> > index fc55f5a57a06..a108ac93fd8f 100644
+> > --- a/arch/arm64/include/asm/smp.h
+> > +++ b/arch/arm64/include/asm/smp.h
+> > @@ -141,7 +141,6 @@ static inline void cpu_panic_kernel(void)
+> >   */
+> >  bool cpus_are_stuck_in_kernel(void);
+> >
+> > -extern void crash_smp_send_stop(void);
+> >  extern bool smp_crash_stop_failed(void);
+> >  extern void panic_smp_self_stop(void);
+> >
+> > diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
+> > index 8b6bd63530dc..6a9be4907c82 100644
+> > --- a/arch/x86/include/asm/crash.h
+> > +++ b/arch/x86/include/asm/crash.h
+> > @@ -7,6 +7,5 @@ struct kimage;
+> >  int crash_load_segments(struct kimage *image);
+> >  int crash_setup_memmap_entries(struct kimage *image,
+> >               struct boot_params *params);
+> > -void crash_smp_send_stop(void);
+> >
+> >  #endif /* _ASM_X86_CRASH_H */
+> >
+>
+>
+>
+>
 
-> +
-> +	hlist_del_init(&console->node);
->  
->  	/*
-> +	 * <HISTORICAL>
->  	 * If this isn't the last console and it has CON_CONSDEV set, we
->  	 * need to set it on the next preferred console.
-> +	 * </HISTORICAL>
-> +	 *
-> +	 * The above makes no sense as there is no guarantee that the next
-> +	 * console has any device attached. Oh well....
->  	 */
 
-It's complicated...
+-- 
+Best Regards
+ Guo Ren
