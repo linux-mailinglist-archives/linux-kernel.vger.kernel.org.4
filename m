@@ -2,96 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E42B5E8BF4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3955E8BFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiIXLzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S233685AbiIXL5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbiIXLzc (ORCPT
+        with ESMTP id S230329AbiIXL5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:55:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CAA7AC30;
-        Sat, 24 Sep 2022 04:55:29 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B8C341F901;
-        Sat, 24 Sep 2022 11:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664020527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=79a8D2Ac7u6BFH11MTZyHbw/7iUCqU/F8iDUx62qwgI=;
-        b=YGEJD2FnZ9chHMjXQmq8tdyuK381YZ49y8Fwu6+QAESAODmoRFO6jaBrLA+UNJOD74ZXgU
-        hRqDPRKM+aBa9zhQ/rw0ACFs90S1D1jpjzgf4mysd+w97EHzqCfYBn+ncLZekTVmq7ELnj
-        5l7eXJMwaYodicCd6KkAfOLiw6C7qbc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664020527;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=79a8D2Ac7u6BFH11MTZyHbw/7iUCqU/F8iDUx62qwgI=;
-        b=nzWakO9kDNhf03FBvsJdphgf1O0ls25eU8ml4O7M7wQRDydBm7NdZbDWeYkgsiPNOJC78F
-        Y/Fua/kXHZSDahCg==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        Sat, 24 Sep 2022 07:57:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72579AFB0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:57:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D8EC22C16E;
-        Sat, 24 Sep 2022 11:55:24 +0000 (UTC)
-Date:   Sat, 24 Sep 2022 13:55:23 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KEXEC" <kexec@lists.infradead.org>,
-        Coiby Xu <coxu@redhat.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9E9AB81002
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEB6C433D6;
+        Sat, 24 Sep 2022 11:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664020625;
+        bh=1B6Wz2m0/DTj9A7MHnRRSB443r6zG9ryMf8tGpPFfm0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DKSB/I3I/F02gC+JhBAk0Pa8X6hSpNEWz0UGTUaRTJZk0/XAi6h4T0VhEVfQSW6Sh
+         1Dv3oFMJhTVOWMv1yCpKYdnSDQ/IbnHQA9UeCPPeKztARIQkckpDGFGykxmuC++6mX
+         VTdwBYU0Iv4U3tz3k4Q1OUBKS5uyTKvLcgcBGSo7cixv6kr1s6Qyu3Ba+uBiRkhlZh
+         FFO4aR8OsNv/Owgb+xM1LGCQND9YuB/WIQd8oLbSZqdUJGHSYVBJcPBv36CZLzd7/a
+         9YUdw0t3RZ0lJst7UUxohVTSP5A0Cvarr+r0uSbCORdlkYenbBvioBsgbQ9V5weLah
+         zUtZiy1kumgoA==
+Received: from 82-132-230-33.dab.02.net ([82.132.230.33] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oc3mI-00CKw6-SQ;
+        Sat, 24 Sep 2022 12:57:03 +0100
+Date:   Sat, 24 Sep 2022 12:56:59 +0100
+Message-ID: <87bkr5hto4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        will@kernel.org, eric.auger@redhat.com, yuzhe@nfschina.com,
+        oliver.upton@linux.dev, shan.gavin@gmail.com,
         James Morse <james.morse@arm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH 5.15 0/6] arm64: kexec_file: use more system keyrings to
- verify kernel image signature + dependencies
-Message-ID: <20220924115523.GZ28810@kitsune.suse.cz>
-References: <cover.1663951201.git.msuchanek@suse.de>
- <Yy7Ll1QJ+u+nkic9@kroah.com>
- <20220924094521.GY28810@kitsune.suse.cz>
- <Yy7YTnJKkv1UtvWF@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yy7YTnJKkv1UtvWF@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>
+Subject: Re: [PATCH] KVM: arm64: vgic: Remove duplicate check in update_affinity_collection()
+In-Reply-To: <20220923065447.323445-1-gshan@redhat.com>
+References: <20220923065447.323445-1-gshan@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.230.33
+X-SA-Exim-Rcpt-To: gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, will@kernel.org, eric.auger@redhat.com, yuzhe@nfschina.com, oliver.upton@linux.dev, shan.gavin@gmail.com, james.morse@arm.com, suzuki.poulose@arm.com, Alexandru.Elisei@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,49 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 12:13:34PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Sep 24, 2022 at 11:45:21AM +0200, Michal Suchánek wrote:
-> > On Sat, Sep 24, 2022 at 11:19:19AM +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, Sep 23, 2022 at 07:10:28PM +0200, Michal Suchanek wrote:
-> > > > Hello,
-> > > > 
-> > > > this is backport of commit 0d519cadf751
-> > > > ("arm64: kexec_file: use more system keyrings to verify kernel image signature")
-> > > > to table 5.15 tree including the preparatory patches.
-> > > 
-> > > This feels to me like a new feature for arm64, one that has never worked
-> > > before and you are just making it feature-parity with x86, right?
-> > > 
-> > > Or is this a regression fix somewhere?  Why is this needed in 5.15.y and
-> > > why can't people who need this new feature just use a newer kernel
-> > > version (5.19?)
-> > 
-> > It's half-broken implementation of the kexec kernel verification. At the time
-> > it was implemented for arm64 we had the platform and secondary keyrings
-> > and x86 was using them but on arm64 the initial implementation ignores
-> > them.
+Gavin,
+
+Side note: please make sure you always Cc all the KVM/arm64 reviewers
+when sending patches (now added).
+
+On Fri, 23 Sep 2022 07:54:47 +0100,
+Gavin Shan <gshan@redhat.com> wrote:
 > 
-> Ok, so it's something that never worked.  Adding support to get it to
-> work doesn't really fall into the stable kernel rules, right?
+> The ITS collection is guranteed to be !NULL when update_affinity_collection()
+> is called. So we needn't check ITE's collection with NULL because the
+> check has been included to the later one.
 
-Not sure. It was defective, not using the facilities available at the
-time correctly. Which translates to kernels that can be kexec'd on x86
-failing to kexec on arm64 without any explanation (signed with same key,
-built for the appropriate arch).
+It took me a while to understand what you meant by this: the 'coll'
+parameter to update_affinity_collection() is never NULL, so comparing
+it with 'ite->collection' is enough to cover both the NULL case and
+the "another collection" case.
 
-> Again, what's wrong with 5.19 for anyone who wants this?  Who does want
-> this?
+If you agree with this, I can directly fix the commit message when
+applying the patch.
 
-Not sure, really.
+Thanks,
 
-The final patch was repeatedly backported to stable and failed to build
-because the prerequisites were missing.
+	M.
 
-So this is a backport that includes the prerequisites for it to build.
-
-If nobody wanted this why is it repeatedly backported generating the
-failure messages?
-
-Thanks
-
-Michal
+-- 
+Without deviation from the norm, progress is not possible.
