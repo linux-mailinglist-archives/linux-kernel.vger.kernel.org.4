@@ -2,208 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C375E8C27
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697CF5E8C31
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiIXMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S233819AbiIXMSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbiIXMQc (ORCPT
+        with ESMTP id S233812AbiIXMSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:16:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B999A6C1F
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664021792; x=1695557792;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=svm7QrMFZBm/qlOJR8CXUcjpft3ZakFJnDWvemrbohw=;
-  b=AwtdTKOHNTS6iCjRPezQhUZcYD8ziFb0cB0GlLk5jr9aUO0xCodXw4/y
-   kVI+7GlxWYs/yXPTeYFund+lQi0/GB8LB5QCMEy0FI+MvoefP/PAX4zlY
-   XLuSwYy9lsX/v1C1iA+fsPfrM3oPto0y/3BxLWjw8E3mlppKQFexjvhs/
-   2jef3fonqQYfpHaHKnOYYPdbKn8n4LNyuvpZWZc2wbZa9/YoNJBlOv6gh
-   DavraYJbyCXy7WQCwtHQIgT0QJfSvHiSr6cK9RbHzu1LkYig/TY31GlWZ
-   EAo06TXiOQWiZWk4PCIEomGnSeR1n7dRZgAf5tDiFt6rYkcAoyp4AOpHN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="283885228"
-X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="283885228"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 05:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="651271058"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Sep 2022 05:16:30 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oc457-0006TU-2g;
-        Sat, 24 Sep 2022 12:16:29 +0000
-Date:   Sat, 24 Sep 2022 20:15:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/microcode] BUILD SUCCESS
- 712f210a457d9c32414df246a72781550bc23ef6
-Message-ID: <632ef4f4.JumoDjEMOzTj8bkX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 24 Sep 2022 08:18:36 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDFBB517B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:18:34 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id t3so2398553ply.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9aIVtq9LZI+Ug1xm034RxKJmV6QnLLHdaDu3UcryddU=;
+        b=ZQLxpkZs8/8zmmqBb5IS+scyitsPQwRtemTsM/uRuukUM2wAXG16LF9TankEHxZZY2
+         b3FdXwd70ZoOc44qUohG0UL5v5NqwDxKh+hz+AisJkOp80r/u+l971inocp7PJVMqbO1
+         HGjGe3sAedkEXTMU5man/DdrAGVoItj/yz64XbQe9AQwKOVWZcVn3cHlw16CKZJ+Kncq
+         1qGA3A7z6iJlBHbhMNsVpxZK/BWZomVI599N/gRRE51uqEfhVPlg6LO0775bDDfnOwYs
+         soY3tsjvtAX9q5b0FclT8avfWUtJsexSbJ682CoVCIL3kSHCqR0YrpXyfoHFqtJJMq8s
+         XDSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9aIVtq9LZI+Ug1xm034RxKJmV6QnLLHdaDu3UcryddU=;
+        b=0nfkPRPE6UUgv28GVZwMNDxEWaSO3v38kmLrY14DF9VmkuXKOEwWAidQ+3o2e6HmVN
+         ZuwAt0VtkpYCw6yaHXYl387FDyxmXHRijR+o+0XMRXqdKmGl2UwMuAnCVR2w8pnbleR8
+         eUm4XXiHVBkBDXlCoGJIdCtXQciS2D8rW4apjY8cipKamLa1CAmW1Oi0bv7+SgRGGg9i
+         NWKNEtuY04yRgzv9ME7fyepr6vh4tn4L51BtpaIxEIERv76dX4OhFvJcoRx9dLwW8ToO
+         w3fgsKU6NdgBAfgLNh7yI+xbgbUkO9VyyB4l4Q3LTGWQjy/+SsMUH9rSfN75Wn6GNrpe
+         Ih9A==
+X-Gm-Message-State: ACrzQf33kV4crKhLy8NPnsaKTo3KY9BI6BSatjHe0X21Vb3YHbybio7x
+        QV1DlIDEHDD8S6HHygdH4hs1pQ==
+X-Google-Smtp-Source: AMsMyM4EwMsrCA2pbM9dzng6xXcsHniRuTy5mh+XwSxCfCQ52NHh818Spx2ubWE3ZG1UD8JKrW2J0A==
+X-Received: by 2002:a17:90b:3e87:b0:203:b9c:f9b7 with SMTP id rj7-20020a17090b3e8700b002030b9cf9b7mr14504722pjb.93.1664021913992;
+        Sat, 24 Sep 2022 05:18:33 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e65:7770:2059:e8ad:fa8b:a6bd])
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090a1f4d00b001fd7e56da4csm3264739pjy.39.2022.09.24.05.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 05:18:33 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com
+Cc:     linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] sched/core: Always do the balancing pass from dl_sched_class
+Date:   Sat, 24 Sep 2022 20:16:09 +0800
+Message-Id: <20220924121609.54129-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        LONGWORDS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-branch HEAD: 712f210a457d9c32414df246a72781550bc23ef6  x86/microcode/AMD: Track patch allocation size explicitly
+The commit 67692435c411 ("sched: Rework pick_next_task() slow-path") and
+commit 6e2df0581f56 ("sched: Fix pick_next_task() vs 'change' pattern race")
+changed the original pick_next_task() loop logic a little.
 
-elapsed time: 1441m
+Previously we always do class->pick_next_task(rq, prev, rf) from highest
+to lowest, and balance happened in that class->pick_next_task(), so we
+don't need to pull RT task if we can pick a DL task.
 
-configs tested: 123
-configs skipped: 3
+The current code do the balancing pass from prev->class, say prev task
+is a RT task to sleep, we will try balance for rt sched_class even though
+we have a DL task on rq.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This patch changes to always do the balancing pass from dl_sched_class,
+since we will check if balance is really needed in each class->balance(),
+we can terminate the balance pass as soon as we know there is a runnable
+task of @class priority or higher.
 
-gcc tested configs:
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arc                                 defconfig
-alpha                               defconfig
-x86_64                              defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-s390                             allmodconfig
-x86_64                               rhel-8.3
-s390                 randconfig-r044-20220923
-arc                  randconfig-r043-20220923
-riscv                randconfig-r042-20220923
-s390                             allyesconfig
-x86_64                           allyesconfig
-arm                                 defconfig
-arc                              allyesconfig
-x86_64                        randconfig-a015
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                          randconfig-a016
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-ia64                             allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-xtensa                              defconfig
-powerpc                     tqm8555_defconfig
-arc                      axs103_smp_defconfig
-i386                          randconfig-c001
-arm                        clps711x_defconfig
-m68k                        mvme147_defconfig
-powerpc                     stx_gp3_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220923
-sh                        edosk7760_defconfig
-sh                        sh7785lcr_defconfig
-arm                       omap2plus_defconfig
-powerpc                     tqm8541_defconfig
-xtensa                    smp_lx200_defconfig
-sh                        dreamcast_defconfig
-sh                         ap325rxa_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                       holly_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-um                               alldefconfig
-arm                         axm55xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-xtensa                       common_defconfig
-ia64                            zx1_defconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-arm64                               defconfig
-ia64                             allyesconfig
-arm                              allmodconfig
-m68k                                defconfig
-ia64                                defconfig
-mips                             allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-powerpc                          allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-clang tested configs:
-hexagon              randconfig-r041-20220923
-hexagon              randconfig-r045-20220923
-x86_64                        randconfig-a016
-i386                          randconfig-a006
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a015
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                             allyesconfig
-powerpc                      pmac32_defconfig
-mips                           rs90_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-powerpc                 mpc836x_mds_defconfig
-mips                     cu1830-neo_defconfig
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220923
-i386                          randconfig-c001
-s390                 randconfig-c005-20220923
-riscv                randconfig-c006-20220923
-mips                 randconfig-c004-20220923
-powerpc              randconfig-c003-20220923
-x86_64                        randconfig-k001
-arm                           sama7_defconfig
-powerpc                    gamecube_defconfig
-arm                         s3c2410_defconfig
-mips                       lemote2f_defconfig
-powerpc                     ppa8548_defconfig
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ee28253c9ac0..ff5e7ac236bd 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5774,7 +5774,7 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
+ 	 * We can terminate the balance pass as soon as we know there is
+ 	 * a runnable task of @class priority or higher.
+ 	 */
+-	for_class_range(class, prev->sched_class, &idle_sched_class) {
++	for_class_range(class, &dl_sched_class, &idle_sched_class) {
+ 		if (class->balance(rq, prev, rf))
+ 			break;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
