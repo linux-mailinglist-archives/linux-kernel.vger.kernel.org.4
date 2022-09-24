@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3525E891A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1835E893A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbiIXHZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S233468AbiIXHfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiIXHYX (ORCPT
+        with ESMTP id S233110AbiIXHfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:24:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5006913EAC9;
-        Sat, 24 Sep 2022 00:24:22 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZL4S1dJ4zHtgV;
-        Sat, 24 Sep 2022 15:19:36 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 24 Sep
- 2022 15:24:19 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
-        Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH v2 8/8] scsi: libsas: use sas_phy_match_port_addr() instead of open coded
-Date:   Sat, 24 Sep 2022 15:34:55 +0800
-Message-ID: <20220924073455.2186805-9-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220924073455.2186805-1-yanaijie@huawei.com>
-References: <20220924073455.2186805-1-yanaijie@huawei.com>
+        Sat, 24 Sep 2022 03:35:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1894EDDD9F
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:35:42 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d11so2018542pll.8
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=OHAwfxUVRgLPl57Qt8T/liUnNNQhzNx0gxOFhvVSyOM=;
+        b=MqDL1gnfsv33k99sO3TMsiTJOAfmrNWHyTsQVd9ovh73plHBNAO4OpBuwUgjhitYCa
+         sEQP+ldMXvmyOtz/TmNem5jwT7S9ZIBd8qS9Goy75aDznBLWPEfIiiUWFyxZy4hf955L
+         uiI/No+xMYPVmCm03n3haIjkBhAalbguZkYZ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=OHAwfxUVRgLPl57Qt8T/liUnNNQhzNx0gxOFhvVSyOM=;
+        b=YAU5deO3lFyzySngC//X3O/3ySdhHb5KouhL7IjAPek5fcwrXJRRUZYTY0pvVGU3/G
+         pk4cT9m8sbH3ffS1z2lUQqbOrm8taFHdnZ1fOJcRNkltIL8/aH1KvImqXnnsNnKDtsWk
+         83x3KQwUIRKcx32pedqiRHkdbXUbCHQSwJmqjPzcou+T0AEMgfmfFb/sv6iW76JR90Zb
+         1XNOwmirUCMjHV4e6SiEs0SI1yNwSe9NLVeURNo/aZdpMjEGwrFuAcqU8fGtWN9aRvf8
+         6XOaRUS0VlKrYopsCcM9iS4ZV0p6jAPhI2VX2lU4ri1SKyhugW9NNDV/BNHefFzjmQTH
+         vARw==
+X-Gm-Message-State: ACrzQf3e06bGNkbVDGqU19mDtRR2SEKkKO/X4EJkmYxI/B08MHoXu/Tu
+        e+mDuDg/kxoF4ZdQ6hxzRwhM/g==
+X-Google-Smtp-Source: AMsMyM7SWSZQrgS1WvIIxziVWMa4tp/CJN/V9VXSExGRi7a1zSWbGK4VzUPUX6KIZxtblDWudiAylw==
+X-Received: by 2002:a17:902:d482:b0:178:1585:40b6 with SMTP id c2-20020a170902d48200b00178158540b6mr12431474plg.134.1664004941643;
+        Sat, 24 Sep 2022 00:35:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e14-20020a17090a684e00b001f2ef3c7956sm1123853pjm.25.2022.09.24.00.35.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 00:35:40 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 00:35:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     syzbot <syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in ovl_fh_to_dentry
+Message-ID: <202209240034.48B1CF05@keescook>
+References: <000000000000763a6c05e95a5985@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000763a6c05e95a5985@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sas address comparation of asd_sas_port and expander phy is open
-coded. Now we can replace it with sas_phy_match_port_addr().
+On Fri, Sep 23, 2022 at 09:05:40AM -0700, syzbot wrote:
+> syzbot found the following issue on:
+> 
+> HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13b13f30880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9d14351a171d0d1c7955
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14283ac4880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=156da4ef080000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> memcpy: detected field-spanning write (size 93) of single field "&fh->fb" at fs/overlayfs/export.c:799 (size 21)
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
----
- drivers/scsi/libsas/sas_expander.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I've send a patch for this now:
+https://lore.kernel.org/linux-hardening/20220924073315.3593031-1-keescook@chromium.org
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index c9d738ad8176..129e5e365f4e 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -1005,8 +1005,7 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
- 	}
- 
- 	/* Parent and domain coherency */
--	if (!dev->parent && (SAS_ADDR(ex_phy->attached_sas_addr) ==
--			     SAS_ADDR(dev->port->sas_addr))) {
-+	if (!dev->parent && sas_phy_match_port_addr(dev->port, ex_phy)) {
- 		sas_add_parent_port(dev, phy_id);
- 		return 0;
- 	}
 -- 
-2.31.1
-
+Kees Cook
