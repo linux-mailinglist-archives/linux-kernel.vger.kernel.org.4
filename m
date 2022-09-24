@@ -2,262 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5D65E8E91
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604CB5E8E95
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiIXQpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S233775AbiIXQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIXQpn (ORCPT
+        with ESMTP id S233703AbiIXQqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:45:43 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD037F98;
-        Sat, 24 Sep 2022 09:45:35 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id w2so1813332qtv.9;
-        Sat, 24 Sep 2022 09:45:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=77zeF3ZT5F5GaWcTglxaesCMWwfWcqS9vVjkWun32sA=;
-        b=RguH2bGUmyrKPQI355avba70Tr6nO7y5ebN+aLq294Y77W2mtcM/zsdv1CA5H1Raq8
-         35XD7ywZe0ShM4ibxpjafodl0AhIQmHDXhRM17paT2z3iwTn7W/JabK3/C20H9OtZtKm
-         ikm4BnEU6pNUVIQvqpTC1Ash1VjvkS43Q/EFpqO56RMB5gVJadh0EWXiDBVJvZiiA8qH
-         CnKcANCorKfOxhchT4yv7JCx8rSGYKezTc8fNqs0ykgwfN5eAhnxQMD4rAwa4HM3dJ4v
-         Ht1CvcZmYfEHeEMuaYx82pK6j8qff+6YdNwKt6Zzw1FLnkm8CGLSEBOom6X542nVeJ3q
-         hufw==
-X-Gm-Message-State: ACrzQf0N2zRqqrAkVlYFV3eFyfetLViRek4gFVP0tXb7E1Q84pVAsA5g
-        S6hFodBsRGyFS+iR3S5uaVKOmJjg8d3gqmtscpapm1M1
-X-Google-Smtp-Source: AMsMyM7aGAfr4ilz45D3XBuDqe9Os7d/BOKSMI7+TnH2rxt2VqKuNkV7MVt2og6n8aG5DVuezz+99MznWCj2Q1k0IBU=
-X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
- n8-20020a05622a11c800b0035ce912a8eamr11811695qtk.17.1664037934750; Sat, 24
- Sep 2022 09:45:34 -0700 (PDT)
+        Sat, 24 Sep 2022 12:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49D3BC43;
+        Sat, 24 Sep 2022 09:46:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 898FA6148D;
+        Sat, 24 Sep 2022 16:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE102C433D6;
+        Sat, 24 Sep 2022 16:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664037959;
+        bh=CDCusbtzZCdsfrWo/f/JHWe00c2E9k9abFe0a7tVAps=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bKf6paN/mrZxYsYKl5ouPkyqLF1b3X6Rompx1/eSx+9US7OvSLlxKzMQlpB27F0+u
+         ZP9HWslRqqoZWbfPuYLoSQW4oDsbzux2b4HbtbOPA9eE0iPZHIMj+3UTXcZi5JqoX7
+         5MaieVjfi8ODOxzVVsF+kFR3yPhLlouiL/qU8D1CCnfvdv7KpM/TPPpuMv7PKDVRBf
+         s55m+jvA8CF8hl5Oy2/K1NWDQz+OwCN+T/xNqP7P8gDRyecwgCQyq0WZbKi6H7ydd/
+         Y9J6HRPwHhsWPfVO39BGyhH/QH5arQmW2VNeqMeBRqU+8RC2VWWhPqYKkHn/F+KNaY
+         uJkxv/fTrZBxQ==
+Date:   Sat, 24 Sep 2022 17:46:07 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] iio: adc: mcp3911: add support to set PGA
+Message-ID: <20220924174607.5cf8019f@jic23-huawei>
+In-Reply-To: <20220922194639.1118971-1-marcus.folkesson@gmail.com>
+References: <20220922194639.1118971-1-marcus.folkesson@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220912203722.205185-1-jeremy.linton@arm.com>
- <20220912203722.205185-2-jeremy.linton@arm.com> <Yy3fTFVyAEx9R/qQ@arm.com>
-In-Reply-To: <Yy3fTFVyAEx9R/qQ@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 18:45:23 +0200
-Message-ID: <CAJZ5v0jb_50v-3mX1=FzDTx9mjmrg16QezQAd8-qc9Bd8DJWdw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
-To:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 6:31 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> Hi Jeremy,
->
-> On Monday 12 Sep 2022 at 15:37:22 (-0500), Jeremy Linton wrote:
-> > PCC regions utilize a mailbox to set/retrieve register values used by
-> > the CPPC code. This is fine as long as the operations are
-> > infrequent. With the FIE code enabled though the overhead can range
-> > from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> > based machines.
-> >
-> > So, before enabling FIE assure none of the registers used by
-> > cppc_get_perf_ctrs() are in the PCC region. Finally, add a module
-> > parameter which can override the PCC region detection at boot or
-> > module reload.
-> >
-> > Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  drivers/acpi/cppc_acpi.c       | 42 ++++++++++++++++++++++++++++++++++
-> >  drivers/cpufreq/cppc_cpufreq.c | 25 ++++++++++++++++----
-> >  include/acpi/cppc_acpi.h       |  5 ++++
-> >  3 files changed, 68 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > index 1e15a9f25ae9..55693e6f7153 100644
-> > --- a/drivers/acpi/cppc_acpi.c
-> > +++ b/drivers/acpi/cppc_acpi.c
-> > @@ -1240,6 +1240,48 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-> >  }
-> >  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
-> >
-> > +/**
-> > + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-> > + *
-> > + * CPPC has flexibility about how CPU performance counters are accessed.
-> > + * One of the choices is PCC regions, which can have a high access latency. This
-> > + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-> > + *
-> > + * Return: true if any of the counters are in PCC regions, false otherwise
-> > + */
-> > +bool cppc_perf_ctrs_in_pcc(void)
-> > +{
-> > +     int cpu;
-> > +
-> > +     for_each_present_cpu(cpu) {
-> > +             struct cpc_register_resource *ref_perf_reg;
-> > +             struct cpc_desc *cpc_desc;
-> > +
-> > +             cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> > +
-> > +             if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> > +                 CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> > +                 CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> > +                     return true;
-> > +
-> > +
-> > +             ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> > +
-> > +             /*
-> > +              * If reference perf register is not supported then we should
-> > +              * use the nominal perf value
-> > +              */
-> > +             if (!CPC_SUPPORTED(ref_perf_reg))
-> > +                     ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> > +
-> > +             if (CPC_IN_PCC(ref_perf_reg))
-> > +                     return true;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> > +
-> >  /**
-> >   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-> >   * @cpunum: CPU from which to read counters.
-> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > index 24eaf0ec344d..9e2a48ac5830 100644
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
-> >
-> >  static struct cpufreq_driver cppc_cpufreq_driver;
-> >
-> > +static enum {
-> > +     FIE_UNSET = -1,
-> > +     FIE_ENABLED,
-> > +     FIE_DISABLED
-> > +} fie_disabled = FIE_UNSET;
-> > +
-> >  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> > +module_param(fie_disabled, int, 0444);
->
-> Why 'int' and not 'bool' here?
->
-> IIUC, if you use 'bool' the user can pass any int/0/1/y/n/Y/N, which
-> will result in fie_disabled properly having either the value 0 or 1
-> (or default FIE_UNSET) if a parameter is not passed.
->
-> Then
-> 'if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED)'
-> can become
-> 'if (fie_disabled == FIE_UNSET)' or 'if (fie_disabled < 0)'.
->
-> I feel I'm missing something, otherwise you would have done this
-> already.
->
-> Otherwise FWIW, it looks good to me.
-> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+On Thu, 22 Sep 2022 21:46:39 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Applied as 6.1 material, thanks!
+> Add support for setting the Programmable Gain Amplifiers by adjust the
+> scale value.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> > +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
-> >
-> >  /* Frequency invariance support */
-> >  struct cppc_freq_invariance {
-> > @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
-> >       struct cppc_freq_invariance *cppc_fi;
-> >       int cpu, ret;
-> >
-> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> > +     if (fie_disabled)
-> >               return;
-> >
-> >       for_each_cpu(cpu, policy->cpus) {
-> > @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
-> >       struct cppc_freq_invariance *cppc_fi;
-> >       int cpu;
-> >
-> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> > +     if (fie_disabled)
-> >               return;
-> >
-> >       /* policy->cpus will be empty here, use related_cpus instead */
-> > @@ -229,7 +237,15 @@ static void __init cppc_freq_invariance_init(void)
-> >       };
-> >       int ret;
-> >
-> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> > +     if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
-> > +             fie_disabled = FIE_ENABLED;
-> > +             if (cppc_perf_ctrs_in_pcc()) {
-> > +                     pr_info("FIE not enabled on systems with registers in PCC\n");
-> > +                     fie_disabled = FIE_DISABLED;
-> > +             }
-> > +     }
-> > +
-> > +     if (fie_disabled)
-> >               return;
-> >
-> >       kworker_fie = kthread_create_worker(0, "cppc_fie");
-> > @@ -247,7 +263,7 @@ static void __init cppc_freq_invariance_init(void)
-> >
-> >  static void cppc_freq_invariance_exit(void)
-> >  {
-> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> > +     if (fie_disabled)
-> >               return;
-> >
-> >       kthread_destroy_worker(kworker_fie);
-> > @@ -936,6 +952,7 @@ static void cppc_check_hisi_workaround(void)
-> >                   wa_info[i].oem_revision == tbl->oem_revision) {
-> >                       /* Overwrite the get() callback */
-> >                       cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-> > +                     fie_disabled = FIE_DISABLED;
-> >                       break;
-> >               }
-> >       }
-> > diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> > index f73d357ecdf5..c5614444031f 100644
-> > --- a/include/acpi/cppc_acpi.h
-> > +++ b/include/acpi/cppc_acpi.h
-> > @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
-> >  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
-> >  extern int cppc_set_enable(int cpu, bool enable);
-> >  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> > +extern bool cppc_perf_ctrs_in_pcc(void);
-> >  extern bool acpi_cpc_valid(void);
-> >  extern bool cppc_allow_fast_switch(void);
-> >  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> > @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
-> >  {
-> >       return -ENOTSUPP;
-> >  }
-> > +static inline bool cppc_perf_ctrs_in_pcc(void)
-> > +{
-> > +     return false;
-> > +}
-> >  static inline bool acpi_cpc_valid(void)
-> >  {
-> >       return false;
-> > --
-> > 2.37.1
-> >
+Applied to the togreg branch of iio.git and pushed out as testing.
+
+I considered slipping this into my 2nd IIO pull request for this cycle
+at the last minute, but wasn't happy skipping normal time being beaten on
+by 0-day and time in next, so I didn't.  Hence this probably won't make
+6.1, but Linus did hint he might do an rc8 in which case I may see
+if GregKH will take a 3rd pull late next week.
+
+If not, it'll be 6.2 material.
+
+Thanks,
+
+Jonathan
+
+> ---
+> 
+> Notes:
+>     Based on
+>     Link: https://lore.kernel.org/all/20220815061625.35568-1-marcus.folkesson@gmail.com/
+>     
+>     But with tmp0, tmp1 and tmp2 removed as those are not needed.
+>     Link: https://lore.kernel.org/all/202209220648.Wb6EtPat-lkp@intel.com/
+> 
+>  drivers/iio/adc/mcp3911.c | 104 +++++++++++++++++++++++++++++---------
+>  1 file changed, 80 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> index 0151258b456c..0d768006eabb 100644
+> --- a/drivers/iio/adc/mcp3911.c
+> +++ b/drivers/iio/adc/mcp3911.c
+> @@ -29,6 +29,8 @@
+>  #define MCP3911_REG_MOD			0x06
+>  #define MCP3911_REG_PHASE		0x07
+>  #define MCP3911_REG_GAIN		0x09
+> +#define MCP3911_GAIN_MASK(ch)		(GENMASK(2, 0) << 3 * ch)
+> +#define MCP3911_GAIN_VAL(ch, val)      ((val << 3 * ch) & MCP3911_GAIN_MASK(ch))
+>  
+>  #define MCP3911_REG_STATUSCOM		0x0a
+>  #define MCP3911_STATUSCOM_DRHIZ         BIT(12)
+> @@ -59,8 +61,10 @@
+>  #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
+>  
+>  #define MCP3911_NUM_CHANNELS		2
+> +#define MCP3911_NUM_SCALES		6
+>  
+>  static const int mcp3911_osr_table[] = { 32, 64, 128, 256, 512, 1024, 2048, 4096 };
+> +static u32 mcp3911_scale_table[MCP3911_NUM_SCALES][2];
+>  
+>  struct mcp3911 {
+>  	struct spi_device *spi;
+> @@ -69,6 +73,7 @@ struct mcp3911 {
+>  	struct clk *clki;
+>  	u32 dev_addr;
+>  	struct iio_trigger *trig;
+> +	u32 gain[MCP3911_NUM_CHANNELS];
+>  	struct {
+>  		u32 channels[MCP3911_NUM_CHANNELS];
+>  		s64 ts __aligned(8);
+> @@ -145,6 +150,11 @@ static int mcp3911_read_avail(struct iio_dev *indio_dev,
+>  		*vals = mcp3911_osr_table;
+>  		*length = ARRAY_SIZE(mcp3911_osr_table);
+>  		return IIO_AVAIL_LIST;
+> +	case IIO_CHAN_INFO_SCALE:
+> +		*type = IIO_VAL_INT_PLUS_NANO;
+> +		*vals = (int *)mcp3911_scale_table;
+> +		*length = ARRAY_SIZE(mcp3911_scale_table) * 2;
+> +		return IIO_AVAIL_LIST;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -189,29 +199,9 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
+>  		break;
+>  
+>  	case IIO_CHAN_INFO_SCALE:
+> -		if (adc->vref) {
+> -			ret = regulator_get_voltage(adc->vref);
+> -			if (ret < 0) {
+> -				dev_err(indio_dev->dev.parent,
+> -					"failed to get vref voltage: %d\n",
+> -				       ret);
+> -				goto out;
+> -			}
+> -
+> -			*val = ret / 1000;
+> -		} else {
+> -			*val = MCP3911_INT_VREF_MV;
+> -		}
+> -
+> -		/*
+> -		 * For 24bit Conversion
+> -		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> -		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> -		 */
+> -
+> -		/* val2 = (2^23 * 1.5) */
+> -		*val2 = 12582912;
+> -		ret = IIO_VAL_FRACTIONAL;
+> +		*val = mcp3911_scale_table[ilog2(adc->gain[channel->channel])][0];
+> +		*val2 = mcp3911_scale_table[ilog2(adc->gain[channel->channel])][1];
+> +		ret = IIO_VAL_INT_PLUS_NANO;
+>  		break;
+>  	}
+>  
+> @@ -229,6 +219,18 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+>  
+>  	mutex_lock(&adc->lock);
+>  	switch (mask) {
+> +	case IIO_CHAN_INFO_SCALE:
+> +		for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+> +			if (val == mcp3911_scale_table[i][0] &&
+> +				val2 == mcp3911_scale_table[i][1]) {
+> +
+> +				adc->gain[channel->channel] = BIT(i);
+> +				ret = mcp3911_update(adc, MCP3911_REG_GAIN,
+> +						MCP3911_GAIN_MASK(channel->channel),
+> +						MCP3911_GAIN_VAL(channel->channel, i), 1);
+> +			}
+> +		}
+> +		break;
+>  	case IIO_CHAN_INFO_OFFSET:
+>  		if (val2 != 0) {
+>  			ret = -EINVAL;
+> @@ -264,6 +266,44 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+>  	return ret;
+>  }
+>  
+> +static int mcp3911_calc_scale_table(struct mcp3911 *adc)
+> +{
+> +	u32 ref = MCP3911_INT_VREF_MV;
+> +	u32 div;
+> +	int ret;
+> +	u64 tmp;
+> +
+> +	if (adc->vref) {
+> +		ret = regulator_get_voltage(adc->vref);
+> +		if (ret < 0) {
+> +			dev_err(&adc->spi->dev,
+> +				"failed to get vref voltage: %d\n",
+> +			       ret);
+> +			return ret;
+> +		}
+> +
+> +		ref = ret / 1000;
+> +	}
+> +
+> +	/*
+> +	 * For 24-bit Conversion
+> +	 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> +	 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> +	 *
+> +	 * ref = Reference voltage
+> +	 * div = (2^23 * 1.5 * gain) = 12582912 * gain
+> +	 */
+> +	for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+> +		div = 12582912 * BIT(i);
+> +		tmp = div_s64((s64)ref * 1000000000LL, div);
+> +
+> +		mcp3911_scale_table[i][0] = 0;
+> +		mcp3911_scale_table[i][1] = tmp;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  #define MCP3911_CHAN(idx) {					\
+>  		.type = IIO_VOLTAGE,				\
+>  		.indexed = 1,					\
+> @@ -273,8 +313,10 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+>  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |	\
+>  			BIT(IIO_CHAN_INFO_OFFSET) |		\
+>  			BIT(IIO_CHAN_INFO_SCALE),		\
+> -		.info_mask_shared_by_type_available =		\
+> +		.info_mask_shared_by_type_available =           \
+>  			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),	\
+> +		.info_mask_separate_available =			\
+> +			BIT(IIO_CHAN_INFO_SCALE),		\
+>  		.scan_type = {					\
+>  			.sign = 's',				\
+>  			.realbits = 24,				\
+> @@ -483,6 +525,20 @@ static int mcp3911_probe(struct spi_device *spi)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = mcp3911_calc_scale_table(adc);
+> +	if (ret)
+> +		return ret;
+> +
+> +       /* Set gain to 1 for all channels */
+> +	for (int i = 0; i < MCP3911_NUM_CHANNELS; i++) {
+> +		adc->gain[i] = 1;
+> +		ret = mcp3911_update(adc, MCP3911_REG_GAIN,
+> +				MCP3911_GAIN_MASK(i),
+> +				MCP3911_GAIN_VAL(i, 0), 1);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	indio_dev->name = spi_get_device_id(spi)->name;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  	indio_dev->info = &mcp3911_info;
+
