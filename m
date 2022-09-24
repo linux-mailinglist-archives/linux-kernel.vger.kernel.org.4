@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872005E879F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4565E87C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiIXCue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 22:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S232707AbiIXCxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 22:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiIXCu1 (ORCPT
+        with ESMTP id S233412AbiIXCwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 22:50:27 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AE4B516D;
-        Fri, 23 Sep 2022 19:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QX2RydskezkFReMmxeS776t8RU+t/KjVgluk/NS4nY0=; b=aPlaqrO/HrDpICO1XvMwqa2/RW
-        kNkC/nxKyL0cPvTJ+5aZtS2ZKMzbLkS6tIecwXv5gblUBtSdAZtsUS9j37QQjsnnsZJgoM6hd8RUo
-        U9zYevr2ivv5zuka/DYkynpiERcGFmem5gk3v79S4EEFMQ6Uf4hvcuPhyXMIKMk9n4ZFWEVqc8exq
-        8OFyXN6zz4LSajGliDnu9uBQv0oY01Cy6V94nRGRisBuhm5UJ3l4Lk073daTKW3B0DxW7Jca4+Kta
-        du7B16Zaa5K9Kcc26xrAWTGJRzq2j4OZYaNiXvnea8Lor5S26o30kaJCamyYySI7zmIlqBKt/pnKY
-        UjhjuxMA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1obvFD-0037d1-34;
-        Sat, 24 Sep 2022 02:50:20 +0000
-Date:   Sat, 24 Sep 2022 03:50:19 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cifs@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] cifs: Add a function to read into an iter from a
- socket
-Message-ID: <Yy5wa7MAmb7AkoPa@ZenIV>
-References: <166126392703.708021.14465850073772688008.stgit@warthog.procyon.org.uk>
- <166126395495.708021.12328677373159554478.stgit@warthog.procyon.org.uk>
+        Fri, 23 Sep 2022 22:52:50 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CEA1401B6;
+        Fri, 23 Sep 2022 19:52:39 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d10so637292pfh.6;
+        Fri, 23 Sep 2022 19:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=P8vaI21b92NWGEjpnCZy/ODfb54d6FrqhksNG5cepIM=;
+        b=caLduk/X8w4TnrVwSePAZCEH+FzRhkWjC4M0DPcbbDsa5BILOuhtNcXGd8A3oh66UR
+         lriiKxLvcTpSIy3D7eh0T2sQzbH3DgktH3gfWckNZn+hkFuNO2zPI6iqQlh0P/h5R0yU
+         R7Ahpl/xjHazmSLed2t/OvNlLchNTmnymyQuuy5N3EMhG0dJ7tbCkosPH5/jrMuAVSbU
+         doGSVQjEm/Pe1RlEFPg2mZYTAwosPvOW3KPWLP7JY66NdTuGuAQPjap4ie2VbxhmW+N1
+         EX9y7Ha/HGTltUUoM6yrSCxi8vNKpcT84nl6N/oVoMSIVhdYdB9VupgIZ5F6W2ZX5dby
+         IW4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=P8vaI21b92NWGEjpnCZy/ODfb54d6FrqhksNG5cepIM=;
+        b=K9JlRblKtfF0Ot0R3ck8bEnNR23nyk6JfGohTv+cQ29z+puOE8VU9dpqQHvxp7ycWZ
+         srN07R35wUbdmr3y2M9Jl+ioU8KSr0COOJv2/2IP0xalCdEdeZSC/IXXmy9iZB67VG7f
+         OwHceBOa80MHu07GP/8cCO+4fd/fsfazevmCHAAwpq0cJL/NWBplDSaQpyBM9u2sA6WL
+         ghcKBcEMCI/0B2Vn9+BQmYdB7ZJweJHARp0S3GYLsxuhloaaW4G6rsJ68lYfcmnfV8DY
+         1YBgay/VoZSDVSFmWcj9ftLFZwSgTwnLbMfn6ZLegb0IHYmwBJE3MzDYLw3acCwxZS3k
+         moAg==
+X-Gm-Message-State: ACrzQf0Hj3sw5N/IJLi7qr4DWEFbZfQnptWrDdf1Z647VABoYbRPTnAE
+        KMfOc9NR0oFevwggb6NszOo=
+X-Google-Smtp-Source: AMsMyM73X9SwgU7Ji9ZeLmVqmwAFGfH3m2Y91JsApW2XQ9bXHlKHeDOdWU7GNItQJbygDa5tjePLHg==
+X-Received: by 2002:a63:4918:0:b0:439:1802:dda3 with SMTP id w24-20020a634918000000b004391802dda3mr10015022pga.467.1663987958803;
+        Fri, 23 Sep 2022 19:52:38 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b0016bf5557690sm6627633plg.4.2022.09.23.19.52.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 19:52:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 23 Sep 2022 16:52:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     williamsukatube@163.com
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] cgroup: simplify code in cgroup_apply_control
+Message-ID: <Yy5w9YFfmZX+9Vq+@slm.duckdns.org>
+References: <20220917084039.3177-1-williamsukatube@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166126395495.708021.12328677373159554478.stgit@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220917084039.3177-1-williamsukatube@163.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:12:34PM +0100, David Howells wrote:
-> +int
-> +cifs_read_iter_from_socket(struct TCP_Server_Info *server, struct iov_iter *iter,
-> +			   unsigned int to_read)
-> +{
-> +	struct msghdr smb_msg;
-> +	int ret;
-> +
-> +	smb_msg.msg_iter = *iter;
-
-> +	if (smb_msg.msg_iter.count > to_read)
-> +		smb_msg.msg_iter.count = to_read;
-
-ITYM
-	iov_iter_truncate(&smb_msg.msg_iter, to_read);
-
-> +	ret = cifs_readv_from_socket(server, &smb_msg);
-> +	if (ret > 0)
-> +		iov_iter_advance(iter, ret);
-> +	return ret;
-> +}
-> +
->  static bool
->  is_smb_response(struct TCP_Server_Info *server, unsigned char type)
->  {
+On Sat, Sep 17, 2022 at 04:40:39PM +0800, williamsukatube@163.com wrote:
+> From: William Dean <williamsukatube@163.com>
 > 
+> It could directly return 'cgroup_update_dfl_csses' to simplify code.
 > 
+> Signed-off-by: William Dean <williamsukatube@163.com>
+
+Applied to cgroup/for-6.1.
+
+Thanks.
+
+-- 
+tejun
