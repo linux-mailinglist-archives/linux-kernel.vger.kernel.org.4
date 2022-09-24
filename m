@@ -2,205 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B475E8DEC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6686F5E8DF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbiIXP3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S233911AbiIXPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbiIXP2m (ORCPT
+        with ESMTP id S233940AbiIXPao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 11:28:42 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F19AE9C4;
-        Sat, 24 Sep 2022 08:28:40 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E06001C0005;
-        Sat, 24 Sep 2022 15:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1664033319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PcAx96hQWyvOVHMIzU0gp4tFx7K/DUMSyJG/y50Qklo=;
-        b=IUaxIX/5E5mDE7r8ZfueH/z48LI4wd6j9GtXLSy0QAOg0+JpssLhrfAhF77VDkRn4k1IRI
-        fmnNXvyk7w1YWHNQq4DHZiDToDzda4pSThPfKrqnhGd6sM8uvSuPYM+K6KS9DqPjvKk3sV
-        91tvO5vLfYjKRo+0aH3H2iT1/aVbUgHHdPpRiUUOQ5K5BEXuyO+bzG/DRVxIp9VOD+LpDj
-        Q6c5Pduq/kUd1U0UVUoP6ZNAR6X3c4DcMrEIO2WnxW9GQ6jcqHYDSD9lQhDxOi2uGMTvKY
-        dHBCwlrEvtZC2s0EN4AdM4i+qjYfU6m48nSF1v1YKGewu7TzRfNd5Z6a9ukXTw==
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v6 7/7] ARM: dts: sun8i-a83t: Add BananaPi M3 OV8865 camera overlay
-Date:   Sat, 24 Sep 2022 17:28:20 +0200
-Message-Id: <20220924152820.77149-8-paul.kocialkowski@bootlin.com>
+        Sat, 24 Sep 2022 11:30:44 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB7D2666;
+        Sat, 24 Sep 2022 08:30:30 -0700 (PDT)
+Received: from g550jk.fritz.box (212095005231.public.telering.at [212.95.5.231])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D2774C6F7F;
+        Sat, 24 Sep 2022 15:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664033427; bh=zV910eCqFNnfwi2bNmNVba6poAJMtaqZWIluNorpGww=;
+        h=From:To:Cc:Subject:Date;
+        b=jYiokasqVqKaAJOIG6yJB6FtYFPiJ3ayo58/chffmyvQQqJ6jSVnxlH+KZn4LL1nn
+         RrDVp41psJvXJL8+gP1x0UcDJqFbBN8CtKOqfYw1YilSwRi0Syt7aJupS1wqqaXb2G
+         uWtb1CMsy6ahnWlexl7mQ0WyQXe6S3frfB+vEqoY=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: arm: qcom: Document huawei,sturgeon device
+Date:   Sat, 24 Sep 2022 17:29:36 +0200
+Message-Id: <20220924152937.4076-1-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220924152820.77149-1-paul.kocialkowski@bootlin.com>
-References: <20220924152820.77149-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an overlay supporting the OV8865 from the BananaPi Camera v3
-peripheral board. The board has two sensors (OV5640 and OV8865)
-which cannot be supported in parallel as they share the same reset
-pin and the kernel currently has no support for this case.
+Document the Huawei Watch ("sturgeon") which is a smartwatch based on
+Snapdragon 400 SoC.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/Makefile                    |   1 +
- .../sun8i-a83t-bananapi-m3-camera-ov8865.dts  | 109 ++++++++++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-a83t-bananapi-m3-camera-ov8865.dts
+Changes in v2:
+* Pick up tags
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 1f1173efeb14..cf0ab67b430b 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1340,6 +1340,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
- 	sun8i-a83t-allwinner-h8homlet-v2.dtb \
- 	sun8i-a83t-bananapi-m3.dtb \
- 	sun8i-a83t-bananapi-m3-camera-ov5640.dtbo \
-+	sun8i-a83t-bananapi-m3-camera-ov8865.dtbo \
- 	sun8i-a83t-cubietruck-plus.dtb \
- 	sun8i-a83t-tbs-a711.dtb \
- 	sun8i-h2-plus-bananapi-m2-zero.dtb \
-diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3-camera-ov8865.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3-camera-ov8865.dts
-new file mode 100644
-index 000000000000..0656ee8d4bfe
---- /dev/null
-+++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3-camera-ov8865.dts
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0 OR X11
-+/*
-+ * Copyright 2022 Bootlin
-+ * Author: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&{/} {
-+	/*
-+	 * These regulators actually have DLDO4 tied to their EN pin, which is
-+	 * described as input supply here for lack of a better representation.
-+	 * Their actual supply is PS, which is always-on.
-+	 */
-+
-+	ov8865_avdd: ov8865-avdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-avdd";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+
-+	ov8865_dovdd: ov8865-dovdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-dovdd";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+
-+	ov8865_dvdd: ov8865-dvdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-dvdd";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+};
-+
-+&ccu {
-+	assigned-clocks = <&ccu CLK_CSI_MCLK>;
-+	assigned-clock-parents = <&osc24M>;
-+	assigned-clock-rates = <24000000>;
-+};
-+
-+&csi {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pe_pins>;
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	ov8865: camera@36 {
-+		compatible = "ovti,ov8865";
-+		reg = <0x36>;
-+
-+		clocks = <&ccu CLK_CSI_MCLK>;
-+		assigned-clocks = <&ccu CLK_CSI_MCLK>;
-+		assigned-clock-parents = <&osc24M>;
-+		assigned-clock-rates = <24000000>;
-+
-+		avdd-supply = <&ov8865_avdd>;
-+		dovdd-supply = <&ov8865_dovdd>;
-+		dvdd-supply = <&ov8865_dvdd>;
-+
-+		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-+		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+
-+		port {
-+			ov8865_out_mipi_csi2: endpoint {
-+				remote-endpoint = <&mipi_csi2_in_ov8865>;
-+				link-frequencies = /bits/ 64 <360000000>;
-+				data-lanes = <1 2 3 4>;
-+			};
-+		};
-+	};
-+};
-+
-+&mipi_csi2 {
-+	status = "okay";
-+};
-+
-+&mipi_csi2_in {
-+	mipi_csi2_in_ov8865: endpoint {
-+		remote-endpoint = <&ov8865_out_mipi_csi2>;
-+		data-lanes = <1 2 3 4>;
-+	};
-+};
-+
-+&pio {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&csi_mclk_pin>;
-+};
-+
-+&reg_dldo4 {
-+	regulator-min-microvolt = <2800000>;
-+	regulator-max-microvolt = <2800000>;
-+};
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index b6257683a700..67ff967ea3ad 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -114,6 +114,7 @@ properties:
+       - items:
+           - enum:
+               - asus,sparrow
++              - huawei,sturgeon
+               - lg,lenok
+           - const: qcom,apq8026
+ 
 -- 
 2.37.3
 
