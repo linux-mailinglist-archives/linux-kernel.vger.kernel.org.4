@@ -2,140 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77965E9047
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674F75E904D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbiIXWPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S229757AbiIXWW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234020AbiIXWPd (ORCPT
+        with ESMTP id S230061AbiIXWWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:15:33 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3F7367B2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:15:32 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 22:15:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1664057730; x=1664316930;
-        bh=vibURvDK8C9+axigLopCKC5jQEsrmsW5ulpcMBkfZGs=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=ogp8N9s8hO2Z1JgKo/5W0A0nXSZWm841x2LEGIK5ontx8mZj3iHofDM2FfcW0xXCA
-         hQlBelr+s6pZsD3i5PbLgcFYDIfSMVJUjjhcYsZDs8mFyqvz7T2CIcpgLMRT794Nxu
-         LTvjLCfBv2fMy9pyBBhE0KsVePuGee7jWTQvey28=
-To:     Nia Espera <a5b6@riseup.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers: gpu: drm: remove support for sofef00 driver on s6e3fc2x01 panel
-Message-ID: <f8a2b974-7f95-c158-5d52-3a9582fcd28c@connolly.tech>
-In-Reply-To: <20220924203616.63325-3-a5b6@riseup.net>
-References: <20220924203616.63325-1-a5b6@riseup.net> <20220924203616.63325-3-a5b6@riseup.net>
-Feedback-ID: 10753939:user:proton
+        Sat, 24 Sep 2022 18:22:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658BF40BCD
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:22:22 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id b5so3366473pgb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=5XRHfXkr0Fe4SAzJoRUw8fMVykjX3P3cSngjSUsS0BI=;
+        b=UMg/xlXZevAPqbw04V0IV9GiY59diX6sjJjaSMv9bzrCrshLGxxoG5aekzqI39a+z7
+         dXt71TE6i9/c5Rl2BtdeeHe2H75euozjIO28dSSWmaa1Mk8utjS1Pa8S1ep/L8YAKCoJ
+         p7nERFlFjWms9tV8WGjVZkJv6eLN24FPTRXE4//UlV8YdJ2P23S65pSecv9ej6ODQqlN
+         flQsY5fCKXCqyUHXKOi7yRQhfZatVKKaHxvOMiwzUHRR4AhiiuHBgduc39L6zAYfzvGi
+         6i8K1Oqd3VYfe5nGC3PY1Rv0IPWkAsCmwPEOJLp2ibelZeINKSJo1kzh2ogogZu8OqDX
+         V5Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=5XRHfXkr0Fe4SAzJoRUw8fMVykjX3P3cSngjSUsS0BI=;
+        b=ww73hUwdemc+7lX+B8tel8YP1p9KIGmLHWjFtNUws5GPAvqRGaexYPoTWEfqjo7ECi
+         Hy0T5Y7MXL4HcusoMgjrQoyxs1cdYiCSyQUo16GEPJ/WGH8I0YYTsmVMpcA1TjVV0ZIT
+         6DMqtMOxtQGiOa6kL7gFn7gRDKcf8sjMHEomPBBzC2IxhtDnrGFLE7jJSf+1GKHI5baX
+         sHdhcF4WY8XT/8vB1Ga0/+iYD58lD56Gbano70gfnwWHYVBn9ps0LYJdpHmwCgepCvTJ
+         E96Y8QoEHJn0GDy7a6T+vphHwF4h6TYFGfHjjzo1aBZLjxGxpwk/5MuSR1g17RGLUjb3
+         4Nlw==
+X-Gm-Message-State: ACrzQf0dGjk2/pBbK+9PMY/unaebRg3Wn5yDViVAr9a0rYIINWfnkE3E
+        hm26LrfECQT58Rqg8Xqsghh/yG2KtUeTRiQqIEJgi186ByGSLF80
+X-Google-Smtp-Source: AMsMyM5LIIMPm0LP/Sk6kCuZaOQBucIrSAcLFwD4lkx0BZ1RjOPpAHzAJ2b3tcGH5hEV0Y57O9Wpv/VOnIT26IF0f9E=
+X-Received: by 2002:a63:90c4:0:b0:438:a962:61e7 with SMTP id
+ a187-20020a6390c4000000b00438a96261e7mr13153649pge.426.1664058141628; Sat, 24
+ Sep 2022 15:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Sun, 25 Sep 2022 03:22:10 +0500
+Message-ID: <CABXGCsN8LHqz7=OSvBpKCqKdV4L_4FPXtQ32bgYveA9yP2_xiQ@mail.gmail.com>
+Subject: Unable bisect issue because kernel not building from old commits
+To:     ast@kernel.org, yhs@fb.com, sean.wang@mediatek.com
+Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
+I want to make bisect between commits fdaf9a5840ac and babf0bb978e3,
+because after commit babf0bb978e3 Wi-Fi (mt7921e) upload speed became
+limited to 170Mbps. On commit fdaf9a5840ac upload speed was 784Mbps.
+
+But I ran into a problem that the gcc-12.2.1 compiler on my
+distribution (Fedora) can't build the kernel from old commits. The
+build fails with the following error:
+ld: warning: arch/x86/power/hibernate_asm_64.o: missing
+.note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future
+version of the linker
+  MODPOST vmlinux.symvers
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+  CC      .vmlinux.export.o
+  LD      .tmp_vmlinux.btf
+ld: warning: arch/x86/power/hibernate_asm_64.o: missing
+.note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future
+version of the linker
+ld: warning: .tmp_vmlinux.btf has a LOAD segment with RWX permissions
+  BTF     .btf.vmlinux.bin.o
+  LD      .tmp_vmlinux.kallsyms1
+ld: warning: .btf.vmlinux.bin.o: missing .note.GNU-stack section
+implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future
+version of the linker
+ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+  KSYMS   .tmp_vmlinux.kallsyms1.S
+  AS      .tmp_vmlinux.kallsyms1.S
+  LD      .tmp_vmlinux.kallsyms2
+ld: warning: .btf.vmlinux.bin.o: missing .note.GNU-stack section
+implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future
+version of the linker
+ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
+  KSYMS   .tmp_vmlinux.kallsyms2.S
+  AS      .tmp_vmlinux.kallsyms2.S
+  LD      vmlinux
+ld: warning: .btf.vmlinux.bin.o: missing .note.GNU-stack section
+implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future
+version of the linker
+ld: warning: vmlinux has a LOAD segment with RWX permissions
+  BTFIDS  vmlinux
+FAILED: load BTF from vmlinux: Invalid argument
+make: *** [Makefile:1160: vmlinux] Error 255
+make: *** Deleting file 'vmlinux'
 
 
-On 24/09/2022 21:36, Nia Espera wrote:
-> Removes functionality from sofef00 panel driver which allowed it to
-> drive the s6e3fc2x01 panel
->
-> Signed-off-by: Nia Espera <a5b6@riseup.net>
+I found a commit that fixes the build:
+dffbbdc2d9889670c30e07d05fc0dd712e8ad430 is the first bad commit
+commit dffbbdc2d9889670c30e07d05fc0dd712e8ad430
+Author: Yonghong Song <yhs@fb.com>
+Date:   Mon Jun 6 23:26:21 2022 -0700
 
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->   drivers/gpu/drm/panel/Kconfig                 |  6 +++---
->   drivers/gpu/drm/panel/panel-samsung-sofef00.c | 18 ------------------
->   2 files changed, 3 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfi=
-g
-> index ee62d5d8828a..62b9cb6acd05 100644
-> --- a/drivers/gpu/drm/panel/Kconfig
-> +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -547,16 +547,16 @@ config DRM_PANEL_SAMSUNG_S6E8AA0
->   =09select VIDEOMODE_HELPERS
->
->   config DRM_PANEL_SAMSUNG_SOFEF00
-> -=09tristate "Samsung sofef00/s6e3fc2x01 OnePlus 6/6T DSI cmd mode panels=
-"
-> +=09tristate "Samsung sofef00 OnePlus 6 DSI cmd mode panel"
->   =09depends on OF
->   =09depends on DRM_MIPI_DSI
->   =09depends on BACKLIGHT_CLASS_DEVICE
->   =09select VIDEOMODE_HELPERS
->   =09help
->   =09  Say Y or M here if you want to enable support for the Samsung AMOL=
-ED
-> -=09  command mode panels found in the OnePlus 6/6T smartphones.
-> +=09  command mode panel found in the OnePlus 6 smartphone.
->
-> -=09  The panels are 2280x1080@60Hz and 2340x1080@60Hz respectively
-> +=09  The panel is 2280x1080@60Hz
->
->   config DRM_PANEL_SAMSUNG_S6E3FC2X01
->   =09tristate "Samsung s6e3fc2x01 OnePlus 6T DSI cmd mode panel"
-> diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef00.c b/drivers/gpu/=
-drm/panel/panel-samsung-sofef00.c
-> index bd02af81a4fe..68e58b9b8c5c 100644
-> --- a/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-> +++ b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-> @@ -181,20 +181,6 @@ static const struct drm_display_mode enchilada_panel=
-_mode =3D {
->   =09.height_mm =3D 145,
->   };
->
-> -static const struct drm_display_mode fajita_panel_mode =3D {
-> -=09.clock =3D (1080 + 72 + 16 + 36) * (2340 + 32 + 4 + 18) * 60 / 1000,
-> -=09.hdisplay =3D 1080,
-> -=09.hsync_start =3D 1080 + 72,
-> -=09.hsync_end =3D 1080 + 72 + 16,
-> -=09.htotal =3D 1080 + 72 + 16 + 36,
-> -=09.vdisplay =3D 2340,
-> -=09.vsync_start =3D 2340 + 32,
-> -=09.vsync_end =3D 2340 + 32 + 4,
-> -=09.vtotal =3D 2340 + 32 + 4 + 18,
-> -=09.width_mm =3D 68,
-> -=09.height_mm =3D 145,
-> -};
-> -
->   static int sofef00_panel_get_modes(struct drm_panel *panel, struct drm_=
-connector *connector)
->   {
->   =09struct drm_display_mode *mode;
-> @@ -327,10 +313,6 @@ static const struct of_device_id sofef00_panel_of_ma=
-tch[] =3D {
->   =09=09.compatible =3D "samsung,sofef00",
->   =09=09.data =3D &enchilada_panel_mode,
->   =09},
-> -=09{ // OnePlus 6T / fajita
-> -=09=09.compatible =3D "samsung,s6e3fc2x01",
-> -=09=09.data =3D &fajita_panel_mode,
-> -=09},
->   =09{ /* sentinel */ }
->   };
->   MODULE_DEVICE_TABLE(of, sofef00_panel_of_match);
-> --
-> 2.37.3
->
+    libbpf: Add enum64 parsing and new enum64 public API
 
---
-Kind Regards,
-Caleb
+    Add enum64 parsing support and two new enum64 public APIs:
+      btf__add_enum64
+      btf__add_enum64_value
 
+    Also add support of signedness for BTF_KIND_ENUM. The
+    BTF_KIND_ENUM API signatures are not changed. The signedness
+    will be changed from unsigned to signed if btf__add_enum_value()
+    finds any negative values.
+
+    Acked-by: Andrii Nakryiko <andrii@kernel.org>
+    Signed-off-by: Yonghong Song <yhs@fb.com>
+    Link: https://lore.kernel.org/r/20220607062621.3719391-1-yhs@fb.com
+    Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+ tools/lib/bpf/btf.c      | 103 +++++++++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/btf.h      |  12 ++++++
+ tools/lib/bpf/libbpf.map |   2 +
+ 3 files changed, 117 insertions(+)
+
+
+But I can't cherry pick it because there are conflicts:
+$ git bisect start
+status: waiting for both good and bad commits
+$ git bisect good fdaf9a5840ac
+status: waiting for bad commit, 1 good commit known
+$ git bisect bad babf0bb978e3
+Bisecting: 2687 revisions left to test after this (roughly 11 steps)
+[86c87bea6b42100c67418af690919c44de6ede6e] Merge tag
+'devicetree-for-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+$ git cherry-pick -n dffbbdc2d9889670c30e07d05fc0dd712e8ad430
+Auto-merging tools/lib/bpf/btf.c
+CONFLICT (content): Merge conflict in tools/lib/bpf/btf.c
+Auto-merging tools/lib/bpf/libbpf.map
+CONFLICT (content): Merge conflict in tools/lib/bpf/libbpf.map
+error: could not apply dffbbdc2d988... libbpf: Add enum64 parsing and
+new enum64 public API
+hint: after resolving the conflicts, mark the corrected paths
+hint: with 'git add <paths>' or 'git rm <paths>'
+
+Are there any other options to fix the kernel build?
+
+Thanks.
+
+
+-- 
+Best Regards,
+Mike Gavrilov.
