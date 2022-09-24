@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D565E903D
+	by mail.lfdr.de (Postfix) with ESMTP id 733A95E903E
 	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiIXWDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S234029AbiIXWDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiIXWDb (ORCPT
+        with ESMTP id S234013AbiIXWDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:03:31 -0400
+        Sat, 24 Sep 2022 18:03:35 -0400
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7001533350
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id 13so7169506ejn.3
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B853341B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id 13so7169754ejn.3
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date;
-        bh=2vbRnOhD8TPYnS7wkqyA/FaN1lEvknTEkNYcBwkBWSw=;
-        b=lyabth+2ha6CI/abNAc0A4hmmYmtoIj9qZeycWPA6WTN8GPMch3AIIeBePGKAWY3uE
-         vYUst9GsmyMzTIwDLv7PdBWHz4Qt+EFDNVwhpN0Qre/vaM9Xu5UxcsOKNRLGNxjUmFj8
-         U6F4mDW1fzy2JtzS91Jm9mpBnr0uNH8AXKpAvyWQQcykRsPphCCyvoz+leFzaYuVkmi0
-         2ChoaYV7q/JKYjRI49OrgDgdQO9b063QrlAmOtuUgkCZbuwXVpd/NJdGOBZZu7On61PX
-         1G/Qi7TpxopspgiquyKl5k7pD4D3B9XVAOOY5LvAzBTFq7bf9FydYiZljs8kx6phqSUO
-         JEPQ==
+        bh=d8vVA7LCY08FZzjgVfkFGePEn4Ti/pmsWV+H+LOB/hs=;
+        b=CUofn/74M6UBh0jXziN+l2pkrNyqT2HGhwRNgj15PqIu3+OPXTyth766Jn0pnAgWBx
+         ts6DnrCvTXZy8dDM0mgdplyr6VpYgfdVeMYg1qRXZ+jt1M0LXOEQNAeb5QOZrUgLV0u0
+         lSc7fZ+cXtmB+jeosdj7Hyvy1XYART5MBoM1BUIkh1va7hSjLZ1KdXYJhYKx7LYItjnp
+         c3wjPBVfhW0htl+q2hx4ml62R2XtWpBVzUxA7H241fls0W2pq+xWtrc7Y0loam3N+86J
+         WDpgjmafdCuBhvUH8iX9bsMt/FgNZQoLO7HlNtFrfmEDFjRoJRKbnko8uRBoOmlS1jt1
+         D7ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2vbRnOhD8TPYnS7wkqyA/FaN1lEvknTEkNYcBwkBWSw=;
-        b=UjlhQkQyG4ouNnTs0KGrO61333fDYSOgtiXFfzD8c1vzgyVmz7jlG3FewieUaVQloN
-         GyPy1cyQcxXa7kPQskgExDY4DNNK39egpxZz363HSnGJS7PT29NtQYPx0nZNzZCWST2D
-         UfLNMAFOL5td1qebfiNR4Dlo3Tzqn0VjaHbf1Giqa0aUKOA+VOtb+I4JXyXpgDGdmV8u
-         fintvijG41YIOCVMgF//DFXKd5noiM8IwSwF9XH4pC0/4RtpH7wCSttM9uinZFF+z0TR
-         cTsUk2kxA2/fvTponBN+TdYMbHYWPT7j5t0yA+UXOv1B0JyClC3QaHpEXtTpoRnF8Qwh
-         VppQ==
-X-Gm-Message-State: ACrzQf0w/jP9ruX+m9ZZNw7Agw2Df1I3SvJEAVcMLNYOqWvamK5n5NEi
-        RpdDq4w880+HfiwgfsatmetLEWC8bog=
-X-Google-Smtp-Source: AMsMyM75+lCEo4sIZEtqv3OQJGS+riGN/VQQDAADNF5SBwOIs7cNPV2yiT7jUVqGWs8gqmsNCerDNw==
-X-Received: by 2002:a17:907:75e7:b0:77a:2378:91bb with SMTP id jz7-20020a17090775e700b0077a237891bbmr12425293ejc.329.1664057008012;
-        Sat, 24 Sep 2022 15:03:28 -0700 (PDT)
+        bh=d8vVA7LCY08FZzjgVfkFGePEn4Ti/pmsWV+H+LOB/hs=;
+        b=sxh+c1P8UrSB0HZh0TaXFLxYUB7Y3DDNmZkx6EfXp8ILQxVKSvPOzsskX4lh3JWwcQ
+         /IpbEqxPjYya/7T/H/P4XtE2jA7wnP5vETAmr4T8yVCA8NamtSutqmmkN4l2tLUO7FEb
+         NDh47mMhbDxo8B5X/1Owiqzwlc38tuRhVQw+gGhZazWMhrrqrQ7Z4OJLIOb8Nc/eUlqE
+         dMMEPg/tGPFx5C6F11nnkKUioQwpScOtOckuXcAVtQMjlDGHaDFGTDg9j12MZiYkYImi
+         /D8K3IhFeM/vtANeoOoQacOEZCgWbryJEB0Ya4wCLNpe4hQSQCqvnAICrmmsBzd9q3Vb
+         Cx1A==
+X-Gm-Message-State: ACrzQf1CroI3sjHS+WK1ikHHK+MlrNW/bYofBE0KOolPoZSfU3dgPgw6
+        oAOEnGWQmdoGuT/MhF24MbYxa712hZk=
+X-Google-Smtp-Source: AMsMyM7W6gJVOcB9zELJw6hUtNm5npgCZacQ83cm8u/w/EMA4h8TJWlTD31JW73GaWDV4LvilWwp/g==
+X-Received: by 2002:a17:907:b0e:b0:77a:d97d:9afc with SMTP id h14-20020a1709070b0e00b0077ad97d9afcmr12273390ejl.199.1664057014168;
+        Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id i21-20020aa7c9d5000000b00452878cba5bsm8114026edt.97.2022.09.24.15.03.26
+        by smtp.gmail.com with ESMTPSA id kv6-20020a17090778c600b0076f0ab594e9sm5952191ejc.73.2022.09.24.15.03.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 15:03:26 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 00:03:24 +0200
+        Sat, 24 Sep 2022 15:03:33 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 00:03:31 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/10] staging: rtl8192e: Rename dot11Cur..., bCurTxBW40MHz
- and bCurrentRT2...
-Message-ID: <97c4f62da9a98b0ddcdaafae68182e3eb47f9a17.1664055213.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 04/10] staging: rtl8192e: Rename bSwBwInPro...,
+ bRegRT2RTAg... and bCurrentRT...
+Message-ID: <868f9db0e29bd170129f90bdbcc14238a750c440.1664055213.git.philipp.g.hortmann@gmail.com>
 References: <cover.1664055213.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,219 +70,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable dot11CurrentPreambleMode to dot11_current_preamble_mode,
-bCurTxBW40MHz to cur_tx_bw40mhz and bCurrentRT2RTLongSlotTime to
-current_rt2rt_long_slot_time to avoid CamelCase which is not accepted
-by checkpatch.
+Rename variable bSwBwInProgress to sw_bw_in_progress, bRegRT2RTAggregation
+to reg_rt2rt_aggregation and bCurrentRT2RTAggregation to
+current_rt2rt_aggregation to avoid CamelCase which is not accepted by
+checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 14 +++++++-------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h   |  2 +-
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     |  4 ++--
- drivers/staging/rtl8192e/rtl819x_HT.h          |  4 ++--
- drivers/staging/rtl8192e/rtl819x_HTProc.c      | 12 ++++++------
- drivers/staging/rtl8192e/rtllib_tx.c           |  2 +-
- 7 files changed, 22 insertions(+), 22 deletions(-)
+ drivers/staging/rtl8192e/rtl819x_HT.h     |  6 +++---
+ drivers/staging/rtl8192e/rtl819x_HTProc.c | 24 +++++++++++------------
+ drivers/staging/rtl8192e/rtllib_softmac.c |  6 +++---
+ 3 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index bd2696cdaccd..7391d7cb7a58 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -822,7 +822,7 @@ static void _rtl92e_net_update(struct net_device *dev)
- 
- 	net = &priv->rtllib->current_network;
- 	rtl92e_config_rate(dev, &rate_config);
--	priv->dot11CurrentPreambleMode = PREAMBLE_AUTO;
-+	priv->dot11_current_preamble_mode = PREAMBLE_AUTO;
- 	priv->basic_rate = rate_config &= 0x15f;
- 	rtl92e_writew(dev, BSSIDR, *(u16 *)net->bssid);
- 	rtl92e_writel(dev, BSSIDR + 2, *(u32 *)(net->bssid + 2));
-@@ -1998,10 +1998,10 @@ void rtl92e_update_ratr_table(struct net_device *dev)
- 		break;
- 	}
- 	ratr_value &= 0x0FFFFFFF;
--	if (ieee->pHTInfo->bCurTxBW40MHz &&
-+	if (ieee->pHTInfo->cur_tx_bw40mhz &&
- 	    ieee->pHTInfo->bCurShortGI40MHz)
- 		ratr_value |= 0x80000000;
--	else if (!ieee->pHTInfo->bCurTxBW40MHz &&
-+	else if (!ieee->pHTInfo->cur_tx_bw40mhz &&
- 		  ieee->pHTInfo->bCurShortGI20MHz)
- 		ratr_value |= 0x80000000;
- 	rtl92e_writel(dev, RATR0+rate_index*4, ratr_value);
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 52b25df99642..89bc989cffba 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -287,16 +287,16 @@ static void _rtl92e_update_cap(struct net_device *dev, u16 cap)
- 	bool		ShortPreamble;
- 
- 	if (cap & WLAN_CAPABILITY_SHORT_PREAMBLE) {
--		if (priv->dot11CurrentPreambleMode != PREAMBLE_SHORT) {
-+		if (priv->dot11_current_preamble_mode != PREAMBLE_SHORT) {
- 			ShortPreamble = true;
--			priv->dot11CurrentPreambleMode = PREAMBLE_SHORT;
-+			priv->dot11_current_preamble_mode = PREAMBLE_SHORT;
- 			priv->rtllib->SetHwRegHandler(dev, HW_VAR_ACK_PREAMBLE,
- 					(unsigned char *)&ShortPreamble);
- 		}
- 	} else {
--		if (priv->dot11CurrentPreambleMode != PREAMBLE_LONG) {
-+		if (priv->dot11_current_preamble_mode != PREAMBLE_LONG) {
- 			ShortPreamble = false;
--			priv->dot11CurrentPreambleMode = PREAMBLE_LONG;
-+			priv->dot11_current_preamble_mode = PREAMBLE_LONG;
- 			priv->rtllib->SetHwRegHandler(dev, HW_VAR_ACK_PREAMBLE,
- 					      (unsigned char *)&ShortPreamble);
- 		}
-@@ -307,7 +307,7 @@ static void _rtl92e_update_cap(struct net_device *dev, u16 cap)
- 		u8	cur_slot_time = priv->slot_time;
- 
- 		if ((cap & WLAN_CAPABILITY_SHORT_SLOT_TIME) &&
--		   (!priv->rtllib->pHTInfo->bCurrentRT2RTLongSlotTime)) {
-+		   (!priv->rtllib->pHTInfo->current_rt2rt_long_slot_time)) {
- 			if (cur_slot_time != SHORT_SLOT_TIME) {
- 				slot_time_val = SHORT_SLOT_TIME;
- 				priv->rtllib->SetHwRegHandler(dev,
-@@ -341,7 +341,7 @@ static void _rtl92e_update_beacon(void *data)
- 
- 	if (ieee->pHTInfo->bCurrentHTSupport)
- 		HT_update_self_and_peer_setting(ieee, net);
--	ieee->pHTInfo->bCurrentRT2RTLongSlotTime = net->bssht.bd_rt2rt_long_slot_time;
-+	ieee->pHTInfo->current_rt2rt_long_slot_time = net->bssht.bd_rt2rt_long_slot_time;
- 	ieee->pHTInfo->RT2RT_HT_Mode = net->bssht.rt2rt_ht_mode;
- 	_rtl92e_update_cap(dev, net->capability);
- }
-@@ -833,7 +833,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	u8 i;
- 
- 	priv->AcmMethod = eAcmWay2_SW;
--	priv->dot11CurrentPreambleMode = PREAMBLE_AUTO;
-+	priv->dot11_current_preamble_mode = PREAMBLE_AUTO;
- 	priv->rtllib->status = 0;
- 	priv->polling_timer_on = 0;
- 	priv->up_first_time = 1;
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 093887bcd463..7021f9c435d9 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -430,7 +430,7 @@ struct r8192_priv {
- 
- 	u16 basic_rate;
- 	u8 short_preamble;
--	u8 dot11CurrentPreambleMode;
-+	u8 dot11_current_preamble_mode;
- 	u8 slot_time;
- 	u16 SifsTime;
- 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index a4bffc081857..2394faba3940 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -343,9 +343,9 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
- 
- 	if (priv->rtllib->state == RTLLIB_LINKED) {
- 
--		bshort_gi_enabled = (pHTInfo->bCurTxBW40MHz &&
-+		bshort_gi_enabled = (pHTInfo->cur_tx_bw40mhz &&
- 				     pHTInfo->bCurShortGI40MHz) ||
--				    (!pHTInfo->bCurTxBW40MHz &&
-+				    (!pHTInfo->cur_tx_bw40mhz &&
- 				     pHTInfo->bCurShortGI20MHz);
- 
- 		pra->upper_rssi_threshold_ratr =
 diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
-index ce13b41074a7..2ab04469ef4b 100644
+index 2ab04469ef4b..5399931786b8 100644
 --- a/drivers/staging/rtl8192e/rtl819x_HT.h
 +++ b/drivers/staging/rtl8192e/rtl819x_HT.h
-@@ -148,7 +148,7 @@ struct rt_hi_throughput {
- 	u8				PeerMimoPs;
- 
- 	enum ht_extchnl_offset CurSTAExtChnlOffset;
--	u8				bCurTxBW40MHz;
-+	u8 cur_tx_bw40mhz;
+@@ -151,12 +151,12 @@ struct rt_hi_throughput {
+ 	u8 cur_tx_bw40mhz;
  	u8				PeerBandwidth;
  
- 	u8				bSwBwInProgress;
-@@ -157,7 +157,7 @@ struct rt_hi_throughput {
- 	u8				bRegRT2RTAggregation;
+-	u8				bSwBwInProgress;
++	u8 sw_bw_in_progress;
+ 	u8				SwBwStep;
+ 
+-	u8				bRegRT2RTAggregation;
++	u8 reg_rt2rt_aggregation;
  	u8				RT2RT_HT_Mode;
- 	u8				bCurrentRT2RTAggregation;
--	u8				bCurrentRT2RTLongSlotTime;
-+	u8 current_rt2rt_long_slot_time;
+-	u8				bCurrentRT2RTAggregation;
++	u8 current_rt2rt_aggregation;
+ 	u8 current_rt2rt_long_slot_time;
  	u8				szRT2RTAggBuffer[10];
  
- 	u8				bRegRxReorderEnable;
 diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index 3b8efaf9b88c..1e1364c56163 100644
+index 1e1364c56163..cde64b123ced 100644
 --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
 +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -543,7 +543,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
- #endif
- 	HTSetConnectBwMode(ieee, (enum ht_channel_width)(pPeerHTCap->ChlWidth),
- 			  (enum ht_extchnl_offset)(pPeerHTInfo->ExtChlOffset));
--	pHTInfo->bCurTxBW40MHz = ((pPeerHTInfo->RecommemdedTxWidth == 1) ?
-+	pHTInfo->cur_tx_bw40mhz = ((pPeerHTInfo->RecommemdedTxWidth == 1) ?
- 				 true : false);
+@@ -98,7 +98,7 @@ void HTUpdateDefaultSetting(struct rtllib_device *ieee)
  
- 	pHTInfo->bCurShortGI20MHz = ((pHTInfo->bRegShortGI20MHz) ?
-@@ -633,7 +633,7 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
- 	pHTInfo->bCurrentHTSupport = false;
+ 	ieee->bTxEnableFwCalcDur = 1;
  
- 	pHTInfo->bCurBW40MHz = false;
--	pHTInfo->bCurTxBW40MHz = false;
-+	pHTInfo->cur_tx_bw40mhz = false;
+-	pHTInfo->bRegRT2RTAggregation = 1;
++	pHTInfo->reg_rt2rt_aggregation = 1;
  
- 	pHTInfo->bCurShortGI20MHz = false;
- 	pHTInfo->bCurShortGI40MHz = false;
-@@ -660,7 +660,7 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
+ 	pHTInfo->bRegRxReorderEnable = 1;
+ 	pHTInfo->RxReorderWinSize = 64;
+@@ -574,7 +574,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
+ 			pHTInfo->bCurrentAMPDUEnable = false;
+ 	}
+ 
+-	if (!pHTInfo->bRegRT2RTAggregation) {
++	if (!pHTInfo->reg_rt2rt_aggregation) {
+ 		if (pHTInfo->AMPDU_Factor > pPeerHTCap->MaxRxAMPDUFactor)
+ 			pHTInfo->CurrentAMPDUFactor =
+ 						 pPeerHTCap->MaxRxAMPDUFactor;
+@@ -655,11 +655,11 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
+ 	memset((void *)(&(pHTInfo->PeerHTInfoBuf)), 0,
+ 		sizeof(pHTInfo->PeerHTInfoBuf));
+ 
+-	pHTInfo->bSwBwInProgress = false;
++	pHTInfo->sw_bw_in_progress = false;
+ 
  	pHTInfo->ePeerHTSpecVer = HT_SPEC_VER_IEEE;
  
- 	pHTInfo->bCurrentRT2RTAggregation = false;
--	pHTInfo->bCurrentRT2RTLongSlotTime = false;
-+	pHTInfo->current_rt2rt_long_slot_time = false;
+-	pHTInfo->bCurrentRT2RTAggregation = false;
++	pHTInfo->current_rt2rt_aggregation = false;
+ 	pHTInfo->current_rt2rt_long_slot_time = false;
  	pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
  
- 	pHTInfo->IOTPeer = 0;
-@@ -720,12 +720,12 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
- 		if (pHTInfo->bRegRT2RTAggregation) {
- 			pHTInfo->bCurrentRT2RTAggregation =
+@@ -717,14 +717,14 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
+ 			       pNetwork->bssht.bd_ht_info_buf,
+ 			       pNetwork->bssht.bd_ht_info_len);
+ 
+-		if (pHTInfo->bRegRT2RTAggregation) {
+-			pHTInfo->bCurrentRT2RTAggregation =
++		if (pHTInfo->reg_rt2rt_aggregation) {
++			pHTInfo->current_rt2rt_aggregation =
  				 pNetwork->bssht.bd_rt2rt_aggregation;
--			pHTInfo->bCurrentRT2RTLongSlotTime =
-+			pHTInfo->current_rt2rt_long_slot_time =
+ 			pHTInfo->current_rt2rt_long_slot_time =
  				 pNetwork->bssht.bd_rt2rt_long_slot_time;
  			pHTInfo->RT2RT_HT_Mode = pNetwork->bssht.rt2rt_ht_mode;
  		} else {
- 			pHTInfo->bCurrentRT2RTAggregation = false;
--			pHTInfo->bCurrentRT2RTLongSlotTime = false;
-+			pHTInfo->current_rt2rt_long_slot_time = false;
+-			pHTInfo->bCurrentRT2RTAggregation = false;
++			pHTInfo->current_rt2rt_aggregation = false;
+ 			pHTInfo->current_rt2rt_long_slot_time = false;
  			pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
  		}
- 
-@@ -757,7 +757,7 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
+@@ -756,7 +756,7 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
+ 			pHTInfo->IOTAction |= HT_IOT_ACT_CDD_FSYNC;
  	} else {
  		pHTInfo->bCurrentHTSupport = false;
- 		pHTInfo->bCurrentRT2RTAggregation = false;
--		pHTInfo->bCurrentRT2RTLongSlotTime = false;
-+		pHTInfo->current_rt2rt_long_slot_time = false;
+-		pHTInfo->bCurrentRT2RTAggregation = false;
++		pHTInfo->current_rt2rt_aggregation = false;
+ 		pHTInfo->current_rt2rt_long_slot_time = false;
  		pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
  
- 		pHTInfo->IOTAction = 0;
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 9da83531932f..595f9b92ac83 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -384,7 +384,7 @@ static void rtllib_query_BandwidthMode(struct rtllib_device *ieee,
+@@ -850,7 +850,7 @@ static void HTSetConnectBwModeCallback(struct rtllib_device *ieee)
+ 				       HT_EXTCHNL_OFFSET_NO_EXT);
+ 	}
  
- 	if ((tcb_desc->data_rate & 0x80) == 0)
- 		return;
--	if (pHTInfo->bCurBW40MHz && pHTInfo->bCurTxBW40MHz &&
-+	if (pHTInfo->bCurBW40MHz && pHTInfo->cur_tx_bw40mhz &&
- 	    !ieee->bandwidth_auto_switch.bforced_tx20Mhz)
- 		tcb_desc->bPacketBW = true;
+-	pHTInfo->bSwBwInProgress = false;
++	pHTInfo->sw_bw_in_progress = false;
  }
+ 
+ void HTSetConnectBwMode(struct rtllib_device *ieee,
+@@ -865,8 +865,8 @@ void HTSetConnectBwMode(struct rtllib_device *ieee,
+ 	if (ieee->GetHalfNmodeSupportByAPsHandler(ieee->dev))
+ 		Bandwidth = HT_CHANNEL_WIDTH_20;
+ 
+-	if (pHTInfo->bSwBwInProgress) {
+-		pr_info("%s: bSwBwInProgress!!\n", __func__);
++	if (pHTInfo->sw_bw_in_progress) {
++		pr_info("%s: sw_bw_in_progress!!\n", __func__);
+ 		return;
+ 	}
+ 	if (Bandwidth == HT_CHANNEL_WIDTH_20_40) {
+@@ -889,7 +889,7 @@ void HTSetConnectBwMode(struct rtllib_device *ieee,
+ 	netdev_dbg(ieee->dev, "%s():pHTInfo->bCurBW40MHz:%x\n", __func__,
+ 		   pHTInfo->bCurBW40MHz);
+ 
+-	pHTInfo->bSwBwInProgress = true;
++	pHTInfo->sw_bw_in_progress = true;
+ 
+ 	HTSetConnectBwModeCallback(ieee);
+ }
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index 9a5dd031d3ff..9d38c35ecf9d 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -865,7 +865,7 @@ static struct sk_buff *rtllib_probe_resp(struct rtllib_device *ieee,
+ 		HTConstructInfoElement(ieee, tmp_ht_info_buf, &tmp_ht_info_len,
+ 				       encrypt);
+ 
+-		if (pHTInfo->bRegRT2RTAggregation) {
++		if (pHTInfo->reg_rt2rt_aggregation) {
+ 			tmp_generic_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
+ 			tmp_generic_ie_len =
+ 				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
+@@ -1189,7 +1189,7 @@ rtllib_association_req(struct rtllib_network *beacon,
+ 		ht_cap_len = sizeof(ieee->pHTInfo->SelfHTCap);
+ 		HTConstructCapabilityElement(ieee, ht_cap_buf, &ht_cap_len,
+ 					     encrypt, true);
+-		if (ieee->pHTInfo->bCurrentRT2RTAggregation) {
++		if (ieee->pHTInfo->current_rt2rt_aggregation) {
+ 			realtek_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
+ 			realtek_ie_len =
+ 				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
+@@ -1368,7 +1368,7 @@ rtllib_association_req(struct rtllib_network *beacon,
+ 			tag += ht_cap_len - 2;
+ 		}
+ 
+-		if (ieee->pHTInfo->bCurrentRT2RTAggregation) {
++		if (ieee->pHTInfo->current_rt2rt_aggregation) {
+ 			tag = skb_put(skb, realtek_ie_len);
+ 			*tag++ = MFIE_TYPE_GENERIC;
+ 			*tag++ = realtek_ie_len - 2;
 -- 
 2.37.3
 
