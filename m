@@ -2,82 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D955E8B60
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C193F5E8B6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiIXKNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S232723AbiIXKRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbiIXKNm (ORCPT
+        with ESMTP id S231641AbiIXKRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:13:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB80E12889E;
-        Sat, 24 Sep 2022 03:13:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4ECC1B80DC8;
-        Sat, 24 Sep 2022 10:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72082C433D6;
-        Sat, 24 Sep 2022 10:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664014417;
-        bh=2RR7JCSle62Ctd7cdprNFNuNTmoMwLRSHoPcjFErasY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0Tw9HH0agvwO440m5y/HJwPfr43xzzV/VsRm39t4dsn1npdKjHy/MWDuw98bFO7By
-         GjNvO3dj6iZIKCfpff0NcgYBbtzrc/OrVikuPqjLdFZ1nHLbmg7Gc2kzRXsGwJH9m9
-         O6xsyQEpCNlaEC3jkmNwX42igf+xwaYVyoGMYcLw=
-Date:   Sat, 24 Sep 2022 12:13:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KEXEC" <kexec@lists.infradead.org>,
-        Coiby Xu <coxu@redhat.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH 5.15 0/6] arm64: kexec_file: use more system keyrings to
- verify kernel image signature + dependencies
-Message-ID: <Yy7YTnJKkv1UtvWF@kroah.com>
-References: <cover.1663951201.git.msuchanek@suse.de>
- <Yy7Ll1QJ+u+nkic9@kroah.com>
- <20220924094521.GY28810@kitsune.suse.cz>
+        Sat, 24 Sep 2022 06:17:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B74A1144A;
+        Sat, 24 Sep 2022 03:17:35 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZPwy6MxszlX49;
+        Sat, 24 Sep 2022 18:13:22 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 18:17:33 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 18:17:33 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
+        Weili Qian <qianweili@huawei.com>
+Subject: [PATCH] crypto: hisilicon/qm - fix incorrect parameters usage
+Date:   Sat, 24 Sep 2022 18:14:42 +0800
+Message-ID: <20220924101442.33833-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924094521.GY28810@kitsune.suse.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +50,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 11:45:21AM +0200, Michal Suchánek wrote:
-> On Sat, Sep 24, 2022 at 11:19:19AM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Sep 23, 2022 at 07:10:28PM +0200, Michal Suchanek wrote:
-> > > Hello,
-> > > 
-> > > this is backport of commit 0d519cadf751
-> > > ("arm64: kexec_file: use more system keyrings to verify kernel image signature")
-> > > to table 5.15 tree including the preparatory patches.
-> > 
-> > This feels to me like a new feature for arm64, one that has never worked
-> > before and you are just making it feature-parity with x86, right?
-> > 
-> > Or is this a regression fix somewhere?  Why is this needed in 5.15.y and
-> > why can't people who need this new feature just use a newer kernel
-> > version (5.19?)
-> 
-> It's half-broken implementation of the kexec kernel verification. At the time
-> it was implemented for arm64 we had the platform and secondary keyrings
-> and x86 was using them but on arm64 the initial implementation ignores
-> them.
+In qm_get_xqc_depth(), parameters low_bits and high_bits save
+the values of the corresponding bits. However, the values saved by the
+two parameters are opposite. As a result, the values returned to the
+callers are incorrect.
 
-Ok, so it's something that never worked.  Adding support to get it to
-work doesn't really fall into the stable kernel rules, right?
+Fixes: 129a9f340172 ("crypto: hisilicon/qm - get qp num and depth from hardware registers")
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+---
+ drivers/crypto/hisilicon/qm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Again, what's wrong with 5.19 for anyone who wants this?  Who does want
-this?
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index 8b387de69d22..c7e7fc49ec06 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -909,8 +909,8 @@ static void qm_get_xqc_depth(struct hisi_qm *qm, u16 *low_bits,
+ 	u32 depth;
+ 
+ 	depth = hisi_qm_get_hw_info(qm, qm_basic_info, type, qm->cap_ver);
+-	*high_bits = depth & QM_XQ_DEPTH_MASK;
+-	*low_bits = (depth >> QM_XQ_DEPTH_SHIFT) & QM_XQ_DEPTH_MASK;
++	*low_bits = depth & QM_XQ_DEPTH_MASK;
++	*high_bits = (depth >> QM_XQ_DEPTH_SHIFT) & QM_XQ_DEPTH_MASK;
+ }
+ 
+ static u32 qm_get_irq_num(struct hisi_qm *qm)
+-- 
+2.33.0
 
-thanks,
-
-greg k-h
