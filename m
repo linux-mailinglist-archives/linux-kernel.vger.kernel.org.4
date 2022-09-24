@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E667F5E8E7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26935E8E81
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiIXQdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S233593AbiIXQdZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 24 Sep 2022 12:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiIXQdC (ORCPT
+        with ESMTP id S231324AbiIXQdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:33:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D9E67440;
-        Sat, 24 Sep 2022 09:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C189B80687;
-        Sat, 24 Sep 2022 16:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72F3C433C1;
-        Sat, 24 Sep 2022 16:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664037179;
-        bh=eDvZ24I+VwB0DHpkH5Ck7T+J+ic8MD34cgwf6xb0jRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uQeJTf1RYI/ZbQfhH2m/NC/v1SafpCBdOJK8fW7ydFR8PcZLhGsv8P62B4RY2Duh/
-         mpJiYkCbirm5JDz8zNoU4/Z+YrA5TOTMYIwoJ0LeK3z8PH7Lfbqc3yjlLv6i0FQZ9e
-         5W15s61HmqFG4oRQjRC5uSZIBGn3/fJzXi3Wb/dzBix/m7OvwqFJXUVKo2hKl3re01
-         tAyjPZv8x54fiZ85Ui6LN31IXsvCk0zPo9vhGoDbSvTS7HjxGji/vWSTbe8cMaovLl
-         H/NMC0wEgCyvmQCbx5G7UvUCu8+nFyNgIGMuG3OVLCHHcd8eBxksUxdNIPBFnmsWpW
-         f/TN+1cPkApEQ==
-Date:   Sat, 24 Sep 2022 11:32:54 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
-        syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ovl: Use "buf" flexible array for memcpy() destination
-Message-ID: <Yy8xNjsZ1N/wbV8s@work>
-References: <20220924073315.3593031-1-keescook@chromium.org>
+        Sat, 24 Sep 2022 12:33:23 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C121D6F559
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:33:20 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id x22-20020a6bda16000000b006a123cb02beso1629679iob.18
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:33:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=S6Nhu5PI5Z0XvBDHUm/86UYsvskU1VKEXNdpoZG2ghw=;
+        b=iTWgL4SAnHG0ERv40FihH552jmzFc+1KgRjlEEHrnzA4stiqYLw7qYRsl8YspSSOPK
+         4Ivv5NIDeYJcEByd2ytKg3wDmJZsf9TqqHrW4qtlFn13+OLEQzp/6HktiLr1DeIWFexX
+         tRt7iwdHV6cY+khmPOtCQNEwYzosicJt1gxn0Z0eXUS1asluqiATX5bMx4+OrVBe8bzX
+         f3rcFLOfG3g+gzT+t3+Fif4lC0XlS0hP1g3IKgStUNokO6mZSGIQ2EVLtjKmTYQCQHOq
+         ljSTrNyTUdB1sjd2MxNwsTH5tx+FKTaVccZJcnZEup/TenK0QJeVvF+zJzadJIB/9FDB
+         rtxg==
+X-Gm-Message-State: ACrzQf1WIWs0CG9wNER9GgosRDdDp4UmRHQ9d60nga4XpdPuX12l8StP
+        mq6CB9zCAeLQCObxb/2Xfnc0yt5AyiGMXAAfHU2fmEbH8D/f
+X-Google-Smtp-Source: AMsMyM6G82M3m2Sn/yF/jBIYC2sHRCRHmjZ3Gqt32JHmrzrNpmIrR77lh54ux3fVEhaVTxlwwbEBSl6ylYPFQbN9Ht6DCJMlw2Km
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924073315.3593031-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c26f:0:b0:2f5:738d:ea72 with SMTP id
+ h15-20020a92c26f000000b002f5738dea72mr6654936ild.275.1664037200125; Sat, 24
+ Sep 2022 09:33:20 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 09:33:20 -0700
+In-Reply-To: <20220924161357.33193-1-yin31149@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034e78e05e96eda0d@google.com>
+Subject: Re: [syzbot] WARNING in wireless_send_event
+From:   syzbot <syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com>
+To:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, keescook@chromium.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 12:33:15AM -0700, Kees Cook wrote:
-> The "buf" flexible array needs to be the memcpy() destination to avoid
-> false positive run-time warning from the recent FORTIFY_SOURCE
-> hardening:
-> 
->   memcpy: detected field-spanning write (size 93) of single field "&fh->fb" at fs/overlayfs/export.c:799 (size 21)
-> 
-> Cc: Miklos Szeredi <miklos@szeredi.hu>
-> Cc: linux-unionfs@vger.kernel.org
-> Reported-by: syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/000000000000763a6c05e95a5985@google.com/
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Hello,
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Thanks!
---
-Gustavo
+failed to create VM pool: failed to create GCE image: create image operation failed: &{Code:PERMISSIONS_ERROR ErrorDetails:[] Location: Message:Required 'read' permission for 'disks/ci-upstream-linux-next-kasan-gce-root-test-job-test-job-image.tar.gz' ForceSendFields:[] NullFields:[]}.
 
-> ---
->  fs/overlayfs/export.c    | 2 +-
->  fs/overlayfs/overlayfs.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
-> index e065a5b9a442..ac9c3ad04016 100644
-> --- a/fs/overlayfs/export.c
-> +++ b/fs/overlayfs/export.c
-> @@ -796,7 +796,7 @@ static struct ovl_fh *ovl_fid_to_fh(struct fid *fid, int buflen, int fh_type)
->  		return ERR_PTR(-ENOMEM);
->  
->  	/* Copy unaligned inner fh into aligned buffer */
-> -	memcpy(&fh->fb, fid, buflen - OVL_FH_WIRE_OFFSET);
-> +	memcpy(fh->buf, fid, buflen - OVL_FH_WIRE_OFFSET);
->  	return fh;
->  }
->  
-> diff --git a/fs/overlayfs/overlayfs.h b/fs/overlayfs/overlayfs.h
-> index 87759165d32b..a0e450313ea4 100644
-> --- a/fs/overlayfs/overlayfs.h
-> +++ b/fs/overlayfs/overlayfs.h
-> @@ -108,7 +108,7 @@ struct ovl_fh {
->  	u8 padding[3];	/* make sure fb.fid is 32bit aligned */
->  	union {
->  		struct ovl_fb fb;
-> -		u8 buf[0];
-> +		DECLARE_FLEX_ARRAY(u8, buf);
->  	};
->  } __packed;
->  
-> -- 
-> 2.34.1
-> 
+syzkaller build log:
+go env (err=<nil>)
+GO111MODULE="auto"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/syzkaller/.cache/go-build"
+GOENV="/syzkaller/.config/go/env"
+GOEXE=""
+GOEXPERIMENT=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOINSECURE=""
+GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
+GONOPROXY=""
+GONOSUMDB=""
+GOOS="linux"
+GOPATH="/syzkaller/jobs/linux/gopath"
+GOPRIVATE=""
+GOPROXY="https://proxy.golang.org,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+GOVCS=""
+GOVERSION="go1.17"
+GCCGO="gccgo"
+AR="ar"
+CC="gcc"
+CXX="g++"
+CGO_ENABLED="1"
+GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build4239397487=/tmp/go-build -gno-record-gcc-switches"
+
+git status (err=<nil>)
+HEAD detached at 380f82fb6
+nothing to commit, working tree clean
+
+
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
+make .descriptions
+bin/syz-sysgen
+touch .descriptions
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=380f82fb6ebefdaa2b4e4f84d34a9019900f0b89 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220921-114622'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
+	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"380f82fb6ebefdaa2b4e4f84d34a9019900f0b89\"
+
+
+
+Tested on:
+
+commit:         aaa11ce2 Add linux-next specific files for 20220923
+git tree:       linux-next
+kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
+dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15585edf080000
+
