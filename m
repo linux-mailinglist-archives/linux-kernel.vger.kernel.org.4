@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44B85E8BB0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5365E8BBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiIXLKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S232783AbiIXLQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiIXLKG (ORCPT
+        with ESMTP id S230446AbiIXLQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:10:06 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93982EF16
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:10:03 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id u69so2493014pgd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=pTdV8j9qoHZXoBn7Z3qVOuNbqVagO5O4zPpZJ11W9tA=;
-        b=aPH4LPkPED8aK4R/Dv7TE3ep6sfceoTpUGvrpUO4/Z188OOqNfMaf3xFltdhgmgZ5k
-         KFxY+wIeNS3zzX9e7K75WwjJRL9J6cgZagmYm2ag2VHTC1vkVGHBXJ5ZxfBvwQlhusSs
-         zNY6IGeRVdB5qKjj+5xqTiCBlijD5OeTeQlP4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=pTdV8j9qoHZXoBn7Z3qVOuNbqVagO5O4zPpZJ11W9tA=;
-        b=aB9qBe6KVNHU71tz1DKIdqbBkuBKdAXVr6q8IsfLe17mYWo9DxFPdfsejdP1Uvspfl
-         Ri97XIxzBCW1hVF+rD/ZoOuDQ3r4Mw5XQs9GHwIQYNqWCVJCOy6/CnsG/0icPAtdsWUy
-         nr1I0LXV1C4JmiQXFS4tIdTcLlo3zBi8dxtdTwLxseF4yBM5EeB3k3L4lb3nv8AHuZBV
-         b0/pcq/QWAPj7nLoCzstBe2CsSDMsQCbIAniwyi0G+HlnaqWnF2lJqjlyX9v9QFxxOR/
-         hxsY9XX3k/91AxjYodF977bpDCptEAWo2tF5bDaxmxwgpemUcalNwFQHcRy62nUzis6D
-         uyyA==
-X-Gm-Message-State: ACrzQf0v8BF16O7nuyu+9SsXcfDZiAXwIIviAoHu7hyFpeL1hvhF1Je7
-        tqR4l7DTrXs9C+2b/Z485cW3Cg==
-X-Google-Smtp-Source: AMsMyM560XfjvCll1ATxl5nJMLEt9zP2sf3UVxRqexoS6YC3n0oAPt/4fn34sEIT5435zON7xNp+yA==
-X-Received: by 2002:a63:243:0:b0:43c:75c:d92a with SMTP id 64-20020a630243000000b0043c075cd92amr11601592pgc.497.1664017803218;
-        Sat, 24 Sep 2022 04:10:03 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:f4de:2419:efa3:8fed])
-        by smtp.gmail.com with ESMTPSA id 14-20020a62160e000000b00540963470d1sm8101490pfw.84.2022.09.24.04.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 04:10:02 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 20:09:58 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 15/18] printk: Add struct cons_text_buf
-Message-ID: <Yy7lhjebrLniJqOR@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-16-john.ogness@linutronix.de>
+        Sat, 24 Sep 2022 07:16:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D5EF6F41;
+        Sat, 24 Sep 2022 04:16:08 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28OBFphv001358;
+        Sat, 24 Sep 2022 11:15:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ys8zOk2h9kpRR719RCT9t13HbSNgmyp1IeIvR+aHRBk=;
+ b=WdmxaJ/XJRlPZH5OBI3o/dRkrhio1Gbkp6a0KQnGjmvoEawA21ho4d/QxbzcvrOmmFg+
+ Uem+H696NSZDFEnMVQaSaxMFno3X997oUpwuDdQZCNN7xsp2JDPFxxD32UlxjidNo1Kg
+ XnFhmsPQ+tmyE1dGNuXatafvI4hnwsEt2+kdEbYBxa5lXOqbQNvHT2m2yJEy/Ro8YNBc
+ dDjVKz9+qrbSmeTEgjGKDqvPNnA4rmFMOYWSWBCFKVo7pfk50LSTaEVTY55xvpQewUkk
+ TZdsnYzBG2yG/2k0qoFjcHUsMwyKB1DX3SXs6lE7LCWduprt6iJgesvQkwzU3vcGGyXl 2A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jst018h4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 11:15:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28OBFoKu010815
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 11:15:50 GMT
+Received: from [10.110.112.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sat, 24 Sep
+ 2022 04:15:44 -0700
+Message-ID: <2f1a6f8f-009e-79ab-5f37-8549f50bbeb4@quicinc.com>
+Date:   Sat, 24 Sep 2022 16:45:26 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-16-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V13 1/7] dt-bindings: Added the yaml bindings for DCC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1663642051.git.quic_schowdhu@quicinc.com>
+ <c6b55a5b44a8add13ea9015542522b2562cf8f60.1663642052.git.quic_schowdhu@quicinc.com>
+ <f09fabec-f5a3-df21-f776-956732d60359@kernel.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <f09fabec-f5a3-df21-f776-956732d60359@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OQAQ1nD51ltXtl5cnpYI-RlJL73X2jLw
+X-Proofpoint-ORIG-GUID: OQAQ1nD51ltXtl5cnpYI-RlJL73X2jLw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-24_04,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=740 clxscore=1011 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209240084
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,13 +87,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/24 02:10), John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Create a data structure to replace the open coded separate buffers for
-> regular and extended formatting.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+On 9/24/2022 12:57 AM, Krzysztof Kozlowski wrote:
+> On 20/09/2022 05:56, Souradeep Chowdhury wrote:
+>> Documentation for Data Capture and Compare(DCC) device tree bindings
+>> in yaml format.
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/arm/msm/qcom,dcc.yaml      | 44 ++++++++++++++++++++++
+>>   1 file changed, 44 insertions(+)
+> Rebase your tree on some current Linux kernel (and use
+> scripts/get_maintainers.pl).
+Ack
+>
+> Best regards,
+> Krzysztof
+>
