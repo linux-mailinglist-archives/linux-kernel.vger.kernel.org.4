@@ -2,78 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD605E8A21
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8065E8A23
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbiIXIWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 04:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S233345AbiIXIXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 04:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiIXIW2 (ORCPT
+        with ESMTP id S232228AbiIXIXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 04:22:28 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227FEA6
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:21:22 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id q17so2308370lji.11
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=nTxsfs2zXjNjdXC7XVmLXrkQUhLVp82wU25VhknIpH4=;
-        b=ynNb8KlX2ritczYckVbPo4eOPezJri68TZc/oUPtq/rwBes51UjQhgsQ8reD0tvAqN
-         YBrPW/KWDfLkRdb7RKjKPN2aOnkWBwSeykUfe4jWkryU360jbsafuglDEjgm7QD7S4Uv
-         2Fl/Isu2VnpH/ZfUkTYhqK0dF7BDUzXNtH+GbBKwDandbMolSiy7kIlOP/pk4os4U2j6
-         GUry62CYGAFmJ+wctaXWcc4ENrV26MdDUPovPICZ7rO81yjlOKELqQ2+kGze25HhwwGn
-         pUyS6IYLUuMRs1YCWk6qwhXK+zyK6NGzZ0qXwYo5Xo+Soqdo2akkVbvqp4Uyqz0hTGYt
-         FuCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=nTxsfs2zXjNjdXC7XVmLXrkQUhLVp82wU25VhknIpH4=;
-        b=XbbBPwqqfHItSeZ7WiqY+m2yQirlGjv8w9HDJrBscQ2WOlI8cS4nFFE11ar59BQMfh
-         tbzAMmqkJgSIHq1tf+kbfymzXc4lfzj0t38al+rEHZmiD08OIMG91itdsRb5FmhvyjwD
-         607MRUpmocDCtkL4JsddZdKDnLnGuSxy3HHil0nOmgymAWfwWGTVHTp2Ppplewq5apYv
-         /9NLLrNHtvWFOXRndMg5A4IGf2dyft8Q5TV1B72p/Ua6GJBkVuWjSdJnRTyCxrSkc2Hq
-         GsNBCMGJs4t0pn2HyM6xm7MYI28vFeBznU66IdK58eMfe/JRod4XitIwMfJLjtRZVio3
-         XtiQ==
-X-Gm-Message-State: ACrzQf2rf5UFTlmH74AjY255bL9K4MEC3GER/SayG76gHEWFeAVsnV/a
-        wkj67qTcQdnsS9WaJeCg9YYmyQ==
-X-Google-Smtp-Source: AMsMyM78g/pGqRaUod7u8K2nn2DBlqXMJ91Nw15TnPerkAemk9J8gGtMYf5UQu/I/jU++W+/Gsz0DQ==
-X-Received: by 2002:a05:651c:a04:b0:26c:50df:75ad with SMTP id k4-20020a05651c0a0400b0026c50df75admr4100970ljq.416.1664007680598;
-        Sat, 24 Sep 2022 01:21:20 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e3-20020a05651236c300b004976809d6a7sm1810430lfs.283.2022.09.24.01.21.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 01:21:20 -0700 (PDT)
-Message-ID: <dc0ef30b-0c99-7086-7b49-755f51fe9668@linaro.org>
-Date:   Sat, 24 Sep 2022 10:21:19 +0200
+        Sat, 24 Sep 2022 04:23:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C325DE;
+        Sat, 24 Sep 2022 01:23:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5123FB80ECF;
+        Sat, 24 Sep 2022 08:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BE4C433C1;
+        Sat, 24 Sep 2022 08:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664007824;
+        bh=MJucUiBD2uBtXMibzIy7JKisKwfId+DiTuUh8qZjI2E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Lb7TDI122JO7DngyDuWU3FBPJ2q8itUYHEXjundcOdurEiGRpExcGwGHz/1WnAEwU
+         r/zjYXQsYzFlDYN3buwjT9OajQWLElY2bLgOXXcb/J0+G+sFFCbqQN8h9HWrIrRGRR
+         5UhTx5iqieOdQmMjdGvZJw5GRUbVbITnhXUWeTrw=
+Date:   Sat, 24 Sep 2022 10:23:42 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fixes for 6.0-rc7
+Message-ID: <Yy6+jsGstABsKP1X@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] bindings: Update maintainer's email address
-Content-Language: en-US
-To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1663979817-1078-1-git-send-email-quic_gurus@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1663979817-1078-1-git-send-email-quic_gurus@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +51,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/09/2022 02:36, Guru Das Srinagesh wrote:
-> Update Guru Das Srinagesh's email address.
-> 
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 2 +-
->  Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml         | 2 +-
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-Here it should be "dt-bindings". Also describe who's address you are
-updating:
-dt-bindings: Update Guru Das Srinagesh's email address
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-With the subject fixed:
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.0-rc7
 
+for you to fetch changes up to 643792048ee84b199052e9c8f89253649ca78922:
+
+  serial: sifive: enable clocks for UART when probed (2022-09-22 16:38:18 +0200)
+
+----------------------------------------------------------------
+TTY/Serial driver fixes for 6.0-rc7
+
+Here are some small, and late, serial driver fixes for 6.0-rc7 to
+resolve some reported problems.
+
+Included in here are:
+	- tegra icount accounting fixes, including a framework function
+	  that other drivers will be converted over to using in 6.1-rc1.
+	- fsl_lpuart reset bugfix
+	- 8250 omap 485 bugfix
+	- sifive serial clock bugfix
+
+The last 3 patches have not shown up in linux-next due to them being
+added to my tree only 2 days ago, but they are tiny and self-contained
+and the developers say they resolve issues that they have with 6.0-rc.
+The other 3 have been in linux-next for a while with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Ilpo Järvinen (3):
+      serial: Create uart_xmit_advance()
+      serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+      serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
+
+Lukas Wunner (1):
+      serial: fsl_lpuart: Reset prior to registration
+
+Matthias Schiffer (1):
+      serial: 8250: omap: Use serial8250_em485_supported
+
+Olof Johansson (1):
+      serial: sifive: enable clocks for UART when probed
+
+ drivers/tty/serial/8250/8250_omap.c |  1 +
+ drivers/tty/serial/fsl_lpuart.c     |  9 +++++----
+ drivers/tty/serial/serial-tegra.c   |  5 ++---
+ drivers/tty/serial/sifive.c         |  2 +-
+ drivers/tty/serial/tegra-tcu.c      |  2 +-
+ include/linux/serial_core.h         | 17 +++++++++++++++++
+ 6 files changed, 27 insertions(+), 9 deletions(-)
