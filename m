@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09FC5E88CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EB85E88D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbiIXGoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 02:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S233252AbiIXGqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 02:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbiIXGoM (ORCPT
+        with ESMTP id S229573AbiIXGqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 02:44:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1504811D0D1;
-        Fri, 23 Sep 2022 23:44:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EDA4DCE0A1D;
-        Sat, 24 Sep 2022 06:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B217FC433D6;
-        Sat, 24 Sep 2022 06:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664001847;
-        bh=XU+g1TD85eu+F7lKIDh9lt03VNI1wjjOGHmpCB5PpDQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DuBuothuIcm+Rf/8d4hwbhg/hA+Gss6N8vAry1R91LV411DY530k21Lse+D8jK9GG
-         RpObjQM3WoK71AFU96BN6LRe54sLdG/uz1FMIPcnkAD74N/BuW+r/s/f/dz+lbhX0r
-         cXIqKeTiJ/jKqhCUt4kEWx27bLxhdSydHSx5SXog=
-Date:   Sat, 24 Sep 2022 08:44:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Sven Schnelle <svens@stackframe.org>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-parisc@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH printk 00/18] preparation for threaded/atomic printing
-Message-ID: <Yy6nVpd3+yogT5pJ@kroah.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+        Sat, 24 Sep 2022 02:46:49 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30B25FE9;
+        Fri, 23 Sep 2022 23:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664002008; x=1695538008;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9xhmRG95Oai0Gh6KQQh9QF7sHwJ15jrKdlIwr7wHUek=;
+  b=nu6Qpp3WxFDXHq199aS7hdslYPd09GcSRdptyZumqiAPXqkehsh10PaL
+   NykJ3GBu316DyXtXumEIQBXLFiAB3R8QIyWZ99HCIilpwoXFxhppmfXaW
+   ARbMH4POT+qBO3VlanLYPCjUmtB6UwTYza3eXlyCma3r2dDR+cDoMWeSI
+   CPNEcI2b2wZxqruZvEEr2eqLKYHN2TlNXufUFGtOrglcOpkhG7W9f2EhW
+   Ompon42Mj/940jsNIjYAwAzeJtyeeqsgLjM44KzFIFUy+Kat1Ru78o7ev
+   ZXoGn2VnLM34xf7QYJzotGQ5Ql1IDXMRqXFI3aJaagaF/2qiKTaUbTO8U
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="302206542"
+X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
+   d="scan'208";a="302206542"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 23:46:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
+   d="scan'208";a="622767116"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Sep 2022 23:46:45 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id A9FE9F7; Sat, 24 Sep 2022 09:47:03 +0300 (EEST)
+Date:   Sat, 24 Sep 2022 09:47:03 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>, stable@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] thunderbolt: Explicitly enable lane adapter hotplug
+ events at startup
+Message-ID: <Yy6n56H09ct76GTJ@black.fi.intel.com>
+References: <20220923183944.10746-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220923183944.10746-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 02:10:36AM +0206, John Ogness wrote:
-> Hi,
-> 
-> This series is essentially the first 18 patches of tglx's RFC series
-> [0] with only minor changes in comments and commit messages. It's
-> purpose is to lay the groundwork for the upcoming threaded/atomic
-> console printing posted as the RFC series and demonstrated at
-> LPC2022 [1].
-> 
-> This series is interesting for mainline because it cleans up various
-> code and documentation quirks discovered while working on the new
-> console printing implementation.
-> 
-> Aside from cleanups, the main features introduced here are:
-> 
-> - Converts the console's DIY linked list implementation to hlist.
-> 
-> - Introduces a console list lock (mutex) so that readers (such as
->   /proc/consoles) can safely iterate the consoles without blocking
->   console printing.
-> 
-> - Adds SRCU support to the console list to prepare for safe console
->   list iterating from any context.
-> 
-> - Refactors buffer handling to prepare for per-console, per-cpu,
->   per-context atomic printing.
-> 
-> The series has the following parts:
-> 
->    Patches  1 - 5:   Cleanups
-> 
->    Patches  6 - 12:  Locking and list conversion
-> 
->    Patches 13 - 18:  Improved output buffer handling to prepare for
->                      code sharing
-> 
+Hi Mario,
 
-These all look great to me, thanks for resending them.
+On Fri, Sep 23, 2022 at 01:39:44PM -0500, Mario Limonciello wrote:
+> Software that has run before the USB4 CM in Linux runs may have disabled
+> hotplug events for a given lane adapter.
+> 
+> Other CMs such as that one distributed with Windows 11 will enable hotplug
+> events. Do the same thing in the Linux CM which fixes hotplug events on
+> "AMD Pink Sardine".
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v2->v3:
+>  * Guard with tb_switch_is_icm to avoid risk to Intel FW CM case
+> v1->v2:
+>  * s/usb4_enable_hotplug/usb4_port_hotplug_enable/
+>  * Clarify intended users in documentation comment
+>  * Only call for lane adapters
+>  * Add stable tag
+> 
+> Note: v2 it was suggested to move this to tb_switch_configure, but
+> port->config is not yet read at that time.  This should be the right
+> time to call it, so this version of the patch just guards against the
+> code running on Intel's controllers that have a FW CM.
 
-Do you want them to go through my serial/tty tree, or is there some
-other tree to take them through (printk?)
+Can we put it in a separate function that is called from
+tb_switch_add()? I explained in the previous reply (to v2) that the
+tb_init_port() is pretty much just reading stuff and therefore I would
+not like to add there anything that does writing.
 
-If they are to go through someone else's tree, feel free to add:
+While at it, the USB4 v2 spec (not yet public but can be found from the
+working group site) adds a CM requirement that forbids writing lane 1
+adapter configuration registers so in addition to that please check
+port->cap_usb4 there so we know we deal with the lane 0 adapter only (as
+->cap_usb4 is only set for the lane 0 adapters).
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+So something like this:
+
+static void tb_switch_port_hotplug_enable(struct tb_switch *sw)
+{
+	if (tb_switch_is_icm(sw))
+		return;
+
+	tb_switch_for_each_port(sw, port) {
+		if (!port->cap_usb4)
+			continue;
+
+		// here enable the hotplug
+	}
+}
+
+int tb_switch_add(struct tb_switch *sw)
+{
+	... // init ports and stuff happens here
+
+	tb_switch_default_link_ports(sw);
+	tb_switch_port_hotplug_enable(sw);
+}
+
+(we should probably create a new macro tb_switch_for_each_usb4_port()
+that just enumerates all USB4 ports).
