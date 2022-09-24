@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1B05E86EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFCA5E86F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbiIXBHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 21:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S232829AbiIXBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 21:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiIXBH2 (ORCPT
+        with ESMTP id S230514AbiIXBLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 21:07:28 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1544132D4C;
-        Fri, 23 Sep 2022 18:07:26 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v2so1379231edc.7;
-        Fri, 23 Sep 2022 18:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xcDTvjZ0q27K7CTovDd27RZ5rVcQpUYfL5Oluu9qcWk=;
-        b=ZHMM35zmDsoNcviYlaumSdDZ66s1ggrM42M2jAbkiXjURn+xZMQP0xB7lqAsAz/UMC
-         iI0gEsnrYBsg/gTWf0sD9HBDcinPcCP34tUdJ09Lpd3EOnBUOliCsuruM7NBkfwwiYcd
-         uRQblFg9bQgFczhbTw9NMHE8SxbLV1gndAclmItIJJ4lX03CXK+WrDLtR0OF/W3hpMCA
-         P7Cs5Yld5yNwyfuf/UMyb5kE7ftBcvmFG3L2N7qoubjDsmGWAMbu09GoC0R4k8gwdQ2W
-         qc6ahMhI9sBoGcp6sy1yhG530TCVJMUvtgslkiiBG3cDCPJwjLNVOlyzKK3AY4wfsJBI
-         xqNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xcDTvjZ0q27K7CTovDd27RZ5rVcQpUYfL5Oluu9qcWk=;
-        b=pksj/x+mxOXwZ0SvbAE0YpOr8MXW4uBv2kwi32dAUKrIK9vZvMrhJWm2cp2IEaVUb5
-         CrjHfcJED9Y/WdkNJAWoevquSKVfT+ZMo46P7PtZ2TSz/H6nL1MPYfKq3QRszMv/w9MB
-         pssJ3BFZySJr7YRDeoV/rJM3GdKUeovBEMedXi3Ul+oRbR5tT20tWPItNr/VyE9Mzv9l
-         ne6RoTiVpY5JMvv8KiRxwvFEsSTc+dysHv5cCBzhhsrpwTIkmZ6RilRtpaMW8T5cNzJv
-         rWV9kfdrjrDiY42IoqgsPDo7ktn5TJKJnqHu8npzMAkvulrY8hypn16OTRbiXL7VsAg6
-         Xd5A==
-X-Gm-Message-State: ACrzQf0Kdkj3h+WE4L+8kTwcVr7/l7ff1R4rl1o5CNvTq7wE/WdUCH0Q
-        wMirhY1I3xNONJ7SFxa5Sl+ENO9rwKKtvU2VkP8=
-X-Google-Smtp-Source: AMsMyM6r+ddKU2IOMFiBvjgbAnyXFSkValEp0ui7PmPGKCBOeQQTfkBzFc5wo3uv6Vp5IHtFSvY3Bn82moqC3MdYIkk=
-X-Received: by 2002:a05:6402:27ca:b0:451:7b58:1b01 with SMTP id
- c10-20020a05640227ca00b004517b581b01mr11476263ede.61.1663981644987; Fri, 23
- Sep 2022 18:07:24 -0700 (PDT)
+        Fri, 23 Sep 2022 21:11:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BBA121115;
+        Fri, 23 Sep 2022 18:11:38 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZ9q22WDNzlXYM;
+        Sat, 24 Sep 2022 09:07:26 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 09:11:36 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 09:11:36 +0800
+Subject: Re: [PATCH v5 08/10] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
+ <20220923112033.1958-9-thunder.leizhen@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4ef46874-4dbc-2663-ebad-7adbbbfa3b18@huawei.com>
+Date:   Sat, 24 Sep 2022 09:11:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com> <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
- <ec9cc2c9-733c-4e72-b61f-d2ab3bf7a99b@app.fastmail.com> <Yy4Bw+jqDxshX4Dg@smile.fi.intel.com>
-In-Reply-To: <Yy4Bw+jqDxshX4Dg@smile.fi.intel.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Fri, 23 Sep 2022 18:07:13 -0700
-Message-ID: <CAHQ1cqHO+EWJP0TV2EQzrcqq=20dqagC-ThrTYQurKrWuZYnvQ@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ferry Toth <fntoth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220923112033.1958-9-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,95 +68,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:58 AM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> +Stephen to help to realize what the mess we have now...
->
-> On Fri, Sep 23, 2022 at 08:35:13PM +0200, Sven Peter wrote:
-> > On Fri, Sep 23, 2022, at 20:23, Andrey Smirnov wrote:
-> > > On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > >>
-> > >> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
-> > >> > On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
-> > >> > > On 22-09-2022 12:08, Andy Shevchenko wrote:
-> > >> > > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
-> > >>
-> > >> FYI: For now I sent a revert, but if we got a solution quicker we always
-> > >> can choose the course of actions.
-> > >>
-> > >
-> > > I think we have another problem. This patch happened in parallel to mine
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
-> > >
-> > > so my changes didn't have that fix in mind and I think your revert
-> > > will not preserve that fix. Can you update your revert to take care of
-> > > that too, please?
-> > >
-> > > I'm really confused how the above commit could be followed up by:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
-> > >
-> > > the diffs in dwc3_drd_init seem contradictory
-> >
-> > I noticed this a while ago when I finally rebased the M1 USB3 PHY WIP branch
-> > and have been meaning to send a fix. Then life unfortunately got in the way and
-> > I completely forgot about it again.
-> >
-> > Both patches were sent at approximately the same time and I think got merged into
-> > two separate branches. The conflict resolution [1] then went bad but I didn't notice
-> > until weeks later :(
->
-> Folks, I have no idea what you are talking about. Can you check that revert
-> series [2] gets your change still in? Because I have no clue how it's involved at
-> all into discussion.
->
-> > [1] https://lore.kernel.org/lkml/20220426150842.473be40e@canb.auug.org.au/
->
-> [2]: https://lore.kernel.org/linux-usb/20220923163051.36288-1-andriy.shevchenko@linux.intel.com/
->
-
-Here's Sven's diff:
-
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index b60b5f7b6dff4..8cad9e7d33687 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -584,16 +584,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
-{
-int ret, irq;
-+ if (ROLE_SWITCH &&
-+ device_property_read_bool(dwc->dev, "usb-role-switch"))
-+ return dwc3_setup_role_switch(dwc);
-+
-dwc->edev = dwc3_get_extcon(dwc);
-if (IS_ERR(dwc->edev))
-return PTR_ERR(dwc->edev);
-- if (ROLE_SWITCH &&
-- device_property_read_bool(dwc->dev, "usb-role-switch")) {
-- ret = dwc3_setup_role_switch(dwc);
-- if (ret < 0)
-- return ret;
-- } else if (dwc->edev) {
-+ if (dwc->edev) {
 
 
-Here's your revert of my patch:
+On 2022/9/23 19:20, Zhen Lei wrote:
+> Currently we traverse all symbols of all modules to find the specified
+> function for the specified module. But in reality, we just need to find
+> the given module and then traverse all the symbols in it.
+> 
+> In order to achieve this purpose, split the call to hook 'fn' into two
+> phases:
+> 1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
+>    the comparison result of the module name without comparing the function
+>    name.
+> 2. Finds the given function in that module. Pass pointer 'mod = NULL'.
+>    Hook 'fn' skip the comparison of module name and directly compare
+>    function names.
 
-@@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
-        int ret, irq;
+Sorry, I forgot to change the description. I will fix it in v6, after I've
+collected review comments.
 
-+       dwc->edev = dwc3_get_extcon(dwc);
-+       if (IS_ERR(dwc->edev))
-+               return PTR_ERR(dwc->edev);
-+
-        if (ROLE_SWITCH &&
-            device_property_read_bool(dwc->dev, "usb-role-switch"))
-                return dwc3_setup_role_switch(dwc);
+> 
+> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+>                 |
+> Phase2:          -->f1-->f2-->f3
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  include/linux/module.h   |  4 ++--
+>  kernel/livepatch/core.c  | 13 ++-----------
+>  kernel/module/kallsyms.c | 15 ++++++++++++---
+>  3 files changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 518296ea7f73af6..6e1a531d78e7e8b 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
+>  }
+>  #endif	/* CONFIG_MODULE_SIG */
+>  
+> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> -					     struct module *, unsigned long),
+> +int module_kallsyms_on_each_symbol(const char *modname,
+> +				   int (*fn)(void *, const char *, unsigned long),
+>  				   void *data);
+>  
+>  #endif /* _LINUX_MODULE_H */
+> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> index 31b57ccf908017e..b02de4cb311c703 100644
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
+> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+>  }
+>  
+>  struct klp_find_arg {
+> -	const char *objname;
+>  	const char *name;
+>  	unsigned long addr;
+>  	unsigned long count;
+>  	unsigned long pos;
+>  };
+>  
+> -static int klp_find_callback(void *data, const char *name,
+> -			     struct module *mod, unsigned long addr)
+> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
+>  {
+>  	struct klp_find_arg *args = data;
+>  
+> -	if ((mod && !args->objname) || (!mod && args->objname))
+> -		return 0;
+> -
+>  	if (strcmp(args->name, name))
+>  		return 0;
+>  
+> -	if (args->objname && strcmp(args->objname, mod->name))
+> -		return 0;
+> -
+>  	args->addr = addr;
+>  	args->count++;
+>  
+> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+>  				  unsigned long sympos, unsigned long *addr)
+>  {
+>  	struct klp_find_arg args = {
+> -		.objname = objname,
+>  		.name = name,
+>  		.addr = 0,
+>  		.count = 0,
+> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+>  	};
+>  
+>  	if (objname)
+> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
+> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
+>  	else
+>  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
+>  
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index f5c5c9175333df7..329cef573675d49 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
+>  }
+>  
+>  #ifdef CONFIG_LIVEPATCH
+> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> -					     struct module *, unsigned long),
+> +int module_kallsyms_on_each_symbol(const char *modname,
+> +				   int (*fn)(void *, const char *, unsigned long),
+>  				   void *data)
+>  {
+>  	struct module *mod;
+> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+>  		if (mod->state == MODULE_STATE_UNFORMED)
+>  			continue;
+>  
+> +		if (strcmp(modname, mod->name))
+> +			continue;
+> +
+>  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
+>  		preempt_disable();
+>  		kallsyms = rcu_dereference_sched(mod->kallsyms);
+> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+>  				continue;
+>  
+>  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+> -				 mod, kallsyms_symbol_value(sym));
+> +				 kallsyms_symbol_value(sym));
+>  			if (ret != 0)
+>  				goto out;
+>  		}
+> +
+> +		/*
+> +		 * The given module is found, the subsequent modules do not
+> +		 * need to be compared.
+> +		 */
+> +		break;
+>  	}
+>  out:
+>  	mutex_unlock(&module_mutex);
+> 
 
-
-There's an order of operations difference. Dwc3_get_extcon() Needs to
-be happening after if (ROLE_SWITCH
+-- 
+Regards,
+  Zhen Lei
