@@ -2,151 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7B15E89FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460EC5E8A0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbiIXIRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 04:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S233483AbiIXISN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 04:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiIXIQo (ORCPT
+        with ESMTP id S233781AbiIXIRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 04:16:44 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C772228E;
-        Sat, 24 Sep 2022 01:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664007223; x=1695543223;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0TYT4iG3jwAB+2GOx4ja8ud7WJIn9Z3aGXgPced/wYo=;
-  b=UkHmP4t0Ejq6feX8v0eLxUQey3kneNrIBYoslZWJAVRinq8i6M+5NOo2
-   hTnlNl84cdgtaKV+9LknD6E84Dq3lpe4B1SRnM2blwK0RzQJOXRpeoV0j
-   yB247d5iTK4hPPWmA8hSFi9TEjKERvqZHHVLvHsh8BIwitSLKSxvQS+lf
-   4HdgC5HT3Ht+j8WgX90/r2sZ17Q4c48J90KAoG6/Mwf4P91wDB/z314ut
-   oD/VT2qWNywTZqqtqzghGDmUI/+NGWBpDMij+IdCUXE9URRSoqabh1C/9
-   qfgypX8oZOkFKAB6Vr9kXyg1i28sbTkr7t4LhUNcsIXAZMzy5nHEeKq3J
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,341,1654531200"; 
-   d="scan'208";a="316450015"
-Received: from mail-dm3nam02lp2048.outbound.protection.outlook.com (HELO NAM02-DM3-obe.outbound.protection.outlook.com) ([104.47.56.48])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Sep 2022 16:13:41 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fTgo0YDr1jQFS6kgJQd8+ROYqWVK05igLjsDfqJk35Nx5m8csiNzB2shJlDN2cR/BPV4M6miTqzhjEvod8VhkyTWDsO3Ig3MI1b0XRTEfw30woVwlC/UiBGHhqQkYkK3ojm0ZLvWWdVSzzIoYezQ+vpJGBdPoQhgpm+ApvV39CqprE/6t4d7FtfssebOO4/bex0cKOtWEOSnCSYjbWNLWD33mPTeCdF6W50Zx5lSl/6aqX6Ps8yb8JYcNfg9n7msxt3f7Nog9YV/0mTna9TtHsKxu1Q9TnjkBQfSxfMSHy48tlgJalvBqnehOueZNp1EJq02pZfnF9iDa07iRooxSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h7hzBAhSODIqunQmH8ba6TYPUPYbU0358rZBJowqHks=;
- b=UKwkkolIxE99x65ZZDm3ckCQuryP0UOpcxdGEzGhYz8SM5Jj2C6c5CgzozA24VxE1ud0133vTPSTG/5aC1ZrvyT1tBAvTc+x/FJLnxlGgem/BpgM53IW2T46mDJe3KbptLb6XzKTLZwAxvpC+tzVhdtkLA4oQFFKSMJ5I1VGx/cNENiWMcbKO4osxNQmXKWCQrkfyM/LAKZkU31Oeq2cLSVHxzpHK8DgqjBA5ilA4JVvhOTaVK7KOq7MChB1j8TkyC3KnydHv4QDdWoLuNq/XBuU50CddIcrYXYE1yZrJhY6wq1dzPFLt8uNnk5sEAq34xi3nir2EvVP7wJYPDQhuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Sat, 24 Sep 2022 04:17:44 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E014C88B1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:15:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s10so2332394ljp.5
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h7hzBAhSODIqunQmH8ba6TYPUPYbU0358rZBJowqHks=;
- b=S38TV3qSYrpiQ40WWa7yjVhLlUKq+UCjd3m7FPgkTbAWgEAZTDrJBTi78Z+5aoYGJUVo5e3Zp4mv+g8Aim288M772iIm5dvVdWCwKo/7JEHyRWzZm5prH7wvmL0ormcgAMVT1OZpYPopALqb1RtT9KlkKhSMg2irZlRXcSOux0w=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- CO1PR04MB8284.namprd04.prod.outlook.com (2603:10b6:303:153::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.22; Sat, 24 Sep 2022 08:13:38 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::f4cb:405c:636:e0ee]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::f4cb:405c:636:e0ee%4]) with mapi id 15.20.5654.022; Sat, 24 Sep 2022
- 08:13:38 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "quic_nitirawa@quicinc.com" <quic_nitirawa@quicinc.com>,
-        "quic_rampraka@quicinc.com" <quic_rampraka@quicinc.com>,
-        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: RE: [PATCH v1 02/16] ufs: core: Introduce Multi-circular queue
- capability
-Thread-Topic: [PATCH v1 02/16] ufs: core: Introduce Multi-circular queue
- capability
-Thread-Index: AQHYzujOjRzRZsX1YUi97UOeZb9uua3uO/+g
-Date:   Sat, 24 Sep 2022 08:13:38 +0000
-Message-ID: <DM6PR04MB6575F55C0A33C049E22C72B6FC509@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
- <fa3d70c1642c64ce75461f630eabe84b3b974d4e.1663894792.git.quic_asutoshd@quicinc.com>
-In-Reply-To: <fa3d70c1642c64ce75461f630eabe84b3b974d4e.1663894792.git.quic_asutoshd@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR04MB6575:EE_|CO1PR04MB8284:EE_
-x-ms-office365-filtering-correlation-id: c61f4ecf-f9a2-48df-603e-08da9e04af27
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l+ZM0TqwXExv5dc9v+0mmNG6ydj7VSCatU9rMNajBStluM1oaCoab1wuUGo4l2GdadQ89EuaDtgHbQAbhJFeEI1D3aG2fncVA009FuiPJOgztg3zRgvwyuL2jolZWfNgUxRiJNsL78gFIJeIEp+gTLeKTckeiSTsdoRe9dLamzVctyd9ePyc10YptuppCv2u72wzICOrm+RP2P9pdQhqAKdvta9kV1pjl5vtyc7vkJ+N21lJzqlGNKT1oKGyLsPNoU9sUJjxV0G0n8YfEbzOQgt9MuyDQwAK6+uiMA4SLFaVHnBSHPhZPUemuO+yrs3bQM8mdPGDmTe3uWjbuBtTiL6ICBQwrdNhFSyOo1jlmlpLDZPcqYkz8wYX3R0kDw55cmCs13zo3GxIKH1TqXfakwQRjuiCcybBRfPRjPTNkfxD2pBUaKP18VA599c0QSFoQfRlGF1UXRrkQftVnLyzxa92vOibN7Z4Y8fdwSjl5THWyaNaJPpT6ckMbpCkikjxXXOVIUGLi8quIzkPStJdr82gaynToZkJK7JKJRRAuHI6ExHmoy92+7IF2KqIOrYPwj7AylW+6ft6dWulocShljaiSCpeN5gsPeH5C05qJsDEu91bf3uX+bfQhKUV1pmdl3Edye4quq8iVmJTNx04AZ0COsQlIl6bRszYa+44mq8Wx0ztff1xZmfE78KP5HHc+EyfD4rKzC7BQUUx6uyktql1Xf8xQXhXC5022uQX+akG8YwiLs6noeklDoBO+S5+G5exyz8FZ6JhM1D1OCjP3c910i8GRBQI7II7hKeY0WE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(451199015)(41300700001)(82960400001)(4744005)(9686003)(316002)(122000001)(66556008)(66476007)(66446008)(64756008)(66946007)(76116006)(26005)(7416002)(2906002)(921005)(33656002)(38070700005)(38100700002)(5660300002)(86362001)(55016003)(52536014)(8936002)(186003)(8676002)(4326008)(71200400001)(478600001)(110136005)(54906003)(7696005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oH08onJLXsrpa6cf5EEmi2J7T7ZfUWgIzEfcoMsmFnmqxsirviz0HQAUZkqe?=
- =?us-ascii?Q?qwKGA1fqJUW39yBI/ma4VlpYmJkBfQAWtewytWbXez4Mwa3rcnjrLolTy2RD?=
- =?us-ascii?Q?kHSv9utwz6xnWVUsVK+EVWrj1+Mz9BhTn8uNgU982rKql/PPzxECZGGRf1wm?=
- =?us-ascii?Q?DfEeNQPRi2Uposg4NKnX3A5tI33wi4SsEXLuQeRq/9NxdxzsRktzzw9uXU+l?=
- =?us-ascii?Q?2ZpLSdDedR+807E60QcJjYkp1epiPGT3hbQLpcowMzxOe06myEkxgILK/Tgs?=
- =?us-ascii?Q?JZvMRYIugNsdspwAQexSQCe42itbt+FR/rhpJ+QnJCzdd0S1hKEvsT2Ky188?=
- =?us-ascii?Q?bwKhBQyD+GWvrUJnvBGXWz+eHZH08KPy1Lv1DQa9lWqbsQC6Kt1+obwSJVFR?=
- =?us-ascii?Q?586L2rl1MXiwPFotnQmagMmwRHW3WDj7TcolsHMN+MT/KRGv6m/Im06bD7tD?=
- =?us-ascii?Q?vVna2lBhCFqgGT+zxG5DbgTkFvgoFSTYFlVZjdRfCpZrUxMyLKSI31CrwyIe?=
- =?us-ascii?Q?OCvf7hxrXL1y8mn9V7UCEfntc/GlCPoNCiu+oX6QW6om9AUFnESRzmPbL2H0?=
- =?us-ascii?Q?t6JNGkJygjK/6sULC/xof9vjnyNdt/rNrcVVKdDtB37Cnb0WxKKavxfxWsnT?=
- =?us-ascii?Q?g61LAsmUQ34LyNWhatQWIfdsii1BePVD+awbX+CFDxFPOMKh6u0iFs10pxSW?=
- =?us-ascii?Q?RjjvG7bHtPbp4OrzU1To7XawGbTvleNsSgw37Is2M2zHP0Mrf5c7/6vd90sr?=
- =?us-ascii?Q?LG5kfAmrx+DIS6cjtpCqnT1YfJXRlx377Zvbd3Q1ZoFNsfnI4im37Q4+b18u?=
- =?us-ascii?Q?WADbaGxPqJloeDaJHUkEgGPQIUwOx/Gvc5xm9Rk/hSRiGIbRu4Wexl2T+Gla?=
- =?us-ascii?Q?qy2fNeGRwQlTyuzcS3xg1MJnRldLcChSaSgrMfVl8dQyhn9BTYc0HI/GCXmC?=
- =?us-ascii?Q?M+ceotKoP1T0iHPXoCgV/s+NTODY9Z86UJ2SUp/N6V8imbge8RsX8GhkY68P?=
- =?us-ascii?Q?H0qxFJQQZsGbp959k9B5/zWnavlZQs8+rC2XZjS8DXdQ+QCFtsn7483BhQBD?=
- =?us-ascii?Q?y0tJ5KbdGLI/Oy/8M1n8AMXy0u6yBh+FlfiEfSN3NOgLT45Oe+aFNWQZZyG/?=
- =?us-ascii?Q?z3lXeV6S7viCPNE7pSwJtDPt4aSUs/XubSh1IL55ZZ9kUDLVjU/6aPYPGAsw?=
- =?us-ascii?Q?LQvMz5bkau2ZQ1kIftDnQmgdE5QJSyDFfykYtTECn9AncOl2bCTcP2jQ0wXS?=
- =?us-ascii?Q?rjOObM+9ZUlesVgFN6yCsnlAYpzBNb7+2xxM43jFstcQA9AE29J/TtniXbeI?=
- =?us-ascii?Q?rmaHjdfhAlAsLI+dxFV7d4g+bo7NM7u3cl+8Ci9e6BPRBx34PbCiVpzXfjB4?=
- =?us-ascii?Q?7my22+VxGil0LBG4XqmCMDV83eV09tMziXR6LtMn8flwQg5bnHPKofv08Umh?=
- =?us-ascii?Q?xCAGXulJz8QhtZBLjEaSuUFou35L9Pca/d2McUe01c0w/W9RtCtIJkmRnUnG?=
- =?us-ascii?Q?GCe4A/2D2MJpnhAATGxRFS5vWoOLa5wD+ujEtIbfd96nd1Ze7MbJx1gkDu+x?=
- =?us-ascii?Q?JyE3QX6Vj4ZZ9ieAwlB7WzCD4KMN+5VVu2sFfxH8?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nQomz4ut+7sjfQrrU1jIFAnyWatFfjECi53D3yczEIE=;
+        b=KI9bvqb1+pvOBd4LUHBVRiy4ZY0slRCTRZZlpbG/wkf5BfzAwgC4tzlqpiFF6oyV8H
+         D7v79qgnbhBTO6d2uDyYHRhhdOOhBfa6EEXzsR1OAGK0jLsPlfD7cA9BCk+dEYTkPA3D
+         wWtwWaAoPO0/uTRDdef7+H6/fPQ584Q/+VF22lUeYetTvqY4NLRzWkfcrMuUKAwvI8Ur
+         HORX0nTGI2VWAa2VLCpjSTjWJtDJGVfm/4NoDwUwRQY3sCzLDgDtibX9udsLmyhZz/Ab
+         UsteBe0vnTvVHno/YLL9xbDupvnLo0yMlhWvaVPU8HJaxwp4Vvg2Oz/Cql9apCVP7xpg
+         yn0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nQomz4ut+7sjfQrrU1jIFAnyWatFfjECi53D3yczEIE=;
+        b=3/z4qesJdUa3zXEg5WWhYOLLiUH7Njfqla7Cu0kNzmdU73Y0Hl077bVR/Sb961UGHt
+         DbFRczDgak3gge4a+o5zXi3+joT5dcqMtexJU1qHWmpjvirf0XTkYZRuYGMo4IerlmQZ
+         03Eedqsf4UHAJfBn+edJkf6V7ypNLaa22n4MBD3dg6wtyTLSXIIj2XmfHU22c6ohOY3e
+         Ka3RZVyGsmBrGl7RHsXr8ZYLUKREMDhhuBS9RA6ljWBq/U2co87QkaMDhX29fW6x7fH7
+         UfVh7UqI/wtyJaA+dBzWAu/DCWL4fvrDhQyFWQnUOcssE94zbZspR5fHp8j3+ZwIMctV
+         +J8Q==
+X-Gm-Message-State: ACrzQf3pnOwBPn+nZ99QfhhiChJ4awIYAzkj3dV1RGLkBBvp503tjNOr
+        IKYfAZSpgajOiBU6XJO4h8NcBt1PinMKLhj7APYJ9A==
+X-Google-Smtp-Source: AMsMyM51jSACu0ueivCRHFSALnMRIGDYekDLNBr6hGK18mYNepOD+DBZDwtrPTKiiVk4AIl/66dQQBc8ZJ/gjsu15yk=
+X-Received: by 2002:a2e:be8d:0:b0:26c:f4b:47a0 with SMTP id
+ a13-20020a2ebe8d000000b0026c0f4b47a0mr4030821ljr.92.1664007329396; Sat, 24
+ Sep 2022 01:15:29 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c61f4ecf-f9a2-48df-603e-08da9e04af27
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2022 08:13:38.1841
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rBtlOlsgyOdv3820V4pbxF4vjVGm5jz3UNClPu+7R5VACyqanQWbkuWGf1zF7Mu2SmrUCKNwV4BJ8eYK0Uwo1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR04MB8284
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20220923202822.2667581-1-keescook@chromium.org> <20220923202822.2667581-15-keescook@chromium.org>
+In-Reply-To: <20220923202822.2667581-15-keescook@chromium.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 24 Sep 2022 10:15:18 +0200
+Message-ID: <CACT4Y+bg=j9VdteQwrJTNFF_t4EE5uDTMLj07+uMJ9-NcooXGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 14/16] kasan: Remove ksize()-related tests
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+        x86@kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,23 +99,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
->  #define EXT_IID_CAP_SHIFT 10
-> +#define MCQ_SUPP_SHIFT 30
->  #define ufshcd_toggle_vreg(_dev, _vreg, _on)                           \
->         ({                                                              \
->                 int _ret;                                               \
-> @@ -2240,6 +2241,10 @@ static inline int ufshcd_hba_capabilities(struct
-> ufs_hba *hba)
->         if (err)
->                 dev_err(hba->dev, "crypto setup failed\n");
->=20
-> +       hba->mcq_sup =3D (hba->capabilities & MASK_MCQ_SUPPORT) >>
-> MCQ_SUPP_SHIFT;
-Since you are just testing for bit30, MASK_MCQ_SUPPORT is not really needed=
-.
-Maybe just:
-hba->mcq_sup =3D (hba->capabilities >> MCQ_SUPP_SHIFT) & 1;
+On Fri, 23 Sept 2022 at 22:28, Kees Cook <keescook@chromium.org> wrote:
+>
+> In preparation for no longer unpoisoning in ksize(), remove the behavioral
+> self-tests for ksize().
+>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: kasan-dev@googlegroups.com
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  lib/test_kasan.c  | 42 ------------------------------------------
+>  mm/kasan/shadow.c |  4 +---
+>  2 files changed, 1 insertion(+), 45 deletions(-)
+>
+> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+> index 58c1b01ccfe2..bdd0ced8f8d7 100644
+> --- a/lib/test_kasan.c
+> +++ b/lib/test_kasan.c
+> @@ -753,46 +753,6 @@ static void kasan_global_oob_left(struct kunit *test)
+>         KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
+>  }
+>
+> -/* Check that ksize() makes the whole object accessible. */
+> -static void ksize_unpoisons_memory(struct kunit *test)
+> -{
+> -       char *ptr;
+> -       size_t size = 123, real_size;
+> -
+> -       ptr = kmalloc(size, GFP_KERNEL);
+> -       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+> -       real_size = ksize(ptr);
+> -
+> -       OPTIMIZER_HIDE_VAR(ptr);
+> -
+> -       /* This access shouldn't trigger a KASAN report. */
+ > -       ptr[size] = 'x';
 
-Thanks,
-Avri
+I would rather keep the tests and update to the new behavior. We had
+bugs in ksize, we need test coverage.
+I assume ptr[size] access must now produce an error even after ksize.
+
+
+> -       /* This one must. */
+> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
+> -
+> -       kfree(ptr);
+> -}
+> -
+> -/*
+> - * Check that a use-after-free is detected by ksize() and via normal accesses
+> - * after it.
+> - */
+> -static void ksize_uaf(struct kunit *test)
+> -{
+> -       char *ptr;
+> -       int size = 128 - KASAN_GRANULE_SIZE;
+> -
+> -       ptr = kmalloc(size, GFP_KERNEL);
+> -       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+> -       kfree(ptr);
+> -
+> -       OPTIMIZER_HIDE_VAR(ptr);
+> -       KUNIT_EXPECT_KASAN_FAIL(test, ksize(ptr));
+
+This is still a bug that should be detected, right? Calling ksize on a
+freed pointer is a bug.
+
+> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[0]);
+> -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[size]);
+> -}
+> -
+>  static void kasan_stack_oob(struct kunit *test)
+>  {
+>         char stack_array[10];
+> @@ -1392,8 +1352,6 @@ static struct kunit_case kasan_kunit_test_cases[] = {
+>         KUNIT_CASE(kasan_stack_oob),
+>         KUNIT_CASE(kasan_alloca_oob_left),
+>         KUNIT_CASE(kasan_alloca_oob_right),
+> -       KUNIT_CASE(ksize_unpoisons_memory),
+> -       KUNIT_CASE(ksize_uaf),
+>         KUNIT_CASE(kmem_cache_double_free),
+>         KUNIT_CASE(kmem_cache_invalid_free),
+>         KUNIT_CASE(kmem_cache_double_destroy),
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index 0e3648b603a6..0895c73e9b69 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -124,9 +124,7 @@ void kasan_unpoison(const void *addr, size_t size, bool init)
+>         addr = kasan_reset_tag(addr);
+>
+>         /*
+> -        * Skip KFENCE memory if called explicitly outside of sl*b. Also note
+> -        * that calls to ksize(), where size is not a multiple of machine-word
+> -        * size, would otherwise poison the invalid portion of the word.
+> +        * Skip KFENCE memory if called explicitly outside of sl*b.
+>          */
+>         if (is_kfence_address(addr))
+>                 return;
+> --
+> 2.34.1
