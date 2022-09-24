@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F095E8672
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E375E8677
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiIXAFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S233000AbiIXAFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiIXAFE (ORCPT
+        with ESMTP id S232959AbiIXAFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 20:05:04 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687019E8A8
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:04:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A839DFAB;
+        Fri, 23 Sep 2022 17:04:58 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1663977896;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TiH+o7JC41DdZ3lwu3cXiKJzKZkxqWA+Jud7hMuF9gA=;
-        b=pFGs3MumAKqyjmH+l1KzRd31GIN3NwCRBmrL4IK+kkJfFIF3HGbKRcU6x17/ER90jiOvmH
-        9kbSmpJWvDW6LWdcaNMJEwAd881GJuKf/kESYfjvpEv6emMTrG8bM/F0R9LYdqT10oOaX0
-        a+64EYlYfeyyEM++gUgiN0xZTaSmNPeB1A4VJUuN6CWrstq1srFzFcMbWkbGuEOrxX/4AQ
-        ARAh+pBSMzjD1W3Y6kW6wVZmzEnO4zHxYyWJ+l/OTu97IoTMFO7zv9JEVi4z2Qr5aXbqu3
-        2Pd/N3hFPbM/L3vebmOdOmBXTQGceB6J2vUnCfzhXKk+d2fUQxZ3l1XbL9GShg==
+        bh=5V3Z6AhMdpsVP4d3DckyHZHpUKQGjS72cEceALWthyY=;
+        b=YbT35guZgiSYqZPsZ7HEpaJ0sOvKpQbPePGoaeyTUm7H/wO1/IFAkSjQMkNg4HoC1rMjla
+        jOG2WQmkJFxhuw2YenY92/zVcdEBo8eSRyStxb7OnII/aJAGAhnWzSRDfyJebHiDKEtYsH
+        VNDjMh4g98gPQQl/3zb/cwRcC7g7EU9DyDPbTqF/6nqU9EH06kz9Dc6JPBe3Kgtp2H0HBH
+        dzs1e8znzH4R2m53tahOEpKMFCwYjvzSFUCrkVqO/G6He6rIqI0eJfHtg/e0V6xFjFnvHn
+        e5shoEqTJMDYCVlN2zoS/cBXquWRftl9TI/0+Iz99De6KVyJMNk7i3vBAsXKLA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1663977896;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TiH+o7JC41DdZ3lwu3cXiKJzKZkxqWA+Jud7hMuF9gA=;
-        b=iXszll3pfPqc1GP/P+hO0F9vQwXwpSBQjOIr2P6fq43Fe4y0cIetm3OL3IIU9NvjIPXeUI
-        Lhpp1/LVHRpl2uCQ==
+        bh=5V3Z6AhMdpsVP4d3DckyHZHpUKQGjS72cEceALWthyY=;
+        b=bbbCxJXlhztbHC/ejFyxV3FY+WbK3/0ecpHf3f2KN7q4Su9QrnsgmRYIkGnOJILcTg0FE5
+        gaPedLj1PMB++VDg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk 01/18] printk: Make pr_flush() static
-Date:   Sat, 24 Sep 2022 02:10:37 +0206
-Message-Id: <20220924000454.3319186-2-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH printk 02/18] printk: Declare log_wait properly
+Date:   Sat, 24 Sep 2022 02:10:38 +0206
+Message-Id: <20220924000454.3319186-3-john.ogness@linutronix.de>
 In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
 References: <20220924000454.3319186-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -61,74 +61,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-No user outside the printk code and no reason to export this.
+kernel/printk/printk.c:365:1: warning: symbol 'log_wait' was not declared. Should it be static?
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- include/linux/printk.h | 7 -------
- kernel/printk/printk.c | 5 +++--
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ fs/proc/kmsg.c         | 2 --
+ include/linux/syslog.h | 3 +++
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index cf7d666ab1f8..8c81806c2e99 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -169,8 +169,6 @@ extern void __printk_safe_exit(void);
- #define printk_deferred_enter __printk_safe_enter
- #define printk_deferred_exit __printk_safe_exit
+diff --git a/fs/proc/kmsg.c b/fs/proc/kmsg.c
+index b38ad552887f..9d6950ac10fe 100644
+--- a/fs/proc/kmsg.c
++++ b/fs/proc/kmsg.c
+@@ -18,8 +18,6 @@
+ #include <linux/uaccess.h>
+ #include <asm/io.h>
  
--extern bool pr_flush(int timeout_ms, bool reset_on_progress);
+-extern wait_queue_head_t log_wait;
 -
- /*
-  * Please don't use printk_ratelimit(), because it shares ratelimiting state
-  * with all other unrelated printk_ratelimit() callsites.  Instead use
-@@ -221,11 +219,6 @@ static inline void printk_deferred_exit(void)
+ static int kmsg_open(struct inode * inode, struct file * file)
  {
- }
+ 	return do_syslog(SYSLOG_ACTION_OPEN, NULL, 0, SYSLOG_FROM_PROC);
+diff --git a/include/linux/syslog.h b/include/linux/syslog.h
+index 86af908e2663..955f80e34d4f 100644
+--- a/include/linux/syslog.h
++++ b/include/linux/syslog.h
+@@ -8,6 +8,8 @@
+ #ifndef _LINUX_SYSLOG_H
+ #define _LINUX_SYSLOG_H
  
--static inline bool pr_flush(int timeout_ms, bool reset_on_progress)
--{
--	return true;
--}
--
- static inline int printk_ratelimit(void)
- {
- 	return 0;
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index a1a81fd9889b..14d7d39d118d 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2296,6 +2296,7 @@ asmlinkage __visible int _printk(const char *fmt, ...)
- }
- EXPORT_SYMBOL(_printk);
++#include <linux/wait.h>
++
+ /* Close the log.  Currently a NOP. */
+ #define SYSLOG_ACTION_CLOSE          0
+ /* Open the log. Currently a NOP. */
+@@ -35,5 +37,6 @@
+ #define SYSLOG_FROM_PROC             1
  
-+static bool pr_flush(int timeout_ms, bool reset_on_progress);
- static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress);
+ int do_syslog(int type, char __user *buf, int count, int source);
++extern wait_queue_head_t log_wait;
  
- #else /* CONFIG_PRINTK */
-@@ -2330,6 +2331,7 @@ static void call_console_driver(struct console *con, const char *text, size_t le
- {
- }
- static bool suppress_message_printing(int level) { return false; }
-+static bool pr_flush(int timeout_ms, bool reset_on_progress) { return true; }
- static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
- 
- #endif /* CONFIG_PRINTK */
-@@ -3438,11 +3440,10 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
-  * Context: Process context. May sleep while acquiring console lock.
-  * Return: true if all enabled printers are caught up.
-  */
--bool pr_flush(int timeout_ms, bool reset_on_progress)
-+static bool pr_flush(int timeout_ms, bool reset_on_progress)
- {
- 	return __pr_flush(NULL, timeout_ms, reset_on_progress);
- }
--EXPORT_SYMBOL(pr_flush);
- 
- /*
-  * Delayed printk version, for scheduler-internal messages:
+ #endif /* _LINUX_SYSLOG_H */
 -- 
 2.30.2
 
