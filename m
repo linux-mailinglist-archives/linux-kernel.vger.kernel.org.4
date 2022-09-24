@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697CF5E8C31
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC185E8C4D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiIXMSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S231218AbiIXMW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiIXMSg (ORCPT
+        with ESMTP id S229794AbiIXMWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:18:36 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDFBB517B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:18:34 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id t3so2398553ply.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=9aIVtq9LZI+Ug1xm034RxKJmV6QnLLHdaDu3UcryddU=;
-        b=ZQLxpkZs8/8zmmqBb5IS+scyitsPQwRtemTsM/uRuukUM2wAXG16LF9TankEHxZZY2
-         b3FdXwd70ZoOc44qUohG0UL5v5NqwDxKh+hz+AisJkOp80r/u+l971inocp7PJVMqbO1
-         HGjGe3sAedkEXTMU5man/DdrAGVoItj/yz64XbQe9AQwKOVWZcVn3cHlw16CKZJ+Kncq
-         1qGA3A7z6iJlBHbhMNsVpxZK/BWZomVI599N/gRRE51uqEfhVPlg6LO0775bDDfnOwYs
-         soY3tsjvtAX9q5b0FclT8avfWUtJsexSbJ682CoVCIL3kSHCqR0YrpXyfoHFqtJJMq8s
-         XDSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9aIVtq9LZI+Ug1xm034RxKJmV6QnLLHdaDu3UcryddU=;
-        b=0nfkPRPE6UUgv28GVZwMNDxEWaSO3v38kmLrY14DF9VmkuXKOEwWAidQ+3o2e6HmVN
-         ZuwAt0VtkpYCw6yaHXYl387FDyxmXHRijR+o+0XMRXqdKmGl2UwMuAnCVR2w8pnbleR8
-         eUm4XXiHVBkBDXlCoGJIdCtXQciS2D8rW4apjY8cipKamLa1CAmW1Oi0bv7+SgRGGg9i
-         NWKNEtuY04yRgzv9ME7fyepr6vh4tn4L51BtpaIxEIERv76dX4OhFvJcoRx9dLwW8ToO
-         w3fgsKU6NdgBAfgLNh7yI+xbgbUkO9VyyB4l4Q3LTGWQjy/+SsMUH9rSfN75Wn6GNrpe
-         Ih9A==
-X-Gm-Message-State: ACrzQf33kV4crKhLy8NPnsaKTo3KY9BI6BSatjHe0X21Vb3YHbybio7x
-        QV1DlIDEHDD8S6HHygdH4hs1pQ==
-X-Google-Smtp-Source: AMsMyM4EwMsrCA2pbM9dzng6xXcsHniRuTy5mh+XwSxCfCQ52NHh818Spx2ubWE3ZG1UD8JKrW2J0A==
-X-Received: by 2002:a17:90b:3e87:b0:203:b9c:f9b7 with SMTP id rj7-20020a17090b3e8700b002030b9cf9b7mr14504722pjb.93.1664021913992;
-        Sat, 24 Sep 2022 05:18:33 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a28:e65:7770:2059:e8ad:fa8b:a6bd])
-        by smtp.gmail.com with ESMTPSA id y13-20020a17090a1f4d00b001fd7e56da4csm3264739pjy.39.2022.09.24.05.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 05:18:33 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com
-Cc:     linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] sched/core: Always do the balancing pass from dl_sched_class
-Date:   Sat, 24 Sep 2022 20:16:09 +0800
-Message-Id: <20220924121609.54129-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 24 Sep 2022 08:22:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8356BE1090;
+        Sat, 24 Sep 2022 05:22:49 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZShq40ThzHtkH;
+        Sat, 24 Sep 2022 20:18:03 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 20:22:47 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 20:22:47 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH v6 00/11] kallsyms: Optimizes the performance of lookup symbols
+Date:   Sat, 24 Sep 2022 20:20:40 +0800
+Message-ID: <20220924122051.362-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 67692435c411 ("sched: Rework pick_next_task() slow-path") and
-commit 6e2df0581f56 ("sched: Fix pick_next_task() vs 'change' pattern race")
-changed the original pick_next_task() loop logic a little.
+v5 --> v6:
+1. Add patch 6/11, kallsyms: Add helper kallsyms_lookup_clang_name()
+2. Update commit message of patch 9/11.
 
-Previously we always do class->pick_next_task(rq, prev, rf) from highest
-to lowest, and balance happened in that class->pick_next_task(), so we
-don't need to pull RT task if we can pick a DL task.
 
-The current code do the balancing pass from prev->class, say prev task
-is a RT task to sleep, we will try balance for rt sched_class even though
-we have a DL task on rq.
+v4 --> v5:
+1. In scripts/kallsyms.c, we use an extra field to hold type and eventually
+   put it together with name in write_src().
+2. Generate a new table kallsyms_best_token_table[], so that we compress a
+   symbol in the kernel using a process similar to compress_symbol().
+3. Remove helper sym_name(), and rename field 'sym[]' to 'name[]' in
+   scripts/kallsyms.c
+4. Add helper __kallsyms_lookup_compressed_name() to avoid duplicate code in
+   functions kallsyms_lookup_name() and kallsyms_on_each_match_symbol().
+5. Add a new parameter "const char *modname" to module_kallsyms_on_each_symbol(),
+   this makes the code logic clearer.
+6. Delete the parameter 'struct module *' in the hook function associated with
+   kallsyms_on_each_symbol(), it's unused now.
 
-This patch changes to always do the balancing pass from dl_sched_class,
-since we will check if balance is really needed in each class->balance(),
-we can terminate the balance pass as soon as we know there is a runnable
-task of @class priority or higher.
+v3 --> v4:
+1. Move the declaration of function kallsyms_sym_address() to linux/kallsyms.h,
+   fix a build warning.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2 --> v3:
+1. Improve test cases, perform complete functional tests on functions
+   kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+   kallsyms_on_each_match_symbol().
+2. Add patch [PATCH v3 2/8] scripts/kallsyms: ensure that all possible
+   combinations are compressed.
+3. The symbol type is not compressed regardless of whether
+   CONFIG_KALLSYMS_ALL is set or not. The memory overhead is increased
+   by less than 20KiB if CONFIG_KALLSYMS_ALL=n.
+4. Discard [PATCH v2 3/8] kallsyms: Adjust the types of some local variables
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ee28253c9ac0..ff5e7ac236bd 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5774,7 +5774,7 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
- 	 * We can terminate the balance pass as soon as we know there is
- 	 * a runnable task of @class priority or higher.
- 	 */
--	for_class_range(class, prev->sched_class, &idle_sched_class) {
-+	for_class_range(class, &dl_sched_class, &idle_sched_class) {
- 		if (class->balance(rq, prev, rf))
- 			break;
- 	}
+v1 --> v2:
+Add self-test facility
+
+v1:
+Currently, to search for a symbol, we need to expand the symbols in
+'kallsyms_names' one by one, and then use the expanded string for
+comparison. This is very slow.
+
+In fact, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names'.
+
+This patch series optimizes the performance of function kallsyms_lookup_name(),
+and function klp_find_object_symbol() in the livepatch module. Based on the
+test results, the performance overhead is reduced to 5%. That is, the
+performance of these functions is improved by 20 times.
+
+To avoid increasing the kernel size in non-debug mode, the optimization is only
+for the case CONFIG_KALLSYMS_ALL=y.
+
+Zhen Lei (11):
+  scripts/kallsyms: rename build_initial_tok_table()
+  scripts/kallsyms: don't compress symbol types
+  scripts/kallsyms: remove helper sym_name() and cleanup
+  scripts/kallsyms: generate kallsyms_best_token_table[]
+  kallsyms: Improve the performance of kallsyms_lookup_name()
+  kallsyms: Add helper kallsyms_lookup_clang_name()
+  kallsyms: Add helper kallsyms_on_each_match_symbol()
+  livepatch: Use kallsyms_on_each_match_symbol() to improve performance
+  livepatch: Improve the search performance of
+    module_kallsyms_on_each_symbol()
+  kallsyms: Delete an unused parameter related to
+    kallsyms_on_each_symbol()
+  kallsyms: Add self-test facility
+
+ include/linux/kallsyms.h   |  12 +-
+ include/linux/module.h     |   4 +-
+ init/Kconfig               |  13 ++
+ kernel/Makefile            |   1 +
+ kernel/kallsyms.c          | 195 +++++++++++++++--
+ kernel/kallsyms_internal.h |   1 +
+ kernel/kallsyms_selftest.c | 421 +++++++++++++++++++++++++++++++++++++
+ kernel/livepatch/core.c    |  31 ++-
+ kernel/module/kallsyms.c   |  15 +-
+ kernel/trace/ftrace.c      |   3 +-
+ scripts/kallsyms.c         |  88 +++++---
+ 11 files changed, 717 insertions(+), 67 deletions(-)
+ create mode 100644 kernel/kallsyms_selftest.c
+
 -- 
-2.37.2
+2.25.1
 
