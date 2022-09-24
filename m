@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9F75E870C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1409C5E8710
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbiIXBwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 21:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S233011AbiIXBxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 21:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiIXBwc (ORCPT
+        with ESMTP id S232339AbiIXBxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 21:52:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACFB10196D;
-        Fri, 23 Sep 2022 18:52:32 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MZBmT4r3qzHqM9;
-        Sat, 24 Sep 2022 09:50:17 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 09:52:29 +0800
-Message-ID: <19ffdae6-8484-08e5-f408-ab39a97ce5c0@huawei.com>
-Date:   Sat, 24 Sep 2022 09:52:28 +0800
+        Fri, 23 Sep 2022 21:53:44 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBDF106F45;
+        Fri, 23 Sep 2022 18:53:43 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id q11so1155272qkc.12;
+        Fri, 23 Sep 2022 18:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/oRwLC7FHOemWzoqeif26ioyvFSvS3lvtQTXdIA2m2g=;
+        b=S1kR5nIIy53QQZ9FbFh1NLPLScYNfv3BI7sEeCLIElBFmwIMDtOc/54jUFm1aCyxtH
+         ptCVy6vOQvtgWuqKdoe/P5BLxynHTWIUbbIgAPPLn3aewqDVoum92/oABQuecvuE71r7
+         226y/XpUBpftwVRt/L3mDqT5XigRnPTvoUmYsowBC8fEGURTh3SkuNs33G+vFy83anKh
+         XEc0NiL6JWjNZnMOkEV/xo0oVTgMtTyk9yE63DqPL5qrrDChaQvNAy9fVcughvq8fXf9
+         ic68gnK3js/Xxig138SPK1eDKaBA9asRH5YF3iH9nCiBBHHJcx7ybkESAYH4I5SgwaRW
+         fStg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/oRwLC7FHOemWzoqeif26ioyvFSvS3lvtQTXdIA2m2g=;
+        b=BuzKB44CiraaRlttidK6bUk0DagrnheNRTXFOWrHV+I3X5hXIFIr0GrqSVNMkjkznr
+         61qTxIyyanXud/LleT3SIThuq22ZPhEQz+rTbS85vpQwumM6YIQLU8BYxfkkHthZ+mcR
+         0lxab73AAGQAXxAIyyKCl2CfozekVwaw42e3Iv6yDwdAEec3yBxE431/flb8l9LnhBEq
+         kubfVCPFUME6JmDWP2AxK6lO9toBwZQm1/teqvQ26SKMOL/gpNPJwBQ46/trY2HCfg90
+         gow0Dv/KgWhdnMtEiJ2VtasCFc+oIGNHrJxNitdRMXWUX6Ir/t25sdjW6iCExQnJeKkO
+         nomw==
+X-Gm-Message-State: ACrzQf0jlpq/dUXanDfaxWVtu26ND83+NCvKk2osNzR9ncdcIS9kF5Tu
+        VJacnWQIpqo0VqjiuwijHDB67Apr/jCLNw==
+X-Google-Smtp-Source: AMsMyM5Rd03jIH8TutldOZ7kjUfXJbFeO/d6F0uAyb4WrWVzENsY/rKZf8fsat7mlIUSvDxgAOP4Sw==
+X-Received: by 2002:a05:620a:472b:b0:6ce:6189:74f5 with SMTP id bs43-20020a05620a472b00b006ce618974f5mr7708571qkb.455.1663984422554;
+        Fri, 23 Sep 2022 18:53:42 -0700 (PDT)
+Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with UTF8SMTPSA id d18-20020ac851d2000000b00342fa1f4a10sm6395573qtn.61.2022.09.23.18.53.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 18:53:41 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Nick Bowler <nbowler@draconx.ca>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        linux-kernel@vger.kernel.org (open list),
+        Sean Anderson <seanga2@gmail.com>
+Subject: [PATCH net-next v2 00/13] net: sunhme: Cleanups and logging improvements
+Date:   Fri, 23 Sep 2022 21:53:26 -0400
+Message-Id: <20220924015339.1816744-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/3] arm64/kprobe: Optimize the performance of patching
- single-step slot
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>, <guoren@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <mhiramat@kernel.org>,
-        <rostedt@goodmis.org>, <maz@kernel.org>,
-        <alexandru.elisei@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20220923084658.99304-1-liaochang1@huawei.com>
- <20220923084658.99304-4-liaochang1@huawei.com>
- <Yy2pAEvWKVloVr3U@FVFF77S0Q05N>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <Yy2pAEvWKVloVr3U@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,78 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series is a continuation of [1] with a focus on logging improvements (in
+the style of commit b11e5f6a3a5c ("net: sunhme: output link status with a single
+print.")). I have included several of Rolf's patches in the series where
+appropriate (with slight modifications). After this series is applied, many more
+messages from this driver will come with driver/device information.
+Additionally, most messages (especially debug messages) have been condensed onto
+one line (as KERN_CONT messages get split).
 
+[1] https://lore.kernel.org/netdev/4686583.GXAFRqVoOG@eto.sf-tec.de/
 
-在 2022/9/23 20:39, Mark Rutland 写道:
-> On Fri, Sep 23, 2022 at 04:46:58PM +0800, Liao Chang wrote:
->> Single-step slot would not be used until kprobe is enabled, that means
->> no race condition occurs on it under SMP, hence it is safe to pacth ss
->> slot without stopping machine.
-> 
-> I think this is correct, but this depends on a couple of subtleties,
-> importantly:
-> 
-> * That the I-cache maintenance for these instructions is complete *before* the
->   kprobe BRK is written (and aarch64_insn_patch_text_nosync() ensures this, but
->   just omits causing a Context-Synchronization-Event on all CPUS).
+Changes in v2:
+- Remove space after pci_enable_device
+- Use memset to clear p->happy_meals
+- Set err inside error branches
+- sumhme -> sunhme
+- Remove repeated newline
+- Remove another excess debug
 
-So in order to guarantee the I-cache maintenance is observed on all CPUS,
-it needs to be followed by a explicit Context-Synchronization-Event, perhaps
-it is better to place ISB before kprobe BRK is written.
+Rolf Eike Beer (3):
+  sunhme: remove unused tx_dump_ring()
+  sunhme: forward the error code from pci_enable_device()
+  sunhme: switch to devres
 
-> 
-> * That the kprobe BRK results in an exception (and consequently a
->   Context-Synchronoization-Event), which ensures that the CPU will fetch the
->   single-step slot instructions *after* this, ensuring that the new
->   instructions are used.
+Sean Anderson (10):
+  sunhme: Remove version
+  sunhme: Return an ERR_PTR from quattro_pci_find
+  sunhme: Regularize probe errors
+  sunhme: Convert FOO((...)) to FOO(...)
+  sunhme: Clean up debug infrastructure
+  sunhme: Convert printk(KERN_FOO ...) to pr_foo(...)
+  sunhme: Use (net)dev_foo wherever possible
+  sunhme: Combine continued messages
+  sunhme: Use vdbg for spam-y prints
+  sunhme: Add myself as a maintainer
 
-Yes, because of single-step slot is installed int the BRK execption handler,
-so it is not necessary to generate Context-Synchronization-Event via ISB mentioned above...
-
-Thanks.
-
-> 
-> It would be good if we could call that out explicitly.
-> 
-> Thanks,
-> Mark.
-> 
->> Since I and D caches are coherent within single-step slot from
->> aarch64_insn_patch_text_nosync(), hence no need to do it again via
->> flush_icache_range().
->>
->> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  arch/arm64/kernel/probes/kprobes.c | 7 ++-----
->>  1 file changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
->> index d1d182320245..29b98bc12833 100644
->> --- a/arch/arm64/kernel/probes/kprobes.c
->> +++ b/arch/arm64/kernel/probes/kprobes.c
->> @@ -44,13 +44,10 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
->>  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
->>  {
->>  	kprobe_opcode_t *addr = p->ainsn.api.insn;
->> -	void *addrs[] = {addr, addr + 1};
->> -	u32 insns[] = {p->opcode, BRK64_OPCODE_KPROBES_SS};
->>  
->>  	/* prepare insn slot */
->> -	aarch64_insn_patch_text(addrs, insns, 2);
->> -
->> -	flush_icache_range((uintptr_t)addr, (uintptr_t)(addr + MAX_INSN_SIZE));
->> +	aarch64_insn_patch_text_nosync(addr, p->opcode);
->> +	aarch64_insn_patch_text_nosync(addr + 1, BRK64_OPCODE_KPROBES_SS);
->>  
->>  	/*
->>  	 * Needs restoring of return address after stepping xol.
->> -- 
->> 2.17.1
->>
-> 
-> .
+ MAINTAINERS                       |   5 +
+ drivers/net/ethernet/sun/sunhme.c | 661 ++++++++++++------------------
+ 2 files changed, 264 insertions(+), 402 deletions(-)
 
 -- 
-BR,
-Liao, Chang
+2.37.1
+
