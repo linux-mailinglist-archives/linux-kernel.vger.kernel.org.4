@@ -2,196 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2ED5E8D22
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 15:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A1D5E8D24
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 15:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiIXNeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 09:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S230427AbiIXNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 09:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiIXNeV (ORCPT
+        with ESMTP id S230152AbiIXNgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 09:34:21 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC6ED8260
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:34:20 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id c198so2562487pfc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=RY8LA3Ud6X3kkmJY3XlXNl8R73lTrsVPFHZT3EIEjMw=;
-        b=abHBkWADIUZhsDUWWNdBgOqMUC4xkoKbE1xWNJ0bL0h0KZmI964q8CDk/G+XJJL0Oh
-         YdkvjvfJYCQGXxgpHy/a2aZlbjxBSvEpkVvsMgu7TQMm755WvxiHmQ9YSZ+gyHh3wnox
-         vKJrR1lBPPmAss3dLFGmYahGxSCdG++9IjT7SjWVCWWE8L4OnDzs3QwVgC9jCJJZKkUm
-         MfBCOU63aUjzor2hVj1OU1TaFs399ScNQIYCkbAmSIHoJHiVfH1QRgBDtQJVEqIRCF28
-         LB2F7PYxryWwvP+udXq+bC6NQx4N+Mtt9Hir5amgiVhhn06y9R5dugmoJeDAl6UdDlS0
-         TAlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=RY8LA3Ud6X3kkmJY3XlXNl8R73lTrsVPFHZT3EIEjMw=;
-        b=kuS7VKh0m/UDoVx7Zr7QFPgM0GmCotNZbfk3TrKETQrLlOqJjHJHH4COYKszVSbqWB
-         ty/9NH6Cxzq9KhRP6vwBTU0QL2yqdg1i7+yKNhM4gY1wCUkGlSCDDkIfnvrLImc/T3Mp
-         +FCD8o2M7VlCgZpe2FD3ymAmS4DykP4MoRai473+WkqhAq/gzVsz2QCdB8HFOowW2j1j
-         WFnVVCqzjv+TvW19YXwTkjFyYo03mdJQR++c6DMmdZ7FiLYM9RZ/MOovC+e1TJNnQl1A
-         /Ak7rzxyeCUer8+T6RO+17hCu2gjNLdJTp+F0EbKEdNKmbwRtgioQ5tC+hUa5rmHiO6I
-         qiaQ==
-X-Gm-Message-State: ACrzQf1tN4/WTsivalEiHYFB+C7Sddk8Mwf1tShxTL4lhrM/1/HDF5ti
-        RUJvDr549o5Np9n6VxO//NwQkQ==
-X-Google-Smtp-Source: AMsMyM4497AOaLk6YqcBrZG91dItIMz5oWLFUS2obpFljHDamo6wmK+rf4bRNY8FiOyCAG/KWNnQHQ==
-X-Received: by 2002:a05:6a00:1a94:b0:548:8ce8:db93 with SMTP id e20-20020a056a001a9400b005488ce8db93mr14334148pfv.13.1664026460018;
-        Sat, 24 Sep 2022 06:34:20 -0700 (PDT)
-Received: from leoy-huanghe.lan (ec2-13-52-75-203.us-west-1.compute.amazonaws.com. [13.52.75.203])
-        by smtp.gmail.com with ESMTPSA id b15-20020a63d30f000000b004393cb720afsm7456068pgg.38.2022.09.24.06.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 06:34:19 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3] perf test: Introduce script for data symbol testing
-Date:   Sat, 24 Sep 2022 21:34:08 +0800
-Message-Id: <20220924133408.1125903-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 24 Sep 2022 09:36:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C826AE0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664026595; x=1695562595;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nrHGPQE0ebx0LSwOhgWhn3p0ahPrNolE035XO6Ua4cY=;
+  b=gORyHBFXJH8DBGllO0egBwnyfCsvx9i6YE4PYrf/YOMr9wQtaWyGNRX7
+   gYxREsWUmxiojPyQq9PT9UGfgC5zszeiN2J3Unb/d4DD2gVP9gUuk4qvk
+   zefzKDPR09ZL5nKAlO+TZfv0tqFH6kgqVmMHLEyqC7Pi7T5chrDnMeEnt
+   2vJeXdZFnJJjnKyNpGTxbeeYzbL9IfA8jzdIbrZ69axQJcnoeKSIlo+Ad
+   apxaoN+T4QxQd4m1WuHrfxFtw32F5mfNfTfeGi4Pg5k+tpAUyevuaVbvl
+   oU9D4miNrRI4TVcCce5dM6Dmh0EAJKKrWKCPUEtdIS5UR6GV2xqqqVOqA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="301672707"
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="301672707"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 06:36:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="653735372"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 Sep 2022 06:36:33 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oc5Kb-0006YI-0t;
+        Sat, 24 Sep 2022 13:36:33 +0000
+Date:   Sat, 24 Sep 2022 21:36:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ e400ad8b7e6a1b9102123c6240289a811501f7d9
+Message-ID: <632f07dd.BFP/HWxb3KugZDq3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces a shell script for data symbol testing.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: e400ad8b7e6a1b9102123c6240289a811501f7d9  ACPI: processor idle: Practically limit "Dummy wait" workaround to old Intel systems
 
-The testing is designed a data structure with 64-byte alignment, it has
-two fields "data1" and "data2", and other fields are reserved.
+elapsed time: 901m
 
-Using "perf mem" command, we can record and report memory samples for a
-self-contained workload with 1 second duration.  If have no any memory
-sample for the data structure "buf1", it reports failure;  and by
-checking the offset in structure "buf1", if any memory accessing is not
-for "data1" and "data2" fields, it means wrong data symbol parsing and
-returns failure.
+configs tested: 123
+configs skipped: 4
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Changes from v2:
-- Used 'symbol_daddr' sort key in report (Namyung);
-- Didn't save source code into temp file and used pipe for compilation
-  (Namyung);
-- Polished the C test code included in the script (Namyung).
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+arc                  randconfig-r043-20220923
+s390                 randconfig-r044-20220923
+riscv                randconfig-r042-20220923
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a013
+powerpc                           allnoconfig
+x86_64                        randconfig-a011
+powerpc                          allmodconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+mips                             allyesconfig
+x86_64                        randconfig-a015
+arc                              allyesconfig
+x86_64                              defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+x86_64                               rhel-8.3
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+arm                                 defconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a016
+i386                          randconfig-a014
+i386                             allyesconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+sh                        edosk7760_defconfig
+sh                        sh7785lcr_defconfig
+sparc                       sparc32_defconfig
+mips                         bigsur_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+i386                          randconfig-c001
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+sh                  sh7785lcr_32bit_defconfig
+sh                         ap325rxa_defconfig
+nios2                         10m50_defconfig
+sh                          sdk7780_defconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+xtensa                              defconfig
+powerpc                     tqm8555_defconfig
+arc                      axs103_smp_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220924
+arm64                               defconfig
+ia64                             allyesconfig
+arm                              allmodconfig
+m68k                                defconfig
+ia64                                defconfig
+mips                             allmodconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                  randconfig-c002-20220923
 
-Changes from v1:
-- Removed "killall" since the test has no child process (Ian);
-- Used "char" instead of "long" in the buf structure.
+clang tested configs:
+hexagon              randconfig-r045-20220923
+hexagon              randconfig-r041-20220923
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a015
+arm                        multi_v5_defconfig
+mips                        bcm63xx_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+arm                           sama7_defconfig
+powerpc                    gamecube_defconfig
+arm                         s3c2410_defconfig
+mips                          rm200_defconfig
+arm                          sp7021_defconfig
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220923
+i386                          randconfig-c001
+s390                 randconfig-c005-20220923
+riscv                randconfig-c006-20220923
+mips                 randconfig-c004-20220923
+powerpc              randconfig-c003-20220923
 
- tools/perf/tests/shell/test_data_symbol.sh | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
-
-diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-new file mode 100755
-index 000000000000..a153b0d84dc0
---- /dev/null
-+++ b/tools/perf/tests/shell/test_data_symbol.sh
-@@ -0,0 +1,83 @@
-+#!/bin/bash
-+# Test data symbol
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Leo Yan <leo.yan@linaro.org>, 2022
-+
-+skip_if_no_mem_event() {
-+	perf mem record -e list 2>&1 | egrep -q 'available' && return 0
-+	return 2
-+}
-+
-+skip_if_no_mem_event || exit 2
-+
-+# skip if there's no compiler
-+if ! [ -x "$(command -v cc)" ]; then
-+	echo "skip: no compiler, install gcc"
-+	exit 2
-+fi
-+
-+TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
-+PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-+
-+check_result() {
-+	# The memory report format is as below:
-+	#    99.92%  ...  [.] buf1+0x38
-+	result=$(perf mem report -i ${PERF_DATA} -s symbol_daddr -q 2>&1 |
-+		 awk '/buf1/ { print $4 }')
-+
-+	# Testing is failed if has no any sample for "buf1"
-+	[ -z "$result" ] && return 1
-+
-+	while IFS= read -r line; do
-+		# The "data1" and "data2" fields in structure "buf1" have
-+		# offset "0x0" and "0x38", returns failure if detect any
-+		# other offset value.
-+		if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
-+			return 1
-+		fi
-+	done <<< "$result"
-+
-+	return 0
-+}
-+
-+cleanup_files()
-+{
-+	echo "Cleaning up files..."
-+	rm -f ${PERF_DATA}
-+	rm -f ${TEST_PROGRAM}
-+}
-+
-+trap cleanup_files exit term int
-+
-+# compile test program
-+echo "Compiling test program..."
-+cat << EOF | cc -o ${TEST_PROGRAM} -x c -
-+typedef struct _buf {
-+	char data1;
-+	char reserved[55];
-+	char data2;
-+} buf __attribute__((aligned(64)));
-+
-+static buf buf1;
-+
-+int main(void) {
-+	for (;;) {
-+		buf1.data1++;
-+		buf1.data2 += buf1.data1;
-+	}
-+	return 0;
-+}
-+EOF
-+
-+echo "Recording workload..."
-+perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-+PERFPID=$!
-+
-+sleep 1
-+
-+kill $PERFPID
-+wait $PERFPID
-+
-+check_result
-+exit $?
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
