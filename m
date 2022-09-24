@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AC75E8DE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0772A5E8DE2
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbiIXP2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S233897AbiIXP2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiIXP2d (ORCPT
+        with ESMTP id S233763AbiIXP2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 11:28:33 -0400
+        Sat, 24 Sep 2022 11:28:37 -0400
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C069B849;
-        Sat, 24 Sep 2022 08:28:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A6D9E8B1;
+        Sat, 24 Sep 2022 08:28:35 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DCC621C0003;
-        Sat, 24 Sep 2022 15:28:29 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 531151C0007;
+        Sat, 24 Sep 2022 15:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1664033311;
+        t=1664033312;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o61Aomw3SfUZOaJt+K5AQdwr2Hx3g+NfHuTItfUOQM4=;
-        b=UtfWwwAnlq/amHyFvPHO8lIKFjNdJBLPpyjqtbSyIEvTJXh0IYiw6H/t+prLBE1OdaiKVS
-        lZ8jUeiw2kX1MVxhO8tvHWELByC0DAfDG3arHBrkqSKd1BEA5f/Vc49oyEOicB3J+ZlAsp
-        hKOLj4kiD9ncrn3jkNTctXmNlXopT4/VK67ha9GOdaQmG1NUUUg4ngIENewTOudWrtGuHS
-        A0rE8XDwQD3MOb4b2nMSKV5LNwF80bhQ0i7DegqPy1dZEDQtVFY10qR2CW3zbahuZnO7g+
-        X96ZBvc28G1Y9zMKnpua4t1xtSYkLMQSS5YC8PP3s4nGvepsg09NXcbddVyhrw==
+        bh=8H7TxPSMHgc/OchAiVB655J+THkaG5W4vW2uZPkmijo=;
+        b=p4PUmw2nCJs3KyRDm+QvOOkySCL+RoRN1/469EjW+XykguRnftdlTMzmiBAmFZZ8S6Is6c
+        jQ3kn+yonelwEEHaqjlA2r2GSJ2OSD8EZHjWLgPg1Nwsrh6JHlFet5xQroW+qNiAOWiI5e
+        oaIqxXvulaaYoY8UDLbQeOEEh0YDei31AOtEis0AlztKian5E5ZLAgmzfSa5DJs+hOnjA1
+        PxxI07KFC3HY62J8uk1lDjTdsIfi7/qkuKpxfTZuv62sjFkyfYAcsHECwa7p/KThNIWml4
+        JX64GZ3SJIRh0V4GMKdiqRSi1P7YsiZrXTSR23pUxQcobJWj25LihmxIfg1Hmg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -43,11 +43,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Maxime Ripard <mripard@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/7] clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header
-Date:   Sat, 24 Sep 2022 17:28:14 +0200
-Message-Id: <20220924152820.77149-2-paul.kocialkowski@bootlin.com>
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v6 2/7] ARM: dts: sun8i: v3s: Add mbus node to represent the interconnect
+Date:   Sat, 24 Sep 2022 17:28:15 +0200
+Message-Id: <20220924152820.77149-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220924152820.77149-1-paul.kocialkowski@bootlin.com>
 References: <20220924152820.77149-1-paul.kocialkowski@bootlin.com>
@@ -62,58 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to declare a mbus node for the v3s, expose its associated
-clocks to the public header.
+The V3s uses the mbus interconnect to provide DRAM access for a
+number of blocks. The SoC can only map 2 GiB of DRAM, which is
+reflected in the dma-ranges property.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Reviewed-by: Samuel Holland <samuel@sholland.org>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.h      | 4 ----
- include/dt-bindings/clock/sun8i-v3s-ccu.h | 4 ++--
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-index 108eeeedcbf7..8ed4eff86ca1 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-@@ -39,14 +39,10 @@
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index db194c606fdc..34f7df6b3960 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -579,6 +579,21 @@ int_mii_phy: ethernet-phy@1 {
+ 			};
+ 		};
  
- /* The first bunch of module clocks are exported */
- 
--#define CLK_DRAM		58
--
- /* All the DRAM gates are exported */
- 
- /* Some more module clocks are exported */
- 
--#define CLK_MBUS		72
--
- /* And the GPU module clock is exported */
- 
- #define CLK_PLL_DDR1		74
-diff --git a/include/dt-bindings/clock/sun8i-v3s-ccu.h b/include/dt-bindings/clock/sun8i-v3s-ccu.h
-index 014ac6123d17..4231f23bc53b 100644
---- a/include/dt-bindings/clock/sun8i-v3s-ccu.h
-+++ b/include/dt-bindings/clock/sun8i-v3s-ccu.h
-@@ -87,7 +87,7 @@
- #define CLK_SPI0		55
- #define CLK_USB_PHY0		56
- #define CLK_USB_OHCI0		57
--
-+#define CLK_DRAM		58
- #define CLK_DRAM_VE		59
- #define CLK_DRAM_CSI		60
- #define CLK_DRAM_EHCI		61
-@@ -101,7 +101,7 @@
- #define CLK_VE			69
- #define CLK_AC_DIG		70
- #define CLK_AVS			71
--
-+#define CLK_MBUS		72
- #define CLK_MIPI_CSI		73
- 
- /* Clocks not available on V3s */
++		mbus: dram-controller@1c62000 {
++			compatible = "allwinner,sun8i-v3s-mbus";
++			reg = <0x01c62000 0x1000>,
++			      <0x01c63000 0x1000>;
++			reg-names = "mbus", "dram";
++			clocks = <&ccu CLK_MBUS>,
++				 <&ccu CLK_DRAM>,
++				 <&ccu CLK_BUS_DRAM>;
++			clock-names = "mbus", "dram", "bus";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			dma-ranges = <0x00000000 0x40000000 0x80000000>;
++			#interconnect-cells = <1>;
++		};
++
+ 		spi0: spi@1c68000 {
+ 			compatible = "allwinner,sun8i-h3-spi";
+ 			reg = <0x01c68000 0x1000>;
 -- 
 2.37.3
 
