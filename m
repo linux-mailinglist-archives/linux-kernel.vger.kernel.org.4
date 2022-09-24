@@ -2,146 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251885E88FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE265E88FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiIXHOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S233346AbiIXHPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiIXHOD (ORCPT
+        with ESMTP id S229556AbiIXHO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:14:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A18EE109B;
-        Sat, 24 Sep 2022 00:14:02 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fv3so1984758pjb.0;
-        Sat, 24 Sep 2022 00:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zc39r/JUk5EXO1aNoPPyS+CIqOIgtl4S9VWPOk1JNao=;
-        b=Ehi+afHuxdncG0EVs/whkNJ7qs3LYN5hnk51tmc+bGUYzoI1Mwu4LPafrpUY/wm+5d
-         I6K8+h1FBwOuj7whpuDl+TGIywjop+57FeX/u/dHQ+2AK57D2EFxssv0SBTQQUmLkPCn
-         3jfKnLC8lxEgUmRIK5wzoNKWx40TgCeywM/DBszC/OG/u+w/VVGJdgBz3DUMmDkYQg5L
-         /yeG0l+wcz5qkaX0lmkr4G7Y02VXNhPw3jcwPHmwmLPEBbf5eWFCS7wpPiDMUySP4/5f
-         WP/Z5Y02tTPi5gUxxPT8gBhi/V+QBAgLbHWAKIRnZjkkjJSKrBWNHaXhwYigH1lLXDwt
-         i+bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zc39r/JUk5EXO1aNoPPyS+CIqOIgtl4S9VWPOk1JNao=;
-        b=vCxM4xkZRHl0suQ04oMOWdCPV1G3J+ivlf8nK2qWAlUcgR2TlM9EJtGNFilzLJvuug
-         llKq5jefvFqhUHHBXOmeTgs7GTTFYUS9Dlln4nmrCGwhF2qp4Dn1m3gZqZxZ3DYr/2me
-         qpTzhAFoXTnrttQe56DeXSSFoWnBagn4wfnBjfH0GuA+LswuOCHyc9RG9FZJMsNbOt5r
-         OhsmTKwSa/0KfXB/Ytq9yrwCCSfG1pwlSvmiWleAQesSznZRAYkzGAXPCInZACReR165
-         HwN/zPCopblrvX7s74AITACh39ROefqY2Pf8rJX+xM1Hv9bVqoz9t5aWhR0vy/PVciOD
-         BpPQ==
-X-Gm-Message-State: ACrzQf3cS/7PkVsOXKLoW27VH6eTjNIR7DyoU+kTM2zyHzUuSiIMqQt9
-        b7zFgL+CXkXOoOEXYfSST0nf5wXcOmc=
-X-Google-Smtp-Source: AMsMyM7jyKBnAPqZXemkkirmSaSEssiA5qljF9xjKhmEO/ZR4LstEalDQycc1WjYdl8e3XkC7vUtMQ==
-X-Received: by 2002:a17:90a:4688:b0:1ef:a94:7048 with SMTP id z8-20020a17090a468800b001ef0a947048mr13679726pjf.244.1664003642010;
-        Sat, 24 Sep 2022 00:14:02 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x10-20020aa7956a000000b0053e439c08c1sm7586182pfq.74.2022.09.24.00.13.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 00:14:01 -0700 (PDT)
-Message-ID: <9b0cf584-01b3-3013-b800-1ef59fe82476@gmail.com>
-Date:   Sat, 24 Sep 2022 16:13:57 +0900
+        Sat, 24 Sep 2022 03:14:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F88B1CB29
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:14:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32133B80D83
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 07:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503F7C433C1;
+        Sat, 24 Sep 2022 07:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664003692;
+        bh=yFTm/FVYOxOnX82hlQYnJ9zyQLMQStELUrkKWp1iBOU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nY+K2jomYMCfKj7L0KM9IkUlMAIE4FpVCt1dwg1e7k2TKImmhwsppEKH3KNjxfczz
+         ObroygEtNfJqyL07zQ+Nh2NjzOL6Iib9TvttHlMgWIU8j0S1h2YSidHaO04QAjX9y1
+         O14zCg9CpuYBT3+iVmvn59pGZvs/NoYf19m6p+c68jRoyddoKDdZoBmGddo2BCK6Mi
+         Nxdq/3iQHqZGQ0DfoHflCvr4AwdHr/+GgsFB7eT9mfg+Hspk/63dXWoqHnxxcz4UFu
+         dXgiQZzcNY2l/OOUBJNjClYt/7qQA03NTKktxYvf6I1cJSaZHdO4Vw6mOPpSjMJSir
+         3wJgJthUxgSkw==
+Date:   Sat, 24 Sep 2022 12:44:49 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
+ registers before USB 3.0 power on
+Message-ID: <Yy6uaaZUbZsBSqrw@matsya>
+References: <20220920121154.30115-1-pali@kernel.org>
+ <20220921050300.riwyofdncxscrwe3@shindev>
+ <20220921080557.jdg5wywpa5qxcyo2@pali>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] string: Rewrite and add more kern-doc for the str*()
- functions
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220922062817.2283352-1-keescook@chromium.org>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220922062817.2283352-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220921080557.jdg5wywpa5qxcyo2@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-Thank you for sharing your devel branch.
-
-On Wed, 21 Sep 2022 23:28:17 -0700, Kees Cook wrote:
-> While there were varying degrees of kern-doc for various str*()-family
-> functions, many needed updating and clarification, or to just be
-> entirely written. Update (and relocate) existing kern-doc and add missing
-> functions, sadly shaking my head at how many times I have written "Do
-> not use this function". Include the results in the core kernel API doc.
+On 21-09-22, 10:05, Pali Rohár wrote:
+> On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
+> > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
+> > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
+> > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
+> > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+> > > reset support"). On the other hand USB 2.0 devices connected to the same
+> > > USB-A port are working fine.
+> > > 
+> > > It looks as if the older firmware configures COMPHY registers for USB 3.0
+> > > somehow incompatibly for kernel driver. Experiments show that resetting
+> > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
+> > > register fixes this issue.
+> > > 
+> > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
+> > > step after selecting COMPHY lane and USB 3.0 function. With this change
+> > > Turris MOX board can successfully detect USB 3.0 devices again.
+> > > 
+> > > Before the above mentioned commit this reset was implemented in PHY reset
+> > > method, so this is the reason why there was no issue with older firmware
+> > > version then.
+> > > 
+> > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
+> > > Reported-by: Marek Behún <kabel@kernel.org>
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > > Shinichiro, could you please check that all USB functionality still
+> > > works correctly on your board?
+> > > ---
+> > 
+> > Sure. TL;DR, this patch works ok for my espressobin v7 board.
+> > 
+> > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> > 
+> > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
+> > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
+> > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
+> > drive. The drive was detected and its partition was mounted successfully using
+> > either of the two USB ports.
 > 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> Follow up to https://lore.kernel.org/lkml/20220902223507.2537469-1-keescook@chromium.org
-> Note that this is on top of my recent fortify-string.h series:
-> https://lore.kernel.org/lkml/20220920192202.190793-1-keescook@chromium.org/
-[...]
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 8bb89deb9a91..adbc4d307770 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -1448,6 +1448,8 @@ sub create_parameterlist($$$$) {
->      foreach my $arg (split($splitter, $args)) {
->  	# strip comments
->  	$arg =~ s/\/\*.*\*\///;
-> +	# ignore argument attributes
-> +	$arg =~ s/\sPOS0?\s/ /;
->  	# strip leading/trailing spaces
->  	$arg =~ s/^\s*//;
->  	$arg =~ s/\s*$//;
-> @@ -1657,6 +1659,7 @@ sub dump_function($$) {
->      $prototype =~ s/^__inline +//;
->      $prototype =~ s/^__always_inline +//;
->      $prototype =~ s/^noinline +//;
-> +    $prototype =~ s/^__FORTIFY_INLINE +//;
->      $prototype =~ s/__init +//;
->      $prototype =~ s/__init_or_module +//;
->      $prototype =~ s/__deprecated +//;
-> @@ -1667,6 +1670,7 @@ sub dump_function($$) {
->      $prototype =~ s/__sched +//;
->      $prototype =~ s/__printf\s*\(\s*\d*\s*,\s*\d*\s*\) +//;
->      $prototype =~ s/__(?:re)?alloc_size\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\) +//;
-> +    $prototype =~ s/__diagnose_as\s*\(\s*\S+\s*(?:,\s*\d+\s*)*\) +//;
->      my $define = $prototype =~ s/^#\s*define\s+//; #ak added
->      $prototype =~ s/__attribute_const__ +//;
->      $prototype =~ s/__attribute__\s*\(\(
+> Thank you for testing! Anyway, please check that USB 3.0 device is
+> working fine. Because as I wrote in commit message, on Turris Mox was
+> USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
 
-This hunk in the corresponding commit 87cb97a66ae9 of your devel branch
-looks a little different:
+update the log now?
 
-@@ -1666,7 +1669,8 @@ sub dump_function($$) {
-     $prototype =~ s/__weak +//;
-     $prototype =~ s/__sched +//;
-     $prototype =~ s/__printf\s*\(\s*\d*\s*,\s*\d*\s*\) +//;
--    $prototype =~ s/__alloc_size\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\) +//;
-+    $prototype =~ s/__(?:re)?alloc_size\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\) +//;
-+    $prototype =~ s/__diagnose_as\s*\(\s*\S+\s*(?:,\s*\d+\s*)*\) +//;
-     my $define = $prototype =~ s/^#\s*define\s+//; #ak added
-     $prototype =~ s/__attribute_const__ +//;
-     $prototype =~ s/__attribute__\s*\(\(
+> (lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
+> 3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
+> 
+> > I also confirmed SATA port is ok (my SSD card was detected without error
+> > message) and three network ports works ok ("Link is Up" message on network cable
+> > connection). I did same confirmations with the latest firmware (TF-A and U-boot)
+> > and old firmware (with version date in 2017). All looks good for me.
+> > 
+> > -- 
+> > Shin'ichiro Kawasaki
 
-This was what prevented me from applying the patch.
-
-Anyway, "make htmldocs" works just fine now. FWIW,
-
-Tested-by: Akira Yokosawa <akiyks@gmail.com>
-
-        Thanks, Akira
+-- 
+~Vinod
