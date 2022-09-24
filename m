@@ -2,186 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E1C5E8A2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E87F55E8A2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 10:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbiIXI3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 04:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S233412AbiIXIbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 04:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbiIXI3j (ORCPT
+        with ESMTP id S233133AbiIXIbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 04:29:39 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B39BC21;
-        Sat, 24 Sep 2022 01:29:37 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id f193so2305228pgc.0;
-        Sat, 24 Sep 2022 01:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=H9XCRPFdXqUNtmAqhermX4cpbxgjD3c7QiDFM+/CVWY=;
-        b=L+IBBWJm7mGDiOSPJIMesYOnEzlLQZvFMwAWErTLWcqud7pyVGr6XypYfSyB6hN+34
-         PzVwtZIwrNQFfyRUgCUTuDoXecoQb4daIgwWik2QTtsmO+vDuQE3TWcj1kuCcXbb/3Cu
-         U+1n7qHcWMAIwhoeYJftVORJ8hPu6GS396RLeFworHv0TuvNLlgdJQjSfvg7iyvrSD7f
-         v5U6OBzYFURHQzezkrwvVQsKR1L1j0Ipt2A+vk38ONuHfbnHV8jldzHD0qQwvttUZdA5
-         4YIxsr4VjgYGN2BlXI2ESBU2UlrlchJ7u6TpaTAl/3lrOC7wJr4aQBIvrqyXLEU1qTN1
-         VzEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H9XCRPFdXqUNtmAqhermX4cpbxgjD3c7QiDFM+/CVWY=;
-        b=Y6+anBYwjUWZdY3rwrSdK+uYFItP7Mohyvbgi0E3S3pfoTcJ54KpqWQv70bdi65mzh
-         UaIiWFrNWG3rTVctkm3BWj/v+vD0NMalKlA0MrHn9M+ptQbb87pteoO6Iuh6BDxgQD+M
-         vWmzgDBfTI23Wntvt50PsHO3tMJjReH5pI7zEDfkvTbYFO+1vzum0pakmh2Mo3udovVP
-         8a7jQGMtDWgAg7ZIBhBXhCKm/468bvjXLlST9nBTvfvZaG9XXi8/qj7kbMrge2rvPgfp
-         QlFsZxZ2i/6AqnYKGNNMlx4DSBuL8ucf0C1bsZTlYAuH8snpjpX3mKmGRvyPvaUMtZKr
-         yTHg==
-X-Gm-Message-State: ACrzQf0k1QWzhlHZGtommawMbZA7Ha9g6cM04xs52MKXGh1VNNQXupqZ
-        oZ36FumVSYz+z3WFLMLHBNQ=
-X-Google-Smtp-Source: AMsMyM53KSErTl1m3UqDiFLr87+cKnvRRi113EC/U4YT1zYcRzBlbVl9uy7+/iCME4Pj13MrhZX28g==
-X-Received: by 2002:a05:6a00:99c:b0:54c:27c4:3acb with SMTP id u28-20020a056a00099c00b0054c27c43acbmr12711258pfg.22.1664008177184;
-        Sat, 24 Sep 2022 01:29:37 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-92.three.co.id. [180.214.233.92])
-        by smtp.gmail.com with ESMTPSA id q18-20020a170902eb9200b0017872bc9865sm7162435plg.63.2022.09.24.01.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 01:29:35 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6A0AD1037EC; Sat, 24 Sep 2022 15:29:30 +0700 (WIB)
-Date:   Sat, 24 Sep 2022 15:29:30 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v2 1/6] Documentation: fpga: dfl: Add documentation for
- DFHv1
-Message-ID: <Yy6/6nPa8buvqvbp@debian.me>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
- <20220923121745.129167-2-matthew.gerlach@linux.intel.com>
+        Sat, 24 Sep 2022 04:31:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB07192BF
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 01:31:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AB72611AD
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:31:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978E1C433C1;
+        Sat, 24 Sep 2022 08:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664008290;
+        bh=hdBxf6v0OSLy9sbVlJe1DITjukq2kCo1ke7IxJ/KVxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wd7qGvMZ6+xWFoHuMIfl8JISngFIV1P4SYndk98fkc6cwgOP28lCc+TP6o8VdW6am
+         aUFQpT9USkQdjgI7o+HgNdANPSpq4s2fgfU2vR/Tx6tlaqkhfNUOIMUwGIK5VcwOoL
+         CbCRZHs2UZM+D6IC6TkuKf3uS2RJTlHzcFREMPYrCwunyO4wSd0TlYZ5QrznlkICFw
+         YTQZ4cSF/OWEHSOtrBk6zVab0isD01mz+TfOAS4mIL5SHt2lEqhByTiFbfdn6i5YHd
+         6UtJQiu3jHj0Dvcld2rnnyxO1jgKIU/tKwGXslTE98oreRCtw85+BX6G98pnJAMxu9
+         k1BZoVANDaC+A==
+Received: by pali.im (Postfix)
+        id A03108A2; Sat, 24 Sep 2022 10:31:27 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 10:31:27 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
+ registers before USB 3.0 power on
+Message-ID: <20220924083127.oht57ivvsr4obrjr@pali>
+References: <20220920121154.30115-1-pali@kernel.org>
+ <20220921050300.riwyofdncxscrwe3@shindev>
+ <20220921080557.jdg5wywpa5qxcyo2@pali>
+ <Yy6uaaZUbZsBSqrw@matsya>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gILyyALDCOs9GF4/"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220923121745.129167-2-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yy6uaaZUbZsBSqrw@matsya>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Saturday 24 September 2022 12:44:49 Vinod Koul wrote:
+> On 21-09-22, 10:05, Pali Rohár wrote:
+> > On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
+> > > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
+> > > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
+> > > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
+> > > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+> > > > reset support"). On the other hand USB 2.0 devices connected to the same
+> > > > USB-A port are working fine.
+> > > > 
+> > > > It looks as if the older firmware configures COMPHY registers for USB 3.0
+> > > > somehow incompatibly for kernel driver. Experiments show that resetting
+> > > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
+> > > > register fixes this issue.
+> > > > 
+> > > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
+> > > > step after selecting COMPHY lane and USB 3.0 function. With this change
+> > > > Turris MOX board can successfully detect USB 3.0 devices again.
+> > > > 
+> > > > Before the above mentioned commit this reset was implemented in PHY reset
+> > > > method, so this is the reason why there was no issue with older firmware
+> > > > version then.
+> > > > 
+> > > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
+> > > > Reported-by: Marek Behún <kabel@kernel.org>
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > ---
+> > > > Shinichiro, could you please check that all USB functionality still
+> > > > works correctly on your board?
+> > > > ---
+> > > 
+> > > Sure. TL;DR, this patch works ok for my espressobin v7 board.
+> > > 
+> > > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> > > 
+> > > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
+> > > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
+> > > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
+> > > drive. The drive was detected and its partition was mounted successfully using
+> > > either of the two USB ports.
+> > 
+> > Thank you for testing! Anyway, please check that USB 3.0 device is
+> > working fine. Because as I wrote in commit message, on Turris Mox was
+> > USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
+> 
+> update the log now?
 
---gILyyALDCOs9GF4/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What do you want to update?
 
-On Fri, Sep 23, 2022 at 05:17:40AM -0700, matthew.gerlach@linux.intel.com w=
-rote:
-> +With DFHv0, the register map of a given feature is located immediately f=
-ollowing
-> +the DFHv0 in the memory space.  With DFHv1, the location of the feature =
-register
-> +map can be specified as an offset to the DFHv1 or as an absolute address=
-=2E  The DFHv1
-> +structure is shown below:
-> +
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 =
-ID 0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63                                 GUID_L                          =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63                                 GUID_H                          =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63                 Address/Offset                            1|  Re=
-l  0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance   =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID        =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63                 Parameter Data                                  =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +
-> +                                  ...
-> +
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID        =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +    |63                 Parameter Data                                  =
-   0|
-> +    +-------------------------------------------------------------------=
-----+
-> +
-
-For consistency with DFL location diagram (which is above the DFHv1
-diagram above), use literal code block instead of table:
-
----- >8 ----
-
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 7c786b75b4988f..db6bff4aee25eb 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -584,7 +584,7 @@ across all types.
- With DFHv0, the register map of a given feature is located immediately fol=
-lowing
- the DFHv0 in the memory space.  With DFHv1, the location of the feature re=
-gister
- map can be specified as an offset to the DFHv1 or as an absolute address. =
- The DFHv1
--structure is shown below:
-+structure is shown below::
-=20
-     +---------------------------------------------------------------------=
---+
-     |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID=
- 0|
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---gILyyALDCOs9GF4/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYy6/4wAKCRD2uYlJVVFO
-o5KXAQCJ1UPL/CFnyL4a2ndyowwbvrWpIGVW1a8pRAsFnePQGwD8CNztDfBpOPJZ
-1qnoSvaJGCUYL/4tQ+pvqPu1Dyn+JgA=
-=P99G
------END PGP SIGNATURE-----
-
---gILyyALDCOs9GF4/--
+> > (lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
+> > 3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
+> > 
+> > > I also confirmed SATA port is ok (my SSD card was detected without error
+> > > message) and three network ports works ok ("Link is Up" message on network cable
+> > > connection). I did same confirmations with the latest firmware (TF-A and U-boot)
+> > > and old firmware (with version date in 2017). All looks good for me.
+> > > 
+> > > -- 
+> > > Shin'ichiro Kawasaki
+> 
+> -- 
+> ~Vinod
