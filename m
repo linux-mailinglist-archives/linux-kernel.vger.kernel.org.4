@@ -2,73 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5065E8CF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 15:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BE45E8CF8
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 15:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiIXNCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 09:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S229483AbiIXNL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 09:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIXNCl (ORCPT
+        with ESMTP id S229669AbiIXNL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 09:02:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16C9E2E8
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:02:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C5DFB80EA9
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5B9C433C1;
-        Sat, 24 Sep 2022 13:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664024557;
-        bh=f9TI+zLW1k/oFp4jM/JMZaUsym4/RFdsc3oPkp8gl1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vITOSzQTGC/YMameL61MhoY34yQPY9hA/15BiGXn3DaQb0P/4ieDqrLxOzgFJD/EC
-         OaJ5R8dLDwURtAdRo2n3a07T27JXSXU6D94vXm+uPBGbELv+Mk6Qeh0ckggaTKWgi3
-         NCAIw6POslOurSMVto1kITZtI4YmGXRMz+l4pFeQ=
-Date:   Sat, 24 Sep 2022 15:02:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jim Cromie <jim.cromie@gmail.com>
-Cc:     jbaron@akamai.com, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        linux@rasmusvillemoes.dk, joe@perches.com
-Subject: Re: [PATCH v7 0/9] dyndbg: drm.debug adaptation
-Message-ID: <Yy7/6oTBW2lqVSK1@kroah.com>
-References: <20220912052852.1123868-1-jim.cromie@gmail.com>
+        Sat, 24 Sep 2022 09:11:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5079F0CB
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:11:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZTnN6kMRzHtft;
+        Sat, 24 Sep 2022 21:07:04 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 21:11:48 +0800
+Subject: Re: [PATCH v2 6/9] hugetlb: add vma based lock for pmd sharing
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220914221810.95771-1-mike.kravetz@oracle.com>
+ <20220914221810.95771-7-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <2b1b6d09-0188-23a3-6ac3-6e81446a10e4@huawei.com>
+Date:   Sat, 24 Sep 2022 21:11:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912052852.1123868-1-jim.cromie@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220914221810.95771-7-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
-> hi Greg, Dan, Jason, DRM-folk,
+On 2022/9/15 6:18, Mike Kravetz wrote:
+> Allocate a new hugetlb_vma_lock structure and hang off vm_private_data
+> for synchronization use by vmas that could be involved in pmd sharing.
+> This data structure contains a rw semaphore that is the primary tool
+> used for synchronization.
 > 
-> heres follow-up to V6:
->   rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
->   rework drm_debug_enabled{_raw,_instrumented,} per Dan.
+> This new structure is ref counted, so that it can exist when NOT attached
+> to a vma.  This is only helpful in resolving lock ordering issues where
+> code may need to obtain the vma_lock while there are no guarantees the
+> vma may go away.  By obtaining a ref on the structure, it can be
+> guaranteed that at least the rw semaphore will not go away.
 > 
-> It excludes:
->   nouveau parts (immature)
->   tracefs parts (I missed --to=Steve on v6)
->   split _ddebug_site and de-duplicate experiment (way unready)
+> Only add infrastructure for the new lock here.  Actual use will be added
+> in subsequent patches.
 > 
-> IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
-> 
-> If these are good to apply, I'll rebase and repost the rest separately.
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-All now queued up, thanks.
+LGTM with some nits below. Thanks for your work, Mike.
 
-greg k-h
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+> -/* Reset counters to 0 and clear all HPAGE_RESV_* flags */
+> -void reset_vma_resv_huge_pages(struct vm_area_struct *vma)
+> +void hugetlb_dup_vma_private(struct vm_area_struct *vma)
+>  {
+>  	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
+> +	/*
+> +	 * Clear vm_private_data
+> +	 * - For MAP_PRIVATE mappings, this is the reserve map which does
+> +	 *   not apply to children.  Faults generated by the children are
+> +	 *   not guaranteed to succeed, even if read-only.
+> +	 * - For shared mappings this is a per-vma semaphore that may be
+> +	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+> +	 */
+> +	vma->vm_private_data = (void *)0;
+>  	if (!(vma->vm_flags & VM_MAYSHARE))
+> -		vma->vm_private_data = (void *)0;
+> +		return;
+
+This if block can be deleted ? It doesn't do anything here.
+
+>  }
+>  
+>  /*
+
+<snip>
+
+> +static void hugetlb_vma_lock_free(struct vm_area_struct *vma)
+> +{
+> +	/*
+> +	 * Only present in sharable vmas.  See comment in
+> +	 * __unmap_hugepage_range_final about how VM_SHARED could
+> +	 * be set without VM_MAYSHARE.  As a result, we need to
+> +	 * check if either is set in the free path.
+> +	 */
+> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
+> +		return;
+> +
+> +	if (vma->vm_private_data) {
+> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> +
+> +		/*
+> +		 * vma_lock structure may or not be released, but it
+
+may or not be released?
+
+Thanks,
+Miaohe Lin
+
