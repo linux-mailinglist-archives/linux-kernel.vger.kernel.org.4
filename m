@@ -2,48 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B035E8925
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D385E8920
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiIXHaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S233506AbiIXH2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiIXHaQ (ORCPT
+        with ESMTP id S233446AbiIXH13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:30:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E4D857EA
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:30:14 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZLCD5TJ2zHtj7;
-        Sat, 24 Sep 2022 15:25:28 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 15:30:12 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 15:30:12 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <mhiramat@kernel.org>, <jpoimboe@kernel.org>,
-        <rostedt@goodmis.org>, <peterz@infradead.org>, <namit@vmware.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH -next] x86: kprobes: Remove unused macro stack_addr
-Date:   Sat, 24 Sep 2022 15:26:29 +0800
-Message-ID: <20220924072629.104759-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 24 Sep 2022 03:27:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36EF38A10;
+        Sat, 24 Sep 2022 00:27:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F56460DB7;
+        Sat, 24 Sep 2022 07:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04310C4347C;
+        Sat, 24 Sep 2022 07:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664004422;
+        bh=tt0jOXg97xVp5NYM4iKyzC9fLT2QSJBCxqt4QUSnBRs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cxu6aV2FnfOTOBFphC5ZhTe811lcPISTQ/85BkdTyf9dCqLA1+JcDRKlXOn5zqjUg
+         cAjuCr1vgSxUem3m1D2lyUjJtIyrYez9+GmdnMeKewSy1i9ElB3HwHQ/TNApi1FYRA
+         4dEQVoLmkxIAHOJDpemMDIjjVj+z8STIXyQ3iKxTjw+VmkLKNPAfCY0o7A9UWt6Usu
+         gWrT+6C5BYxyIgzTzcWNC/w914r2HINcoQmuBsD2JJH3g2bXyvqeImxbJc7M0osTWN
+         7FcS99mWTDdzh5vMgqu9cYt8i+mSgSOftq5xL8vK2aRlDwjHptSKG2fPMUtqWrnm8f
+         yLEWtrRy/1z4w==
+Received: by mail-lj1-f181.google.com with SMTP id j24so2267003lja.4;
+        Sat, 24 Sep 2022 00:27:01 -0700 (PDT)
+X-Gm-Message-State: ACrzQf15tQKyWMWEmzEzThxqMycTChdGnMOI2Fc+gqS+UEW8wz5nRwOB
+        WvNlw4z0PKjy5sDK5e2KlUIffGiJKfbOVlbZ5ww=
+X-Google-Smtp-Source: AMsMyM5i2gOhFswR/JCPJ+TrUVXIaw5UdmgNIjTgrno8/UpIa5Y24MFqIqwkWXPnisG24+Exdk5Dhk4DNzKrBpPsaiE=
+X-Received: by 2002:a2e:8349:0:b0:26c:4311:9b84 with SMTP id
+ l9-20020a2e8349000000b0026c43119b84mr4410587ljh.152.1664004419937; Sat, 24
+ Sep 2022 00:26:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220923221730.1860518-1-dave.hansen@linux.intel.com>
+In-Reply-To: <20220923221730.1860518-1-dave.hansen@linux.intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 24 Sep 2022 09:26:48 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEAneXVTFenwrP5U6-SSO7Hqm07z=1w19PUS4MUHM+BRw@mail.gmail.com>
+Message-ID: <CAMj1kXEAneXVTFenwrP5U6-SSO7Hqm07z=1w19PUS4MUHM+BRw@mail.gmail.com>
+Subject: Re: [PATCH] x86/mm: Disable W^X detection and enforcement on 32-bit
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,36 +66,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An unused macro reported by [-Wunused-macros].
+On Sat, 24 Sept 2022 at 00:17, Dave Hansen <dave.hansen@linux.intel.com> wrote:
+>
+> The 32-bit code is in a weird spot.  Some 32-bit builds (non-PAE) do not
+> even have NX support.  Even PAE builds that support NX have to contend
+> with things like EFI data and code mixed in the same pages where W+X
+> is unavoidable.
+>
+> The folks still running X86_32=y kernels are unlikely to care much about
+> NX.  That combined with the fundamental inability fix _all_ of the W+X
+> things means this code had little value on X86_32=y.  Disable the checks.
+>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Darren Hart <dvhart@infradead.org>
+> Cc: Andy Shevchenko <andy@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: linux-efi@vger.kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Link: https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
 
-This macro is used to access the sp in pt_regs because at that time
-x86_32 can only get sp by kernel_stack_pointer(regs).
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-'3c88c692c287 ("x86/stackframe/32: Provide consistent pt_regs")'
-This commit have unified the pt_regs and from them we can get sp from
-pt_regs with regs->sp easily. Nowhere is using this macro anymore.
-
-Refrencing pt_regs directly is more clear. Remove this macro for
-code cleaning.
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- arch/x86/kernel/kprobes/core.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 4c3c27b6aea3..eb8bc82846b9 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -59,8 +59,6 @@
- DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
- DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
- 
--#define stack_addr(regs) ((unsigned long *)regs->sp)
--
- #define W(row, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, ba, bb, bc, bd, be, bf)\
- 	(((b0##UL << 0x0)|(b1##UL << 0x1)|(b2##UL << 0x2)|(b3##UL << 0x3) |   \
- 	  (b4##UL << 0x4)|(b5##UL << 0x5)|(b6##UL << 0x6)|(b7##UL << 0x7) |   \
--- 
-2.17.1
-
+> ---
+>  arch/x86/mm/pat/set_memory.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 20b1e24baa85..efe882c753ca 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -587,6 +587,14 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
+>  {
+>         unsigned long end;
+>
+> +       /*
+> +        * 32-bit has some unfixable W+X issues, like EFI code
+> +        * and writeable data being in the same page.  Disable
+> +        * detection and enforcement there.
+> +        */
+> +       if (IS_ENABLED(CONFIG_X86_32))
+> +               return new;
+> +
+>         /* Only enforce when NX is supported: */
+>         if (!(__supported_pte_mask & _PAGE_NX))
+>                 return new;
+> --
+> 2.34.1
+>
