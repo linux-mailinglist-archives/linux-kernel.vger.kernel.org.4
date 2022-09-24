@@ -2,281 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7DA5E8BD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D60F5E8BDF
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbiIXLoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S233609AbiIXLpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiIXLoe (ORCPT
+        with ESMTP id S233651AbiIXLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:44:34 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B657EE56;
-        Sat, 24 Sep 2022 04:44:31 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w20so2308552ply.12;
-        Sat, 24 Sep 2022 04:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=yo07PqkzGc/Ak91EyADpr56EyPsnZrX2A8n7RvC5xMQ=;
-        b=fYjpXY+OEAvd9gZe2y0ZW1kvV5tBKhwHkzoFiLZf4MZ2jfikSbhMPAwSLHEqC6QhTV
-         ICKGxooCbie/kaL3IqkqeiRCfGHpBYUN0YHAip0Ik1vWC1a+HO8oF2m4cCAOW0kqg/D2
-         wM8mmcWs2xBJNPKPAQCek5Ky4DvP45OpA+YqZrEURQVk6v/584Cxd8YyUb1mp8yD3tU9
-         CZQl+sFN73ViWLrIomHI/boX60srmpqF67k0SK03RsebUIh7y6AEwTD3a5pY/tyrUCwM
-         UJjo+SBOpV1NRCvcoMuqGoJuXhDO53h8JxULHQNB1rSFlM1QhlLz7KdrkeTR4irBw0/W
-         Tkjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=yo07PqkzGc/Ak91EyADpr56EyPsnZrX2A8n7RvC5xMQ=;
-        b=EsvYfPJSP9Siabj1RlOxFkE/sYtuy4Cy33Cb2an5wFIWrcBYVgZAG0Yh6iKDaEAQtF
-         kp5ULYr22sjVTzU2ld3vuzdR8sIoeVpSH19fxP5xOABZ/akrG3Qwowd5FC89mDhcBlr9
-         IPNCudjXRe5yguk7PTrLBIbliRvngKQe6O2ZMAfa5zOw/o90L1EcCRGtbKJw6HEpXU43
-         dZMMtz3o/0KemVuCxrapeK4pqZvgFrUq4/GOW/WdKxm+m8BeloqOk3+2kX/F/YaLqpey
-         nJkzstCFIksUiJUndOuo7wdsCn8wM/y11KxLkYc3Vck8jaI1fqr9ocYA5833EEzzFizf
-         5jJw==
-X-Gm-Message-State: ACrzQf2A8vwTpXeM0cs0OOFM+ocWehJ/gMiX5kK9CmOafaLcxWru66Ll
-        qz8smaexK5uD1xl+UgYL1Tg=
-X-Google-Smtp-Source: AMsMyM7AQR0pYlvb0Hccep3U2Y6LhTfgD5nufTXAeG9Tz1hCLxBcZWS4A9HaS58TB0VOqgB1MJbGOw==
-X-Received: by 2002:a17:90b:3850:b0:200:b1fd:891f with SMTP id nl16-20020a17090b385000b00200b1fd891fmr15142314pjb.144.1664019871056;
-        Sat, 24 Sep 2022 04:44:31 -0700 (PDT)
-Received: from localhost ([36.112.206.177])
-        by smtp.gmail.com with ESMTPSA id w68-20020a628247000000b0053e75395705sm8239785pfd.127.2022.09.24.04.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 04:44:30 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     keescook@chromium.org
-Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH] Add linux-next specific files for 20220923
-Date:   Sat, 24 Sep 2022 19:44:25 +0800
-Message-Id: <20220924114425.95553-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202209240014.C7B6E929A@keescook>
-References: <202209240014.C7B6E929A@keescook>
+        Sat, 24 Sep 2022 07:44:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F43252;
+        Sat, 24 Sep 2022 04:44:49 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28OBiORQ003689;
+        Sat, 24 Sep 2022 11:44:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3N1VaLpXUDkXxS9kSOW/35TYj4yY7CtvK57VDScUYOE=;
+ b=Q2wGJMTuP0svRfVDj4EGI97TmocbPgs4sj7oGS39R42NC6s9QqMwtCocsUkOgjLqqcM4
+ 9B5gGx3NP25kwFGgh6FqlE6Z/42hkUJ+rrPzTteqY6QPARIidav3kOEOQFw4ZmGLmcGD
+ E1tk7W4YneIRUqGcXo9HPGCMEzA+4bgtKekxSzxOf06nad1dZShViq9OzOjkuqxBg3qb
+ KANZuVO+KiBN9uv21ag69jUjY9swJznhyL7TUADxlZ1QmN9pdBPnmLrCVYF9s8C6cWmL
+ dY0Cwn+rzA1x8j3DagQDQjKNMHIVWGdb/H5oYshuH/zULv3XKZoaDXRUvMvXKcmjKnkJ Bw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jsu6frje4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 11:44:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28OBiZHD015936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 11:44:35 GMT
+Received: from [10.110.112.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sat, 24 Sep
+ 2022 04:44:30 -0700
+Message-ID: <9cba3c3d-c489-d99b-0bf1-81113fd6186f@quicinc.com>
+Date:   Sat, 24 Sep 2022 17:14:26 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V13 2/7] soc: qcom: dcc: Add driver support for Data
+ Capture and Compare unit(DCC)
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1663642051.git.quic_schowdhu@quicinc.com>
+ <44ca04316e8b67f1662d304d8535236d82710bda.1663642052.git.quic_schowdhu@quicinc.com>
+ <fa33589b-7fe1-7be2-8d80-4c81183126c9@kernel.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <fa33589b-7fe1-7be2-8d80-4c81183126c9@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D1ViNZuXCqshm-L8q8dUw0YAmA6WaEZk
+X-Proofpoint-ORIG-GUID: D1ViNZuXCqshm-L8q8dUw0YAmA6WaEZk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-24_04,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 bulkscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209240088
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-On Sat, 24 Sept 2022 at 15:26, Kees Cook <keescook@chromium.org> wrote:
->
-> On Sat, Sep 24, 2022 at 03:10:34PM +0800, Hawkins Jiawei wrote:
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-> > > git tree:       linux-next
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1154ddd5080000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c196f080000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f12618880000
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > memcpy: detected field-spanning write (size 8) of single field "&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
-> > > WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623 wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
-> > > Modules linked in:
-> > > CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-> > > RIP: 0010:wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
-> > > Code: fa ff ff e8 cd b9 db f8 b9 04 00 00 00 4c 89 e6 48 c7 c2 e0 56 11 8b 48 c7 c7 20 56 11 8b c6 05 94 8e 2a 05 01 e8 b8 b0 a6 00 <0f> 0b e9 9b fa ff ff e8 6f ef 27 f9 e9 a6 fd ff ff e8 c5 ef 27 f9
-> > > RSP: 0018:ffffc90003b2fbc0 EFLAGS: 00010286
-> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > > RDX: ffff888021d157c0 RSI: ffffffff81620348 RDI: fffff52000765f6a
-> > > RBP: ffff88801e15c780 R08: 0000000000000005 R09: 0000000000000000
-> > > R10: 0000000080000000 R11: 20676e696e6e6170 R12: 0000000000000008
-> > > R13: ffff888025a72640 R14: ffff8880225d402c R15: ffff8880225d4034
-> > > FS:  0000555556bd9300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00007fbda677dfb8 CR3: 000000007b976000 CR4: 00000000003506e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
-> > >  wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
-> > >  wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
-> > >  wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
-> > >  wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
-> > >  sock_ioctl+0x285/0x640 net/socket.c:1220
-> > >  vfs_ioctl fs/ioctl.c:51 [inline]
-> > >  __do_sys_ioctl fs/ioctl.c:870 [inline]
-> > >  __se_sys_ioctl fs/ioctl.c:856 [inline]
-> > >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7fbda6736af9
-> > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007ffd45e80138 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fbda6736af9
-> > > RDX: 0000000020000000 RSI: 0000000000008b04 RDI: 0000000000000003
-> > > RBP: 00007fbda66faca0 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbda66fad30
-> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > >  </TASK>
-> >
-> > I think this is the samiliar problem as what Kees Cook pointed out in
-> > https://lore.kernel.org/linux-next/202209211250.3049C29@keescook/
-> >
-> > It seems that memcpy() will performs run-time buffer bounds
-> > checking, which triggers this warning.
-> >
-> > #syz test git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > master
-> >
-> >
-> > diff --git a/include/linux/wireless.h b/include/linux/wireless.h
-> > index 2d1b54556eff..81603848b0aa 100644
-> > --- a/include/linux/wireless.h
-> > +++ b/include/linux/wireless.h
-> > @@ -26,7 +26,10 @@ struct compat_iw_point {
-> >  struct __compat_iw_event {
-> >       __u16           len;                    /* Real length of this stuff */
-> >       __u16           cmd;                    /* Wireless IOCTL */
-> > -     compat_caddr_t  pointer;
-> > +     union {
-> > +             compat_caddr_t  pointer;
-> > +             __DECLARE_FLEX_ARRAY(__u8, pointer_flex);
-> > +     };
->
-> Is this expected to be dynamically sized? I assume so, given the "Real
-> length" comment. :)
-I think this is dynamically sized.
 
-	hdr_len = compat_event_type_size[descr->header_type];
-	event_len = hdr_len + extra_len;
+On 9/24/2022 1:12 AM, Krzysztof Kozlowski wrote:
+> On 20/09/2022 05:56, Souradeep Chowdhury wrote:
+>> The DCC is a DMA Engine designed to capture and store data
+>> during system crash or software triggers. The DCC operates
+>> based on user inputs via the debugfs interface. The user gives
+>> addresses as inputs and these addresses are stored in the
+> (...)
+>
+>> +
+>> +#define DCC_RD_MOD_WR_ADDR              0xC105E
+>> +
+>> +/*DCC debugfs directory*/
+>> +static struct dentry	*dcc_dbg;
+>> +
+>> +enum dcc_descriptor_type {
+>> +	DCC_READ_TYPE,
+>> +	DCC_LOOP_TYPE,
+>> +	DCC_READ_WRITE_TYPE,
+>> +	DCC_WRITE_TYPE
+>> +};
+>> +
+>> +struct dcc_config_entry {
+>> +	u32				base;
+>> +	u32				offset;
+>> +	u32				len;
+>> +	u32				loop_cnt;
+>> +	u32				write_val;
+>> +	u32				mask;
+>> +	bool				apb_bus;
+>> +	enum dcc_descriptor_type	desc_type;
+>> +	struct list_head		list;
+>> +};
+>> +
+>> +/**
+>> + * struct dcc_drvdata - configuration information related to a dcc device
+>> + * @base:	      Base Address of the dcc device
+>> + * @dev:	      The device attached to the driver data
+>> + * @mutex:	      Lock to protect access and manipulation of dcc_drvdata
+>> + * @ram_base:         Base address for the SRAM dedicated for the dcc device
+>> + * @ram_size:         Total size of the SRAM dedicated for the dcc device
+>> + * @ram_offset:       Offset to the SRAM dedicated for dcc device
+>> + * @mem_map_ver:      Memory map version of DCC hardware
+>> + * @ram_cfg:          Used for address limit calculation for dcc
+>> + * @ram_start:        Starting address of DCC SRAM
+>> + * @sram_dev:	      Micellaneous device equivalent of dcc SRAM
+>> + * @cfg_head:	      Points to the head of the linked list of addresses
+>> + * @dbg_dir:          The dcc debugfs directory under which all the debugfs files are placed
+>> + * @nr_link_list:     Total number of linkedlists supported by the DCC configuration
+>> + * @loopoff:          Loop offset bits range for the addresses
+> All these entres have messed up spacing.
+Ack
+>
+>> + * @enable:           This contains an array of linkedlist enable flags
+> No, this is not an array of linked lists... It's a pointer to bool. This
+> is not way to store linked lists.
+Ack
+>
+>
+>> +
+>> +static int dcc_probe(struct platform_device *pdev)
+>> +{
+>> +	u32 val;
+>> +	int ret = 0, i, size;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct dcc_drvdata *dcc;
+>> +	struct resource *res;
+>> +
+>> +	dcc = devm_kzalloc(dev, sizeof(*dcc), GFP_KERNEL);
+>> +	if (!dcc)
+>> +		return -ENOMEM;
+>> +
+>> +	dcc->dev = &pdev->dev;
+>> +	platform_set_drvdata(pdev, dcc);
+>> +
+>> +	dcc->base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(dcc->base))
+>> +		return PTR_ERR(dcc->base);
+>> +
+>> +	dcc->ram_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+>> +	if (IS_ERR(dcc->ram_base))
+>> +		return PTR_ERR(dcc->ram_base);
+>> +
+>> +	dcc->ram_size = resource_size(res);
+>> +
+>> +	dcc->ram_offset = (size_t)of_device_get_match_data(&pdev->dev);
+>> +
+>> +	val = dcc_readl(dcc, DCC_HW_INFO);
+>> +
+>> +	if (FIELD_GET(DCC_VER_INFO_MASK, val)) {
+>> +		dcc->mem_map_ver = 3;
+>> +		dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
+>> +		if (dcc->nr_link_list == 0)
+>> +			return	-EINVAL;
+>> +	} else if ((val & DCC_VER_MASK2) == DCC_VER_MASK2) {
+>> +		dcc->mem_map_ver = 2;
+>> +		dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
+>> +		if (dcc->nr_link_list == 0)
+>> +			return	-EINVAL;
+>> +	} else {
+>> +		dcc->mem_map_ver = 1;
+>> +		dcc->nr_link_list = DCC_MAX_LINK_LIST;
+>> +	}
+>> +
+>> +	/* Either set the fixed loop offset or calculate it
+> Start with /*
+> (see coding style)
+Ack
+>
+>> +	 * from ram_size.Max consecutive addresses the
+>> +	 * dcc can loop is equivalent to the ram size
+>> +	 */
+>> +	if (val & DCC_LOOP_OFFSET_MASK)
+>> +		dcc->loopoff = DCC_FIX_LOOP_OFFSET;
+>> +	else
+>> +		dcc->loopoff = get_bitmask_order((dcc->ram_size +
+>> +				dcc->ram_offset) / 4 - 1);
+>> +
+>> +	mutex_init(&dcc->mutex);
+>> +	/* Allocate space for all entries at once */
+>> +	size = sizeof(*dcc->enable) + sizeof(*dcc->cfg_head);
+> This is quite confusing way of handling lists - some parts of drvdata
+> are list, some are not.
 
-	[...]
+We are using three things for lists here.  A cfg_head which points to 
+the head of the
 
-	/* Add the wireless events in the netlink packet */
-	nla = nla_reserve(compskb, IFLA_WIRELESS, event_len);
-	if (!nla) {
-		kfree_skb(skb);
-		kfree_skb(compskb);
-		return;
-	}
-	compat_event = nla_data(nla);
+individual linkedlist of addresses. a nr_linked_list to store the total 
+number of lists
 
-	[...]
+supported by dcc and an array of boolean to store the enabled status of 
+each individual lists
 
-	if (descr->header_type == IW_HEADER_TYPE_POINT) {
-		compat_wrqu.length = wrqu->data.length;
-		compat_wrqu.flags = wrqu->data.flags;
-		memcpy(&compat_event->pointer,
-			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
-			hdr_len - IW_EV_COMPAT_LCP_LEN);
-		if (extra_len)
-			memcpy(((char *) compat_event) + hdr_len,
-				extra, extra_len);
-	} else {
-		/* extra_len must be zero, so no if (extra) needed */
-		memcpy(&compat_event->pointer, wrqu,
-			hdr_len - IW_EV_COMPAT_LCP_LEN);
-	}
+>> +
+>> +	dcc->enable = devm_kcalloc(dev, dcc->nr_link_list, size, GFP_KERNEL);
+>> +	if (!dcc->enable)
+>> +		return -ENOMEM;
+>> +
+>> +	dcc->cfg_head = (struct list_head *)(dcc->enable + dcc->nr_link_list);
+> That's unusual way to iterate over list...
+Here we are instantiating the head of each individual linked lists in 
+the array that stores the list.
+>
+>> +
+>> +	for (i = 0; i < dcc->nr_link_list; i++)
+>> +		INIT_LIST_HEAD(&dcc->cfg_head[i]);
+>> +
+>> +	ret = dcc_sram_dev_init(dcc);
+>> +	if (ret) {
+>> +		dev_err(dcc->dev, "DCC: sram node not registered.\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = dcc_create_debug_dir(dcc);
+>> +	if (ret) {
+>> +		dev_err(dcc->dev, "DCC: debugfs files not created.\n");
+> debugfs failures are not reasons to fail probe. Also no need to print
+> errors.
 
-according to the above code, it seems that this structure is used to
-parse ths payload from buffer, so the field **pointer** should just
-be a position label to the unused bytes in buffer. Its unused bytes will be
-parsed as different structure according to event type.
+The total functionality of this driver is dependent on the debugfs 
+files. That is why
 
->
-> >  };
-> >  #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
-> >  #define IW_EV_COMPAT_POINT_OFF offsetof(struct compat_iw_point, length)
-> > diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
-> > index 76a80a41615b..9d0b50abbe09 100644
-> > --- a/net/wireless/wext-core.c
-> > +++ b/net/wireless/wext-core.c
-> > @@ -620,7 +620,7 @@ void wireless_send_event(struct net_device *      dev,
->
-> adding in more context code:
->
->                 memcpy(&compat_event->pointer,
->                         ((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
->                         hdr_len - IW_EV_COMPAT_LCP_LEN);
->                 if (extra_len)
->                         memcpy(((char *) compat_event) + hdr_len,
->                                 extra, extra_len);
->
-> The code above has "pointer" as a memcpy destination as well. I think
-> that should be changed to pointer_flex as well, as the length calculation
-> is the same. I wonder what FORTIFY will think about the second memcpy
-> above. If I'm reading the math correctly, it might need to be:
->
->                 if (extra_len) {
->                         size_t offset = hdr_len - offsetof(typeof(*compat_event), pointer_flex);
->                         memcpy(&compat_event->pointer_flex[offset], extra, extra_len);
->                 }
->
-I agree with you. It seems that in this situation,
-the event type has been cleared, the unuesd bytes start from **pointer**
-field should be parsed as struct iw_point type as below, which is a bigger
-structure than **pointer**, it will also triggers the memcpy() warning.
-/*
-	 * The problem for 64/32 bit.
-	 *
-	 * On 64-bit, a regular event is laid out as follows:
-	 * An iw_point event is laid out like this instead:
-	 *      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
-	 *      | event.len | event.cmd |     p a d d i n g     |
-	 *      | iwpnt.len | iwpnt.flg |     p a d d i n g     |
-	 *      | extra data  ...
-	 *
-	 * The second padding exists because struct iw_point is extended,
-	 * but this depends on the platform...
-	 *
-	 * On 32-bit, all the padding shouldn't be there.
-	 */
+the probe if failed with error message if it is not created. This is 
+done as per Alex's
 
-And as for the value of offsetof in calculating **offset**,
-I wonder if we can use the macro defined in
-include/linux/wireless.h as below, which makes code simplier:
-#define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
+comment on version 8 of the patch.
 
-
+>> +		dcc_sram_dev_exit(dcc);
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dcc_remove(struct platform_device *pdev)
+>> +{
+>> +	struct dcc_drvdata *drvdata = platform_get_drvdata(pdev);
+>> +
+>> +	dcc_delete_debug_dir(drvdata);
+>> +
+>> +	dcc_sram_dev_exit(drvdata);
+>> +
+> No need for blank lines between each calls.
+Ack
 >
-> >       } else {
-> >               /* extra_len must be zero, so no if (extra) needed */
-> > -             memcpy(&compat_event->pointer, wrqu,
-> > +             memcpy(&compat_event->pointer_flex, wrqu,
-> >                       hdr_len - IW_EV_COMPAT_LCP_LEN);
-> >       }
-> >
+>> +	dcc_config_reset(drvdata);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id dcc_match_table[] = {
+>> +	{ .compatible = "qcom,sm8150-dcc", .data = (void *)0x5000 },
+>> +	{ .compatible = "qcom,sc7280-dcc", .data = (void *)0x12000 },
+>> +	{ .compatible = "qcom,sc7180-dcc", .data = (void *)0x6000 },
+>> +	{ .compatible = "qcom,sdm845-dcc", .data = (void *)0x6000 },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, dcc_match_table);
+>> +
+>> +static struct platform_driver dcc_driver = {
+>> +	.probe = dcc_probe,
+>> +	.remove	= dcc_remove,
+>> +	.driver	= {
+>> +		.name = "qcom-dcc",
+>> +		.of_match_table	= dcc_match_table,
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(dcc_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
+>> +
+> Best regards,
+> Krzysztof
 >
-> But otherwise, yes, looks like the right modification. Thanks for tackling
-> this! It is quite a weird structure! :)
->
-> -Kees
->
-> --
-> Kees Cook
