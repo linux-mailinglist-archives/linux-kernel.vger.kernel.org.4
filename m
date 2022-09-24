@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A705E88B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367415E88BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbiIXGZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 02:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S233383AbiIXG21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 02:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIXGY7 (ORCPT
+        with ESMTP id S229479AbiIXG2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 02:24:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791242EF1C;
-        Fri, 23 Sep 2022 23:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664000698; x=1695536698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ahk3qTCXfZXiFTcCidMdjrCVQMdNXV2fOISqcNWVFbQ=;
-  b=QDq0MpE2T3XDINS7P6ifBvZzKTz3FMKQZEsAgXsd6AiEJ64FghxTbO22
-   UXaL1nSBym6o6wzlm4f6ugLb7FGCiLGmn4X3laanQdYGpNbNT83dBFcL0
-   4jUhKTF1wTpXordNzA1ciyYyEYbwh706kpRjbrMT3KM5aJ7X8Izsf9o4M
-   64/bAM2xO150Y7HM1zNitNdkXUdl8l4jysJqmswOLz6tFOvFmqfZPzzoz
-   NN/FYHhnDakK6wiBLhRhkoyMFZu2DkS9NCGrMGbogA+gT4Wuj0dAHWrjp
-   SW/LDJWYnfekDatymUPyJfrPGeHgKeT9gkFmUd779KGqWCS8eTcNosZ3S
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299472942"
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="299472942"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 23:24:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="651214007"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 23:24:55 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id CDEB7F7; Sat, 24 Sep 2022 09:25:13 +0300 (EEST)
-Date:   Sat, 24 Sep 2022 09:25:13 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Szuying Chen <Chloe_Chen@asmedia.com.tw>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v1 1/2] thunderbolt: Convert to use
- sysfs_emit()/sysfs_emit_at() APIs
-Message-ID: <Yy6iyYWd5CGQMFit@black.fi.intel.com>
-References: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
+        Sat, 24 Sep 2022 02:28:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8111E5C1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 23:28:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 199EEB8013A
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 06:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E408BC433C1;
+        Sat, 24 Sep 2022 06:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664000901;
+        bh=13hcAswE3/w5gxNu2/Ksn2qrnXkSsfzErgmHm7xxrQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SGdBa86rzljLx7cjzepoilpeBg3XmKvRNAw28AALpCf6Qk/7FWeV3Nw9qlOBqHThk
+         2Uii+Yu7WhDAoDKeVxYIObjTalaTstgk1Xdv26p8Y7NlSqimtN8paEyOuSbpDNGgpT
+         veWfBuPHzR0m7KhFhjO8dTxVvyPdIRQ+cTFUQ6jQ/NEEV+8x1x83H7HFqst+Fi505/
+         eaE0h824Xm2UaGMHjOXMvdaRTlafhEyvT6qotgokzmvekti0s0EsNUEG1xGbpMSrwJ
+         zloX68w2JN2yOSm5+WQ597Ei+2SrgavhVTxQKmEYKINYo4QxLy0usY145FGO/rYMQn
+         O/q7FzEa+tv6Q==
+Date:   Sat, 24 Sep 2022 11:58:17 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: Re: [PATCH 00/18] unify register access and macros
+Message-ID: <Yy6jgYXSawkaAMxv@matsya>
+References: <20220920090038.15133-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220920090038.15133-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 05:32:39PM +0300, Andy Shevchenko wrote:
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the value
-> to be returned to user space.
-> 
-> While at it, use Elvis operator in some cases.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 20-09-22, 17:00, Chunfeng Yun wrote:
+> No need to define new macros to generate bits, mask and bitfield, use
+> common ones instead, e.g. BIT, GENMASK and FIELD_PREP etc.
+> Due to common register access helpers are defined for MediaTek's phy
+> drivers, the similar helpers defined by ufs, hdmi and mipi phy drivers
+> can be removed.
 
-This and the following patch applied to thunderbolt.git/next. Thanks
-Andy!
+Applied, thanks
+
+-- 
+~Vinod
