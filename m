@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1CB5E868F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501815E8696
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiIXAIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
+        id S233030AbiIXALl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbiIXAHo (ORCPT
+        with ESMTP id S232588AbiIXALN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 20:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E23114A7B1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:06:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D968E616DF
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E05EC433D6;
-        Sat, 24 Sep 2022 00:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663977957;
-        bh=mWdycZrVbYlYerQP3VWTZuUZAv52rEKHRKG7opsxIoQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NNQb1trdB5wAEa0rLSi7MfG1r3yx6medNJchwv/GWiAbeVAngL2qIBHEmeDJsyYyW
-         6xv59nob/pbHQWYWcsDBGkGRC7hUPZTlTuh8TlrlFo3hd10yJRP1Tm7mf8hAaC7etY
-         rfp6I2AI1MNOpQt4eLkK1OK1LI4Er+Xib8koMOdE=
-Date:   Fri, 23 Sep 2022 17:05:54 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Liu Zixian <liuzixian4@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "David Hildenbrand" <david@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, <linux-mm@kvack.org>,
+        Fri, 23 Sep 2022 20:11:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D928832BBF;
+        Fri, 23 Sep 2022 17:09:50 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NNJkTx032306;
+        Sat, 24 Sep 2022 00:09:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=a7nDO7ohfYGnTWh7ONt+gbaTWPaULiS/JkfZBmleIpc=;
+ b=lYChOzqnjiGhJxskAVQ8Jo1G7s+TkmFNu7ZVWFdL+qqIlBHWujZ12RkNw+m2M3h+nzIn
+ 546efAq+g98DnDPvGNfUuOjOQSrG9jvvXpwkyYxx6eNOiBJkIaYNcoH4stXGOM/LnLt2
+ m0MQ02uDlAm2YiS0yDWDB94HVxYaztwq+2Dq0P9tLUfWVyt1IPVgAQYv0SqCdaBZYHiw
+ 8VYOCGQiUZsiqIx/KEos//6tDbqUWP7RIeF3xROSSUvLT7QwixCbJ4GjgUQ+P7tz1PSm
+ qGniACNCPkENmudBzopIT06U/9odAb41o31uiuhpzUM/0vCTAZZ92P2l7z7Zf8+wNfEi SA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrpqnvpyh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 00:09:35 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28O09YZb019390
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Sep 2022 00:09:34 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 23 Sep
+ 2022 17:09:33 -0700
+Date:   Fri, 23 Sep 2022 17:09:32 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <martin.botka@somainline.org>,
+        <angelogioacchino.delregno@somainline.org>,
+        <marijn.suijten@somainline.org>, <jamipkettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: hugetlb: fix UAF in hugetlb_handle_userfault
-Message-Id: <20220923170554.7046bb023f8cf582b5909b77@linux-foundation.org>
-In-Reply-To: <20220923042113.137273-1-liushixin2@huawei.com>
-References: <20220923042113.137273-1-liushixin2@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
+Message-ID: <20220924000932.GA1450@quicinc.com>
+References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
+ <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
+ <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: t7244SlhJEQ1FUYFuitfzHvBzA_Hi1C-
+X-Proofpoint-GUID: t7244SlhJEQ1FUYFuitfzHvBzA_Hi1C-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-23_10,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 mlxlogscore=927
+ lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209230155
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 12:21:13 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+On Sep 21 2022 20:43, Konrad Dybcio wrote:
+> Does it? I did not define this compatible in the driver, so it does
+> not consume any clocks.
 
-> The vma_lock and hugetlb_fault_mutex are dropped before handling
-> userfault and reacquire them again after handle_userfault(), but
-> reacquire the vma_lock could lead to UAF[1,2] due to the following
-> race,
-> 
-> hugetlb_fault
->   hugetlb_no_page
->     /*unlock vma_lock */
->     hugetlb_handle_userfault
->       handle_userfault
->         /* unlock mm->mmap_lock*/
->                                            vm_mmap_pgoff
->                                              do_mmap
->                                                mmap_region
->                                                  munmap_vma_range
->                                                    /* clean old vma */
->         /* lock vma_lock again  <--- UAF */
->     /* unlock vma_lock */
-> 
-> Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
-> let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
-> the issue.
-> 
-> [1] https://lore.kernel.org/linux-mm/000000000000d5e00a05e834962e@google.com/
-> [2] https://lore.kernel.org/linux-mm/20220921014457.1668-1-liuzixian4@huawei.com/
-> Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
-> Reported-by: Liu Zixian <liuzixian4@huawei.com>
-> Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
-> CC: stable@vger.kernel.org # 4.14+
+The bindings should describe only those compatibles that the driver supports -
+that is, both the driver and its bindings should be in sync.
 
-Patch is against mm-unstable, which isn't appropriate for a backport. 
-Could you please something against current -linus (which will be more
-backportable), then I'll figure out the fallout on mm-unstable.
+Could you please update the driver with this compatible as well? Let's not
+merge this change without that first.
 
-Thanks.
+Thank you.
+
+Guru Das.
