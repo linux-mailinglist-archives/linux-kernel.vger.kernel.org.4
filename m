@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C80D5E867C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F095E8672
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiIXAFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S232971AbiIXAFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiIXAFE (ORCPT
+        with ESMTP id S232964AbiIXAFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 20:05:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4969E9AFA8;
-        Fri, 23 Sep 2022 17:04:57 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687019E8A8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:04:57 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663977895;
+        s=2020; t=1663977896;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aIZ/p/zzcUdqvZHBfaTh7iNfzROHCGADiXc3h/IYPhs=;
-        b=tCZMo4OJzUDsRF8Tt5+dc9rVSfsM8skI4n+zWXwCUkL8CFC32e6KCXNJYzr7jmUCSiy7PK
-        d9ZVBFsHn5tVkGw/58xnFgn8uhx7BTppvYVU7Vd4CaZ2bIRNe8Z/Ii/vYBnlumMa3r3Hq3
-        49kHaqlbV5niuvxKHiUPpIHDZsJZQw1iJD8rOb3wM23v9LK2MTpnIthq8+Q6WNMEqYUufP
-        PMS42lqeKjpuGybID818ebteZp2Kb3z4H0DJdG80La4a8KFtliJL5kdAiqEuYYZCQlPrl1
-        P+/5opPrHYIwb+TO/xBD8nL5QfWxEhOeCKp9VOoMS4tpmc0c4KjlfXyhkmGRAA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TiH+o7JC41DdZ3lwu3cXiKJzKZkxqWA+Jud7hMuF9gA=;
+        b=pFGs3MumAKqyjmH+l1KzRd31GIN3NwCRBmrL4IK+kkJfFIF3HGbKRcU6x17/ER90jiOvmH
+        9kbSmpJWvDW6LWdcaNMJEwAd881GJuKf/kESYfjvpEv6emMTrG8bM/F0R9LYdqT10oOaX0
+        a+64EYlYfeyyEM++gUgiN0xZTaSmNPeB1A4VJUuN6CWrstq1srFzFcMbWkbGuEOrxX/4AQ
+        ARAh+pBSMzjD1W3Y6kW6wVZmzEnO4zHxYyWJ+l/OTu97IoTMFO7zv9JEVi4z2Qr5aXbqu3
+        2Pd/N3hFPbM/L3vebmOdOmBXTQGceB6J2vUnCfzhXKk+d2fUQxZ3l1XbL9GShg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663977895;
+        s=2020e; t=1663977896;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aIZ/p/zzcUdqvZHBfaTh7iNfzROHCGADiXc3h/IYPhs=;
-        b=G1F2Ln97f+/dUnOPn//ayxn+aXiNDFuWDxoBSCqEd1WNNf6v/RbGXOH0HkyRnz8gTDiImh
-        gtw3fZf+UFXvSmDA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TiH+o7JC41DdZ3lwu3cXiKJzKZkxqWA+Jud7hMuF9gA=;
+        b=iXszll3pfPqc1GP/P+hO0F9vQwXwpSBQjOIr2P6fq43Fe4y0cIetm3OL3IIU9NvjIPXeUI
+        Lhpp1/LVHRpl2uCQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Sven Schnelle <svens@stackframe.org>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-parisc@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH printk 00/18] preparation for threaded/atomic printing
-Date:   Sat, 24 Sep 2022 02:10:36 +0206
-Message-Id: <20220924000454.3319186-1-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk 01/18] printk: Make pr_flush() static
+Date:   Sat, 24 Sep 2022 02:10:37 +0206
+Message-Id: <20220924000454.3319186-2-john.ogness@linutronix.de>
+In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,82 +59,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Thomas Gleixner <tglx@linutronix.de>
 
-This series is essentially the first 18 patches of tglx's RFC series
-[0] with only minor changes in comments and commit messages. It's
-purpose is to lay the groundwork for the upcoming threaded/atomic
-console printing posted as the RFC series and demonstrated at
-LPC2022 [1].
+No user outside the printk code and no reason to export this.
 
-This series is interesting for mainline because it cleans up various
-code and documentation quirks discovered while working on the new
-console printing implementation.
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ include/linux/printk.h | 7 -------
+ kernel/printk/printk.c | 5 +++--
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-Aside from cleanups, the main features introduced here are:
-
-- Converts the console's DIY linked list implementation to hlist.
-
-- Introduces a console list lock (mutex) so that readers (such as
-  /proc/consoles) can safely iterate the consoles without blocking
-  console printing.
-
-- Adds SRCU support to the console list to prepare for safe console
-  list iterating from any context.
-
-- Refactors buffer handling to prepare for per-console, per-cpu,
-  per-context atomic printing.
-
-The series has the following parts:
-
-   Patches  1 - 5:   Cleanups
-
-   Patches  6 - 12:  Locking and list conversion
-
-   Patches 13 - 18:  Improved output buffer handling to prepare for
-                     code sharing
-
-John Ogness
-
-[0] https://lore.kernel.org/lkml/20220910221947.171557773@linutronix.de
-[1] https://lore.kernel.org/lkml/875yheqh6v.fsf@jogness.linutronix.de
-
-Thomas Gleixner (18):
-  printk: Make pr_flush() static
-  printk: Declare log_wait properly
-  printk: Remove write only variable nr_ext_console_drivers
-  printk: Remove bogus comment vs. boot consoles
-  printk: Mark __printk percpu data ready __ro_after_init
-  printk: Protect [un]register_console() with a mutex
-  printk: Convert console list walks for readers to list lock
-  parisc: Put console abuse into one place
-  serial: kgdboc: Lock console list in probe function
-  kgbd: Pretend that console list walk is safe
-  printk: Convert console_drivers list to hlist
-  printk: Prepare for SCRU console list protection
-  printk: Move buffer size defines
-  printk: Document struct console
-  printk: Add struct cons_text_buf
-  printk: Use struct cons_text_buf
-  printk: Use an output descriptor struct for emit
-  printk: Handle dropped message smarter
-
- arch/parisc/include/asm/pdc.h |   2 +-
- arch/parisc/kernel/pdc_cons.c |  55 +++--
- arch/parisc/kernel/traps.c    |  17 +-
- drivers/tty/serial/kgdboc.c   |   9 +-
- drivers/tty/tty_io.c          |   6 +-
- fs/proc/consoles.c            |  11 +-
- fs/proc/kmsg.c                |   2 -
- include/linux/console.h       | 197 +++++++++++++---
- include/linux/printk.h        |   9 -
- include/linux/syslog.h        |   3 +
- kernel/debug/kdb/kdb_io.c     |   7 +-
- kernel/printk/printk.c        | 414 ++++++++++++++++++++++------------
- 12 files changed, 499 insertions(+), 233 deletions(-)
-
-
-base-commit: dc453dd89daacdc0da6d66234aa27e417df7edcd
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index cf7d666ab1f8..8c81806c2e99 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -169,8 +169,6 @@ extern void __printk_safe_exit(void);
+ #define printk_deferred_enter __printk_safe_enter
+ #define printk_deferred_exit __printk_safe_exit
+ 
+-extern bool pr_flush(int timeout_ms, bool reset_on_progress);
+-
+ /*
+  * Please don't use printk_ratelimit(), because it shares ratelimiting state
+  * with all other unrelated printk_ratelimit() callsites.  Instead use
+@@ -221,11 +219,6 @@ static inline void printk_deferred_exit(void)
+ {
+ }
+ 
+-static inline bool pr_flush(int timeout_ms, bool reset_on_progress)
+-{
+-	return true;
+-}
+-
+ static inline int printk_ratelimit(void)
+ {
+ 	return 0;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index a1a81fd9889b..14d7d39d118d 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2296,6 +2296,7 @@ asmlinkage __visible int _printk(const char *fmt, ...)
+ }
+ EXPORT_SYMBOL(_printk);
+ 
++static bool pr_flush(int timeout_ms, bool reset_on_progress);
+ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress);
+ 
+ #else /* CONFIG_PRINTK */
+@@ -2330,6 +2331,7 @@ static void call_console_driver(struct console *con, const char *text, size_t le
+ {
+ }
+ static bool suppress_message_printing(int level) { return false; }
++static bool pr_flush(int timeout_ms, bool reset_on_progress) { return true; }
+ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
+ 
+ #endif /* CONFIG_PRINTK */
+@@ -3438,11 +3440,10 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
+  * Context: Process context. May sleep while acquiring console lock.
+  * Return: true if all enabled printers are caught up.
+  */
+-bool pr_flush(int timeout_ms, bool reset_on_progress)
++static bool pr_flush(int timeout_ms, bool reset_on_progress)
+ {
+ 	return __pr_flush(NULL, timeout_ms, reset_on_progress);
+ }
+-EXPORT_SYMBOL(pr_flush);
+ 
+ /*
+  * Delayed printk version, for scheduler-internal messages:
 -- 
 2.30.2
 
