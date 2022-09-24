@@ -2,108 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3F35E8BCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DA15E8BD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbiIXLmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S233563AbiIXLnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiIXLml (ORCPT
+        with ESMTP id S233501AbiIXLnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:42:41 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F9115F51
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:42:39 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D3E42FF806;
-        Sat, 24 Sep 2022 11:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1664019758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RhYx+mUA0owcFn9yFdKn4/95n9UVkSvpbtcV0Fc5BEQ=;
-        b=ORM8Ah0Wk8YvxiPWmQ67Zgevs6PsbkhxocFmGXa9gFNChy+qxKkAm4Y3DHeO5fbjybX2Bc
-        CEtqG5MCisUs/PqXlvy/6Pb/NTedx6X/8Q/COZkHGzfeVpoEDj/ZDtAASUXGsch2iSes29
-        JNLdmMRrf6bil/SNDL7dMpR7sBUXrwUWyitwRV6pIyITC95ycuZzyFeClkHVmiK268aW8b
-        xIYK2Kw7d4K9c1gQZZJvKUmKWg2E6jb26sJ1naauD4+9M9wzV8LpsreCOowlu/nDuBBK8M
-        AEGcxCDCdflycUNwbm8Ch4l7NBRJ+pigXV9SbazZW4Gt3hspHAmvGyT5qEN6rg==
-Date:   Sat, 24 Sep 2022 13:42:37 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH] pcmcia: at91_cf: switch to using gpiod API
-Message-ID: <Yy7tLRcMaKeet9An@mail.local>
-References: <Yy6d7TjqzUwGQnQa@penguin>
- <68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com>
+        Sat, 24 Sep 2022 07:43:22 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA7F115F51
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:43:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MZRqt5Rb7z1P6rB;
+        Sat, 24 Sep 2022 19:39:06 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 19:43:17 +0800
+Subject: Re: [PATCH v3 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, <linux-mm@kvack.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-2-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <91a4759f-88e4-f9ac-aff5-41d2db5ecfdd@huawei.com>
+Date:   Sat, 24 Sep 2022 19:43:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220921091359.25889-2-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/09/2022 10:33:29+0200, Arnd Bergmann wrote:
-> On Sat, Sep 24, 2022, at 8:04 AM, Dmitry Torokhov wrote:
-> > This patch switches the driver to use newer gpiod API instead of legacy
-> > gpio API. This moves us closer to the goal of stopping exporting
-> > OF-specific APIs of gpiolib.
-> >
-> > While at it, stop using module-global for regmap.
-> >
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On 2022/9/21 17:13, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 > 
-> This looks good to me overall. Three comments:
+> HWPoisoned page is not supposed to be accessed once marked, but currently
+> such accesses can happen during memory hotremove because do_migrate_range()
+> can be called before dissolve_free_huge_pages() is called.
 > 
-> > @@ -63,7 +62,7 @@ struct at91_cf_socket {
-> > 
-> >  static inline int at91_cf_present(struct at91_cf_socket *cf)
-> >  {
-> > -	return !gpio_get_value(cf->board->det_pin);
-> > +	return gpiod_get_value(cf->board->det_pin);
-> >  }
+> Clear HPageMigratable for hwpoisoned hugepages to prevent them from being
+> migrated.  This should be done in hugetlb_lock to avoid race against
+> isolate_hugetlb().
 > 
-> a) The change in polarity looks wrong here, I can't really tell
-> from the patch. If this is intentional, maybe explain it in
-> the changelog. With that addressed (either way)
+> get_hwpoison_huge_page() needs to have a flag to show it's called from
+> unpoison to take refcount of hwpoisoned hugepages, so add it.
 > 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> 
-> b) In case you are doing more patches like this one at the moment,
-> note that I'm in the process of removing all unused board files
-> for arch/arm/, which will in turn make a lot of drivers unused.
-> I should be able to provide a branch soon, which can be used to
-> identify drivers that don't have DT support any more and don't
-> have any board files. Rather than converting them to gpio
-> descriptors, we can probably just remove those drivers.
-> 
-> c) I'm not sure about the state of the at91_cf driver. Apparently
-> we used to have three drivers for the same hardware (pcmcia,
-> pata and ide), and only the pcmcia driver remained in the tree
-> after drivers/ide/ was removed and pata_at91 did not get converted
-> to DT. I think in the long run we will remove the pcmcia layer,
-> so if you are actually trying to use this hardware, we may want to
-> revive the pata variant and drop this one instead.
-> There is no dts file in tree that actually declares either of them,
-> so chances are that nobody is actually using the CF slot on at91
-> any more.
+> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+
+Thanks for your work, Naoya. Maybe something to improve below.
+
+> ---
+> ChangeLog v2 -> v3
+> - move to the approach of clearing HPageMigratable instead of shifting
+>   dissolve_free_huge_pages.
+> ---
+>  include/linux/hugetlb.h |  4 ++--
+>  mm/hugetlb.c            |  4 ++--
+>  mm/memory-failure.c     | 12 ++++++++++--
+>  3 files changed, 14 insertions(+), 6 deletions(-)
 > 
 
-I'm pretty sure it is broken since eaa9a21dd14b ("pcmcia: at91_cf: Use
-syscon to configure the MC/smc") as this change has never been tested.
+<snip>
 
+> @@ -7267,7 +7267,7 @@ int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
+>  		*hugetlb = true;
+>  		if (HPageFreed(page))
+>  			ret = 0;
+> -		else if (HPageMigratable(page))
+> +		else if (HPageMigratable(page) || unpoison)
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Is unpoison_memory() expected to restore the HPageMigratable flag as well ?
+
+>  			ret = get_page_unless_zero(page);
+>  		else
+>  			ret = -EBUSY;
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 145bb561ddb3..5942e1c0407e 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1244,7 +1244,7 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>  	int ret = 0;
+>  	bool hugetlb = false;
+>  
+> -	ret = get_hwpoison_huge_page(head, &hugetlb);
+> +	ret = get_hwpoison_huge_page(head, &hugetlb, false);
+>  	if (hugetlb)
+>  		return ret;
+>  
+> @@ -1334,7 +1334,7 @@ static int __get_unpoison_page(struct page *page)
+>  	int ret = 0;
+>  	bool hugetlb = false;
+>  
+> -	ret = get_hwpoison_huge_page(head, &hugetlb);
+> +	ret = get_hwpoison_huge_page(head, &hugetlb, true);
+>  	if (hugetlb)
+>  		return ret;
+>  
+> @@ -1815,6 +1815,13 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>  		goto out;
+>  	}
+>  
+> +	/*
+> +	 * Clearing HPageMigratable for hwpoisoned hugepages to prevent them
+> +	 * from being migrated by memory hotremove.
+> +	 */
+> +	if (count_increased)
+> +		ClearHPageMigratable(head);
+
+I believe this can prevent hwpoisoned hugepages from being migrated though there still be some windows.
+
+> +
+>  	return ret;
+>  out:
+>  	if (count_increased)
+> @@ -1862,6 +1869,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  
+>  	if (hwpoison_filter(p)) {
+>  		hugetlb_clear_page_hwpoison(head);
+> +		SetHPageMigratable(head);
+
+Would we set HPageMigratable flag for free hugetlb pages here? IIUC, they're not expected to have this flag set.
+
+Thanks,
+Miaohe Lin
+
+>  		unlock_page(head);
+>  		if (res == 1)
+>  			put_page(head);
+> 
+
