@@ -2,117 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF785E8F9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B3E5E8FA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 22:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiIXUX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 16:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
+        id S233782AbiIXU0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 16:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiIXUX1 (ORCPT
+        with ESMTP id S229929AbiIXUZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 16:23:27 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E140BDB
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:23:25 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664051004;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nC3nuVqN+jtEUN74Nl68oDoRxZZaXpDu+Kubg+3Y4uE=;
-        b=K5b/cTkQVPZHrmVwC5a5EZ6fbHafwPdgOTRisgbxnFrlDyFsNV8EppN8s8pwk3WvoYaKMh
-        2jMjRVOcQmLC7gpvopmtr3Sjin8ubOEGUnRny9AGIWZGq0fj7LCCb784kCWrUGCCFlpiDQ
-        mFqrQzCTdUdXXfuIweR95PiUh6ngdA4=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH mm v2] kasan: fix array-bounds warnings in tests
-Date:   Sat, 24 Sep 2022 22:23:21 +0200
-Message-Id: <9c0210393a8da6fb6887a111a986eb50dfc1b895.1664050880.git.andreyknvl@google.com>
+        Sat, 24 Sep 2022 16:25:58 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C024C3B712
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:25:57 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id l7-20020a056830154700b0065563d564dfso2158880otp.0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 13:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date;
+        bh=m7KtlTRQ/940R7kWNpP3Vz5Bs4+fmR2cZz2mXb6ruwc=;
+        b=o/j6TYB0hLCyOCwHzpUw/Hx4WFeL4LjHBvDhaTRxy9nD5L9Yj5MY6N/S5xXVTz9Ca+
+         qp/aCH97Mro/J3JLa5sAUX7LR3H0y5Acotuh0v1QpM9vpyAa0/9In5kBDrokKy3xmTG8
+         szZSroRthPVEHP0X9LuZ3BLZaEqhwjL3w12FmEY8xgW4OBRutjtOaifcQdn4QIykPu1l
+         JNC5uDB+dPiW4X3vdK8emHl5q/HgAlWHlpfhRrtrOxrMoh+d/83RsCd79+65336W20h+
+         xFDm2i6ZIFdNiREg3eBOxB62f/4TmeTQjzPllYmkg3wFDnl1iQjmjeVerlqMqhYd6Hpu
+         d1yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m7KtlTRQ/940R7kWNpP3Vz5Bs4+fmR2cZz2mXb6ruwc=;
+        b=KDGdqI5uPsCbf6EWtP38q8g4sHkqgEnvN12kjAWYSac0R57PB7j/Gv2yoeUwOsF6YY
+         ZO5WonQBhA7cSmCvOYziWG1YuZEQW1EjrAVx/1D38dX0qJ3j0jzcTyQwjZZWSd3igBid
+         pErrYpO2QuWPHr62XUpZF0TJQrjiQkhOoIY2sTSTV5+cH7OusV8O2m9r2PNpV+Wqz5rm
+         ct/8pz7xLeJ4xLeRmsXgP1t/PqW05PrjBqUsztNxbxv5kjQL2hnFDJNSbsLibhUjbTDl
+         cZ5U18W3Q6p8uFktr6JVALpnODf51sIf/Vy1vE7SjfYuOjO+eTBeGMJSTYYnQm80JYlH
+         HyNQ==
+X-Gm-Message-State: ACrzQf3kzX+FwnGZIhAqZgumCOwrXgvoQFtNTeQKWh8HYe9cE07iv1uU
+        fFqH5dU3plzMgiplliDJsjgdHLzcBPZGcBweqns=
+X-Google-Smtp-Source: AMsMyM6z51yFXoEklRool/IqRRMiGtlU3wa3BoMhOtLoHawAZv7ySC98Y2CXOkjdMuUTD+uAtdX7/C5OuhlEU68beUc=
+X-Received: by 2002:a9d:7d81:0:b0:655:d419:54f1 with SMTP id
+ j1-20020a9d7d81000000b00655d41954f1mr6734330otn.177.1664051156968; Sat, 24
+ Sep 2022 13:25:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: anitaabdallae2017@gmail.com
+Received: by 2002:a05:6820:1620:0:0:0:0 with HTTP; Sat, 24 Sep 2022 13:25:56
+ -0700 (PDT)
+From:   Monica Karim <monicakarima38@gmail.com>
+Date:   Sat, 24 Sep 2022 21:25:56 +0100
+X-Google-Sender-Auth: M8R9IfuH1a2dr9wfueHCFNfAvTw
+Message-ID: <CALrj+s9ER815OAHKR8TATZJFKZPk15BNbVkG40UbsBtgKK9M4Q@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
-
-GCC's -Warray-bounds option detects out-of-bounds accesses to
-statically-sized allocations in krealloc out-of-bounds tests.
-
-Use OPTIMIZER_HIDE_VAR to suppress the warning.
-
-Also change kmalloc_memmove_invalid_size to use OPTIMIZER_HIDE_VAR
-instead of a volatile variable.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-
----
-
-Changes v1->v2:
-- Hide ptr2 instead of size1 and size2 to be consistent with other
-  uses of OPTIMIZER_HIDE_VAR in KASAN tests.
----
- mm/kasan/kasan_test.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 71cb402c404f..dbb0a672380f 100644
---- a/mm/kasan/kasan_test.c
-+++ b/mm/kasan/kasan_test.c
-@@ -333,6 +333,8 @@ static void krealloc_more_oob_helper(struct kunit *test,
- 	ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
- 
-+	OPTIMIZER_HIDE_VAR(ptr2);
-+
- 	/* All offsets up to size2 must be accessible. */
- 	ptr2[size1 - 1] = 'x';
- 	ptr2[size1] = 'x';
-@@ -365,6 +367,8 @@ static void krealloc_less_oob_helper(struct kunit *test,
- 	ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
- 
-+	OPTIMIZER_HIDE_VAR(ptr2);
-+
- 	/* Must be accessible for all modes. */
- 	ptr2[size2 - 1] = 'x';
- 
-@@ -578,13 +582,14 @@ static void kmalloc_memmove_invalid_size(struct kunit *test)
- {
- 	char *ptr;
- 	size_t size = 64;
--	volatile size_t invalid_size = size;
-+	size_t invalid_size = size;
- 
- 	ptr = kmalloc(size, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
- 
- 	memset((char *)ptr, 0, 64);
- 	OPTIMIZER_HIDE_VAR(ptr);
-+	OPTIMIZER_HIDE_VAR(invalid_size);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 		memmove((char *)ptr, (char *)ptr + 4, invalid_size));
- 	kfree(ptr);
--- 
-2.25.1
-
+How are you? I am Monica a Nurse from Netherlands .What about you?I
+need to discuss very important thing with you.
