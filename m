@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD2F5E8684
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3536B5E8680
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbiIXAFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S232869AbiIXAFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbiIXAFL (ORCPT
+        with ESMTP id S232977AbiIXAFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 20:05:11 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51119A2220
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50704A00FF
         for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:05:06 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,30 +22,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DfVMZJNRNmUcXs0AcEgf8PmYZBx9ybi5NZy3duOSBFA=;
-        b=Zow98vZHUhmdqMsJES3M8pCx7McItBn90Y/GKqk3vKRNbclqVUaov3IAkPienr20Ndlrxu
-        tYBHN9v1A4lJ0U8xdPow1fcAHflWhjwTXU+GNT3/goFE8SgWLeDIWCKXfmv6nhT6pp4jhK
-        MQeBQsq0B3rpi/gOn/n1cbHN2dHAxr4ZK8YRQJk12mMH3tvrUGNflxfBrYQ7fC212nSzpU
-        vC8OXucQG03GD5u0f9R5nhZhGmvXqjVBRdhae9d9oupqMd5XZ4Vbu/ekXePHk7HhNBNl6U
-        aBXR2vC9C0nWcmS/clVrc1wwPs3dMYnIPTJKA0rD40OABRS11H0FrmrRSRKxSQ==
+        bh=wFxBj/7Cwv+l8jbrElsJozenhe25KvbQeObQTTb9s44=;
+        b=PtZbcifWrYlUJnCh/nYiLHegyU3pOQE2MzDRtKEPyugn+iUtdN+2p7gUFn3KBAXMnqUEcw
+        DNgrwSVspJQ6PQZaIGIobyjWFoQZ/2D67xRIVYll6LrryVbWhD/L7FLz21J2NA3T2iN80F
+        ADWD1shpEyJchkZX2zKKPa47vbJFVlGO4ntUvscBZc8y4QSrysIEMqwguJW72yyEkbQG9x
+        ZyB6Bwtx6qmSBhFet5QMz+Wp43C2H9OW7qCsPDqnSylYuUH9AwQydTX/WJ7/JPommRXGdZ
+        kjNpQ9mjgM/52KOf2hQkTF281W0uT5QcmTYHuQWyTYBpZWFlVuI0u1DFUoqX3Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1663977903;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DfVMZJNRNmUcXs0AcEgf8PmYZBx9ybi5NZy3duOSBFA=;
-        b=qb7loi7gRnwUl6Y/52LX2Rz/INvaxFAKfEz5BoDrnfE/NNdN0SBbAXEool0QD9LHVeRXYZ
-        dXfaJ+cbHx2U9IBA==
+        bh=wFxBj/7Cwv+l8jbrElsJozenhe25KvbQeObQTTb9s44=;
+        b=jgRrlrJtt6YEu8bhuqsaWVwwoyDhFmY7chaNEhatxeXIUF8tw2Jxk30J0Z69TzMiDx09jO
+        PC65BfeYfKkZMfCw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk 12/18] printk: Prepare for SCRU console list protection
-Date:   Sat, 24 Sep 2022 02:10:48 +0206
-Message-Id: <20220924000454.3319186-13-john.ogness@linutronix.de>
+Subject: [PATCH printk 13/18] printk: Move buffer size defines
+Date:   Sat, 24 Sep 2022 02:10:49 +0206
+Message-Id: <20220924000454.3319186-14-john.ogness@linutronix.de>
 In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
 References: <20220924000454.3319186-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,120 +62,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Provide a SRCU protected variant to walk the console list.
-
-Preperatory change for a new console infrastructure which operates
-independent of console BKL.
+Move the buffer size defines to console.h in preparation of adding a buffer
+structure.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- include/linux/console.h | 14 +++++++++++++-
- kernel/printk/printk.c  | 16 +++++++++++++---
- 2 files changed, 26 insertions(+), 4 deletions(-)
+ include/linux/console.h | 14 ++++++++++++++
+ include/linux/printk.h  |  2 --
+ kernel/printk/printk.c  |  8 --------
+ 3 files changed, 14 insertions(+), 10 deletions(-)
 
 diff --git a/include/linux/console.h b/include/linux/console.h
-index 1e3d0a50cef1..dc0df9d9e7d9 100644
+index dc0df9d9e7d9..3bb5bc62e154 100644
 --- a/include/linux/console.h
 +++ b/include/linux/console.h
-@@ -15,7 +15,7 @@
- #define _LINUX_CONSOLE_H_ 1
+@@ -122,6 +122,20 @@ static inline int con_debug_leave(void)
+ #define CM_ERASE    (2)
+ #define CM_MOVE     (3)
  
- #include <linux/atomic.h>
--#include <linux/list.h>
-+#include <linux/rculist.h>
- #include <linux/types.h>
- 
- struct vc_data;
-@@ -161,6 +161,7 @@ struct console {
- #ifdef CONFIG_LOCKDEP
- extern void lockdep_assert_console_lock_held(void);
- extern void lockdep_assert_console_list_lock_held(void);
-+extern bool console_srcu_read_lock_is_held(void);
- #else
- static inline void lockdep_assert_console_lock_held(void) { }
- static inline void lockdep_assert_console_list_lock_held(void) { }
-@@ -171,6 +172,17 @@ extern struct hlist_head console_list;
- extern void console_list_lock(void) __acquires(console_mutex);
- extern void console_list_unlock(void) __releases(console_mutex);
- 
-+/**
-+ * for_each_console_srcu() - Iterator over registered consoles
-+ * @con:	struct console pointer used as loop cursor
-+ *
-+ * Requires console_srcu_read_lock to be held. Can be invoked from
-+ * any context.
-+ */
-+#define for_each_console_srcu(con)					\
-+	hlist_for_each_entry_srcu(con, &console_list, node,		\
-+				  console_srcu_read_lock_is_held())
++#ifdef CONFIG_PRINTK
++/* The maximum size of a formatted record (i.e. with prefix added per line) */
++#define CONSOLE_LOG_MAX		1024
 +
- /**
-  * for_each_registered_console() - Iterator over registered consoles
-  * @con:	struct console pointer used as loop cursor
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index f1d31dcbd6ba..7e6d1cd34452 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -93,6 +93,7 @@ static DEFINE_MUTEX(console_mutex);
- static DEFINE_SEMAPHORE(console_sem);
- HLIST_HEAD(console_list);
- EXPORT_SYMBOL_GPL(console_list);
-+DEFINE_STATIC_SRCU(console_srcu);
- 
++/* The maximum size for a dropped text message */
++#define DROPPED_TEXT_MAX	64
++#else
++#define CONSOLE_LOG_MAX		0
++#define DROPPED_TEXT_MAX	0
++#endif
++
++/* The maximum size of an formatted extended record */
++#define CONSOLE_EXT_LOG_MAX	8192
++
  /*
-  * System may need to suppress printk message under certain
-@@ -121,6 +122,10 @@ void lockdep_assert_console_list_lock_held(void)
- 	lockdep_assert_held(&console_mutex);
+  * The interface for a console, or any other device that wants to capture
+  * console messages (printer driver?)
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index 8c81806c2e99..8ef499ab3c1e 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -44,8 +44,6 @@ static inline const char *printk_skip_headers(const char *buffer)
+ 	return buffer;
  }
  
-+bool console_srcu_read_lock_is_held(void)
-+{
-+	return srcu_read_lock_held(&console_srcu);
-+}
+-#define CONSOLE_EXT_LOG_MAX	8192
+-
+ /* printk's without a loglevel use this.. */
+ #define MESSAGE_LOGLEVEL_DEFAULT CONFIG_MESSAGE_LOGLEVEL_DEFAULT
+ 
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 7e6d1cd34452..65e9903d066f 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -433,12 +433,6 @@ static struct latched_seq clear_seq = {
+ #define PREFIX_MAX		32
  #endif
  
- enum devkmsg_log_bits {
-@@ -3232,9 +3237,9 @@ void register_console(struct console *newcon)
- 	 */
- 	console_lock();
- 	if (newcon->flags & CON_CONSDEV || hlist_empty(&console_list))
--		hlist_add_head(&newcon->node, &console_list);
-+		hlist_add_head_rcu(&newcon->node, &console_list);
- 	else
--		hlist_add_behind(&newcon->node, console_list.first);
-+		hlist_add_behind_rcu(&newcon->node, console_list.first);
+-/* the maximum size of a formatted record (i.e. with prefix added per line) */
+-#define CONSOLE_LOG_MAX		1024
+-
+-/* the maximum size for a dropped text message */
+-#define DROPPED_TEXT_MAX	64
+-
+ /* the maximum size allowed to be reserved for a record */
+ #define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
  
- 	/* Ensure this flag is always set for the head of the list */
- 	cons_first()->flags |= CON_CONSDEV;
-@@ -3250,6 +3255,7 @@ void register_console(struct console *newcon)
- 		newcon->seq = prb_next_seq(prb);
- 	}
- 	console_unlock();
-+	/* No need to synchronize SRCU here! */
- 	console_sysfs_notify();
+@@ -2343,8 +2337,6 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
  
- 	/*
-@@ -3295,7 +3301,7 @@ static int console_unregister_locked(struct console *console)
- 	if (hlist_unhashed(&console->node))
- 		goto out_unlock;
+ #else /* CONFIG_PRINTK */
  
--	hlist_del_init(&console->node);
-+	hlist_del_init_rcu(&console->node);
+-#define CONSOLE_LOG_MAX		0
+-#define DROPPED_TEXT_MAX	0
+ #define printk_time		false
  
- 	/*
- 	 * <HISTORICAL>
-@@ -3310,6 +3316,10 @@ static int console_unregister_locked(struct console *console)
- 		cons_first()->flags |= CON_CONSDEV;
- 
- 	console_unlock();
-+
-+	/* Ensure that all SRCU list walks have completed */
-+	synchronize_srcu(&console_srcu);
-+
- 	console_sysfs_notify();
- 
- 	if (console->exit)
+ #define prb_read_valid(rb, seq, r)	false
 -- 
 2.30.2
 
