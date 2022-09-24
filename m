@@ -2,84 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4075E8B6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213175E8B80
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 12:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiIXKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 06:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S229923AbiIXKeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 06:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiIXKSY (ORCPT
+        with ESMTP id S229447AbiIXKeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:18:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE86112655
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 03:18:23 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZPxt2s1jzlXLM;
-        Sat, 24 Sep 2022 18:14:10 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 18:18:21 +0800
-Received: from [10.67.111.176] (10.67.111.176) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 18:18:20 +0800
-Message-ID: <b02f72c5-636d-2d4f-98d7-bf3741e38e5d@huawei.com>
-Date:   Sat, 24 Sep 2022 18:18:19 +0800
+        Sat, 24 Sep 2022 06:34:22 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E24128A31;
+        Sat, 24 Sep 2022 03:34:16 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id cc5so3439433wrb.6;
+        Sat, 24 Sep 2022 03:34:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lWWSF5r7ARtTOClsK9sXEb7aJbRhNSyG93pnZwDgR5I=;
+        b=KSyEDPTrERDbPHgI3yKjQwFOuoePdyYavdVYJm/tY+ThFTOwq8HOCNLpP89t/EYIBK
+         tavLNvSlBhj9s5L4jrDB85fgqtLdE4Fstx/MZZIw4niSkjG7OKFraYC5KBarHHydAwcr
+         2apbgZDmNREUwKQ++sYU8ZyWG43oTIZ+D/z7NRvSdfu8rFV0wJrrlgsIXnS2UofV+DnK
+         +MbLVv5WMRkB/JOpRBhdwmnD4CVcq1cr7yBnxFTt9gvzkboFsCKTO8nG5L5CIssPLK49
+         69U/B0Ke03Fdu33v0nZ56wlueeMJBdW6K/7zDIF0sutm2scnrGqu7lXViebI+8omHlv8
+         GWkQ==
+X-Gm-Message-State: ACrzQf0vxyCPkvz0qVKMuduANVNNgK7qLH/9Tk+YpbVGfruvdMbD7WYk
+        xmQ2hFg0lF+oyGtl1/mcWhDEniv2rRI=
+X-Google-Smtp-Source: AMsMyM5wNBvhEnQyq1UtD7jkcm6hZPvgsbB9LvwMs+u55ik/lB3hZLEDCOipgXROVhNjvYZFhZT5zw==
+X-Received: by 2002:a05:6000:912:b0:229:9bc1:27ed with SMTP id bz18-20020a056000091200b002299bc127edmr7554875wrb.546.1664015655105;
+        Sat, 24 Sep 2022 03:34:15 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id o3-20020a05600c4fc300b003a5ca627333sm4961389wmq.8.2022.09.24.03.34.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 03:34:14 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 10:34:12 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] Drivers: hv: vmbus: Split memcpy of flex-array
+Message-ID: <Yy7dJP4p0FMQfPl5@liuwe-devbox-debian-v2>
+References: <20220924030741.3345349-1-keescook@chromium.org>
+ <Yy58rt9N0+dHrNtt@work>
+ <202209232119.E32C14857@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next] x86/sev: Remove unused variable "err" in
- enforce_vmpl0()
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <brijesh.singh@amd.com>, <michael.roth@amd.com>,
-        <venu.busireddy@oracle.com>, <linux-kernel@vger.kernel.org>
-References: <20220923113209.3046960-1-lizetao1@huawei.com>
- <Yy2kU7lZuArVMC5p@zn.tnic>
-From:   Li Zetao <lizetao1@huawei.com>
-In-Reply-To: <Yy2kU7lZuArVMC5p@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.176]
-X-ClientProxiedBy: dggpeml100009.china.huawei.com (7.185.36.95) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202209232119.E32C14857@keescook>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/23 20:19, Borislav Petkov wrote:
+Hi Kees
 
-> On Fri, Sep 23, 2022 at 11:32:09AM +0000, Li Zetao wrote:
->> Gcc report warning as follows:
->>
->> arch/x86/boot/compressed/sev.c: In function ‘enforce_vmpl0’:
->> arch/x86/boot/compressed/sev.c:256:13: error: unused variable ‘err’
->>   [-Werror=unused-variable]
-> How do you trigger this? Compiler version and .config?
->
-> I haven't seen this one in any of my builds until now...
->
-> Thx.
+On Fri, Sep 23, 2022 at 09:22:55PM -0700, Kees Cook wrote:
+> On Fri, Sep 23, 2022 at 10:42:38PM -0500, Gustavo A. R. Silva wrote:
+> > On Fri, Sep 23, 2022 at 08:07:41PM -0700, Kees Cook wrote:
+> > > To work around a misbehavior of the compiler's ability to see into
+> > > composite flexible array structs (as detailed in the coming memcpy()
+> > > hardening series[1]), split the memcpy() of the header and the payload
+> > > so no false positive run-time overflow warning will be generated. As it
+> > > turns out, this appears to actually reduce the text size:
+> 
+> Er, actually, I can't read/math. ;) It _does_ grow the text size. (That's
+> 2_3_ not 22 at the start of the text size...) On examination, it appears
+> to unroll the already inlined memcpy further.
 
-My Compiler version is 11.2.0. I used the default .config and compiled 
-with flags "-Wall -Werror", just as follows:
+Can you provide an updated commit message? No need to resend.
 
-     make allmodconfig
+Thanks,
+Wei.
 
-     make EXTRA_CFLAGS="-Wall -Werror"
-
-
-Best regards
-
-Li Zetao
-
+> 
+> > > 
+> > > $ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
+> > >    text    data     bss     dec     hex filename
+> > >   22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
+> > >   23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
+>        ^
+> 
+> -Kees
+> 
+> -- 
+> Kees Cook
