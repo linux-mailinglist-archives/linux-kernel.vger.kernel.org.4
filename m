@@ -2,172 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52755E8BE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93F95E8BEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiIXLrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S233626AbiIXLxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbiIXLrj (ORCPT
+        with ESMTP id S233571AbiIXLxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:47:39 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130C3B6D08
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:47:35 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id a15-20020a6b660f000000b006a0d0794ad1so1402120ioc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:47:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=kz7VThonCNmrsVgT4nn/20It5uuYNl8qH1kr/c0Ij7Q=;
-        b=sbwNvmmYm25G2KYm6/eGB5I6IRaOwTzWHI3DWV9/lYTjlZ89+c/Seyw2QQ1laGrC4b
-         JP1hZFVtzaQS97F/WrC+P6S3hxoFozRiqeBWJBF/MYqfE49f4i9QTtS7yJw/2FszkJoM
-         3F0NBDZ/onUyZ+3Mvzvlqfsw7V2FL88v1noUcrRk1H0h7YcT8iTc9jz96snL5/6YYvJW
-         CVmlmNcGtuPIruikLojqRmqGNLDYYZeEbg2jPSUFQ+g6vQfiqH08iKgRCk6PyLjQe7Fm
-         hr1kOC86qW6zlLsEs4NlpYkn9GHSAD4CmsxpJtmkDqM9EevvKYTEq3DEd+Ek4Qq7faV7
-         c+og==
-X-Gm-Message-State: ACrzQf0j/h5kmFShZTn1yhi17yHDu10jV/QgQ7AwCMHOn9ohr7SCroX6
-        Ho5+ddN1nuJx49M3N9ss+GLHCMoInI+jf/BFrdrRKENeC1Nh
-X-Google-Smtp-Source: AMsMyM63X95a0if4uNdqRk5vJz48MHzaxm39aiviajGVQEBuOh9yOJqTNgdf4B8oK/XvK5PzE8VGhbQuo6vSWzW72f2zO/7Q0jMU
+        Sat, 24 Sep 2022 07:53:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B5B600C
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:53:18 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZS3c0HY3zWh2Q;
+        Sat, 24 Sep 2022 19:49:16 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 19:53:15 +0800
+Subject: Re: [PATCH v3 2/4] mm/hwpoison: move definitions of
+ num_poisoned_pages_* to memory-failure.c
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, <linux-mm@kvack.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-3-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4b7c327a-547e-be8b-4568-745fabe74641@huawei.com>
+Date:   Sat, 24 Sep 2022 19:53:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2112:b0:6a4:71a4:ad2c with SMTP id
- x18-20020a056602211200b006a471a4ad2cmr366133iox.43.1664020054546; Sat, 24 Sep
- 2022 04:47:34 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 04:47:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000040201f05e96adc81@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in eventfd_ctx_put
-From:   syzbot <syzbot+6f0c896c5a9449a10ded@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220921091359.25889-3-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022/9/21 17:13, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> These interfaces will be used by drivers/base/core.c by later patch, so as a
+> preparatory work move them to more common header file visible to the file.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+> ChangeLog v2 -> v3:
+> - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
+> ---
+>  arch/parisc/kernel/pdt.c |  3 +--
+>  include/linux/mm.h       |  5 +++++
+>  include/linux/swapops.h  | 24 ++----------------------
+>  mm/memory-failure.c      | 10 ++++++++++
+>  4 files changed, 18 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
+> index e391b175f5ec..fdc880e2575a 100644
+> --- a/arch/parisc/kernel/pdt.c
+> +++ b/arch/parisc/kernel/pdt.c
+> @@ -18,8 +18,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/initrd.h>
+>  #include <linux/pgtable.h>
+> -#include <linux/swap.h>
 
-syzbot found the following issue on:
+Is header file "linux/swap.h" already unneeded before the code change? It seems there's
+no code change in that file.
 
-HEAD commit:    521a547ced64 Linux 6.0-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=134ea35f080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
-dashboard link: https://syzkaller.appspot.com/bug?extid=6f0c896c5a9449a10ded
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149bfdd8880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104808b0880000
+> -#include <linux/swapops.h>
+> +#include <linux/mm.h>
+>  
+>  #include <asm/pdc.h>
+>  #include <asm/pdcpat.h>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index c2277f5aba9e..80a2d800f272 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3279,11 +3279,16 @@ extern atomic_long_t num_poisoned_pages __read_mostly;
+>  extern int soft_offline_page(unsigned long pfn, int flags);
+>  #ifdef CONFIG_MEMORY_FAILURE
+>  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
+> +extern void num_poisoned_pages_inc(void);
+>  #else
+>  static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>  {
+>  	return 0;
+>  }
+> +
+> +static inline void num_poisoned_pages_inc(void)
+> +{
+> +}
+>  #endif
+>  
+>  #ifndef arch_memory_failure
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index a91dd08e107b..3e58a812399a 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -581,8 +581,6 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
+>  
+>  #ifdef CONFIG_MEMORY_FAILURE
+>  
+> -extern atomic_long_t num_poisoned_pages __read_mostly;
+> -
+>  /*
+>   * Support for hardware poisoned pages
+>   */
+> @@ -610,17 +608,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>  	return p;
+>  }
+>  
+> -static inline void num_poisoned_pages_inc(void)
+> -{
+> -	atomic_long_inc(&num_poisoned_pages);
+> -}
+> -
+> -static inline void num_poisoned_pages_sub(long i)
+> -{
+> -	atomic_long_sub(i, &num_poisoned_pages);
+> -}
+> -
+> -#else  /* CONFIG_MEMORY_FAILURE */
+> +#else
+>  
+>  static inline swp_entry_t make_hwpoison_entry(struct page *page)
+>  {
+> @@ -636,15 +624,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>  {
+>  	return NULL;
+>  }
+> -
+> -static inline void num_poisoned_pages_inc(void)
+> -{
+> -}
+> -
+> -static inline void num_poisoned_pages_sub(long i)
+> -{
+> -}
+> -#endif  /* CONFIG_MEMORY_FAILURE */
+> +#endif
+>  
+>  static inline int non_swap_entry(swp_entry_t entry)
+>  {
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 5942e1c0407e..aa6ce685b863 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -74,6 +74,16 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+>  static bool hw_memory_failure __read_mostly = false;
+>  
+> +static inline void num_poisoned_pages_inc(void)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6f0c896c5a9449a10ded@syzkaller.appspotmail.com
+This function is defined as "static inline" while it's "extern void num_poisoned_pages_inc(void)"
+in the header file. Is this expected?
 
-L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
-BUG: unable to handle page fault for address: ffffffffffffffea
-#PF: supervisor write access in kernel mode
-#PF: error_code(0x0002) - not-present page
-PGD bc8f067 P4D bc8f067 PUD bc91067 PMD 0 
-Oops: 0002 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3606 Comm: syz-executor343 Not tainted 6.0.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0010:arch_atomic_fetch_sub arch/x86/include/asm/atomic.h:190 [inline]
-RIP: 0010:atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-RIP: 0010:__refcount_sub_and_test include/linux/refcount.h:272 [inline]
-RIP: 0010:__refcount_dec_and_test include/linux/refcount.h:315 [inline]
-RIP: 0010:refcount_dec_and_test include/linux/refcount.h:333 [inline]
-RIP: 0010:kref_put include/linux/kref.h:64 [inline]
-RIP: 0010:eventfd_ctx_put+0x1e/0x110 fs/eventfd.c:112
-Code: ff ff e8 65 7e dc ff e9 b5 fb ff ff 41 54 55 48 89 fd 53 bb ff ff ff ff e8 ef 1d 90 ff be 04 00 00 00 48 89 ef e8 72 80 dc ff <f0> 0f c1 5d 00 bf 01 00 00 00 89 de e8 91 1a 90 ff 83 fb 01 74 35
-RSP: 0018:ffffc9000365f748 EFLAGS: 00010246
-RAX: 0000000000000001 RBX: 00000000ffffffff RCX: ffffffff81ebeb3e
-RDX: fffffbfffffffffe RSI: 0000000000000004 RDI: ffffffffffffffea
-RBP: ffffffffffffffea R08: 0000000000000001 R09: ffffffffffffffed
-R10: fffffbfffffffffd R11: 0000000000000000 R12: 0000000000000003
-R13: ffffffffffffffea R14: ffffc900037b1000 R15: 00000000ffffffea
-FS:  0000555556297300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffea CR3: 0000000072461000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvm_xen_eventfd_assign arch/x86/kvm/xen.c:1721 [inline]
- kvm_xen_setattr_evtchn arch/x86/kvm/xen.c:1780 [inline]
- kvm_xen_hvm_set_attr+0x563/0x1610 arch/x86/kvm/xen.c:486
- kvm_arch_vm_ioctl+0xe39/0x18b0 arch/x86/kvm/x86.c:6790
- kvm_vm_ioctl+0x15df/0x2380 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4811
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd65dc84b69
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc633540b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd65dc84b69
-RDX: 0000000020000040 RSI: 000000004048aec9 RDI: 0000000000000004
-RBP: 00007fd65dc48d10 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd65dc48da0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
-CR2: ffffffffffffffea
----[ end trace 0000000000000000 ]---
-RIP: 0010:arch_atomic_fetch_sub arch/x86/include/asm/atomic.h:190 [inline]
-RIP: 0010:atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-RIP: 0010:__refcount_sub_and_test include/linux/refcount.h:272 [inline]
-RIP: 0010:__refcount_dec_and_test include/linux/refcount.h:315 [inline]
-RIP: 0010:refcount_dec_and_test include/linux/refcount.h:333 [inline]
-RIP: 0010:kref_put include/linux/kref.h:64 [inline]
-RIP: 0010:eventfd_ctx_put+0x1e/0x110 fs/eventfd.c:112
-Code: ff ff e8 65 7e dc ff e9 b5 fb ff ff 41 54 55 48 89 fd 53 bb ff ff ff ff e8 ef 1d 90 ff be 04 00 00 00 48 89 ef e8 72 80 dc ff <f0> 0f c1 5d 00 bf 01 00 00 00 89 de e8 91 1a 90 ff 83 fb 01 74 35
-RSP: 0018:ffffc9000365f748 EFLAGS: 00010246
-RAX: 0000000000000001 RBX: 00000000ffffffff RCX: ffffffff81ebeb3e
-RDX: fffffbfffffffffe RSI: 0000000000000004 RDI: ffffffffffffffea
-RBP: ffffffffffffffea R08: 0000000000000001 R09: ffffffffffffffed
-R10: fffffbfffffffffd R11: 0000000000000000 R12: 0000000000000003
-R13: ffffffffffffffea R14: ffffc900037b1000 R15: 00000000ffffffea
-FS:  0000555556297300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffea CR3: 0000000072461000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 2 bytes skipped:
-   0:	e8 65 7e dc ff       	callq  0xffdc7e6a
-   5:	e9 b5 fb ff ff       	jmpq   0xfffffbbf
-   a:	41 54                	push   %r12
-   c:	55                   	push   %rbp
-   d:	48 89 fd             	mov    %rdi,%rbp
-  10:	53                   	push   %rbx
-  11:	bb ff ff ff ff       	mov    $0xffffffff,%ebx
-  16:	e8 ef 1d 90 ff       	callq  0xff901e0a
-  1b:	be 04 00 00 00       	mov    $0x4,%esi
-  20:	48 89 ef             	mov    %rbp,%rdi
-  23:	e8 72 80 dc ff       	callq  0xffdc809a
-* 28:	f0 0f c1 5d 00       	lock xadd %ebx,0x0(%rbp) <-- trapping instruction
-  2d:	bf 01 00 00 00       	mov    $0x1,%edi
-  32:	89 de                	mov    %ebx,%esi
-  34:	e8 91 1a 90 ff       	callq  0xff901aca
-  39:	83 fb 01             	cmp    $0x1,%ebx
-  3c:	74 35                	je     0x73
+Thanks,
+Miaohe Lin
 
+> +{
+> +	atomic_long_inc(&num_poisoned_pages);
+> +}
+> +
+> +static inline void num_poisoned_pages_sub(long i)
+> +{
+> +	atomic_long_sub(i, &num_poisoned_pages);
+> +}
+> +
+>  /*
+>   * Return values:
+>   *   1:   the page is dissolved (if needed) and taken off from buddy,
+> 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
