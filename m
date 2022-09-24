@@ -2,56 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93F95E8BEC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F3C5E8BEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 13:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbiIXLxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 07:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S233643AbiIXLzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 07:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiIXLxT (ORCPT
+        with ESMTP id S230293AbiIXLzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 07:53:19 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B5B600C
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 04:53:18 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZS3c0HY3zWh2Q;
-        Sat, 24 Sep 2022 19:49:16 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 19:53:15 +0800
-Subject: Re: [PATCH v3 2/4] mm/hwpoison: move definitions of
- num_poisoned_pages_* to memory-failure.c
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, <linux-mm@kvack.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
- <20220921091359.25889-3-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4b7c327a-547e-be8b-4568-745fabe74641@huawei.com>
-Date:   Sat, 24 Sep 2022 19:53:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sat, 24 Sep 2022 07:55:15 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E3E2251B;
+        Sat, 24 Sep 2022 04:55:13 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id hy2so5448962ejc.8;
+        Sat, 24 Sep 2022 04:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=F98fTUaqz/xgAnbNOjVz2gYVeA9O9kAzBF55v8LQ+9U=;
+        b=PuDVLGVns39/bq1zoea1OIaiY/wKkRFJ5R96SLuxh40U9n+/AzFSKB7qeM8akTEXke
+         3ZH5Z4NWpkcYsd4u0QdobmSJ8VXRB6/6ddFX5Y57D+VkRkyqDuIDsclrlmzB1EcGeA1U
+         +1r9RLXvmTujAABLGG6vinBnprZPv27Y+fSlf7xjz4Ku4gnlzZ2DsFb9nS5Kp5swBB/s
+         2XVgSQS/V8w1obJ7FFWFcXFvzBT/EvYbfI25QePU5mTNVWLlemuiTYTe9txAsN+cuVKB
+         qhqbGKL90kWp1za33LjaJDvJvtuueIQsz1fjCl8Dc8wb/io6SpKylKIhcw0meLEVjKf8
+         DnhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=F98fTUaqz/xgAnbNOjVz2gYVeA9O9kAzBF55v8LQ+9U=;
+        b=j9ds+AnIB1EWFfTDvLfJt4sKrP05ght1TiD5wMDVTtrtikoJwjMhCwCP/0RaLB/hBa
+         tJoV2ReNOPRTWBSTNMo1A3gLQsEvFcizPWawM6MTq8f8K9Kl9m7BBT9J/rHUe5pNzto5
+         s6/cEB/lcngMtURga09j3HNT8slS2Fpj8qSBlFUzuCpbSCan7wxAFOW5cZlugadgHpd0
+         vGIBenYYGEj9jBIQsqJLCnduK/ZdNUh62QHScOM4nTWBofoz2itODHDc53H+cUfzH/vn
+         WyUMbIGecZIraoHUR+VHGIzdRhM02N+hlngtu+4dVK6+VqRKLZaepjeaWj9kQEcuCpaN
+         J5/w==
+X-Gm-Message-State: ACrzQf1fnn0FINARXfpO767JRrYKtlYya9ceJ2pQTmkN62oQfaVe14aP
+        kc0aS6z2BWyrFEuofnqJUuA=
+X-Google-Smtp-Source: AMsMyM57L1MEFFetdqgTUmhOiUhQGK8B7QJ8BqsD2Xz0+ku2Q0dd0cXvixPefwbTeccTFMezEaybeQ==
+X-Received: by 2002:a17:907:9807:b0:781:feee:f87c with SMTP id ji7-20020a170907980700b00781feeef87cmr10818222ejc.101.1664020511427;
+        Sat, 24 Sep 2022 04:55:11 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:3929:d307:8379:1a1e? (2a02-a466-68ed-1-3929-d307-8379-1a1e.fixed6.kpn.net. [2a02:a466:68ed:1:3929:d307:8379:1a1e])
+        by smtp.gmail.com with ESMTPSA id w8-20020a17090652c800b00780ab5a9116sm5388708ejn.211.2022.09.24.04.55.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 04:55:11 -0700 (PDT)
+Message-ID: <f9e859f5-102f-c18a-ed83-ff83d223e410@gmail.com>
+Date:   Sat, 24 Sep 2022 13:55:10 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220921091359.25889-3-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is
+ present
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sven Peter <sven@svenpeter.dev>
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
+ <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+ <Yy4A7W9y4eeHOvco@smile.fi.intel.com>
+ <CAHQ1cqG8KfZAFwvjkn1f+aKrOkPNKW=NJo-rz-Zqp+WFZLoF4g@mail.gmail.com>
 Content-Language: en-US
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqG8KfZAFwvjkn1f+aKrOkPNKW=NJo-rz-Zqp+WFZLoF4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,138 +88,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/21 17:13, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> These interfaces will be used by drivers/base/core.c by later patch, so as a
-> preparatory work move them to more common header file visible to the file.
-> 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ---
-> ChangeLog v2 -> v3:
-> - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
-> ---
->  arch/parisc/kernel/pdt.c |  3 +--
->  include/linux/mm.h       |  5 +++++
->  include/linux/swapops.h  | 24 ++----------------------
->  mm/memory-failure.c      | 10 ++++++++++
->  4 files changed, 18 insertions(+), 24 deletions(-)
-> 
-> diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
-> index e391b175f5ec..fdc880e2575a 100644
-> --- a/arch/parisc/kernel/pdt.c
-> +++ b/arch/parisc/kernel/pdt.c
-> @@ -18,8 +18,7 @@
->  #include <linux/kthread.h>
->  #include <linux/initrd.h>
->  #include <linux/pgtable.h>
-> -#include <linux/swap.h>
+Hi,
 
-Is header file "linux/swap.h" already unneeded before the code change? It seems there's
-no code change in that file.
+Op 24-09-2022 om 03:27 schreef Andrey Smirnov:
+> On Fri, Sep 23, 2022 at 11:54 AM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+>> On Fri, Sep 23, 2022 at 11:23:23AM -0700, Andrey Smirnov wrote:
+>>> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
+>>> <andriy.shevchenko@intel.com> wrote:
+>>>> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
+>>>>> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+>>>>>> On 22-09-2022 12:08, Andy Shevchenko wrote:
+>>>>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+>>>> FYI: For now I sent a revert, but if we got a solution quicker we always
+>>>> can choose the course of actions.
+>>> I think we have another problem. This patch happened in parallel to mine
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
+>>>
+>>> so my changes didn't have that fix in mind and I think your revert
+>>> will not preserve that fix. Can you update your revert to take care of
+>>> that too, please?
+>>>
+>>> I'm really confused how the above commit could be followed up by:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
+>>>
+>>> the diffs in dwc3_drd_init seem contradictory
+>> I'm not sure I follow. Your patch has been merged and after that some kind of
+>> merge conflict was resolved by an additional change. To revert your stuff
+>> cleanly we need to revert the merge update patch first. That's why revert is a
+>> series of patches and not a single one. I have no idea how above mentioned
+>> commit at all related to all this.
+>>
+>> Can you elaborate more, please?
+>>
+> It's not important to clarify, just me voicing my confusion, we have
+> way too many threads of discussion already.
+>
+>>>>>> If the extcon device exists, get the mode from the extcon device. If
+>>>>>> the controller is DRD and the driver is unable to determine the mode,
+>>>>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+>>>>>>
+>>>>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
+>>>>>> share bisect log?
+>>>>>>
+>>>>>> I can but not right now. But what I did was bisect between 5.18.0 (good) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit before that (good).
+>>>>>>
+>>>>>> The effect of the patch is that on Merrifield (I tested with Intel Edison Arduino board which has a HW switch to select between host and device mode) device mode works but in host mode USB is completely not working.
+>>>>>>
+>>>>>> Currently on host mode - when working - superfluous error messages from tusb1210 appear. When host mode is not working there are no tusb1210 messages in the logs / on the console at all. Seemingly tusb1210 is not probed, which points in the direction of a relation to extcon.
+>>>>>>
+>>>>>> Taking into account the late cycle, I would like to revert the change. And
+>>>>>> Ferry and I would help to test any other (non-regressive) approach).
+>>>>>>
+>>>>>> I have not yet tested if a simple revert fixes the problem but will tonight.
+>>>>>>
+>>>>>> I would be happy to test other approaches too.
+>>>>> It's a bit hard for me to suggest an alternative approach without
+>>>>> knowing how things are breaking in this case. I'd love to order one of
+>>>>> those boards to repro and fix this on my end, but it looks like this
+>>>>> HW is EOLed and out of stock in most places. If you guys know how to
+>>>>> get my hands on those boards I'm all ears.
+>>>> There are still some second hand Intel Edison boards flying around
+>>>> (but maybe cost a bit more than expected) and there are also
+>>>> Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
+>>>> option though requires more actions in order something to be boot
+>>>> there.
+>>> OK, I'll check e-bay just in case.
+>>>
+>>>> In any case, it's probably quicker to ask Ferry or me for testing.
+>>>> (Although currently I have no access to the board to test OTG, it's
+>>>>   remote device which I can only power on and off and it has always
+>>>>   be in host mode.)
+>>>>
+>>>>> Barring that, Ferry can you dig more into this failure? E.g. is it this hunk
+>>>>>
+>>>>> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+>>>>>                   * mode. If the controller supports DRD but the dr_mode is not
+>>>>>                   * specified or set to OTG, then set the mode to peripheral.
+>>>>>                   */
+>>>>> -               if (mode == USB_DR_MODE_OTG &&
+>>>>> +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+>>>>>                      (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+>>>>>                       !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+>>>>>                      !DWC3_VER_IS_PRIOR(DWC3, 330A))
+>>>>> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+>>>>>          }
+>>>>>   }
+>>>>>
+>>>>> that's problematic or moving
+>>>> I think you wanted to revert only this line and test?
+>>> Yes.
+>> Ferry, can you try that (but I believe it won't help anyway, because I don't
+>> see how we handle deferred probe).
+>>
+>>>>>   static int dwc3_probe(struct platform_device *pdev)
+>>>>>   {
+>>>>>          struct device           *dev = &pdev->dev;
+>>>>> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
+>>>>>                  goto err2;
+>>>>>          }
+>>>>>
+>>>>> +       dwc->edev = dwc3_get_extcon(dwc);
+>>>>> +       if (IS_ERR(dwc->edev)) {
+>>>>> +               ret = PTR_ERR(dwc->edev);
+>>>>> +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
+>>>>> +               goto err3;
+>>>>> +       }
+>>>>> +
+>>>>>          ret = dwc3_get_dr_mode(dwc);
+>>>>>          if (ret)
+>>>>>                  goto err3;
+>>>>>
+>>>>> to happen earlier?
+>>>> It is not always possible to have an extcon driver available, that's why in
+>>>> some cases the probe of it defers. I dunno how your patch supposed to work
+>>>> in that case.
+>>> I'm not sure I understand what you mean. AFAIU the logic is that if
+>>> the platform specifies the presence of extcon either via DT or, like
+>>> Merrifield, via and explicit "linux,extcon-name" device property in
+>>> the code then extcon is a mandatory component of the DRD stack and the
+>>> driver is expected to be present for the whole thing to work.
+>>> I don't
+>>> think I really changed that logic with my patch, even after the revert
+>>> dwc3_get_extcon() will be called as a part of a probing codepath,
+>> But it's not true as proved by the experiment. So with your patch it doesn't
+>> work anymore, so the logic _is_ changed.
+>>
+> I think you are jumping the gun here. We know that the patch breaks
+> USB host functionality on Merrifield. We know that "Seemingly tusb1210
+> is not probed". Do we know that dwc3.ko (I think that'd be the
+> driver's name) is not probed? Did Ferry share that info with you in
+> some other thread? I don't deny it is possible, but I don't think this
+> is really clear at this moment to say definitively.
 
-> -#include <linux/swapops.h>
-> +#include <linux/mm.h>
->  
->  #include <asm/pdc.h>
->  #include <asm/pdcpat.h>
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index c2277f5aba9e..80a2d800f272 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3279,11 +3279,16 @@ extern atomic_long_t num_poisoned_pages __read_mostly;
->  extern int soft_offline_page(unsigned long pfn, int flags);
->  #ifdef CONFIG_MEMORY_FAILURE
->  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
-> +extern void num_poisoned_pages_inc(void);
->  #else
->  static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
->  {
->  	return 0;
->  }
-> +
-> +static inline void num_poisoned_pages_inc(void)
-> +{
-> +}
->  #endif
->  
->  #ifndef arch_memory_failure
-> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> index a91dd08e107b..3e58a812399a 100644
-> --- a/include/linux/swapops.h
-> +++ b/include/linux/swapops.h
-> @@ -581,8 +581,6 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
->  
->  #ifdef CONFIG_MEMORY_FAILURE
->  
-> -extern atomic_long_t num_poisoned_pages __read_mostly;
-> -
->  /*
->   * Support for hardware poisoned pages
->   */
-> @@ -610,17 +608,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
->  	return p;
->  }
->  
-> -static inline void num_poisoned_pages_inc(void)
-> -{
-> -	atomic_long_inc(&num_poisoned_pages);
-> -}
-> -
-> -static inline void num_poisoned_pages_sub(long i)
-> -{
-> -	atomic_long_sub(i, &num_poisoned_pages);
-> -}
-> -
-> -#else  /* CONFIG_MEMORY_FAILURE */
-> +#else
->  
->  static inline swp_entry_t make_hwpoison_entry(struct page *page)
->  {
-> @@ -636,15 +624,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
->  {
->  	return NULL;
->  }
-> -
-> -static inline void num_poisoned_pages_inc(void)
-> -{
-> -}
-> -
-> -static inline void num_poisoned_pages_sub(long i)
-> -{
-> -}
-> -#endif  /* CONFIG_MEMORY_FAILURE */
-> +#endif
->  
->  static inline int non_swap_entry(swp_entry_t entry)
->  {
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 5942e1c0407e..aa6ce685b863 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -74,6 +74,16 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
->  
->  static bool hw_memory_failure __read_mostly = false;
->  
-> +static inline void num_poisoned_pages_inc(void)
+I am not sure. I have dwc3 builtin. And intel_soc_pmic_mrfld and 
+extcon-intel-mrfld as a module.
 
-This function is defined as "static inline" while it's "extern void num_poisoned_pages_inc(void)"
-in the header file. Is this expected?
+But with the USB host broken this returns nothing:
 
-Thanks,
-Miaohe Lin
+root@yuna:~# journalctl -k -b -0 | grep -i dwc
 
-> +{
-> +	atomic_long_inc(&num_poisoned_pages);
-> +}
-> +
-> +static inline void num_poisoned_pages_sub(long i)
-> +{
-> +	atomic_long_sub(i, &num_poisoned_pages);
-> +}
-> +
->  /*
->   * Return values:
->   *   1:   the page is dissolved (if needed) and taken off from buddy,
-> 
+While with the 2 reverts (and host working):
 
+root@yuna:~# journalctl -k -b -1 | grep -i dwc
+Sep 22 22:57:38 yuna kernel: tusb1210 dwc3.0.auto.ulpi: GPIO lookup for 
+consumer reset
+...
+
+Sep 22 22:57:38 yuna kernel: debugfs: Directory 'dwc3.0.auto' with 
+parent 'ulpi' already present!
+...
+
+Sep 22 22:57:39 yuna kernel: tusb1210 dwc3.0.auto.ulpi: error -110 
+writing val 0x41 to reg 0x80
+
+Like I mentioned before, when host works I get warnings and errors on 
+the console as well as in the logs.
+
+I also get this one, but believe that is related to another problem, 
+something in hub.c. Which happens when the host works as a hub is plugin 
+there.
+
+Sep 22 22:57:39 yuna kernel: DMA-API: dwc3 dwc3.0.auto: cacheline 
+tracking EEXIST, overlapping mappings aren't supported
+
+>>>        so
+>>> if the a missing driver is causing a probe deferral it should still be
+>>> happening, unless I missed something.
+>> The merge fix removes deferred probe by some reason.
+>>
+>>>>> Does tracing the "mrfld_bcove_pwrsrc" driver (the
+>>>>> excton provider in this case AFIACT) show anything interesting?
+>>>> I believe there is nothing interesting.
+>> --
+>> With Best Regards,
+>> Andy Shevchenko
+>>
+>>
