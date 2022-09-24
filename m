@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D885E8D3D
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 16:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D90F5E8D4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 16:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiIXOSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 10:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        id S231641AbiIXOXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 10:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIXOSF (ORCPT
+        with ESMTP id S229893AbiIXOXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 10:18:05 -0400
-Received: from cmccmta3.chinamobile.com (cmccmta3.chinamobile.com [221.176.66.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8559725C4E
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 07:17:59 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.3])
-        by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee9632f1193b52-e119a;
-        Sat, 24 Sep 2022 22:17:57 +0800 (CST)
-X-RM-TRANSID: 2ee9632f1193b52-e119a
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.64.113.136])
-        by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee2632f117a251-45be7;
-        Sat, 24 Sep 2022 22:17:56 +0800 (CST)
-X-RM-TRANSID: 2ee2632f117a251-45be7
-From:   liujing <liujing@cmss.chinamobile.com>
-To:     vgoyal@redhat.com
-Cc:     stefanha@redhat.com, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liujing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] virtio_fs.c: add check kmalloc return
-Date:   Sat, 24 Sep 2022 10:17:28 -0400
-Message-Id: <20220924141728.3343-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 24 Sep 2022 10:23:09 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4941CA99E8;
+        Sat, 24 Sep 2022 07:23:07 -0700 (PDT)
+Received: from g550jk.fritz.box (212095005231.public.telering.at [212.95.5.231])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0F805C0C33;
+        Sat, 24 Sep 2022 14:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664029354; bh=EGEQk47etgfby3MwL6kaa8c9zClOyk0rfXJQBVnRfuY=;
+        h=From:To:Cc:Subject:Date;
+        b=VZ5wqPcZE4+SfBOG0OM16NIYFKR4E/+cW4l/zf9vcJqGOQ731chJhl6+Im1rMNAKy
+         /vWt+hdLvUpHgRfIO3cpA2ZTppnP/N/xNO7aPqXwNxuoAf064x5KRctamZ2E8mS76I
+         UHuXhbo/9kKMOU7YaZWfxbfhHC3/Ytou+Vy8Gg8o=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-bluetooth@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: bluetooth: broadcom: add BCM43430A0 & BCM43430A1
+Date:   Sat, 24 Sep 2022 16:21:55 +0200
+Message-Id: <20220924142154.14217-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: liujing <liujing@cmss.chinamobile.com>
+Document the compatible string for BCM43430A0 bluetooth used in lg-lenok
+and BCM43430A1 used in asus-sparrow.
+
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- fs/fuse/virtio_fs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes in v3:
+* pick up tags
+* resend
 
-diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-index 4d8d4f16c727..07334c9c2883 100644
---- a/fs/fuse/virtio_fs.c
-+++ b/fs/fuse/virtio_fs.c
-@@ -989,6 +989,10 @@ __releases(fiq->lock)
- 
- 	/* Allocate a buffer for the request */
- 	forget = kmalloc(sizeof(*forget), GFP_NOFS | __GFP_NOFAIL);
-+
-+	if (forget == NULL)
-+		return -ENOMEM;
-+
- 	req = &forget->req;
- 
- 	req->ih = (struct fuse_in_header){
+ Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+index 445b2a553625..d8d56076d656 100644
+--- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+@@ -19,6 +19,8 @@ properties:
+       - brcm,bcm4329-bt
+       - brcm,bcm4330-bt
+       - brcm,bcm4334-bt
++      - brcm,bcm43430a0-bt
++      - brcm,bcm43430a1-bt
+       - brcm,bcm43438-bt
+       - brcm,bcm4345c5
+       - brcm,bcm43540-bt
 -- 
-2.18.2
-
-
+2.37.3
 
