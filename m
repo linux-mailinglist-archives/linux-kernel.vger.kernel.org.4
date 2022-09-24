@@ -2,112 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5E15E8F66
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0495E8F69
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiIXSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 14:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S233904AbiIXSsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 14:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIXSlD (ORCPT
+        with ESMTP id S233950AbiIXSsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 14:41:03 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0CC13D58;
-        Sat, 24 Sep 2022 11:41:01 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1280590722dso4416625fac.1;
-        Sat, 24 Sep 2022 11:41:01 -0700 (PDT)
+        Sat, 24 Sep 2022 14:48:37 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E0141D21
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:48:36 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bq9so4585712wrb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=8JOtQBvvLW72XVECmck79YSCsfPdNEq7ykuouwI7PTQ=;
-        b=MSxyC2yaJeJFCrV3/oDu6uv9ePg9BMYRIryj1KMAIrVpi3mTBGxkNUVnBCzgaPf6bQ
-         +/GAysqPfj3fNGaTMTI916aGvO/Kwmj737GqoNXXw7V2s8ebEHLwT57AyPSTBouiZXNX
-         cIkj15f08jmn2QkGa79lkBiIb8bE2WGgK9N9+72jGgo5L2uF2bzet43DfGHA2SHYbzYX
-         3A3MxbO3ys2lktiyS/iQQ1ulZv5lXOjPl39ygxpP6mzK0QXGv1DID2Mi3zjTua7n5ulu
-         D2/fyyEmqJZ7uc6PPC/9/PVJ4rtEbwTd23xTbUoCRrAhBsCj2xQP/qYWNj8C8p0ON/2n
-         YSQQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1SloNiMp786X2/xuqKiZdnsDiOxKqBmN1OwZoG5Zg/4=;
+        b=s6p3Osv3PS44ZndFuV4YV+gFUmymU1awcYWHUmEPqhrxbdgP88tPDHz2YgB4L0+J2n
+         twoQxWQFO0DkaN2HqlVWgE1CiwBLdMpPSea4bPEfjHct1bUhd5r+xYPU7FNR3jbBtvCG
+         cfVKaMhP97LgVH7uYwNQ5/UtFwX69p6Rj5vY8Qa848XNeoob/t/z5LNZhiNWRQdO5mgl
+         jTEOZWobup44U585RlO5FT523URWRNjSKMY4Qu/5CYT2uEQ3HP83RlpuM3oJmaziw/p5
+         rP545v70Ck6hQ9Y2VWMEjTsJrMl+HCKObd10EGwmpYXv0+rRTCAz20Qw9Iy0UNt6euFC
+         Bf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=8JOtQBvvLW72XVECmck79YSCsfPdNEq7ykuouwI7PTQ=;
-        b=1k+EQGgy1H+AlO2qx8ps4Aix/o1asbCQ9xEknxYSxPPm7lErXbal8+R29z1EVFq3Ml
-         eKlSfUWHOmVo2/j+W9mZfTKGg6nslLT4Yhxdhk/1PjHRHOU0hUh7anSmWofYXDsbvNKO
-         CIS+yzQ62vY1g6jW5OxKAGy8zSBynlVYxOvUP9FjqCaY+p7XYR6kAUzDMOv+snHpdbLD
-         lHGMTVV9K9Mb5EdigqWO8zDL5578CI0MclENQd8X59PaZIHfs12HSrL2Osn/i3n8AFDO
-         0Mv0NFmNijzUJOOMQsUCcAOHXVtB65ZCDGLt2Y5aCSlk+3Kf/QSfw/uqVn/IIc7gd/HW
-         x2cg==
-X-Gm-Message-State: ACrzQf2HIjIqivGD4Kq6zQ19l4uAOgiL1fyLQPgHTojZ6RCVGR6774o4
-        GgmM0Uru4DHLfAlxt/zMkVg=
-X-Google-Smtp-Source: AMsMyM7/QppKaCvZ9AfPDnSI2olE5YiSRYcrHUcuFRLuFzHDidrPoBxkEIbi+YYShIqiI6EKekT7vw==
-X-Received: by 2002:a05:6870:c213:b0:127:a748:4aab with SMTP id z19-20020a056870c21300b00127a7484aabmr14139381oae.52.1664044860580;
-        Sat, 24 Sep 2022 11:41:00 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:3499:8fa2:1bc4:de36:509f])
-        by smtp.gmail.com with ESMTPSA id e5-20020a056870c0c500b001275f056133sm6519090oad.51.2022.09.24.11.40.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 11:41:00 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] wifi: mac80211: mlme: Fix missing unlock on beacon RX
-Date:   Sat, 24 Sep 2022 15:40:41 -0300
-Message-Id: <20220924184042.778676-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1SloNiMp786X2/xuqKiZdnsDiOxKqBmN1OwZoG5Zg/4=;
+        b=QWkuVgtyvcO8FJZAA8kmUz5pdzVAqWw7D54Pndoh3HtiJ8+2sSJg76QWH+LsIw0Efy
+         YcQ/t+mou5sdOD7DvoZieQ0nnLwRAu89KwAK5PFCopxy87aQ3yNdQJpxFnhbyGz/FR/M
+         lBoLp+B5pkb/9OoOUFVtNM69ZR1el8ksoxO1Hqai4+rQji51o0RMUTl9ovVAJnU2dAKW
+         eRVrDqipxMKMpGt2fsmczQxc9+KG2krtAubj1gUFXoASnNfUNDTp7ivI0Ez/ljYs4DYm
+         9a32QzZUSvmiu76ihaNiYhz30lEdyK0qLwvp1s6HnT/eTrlbS2iYdX0JiYgmwZBwc43T
+         XYeQ==
+X-Gm-Message-State: ACrzQf1IUXeZOkg31ZsXHZ/iFo+JWziVzVP+8ianVM3b7VKggYbbFhVw
+        /1JK4pdh7BHYASBxLNwi0rjyG1hlpK955Q==
+X-Google-Smtp-Source: AMsMyM6BTKNWRNW4fi5SCqBKlwFG+My7AlvvpQP1+l5Q6DLyg/NX61GGE5UAVATm57uh7NxyD+GNqw==
+X-Received: by 2002:a5d:4c4c:0:b0:22a:35bd:84a9 with SMTP id n12-20020a5d4c4c000000b0022a35bd84a9mr8310432wrt.103.1664045314397;
+        Sat, 24 Sep 2022 11:48:34 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bw25-20020a0560001f9900b0022ac1be009esm10761143wrb.16.2022.09.24.11.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 11:48:33 -0700 (PDT)
+Message-ID: <fb52982c-745e-ef9b-6258-0870d00a744b@linaro.org>
+Date:   Sat, 24 Sep 2022 20:48:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: v6.0-rc6 - arm64 / rock960 : kernel panic
+Content-Language: en-US
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Heiko St??bner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <4f398e4c-973b-7843-2f75-27324d109277@linaro.org>
+ <CAOf5uwnfCCwHjSXTurMtyEpZc_tF8bH=fxfwBzOtHcfM_S4tYg@mail.gmail.com>
+ <CAOf5uw=_+WQO7qH_Bxs5qEBn2_nemzuLiXdYe8+W_+OnFZNYkw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAOf5uw=_+WQO7qH_Bxs5qEBn2_nemzuLiXdYe8+W_+OnFZNYkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 98b0b467466c ("wifi: mac80211: mlme: use correct link_sta")
-switched to link station instead of deflink and added some checks to do
-that, which are done with the 'sta_mtx' mutex held. However, the error
-path of these checks does not unlock 'sta_mtx' before returning.
+On 24/09/2022 20:01, Michael Nazzareno Trimarchi wrote:
+> On Sat, Sep 24, 2022 at 7:58 PM Michael Nazzareno Trimarchi
+> <michael@amarulasolutions.com> wrote:
+>>
+>> Hi Daniel
+>>
+>> On Sat, Sep 24, 2022 at 7:43 PM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>>
+>>> Hi,
+>>>
+>>> there is a kernel panic on a rock960 board:
+>>>
+>>> After git bisecting, I have:
+>>>
+>>> commit 14facbc1871ae15404666747b5319c08e04b875a
+>>> Merge: f5c97da8037b 32346491ddf2
+>>> Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Date:   Mon Jul 11 08:32:58 2022 +0200
+>>>
+>>>       Merge 5.19-rc6 into char-misc-next
+>>>
+>>>       We need the misc driver fixes in here as well.
+>>>
+>>>       Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>
+>>> Any clue?
+>>
+>> That code receive 3-4 commits for one fix
+>>
+>> diff --git a/sound/soc/rockchip/rockchip_i2s.c
+>> b/sound/soc/rockchip/rockchip_i2s.c
+>> index f5f3540a9e18..a32a45b09b03 100644
+>> --- a/sound/soc/rockchip/rockchip_i2s.c
+>> +++ b/sound/soc/rockchip/rockchip_i2s.c
+>> @@ -803,7 +803,7 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
+>>
+>>          i2s->bclk_ratio = 64;
+>>          i2s->pinctrl = devm_pinctrl_get(&pdev->dev);
+>> -       if (!IS_ERR(i2s->pinctrl)) {
+>> +       if (!IS_ERR_OR_NULL(i2s->pinctrl)) {
+>>                  i2s->bclk_on = pinctrl_lookup_state(i2s->pinctrl, "bclk_on");
+>>                  if (!IS_ERR_OR_NULL(i2s->bclk_on)) {
+>>                          i2s->bclk_off =
+>> pinctrl_lookup_state(i2s->pinctrl, "bclk_off");
+> 
+> I don't sure if you can get null from there, but you have two
+> lookup_state on that function
 
-Fixes: 98b0b467466c ("wifi: mac80211: mlme: use correct link_sta")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
----
- net/mac80211/mlme.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-index 5265d2b6db12..c0fbffd9b153 100644
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -5589,12 +5589,16 @@ static void ieee80211_rx_mgmt_beacon(struct ieee80211_link_data *link,
- 
- 	mutex_lock(&local->sta_mtx);
- 	sta = sta_info_get(sdata, sdata->vif.cfg.ap_addr);
--	if (WARN_ON(!sta))
-+	if (WARN_ON(!sta)) {
-+		mutex_unlock(&local->sta_mtx);
- 		goto free;
-+	}
- 	link_sta = rcu_dereference_protected(sta->link[link->link_id],
- 					     lockdep_is_held(&local->sta_mtx));
--	if (WARN_ON(!link_sta))
-+	if (WARN_ON(!link_sta)) {
-+		mutex_unlock(&local->sta_mtx);
- 		goto free;
-+	}
- 
- 	changed |= ieee80211_recalc_twt_req(link, link_sta, elems);
- 
+Hmm, actually, I think it is not the same kernel panic I'm observing on 
+v6.0-rc6.
+
+I've been puzzled by different kernel panics from different issues when 
+git bisecting.
+
+The one happening is:
+
+[    2.471037] rk808-rtc rk808-rtc: setting system clock to 
+2022-09-24T18:41:07 UTC (1664044867)
+[    2.485859] usbcore: registered new interface driver uvcvideo
+[    3.726846] Unable to handle kernel execute from non-executable 
+memory at virtual address ffff80000a516530
+[    3.728032] Mem abort info:
+[    3.728308]   ESR = 0x000000008600000f
+[    3.728667]   EC = 0x21: IABT (current EL), IL = 32 bits
+[    3.729169]   SET = 0, FnV = 0
+[    3.729466]   EA = 0, S1PTW = 0
+[    3.729770]   FSC = 0x0f: level 3 permission fault
+[    3.730223] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000005f42000
+[    3.730846] [ffff80000a516530] pgd=10000000f7fff003, 
+p4d=10000000f7fff003, pud=10000000f7ffe003, pmd=10000000f7ff9003, 
+pte=0078000006516f03
+[    3.732063] Internal error: Oops: 8600000f [#1] PREEMPT SMP
+[    3.732588] Modules linked in:
+[    3.732918] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.0.0-rc1+ #730
+[    3.733532] Hardware name: 96boards Rock960 (DT)
+[    3.733971] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)
+[    3.734635] pc : extcon_dev_list+0x0/0x10
+[    3.735056] lr : call_timer_fn.constprop.0+0x24/0x80
+[    3.735551] sp : ffff80000a733ab0
+[    3.735869] x29: ffff80000a733ab0 x28: 0000000000000005 x27: 
+ffff80000a516530
+[    3.736574] x26: ffff80000a3779c0 x25: ffff0000f776dde8 x24: 
+ffff80000a733b40
+[    3.737277] x23: 0000000000000000 x22: dead000000000122 x21: 
+0000000000000101
+[    3.737977] x20: ffff000000644600 x19: ffff80000a516530 x18: 
+ffffffffffffffff
+[    3.738677] x17: ffff8000ed713000 x16: ffff80000800c000 x15: 
+0000000000004000
+[    3.739377] x14: 0000000000000000 x13: 0000000000000000 x12: 
+0000000000000000
+[    3.740073] x11: 00000000000000b7 x10: ffff8000ed713000 x9 : 
+ffff0000f776de30
+[    3.740771] x8 : 0000000000000001 x7 : ffffffffffffffff x6 : 
+0000000000000000
+[    3.741469] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 
+0000000000000200
+[    3.742164] x2 : 0000000000000200 x1 : ffff80000a516530 x0 : 
+ffff0000007e7310
+[    3.742865] Call trace:
+[    3.743107]  extcon_dev_list+0x0/0x10
+[    3.743477]  __run_timers.part.0+0x1f0/0x234
+[    3.743908]  run_timer_softirq+0x3c/0x7c
+[    3.744306]  _stext+0x124/0x2a4
+[    3.744627]  __irq_exit_rcu+0xcc/0xfc
+[    3.745008]  irq_exit_rcu+0x10/0x20
+[    3.745372]  el1_interrupt+0x38/0x70
+[    3.745733]  el1h_64_irq_handler+0x18/0x24
+[    3.746140]  el1h_64_irq+0x64/0x68
+[    3.746484]  arch_cpu_idle+0x18/0x2c
+[    3.746843]  default_idle_call+0x34/0x70
+[    3.747243]  do_idle+0x240/0x2bc
+[    3.747576]  cpu_startup_entry+0x24/0x30
+[    3.747969]  secondary_start_kernel+0x12c/0x140
+[    3.748421]  __secondary_switched+0xb0/0xb4
+[    3.748879] Code: 0a516520 ffff8000 0a516520 ffff8000 (007e7320)
+[    3.749461] ---[ end trace 0000000000000000 ]---
+[    3.749911] Kernel panic - not syncing: Oops: Fatal exception in 
+interrupt
+[    3.750548] SMP: stopping secondary CPUs
+[    3.751094] Kernel Offset: 0x80000 from 0xffff800008000000
+[    3.751609] PHYS_OFFSET: 0x0
+[    3.751889] CPU features: 0x2000,0824f021,00001082
+[    3.752354] Memory Limit: none
+[    3.752655] ---[ end Kernel panic - not syncing: Oops: Fatal 
+exception in interrupt ]---
+
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
