@@ -2,287 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CE65E8795
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479955E8799
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 04:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbiIXCkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 22:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S230514AbiIXCrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 22:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiIXCku (ORCPT
+        with ESMTP id S229600AbiIXCrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 22:40:50 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A1DE741A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 19:40:46 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id e4-20020a5d85c4000000b0068bb3c11e72so988981ios.5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 19:40:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=onJAqhgCyi2YJW4sYUxj2DDCsFwDiwgCEPMaHbSzii8=;
-        b=u35/vRO6aCEm/FrT4c2w0xFVwsZuXhpBwcN6NgqOaaM0Ah0tAXdgkDvkrGe8b5egzq
-         jyv27Q5m3F50IbC5AYfnjwy7gd3op0u+SqEcIEavyzb/t/bmuN963hJMki+rLWvVeUbW
-         gjaArfp0aYmr+0gy56F0YW9rgNJ65EgclkA0xqtQ2JdNZw6PMkKO7oy4VjJ9aYRVbo2B
-         Vn3Wgx0f+fASBgj/g/DQ7vONIEPdCYxx92HT4jlvdim4L7tCSI+hoPzbbbBzr1GoACq+
-         Q2FiMQWADEDP6Ma5SiHnmKewwLDO3cLtrgNHfImvfuTGhy/1c+8AkRMkpOd6C3GRIsA5
-         ByNg==
-X-Gm-Message-State: ACrzQf0nFH/zREo30leEYlj2sU4VeUtX5fG+WzL9Y2ktRQdla916sgk1
-        NorrFfKtxbqXG8iUu4RZ1nckEkjcK5zd4i3dV8oK4DNobQ+R
-X-Google-Smtp-Source: AMsMyM4SjhsGnfCPrn904C8VG+JdYCNtOhuR5Bf9rtuX/yFlye1DW3iYQpOrw+eC/ZCPeNArNmqDrw+XHos0LZjpd4bFTZj/hFPr
+        Fri, 23 Sep 2022 22:47:14 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98404AA3DD;
+        Fri, 23 Sep 2022 19:47:12 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Sat, 24 Sep 2022 10:46:58
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.162.98.155]
+Date:   Sat, 24 Sep 2022 10:46:58 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jason Yan" <yanaijie@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, kuba@kernel.org,
+        john.garry@huawei.com, gregkh@linuxfoundation.org,
+        davem@davemloft.net
+Subject: Re: [PATCH] scsi: libsas: fix use-after-free bug in
+ smp_execute_task_sg
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <9cd0b0ae-c6c7-a5bc-a834-a84010702bbc@huawei.com>
+References: <20220920144213.10536-1-duoming@zju.edu.cn>
+ <9cd0b0ae-c6c7-a5bc-a834-a84010702bbc@huawei.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1074:b0:2f6:15d9:4719 with SMTP id
- q20-20020a056e02107400b002f615d94719mr5508688ilj.123.1663987245895; Fri, 23
- Sep 2022 19:40:45 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 19:40:45 -0700
-In-Reply-To: <000000000000e848fb05e962fb56@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b3d6e705e96338b2@google.com>
-Subject: Re: [syzbot] WARNING: held lock freed in l2cap_conn_del
-From:   syzbot <syzbot+f5f14f5e9e2df9920b98@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Message-ID: <5e739c0a.f33e7.1836d641313.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgAXz1qiby5jUWdFBg--.16137W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMDAVZdtbnvSwACsi
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=145ed640880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
-dashboard link: https://syzkaller.appspot.com/bug?extid=f5f14f5e9e2df9920b98
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14bce6e4880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12903cff080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f5f14f5e9e2df9920b98@syzkaller.appspotmail.com
-
-Bluetooth: hci0: hardware error 0x00
-=========================
-WARNING: held lock freed!
-6.0.0-rc6-syzkaller-00281-g1707c39ae309 #0 Not tainted
--------------------------
-kworker/u5:2/3610 is freeing memory ffff888021840000-ffff8880218407ff, with a lock still held there!
-ffff888021840520 (&chan->lock/1){+.+.}-{3:3}, at: l2cap_chan_lock include/net/bluetooth/l2cap.h:855 [inline]
-ffff888021840520 (&chan->lock/1){+.+.}-{3:3}, at: l2cap_conn_del+0x3b5/0x7b0 net/bluetooth/l2cap_core.c:1920
-7 locks held by kworker/u5:2/3610:
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
- #0: ffff888147a10938 ((wq_completion)hci0){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
- #1: ffffc90003a6fda8 ((work_completion)(&hdev->error_reset)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
- #2: ffff888077b60fd0 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x25/0x70 net/bluetooth/hci_core.c:552
- #3: ffff888077b60078 (&hdev->lock){+.+.}-{3:3}, at: hci_dev_close_sync+0x268/0x1130 net/bluetooth/hci_sync.c:4463
- #4: ffffffff8d9d3e28 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1776 [inline]
- #4: ffffffff8d9d3e28 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0xd5/0x260 net/bluetooth/hci_conn.c:2366
- #5: ffff888149a112d8 (&conn->chan_lock){+.+.}-{3:3}, at: l2cap_conn_del+0x2ef/0x7b0 net/bluetooth/l2cap_core.c:1915
- #6: ffff888021840520 (&chan->lock/1){+.+.}-{3:3}, at: l2cap_chan_lock include/net/bluetooth/l2cap.h:855 [inline]
- #6: ffff888021840520 (&chan->lock/1){+.+.}-{3:3}, at: l2cap_conn_del+0x3b5/0x7b0 net/bluetooth/l2cap_core.c:1920
-
-stack backtrace:
-CPU: 0 PID: 3610 Comm: kworker/u5:2 Not tainted 6.0.0-rc6-syzkaller-00281-g1707c39ae309 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: hci0 hci_error_reset
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_freed_lock_bug kernel/locking/lockdep.c:6422 [inline]
- debug_check_no_locks_freed.cold+0x9d/0xa9 kernel/locking/lockdep.c:6455
- slab_free_hook mm/slub.c:1731 [inline]
- slab_free_freelist_hook+0x73/0x1c0 mm/slub.c:1785
- slab_free mm/slub.c:3539 [inline]
- kfree+0xe2/0x580 mm/slub.c:4567
- l2cap_chan_destroy net/bluetooth/l2cap_core.c:503 [inline]
- kref_put include/linux/kref.h:65 [inline]
- l2cap_chan_put+0x22a/0x2d0 net/bluetooth/l2cap_core.c:527
- l2cap_conn_del+0x3fc/0x7b0 net/bluetooth/l2cap_core.c:1924
- l2cap_disconn_cfm net/bluetooth/l2cap_core.c:8212 [inline]
- l2cap_disconn_cfm+0x8c/0xc0 net/bluetooth/l2cap_core.c:8205
- hci_disconn_cfm include/net/bluetooth/hci_core.h:1779 [inline]
- hci_conn_hash_flush+0x122/0x260 net/bluetooth/hci_conn.c:2366
- hci_dev_close_sync+0x55d/0x1130 net/bluetooth/hci_sync.c:4476
- hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
- hci_error_reset+0x96/0x130 net/bluetooth/hci_core.c:1050
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: use-after-free in atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
-BUG: KASAN: use-after-free in __mutex_unlock_slowpath+0xa6/0x5e0 kernel/locking/mutex.c:916
-Read of size 8 at addr ffff8880218404b8 by task kworker/u5:2/3610
-
-CPU: 0 PID: 3610 Comm: kworker/u5:2 Not tainted 6.0.0-rc6-syzkaller-00281-g1707c39ae309 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: hci0 hci_error_reset
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
- __mutex_unlock_slowpath+0xa6/0x5e0 kernel/locking/mutex.c:916
- l2cap_chan_unlock include/net/bluetooth/l2cap.h:860 [inline]
- l2cap_conn_del+0x404/0x7b0 net/bluetooth/l2cap_core.c:1926
- l2cap_disconn_cfm net/bluetooth/l2cap_core.c:8212 [inline]
- l2cap_disconn_cfm+0x8c/0xc0 net/bluetooth/l2cap_core.c:8205
- hci_disconn_cfm include/net/bluetooth/hci_core.h:1779 [inline]
- hci_conn_hash_flush+0x122/0x260 net/bluetooth/hci_conn.c:2366
- hci_dev_close_sync+0x55d/0x1130 net/bluetooth/hci_sync.c:4476
- hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
- hci_error_reset+0x96/0x130 net/bluetooth/hci_core.c:1050
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-Allocated by task 49:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- l2cap_chan_create+0x40/0x570 net/bluetooth/l2cap_core.c:463
- a2mp_chan_open net/bluetooth/a2mp.c:771 [inline]
- amp_mgr_create+0x8f/0x960 net/bluetooth/a2mp.c:862
- a2mp_channel_create+0x7d/0x150 net/bluetooth/a2mp.c:894
- l2cap_data_channel net/bluetooth/l2cap_core.c:7569 [inline]
- l2cap_recv_frame+0x48e3/0x8d90 net/bluetooth/l2cap_core.c:7724
- l2cap_recv_acldata+0xaa6/0xc00 net/bluetooth/l2cap_core.c:8429
- hci_acldata_packet net/bluetooth/hci_core.c:3777 [inline]
- hci_rx_work+0x705/0x1230 net/bluetooth/hci_core.c:4012
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Freed by task 3610:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1759 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1785
- slab_free mm/slub.c:3539 [inline]
- kfree+0xe2/0x580 mm/slub.c:4567
- l2cap_chan_destroy net/bluetooth/l2cap_core.c:503 [inline]
- kref_put include/linux/kref.h:65 [inline]
- l2cap_chan_put+0x22a/0x2d0 net/bluetooth/l2cap_core.c:527
- l2cap_conn_del+0x3fc/0x7b0 net/bluetooth/l2cap_core.c:1924
- l2cap_disconn_cfm net/bluetooth/l2cap_core.c:8212 [inline]
- l2cap_disconn_cfm+0x8c/0xc0 net/bluetooth/l2cap_core.c:8205
- hci_disconn_cfm include/net/bluetooth/hci_core.h:1779 [inline]
- hci_conn_hash_flush+0x122/0x260 net/bluetooth/hci_conn.c:2366
- hci_dev_close_sync+0x55d/0x1130 net/bluetooth/hci_sync.c:4476
- hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
- hci_error_reset+0x96/0x130 net/bluetooth/hci_core.c:1050
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-The buggy address belongs to the object at ffff888021840000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 1208 bytes inside of
- 2048-byte region [ffff888021840000, ffff888021840800)
-
-The buggy address belongs to the physical page:
-page:ffffea0000861000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x21840
-head:ffffea0000861000 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888011842000
-raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x52a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 49, tgid 49 (kworker/u5:0), ts 46525106359, free_ts 46388169462
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
- alloc_slab_page mm/slub.c:1829 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1974
- new_slab mm/slub.c:2034 [inline]
- ___slab_alloc+0x7f1/0xe10 mm/slub.c:3036
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3123
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3287
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- l2cap_chan_create+0x40/0x570 net/bluetooth/l2cap_core.c:463
- a2mp_chan_open net/bluetooth/a2mp.c:771 [inline]
- amp_mgr_create+0x8f/0x960 net/bluetooth/a2mp.c:862
- a2mp_channel_create+0x7d/0x150 net/bluetooth/a2mp.c:894
- l2cap_data_channel net/bluetooth/l2cap_core.c:7569 [inline]
- l2cap_recv_frame+0x48e3/0x8d90 net/bluetooth/l2cap_core.c:7724
- l2cap_recv_acldata+0xaa6/0xc00 net/bluetooth/l2cap_core.c:8429
- hci_acldata_packet net/bluetooth/hci_core.c:3777 [inline]
- hci_rx_work+0x705/0x1230 net/bluetooth/hci_core.c:4012
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2553
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3248 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3263 [inline]
- kmem_cache_alloc+0x267/0x3b0 mm/slub.c:3273
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
- getname_flags+0x9a/0xe0 include/linux/audit.h:320
- vfs_fstatat+0x73/0xb0 fs/stat.c:254
- __do_sys_newfstatat+0x91/0x110 fs/stat.c:425
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888021840380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888021840400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888021840480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff888021840500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888021840580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+SGVsbG8sCgpPbiBUaHUsIDIyIFNlcCAyMDIyIDIyOjA2OjMwICswODAwIEphc29uIFlhbiB3cm90
+ZToKCj4gT24gMjAyMi85LzIwIDIyOjQyLCBEdW9taW5nIFpob3Ugd3JvdGU6Cj4gPiBXaGVuIGV4
+ZWN1dGluZyBTTVAgdGFzayBmYWlsZWQsIHRoZSBzbXBfZXhlY3V0ZV90YXNrX3NnKCkKPiA+IGNh
+bGxzIGRlbF90aW1lcigpIHRvIGRlbGV0ZSB0aGUgInNsb3dfdGFzay0+dGltZXIiLiBIb3dldmVy
+LAo+ID4gaWYgdGhlIHRpbWVyIGhhbmRsZXIgc2FzX3Rhc2tfaW50ZXJuYWxfdGltZWRvdXQoKSBp
+cyBydW5uaW5nLAo+ID4gdGhlIGRlbF90aW1lcigpIGluIHNtcF9leGVjdXRlX3Rhc2tfc2coKSB3
+aWxsIG5vdCBzdG9wIGl0Cj4gPiBhbmQgdGhlIFVBRiBidWcgd2lsbCBoYXBwZW4uIFRoZSBwcm9j
+ZXNzIGlzIHNob3duIGJlbG93Ogo+ID4gCj4gPiAgICAgICAgKHRocmVhZCAxKSAgICAgICAgICAg
+ICAgIHwgICAgICAgICh0aHJlYWQgMikKPiA+IHNtcF9leGVjdXRlX3Rhc2tfc2coKSAgICAgICAg
+ICB8IHNhc190YXNrX2ludGVybmFsX3RpbWVkb3V0KCkKPiA+ICAgLi4uICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfAo+ID4gICBkZWxfdGltZXIoKSAgICAgICAgICAgICAgICAgICB8Cj4gPiAg
+IC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIC4uLgo+ID4gICBzYXNfZnJlZV90YXNr
+KHRhc2spICAgICAgICAgICB8Cj4gPiAgICBrZnJlZSh0YXNrLT5zbG93X3Rhc2spIC8vRlJFRXwK
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgdGFzay0+c2xvd190YXNrLT4u
+Li4gLy9VU0UKPiA+IAo+ID4gRml4IGJ5IGNhbGxpbmcgZGVsX3RpbWVyX3N5bmMoKSBpbiBzbXBf
+ZXhlY3V0ZV90YXNrX3NnKCksCj4gPiB3aGljaCBtYWtlcyBzdXJlIHRoZSB0aW1lciBoYW5kbGVy
+IGhhdmUgZmluaXNoZWQgYmVmb3JlCj4gPiB0aGUgInRhc2stPnNsb3dfdGFzayIgaXMgZGVhbGxv
+Y2F0ZWQuCj4gPiAKPiA+IEZpeGVzOiAyOTA4ZDc3OGFiM2UgKCJbU0NTSV0gYWljOTR4eDogbmV3
+IGRyaXZlciIpCj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVk
+dS5jbj4KPiA+IC0tLQo+ID4gICBkcml2ZXJzL3Njc2kvbGlic2FzL3Nhc19leHBhbmRlci5jIHwg
+MiArLQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
+PiA+IAo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS9saWJzYXMvc2FzX2V4cGFuZGVyLmMg
+Yi9kcml2ZXJzL3Njc2kvbGlic2FzL3Nhc19leHBhbmRlci5jCj4gPiBpbmRleCBmYTIyMDkwODBj
+Yy4uNWNlMjUxODMwMTAgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3Njc2kvbGlic2FzL3Nhc19l
+eHBhbmRlci5jCj4gPiArKysgYi9kcml2ZXJzL3Njc2kvbGlic2FzL3Nhc19leHBhbmRlci5jCj4g
+PiBAQCAtNjcsNyArNjcsNyBAQCBzdGF0aWMgaW50IHNtcF9leGVjdXRlX3Rhc2tfc2coc3RydWN0
+IGRvbWFpbl9kZXZpY2UgKmRldiwKPiA+ICAgCQlyZXMgPSBpLT5kZnQtPmxsZGRfZXhlY3V0ZV90
+YXNrKHRhc2ssIEdGUF9LRVJORUwpOwo+ID4gICAKPiA+ICAgCQlpZiAocmVzKSB7Cj4gPiAtCQkJ
+ZGVsX3RpbWVyKCZ0YXNrLT5zbG93X3Rhc2stPnRpbWVyKTsKPiA+ICsJCQlkZWxfdGltZXJfc3lu
+YygmdGFzay0+c2xvd190YXNrLT50aW1lcik7Cj4gPiAgIAkJCXByX25vdGljZSgiZXhlY3V0aW5n
+IFNNUCB0YXNrIGZhaWxlZDolZFxuIiwgcmVzKTsKPiA+ICAgCQkJYnJlYWs7Cj4gPiAgIAkJfQo+
+ID4gCj4gCj4gVGhlIHRpbWVyIHNob3VsZCBiZSB0cmlnZ2VyZWQgMTAgc2Vjb25kcyBsYXRlci4g
+SSBhbSBjdXJpb3VzIHdoeSB3ZSBzdGF5Cj4gdGhpcyBsb25nIGJlZm9yZSBkZWxfdGltZXIoKS4K
+CkkgdGhpbmsgdGhlIGhhY2tlciBtYXkgY3JlYXRlIGEgbGFyZ2UgbnVtYmVyIG9mIGhhcmR3YXJl
+IGludGVycnVwdHMgdG8KaW5jcmVhc2UgdGhlIGRlbGF5ZWQgdGltZS4KCj4gSG93ZXZlciB0aGlz
+IGNoYW5nZSBsb29rcyBnb29kIHRvIG1lLgo+IFJldmlld2VkLWJ5OiBKYXNvbiBZYW4gPHlhbmFp
+amllQGh1YXdlaS5jb20+CgpUaGFuayB5b3UhCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQo=
 
