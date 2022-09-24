@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CE35E8921
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEBA5E8919
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiIXH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S233460AbiIXHZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiIXH1U (ORCPT
+        with ESMTP id S233437AbiIXHZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:27:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CBA24094;
-        Sat, 24 Sep 2022 00:26:16 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZL8p75N5zpTrN;
-        Sat, 24 Sep 2022 15:23:22 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 15:26:14 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 15:26:14 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-modules@vger.kernel.org>
-CC:     <mcgrof@kernel.org>, <chenzhongjin@huawei.com>
-Subject: [PATCH -next] module: Remove unused macros module_addr_min/max
-Date:   Sat, 24 Sep 2022 15:22:16 +0800
-Message-ID: <20220924072216.103876-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 24 Sep 2022 03:25:35 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781E12AE9;
+        Sat, 24 Sep 2022 00:24:35 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1obzWU-007vmx-Ty; Sat, 24 Sep 2022 17:24:28 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 24 Sep 2022 15:24:26 +0800
+Date:   Sat, 24 Sep 2022 15:24:26 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Ignat Korchagin <ignat@cloudflare.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lei he <helei.sig11@bytedance.com>, kernel-team@cloudflare.com
+Subject: Re: [PATCH 0/4] crypto: add ECDSA signature support to key retention
+ service
+Message-ID: <Yy6wqqVpUCeQKrdh@gondor.apana.org.au>
+References: <20220908200036.2034-1-ignat@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908200036.2034-1-ignat@cloudflare.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unused macros reported by [-Wunused-macros].
+On Thu, Sep 08, 2022 at 09:00:32PM +0100, Ignat Korchagin wrote:
+> Kernel Key Retention Service[1] is a useful building block to build secure
+> production key management systems. One of its interesting features is
+> support for asymmetric keys: we can allow a process to use a certain key
+> (decrypt or sign data) without actually allowing the process to read the
+> cryptographic key material. By doing so we protect our code from certain
+> type of attacks, where a process memory memory leak actually leaks a
+> potentially highly sensitive cryptographic material.
+> 
+> But unfortunately only RSA algorithm was supported until now, because
+> in-kernel ECDSA implementation supported signature verifications only.
+> 
+> This patchset implements in-kernel ECDSA signature generation and adds
+> support for ECDSA signing in the key retention service. The key retention
+> service support was taken out of a previous unmerged patchset from Lei He[2]
+> 
+> [1]: https://www.kernel.org/doc/html/latest/security/keys/core.html
+> [2]: https://patchwork.kernel.org/project/linux-crypto/list/?series=653034&state=*
+> 
+> Ignat Korchagin (2):
+>   crypto: add ECDSA signature generation support
+>   crypto: add ECDSA test vectors from RFC 6979
+> 
+> lei he (2):
+>   crypto: pkcs8 parser support ECDSA private keys
+>   crypto: remove unused field in pkcs8_parse_context
+> 
+>  crypto/Kconfig                        |   3 +-
+>  crypto/Makefile                       |   4 +-
+>  crypto/asymmetric_keys/pkcs8.asn1     |   2 +-
+>  crypto/asymmetric_keys/pkcs8_parser.c |  46 +++-
+>  crypto/ecc.c                          |   9 +-
+>  crypto/ecdsa.c                        | 373 +++++++++++++++++++++++++-
+>  crypto/ecprivkey.asn1                 |   6 +
+>  crypto/testmgr.c                      |  18 ++
+>  crypto/testmgr.h                      | 333 +++++++++++++++++++++++
+>  include/crypto/internal/ecc.h         |  11 +
+>  10 files changed, 788 insertions(+), 17 deletions(-)
+>  create mode 100644 crypto/ecprivkey.asn1
+> 
+> --
+> 2.36.1
 
-These macros are introduced to record the bound address of modules.
-
-'80b8bf436990 ("module: Always have struct mod_tree_root")'
-This commit has made struct mod_tree_root always exist, which means
-we can always referencing mod_tree derectly rather than using this
-macro.
-
-So they are useless, remove them for code cleaning.
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- kernel/module/main.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a4e4d84b6f4e..96dcc950da60 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -84,9 +84,6 @@ struct mod_tree_root mod_data_tree __cacheline_aligned = {
- };
- #endif
- 
--#define module_addr_min mod_tree.addr_min
--#define module_addr_max mod_tree.addr_max
--
- struct symsearch {
- 	const struct kernel_symbol *start, *stop;
- 	const s32 *crcs;
+I need acks for patches 3-4 from David.  Thanks!
 -- 
-2.17.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
