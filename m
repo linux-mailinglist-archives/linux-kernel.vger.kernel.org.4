@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236855E8E11
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B2B5E8E15
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 17:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiIXPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 11:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S233933AbiIXPl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 11:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiIXPit (ORCPT
+        with ESMTP id S233914AbiIXPlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 11:38:49 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF5782D3A
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BWI0L1kQTk7BMWi6MFyTZs6jqs5x7Xnj3MiKNVlTUYQ=; b=Pgd6HZiZE6iRkTqt2dgK4hOdxV
-        6sysMQQe5+H4fm+M4ZH678VpyuiPOSW1ZRLZgdAXiUnclVeMowHenmZalvUeD+t008qpdlrGafoR2
-        E7Ycx5EwQmbEzlSJ0Dyu8id/YpTxuTp7I9uAgaHg3D+c/8HqteHEJDyMDYTJEnhO2/qQemB8Ouf6D
-        VTwYjip8ZHb3qXxebY5Yz+bTlpzqwbHlRaRpUOXZDrDGMnqC+QNrQmtidCIhwaJ/1YFzCkGVZw38F
-        uDuFlgg6amBQOpG228bp9TB5KdKXIyiJcWkOKAh2G0GfkFXCWbHQMv5MxXOX4tVk8FdXWp11BXU+Y
-        Q1Y7OAiA==;
-Received: from [2a01:799:961:d200:8cf6:761:40ec:1ff7] (port=52059)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oc7Es-0000Ut-BH; Sat, 24 Sep 2022 17:38:46 +0200
-Message-ID: <ec9262ac-e935-2ff4-9f67-fe26c7212613@tronnes.org>
-Date:   Sat, 24 Sep 2022 17:38:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 06/33] drm/connector: Rename legacy TV property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        Sat, 24 Sep 2022 11:41:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C0163C8
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 08:41:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 257BAB80DE0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DA225C433D6;
+        Sat, 24 Sep 2022 15:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664034108;
+        bh=M3+cOc7Iqi1w0+AS5uJ8P/hWru//sv+TXcl6puqGrA4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=WdGHji8mj4qKrMKlz+2mj7idrpmbdB3E4kmZhWqy6x73XqKmXrDQ4uyIgEGs2dFkd
+         dp1UeKvd0TydsIuGL9EQFYaI8akeeioZT8tb2gsHp9Kd2pPnvjaC2BStMPfAh2gymc
+         f8pnB4mo0ty81qfXDK8NsJfEPU303vquFFxDrbq6Y5l//9HbZ0xeaY1UlX9XaiFrml
+         hTvqvWMtXVINPnsGsd7WiiKvEp+14tObybgODN8rjKFlZRZgHD5gHczTDWgNzBVniW
+         dFntjrX70sYc2YjyAVBOLo3155J8YzzC0QJzUTvwungGSKt9n4hRJI+mDURXLvPFRz
+         0PkADsJM2Jqxg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C04AEE21ECF;
+        Sat, 24 Sep 2022 15:41:48 +0000 (UTC)
+Subject: Re: [GIT PULL] workqueue fixes for v6.0-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
+References: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yy5+KbO8g7t0szu5@slm.duckdns.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.0-rc6-fixes
+X-PR-Tracked-Commit-Id: c0feea594e058223973db94c1c32a830c9807c86
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: aae8dda51964ff9d3f1dc96528b853826667efad
+Message-Id: <166403410877.30824.2365999891805066767.pr-tracker-bot@kernel.org>
+Date:   Sat, 24 Sep 2022 15:41:48 +0000
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,17 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Fri, 23 Sep 2022 17:48:57 -1000:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.0-rc6-fixes
 
-Den 22.09.2022 16.25, skrev Maxime Ripard:
-> The current tv_mode has driver-specific values that don't allow to
-> easily share code using it, either at the userspace or kernel level.
-> 
-> Since we're going to introduce a new, generic, property that fit the
-> same purpose, let's rename this one to legacy_tv_mode to make it
-> obvious we should move away from it.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/aae8dda51964ff9d3f1dc96528b853826667efad
 
-Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
