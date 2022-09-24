@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AF25E889D
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 07:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F345E88A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 08:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiIXFpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 01:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S233088AbiIXGBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 02:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiIXFo7 (ORCPT
+        with ESMTP id S231379AbiIXGBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 01:44:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B501F3BC79;
-        Fri, 23 Sep 2022 22:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663998285; x=1695534285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=aktu51+28FaoJRxOu94f10+s9e/A7ngnX7byejD6d3s=;
-  b=RG9cFJmIH+/DoOYn3J7gULp7D3lf29qWNkJgxSm8Op91MCsxmwGEWgaP
-   feSYJRDGJpWPPdqGyP8bM5g+U7FWJagvKt/5+d0Iqupq/nJZXBzW1welX
-   kXwytf6+QBPSOfn+h4bHEiC0wG1KwHMi8i1HCwJ38hI9IontS/W7tmDz4
-   PJUP4xVRR2bQ3QGjh202Md0YUjrHQ/JHNyxIuQY2wC9M7c4ycES61P0lK
-   l/5eqqD/hN/6LPpe3n4vOZOUnlnRcTMSNfPKRhSwm95ictJWgQK3GMzG8
-   zViBOIIHuzaGNSquQDxR1FoYQ9wYg3Y5v8FC3NmKNG5U5wZMvTJ0d4NL9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299470293"
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="299470293"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 22:44:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="651207779"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 22:44:42 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
-Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, kan.liang@linux.intel.com,
-        artem.bityutskiy@linux.intel.com
-Subject: [PATCH 3/3] tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
-Date:   Sat, 24 Sep 2022 13:47:38 +0800
-Message-Id: <20220924054738.12076-4-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220924054738.12076-1-rui.zhang@intel.com>
-References: <20220924054738.12076-1-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 24 Sep 2022 02:01:49 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94411E11D3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 23:01:48 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id v4so2046512pgi.10
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 23:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=frtRJO9aYCNdmGoP3UvlNSZ/JjwEc5weswdq+XzluEM=;
+        b=EkYsLXgVhlax+Y7RIe87hesf6zrDCoj91bVE89Vr49KRen4ED+B0kqBuiVtV/N2V53
+         rzN1qH1DBJOJVU1n6DmTtv/iKftufggXj85BP/NJHw3E3l1EUdbqDjgIxxpDJ8n05Oup
+         fm9mqJHPRJzoqKlwYvB6u0EY72TREpeeVIs+0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=frtRJO9aYCNdmGoP3UvlNSZ/JjwEc5weswdq+XzluEM=;
+        b=PntfbnDmA9Ts1Kuf83hD5hwqbhvKQ1EmHH9OX/eTYGw3uqLAmjIIZA87D9FmRbvFY6
+         ZL5QeDCZUZLgcB6gKND6DoGmlIMPpeYymOUs6wGBEByQzJDqqIwW7lF+6BkhTyZaI7Mp
+         7ivp9g5Y1ahgCQxfvLdAkZ5T5xTnI0YelymEaZHXJmGQOB6DjaE4bApx/rR9MqdgW3ml
+         q7U0L0kg/Me8nTJwIhRfccNoMIRhqp46ic4F0+8CLo4boz65cSUvqqyOWslsa5ElVdfW
+         2GI+NQRcuWNFtnqWDjd0i+cF0NdH7mcvlQPiEbx2tmqj9WQ9mQL6n/3DQltpkGM4BX4d
+         Qhlw==
+X-Gm-Message-State: ACrzQf0sEZhvwKBD8TPZaANJCCuxTcdOeD3bHZf91RjpVyaWKT5h8V1j
+        kTO9HI4XmVac1iVqbRcttbwdDA==
+X-Google-Smtp-Source: AMsMyM7Iur1TwmY1pIh1BeWHPMeCtSQWW+RntK8sDmsWsEVr03e2wF5I3VilxEd1HsrZKIzyVSMEmg==
+X-Received: by 2002:a63:e417:0:b0:43c:2fc6:d60c with SMTP id a23-20020a63e417000000b0043c2fc6d60cmr7643869pgi.436.1663999308097;
+        Fri, 23 Sep 2022 23:01:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w12-20020a170902904c00b00170d34cf7f3sm6795390plz.257.2022.09.23.23.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 23:01:47 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 23:01:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     HighPoint Linux Team <linux@highpoint-tech.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2][next] scsi: hptiop: Replace one-element array with
+ flexible-array member
+Message-ID: <202209232240.747B2B5FCC@keescook>
+References: <cover.1663865333.git.gustavoars@kernel.org>
+ <6238ccf37798e36d783f5ce5e483e6837e98be79.1663865333.git.gustavoars@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6238ccf37798e36d783f5ce5e483e6837e98be79.1663865333.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
-Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
-energy resolution as described in MSR_RAPL_POWER_UNIT.
+On Thu, Sep 22, 2022 at 11:53:23AM -0500, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in struct hpt_iop_request_scsi_command and refactor the rest of the
+> code, accordingly.
+> 
+> The following pieces of code suggest that the one element of array sg_list
+> in struct hpt_iop_request_scsi_command is not taken into account when
+> calculating the total size for both struct hpt_iop_request_scsi_command
+> and the maximum number of elements sg_list will contain:
+> 
+> 1047         req->header.size = cpu_to_le32(
+> 1048                                 sizeof(struct hpt_iop_request_scsi_command)
+> 1049                                  - sizeof(struct hpt_iopsg)
+> 1050                                  + sg_count * sizeof(struct hpt_iopsg));
+> 
+> 1400         req_size = sizeof(struct hpt_iop_request_scsi_command)                            1401                 + sizeof(struct hpt_iopsg) * (hba->max_sg_descriptors - 1);
 
-Remove the SPR rapl_dram_energy_units quirk.
+Accidentally merge line above ("1401" should start a new line).
 
-Fixes: e7af1ed3fa47 ("tools/power turbostat: Support additional CPU model numbers")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Tested-by: Wang Wendy <wendy.wang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 -
- 1 file changed, 1 deletion(-)
+> So it's safe to replace the one-element array with a flexible-array
+> member and update the code above, accordingly: now we don't need to
+> subtract sizeof(struct hpt_iopsg) from sizeof(struct hpt_iop_request_scsi_command)
+> because this is implicitly done by the flex-array transformation.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 597cc2dbc456..e3e357df2a51 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4560,7 +4560,6 @@ static double rapl_dram_energy_units_probe(int model, double rapl_energy_units)
- 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
- 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
- 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
--	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
- 		return (rapl_dram_energy_units = 15.3 / 1000000);
- 	default:
- 		return (rapl_energy_units);
+The only binary output change I see is from the line numbers changing
+from the patch, as the argument to __might_sleep() is adjusted:
+
+...
+│       call   d1 <hptiop_reset+0x74>
+│   R_X86_64_PLT32      __x86_indirect_thunk_rax-0x4
+│ -     mov    $0x434,%esi
+│ +     mov    $0x433,%esi
+│       mov    $0x0,%rdi
+│   R_X86_64_32S        .rodata.str1.1
+│       call   e2 <hptiop_reset+0x85>
+│   R_X86_64_PLT32      __might_sleep-0x4
+...
+
+So this looks good!
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-2.25.1
-
+Kees Cook
