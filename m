@@ -2,320 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BB85E8E89
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5D65E8E91
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbiIXQkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S233689AbiIXQpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiIXQkk (ORCPT
+        with ESMTP id S229685AbiIXQpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:40:40 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAFA31239;
-        Sat, 24 Sep 2022 09:40:38 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id g4so1896192qvo.3;
-        Sat, 24 Sep 2022 09:40:38 -0700 (PDT)
+        Sat, 24 Sep 2022 12:45:43 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD037F98;
+        Sat, 24 Sep 2022 09:45:35 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id w2so1813332qtv.9;
+        Sat, 24 Sep 2022 09:45:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gE3KFEUdndJXdpY6KUQ2M1H/RzmcTG6K//Zg7fHhHug=;
-        b=ukJj0wVymixTEqdbRJIyBC40lYfw+dPr+AwiEfQhSpbtz1ci6mbAM4QZd4j2xQowX8
-         5artbqjv1E5zIUZary4pA79HCRoMUhnXoqf4XyonrNHq2n29+6TmAQ8xJPeI5xtRCrF9
-         fAhNOsGMVa94YIAJg/+e/MAsA4AlzTufwl9/Xf6Smz0RAdcYgvHCfpBZKQkd/0zQMgD0
-         KsNBaIJUYPF95wV1bKPWatUIY0/eZyZG5yBnBKP5xSabHp5pp6ag4s0j5ByPDT7s7J5n
-         Tl6uE+wJ745ds36jsRZpUBaxBmTTtq3ThAvXMGR23Gk4+zNGdHg70HajYGeE+AlBZurb
-         lo9Q==
-X-Gm-Message-State: ACrzQf1AzGkSuC+KhasHcJhQTZCVfO36i6BaE90CwqvMf0yIo8xcMsEO
-        4d1sjxKjx32s+7uNdCsu2tuWZPOfquRvqj/nRp9Jz++D
-X-Google-Smtp-Source: AMsMyM7fbJVAZSVER7pZxB2EfdF8AmyZIAMGhKrJ+SS/bqBnDtUB10uawlldVrEY558Ks+NRtiNxfKUUePfB3oDqvdY=
-X-Received: by 2002:a05:6214:d8d:b0:4ad:5d9d:bda8 with SMTP id
- e13-20020a0562140d8d00b004ad5d9dbda8mr11283909qve.85.1664037638085; Sat, 24
- Sep 2022 09:40:38 -0700 (PDT)
+        bh=77zeF3ZT5F5GaWcTglxaesCMWwfWcqS9vVjkWun32sA=;
+        b=RguH2bGUmyrKPQI355avba70Tr6nO7y5ebN+aLq294Y77W2mtcM/zsdv1CA5H1Raq8
+         35XD7ywZe0ShM4ibxpjafodl0AhIQmHDXhRM17paT2z3iwTn7W/JabK3/C20H9OtZtKm
+         ikm4BnEU6pNUVIQvqpTC1Ash1VjvkS43Q/EFpqO56RMB5gVJadh0EWXiDBVJvZiiA8qH
+         CnKcANCorKfOxhchT4yv7JCx8rSGYKezTc8fNqs0ykgwfN5eAhnxQMD4rAwa4HM3dJ4v
+         Ht1CvcZmYfEHeEMuaYx82pK6j8qff+6YdNwKt6Zzw1FLnkm8CGLSEBOom6X542nVeJ3q
+         hufw==
+X-Gm-Message-State: ACrzQf0N2zRqqrAkVlYFV3eFyfetLViRek4gFVP0tXb7E1Q84pVAsA5g
+        S6hFodBsRGyFS+iR3S5uaVKOmJjg8d3gqmtscpapm1M1
+X-Google-Smtp-Source: AMsMyM7aGAfr4ilz45D3XBuDqe9Os7d/BOKSMI7+TnH2rxt2VqKuNkV7MVt2og6n8aG5DVuezz+99MznWCj2Q1k0IBU=
+X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
+ n8-20020a05622a11c800b0035ce912a8eamr11811695qtk.17.1664037934750; Sat, 24
+ Sep 2022 09:45:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220911090635.5559-1-lvjianmin@loongson.cn> <20220911090635.5559-2-lvjianmin@loongson.cn>
- <YyA9n+xMMUjSRV3y@lpieralisi>
-In-Reply-To: <YyA9n+xMMUjSRV3y@lpieralisi>
+References: <20220912203722.205185-1-jeremy.linton@arm.com>
+ <20220912203722.205185-2-jeremy.linton@arm.com> <Yy3fTFVyAEx9R/qQ@arm.com>
+In-Reply-To: <Yy3fTFVyAEx9R/qQ@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 18:40:26 +0200
-Message-ID: <CAJZ5v0jYy+pMWH7Y5CckhY773ypY9CkuwuegcHgTn_LH557+Mw@mail.gmail.com>
-Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
- different offsets
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+Date:   Sat, 24 Sep 2022 18:45:23 +0200
+Message-ID: <CAJZ5v0jb_50v-3mX1=FzDTx9mjmrg16QezQAd8-qc9Bd8DJWdw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
+To:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Robert Moore <robert.moore@intel.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        loongarch@lists.linux.dev
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 10:21 AM Lorenzo Pieralisi
-<lpieralisi@kernel.org> wrote:
+On Fri, Sep 23, 2022 at 6:31 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
 >
-> On Sun, Sep 11, 2022 at 05:06:34PM +0800, Jianmin Lv wrote:
-> > In DT systems configurations, of_dma_get_range() returns struct
-> > bus_dma_region DMA regions; they are used to set-up devices
-> > DMA windows with different offset available for translation between DMA
-> > address and CPU address.
+> Hi Jeremy,
+>
+> On Monday 12 Sep 2022 at 15:37:22 (-0500), Jeremy Linton wrote:
+> > PCC regions utilize a mailbox to set/retrieve register values used by
+> > the CPPC code. This is fine as long as the operations are
+> > infrequent. With the FIE code enabled though the overhead can range
+> > from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> > based machines.
 > >
-> > In ACPI systems configuration, acpi_dma_get_range() does not return
-> > DMA regions yet and that precludes setting up the dev->dma_range_map
-> > pointer and therefore DMA regions with multiple offsets.
+> > So, before enabling FIE assure none of the registers used by
+> > cppc_get_perf_ctrs() are in the PCC region. Finally, add a module
+> > parameter which can override the PCC region detection at boot or
+> > module reload.
 > >
-> > Update acpi_dma_get_range() to return struct bus_dma_region
-> > DMA regions like of_dma_get_range() does.
-> >
-> > After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
-> > ARM64, where the original dma_addr and size are removed as these
-> > arguments are now redundant, and pass 0 and U64_MAX for dma_base
-> > and size of arch_setup_dma_ops; this is a simplification consistent
-> > with what other ACPI architectures also pass to iommu_setup_dma_ops().
-> >
-> > Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-> > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> > Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > > ---
-> >  drivers/acpi/arm64/dma.c | 28 ++++++++++++---------
-> >  drivers/acpi/scan.c      | 53 +++++++++++++++++-----------------------
-> >  include/acpi/acpi_bus.h  |  3 +--
-> >  include/linux/acpi.h     |  7 +++---
-> >  4 files changed, 44 insertions(+), 47 deletions(-)
->
-> Reviewed-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
-
-Applied as 6.1 material along with the [2/2], thanks!
-
-> > diff --git a/drivers/acpi/arm64/dma.c b/drivers/acpi/arm64/dma.c
-> > index f16739ad3cc0..93d796531af3 100644
-> > --- a/drivers/acpi/arm64/dma.c
-> > +++ b/drivers/acpi/arm64/dma.c
-> > @@ -4,11 +4,12 @@
-> >  #include <linux/device.h>
-> >  #include <linux/dma-direct.h>
+> >  drivers/acpi/cppc_acpi.c       | 42 ++++++++++++++++++++++++++++++++++
+> >  drivers/cpufreq/cppc_cpufreq.c | 25 ++++++++++++++++----
+> >  include/acpi/cppc_acpi.h       |  5 ++++
+> >  3 files changed, 68 insertions(+), 4 deletions(-)
 > >
-> > -void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-> > +void acpi_arch_dma_setup(struct device *dev)
-> >  {
-> >       int ret;
-> >       u64 end, mask;
-> > -     u64 dmaaddr = 0, size = 0, offset = 0;
-> > +     u64 size = 0;
-> > +     const struct bus_dma_region *map = NULL;
+> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> > index 1e15a9f25ae9..55693e6f7153 100644
+> > --- a/drivers/acpi/cppc_acpi.c
+> > +++ b/drivers/acpi/cppc_acpi.c
+> > @@ -1240,6 +1240,48 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+> >  }
+> >  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
 > >
-> >       /*
-> >        * If @dev is expected to be DMA-capable then the bus code that created
-> > @@ -26,7 +27,19 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-> >       else
-> >               size = 1ULL << 32;
-> >
-> > -     ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
-> > +     ret = acpi_dma_get_range(dev, &map);
-> > +     if (!ret && map) {
-> > +             const struct bus_dma_region *r = map;
+> > +/**
+> > + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
+> > + *
+> > + * CPPC has flexibility about how CPU performance counters are accessed.
+> > + * One of the choices is PCC regions, which can have a high access latency. This
+> > + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
+> > + *
+> > + * Return: true if any of the counters are in PCC regions, false otherwise
+> > + */
+> > +bool cppc_perf_ctrs_in_pcc(void)
+> > +{
+> > +     int cpu;
 > > +
-> > +             for (end = 0; r->size; r++) {
-> > +                     if (r->dma_start + r->size - 1 > end)
-> > +                             end = r->dma_start + r->size - 1;
-> > +             }
+> > +     for_each_present_cpu(cpu) {
+> > +             struct cpc_register_resource *ref_perf_reg;
+> > +             struct cpc_desc *cpc_desc;
 > > +
-> > +             size = end + 1;
-> > +             dev->dma_range_map = map;
+> > +             cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> > +
+> > +             if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> > +                 CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> > +                 CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> > +                     return true;
+> > +
+> > +
+> > +             ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> > +
+> > +             /*
+> > +              * If reference perf register is not supported then we should
+> > +              * use the nominal perf value
+> > +              */
+> > +             if (!CPC_SUPPORTED(ref_perf_reg))
+> > +                     ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> > +
+> > +             if (CPC_IN_PCC(ref_perf_reg))
+> > +                     return true;
 > > +     }
 > > +
-> >       if (ret == -ENODEV)
-> >               ret = iort_dma_get_ranges(dev, &size);
-> >       if (!ret) {
-> > @@ -34,17 +47,10 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-> >                * Limit coherent and dma mask based on size retrieved from
-> >                * firmware.
-> >                */
-> > -             end = dmaaddr + size - 1;
-> > +             end = size - 1;
-> >               mask = DMA_BIT_MASK(ilog2(end) + 1);
-> >               dev->bus_dma_limit = end;
-> >               dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
-> >               *dev->dma_mask = min(*dev->dma_mask, mask);
-> >       }
-> > -
-> > -     *dma_addr = dmaaddr;
-> > -     *dma_size = size;
-> > -
-> > -     ret = dma_direct_set_offset(dev, dmaaddr + offset, dmaaddr, size);
-> > -
-> > -     dev_dbg(dev, "dma_offset(%#08llx)%s\n", offset, ret ? " failed!" : "");
-> >  }
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 42cec8120f18..f96ef8536037 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/platform_data/x86/apple.h>
-> >  #include <linux/pgtable.h>
-> >  #include <linux/crc32.h>
-> > +#include <linux/dma-direct.h>
-> >
-> >  #include "internal.h"
-> >
-> > @@ -1467,25 +1468,21 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
-> >   * acpi_dma_get_range() - Get device DMA parameters.
-> >   *
-> >   * @dev: device to configure
-> > - * @dma_addr: pointer device DMA address result
-> > - * @offset: pointer to the DMA offset result
-> > - * @size: pointer to DMA range size result
-> > + * @map: pointer to DMA ranges result
-> >   *
-> > - * Evaluate DMA regions and return respectively DMA region start, offset
-> > - * and size in dma_addr, offset and size on parsing success; it does not
-> > - * update the passed in values on failure.
-> > + * Evaluate DMA regions and return pointer to DMA regions on
-> > + * parsing success; it does not update the passed in values on failure.
-> >   *
-> >   * Return 0 on success, < 0 on failure.
-> >   */
-> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> > -                    u64 *size)
-> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
-> >  {
-> >       struct acpi_device *adev;
-> >       LIST_HEAD(list);
-> >       struct resource_entry *rentry;
-> >       int ret;
-> >       struct device *dma_dev = dev;
-> > -     u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
-> > +     struct bus_dma_region *r;
-> >
-> >       /*
-> >        * Walk the device tree chasing an ACPI companion with a _DMA
-> > @@ -1510,31 +1507,28 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> >
-> >       ret = acpi_dev_get_dma_resources(adev, &list);
-> >       if (ret > 0) {
-> > +             r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
-> > +             if (!r) {
-> > +                     ret = -ENOMEM;
-> > +                     goto out;
-> > +             }
+> > +     return false;
+> > +}
+> > +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
 > > +
-> >               list_for_each_entry(rentry, &list, node) {
-> > -                     if (dma_offset && rentry->offset != dma_offset) {
-> > +                     if (rentry->res->start >= rentry->res->end) {
-> > +                             kfree(r);
-> >                               ret = -EINVAL;
-> > -                             dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
-> > +                             dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
-> >                               goto out;
-> >                       }
-> > -                     dma_offset = rentry->offset;
+> >  /**
+> >   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+> >   * @cpunum: CPU from which to read counters.
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index 24eaf0ec344d..9e2a48ac5830 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
 > >
-> > -                     /* Take lower and upper limits */
-> > -                     if (rentry->res->start < dma_start)
-> > -                             dma_start = rentry->res->start;
-> > -                     if (rentry->res->end > dma_end)
-> > -                             dma_end = rentry->res->end;
-> > -             }
-> > -
-> > -             if (dma_start >= dma_end) {
-> > -                     ret = -EINVAL;
-> > -                     dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
-> > -                     goto out;
-> > +                     r->cpu_start = rentry->res->start;
-> > +                     r->dma_start = rentry->res->start - rentry->offset;
-> > +                     r->size = resource_size(rentry->res);
-> > +                     r->offset = rentry->offset;
-> > +                     r++;
+> >  static struct cpufreq_driver cppc_cpufreq_driver;
+> >
+> > +static enum {
+> > +     FIE_UNSET = -1,
+> > +     FIE_ENABLED,
+> > +     FIE_DISABLED
+> > +} fie_disabled = FIE_UNSET;
+> > +
+> >  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+> > +module_param(fie_disabled, int, 0444);
+>
+> Why 'int' and not 'bool' here?
+>
+> IIUC, if you use 'bool' the user can pass any int/0/1/y/n/Y/N, which
+> will result in fie_disabled properly having either the value 0 or 1
+> (or default FIE_UNSET) if a parameter is not passed.
+>
+> Then
+> 'if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED)'
+> can become
+> 'if (fie_disabled == FIE_UNSET)' or 'if (fie_disabled < 0)'.
+>
+> I feel I'm missing something, otherwise you would have done this
+> already.
+>
+> Otherwise FWIW, it looks good to me.
+> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+Applied as 6.1 material, thanks!
+
+> > +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+> >
+> >  /* Frequency invariance support */
+> >  struct cppc_freq_invariance {
+> > @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+> >       struct cppc_freq_invariance *cppc_fi;
+> >       int cpu, ret;
+> >
+> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +     if (fie_disabled)
+> >               return;
+> >
+> >       for_each_cpu(cpu, policy->cpus) {
+> > @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+> >       struct cppc_freq_invariance *cppc_fi;
+> >       int cpu;
+> >
+> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +     if (fie_disabled)
+> >               return;
+> >
+> >       /* policy->cpus will be empty here, use related_cpus instead */
+> > @@ -229,7 +237,15 @@ static void __init cppc_freq_invariance_init(void)
+> >       };
+> >       int ret;
+> >
+> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +     if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
+> > +             fie_disabled = FIE_ENABLED;
+> > +             if (cppc_perf_ctrs_in_pcc()) {
+> > +                     pr_info("FIE not enabled on systems with registers in PCC\n");
+> > +                     fie_disabled = FIE_DISABLED;
+> > +             }
+> > +     }
+> > +
+> > +     if (fie_disabled)
+> >               return;
+> >
+> >       kworker_fie = kthread_create_worker(0, "cppc_fie");
+> > @@ -247,7 +263,7 @@ static void __init cppc_freq_invariance_init(void)
+> >
+> >  static void cppc_freq_invariance_exit(void)
+> >  {
+> > -     if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> > +     if (fie_disabled)
+> >               return;
+> >
+> >       kthread_destroy_worker(kworker_fie);
+> > @@ -936,6 +952,7 @@ static void cppc_check_hisi_workaround(void)
+> >                   wa_info[i].oem_revision == tbl->oem_revision) {
+> >                       /* Overwrite the get() callback */
+> >                       cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+> > +                     fie_disabled = FIE_DISABLED;
+> >                       break;
 > >               }
-> >
-> > -             *dma_addr = dma_start - dma_offset;
-> > -             len = dma_end - dma_start;
-> > -             *size = max(len, len + 1);
-> > -             *offset = dma_offset;
-> > +             *map = r;
 > >       }
-> >   out:
-> >       acpi_dev_free_resource_list(&list);
-> > @@ -1624,20 +1618,19 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
-> >                         const u32 *input_id)
+> > diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> > index f73d357ecdf5..c5614444031f 100644
+> > --- a/include/acpi/cppc_acpi.h
+> > +++ b/include/acpi/cppc_acpi.h
+> > @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+> >  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+> >  extern int cppc_set_enable(int cpu, bool enable);
+> >  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> > +extern bool cppc_perf_ctrs_in_pcc(void);
+> >  extern bool acpi_cpc_valid(void);
+> >  extern bool cppc_allow_fast_switch(void);
+> >  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+> > @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
 > >  {
-> >       const struct iommu_ops *iommu;
-> > -     u64 dma_addr = 0, size = 0;
-> >
-> >       if (attr == DEV_DMA_NOT_SUPPORTED) {
-> >               set_dma_ops(dev, &dma_dummy_ops);
-> >               return 0;
-> >       }
-> >
-> > -     acpi_arch_dma_setup(dev, &dma_addr, &size);
-> > +     acpi_arch_dma_setup(dev);
-> >
-> >       iommu = acpi_iommu_configure_id(dev, input_id);
-> >       if (PTR_ERR(iommu) == -EPROBE_DEFER)
-> >               return -EPROBE_DEFER;
-> >
-> > -     arch_setup_dma_ops(dev, dma_addr, size,
-> > +     arch_setup_dma_ops(dev, 0, U64_MAX,
-> >                               iommu, attr == DEV_DMA_COHERENT);
-> >
-> >       return 0;
-> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > index e7d27373ff71..73ac4a1d6947 100644
-> > --- a/include/acpi/acpi_bus.h
-> > +++ b/include/acpi/acpi_bus.h
-> > @@ -613,8 +613,7 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev);
-> >  int acpi_iommu_fwspec_init(struct device *dev, u32 id,
-> >                          struct fwnode_handle *fwnode,
-> >                          const struct iommu_ops *ops);
-> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> > -                    u64 *size);
-> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
-> >  int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
-> >                          const u32 *input_id);
-> >  static inline int acpi_dma_configure(struct device *dev,
-> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> > index 6f64b2f3dc54..bb41623dab77 100644
-> > --- a/include/linux/acpi.h
-> > +++ b/include/linux/acpi.h
-> > @@ -281,12 +281,12 @@ void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
-> >
-> >  #ifdef CONFIG_ARM64
-> >  void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
-> > -void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size);
-> > +void acpi_arch_dma_setup(struct device *dev);
-> >  #else
-> >  static inline void
-> >  acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
-> >  static inline void
-> > -acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size) { }
-> > +acpi_arch_dma_setup(struct device *dev) { }
-> >  #endif
-> >
-> >  int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
-> > @@ -977,8 +977,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
-> >       return DEV_DMA_NOT_SUPPORTED;
+> >       return -ENOTSUPP;
 > >  }
-> >
-> > -static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
-> > -                                  u64 *offset, u64 *size)
-> > +static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+> > +static inline bool cppc_perf_ctrs_in_pcc(void)
+> > +{
+> > +     return false;
+> > +}
+> >  static inline bool acpi_cpc_valid(void)
 > >  {
-> >       return -ENODEV;
-> >  }
+> >       return false;
 > > --
-> > 2.31.1
+> > 2.37.1
 > >
