@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03EC5E8F5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F195E8F5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbiIXSce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 14:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S229800AbiIXScm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 14:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiIXScc (ORCPT
+        with ESMTP id S233588AbiIXScd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 14:32:32 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6BC3A4B1
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:32:31 -0700 (PDT)
+        Sat, 24 Sep 2022 14:32:33 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F943A4BF
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:32:32 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664044349;
+        t=1664044350;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hSHn8pdWEz/EAWLe2z3ri8yOC1WGCkjx3I21+gYS0z4=;
-        b=wm4LrK/u//STiB7sxFAPXzhzOrb5u7tdGsFqjfuykHjFsd5KNCqvBIWByfC8kazmxtZWk/
-        CKxzoj98SET0txBWzTn/8VyxcHmpJe0uFZpdGZzQUYpQ7Agskv7Uq5YKIIdVTTWckblDr+
-        5RXF0rS5KNcne9jsHaBZ4ZXHeiGmrx8=
+        bh=wCZqMmRS53sAUXuFaKIWMcHMmvAGs3N+TjAFGrnshio=;
+        b=G8sO/LbZF5z3kI5Kifxt5ZbKg8A1tSsCYv+pkp8rEqdgvBhC9QeVYnLDdk41giAQgzuoZS
+        1pt3hKM0m7qNgN/2XBvAg2nX1YCrxL6lMvDMpOzsrpYe52MYyjb3cFmJ2Sm7Xy1Wk/a6v4
+        KfEkT8zqRq/iA15eJmveNb+JR8MFQeo=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -36,18 +36,18 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm 2/3] kasan: migrate kasan_rcu_uaf test to kunit
-Date:   Sat, 24 Sep 2022 20:31:52 +0200
-Message-Id: <bc3b1d29d8addd24738982c44b717fbbe6dff8e9.1664044241.git.andreyknvl@google.com>
+Subject: [PATCH mm 3/3] kasan: migrate workqueue_uaf test to kunit
+Date:   Sat, 24 Sep 2022 20:31:53 +0200
+Message-Id: <2815073f2be37e554f7f0fd7b1d10e9742be6ce3.1664044241.git.andreyknvl@google.com>
 In-Reply-To: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
 References: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,134 +56,142 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Migrate the kasan_rcu_uaf test to the KUnit framework.
-
-Changes to the implementation of the test:
-
-- Call rcu_barrier() after call_rcu() to make that the RCU callbacks get
-  triggered before the test is over.
-
-- Cast pointer passed to rcu_dereference_protected as __rcu to get rid of
-  the Sparse warning.
-
-- Check that KASAN prints a report via KUNIT_EXPECT_KASAN_FAIL.
+Migrate the workqueue_uaf test to the KUnit framework.
 
 Initially, this test was intended to check that Generic KASAN prints
-auxiliary stack traces for RCU objects. Nevertheless, the test is enabled
-for all modes to make that KASAN reports bad accesses in RCU callbacks.
+auxiliary stack traces for workqueues. Nevertheless, the test is enabled
+for all modes to make that KASAN reports bad accesses in the tested
+scenario.
 
 The presence of auxiliary stack traces for the Generic mode needs to be
 inspected manually.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/kasan_test.c        | 37 ++++++++++++++++++++++++++++++++++++
- mm/kasan/kasan_test_module.c | 30 -----------------------------
- 2 files changed, 37 insertions(+), 30 deletions(-)
+ mm/kasan/kasan_test.c        | 40 +++++++++++++++++++++++++++++-------
+ mm/kasan/kasan_test_module.c | 30 ---------------------------
+ 2 files changed, 33 insertions(+), 37 deletions(-)
 
 diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 3a2886f85e69..005776325e20 100644
+index 005776325e20..71cb402c404f 100644
 --- a/mm/kasan/kasan_test.c
 +++ b/mm/kasan/kasan_test.c
-@@ -1134,6 +1134,42 @@ static void kmalloc_double_kzfree(struct kunit *test)
+@@ -1134,6 +1134,14 @@ static void kmalloc_double_kzfree(struct kunit *test)
  	KUNIT_EXPECT_KASAN_FAIL(test, kfree_sensitive(ptr));
  }
  
-+static struct kasan_rcu_info {
-+	int i;
-+	struct rcu_head rcu;
-+} *global_rcu_ptr;
++/*
++ * The two tests below check that Generic KASAN prints auxiliary stack traces
++ * for RCU callbacks and workqueues. The reports need to be inspected manually.
++ *
++ * These tests are still enabled for other KASAN modes to make sure that all
++ * modes report bad accesses in tested scenarios.
++ */
 +
-+static void rcu_uaf_reclaim(struct rcu_head *rp)
+ static struct kasan_rcu_info {
+ 	int i;
+ 	struct rcu_head rcu;
+@@ -1148,13 +1156,6 @@ static void rcu_uaf_reclaim(struct rcu_head *rp)
+ 	((volatile struct kasan_rcu_info *)fp)->i;
+ }
+ 
+-/*
+- * Check that Generic KASAN prints auxiliary stack traces for RCU callbacks.
+- * The report needs to be inspected manually.
+- *
+- * This test is still enabled for other KASAN modes to make sure that all modes
+- * report bad accesses in tested scenarios.
+- */
+ static void rcu_uaf(struct kunit *test)
+ {
+ 	struct kasan_rcu_info *ptr;
+@@ -1170,6 +1171,30 @@ static void rcu_uaf(struct kunit *test)
+ 		rcu_barrier());
+ }
+ 
++static void workqueue_uaf_work(struct work_struct *work)
 +{
-+	struct kasan_rcu_info *fp =
-+		container_of(rp, struct kasan_rcu_info, rcu);
-+
-+	kfree(fp);
-+	((volatile struct kasan_rcu_info *)fp)->i;
++	kfree(work);
 +}
 +
-+/*
-+ * Check that Generic KASAN prints auxiliary stack traces for RCU callbacks.
-+ * The report needs to be inspected manually.
-+ *
-+ * This test is still enabled for other KASAN modes to make sure that all modes
-+ * report bad accesses in tested scenarios.
-+ */
-+static void rcu_uaf(struct kunit *test)
++static void workqueue_uaf(struct kunit *test)
 +{
-+	struct kasan_rcu_info *ptr;
++	struct workqueue_struct *workqueue;
++	struct work_struct *work;
 +
-+	ptr = kmalloc(sizeof(struct kasan_rcu_info), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
++	workqueue = create_workqueue("kasan_workqueue_test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, workqueue);
 +
-+	global_rcu_ptr = rcu_dereference_protected(
-+				(struct kasan_rcu_info __rcu *)ptr, NULL);
++	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, work);
++
++	INIT_WORK(work, workqueue_uaf_work);
++	queue_work(workqueue, work);
++	destroy_workqueue(workqueue);
 +
 +	KUNIT_EXPECT_KASAN_FAIL(test,
-+		call_rcu(&global_rcu_ptr->rcu, rcu_uaf_reclaim);
-+		rcu_barrier());
++		((volatile struct work_struct *)work)->data);
 +}
 +
  static void vmalloc_helpers_tags(struct kunit *test)
  {
  	void *ptr;
-@@ -1465,6 +1501,7 @@ static struct kunit_case kasan_kunit_test_cases[] = {
- 	KUNIT_CASE(kasan_bitops_generic),
+@@ -1502,6 +1527,7 @@ static struct kunit_case kasan_kunit_test_cases[] = {
  	KUNIT_CASE(kasan_bitops_tags),
  	KUNIT_CASE(kmalloc_double_kzfree),
-+	KUNIT_CASE(rcu_uaf),
+ 	KUNIT_CASE(rcu_uaf),
++	KUNIT_CASE(workqueue_uaf),
  	KUNIT_CASE(vmalloc_helpers_tags),
  	KUNIT_CASE(vmalloc_oob),
  	KUNIT_CASE(vmap_tags),
 diff --git a/mm/kasan/kasan_test_module.c b/mm/kasan/kasan_test_module.c
-index e4ca82dc2c16..4688cbcd722d 100644
+index 4688cbcd722d..7be7bed456ef 100644
 --- a/mm/kasan/kasan_test_module.c
 +++ b/mm/kasan/kasan_test_module.c
 @@ -62,35 +62,6 @@ static noinline void __init copy_user_test(void)
  	kfree(kmem);
  }
  
--static struct kasan_rcu_info {
--	int i;
--	struct rcu_head rcu;
--} *global_rcu_ptr;
--
--static noinline void __init kasan_rcu_reclaim(struct rcu_head *rp)
+-static noinline void __init kasan_workqueue_work(struct work_struct *work)
 -{
--	struct kasan_rcu_info *fp = container_of(rp,
--						struct kasan_rcu_info, rcu);
--
--	kfree(fp);
--	((volatile struct kasan_rcu_info *)fp)->i;
+-	kfree(work);
 -}
 -
--static noinline void __init kasan_rcu_uaf(void)
+-static noinline void __init kasan_workqueue_uaf(void)
 -{
--	struct kasan_rcu_info *ptr;
+-	struct workqueue_struct *workqueue;
+-	struct work_struct *work;
 -
--	pr_info("use-after-free in kasan_rcu_reclaim\n");
--	ptr = kmalloc(sizeof(struct kasan_rcu_info), GFP_KERNEL);
--	if (!ptr) {
+-	workqueue = create_workqueue("kasan_wq_test");
+-	if (!workqueue) {
+-		pr_err("Allocation failed\n");
+-		return;
+-	}
+-	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
+-	if (!work) {
 -		pr_err("Allocation failed\n");
 -		return;
 -	}
 -
--	global_rcu_ptr = rcu_dereference_protected(ptr, NULL);
--	call_rcu(&global_rcu_ptr->rcu, kasan_rcu_reclaim);
+-	INIT_WORK(work, kasan_workqueue_work);
+-	queue_work(workqueue, work);
+-	destroy_workqueue(workqueue);
+-
+-	pr_info("use-after-free on workqueue\n");
+-	((volatile struct work_struct *)work)->data;
 -}
 -
- static noinline void __init kasan_workqueue_work(struct work_struct *work)
+ static int __init test_kasan_module_init(void)
  {
- 	kfree(work);
-@@ -130,7 +101,6 @@ static int __init test_kasan_module_init(void)
+ 	/*
+@@ -101,7 +72,6 @@ static int __init test_kasan_module_init(void)
  	bool multishot = kasan_save_enable_multi_shot();
  
  	copy_user_test();
--	kasan_rcu_uaf();
- 	kasan_workqueue_uaf();
+-	kasan_workqueue_uaf();
  
  	kasan_restore_multi_shot(multishot);
+ 	return -EAGAIN;
 -- 
 2.25.1
 
