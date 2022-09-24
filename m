@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282065E8E76
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8C05E8E7C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiIXQ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S230273AbiIXQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiIXQ0I (ORCPT
+        with ESMTP id S229573AbiIXQcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:26:08 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0075597B17
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:26:03 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so8658859pja.5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nf/TNopwKhA3SuAUzkxD65hQdoK363QhRQCS+wUiixo=;
-        b=MTrcpRmtk+EbhHce3q+zlg2MuEk7MubfhNmZm/kxs+7EJvA7mNxh+cinYxePsg/h6R
-         VfvBgZrTST8LSjZpmSH70Hpf0dbPDG3adhU6k0pakjyAGq5KXlzpn5YAXhmlv78I9kKw
-         bsTJtZEf/3IsZNeL5Bp3nbauVmGUadQkMGxao=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nf/TNopwKhA3SuAUzkxD65hQdoK363QhRQCS+wUiixo=;
-        b=BgcLQoXE5yHGXQL53Lb+ZIgTszSId9mNbgSxqVlEkcxDiqUJWFXt+l0ZbowSD0BKuE
-         FIs+AIepAkFSpBA8/Xs7iUfQx/7fKkMEFB11TKW7hIRyUPKGS/UM+wowk4HC480q2gKI
-         eqd1D6YWoPcJH++VDFMUyHJx4j3vhIVrt8Uz+LvPjDQN8QbNdD8GkJYcCHhi9anlZPF2
-         MtJv1v5yVlzSIVdqnC/ZtpAzUJHVmSxyV2GMuL4zGKI9pQwvsBv2sbJYnr11QlUQOO8O
-         +Nz8sjx5ez1kkqHRakfc+NZYT+9jUoRB6LaxddnCqSdfe6afHWV2EUsw90U4tHGmMkxC
-         dAHQ==
-X-Gm-Message-State: ACrzQf1XHDLP9wAVRE0WWpkPBDjNz86VOdg3J12ZKmCOrA0GlEMO0zan
-        ZN0/VXZ77JOfxGBbKwST0OMR4Q==
-X-Google-Smtp-Source: AMsMyM4hKcHlQYxI4al8+kxt5UInFkqmnU3b/eZLuYHZ1WZTaDBH1h6qGmxxvtz6sVCkeQflgDPGtg==
-X-Received: by 2002:a17:903:110f:b0:178:ae31:ab2 with SMTP id n15-20020a170903110f00b00178ae310ab2mr14078264plh.89.1664036763455;
-        Sat, 24 Sep 2022 09:26:03 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090aeb9200b001fb47692333sm3600904pjy.23.2022.09.24.09.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 09:26:02 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 09:26:01 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] Add linux-next specific files for 20220923
-Message-ID: <202209240905.F5654D7A5@keescook>
-References: <20220924114425.95553-1-yin31149@gmail.com>
- <20220924155514.32408-1-yin31149@gmail.com>
+        Sat, 24 Sep 2022 12:32:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7B625F1;
+        Sat, 24 Sep 2022 09:32:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A95D6CE0988;
+        Sat, 24 Sep 2022 16:32:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F35C433D6;
+        Sat, 24 Sep 2022 16:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664037134;
+        bh=PahxIU04ESTvZiacu5ZryDA08VTAB+qNsD1TEfobxFo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VrjKKYBwxOWf78kLDaosBH9cNw3y9yGFkYgYR17EVIMBPiVK2dnujkEmI+7fqyfWw
+         hwzVlYqR51f8FuarsYqBZ35kcXHeA5jglk2bbdP4rbdJrNG+40JlHK+CUYDhzxxsKv
+         rblGLi0X66Y0w0MEXVIwyCX+8kBXOvi/Mq9p/pXABabAekjP5zxGffAJ9ADtdBYnuD
+         0gNLq+EFs3kNw5rOFw6TTAUfJ2U1iacPKnN+XAcL7ijJXHpOwU98jcAQ3rxzc5lIFc
+         LIyhrNmMbAFuzGJRk68oY+iD2AmEjLrclU7Wgmn6g2hC7y3Ctxl0BD50+3JdXqV6ib
+         51nvtDlUwYO3w==
+Date:   Sat, 24 Sep 2022 17:32:21 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     cmo@melexis.com
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v6 0/3] iio: temperature: mlx90632: Add powermanagement
+Message-ID: <20220924173221.1174608b@jic23-huawei>
+In-Reply-To: <cover.1663834141.git.cmo@melexis.com>
+References: <cover.1663834141.git.cmo@melexis.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924155514.32408-1-yin31149@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 11:55:14PM +0800, Hawkins Jiawei wrote:
-> > And as for the value of offsetof in calculating **offset**,
-> > I wonder if we can use the macro defined in
-> > include/linux/wireless.h as below, which makes code simplier:
-> > #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
+On Thu, 22 Sep 2022 10:13:21 +0200
+cmo@melexis.com wrote:
 
-Ah yes, that would be good.
+> From: Crt Mori <cmo@melexis.com>
+> 
+> As discussed previously on the group under the
+> "Controlling device power management from terminal" thread the mlx90632
+> sensor provides measurement capabilities under sleep_step mode. This
+> series runtime suspends the unused chip to sleep step mode to save power
+> but in case of continuous sequential reading it switches to continuous
+> mode for faster readouts. This value is hardcoded to
+> MLX90632_MEAS_MAX_TIME (with some buffer) and not user configurable.
+> 
+> The sensor runtime suspension is set to MLX90632_SLEEP_DELAY_MS which is
+> hardcoded to 3 times as much as MEAS_MAX_TIME.
+> 
+Hi Crt,
 
-> According to above code, it seems that kernel will saves enough memory
-> (hdr_len + extra_len bytes) for payload structure in
-> nla_reserve()(Please correct me if I am wrong), pointed by compat_event.
-> So I wonder if we can use unsafe_memcpy(), to avoid unnecessary
-> memcpy() check as below, which seems more simple:
+Applied. However, we are cutting it very tight for the coming merge window
+so I'm not sure I'll get a 3rd pull request out (this just missed the 2nd
+one as I only queued up material that was in a final state last weekend)
+So for now pushed out as testing and we'll see if Linus hints at an rc8
+when he releases rc7 tomorrow.  If not this will be 6.2 material now.
 
-I'd rather this was properly resolved with the creation of a real
-flexible array so that when bounds tracking gets improved in the future,
-the compiler can reason about it better. And, I think, it makes the code
-more readable:
+Thanks,
 
-diff --git a/include/linux/wireless.h b/include/linux/wireless.h
-index 2d1b54556eff..e0b4b46da63f 100644
---- a/include/linux/wireless.h
-+++ b/include/linux/wireless.h
-@@ -26,7 +26,10 @@ struct compat_iw_point {
- struct __compat_iw_event {
- 	__u16		len;			/* Real length of this stuff */
- 	__u16		cmd;			/* Wireless IOCTL */
--	compat_caddr_t	pointer;
-+	union {
-+		compat_caddr_t	pointer;
-+		DECLARE_FLEX_ARRAY(__u8, ptr_bytes);
-+	};
- };
- #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
- #define IW_EV_COMPAT_POINT_OFF offsetof(struct compat_iw_point, length)
-diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
-index 76a80a41615b..6079c8f4b634 100644
---- a/net/wireless/wext-core.c
-+++ b/net/wireless/wext-core.c
-@@ -468,6 +468,7 @@ void wireless_send_event(struct net_device *	dev,
- 	struct __compat_iw_event *compat_event;
- 	struct compat_iw_point compat_wrqu;
- 	struct sk_buff *compskb;
-+	int ptr_len;
- #endif
- 
- 	/*
-@@ -582,6 +583,7 @@ void wireless_send_event(struct net_device *	dev,
- 	nlmsg_end(skb, nlh);
- #ifdef CONFIG_COMPAT
- 	hdr_len = compat_event_type_size[descr->header_type];
-+	ptr_len = hdr_len - IW_EV_COMPAT_LCP_LEN;
- 	event_len = hdr_len + extra_len;
- 
- 	compskb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
-@@ -612,16 +614,15 @@ void wireless_send_event(struct net_device *	dev,
- 	if (descr->header_type == IW_HEADER_TYPE_POINT) {
- 		compat_wrqu.length = wrqu->data.length;
- 		compat_wrqu.flags = wrqu->data.flags;
--		memcpy(&compat_event->pointer,
-+		memcpy(compat_event->ptr_bytes,
- 			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
--			hdr_len - IW_EV_COMPAT_LCP_LEN);
-+			ptr_len);
- 		if (extra_len)
--			memcpy(((char *) compat_event) + hdr_len,
-+			memcpy(compat_event->ptr_bytes + ptr_len,
- 				extra, extra_len);
- 	} else {
- 		/* extra_len must be zero, so no if (extra) needed */
--		memcpy(&compat_event->pointer, wrqu,
--			hdr_len - IW_EV_COMPAT_LCP_LEN);
-+		memcpy(compat_event->ptr_bytes, wrqu, ptr_len);
- 	}
- 
- 	nlmsg_end(compskb, nlh);
+Jonathan
 
 
--- 
-Kees Cook
+> Changes in v6:
+> 
+>  - Revert changes to the suspend to prevent power mode regression
+> 
+> Changes in v5 (per review comments from Jonathan Cameron):
+> 
+>  - Migrate to devm also for driver removal, along with putting it to low
+>    power mode
+> 
+> Changes in v4 (per review comments from Jonathan Cameron):
+> 
+>  - Migrate back to devm_pm_runtime_enable and remove the pm_disable function
+>  - Remove pm stuff from remove and also sleep, since when iio device is
+>    not registered also sleep makes no sense.
+>  - Replace use EOPNOTSUPP as per checkpatch suggestion although some drivers
+>    still use ENOTSUPP.
+>  - Change the style of read frequency
+> 
+> Changes in v3 (per review comments from Jonathan Cameron):
+> 
+>  - Change the "available" attribute presentation to more recent way
+>    suggested
+>  - Replace devm_pm_runtime_enable with enable and devm_add_action_or_reset
+>  - When suspending device also put it to lower power mode in case there is
+>    dummy regulator
+>  - Use more switch cases instead of if/else
+> 
+> Changes in v2:
+> 
+>  - apply review comments from Andy Shevchenko
+> 
+> Crt Mori (3):
+>   iio: temperature: mlx90632 Add runtime powermanagement modes
+>   iio: temperature: mlx90632 Read sampling frequency
+>   iio: temperature: mlx90632 Change return value of sensor measurement
+>     channel
+> 
+>  drivers/iio/temperature/mlx90632.c | 440 ++++++++++++++++++++++++-----
+>  1 file changed, 369 insertions(+), 71 deletions(-)
+> 
+
