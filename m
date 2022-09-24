@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9225E8683
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FF95E8682
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiIXAFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S231535AbiIXAFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbiIXAFL (ORCPT
+        with ESMTP id S232999AbiIXAFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 20:05:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562ECA50C5
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 17:05:06 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F50A405A;
+        Fri, 23 Sep 2022 17:05:06 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663977898;
+        s=2020; t=1663977899;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=19twU3lQfNuvUm9JND8TvG6rBZFGKcSPH9RyFrZuYhQ=;
-        b=lqetqNRvqeJqLk8TBA11OGuf2NUa6RHrjlEyJz6gz4r+c8kBjyRL4nRzG+BW3/VCuRUeoY
-        wg8wRvVkF5t15eiKwmpBE/BwM+8kDtg06vlf4vUPXoQwYADxDQSR2VD2h12ctlhVx1+0LR
-        jZQVnE4JiHijrL7Sn8XD6RJScn1p5cT5AtGWUPmSLeAcbS0m/tA22U0Amrm89mDe8a6+is
-        nZ0jGgyKz8REztYSusY/AXexeHX8I3W7WHKnQ0B+PIvjhj+K8Ju9pYcMLLmAd2NG3EVDCH
-        WLiN+JaJEyeZH9CtC74KWFN4YXmOC8XBGWY4q9mZ32Xg42Shcys9fjjJUTppAg==
+        bh=z4OGWc0QkUJ6JpVm6AppOXfX1G2JfqpiTA52+HrwtTY=;
+        b=wo5y13ZPqu7DG6xhkiOjxCXrMVZOmvijPkCUMdYOJ31rMot8dZf8lnPnndgkqQZYsRRDNt
+        WcmpGX3QbCsXgfqhOZ/s0OqTaoRUq9H+WrPRTlbqbt3ndKez5/S3bqJIkepkMudA5sV10r
+        qoAXPDOwTvLKsqeD2aXLPrBY3Pj7pKQk9H9QAn/3C473rVtbmlVWnprk2M9aFDw58A4s+j
+        3rvoe1SnJtb1eoJesQ28wBHlgFJXHEo2Kp5SbtxIIJn2A+GCmw+/zJp9XNhb4I3p8rhH3I
+        zhtUXfV6wrrVy6nIhaGnJ6NvGP2FWWU3CsDNS8LjzfSM6oEn1cpyo6UH+NOGYQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663977898;
+        s=2020e; t=1663977899;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=19twU3lQfNuvUm9JND8TvG6rBZFGKcSPH9RyFrZuYhQ=;
-        b=PnSeZAOK90thATM65Hp/yFXp9CjpHPOhtAVLF/An+huTzDUUsRLvdFBK4JiUQr0DQyth1Z
-        sacn3uM1K6kLTaAA==
+        bh=z4OGWc0QkUJ6JpVm6AppOXfX1G2JfqpiTA52+HrwtTY=;
+        b=uY274NzrecLhyeA7K/R69mxN8EakigvmJU+z/05LIgT426Zvq92N4bWZKZIy8fTjRCVtO5
+        5Cwa0yC0zEZz2tDg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk 06/18] printk: Protect [un]register_console() with a mutex
-Date:   Sat, 24 Sep 2022 02:10:42 +0206
-Message-Id: <20220924000454.3319186-7-john.ogness@linutronix.de>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH printk 07/18] printk: Convert console list walks for readers to list lock
+Date:   Sat, 24 Sep 2022 02:10:43 +0206
+Message-Id: <20220924000454.3319186-8-john.ogness@linutronix.de>
 In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
 References: <20220924000454.3319186-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,267 +64,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Unprotected list walks are a brilliant idea. Especially in the context of
-hotpluggable consoles.
-
-The new list lock provides not only synchronization for console list
-manipulation, but also for manipulation of console->flags:
-
-    console_list_lock();
-    console_lock();
-
-    /* may now manipulate the console list and/or console->flags */
-
-    console_unlock();
-    console_list_unlock();
-
-Therefore it is safe to iterate the console list and read console->flags
-if holding either the console lock or the console list lock.
+Facilities which expose console information to sysfs or procfs can use the
+new list protection to keep the list stable. No need to hold console lock.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- include/linux/console.h | 30 +++++++++++++--
- kernel/printk/printk.c  | 84 ++++++++++++++++++++++++++++++++++-------
- 2 files changed, 98 insertions(+), 16 deletions(-)
+ drivers/tty/tty_io.c   | 6 +++---
+ fs/proc/consoles.c     | 6 +++---
+ kernel/printk/printk.c | 8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/console.h b/include/linux/console.h
-index 8c1686e2c233..24344f9b0bc1 100644
---- a/include/linux/console.h
-+++ b/include/linux/console.h
-@@ -157,10 +157,34 @@ struct console {
- 	struct	 console *next;
- };
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 8fec1d8648f5..6fa142155b94 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3535,8 +3535,8 @@ static ssize_t show_cons_active(struct device *dev,
+ 	struct console *c;
+ 	ssize_t count = 0;
  
--/*
-- * for_each_console() allows you to iterate on each console
-+#ifdef CONFIG_LOCKDEP
-+extern void lockdep_assert_console_list_lock_held(void);
-+#else
-+static inline void lockdep_assert_console_list_lock_held(void) { }
-+#endif
-+
-+extern void console_list_lock(void) __acquires(console_mutex);
-+extern void console_list_unlock(void) __releases(console_mutex);
-+
-+/**
-+ * for_each_registered_console() - Iterator over registered consoles
-+ * @con:	struct console pointer used as loop cursor
-+ *
-+ * Requires console_list_lock to be held. Can only be invoked from
-+ * preemptible context.
-+ */
-+#define for_each_registered_console(con)				\
-+	lockdep_assert_console_list_lock_held();			\
-+	for (con = console_drivers; con != NULL; con = con->next)
-+
-+/**
-+ * for_each_console() - Iterator over registered consoles
-+ * @con:	struct console pointer used as loop cursor
-+ *
-+ * Requires console_lock to be held which guarantees that the
-+ * list is immutable.
-  */
--#define for_each_console(con) \
-+#define for_each_console(con)						\
- 	for (con = console_drivers; con != NULL; con = con->next)
+-	console_lock();
+-	for_each_console(c) {
++	console_list_lock();
++	for_each_registered_console(c) {
+ 		if (!c->device)
+ 			continue;
+ 		if (!c->write)
+@@ -3560,7 +3560,7 @@ static ssize_t show_cons_active(struct device *dev,
  
- extern int console_set_on_cmdline;
+ 		count += sprintf(buf + count, "%c", i ? ' ':'\n');
+ 	}
+-	console_unlock();
++	console_list_unlock();
+ 
+ 	return count;
+ }
+diff --git a/fs/proc/consoles.c b/fs/proc/consoles.c
+index dfe6ce3505ce..6775056eecd5 100644
+--- a/fs/proc/consoles.c
++++ b/fs/proc/consoles.c
+@@ -63,8 +63,8 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+ 	struct console *con;
+ 	loff_t off = 0;
+ 
+-	console_lock();
+-	for_each_console(con)
++	console_list_lock();
++	for_each_registered_console(con)
+ 		if (off++ == *pos)
+ 			break;
+ 
+@@ -80,7 +80,7 @@ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+ 
+ static void c_stop(struct seq_file *m, void *v)
+ {
+-	console_unlock();
++	console_list_unlock();
+ }
+ 
+ static const struct seq_operations consoles_op = {
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index e4f1e7478b52..8c56f6071873 100644
+index 8c56f6071873..80a728ef9d96 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -79,10 +79,17 @@ int oops_in_progress;
- EXPORT_SYMBOL(oops_in_progress);
- 
- /*
-- * console_sem protects the console_drivers list, and also
-- * provides serialisation for access to the entire console
-- * driver system.
-+ * console_sem protects the console_drivers list, and also provides
-+ * serialization for access to the entire console driver system.
-+ *
-+ * console_mutex serializes register/unregister.
-+ *
-+ * console_sem must be taken inside a console_mutex locked section
-+ * for any list manipulation in order to keep the console BKL
-+ * machinery happy. This requirement also applies to manipulation
-+ * of console->flags.
+@@ -2990,18 +2990,18 @@ void console_flush_on_panic(enum con_flush_mode mode)
   */
-+static DEFINE_MUTEX(console_mutex);
- static DEFINE_SEMAPHORE(console_sem);
- struct console *console_drivers;
- EXPORT_SYMBOL_GPL(console_drivers);
-@@ -103,6 +110,12 @@ static int __read_mostly suppress_panic_printk;
- static struct lockdep_map console_lock_dep_map = {
- 	.name = "console_lock"
- };
-+
-+void lockdep_assert_console_list_lock_held(void)
-+{
-+	lockdep_assert_held(&console_mutex);
-+}
-+
- #endif
- 
- enum devkmsg_log_bits {
-@@ -220,6 +233,28 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
- }
- #endif /* CONFIG_PRINTK && CONFIG_SYSCTL */
- 
-+/**
-+ * console_list_lock - Lock the console list
-+ *
-+ * For non-console related list walks, e.g. procfs, sysfs...
-+ */
-+void console_list_lock(void)
-+{
-+	mutex_lock(&console_mutex);
-+}
-+EXPORT_SYMBOL(console_list_lock);
-+
-+/**
-+ * console_list_unlock - Unlock the console list
-+ *
-+ * Counterpart to console_list_lock()
-+ */
-+void console_list_unlock(void)
-+{
-+	mutex_unlock(&console_mutex);
-+}
-+EXPORT_SYMBOL(console_list_unlock);
-+
- /*
-  * Helper macros to handle lockdep when locking/unlocking console_sem. We use
-  * macros instead of functions so that _RET_IP_ contains useful information.
-@@ -2978,17 +3013,21 @@ struct tty_driver *console_device(int *index)
- void console_stop(struct console *console)
+ struct tty_driver *console_device(int *index)
  {
- 	__pr_flush(console, 1000, true);
+-	struct console *c;
+ 	struct tty_driver *driver = NULL;
++	struct console *c;
+ 
+-	console_lock();
+-	for_each_console(c) {
 +	console_list_lock();
- 	console_lock();
- 	console->flags &= ~CON_ENABLED;
- 	console_unlock();
-+	console_list_unlock();
- }
- EXPORT_SYMBOL(console_stop);
- 
- void console_start(struct console *console)
- {
-+	console_list_lock();
- 	console_lock();
- 	console->flags |= CON_ENABLED;
- 	console_unlock();
-+	console_list_unlock();
- 	__pr_flush(console, 1000, true);
- }
- EXPORT_SYMBOL(console_start);
-@@ -3081,6 +3120,8 @@ static void try_enable_default_console(struct console *newcon)
- 	       (con->flags & CON_BOOT) ? "boot" : "",	\
- 	       con->name, con->index, ##__VA_ARGS__)
- 
-+static int console_unregister_locked(struct console *console);
-+
- /*
-  * The console driver calls this routine during kernel initialization
-  * to register the console printing procedure with printk() and to
-@@ -3107,13 +3148,14 @@ void register_console(struct console *newcon)
- 	bool realcon_enabled = false;
- 	int err;
- 
--	for_each_console(con) {
-+	console_list_lock();
-+	for_each_registered_console(con) {
- 		if (WARN(con == newcon, "console '%s%d' already registered\n",
- 					 con->name, con->index))
--			return;
-+			goto unlock;
- 	}
- 
--	for_each_console(con) {
-+	for_each_registered_console(con) {
- 		if (con->flags & CON_BOOT)
- 			bootcon_enabled = true;
- 		else
-@@ -3124,7 +3166,7 @@ void register_console(struct console *newcon)
- 	if (newcon->flags & CON_BOOT && realcon_enabled) {
- 		pr_info("Too late to register bootconsole %s%d\n",
- 			newcon->name, newcon->index);
--		return;
-+		goto unlock;
- 	}
- 
- 	/*
-@@ -3155,7 +3197,7 @@ void register_console(struct console *newcon)
- 
- 	/* printk() messages are not printed to the Braille console. */
- 	if (err || newcon->flags & CON_BRL)
--		return;
-+		goto unlock;
- 
- 	/*
- 	 * If we have a bootconsole, and are switching to a real console,
-@@ -3209,14 +3251,17 @@ void register_console(struct console *newcon)
- 	if (bootcon_enabled &&
- 	    ((newcon->flags & (CON_CONSDEV | CON_BOOT)) == CON_CONSDEV) &&
- 	    !keep_bootcon) {
--		for_each_console(con)
-+		for_each_console(con) {
- 			if (con->flags & CON_BOOT)
--				unregister_console(con);
-+				console_unregister_locked(con);
-+		}
- 	}
-+unlock:
-+	console_list_unlock();
- }
- EXPORT_SYMBOL(register_console);
- 
--int unregister_console(struct console *console)
-+static int console_unregister_locked(struct console *console)
- {
- 	struct console *con;
- 	int res;
-@@ -3269,6 +3314,16 @@ int unregister_console(struct console *console)
- 
- 	return res;
- }
-+
-+int unregister_console(struct console *console)
-+{
-+	int res;
-+
-+	console_list_lock();
-+	res = console_unregister_locked(console);
-+	console_list_unlock();
-+	return res;
-+}
- EXPORT_SYMBOL(unregister_console);
- 
- /*
-@@ -3320,7 +3375,8 @@ static int __init printk_late_init(void)
- 	struct console *con;
- 	int ret;
- 
--	for_each_console(con) {
-+	console_list_lock();
-+	for_each_registered_console(con) {
- 		if (!(con->flags & CON_BOOT))
++	for_each_registered_console(c) {
+ 		if (!c->device)
  			continue;
- 
-@@ -3337,9 +3393,11 @@ static int __init printk_late_init(void)
- 			 */
- 			pr_warn("bootconsole [%s%d] uses init memory and must be disabled even before the real one is ready\n",
- 				con->name, con->index);
--			unregister_console(con);
-+			console_unregister_locked(con);
- 		}
+ 		driver = c->device(c, index);
+ 		if (driver)
+ 			break;
  	}
+-	console_unlock();
 +	console_list_unlock();
-+
- 	ret = cpuhp_setup_state_nocalls(CPUHP_PRINTK_DEAD, "printk:dead", NULL,
- 					console_cpu_notify);
- 	WARN_ON(ret < 0);
+ 	return driver;
+ }
+ 
 -- 
 2.30.2
 
