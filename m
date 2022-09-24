@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0419B5E8931
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B145E890A
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbiIXHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S233097AbiIXHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbiIXHdV (ORCPT
+        with ESMTP id S232392AbiIXHYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:33:21 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30090D6937
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:33:20 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x1so2027715plv.5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ZMVsUMBAKMeduU+ys2KO9Tzke8RIAJ6IXsSd88ClynM=;
-        b=VexB8OMgivKHIQttJFnZ9yevpt5OqU1P2L/CoE5HKTeqDzxuckcZufT68YFWJVSRKa
-         mXGwdC6OK15QOHlaUILroAyLFQmLyBMBStlRMtzrny1Wfcf/uV2mh3WfC56QE/z/UtBk
-         5+EqsikYVRmR3yylEBySsgNSZsN3+9O84H8sc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZMVsUMBAKMeduU+ys2KO9Tzke8RIAJ6IXsSd88ClynM=;
-        b=VXhkz3TpN0WGewEbQkk44sVtIXhTbxx50/FbiXYWfLOdesT4D+mESdfMG3I9H1L2iT
-         ESs3Tg64NHPQqa8aK/zaFGbXsIveGkz55rM675Zl9/d3ADfB87eSP09hHabw+mAn6hiD
-         dr+anomk1Lncb5wMe+9xONTPDswFacea+5IKG1ymZAYf7XwPsCbOA5s//kExOYHt/9tJ
-         OPT5aT+QsWvZj8Df6gtOY/AQ6VLHbaHsnxOfZEDmt+jCETZgBksHdRit2cnsI9Gy0ogn
-         aF2HsWIVodrHbUeTvJK7LUZc6I7Hp1WZcZ15psf5/L20l2Y9sS7rgEeAKDl6pR6demmS
-         2Z+A==
-X-Gm-Message-State: ACrzQf02JD1Bz+NWUgJQ9ATuMd/NuY7sqR2BfUuw2d+Zqflo9AFoPE0E
-        POYkDxphXCrtgO+9ls4q3prrsQ==
-X-Google-Smtp-Source: AMsMyM5dtkPYTYddrXNhG6ecfeRdFrVSWAw3E/y5q/8pGqLf6wSqaBYgu/mZR6ehjD0wqT3DD8x55g==
-X-Received: by 2002:a17:902:ec85:b0:178:8a69:45fb with SMTP id x5-20020a170902ec8500b001788a6945fbmr12137091plg.130.1664004799686;
-        Sat, 24 Sep 2022 00:33:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t185-20020a6378c2000000b0042c0ffa0e62sm6741145pgc.47.2022.09.24.00.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 00:33:18 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Kees Cook <keescook@chromium.org>, linux-unionfs@vger.kernel.org,
-        syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] ovl: Use "buf" flexible array for memcpy() destination
-Date:   Sat, 24 Sep 2022 00:33:15 -0700
-Message-Id: <20220924073315.3593031-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 24 Sep 2022 03:24:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A1313D863;
+        Sat, 24 Sep 2022 00:24:17 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZL4M35tJzHthl;
+        Sat, 24 Sep 2022 15:19:31 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 24 Sep
+ 2022 15:24:15 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
+        Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH v2 0/8] scsi: libsas: sas address comparation refactor
+Date:   Sat, 24 Sep 2022 15:34:47 +0800
+Message-ID: <20220924073455.2186805-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1518; h=from:subject; bh=6sc208vuicFU4j8f7/nNB0JUDwsqAqSCJXpZ1EpVcfA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLrK73g/2u1z6Qo/0wbshT3zKYTCL0tirpBYjt0di TZlH9uSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy6yuwAKCRCJcvTf3G3AJjWoD/ 9cpL/UxMQ3K7MgktDwxw4j1kV05thlGrqOrVhAt3OpsYa4oIe0WXK1G+UjF6BYlIkcWC8XynTIwBjj ZfmM/rQ3h4J1cjkWuGJUgHlAPvzsREZd0F/dAjYaF7O/lG65jMrVgOc/rkR5akfVjANgXZAPwkkSw5 K8PC11mmJkqIgOEwubt6fnJkBWKqjEDxgiswF75F9Xeg/XGe9S5AzAez4e2BRqpcSwtVHhztqeoktZ XX+N/47aHo9p/uuxcfFf4N1J2silCBgaVSJmjHywm6N/h5ZiK3Is9f0VfY4U7LZNZaUCE62GnjK4bD yrlOGc1XE6SRejHHIgAM4ev2GyokGwZJVMiff66WMomyzCTMRANXsePRNj+VLfqE8F/oczbKg/hGVw F134cU4/d/mb98CfKaCyddD82KWqUc0d9kIuyPGmOb0tDFsiYVYY2GXKiXqSD/f5Z2P9dTA5Nrn3eU w3O8OxgddbTmXgCwpXAaDRaykKAcl3PiQrK4lbZA2chRSVt0AtSda8nRJR+1mKlWVHHA/wPG70rFKc JqDG8MqGe2IWwMHASp4z+i8HNoQH2vjYROqq2+4cf7ILKRc0rTKxCVv3QK+cXKOlJbtlpSldo/zrxO bRWMT8NZKyDKUiwq1lOF6TLAoUa6wuszJLocHzK0lJKfGzdlies8D8TUjG+w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "buf" flexible array needs to be the memcpy() destination to avoid
-false positive run-time warning from the recent FORTIFY_SOURCE
-hardening:
+Sas address conversion and comparation is widely used in libsas and
+drivers. However they are all opencoded and to avoid the line spill over
+80 columns, are mostly split into multi-lines.
 
-  memcpy: detected field-spanning write (size 93) of single field "&fh->fb" at fs/overlayfs/export.c:799 (size 21)
+To make the code easier to read, introduce some helpers with clearer
+semantics and replace the opencoded segments with them.
 
-Cc: Miklos Szeredi <miklos@szeredi.hu>
-Cc: linux-unionfs@vger.kernel.org
-Reported-by: syzbot+9d14351a171d0d1c7955@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/all/000000000000763a6c05e95a5985@google.com/
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/overlayfs/export.c    | 2 +-
- fs/overlayfs/overlayfs.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v1->v2:
+  First factor out sas_find_attached_phy() and replace LLDDs's code
+  	with it.
+  Remove three too simple helpers.
+  Rename the helpers with 'sas_' prefix.
 
-diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
-index e065a5b9a442..ac9c3ad04016 100644
---- a/fs/overlayfs/export.c
-+++ b/fs/overlayfs/export.c
-@@ -796,7 +796,7 @@ static struct ovl_fh *ovl_fid_to_fh(struct fid *fid, int buflen, int fh_type)
- 		return ERR_PTR(-ENOMEM);
- 
- 	/* Copy unaligned inner fh into aligned buffer */
--	memcpy(&fh->fb, fid, buflen - OVL_FH_WIRE_OFFSET);
-+	memcpy(fh->buf, fid, buflen - OVL_FH_WIRE_OFFSET);
- 	return fh;
- }
- 
-diff --git a/fs/overlayfs/overlayfs.h b/fs/overlayfs/overlayfs.h
-index 87759165d32b..a0e450313ea4 100644
---- a/fs/overlayfs/overlayfs.h
-+++ b/fs/overlayfs/overlayfs.h
-@@ -108,7 +108,7 @@ struct ovl_fh {
- 	u8 padding[3];	/* make sure fb.fid is 32bit aligned */
- 	union {
- 		struct ovl_fb fb;
--		u8 buf[0];
-+		DECLARE_FLEX_ARRAY(u8, buf);
- 	};
- } __packed;
- 
+Jason Yan (8):
+  scsi: libsas: introduce sas_find_attached_phy() helper
+  scsi: pm8001: use sas_find_attached_phy() instead of open coded
+  scsi: mvsas: use sas_find_attached_phy() instead of open coded
+  scsi: hisi_sas: use sas_find_attathed_phy() instead of open coded
+  scsi: libsas: introduce sas address comparation helpers
+  scsi: libsas: use sas_phy_match_dev_addr() instead of open coded
+  scsi: libsas: use sas_phy_addr_same() instead of open coded
+  scsi: libsas: use sas_phy_match_port_addr() instead of open coded
+
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 12 ++------
+ drivers/scsi/libsas/sas_expander.c    | 40 ++++++++++++++++-----------
+ drivers/scsi/libsas/sas_internal.h    | 17 ++++++++++++
+ drivers/scsi/mvsas/mv_sas.c           | 15 +++-------
+ drivers/scsi/pm8001/pm8001_sas.c      | 16 ++++-------
+ include/scsi/libsas.h                 |  2 ++
+ 6 files changed, 54 insertions(+), 48 deletions(-)
+
 -- 
-2.34.1
+2.31.1
 
