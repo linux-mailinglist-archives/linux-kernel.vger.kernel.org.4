@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6F65E8EAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BE15E8EA8
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiIXQ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiIXQ4H (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233901AbiIXQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 24 Sep 2022 12:56:07 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD28284D;
-        Sat, 24 Sep 2022 09:56:06 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id j8so1863922qvt.13;
-        Sat, 24 Sep 2022 09:56:06 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233790AbiIXQ4E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 24 Sep 2022 12:56:04 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E23857E6
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:56:02 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a8so4722315lff.13
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=qCvUzRzeULor4WnIiJD8wT2Pery0VW3IjzzZAt+uUKI=;
+        b=YrT3IgVkLxnd7lidhwQ5ASDEIJwxgK36UxOQkbdeRE7hB0B8wzZBtMF0jfsEL5rnMJ
+         TmhP2cc7k2DOZULm2xKxAQwR6NEaCgCknCft51BBR5i6G0ierThFmNjmt+AUuxyQduMy
+         t0eLTJ1C5ZZKjqwBCcmQjLPxu4HwHkEVQULR8JrXmZHTPgSyZv/yV9O+Ryxu/LElp6h2
+         i42ASsvHNuDzXVQjaMHifVay2O70bcey4kpW8Rsxila4FZUIg/5VsM5ZEeM79Qk1DCbD
+         T2Pq9JeMlZ19HLmQg+O+0Vq5X8cC2RKZqizzdRLL8sdmTKeRCWSRIeA2+Y8iTdNGzhK/
+         mxbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2alwuq6T22+l7tsq01aDJyHbKbwXThP2O3Hb5R6vV1k=;
-        b=0XxHv7XKFiwJRKC2biTa27VhWduWPHj5c5o6Mlpag0GBAvhLTHVeTU/yckdxS6+O0S
-         QyM5umhHR6hEtfgGSSWmNllRiY+F1Q3/nBTL6LT3dsFvzSDVd7AUBsHtG56r8zCFhL1R
-         rHBIQOEZead6oO7JWISwmgMWT1M8ymDHoEox54tqoOnGdQrzApUe2bYAH3//gUlSUbf1
-         mcqdDnW3wEUwn0UW8IzteOVwpQZaWHdhKotc6pBGYRGhuOZ47Y6oLsr+hAYSOpUORZe4
-         7WOQG8Z6GQLM4oIEYWWRyQYUzlJXeZ8ytHVlJ5mh05ymP75Gn0BuaZWd8yvHD1NcRxw8
-         v2EQ==
-X-Gm-Message-State: ACrzQf16DO1F6DbBryNC7+YWsd5JYJ38pMcwDB3dJ1l8+iLduUGuxYCp
-        zxkrFGK652dPUFhyLBZWu+I6uNvPc1/PeDj685j6dIrI
-X-Google-Smtp-Source: AMsMyM7e+nM+Fe1kxjW+74yG7wpTMJUfczsapG40d1OOl6rctBor6/OHKirmTh2tqxVkZo3h2ljWJ5iJkpYu3Y1dLF8=
-X-Received: by 2002:a05:6214:f24:b0:4ac:a9fd:8b42 with SMTP id
- iw4-20020a0562140f2400b004aca9fd8b42mr11467783qvb.22.1664038565511; Sat, 24
- Sep 2022 09:56:05 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qCvUzRzeULor4WnIiJD8wT2Pery0VW3IjzzZAt+uUKI=;
+        b=s+kwo+QWfcn1vLH0EOLbH6t1f0yP1E7qptXWPYxF+z2KT4eabbdp7NtMi558kzh5Ce
+         QYZjX/92L/1QbDTaoWF3PTEr7L6xcGQkJmcOe8MgNJQ/FLmNXtQaHbChWMdltqY2Ifii
+         Mt54jgGTahTiIwSk88JbK+AEnEABqUKvxTFZR6iXln21wK5UBZQwjpjuNPxoAmkzqQup
+         OMNWligj5G2bF0+yoxq51Xc1Mqhqip2iZHjkETJQm0OpmcWBw9IKCmFJ346rNy/1++8u
+         Z1wAOKC1tNVXWN3NUIkJNRGmFb32W1iECafaQdd1pJsjfTzmFpHufTXIh2pB2aXyyE95
+         ox6A==
+X-Gm-Message-State: ACrzQf1UskQHlvf8cU4F9eIOiUKIV2bQd+6tUkAiJOHtibAarqyEOmVp
+        mjLY6iWIWfWx6Y299aIH1ouDAA==
+X-Google-Smtp-Source: AMsMyM4cBGD1nJDClwlGskZMtBadV77/jXdaK8NpBV5chtC2K4VAqeN5up0Rn8Uz0Cyv6BPxMYK2PA==
+X-Received: by 2002:a05:6512:10d1:b0:49d:7dac:e2e3 with SMTP id k17-20020a05651210d100b0049d7dace2e3mr5464359lfg.224.1664038561051;
+        Sat, 24 Sep 2022 09:56:01 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bf31-20020a2eaa1f000000b0026c2e0258bcsm1844780ljb.42.2022.09.24.09.56.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 09:56:00 -0700 (PDT)
+Message-ID: <ea2d5008-d250-cc5a-e608-cb35a6ad67b8@linaro.org>
+Date:   Sat, 24 Sep 2022 18:55:59 +0200
 MIME-Version: 1.0
-References: <20220921143244.16282-1-vijayenthiran.subramaniam@arm.com> <20220921144854.ug2adlz4ofglxp7c@bogus>
-In-Reply-To: <20220921144854.ug2adlz4ofglxp7c@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 18:55:54 +0200
-Message-ID: <CAJZ5v0ikzf22Kgq728vvjpXAgt5fHN4bQwQA=qf=9t99sRwftA@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: amba: Add Arm DMA-330 controller to the
- supported list
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Vijayenthiran Subramaniam <vijayenthiran.subramaniam@arm.com>
-Cc:     Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        thomas.abraham@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] ARM: dts: qcom: add 'chassis-type' property
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220924154422.9896-1-luca@z3ntu.xyz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220924154422.9896-1-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 4:49 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Sep 21, 2022 at 08:02:44PM +0530, Vijayenthiran Subramaniam wrote:
-> > Add ACPI ID for ARM DMA-330 controller to AMBA id supported list to
-> > allow the probing of the device.
-> >
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->
-> Rafael,
->
-> I assume you will pick this up as usual through your tree.
+On 24/09/2022 17:44, Luca Weiss wrote:
+> Add the chassis-type property to arm32 Qualcomm watches, phones and
+> tablets.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Sure.
 
-Applied as 6.1 material with under edited subject, thanks!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
