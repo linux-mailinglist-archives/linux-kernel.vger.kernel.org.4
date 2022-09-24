@@ -2,213 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFCA5E86F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAF55E86F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 03:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbiIXBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 21:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S232854AbiIXBMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 21:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiIXBLl (ORCPT
+        with ESMTP id S230113AbiIXBMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 21:11:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BBA121115;
-        Fri, 23 Sep 2022 18:11:38 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZ9q22WDNzlXYM;
-        Sat, 24 Sep 2022 09:07:26 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 09:11:36 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 09:11:36 +0800
-Subject: Re: [PATCH v5 08/10] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
- <20220923112033.1958-9-thunder.leizhen@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4ef46874-4dbc-2663-ebad-7adbbbfa3b18@huawei.com>
-Date:   Sat, 24 Sep 2022 09:11:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 23 Sep 2022 21:12:30 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC00137921
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 18:12:28 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so7409951pjo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 18:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=klQs6tfhtrxGmSxDlE88a9pPaIjzAvztOQCzE3AsayE=;
+        b=slZD1aGtjzVt63f1HI7bGOluY10Of0T+XT6GY2s9ohgxrqkT7h7nj3jKbPMzh2PDHT
+         UAbVevspZYb2NuT5lnLA7qtx4oVqS92pJyjNGuScxLpW6/DhJya85H0wrFal+FmRL3PA
+         PEQX82MgVKt7NW1VB2DSQoI/rLQJxGs7GfqtstlGceWXn3PbtfGiVAv+isv37l3T4y4Q
+         s+gCjW5Yw05/9OKD4+1wOTgqHU2OBoAOa+X640gZ/nKpHKqmnD5DZGgRXDvvtXk740+X
+         ksvpY0PUQR6/7DVpJ3Vwm0gme3bG225CuFhh8eYleXuRf8BTNSdy7Iwxa2RsM4ZlEpZK
+         Xfjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=klQs6tfhtrxGmSxDlE88a9pPaIjzAvztOQCzE3AsayE=;
+        b=4U7wrqYbAFqFNNK8tuCVs4qTqmCW3iI+7WBbrZ788xUDZyPQaIPLK6BSYu2o7dP0UH
+         lHPZDvMF3usORyvpLJE27PEPBFVQGfvn+eG+scJditH8Qz9MnqvBjFYLp1CY53R5tmJT
+         5kqlVnRSpsXzPQQB69lDqgv0ZSpfp62CRBa2vIBiT3a9ZNV/HU+0GLNV+CYW7gGZWnH9
+         lTQ6txsE9BfQmuuaoUf63houWjliO2vQtgZA9peuLSeRgfTwlJqxRAIrwW6JH3KuTt+i
+         SC2IU8iMBIIXxRfWAxDP69hTQIID5rIekKJ5XTsRQ0EbVenyT7tU8BaLZOeMd3SPn1oH
+         x39w==
+X-Gm-Message-State: ACrzQf3HPJMXLtuLtBOkrS1+goip7n2JyPUwNA51AqBdUJfSHsdfiPSc
+        njLI2AYGZsCF+AkdyL35nSTrag==
+X-Google-Smtp-Source: AMsMyM4bHxUAXQWCFsOc+D6JYHNqkUF/vvw1/bpKMovRGnFt2RMV+DqsFQFMWNcFHIcc5f634xgc2w==
+X-Received: by 2002:a17:903:1110:b0:178:9f67:b524 with SMTP id n16-20020a170903111000b001789f67b524mr11348631plh.50.1663981947751;
+        Fri, 23 Sep 2022 18:12:27 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id bb11-20020a170902bc8b00b0016c57657977sm6601304plb.41.2022.09.23.18.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 18:12:27 -0700 (PDT)
+Message-ID: <88fb97a1-23a1-9f75-a9fa-54b233e0a39e@kernel.dk>
+Date:   Fri, 23 Sep 2022 19:12:26 -0600
 MIME-Version: 1.0
-In-Reply-To: <20220923112033.1958-9-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V6 0/7] ublk_drv: add USER_RECOVERY support
 Content-Language: en-US
+To:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>, ming.lei@redhat.com
+Cc:     xiaoguang.wang@linux.alibaba.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joseph.qi@linux.alibaba.com
+References: <20220923153919.44078-1-ZiyangZhang@linux.alibaba.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220923153919.44078-1-ZiyangZhang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/23/22 9:39 AM, ZiyangZhang wrote:
+> ublk_drv is a driver simply passes all blk-mq rqs to userspace
+> target(such as ublksrv[1]). For each ublk queue, there is one
+> ubq_daemon(pthread). All ubq_daemons share the same process
+> which opens /dev/ublkcX. The ubq_daemon code infinitely loops on
+> io_uring_enter() to send/receive io_uring cmds which pass
+> information of blk-mq rqs.
+> 
+> Since the real IO handler(the process/thread opening /dev/ublkcX) is
+> in userspace, it could crash if:
+> (1) the user kills -9 it because of IO hang on backend, system
+>     reboot, etc...
+> (2) the process/thread catches a exception(segfault, divisor error,
+> oom...) Therefore, the kernel driver has to deal with a dying
+> ubq_daemon or the process.
+> 
+> Now, if one ubq_daemon(pthread) or the process crashes, ublk_drv
+> must abort the dying ubq, stop the device and delete everything.
+> This is not a good choice in practice because users do not expect
+> aborted requests, I/O errors and a deleted device. They may want
+> a recovery machenism so that no requests are aborted and no I/O
+> error occurs. Anyway, users just want everything works as usual.
+> 
+> This patchset implements USER_RECOVERY support. If the process
+> or any ubq_daemon(pthread) crashes(exits accidentally), we allow
+> user to provide new process and ubq_daemons.
+> 
+> Note: The responsibility of recovery belongs to the user who opens
+> /dev/ublkcX. After a crash, the kernel driver only switch the
+> device's state to be ready for recovery(START_USER_RECOVERY) or
+> termination(STOP_DEV). The state is defined as UBLK_S_DEV_QUIESCED.
+> This patchset does not provide how to detect such a crash in userspace.
+> The user has may ways to do so. For example, user may:
+> (1) send GET_DEV_INFO on specific dev_id and check if its state is
+>     UBLK_S_DEV_QUIESCED.
+> (2) 'ps' on ublksrv_pid.
+> 
+> Recovery feature is quite useful for real products. In detail,
+> we support this scenario:
+> (1) The /dev/ublkc0 is opened by process 0.
+> (2) Fio is running on /dev/ublkb0 exposed by ublk_drv and all
+>     rqs are handled by process 0.
+> (3) Process 0 suddenly crashes(e.g. segfault);
+> (4) Fio is still running and submit IOs(but these IOs cannot
+>     be dispatched now)
+> (5) User starts process 1 and attach it to /dev/ublkc0
+> (6) All rqs are handled by process 1 now and IOs can be
+>     completed now.
+> 
+> Note: The backend must tolerate double-write because we re-issue
+> a rq sent to the old process 0 before.
+> 
+> We provide a sample script here to simulate the above steps:
+> 
+> ***************************script***************************
+> LOOPS=10
+> 
+> __ublk_get_pid() {
+> 	pid=`./ublk list -n 0 | grep "pid" | awk '{print $7}'`
+> 	echo $pid
+> }
+> 
+> ublk_recover_kill()
+> {
+> 	for CNT in `seq $LOOPS`; do
+> 		dmesg -C
+>                 pid=`__ublk_get_pid`
+>                 echo -e "*** kill $pid now ***"
+> 		kill -9 $pid
+> 		sleep 6
+>                 echo -e "*** recover now ***"
+>                 ./ublk recover -n 0
+> 		sleep 6
+> 	done
+> }
+> 
+> ublk_test()
+> {
+>         echo -e "*** add ublk device ***"
+>         ./ublk add -t null -d 4 -i 1
+>         sleep 2
+>         echo -e "*** start fio ***"
+>         fio --bs=4k \
+>             --filename=/dev/ublkb0 \
+>             --runtime=140s \
+>             --rw=read &
+>         sleep 4
+>         ublk_recover_kill
+>         wait
+>         echo -e "*** delete ublk device ***"
+>         ./ublk del -n 0
+> }
+> 
+> for CNT in `seq 4`; do
+>         modprobe -rv ublk_drv
+>         modprobe ublk_drv
+>         echo -e "************ round $CNT ************"
+>         ublk_test
+>         sleep 5
+> done
+> ***************************script***************************
+> 
+> You may run it with our modified ublksrv[2] which supports
+> recovery feature. No I/O error occurs and you can verify it
+> by typing
+>     $ perf-tools/bin/tpoint block:block_rq_error
+> 
+> The basic idea of USER_RECOVERY is quite straightfoward:
+> (1) quiesce ublk queues and requeue/abort rqs.
+> (2) release/free everything belongs to the dying process.
+>     Note: Since ublk_drv does save information about user process,
+>     this work is important because we don't expect any resource
+>     lekage. Particularly, ioucmds from the dying ubq_daemons
+>     need to be completed(freed).
+> (3) allow new ubq_daemons issue FETCH_REQ.
+>     Note: ublk_ch_uring_cmd() checks some states and flags. We
+>     have to set them to a correct value.
+> 
+> Here is steps to reocver:
+> (0) requests dispatched after the corresponding ubq_daemon is dying 
+>     are requeued.
+> (1) monitor_work finds one dying ubq_daemon, and it should
+>     schedule quiesce_work and requeue/abort requests issued to
+>     userspace before the ubq_daemon is dying.
+> (2) quiesce_work must (a)quiesce request queue to ban any incoming
+>     ublk_queue_rq(), (b)wait unitl all rqs are IDLE, (c)complete old
+> 	  ioucmds. Then the ublk device is ready for recovery or stop.
+> (3) The user sends START_USER_RECOVERY ctrl-cmd to /dev/ublk-control
+>     with a dev_id X (such as 3 for /dev/ublkc3).
+> (4) Then ublk_drv should perpare for a new process to attach /dev/ublkcX.
+>     All ublk_io structures are cleared and ubq_daemons are reset.
+> (5) Then, user should start a new process and ubq_daemons(pthreads) and
+>     send FETCH_REQ by io_uring_enter() to make all ubqs be ready. The
+>     user must correctly setup queues, flags and so on(how to persist
+>     user's information is not related to this patchset).
+> (6) The user sends END_USER_RECOVERY ctrl-cmd to /dev/ublk-control with a
+>     dev_id X.
+> (7) After receiving END_USER_RECOVERY, ublk_drv waits for all ubq_daemons
+>     getting ready. Then it unquiesces request queue and new rqs are
+>     allowed.
+> 
+> You should use ublksrv[2] and tests[3] provided by us. We add 3 additional
+> tests to verify that recovery feature works. Our code will be PR-ed to
+> Ming's repo soon.
 
-
-On 2022/9/23 19:20, Zhen Lei wrote:
-> Currently we traverse all symbols of all modules to find the specified
-> function for the specified module. But in reality, we just need to find
-> the given module and then traverse all the symbols in it.
-> 
-> In order to achieve this purpose, split the call to hook 'fn' into two
-> phases:
-> 1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
->    the comparison result of the module name without comparing the function
->    name.
-> 2. Finds the given function in that module. Pass pointer 'mod = NULL'.
->    Hook 'fn' skip the comparison of module name and directly compare
->    function names.
-
-Sorry, I forgot to change the description. I will fix it in v6, after I've
-collected review comments.
-
-> 
-> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->                 |
-> Phase2:          -->f1-->f2-->f3
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  include/linux/module.h   |  4 ++--
->  kernel/livepatch/core.c  | 13 ++-----------
->  kernel/module/kallsyms.c | 15 ++++++++++++---
->  3 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 518296ea7f73af6..6e1a531d78e7e8b 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
->  }
->  #endif	/* CONFIG_MODULE_SIG */
->  
-> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> -					     struct module *, unsigned long),
-> +int module_kallsyms_on_each_symbol(const char *modname,
-> +				   int (*fn)(void *, const char *, unsigned long),
->  				   void *data);
->  
->  #endif /* _LINUX_MODULE_H */
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 31b57ccf908017e..b02de4cb311c703 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
->  }
->  
->  struct klp_find_arg {
-> -	const char *objname;
->  	const char *name;
->  	unsigned long addr;
->  	unsigned long count;
->  	unsigned long pos;
->  };
->  
-> -static int klp_find_callback(void *data, const char *name,
-> -			     struct module *mod, unsigned long addr)
-> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
->  {
->  	struct klp_find_arg *args = data;
->  
-> -	if ((mod && !args->objname) || (!mod && args->objname))
-> -		return 0;
-> -
->  	if (strcmp(args->name, name))
->  		return 0;
->  
-> -	if (args->objname && strcmp(args->objname, mod->name))
-> -		return 0;
-> -
->  	args->addr = addr;
->  	args->count++;
->  
-> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  				  unsigned long sympos, unsigned long *addr)
->  {
->  	struct klp_find_arg args = {
-> -		.objname = objname,
->  		.name = name,
->  		.addr = 0,
->  		.count = 0,
-> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  	};
->  
->  	if (objname)
-> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
->  	else
->  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
->  
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index f5c5c9175333df7..329cef573675d49 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
->  }
->  
->  #ifdef CONFIG_LIVEPATCH
-> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> -					     struct module *, unsigned long),
-> +int module_kallsyms_on_each_symbol(const char *modname,
-> +				   int (*fn)(void *, const char *, unsigned long),
->  				   void *data)
->  {
->  	struct module *mod;
-> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->  		if (mod->state == MODULE_STATE_UNFORMED)
->  			continue;
->  
-> +		if (strcmp(modname, mod->name))
-> +			continue;
-> +
->  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
->  		preempt_disable();
->  		kallsyms = rcu_dereference_sched(mod->kallsyms);
-> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->  				continue;
->  
->  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
-> -				 mod, kallsyms_symbol_value(sym));
-> +				 kallsyms_symbol_value(sym));
->  			if (ret != 0)
->  				goto out;
->  		}
-> +
-> +		/*
-> +		 * The given module is found, the subsequent modules do not
-> +		 * need to be compared.
-> +		 */
-> +		break;
->  	}
->  out:
->  	mutex_unlock(&module_mutex);
-> 
+I'm going to apply 1-6 for 6.1, applying the doc patch is difficult as
+it only went into 6.0 past forking off the 6.1 block branch. Would you
+mind resending the 7/7 patch once the merge window opens and I've pushed
+the previous bits? I may forget otherwise...
 
 -- 
-Regards,
-  Zhen Lei
+Jens Axboe
+
+
