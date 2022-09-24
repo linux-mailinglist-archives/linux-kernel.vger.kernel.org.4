@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7E65E87D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 05:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6853F5E87E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 05:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiIXDID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 23:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        id S232018AbiIXDQu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Sep 2022 23:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiIXDHq (ORCPT
+        with ESMTP id S231833AbiIXDQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 23:07:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE1214DAC4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 20:07:45 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id rt12so1657871pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 20:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=IKtN884SGIzThZ/mZCoo1s2thpv1mLuefxTzikoO46k=;
-        b=FlAbE9MZWxzGPuu+k1MJIaxHAf5yVuJ3T/UpZFi8DcgSIlQfZbf6V190IbrtVsRrPL
-         8sMlEZLhwaFVqHellbBnkUGoZn7u5oJzHePipXuNhquffKhskmvVCfIuTvIsth8aHXoB
-         O+9ydyZw79rKs1+rdHr0JmyeJXX/cQLpr7LFc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=IKtN884SGIzThZ/mZCoo1s2thpv1mLuefxTzikoO46k=;
-        b=dKjlko9Vx1M6yZaN3azd828ln+PvwWtu7UXmGKCW8Jb5HE0nKCmvZ2Oe0MqxK8ncFX
-         1tzJVM8EmnQDF0D0+hVoYUWOw6HQ5EihMkB1PdKiA6kQ4tPbM3gDWtvLVWSXYRUTLeT8
-         ZCx6d3nRnlTonagPid/x2b7bJgnmZeswaoictIDYUO8TAUgKxPVHxEnibLIolIIicUHl
-         f0QipImawIiEBACfdZdCl2viHb0Q9bQirLDl3xVuA6Sbyo+ehi2pas0OqMzkzf/Gr0Di
-         fQXmliOlGmEiNlkvvHpBDfFUobeR3f6dnWCiBL/uYxhJZg9UZyDEFb7uokrIrlkXgVRn
-         OuJQ==
-X-Gm-Message-State: ACrzQf0O2Zt1VrIgNt+lrX0Dz+yaBbbLWv7OEhU+iJ7cOVzaMhAMRLA9
-        me6FjXyBhFdVlb2k6MpjWD9bsQ==
-X-Google-Smtp-Source: AMsMyM4xeWiO9hxnieusSOMYxL3CDhWH1EAfQ+hXla91iYRHTUdt0JX80iN1Apg/jZYW55gbb7dsOQ==
-X-Received: by 2002:a17:90a:64c8:b0:202:6d4a:90f8 with SMTP id i8-20020a17090a64c800b002026d4a90f8mr13260584pjm.11.1663988864687;
-        Fri, 23 Sep 2022 20:07:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q19-20020aa79833000000b00540c3b6f32fsm7128298pfl.49.2022.09.23.20.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 20:07:43 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] Drivers: hv: vmbus: Split memcpy of flex-array
-Date:   Fri, 23 Sep 2022 20:07:41 -0700
-Message-Id: <20220924030741.3345349-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1726; h=from:subject; bh=7+JpelBNpq5Fw7aAx9OdfzO7liLVsPVR9WciMS4r/NU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLnR9wwp6bolWrhQnItcWX3Mum1QtC8G4uZsAS92B C8WkhqaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy50fQAKCRCJcvTf3G3AJpIbD/ 4o9CL5W3GD7T8nYy9vURy0GTTRdPcnwfkEBkvSaBS+6Z047JJXm6JqxYu/4Lj0AMUpOilsKpZIcNXl R6Fro9YcKKMxsPodqIQAc/OFDFje/l3feGhMAHiETi/a5uErOeUJ2MjdCNa5AHSbiaEcB/Es7qj83K DRp14VcgSN5krKbp/6hzYptKDoOt1B0Tf6pGwecGCVT+x/Hphs5UT6pqGhlCsmArMSAI4peTWppE17 fhKWhEmQQDcPquyhachSwTqTdXtCd1XaluRb3veUn6hRKIjC90NamtF8DTyNPMo7LAbnpHj4ydrRR2 FzP5KnEnTTd1xPt3KZ9aAIkZluItICRn/hqfNPCgv5ZsZ0Ynqwn3b9/JWOCOJNxvUwavjeLswrCgmS Lw6nffnf55NJCKMDWgptuaynCK1RMelbVckcZTasi88pRe0zhsRnC5LNad/z8SzY44y7ry5r9Lha5o LFlw3gW16kUMMgUamMJh8SPz+P4JhPTQUUY/yVC6jSsaNbvHicYHFsLBn2XCLveCpBZAYOyNWfYaj4 uYgO8LgNb1aedi4QQ3qaCyVBrjmlPqWqH336vwOA3yaxn8WiippB5r+wH+inl4MwIsG2Dj78qimr1T U4yM40JKYUupXDXYiB5ZUNYZnEV9aC9dcpEQA3ibZ+WuJOfIwgCZjnFc7pCw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 23:16:45 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BDE19C1A;
+        Fri, 23 Sep 2022 20:16:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=cambda@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQYdkqQ_1663989398;
+Received: from smtpclient.apple(mailfrom:cambda@linux.alibaba.com fp:SMTPD_---0VQYdkqQ_1663989398)
+          by smtp.aliyun-inc.com;
+          Sat, 24 Sep 2022 11:16:39 +0800
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Syscall kill() can send signal to thread ID
+From:   Cambda Zhu <cambda@linux.alibaba.com>
+In-Reply-To: <874jwx4wjl.fsf@email.froward.int.ebiederm.org>
+Date:   Sat, 24 Sep 2022 11:16:38 +0800
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <797881AA-14C7-49EF-AEBB-70D544942ECE@linux.alibaba.com>
+References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
+ <87k05v5sqn.fsf@email.froward.int.ebiederm.org>
+ <59403595-9F9B-49C4-AB62-259DD2C40196@linux.alibaba.com>
+ <874jwx4wjl.fsf@email.froward.int.ebiederm.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To work around a misbehavior of the compiler's ability to see into
-composite flexible array structs (as detailed in the coming memcpy()
-hardening series[1]), split the memcpy() of the header and the payload
-so no false positive run-time overflow warning will be generated. As it
-turns out, this appears to actually reduce the text size:
 
-$ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
-   text    data     bss     dec     hex filename
-  22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
-  23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
+> On Sep 24, 2022, at 05:21, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> 
+> "cambda@linux.alibaba.com" <cambda@linux.alibaba.com> writes:
+> 
+>>> On Sep 22, 2022, at 23:33, Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>> 
+>>> cambda@linux.alibaba.com writes:
+>>> 
+>>>> I found syscall kill() can send signal to a thread id, which is
+>>>> not the TGID. But the Linux manual page kill(2) said:
+>>>> 
+>>>> "The kill() system call can be used to send any signal to any
+>>>> process group or process."
+>>>> 
+>>>> And the Linux manual page tkill(2) said:
+>>>> 
+>>>> "tgkill() sends the signal sig to the thread with the thread ID
+>>>> tid in the thread group tgid.  (By contrast, kill(2) can be used
+>>>> to send a signal only to a process (i.e., thread group) as a
+>>>> whole, and the signal will be delivered to an arbitrary thread
+>>>> within that process.)"
+>>>> 
+>>>> I don't know whether the meaning of this 'process' should be
+>>>> the TGID? Because I found kill(tid, 0) will return ESRCH on FreeBSD,
+>>>> while Linux sends signal to the thread group that the thread belongs
+>>>> to.
+>>>> 
+>>>> If this is as expected, should we add a notice to the Linux manual
+>>>> page? Because it's a syscall and the pids not equal to tgid are not
+>>>> listed under /proc. This may be a little confusing, I guess.
+>>> 
+>>> How did you come across this?  Were you just experimenting?
+>>> 
+>>> I am wondering if you were tracking a bug, or a portability problem
+>>> or something else.  If the current behavior is causing problems in
+>>> some way instead of just being a detail that no one really cares about
+>>> either way it would be worth considering if we want to maintain the
+>>> current behavior.
+>>> 
+>>> Eric
+>> 
+>> I have found I can cd into /proc/tid, and the proc_pid_readdir()
+>> uses next_tgid() to filter tid. Also the 'ps' command reads the
+>> /proc dir to show processes. That's why I was confused with kill().
+>> 
+>> And yes, I'm tracking a bug. A service monitor, like systemd or
+>> some watchdog, uses kill() to check if a pid is valid or not:
+>>  1. Store service pid into cache.
+>>  2. Check if pid in cache is valid by kill(pid, 0).
+>>  3. Check if pid in cache is the service to watch.
+>> 
+>> So if kill(pid, 0) returns success but no process info shows on 'ps'
+>> command, the service monitor could be confused. The monitor could
+>> check if pid is tid, but this means the odd behavior would be used
+>> intentionally. And this workaround may be unsafe on other OS?
+>> 
+>> I'm agreed with you that this behavior shouldn't be removed, in case
+>> some userspace applications use it now.
+> 
+> As has already been mentioned using pids and api's like kill is
+> fundamentally racy.  We try and to keep from reusing pids too quickly.
+> Unfortunately what we have is that on average there will be some time
+> between pid reuse not an kind of worst case guarantee.
+> 
+> We have slowly been introducing techniques into linux allow combatting
+> that.  A directory processes directory in proc that you have open will
+> never point to another process even after the pid is reused.  Similarly
+> we have pidfd that will associate with a specific process and will not
+> associate with any other process even if the processes pid is reused.
+> 
+> That is we have userspace pid value reuse, but we don't reuse struct pid
+> in the kernel.
+> 
+> Unfortunately I don't think there is anything that allows these races to
+> be addressed in a portable manner.
+> 
+> Eric
 
-[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
+I got it. Thank you!
 
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Stephen Hemminger <sthemmin@microsoft.com>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: Dexuan Cui <decui@microsoft.com>
-Cc: linux-hyperv@vger.kernel.org
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/hv/vmbus_drv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 23c680d1a0f5..9b111a8262e3 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1131,7 +1131,8 @@ void vmbus_on_msg_dpc(unsigned long data)
- 			return;
- 
- 		INIT_WORK(&ctx->work, vmbus_onmessage_work);
--		memcpy(&ctx->msg, &msg_copy, sizeof(msg->header) + payload_size);
-+		ctx->msg.header = msg_copy.header;
-+		memcpy(&ctx->msg.payload, msg_copy.u.payload, payload_size);
- 
- 		/*
- 		 * The host can generate a rescind message while we
--- 
-2.34.1
-
+Regards,
+Cambda
