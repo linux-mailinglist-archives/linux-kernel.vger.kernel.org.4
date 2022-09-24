@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2E65E8C19
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F37A5E8C1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 14:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiIXMLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 08:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S231169AbiIXMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 08:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiIXMLN (ORCPT
+        with ESMTP id S230050AbiIXMNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:11:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6234889CFF;
-        Sat, 24 Sep 2022 05:11:12 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZSS318SVzlXL7;
-        Sat, 24 Sep 2022 20:06:59 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 20:11:10 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 20:11:09 +0800
-Subject: Re: [PATCH v5 08/10] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
- <20220923112033.1958-9-thunder.leizhen@huawei.com>
- <4ef46874-4dbc-2663-ebad-7adbbbfa3b18@huawei.com>
-Message-ID: <6cddc5ab-6af5-c221-9383-a45d955af52b@huawei.com>
-Date:   Sat, 24 Sep 2022 20:10:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 24 Sep 2022 08:13:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D97EE11F1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 05:13:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 193DD6126D
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 12:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446ECC433D6;
+        Sat, 24 Sep 2022 12:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664021585;
+        bh=VyLMxWfneZ3rJhbjfHMq7D9mfK6vAql+dCxazpz2FcU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=re+t2boxpL4KVGkisBN5BsjQuz0oxSeAZYXyheiKOY4pi1sR6kSKdqafy0/9Y9czJ
+         IFvQKjmJFcjRv9upiokhfKYhkzetKVnMfem+ElegOP8XMcd7/Dq9LQpikwmNdEG7Qw
+         X9f/Yr7Y7Bks8cmqkkbmR34kKF8SWDx3/tk/b4tVrtCvLWZbYCSmGLBZC2+7sbS0ht
+         32qdiqTqwzFFXoO2T/U7ujnGFrUI9LxinHsQ5pTtF+1RQB+u6BAXQr38w6u6g9FPEG
+         IIqt0/3/3M2EAi2tWF35dPxu0xZR42XXD8xtQQ2KoHCWAc7xQHldDOzMraqT1X9wVb
+         MVvl2y/+8LvDQ==
+Received: by pali.im (Postfix)
+        id B23168A2; Sat, 24 Sep 2022 14:13:02 +0200 (CEST)
+Date:   Sat, 24 Sep 2022 14:13:02 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: turris-omnia: Add ethernet aliases
+Message-ID: <20220924121302.jtm4qv6vgpc33tav@pali>
+References: <20220727130926.1874-1-pali@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <4ef46874-4dbc-2663-ebad-7adbbbfa3b18@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220727130926.1874-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+PING?
 
-
-On 2022/9/24 9:11, Leizhen (ThunderTown) wrote:
+On Wednesday 27 July 2022 15:09:26 Pali Rohár wrote:
+> This allows bootloader to correctly pass MAC addresses used by bootloader
+> to individual interfaces into kernel device tree.
 > 
-> On 2022/9/23 19:20, Zhen Lei wrote:
->> Currently we traverse all symbols of all modules to find the specified
->> function for the specified module. But in reality, we just need to find
->> the given module and then traverse all the symbols in it.
->>
->> In order to achieve this purpose, split the call to hook 'fn' into two
->> phases:
->> 1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
->>    the comparison result of the module name without comparing the function
->>    name.
->> 2. Finds the given function in that module. Pass pointer 'mod = NULL'.
->>    Hook 'fn' skip the comparison of module name and directly compare
->>    function names.
-> Sorry, I forgot to change the description. I will fix it in v6, after I've
-> collected review comments.
-
-Oh, It's Saturday, and I don't think anyone's seen v5 yet. So I'll post the v6.
-Please skip v5.
-
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  arch/arm/boot/dts/armada-385-turris-omnia.dts | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-
--- 
-Regards,
-  Zhen Lei
+> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> index f4eb6898aa6b..d2afa466e29a 100644
+> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> @@ -23,6 +23,12 @@
+>  		stdout-path = &uart0;
+>  	};
+>  
+> +	aliases {
+> +		ethernet0 = &eth0;
+> +		ethernet1 = &eth1;
+> +		ethernet2 = &eth2;
+> +	};
+> +
+>  	memory {
+>  		device_type = "memory";
+>  		reg = <0x00000000 0x40000000>; /* 1024 MB */
+> -- 
+> 2.20.1
+> 
