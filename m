@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826355E8B2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 11:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0283D5E8B3B
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 11:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiIXJxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 05:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S233686AbiIXJyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 05:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbiIXJxD (ORCPT
+        with ESMTP id S233342AbiIXJyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 05:53:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471F9B0894;
-        Sat, 24 Sep 2022 02:53:03 -0700 (PDT)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664013180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ILxHY3TWz3amCTghU14AmHcO8sLhIbTOfXDqfFVic+0=;
-        b=uPDA+iTSI6Zaa1ooqbeSoL8d7JhZbTsAhpvzmdOSZof6w1+Q1hy6Mar7GQyPX5NtwkRxJs
-        vKaXrluD3fpLw3Mm126+oqMrnSiU9yueznrWcifR4K7vyo0PP2rEV/L+32sGrBdaPxhcCP
-        zKKhrGqQQzg2rnWSN1Z7indpMFqjoTVU3NEnah2rI/D0JNjIx/3yYI2p0AQwQc0sLcBhe1
-        ZZSNzxs10bhDqdL3DREEVvwnxTWeQPS/w8JqJcHRcGLgaO1yxPvZ+fKqdFsOZSgeCX6rqk
-        cFgk+I79G8mXokijmJe/Eb0gOiK9xhGGGDP4tIARL3gW0UpKH+BjddWuDQcnng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664013180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ILxHY3TWz3amCTghU14AmHcO8sLhIbTOfXDqfFVic+0=;
-        b=2oCnuv8LHrTsMXgDCJap1SqMJorMTwJZhmzUCe3VAEYe1Lvc3RNJnOYbTQJHj11Icc6DLo
-        STAAjqHqh4uHqLAA==
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/4] Improve tsn_lib selftests for future
- distributed tasks
-In-Reply-To: <20220923210016.3406301-1-vladimir.oltean@nxp.com>
-References: <20220923210016.3406301-1-vladimir.oltean@nxp.com>
-Date:   Sat, 24 Sep 2022 11:52:59 +0200
-Message-ID: <87bkr5aykk.fsf@kurt>
+        Sat, 24 Sep 2022 05:54:35 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97EDFD4;
+        Sat, 24 Sep 2022 02:54:33 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z6so3379638wrq.1;
+        Sat, 24 Sep 2022 02:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Ni2PDD1NFXkbmz8UnUvfBD8YcER96pHHvaQvpBK+Slw=;
+        b=C3LDPsx9R+xX0AZJpXGXFWB6l4L58kc6usbJgacH5EJHK9hLe/l8Vn3mVvqrybicF5
+         L7J2KFnPL45Mv4TsvGxSIMe5vc4O778jucBNuHpp+wTs+MM7lqbaW5r4MkagLA7RNG8h
+         0UD6IVYXnn7qHnar5qmVkCLpVtX7fGeWHOVq8TJi+yBF5HFMUJ/4lOniszRu6zo8DeTC
+         SxtJYqqIKpNgu4LTQwn2UJxjQcjmfYcKaos0tXZ9uWimOdxvpTBJVsnNLWeOm9dx+Gb9
+         DfaPOqt14cV8OpYl9DQ/B5KFxShpb5uv7wq8qghvph40sxCNASHBA2FDfDDBVuFnwHfA
+         OMhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ni2PDD1NFXkbmz8UnUvfBD8YcER96pHHvaQvpBK+Slw=;
+        b=JPosYCZgmkjJE5j17b4SrcIQckbOcOxcfaoeRdYIj7cb+7ntJUrDM4bJRGnENidDqE
+         Iy51wj2ZLPyw3hVo8guTtil3ZAYeYNaSAbkKQSnNSjRQj+50U9aq9i03TfFJsZdTXB9b
+         8b0/B8wLefk5RGhcCYhyX3v9SxYBA5fqsK25wG/fEU9q6C3sZEpwmHrZM+91wAS7DRC/
+         1un0UEbNX+dIO8o6j4W3i8EU+jJdofzwkjRqaiLZrJ9esM9nC/DWTvdVJqXx1vHFNkME
+         7GQhaJLg/TYKQ45c6yMZ22yn2l5Oaa/fDfddweu9z9kmyuW44qtvgehKd6iMy4S4gS5d
+         j6aA==
+X-Gm-Message-State: ACrzQf2oqd99Yr8c0XiBSYIH/Xg0l6HtYE50Zs3w0VlupklItHm2QZpi
+        bk0RL4SrHh2pVfkcjoTr560iZ4IHRpc=
+X-Google-Smtp-Source: AMsMyM55dTUIfOl6q8oqV+C7winYsaRumaB+IsGSqPRT75hUo3eho1ftDLthetry1gBpKcjMMX+ufA==
+X-Received: by 2002:a05:6000:2c5:b0:22b:c77:7690 with SMTP id o5-20020a05600002c500b0022b0c777690mr7678715wry.563.1664013272265;
+        Sat, 24 Sep 2022 02:54:32 -0700 (PDT)
+Received: from localhost.localdomain ([5.25.100.2])
+        by smtp.gmail.com with ESMTPSA id c2-20020a7bc2a2000000b003a844885f88sm4776835wmk.22.2022.09.24.02.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 02:54:31 -0700 (PDT)
+From:   Kerem Karabay <kekrby@gmail.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kekrby <kekrby@gmail.com>
+Subject: [PATCH v2 0/2] Version 2 of hid-apple fixes
+Date:   Sat, 24 Sep 2022 12:53:04 +0300
+Message-Id: <20220924095306.8852-1-kekrby@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+From: kekrby <kekrby@gmail.com>
 
-On Sat Sep 24 2022, Vladimir Oltean wrote:
-> Some of the boards I am working with are limited in the number of ports
-> that they offer, and as more TSN related selftests are added, it is
-> important to be able to distribute the work among multiple boards.
-> A large part of implementing that is ensuring network-wide
-> synchronization, but also permitting more streams of data to flow
-> through the network. There is the more important aspect of also
-> coordinating the timing characteristics of those streams, and that is
-> also something that is tackled, although not in this modest patch set.
-> The goal here is not to introduce new selftests yet, but just to lay a
-> better foundation for them. These patches are a part of the cleanup work
-> I've done while working on selftests for frame preemption. They are
-> regression-tested with psfp.sh.
+Hi all,
 
-For this series,
+This patch series is an updated version of this one:
+https://lore.kernel.org/all/20220910094354.12359-2-kekrby@gmail.com/.
 
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+# Changes since v1:
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+- Fixed loading the module with the `swap_fn_leftctrl` option set to 1,
+  which would make the Fn key cease to function. (Setting the option
+  after loading the module still worked, which is why the bug was not
+  caught while testing.)
 
------BEGIN PGP SIGNATURE-----
+Kerem Karabay (2):
+  HID: apple: fix key translations where multiple quirks attempt to
+    translate the same key and the ones that depend on other
+    translations
+  HID: apple: enable APPLE_ISO_TILDE_QUIRK for the keyboards of Macs
+    with the T2 chip
 
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmMu03sTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgnCCD/9gvTfAyxuU9tn7yTA/6CsNP2bI/5bK
-HtAcw3lFVdGfVqLciUpopSZN+/pCuqit32naMsM1DqhR37aZTYjdDm1cvu26UUhg
-gGmXC8RVToLt42bcRRSvRLdcvt+zyqxeCoV051DMGXmn0XF0jJe59AjLStwoK/It
-nfMa4i4Jojw/ttnJqyAbQDjh2aCSkLH0xFS1MJdCKBmOMjclWLKYGsa1Ctg3YE5I
-ARnEVjzz8p95QMoFUFObW5h92nIxNKikcEFD4satk8ql5GfxJOMBNR7eoYj0Y+fy
-Bwr1lGbDLf8Cg3H6NURQJyrRrWWQJDftk1fzpSw5q5MCnLQuA3QZcz8P0YCAyFIt
-y+83pc2E5ifVsZISXtJzERHDx063lylVM2DL7gFhNBXofnOTZ61S15vggkL8pINr
-y3cicITEeJWDhRO/g0+n0u+foVLxDSMKYLG43nK0btgpkEl8Vpvr4FFUBVdU39Z0
-ar0RkVGb3YVriKOfl+nv5xWX/FvCbuQFSuETv1f6XrwO+y3L8TVpLfwgkK3KyMPt
-H0GUnZcPfij9qD5IZ0Jv/GlhyN2KsB6FhzQPcZ09fH6yXZBswOhs3a4TdXlDKGEH
-gWYI+QN4E8aE9dZLN6sw8rV/08KIfyPzsSk5Su+exw0C9Px7jCMK2AW2QXqaTTqK
-Kh2YHmzetobEHA==
-=gUDW
------END PGP SIGNATURE-----
---=-=-=--
+ drivers/hid/hid-apple.c | 118 ++++++++++++++++++----------------------
+ 1 file changed, 52 insertions(+), 66 deletions(-)
+
+-- 
+2.37.2
+
