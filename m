@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D385E8920
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7179F5E8922
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbiIXH2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S233442AbiIXH3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiIXH13 (ORCPT
+        with ESMTP id S232228AbiIXH3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:27:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36EF38A10;
-        Sat, 24 Sep 2022 00:27:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F56460DB7;
-        Sat, 24 Sep 2022 07:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04310C4347C;
-        Sat, 24 Sep 2022 07:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664004422;
-        bh=tt0jOXg97xVp5NYM4iKyzC9fLT2QSJBCxqt4QUSnBRs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cxu6aV2FnfOTOBFphC5ZhTe811lcPISTQ/85BkdTyf9dCqLA1+JcDRKlXOn5zqjUg
-         cAjuCr1vgSxUem3m1D2lyUjJtIyrYez9+GmdnMeKewSy1i9ElB3HwHQ/TNApi1FYRA
-         4dEQVoLmkxIAHOJDpemMDIjjVj+z8STIXyQ3iKxTjw+VmkLKNPAfCY0o7A9UWt6Usu
-         gWrT+6C5BYxyIgzTzcWNC/w914r2HINcoQmuBsD2JJH3g2bXyvqeImxbJc7M0osTWN
-         7FcS99mWTDdzh5vMgqu9cYt8i+mSgSOftq5xL8vK2aRlDwjHptSKG2fPMUtqWrnm8f
-         yLEWtrRy/1z4w==
-Received: by mail-lj1-f181.google.com with SMTP id j24so2267003lja.4;
-        Sat, 24 Sep 2022 00:27:01 -0700 (PDT)
-X-Gm-Message-State: ACrzQf15tQKyWMWEmzEzThxqMycTChdGnMOI2Fc+gqS+UEW8wz5nRwOB
-        WvNlw4z0PKjy5sDK5e2KlUIffGiJKfbOVlbZ5ww=
-X-Google-Smtp-Source: AMsMyM5i2gOhFswR/JCPJ+TrUVXIaw5UdmgNIjTgrno8/UpIa5Y24MFqIqwkWXPnisG24+Exdk5Dhk4DNzKrBpPsaiE=
-X-Received: by 2002:a2e:8349:0:b0:26c:4311:9b84 with SMTP id
- l9-20020a2e8349000000b0026c43119b84mr4410587ljh.152.1664004419937; Sat, 24
- Sep 2022 00:26:59 -0700 (PDT)
+        Sat, 24 Sep 2022 03:29:15 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BA31D338
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:29:12 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id j17-20020a9d7f11000000b0065a20212349so1332113otq.12
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=ZsVr0q7yabDdKFmE4b0RvYJDpC4ReAh7J6+IaRkZIac=;
+        b=MgP3Bi14j1EF47j8QRIFn8p0mfiL4/3LY6SQNRqnp1QBkgKiPN0SgFnSU1m6htUBMH
+         q9DRtpuc86QAspRW4NWxak+QLSzUG+L+hmdnFEjJZ9Ueaq/JfM2nSD/K9CWPOZzyEU9i
+         fpyjZIXHufF3pdQI4jcY2Z8OEomcx4fN99nFQejM3QptJwSd3KGiAxwTnT/4C6dPD1dp
+         luG4+GaWZbWvbPC2QgUw/zZu/wYeR/F/Br/TbjMxn98k9YY0KTSSrhkpO/HImWNVduMs
+         6xnZKp0W9GtlRhzsUiBtzO5kj9ZO7/9IfHbzVu4nQFX8QUvHJCWUPScUyKnfE9STBnzq
+         QrSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZsVr0q7yabDdKFmE4b0RvYJDpC4ReAh7J6+IaRkZIac=;
+        b=Lxp6SqBqoRawIi9z+gjn4LzhbBjep7G3q1FbO8mCVlgyz4agFpMn9VVlZyQcmvW/Z7
+         3AFwX65h14tssoYAWi3GJMaQAoegtJMDMRTMZ3hn8FKCBk/+S9cRpz6QIENRHng2sqP/
+         96iOcsx5B3QgqQFTSDxrWkVQKJrFjndd2ek7nxvjSmehOIqh5Y/k+/f/A4kja9WEcW0w
+         kDISVP9ZaxXzio1zyv/AhDAkMRCUNUENvq4eTZFC7wV99uqwhq+1R19fOEV2cTgLXWH+
+         YkAfu9M1iO9RsMjTWGerv8r10sjrrpRbXtjUPmB8KuSWLDQFKZHqKtuYidopGi8SquZk
+         6jnA==
+X-Gm-Message-State: ACrzQf1bjT4MaV9TTVVsTs48pTYM9syo2yzTVoqvhu6sJCPGVRZOQhP9
+        qajoBK7Dy214q1InMc3ju7r4Kg==
+X-Google-Smtp-Source: AMsMyM7rHX9avXVvGti6b14/UhSMtpCFTnD4H/T7tGZQ0DnOKU/conEyd8/+GV2Sa0mhjuKYTnQ/KQ==
+X-Received: by 2002:a9d:150:0:b0:659:f778:3b90 with SMTP id 74-20020a9d0150000000b00659f7783b90mr5552597otu.183.1664004551986;
+        Sat, 24 Sep 2022 00:29:11 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id m9-20020a056870a40900b0011f390fdb0asm5883375oal.12.2022.09.24.00.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 00:29:11 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 00:28:52 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Nathan Chancellor <nathan@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, ndesaulniers@google.com,
+        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com
+Subject: Re: [syzbot] general protection fault in PageHeadHuge
+In-Reply-To: <Yy5M0Ht6X3hFuq/S@dev-arch.thelio-3990X>
+Message-ID: <ff6b391-9ec3-56a3-694c-c1954bde146@google.com>
+References: <0000000000006c300705e95a59db@google.com> <Yy4g/BKpnJga1toG@monkey> <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com> <Yy5M0Ht6X3hFuq/S@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-References: <20220923221730.1860518-1-dave.hansen@linux.intel.com>
-In-Reply-To: <20220923221730.1860518-1-dave.hansen@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 24 Sep 2022 09:26:48 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEAneXVTFenwrP5U6-SSO7Hqm07z=1w19PUS4MUHM+BRw@mail.gmail.com>
-Message-ID: <CAMj1kXEAneXVTFenwrP5U6-SSO7Hqm07z=1w19PUS4MUHM+BRw@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm: Disable W^X detection and enforcement on 32-bit
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Sept 2022 at 00:17, Dave Hansen <dave.hansen@linux.intel.com> wrote:
->
-> The 32-bit code is in a weird spot.  Some 32-bit builds (non-PAE) do not
-> even have NX support.  Even PAE builds that support NX have to contend
-> with things like EFI data and code mixed in the same pages where W+X
-> is unavoidable.
->
-> The folks still running X86_32=y kernels are unlikely to care much about
-> NX.  That combined with the fundamental inability fix _all_ of the W+X
-> things means this code had little value on X86_32=y.  Disable the checks.
->
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Darren Hart <dvhart@infradead.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-> Cc: linux-efi@vger.kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Link: https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
+On Fri, 23 Sep 2022, Nathan Chancellor wrote:
+> On Fri, Sep 23, 2022 at 05:14:38PM -0700, Hugh Dickins wrote:
+> > 
+> > But me, I cannot even get the latest linux-next to boot: next job.
+> 
+> Maybe I can save you a bisect:
+> 
+> https://lore.kernel.org/all/Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X/
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Many thanks Nathan, yes, you did save me a bisect with that link.
+And I managed to get a patch to revert the badness,
+I'll reply there on that thread now.
 
-> ---
->  arch/x86/mm/pat/set_memory.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 20b1e24baa85..efe882c753ca 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -587,6 +587,14 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
->  {
->         unsigned long end;
->
-> +       /*
-> +        * 32-bit has some unfixable W+X issues, like EFI code
-> +        * and writeable data being in the same page.  Disable
-> +        * detection and enforcement there.
-> +        */
-> +       if (IS_ENABLED(CONFIG_X86_32))
-> +               return new;
-> +
->         /* Only enforce when NX is supported: */
->         if (!(__supported_pte_mask & _PAGE_NX))
->                 return new;
-> --
-> 2.34.1
->
+Hugh
