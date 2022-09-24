@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE265E88FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEA45E8903
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbiIXHPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S233407AbiIXHR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiIXHO5 (ORCPT
+        with ESMTP id S233310AbiIXHRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:14:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F88B1CB29
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:14:55 -0700 (PDT)
+        Sat, 24 Sep 2022 03:17:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7FE138F3D;
+        Sat, 24 Sep 2022 00:17:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32133B80D83
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 07:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503F7C433C1;
-        Sat, 24 Sep 2022 07:14:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60A76B80DAF;
+        Sat, 24 Sep 2022 07:17:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0ACC433C1;
+        Sat, 24 Sep 2022 07:17:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664003692;
-        bh=yFTm/FVYOxOnX82hlQYnJ9zyQLMQStELUrkKWp1iBOU=;
+        s=k20201202; t=1664003839;
+        bh=OofynfKNUNtBce3tQD8sgtjcGFvwIJCOJYj5t820y3k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nY+K2jomYMCfKj7L0KM9IkUlMAIE4FpVCt1dwg1e7k2TKImmhwsppEKH3KNjxfczz
-         ObroygEtNfJqyL07zQ+Nh2NjzOL6Iib9TvttHlMgWIU8j0S1h2YSidHaO04QAjX9y1
-         O14zCg9CpuYBT3+iVmvn59pGZvs/NoYf19m6p+c68jRoyddoKDdZoBmGddo2BCK6Mi
-         Nxdq/3iQHqZGQ0DfoHflCvr4AwdHr/+GgsFB7eT9mfg+Hspk/63dXWoqHnxxcz4UFu
-         dXgiQZzcNY2l/OOUBJNjClYt/7qQA03NTKktxYvf6I1cJSaZHdO4Vw6mOPpSjMJSir
-         3wJgJthUxgSkw==
-Date:   Sat, 24 Sep 2022 12:44:49 +0530
+        b=Sq9ekBFljOM8H2FSvks7FSE9Ybg8dzRTyD3Su72fXv/5ohNZKE2txBPUbdim/DRC1
+         Cn1oQxKq1rgiYEufvWKgZgaZz53LJFtQtImRYfhCLz4Nqxd4TIEwb3YaWLUb3EGOKd
+         kIPoEK0tdTfMvrMoOq+t/W09WHt4SYKr56JwHb3ixYgskmyDbmAS9ykPEYAzWoaiQ9
+         cBQ3yJ2hAkXX3kjL8AgrBTktujm7vqhJQlf3rlpckiEBQX+8dyxxEZo55IHL+lFcab
+         Is/bLkVGTiaHz8mpoHBXjLvlECVPpJ5Iiq0vIAeLPKMzUWTXiPX6dwePzNsBhtgui1
+         0lC/kiXv50i0g==
+Date:   Sat, 24 Sep 2022 12:47:15 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
- registers before USB 3.0 power on
-Message-ID: <Yy6uaaZUbZsBSqrw@matsya>
-References: <20220920121154.30115-1-pali@kernel.org>
- <20220921050300.riwyofdncxscrwe3@shindev>
- <20220921080557.jdg5wywpa5qxcyo2@pali>
+To:     Haotien Hsu <haotienh@nvidia.com>
+Cc:     p.zabel@pengutronix.de, jckuo@nvidia.com, kishon@ti.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wayne Chang <waynec@nvidia.com>
+Subject: Re: [PATCH] phy: tegra: xusb: Enable usb role switch attribute
+Message-ID: <Yy6u+9x/oDo4Gd+F@matsya>
+References: <20220921112500.798282-1-haotienh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220921080557.jdg5wywpa5qxcyo2@pali>
+In-Reply-To: <20220921112500.798282-1-haotienh@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,62 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-09-22, 10:05, Pali Rohár wrote:
-> On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
-> > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
-> > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
-> > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
-> > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
-> > > reset support"). On the other hand USB 2.0 devices connected to the same
-> > > USB-A port are working fine.
-> > > 
-> > > It looks as if the older firmware configures COMPHY registers for USB 3.0
-> > > somehow incompatibly for kernel driver. Experiments show that resetting
-> > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
-> > > register fixes this issue.
-> > > 
-> > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
-> > > step after selecting COMPHY lane and USB 3.0 function. With this change
-> > > Turris MOX board can successfully detect USB 3.0 devices again.
-> > > 
-> > > Before the above mentioned commit this reset was implemented in PHY reset
-> > > method, so this is the reason why there was no issue with older firmware
-> > > version then.
-> > > 
-> > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
-> > > Reported-by: Marek Behún <kabel@kernel.org>
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > > Shinichiro, could you please check that all USB functionality still
-> > > works correctly on your board?
-> > > ---
-> > 
-> > Sure. TL;DR, this patch works ok for my espressobin v7 board.
-> > 
-> > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-> > 
-> > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
-> > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
-> > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
-> > drive. The drive was detected and its partition was mounted successfully using
-> > either of the two USB ports.
+On 21-09-22, 19:25, Haotien Hsu wrote:
+> From: Wayne Chang <waynec@nvidia.com>
 > 
-> Thank you for testing! Anyway, please check that USB 3.0 device is
-> working fine. Because as I wrote in commit message, on Turris Mox was
-> USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
+> This patch enables the usb-role-switch atrribute
+> to have the user-space check current device role
+> of otg cability ports
 
-update the log now?
+typo cability
 
-> (lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
-> 3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
+
+You can use 72 chars for changelog rather than limiting at 50chars :-(
+
 > 
-> > I also confirmed SATA port is ok (my SSD card was detected without error
-> > message) and three network ports works ok ("Link is Up" message on network cable
-> > connection). I did same confirmations with the latest firmware (TF-A and U-boot)
-> > and old firmware (with version date in 2017). All looks good for me.
-> > 
-> > -- 
-> > Shin'ichiro Kawasaki
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+> ---
+>  drivers/phy/tegra/xusb.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> index aa5237eacd29..220ab7719ade 100644
+> --- a/drivers/phy/tegra/xusb.c
+> +++ b/drivers/phy/tegra/xusb.c
+> @@ -656,6 +656,7 @@ static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
+>  	struct usb_role_switch_desc role_sx_desc = {
+>  		.fwnode = dev_fwnode(&port->dev),
+>  		.set = tegra_xusb_role_sw_set,
+> +		.allow_userspace_control = true,
+>  	};
+>  	int err = 0;
+>  
+> -- 
+> 2.25.1
 
 -- 
 ~Vinod
