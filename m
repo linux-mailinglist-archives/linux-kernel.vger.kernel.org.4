@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7DC5E8F62
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5E15E8F66
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiIXSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 14:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S229547AbiIXSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 14:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiIXSfj (ORCPT
+        with ESMTP id S229502AbiIXSlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 14:35:39 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B51140E22;
-        Sat, 24 Sep 2022 11:35:36 -0700 (PDT)
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 28OIZLc9005082;
-        Sun, 25 Sep 2022 03:35:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28OIZLc9005082
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664044521;
-        bh=RbqoFf+NUPS3ZIfi5M0nVs/cSJ76u5DRwLEJ1NMMjb8=;
-        h=From:Date:Subject:To:Cc:From;
-        b=KPiIAqprkcpsg10dTimf7qprbxFVoPDTf4FYP7WZf9Vlj/8N459PGF/QlBcsNsDnG
-         9v8oK7VRXcELwmHdKA1YZKKkEO2pBONiFqHbqaMqf0uQqsLJlknATS3mEewzmtaPYd
-         bxfJQ+rn46JqDtLCzbxBcgtXRQzMkOGgIn364LQntw5OLbk7J2bmZsRYfcNPKFqXGk
-         AD0Ggnok3SdgjgO9AvVt1OTKK06C2bxkAps4zu3+Ushs79+H2ox14g23dsN6YSvcj/
-         bXuJxpq1bYHAu8yWiEeyM6LjWPOPkjVsLr27Eg1H9yifFBZ/WAdlWGoq8btPVCQCOa
-         S5iR2fKgpgz6Q==
-X-Nifty-SrcIP: [209.85.167.175]
-Received: by mail-oi1-f175.google.com with SMTP id t62so3631468oie.10;
-        Sat, 24 Sep 2022 11:35:21 -0700 (PDT)
-X-Gm-Message-State: ACrzQf10b+185D1577VpXKTmPan/z/Fx93saQGTVtTitLBwCGjBx/x4t
-        zaIVAayw5hgATDvOae1Wi/5dHnE3CgKImO2ADzo=
-X-Google-Smtp-Source: AMsMyM7rQ9j5IF9emwrULzHOpQ66ut5L1dC7h0xgpYEFiOUwjUr+ir8cpdIIc7CijiTFyyUKWXaz2T/aOap5jgvhX+A=
-X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
- x12-20020a54400c000000b0034f99130262mr6691143oie.287.1664044520383; Sat, 24
- Sep 2022 11:35:20 -0700 (PDT)
+        Sat, 24 Sep 2022 14:41:03 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0CC13D58;
+        Sat, 24 Sep 2022 11:41:01 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1280590722dso4416625fac.1;
+        Sat, 24 Sep 2022 11:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=8JOtQBvvLW72XVECmck79YSCsfPdNEq7ykuouwI7PTQ=;
+        b=MSxyC2yaJeJFCrV3/oDu6uv9ePg9BMYRIryj1KMAIrVpi3mTBGxkNUVnBCzgaPf6bQ
+         +/GAysqPfj3fNGaTMTI916aGvO/Kwmj737GqoNXXw7V2s8ebEHLwT57AyPSTBouiZXNX
+         cIkj15f08jmn2QkGa79lkBiIb8bE2WGgK9N9+72jGgo5L2uF2bzet43DfGHA2SHYbzYX
+         3A3MxbO3ys2lktiyS/iQQ1ulZv5lXOjPl39ygxpP6mzK0QXGv1DID2Mi3zjTua7n5ulu
+         D2/fyyEmqJZ7uc6PPC/9/PVJ4rtEbwTd23xTbUoCRrAhBsCj2xQP/qYWNj8C8p0ON/2n
+         YSQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=8JOtQBvvLW72XVECmck79YSCsfPdNEq7ykuouwI7PTQ=;
+        b=1k+EQGgy1H+AlO2qx8ps4Aix/o1asbCQ9xEknxYSxPPm7lErXbal8+R29z1EVFq3Ml
+         eKlSfUWHOmVo2/j+W9mZfTKGg6nslLT4Yhxdhk/1PjHRHOU0hUh7anSmWofYXDsbvNKO
+         CIS+yzQ62vY1g6jW5OxKAGy8zSBynlVYxOvUP9FjqCaY+p7XYR6kAUzDMOv+snHpdbLD
+         lHGMTVV9K9Mb5EdigqWO8zDL5578CI0MclENQd8X59PaZIHfs12HSrL2Osn/i3n8AFDO
+         0Mv0NFmNijzUJOOMQsUCcAOHXVtB65ZCDGLt2Y5aCSlk+3Kf/QSfw/uqVn/IIc7gd/HW
+         x2cg==
+X-Gm-Message-State: ACrzQf2HIjIqivGD4Kq6zQ19l4uAOgiL1fyLQPgHTojZ6RCVGR6774o4
+        GgmM0Uru4DHLfAlxt/zMkVg=
+X-Google-Smtp-Source: AMsMyM7/QppKaCvZ9AfPDnSI2olE5YiSRYcrHUcuFRLuFzHDidrPoBxkEIbi+YYShIqiI6EKekT7vw==
+X-Received: by 2002:a05:6870:c213:b0:127:a748:4aab with SMTP id z19-20020a056870c21300b00127a7484aabmr14139381oae.52.1664044860580;
+        Sat, 24 Sep 2022 11:41:00 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cc:3499:8fa2:1bc4:de36:509f])
+        by smtp.gmail.com with ESMTPSA id e5-20020a056870c0c500b001275f056133sm6519090oad.51.2022.09.24.11.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 11:41:00 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] wifi: mac80211: mlme: Fix missing unlock on beacon RX
+Date:   Sat, 24 Sep 2022 15:40:41 -0300
+Message-Id: <20220924184042.778676-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 25 Sep 2022 03:34:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATDVBT1NKZtUkjk3GpqxEtOc8JLjY3XMjREHrp94t13-w@mail.gmail.com>
-Message-ID: <CAK7LNATDVBT1NKZtUkjk3GpqxEtOc8JLjY3XMjREHrp94t13-w@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.0-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,62 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Commit 98b0b467466c ("wifi: mac80211: mlme: use correct link_sta")
+switched to link station instead of deflink and added some checks to do
+that, which are done with the 'sta_mtx' mutex held. However, the error
+path of these checks does not unlock 'sta_mtx' before returning.
 
+Fixes: 98b0b467466c ("wifi: mac80211: mlme: use correct link_sta")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ net/mac80211/mlme.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Please pull some Kbuild fixes.
-Thanks.
-
-
-
-The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
-
-  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.0-3
-
-for you to fetch changes up to 32ef9e5054ec0321b9336058c58ec749e9c6b0fe:
-
-  Makefile.debug: re-enable debug info for .S files (2022-09-24 11:19:19 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.0 (3rd)
-
- - Fix build error for the combination of CONFIG_SYSTEM_TRUSTED_KEYRING=y
-   and CONFIG_X509_CERTIFICATE_PARSER=m
-
- - Fix CONFIG_DEBUG_INFO_SPLIT to generate debug info for GCC 11+ and Clang 12+
-
- - Revive debug info for assembly files
-
- - Remove unused code
-
-----------------------------------------------------------------
-Masahiro Yamada (1):
-      certs: make system keyring depend on built-in x509 parser
-
-Nick Desaulniers (2):
-      Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
-      Makefile.debug: re-enable debug info for .S files
-
-Zeng Heng (1):
-      Kconfig: remove unused function 'menu_get_root_menu'
-
-yangxingwu (1):
-      scripts/clang-tools: remove unused module
-
- certs/Kconfig                          |  2 +-
- lib/Kconfig.debug                      |  4 +++-
- scripts/Makefile.debug                 | 21 ++++++++++-----------
- scripts/clang-tools/run-clang-tools.py |  1 -
- scripts/kconfig/lkc.h                  |  1 -
- scripts/kconfig/menu.c                 |  5 -----
- 6 files changed, 14 insertions(+), 20 deletions(-)
-
-
+diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+index 5265d2b6db12..c0fbffd9b153 100644
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@ -5589,12 +5589,16 @@ static void ieee80211_rx_mgmt_beacon(struct ieee80211_link_data *link,
+ 
+ 	mutex_lock(&local->sta_mtx);
+ 	sta = sta_info_get(sdata, sdata->vif.cfg.ap_addr);
+-	if (WARN_ON(!sta))
++	if (WARN_ON(!sta)) {
++		mutex_unlock(&local->sta_mtx);
+ 		goto free;
++	}
+ 	link_sta = rcu_dereference_protected(sta->link[link->link_id],
+ 					     lockdep_is_held(&local->sta_mtx));
+-	if (WARN_ON(!link_sta))
++	if (WARN_ON(!link_sta)) {
++		mutex_unlock(&local->sta_mtx);
+ 		goto free;
++	}
+ 
+ 	changed |= ieee80211_recalc_twt_req(link, link_sta, elems);
+ 
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+
