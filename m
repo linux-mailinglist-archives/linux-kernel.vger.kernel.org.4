@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6755E86CF
+	by mail.lfdr.de (Postfix) with ESMTP id 187D35E86CE
 	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 02:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiIXAma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 20:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S231517AbiIXAmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 20:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiIXAm0 (ORCPT
+        with ESMTP id S232397AbiIXAm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 20:42:26 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D1F115BCC;
-        Fri, 23 Sep 2022 17:42:26 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d82so1569022pfd.10;
-        Fri, 23 Sep 2022 17:42:26 -0700 (PDT)
+        Fri, 23 Sep 2022 20:42:28 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF83D115BCC;
+        Fri, 23 Sep 2022 17:42:27 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id jm5so1526736plb.13;
+        Fri, 23 Sep 2022 17:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=+v3yE0wWE49NqNIeqeicpRAPLJhDqR/nFIdPn+1DxBU=;
-        b=SsdwqMSJRsG+1G0OIsHufweHBGomqI88q+Ar5ZR8JIuzYBvUn4gfgi4ignCpfNiUbq
-         Ay6yB86z+z0g+8r1fFTIcmpW3wm3WAJU4d0xkUC6ED69IoRzA0vYhMmHoaS2UuHQK0FB
-         eei/dp17iGSopw2RYfTdAemRHr0VTe3UPg/GadnDejXfYzYWVG1/Zw8RbpG35ZJIfhyb
-         uoUBmemRclFgWpBCkQbCw24PhRCGMFVzLIhw5vufyj2dqRbYY3Z9462l3xt3s+HaFLGU
-         A6HzRRl4tWDwYYdOk2Z5pXs2OR4SrTKmzzq9m3vB7BbtakEvKH83mOpTbsJfAqx/8NFB
-         YIOQ==
+        bh=nsTuKY7W4PY53LlO1HXB0XbCZ8PJy5sf3lmL8N0J30g=;
+        b=nhVl3BIrKBOJYJuLzSM7AeliCsGuqV3cZiOyh3Ggtm6jHMriiA+42Klv4Gi+vhDZIX
+         KWvuhYpH3/na5nk3p9htonaM+diUKqA5NloBD8gYPsaGjMkf8WDRnmpm6vfO9gDABbz2
+         cCdSqtOZFpoH+luUsCSbLU/Z8WCObuIawhYQOqugpGTWvBJSJdldbvcv9KBP6hoFQoVn
+         Clo8fxC+GAjmq9GNVnAGPmAS1BLC0/idKLul5T5LwjoWvIz4slduKcTAF9q7L6qIumo3
+         yg5VIksiLxQl65i4sfOnXeLcjSRtPgrk+ilRbCpYBnKn96xR4ly4Xcrpp9yd2SUWIjh6
+         6PvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date;
-        bh=+v3yE0wWE49NqNIeqeicpRAPLJhDqR/nFIdPn+1DxBU=;
-        b=HLn18E1jNKoX/A3gO4Cw22OxFUkWOeYSiijREcR7FfByVk94rO2LRUqfyGhQMwiiFf
-         EA19MLTDKUIpF8DND+TFcqBWFo1KtS9E5dQmo71tzJ+KCfg0POQpGlNT+j+qifSpsd/K
-         pelf9+erLF/Z4pdtiLPYLooUJTonMeBPsrjHdsITq88J19XS9GV33aNigt8IyXCmjUh+
-         z57J0LSZYJ9GYjCwe1eANf9lMuTeA5lC2t3tXeDYNKlD1WsU7V+XjYw8IAMQFkBWi0/N
-         9NNcr4OYnYwnrn4OC/l/M2nYiwgqvilIZ8nwAZS7tFX4uv1hKyDCvtTQpudEoOirmsxT
-         Y2EA==
-X-Gm-Message-State: ACrzQf0eXBBBILLwLr5CtPqwZpv5kO0wHO88lBtwE6V45o0kXJ5jKHwj
-        faTVKhjt6BXpVwrJMySfmCU=
-X-Google-Smtp-Source: AMsMyM7by9Pti91NLmeVFFWJpmi5CuOnNfH4k7lDpaVv1+TtA3c5AiMGJQAhRJnclmclkzbtepYWcg==
-X-Received: by 2002:a05:6a00:24d4:b0:544:abd7:c944 with SMTP id d20-20020a056a0024d400b00544abd7c944mr11971435pfv.44.1663980145566;
-        Fri, 23 Sep 2022 17:42:25 -0700 (PDT)
+        bh=nsTuKY7W4PY53LlO1HXB0XbCZ8PJy5sf3lmL8N0J30g=;
+        b=bvLn2G+sQENzxOUqx7/hxGELEZ9+4hnffHgcz0zypuNQtm29xdWdSw2DCWGETCoRvv
+         QIb+8oskPbf+xBfoEufniY4fq1sPpNBR7miwSoghaujYosrxPn38823xYA4F9ugIEgSX
+         Qs4qbdnLuQ9+8qMuT1Ua421q0JQj66fTvgiUHgUgvBLRiE48mygHAvJCdLAqg410wb7y
+         anAGHimQuWPNzipDZQUJMYnNvSKGwwF/LkWmDuJFWDlKDo9LH9aW+04RMmAWKc7VlE33
+         6ujSDB7jELAqcB9Tg3dnyc1uohda+EHdghHEJN1qT4o5vWtX0hXqteqqTGZB1l6L2znG
+         ImiQ==
+X-Gm-Message-State: ACrzQf2w1NuLvK3RONqtHf3Osd/R74zm6VG0cV/d4WbT5xWrp5t0348Z
+        4O+8qJ8hYEZlK6MBCKkULEI=
+X-Google-Smtp-Source: AMsMyM5hKURUKXXsenYOl0Idh82XT7fllNvMpBg42nbj1F9Tg/UwQf7y9b+h0mHgRtt8tVStcvsxDg==
+X-Received: by 2002:a17:902:e808:b0:178:1520:b255 with SMTP id u8-20020a170902e80800b001781520b255mr10963314plg.54.1663980147164;
+        Fri, 23 Sep 2022 17:42:27 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:9987:f0b9:ad5:1fe7])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm6639516plx.281.2022.09.23.17.42.24
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm6639516plx.281.2022.09.23.17.42.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 17:42:25 -0700 (PDT)
+        Fri, 23 Sep 2022 17:42:26 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 2/3] perf lock: Add -q/--quiet option
-Date:   Fri, 23 Sep 2022 17:42:20 -0700
-Message-Id: <20220924004221.841024-2-namhyung@kernel.org>
+Subject: [PATCH 3/3] perf test: Add kernel lock contention test
+Date:   Fri, 23 Sep 2022 17:42:21 -0700
+Message-Id: <20220924004221.841024-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 In-Reply-To: <20220924004221.841024-1-namhyung@kernel.org>
 References: <20220924004221.841024-1-namhyung@kernel.org>
@@ -77,89 +77,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like perf report, this option is to suppress header and debug messages.
+Add a new shell test to check if both normal perf lock record +
+contention and BPF (with -b) option are working.  Use perf bench
+sched messaging as a workload since it'd create some contention for
+sending and receiving messages.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/Documentation/perf-lock.txt |  4 ++++
- tools/perf/builtin-lock.c              | 27 +++++++++++++++-----------
- 2 files changed, 20 insertions(+), 11 deletions(-)
+ tools/perf/tests/shell/lock_contention.sh | 73 +++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100755 tools/perf/tests/shell/lock_contention.sh
 
-diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-index b23e76200ac2..3b1e16563b79 100644
---- a/tools/perf/Documentation/perf-lock.txt
-+++ b/tools/perf/Documentation/perf-lock.txt
-@@ -40,6 +40,10 @@ COMMON OPTIONS
- --verbose::
-         Be more verbose (show symbol address, etc).
- 
-+-q::
-+--quiet::
-+	Do not show any message. (Suppress -v)
+diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests/shell/lock_contention.sh
+new file mode 100755
+index 000000000000..04bf604e3c6f
+--- /dev/null
++++ b/tools/perf/tests/shell/lock_contention.sh
+@@ -0,0 +1,73 @@
++#!/bin/sh
++# kernel lock contention analysis test
++# SPDX-License-Identifier: GPL-2.0
 +
- -D::
- --dump-raw-trace::
-         Dump raw trace in ASCII.
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 1c0d52384d9e..9722d4ab2e55 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1250,7 +1250,7 @@ static void print_bad_events(int bad, int total)
- 	for (i = 0; i < BROKEN_MAX; i++)
- 		broken += bad_hist[i];
- 
--	if (broken == 0 && !verbose)
-+	if (quiet || (broken == 0 && !verbose))
- 		return;
- 
- 	pr_info("\n=== output for debug===\n\n");
-@@ -1269,10 +1269,12 @@ static void print_result(void)
- 	char cut_name[20];
- 	int bad, total, printed;
- 
--	pr_info("%20s ", "Name");
--	list_for_each_entry(key, &lock_keys, list)
--		pr_info("%*s ", key->len, key->header);
--	pr_info("\n\n");
-+	if (!quiet) {
-+		pr_info("%20s ", "Name");
-+		list_for_each_entry(key, &lock_keys, list)
-+			pr_info("%*s ", key->len, key->header);
-+		pr_info("\n\n");
-+	}
- 
- 	bad = total = printed = 0;
- 	while ((st = pop_from_result())) {
-@@ -1482,13 +1484,15 @@ static void print_contention_result(struct lock_contention *con)
- 	struct lock_key *key;
- 	int bad, total, printed;
- 
--	list_for_each_entry(key, &lock_keys, list)
--		pr_info("%*s ", key->len, key->header);
-+	if (!quiet) {
-+		list_for_each_entry(key, &lock_keys, list)
-+			pr_info("%*s ", key->len, key->header);
- 
--	if (show_thread_stats)
--		pr_info("  %10s   %s\n\n", "pid", "comm");
--	else
--		pr_info("  %10s   %s\n\n", "type", "caller");
-+		if (show_thread_stats)
-+			pr_info("  %10s   %s\n\n", "pid", "comm");
-+		else
-+			pr_info("  %10s   %s\n\n", "type", "caller");
-+	}
- 
- 	bad = total = printed = 0;
- 	if (use_bpf)
-@@ -1865,6 +1869,7 @@ int cmd_lock(int argc, const char **argv)
- 		   "file", "vmlinux pathname"),
- 	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
- 		   "file", "kallsyms pathname"),
-+	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any message"),
- 	OPT_END()
- 	};
- 
++set -e
++
++err=0
++perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++result=$(mktemp /tmp/__perf_test.result.XXXXX)
++
++cleanup() {
++	rm -f ${perfdata}
++	rm -f ${result}
++	trap - exit term int
++}
++
++trap_cleanup() {
++	cleanup
++	exit ${err}
++}
++trap trap_cleanup exit term int
++
++check() {
++	if [ `id -u` != 0 ]; then
++		echo "[Skip] No root permission"
++		err=2
++		exit
++	fi
++
++	if ! perf list | grep -q lock:contention_begin; then
++		echo "[Skip] No lock contention tracepoints"
++		err=2
++		exit
++	fi
++}
++
++test_record()
++{
++	echo "Testing perf lock record and perf lock contention"
++	perf lock record -o ${perfdata} -- perf bench sched messaging > /dev/null 2>&1
++	# the output goes to the stderr and we expect only 1 output (-E 1)
++	perf lock contention -i ${perfdata} -E 1 -q 2> ${result}
++	if [ $(cat "${result}" | wc -l) != "1" ]; then
++		echo "[Fail] Recorded result count is not 1:" $(cat "${result}" | wc -l)
++		err=1
++		exit
++	fi
++}
++
++test_bpf()
++{
++	echo "Testing perf lock contention --use-bpf"
++
++	if ! perf lock con -b true > /dev/null 2>&1 ; then
++		echo "[Skip] No BPF support"
++		exit
++	fi
++
++	# the perf lock contention output goes to the stderr
++	perf lock con -a -b -E 1 -q -- perf bench sched messaging > /dev/null 2> ${result}
++	if [ $(cat "${result}" | wc -l) != "1" ]; then
++		echo "[Fail] BPF result count is not 1:" $(cat "${result}" | wc -l)
++		err=1
++		exit
++	fi
++}
++
++check
++
++test_record
++test_bpf
++
++exit ${err}
 -- 
 2.37.3.998.g577e59143f-goog
 
