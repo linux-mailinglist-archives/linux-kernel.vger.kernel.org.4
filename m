@@ -2,228 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CCB5E9050
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03DA5E9059
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbiIXWZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S234041AbiIXWqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiIXWZI (ORCPT
+        with ESMTP id S229614AbiIXWqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:25:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B44B866;
-        Sat, 24 Sep 2022 15:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oO9x/CDUvHPGi3SgWXz0G80tj/2R7cBfo1sGwDbVEa0=; b=Z4wWIOsAkMuzCA9CnU5EtdocHa
-        vgbZlJUM3pnqYEQ1DeEKfySxmbpmbZaoYPi9PO44aiOjFQuEE9oj+OpyNRdMhyUuZlADKO2wmVmJU
-        KOg2VhGYo/h8V+ikuZUSelS60sJIo/sO8+kARONErzkXOIz+2t63y02f+w8MENDiMRjorY1HVOUag
-        4JQVDgbBDi7/Zv0l36z39GrLoylF/YU9k8WYJwr1oR8r6Q6mX0EYGJ6yJ2fuaYo+1JSMI/N89kzu6
-        QJ6PhMsX86ByxSIjPs+xu8CCeiN/JgFGzU8FjWW+iAAkqJ5Qa4cNHSs8gkhYxm3FndWNChcpWsHy3
-        +yQT3CKw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocDa6-0094gW-7U; Sat, 24 Sep 2022 22:25:06 +0000
-Date:   Sat, 24 Sep 2022 23:25:06 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+0e9dc403e57033a74b1d@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] INFO: task hung in __filemap_get_folio
-Message-ID: <Yy+DwlrnuBOKudoY@casper.infradead.org>
-References: <0000000000002709ae05e5b6474c@google.com>
- <000000000000fc539605e95c95be@google.com>
+        Sat, 24 Sep 2022 18:46:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856FA491FF;
+        Sat, 24 Sep 2022 15:46:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9888BCE02C7;
+        Sat, 24 Sep 2022 22:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E7FC433C1;
+        Sat, 24 Sep 2022 22:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664059600;
+        bh=eHSWTYnYsyVR2UjL5XkSiNfNQCN0O0WOvvT2T6zd9/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TTvEy692J7m3Bc7aiAqp/ud5O+dnXdHo/ejW4MEq5xuFjGRMJ1CVmrDxHY97EIM4f
+         uEi4e5HAjI4b5hiyg6C5hcKV+Gp1dhP76ZnGquDWlh0aEdVzIEkkVOib4HNgrEOfnh
+         kOFr1VVbKZr3ZaF/J1bR8Zaffs3LPMnuX+6yTdegwSa23UrFLE9VkfouZIHSF1Yw81
+         FK732zZDV2BzCJNLIeggo8Hfen6mzyfj529ec2PMtJJHjITRNZXmp76sZPv26fZsWF
+         eRbj0RU8yMOEzZQxmsrGuMjOto5s56x5eO5297Ihf/SQhPoWVRk+we26xbLKSXhqW7
+         L3zfXLvL8w7DA==
+Date:   Sun, 25 Sep 2022 00:46:37 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220924224637.GA161871@lothringen>
+References: <20220922220104.2446868-1-joel@joelfernandes.org>
+ <20220922220104.2446868-2-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000fc539605e95c95be@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220922220104.2446868-2-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:45:46AM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On Thu, Sep 22, 2022 at 10:01:01PM +0000, Joel Fernandes (Google) wrote:
+> @@ -3902,7 +3939,11 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  	rdp->barrier_head.func = rcu_barrier_callback;
+>  	debug_rcu_head_queue(&rdp->barrier_head);
+>  	rcu_nocb_lock(rdp);
+> -	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+> +	/*
+> +	 * Flush the bypass list, but also wake up the GP thread as otherwise
+> +	 * bypass/lazy CBs maynot be noticed, and can cause real long delays!
+> +	 */
+> +	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, FLUSH_BP_WAKE));
 
-No, it hasn't.  This is a different bug.  The other one is a bug in
-NTFS.  This is ... something else?  Maybe nbd?  maybe fuse?
+This fixes an issue that goes beyond lazy implementation. It should be done
+in a separate patch, handling rcu_segcblist_entrain() as well, with "Fixes: " tag.
 
-> HEAD commit:    bf682942cd26 Merge tag 'scsi-fixes' of git://git.kernel.or..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12096640880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7db7ad17eb14cb7
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0e9dc403e57033a74b1d
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116e80ff080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11bfbbcf080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+0e9dc403e57033a74b1d@syzkaller.appspotmail.com
-> 
-> INFO: task udevd:3638 blocked for more than 143 seconds.
->       Not tainted 6.0.0-rc6-syzkaller-00210-gbf682942cd26 #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:udevd           state:D stack:26248 pid: 3638 ppid:  2972 flags:0x00004006
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:5182 [inline]
->  __schedule+0xadf/0x52b0 kernel/sched/core.c:6494
->  schedule+0xda/0x1b0 kernel/sched/core.c:6570
->  io_schedule+0xba/0x130 kernel/sched/core.c:8714
->  folio_wait_bit_common+0x3dd/0xa90 mm/filemap.c:1298
->  __folio_lock mm/filemap.c:1664 [inline]
->  folio_lock include/linux/pagemap.h:939 [inline]
->  folio_lock include/linux/pagemap.h:935 [inline]
->  __filemap_get_folio+0xc6d/0xed0 mm/filemap.c:1936
->  truncate_inode_pages_range+0x37c/0x1510 mm/truncate.c:378
->  kill_bdev block/bdev.c:75 [inline]
->  blkdev_flush_mapping+0x140/0x2f0 block/bdev.c:661
->  blkdev_put_whole+0xd1/0xf0 block/bdev.c:692
->  blkdev_put+0x226/0x770 block/bdev.c:952
->  blkdev_close+0x64/0x80 block/fops.c:499
->  __fput+0x277/0x9d0 fs/file_table.c:320
->  task_work_run+0xdd/0x1a0 kernel/task_work.c:177
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0xad5/0x29b0 kernel/exit.c:795
->  do_group_exit+0xd2/0x2f0 kernel/exit.c:925
->  get_signal+0x238c/0x2610 kernel/signal.c:2857
->  arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
->  exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
->  exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
->  syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
->  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fea11178697
-> RSP: 002b:00007ffc3c7fb710 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-> RAX: 0000000000000008 RBX: 000055b3e78469c0 RCX: 00007fea11178697
-> RDX: 00000000000a0800 RSI: 000055b3e7818920 RDI: 00000000ffffff9c
-> RBP: 000055b3e7818920 R08: 0000000000000001 R09: 00007ffc3c816080
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000a0800
-> R13: 000055b3e7819a80 R14: 00007ffc3c7fb7bc R15: 000055b3e780b2c0
->  </TASK>
-> INFO: task syz-executor127:3645 blocked for more than 143 seconds.
->       Not tainted 6.0.0-rc6-syzkaller-00210-gbf682942cd26 #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor127 state:D stack:28376 pid: 3645 ppid:  3635 flags:0x00000004
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:5182 [inline]
->  __schedule+0xadf/0x52b0 kernel/sched/core.c:6494
->  schedule+0xda/0x1b0 kernel/sched/core.c:6570
->  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6629
->  __mutex_lock_common kernel/locking/mutex.c:679 [inline]
->  __mutex_lock+0xa44/0x1350 kernel/locking/mutex.c:747
->  blkdev_get_by_dev.part.0+0x9b/0xb90 block/bdev.c:812
->  blkdev_get_by_dev+0x6b/0x80 block/bdev.c:855
->  blkdev_open+0x13c/0x2c0 block/fops.c:485
->  do_dentry_open+0x4a4/0x13a0 fs/open.c:880
->  do_open fs/namei.c:3557 [inline]
->  path_openat+0x1c92/0x28f0 fs/namei.c:3691
->  do_filp_open+0x1b6/0x400 fs/namei.c:3718
->  do_sys_openat2+0x16d/0x4c0 fs/open.c:1313
->  do_sys_open fs/open.c:1329 [inline]
->  __do_sys_openat fs/open.c:1345 [inline]
->  __se_sys_openat fs/open.c:1340 [inline]
->  __x64_sys_openat+0x13f/0x1f0 fs/open.c:1340
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7ff1e173a4d7
-> RSP: 002b:00007ffdf8c863c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff1e173a4d7
-> RDX: 0000000000000000 RSI: 00007ffdf8c86440 RDI: 00000000ffffff9c
-> RBP: 00007ffdf8c86440 R08: 000000000000ffff R09: 00007ffdf8c862d0
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> 
-> Showing all locks held in the system:
-> 1 lock held by rcu_tasks_kthre/12:
->  #0: ffffffff8bf85db0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
-> 1 lock held by rcu_tasks_trace/13:
->  #0: ffffffff8bf85ab0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
-> 1 lock held by khungtaskd/28:
->  #0: ffffffff8bf86900 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6492
-> 1 lock held by klogd/2961:
->  #0: ffff8880b9a3a018 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:544
-> 2 locks held by getty/3287:
->  #0: ffff88801caa6098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
->  #1: ffffc90001c482f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef0/0x13e0 drivers/tty/n_tty.c:2177
-> 1 lock held by udevd/3638:
->  #0: ffff88801e6644c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0xbc/0x770 block/bdev.c:910
-> 1 lock held by syz-executor127/3645:
->  #0: ffff88801e6644c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev.part.0+0x9b/0xb90 block/bdev.c:812
-> 
-> =============================================
-> 
-> NMI backtrace for cpu 1
-> CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.0.0-rc6-syzkaller-00210-gbf682942cd26 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  nmi_cpu_backtrace.cold+0x46/0x14f lib/nmi_backtrace.c:111
->  nmi_trigger_cpumask_backtrace+0x206/0x250 lib/nmi_backtrace.c:62
->  trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
->  check_hung_uninterruptible_tasks kernel/hung_task.c:212 [inline]
->  watchdog+0xc18/0xf50 kernel/hung_task.c:369
->  kthread+0x2e4/0x3a0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> Sending NMI from CPU 1 to CPUs 0:
-> NMI backtrace for cpu 0
-> CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.0.0-rc6-syzkaller-00210-gbf682942cd26 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> Workqueue: events_unbound toggle_allocation_gate
-> RIP: 0010:check_wait_context kernel/locking/lockdep.c:4741 [inline]
-> RIP: 0010:__lock_acquire+0x574/0x56d0 kernel/locking/lockdep.c:5003
-> Code: 00 00 45 89 fe 41 83 ee 01 0f 88 7c 13 00 00 49 b9 00 00 00 00 00 fc ff df 49 63 c6 48 8d 04 80 49 8d ac c5 99 0a 00 00 eb 12 <41> 83 ee 01 48 83 ed 28 41 83 fe ff 0f 84 15 0b 00 00 48 8d 5d df
-> RSP: 0018:ffffc90000d2f738 EFLAGS: 00000046
-> RAX: 0000000000000000 RBX: ffff8880174d0af8 RCX: 0000000000000001
-> RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffffff908e8dd9
-> RBP: ffff8880174d0b19 R08: 0000000000000000 R09: dffffc0000000000
-> R10: fffffbfff211c32a R11: 0000000000000000 R12: ffff8880174d0bc0
-> R13: ffff8880174d0080 R14: 0000000000000000 R15: 0000000000000005
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000056317ad90680 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  lock_acquire kernel/locking/lockdep.c:5666 [inline]
->  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
->  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
->  _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
->  spin_lock include/linux/spinlock.h:349 [inline]
->  __get_locked_pte+0x154/0x270 mm/memory.c:1838
->  get_locked_pte include/linux/mm.h:2089 [inline]
->  __text_poke+0x1b3/0x8e0 arch/x86/kernel/alternative.c:1123
->  text_poke arch/x86/kernel/alternative.c:1208 [inline]
->  text_poke_bp_batch+0x147/0x6c0 arch/x86/kernel/alternative.c:1487
->  text_poke_flush arch/x86/kernel/alternative.c:1660 [inline]
->  text_poke_flush arch/x86/kernel/alternative.c:1657 [inline]
->  text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1667
->  arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
->  jump_label_update+0x32f/0x410 kernel/jump_label.c:801
->  static_key_disable_cpuslocked+0x152/0x1b0 kernel/jump_label.c:207
->  static_key_disable+0x16/0x20 kernel/jump_label.c:215
->  toggle_allocation_gate mm/kfence/core.c:825 [inline]
->  toggle_allocation_gate+0x183/0x390 mm/kfence/core.c:803
->  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
->  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->  kthread+0x2e4/0x3a0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.080 msecs
-> 
+And then FLUSH_BP_WAKE is probably not needed anymore. 
+
+>  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+>  		atomic_inc(&rcu_state.barrier_cpu_count);
+>  	} else {
+> @@ -269,10 +294,14 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+>  	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
+>  
+>  	/*
+> -	 * Bypass wakeup overrides previous deferments. In case
+> -	 * of callback storm, no need to wake up too early.
+> +	 * Bypass wakeup overrides previous deferments. In case of
+> +	 * callback storm, no need to wake up too early.
+>  	 */
+> -	if (waketype == RCU_NOCB_WAKE_BYPASS) {
+> +	if (waketype == RCU_NOCB_WAKE_LAZY
+> +		&& READ_ONCE(rdp->nocb_defer_wakeup) == RCU_NOCB_WAKE_NOT) {
+
+This can be a plain READ since ->nocb_defer_wakeup is only written under ->nocb_gp_lock.
+
+> +		mod_timer(&rdp_gp->nocb_timer, jiffies + jiffies_till_flush);
+> +		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+> +	} else if (waketype == RCU_NOCB_WAKE_BYPASS) {
+>  		mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
+>  		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+>  	} else {
+> @@ -512,9 +598,16 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
+>  	}
+>  	// Need to actually to a wakeup.
+>  	len = rcu_segcblist_n_cbs(&rdp->cblist);
+> +	bypass_len = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> +	lazy_len = READ_ONCE(rdp->lazy_len);
+>  	if (was_alldone) {
+>  		rdp->qlen_last_fqs_check = len;
+> -		if (!irqs_disabled_flags(flags)) {
+> +		// Only lazy CBs in bypass list
+> +		if (lazy_len && bypass_len == lazy_len) {
+> +			rcu_nocb_unlock_irqrestore(rdp, flags);
+> +			wake_nocb_gp_defer(rdp, RCU_NOCB_WAKE_LAZY,
+> +					   TPS("WakeLazy"));
+
+I'm trying to think of a case where rcu_nocb_try_bypass() returns false
+(queue to regular list) but then call_rcu() -> __call_rcu_nocb_wake() ends up
+seeing a lazy bypass queue even though we are queueing a non-lazy callback
+(should have flushed in this case).
+
+Looks like it shouldn't happen, even with concurrent (de-offloading) but just
+in case, can we add:
+
+      WARN_ON_ONCE(lazy_len != len)
+
+> +		} else if (!irqs_disabled_flags(flags)) {
+>  			/* ... if queue was empty ... */
+>  			rcu_nocb_unlock_irqrestore(rdp, flags);
+>  			wake_nocb_gp(rdp, false);
+
+Thanks.
