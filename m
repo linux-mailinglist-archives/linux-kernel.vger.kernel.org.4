@@ -2,196 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F195E8F5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7DC5E8F62
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 20:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiIXScm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 14:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S233909AbiIXSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 14:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiIXScd (ORCPT
+        with ESMTP id S233516AbiIXSfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 14:32:33 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F943A4BF
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 11:32:32 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664044350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wCZqMmRS53sAUXuFaKIWMcHMmvAGs3N+TjAFGrnshio=;
-        b=G8sO/LbZF5z3kI5Kifxt5ZbKg8A1tSsCYv+pkp8rEqdgvBhC9QeVYnLDdk41giAQgzuoZS
-        1pt3hKM0m7qNgN/2XBvAg2nX1YCrxL6lMvDMpOzsrpYe52MYyjb3cFmJ2Sm7Xy1Wk/a6v4
-        KfEkT8zqRq/iA15eJmveNb+JR8MFQeo=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm 3/3] kasan: migrate workqueue_uaf test to kunit
-Date:   Sat, 24 Sep 2022 20:31:53 +0200
-Message-Id: <2815073f2be37e554f7f0fd7b1d10e9742be6ce3.1664044241.git.andreyknvl@google.com>
-In-Reply-To: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
-References: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
+        Sat, 24 Sep 2022 14:35:39 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B51140E22;
+        Sat, 24 Sep 2022 11:35:36 -0700 (PDT)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 28OIZLc9005082;
+        Sun, 25 Sep 2022 03:35:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28OIZLc9005082
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664044521;
+        bh=RbqoFf+NUPS3ZIfi5M0nVs/cSJ76u5DRwLEJ1NMMjb8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=KPiIAqprkcpsg10dTimf7qprbxFVoPDTf4FYP7WZf9Vlj/8N459PGF/QlBcsNsDnG
+         9v8oK7VRXcELwmHdKA1YZKKkEO2pBONiFqHbqaMqf0uQqsLJlknATS3mEewzmtaPYd
+         bxfJQ+rn46JqDtLCzbxBcgtXRQzMkOGgIn364LQntw5OLbk7J2bmZsRYfcNPKFqXGk
+         AD0Ggnok3SdgjgO9AvVt1OTKK06C2bxkAps4zu3+Ushs79+H2ox14g23dsN6YSvcj/
+         bXuJxpq1bYHAu8yWiEeyM6LjWPOPkjVsLr27Eg1H9yifFBZ/WAdlWGoq8btPVCQCOa
+         S5iR2fKgpgz6Q==
+X-Nifty-SrcIP: [209.85.167.175]
+Received: by mail-oi1-f175.google.com with SMTP id t62so3631468oie.10;
+        Sat, 24 Sep 2022 11:35:21 -0700 (PDT)
+X-Gm-Message-State: ACrzQf10b+185D1577VpXKTmPan/z/Fx93saQGTVtTitLBwCGjBx/x4t
+        zaIVAayw5hgATDvOae1Wi/5dHnE3CgKImO2ADzo=
+X-Google-Smtp-Source: AMsMyM7rQ9j5IF9emwrULzHOpQ66ut5L1dC7h0xgpYEFiOUwjUr+ir8cpdIIc7CijiTFyyUKWXaz2T/aOap5jgvhX+A=
+X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
+ x12-20020a54400c000000b0034f99130262mr6691143oie.287.1664044520383; Sat, 24
+ Sep 2022 11:35:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 25 Sep 2022 03:34:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATDVBT1NKZtUkjk3GpqxEtOc8JLjY3XMjREHrp94t13-w@mail.gmail.com>
+Message-ID: <CAK7LNATDVBT1NKZtUkjk3GpqxEtOc8JLjY3XMjREHrp94t13-w@mail.gmail.com>
+Subject: [GIT PULL] Kbuild fixes for v6.0-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+Hello Linus,
 
-Migrate the workqueue_uaf test to the KUnit framework.
 
-Initially, this test was intended to check that Generic KASAN prints
-auxiliary stack traces for workqueues. Nevertheless, the test is enabled
-for all modes to make that KASAN reports bad accesses in the tested
-scenario.
+Please pull some Kbuild fixes.
+Thanks.
 
-The presence of auxiliary stack traces for the Generic mode needs to be
-inspected manually.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- mm/kasan/kasan_test.c        | 40 +++++++++++++++++++++++++++++-------
- mm/kasan/kasan_test_module.c | 30 ---------------------------
- 2 files changed, 33 insertions(+), 37 deletions(-)
 
-diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 005776325e20..71cb402c404f 100644
---- a/mm/kasan/kasan_test.c
-+++ b/mm/kasan/kasan_test.c
-@@ -1134,6 +1134,14 @@ static void kmalloc_double_kzfree(struct kunit *test)
- 	KUNIT_EXPECT_KASAN_FAIL(test, kfree_sensitive(ptr));
- }
- 
-+/*
-+ * The two tests below check that Generic KASAN prints auxiliary stack traces
-+ * for RCU callbacks and workqueues. The reports need to be inspected manually.
-+ *
-+ * These tests are still enabled for other KASAN modes to make sure that all
-+ * modes report bad accesses in tested scenarios.
-+ */
-+
- static struct kasan_rcu_info {
- 	int i;
- 	struct rcu_head rcu;
-@@ -1148,13 +1156,6 @@ static void rcu_uaf_reclaim(struct rcu_head *rp)
- 	((volatile struct kasan_rcu_info *)fp)->i;
- }
- 
--/*
-- * Check that Generic KASAN prints auxiliary stack traces for RCU callbacks.
-- * The report needs to be inspected manually.
-- *
-- * This test is still enabled for other KASAN modes to make sure that all modes
-- * report bad accesses in tested scenarios.
-- */
- static void rcu_uaf(struct kunit *test)
- {
- 	struct kasan_rcu_info *ptr;
-@@ -1170,6 +1171,30 @@ static void rcu_uaf(struct kunit *test)
- 		rcu_barrier());
- }
- 
-+static void workqueue_uaf_work(struct work_struct *work)
-+{
-+	kfree(work);
-+}
-+
-+static void workqueue_uaf(struct kunit *test)
-+{
-+	struct workqueue_struct *workqueue;
-+	struct work_struct *work;
-+
-+	workqueue = create_workqueue("kasan_workqueue_test");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, workqueue);
-+
-+	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, work);
-+
-+	INIT_WORK(work, workqueue_uaf_work);
-+	queue_work(workqueue, work);
-+	destroy_workqueue(workqueue);
-+
-+	KUNIT_EXPECT_KASAN_FAIL(test,
-+		((volatile struct work_struct *)work)->data);
-+}
-+
- static void vmalloc_helpers_tags(struct kunit *test)
- {
- 	void *ptr;
-@@ -1502,6 +1527,7 @@ static struct kunit_case kasan_kunit_test_cases[] = {
- 	KUNIT_CASE(kasan_bitops_tags),
- 	KUNIT_CASE(kmalloc_double_kzfree),
- 	KUNIT_CASE(rcu_uaf),
-+	KUNIT_CASE(workqueue_uaf),
- 	KUNIT_CASE(vmalloc_helpers_tags),
- 	KUNIT_CASE(vmalloc_oob),
- 	KUNIT_CASE(vmap_tags),
-diff --git a/mm/kasan/kasan_test_module.c b/mm/kasan/kasan_test_module.c
-index 4688cbcd722d..7be7bed456ef 100644
---- a/mm/kasan/kasan_test_module.c
-+++ b/mm/kasan/kasan_test_module.c
-@@ -62,35 +62,6 @@ static noinline void __init copy_user_test(void)
- 	kfree(kmem);
- }
- 
--static noinline void __init kasan_workqueue_work(struct work_struct *work)
--{
--	kfree(work);
--}
--
--static noinline void __init kasan_workqueue_uaf(void)
--{
--	struct workqueue_struct *workqueue;
--	struct work_struct *work;
--
--	workqueue = create_workqueue("kasan_wq_test");
--	if (!workqueue) {
--		pr_err("Allocation failed\n");
--		return;
--	}
--	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
--	if (!work) {
--		pr_err("Allocation failed\n");
--		return;
--	}
--
--	INIT_WORK(work, kasan_workqueue_work);
--	queue_work(workqueue, work);
--	destroy_workqueue(workqueue);
--
--	pr_info("use-after-free on workqueue\n");
--	((volatile struct work_struct *)work)->data;
--}
--
- static int __init test_kasan_module_init(void)
- {
- 	/*
-@@ -101,7 +72,6 @@ static int __init test_kasan_module_init(void)
- 	bool multishot = kasan_save_enable_multi_shot();
- 
- 	copy_user_test();
--	kasan_workqueue_uaf();
- 
- 	kasan_restore_multi_shot(multishot);
- 	return -EAGAIN;
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-fixes-v6.0-3
+
+for you to fetch changes up to 32ef9e5054ec0321b9336058c58ec749e9c6b0fe:
+
+  Makefile.debug: re-enable debug info for .S files (2022-09-24 11:19:19 +0900)
+
+----------------------------------------------------------------
+Kbuild fixes for v6.0 (3rd)
+
+ - Fix build error for the combination of CONFIG_SYSTEM_TRUSTED_KEYRING=y
+   and CONFIG_X509_CERTIFICATE_PARSER=m
+
+ - Fix CONFIG_DEBUG_INFO_SPLIT to generate debug info for GCC 11+ and Clang 12+
+
+ - Revive debug info for assembly files
+
+ - Remove unused code
+
+----------------------------------------------------------------
+Masahiro Yamada (1):
+      certs: make system keyring depend on built-in x509 parser
+
+Nick Desaulniers (2):
+      Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
+      Makefile.debug: re-enable debug info for .S files
+
+Zeng Heng (1):
+      Kconfig: remove unused function 'menu_get_root_menu'
+
+yangxingwu (1):
+      scripts/clang-tools: remove unused module
+
+ certs/Kconfig                          |  2 +-
+ lib/Kconfig.debug                      |  4 +++-
+ scripts/Makefile.debug                 | 21 ++++++++++-----------
+ scripts/clang-tools/run-clang-tools.py |  1 -
+ scripts/kconfig/lkc.h                  |  1 -
+ scripts/kconfig/menu.c                 |  5 -----
+ 6 files changed, 14 insertions(+), 20 deletions(-)
+
+
 -- 
-2.25.1
-
+Best Regards
+Masahiro Yamada
