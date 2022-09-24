@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4238E5E8824
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 06:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094B85E8829
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 06:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbiIXEEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 00:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S233301AbiIXEIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 00:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiIXEEH (ORCPT
+        with ESMTP id S233102AbiIXEIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 00:04:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F9413A953;
-        Fri, 23 Sep 2022 21:04:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D8760A52;
-        Sat, 24 Sep 2022 04:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05415C433D6;
-        Sat, 24 Sep 2022 04:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663992245;
-        bh=EN/xHz26wvCyfr+ycL35toumyEeShppuKtIek9Wh97g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sO/9eSK+OnQSJLog+b3/n4HuBOverxs5/4ryCOCLCF22pEHOPasrkIN7/tBgYTOkD
-         P/6Vj9T5M2sPUbwFKt/ZCBrmMMD4L/d0XANAN4z6y/HLXhXWZyotWsYFIBPYt/N0nz
-         E7sIGBjRR69t6ANd0ACbEwTtDNW/suByxYyLFOtuVkQ+DyCWRosxQggqh+GCBZrgpt
-         CJlVm+AvydgImR3ln+gv3dUJHFJgKfTKtBt3gTt7zm09r3ioIl6yPUKrlfyfRiqBZf
-         vkvfXddsB8gOeigqQFdwtL36k06sCtFq0/KbjSYxhRufYmuqxArV8XFkF0E5y7cb/s
-         PBqH0EPal/ZFQ==
-Date:   Fri, 23 Sep 2022 23:03:59 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        Sat, 24 Sep 2022 00:08:40 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3413FB60
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 21:08:39 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d24so1794708pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 21:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=KTpXWyUfll++z7HAP03By+eA9GIaY84D+3kNuRJY2h8=;
+        b=EKUUevtGtyBMzrNFQzypBqYj20XXKLIIjEykNJuC6WbBX77P4whhxWmu/HidER0vfh
+         hY47+ITassozPqvsIj5G6eOmByCur8iVlGihQ4EscY8gDO9VX8tiSb/aDKgWOwCIt9Ab
+         JO8de+j0fVZPNG+xGUc1ofG17CXcmR2YFe364=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=KTpXWyUfll++z7HAP03By+eA9GIaY84D+3kNuRJY2h8=;
+        b=sb2l4DWpwrSSt8tCrrizjBpKV4X2sY/GaxYHpJO/EZ1pTCxxzDXnowkRxM921utug8
+         Qtd+/xE9k+3SYgym07sOao2RG62P6vIYZePJosxCUqx71AQhPH+mJ/d0hRUM+445n6Qy
+         wKU1NIoFzjmOTv0cufxZirt3oIiFOf6cTgTkZBH5U0FR7bqsM72tRIOhkYQOzLKhRx4D
+         ZKxOWMczcl1bs77SH3C5Z4F0VBwBHlIQXjiwqyGKpoTo2WYG3SQFfy17V39T4hmqE4jE
+         aflxhmAYNy7EmSrUfoTvtF3weKDCHvQdwOiVXj/I3Q9oKkTjaaxSpJftyX4Ns/T34XMn
+         uGhw==
+X-Gm-Message-State: ACrzQf0oPuteCO/PndkPym7h5ovVRKHJYOd48IhL7mMDQuQrdKoHlDmM
+        z3nzBElURFrdRBijcbtbEwV8Tw==
+X-Google-Smtp-Source: AMsMyM71MzhI6cppP1wRrRHYJPrClOj8l4ZKb0OLA8RhQdAePaq9ZRI4HNFyzeBwHwsstrixVbdU2A==
+X-Received: by 2002:a17:902:e494:b0:178:5b6d:636 with SMTP id i20-20020a170902e49400b001785b6d0636mr11292050ple.64.1663992518563;
+        Fri, 23 Sep 2022 21:08:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z12-20020a6553cc000000b0041d6d37deb5sm6413190pgr.81.2022.09.23.21.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 21:08:37 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] dlm: Split memcpy() of struct dlm_message flexible array
-Message-ID: <Yy6Br5dUir4pfcvv@work>
-References: <20220924035226.3359297-1-keescook@chromium.org>
+Subject: [PATCH] NFC: hci: Split memcpy() of struct hcp_message flexible array
+Date:   Fri, 23 Sep 2022 21:08:35 -0700
+Message-Id: <20220924040835.3364912-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924035226.3359297-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1692; h=from:subject; bh=L3jycFmba5E2CH09pA5cygiCtitH/bmlm+CqI6heXOk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLoLD0YsYw2J2xQ0tZE9KGrEoJ8NYLRlKPkcvzZqz yQEQEbyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy6CwwAKCRCJcvTf3G3AJk4LEA ClWkoy6IOy1qfx50hwizKTjj+BKE2WJ46hPcko+MF5I0MZ6Q4ZATjEiGbraCyQGgtwYzk8cLV9p8gQ 8GKPpSW0UJojL6M7Hc3ucQo7yVKecKiBbJnVHX41ZLSARp5binAPgqa5RbCttvbBwbznrihcKb7DTs w/5Wkc0UBwh+yUMHTpvzMGwtamUHlQXDKNIoS26Osa4pBT5M3AD3rsJWcuDEVTSrQOMxBvcJwHkaIY xvXsS00hHt1OK/JRz290YhG0SN/sORY5owHBJAUGwoRo7lwoqcJPWyG/ejOCJLk1wOxXFdAUE2sUMY mTt3ewUROH/wBSuhk3tjZbEVGrzokGmfhiLLoMRZyBvc96zzi34I3JuEU1rOWaC05ufU2FLv7yIwur UrwkV3GHMIxXi0+Yx37Ty5KhZaQydPHbZwLfaJnpaIq3FU0ay2BGVnI1eaPQzewRe/Z6XixsBh5tBs d5Qx3+G46QMvlLNIPsRYn+tuH+6tUuCKPPA6ySkZaSfp3a69YISMghumcZLBFMTh9TPejpmy8/ECWq IgqQ6y0Jq4xC1WE06cgdkiHTJNpAC85uTT8hj+wCOSqtbkjpoSPyUAbHn/DtjyEhXoWsf0QsRdC+t2 rIQSEM25WqhwuUwEipx/MEvW3e8Jhwd/X8f4lmiT5SfwTV4GuVeqO820uA5g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 08:52:26PM -0700, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated.
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
-> 
-> Cc: Christine Caulfield <ccaulfie@redhat.com>
-> Cc: David Teigland <teigland@redhat.com>
-> Cc: cluster-devel@redhat.com
-> Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+To work around a misbehavior of the compiler's ability to see into
+composite flexible array structs (as detailed in the coming memcpy()
+hardening series[1]), split the memcpy() of the header and the payload
+so no false positive run-time overflow warning will be generated. This
+split already existed for the "firstfrag" case, so just generalize the
+logic further.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
 
-Thanks!
---
-Gustavo
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ net/nfc/hci/hcp.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-> ---
->  fs/dlm/requestqueue.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/dlm/requestqueue.c b/fs/dlm/requestqueue.c
-> index 036a9a0078f6..63f45c3c53a2 100644
-> --- a/fs/dlm/requestqueue.c
-> +++ b/fs/dlm/requestqueue.c
-> @@ -44,7 +44,8 @@ void dlm_add_requestqueue(struct dlm_ls *ls, int nodeid, struct dlm_message *ms)
->  
->  	e->recover_seq = ls->ls_recover_seq & 0xFFFFFFFF;
->  	e->nodeid = nodeid;
-> -	memcpy(&e->request, ms, le16_to_cpu(ms->m_header.h_length));
-> +	e->request = *ms;
-> +	memcpy(&e->request.m_extra, ms->m_extra, length);
->  
->  	atomic_inc(&ls->ls_requestqueue_cnt);
->  	mutex_lock(&ls->ls_requestqueue_mutex);
-> -- 
-> 2.34.1
-> 
+diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
+index 05c60988f59a..4902f5064098 100644
+--- a/net/nfc/hci/hcp.c
++++ b/net/nfc/hci/hcp.c
+@@ -73,14 +73,12 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
+ 		if (firstfrag) {
+ 			firstfrag = false;
+ 			packet->message.header = HCP_HEADER(type, instruction);
+-			if (ptr) {
+-				memcpy(packet->message.data, ptr,
+-				       data_link_len - 1);
+-				ptr += data_link_len - 1;
+-			}
+ 		} else {
+-			memcpy(&packet->message, ptr, data_link_len);
+-			ptr += data_link_len;
++			packet->message.header = *ptr++;
++		}
++		if (ptr) {
++			memcpy(packet->message.data, ptr, data_link_len - 1);
++			ptr += data_link_len - 1;
+ 		}
+ 
+ 		/* This is the last fragment, set the cb bit */
+-- 
+2.34.1
+
