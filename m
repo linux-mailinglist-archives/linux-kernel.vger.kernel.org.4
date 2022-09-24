@@ -2,76 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDDB5E892C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479895E892D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 09:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiIXHcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 03:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S233528AbiIXHct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 03:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbiIXHcX (ORCPT
+        with ESMTP id S233048AbiIXHcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 03:32:23 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82973B6021
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:32:21 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id b9-20020a6be709000000b006a469cf388eso183407ioh.19
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 00:32:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=smF9HOdC+2VyuIQusJkqLf0ZxepoTAJJv1ZHTIKRl8M=;
-        b=IBkK9yrCWtnZ5vnnAkP8IwcgTVteTqNri3xBm3QF3udnNrJfkdaSsDGyXqGXwhksur
-         lonOwU5+ieuC5/M2hwVYapVXJznPwP+4MHdiChsm2B85FCpJthVHvhIO4eQ97z/9bkhO
-         s9M9ZqB6XdoolborjA38JqwifPRAe26gliw9u/89o988YRxv5XWiD/078YeRtXZPWaNK
-         lBoZuM8pvMZv9hXE2tUGVaohh0ot3enygXA/yBGWiRJQTwfou63WJqBU1YucLKNK//ak
-         uGSS0pTTJUXrWUZGg6dLWTahE5lO3v2hQrx43ckqlOvyG/bGldaIbdWEBP9Rvq4fgYpu
-         58Bg==
-X-Gm-Message-State: ACrzQf1mIwszflENGVZk238Fc2+7Fpl+LCgo0wBlKQhiuQsTWMDgJg01
-        fIPGxjApdFsyg8Bz8zRrBcX2THnnrtsc5JWykV/sLD7u2B98
-X-Google-Smtp-Source: AMsMyM5dpGDWio+1+8ELwAvfIQQcmtxpvjqTNwVl62gZuxZPf/+C54q/yGdRRt2kmcIH9d9supA+klcDz9KQHyEup54tWf+JEwPc
+        Sat, 24 Sep 2022 03:32:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9EC979D1;
+        Sat, 24 Sep 2022 00:32:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F48AB80E4B;
+        Sat, 24 Sep 2022 07:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A2BC433D6;
+        Sat, 24 Sep 2022 07:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664004761;
+        bh=MvW2nw9Tq37atkISD2sTXKHttXxXGzJoXD9oQlvvmM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nb+O8uHfg69jJRTXdJmu12AgCkyAEm9hU9F3MQxF/azt+KNWw5Q8WcqoiLVZOEiCg
+         wWOoWO4z/zz2w+Qjhas7ybMkaldJ41GeYaIYibwA4Ds9yo9bZ+1yVWOyT/DHcWPoEQ
+         OtPBqb9Ma9wAqdGVYI8ipKuQHepilAuRIhKmqGKP/YP6siUCZ4PPZTMIdJzMjyTdH4
+         kRBhrSjDl0mjx1N0/mY/U8ndRnbLe3V5tj3qrjx5r1mhRWqQ8K3oLItVFni5qyypEv
+         c79sWPLm6XV2hQjP+R7STWG0DxT4MljjgQMy/KhLtWtwroKe1oZEv+eQ9I+2Ys0cUo
+         YUi3JhfiNW6TQ==
+Date:   Sat, 24 Sep 2022 13:02:37 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
+        marex@denx.de, richard.leitner@linux.dev,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v8 2/2] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
+ support
+Message-ID: <Yy6yld/zNWB9bJKF@matsya>
+References: <1663659498-5180-1-git-send-email-hongxing.zhu@nxp.com>
+ <1663659498-5180-3-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:670b:0:b0:6a0:d9db:5ae5 with SMTP id
- b11-20020a6b670b000000b006a0d9db5ae5mr5283649ioc.62.1664004740784; Sat, 24
- Sep 2022 00:32:20 -0700 (PDT)
-Date:   Sat, 24 Sep 2022 00:32:20 -0700
-In-Reply-To: <20220924071035.16027-1-yin31149@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007aab3a05e9674b8c@google.com>
-Subject: Re: [syzbot] WARNING in wireless_send_event
-From:   syzbot <syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com>
-To:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, keescook@chromium.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1663659498-5180-3-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 20-09-22, 15:38, Richard Zhu wrote:
+> Add i.MX8MP PCIe PHY support.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Marek Vasut <marex@denx.de>
+> Tested-by: Richard Leitner <richard.leitner@skidata.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 144 ++++++++++++++-------
+>  1 file changed, 97 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index ad7d2edfc414..bef0e9d64244 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+>  #include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_device.h>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+why do you need all these headers..?
 
-Reported-and-tested-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> @@ -31,12 +34,10 @@
+>  #define IMX8MM_PCIE_PHY_CMN_REG065	0x194
+>  #define  ANA_AUX_RX_TERM		(BIT(7) | BIT(4))
+>  #define  ANA_AUX_TX_LVL			GENMASK(3, 0)
+> -#define IMX8MM_PCIE_PHY_CMN_REG75	0x1D4
+> -#define  PCIE_PHY_CMN_REG75_PLL_DONE	0x3
+> +#define IMX8MM_PCIE_PHY_CMN_REG075	0x1D4
 
-Tested on:
+why this change? 
 
-commit:         aaa11ce2 Add linux-next specific files for 20220923
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b03250880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=473754e5af963cf014cf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11b03250880000
+> +#define  ANA_PLL_DONE			0x3
+>  #define PCIE_PHY_TRSV_REG5		0x414
+> -#define  PCIE_PHY_TRSV_REG5_GEN1_DEEMP	0x2D
+>  #define PCIE_PHY_TRSV_REG6		0x418
+> -#define  PCIE_PHY_TRSV_REG6_GEN2_DEEMP	0xF
+>  
+>  #define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
+>  #define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
+> @@ -47,16 +48,28 @@
+>  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+>  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+>  
+> +enum imx8_pcie_phy_type {
+> +	IMX8MM,
+> +	IMX8MP,
+> +};
+> +
+> +struct imx8_pcie_phy_drvdata {
+> +	enum		imx8_pcie_phy_type variant;
+> +	const char	*gpr;
+> +};
+> +
+>  struct imx8_pcie_phy {
+>  	void __iomem		*base;
+>  	struct clk		*clk;
+>  	struct phy		*phy;
+>  	struct regmap		*iomuxc_gpr;
+>  	struct reset_control	*reset;
+> +	struct reset_control	*perst;
+>  	u32			refclk_pad_mode;
+>  	u32			tx_deemph_gen1;
+>  	u32			tx_deemph_gen2;
+>  	bool			clkreq_unused;
+> +	const struct imx8_pcie_phy_drvdata	*drvdata;
+>  };
+>  
+>  static int imx8_pcie_phy_init(struct phy *phy)
+> @@ -68,31 +81,20 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  	reset_control_assert(imx8_phy->reset);
+>  
+>  	pad_mode = imx8_phy->refclk_pad_mode;
+> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> -			   imx8_phy->clkreq_unused ?
+> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN,
+> -			   IMX8MM_GPR_PCIE_AUX_EN);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> -
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+> -	usleep_range(100, 200);
+> -
+> -	/* Do the PHY common block reset */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_CMN_RST,
+> -			   IMX8MM_GPR_PCIE_CMN_RST);
+> -	usleep_range(200, 500);
+> +	switch (imx8_phy->drvdata->variant) {
+> +	case IMX8MM:
+> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+> +		if (imx8_phy->tx_deemph_gen1)
+> +			writel(imx8_phy->tx_deemph_gen1,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+> +		if (imx8_phy->tx_deemph_gen2)
+> +			writel(imx8_phy->tx_deemph_gen2,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+> +		break;
+> +	case IMX8MP:
+> +		reset_control_assert(imx8_phy->perst);
+> +		break;
+> +	}
+>  
+>  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
+>  	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
+> @@ -120,20 +122,44 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
+>  	}
+>  
+> -	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+> -	if (imx8_phy->tx_deemph_gen1)
+> -		writel(imx8_phy->tx_deemph_gen1,
+> -		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+> -	if (imx8_phy->tx_deemph_gen2)
+> -		writel(imx8_phy->tx_deemph_gen2,
+> -		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> +			   imx8_phy->clkreq_unused ?
+> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN,
+> +			   IMX8MM_GPR_PCIE_AUX_EN);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> +
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
 
-Note: testing is done by a robot and is best-effort only.
+Lets do code reorg in a separate patch and then add support for new SOC,
+that is more reviewable that this big pile of changes
+
+> +	usleep_range(100, 200);
+>  
+> -	reset_control_deassert(imx8_phy->reset);
+> +	/* Do the PHY common block reset */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_CMN_RST,
+> +			   IMX8MM_GPR_PCIE_CMN_RST);
+> +
+> +	switch (imx8_phy->drvdata->variant) {
+> +	case IMX8MP:
+> +		reset_control_deassert(imx8_phy->perst);
+> +		fallthrough;
+> +	case IMX8MM:
+> +		reset_control_deassert(imx8_phy->reset);
+> +		usleep_range(200, 500);
+> +		break;
+> +	}
+>  
+>  	/* Polling to check the phy is ready or not. */
+> -	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG75,
+> -				 val, val == PCIE_PHY_CMN_REG75_PLL_DONE,
+> -				 10, 20000);
+> +	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
+> +				 val, val == ANA_PLL_DONE, 10, 20000);
+>  	return ret;
+>  }
+>  
+> @@ -160,6 +186,25 @@ static const struct phy_ops imx8_pcie_phy_ops = {
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> +static const struct imx8_pcie_phy_drvdata drvdata[] = {
+> +	[IMX8MM] = {
+> +		.variant = IMX8MM,
+> +		.gpr = "fsl,imx8mm-iomuxc-gpr",
+> +	},
+> +
+> +	[IMX8MP] = {
+> +		.variant = IMX8MP,
+> +		.gpr = "fsl,imx8mp-iomuxc-gpr",
+> +	},
+> +};
+> +
+> +static const struct of_device_id imx8_pcie_phy_of_match[] = {
+> +	{.compatible = "fsl,imx8mm-pcie-phy", .data = &drvdata[IMX8MM], },
+> +	{.compatible = "fsl,imx8mp-pcie-phy", .data = &drvdata[IMX8MP], },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+> +
+>  static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  {
+>  	struct phy_provider *phy_provider;
+> @@ -172,6 +217,8 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  	if (!imx8_phy)
+>  		return -ENOMEM;
+>  
+> +	imx8_phy->drvdata = of_device_get_match_data(dev);
+> +
+>  	/* get PHY refclk pad mode */
+>  	of_property_read_u32(np, "fsl,refclk-pad-mode",
+>  			     &imx8_phy->refclk_pad_mode);
+> @@ -197,7 +244,7 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  
+>  	/* Grab GPR config register range */
+>  	imx8_phy->iomuxc_gpr =
+> -		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
+> +		 syscon_regmap_lookup_by_compatible(imx8_phy->drvdata->gpr);
+>  	if (IS_ERR(imx8_phy->iomuxc_gpr)) {
+>  		dev_err(dev, "unable to find iomuxc registers\n");
+>  		return PTR_ERR(imx8_phy->iomuxc_gpr);
+> @@ -209,6 +256,15 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  		return PTR_ERR(imx8_phy->reset);
+>  	}
+>  
+> +	if (imx8_phy->drvdata->variant == IMX8MP) {
+> +		imx8_phy->perst =
+> +			devm_reset_control_get_exclusive(dev, "perst");
+> +		if (IS_ERR(imx8_phy->perst)) {
+> +			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
+> +			return PTR_ERR(imx8_phy->perst);
+> +		}
+> +	}
+> +
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	imx8_phy->base = devm_ioremap_resource(dev, res);
+>  	if (IS_ERR(imx8_phy->base))
+> @@ -225,12 +281,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  	return PTR_ERR_OR_ZERO(phy_provider);
+>  }
+>  
+> -static const struct of_device_id imx8_pcie_phy_of_match[] = {
+> -	{.compatible = "fsl,imx8mm-pcie-phy",},
+> -	{ },
+> -};
+> -MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+> -
+>  static struct platform_driver imx8_pcie_phy_driver = {
+>  	.probe	= imx8_pcie_phy_probe,
+>  	.driver = {
+> -- 
+> 2.25.1
+
+-- 
+~Vinod
