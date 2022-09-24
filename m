@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733A95E903E
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97085E903F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 00:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbiIXWDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 18:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S234078AbiIXWEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 18:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiIXWDf (ORCPT
+        with ESMTP id S234005AbiIXWDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 18:03:35 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B853341B
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id 13so7169754ejn.3
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
+        Sat, 24 Sep 2022 18:03:50 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13A6459A1
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v2so3582833edc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 15:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date;
-        bh=d8vVA7LCY08FZzjgVfkFGePEn4Ti/pmsWV+H+LOB/hs=;
-        b=CUofn/74M6UBh0jXziN+l2pkrNyqT2HGhwRNgj15PqIu3+OPXTyth766Jn0pnAgWBx
-         ts6DnrCvTXZy8dDM0mgdplyr6VpYgfdVeMYg1qRXZ+jt1M0LXOEQNAeb5QOZrUgLV0u0
-         lSc7fZ+cXtmB+jeosdj7Hyvy1XYART5MBoM1BUIkh1va7hSjLZ1KdXYJhYKx7LYItjnp
-         c3wjPBVfhW0htl+q2hx4ml62R2XtWpBVzUxA7H241fls0W2pq+xWtrc7Y0loam3N+86J
-         WDpgjmafdCuBhvUH8iX9bsMt/FgNZQoLO7HlNtFrfmEDFjRoJRKbnko8uRBoOmlS1jt1
-         D7ag==
+        bh=dSJnz+umwC1fO28aulEVuk9aMWTo08d86Tw2gPXDo/0=;
+        b=HLHhHSnMyHhtzYq39NNbRzQpg/WFo6A+npAtuDI4SFXpSXV0WsoZEwOiqiQ9f5LH3U
+         mYcJFFc0Qf2/xHCG8sk5zs/pL2FcY3Z7o3zm45Z3R2YFEG67xGwjdrLapDqhHaLPk6rK
+         3eWpEu0qjqJrtgdVIYfJ+wOj1MxI6TSftHhnYlpaCvwT4uNuOnVu0Tcv2R6YlbocnWSk
+         qK7TKzA0ddGtGE9bLrybL+egPmv915St9xMMoHmF2msXrH1nUEuDY4BsauxLCPQmCvr8
+         1Oh+UT2qfCaGc1b+M+easHUPAf4r/xKaip6zgXMr62n5ndcSxTiFW9oocGRL6p6ulHTc
+         bVTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=d8vVA7LCY08FZzjgVfkFGePEn4Ti/pmsWV+H+LOB/hs=;
-        b=sxh+c1P8UrSB0HZh0TaXFLxYUB7Y3DDNmZkx6EfXp8ILQxVKSvPOzsskX4lh3JWwcQ
-         /IpbEqxPjYya/7T/H/P4XtE2jA7wnP5vETAmr4T8yVCA8NamtSutqmmkN4l2tLUO7FEb
-         NDh47mMhbDxo8B5X/1Owiqzwlc38tuRhVQw+gGhZazWMhrrqrQ7Z4OJLIOb8Nc/eUlqE
-         dMMEPg/tGPFx5C6F11nnkKUioQwpScOtOckuXcAVtQMjlDGHaDFGTDg9j12MZiYkYImi
-         /D8K3IhFeM/vtANeoOoQacOEZCgWbryJEB0Ya4wCLNpe4hQSQCqvnAICrmmsBzd9q3Vb
-         Cx1A==
-X-Gm-Message-State: ACrzQf1CroI3sjHS+WK1ikHHK+MlrNW/bYofBE0KOolPoZSfU3dgPgw6
-        oAOEnGWQmdoGuT/MhF24MbYxa712hZk=
-X-Google-Smtp-Source: AMsMyM7W6gJVOcB9zELJw6hUtNm5npgCZacQ83cm8u/w/EMA4h8TJWlTD31JW73GaWDV4LvilWwp/g==
-X-Received: by 2002:a17:907:b0e:b0:77a:d97d:9afc with SMTP id h14-20020a1709070b0e00b0077ad97d9afcmr12273390ejl.199.1664057014168;
-        Sat, 24 Sep 2022 15:03:34 -0700 (PDT)
+        bh=dSJnz+umwC1fO28aulEVuk9aMWTo08d86Tw2gPXDo/0=;
+        b=vx/5UeL++LtTG/qkjn2YBTVZtIPpjK428Dv5xnJlL4OaECBObyIofMuPN9gR+h/r2V
+         KiEqhD/MM7BUdqeiVx8wcOFFYCrJVFgcQEPoMCWKfXB2Hr26PIm3P85JUNFYIIfgpARA
+         uxrjfXFf5Fep3C+LcRGspS5kOzQc79mJwUr6os5fQXOd1YEo8JJ1bxIDvZZ6v+GgDzqt
+         uUODbzz4w/9WuH8SEDL9eiYP6+uWM2vlRmlQ7dm2Z1dOJwZkQ6mMqrIGWfqf0aTiuvmd
+         Av80RQY/Xwye2/1lU9IfY66R/aAurtKK95Da58FROFGqEIqxYxWPZnk6JRZdPaP+rETu
+         eBsg==
+X-Gm-Message-State: ACrzQf1pJk2/l8rPBUoBuBrvov2lr+4Oh3VEJ51LDjfuP7dIQKBesq58
+        vPKh6yOeW5w3uwCgk7RHrQg=
+X-Google-Smtp-Source: AMsMyM47OdgdZnT91Qet95p4gB/C79m1RvSWY2YqGAm+MXpQQeRDSydwfz7iQMZkK57x/rRh/bQhXg==
+X-Received: by 2002:a50:9510:0:b0:453:dded:60e with SMTP id u16-20020a509510000000b00453dded060emr15306559eda.204.1664057025203;
+        Sat, 24 Sep 2022 15:03:45 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id kv6-20020a17090778c600b0076f0ab594e9sm5952191ejc.73.2022.09.24.15.03.33
+        by smtp.gmail.com with ESMTPSA id z24-20020a50cd18000000b00456e130b457sm2936547edi.59.2022.09.24.15.03.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 15:03:33 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 00:03:31 +0200
+        Sat, 24 Sep 2022 15:03:44 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 00:03:42 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 04/10] staging: rtl8192e: Rename bSwBwInPro...,
- bRegRT2RTAg... and bCurrentRT...
-Message-ID: <868f9db0e29bd170129f90bdbcc14238a750c440.1664055213.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 05/10] staging: rtl8192e: Rename szRT2RTAggBuffer,
+ bRegRxRe... and bCurRxReo...
+Message-ID: <af445e0a80dc8e153a1ba81df99309f19a69d6cb.1664055213.git.philipp.g.hortmann@gmail.com>
 References: <cover.1664055213.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,161 +70,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable bSwBwInProgress to sw_bw_in_progress, bRegRT2RTAggregation
-to reg_rt2rt_aggregation and bCurrentRT2RTAggregation to
-current_rt2rt_aggregation to avoid CamelCase which is not accepted by
-checkpatch.
+Rename variable szRT2RTAggBuffer to sz_rt2rt_agg_buf, bRegRxReorderEnable
+to reg_rx_reorder_enable and bCurRxReorderEnable to cur_rx_reorder_enable
+to avoid CamelCase which is not accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl819x_HT.h     |  6 +++---
- drivers/staging/rtl8192e/rtl819x_HTProc.c | 24 +++++++++++------------
- drivers/staging/rtl8192e/rtllib_softmac.c |  6 +++---
- 3 files changed, 18 insertions(+), 18 deletions(-)
+ drivers/staging/rtl8192e/rtl819x_HT.h     | 6 +++---
+ drivers/staging/rtl8192e/rtl819x_HTProc.c | 4 ++--
+ drivers/staging/rtl8192e/rtllib_rx.c      | 4 ++--
+ drivers/staging/rtl8192e/rtllib_softmac.c | 8 ++++----
+ 4 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
-index 2ab04469ef4b..5399931786b8 100644
+index 5399931786b8..2dd08f06fa9f 100644
 --- a/drivers/staging/rtl8192e/rtl819x_HT.h
 +++ b/drivers/staging/rtl8192e/rtl819x_HT.h
-@@ -151,12 +151,12 @@ struct rt_hi_throughput {
- 	u8 cur_tx_bw40mhz;
- 	u8				PeerBandwidth;
- 
--	u8				bSwBwInProgress;
-+	u8 sw_bw_in_progress;
- 	u8				SwBwStep;
- 
--	u8				bRegRT2RTAggregation;
-+	u8 reg_rt2rt_aggregation;
+@@ -158,10 +158,10 @@ struct rt_hi_throughput {
  	u8				RT2RT_HT_Mode;
--	u8				bCurrentRT2RTAggregation;
-+	u8 current_rt2rt_aggregation;
+ 	u8 current_rt2rt_aggregation;
  	u8 current_rt2rt_long_slot_time;
- 	u8				szRT2RTAggBuffer[10];
+-	u8				szRT2RTAggBuffer[10];
++	u8 sz_rt2rt_agg_buf[10];
  
+-	u8				bRegRxReorderEnable;
+-	u8				bCurRxReorderEnable;
++	u8 reg_rx_reorder_enable;
++	u8 cur_rx_reorder_enable;
+ 	u8				RxReorderWinSize;
+ 	u8				RxReorderPendingTime;
+ 	u16				RxReorderDropCounter;
 diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index 1e1364c56163..cde64b123ced 100644
+index cde64b123ced..e8fcfa01204b 100644
 --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
 +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -98,7 +98,7 @@ void HTUpdateDefaultSetting(struct rtllib_device *ieee)
+@@ -100,7 +100,7 @@ void HTUpdateDefaultSetting(struct rtllib_device *ieee)
  
- 	ieee->bTxEnableFwCalcDur = 1;
+ 	pHTInfo->reg_rt2rt_aggregation = 1;
  
--	pHTInfo->bRegRT2RTAggregation = 1;
-+	pHTInfo->reg_rt2rt_aggregation = 1;
- 
- 	pHTInfo->bRegRxReorderEnable = 1;
+-	pHTInfo->bRegRxReorderEnable = 1;
++	pHTInfo->reg_rx_reorder_enable = 1;
  	pHTInfo->RxReorderWinSize = 64;
-@@ -574,7 +574,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
- 			pHTInfo->bCurrentAMPDUEnable = false;
- 	}
- 
--	if (!pHTInfo->bRegRT2RTAggregation) {
-+	if (!pHTInfo->reg_rt2rt_aggregation) {
- 		if (pHTInfo->AMPDU_Factor > pPeerHTCap->MaxRxAMPDUFactor)
- 			pHTInfo->CurrentAMPDUFactor =
- 						 pPeerHTCap->MaxRxAMPDUFactor;
-@@ -655,11 +655,11 @@ void HTInitializeHTInfo(struct rtllib_device *ieee)
- 	memset((void *)(&(pHTInfo->PeerHTInfoBuf)), 0,
- 		sizeof(pHTInfo->PeerHTInfoBuf));
- 
--	pHTInfo->bSwBwInProgress = false;
-+	pHTInfo->sw_bw_in_progress = false;
- 
- 	pHTInfo->ePeerHTSpecVer = HT_SPEC_VER_IEEE;
- 
--	pHTInfo->bCurrentRT2RTAggregation = false;
-+	pHTInfo->current_rt2rt_aggregation = false;
- 	pHTInfo->current_rt2rt_long_slot_time = false;
- 	pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
- 
-@@ -717,14 +717,14 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
- 			       pNetwork->bssht.bd_ht_info_buf,
- 			       pNetwork->bssht.bd_ht_info_len);
- 
--		if (pHTInfo->bRegRT2RTAggregation) {
--			pHTInfo->bCurrentRT2RTAggregation =
-+		if (pHTInfo->reg_rt2rt_aggregation) {
-+			pHTInfo->current_rt2rt_aggregation =
- 				 pNetwork->bssht.bd_rt2rt_aggregation;
- 			pHTInfo->current_rt2rt_long_slot_time =
- 				 pNetwork->bssht.bd_rt2rt_long_slot_time;
- 			pHTInfo->RT2RT_HT_Mode = pNetwork->bssht.rt2rt_ht_mode;
- 		} else {
--			pHTInfo->bCurrentRT2RTAggregation = false;
-+			pHTInfo->current_rt2rt_aggregation = false;
- 			pHTInfo->current_rt2rt_long_slot_time = false;
- 			pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
- 		}
-@@ -756,7 +756,7 @@ void HTResetSelfAndSavePeerSetting(struct rtllib_device *ieee,
- 			pHTInfo->IOTAction |= HT_IOT_ACT_CDD_FSYNC;
- 	} else {
- 		pHTInfo->bCurrentHTSupport = false;
--		pHTInfo->bCurrentRT2RTAggregation = false;
-+		pHTInfo->current_rt2rt_aggregation = false;
- 		pHTInfo->current_rt2rt_long_slot_time = false;
- 		pHTInfo->RT2RT_HT_Mode = (enum rt_ht_capability)0;
- 
-@@ -850,7 +850,7 @@ static void HTSetConnectBwModeCallback(struct rtllib_device *ieee)
- 				       HT_EXTCHNL_OFFSET_NO_EXT);
- 	}
- 
--	pHTInfo->bSwBwInProgress = false;
-+	pHTInfo->sw_bw_in_progress = false;
+ 	pHTInfo->RxReorderPendingTime = 30;
  }
- 
- void HTSetConnectBwMode(struct rtllib_device *ieee,
-@@ -865,8 +865,8 @@ void HTSetConnectBwMode(struct rtllib_device *ieee,
- 	if (ieee->GetHalfNmodeSupportByAPsHandler(ieee->dev))
- 		Bandwidth = HT_CHANNEL_WIDTH_20;
- 
--	if (pHTInfo->bSwBwInProgress) {
--		pr_info("%s: bSwBwInProgress!!\n", __func__);
-+	if (pHTInfo->sw_bw_in_progress) {
-+		pr_info("%s: sw_bw_in_progress!!\n", __func__);
- 		return;
+@@ -605,7 +605,7 @@ void HTOnAssocRsp(struct rtllib_device *ieee)
+ 		pHTInfo->ForcedAMSDUMode = HT_AGG_FORCE_ENABLE;
+ 		pHTInfo->ForcedAMSDUMaxSize = 7935;
  	}
- 	if (Bandwidth == HT_CHANNEL_WIDTH_20_40) {
-@@ -889,7 +889,7 @@ void HTSetConnectBwMode(struct rtllib_device *ieee,
- 	netdev_dbg(ieee->dev, "%s():pHTInfo->bCurBW40MHz:%x\n", __func__,
- 		   pHTInfo->bCurBW40MHz);
+-	pHTInfo->bCurRxReorderEnable = pHTInfo->bRegRxReorderEnable;
++	pHTInfo->cur_rx_reorder_enable = pHTInfo->reg_rx_reorder_enable;
  
--	pHTInfo->bSwBwInProgress = true;
-+	pHTInfo->sw_bw_in_progress = true;
+ 	if (pPeerHTCap->MCS[0] == 0)
+ 		pPeerHTCap->MCS[0] = 0xff;
+diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
+index abe5c153f74e..8ec8aa7d97d4 100644
+--- a/drivers/staging/rtl8192e/rtllib_rx.c
++++ b/drivers/staging/rtl8192e/rtllib_rx.c
+@@ -924,7 +924,7 @@ static int rtllib_rx_check_duplicate(struct rtllib_device *ieee,
+ 	sc = le16_to_cpu(hdr->seq_ctl);
+ 	frag = WLAN_GET_SEQ_FRAG(sc);
  
- 	HTSetConnectBwModeCallback(ieee);
- }
+-	if (!ieee->pHTInfo->bCurRxReorderEnable ||
++	if (!ieee->pHTInfo->cur_rx_reorder_enable ||
+ 		!ieee->current_network.qos_data.active ||
+ 		!IsDataFrame(skb->data) ||
+ 		IsLegacyDataFrame(skb->data)) {
+@@ -1442,7 +1442,7 @@ static int rtllib_rx_InfraAdhoc(struct rtllib_device *ieee, struct sk_buff *skb,
+ 	}
+ 
+ 	/* Indicate packets to upper layer or Rx Reorder */
+-	if (!ieee->pHTInfo->bCurRxReorderEnable || pTS == NULL || bToOtherSTA)
++	if (!ieee->pHTInfo->cur_rx_reorder_enable || pTS == NULL || bToOtherSTA)
+ 		rtllib_rx_indicate_pkt_legacy(ieee, rx_stats, rxb, dst, src);
+ 	else
+ 		RxReorderIndicatePacket(ieee, rxb, pTS, SeqNum);
 diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 9a5dd031d3ff..9d38c35ecf9d 100644
+index 9d38c35ecf9d..4708aa9752ed 100644
 --- a/drivers/staging/rtl8192e/rtllib_softmac.c
 +++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -865,7 +865,7 @@ static struct sk_buff *rtllib_probe_resp(struct rtllib_device *ieee,
- 		HTConstructInfoElement(ieee, tmp_ht_info_buf, &tmp_ht_info_len,
+@@ -866,9 +866,9 @@ static struct sk_buff *rtllib_probe_resp(struct rtllib_device *ieee,
  				       encrypt);
  
--		if (pHTInfo->bRegRT2RTAggregation) {
-+		if (pHTInfo->reg_rt2rt_aggregation) {
- 			tmp_generic_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
+ 		if (pHTInfo->reg_rt2rt_aggregation) {
+-			tmp_generic_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
++			tmp_generic_ie_buf = ieee->pHTInfo->sz_rt2rt_agg_buf;
  			tmp_generic_ie_len =
- 				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
-@@ -1189,7 +1189,7 @@ rtllib_association_req(struct rtllib_network *beacon,
- 		ht_cap_len = sizeof(ieee->pHTInfo->SelfHTCap);
+-				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
++				 sizeof(ieee->pHTInfo->sz_rt2rt_agg_buf);
+ 			HTConstructRT2RTAggElement(ieee, tmp_generic_ie_buf,
+ 						   &tmp_generic_ie_len);
+ 		}
+@@ -1190,9 +1190,9 @@ rtllib_association_req(struct rtllib_network *beacon,
  		HTConstructCapabilityElement(ieee, ht_cap_buf, &ht_cap_len,
  					     encrypt, true);
--		if (ieee->pHTInfo->bCurrentRT2RTAggregation) {
-+		if (ieee->pHTInfo->current_rt2rt_aggregation) {
- 			realtek_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
+ 		if (ieee->pHTInfo->current_rt2rt_aggregation) {
+-			realtek_ie_buf = ieee->pHTInfo->szRT2RTAggBuffer;
++			realtek_ie_buf = ieee->pHTInfo->sz_rt2rt_agg_buf;
  			realtek_ie_len =
- 				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
-@@ -1368,7 +1368,7 @@ rtllib_association_req(struct rtllib_network *beacon,
- 			tag += ht_cap_len - 2;
+-				 sizeof(ieee->pHTInfo->szRT2RTAggBuffer);
++				 sizeof(ieee->pHTInfo->sz_rt2rt_agg_buf);
+ 			HTConstructRT2RTAggElement(ieee, realtek_ie_buf,
+ 						   &realtek_ie_len);
  		}
- 
--		if (ieee->pHTInfo->bCurrentRT2RTAggregation) {
-+		if (ieee->pHTInfo->current_rt2rt_aggregation) {
- 			tag = skb_put(skb, realtek_ie_len);
- 			*tag++ = MFIE_TYPE_GENERIC;
- 			*tag++ = realtek_ie_len - 2;
 -- 
 2.37.3
 
