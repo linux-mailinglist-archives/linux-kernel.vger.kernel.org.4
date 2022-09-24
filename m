@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BE15E8EA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7920F5E8EAC
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Sep 2022 18:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiIXQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 12:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S232357AbiIXQ5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 12:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbiIXQ4E (ORCPT
+        with ESMTP id S229662AbiIXQ5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 12:56:04 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E23857E6
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:56:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a8so4722315lff.13
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 09:56:02 -0700 (PDT)
+        Sat, 24 Sep 2022 12:57:41 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEE2857E6;
+        Sat, 24 Sep 2022 09:57:40 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id e5so2910850pfl.2;
+        Sat, 24 Sep 2022 09:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=qCvUzRzeULor4WnIiJD8wT2Pery0VW3IjzzZAt+uUKI=;
-        b=YrT3IgVkLxnd7lidhwQ5ASDEIJwxgK36UxOQkbdeRE7hB0B8wzZBtMF0jfsEL5rnMJ
-         TmhP2cc7k2DOZULm2xKxAQwR6NEaCgCknCft51BBR5i6G0ierThFmNjmt+AUuxyQduMy
-         t0eLTJ1C5ZZKjqwBCcmQjLPxu4HwHkEVQULR8JrXmZHTPgSyZv/yV9O+Ryxu/LElp6h2
-         i42ASsvHNuDzXVQjaMHifVay2O70bcey4kpW8Rsxila4FZUIg/5VsM5ZEeM79Qk1DCbD
-         T2Pq9JeMlZ19HLmQg+O+0Vq5X8cC2RKZqizzdRLL8sdmTKeRCWSRIeA2+Y8iTdNGzhK/
-         mxbA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=1E0SmAG1zMtGpgd4usKXl/ulVKEy4vgx4ZMpo2BJm1w=;
+        b=Xwx8u7YO9fr60zms/hLTGR+6VmKjqpn2hvEzCEJYp/5Ke8z5Ikwt8tFEJHLo2mZJ/8
+         WgZu5fV6qaT0mjcK/beIB1d5Xnzw/bnwM0tC49mVBczh/Nv4T5KUQgpAT49gTCwDTHZQ
+         qGPgyMglM31IozYzxdy0kvI71CTUrFS+vLWi7xgn5tBokk5SlvROgVMg8LDR+9eh0FKX
+         jA+e6Kmg6hehhio2UcN6Hv7leyWSl0qNlfiBNrsFzCyKr9kWxZyknlUzyMyOGQ8ODgCs
+         7Q/y6wiivrS1zvFb8iN2MpbQ96/CWvwH3RgEFhl7L/KHzNrovOEiCgyEF14yTSAmsed2
+         +L9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qCvUzRzeULor4WnIiJD8wT2Pery0VW3IjzzZAt+uUKI=;
-        b=s+kwo+QWfcn1vLH0EOLbH6t1f0yP1E7qptXWPYxF+z2KT4eabbdp7NtMi558kzh5Ce
-         QYZjX/92L/1QbDTaoWF3PTEr7L6xcGQkJmcOe8MgNJQ/FLmNXtQaHbChWMdltqY2Ifii
-         Mt54jgGTahTiIwSk88JbK+AEnEABqUKvxTFZR6iXln21wK5UBZQwjpjuNPxoAmkzqQup
-         OMNWligj5G2bF0+yoxq51Xc1Mqhqip2iZHjkETJQm0OpmcWBw9IKCmFJ346rNy/1++8u
-         Z1wAOKC1tNVXWN3NUIkJNRGmFb32W1iECafaQdd1pJsjfTzmFpHufTXIh2pB2aXyyE95
-         ox6A==
-X-Gm-Message-State: ACrzQf1UskQHlvf8cU4F9eIOiUKIV2bQd+6tUkAiJOHtibAarqyEOmVp
-        mjLY6iWIWfWx6Y299aIH1ouDAA==
-X-Google-Smtp-Source: AMsMyM4cBGD1nJDClwlGskZMtBadV77/jXdaK8NpBV5chtC2K4VAqeN5up0Rn8Uz0Cyv6BPxMYK2PA==
-X-Received: by 2002:a05:6512:10d1:b0:49d:7dac:e2e3 with SMTP id k17-20020a05651210d100b0049d7dace2e3mr5464359lfg.224.1664038561051;
-        Sat, 24 Sep 2022 09:56:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bf31-20020a2eaa1f000000b0026c2e0258bcsm1844780ljb.42.2022.09.24.09.56.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 09:56:00 -0700 (PDT)
-Message-ID: <ea2d5008-d250-cc5a-e608-cb35a6ad67b8@linaro.org>
-Date:   Sat, 24 Sep 2022 18:55:59 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=1E0SmAG1zMtGpgd4usKXl/ulVKEy4vgx4ZMpo2BJm1w=;
+        b=a5C3J8K/p6rqwslwQV1wp6naxbd1mmaxinZgSwzJ3E6mRfcZT5P0oqa1aXd3Rdp7KP
+         XIhmPh8hJuw6NVn9VxioyEVM8Rj2PNyLe/coFMNmAPRGn+HSXRUr2JbY5ebr41e+SisB
+         tUESFYbnSP6nP8strkYzmNRZgu+NY6DDTsz5ae0JhLk1jbrZU3NCd6JCQ1nPF1greQhS
+         gqQ2yIHXDCY3FvMMeRqMVjxvxcOM7zF1x6mrs5UeFnOlQK3z3oIJ6M/lU6HdGZJqJcmh
+         CLYFWax6ZqW7Xaxs3L17HMBbaVZc+CnxULejJ0SXUGH18F93xLlKg10eBGBebbBmgJr3
+         AMRw==
+X-Gm-Message-State: ACrzQf3hCKn1Y2bhZYtnFlxAlDGbnMLqxufXv+vDm6GEohQxcQt2L1n6
+        KDq7jj4lLMOWJy2NApWufXg=
+X-Google-Smtp-Source: AMsMyM5UlZQ8GK52njQnoPAnJhydxopgy3eoiO5mi1fbDmjevmmYffok0AWti0JmC+G/PrY8XJhFQA==
+X-Received: by 2002:a05:6a00:170e:b0:550:dc52:4647 with SMTP id h14-20020a056a00170e00b00550dc524647mr14820870pfc.19.1664038659709;
+        Sat, 24 Sep 2022 09:57:39 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:20c0:42d3:7ef1:1f3])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902f20c00b00176675adbe1sm7960082plc.208.2022.09.24.09.57.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 09:57:39 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH 0/5] perf tools: Clean up cpu map handling for a system-wide evsel (v1)
+Date:   Sat, 24 Sep 2022 09:57:32 -0700
+Message-Id: <20220924165737.956428-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] ARM: dts: qcom: add 'chassis-type' property
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220924154422.9896-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220924154422.9896-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/09/2022 17:44, Luca Weiss wrote:
-> Add the chassis-type property to arm32 Qualcomm watches, phones and
-> tablets.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Hello,
+
+The system-wide evsel has a cpu map for all (online) cpus regardless
+of user requested cpus.  But the cpu map handling code has some
+special case for it and I think we can cleanup the code by making sure
+that such a evsel has a proper cpu/thread maps from the beginning.
+This patches should not cause any change in the behavior.
+
+You can get the code from 'perf/cpumap-update-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+  
+Thanks,
+Namhyung
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Namhyung Kim (5):
+  libperf: Populate system-wide evsel maps
+  libperf: Propagate maps only if necessary
+  perf tools: Get rid of evlist__add_on_all_cpus()
+  perf tools: Add evlist__add_sched_switch()
+  perf tools: Remove special handling of system-wide evsel
 
-Best regards,
-Krzysztof
+ tools/lib/perf/evlist.c             | 23 ++++++++-------
+ tools/lib/perf/evsel.c              |  3 --
+ tools/perf/arch/x86/util/intel-pt.c | 15 ++++------
+ tools/perf/builtin-script.c         |  3 --
+ tools/perf/tests/switch-tracking.c  | 15 ++++------
+ tools/perf/util/evlist.c            | 46 ++++++++++++-----------------
+ tools/perf/util/evlist.h            |  1 +
+ tools/perf/util/evsel.c             | 12 ++------
+ tools/perf/util/stat.c              |  3 --
+ 9 files changed, 44 insertions(+), 77 deletions(-)
+
+-- 
+2.37.3.998.g577e59143f-goog
 
