@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750575E9453
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322F95E9456
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiIYQTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 12:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S232004AbiIYQWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 12:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbiIYQTd (ORCPT
+        with ESMTP id S230505AbiIYQWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 12:19:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D372233;
-        Sun, 25 Sep 2022 09:19:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k10so7434598lfm.4;
-        Sun, 25 Sep 2022 09:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=J9KMqJi/q6W4clyZw0NlrkwRki9TMO0lxNcnvx1Dx7M=;
-        b=DSAJvMB5y7LrdMIgz2mEY5jZTvcYCFvJqeOmULmTDrFFtElW0jkSccyqTuaYDQHVA4
-         jmJsWaKuoTEiQ5B71N4r6DHehQO4cf3se6jlQcU8VuOI71EJu9Zk5SwFRIE/SEyemsiF
-         5tqdTPOd7QGho3eAGH6iuUFhFd2Lah9OWeLjsBm47AZwPck3xy+80e315dbPgaHK0NCh
-         3nb+pK6mLbl5yH5AScwXh2/WbReQXoBDCGwECEGlNvv0E/DmpyAsiMvQ9v25HaFpmQ1A
-         t0CdcPTqXWWodO83QxXbagw/+c5cfgZFo+f/YQTHKaQ9+MIWA2rKWTYTN2SNj6OfUREU
-         5HXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=J9KMqJi/q6W4clyZw0NlrkwRki9TMO0lxNcnvx1Dx7M=;
-        b=uHwPIsautUpwbO1M+g0kJeZJqewYEK539kDy+X5Pc8b6PzuGuH6e/sU+Yt+qdqNrsE
-         uo3Aq7nekPXP5DB/SCS5ONuB1y0asKuqMQ5Zk87DhcV6J7Xuvkema7J7p7QuEOotdkm2
-         iL9fpXFHPGcK53k2GuiHzllrsaOKS8//c0Gw/n9whSJYL+D9nyICrab5aUm2NdvtFFzf
-         wXdqzGiB6tSp2vzTTmFjyXHRRnPEv6I6YShwIjPyFjY8TVa5D88562ywrJ5N0JkrZy6j
-         Ubwft4pQxuHlUwoh464WxtBWKe9wqRZz341zkn47VKHbAwYRqLYKXT5jMfzHkN/nYuxw
-         VqNg==
-X-Gm-Message-State: ACrzQf3R9JnmMrovff8Au6ibbgRvDvb68cqj+w3NScnhV/E+/XZ585He
-        g2LmqX6DD94uxlfVHP3vIik=
-X-Google-Smtp-Source: AMsMyM4VQ4kfS/T8BAv5BTaYjOoI6VwKUlODD/pVTfaN8Ipg3GLRgOBNVr58j3q1TI/QIOB4wslv5Q==
-X-Received: by 2002:a05:6512:3e13:b0:499:1829:5181 with SMTP id i19-20020a0565123e1300b0049918295181mr7363944lfv.71.1664122769424;
-        Sun, 25 Sep 2022 09:19:29 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id c3-20020a05651221a300b0048b08e25979sm2248212lft.199.2022.09.25.09.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 09:19:28 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 19:19:26 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 09/23] ata: libahci_platform: Parse ports-implemented
- property in resources getter
-Message-ID: <20220925161926.hc6txrf7yklqen7s@mobilestation>
-References: <20220909193621.17380-1-Sergey.Semin@baikalelectronics.ru>
- <20220909193621.17380-10-Sergey.Semin@baikalelectronics.ru>
- <20220919215014.GA336081@roeck-us.net>
- <7872df9d-db4e-0617-84eb-e47394774322@opensource.wdc.com>
+        Sun, 25 Sep 2022 12:22:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF45E0B3;
+        Sun, 25 Sep 2022 09:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664122895;
+        bh=fI8v2MjLTWColJNckOi/CL8S2YaxkCPvzxue3zGfDQQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=d9L5BQzgHmgrTVpJly5w97+p1QcINxXisS07Hu4KdkpasB9ud7fGQHSw1rkzZytW1
+         UryFuYVvHSVXAgCKHM1/Oj1ZGkMiou2iSsj5XGe7YZw0YKs1Xnq5/XdsVtvTRIOFbS
+         GgRQjalXWvWLx/euY3O5aQ9gLp39RnLF1MnKqxqk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.188.118]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYNJq-1ohYsv34pW-00VQ5i; Sun, 25
+ Sep 2022 18:21:35 +0200
+Message-ID: <eabf4405-7492-19c4-0827-a240e9c75dca@gmx.de>
+Date:   Sun, 25 Sep 2022 18:21:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7872df9d-db4e-0617-84eb-e47394774322@opensource.wdc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next] video: fbdev: tridentfb: Fix missing
+ pci_disable_device() in probe and remove
+Content-Language: en-US
+To:     ruanjinjie <ruanjinjie@huawei.com>, zheyuma97@gmail.com,
+        javierm@redhat.com, wsa+renesas@sang-engineering.com,
+        tzimmermann@suse.de, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220922013709.3324521-1-ruanjinjie@huawei.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220922013709.3324521-1-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4C350QFUsyfxOBN9unp7HZnhW3cx3yY62B3+HaSeKy7Y83u0ETf
+ wcxeMn461m2islOO4yVPWtwWOInz6mdQiukZsXTbijl/YJpgYVmT99qsd0XnNqHsB3gDYOo
+ srmLQqX0Bz6d8wZc7h9BYlW9S+54WEcG3NoycQjXWJLJSvugJ+idhSSjyO+hOafZTxGmcjP
+ mDuBZub5EeYy+u1Ff/SyQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:M/VDfI/GNCk=:J0E7YpgIxEz6PydXA9ZOtf
+ o7D1/KS6Ufb8QuX8glgXQLFF/MW5SYVZS+KX8LU9Cl51VaEZZX18NxwWAl8mD8ySq1k+jKIIz
+ 7dY31DMXqd/3QIXbdw5o8xSYKHUEoFNmbaIHlYmUuYa6dCqP6iKgzszqP6optomG1BuXq8gJf
+ HidXw2EPYFBlLJ3ZMi8x9WbWH5xFpDgsFrhXMCTZ6LuHkkub8uG6xVKkDRkshBR4eGgthZd44
+ gs9bAi7tNzJIfJSYkeIkARv1xgLCFetabgkkuCp3Peh2hvGmwjAzjkCdm38sMlWwI1WmtVr7B
+ 24U9+jPudng0HpAkTN3zwT0rm2M39qZKija3NvZnChmywCHMxaylfnUiPKts5ZN6UvLtu7Adz
+ QhOrU/qr+0A8a5L1oSsOpP5bDyvSbhAfST3tEiikD2H/nJieRhIEHxjrkEn9bqupU06zChc+M
+ g3LyJviZpK4o8+aJpzf0cKQaUWWyjuUcYevFBVS5LkS691wtElojW4fpOzHhjJt5wEb7ON/0U
+ 01qv8LPHctzHEzsyKhD5BcsFrMscgOHa0600Mg/PSf1koiAHHeqOAOsdEJFeJFoG2DPxiV4qh
+ kY19RvUDo/AmA0AJqqQlffZ2dF5iq4DwmxGMjjQ9u9jeQBv8CQbTCTcoHZV+rweXZ7buFe2jJ
+ FvuXpuZnvagT5Yq3NYe2SI9s2LIvlLmDYGVSdWBozXycEPtFgZu0oFAJ6v0ax7LSHtntB9RR1
+ UIPhN521RDe0PLwmRaatav/fCchA33IZf5gHIS0TaUT1hq6U19OIj/ZcA2wJJxYsAai8s0TR3
+ A6y3W6xg0fgK52xnyj2EIzDFUXdhMN/IWM8HWb9lvMtSTmGTXTHZKwb9+D9C68QSc4NAs1PmM
+ Zg20g7m/A34XTvcmg+S2BbfQGPhTn+16n3kgtY/F9Es7SSAKcHwcCUb2AcwaswEVvE24pnR+W
+ NLuBGck6vhIV0IpXhKvCgmQdBQo6PERh1uzPHvERQEBLavTgs1wzXZY7LiozD4LxC9wOCoren
+ 0gPcF+iFhRtQ8U0WRPuq2cu0Eo3qCEG2ID7WK7LO70NLZ4pdvXYObzGgOmWJX+mmKWQ04NtiB
+ SZj0BkDZjtMOl75MPNd5Nj6U7jRC4Py4VfH6zQAXg7vm+i7CB7utqGmQAe2BkFtX7l2H3Kq/7
+ Zj0skJ6XqiTFKM8h/0794dqrud
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,86 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 08:55:59AM +0900, Damien Le Moal wrote:
-> On 9/20/22 06:50, Guenter Roeck wrote:
-> > On Fri, Sep 09, 2022 at 10:36:07PM +0300, Serge Semin wrote:
-> >> The ports-implemented property is mainly used on the OF-based platforms
-> >> with no ports mapping initialized by a bootloader/BIOS firmware. Seeing
-> >> the same of_property_read_u32()-based pattern has already been implemented
-> >> in the generic AHCI LLDD (glue) driver and in the Mediatek, St AHCI
-> >> drivers let's move the property read procedure to the generic
-> >> ahci_platform_get_resources() method. Thus we'll have the forced ports
-> >> mapping feature supported for each OF-based platform which requires that,
-> >> and stop re-implementing the same pattern in there a bit simplifying the
-> >> code.
-> >>
-> >> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> >> ---
-> >>  drivers/ata/ahci_mtk.c         | 2 --
-> >>  drivers/ata/ahci_platform.c    | 3 ---
-> >>  drivers/ata/ahci_st.c          | 3 ---
-> >>  drivers/ata/libahci_platform.c | 3 +++
-> >>  4 files changed, 3 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/drivers/ata/ahci_mtk.c b/drivers/ata/ahci_mtk.c
-> >> index 1f6c85fde983..c056378e3e72 100644
-> >> --- a/drivers/ata/ahci_mtk.c
-> >> +++ b/drivers/ata/ahci_mtk.c
-> >> @@ -118,8 +118,6 @@ static int mtk_ahci_parse_property(struct ahci_host_priv *hpriv,
-> >>  				   SYS_CFG_SATA_EN);
-> >>  	}
-> >>  
-> >> -	of_property_read_u32(np, "ports-implemented", &hpriv->force_port_map);
-> >> -
-> >>  	return 0;
-> >>  }
-> >>  
-> >> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> >> index 28a8de5b48b9..9b56490ecbc3 100644
-> >> --- a/drivers/ata/ahci_platform.c
-> >> +++ b/drivers/ata/ahci_platform.c
-> >> @@ -56,9 +56,6 @@ static int ahci_probe(struct platform_device *pdev)
-> >>  	if (rc)
-> >>  		return rc;
-> >>  
-> >> -	of_property_read_u32(dev->of_node,
-> >> -			     "ports-implemented", &hpriv->force_port_map);
-> >> -
-> >>  	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
-> >>  		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
-> >>  
-> >> diff --git a/drivers/ata/ahci_st.c b/drivers/ata/ahci_st.c
-> >> index 7526653c843b..068621099c00 100644
-> >> --- a/drivers/ata/ahci_st.c
-> >> +++ b/drivers/ata/ahci_st.c
-> >> @@ -168,9 +168,6 @@ static int st_ahci_probe(struct platform_device *pdev)
-> >>  
-> >>  	st_ahci_configure_oob(hpriv->mmio);
-> >>  
-> >> -	of_property_read_u32(dev->of_node,
-> >> -			     "ports-implemented", &hpriv->force_port_map);
-> >> -
-> > 
-> > With arm:allmodconfig, this results in:
-> > 
-> >   CC [M]  drivers/ata/ahci_st.o
-> > drivers/ata/ahci_st.c: In function 'st_ahci_probe':
-> > drivers/ata/ahci_st.c:147:24: error: unused variable 'dev' [-Werror=unused-variable]
-> >   147 |         struct device *dev = &pdev->dev;
-> > 
-> > Guenter
-> 
+On 9/22/22 03:37, ruanjinjie wrote:
+> Replace pci_enable_device() with pcim_enable_device(),
+> pci_disable_device() and pci_release_regions() will be
+> called in release automatically.
+>
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 
-> Just pushed a fix for this in ata tree for-next and for-6.1 branches. The
-> problem should be resolved with the next linux-next merge.
+applied.
 
-Once again thanks for sending the fix for my mistake.
+Thanks!
+Helge
 
-Regards,
--Sergey
+> ---
+>   drivers/video/fbdev/tridentfb.c | 6 +-----
+>   1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/tridentfb.c b/drivers/video/fbdev/tride=
+ntfb.c
+> index f9c3b1d38fc2..7933e01aacc5 100644
+> --- a/drivers/video/fbdev/tridentfb.c
+> +++ b/drivers/video/fbdev/tridentfb.c
+> @@ -1475,7 +1475,7 @@ static int trident_pci_probe(struct pci_dev *dev,
+>   	if (err)
+>   		return err;
+>
+> -	err =3D pci_enable_device(dev);
+> +	err =3D pcim_enable_device(dev);
+>   	if (err)
+>   		return err;
+>
+> @@ -1715,12 +1715,10 @@ static int trident_pci_probe(struct pci_dev *dev=
+,
+>   	kfree(info->pixmap.addr);
+>   	if (info->screen_base)
+>   		iounmap(info->screen_base);
+> -	release_mem_region(tridentfb_fix.smem_start, tridentfb_fix.smem_len);
+>   	disable_mmio(info->par);
+>   out_unmap1:
+>   	if (default_par->io_virt)
+>   		iounmap(default_par->io_virt);
+> -	release_mem_region(tridentfb_fix.mmio_start, tridentfb_fix.mmio_len);
+>   	framebuffer_release(info);
+>   	return err;
+>   }
+> @@ -1735,8 +1733,6 @@ static void trident_pci_remove(struct pci_dev *dev=
+)
+>   		i2c_del_adapter(&par->ddc_adapter);
+>   	iounmap(par->io_virt);
+>   	iounmap(info->screen_base);
+> -	release_mem_region(tridentfb_fix.smem_start, tridentfb_fix.smem_len);
+> -	release_mem_region(tridentfb_fix.mmio_start, tridentfb_fix.mmio_len);
+>   	kfree(info->pixmap.addr);
+>   	fb_dealloc_cmap(&info->cmap);
+>   	framebuffer_release(info);
 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
-> 
