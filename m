@@ -2,146 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F445E937D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8B25E9382
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiIYNnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 09:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S229557AbiIYNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 09:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiIYNnW (ORCPT
+        with ESMTP id S230385AbiIYNx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 09:43:22 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28022AC4F
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:43:19 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id cRuaoxFHkPMmacRuao7pdV; Sun, 25 Sep 2022 15:43:18 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 25 Sep 2022 15:43:18 +0200
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Russell King <linux@armlinux.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH] headers: Remove some left-over license text in include/uapi/drm/
-Date:   Sun, 25 Sep 2022 15:43:00 +0200
-Message-Id: <e5cacd121ddb2a595cede602036b1bdfbee020d5.1664113376.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 25 Sep 2022 09:53:27 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF592C136
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:53:24 -0700 (PDT)
+Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28PDquPj028689;
+        Sun, 25 Sep 2022 22:52:56 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
+ Sun, 25 Sep 2022 22:52:56 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28PDquLX028686
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 25 Sep 2022 22:52:56 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e37e3b18-401e-f319-9006-2e2a09111c74@I-love.SAKURA.ne.jp>
+Date:   Sun, 25 Sep 2022 22:52:56 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] kernfs: fix UAF race condition in __kernfs_remove()
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Christian A. Ehrhardt" <lk@c--e.de>
+Cc:     Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
+        Hillf Danton <hdanton@sina.com>
+References: <000000000000646c9605e714ec6e@google.com>
+ <7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp>
+ <YzBT+hJ/fmp75j1P@kroah.com>
+ <83be5776-4038-90d5-f202-9a6e97b6d551@I-love.SAKURA.ne.jp>
+ <YzBaYHqldB39zD17@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YzBaYHqldB39zD17@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is already a SPDX-License-Identifier tag, so the corresponding
-license text can be removed.
+On 2022/09/25 22:40, Greg Kroah-Hartman wrote:
+> On Sun, Sep 25, 2022 at 10:20:27PM +0900, Tetsuo Handa wrote:
+>> On 2022/09/25 22:13, Greg Kroah-Hartman wrote:
+>>> Isn't this already handled by:
+>>> 	https://lore.kernel.org/r/20220913121723.691454-1-lk@c--e.de
+>>>
+>>> that will show up in the next linux-next tree.
+>>
+>> Oh, I didn't know that patch.
+>>
+>> But is that patch complete, for there are three __kernfs_remove() callers?
+>>
+> 
+> syzbot seems to think it works :)
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- include/uapi/drm/armada_drm.h  |  4 ----
- include/uapi/drm/etnaviv_drm.h | 12 ------------
- include/uapi/drm/exynos_drm.h  |  5 -----
- include/uapi/drm/omap_drm.h    | 12 ------------
- 4 files changed, 33 deletions(-)
-
-diff --git a/include/uapi/drm/armada_drm.h b/include/uapi/drm/armada_drm.h
-index af1c14c837c5..f711e63a9758 100644
---- a/include/uapi/drm/armada_drm.h
-+++ b/include/uapi/drm/armada_drm.h
-@@ -2,10 +2,6 @@
- /*
-  * Copyright (C) 2012 Russell King
-  *  With inspiration from the i915 driver
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-  */
- #ifndef DRM_ARMADA_IOCTL_H
- #define DRM_ARMADA_IOCTL_H
-diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
-index af024d90453d..13dd1d1a9d41 100644
---- a/include/uapi/drm/etnaviv_drm.h
-+++ b/include/uapi/drm/etnaviv_drm.h
-@@ -1,18 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- /*
-  * Copyright (C) 2015 Etnaviv Project
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License version 2 as published by
-- * the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-- * more details.
-- *
-- * You should have received a copy of the GNU General Public License along with
-- * this program.  If not, see <http://www.gnu.org/licenses/>.
-  */
- 
- #ifndef __ETNAVIV_DRM_H__
-diff --git a/include/uapi/drm/exynos_drm.h b/include/uapi/drm/exynos_drm.h
-index a51aa1c618c1..a96fa566433c 100644
---- a/include/uapi/drm/exynos_drm.h
-+++ b/include/uapi/drm/exynos_drm.h
-@@ -6,11 +6,6 @@
-  *	Inki Dae <inki.dae@samsung.com>
-  *	Joonyoung Shim <jy0922.shim@samsung.com>
-  *	Seung-Woo Kim <sw0312.kim@samsung.com>
-- *
-- * This program is free software; you can redistribute  it and/or modify it
-- * under  the terms of  the GNU General  Public License as published by the
-- * Free Software Foundation;  either version 2 of the  License, or (at your
-- * option) any later version.
-  */
- 
- #ifndef _UAPI_EXYNOS_DRM_H_
-diff --git a/include/uapi/drm/omap_drm.h b/include/uapi/drm/omap_drm.h
-index 5a142fad473c..b51dad32122d 100644
---- a/include/uapi/drm/omap_drm.h
-+++ b/include/uapi/drm/omap_drm.h
-@@ -4,18 +4,6 @@
-  *
-  * Copyright (C) 2011 Texas Instruments
-  * Author: Rob Clark <rob@ti.com>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License version 2 as published by
-- * the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-- * more details.
-- *
-- * You should have received a copy of the GNU General Public License along with
-- * this program.  If not, see <http://www.gnu.org/licenses/>.
-  */
- 
- #ifndef __OMAP_DRM_H__
--- 
-2.34.1
+syzbot's reproducer tested only kernfs_remove_by_name_ns() case.
+I'm not sure whether e.g. __kernfs_remove() from kernfs_remove() is safe.
 
