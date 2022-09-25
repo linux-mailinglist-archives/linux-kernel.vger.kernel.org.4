@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE16E5E956F
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCF15E9571
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiIYSnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 14:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S232871AbiIYSoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 14:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIYSnq (ORCPT
+        with ESMTP id S232688AbiIYSn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:43:46 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 675BE2B61E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:43:45 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 28PIhXrm013995;
-        Sun, 25 Sep 2022 20:43:33 +0200
-Date:   Sun, 25 Sep 2022 20:43:33 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     ast@kernel.org, yhs@fb.com, sean.wang@mediatek.com,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: Unable bisect issue because kernel not building from old commits
-Message-ID: <20220925184333.GA13967@1wt.eu>
-References: <CABXGCsN8LHqz7=OSvBpKCqKdV4L_4FPXtQ32bgYveA9yP2_xiQ@mail.gmail.com>
- <20220925042031.GA9845@1wt.eu>
- <CABXGCsOsm_QtFjd9KCYOc3E_4Tn_EVDhWifOPMU7_PZ7MC2big@mail.gmail.com>
- <20220925152142.GA13116@1wt.eu>
- <CABXGCsN532FpFraXu_DiA4_SiRRXqy6zL0AD+oV0c5er4DJQJQ@mail.gmail.com>
+        Sun, 25 Sep 2022 14:43:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860CE2B626;
+        Sun, 25 Sep 2022 11:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664131434; x=1695667434;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EOSN/UYw3FtbzLVDPAbCUVUyyCNr6nKc9JqjrXMbKTA=;
+  b=VEImBlZtqBpo7n2ENPh+JprOPt7BBjrMqNNcG3jvIZaNrcsHUM17r0DS
+   t5x78rZOqo1JTTgamAmC7ot+JHn1QCEeu5bF5rzqSnffpCg8QPBV/xamv
+   3hYmTDvtW/N3ibPTb63rAjhPB3dQA6nkfgVAOqqReW0cd7PY/TAnmhKr5
+   7RlKQj8fn4tQP3r8ekoCuB1733DdaDOP8VSFxt51uIeBasHLm0F9MBkPU
+   CNfOfHQRpdAAuF1/FAyEgA/F/XYip8w92lJvxxFK+KuijkDQCDCeQI8h1
+   F984raLuJaxv3kCaZaaF6/r79WiwuNYclk3rTGEVBf3Ao6IowxHcBTbej
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
+   d="scan'208";a="115319822"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Sep 2022 11:43:53 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Sun, 25 Sep 2022 11:43:53 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Sun, 25 Sep 2022 11:43:51 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 0/3] net: lan966x: Add tbf, cbs, ets support
+Date:   Sun, 25 Sep 2022 20:46:30 +0200
+Message-ID: <20220925184633.4148143-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABXGCsN532FpFraXu_DiA4_SiRRXqy6zL0AD+oV0c5er4DJQJQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 09:13:13PM +0500, Mikhail Gavrilov wrote:
-> On Sun, Sep 25, 2022 at 8:21 PM Willy Tarreau <w@1wt.eu> wrote:
-> > Just add:
-> >
-> >    CROSS_COMPILE=/path/to/toolchain/bin/prefix-
-> >
-> > to your make command line and it will be fine.
-> >
-> > The makefile will append {gcc,ld,...} to this CROSS_COMPILE prefix to
-> > construct the full pathname to the binaries.
-> 
-> It works!
-> But I hit another build issue.
-> 
-> $ make clean &&
-> CROSS_COMPILE=~/Downloads/x86_64-gcc-7.5.0-nolibc-x86_64-linux/gcc-7.5.0-nolibc/x86_64-linux/bin/x86_64-linux-
-> make -j32 bzImage
-> ***
->   GEN     modules.builtin
->   LD      .tmp_vmlinux.btf
->   BTF     .btf.vmlinux.bin.o
->   LD      .tmp_vmlinux.kallsyms1
->   KSYMS   .tmp_vmlinux.kallsyms1.S
->   AS      .tmp_vmlinux.kallsyms1.S
->   LD      .tmp_vmlinux.kallsyms2
->   KSYMS   .tmp_vmlinux.kallsyms2.S
->   AS      .tmp_vmlinux.kallsyms2.S
->   LD      vmlinux
->   BTFIDS  vmlinux
-> FAILED: load BTF from vmlinux: Invalid argument
-> make: *** [Makefile:1159: vmlinux] Error 255
-> make: *** Deleting file 'vmlinux'
+Add support for offloading QoS features with tc command to lan966x.
+The offloaded Qos features are tbf, cbs and ets.
 
-This was reported and addressed a month ago:
+Horatiu Vultur (3):
+  net: lan966x: Add offload support for tbf
+  net: lan966x: Add offload support for cbs
+  net: lan966x: Add offload support for ets
 
-    https://lore.kernel.org/bpf/20220825171620.cioobudss6ovyrkc@altlinux.org/t/#m24a9de4b8cc11eb9c3bbed022487d6de0d42ea4b
+ .../net/ethernet/microchip/lan966x/Makefile   |  3 +-
+ .../ethernet/microchip/lan966x/lan966x_cbs.c  | 70 ++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_ets.c  | 96 +++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_main.h | 19 ++++
+ .../ethernet/microchip/lan966x/lan966x_regs.h | 50 ++++++++++
+ .../ethernet/microchip/lan966x/lan966x_tbf.c  | 85 ++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_tc.c   | 43 +++++++++
+ 7 files changed, 365 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_cbs.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_ets.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_tbf.c
 
-In short if you don't need XDP you could possibly disable
-CONFIG_DEBUG_INFO_BTF, otherwise you may have to rebuild the latest
-pahole utility that seems to be involved in this. But I never faced
-this issue so I can only recommend hints about things to look at,
-and could be wrong.
+-- 
+2.33.0
 
-Willy
