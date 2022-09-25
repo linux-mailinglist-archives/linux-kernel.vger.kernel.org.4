@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065105E90A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 03:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB24C5E90A3
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 03:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiIYBXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 21:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S229683AbiIYBXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Sep 2022 21:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiIYBXi (ORCPT
+        with ESMTP id S229547AbiIYBXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 21:23:38 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C77260D
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 18:23:36 -0700 (PDT)
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 28P1NF4v024435
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:23:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28P1NF4v024435
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664068995;
-        bh=wcy17lhVeaFvvhqspD1VtBx9l8ybKL1EsOARSQKPsAA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ezESg2phz67myHt1bc99AS5anJgOYB5MXNC1EYM6fSMxeVvKu9pKfMZcrNDMg2fb8
-         t9p8vSHWo+dG3ocoS5j44CtV7z5Oeg+Uw2a7Q78E/z2e2e+jNXrRj42sloa7poXeem
-         6y6e6xurOs3X2bxkkn00l/CnsE8c6UHYjVuqG42VHmjmMUhZ2JApyQ3Mq6hlxdB4O0
-         Q2ff+MQ7mU51AoxFZjMXdk4z+o7TRKZ8rbctWk1uRK8LfbqPYqm76nXy+DI24jbJ79
-         GprtVL7gCcx5mheDZfBCaQ2ZhyjpGlVO1P+gsHMYtNfU+1hS2jp9BoDOHIafwSdAdf
-         FkgCcIiyPQmRA==
-X-Nifty-SrcIP: [209.85.167.180]
-Received: by mail-oi1-f180.google.com with SMTP id s125so4388514oie.4
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 18:23:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1Uyf5cSiD50kGJGKcDncybqz2hle2LtNlPOhy4uwbU1qon2fCo
-        WBMdhUO/YpSgjUMc4KB9DDSsCUUa5y06xDXrSK0=
-X-Google-Smtp-Source: AMsMyM78F9oRvL/JaZHExdRddIxrTZMIBVAq1fKW09ZWD2NQwNhABlAWFfCsQTOhhxVykQSMpBJaowS/3AsoKQXv62g=
-X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
- cj5-20020a0568081b8500b0034d8ce1d5b0mr11934584oib.194.1664068994564; Sat, 24
- Sep 2022 18:23:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com> <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
- <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 25 Sep 2022 10:22:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
-Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        Sat, 24 Sep 2022 21:23:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19371260D
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 18:23:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3794B80E1C
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 01:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5947AC433D6;
+        Sun, 25 Sep 2022 01:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664068993;
+        bh=CVQMvErdFLaHjzW/3HPZGHlLkb8jsIT7WcB1p3YNyNA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f9s0J51kpvlIJ18/6ePq40kpqXw1IRaQhWsuLWkVT074PX5P2q63Z8hekIN6B9wAz
+         EJK+Og0UoQ/49VTKTzKNosJg3I5ouC3gNgjuAI5EeP+bOC7uKkRp37tPGrGSigzq8s
+         yuh/UMziqEBxkpPsT9diDILg0BnxZylz/xmcFSKKf9rcVxGZ8ADlz8APAcDwlonuQS
+         ga2tQ+44gojb8d+He+40+xBCxWrJgzYljJcskV1FEBkXpSqg4HboMnFq7iB/MruEgg
+         OtQ39pXJjulZnq7PB6mnfMh72OpPRGtqJDMBMOyNPQGjFUydvvCNPrKw8qKYpTK0z0
+         eo1XQKJxk8+3A==
+Date:   Sun, 25 Sep 2022 10:23:08 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <hpa@zytor.com>, <mhiramat@kernel.org>,
+        <jpoimboe@kernel.org>, <rostedt@goodmis.org>,
+        <peterz@infradead.org>, <namit@vmware.com>
+Subject: Re: [PATCH -next] x86: kprobes: Remove unused macro stack_addr
+Message-Id: <20220925102308.96ed6863020cfbebd69223ee@kernel.org>
+In-Reply-To: <20220924072629.104759-1-chenzhongjin@huawei.com>
+References: <20220924072629.104759-1-chenzhongjin@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,138 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 11:28 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Sep 24, 2022 at 4:44 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Tue, Sep 20, 2022 at 2:08 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > cc-ifversion is GCC specific. Replace it with compiler specific
-> > > variants. Update the users of cc-ifversion to use these new macros.
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/350
-> > > Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-> > > Suggested-by: Bill Wendling <morbo@google.com>
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > > Changes v3 -> v4:
-> > > * Split into its own patch again from series, as per Masahiro.
-> > > * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
-> > >   clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
-> >
-> >
-> > Applied to linux-kbuild.
-> > Thanks.
-> >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
->
->
->
->
->
->
-> I noticed a small flaw now.
->
->
->
-> $ make mrproper; make
-> /bin/sh: 1: [: -ge: unexpected operator
-> ***
-> *** Configuration file ".config" not found!
-> ***
-> *** Please run some configurator (e.g. "make oldconfig" or
-> *** "make menuconfig" or "make xconfig").
-> ***
-> Makefile:711: include/config/auto.conf.cmd: No such file or directory
-> make: *** [Makefile:720: .config] Error 1
->
->
->
->
->
->
->
->
-> This fails anyway, but it shows annoying
->
->    /bin/sh: 1: [: -ge: unexpected operator
->
->
->
-> It is emit by this line:
->
->   KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
->
->
->
->
-> When $(CONFIG_GCC_VERSION) is empty, it becomes invalid shell code:
->
->      [ -ge $(1) ] && echo y
->
->
->
->
->
-> Now I just recalled why I wrote the original code like this:
->
->
->   cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ]  ...
->
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+On Sat, 24 Sep 2022 15:26:29 +0800
+Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
+> An unused macro reported by [-Wunused-macros].
+> 
+> This macro is used to access the sp in pt_regs because at that time
+> x86_32 can only get sp by kernel_stack_pointer(regs).
+> 
+> '3c88c692c287 ("x86/stackframe/32: Provide consistent pt_regs")'
+> This commit have unified the pt_regs and from them we can get sp from
+> pt_regs with regs->sp easily. Nowhere is using this macro anymore.
+> 
+> Refrencing pt_regs directly is more clear. Remove this macro for
+> code cleaning.
 
+Thanks for the clean up!
 
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
+Thank you,
 
-
-
-I squashed the following code diff.
-Please let me know if there is a problem.
-
-
-
-
-
-
-
-
-
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 9d18fb91890e..20d353dcabfb 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
-
- # gcc-min-version
- # Usage: cflags-$(call gcc-min-version, 70100) += -foo
--gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
-+gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
-
- # clang-min-version
- # Usage: cflags-$(call clang-min-version, 110000) += -foo
--clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-+clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
-
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
-
-
-
-
+> 
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>  arch/x86/kernel/kprobes/core.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index 4c3c27b6aea3..eb8bc82846b9 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -59,8 +59,6 @@
+>  DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
+>  DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+>  
+> -#define stack_addr(regs) ((unsigned long *)regs->sp)
+> -
+>  #define W(row, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, ba, bb, bc, bd, be, bf)\
+>  	(((b0##UL << 0x0)|(b1##UL << 0x1)|(b2##UL << 0x2)|(b3##UL << 0x3) |   \
+>  	  (b4##UL << 0x4)|(b5##UL << 0x5)|(b6##UL << 0x6)|(b7##UL << 0x7) |   \
+> -- 
+> 2.17.1
+> 
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
