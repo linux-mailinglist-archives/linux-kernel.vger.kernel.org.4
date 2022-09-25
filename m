@@ -2,143 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3835E9229
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F645E921F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiIYKhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 06:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S231698AbiIYKez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 06:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiIYKgr (ORCPT
+        with ESMTP id S229574AbiIYKet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 06:36:47 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA4D2CDFA;
-        Sun, 25 Sep 2022 03:36:45 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so10888292pjb.0;
-        Sun, 25 Sep 2022 03:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=4Ot2lP39QN3yfVpgj7SLSWZBZZZnT/3K2vptG1qJdkE=;
-        b=iSSeFgmmk/7jZG6g/b/9ADqG+LZ5HMjvms+2LNiqELFfkQ4VwSY/REwyxrBMHhVnDC
-         6IZ9R8AUb9DlglQhlc9CwKEKCQO1UPW5q+NNnbH0YlbB+QAcb4tdcQlkIUjpJkRSwr3a
-         f4EXiGSPRRvVU4T1PdsgyIUByuEL5ybCgX5rGtTxhpUrN1OFq5Gm6R97Qs/RGACao/h9
-         iolaIXtceGriJm3JPOHaUUOb3h7l3z/SUbcIEUJLQy7cugQS8ffzDWe0O9sU1HM46Bbm
-         vgimZqpaqT/DSUpV/8WTqC5EMyDC5TUKWJBGDqgDcYN+M7vI24wSYo8Rs0Jgkzl2bxy2
-         G5JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4Ot2lP39QN3yfVpgj7SLSWZBZZZnT/3K2vptG1qJdkE=;
-        b=buBra9Bv32uXbM5I6dMjlRqDylrvqVS2t1WfNa2PSW7+nWtTlT+5r4endeLYKEXvzK
-         cQXwdojr1DtljPjn2hHTaAktzaPdIElumaTkB3ukO1CHOQun9pdUi3D+kkE4ru/d9LSB
-         gkVgbTZAk6OoJuTFDjPzLFtVl/6t9UfVYjkBaKptokYaGGnFA/dvjkub1zPKyp2iHyMQ
-         Gahsh1OjQJWM/kj4kEE827++em94bVlWXxV89t7tovuqfn65pKGb9/piRxJ4FVgesXvH
-         /3UKkL+Fjt1qJ5/x5oM6w385yDWP4446FCQZ4YxBrv+pSrvzcYP5euIbmmnOLZC4q9qE
-         Uf8A==
-X-Gm-Message-State: ACrzQf2zwur45OpszfrgQB8WP4QqRNQrLx4rs7d5blkMIW0oaZs0WenZ
-        IbHNTm/cSihBwKAl4M0aZG8=
-X-Google-Smtp-Source: AMsMyM4GXRh9T+Op3qFcLR9q/PCBQ7Qfq4wcJf1TBPzLMUTg+J6KwwvWxx1jadiiESOWNdG/ToWi6A==
-X-Received: by 2002:a17:90b:33d1:b0:203:7b4b:ba1e with SMTP id lk17-20020a17090b33d100b002037b4bba1emr19178483pjb.128.1664102204547;
-        Sun, 25 Sep 2022 03:36:44 -0700 (PDT)
-Received: from ubuntu.localdomain ([117.176.186.252])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170902e80400b00179c81f6693sm3722183plg.264.2022.09.25.03.36.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 25 Sep 2022 03:36:44 -0700 (PDT)
-From:   wangyong <yongw.pur@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jaewon31.kim@samsung.com, linux-kernel@vger.kernel.org,
-        mhocko@kernel.org, stable@vger.kernel.org, wang.yong12@zte.com.cn,
-        yongw.pur@gmail.com, Minchan Kim <minchan@kernel.org>,
-        Baoquan He <bhe@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Yong-Taek Lee <ytk.lee@samsung.com>, stable@vger.kerenl.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 stable-4.19 3/3] page_alloc: fix invalid watermark check on a negative value
-Date:   Sun, 25 Sep 2022 03:35:29 -0700
-Message-Id: <20220925103529.13716-4-yongw.pur@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220925103529.13716-1-yongw.pur@gmail.com>
-References: <Yyn7MoSmV43Gxog4@kroah.com>
- <20220925103529.13716-1-yongw.pur@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 25 Sep 2022 06:34:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B92EE0A;
+        Sun, 25 Sep 2022 03:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664102084; x=1695638084;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AzjMN8M1hyW76bzY/qqhHv+8AwzopllUtlSeYRDbq7M=;
+  b=EWiRWUnTjr0DDhNkuB2cmAKQdgSKBqAb6te6YFmZD99KuX95o/pd+EPQ
+   UhxCqHG6ktyYyVWItb8HFDjtvscRiZ9DE10kIeTZsy9NqPsVkkc6Z5yrj
+   9YQBDkrZemoiYp9S7CU/aUlqAnlOvUy5r4pMJkHY3YCIM3VbZPEji4M6R
+   si3+MJUyPHMup2Xjw6SwV4GDPcfPqeFC+3PcQasWEyRM97VRCaknD+6gu
+   TyiiWvN7bQig84SLXzomSZWsb8HcGFkQT4fZrQobJfLPFLXtC2/3cpd+Z
+   Yb+wTZ0a0Xpf5xBNqw4GQyupTbR8oxFjANlROhVkLw3PYVMC3mcw3rsLV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="299573871"
+X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
+   d="scan'208";a="299573871"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 03:34:40 -0700
+X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
+   d="scan'208";a="623019177"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 03:34:39 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     bigeasy@linutronix.de, tglx@linutronix.de,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
+Subject: [PATCH] irq_work: Migrate the remaining work of the offline CPU on PREEMPT_RT
+Date:   Sun, 25 Sep 2022 18:41:11 +0800
+Message-Id: <20220925104111.1454100-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaewon Kim <jaewon31.kim@samsung.com>
+When CPU goes offline and invoke CPU_DYING callbacks, the
+smpcfd_dying_cpu() be invoked to flush the remaining irq_work of the
+offline CPU, for lazy irq_work, will wakeup per-CPU irq_work kthreads
+to invoke callbacks, but the irq_work kthreads are in TASK_PARKED
+state, will not get the actual wakeup, resulting in the remaining lazy
+irq_work not being executed.
 
-[ backport of commit 9282012fc0aa248b77a69f5eb802b67c5a16bb13 ]
+This commit requeue remaining of lazy irq_work to online CPU.
 
-There was a report that a task is waiting at the
-throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
-increasing.
-
-This is a bug where zone_watermark_fast returns true even when the free
-is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
-reserve in watermark fast") changed the watermark fast to consider
-highatomic reserve. But it did not handle a negative value case which
-can be happened when reserved_highatomic pageblock is bigger than the
-actual free.
-
-If watermark is considered as ok for the negative value, allocating
-contexts for order-0 will consume all free pages without direct reclaim,
-and finally free page may become depleted except highatomic free.
-
-Then allocating contexts may fall into throttle_direct_reclaim. This
-symptom may easily happen in a system where wmark min is low and other
-reclaimers like kswapd does not make free pages quickly.
-
-Handle the negative case by using MIN.
-
-Link: https://lkml.kernel.org/r/20220725095212.25388-1-jaewon31.kim@samsung.com
-Fixes: f27ce0e14088 ("page_alloc: consider highatomic reserve in watermark fast")
-Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
-Reported-by: GyeongHwan Hong <gh21.hong@samsung.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Baoquan He <bhe@redhat.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Yong-Taek Lee <ytk.lee@samsung.com>
-Cc: <stable@vger.kerenl.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
- mm/page_alloc.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ include/linux/irq_work.h |  1 +
+ kernel/cpu.c             |  1 +
+ kernel/irq_work.c        | 20 ++++++++++++++++++++
+ 3 files changed, 22 insertions(+)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 237463d..d6d8a37 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3243,11 +3243,15 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
- 	 * need to be calculated.
- 	 */
- 	if (!order) {
--		long fast_free;
-+		long usable_free;
-+		long reserved;
+diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
+index 8cd11a223260..900d9053a62d 100644
+--- a/include/linux/irq_work.h
++++ b/include/linux/irq_work.h
+@@ -66,6 +66,7 @@ void irq_work_sync(struct irq_work *work);
+ void irq_work_run(void);
+ bool irq_work_needs_cpu(void);
+ void irq_work_single(void *arg);
++void irq_work_migrate(int cpu);
+ #else
+ static inline bool irq_work_needs_cpu(void) { return false; }
+ static inline void irq_work_run(void) { }
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index bbad5e375d3b..70461b6d785d 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1075,6 +1075,7 @@ static int takedown_cpu(unsigned int cpu)
  
--		fast_free = free_pages;
--		fast_free -= __zone_watermark_unusable_free(z, 0, alloc_flags);
--		if (fast_free > mark + z->lowmem_reserve[classzone_idx])
-+		usable_free = free_pages;
-+		reserved = __zone_watermark_unusable_free(z, 0, alloc_flags);
+ 	tick_cleanup_dead_cpu(cpu);
+ 	rcutree_migrate_callbacks(cpu);
++	irq_work_migrate(cpu);
+ 	return 0;
+ }
+ 
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index 7afa40fe5cc4..bfa21468c2df 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -242,6 +242,26 @@ static void irq_work_run_list(struct llist_head *list)
+ 		irq_work_single(work);
+ }
+ 
++void irq_work_migrate(int cpu)
++{
++	struct irq_work *work, *tmp;
++	struct llist_node *llnode;
++	struct llist_head *list = per_cpu_ptr(&lazy_list, cpu);
 +
-+		/* reserved may over estimate high-atomic reserves. */
-+		usable_free -= min(usable_free, reserved);
-+		if (usable_free > mark + z->lowmem_reserve[classzone_idx])
- 			return true;
- 	}
- 
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++		return;
++
++	if (llist_empty(list))
++		return;
++
++	llnode = llist_del_all(list);
++	llist_for_each_entry_safe(work, tmp, llnode, node.llist) {
++		atomic_set(&work->node.a_flags, 0);
++		irq_work_queue(work);
++	}
++}
++EXPORT_SYMBOL_GPL(irq_work_migrate);
++
+ /*
+  * hotplug calls this through:
+  *  hotplug_cfd() -> flush_smp_call_function_queue()
 -- 
-2.7.4
+2.25.1
+
