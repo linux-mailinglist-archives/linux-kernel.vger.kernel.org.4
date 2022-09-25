@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5F25E96B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 00:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0F65E96E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 01:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiIYWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 18:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S231895AbiIYXSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 19:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiIYWwT (ORCPT
+        with ESMTP id S231472AbiIYXS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 18:52:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F142A706
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 15:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664146338; x=1695682338;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oSpAJI+Sflg4S4/9V24kGd4lQ+/U/pcM2tTcNLjPWME=;
-  b=TBkZ3JGEF+kZlwRRcyXX2twyROycjIHqSyUCUIkQbeLcGtop+zBC6sFA
-   GVp7U0SGu3FoVG+w3UavWgp8aW8+ZPaCHLkRcYnIL2F6fKIw/8uKeA8TH
-   hxFUtDLy3TpsN2C1yiDEU2JvC7OUPU9LNWH7tHv/wwre20hK7E2W5xUfb
-   G2S7H62/HcZxigM7CCHYW0ptHshxYC/snP2YxxruNtr/2kwU41raoz03h
-   Dmf9oCq7rgcCYaG+SuPirRklV4Rin2zy/46o3l7Ilv4LqBayttzhHRmHW
-   qvgNg5clnweTF7h10W0BQ52YJODk+4cLWGRHNqz2QJ6C/ZPDnmGfgtI8Z
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="364932318"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="364932318"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 15:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="949643383"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Sep 2022 15:52:16 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ocaTw-0008SU-1B;
-        Sun, 25 Sep 2022 22:52:16 +0000
-Date:   Mon, 26 Sep 2022 06:51:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 02a42cd778750c33d55876321fa68e906122247e
-Message-ID: <6330db7f.NC2HOxj91cjrIWlK%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 25 Sep 2022 19:18:28 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1699723143;
+        Sun, 25 Sep 2022 16:18:26 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28PNGrMT001745
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 25 Sep 2022 19:16:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1664147821; bh=da9jQuNWBOYtDW1IPt/q34HmRXLfvRq67qaZEcnXCxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=gECWnrIo9+3OSV3jvVy6YC/pGxCUN9+n3Q6/Nhdz1ch35b1yrJCauKZ9YZEPLczzT
+         CgTtpjSxw3gB+CT0BOukaNmBoxSgn0vqg+PkRxZko1LDhzZM4+UcNJ0XCpgcEtqaHS
+         UPdtE04CEsR4coBh9hUG9QyZ4KlVISnK+FaPQjpPcxdGYVtykpEQ/zRLKTJbpn55JS
+         3v+PeB3JsRQQ5b9CkqgkcTby+iq4+/nRivIsiHef/V2CwWF8vOG3efqQSW1TZ3S/nc
+         TfALy+UHv5h8ytrvS9zU65/JQUHXb+X5PoRgCNH6OhzNyc7JQ4P7ayWZq8G71QAvnt
+         +LMD6dWnWhnVQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id CD2E015C5274; Sun, 25 Sep 2022 19:16:53 -0400 (EDT)
+Date:   Sun, 25 Sep 2022 19:16:53 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        tech-board@lists.linuxfoundation.org,
+        Song Liu <songliubraving@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        Borislav Petkov <bp@alien8.de>, brijesh.singh@amd.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, jane.chu@oracle.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, seanjc@google.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>
+Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
+Message-ID: <YzDhZSsf82RekI+n@mit.edu>
+References: <00000000000076f3a305e97e9229@google.com>
+ <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
+ <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 02a42cd778750c33d55876321fa68e906122247e  Merge branch into tip/master: 'x86/timers'
+On Sun, Sep 25, 2022 at 02:55:46PM -0700, Alexei Starovoitov wrote:
+> 
+> So instead of pinging us with your w^x concern you've decided
+> to fail hard in -next to force the issue and
+> now acting like this is something surprising to you?!
+> 
+> This is Code of Conduct "worthy" behavior demonstrated
+> by a newly elected member of the Technical Advisory Board.
 
-elapsed time: 723m
+I must be missing something.  Why/what do you think this is
+specifically a Code of Conduct violation?
 
-configs tested: 58
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arc                                 defconfig
-s390                             allmodconfig
-x86_64                              defconfig
-x86_64                        randconfig-a002
-alpha                               defconfig
-powerpc                           allnoconfig
-arm                                 defconfig
-s390                                defconfig
-arc                  randconfig-r043-20220925
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-i386                             allyesconfig
-i386                          randconfig-a001
-s390                 randconfig-r044-20220925
-x86_64                        randconfig-a011
-i386                          randconfig-a003
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           allyesconfig
-i386                          randconfig-a014
-x86_64                        randconfig-a006
-i386                          randconfig-a012
-s390                             allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a015
-riscv                randconfig-r042-20220925
-i386                          randconfig-a016
-i386                          randconfig-a005
-x86_64                        randconfig-a004
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-arm                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20220925
-hexagon              randconfig-r041-20220925
-i386                          randconfig-a013
-i386                          randconfig-a002
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-x86_64                        randconfig-a003
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-i386                          randconfig-a006
-i386                          randconfig-a004
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+				- Ted
