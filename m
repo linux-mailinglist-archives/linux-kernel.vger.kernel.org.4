@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B6D5E9508
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89275E9518
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiIYRrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S232854AbiIYRwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbiIYRq4 (ORCPT
+        with ESMTP id S232474AbiIYRwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:46:56 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8CC23BDD
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:46:55 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id g12so2951267qts.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:46:55 -0700 (PDT)
+        Sun, 25 Sep 2022 13:52:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BCB1F629
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:52:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 30so6285309edw.5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=8jE96hogZR+NquxzuPoUFyq87wtmzQSELzXQTPSQhSs=;
-        b=epLVXpG2/zy7Qon/++OSH0d1HDaGjKoWhpyLmAKTQQ/Fk1pd5tw6wNb1s2/Gmdl6rw
-         Dz0fslVf2SO/vVP+GsqszF4a4FRv9pn70FC4yjd0BhYSZr7xwYr6PGkG3VtmdFj0HCxB
-         Edwysi4GYOugxwljAWRwWT3NzSv7tvL4ofUGs=
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tKIChjssk9qrfQZXpSX5zD6aIatsPePkOhcMo1qow4g=;
+        b=Pmmlj3lT76utLBHuu2eVq7J7WxDwU4qJHC1HgjjZdWljTsQBb6ewQh2J/C7SqUXgCN
+         u69G0QtqpddFf5wBa2APijOHMNSj0skQ4sW0w52RaaHHnFp+mhJn6TCbfa+Gez9Fwybw
+         jdvdfp+X2Rgj1Cse7c1c1F8SmwEz/DYSg2vvQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=8jE96hogZR+NquxzuPoUFyq87wtmzQSELzXQTPSQhSs=;
-        b=m5aMFjbbLVg1kqMZz0CneCvZWffwelBnmCjw16nHi3MXm7EZNV1fsbzQO0pszJPlW8
-         k25PqLu9sFBbRBecJib4nKP32KXWf29BiVz5VBsG8hrtpSH1J8ahL4rm94y22+rDWWCI
-         WpXFRjdklMxxWvK4kdmLp2bjDZn2WIczrFtW/ktVwHlwbikH6spkAYGUBdYM7XSpVwqL
-         wOmP8HQsoMsIh2dcDzvQ0mQZiCyw5hClQzwMviu380Rnfx0T4t2qBc5sq+1pXnMyMQSS
-         pJw7JNYo5k8W2j70Y6YJqzkk9qggkPrgdLAXHl+NQgptjIKvkaXrAqeUEMtS97hIl//5
-         WjTQ==
-X-Gm-Message-State: ACrzQf15FCd+c28wyvLWe3AJSDOdcdmUNuBoiR4WxK44Eti16YN02YpT
-        p4us3KEHsal96/V/mtWenjXN6g==
-X-Google-Smtp-Source: AMsMyM48SFlUti6V6oANMuQ2XTQDcP59hkQJw62s0fw6lIIkGZVsbHvXEfQ6mrCMwisO1ctjs+9z9A==
-X-Received: by 2002:a05:622a:491:b0:35d:acd:d855 with SMTP id p17-20020a05622a049100b0035d0acdd855mr15118353qtx.143.1664128014323;
-        Sun, 25 Sep 2022 10:46:54 -0700 (PDT)
-Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05620a240700b006cede93c765sm10443329qkn.28.2022.09.25.10.46.53
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tKIChjssk9qrfQZXpSX5zD6aIatsPePkOhcMo1qow4g=;
+        b=lyjgrUbIX/EEJDt7Yux3VcvX9PkTDhBm+RvZ6eaL/XO/dZ9rUiJdUQKHFVCeeLowtE
+         zy/qIy8TXUWIVLqduKZgWiYJKwc1lU5Q+TMc39kWNN0sbJaOdnRRBKNsqi87r3tbepYi
+         SkQjtIjhmzEN5IQJWrn4qu2NdqgzKHdXfBbvmCGd1xc83hSDmLcklVvMRvUTeco57M4y
+         kwWS4gmVXkS1eyIE2YVSvO4y+0aCNpeYaJVT/wT59T77rMsPQZDuyLTEaTceTOhCSjkw
+         VUYT4l4e8qEqFuKghWbxDbskXjlFFRYh7vwUxAoe5+FGBTX4Hnv2pows++LOF/JzlVbo
+         3boA==
+X-Gm-Message-State: ACrzQf1DKJDnfvbzqpEa9MCsX+Vt3BGsZ/20lcYTk575gsEM1+5NRqcP
+        S78choHQVmhwnPSF8fKopsrvtzNPXoE6KA==
+X-Google-Smtp-Source: AMsMyM4Kx2cZYORTXn6rNexr6JP9tU03J3wrYfA9VDWomLSa/cKrdR5EXdtuhXTPkZr5BHVRwa/nEg==
+X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id h2-20020a056402280200b0043a909855a0mr18339228ede.179.1664128336243;
+        Sun, 25 Sep 2022 10:52:16 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-232-92-192.retail.telecomitalia.it. [95.232.92.192])
+        by smtp.gmail.com with ESMTPSA id f23-20020a056402161700b0045703d699b9sm3252594edv.78.2022.09.25.10.52.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 10:46:53 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 17:46:53 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
-        frederic@kernel.org, paulmck@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <YzCUDXn3htWbqM4f@google.com>
-References: <20220922220104.2446868-1-joel@joelfernandes.org>
- <20220922220104.2446868-2-joel@joelfernandes.org>
- <YzAX5kOwjrZzoed6@pc636>
+        Sun, 25 Sep 2022 10:52:15 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH v4 0/5] can: bxcan: add support for ST bxCAN controller
+Date:   Sun, 25 Sep 2022 19:52:04 +0200
+Message-Id: <20220925175209.1528960-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzAX5kOwjrZzoed6@pc636>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -70,192 +86,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vlad,
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-On Sun, Sep 25, 2022 at 10:57:10AM +0200, Uladzislau Rezki wrote:
-> > Implement timer-based RCU lazy callback batching. The batch is flushed
-> > whenever a certain amount of time has passed, or the batch on a
-> > particular CPU grows too big. Also memory pressure will flush it in a
-> > future patch.
-> > 
-> > To handle several corner cases automagically (such as rcu_barrier() and
-> > hotplug), we re-use bypass lists to handle lazy CBs. The bypass list
-> > length has the lazy CB length included in it. A separate lazy CB length
-> > counter is also introduced to keep track of the number of lazy CBs.
-> > 
-> > v5->v6:
-> > 
-> > [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
-> >   deferral levels wake much earlier so for those it is not needed. ]
-> > 
-> > [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
-> > 
-> > [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
-> > 
-> > [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
-> > 
-> > [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
-> > 
-> > [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
-> > 
-> I think it make sense to add some data to the commit message
-> illustrating what this patch does.
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
-Sure, will do!
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-> From my side i gave a try of this patch on my setup. Some data:
-> 
-> <snip>
-> root@pc638:/home/urezki/rcu_v6# ./perf_script_parser ./perf_v6.script | sort -nk 6 | grep rcu
-> name:                       rcuop/23 pid:        184 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/26 pid:        206 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/29 pid:        227 woken-up     1     interval: min     0     max     0       avg     0
-> name:                        rcuop/2 pid:         35 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/33 pid:        256 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/34 pid:        263 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/35 pid:        270 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/36 pid:        277 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/37 pid:        284 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/38 pid:        291 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/49 pid:        370 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/59 pid:        441 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/63 pid:        469 woken-up     1     interval: min     0     max     0       avg     0
-> name:                        rcuog/0 pid:         16 woken-up     2     interval: min  8034     max  8034       avg  4017
-> name:                       rcuog/24 pid:        191 woken-up     2     interval: min  7941     max  7941       avg  3970
-> name:                       rcuog/32 pid:        248 woken-up     2     interval: min  7542     max  7542       avg  3771
-> name:                       rcuog/48 pid:        362 woken-up     2     interval: min  8065     max  8065       avg  4032
-> name:                       rcuog/56 pid:        419 woken-up     2     interval: min  8076     max  8076       avg  4038
-> name:                       rcuop/21 pid:        170 woken-up     2     interval: min 13311438  max 13311438    avg 6655719
-> name:                       rcuog/16 pid:        134 woken-up     4     interval: min  8029     max 13303387    avg 3329863
-> name:                        rcuop/9 pid:         85 woken-up     4     interval: min 10007570  max 10007586    avg 7505684
-> name:                        rcuog/8 pid:         77 woken-up     8     interval: min  6240     max 10001242    avg 3753622
-> name:                    rcu_preempt pid:         15 woken-up    18     interval: min  6058     max 9999713     avg 2140788
-> name:                     test_rcu/0 pid:       1411 woken-up 10003     interval: min   165     max 19072       avg  4275
-> root@pc638:/home/urezki/rcu_v6#
-> 
-> root@pc638:/home/urezki/rcu_v6# ./perf_script_parser ./perf_default.script | sort -nk 6 | grep rcu
-> name:                       rcuop/33 pid:        256 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuop/51 pid:        384 woken-up     1     interval: min     0     max     0       avg     0
-> name:                       rcuog/32 pid:        248 woken-up     2     interval: min 11927     max 11927       avg  5963
-> name:                       rcuop/63 pid:        469 woken-up     2     interval: min 23963     max 23963       avg 11981
-> name:                       rcuog/56 pid:        419 woken-up     3     interval: min 11132     max 23967       avg 11699
-> name:                       rcuop/50 pid:        377 woken-up     3     interval: min  8057     max 4944344     avg 1650800
-> name:                       rcuog/48 pid:        362 woken-up     8     interval: min  2712     max 37430015    avg 5298801
-> name:                       rcuop/16 pid:        135 woken-up  4790     interval: min  7340     max 16649       avg  8843
-> name:                       rcuog/16 pid:        134 woken-up  4792     interval: min  7368     max 16644       avg  8844
-> name:                    rcu_preempt pid:         15 woken-up  5302     interval: min    26     max 12179       avg  7994
-> name:                     test_rcu/0 pid:       1353 woken-up 10003     interval: min   169     max 18508       avg  4236
-> root@pc638:/home/urezki/rcu_v6#
-> <snip>
-> 
-> so it is obvious that the patch does the job.
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
-Thanks a lot for testing!
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
 
-> On my KVM machine the boot time is affected:
-> 
-> <snip>
-> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
-> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
-> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
-> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
-> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
-> [  104.115418] process '/usr/bin/fstype' started with executable stack
-> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
-> [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
-> [  104.340193] systemd[1]: Detected virtualization kvm.
-> [  104.340196] systemd[1]: Detected architecture x86-64.
-> [  104.359032] systemd[1]: Set hostname to <pc638>.
-> [  105.740109] random: crng init done
-> [  105.741267] systemd[1]: Reached target Remote File Systems.
-> <snip>
-> 
-> 2 - 11 and second delay is between 32 - 104. So there are still users which must
-> be waiting for "RCU" in a sync way.
+make stm32f469_disco_sd_defconfig
+make
 
-I was wondering if you can compare boot logs and see which timestamp does the
-slow down start from. That way, we can narrow down the callback. Also another
-idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
-ftrace_dump_on_oops" to the boot params, and then manually call
-"tracing_off(); panic();" from the code at the first printk that seems off in
-your comparison of good vs bad. For example, if "crng init done" timestamp is
-off, put the "tracing_off(); panic();" there. Then grab the serial console
-output to see what were the last callbacks that was queued/invoked.
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
 
-> > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> > index 08605ce7379d..40ae36904825 100644
-> > --- a/include/linux/rcupdate.h
-> > +++ b/include/linux/rcupdate.h
-> > @@ -108,6 +108,13 @@ static inline int rcu_preempt_depth(void)
-> >  
-> >  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
-> >  
-> > +#ifdef CONFIG_RCU_LAZY
-> > +void call_rcu_flush(struct rcu_head *head, rcu_callback_t func);
-> > +#else
-> > +static inline void call_rcu_flush(struct rcu_head *head,
-> > +		rcu_callback_t func) {  call_rcu(head, func); }
-> > +#endif
-> > +
-> >  /* Internal to kernel */
-> >  void rcu_init(void);
-> >  extern int rcu_scheduler_active;
-> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > index f53ad63b2bc6..edd632e68497 100644
-> > --- a/kernel/rcu/Kconfig
-> > +++ b/kernel/rcu/Kconfig
-> > @@ -314,4 +314,12 @@ config TASKS_TRACE_RCU_READ_MB
-> >  	  Say N here if you hate read-side memory barriers.
-> >  	  Take the default if you are unsure.
-> >  
-> > +config RCU_LAZY
-> > +	bool "RCU callback lazy invocation functionality"
-> > +	depends on RCU_NOCB_CPU
-> > +	default n
-> > +	help
-> > +	  To save power, batch RCU callbacks and flush after delay, memory
-> > +	  pressure or callback list growing too big.
-> > +
-> >
-> Do you think you need this kernel option? Can we just consider and make
-> it a run-time configurable? For example much more users will give it a try,
-> so it will increase a coverage. By default it can be off.
-> 
-> Also you do not need to do:
-> 
-> #ifdef LAZY
+Changes in v4:
+- Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
+ (compatible "st,stm32f4-bxcan") are no longer children of a parent
+  node with compatible "st,stm32f4-bxcan-core".
+- Add the "st,gcan" property (global can memory) to can nodes which
+  references a "syscon" node containing the shared clock and memory
+  addresses.
+- Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
+  with the gcan@40006600 node ("sysnode" compatible). The gcan node
+  contains clocks and memory addresses shared by the two can nodes
+  of which it's no longer the parent.
+- Add to can nodes the "st,gcan" property (global can memory) which
+  references the gcan@40006600 node ("sysnode compatibble).
+- Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
+- Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
+  moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
+  has therefore been removed.
+- Use the regmap_*() functions to access the shared memory registers.
+- Use spinlock to protect bxcan_rmw().
+- Use 1 space, instead of tabs, in the macros definition.
+- Drop clock ref-counting.
+- Drop unused code.
+- Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
+- Add BXCAN_ prefix to lec error codes.
+- Add the macro BXCAN_RX_MB_NUM.
+- Enable time triggered mode and use can_rx_offload().
+- Use readx_poll_timeout() in function with timeouts.
+- Loop from tail to head in bxcan_tx_isr().
+- Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
+- Don't return from bxcan_handle_state_change() if skb/cf are NULL.
+- Enable/disable the generation of the bus error interrupt depending
+  on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
+- Don't return from bxcan_handle_bus_err() if skb is NULL.
+- Drop statistics updating from bxcan_handle_bus_err().
+- Add an empty line in front of 'return IRQ_HANDLED;'
+- Rename bxcan_start() to bxcan_chip_start().
+- Rename bxcan_stop() to bxcan_chip_stop().
+- Disable all IRQs in bxcan_chip_stop().
+- Rename bxcan_close() to bxcan_ndo_stop().
+- Use writel instead of bxcan_rmw() to update the dlc register.
 
-How does the "LAZY" macro end up being runtime-configurable? That's static /
-compile time. Did I miss something?
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
 
-> ...
-> #else
-> ...
-> #endif
-> 
-> >  
-> > +/*
-> > + * LAZY_FLUSH_JIFFIES decides the maximum amount of time that
-> > + * can elapse before lazy callbacks are flushed. Lazy callbacks
-> > + * could be flushed much earlier for a number of other reasons
-> > + * however, LAZY_FLUSH_JIFFIES will ensure no lazy callbacks are
-> > + * left unsubmitted to RCU after those many jiffies.
-> > + */
-> > +#define LAZY_FLUSH_JIFFIES (10 * HZ)
-> > +static unsigned long jiffies_till_flush = LAZY_FLUSH_JIFFIES;
-> Make it configurable? I do not think you actually need 10 seconds here.
-> Reducing it will reduce a possibility to hit a low memory condition. 1
-> second would be far enough i think.
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
 
-Hmm, I can make the delay configurable but for now I'll keep this as default
-as all of our power testing has been done with that and I don't want risk
-losing the optimization.
+Dario Binacchi (5):
+  dt-bindings: arm: stm32: add compatible for syscon gcan node
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
 
-Honestly, I am not worried too about memory pressure as we have a shrinker
-which triggers flushes on the slightest hint of memory pressure. If it is not
-handling it properly, then we need to fix the shrinker.
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    2 +
+ .../bindings/net/can/st,stm32-bxcan.yaml      |   83 ++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   29 +
+ drivers/net/can/Kconfig                       |   12 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan.c                       | 1110 +++++++++++++++++
+ 8 files changed, 1274 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan.c
 
-thanks,
-
- - Joel
+-- 
+2.32.0
 
