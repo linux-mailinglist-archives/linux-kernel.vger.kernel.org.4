@@ -2,88 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB61C5E93C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A055E93C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiIYOww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 10:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S229794AbiIYO4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 10:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIYOws (ORCPT
+        with ESMTP id S229567AbiIYO4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 10:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1202BB1B;
-        Sun, 25 Sep 2022 07:52:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 25 Sep 2022 10:56:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58162CC8B
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 07:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664117778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9wAMf4g97GMPZ/zZY9HnOUGLwVYUmgjVUMe6QXv7bsg=;
+        b=JPMFmEaN4rahuSTXtNoX2irPKrPdHb/fjZsDR4e4RdXH5zNPiBl4jSirgryfxJ2aZY4d6m
+        yCBsTkd5GPE7SibGWBIsT+ijCssQwlAyZ7R1lIOyX+j6OiYeGj+AwBiFd67qf1cmWHMQoc
+        O1DHaApuSwlT/RG+ucOASBpiTdghABM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-Tmj6sBDQNK6DiF7a-0c5Mg-1; Sun, 25 Sep 2022 10:56:12 -0400
+X-MC-Unique: Tmj6sBDQNK6DiF7a-0c5Mg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04FBF614FB;
-        Sun, 25 Sep 2022 14:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A26DC433D6;
-        Sun, 25 Sep 2022 14:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664117565;
-        bh=3kjYfysKz0E8NVkgZIWBHMbIcjSTrZQrXVoy9GUlif8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nI/VUGvhS/o/0MoeXJdOb84mSz2LESLsTM1Tig6MHcizuxlO0q1pVXxkvsWxIYxSQ
-         V/FyZhUlXsB7E5BN7Kc/dQtiBi8fWYzrzLi4S3fiJ9WxOFCNAm9ux7QXKcsVgTfOro
-         j15qy1eLbO0IEJy1UloCtUnNniXuRUhPP8HkUkAu7xPk8Rw5N2K53PQwytnbC6Rew6
-         P0XsR598O46wt7DAmBq5QpSoRnpEHe3ZlTxyXuRrFeoEmRgrgXWnQ+8ag4MsQfrYqJ
-         VmWLI5Gpc0gXG7XRBVs+48Lymilzz7YLHHc0etp+E0vNPJ4H+xGqCRtcuqw4xtNSGi
-         WDVKHZYVqVywA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1ocSzr-00CTtI-7A;
-        Sun, 25 Sep 2022 15:52:43 +0100
-Date:   Sun, 25 Sep 2022 10:52:39 -0400
-Message-ID: <86bkr38q14.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     mark.rutland@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] dt-bindings: timer: arm,arch_timer: Allow dual compatible string
-In-Reply-To: <20220922161149.371565-1-jean-philippe@linaro.org>
-References: <20220922161149.371565-1-jean-philippe@linaro.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: jean-philippe@linaro.org, mark.rutland@arm.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E3711C05143;
+        Sun, 25 Sep 2022 14:56:12 +0000 (UTC)
+Received: from [10.22.32.91] (unknown [10.22.32.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D50A492B04;
+        Sun, 25 Sep 2022 14:56:11 +0000 (UTC)
+Message-ID: <0a715ca2-0348-454a-1f49-1c4e6851346f@redhat.com>
+Date:   Sun, 25 Sep 2022 10:56:10 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2] locking/lock_events: Fix license version
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dbueso@suse.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>
+References: <a57505bf6c8ddbd68ff5a320aaf5922ec431e00e.1664117249.git.christophe.jaillet@wanadoo.fr>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <a57505bf6c8ddbd68ff5a320aaf5922ec431e00e.1664117249.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022 12:11:50 -0400,
-Jean-Philippe Brucker <jean-philippe@linaro.org> wrote:
-> 
-> Since the Armv7 and Armv8 architected timers are compatible, it is valid
-> to expose a devicetree node with compatible string "arm,armv8-timer"
-> followed by "arm,armv7-timer". For example a 32-bit guest running on a
-> 64-bit machine may look for the v7 string even though the hardware is v8.
-> VMMs such as QEMU and kvmtool have been using this compatible string for
-> some time. Clean up the compatible list a little and add the dual
-> option.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+On 9/25/22 10:47, Christophe JAILLET wrote:
+> SPDX-License-Identifier is GPL-2.0, but the license text states "either
+> version 2 of the License, or (at your option) any later version."
+>
+> So update the SPDX-License-Identifier to GPL-2.0-or-later.
+>
+> Remove the license text as well. It is useless now.
+>
+> Fixes: ad53fa10fa9e ("locking/qspinlock_stat: Introduce generic lockevent_*() counting APIs")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   kernel/locking/lock_events.h      | 12 +-----------
+>   kernel/locking/lock_events_list.h | 12 +-----------
+>   2 files changed, 2 insertions(+), 22 deletions(-)
+>
+> diff --git a/kernel/locking/lock_events.h b/kernel/locking/lock_events.h
+> index 8c7e7d25f09c..ba17c5be3c2b 100644
+> --- a/kernel/locking/lock_events.h
+> +++ b/kernel/locking/lock_events.h
+> @@ -1,15 +1,5 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>   /*
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+> - *
+> - * This program is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> - * GNU General Public License for more details.
+> - *
+>    * Authors: Waiman Long <longman@redhat.com>
+>    */
+>   
+> diff --git a/kernel/locking/lock_events_list.h b/kernel/locking/lock_events_list.h
+> index 97fb6f3f840a..7430ecd1fbc6 100644
+> --- a/kernel/locking/lock_events_list.h
+> +++ b/kernel/locking/lock_events_list.h
+> @@ -1,15 +1,5 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>   /*
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+> - *
+> - * This program is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> - * GNU General Public License for more details.
+> - *
+>    * Authors: Waiman Long <longman@redhat.com>
+>    */
+>   
+Acked-by: Waiman Long <longman@redhat.com>
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
