@@ -2,93 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E795E9188
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 09:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915C75E918B
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 09:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiIYHss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 03:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S229539AbiIYHvD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 25 Sep 2022 03:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIYHso (ORCPT
+        with ESMTP id S229525AbiIYHu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 03:48:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376E337F90;
-        Sun, 25 Sep 2022 00:48:43 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a26so8364370ejc.4;
-        Sun, 25 Sep 2022 00:48:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=NPryojRVWrHTWftBM3+nGe/FEaKEi2zn6ID8jRnj95o=;
-        b=UHdE/Ozczuk466WSCjjpdbP4Udazo0rO27CzdCgwt98DsrtnGt547Jxj9Xorerej4r
-         W9On5DaqxYqI8hhZ8RNpph1FYBjyRAZsC1PwM2sFhL27zSQwQrR85DMakb6WUF1xc5B8
-         AdOnOYsWTiUWFuf570ftUWktWxgBWmWQ6F2XG3+hz54C88N19AcJK/+vAzgBHL8P5U8y
-         k9Lay1B2pZ2MLBkD1gyJ+2s3CUbtUrGezfmOFhSVjgLsWGZjF71og3KYSXv7j2Z25N6z
-         Y+8FnYXAJIt/ZpzMYy8+bdJnCljSxyVM1X5u7N9rgaMgsnOsTN6z1p3WxewIOJED32WJ
-         75OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NPryojRVWrHTWftBM3+nGe/FEaKEi2zn6ID8jRnj95o=;
-        b=zXfFcuWu3P/2O0YgIGE1hh7osCQ6WrX7ZiRuTuZIdEjEbS5bS+vAcmUQe1BVqcKtWk
-         ufSu1ZE0DnH5INwB9L0F0xfBjUWilqOHnA0OPFAAgUwhnvCNu3GLS91khu/6/hml0zPj
-         bYKdkNwu8sljv4GTcMX58QVwuzahe2uebZnRWKtGqq68bQmXXANE6Lh1ogtsM6w9ZcUj
-         J86YZofHkt+1MX7XE4NCHaZ//X/BnmjcvV1KSnyxBE4PBAeZwg4edOJXnhzmAv1TThOm
-         dscnVL4Z/OSm6Eoj9nwqIuTJktFzChFwzuqS2WALoevaYOBUgYGbgVBp6kM4lZDhkPOU
-         Yhbg==
-X-Gm-Message-State: ACrzQf380Zp/EkzgYGY93q87MRXn79JudmRG2n0UkxQOeo3NKhVc57Uy
-        43gt+m6QcCLvlS6jz1kl2sQ=
-X-Google-Smtp-Source: AMsMyM486OUL3jZ2ltdLxEmKE1lmKCq+ApFBWoPZnSjv1xr0D6+aTvPlF6arEgFNu5JnG1jCxfVHSg==
-X-Received: by 2002:a17:907:2c78:b0:779:7327:c897 with SMTP id ib24-20020a1709072c7800b007797327c897mr13238793ejc.657.1664092121622;
-        Sun, 25 Sep 2022 00:48:41 -0700 (PDT)
-Received: from [192.168.0.106] ([77.126.16.127])
-        by smtp.gmail.com with ESMTPSA id 27-20020a170906301b00b0073d9a0d0cbcsm6468803ejz.72.2022.09.25.00.48.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 00:48:41 -0700 (PDT)
-Message-ID: <edb78d88-4c1b-f73c-0efa-9ccc70e99a48@gmail.com>
-Date:   Sun, 25 Sep 2022 10:48:36 +0300
+        Sun, 25 Sep 2022 03:50:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148539121;
+        Sun, 25 Sep 2022 00:50:56 -0700 (PDT)
+Received: from [192.168.0.108] ([91.64.235.177]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M7sYM-1oYWvD334c-0053mu; Sun, 25 Sep 2022 09:50:49 +0200
+From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Subject: Re[2]: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a
+ V0.96 controller
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 25 Sep 2022 07:50:48 +0000
+Message-Id: <em98cdb3f1-82c0-4fd3-92af-9c3d062b3d0c@35bdcead.com>
+In-Reply-To: <Yy7ENBX2Zo3vNgB1@kroah.com>
+References: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
+ <Yy7ENBX2Zo3vNgB1@kroah.com>
+Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+User-Agent: eM_Client/9.1.2109.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 0/7] sched, net: NUMA-aware CPU spreading interface
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20220923132527.1001870-1-vschneid@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:52rf65inMBMmyrIZ+seb/zigRzsdSHf/6hANlgtHpAKAtAQfis8
+ IIn1uXix7qRGjSdFR8+tAnjr2d5Cxkdz+BhykgQkuJm/YYGmyHkuaLei+yPlf2lzAGldrXA
+ EF+c4KvJw88it43dI0fgTCozsoOYW7gta41bszCImEJtx1UwpH7BGiScIrhYtBPDgXbgOqX
+ pXa0AzE1JFDNmWYkyYXDg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RZLZFZIuoGE=:8JYpD2qzRGyZRHP9buRo3A
+ 44o0Ed3t0lRWehmwhhppJZOU023Men4FI/fpLtrKM32/jQUFtCaSmjL5cAP3EpTL0Ng4S/2mL
+ Af/2E97kww8XOaZ6lruSwDnibNLxU3Yj0SSTewVuCnMaJ50y6gczeydcX4eofG6MW0CBTBDNc
+ OsKT4n4o4Aq+G2LmHa12/LrVW39UMUsb6kAZuxiH8KN4FBGpCOslgpM94FJpEmFgUS0MVo4nH
+ mYdFrLRh6NhTAUbv+e7c43XLrKFEskTgzOMqMj/ql9Xv3WEJS2NLPYvBvPSgpz+vDWa3dBHvK
+ 3oyoSXGWQZd3SDABckw27WBEHqwF2Y+an1m2JIGMRcEmcVjOcpJeDdwIU9OHg+Pb0OcXL0xMA
+ 6m8xYHtAGkEGn8NrrPYD7w9lSAxwfZnRHqZHz9NrIjqSEwO14svIYC0oMg5xLXTZouSxBaATO
+ KSDwsxB5HzwkqEAbT1ZylS480uwtDDxnb0mQZ9FJ40UUF3zjU6jIEvJYmkxfWfNsl0/htxjdU
+ ObJKMrpP6449iZmHI8nQb+dhIzkMrxz/6x4uMOOchlokvKwvrgeYqDzqZbreTMZ29SxaZ1c6h
+ uv7MQtj4VrqTO0KbpoeGX5gknu9+tdq6PTHoDk7Lg9y6igP6m3+VYvXWiTAinPS9+av7LYOw6
+ aeM4KMWHmY4DRIMVgKZ4AhoTQ+5Z8iO21Xq/FpPjtEb/1SUs20omO/zC+7f+tHFxgYgEmSFBG
+ ufcyZ7YvDI9twqLM7l0gWzp9ImI/jNQEp0eRN6YVuA7FqE/WYieykIS2VYQR7VZiDozqATk4k
+ 2XffQ0ZflMF7c9KFLxThqJtrboNcA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,146 +60,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi there,
+
+I'm a bit at a loss here. This is a three-line change, and I get loads 
+of warnings regarding "please, no spaces at beginning of lines". I also 
+got some about proper indentation... what now? Anyway. I have 
+reformatted the whole section that replaces the three lines, all tab 
+indents. Script/bot doesn't really like it, but looks proper to me as a 
+coder.
+Anyway, the issue at hand is a bit bigger. I installed mutt and git-mail 
+on the dev machine, and it actually works. But guess what, when I want 
+to mail out the patch to the maintainers, it gets rejected by the mailer 
+daemon (not on my machine, some MTA on the way) because 1und1 (my isp 
+where the email address I use is registered) has a low reputation and 
+gets blacklisted. So I go and use the eMClient on my Windows machine and 
+attach the patch file... I could do an uuencode and copy/paste the text, 
+maybe next time.
+Also, I happen to not understand this patch and patch resend business, 
+apparrently. I tried to fix all check errors of scripts/checkpatch.pl, 
+and amended my commit in my branch (apparrently this). So this is still 
+one commit... and the patch is one patch that should go into an upstream 
+commit... and that should be it.
+To conclude,
+
+- I tried to fix the format
+- I can't fix the other MTA (and I won't go out and get employed at 
+intel or something to have a respectable email address)
+- I don't understand this resubmit business.
+
+Can you please help? In the meantime I will re-read "The canonical patch 
+format" for further insight.
+
+with best regards
+
+Jens Glathe
 
 
-On 9/23/2022 4:25 PM, Valentin Schneider wrote:
-> Hi folks,
-> 
-> Tariq pointed out in [1] that drivers allocating IRQ vectors would benefit
-> from having smarter NUMA-awareness (cpumask_local_spread() doesn't quite cut
-> it).
-> 
-> The proposed interface involved an array of CPUs and a temporary cpumask, and
-> being my difficult self what I'm proposing here is an interface that doesn't
-> require any temporary storage other than some stack variables (at the cost of
-> one wild macro).
-> 
-> Please note that this is based on top of Yury's bitmap-for-next [2] to leverage
-> his fancy new FIND_NEXT_BIT() macro.
-> 
-> [1]: https://lore.kernel.org/all/20220728191203.4055-1-tariqt@nvidia.com/
-> [2]: https://github.com/norov/linux.git/ -b bitmap-for-next
-> 
-> A note on treewide use of for_each_cpu_andnot()
-> ===============================================
-> 
-> I've used the below coccinelle script to find places that could be patched (I
-> couldn't figure out the valid syntax to patch from coccinelle itself):
-> 
-> ,-----
-> @tmpandnot@
-> expression tmpmask;
-> iterator for_each_cpu;
-> position p;
-> statement S;
-> @@
-> cpumask_andnot(tmpmask, ...);
-> 
-> ...
-> 
-> (
-> for_each_cpu@p(..., tmpmask, ...)
-> 	S
-> |
-> for_each_cpu@p(..., tmpmask, ...)
-> {
-> 	...
-> }
-> )
-> 
-> @script:python depends on tmpandnot@
-> p << tmpandnot.p;
-> @@
-> coccilib.report.print_report(p[0], "andnot loop here")
-> '-----
-> 
-> Which yields (against c40e8341e3b3):
-> 
-> .//arch/powerpc/kernel/smp.c:1587:1-13: andnot loop here
-> .//arch/powerpc/kernel/smp.c:1530:1-13: andnot loop here
-> .//arch/powerpc/kernel/smp.c:1440:1-13: andnot loop here
-> .//arch/powerpc/platforms/powernv/subcore.c:306:2-14: andnot loop here
-> .//arch/x86/kernel/apic/x2apic_cluster.c:62:1-13: andnot loop here
-> .//drivers/acpi/acpi_pad.c:110:1-13: andnot loop here
-> .//drivers/cpufreq/armada-8k-cpufreq.c:148:1-13: andnot loop here
-> .//drivers/cpufreq/powernv-cpufreq.c:931:1-13: andnot loop here
-> .//drivers/net/ethernet/sfc/efx_channels.c:73:1-13: andnot loop here
-> .//drivers/net/ethernet/sfc/siena/efx_channels.c:73:1-13: andnot loop here
-> .//kernel/sched/core.c:345:1-13: andnot loop here
-> .//kernel/sched/core.c:366:1-13: andnot loop here
-> .//net/core/dev.c:3058:1-13: andnot loop here
-> 
-> A lot of those are actually of the shape
-> 
->    for_each_cpu(cpu, mask) {
->        ...
->        cpumask_andnot(mask, ...);
->    }
-> 
-> I think *some* of the powerpc ones would be a match for for_each_cpu_andnot(),
-> but I decided to just stick to the one obvious one in __sched_core_flip().
->    
-> Revisions
-> =========
-> 
-> v3 -> v4
-> ++++++++
-> 
-> o Rebased on top of Yury's bitmap-for-next
-> o Added Tariq's mlx5e patch
-> o Made sched_numa_hop_mask() return cpu_online_mask for the NUMA_NO_NODE &&
->    hops=0 case
-> 
-> v2 -> v3
-> ++++++++
-> 
-> o Added for_each_cpu_and() and for_each_cpu_andnot() tests (Yury)
-> o New patches to fix issues raised by running the above
-> 
-> o New patch to use for_each_cpu_andnot() in sched/core.c (Yury)
-> 
-> v1 -> v2
-> ++++++++
-> 
-> o Split _find_next_bit() @invert into @invert1 and @invert2 (Yury)
-> o Rebase onto v6.0-rc1
-> 
-> Cheers,
-> Valentin
-> 
-> Tariq Toukan (1):
->    net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity
->      hints
-> 
-> Valentin Schneider (6):
->    lib/find_bit: Introduce find_next_andnot_bit()
->    cpumask: Introduce for_each_cpu_andnot()
->    lib/test_cpumask: Add for_each_cpu_and(not) tests
->    sched/core: Merge cpumask_andnot()+for_each_cpu() into
->      for_each_cpu_andnot()
->    sched/topology: Introduce sched_numa_hop_mask()
->    sched/topology: Introduce for_each_numa_hop_cpu()
-> 
->   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 13 +++++-
->   include/linux/cpumask.h                      | 39 ++++++++++++++++
->   include/linux/find.h                         | 33 +++++++++++++
->   include/linux/topology.h                     | 49 ++++++++++++++++++++
->   kernel/sched/core.c                          |  5 +-
->   kernel/sched/topology.c                      | 31 +++++++++++++
->   lib/cpumask_kunit.c                          | 19 ++++++++
->   lib/find_bit.c                               |  9 ++++
->   8 files changed, 192 insertions(+), 6 deletions(-)
-> 
-> --
-> 2.31.1
-> 
+------ Originalnachricht ------
+Von "Greg KH" <gregkh@linuxfoundation.org>
+An "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+Cc mathias.nyman@intel.com; linux-usb@vger.kernel.org; 
+linux-kernel@vger.kernel.org
+Datum 24.09.2022 10:47:48
+Betreff Re: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite 
+being a V0.96 controller
 
-Valentin, thank you for investing your time here.
-
-Acked-by: Tariq Toukan <tariqt@nvidia.com>
-
-Tested on my mlx5 environment.
-It works as expected, including the case of node == NUMA_NO_NODE.
-
-Regards,
-Tariq
+>On Sat, Sep 24, 2022 at 08:16:34AM +0000, Jens Glathe wrote:
+>>Hi there,
+>>
+>>second try at a patch which was an actual pain with my Lenovo T500 notebook, augmented with an USB3 PCMCIA card that has an ASM1042 chip. Inspired by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
+>>
+>>ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event errors with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally setting quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this case.
+>>
+>>with best regards
+>>
+>>Jens Glathe
+>>
+>>---
+>>
+>>v1->v2
+>>
+>>intensive use of scripts/checkpatch.pl, reformatted the code
+>>reformatted the commit text for line wraps
+>
+>>From ffb3a70a48b91b79943a0131ddd470e5f09c0f41 Mon Sep 17 00:00:00 2001
+>>From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+>>Date: Sun, 28 Aug 2022 16:23:41 +0200
+>>Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a
+>>  V0.96 controller
+>>
+>>only if it reports as a V0.96 XHCI controller. Appears to fix the errors
+>>"xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
+>>current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
+>>often) when using a r8152 USB3 ethernet adapter with integrated hub.
+>>
+>>Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+>>---
+>>  drivers/usb/host/xhci-pci.c | 10 +++++++---
+>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>>diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>>index dce6c0ec8d34..f8b3b34d257e 100644
+>>--- a/drivers/usb/host/xhci-pci.c
+>>+++ b/drivers/usb/host/xhci-pci.c
+>>@@ -305,9 +305,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>>  		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
+>>  	}
+>>  -	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>-		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+>>-		xhci->quirks |= XHCI_BROKEN_STREAMS;
+>>+  if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>+      pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
+>>+    /* try to tame the ASMedia 1042 controller which is 0.96 */
+>>+    if (xhci->hci_version == 0x96)
+>>+      xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+>>+    xhci->quirks |= XHCI_BROKEN_STREAMS;
+>>+  }
+>>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>  		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
+>>  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+>>-- 2.25.1
+>>
+>
+>Hi,
+>
+>This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+>a patch that has triggered this response.  He used to manually respond
+>to these common problems, but in order to save his sanity (he kept
+>writing the same thing over and over, yet to different people), I was
+>created.  Hopefully you will not take offence and will fix the problem
+>in your patch and resubmit it so that it can be accepted into the Linux
+>kernel tree.
+>
+>You are receiving this message because of the following common error(s)
+>as indicated below:
+>
+>- Your patch contains warnings and/or errors noticed by the
+>  scripts/checkpatch.pl tool.
+>
+>- Your patch was attached, please place it inline so that it can be
+>  applied directly from the email message itself.
+>
+>- This looks like a new version of a previously submitted patch, but you
+>  did not list below the --- line any changes from the previous version.
+>  Please read the section entitled "The canonical patch format" in the
+>  kernel file, Documentation/SubmittingPatches for what needs to be done
+>  here to properly describe this.
+>
+>If you wish to discuss this problem further, or you have questions about
+>how to resolve this issue, please feel free to respond to this email and
+>Greg will reply once he has dug out from the pending patches received
+>from other developers.
+>
+>thanks,
+>
+>greg k-h's patch email bot
