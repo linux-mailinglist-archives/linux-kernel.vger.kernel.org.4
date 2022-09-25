@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5305E9317
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 14:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F965E931C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 14:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiIYM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 08:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S231345AbiIYMci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 08:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIYM3l (ORCPT
+        with ESMTP id S229965AbiIYMcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 08:29:41 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE0D5F42
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 05:29:35 -0700 (PDT)
-Received: from fsav312.sakura.ne.jp (fsav312.sakura.ne.jp [153.120.85.143])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28PCTXIL012665;
-        Sun, 25 Sep 2022 21:29:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav312.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp);
- Sun, 25 Sep 2022 21:29:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav312.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28PCTWSJ012662
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 25 Sep 2022 21:29:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp>
-Date:   Sun, 25 Sep 2022 21:29:32 +0900
+        Sun, 25 Sep 2022 08:32:36 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4BA2CDF7
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 05:32:35 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id j24so4744346lja.4
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 05:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nabam-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=SyIJ4xReYhaGfQD9IOYV1GyBGeZ/knL4/dXn4A3KuoE=;
+        b=Pr9jz7KbT19OgX66iH/phdojxtRKaOKcFxrfTjDq7xBaKP8mtxi32TE+qatCpZC8y0
+         le+P0+FzawTdPPtnCIQzuyPEfcXgU89k7pPNZVFZKZnWuhIYEKbfMY6ElsG7zJGSq8wx
+         LJpEArX4XO4RueOvJLBPv+X9l4RO3BjKLwow9ztk1Dfv0h2bj9JhI8lIDiLlJXE7XLIf
+         hSel8yHVyevK9QxSxXTCeogTo2vOvzIJsqA7YnJrTVCJrsqOAGsr+qgtuM7VHSqHEJK0
+         LXmpzSRjrGvxPq5gdYcmIMkWO0BMOzHWx5CV/YsM2Q2R4Uaeex11CB9wCu/YMA4AbeGU
+         vZDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=SyIJ4xReYhaGfQD9IOYV1GyBGeZ/knL4/dXn4A3KuoE=;
+        b=KuUaKKXUl5NrnNbHMAxUejn//ImTrV4m0jtVx/SJe2bGa3PA1W/elI33Suzqp1bLQv
+         YW5NwMBNtTssCjqePuyey/54eWBTYd2X3v8aGRLsKS1+Jx1GI2kTStc13JNF1Bu0naVS
+         tzJtIF5aPXY3AJBNfceQ6L5kaxGykM+vS4afp7dz4E+Dn371mRQ2UrvsGCXZKB708G5O
+         q2O7P6b5nszgrqYJe7C8jJbUGyqhvgJ0Qmdu5+UI3dA/B6ib6K/7axwELJ081fTAlzU6
+         a7YbHiJY/opQw6ADjbgHE48JM8TI5hhmAodNmVHWzQZOUwU302Y38jdLThbL/suZtOkj
+         ZRHA==
+X-Gm-Message-State: ACrzQf0Tii8Vf0/9bZJY9stQ/q3rIaNpNXZAJwGSZPQh1+Ox2CJ7AmTN
+        sJ5D3okxRyHlafXd948Lqxtehw==
+X-Google-Smtp-Source: AMsMyM5qTBOpkg1FJNpj8S8lFhgO+0g1sh5ifRCx6thJjhYreEe7ogJkgbWKCbl8UMHemr9lz4t0YA==
+X-Received: by 2002:a05:651c:1548:b0:26c:61b3:7129 with SMTP id y8-20020a05651c154800b0026c61b37129mr5599032ljp.381.1664109153337;
+        Sun, 25 Sep 2022 05:32:33 -0700 (PDT)
+Received: from 16-inch.lan (c-7f0d225c.016-470-73746f7.bbcust.telenor.se. [92.34.13.127])
+        by smtp.googlemail.com with ESMTPSA id y6-20020ac24466000000b00492e69be4d6sm2202314lfl.27.2022.09.25.05.32.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 25 Sep 2022 05:32:32 -0700 (PDT)
+From:   Lev Popov <leo@nabam.net>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Lev Popov <leo@nabam.net>, Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: fix quartz64-a bluetooth configuration
+Date:   Sun, 25 Sep 2022 14:31:42 +0200
+Message-Id: <20220925123144.70639-1-leo@nabam.net>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: [PATCH] kernfs: fix UAF race condition in __kernfs_remove()
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-References: <000000000000646c9605e714ec6e@google.com>
-Cc:     syzbot <syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        Hillf Danton <hdanton@sina.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <000000000000646c9605e714ec6e@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting use-after-free read at __kernfs_remove() [1], for
-commit 35beab0635f3cdd4 ("kernfs: restructure removal path to fix possible
-premature return") missed that we need to keep a ref on "kn" as well as
-"pos".
+For "Quartz64 Model A" add missing RTS line to the UART interface used by
+bluetooth and swap bluetooth host-wakeup and device-wakeup gpio pins to
+match the boards physical layout. This changes are necessary to make
+bluetooth provided by the wireless module work.
 
-This race condition happens when two concurrent removers "T1" and "T2"
-interfere due to kernfs_drain() temporarily dropping kernfs_rwsem.
-
-  T1:                     T2:
-  down_write(&root->kernfs_rwsem);
-  do {
-    pos = kernfs_leftmost_descendant(kn);
-    kernfs_get(pos);
-    kernfs_drain(pos) {
-      up_write(&root->kernfs_rwsem);
-                          down_write(&root->kernfs_rwsem);
-                          do {
-                            // Removes all children and "kn", but won't
-                            // free T1's "pos" and "kn", for T1 has a ref
-                            // on T1's "pos", and T1's "pos" in turn keeps
-                            // a ref on "kn".
-                            pos = kernfs_leftmost_descendant(kn);
-                            kernfs_put(pos);
-                          } while (pos != kn) // Will break.
-                          up_write(&root->kernfs_rwsem);
-      down_write(&root->kernfs_rwsem);
-    }
-    // Frees "pos" because this was the last ref, and also frees "kn"
-    // because a ref by "pos" was gone (i.e. "kn" no longer has ref)
-    // via "goto repeat;" inside kernfs_put().
-    kernfs_put(pos);
-  } while (pos != kn) // Will continue, despite "kn" already freed.
-
-Link: https://syzkaller.appspot.com/bug?extid=8bee3285b9e190f1509e [1]
-Reported-by: syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com
-Fixes: 35beab0635f3cdd4 ("kernfs: restructure removal path to fix possible premature return")
-Tested-by: syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com
-Co-developed-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Lev Popov <leo@nabam.net>
 ---
- fs/kernfs/dir.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 1cc88ba6de90..effb461d34fa 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -1365,6 +1365,11 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+index a05460b92415..91908081c5ed 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+@@ -740,7 +740,7 @@ &uart0 {
  
- 	/* deactivate and unlink the subtree node-by-node */
-+	/*
-+	 * kernfs_put(pos) will invoke kernfs_put(kn) if @pos was the last
-+	 * reference to @kn. Make sure @kn doesn't go away underneath us.
-+	 */
-+	kernfs_get(kn);
- 	do {
- 		pos = kernfs_leftmost_descendant(kn);
+ &uart1 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
++	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn &uart1m0_rtsn>;
+ 	status = "okay";
+ 	uart-has-rtscts;
  
-@@ -1406,6 +1411,7 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 
- 		kernfs_put(pos);
- 	} while (pos != kn);
-+	kernfs_put(kn);
- }
- 
- /**
+@@ -748,8 +748,8 @@ bluetooth {
+ 		compatible = "brcm,bcm43438-bt";
+ 		clocks = <&rk817 1>;
+ 		clock-names = "lpo";
+-		device-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+-		host-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
++		host-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
++		device-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
+ 		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
 -- 
-2.34.1
+2.37.3
 
