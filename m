@@ -2,164 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADCB5E9161
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 09:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD1E5E9167
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 09:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiIYHR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 03:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S230056AbiIYHTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 03:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiIYHRw (ORCPT
+        with ESMTP id S230052AbiIYHTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 03:17:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6CF32ECD
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 00:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664090269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FnuW0+nquE7jeCs1wGd25t/HgD5sAtMc07QK9kih2sQ=;
-        b=B97KTn2dpYAt61kIInCLOK/2Ro6Wst4uMijGFSzgHYRdcZYdeHN2Z3ugLtJoUKxafz8yNC
-        sWsj/xIEwaV1yrv9Q1SsmiCxhVHRLyjrG7MDBtCipNp9CsQ1df0T63dAJdIXFk2HpFvimj
-        SNz8dinnXFQVzc5AwMsgibAO84z47E8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-201-Fmb7gLiJOgmRbldf5tVT7A-1; Sun, 25 Sep 2022 03:17:48 -0400
-X-MC-Unique: Fmb7gLiJOgmRbldf5tVT7A-1
-Received: by mail-qt1-f200.google.com with SMTP id u9-20020a05622a14c900b0035cc7e8cbaeso2697170qtx.19
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 00:17:48 -0700 (PDT)
+        Sun, 25 Sep 2022 03:19:34 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9F9DBC;
+        Sun, 25 Sep 2022 00:19:31 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id s206so3946243pgs.3;
+        Sun, 25 Sep 2022 00:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JhgeFXBwEssJLCEu3HGm6m9iF2diEh9TDrujALeUOj0=;
+        b=QtcLwuge3UideCQ5YgkWRxWwqZ8qJ0Mh6NH3/rBN/BfqBaNwFI8dR30h744EHBieXU
+         0ceRDcGbVnBRq2eQ5S2HNTahi63SNB3LLynfnyJUSfOezvy3bndJAeaW9NQLKBXiQVPI
+         Fv97ksNXiGIJneFVb7YP8U/EbnAhhVPBX2AtOZrSu6cPPXNs41pobN0tf4feFzEt+2Di
+         9qRyFwTritv6dUuU3u4C2Chxo8StKgfj5Y6D6pSSiX8ng88BsauC0GXttsIlDFp3SyVp
+         /LCWz34KXLQViTd/P0OfRMqdujScZEHJwuJAi/beXCf/QynyzJOpD/UCdbenaThD13XG
+         /X7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=FnuW0+nquE7jeCs1wGd25t/HgD5sAtMc07QK9kih2sQ=;
-        b=1hGbUuuIOyXjb8ud9UKRr/zplJ1TlMSGomNh054cYWSyIbbzS9wyaIsx0CJYS/BbHX
-         n9+vcKcwMAMKdRvCF/1yDlqznFcbui4hA7sctL4+9CThTFI8DQrvnKaWcNx0Vx/6wJjS
-         QnAWILnhM98Wxlh4wQSMz5Q0AGvXxyzTMx2juyr5ztWGe+V7fbLKbOCTKsxRRT+ZtPtq
-         w0kHXeqDBOAd41nwL0DZ5GmtQ953Iklzj8U3RqdMQWRNr1IChv31AZsuFTo8oRm18fmT
-         1tnE/ieETK3b/ibWYKdiBIJHnQFz/lKmO4zkJInVaSeGO0dPPpmitKsL99d8EleQyGwi
-         Ye8w==
-X-Gm-Message-State: ACrzQf1AIH9xfA3htef+jrD2T5WXNR1FMsf87+dww/CqCjvuwnZcteUx
-        d021jhoxnShkJZZmoSVEYvxuvPvOOX8LLvg6XtoX76xqPARGyZ9dFuRpxgXuJkIe+KtKp45Otrx
-        VE3NtHHQa6Qm59ByjmtSiJTci
-X-Received: by 2002:a05:620a:c8f:b0:6cb:e329:b5b9 with SMTP id q15-20020a05620a0c8f00b006cbe329b5b9mr10667178qki.95.1664090268095;
-        Sun, 25 Sep 2022 00:17:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4u6YF4dJIrwAN1QRZGgvTOpwH6qKYsc23O//LxYiiudu83+P6fv+LpA21i63RBBqqlayo//g==
-X-Received: by 2002:a05:620a:c8f:b0:6cb:e329:b5b9 with SMTP id q15-20020a05620a0c8f00b006cbe329b5b9mr10667159qki.95.1664090267816;
-        Sun, 25 Sep 2022 00:17:47 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-97-96.dyn.eolo.it. [146.241.97.96])
-        by smtp.gmail.com with ESMTPSA id bp30-20020a05620a459e00b006c479acd82fsm10375465qkb.7.2022.09.25.00.17.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JhgeFXBwEssJLCEu3HGm6m9iF2diEh9TDrujALeUOj0=;
+        b=zNOnqDZcyPm2342nLOsH81Afa3Mm5o1Fkq/Mc9/vGaukxvsU1wMbb60rkdjMQbqyrj
+         2gAHFr51vZ38+cXdIcXmw6dL/C6kWOW9nccmT+wC2nBGQdyxTdGOu39+Pl3JevhBh2D3
+         TZMJ4Sd6/zOs2lV+WoGE28QUaYie7SB0sqFZZuLVzaCBQKc18ob5lzbKYvfCVZ92fAEc
+         MdAo3IRpx5I2HQcT58HeKDt0K4t1FtQCedphY67N3KG9Sp3ELmFUOpv1Ea6DcM17e1QJ
+         ZyMwx1ZLI3UFxJr0hPx0QSQvLvbQv+CDy3BhvVyx+kcGXLPxeUhFWsl3arKmxdzZRpd8
+         WwQA==
+X-Gm-Message-State: ACrzQf1R/62p+MzQsUgWE2vqXAGX2KX3n933dkI0rk+aMT9mSVBkya9b
+        8yVet9GGT7YAk5J+fqpSdkSBzqvcoi0=
+X-Google-Smtp-Source: AMsMyM7FIEzMCBxaERbb4XhPgMfNOMmA6avqb4RDV5vMVMJdho1fH+S+Ma/vQt+ikrc8A5I+oINIsA==
+X-Received: by 2002:a63:5141:0:b0:43c:1471:7eb5 with SMTP id r1-20020a635141000000b0043c14717eb5mr13316353pgl.587.1664090371023;
+        Sun, 25 Sep 2022 00:19:31 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:37c:3916:9a45:14cc])
+        by smtp.gmail.com with ESMTPSA id i8-20020a1709026ac800b00176a579fae8sm8710757plt.210.2022.09.25.00.19.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 00:17:47 -0700 (PDT)
-Message-ID: <e340d993bce8e1b2742fba52ac6383771cfaddae.camel@redhat.com>
-Subject: Re: [PATCH v2 04/16] skbuff: Phase out ksize() fallback for
- frag_size
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Date:   Sun, 25 Sep 2022 09:17:40 +0200
-In-Reply-To: <20220923202822.2667581-5-keescook@chromium.org>
-References: <20220923202822.2667581-1-keescook@chromium.org>
-         <20220923202822.2667581-5-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Sun, 25 Sep 2022 00:19:30 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 00:19:27 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: joydev - Fix comment typo
+Message-ID: <YzAA/wmrF4VxjLE2@google.com>
+References: <20220804120800.60415-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804120800.60415-1-wangborong@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-23 at 13:28 -0700, Kees Cook wrote:
-> All callers of APIs that allowed a 0-sized frag_size appear to be
-> passing actual size information already
-
-AFAICS, not yet:
-
-drivers/net/ethernet/qlogic/qed/qed_ll2.c:
-	skb = build_skb(buffer->data, 0); // -> __build_skb(..., 0) 
-		// ->  __build_skb_around()
-
-drivers/net/ethernet/broadcom/bnx2.c:
-	skb = build_skb(data, 0);
-
-I guess some more drivers have calls leading to 
-
-	__build_skb_around(...,  0)
-
-there are several call path to checks...
-
-
-> , so this use of ksize() can
-> be removed. However, just in case there is something still depending
-> on this behavior, issue a WARN and fall back to as before to ksize()
-> which means we'll also potentially get KASAN warnings.
+On Thu, Aug 04, 2022 at 08:08:00PM +0800, Jason Wang wrote:
+> The double `from' is duplicated in the comment, remove one.
 > 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  net/core/skbuff.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
-> 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 0b30fbdbd0d0..84ca89c781cd 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -195,7 +195,11 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
->  			       unsigned int frag_size)
->  {
->  	struct skb_shared_info *shinfo;
-> -	unsigned int size = frag_size ? : ksize(data);
-> +	unsigned int size = frag_size;
-> +
-> +	/* All callers should be setting frag size now? */
-> +	if (WARN_ON_ONCE(size == 0))
-> +		size = ksize(data);
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-At some point in the future, I guess we could even drop this check,
-right?
+Applied, thank you.
 
-Thanks!
-
-Paolo
-
+-- 
+Dmitry
