@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252095E92B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2891E5E92B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiIYLVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 07:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
+        id S230381AbiIYLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 07:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiIYLVb (ORCPT
+        with ESMTP id S229929AbiIYLZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 07:21:31 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39702E69D
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:21:29 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a8so6757163lff.13
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=tmgRMVajfJ/rcrn228aspdr1S7/uuIkhYN/dmuBPsdc=;
-        b=AVE4jDkSvxgPIFRsMAM7jDsIKLl+8gYT8k73hGCY2YjUWEp6C7oan5f5V35FrXG+nS
-         LAvs7PRCrAh50q8+og+0pMJnnurj8yUYY/25pUDtDpxbhZJL9O1WFWm/HuvaGWWKqiGF
-         o7ADIBvVGGf4UxATwQTUf9gf0kEXnz9wL8g3GpMlfi0aCvYA9PeoJPn8R74jzr9+ocmz
-         3+z6X/7KZ9YL3gBV4mZDKsW/wSaOJ3LPvrHwy0kvkbUi/a4WMlnfoNChSIodfRH95j+f
-         zG0GbghmOuLxCRc5+UbEqZTMABmVKmvbRaxgoRwkOKpwNcAm3gr55RIFBip5RC3yUw5K
-         OsmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=tmgRMVajfJ/rcrn228aspdr1S7/uuIkhYN/dmuBPsdc=;
-        b=IOXYizjVjshjLmdldbOjmF1aeo2CUUa2zuVGA/7mr781X0rli0QgI0ZNXeddJL213L
-         1NAh+1sC+YAKmzAEbBbom5pZza48aoxVPyXD+ABxJvvyXZk59QCm7Yketvntqni4r3YE
-         q15FhpiwGrzE9fw3cAhc1zH/XrJgGNycZvaSz6HS8kKnPQXI6in9a8spzE1otA3WHvgw
-         Z0lvTXc/dwu5wodCLCf5cr0L5EflzAvhSpX/0GtlVEkaMZ+ZY3np3NgET7V6arEAu2bT
-         BKRT4kFdvlsrTpAoHaJ8qoSua6ZOv6OCrft36TY5vkb10InqZnlmxTEvvP0w5QMsbNd+
-         IVbw==
-X-Gm-Message-State: ACrzQf2GK0SxSF32mBE99O+yFlzX6wZxU6rOMFigvxrCXDhdsu/NmOho
-        3vL1AqWTdl8Ykhz54Nry6HnqTQ==
-X-Google-Smtp-Source: AMsMyM4kONuHhMPkXDCvEuCUoF5bDQfzA2AoUTOe4vdPSAQEggpBbJIs/cl6wa9yskO0SVgPNxw4+A==
-X-Received: by 2002:a05:6512:3b0b:b0:49a:d44b:428 with SMTP id f11-20020a0565123b0b00b0049ad44b0428mr7173041lfv.0.1664104888207;
-        Sun, 25 Sep 2022 04:21:28 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c16-20020ac25f70000000b004946748ad4dsm2178053lfc.159.2022.09.25.04.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 04:21:27 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/2] arm64: defconfig: enable rest of Qualcomm ARMv8 SoCs pinctrl drivers
-Date:   Sun, 25 Sep 2022 13:21:23 +0200
-Message-Id: <20220925112123.148897-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220925112123.148897-1-krzysztof.kozlowski@linaro.org>
-References: <20220925112123.148897-1-krzysztof.kozlowski@linaro.org>
+        Sun, 25 Sep 2022 07:25:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBB22F3B9;
+        Sun, 25 Sep 2022 04:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664105101;
+        bh=UWqhMQp6ZxdK7nN3F7WhJnrk5n9DdR2COrjRGDFJtmg=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gn7cl1qvgjQmfsGQT3kz/hP3pdXTE+/0JNg2efoaiVGr0b67L6hD4n4yAU5FJlZql
+         TZYKTWrV2VPLamveMuvMQExSHCuujj0Sni6hhLi6NaOh7UWykPwt7lFKohd0BBZlUp
+         eFzBa3Prdeu6mnuxh3vjFmScy9OkpSWOeCt+ws+A=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.188.118]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGz1f-1oPzIs1AbT-00E1iV; Sun, 25
+ Sep 2022 13:25:01 +0200
+Message-ID: <d57755de-44dc-e39c-6f79-1c139a77525f@gmx.de>
+Date:   Sun, 25 Sep 2022 13:24:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 2/2] video: fbdev: gbefb: Remove unproper information
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, broonie@kernel.org,
+        maarten.lankhorst@linux.intel.com, daniel.vetter@ffwll.ch
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220902025612.3833972-1-jiasheng@iscas.ac.cn>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220902025612.3833972-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:NWo9unw0v52ZFh0r2dGQYyZpghQUKrtzka/hso5b+yrA2j3vu+E
+ qYiZ1qOmdwDM46N1xr8Ne6oZQC+FP0Js6RaF7lEIERXTnqLs6oFkD9FSWt1OAaNsavE0kWv
+ K+PT4Jf4HGLG8EE/ZnlppmveezN1u6oiDlfV/UfHf35tk70LBL1MhdimNvo2n8NLItI58Fc
+ M+DvRUTVNzwrjoDyX5IGg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lvvGcYDw70o=:e9E8067rY2u8n0gK4OGbxV
+ 1BygFJt4LIrgwOC7gLlDUNHWK777hhq+FUckuGx/yYKQ7A2yVPDTiInKCDBOfguhZv36VfvfL
+ CLa341Rmv7VcAzlt6mRjUtTyWzzYr6rxCayaIb0xbh4xya854ZOcfE9ARy6ALotgCh/IFJLcv
+ nGcR7WUtp562CuPM0gecUPHi6cuCLHxyOXx1vrM20o+LWMCIX99kCUV56t7L/HIgm+F8EjFDn
+ /+WIJAidTbL59eZErg8rROMx9PkpuSeCqNwtWWUGRD3m99pDIBJkgAY+P02tKu9zbzqb9dDH8
+ C4OQevn6pjkadV+p7EK4jB5Axaym+cUOmcKkucfzHU6Pam+zjFaFFTzeMPgrLcexfEhTdDF2V
+ 2cToD8+r+SFkS8GcT20UlRUWBK+wWKZoVd0Z1Sjlvkq6HuTyYdf5vEzM3Ltw7jqNGibSeUtHz
+ c8H5fwnuezv+wYKhQkK39b6hLeM84Y5gR7wmQQjCjUmz4Kzkmxi9eahe910SBg2Bm3xLoydEv
+ /+bHLjTikV0obqWOX0R8r8qIRj+xb1imqjVrsIKiKLXLmm4Yam6cCkFRKrqHneH13RsXMfNW8
+ nxTvyGmyY/M1ZRgMknJfNp/ZwJYGQdwBEC7fXGzKFQ7hojiSvgCquK4SMgd8FCkv43hWI0Fre
+ PCo6O+k/zmZS5eVuUwuJmkyGTfxU++Lu+4IGK32BOiMcAYw0U2nZo57WA7h3QWtHch8onRYfq
+ v6YGI5bf7WKyBYaWypgJI652tX7F7/gu80IebRzGJ9xDGWzQsxWOqxPslz7aCLORo9w1GYH7G
+ fkR9RpzXNvZgHyPuG5ov6CL0U+9Qpg7dR0HxiqonPWGzeta+l2DI7I8upZscZ9KLTSawceg+H
+ mFE7CztJkLkd7jCgGcBDpF7Xd6rkpRmd64T6PtgVl+C3kFf6POxxSTH8AwCbgzna9gWm5xH8Y
+ aFaod9KiUeWCtKxnoULIwtviKu4POUESbGbo9YJ7nSTJXP/3uKt0vXotA9HM4zvj5qtTrW+TW
+ Bk+lErEK5Z1U3n+eXO0GRwlwp4R/GMKwVyUM91W7BbXgZA80PcKRpayafHjvk5ecZhzn4SgqI
+ jDoh0tZI0tenpdD/FIs9ebQOnfQ/4EmDqhwgMqlrZemgnnN3xhFuA7p/ssDmjXfG6VWsWO3Ha
+ u6vimqD2StUIqSluEMXPWMC/Cn
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable rest of Qualcomm ARMv8 SoCs pin controller drivers (MSM8953,
-MSM8976, QCM2290).
+On 9/2/22 04:56, Jiasheng Jiang wrote:
+> When drivers are working properly, they are quiet.
+> Therefore, the fb_info() should be removed.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+NAK.
+This seems to be useful info about the detected card and it's only
+printed once.
 
----
+Helge
 
-Changes since v1:
-1. Enable MSM8976 (Stephan)
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5a4ba141d15c..1138386952b5 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -529,9 +529,12 @@ CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ6018=y
- CONFIG_PINCTRL_MSM8916=y
-+CONFIG_PINCTRL_MSM8953=y
-+CONFIG_PINCTRL_MSM8976=y
- CONFIG_PINCTRL_MSM8994=y
- CONFIG_PINCTRL_MSM8996=y
- CONFIG_PINCTRL_MSM8998=y
-+CONFIG_PINCTRL_QCM2290=y
- CONFIG_PINCTRL_QCS404=y
- CONFIG_PINCTRL_QDF2XXX=y
- CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
--- 
-2.34.1
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>   drivers/video/fbdev/gbefb.c | 4 ----
+>   1 file changed, 4 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
+> index 1582c718329c..7e39ab939691 100644
+> --- a/drivers/video/fbdev/gbefb.c
+> +++ b/drivers/video/fbdev/gbefb.c
+> @@ -1217,10 +1217,6 @@ static int gbefb_probe(struct platform_device *p_=
+dev)
+>
+>   	platform_set_drvdata(p_dev, info);
+>
+> -	fb_info(info, "%s rev %d @ 0x%08x using %dkB memory\n",
+> -		info->fix.id, gbe_revision, (unsigned)GBE_BASE,
+> -		gbe_mem_size >> 10);
+> -
+>   	return 0;
+>
+>   out_gbe_unmap:
 
