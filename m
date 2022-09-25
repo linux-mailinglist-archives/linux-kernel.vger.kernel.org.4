@@ -2,153 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BBC5E9643
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 23:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43815E968B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 00:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiIYV4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 17:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S232377AbiIYWAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 18:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiIYV4A (ORCPT
+        with ESMTP id S229850AbiIYWAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 17:56:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7242613C;
-        Sun, 25 Sep 2022 14:55:59 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id e18so6730006edj.3;
-        Sun, 25 Sep 2022 14:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Nq7MnhcvX99bKKf80P+sMU5/an01GxgPdCrj+THEd8g=;
-        b=VvqYJYXgsLF7ULOw6t9V9+QnvXBOeIJxdQYZqa0GjB8tj/jcg0Mz9Ml0iGM7wW9ZSO
-         9xjbbnYM0mxJoAQOB/DauXUJEbDCseh8avW7A68QVORhh1VrB9RprwIF5sXXzI4aeNTP
-         yuZTJdtduyXKVK90K8m1jEs6cbZPje3ZDuKeyxlVbKZkgSHVgrv5KADgZjBtIQ0IP9+E
-         TMIy1QXq/g5263WGDSfss98npfONbPBl/VA0nzQM2gb2FHqngkdUM/GEG5idA6j8r2eB
-         wDoR9ey9dG++RuzigfPA+Bdd2KLfRnhnpbKskXDOv7narSUaG0X6+Hp0HWBT7RHPrcX3
-         Z7Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Nq7MnhcvX99bKKf80P+sMU5/an01GxgPdCrj+THEd8g=;
-        b=hoMuNUM3jLn9DmOgBLp/dAO2ruqdYJIPCHDmIQJxnz+0D8S0XjQuBL002qRdSM3GVD
-         fk10JigaRlcn4D9GiJ9XUXedDBzT0REiX9Tv6sJYmNY2D4uAGPXKk5dORhby8f/YNq3b
-         QFKo79R6ABsqU1nym2b+fL7NCnpCv79RzKbtfUcHojPriU066WYUZieYddnt/wLiacwp
-         mwC3LsmyZPswe0+JCKtC9lEaRD93Gvn0eZHu3K9/03Ym4IIKxF5WrUTL70Bv1VC0urX8
-         eHI/8Yk9Hewy0B57j0LsvuqvEs6rg0qhq2QCwsPDBGbIidnZr7o/B6zKd5V89aykLX5x
-         d1kQ==
-X-Gm-Message-State: ACrzQf0lcAGfa5vjlKfBZV34ClpcL3u7ehD3KjkCs+scZ/SLGG7mV4ZB
-        bFolA8CCgua91JarBThJAeEIpsc5GAAd19pJ7xk=
-X-Google-Smtp-Source: AMsMyM5QTYJcKp1XqmsgafDf1EDpvbjs61jfb79OZ5M65Ybs+IkZrmY3iem/gU8LiyHCtk0nqCSJwvsaQQecxAoOokU=
-X-Received: by 2002:a05:6402:54b:b0:457:3b62:306a with SMTP id
- i11-20020a056402054b00b004573b62306amr3366795edx.6.1664142957473; Sun, 25 Sep
- 2022 14:55:57 -0700 (PDT)
+        Sun, 25 Sep 2022 18:00:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E96F2A958;
+        Sun, 25 Sep 2022 15:00:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C71C3614B5;
+        Sun, 25 Sep 2022 22:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DFCC433C1;
+        Sun, 25 Sep 2022 22:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664143248;
+        bh=JNT9ovwJ5a7LseZHc7f645e2mjUSE+d6MdNF4U9ZPMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GlJLiDnRYX23aL6G0c7a9CJ21jrSAh4239BOFw2SnARtZrFBf8hnVx/KGwcQPsKi8
+         64SArqQyosc1iyTJporjKpUqFfs3Pz67UaVZ5JjjnL3Xo8Q75qWdifuXPCUrD4FdfB
+         1GPdwRpEfBn5XUp/8sm68BmN2/2PcMAGu6EGLzPrbFlyMHfR32RVn7tZO2xcvSROvu
+         WKtNjL5OfdWY8SzVc7ny2qMMWAu+XRNtG9Y3/zn54K9L8ciTGsk2XXlUtu44D/yypU
+         govK85Tg4QzzBgr7TPRxiMw4hAWUazdqoqfxcS5+o34kE0p9rKZ1vw9irMGh0zu6is
+         U8Vo9cOWfyFEQ==
+Date:   Mon, 26 Sep 2022 00:00:45 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220925220045.GA182613@lothringen>
+References: <19217A4C-7183-4D78-A714-FBFE7BB20742@joelfernandes.org>
+ <22F29015-5962-433D-8815-E4154B4897DD@joelfernandes.org>
 MIME-Version: 1.0
-References: <00000000000076f3a305e97e9229@google.com> <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
-In-Reply-To: <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sun, 25 Sep 2022 14:55:46 -0700
-Message-ID: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        tech-board@lists.linuxfoundation.org,
-        Song Liu <songliubraving@fb.com>,
-        Kernel Team <Kernel-team@fb.com>
-Cc:     Borislav Petkov <bp@alien8.de>, brijesh.singh@amd.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, jane.chu@oracle.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, seanjc@google.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <22F29015-5962-433D-8815-E4154B4897DD@joelfernandes.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 9:44 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 9/25/22 04:18, syzbot wrote:
-> > ------------[ cut here ]------------
-> > CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: 0xffffffffa0401000 - 0xffffffffa0401fff PFN 7d8d5
-> > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 verify_rwx arch/x86/mm/pat/set_memory.c:600 [inline]
-> > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr arch/x86/mm/pat/set_memory.c:1569 [inline]
-> > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr_set_clr+0x1f40/0x2020 arch/x86/mm/pat/set_memory.c:1691
-> > Modules linked in:
->
-> Yay, one of these that isn't due to wonky 32-bit kernels!
->
-> This one looks to be naughty intentionally:
->
-> > void *bpf_jit_alloc_exec_page(void)
-> > {
-> ...
-> >         /* Keep image as writeable. The alternative is to keep flipping ro/rw
-> >          * every time new program is attached or detached.
-> >          */
-> >         set_memory_x((long)image, 1);
-> >         return image;
-> > }
->
-> For STRICT_KERNEL_RWX kernels, I think we would really rather that this
-> code *did* flip ro/rw every time a new BPF program is attached or detached.
+On Sat, Sep 24, 2022 at 09:00:39PM -0400, Joel Fernandes wrote:
+> 
+> 
+> > On Sep 24, 2022, at 7:28 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> > 
+> > ﻿Hi Frederic, thanks for the response, replies
+> > below courtesy fruit company’s device:
+> > 
+> >>> On Sep 24, 2022, at 6:46 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
+> >>> 
+> >>> ﻿On Thu, Sep 22, 2022 at 10:01:01PM +0000, Joel Fernandes (Google) wrote:
+> >>> @@ -3902,7 +3939,11 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+> >>>   rdp->barrier_head.func = rcu_barrier_callback;
+> >>>   debug_rcu_head_queue(&rdp->barrier_head);
+> >>>   rcu_nocb_lock(rdp);
+> >>> -    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+> >>> +    /*
+> >>> +     * Flush the bypass list, but also wake up the GP thread as otherwise
+> >>> +     * bypass/lazy CBs maynot be noticed, and can cause real long delays!
+> >>> +     */
+> >>> +    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, FLUSH_BP_WAKE));
+> >> 
+> >> This fixes an issue that goes beyond lazy implementation. It should be done
+> >> in a separate patch, handling rcu_segcblist_entrain() as well, with "Fixes: " tag.
+> > 
+> > I wanted to do that, however on discussion with
+> > Paul I thought of making this optimization only for
+> > all lazy bypass CBs. That makes it directly related
+> > this patch since the laziness notion is first
+> > introduced here. On the other hand I could make
+> > this change in a later patch since we are not
+> > super bisectable anyway courtesy of the last
+> > patch (which is not really an issue if the CONFIG
+> > is kept off during someone’s bisection.
+> 
+> Or are we saying it’s worth doing the wake up for rcu barrier even for regular bypass CB? That’d save 2 jiffies on rcu barrier. If we agree it’s needed, then yes splitting the patch makes sense.
+> 
+> Please let me know your opinions, thanks,
+> 
+>  - Joel
 
-Steven Rostedt noticed that comment around the middle of August
-and told you and Peter about it.
-Then Peter added a WARN_ONCE in commit
-https://lore.kernel.org/all/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net/
-to explicitly trigger that known issue.
-Sure enough the fedora fails to boot on linux-next since then,
-because systemd is loading bpf programs that use bpf trampoline.
-The boot issue was was reported 3 days ago:
-https://lore.kernel.org/bpf/c84cc27c1a5031a003039748c3c099732a718aec.camel@kernel.org/T/#u
-Now we're trying to urgently address it with:
-https://lore.kernel.org/bpf/20220923211837.3044723-1-song@kernel.org/
+Sure, I mean since we are fixing the buggy rcu_barrier_entrain() anyway, let's
+just fix bypass as well. Such as in the following (untested):
 
-So instead of pinging us with your w^x concern you've decided
-to fail hard in -next to force the issue and
-now acting like this is something surprising to you?!
-
-This is Code of Conduct "worthy" behavior demonstrated
-by a newly elected member of the Technical Advisory Board.
-Please consider resigning.
-A TAB member should be better than this.
-
-As far as this w^x issue...
-we've communicated back in May 2022 (sorry I cannot find the link
-to that discussion) that bpf_prog_pack is targeting to be used
-by everything bpf. Currently by bpf progs only.
-bpf trampoline and bpf dispatcher were next on the list.
-But then folks expressed the desire to generalize bpf_prog_pack for
-everything: bpf, modules and all other trampolines.
-We've posted multiple revisions and kept pinging for feedback.
-The last one on Aug 24:
-https://lkml.org/lkml/2022/8/24/857
-If/when the generic vmalloc_exec lands we can finally close
-the issue for modules, bpf progs, and trampolines of all kinds.
-Make them fast by using large pages and w^x compliant.
-
-And, sorry, "flip ro/rw every time" is not a good idea from
-security pov.
-There is a much better solution that stalled on the code review.
-In the meantime we'll land a quick fix to re-enable boot in -next
-in the coming days.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index b39e97175a9e..a0df964abb0e 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3834,6 +3834,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ {
+ 	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
+ 	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
++	bool wake_nocb = false;
++	bool was_alldone = false;
+ 
+ 	lockdep_assert_held(&rcu_state.barrier_lock);
+ 	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
+@@ -3842,6 +3844,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 	rdp->barrier_head.func = rcu_barrier_callback;
+ 	debug_rcu_head_queue(&rdp->barrier_head);
+ 	rcu_nocb_lock(rdp);
++	if (rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist))
++		was_alldone = true;
+ 	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+ 	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+ 		atomic_inc(&rcu_state.barrier_cpu_count);
+@@ -3849,7 +3853,12 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 		debug_rcu_head_unqueue(&rdp->barrier_head);
+ 		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+ 	}
++	if (was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist))
++		wake_nocb = true;
+ 	rcu_nocb_unlock(rdp);
++	if (wake_nocb)
++		wake_nocb_gp(rdp, false);
++
+ 	smp_store_release(&rdp->barrier_seq_snap, gseq);
+ }
+ 
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index d4a97e40ea9c..925dd98f8b23 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+ static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+ static void rcu_init_one_nocb(struct rcu_node *rnp);
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j);
+ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 538a0ed93946..e1701aa9c82c 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1600,6 +1600,10 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+ {
+ }
+ 
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
++{
++}
++
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j)
+ {
