@@ -2,101 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7992E5E92D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EE5E92F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 14:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiIYLyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 07:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S232228AbiIYMGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 08:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiIYLyd (ORCPT
+        with ESMTP id S229592AbiIYMGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 07:54:33 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065432D74E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:54:29 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id q17so4648497lji.11
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Q46V3bJGY5zK2gbUyWGrQRsMlQhZzKF53118KkxntJ8=;
-        b=n5CpgP2J1Z1DA5Itg2vYm43fttQpqbE/BycyCWdr1poja6mSAQfBJUaN7s1j5xR31j
-         k494Hkw1628M3V4SKcYP2Z4KZUkrRPvnHUt4XVgXAtwjxjZPEriBxFd1TUEWPcnUmLzY
-         zZun2J6E7Hl6iOp3rl8RiozOqiNHUbVyyGaUnKK1vOISsHj4e8/+LU+8l3+2gjyIFEB9
-         2bQAozw+iVeIf+Mic47g7u9aD4ks0Z0suwOkZ4fAoqTQhm9TZXB78zlHszHagl4Rlb4K
-         Anns1kkb2TyG19FTg1PbA8PmJy+izOLmYe0VPigHtjmv5uYZaSHtijZh6dKYjWcTGVT2
-         dtXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Q46V3bJGY5zK2gbUyWGrQRsMlQhZzKF53118KkxntJ8=;
-        b=GjY4vAopQamY4uoFrt66YaYEvUMpRSb9zBYa2nfPgXgg7N6dY8copg8qKAyNscB6Uu
-         tKRrNJHrfHX26qby3alb+hgZ45JFgtEj0Son1BeJLeWHKRHokjZn8P5jxZ7kfwQogPXH
-         7qGHldkCq0pKBiUgOXw4ZizQOSFEus1z5Ys2b04Fcb4QEC3DTKM3D6W083ofNA4cnBKA
-         vLrNO5+RbNckc5a3VGlcKoXgV65h2cUBOMHkNX7B7Dikp59yTKNJj0HHIyAbmg1UYufB
-         y/qqumNl63Vc1xGA3ProntvcTZshhwRPshTlo+eXjH/p8E9tHSQp/hKsOY8jkrzImN3V
-         rnnw==
-X-Gm-Message-State: ACrzQf29AjMAwq21/bCUCfjJC+w6HIgpIITukrx5v/DZY9oA1fjPTd9G
-        9Z2ZZQFScV9ep28NX2KJBtJ756CUtgtVEg==
-X-Google-Smtp-Source: AMsMyM5XLWU55ymLsZdVdphhQDPQJN/T6CnftbdVvYYEq2iLQstLu/xbqjofALcr2z8IxLxOviUD9Q==
-X-Received: by 2002:a05:651c:211:b0:26b:e743:b4b0 with SMTP id y17-20020a05651c021100b0026be743b4b0mr5919239ljn.527.1664106867404;
-        Sun, 25 Sep 2022 04:54:27 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2eb754000000b0026c64fd8f0csm2015407ljo.71.2022.09.25.04.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 04:54:26 -0700 (PDT)
-Message-ID: <441153f6-26ee-cbb2-fe42-101de91952c5@linaro.org>
-Date:   Sun, 25 Sep 2022 13:54:25 +0200
+        Sun, 25 Sep 2022 08:06:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1664D2F3A1;
+        Sun, 25 Sep 2022 05:06:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A52F4614FE;
+        Sun, 25 Sep 2022 12:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F033C433C1;
+        Sun, 25 Sep 2022 12:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664107610;
+        bh=BCVRBXCetpvd2YGmBGtkM+UvNAeY+VGeEDAT0/lc8fs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PU4HPuu6PfX16bgcSLQO2UdKyKi6k7hidu67KPybnHdBqUDMS2nEB0bskWnITbEI1
+         NiISQOj9XmDLK220C1XUdj2ECXol9pSIXpNbkClHluegVM1oYYycVNx99kVXgLukx9
+         EPU/1LXeHiI6+8eZAFXHudHaHWa288mSa9ZlipLUF0IJHUFEeaqsCrVF5rJI2V2ePq
+         k6UEXIz3RPnZLYdgnY9JssVFw+sQY5d4XVdYVey6CXQowDvO4T3RG/rpTDiF6CW6C/
+         ppMcYGtCVWe5d50KxhotzIEYWi4VS/pvfEz2ckZhNP6lcyEirgox4/ytck47LAc95A
+         OEvoEnYdqANEA==
+Received: by pali.im (Postfix)
+        id 6D0D1EE2; Sun, 25 Sep 2022 14:06:46 +0200 (CEST)
+Date:   Sun, 25 Sep 2022 14:06:46 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Viacheslav Dubeyko <slava@dubeyko.com>
+Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Salah Triki <salah.triki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Marek =?utf-8?B?QmVow7pu?= <marek.behun@nic.cz>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [RFC PATCH 12/20] hfs: Do not use broken utf8 NLS table for
+ iocharset=utf8 mount option
+Message-ID: <20220925120646.dfkofrka74blwrwb@pali>
+References: <20210808162453.1653-1-pali@kernel.org>
+ <20210808162453.1653-13-pali@kernel.org>
+ <4B1987C7-F6D9-4493-ACD0-846B92F86037@dubeyko.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] pinctrl: qcom: restrict drivers per ARM/ARM64
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220925112103.148836-1-krzysztof.kozlowski@linaro.org>
- <08E290AD-C842-4BF2-9C57-2CE59A4C5D88@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <08E290AD-C842-4BF2-9C57-2CE59A4C5D88@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4B1987C7-F6D9-4493-ACD0-846B92F86037@dubeyko.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 13:43, Dmitry Baryshkov wrote:
-> 
-> 
-> On 25 September 2022 14:21:03 GMT+03:00, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> There is no point to allow selecting pin-controller drivers for Qualcomm
->> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
->> kernel configuration more difficult as many do not remember the Qualcomm
->> SoCs.  There won't be a single image for ARMv7 and ARMv8/9 SoCs, so no
->> features/options are lost.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> I haven't checked which restrictions apply to msm8916 at this moment, but it might be worth adding 'depends on ARM || ARM64 || COMPILE_TEST'
+Hello! Sorry for a longer delay. Below are comments.
 
-This is limited by ARCH_QCOM (top-level if in the file), so I am not
-sure what would be benefits.
+On Monday 09 August 2021 10:49:34 Viacheslav Dubeyko wrote:
+> > On Aug 8, 2021, at 9:24 AM, Pali Rohár <pali@kernel.org> wrote:
+> > 
+> > NLS table for utf8 is broken and cannot be fixed.
+> > 
+> > So instead of broken utf8 nls functions char2uni() and uni2char() use
+> > functions utf8_to_utf32() and utf32_to_utf8() which implements correct
+> > encoding and decoding between Unicode code points and UTF-8 sequence.
+> > 
+> > When iochatset=utf8 is used then set hsb->nls_io to NULL and use it for
+> > distinguish between the fact if NLS table or native UTF-8 functions should
+> > be used.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> > fs/hfs/super.c | 33 ++++++++++++++++++++++-----------
+> > fs/hfs/trans.c | 24 ++++++++++++++++++++----
+> > 2 files changed, 42 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/fs/hfs/super.c b/fs/hfs/super.c
+> > index 86bc46746c7f..076308df41cf 100644
+> > --- a/fs/hfs/super.c
+> > +++ b/fs/hfs/super.c
+> > @@ -149,10 +149,13 @@ static int hfs_show_options(struct seq_file *seq, struct dentry *root)
+> > 		seq_printf(seq, ",part=%u", sbi->part);
+> > 	if (sbi->session >= 0)
+> > 		seq_printf(seq, ",session=%u", sbi->session);
+> > -	if (sbi->nls_disk)
+> > +	if (sbi->nls_disk) {
+> > 		seq_printf(seq, ",codepage=%s", sbi->nls_disk->charset);
+> 
+> Maybe, I am missing something. But where is the closing “}”?
 
-Best regards,
-Krzysztof
+See below...
 
+> 
+> > -	if (sbi->nls_io)
+> > -		seq_printf(seq, ",iocharset=%s", sbi->nls_io->charset);
+> > +		if (sbi->nls_io)
+> > +			seq_printf(seq, ",iocharset=%s", sbi->nls_io->charset);
+> > +		else
+> > +			seq_puts(seq, ",iocharset=utf8");
+> > +	}
+
+        ^
+... Closing "}" is marked above.
+
+> > 	if (sbi->s_quiet)
+> > 		seq_printf(seq, ",quiet");
+> > 	return 0;
+> > @@ -225,6 +228,7 @@ static int parse_options(char *options, struct hfs_sb_info *hsb)
+> > 	char *p;
+> > 	substring_t args[MAX_OPT_ARGS];
+> > 	int tmp, token;
+> > +	int have_iocharset;
+> 
+> What’s about boolean type?
+
+Ok! No problem, I can use "bool" type. Just I was in impression that
+code style of this driver is to use "int" type also for booleans.
+Same for "false" and "true" as you mentioned below.
+
+> > 
+> > 	/* initialize the sb with defaults */
+> > 	hsb->s_uid = current_uid();
+> > @@ -239,6 +243,8 @@ static int parse_options(char *options, struct hfs_sb_info *hsb)
+> > 	if (!options)
+> > 		return 1;
+> > 
+> > +	have_iocharset = 0;
+> 
+> What’s about false here?
+> 
+> > +
+> > 	while ((p = strsep(&options, ",")) != NULL) {
+> > 		if (!*p)
+> > 			continue;
+> > @@ -332,18 +338,22 @@ static int parse_options(char *options, struct hfs_sb_info *hsb)
+> > 			kfree(p);
+> > 			break;
+> > 		case opt_iocharset:
+> > -			if (hsb->nls_io) {
+> > +			if (have_iocharset) {
+> > 				pr_err("unable to change iocharset\n");
+> > 				return 0;
+> > 			}
+> > 			p = match_strdup(&args[0]);
+> > -			if (p)
+> > -				hsb->nls_io = load_nls(p);
+> > -			if (!hsb->nls_io) {
+> > -				pr_err("unable to load iocharset \"%s\"\n", p);
+> > -				kfree(p);
+> > +			if (!p)
+> > 				return 0;
+> > +			if (strcmp(p, "utf8") != 0) {
+> > +				hsb->nls_io = load_nls(p);
+> > +				if (!hsb->nls_io) {
+> > +					pr_err("unable to load iocharset \"%s\"\n", p);
+> > +					kfree(p);
+> > +					return 0;
+> > +				}
+> > 			}
+> > +			have_iocharset = 1;
+> 
+> What’s about true here?
+> 
+> > 			kfree(p);
+> > 			break;
+> > 		default:
+> > @@ -351,7 +361,7 @@ static int parse_options(char *options, struct hfs_sb_info *hsb)
+> > 		}
+> > 	}
+> > 
+> > -	if (hsb->nls_io && !hsb->nls_disk) {
+> > +	if (have_iocharset && !hsb->nls_disk) {
+> > 		/*
+> > 		 * Previous version of hfs driver did something unexpected:
+> > 		 * When codepage was not defined but iocharset was then
+> > @@ -382,7 +392,8 @@ static int parse_options(char *options, struct hfs_sb_info *hsb)
+> > 			return 0;
+> > 		}
+> > 	}
+> > -	if (hsb->nls_disk && !hsb->nls_io) {
+> > +	if (hsb->nls_disk &&
+> > +	    !have_iocharset && strcmp(CONFIG_NLS_DEFAULT, "utf8") != 0) {
+> 
+> Maybe, introduce the variable to calculate the boolean value here? Then if statement will look much cleaner.
+
+I'm not sure how to do it to make code look cleaner.
+
+Currently there is:
+
+if (hsb->nls_disk &&
+    !have_iocharset && strcmp(CONFIG_NLS_DEFAULT, "utf8") != 0) {
+    hsb->nls_io = load_nls_default();
+    ...
+}
+
+I can replace it e.g. by:
+
+bool need_to_load_nls;
+...
+if (hsb->nls_disk &&
+    !have_iocharset && strcmp(CONFIG_NLS_DEFAULT, "utf8") != 0)
+    need_to_load_nls = true;
+else
+    need_to_load_nls = false;
+
+if (need_to_load_nls) {
+    hsb->nls_io = load_nls_default();
+    ...
+}
+
+But it is just longer, condition is still there and it requires one
+additional variable which more me is less readable because it is longer.
+
+> > 		hsb->nls_io = load_nls_default();
+> > 		if (!hsb->nls_io) {
+> > 			pr_err("unable to load default iocharset\n");
+> > diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
+> > index c75682c61b06..bff8e54003ab 100644
+> > --- a/fs/hfs/trans.c
+> > +++ b/fs/hfs/trans.c
+> > @@ -44,7 +44,7 @@ int hfs_mac2asc(struct super_block *sb, char *out, const struct hfs_name *in)
+> > 		srclen = HFS_NAMELEN;
+> > 	dst = out;
+> > 	dstlen = HFS_MAX_NAMELEN;
+> > -	if (nls_io) {
+> > +	if (nls_disk) {
+> > 		wchar_t ch;
+> > 
+> 
+> I could miss something here. But what’s about the closing “}”?
+
+Closing "}" is there on the same location as it was. Before my change on
+"if" line was opening "{" and also with my change there is opening "{".
+So opening "{" and closing "}" are there and matches.
+
+> Thanks,
+> Slava.
+> 
+> > 		while (srclen > 0) {
+> > @@ -57,7 +57,12 @@ int hfs_mac2asc(struct super_block *sb, char *out, const struct hfs_name *in)
+> > 			srclen -= size;
+> > 			if (ch == '/')
+> > 				ch = ':';
+> > -			size = nls_io->uni2char(ch, dst, dstlen);
+> > +			if (nls_io)
+> > +				size = nls_io->uni2char(ch, dst, dstlen);
+> > +			else if (dstlen > 0)
+> > +				size = utf32_to_utf8(ch, dst, dstlen);
+> > +			else
+> > +				size = -ENAMETOOLONG;
+> > 			if (size < 0) {
+> > 				if (size == -ENAMETOOLONG)
+> > 					goto out;
+> > @@ -101,11 +106,22 @@ void hfs_asc2mac(struct super_block *sb, struct hfs_name *out, const struct qstr
+> > 	srclen = in->len;
+> > 	dst = out->name;
+> > 	dstlen = HFS_NAMELEN;
+> > -	if (nls_io) {
+> > +	if (nls_disk) {
+> > 		wchar_t ch;
+> > +		unicode_t u;
+> > 
+> > 		while (srclen > 0) {
+> > -			size = nls_io->char2uni(src, srclen, &ch);
+> > +			if (nls_io)
+> > +				size = nls_io->char2uni(src, srclen, &ch);
+> > +			else {
+> > +				size = utf8_to_utf32(str, strlen, &u);
+> > +				if (size >= 0) {
+> > +					if (u <= MAX_WCHAR_T)
+> > +						ch = u;
+> > +					else
+> > +						size = -EINVAL;
+> > +				}
+> > +			}
+> > 			if (size < 0) {
+> > 				ch = '?';
+> > 				size = 1;
+> > -- 
+> > 2.20.1
+> > 
+> 
