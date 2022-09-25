@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C085E9402
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52755E9404
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiIYPii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 11:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S231396AbiIYPk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 11:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiIYPif (ORCPT
+        with ESMTP id S229850AbiIYPk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 11:38:35 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57302B276
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 08:38:33 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-127ba06d03fso6474914fac.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 08:38:33 -0700 (PDT)
+        Sun, 25 Sep 2022 11:40:26 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13618E05;
+        Sun, 25 Sep 2022 08:40:25 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s26so4522652pgv.7;
+        Sun, 25 Sep 2022 08:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=wfXjfC3EWDHrGpRS+gvNWNFBXSYDvNyjD9tP1zSNKUE=;
-        b=UtyLh8+aOqStQY7SBVSBT+Uf+D2PRI7ataCPEexqTFnfTTENH5JBMJH8Y1GZ/topyh
-         24kidwYQ9ipGVn3EMO4cHQv+IzzhoOXONnv/1M1fe9Vcw8yVxxoNFl4mVrZfGE9XDEvZ
-         bzaAiDcGRwUEcnihUmHIY1Aik81f499Hoow9cVxHJpS6X+5hraLfS9qMX0MCmBIdAan5
-         IiaacyAPWnFfdjPp6ggdSqE+0C6dzAbEDAv7jzz16h1yI0mr95ZMLJ8JOnUcSsKnfP2j
-         PplY6lHK6kSnXcKdXbhltwE8ZznmqR3AEFM049xT6ecfJVLBG0oUISklQKx2yG6qFHNm
-         WY3Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=ALf43tEt4uTY7t2ZG6Ao8BT7RErUJLGMqwWyM5uhgEc=;
+        b=hqwPnnM/ypNQfn1GAU6crVglBMh7NBmkOrRMeMKH0gXTqXMYa5DFjsjfRf5m+R6r/e
+         wjaP/7EpmEPJ61efUZ3KgwrZ6eKWxBBBmY8VPN9ctSySBRvtXpXd/WZeOHXChaTCjiDl
+         YS7ydQy/7kvk/NLQMuYRdiq9e0B/BL9l9JiyH4WAweuar2ZX1zY03K2ToY6sQWjMXL3Z
+         h7svrokrX4Rqm1Gf7QBy9+9GiOb9Lh5YqnJTQm3bcrXzQ6YeqiG3vxa9o4/ahkIolpzQ
+         xx4yjcBIoitEZaLR/2f3M8tOWDy86puakGnE7rOmCVA8xXiOJZNyoIcbEzMN4bK4+GFo
+         DrVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=wfXjfC3EWDHrGpRS+gvNWNFBXSYDvNyjD9tP1zSNKUE=;
-        b=n1R8xgLyQMPUkemv6NblYOKd6AO6OrhtffEqANBnawyIFffJkwVclQc6s5zYhKiSeG
-         O8/ZsK1qjVfSM6ma/qRtZnGrwI+/BiObHDhdWh2cEu0r5I9Mr7NO8+ailKviHy8jv/xT
-         IcWvdkv+4kJVhVAajCvCWDDjaak2YXisuSWYotSe+llQxOaHxS0nvBdrXBHoo0aUEB9b
-         FoRwRkBGj0oXDvsH703hdoSszXi2sJT2A06cZk+l5nkUywDbdWYsVnBnrCLxcKDDgJB/
-         joa/sfbPSt//algnko/B2vs2hXRQgdrhlfrx2JPmyLEhZaSZvzwSPWK8mE5p1jc1vTRZ
-         KLPw==
-X-Gm-Message-State: ACrzQf1FO40t1SZ2CjKn1aeEQe3vdwX1if0T/rxtq63pcxZgvxYTJl5W
-        2kqCswfvbJaGlVkwTT1OJCI8gM3aUFLVRr8YXagLcA==
-X-Google-Smtp-Source: AMsMyM5+NiH0xu5KeDnC76FZrQG9ewq7BGmaz5h3jl0S0ZsfvzHsKe4c9DYHBrEIXuXc2oxcFOhONGtiE5UaJyOJ2Vc=
-X-Received: by 2002:a05:6870:1490:b0:126:e07:2a4a with SMTP id
- k16-20020a056870149000b001260e072a4amr9788924oab.2.1664120312476; Sun, 25 Sep
- 2022 08:38:32 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ALf43tEt4uTY7t2ZG6Ao8BT7RErUJLGMqwWyM5uhgEc=;
+        b=hn6C5fK0WYpUXIGNguCmIGQOfeyVxkxuW2oEZ2YLWYsia9EyQ0/ICtyWrBmP0CUF4d
+         Ei7FrTowf0RPjAQoOFfdjn2d95l6aTsbz4Iif/CGUd2eWokpbDKjBjOz8KjGmh6SuPrb
+         NSqcIdFw5I3AExP9uLnCI2NeE72ItRactjDHzNlHMcW4ZWcCHR715lhjyhXOXvaoUntp
+         JfujGFQRjyHpn7CUYisJcD9nUtmCTwa7mbpSzmMJ9tKbmI6F8gKTAOZBQk8ThJrCo7oS
+         0ujl1SHORczVFlP8K9ewtRLnHJxRRDzewZBODxVYRb1hfHkpyivA5gi0bwNAbPm8kVMs
+         tuNQ==
+X-Gm-Message-State: ACrzQf3xh8I8w3WRMas6Dzu3F6jLUPqp5lNhFNapvfTYQUgOyNIB5j95
+        TrnxW2GvXgUPP4XULgCdoWY=
+X-Google-Smtp-Source: AMsMyM5qEgpsSBH0Cd3X5H1tJXymH6cgWhNuk88G9vgitj4eLEaGuYvD3kPzFZfzfeaTUToVZNfo8w==
+X-Received: by 2002:a63:191d:0:b0:434:4bb3:e016 with SMTP id z29-20020a63191d000000b004344bb3e016mr16522946pgl.133.1664120424520;
+        Sun, 25 Sep 2022 08:40:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o67-20020a625a46000000b00554722eda37sm7790166pfb.0.2022.09.25.08.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 08:40:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 25 Sep 2022 08:40:22 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Philippe Boos <pboos@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] watchdog: meson: keep running if already active
+Message-ID: <20220925154022.GA1758351@roeck-us.net>
+References: <20220801092150.4449-1-pboos@baylibre.com>
 MIME-Version: 1.0
-References: <000000000000a96c0b05e97f0444@google.com>
-In-Reply-To: <000000000000a96c0b05e97f0444@google.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Sun, 25 Sep 2022 11:38:21 -0400
-Message-ID: <CAM0EoMnJ=STtk5BnZ9oJtnkXY2Q+Px2cKa4gowFRGpp40UNKww@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in u32_change
-To:     syzbot <syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801092150.4449-1-pboos@baylibre.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Is there a way to tell the boat "looking into it?"
+On Mon, Aug 01, 2022 at 11:21:50AM +0200, Philippe Boos wrote:
+> If the watchdog is already running (e.g.: started by bootloader) then
+> the kernel driver should keep the watchdog active but the amlogic driver
+> turns it off.
+> 
+> Let the driver fix the clock rate if already active because we do not
+> know the previous timebase value. To avoid unintentional resetting we
+> temporarily set it to its maximum value.
+> 
+> Then keep the enable bit if is was previously active.
+> 
+> Signed-off-by: Philippe Boos <pboos@baylibre.com>
+> Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
 
-cheers,
-jamal
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Sun, Sep 25, 2022 at 7:50 AM syzbot
-<syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=16becbd5080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a2c4601efc75848ba321
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13bc196f080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152b15f8880000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> memcpy: detected field-spanning write (size 80) of single field "&n->sel" at net/sched/cls_u32.c:1043 (size 16)
-> WARNING: CPU: 0 PID: 3608 at net/sched/cls_u32.c:1043 u32_change+0x2962/0x3250 net/sched/cls_u32.c:1043
-> Modules linked in:
-> CPU: 0 PID: 3608 Comm: syz-executor971 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-> RIP: 0010:u32_change+0x2962/0x3250 net/sched/cls_u32.c:1043
-> Code: f4 df 14 fa 48 8b b5 78 fe ff ff b9 10 00 00 00 48 c7 c2 20 f7 f5 8a 48 c7 c7 a0 f6 f5 8a c6 05 55 b3 63 06 01 e8 db d6 df 01 <0f> 0b e9 73 f3 ff ff e8 c2 df 14 fa 48 c7 c7 00 fc f5 8a e8 66 ed
-> RSP: 0018:ffffc90003d7f300 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffffc90003d7f618 RCX: 0000000000000000
-> RDX: ffff8880235f1d40 RSI: ffffffff81620348 RDI: fffff520007afe52
-> RBP: ffffc90003d7f4a0 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000000 R11: 203a7970636d656d R12: ffff888021d420e0
-> R13: ffffc90003d7f5b8 R14: ffff888021d43c30 R15: ffff888021d42000
-> FS:  0000555555f71300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000000064a110 CR3: 000000002824c000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  tc_new_tfilter+0x938/0x2190 net/sched/cls_api.c:2146
->  rtnetlink_rcv_msg+0x955/0xca0 net/core/rtnetlink.c:6082
->  netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
->  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
->  netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
->  netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xcf/0x120 net/socket.c:734
->  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
->  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
->  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f97a4bf4e69
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffdcaf10028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f97a4bf4e69
-> RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000006
-> RBP: 00007f97a4bb9010 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f97a4bb90a0
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
->
->
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+>  drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+> index 5a9ca10fbcfa..8be8fd9e5637 100644
+> --- a/drivers/watchdog/meson_gxbb_wdt.c
+> +++ b/drivers/watchdog/meson_gxbb_wdt.c
+> @@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct meson_gxbb_wdt *data;
+>  	int ret;
+> +	u32 ctrl_reg;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>  	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
+>  	watchdog_set_drvdata(&data->wdt_dev, data);
+>  
+> +	ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
+> +				GXBB_WDT_CTRL_EN;
+> +
+> +	if (ctrl_reg) {
+> +		/* Watchdog is running - keep it running but extend timeout
+> +		 * to the maximum while setting the timebase
+> +		 */
+> +		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
+> +		meson_gxbb_wdt_set_timeout(&data->wdt_dev,
+> +				GXBB_WDT_TCNT_SETUP_MASK / 1000);
+> +	}
+> +
+>  	/* Setup with 1ms timebase */
+> -	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
+> -		GXBB_WDT_CTRL_EE_RESET |
+> -		GXBB_WDT_CTRL_CLK_EN |
+> -		GXBB_WDT_CTRL_CLKDIV_EN,
+> -		data->reg_base + GXBB_WDT_CTRL_REG);
+> +	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
+> +			GXBB_WDT_CTRL_DIV_MASK) |
+> +			GXBB_WDT_CTRL_EE_RESET |
+> +			GXBB_WDT_CTRL_CLK_EN |
+> +			GXBB_WDT_CTRL_CLKDIV_EN;
+>  
+> +	writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
+>  	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+>  
+>  	watchdog_stop_on_reboot(&data->wdt_dev);
