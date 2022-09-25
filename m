@@ -2,239 +2,586 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524695E954D
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB905E9554
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiIYSIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 14:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S232648AbiIYSJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 14:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiIYSIU (ORCPT
+        with ESMTP id S232068AbiIYSJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:08:20 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F135D2A94F;
-        Sun, 25 Sep 2022 11:08:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=froe8U22lPAsyFYDKb8gz7GeeS/xXvArdu0Xi4i+37PC3J3lDOUMMbBndMK3YP8wZ3tuJv+BBczUUUNDe9AABE5YuZNgvj7OeFBpKEZ/koqAoZ0lc3hxitc9PFBxImCq6eDkTliBA7Hn8pTWxO4Mfpt9Z8ktDngHpGI9ZAm5hf5wXEjExrZNp6kKzHoMCj3dVSX/iMz2qPupggdhrVJETAQmZ+UTDxUEo1MfhxSVKPw2pL64KMh2wMF1YFAVL8XLCeD7V3AY8DKNHK28AcXcIR3ZjjjcQqnWzzeImQDJy8Ad33Gbu0qk4XLwN1JHOfMXjbjT7sNI0fuQxxEE6eDFqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n62TMUhbtw7CZp6V4FfxOA4/3OrlBP2cy/grjGanfkM=;
- b=LReMlCsj915Y0IglZqV9d2aRh1MytXqyko82jsIeeUQV5r7uHkbsEUO3ztCXhFdYspKfQ14cqpLtdUbYHUIlH+eK9SbhMarXT/U/qF0sgKEzAGMkmzgQ3gk2uWumQRU4hcEy8dxxE6Tj9xlvVRMX+xEIC6S1T9syTg0GGExoDVOkky+vL+V7udUzeL0hlQF22km4M9gemLl+JS9V/1fZl5GQSx1DFqvtygcBS9IJw6tCnn6Z11JzH4e0hwB8Bwlf1RSl/fkcFa4+CfgK5xfG3Asj0gmt/ayju80bfhFhNZbCx+iKeVtRYtrSCh3C/ZoDJhgYDw5P4LuMlgyyx0ZUmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n62TMUhbtw7CZp6V4FfxOA4/3OrlBP2cy/grjGanfkM=;
- b=AsshXKL4D52vuLLXA5Ef00XPel7D9etZ+OFbXfe0J/VDdaHhcpkE+9wf4aujrOGDwJp8J3y8Q22HhsinQ/7vqz/G6KhxZb8qN377BKf2WddPP3T7uGZedRaSpFnY2F0MjwxqWkeC7nU54gWc4huFWV1ousHcf0G6SN+dq3zZsdk=
-Received: from SN7PR04CA0032.namprd04.prod.outlook.com (2603:10b6:806:120::7)
- by PH0PR02MB8534.namprd02.prod.outlook.com (2603:10b6:510:10d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Sun, 25 Sep
- 2022 18:08:17 +0000
-Received: from SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:120:cafe::f6) by SN7PR04CA0032.outlook.office365.com
- (2603:10b6:806:120::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24 via Frontend
- Transport; Sun, 25 Sep 2022 18:08:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0014.mail.protection.outlook.com (10.97.4.112) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Sun, 25 Sep 2022 18:08:17 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Sun, 25 Sep 2022 11:07:53 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.9 via Frontend Transport; Sun, 25 Sep 2022 11:07:53 -0700
-Envelope-to: broonie@kernel.org,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- akumarma@amd.com,
- git@amd.com,
- linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- amit.kumar-mahapatra@amd.com
-Received: from [10.140.6.18] (port=44788 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1ocW2i-0001TD-V7; Sun, 25 Sep 2022 11:07:53 -0700
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <akumarma@amd.com>, <git@amd.com>, <michal.simek@xilinx.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <amit.kumar-mahapatra@amd.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH v3 3/7] spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same SPI frequency
-Date:   Sun, 25 Sep 2022 23:37:35 +0530
-Message-ID: <20220925180739.21612-4-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220925180739.21612-1-amit.kumar-mahapatra@xilinx.com>
-References: <20220925180739.21612-1-amit.kumar-mahapatra@xilinx.com>
+        Sun, 25 Sep 2022 14:09:42 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25838E97
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:09:31 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A9A5F60004;
+        Sun, 25 Sep 2022 18:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664129367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vQ6nSh7AknV2yq1xRZY2J4+Brn8vMV4byzunU3j5yy4=;
+        b=ALsOcVFXlIZRlODNg8u1TIrMPtvkClsV3a1Bw6Mfc2iPdJS6HFpYRHHglvSjSvCb1eaAGF
+        ePD5gSoj8gmjdn0FJbypizGZviwAoies5v7jcbEddHRg00MyzCbcEsZPgfJ3hTbzZEEdTv
+        BOk2mcAbilSiog27CIlRF3bY4fvZv3YETHr1OQAyG3YnEMQRuUu8m26ySH2wzMxDHNn4xy
+        +9MJQS4a9KH527cEBN+LZLfp+0CxZMfbM5X/jbJHn08YdlgrIcuUxC0t3Jqm+04+/4HdCN
+        6zavYYL1XNxeNqmiqtDl5JBPWD20IS6Vybwd1bSAJ9wXyLuCvBj25EoPjea6+w==
+Date:   Sun, 25 Sep 2022 20:09:26 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH] pcmcia: at91_cf: switch to using gpiod API
+Message-ID: <YzCZVkT5PeNes7Wu@mail.local>
+References: <Yy6d7TjqzUwGQnQa@penguin>
+ <68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com>
+ <Yy7tLRcMaKeet9An@mail.local>
+ <Yy8RcC2QHdws26ha@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1NAM02FT0014:EE_|PH0PR02MB8534:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6421c1f0-69dc-410b-92ce-08da9f20ebf8
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RJE1+Ht+gTDdurc+Ilxtuk4LmHAKVWvSfWnVN464uAWagLj8V3qU9TV2wMxm104TOUjPhcMaz+F8q9+Q7k9ATRRgR5bXUMzKrGNRJlgcROknsmTqDVe9JQsRXkRYuTJrwCeKqOtlPirsVydbYFmWRLm9oMRnh1Cwe/7/aD2KMF1l8deTsgTOpYH7iv2OXPM9QAVsnSPB28jjizIJAHvW8EKnRubLhL5a1NGNvsYUr1xnmu0D9hblJI95izWJMNQc5tuGvsm9hjn9knk4NNXwEN/EWorquB/WgIkXBzY407OeFHokuMC3d/VaTaCIKxt0TNHUqVu8wW5oIGRF9IEUDsuGcrDeP2U+vxFv3WCCsJfHcXEC3pfbXqThPohmbBeWUapll1ntWJqb8J7G/B05a6HCfLLiIzGYCtF73rXiUWHCuba3Ee3PJMgdTMVhdBHvrpwAAs8MjA5zhCGZ9BXLn4sF+pNaxRVPacqnddTukJ36GXf8Sv89Um+O8qFsuRh1uqKXdLCb1ezZ5QS+TIjHpfhan6nhNylv4LOEGubQ81l4iXw6DCaTXLzQ/4WxbJhPR8F6OcbxQbTbVEkysaFszI1O7z6vjS35Gv4gxnRggegdMfX5HYJzeTpcm+aF8P5FU0mvozpaXhy6TjC4+LOuQ+jCfvrVxDbToGaYM5yR8thtTw43eiMZDIQEqF0bU4dlnAKDV81TGuaY8SyX/FsmbaIiD/aJmG+zha7fzd4hL3/zz+Ll/iLi6pFkYN+X0x+NMKKgsklk/IrTSrVtd9IQmqSz1z95UMX6lpqR2nVlPsE=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199015)(46966006)(40470700004)(36840700001)(4326008)(8676002)(70206006)(70586007)(186003)(1076003)(426003)(47076005)(336012)(26005)(107886003)(6666004)(7696005)(54906003)(110136005)(2616005)(316002)(36756003)(356005)(2906002)(5660300002)(7416002)(82740400003)(7636003)(40460700003)(41300700001)(83380400001)(40480700001)(8936002)(9786002)(36860700001)(82310400005)(478600001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2022 18:08:17.2115
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6421c1f0-69dc-410b-92ce-08da9f20ebf8
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8534
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy8RcC2QHdws26ha@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During every transfer the GQSPI driver configures the baud rate value. But
-when there is no change in the SPI clock frequency the driver should avoid
-rewriting the same baud rate value to the configuration register. Update
-GQSPI driver to rewrite the baud rate value if there is any change in SPI
-clock frequency.
+On 24/09/2022 16:17:20+0200, Dominik Brodowski wrote:
+> Am Sat, Sep 24, 2022 at 01:42:37PM +0200 schrieb Alexandre Belloni:
+> > On 24/09/2022 10:33:29+0200, Arnd Bergmann wrote:
+> > > On Sat, Sep 24, 2022, at 8:04 AM, Dmitry Torokhov wrote:
+> > > > This patch switches the driver to use newer gpiod API instead of legacy
+> > > > gpio API. This moves us closer to the goal of stopping exporting
+> > > > OF-specific APIs of gpiolib.
+> > > >
+> > > > While at it, stop using module-global for regmap.
+> > > >
+> > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > 
+> > > This looks good to me overall. Three comments:
+> > > 
+> > > > @@ -63,7 +62,7 @@ struct at91_cf_socket {
+> > > > 
+> > > >  static inline int at91_cf_present(struct at91_cf_socket *cf)
+> > > >  {
+> > > > -	return !gpio_get_value(cf->board->det_pin);
+> > > > +	return gpiod_get_value(cf->board->det_pin);
+> > > >  }
+> > > 
+> > > a) The change in polarity looks wrong here, I can't really tell
+> > > from the patch. If this is intentional, maybe explain it in
+> > > the changelog. With that addressed (either way)
+> > > 
+> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > 
+> > > b) In case you are doing more patches like this one at the moment,
+> > > note that I'm in the process of removing all unused board files
+> > > for arch/arm/, which will in turn make a lot of drivers unused.
+> > > I should be able to provide a branch soon, which can be used to
+> > > identify drivers that don't have DT support any more and don't
+> > > have any board files. Rather than converting them to gpio
+> > > descriptors, we can probably just remove those drivers.
+> > > 
+> > > c) I'm not sure about the state of the at91_cf driver. Apparently
+> > > we used to have three drivers for the same hardware (pcmcia,
+> > > pata and ide), and only the pcmcia driver remained in the tree
+> > > after drivers/ide/ was removed and pata_at91 did not get converted
+> > > to DT. I think in the long run we will remove the pcmcia layer,
+> > > so if you are actually trying to use this hardware, we may want to
+> > > revive the pata variant and drop this one instead.
+> > > There is no dts file in tree that actually declares either of them,
+> > > so chances are that nobody is actually using the CF slot on at91
+> > > any more.
+> > > 
+> > 
+> > I'm pretty sure it is broken since eaa9a21dd14b ("pcmcia: at91_cf: Use
+> > syscon to configure the MC/smc") as this change has never been tested.
+> 
+> Well, that's a pretty strong reason to remove this driver. May I get ACKs on
+> this patch, please?
+> 
+> Thanks,
+> 	Dominik
+> 
+> 
+> From: Dominik Brodowski <linux@dominikbrodowski.net>
+> Subject: [PATCH] pcmcia: remove AT91RM9200 Compact Flash driver
+> 
+> As noted by Arnd Bergmann, "we used to have three drivers for the same
+> hardware (pcmcia, pata and ide), and only the pcmcia driver remained
+> in the tree after drivers/ide/ was removed and pata_at91 did not get
+> converted to DT". "There is no dts file in tree that actually declares
+> either of them, so chances are that nobody is actually using the CF
+> slot on at91 any more."[1]
+> 
+> On this rationale, remove the AT91RM9200 Compact Flash driver, which
+> also assists in reaching "the goal of stopping exporting OF-specific
+> APIs of gpiolib".[2]
+> 
+> [1] https://lore.kernel.org/lkml/68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com/
+> [2] https://lore.kernel.org/lkml/Yy6d7TjqzUwGQnQa@penguin/
+> 
+> Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+> 
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
- drivers/spi/spi-zynqmp-gqspi.c | 49 ++++++++++++++++++++++++----------
- 1 file changed, 35 insertions(+), 14 deletions(-)
+> diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+> index 90ebc688ec05..1525023e49b6 100644
+> --- a/drivers/pcmcia/Kconfig
+> +++ b/drivers/pcmcia/Kconfig
+> @@ -248,15 +248,6 @@ config OMAP_CF
+>  	  Say Y here to support the CompactFlash controller on OMAP.
+>  	  Note that this doesn't support "True IDE" mode.
+>  
+> -config AT91_CF
+> -	tristate "AT91 CompactFlash Controller"
+> -	depends on PCI
+> -	depends on OF
+> -	depends on PCMCIA && ARCH_AT91
+> -	help
+> -	  Say Y here to support the CompactFlash controller on AT91 chips.
+> -	  Or choose M to compile the driver as a module named "at91_cf".
+> -
+>  config ELECTRA_CF
+>  	tristate "Electra CompactFlash Controller"
+>  	depends on PCMCIA && PPC_PASEMI
+> diff --git a/drivers/pcmcia/Makefile b/drivers/pcmcia/Makefile
+> index 1c3ae8888e5f..b3a2accf47af 100644
+> --- a/drivers/pcmcia/Makefile
+> +++ b/drivers/pcmcia/Makefile
+> @@ -30,7 +30,6 @@ obj-$(CONFIG_PCMCIA_SA1100)			+= sa1100_cs.o
+>  obj-$(CONFIG_PCMCIA_SA1111)			+= sa1111_cs.o
+>  obj-$(CONFIG_PCMCIA_BCM63XX)			+= bcm63xx_pcmcia.o
+>  obj-$(CONFIG_OMAP_CF)				+= omap_cf.o
+> -obj-$(CONFIG_AT91_CF)				+= at91_cf.o
+>  obj-$(CONFIG_ELECTRA_CF)			+= electra_cf.o
+>  obj-$(CONFIG_PCMCIA_ALCHEMY_DEVBOARD)		+= db1xxx_ss.o
+>  obj-$(CONFIG_PCMCIA_MAX1600)			+= max1600.o
+> diff --git a/drivers/pcmcia/at91_cf.c b/drivers/pcmcia/at91_cf.c
+> deleted file mode 100644
+> index c1297f0ebf03..000000000000
+> --- a/drivers/pcmcia/at91_cf.c
+> +++ /dev/null
+> @@ -1,407 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
+> -/*
+> - * at91_cf.c -- AT91 CompactFlash controller driver
+> - *
+> - * Copyright (C) 2005 David Brownell
+> - */
+> -
+> -#include <linux/module.h>
+> -#include <linux/kernel.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/errno.h>
+> -#include <linux/init.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/slab.h>
+> -#include <linux/gpio.h>
+> -#include <linux/io.h>
+> -#include <linux/sizes.h>
+> -#include <linux/mfd/syscon.h>
+> -#include <linux/mfd/syscon/atmel-mc.h>
+> -#include <linux/of.h>
+> -#include <linux/of_device.h>
+> -#include <linux/of_gpio.h>
+> -#include <linux/pci.h>
+> -#include <linux/regmap.h>
+> -
+> -#include <pcmcia/ss.h>
+> -
+> -/*
+> - * A0..A10 work in each range; A23 indicates I/O space;  A25 is CFRNW;
+> - * some other bit in {A24,A22..A11} is nREG to flag memory access
+> - * (vs attributes).  So more than 2KB/region would just be waste.
+> - * Note: These are offsets from the physical base address.
+> - */
+> -#define	CF_ATTR_PHYS	(0)
+> -#define	CF_IO_PHYS	(1 << 23)
+> -#define	CF_MEM_PHYS	(0x017ff800)
+> -
+> -struct at91_cf_data {
+> -	int	irq_pin;		/* I/O IRQ */
+> -	int	det_pin;		/* Card detect */
+> -	int	vcc_pin;		/* power switching */
+> -	int	rst_pin;		/* card reset */
+> -	u8	chipselect;		/* EBI Chip Select number */
+> -	u8	flags;
+> -#define AT91_CF_TRUE_IDE	0x01
+> -#define AT91_IDE_SWAP_A0_A2	0x02
+> -};
+> -
+> -static struct regmap *mc;
+> -
+> -/*--------------------------------------------------------------------------*/
+> -
+> -struct at91_cf_socket {
+> -	struct pcmcia_socket	socket;
+> -
+> -	unsigned		present:1;
+> -
+> -	struct platform_device	*pdev;
+> -	struct at91_cf_data	*board;
+> -
+> -	unsigned long		phys_baseaddr;
+> -};
+> -
+> -static inline int at91_cf_present(struct at91_cf_socket *cf)
+> -{
+> -	return !gpio_get_value(cf->board->det_pin);
+> -}
+> -
+> -/*--------------------------------------------------------------------------*/
+> -
+> -static int at91_cf_ss_init(struct pcmcia_socket *s)
+> -{
+> -	return 0;
+> -}
+> -
+> -static irqreturn_t at91_cf_irq(int irq, void *_cf)
+> -{
+> -	struct at91_cf_socket *cf = _cf;
+> -
+> -	if (irq == gpio_to_irq(cf->board->det_pin)) {
+> -		unsigned present = at91_cf_present(cf);
+> -
+> -		/* kick pccard as needed */
+> -		if (present != cf->present) {
+> -			cf->present = present;
+> -			dev_dbg(&cf->pdev->dev, "card %s\n",
+> -					present ? "present" : "gone");
+> -			pcmcia_parse_events(&cf->socket, SS_DETECT);
+> -		}
+> -	}
+> -
+> -	return IRQ_HANDLED;
+> -}
+> -
+> -static int at91_cf_get_status(struct pcmcia_socket *s, u_int *sp)
+> -{
+> -	struct at91_cf_socket	*cf;
+> -
+> -	if (!sp)
+> -		return -EINVAL;
+> -
+> -	cf = container_of(s, struct at91_cf_socket, socket);
+> -
+> -	/* NOTE: CF is always 3VCARD */
+> -	if (at91_cf_present(cf)) {
+> -		int rdy	= gpio_is_valid(cf->board->irq_pin);	/* RDY/nIRQ */
+> -		int vcc	= gpio_is_valid(cf->board->vcc_pin);
+> -
+> -		*sp = SS_DETECT | SS_3VCARD;
+> -		if (!rdy || gpio_get_value(cf->board->irq_pin))
+> -			*sp |= SS_READY;
+> -		if (!vcc || gpio_get_value(cf->board->vcc_pin))
+> -			*sp |= SS_POWERON;
+> -	} else
+> -		*sp = 0;
+> -
+> -	return 0;
+> -}
+> -
+> -static int
+> -at91_cf_set_socket(struct pcmcia_socket *sock, struct socket_state_t *s)
+> -{
+> -	struct at91_cf_socket	*cf;
+> -
+> -	cf = container_of(sock, struct at91_cf_socket, socket);
+> -
+> -	/* switch Vcc if needed and possible */
+> -	if (gpio_is_valid(cf->board->vcc_pin)) {
+> -		switch (s->Vcc) {
+> -		case 0:
+> -			gpio_set_value(cf->board->vcc_pin, 0);
+> -			break;
+> -		case 33:
+> -			gpio_set_value(cf->board->vcc_pin, 1);
+> -			break;
+> -		default:
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	/* toggle reset if needed */
+> -	gpio_set_value(cf->board->rst_pin, s->flags & SS_RESET);
+> -
+> -	dev_dbg(&cf->pdev->dev, "Vcc %d, io_irq %d, flags %04x csc %04x\n",
+> -				s->Vcc, s->io_irq, s->flags, s->csc_mask);
+> -
+> -	return 0;
+> -}
+> -
+> -static int at91_cf_ss_suspend(struct pcmcia_socket *s)
+> -{
+> -	return at91_cf_set_socket(s, &dead_socket);
+> -}
+> -
+> -/* we already mapped the I/O region */
+> -static int at91_cf_set_io_map(struct pcmcia_socket *s, struct pccard_io_map *io)
+> -{
+> -	struct at91_cf_socket	*cf;
+> -	u32			csr;
+> -
+> -	cf = container_of(s, struct at91_cf_socket, socket);
+> -	io->flags &= (MAP_ACTIVE | MAP_16BIT | MAP_AUTOSZ);
+> -
+> -	/*
+> -	 * Use 16 bit accesses unless/until we need 8-bit i/o space.
+> -	 *
+> -	 * NOTE: this CF controller ignores IOIS16, so we can't really do
+> -	 * MAP_AUTOSZ.  The 16bit mode allows single byte access on either
+> -	 * D0-D7 (even addr) or D8-D15 (odd), so it's close enough for many
+> -	 * purposes (and handles ide-cs).
+> -	 *
+> -	 * The 8bit mode is needed for odd byte access on D0-D7.  It seems
+> -	 * some cards only like that way to get at the odd byte, despite
+> -	 * CF 3.0 spec table 35 also giving the D8-D15 option.
+> -	 */
+> -	if (!(io->flags & (MAP_16BIT | MAP_AUTOSZ))) {
+> -		csr = AT91_MC_SMC_DBW_8;
+> -		dev_dbg(&cf->pdev->dev, "8bit i/o bus\n");
+> -	} else {
+> -		csr = AT91_MC_SMC_DBW_16;
+> -		dev_dbg(&cf->pdev->dev, "16bit i/o bus\n");
+> -	}
+> -	regmap_update_bits(mc, AT91_MC_SMC_CSR(cf->board->chipselect),
+> -			   AT91_MC_SMC_DBW, csr);
+> -
+> -	io->start = cf->socket.io_offset;
+> -	io->stop = io->start + SZ_2K - 1;
+> -
+> -	return 0;
+> -}
+> -
+> -/* pcmcia layer maps/unmaps mem regions */
+> -static int
+> -at91_cf_set_mem_map(struct pcmcia_socket *s, struct pccard_mem_map *map)
+> -{
+> -	struct at91_cf_socket	*cf;
+> -
+> -	if (map->card_start)
+> -		return -EINVAL;
+> -
+> -	cf = container_of(s, struct at91_cf_socket, socket);
+> -
+> -	map->flags &= (MAP_ACTIVE | MAP_ATTRIB | MAP_16BIT);
+> -	if (map->flags & MAP_ATTRIB)
+> -		map->static_start = cf->phys_baseaddr + CF_ATTR_PHYS;
+> -	else
+> -		map->static_start = cf->phys_baseaddr + CF_MEM_PHYS;
+> -
+> -	return 0;
+> -}
+> -
+> -static struct pccard_operations at91_cf_ops = {
+> -	.init			= at91_cf_ss_init,
+> -	.suspend		= at91_cf_ss_suspend,
+> -	.get_status		= at91_cf_get_status,
+> -	.set_socket		= at91_cf_set_socket,
+> -	.set_io_map		= at91_cf_set_io_map,
+> -	.set_mem_map		= at91_cf_set_mem_map,
+> -};
+> -
+> -/*--------------------------------------------------------------------------*/
+> -
+> -static const struct of_device_id at91_cf_dt_ids[] = {
+> -	{ .compatible = "atmel,at91rm9200-cf" },
+> -	{ /* sentinel */ }
+> -};
+> -MODULE_DEVICE_TABLE(of, at91_cf_dt_ids);
+> -
+> -static int at91_cf_probe(struct platform_device *pdev)
+> -{
+> -	struct at91_cf_socket	*cf;
+> -	struct at91_cf_data	*board;
+> -	struct resource		*io;
+> -	struct resource		realio;
+> -	int			status;
+> -
+> -	board = devm_kzalloc(&pdev->dev, sizeof(*board), GFP_KERNEL);
+> -	if (!board)
+> -		return -ENOMEM;
+> -
+> -	board->irq_pin = of_get_gpio(pdev->dev.of_node, 0);
+> -	board->det_pin = of_get_gpio(pdev->dev.of_node, 1);
+> -	board->vcc_pin = of_get_gpio(pdev->dev.of_node, 2);
+> -	board->rst_pin = of_get_gpio(pdev->dev.of_node, 3);
+> -
+> -	mc = syscon_regmap_lookup_by_compatible("atmel,at91rm9200-sdramc");
+> -	if (IS_ERR(mc))
+> -		return PTR_ERR(mc);
+> -
+> -	if (!gpio_is_valid(board->det_pin) || !gpio_is_valid(board->rst_pin))
+> -		return -ENODEV;
+> -
+> -	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!io)
+> -		return -ENODEV;
+> -
+> -	cf = devm_kzalloc(&pdev->dev, sizeof(*cf), GFP_KERNEL);
+> -	if (!cf)
+> -		return -ENOMEM;
+> -
+> -	cf->board = board;
+> -	cf->pdev = pdev;
+> -	cf->phys_baseaddr = io->start;
+> -	platform_set_drvdata(pdev, cf);
+> -
+> -	/* must be a GPIO; ergo must trigger on both edges */
+> -	status = devm_gpio_request(&pdev->dev, board->det_pin, "cf_det");
+> -	if (status < 0)
+> -		return status;
+> -
+> -	status = devm_request_irq(&pdev->dev, gpio_to_irq(board->det_pin),
+> -					at91_cf_irq, 0, "at91_cf detect", cf);
+> -	if (status < 0)
+> -		return status;
+> -
+> -	device_init_wakeup(&pdev->dev, 1);
+> -
+> -	status = devm_gpio_request(&pdev->dev, board->rst_pin, "cf_rst");
+> -	if (status < 0)
+> -		goto fail0a;
+> -
+> -	if (gpio_is_valid(board->vcc_pin)) {
+> -		status = devm_gpio_request(&pdev->dev, board->vcc_pin, "cf_vcc");
+> -		if (status < 0)
+> -			goto fail0a;
+> -	}
+> -
+> -	/*
+> -	 * The card driver will request this irq later as needed.
+> -	 * but it causes lots of "irqNN: nobody cared" messages
+> -	 * unless we report that we handle everything (sigh).
+> -	 * (Note:  DK board doesn't wire the IRQ pin...)
+> -	 */
+> -	if (gpio_is_valid(board->irq_pin)) {
+> -		status = devm_gpio_request(&pdev->dev, board->irq_pin, "cf_irq");
+> -		if (status < 0)
+> -			goto fail0a;
+> -
+> -		status = devm_request_irq(&pdev->dev, gpio_to_irq(board->irq_pin),
+> -					at91_cf_irq, IRQF_SHARED, "at91_cf", cf);
+> -		if (status < 0)
+> -			goto fail0a;
+> -		cf->socket.pci_irq = gpio_to_irq(board->irq_pin);
+> -	} else
+> -		cf->socket.pci_irq = nr_irqs + 1;
+> -
+> -	/*
+> -	 * pcmcia layer only remaps "real" memory not iospace
+> -	 * io_offset is set to 0x10000 to avoid the check in static_find_io().
+> -	 * */
+> -	cf->socket.io_offset = 0x10000;
+> -	realio.start = cf->socket.io_offset;
+> -	realio.end = realio.start + SZ_64K - 1;
+> -	status = pci_remap_iospace(&realio, cf->phys_baseaddr + CF_IO_PHYS);
+> -	if (status)
+> -		goto fail0a;
+> -
+> -	/* reserve chip-select regions */
+> -	if (!devm_request_mem_region(&pdev->dev, io->start, resource_size(io), "at91_cf")) {
+> -		status = -ENXIO;
+> -		goto fail0a;
+> -	}
+> -
+> -	dev_info(&pdev->dev, "irqs det #%d, io #%d\n",
+> -		gpio_to_irq(board->det_pin), gpio_to_irq(board->irq_pin));
+> -
+> -	cf->socket.owner = THIS_MODULE;
+> -	cf->socket.dev.parent = &pdev->dev;
+> -	cf->socket.ops = &at91_cf_ops;
+> -	cf->socket.resource_ops = &pccard_static_ops;
+> -	cf->socket.features = SS_CAP_PCCARD | SS_CAP_STATIC_MAP
+> -				| SS_CAP_MEM_ALIGN;
+> -	cf->socket.map_size = SZ_2K;
+> -	cf->socket.io[0].res = io;
+> -
+> -	status = pcmcia_register_socket(&cf->socket);
+> -	if (status < 0)
+> -		goto fail0a;
+> -
+> -	return 0;
+> -
+> -fail0a:
+> -	device_init_wakeup(&pdev->dev, 0);
+> -	return status;
+> -}
+> -
+> -static int at91_cf_remove(struct platform_device *pdev)
+> -{
+> -	struct at91_cf_socket	*cf = platform_get_drvdata(pdev);
+> -
+> -	pcmcia_unregister_socket(&cf->socket);
+> -	device_init_wakeup(&pdev->dev, 0);
+> -
+> -	return 0;
+> -}
+> -
+> -#ifdef	CONFIG_PM
+> -
+> -static int at91_cf_suspend(struct platform_device *pdev, pm_message_t mesg)
+> -{
+> -	struct at91_cf_socket	*cf = platform_get_drvdata(pdev);
+> -	struct at91_cf_data	*board = cf->board;
+> -
+> -	if (device_may_wakeup(&pdev->dev)) {
+> -		enable_irq_wake(gpio_to_irq(board->det_pin));
+> -		if (gpio_is_valid(board->irq_pin))
+> -			enable_irq_wake(gpio_to_irq(board->irq_pin));
+> -	}
+> -	return 0;
+> -}
+> -
+> -static int at91_cf_resume(struct platform_device *pdev)
+> -{
+> -	struct at91_cf_socket	*cf = platform_get_drvdata(pdev);
+> -	struct at91_cf_data	*board = cf->board;
+> -
+> -	if (device_may_wakeup(&pdev->dev)) {
+> -		disable_irq_wake(gpio_to_irq(board->det_pin));
+> -		if (gpio_is_valid(board->irq_pin))
+> -			disable_irq_wake(gpio_to_irq(board->irq_pin));
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -#else
+> -#define	at91_cf_suspend		NULL
+> -#define	at91_cf_resume		NULL
+> -#endif
+> -
+> -static struct platform_driver at91_cf_driver = {
+> -	.driver = {
+> -		.name		= "at91_cf",
+> -		.of_match_table = at91_cf_dt_ids,
+> -	},
+> -	.probe		= at91_cf_probe,
+> -	.remove		= at91_cf_remove,
+> -	.suspend	= at91_cf_suspend,
+> -	.resume		= at91_cf_resume,
+> -};
+> -
+> -module_platform_driver(at91_cf_driver);
+> -
+> -MODULE_DESCRIPTION("AT91 Compact Flash Driver");
+> -MODULE_AUTHOR("David Brownell");
+> -MODULE_LICENSE("GPL");
+> -MODULE_ALIAS("platform:at91_cf");
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 1b56dd29057f..0fecea338027 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -159,6 +159,7 @@ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
-  * @mode:		Defines the mode in which QSPI is operating
-  * @data_completion:	completion structure
-  * @op_lock:		Operational lock
-+ * @speed_hz:          Current SPI bus clock speed in hz
-  */
- struct zynqmp_qspi {
- 	struct spi_controller *ctlr;
-@@ -179,6 +180,7 @@ struct zynqmp_qspi {
- 	enum mode_type mode;
- 	struct completion data_completion;
- 	struct mutex op_lock;
-+	u32 speed_hz;
- };
- 
- /**
-@@ -273,7 +275,8 @@ static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
-  */
- static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- {
--	u32 config_reg;
-+	u32 config_reg, baud_rate_val = 0;
-+	ulong clk_rate;
- 
- 	/* Select the GQSPI mode */
- 	zynqmp_gqspi_write(xqspi, GQSPI_SEL_OFST, GQSPI_SEL_MASK);
-@@ -318,6 +321,16 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- 	else
- 		config_reg &= ~GQSPI_CFG_CLK_POL_MASK;
- 
-+	/* Set the clock frequency */
-+	clk_rate = clk_get_rate(xqspi->refclk);
-+	while ((baud_rate_val < GQSPI_BAUD_DIV_MAX) &&
-+	       (clk_rate /
-+		(GQSPI_BAUD_DIV_SHIFT << baud_rate_val)) > xqspi->speed_hz)
-+		baud_rate_val++;
-+
-+	config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
-+	config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
-+
- 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
- 
- 	/* Clear the TX and RX FIFO */
-@@ -466,22 +479,29 @@ static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi,
- 				 struct spi_device *qspi)
- {
- 	ulong clk_rate;
--	u32 config_reg, baud_rate_val = 0;
-+	u32 config_reg, req_speed_hz, baud_rate_val = 0;
- 
--	/* Set the clock frequency */
--	/* If req_hz == 0, default to lowest speed */
--	clk_rate = clk_get_rate(xqspi->refclk);
-+	req_speed_hz = qspi->max_speed_hz;
- 
--	while ((baud_rate_val < GQSPI_BAUD_DIV_MAX) &&
--	       (clk_rate /
--		(GQSPI_BAUD_DIV_SHIFT << baud_rate_val)) > qspi->max_speed_hz)
--		baud_rate_val++;
-+	if (xqspi->speed_hz != req_speed_hz) {
-+		xqspi->speed_hz = req_speed_hz;
- 
--	config_reg = zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST);
-+		/* Set the clock frequency */
-+		/* If req_speed_hz == 0, default to lowest speed */
-+		clk_rate = clk_get_rate(xqspi->refclk);
- 
--	config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
--	config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
--	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
-+		while ((baud_rate_val < GQSPI_BAUD_DIV_MAX) &&
-+		       (clk_rate /
-+			(GQSPI_BAUD_DIV_SHIFT << baud_rate_val)) >
-+		       req_speed_hz)
-+			baud_rate_val++;
-+
-+		config_reg = zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST);
-+
-+		config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
-+		config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
-+		zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
-+	}
- 	return 0;
- }
- 
-@@ -1173,6 +1193,8 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
- 		SPI_TX_DUAL | SPI_TX_QUAD;
-+	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
-+	xqspi->speed_hz = ctlr->max_speed_hz;
- 
- 	/* QSPI controller initializations */
- 	zynqmp_qspi_init_hw(xqspi);
-@@ -1209,7 +1231,6 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
- 	ctlr->mem_ops = &zynqmp_qspi_mem_ops;
- 	ctlr->setup = zynqmp_qspi_setup_op;
--	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
- 	ctlr->dev.of_node = np;
- 	ctlr->auto_runtime_pm = true;
 -- 
-2.17.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
