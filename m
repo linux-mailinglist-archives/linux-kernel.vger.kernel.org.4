@@ -2,78 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8B25E9382
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AC35E9387
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiIYNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 09:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S231841AbiIYN5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 09:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiIYNx1 (ORCPT
+        with ESMTP id S231727AbiIYN5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 09:53:27 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF592C136
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:53:24 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28PDquPj028689;
-        Sun, 25 Sep 2022 22:52:56 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Sun, 25 Sep 2022 22:52:56 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28PDquLX028686
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 25 Sep 2022 22:52:56 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <e37e3b18-401e-f319-9006-2e2a09111c74@I-love.SAKURA.ne.jp>
-Date:   Sun, 25 Sep 2022 22:52:56 +0900
+        Sun, 25 Sep 2022 09:57:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2438523BF1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:57:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62B7DB80C8B
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 13:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76336C433C1;
+        Sun, 25 Sep 2022 13:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664114260;
+        bh=N0p+XMeh405m/51bzQKxPmvxMqC5MIXNTOTO+P5wiZk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DuYEcQRm56zWUhKYlickDrWNf3iCO4KsdwpLT8LR3W1Vd+yslZ8RWJ1+/lcCfv6q+
+         MJhQ4QCRpjwOsjqKZh7MMd3+DDH/4bY4AP6psxUYjPAhzjGVAWtsNZ3nkdd5nWdb4m
+         pQVEDxnEMUyJjEUQt8D7G/Zm2F+eZgvwUDqHN7vWEXEHgokxDjAwWLo7cevvnrmMi5
+         hrBaspEfY563XSQjItIlGFBc0YkUr6dg+XzWX8uWakwl+eWO3hCLu/ML+0zq3cAgfn
+         ZTDaET7apJTNkQmR5B33+8Xoj+Id8iAQD+BBqfHNFfcvpA6MsVdMwHlQq/grKx4HFm
+         aD0Ksqrt4woLw==
+Message-ID: <490b5696-b4b3-94ca-f856-e19af9a88ab6@kernel.org>
+Date:   Sun, 25 Sep 2022 21:57:37 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] kernfs: fix UAF race condition in __kernfs_remove()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [RFC PATCH v2] f2fs: record need_fsck in super_block
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Christian A. Ehrhardt" <lk@c--e.de>
-Cc:     Tejun Heo <tj@kernel.org>,
-        syzbot <syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        Hillf Danton <hdanton@sina.com>
-References: <000000000000646c9605e714ec6e@google.com>
- <7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp>
- <YzBT+hJ/fmp75j1P@kroah.com>
- <83be5776-4038-90d5-f202-9a6e97b6d551@I-love.SAKURA.ne.jp>
- <YzBaYHqldB39zD17@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YzBaYHqldB39zD17@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20220913135919.2445544-1-chao@kernel.org>
+ <YykPzeC4lk+F/U/2@google.com>
+ <b22657e3-df59-46ff-81c5-be22e422a576@kernel.org>
+ <YyykoT0BdBrXfcrQ@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YyykoT0BdBrXfcrQ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/25 22:40, Greg Kroah-Hartman wrote:
-> On Sun, Sep 25, 2022 at 10:20:27PM +0900, Tetsuo Handa wrote:
->> On 2022/09/25 22:13, Greg Kroah-Hartman wrote:
->>> Isn't this already handled by:
->>> 	https://lore.kernel.org/r/20220913121723.691454-1-lk@c--e.de
+On 2022/9/23 2:08, Jaegeuk Kim wrote:
+> On 09/20, Chao Yu wrote:
+>> On 2022/9/20 8:56, Jaegeuk Kim wrote:
+>>> On 09/13, Chao Yu wrote:
+>>>> Once CP_ERROR_FLAG is set, checkpoint is disallowed to be triggered to
+>>>> persist CP_FSCK_FLAG, fsck won't repair the image due to lack of
+>>>> CP_FSCK_FLAG.
+>>>>
+>>>> This patch proposes to persist newly introduced SB_NEED_FSCK flag into
+>>>> super block if CP_ERROR_FLAG and SBI_NEED_FSCK is set, later, once fsck
+>>>> detect this flag, it can check and repair corrupted image in time.
+>>>>
+>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>> ---
+>>>> v2:
+>>>> - remove unneeded codes.
+>>>>    fs/f2fs/checkpoint.c    |  6 +++++-
+>>>>    fs/f2fs/f2fs.h          |  1 +
+>>>>    fs/f2fs/super.c         | 26 ++++++++++++++++++++++++++
+>>>>    include/linux/f2fs_fs.h |  5 ++++-
+>>>>    4 files changed, 36 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+>>>> index c3119e4c890c..0836fce40394 100644
+>>>> --- a/fs/f2fs/checkpoint.c
+>>>> +++ b/fs/f2fs/checkpoint.c
+>>>> @@ -30,8 +30,12 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
+>>>>    {
+>>>>    	f2fs_build_fault_attr(sbi, 0, 0);
+>>>>    	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+>>>> -	if (!end_io)
+>>>> +	if (!end_io) {
+>>>>    		f2fs_flush_merged_writes(sbi);
+>>>> +
+>>>> +		if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+>>>> +			f2fs_update_sb_flags(sbi, SB_NEED_FSCK);
 >>>
->>> that will show up in the next linux-next tree.
+>>> Let's think of putting some more context in superblock, if we want to overwrite
+>>> it. E.g., a reason to stop checkpoint?
 >>
->> Oh, I didn't know that patch.
->>
->> But is that patch complete, for there are three __kernfs_remove() callers?
->>
+>> Good idea, maybe:
+>> Bit	Value				max number of type
+>> [0]	need fsck flag			1
+>> [1-5]	reason to stop checkpoint	32
+>> [6-13]	reason to fsck			256
 > 
-> syzbot seems to think it works :)
+> How about just keeping the counters of the reasons? (e.g., EIO count which
+> stopped checkpoint)
+> 
+> #define MAX_CRASH_REASON 32
+> char array[MAX_CRASH_REASON];
 
-syzbot's reproducer tested only kernfs_remove_by_name_ns() case.
-I'm not sure whether e.g. __kernfs_remove() from kernfs_remove() is safe.
+Something like this?
 
+---
+  fs/f2fs/checkpoint.c    | 10 +++++++---
+  fs/f2fs/data.c          |  6 ++++--
+  fs/f2fs/f2fs.h          |  4 +++-
+  fs/f2fs/file.c          | 11 ++++++-----
+  fs/f2fs/gc.c            |  6 ++++--
+  fs/f2fs/inode.c         |  3 ++-
+  fs/f2fs/segment.c       |  5 +++--
+  fs/f2fs/super.c         | 25 +++++++++++++++++++++++++
+  include/linux/f2fs_fs.h | 20 +++++++++++++++++++-
+  9 files changed, 73 insertions(+), 17 deletions(-)
+
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 308b70812cbd..b14a8e5eca21 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -26,12 +26,16 @@
+  static struct kmem_cache *ino_entry_slab;
+  struct kmem_cache *f2fs_inode_entry_slab;
+
+-void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
++void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
++						unsigned char reason)
+  {
+  	f2fs_build_fault_attr(sbi, 0, 0);
+  	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+-	if (!end_io)
++	if (!end_io) {
+  		f2fs_flush_merged_writes(sbi);
++
++		f2fs_update_sb_flags(sbi, reason);
++	}
+  }
+
+  /*
+@@ -122,7 +126,7 @@ struct page *f2fs_get_meta_page_retry(struct f2fs_sb_info *sbi, pgoff_t index)
+  		if (PTR_ERR(page) == -EIO &&
+  				++count <= DEFAULT_RETRY_IO_COUNT)
+  			goto retry;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_META_PAGE);
+  	}
+  	return page;
+  }
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 4e5be2c1dab9..20c8d835a87b 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -333,7 +333,8 @@ static void f2fs_write_end_io(struct bio *bio)
+  			mempool_free(page, sbi->write_io_dummy);
+
+  			if (unlikely(bio->bi_status))
+-				f2fs_stop_checkpoint(sbi, true);
++				f2fs_stop_checkpoint(sbi, true,
++						STOP_CP_REASON_WRITE_FAIL);
+  			continue;
+  		}
+
+@@ -349,7 +350,8 @@ static void f2fs_write_end_io(struct bio *bio)
+  		if (unlikely(bio->bi_status)) {
+  			mapping_set_error(page->mapping, -EIO);
+  			if (type == F2FS_WB_CP_DATA)
+-				f2fs_stop_checkpoint(sbi, true);
++				f2fs_stop_checkpoint(sbi, true,
++						STOP_CP_REASON_WRITE_FAIL);
+  		}
+
+  		f2fs_bug_on(sbi, page->mapping == NODE_MAPPING(sbi) &&
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d680a051cba4..ebda0ce1adbf 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3559,6 +3559,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+  int f2fs_quota_sync(struct super_block *sb, int type);
+  loff_t max_file_blocks(struct inode *inode);
+  void f2fs_quota_off_umount(struct super_block *sb);
++void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned char reason);
+  int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+  int f2fs_sync_fs(struct super_block *sb, int sync);
+  int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
+@@ -3718,7 +3719,8 @@ static inline bool f2fs_need_rand_seg(struct f2fs_sb_info *sbi)
+  /*
+   * checkpoint.c
+   */
+-void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io);
++void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
++							unsigned char reason);
+  void f2fs_flush_ckpt_thread(struct f2fs_sb_info *sbi);
+  struct page *f2fs_grab_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+  struct page *f2fs_get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 2f9b387fef54..da45798d7fe5 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2153,7 +2153,8 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+  		if (ret) {
+  			if (ret == -EROFS) {
+  				ret = 0;
+-				f2fs_stop_checkpoint(sbi, false);
++				f2fs_stop_checkpoint(sbi, false,
++						STOP_CP_REASON_SHUTDOWN);
+  				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+  				trace_f2fs_shutdown(sbi, in, ret);
+  			}
+@@ -2166,7 +2167,7 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+  		ret = freeze_bdev(sb->s_bdev);
+  		if (ret)
+  			goto out;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+  		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+  		thaw_bdev(sb->s_bdev);
+  		break;
+@@ -2175,16 +2176,16 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+  		ret = f2fs_sync_fs(sb, 1);
+  		if (ret)
+  			goto out;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+  		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+  		break;
+  	case F2FS_GOING_DOWN_NOSYNC:
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+  		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+  		break;
+  	case F2FS_GOING_DOWN_METAFLUSH:
+  		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+  		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+  		break;
+  	case F2FS_GOING_DOWN_NEED_FSCK:
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 3a820e5cdaee..6e42dad0ac2d 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -74,7 +74,8 @@ static int gc_thread_func(void *data)
+
+  		if (time_to_inject(sbi, FAULT_CHECKPOINT)) {
+  			f2fs_show_injection_info(sbi, FAULT_CHECKPOINT);
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_FAULT_INJECT);
+  		}
+
+  		if (!sb_start_write_trylock(sbi->sb)) {
+@@ -1712,7 +1713,8 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
+  			f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
+  				 segno, type, GET_SUM_TYPE((&sum->footer)));
+  			set_sbi_flag(sbi, SBI_NEED_FSCK);
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++				STOP_CP_REASON_CORRUPTED_SUMMARY);
+  			goto skip;
+  		}
+
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index f6cb8b78b5d5..7880596b51ee 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -716,7 +716,8 @@ void f2fs_update_inode_page(struct inode *inode)
+  			cond_resched();
+  			goto retry;
+  		} else if (err != -ENOENT) {
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_UPDATE_INODE);
+  		}
+  		return;
+  	}
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index e35be4116767..4ed84510f195 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -390,7 +390,7 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+  {
+  	if (time_to_inject(sbi, FAULT_CHECKPOINT)) {
+  		f2fs_show_injection_info(sbi, FAULT_CHECKPOINT);
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_FAULT_INJECT);
+  	}
+
+  	/* balance_fs_bg is able to be pending */
+@@ -708,7 +708,8 @@ int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
+  		} while (ret && --count);
+
+  		if (ret) {
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_FLUSH_FAIL);
+  			break;
+  		}
+
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index b8e5fe244596..9f0a64b4c5c6 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -3846,6 +3846,31 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+  	return err;
+  }
+
++void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned char reason)
++{
++	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
++	unsigned short s_flags;
++	int err;
++
++	f2fs_bug_on(sbi, reason >= MAX_STOP_REASON);
++
++	f2fs_down_write(&sbi->sb_lock);
++
++	raw_super->s_stop_reason[reason]++;
++	
++	s_flags = le16_to_cpu(raw_super->s_flags);
++
++	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
++		raw_super->s_flags = cpu_to_le16(s_flags | SB_NEED_FSCK);
++
++	err = f2fs_commit_super(sbi, false);
++	if (err)
++		f2fs_warn(sbi, "f2fs_commit_super fails to persist flag: %u, reason:%u err:%d",
++					s_flags | SB_NEED_FSCK, reason, err);
++
++	f2fs_up_write(&sbi->sb_lock);
++}
++
+  static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+  {
+  	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+index d445150c5350..adeaac71a563 100644
+--- a/include/linux/f2fs_fs.h
++++ b/include/linux/f2fs_fs.h
+@@ -73,6 +73,22 @@ struct f2fs_device {
+  	__le32 total_segments;
+  } __packed;
+
++/* reason of stop_checkpoint */
++enum {
++	STOP_CP_REASON_SHUTDOWN,
++	STOP_CP_REASON_FAULT_INJECT,
++	STOP_CP_REASON_META_PAGE,
++	STOP_CP_REASON_WRITE_FAIL,
++	STOP_CP_REASON_CORRUPTED_SUMMARY,
++	STOP_CP_REASON_UPDATE_INODE,
++	STOP_CP_REASON_FLUSH_FAIL,
++	STOP_CP_REASON_MAX,
++};
++
++#define	MAX_STOP_REASON			32
++
++#define SB_NEED_FSCK			0x00000001	/* need fsck */
++
+  struct f2fs_super_block {
+  	__le32 magic;			/* Magic Number */
+  	__le16 major_ver;		/* Major Version */
+@@ -116,7 +132,9 @@ struct f2fs_super_block {
+  	__u8 hot_ext_count;		/* # of hot file extension */
+  	__le16  s_encoding;		/* Filename charset encoding */
+  	__le16  s_encoding_flags;	/* Filename charset encoding flags */
+-	__u8 reserved[306];		/* valid reserved region */
++	__le16 s_flags;			/* super block flags */
++	__u8 s_stop_reason[MAX_STOP_REASON];	/* stop checkpoint reason */
++	__u8 reserved[272];		/* valid reserved region */
+  	__le32 crc;			/* checksum of superblock */
+  } __packed;
+
+-- 
+2.36.1
+
+
+
+> 
+>>
+>> Thanks
+>>
+>>>
+>>>> +	}
+>>>>    }
+>>>>    /*
+>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>> index dee7b67a17a6..1960a98c7555 100644
+>>>> --- a/fs/f2fs/f2fs.h
+>>>> +++ b/fs/f2fs/f2fs.h
+>>>> @@ -3556,6 +3556,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+>>>>    int f2fs_quota_sync(struct super_block *sb, int type);
+>>>>    loff_t max_file_blocks(struct inode *inode);
+>>>>    void f2fs_quota_off_umount(struct super_block *sb);
+>>>> +void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag);
+>>>>    int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+>>>>    int f2fs_sync_fs(struct super_block *sb, int sync);
+>>>>    int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
+>>>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+>>>> index b8e5fe244596..c99ba840593d 100644
+>>>> --- a/fs/f2fs/super.c
+>>>> +++ b/fs/f2fs/super.c
+>>>> @@ -3846,6 +3846,32 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+>>>>    	return err;
+>>>>    }
+>>>> +void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag)
+>>>> +{
+>>>> +	unsigned short s_flags;
+>>>> +	int err;
+>>>> +
+>>>> +	if (le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags) & SB_NEED_FSCK)
+>>>> +		return;
+>>>> +
+>>>> +	f2fs_down_write(&sbi->sb_lock);
+>>>> +
+>>>> +	s_flags = le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags);
+>>>> +
+>>>> +	if (s_flags & SB_NEED_FSCK)
+>>>> +		goto out_unlock;
+>>>> +
+>>>> +	F2FS_RAW_SUPER(sbi)->s_flags = cpu_to_le16(s_flags | SB_NEED_FSCK);
+>>>> +
+>>>> +	err = f2fs_commit_super(sbi, false);
+>>>> +	if (err) {
+>>>> +		f2fs_warn(sbi, "f2fs_commit_super fails to persist flag: %u, err:%d", flag, err);
+>>>> +		F2FS_RAW_SUPER(sbi)->s_flags = s_flags;
+>>>> +	}
+>>>> +out_unlock:
+>>>> +	f2fs_up_write(&sbi->sb_lock);
+>>>> +}
+>>>> +
+>>>>    static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+>>>>    {
+>>>>    	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+>>>> diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+>>>> index d445150c5350..124176e2a42c 100644
+>>>> --- a/include/linux/f2fs_fs.h
+>>>> +++ b/include/linux/f2fs_fs.h
+>>>> @@ -73,6 +73,8 @@ struct f2fs_device {
+>>>>    	__le32 total_segments;
+>>>>    } __packed;
+>>>> +#define SB_NEED_FSCK			0x00000001	/* need fsck */
+>>>> +
+>>>>    struct f2fs_super_block {
+>>>>    	__le32 magic;			/* Magic Number */
+>>>>    	__le16 major_ver;		/* Major Version */
+>>>> @@ -116,7 +118,8 @@ struct f2fs_super_block {
+>>>>    	__u8 hot_ext_count;		/* # of hot file extension */
+>>>>    	__le16  s_encoding;		/* Filename charset encoding */
+>>>>    	__le16  s_encoding_flags;	/* Filename charset encoding flags */
+>>>> -	__u8 reserved[306];		/* valid reserved region */
+>>>> +	__le16 s_flags;			/* super block flags */
+>>>> +	__u8 reserved[304];		/* valid reserved region */
+>>>>    	__le32 crc;			/* checksum of superblock */
+>>>>    } __packed;
+>>>> -- 
+>>>> 2.25.1
