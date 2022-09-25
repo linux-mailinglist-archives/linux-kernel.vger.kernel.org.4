@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6436B5E9389
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0315E93E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiIYN6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 09:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S230509AbiIYPXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 11:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiIYN6i (ORCPT
+        with ESMTP id S229915AbiIYPXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 09:58:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F047324BFA
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:58:37 -0700 (PDT)
+        Sun, 25 Sep 2022 11:23:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642242DA96
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 08:23:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D49461501
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 13:58:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B1BC433D6;
-        Sun, 25 Sep 2022 13:58:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C5A5B80A07
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 15:23:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0A3C433C1;
+        Sun, 25 Sep 2022 15:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664114317;
-        bh=MGwUQiUtZoWNbJEdflLjTSXHBOjjDadhwqToTMxsbm4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=p4PCxVZpotAhSGpe00qAsg2OTZlWqQkiD1+hylwC5zFJyA9yN8OqxE0AUBT0n/87c
-         TrbKDlW9iMQJjJbUbu1zmCMKOyzjrVHWmUHx6gA1LQAvdO3uFcvLf0i+lDAxMcjC+/
-         aHWEkAJyzH+pOwVxcCzv9uOH7j5AuIVu8Vty0gpTgRYDtCZaIEelUCr/Sq0+BKVA3J
-         H671FLnOHWB31OQiN7pVB5b+e7f90+pX37w8TPKLQDrcvW144e1HIlNAcwfWSLkpEA
-         +A2EmJzKcwGs0Tcz4A+QOHmSUVCk8tTmoAt1f55//5hFWVRajficegb0naHfUAZmJB
-         z4w04Pn7ZOrrA==
-Message-ID: <86b63dd6-ebe6-0d1a-5494-a8c839e483fc@kernel.org>
-Date:   Sun, 25 Sep 2022 21:58:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v3] f2fs: fix to detect corrupted meta ino
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20220913074812.2300528-1-chao@kernel.org>
- <44a1eca6-568b-a752-ef01-06de489eb466@kernel.org>
- <YyylXIEhaearlfEf@google.com>
+        s=k20201202; t=1664119395;
+        bh=mNE9p5/mRNRoN586/wzug966NONIBtlU0EfERJqekg8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pGG7sCChzjYrQ3TP6zxfy15lEwow248ybUpqJQRJnKuoKixP2lG/l8XhtDjX1T2KP
+         A5LCCwlU5gft2m/+TWcFOexoy9dzW4LB1PJSUeFkeaGIoCc7aPM98+WuxXdRMF2wFX
+         BPpjV+d0vi4oZUfp5KWuDM5Rj7soCIX1GEtjdbsGwQGtXpJKx27L81Nr3vD9mscxEd
+         r/UkXDnr8nPsMP87zVmPLtYG+xXgMlkrwOR2ZbwFOJqRtJIb9lY0oji7UNNFMew/Ew
+         knY5cIpiet6Pu1wueiJqi8S+jgxF1JIYRGVjmLy2Mm1Xz5/Yb3dimmdMwjgsLVb8JJ
+         USChfrPalDuow==
 From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YyylXIEhaearlfEf@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hugh Dickins <hugh@veritas.com>
+Cc:     chao@kernel.org, Chao Yu <chao.yu@oppo.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mm/slub: clean up create_unique_id()
+Date:   Sun, 25 Sep 2022 15:12:07 +0800
+Message-Id: <20220925071207.13183-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,86 +61,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/23 2:11, Jaegeuk Kim wrote:
-> I modified a bit.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=a9a1592fa175baaaae43f54f175a972757c47919
+From: Chao Yu <chao.yu@oppo.com>
 
-Fine to me. :)
+As Christophe JAILLET suggested:
 
-Thanks,
+In create_unique_id(),
 
-> 
-> Thanks,
-> 
-> On 09/22, Chao Yu wrote:
->> Ping,
->>
->> On 2022/9/13 15:48, Chao Yu wrote:
->>> It is possible that ino of dirent or orphan inode is corrupted in a
->>> fuzzed image, occasionally, if corrupted ino is equal to meta ino:
->>> meta_ino, node_ino or compress_ino, caller of f2fs_iget() from below
->>> call paths will get meta inode directly, it's not allowed, let's
->>> add sanity check to detect such cases.
->>>
->>> case #1
->>> - recover_dentry
->>>    - __f2fs_find_entry
->>>    - f2fs_iget_retry
->>>
->>> case #2
->>> - recover_orphan_inode
->>>    - f2fs_iget_retry
->>>
->>> Signed-off-by: Chao Yu <chao@kernel.org>
->>> ---
->>> v3:
->>> - update commit title/message
->>> - change logic inside f2fs_iget() rather than its caller
->>>    fs/f2fs/inode.c | 25 ++++++++++++++++++-------
->>>    1 file changed, 18 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
->>> index cde0a3dc80c3..1baac6056733 100644
->>> --- a/fs/f2fs/inode.c
->>> +++ b/fs/f2fs/inode.c
->>> @@ -487,6 +487,12 @@ static int do_read_inode(struct inode *inode)
->>>    	return 0;
->>>    }
->>> +static bool is_meta_ino(struct f2fs_sb_info *sbi, unsigned int ino)
->>> +{
->>> +	return ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
->>> +		ino == F2FS_COMPRESS_INO(sbi);
->>> +}
->>> +
->>>    struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->>>    {
->>>    	struct f2fs_sb_info *sbi = F2FS_SB(sb);
->>> @@ -497,17 +503,22 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->>>    	if (!inode)
->>>    		return ERR_PTR(-ENOMEM);
->>> +	if (is_meta_ino(sbi, ino)) {
->>> +		if (!(inode->i_state & I_NEW)) {
->>> +			f2fs_err(sbi, "detect corrupted inode no:%lu, run fsck to repair", ino);
->>> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
->>> +			ret = -EFSCORRUPTED;
->>> +			trace_f2fs_iget_exit(inode, ret);
->>> +			iput(inode);
->>> +			return ERR_PTR(ret);
->>> +		}
->>> +		goto make_now;
->>> +	}
->>> +
->>>    	if (!(inode->i_state & I_NEW)) {
->>>    		trace_f2fs_iget(inode);
->>>    		return inode;
->>>    	}
->>> -	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
->>> -		goto make_now;
->>> -
->>> -#ifdef CONFIG_F2FS_FS_COMPRESSION
->>> -	if (ino == F2FS_COMPRESS_INO(sbi))
->>> -		goto make_now;
->>> -#endif
->>>    	ret = do_read_inode(inode);
->>>    	if (ret)
+"looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+
+The 2nd BUG_ON at the end of the function could certainly be just
+removed as well or remplaced by a:
+        if (p > name + ID_STR_LENGTH - 1) {
+                kfree(name);
+                return -E<something>;
+        }
+"
+
+According to above suggestion, let's do below cleanups:
+1. reduce ID_STR_LENGTH to 32, as the buffer size should be enough;
+2. use WARN_ON instead of BUG_ON() and return error if check condition
+is true;
+3. use snprintf instead of sprintf to avoid overflow.
+
+Link: https://lore.kernel.org/linux-mm/2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr/
+Fixes: 81819f0fc828 ("SLUB core")
+Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v2:
+- add WARN_ON() instead of return error silently;
+- use snprintf instead of sprintf to avoid overflow.
+ mm/slub.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index 4b98dff9be8e..3d37a8a7b965 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5890,7 +5890,7 @@ static inline struct kset *cache_kset(struct kmem_cache *s)
+ 	return slab_kset;
+ }
+ 
+-#define ID_STR_LENGTH 64
++#define ID_STR_LENGTH 32
+ 
+ /* Create a unique string id for a slab cache:
+  *
+@@ -5924,9 +5924,13 @@ static char *create_unique_id(struct kmem_cache *s)
+ 		*p++ = 'A';
+ 	if (p != name + 1)
+ 		*p++ = '-';
+-	p += sprintf(p, "%07u", s->size);
++	p += snprintf(p, ID_STR_LENGTH - 1 - (p - name), "%07u", s->size);
+ 
+-	BUG_ON(p > name + ID_STR_LENGTH - 1);
++	if (p > name + ID_STR_LENGTH - 1) {
++		WARN_ON(1);
++		kfree(name);
++		return ERR_PTR(-EINVAL);
++	}
+ 	return name;
+ }
+ 
+-- 
+2.36.1
+
