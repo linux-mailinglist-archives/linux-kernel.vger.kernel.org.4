@@ -2,116 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37AC5E95A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 21:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21055E95A3
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 21:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiIYTGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 15:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S231523AbiIYTHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 15:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbiIYTGe (ORCPT
+        with ESMTP id S231893AbiIYTHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 15:06:34 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CA62980F
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 12:06:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 9AFBC2B0671C;
-        Sun, 25 Sep 2022 15:06:29 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sun, 25 Sep 2022 15:06:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1664132789; x=1664136389; bh=fKqy27w2GA
-        4Y8LWhyhSLPIcBLwEelT8v2okY55fFoU8=; b=jbPPDbeFO7GLI8XbKyqGpGUhmq
-        Az+yYtbhzHd/MgL/Zp8WSG0B27lHOQUacYU/MlKoz1Ark6WxO4/pjF08ePTsV6KU
-        YoFfh1I8f/5Gxeo+uNMARiKi2iG72PeF51nJGEQ6i5n4bsKfwMLcrrIIOlXNKRPp
-        n2ru0jtt4xUEeair0yERxP1y8Mq8lqk2cyAqFQSTIUuzFKAzZKo/oOmXtDQ5XJmc
-        jW/oZhivd5FrPpsPO3b6+1z20jhRixXgymlZ25XfFIDmtnjIH0/rsNsBUpUNm+It
-        zWq3drxBfGP1RYaVb9S1hSRJRx/LzMvqJKikrfmYoHlj5z4xpfA/Zs4SDz7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664132789; x=1664136389; bh=fKqy27w2GA4Y8LWhyhSLPIcBLwEe
-        lT8v2okY55fFoU8=; b=S3ItP2HAepGCYyNk6FnrGIh83JLFjj0ZKPioD+oowhjL
-        D8+mdCSty3J3AieOeh8rk1QBasuVIf8QkA5MBuyPisLrYR01c/0Wdh/SkOubAe4w
-        +jgtm9k2z+evHstf+VaCASIrczA1VwYLQbLs+euMkSycOKJIqaTOHj/qE9pmyamW
-        m0AIz6BHYR1HiRCbnoFkdnKXJTU+4V7oFIA/4B2kSNOnnMED+zcOTCzYWsLfr6YX
-        Bd93c9Ai6dJhR+/QTaHoJlSbF+OzssnS7SA7qGz9JgurLrOv05EMQSIGdAXdjO0x
-        dFV1cgu+y2AL1pEw7CYYopH4HphKqZUBjj6Pw8t+oA==
-X-ME-Sender: <xms:tKYwY68wKQpgSgRYOBa-4Xqa-8RkiAKB4ffRlhlNmlEUyDP4v0PXow>
-    <xme:tKYwY6sQkUAWEF0iZqNyjvbpPH42sHil3fEzJ_fm2PHqk6lDZYGMM2ZwVb1PUFp4p
-    WSO8q2bd9Dor6BNoK0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegtddgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:tKYwYwATwnF-Miv9NQ6ImgjiknKDJXB5w18nxrGFcfZALFozCr0DpA>
-    <xmx:tKYwYyeDl5WvX5B5DdQMBkASOTBFIayuCKxAZ6t7YahtsvAQKjVDIQ>
-    <xmx:tKYwY_Olj8flpFI2TJOLvocoEU0c_OKjo2G8VKLiN8J84N4_idU2WQ>
-    <xmx:taYwY4qsGz3SkpbjJU38rmbloaDVaSEgUtUECWrGyMst2aFGaxKNcBncleA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 535E7B60086; Sun, 25 Sep 2022 15:06:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <d7179695-46ef-4043-b0aa-bff6e9a8751b@www.fastmail.com>
-In-Reply-To: <Yy8RcC2QHdws26ha@owl.dominikbrodowski.net>
-References: <Yy6d7TjqzUwGQnQa@penguin>
- <68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com>
- <Yy7tLRcMaKeet9An@mail.local> <Yy8RcC2QHdws26ha@owl.dominikbrodowski.net>
-Date:   Sun, 25 Sep 2022 21:06:08 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-Cc:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH] pcmcia: at91_cf: switch to using gpiod API
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 25 Sep 2022 15:07:07 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FEF2980F;
+        Sun, 25 Sep 2022 12:07:04 -0700 (PDT)
+Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D3F42C7994;
+        Sun, 25 Sep 2022 19:06:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664132792; bh=uhvXYd6jF1/10Qg7Vcx2EOxbSxHTNsKux15fh4UZwEg=;
+        h=From:To:Cc:Subject:Date;
+        b=i4YnorHCxDddONfGTSHlXYebtInD5RZm5wQT5H8iPBoJVO1+JqSiQMDqxZ+47WGzo
+         4diWbfT1SLMdmj6wLNgoIyu6GtY0gPznGzP9NPyGptLiIFjhfFZLgKLjxOQu8JtFQ+
+         DIJIOCG5A4+TQRAljY+sXsWWIsIFf6A4kEkI0Y+8=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom: pmx65: use node name "gpio" for spmi-gpio
+Date:   Sun, 25 Sep 2022 21:06:21 +0200
+Message-Id: <20220925190622.111505-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022, at 4:17 PM, Dominik Brodowski wrote:
->
-> From: Dominik Brodowski <linux@dominikbrodowski.net>
-> Subject: [PATCH] pcmcia: remove AT91RM9200 Compact Flash driver
->
-> As noted by Arnd Bergmann, "we used to have three drivers for the same
-> hardware (pcmcia, pata and ide), and only the pcmcia driver remained
-> in the tree after drivers/ide/ was removed and pata_at91 did not get
-> converted to DT". "There is no dts file in tree that actually declares
-> either of them, so chances are that nobody is actually using the CF
-> slot on at91 any more."[1]
->
-> On this rationale, remove the AT91RM9200 Compact Flash driver, which
-> also assists in reaching "the goal of stopping exporting OF-specific
-> APIs of gpiolib".[2]
->
-> [1] 
-> https://lore.kernel.org/lkml/68c63077-848b-45f5-8aca-ed995391f2b6@www.fastmail.com/
-> [2] https://lore.kernel.org/lkml/Yy6d7TjqzUwGQnQa@penguin/
->
-> Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+All other usages of qcom,spmi-gpio use the gpio@ node name, and this is
+also validated by the dt binding check. Fix it.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/qcom-pmx65.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-though we probably want to remove the binding at
-Documentation/devicetree/bindings/ata/atmel-at91_cf.txt
-as well.
+diff --git a/arch/arm/boot/dts/qcom-pmx65.dtsi b/arch/arm/boot/dts/qcom-pmx65.dtsi
+index abf229a8b75a..1c7fdf59c1f5 100644
+--- a/arch/arm/boot/dts/qcom-pmx65.dtsi
++++ b/arch/arm/boot/dts/qcom-pmx65.dtsi
+@@ -20,7 +20,7 @@ pmx65_temp: temp-alarm@a00 {
+ 			#thermal-sensor-cells = <0>;
+ 		};
  
-      Arnd
+-		pmx65_gpios: pinctrl@8800 {
++		pmx65_gpios: gpio@8800 {
+ 			compatible = "qcom,pmx65-gpio", "qcom,spmi-gpio";
+ 			reg = <0x8800>;
+ 			gpio-controller;
+-- 
+2.37.3
+
