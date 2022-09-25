@@ -2,89 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CF25E93F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B561F5E93F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiIYPYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 11:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S232457AbiIYPZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 11:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiIYPYr (ORCPT
+        with ESMTP id S232427AbiIYPZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 11:24:47 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E0DD100;
-        Sun, 25 Sep 2022 08:24:42 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id r20so2786810qtn.12;
-        Sun, 25 Sep 2022 08:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=RwYAgY9k+ZdHOhXCXlvKjDwCnUM8rmMBXSn9DDqSSiI=;
-        b=YLadT8V2+TdwrGM8mR5Co5lLfFJZbvhx+vr97l/qOw1w8fOddBEsH9/3NrnZKQdTAk
-         9jKEfaIQxZMfZVNUjT8SeteblgwHRYx0crlAiZT+mt/5q5++vYp+dy9Dr54xlfoojIQt
-         8dtAlkG963gZqU4i5sbqu8PRIQxq0uNEMFHw9ErjJjO2zZKcfNi95j0Gn5vuYZTCoQ5w
-         NrRoMJ5uDLOLDJS/KZyRYLUiHPnFMMRf0dU0JKFuZQ2j7s1tY0oa+2yII+Fn66oxTU0E
-         B4zgiRDhdOgSlOz3+wAFX9S7jTNR9YY9GCxCCDg6IaAvOUo6UTLusRKxUmj9eiu7DETh
-         kxBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RwYAgY9k+ZdHOhXCXlvKjDwCnUM8rmMBXSn9DDqSSiI=;
-        b=5s4ErrIJEUGrqNkexixcxLdtmDHA6pmyNVsCiNJgKluFmehUzAF4Hucn5jJENaiMxH
-         D/HT6fv38UJN5PcLR/9EtREIeBP0B2IOfSk+xzpyj02Y7LgluX9ZMHopuL9+lAjrnLZD
-         Q4End8c1JTpGkOZILiIWl60JegdwPXft93Uo5T3pncucSCagT0xY0NfEGc6qDxtIShON
-         syhyGznFMG1GtLHZBY0O5CikAneWv6l3FzTkyvL38VU/dbDZp79x9PkIFmyKdoI9OA7W
-         5T0iG2LhI6TYmNY4eIj86z5itDPzM0bOqho49tt0UmnXeH/n24U0sKFyz5Jsx5pkv5Hx
-         9fSQ==
-X-Gm-Message-State: ACrzQf0WvpbheIpo6tz5v7HmMYeCAAk/kNsMqi0RAtmBc335Whj8RTGr
-        7gn7JPfevGm9fby/JGRnVTk=
-X-Google-Smtp-Source: AMsMyM7CIRuyE84Lf4RVlXhJr/6n4jP6Uo2inXHxQm41OSa4JAVk7hKO+EQ+UXabfXfIpigfWi7Tsw==
-X-Received: by 2002:a05:622a:5d2:b0:35d:dc4:e9e8 with SMTP id d18-20020a05622a05d200b0035d0dc4e9e8mr15092149qtb.650.1664119482017;
-        Sun, 25 Sep 2022 08:24:42 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:2eaf:6d8e:66c4:eb75])
-        by smtp.gmail.com with ESMTPSA id s2-20020a05620a29c200b006ce40fbb8f6sm9574756qkp.21.2022.09.25.08.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 08:24:41 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 08:24:41 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v4 5/7] sched/topology: Introduce sched_numa_hop_mask()
-Message-ID: <YzByuaa4ewpTNNOx@yury-laptop>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
- <20220923155542.1212814-4-vschneid@redhat.com>
- <YzBtH8s98eTmxaJo@yury-laptop>
+        Sun, 25 Sep 2022 11:25:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0566113FA4
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 08:25:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 326C061488
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 15:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2095C433D6;
+        Sun, 25 Sep 2022 15:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664119500;
+        bh=Fpv353I50hrgwd5/Rj0tOo2NjUe8ua59ZT8TMzWWfxs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U4HF8I6EvFuaKav5dBdbiPZx+L02Mon+78/CgcGbOW0upqxHMZNoLgshJetp2weMV
+         DWQ8eYgvp679kV6qoD/ryKd/86IvDrhJ5fEnLcUtXhOaDx9PqrF/9CFbVAx2+wnSn8
+         I72hd8hd/m3U/vO9/jS+260HDc4PaTKKQyrsZsJq2EXMQpK1tuMUtjDAvWM5LbA3UL
+         xLi9ioNc/K2AfmVbVCRM0RXpfDLJnevptsOEvOG7bgDbwLlRohzIPzINfxE9VFZjys
+         D0jgw4eWq3uL4ArbeQk1kMTAUHKIvMUXLGGKeZb0wWuWk3yQp1IZQXCMra0snlxGR0
+         P7An+f/GY/XfQ==
+Message-ID: <449ccb5d-d2e5-950d-3458-5d0e56e83bf9@kernel.org>
+Date:   Sun, 25 Sep 2022 23:24:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzBtH8s98eTmxaJo@yury-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] mm/slub: clean up create_unique_id()
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Hugh Dickins <hugh@veritas.com>
+Cc:     Chao Yu <chao.yu@oppo.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christoph Lameter <clameter@sgi.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220918092146.4060783-1-chao@kernel.org>
+ <719a7ea0-c152-af03-8f6c-7dda702d1863@suse.cz>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <719a7ea0-c152-af03-8f6c-7dda702d1863@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,69 +67,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 08:00:49AM -0700, Yury Norov wrote:
-> On Fri, Sep 23, 2022 at 04:55:40PM +0100, Valentin Schneider wrote:
-> > Tariq has pointed out that drivers allocating IRQ vectors would benefit
-> > from having smarter NUMA-awareness - cpumask_local_spread() only knows
-> > about the local node and everything outside is in the same bucket.
-> > 
-> > sched_domains_numa_masks is pretty much what we want to hand out (a cpumask
-> > of CPUs reachable within a given distance budget), introduce
-> > sched_numa_hop_mask() to export those cpumasks.
-> > 
-> > Link: http://lore.kernel.org/r/20220728191203.4055-1-tariqt@nvidia.com
-> > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> > ---
-> >  include/linux/topology.h | 12 ++++++++++++
-> >  kernel/sched/topology.c  | 31 +++++++++++++++++++++++++++++++
-> >  2 files changed, 43 insertions(+)
-> > 
-> > diff --git a/include/linux/topology.h b/include/linux/topology.h
-> > index 4564faafd0e1..3e91ae6d0ad5 100644
-> > --- a/include/linux/topology.h
-> > +++ b/include/linux/topology.h
-> > @@ -245,5 +245,17 @@ static inline const struct cpumask *cpu_cpu_mask(int cpu)
-> >  	return cpumask_of_node(cpu_to_node(cpu));
-> >  }
-> >  
-> > +#ifdef CONFIG_NUMA
-> > +extern const struct cpumask *sched_numa_hop_mask(int node, int hops);
-> > +#else
-> > +static inline const struct cpumask *sched_numa_hop_mask(int node, int hops)
-> > +{
-> > +	if (node == NUMA_NO_NODE && !hops)
-> > +		return cpu_online_mask;
-> > +
-> > +	return ERR_PTR(-EOPNOTSUPP);
-> > +}
-> > +#endif	/* CONFIG_NUMA */
-> > +
-> >  
-> >  #endif /* _LINUX_TOPOLOGY_H */
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index 8739c2a5a54e..ee77706603c0 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -2067,6 +2067,37 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
-> >  	return found;
-> >  }
-> >  
-> > +/**
-> > + * sched_numa_hop_mask() - Get the cpumask of CPUs at most @hops hops away.
-> > + * @node: The node to count hops from.
-> > + * @hops: Include CPUs up to that many hops away. 0 means local node.
-> > + *
-> > + * Requires rcu_lock to be held. Returned cpumask is only valid within that
-> > + * read-side section, copy it if required beyond that.
-> > + *
-> > + * Note that not all hops are equal in distance; see sched_init_numa() for how
-> > + * distances and masks are handled.
-> > + *
-> > + * Also note that this is a reflection of sched_domains_numa_masks, which may change
-> > + * during the lifetime of the system (offline nodes are taken out of the masks).
-> > + */
+On 2022/9/23 4:47, Vlastimil Babka wrote:
+> On 9/18/22 11:21, Chao Yu wrote:
+>> From: Chao Yu <chao.yu@oppo.com>
+>>
+>> As Christophe JAILLET suggested:
+>>
+>> In create_unique_id(),
+>>
+>> "looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+>>
+>> The 2nd BUG_ON at the end of the function could certainly be just
+>> removed as well or remplaced by a:
+>>          if (p > name + ID_STR_LENGTH - 1) {
+>>                  kfree(name);
+>>                  return -E<something>;
+>>          }
+>> "
+>>
+>> According to above suggestion, let's do below cleanups:
+>> 1. reduce ID_STR_LENGTH to 32, as the buffer size should be enough;
+>> 2. remove BUG_ON() and return error if check condition is true.
 > 
-> Since it's exported, can you declare function parameters and return
-> values properly?
+> I'd leave a WARN_ON there as we really don't expect this to happen, so if it
+> does, we should be loud about it and not silently fail.
 
-s/declare/describe
+Agreed.
+
+> 
+>> Link: https://lore.kernel.org/linux-mm/2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr/
+>> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> Fixes: 81819f0fc828 ("SLUB core")
+>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>> ---
+>>   mm/slub.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index 5ba6db62a5ab..a045c1ca8772 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -5883,7 +5883,7 @@ static inline struct kset *cache_kset(struct kmem_cache *s)
+>>   	return slab_kset;
+>>   }
+>>   
+>> -#define ID_STR_LENGTH 64
+>> +#define ID_STR_LENGTH 32
+>>   
+>>   /* Create a unique string id for a slab cache:
+>>    *
+>> @@ -5919,7 +5919,10 @@ static char *create_unique_id(struct kmem_cache *s)
+>>   		*p++ = '-';
+>>   	p += sprintf(p, "%07u", s->size);
+> 
+> Hm but sprintf() will happily overflow, so if we only detect that
+> afterwards, it's kinda too late to gracefully fail.
+> Should use snprintf() then?
+
+Correct.
+
+Updated in v2.
+
+Thanks,
+
+> 
+>> -	BUG_ON(p > name + ID_STR_LENGTH - 1);
+>> +	if (p > name + ID_STR_LENGTH - 1) {
+>> +		kfree(name);
+>> +		return ERR_PTR(-EINVAL);
+>> +	}
+>>   	return name;
+>>   }
+>>   
+> 
