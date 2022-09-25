@@ -2,162 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287FE5E90EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 05:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4B55E90F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 06:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiIYDyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Sep 2022 23:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S229672AbiIYETp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 00:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiIYDyV (ORCPT
+        with ESMTP id S229485AbiIYETm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Sep 2022 23:54:21 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559D029804;
-        Sat, 24 Sep 2022 20:54:20 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d11so3469834pll.8;
-        Sat, 24 Sep 2022 20:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aFaN8NcfRpobbIHExA/Rky3fMWo3aA5jQQgTJ5qtoI4=;
-        b=dlbNbxMVsra3/12R+SGJCpwRE6AucEpmhepW/1NZvwidYB7/hBbmxKZh8TtI2pMvmM
-         WHuXrOVVkTvUf4lCSEWdttcF/wxhBGLnMoA3m9zktCOOLwV8z3EcIiGXNnCg3HQzOj9e
-         bJTww932DcRHj5MyyvoeMBwrNNB1+vKO+/73cK0Z/1L3yJa9/OpOi5rPqqfNAfTXPmQ9
-         aMmafc/9prfZJHqh2aoBLJ9ZlzEYUv23uENzh8/HmNX6KmD5hkoifouaXzFifiOSJUzK
-         eg6CboTD9y+WMdAoVL/Nv7SYEgzi3ch0xT+bTUQu0I+R1G+MZ8u38beA3Y/oerwEThsY
-         6rqA==
+        Sun, 25 Sep 2022 00:19:42 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C2B2DC3
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 21:19:37 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id n4-20020a056e02100400b002f09be72a53so2951216ilj.18
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Sep 2022 21:19:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aFaN8NcfRpobbIHExA/Rky3fMWo3aA5jQQgTJ5qtoI4=;
-        b=7WTbuzhbo++TgE+th+D4CsqTfakLcPEOMmcFO3F+TC8HxjnPHWcctJExHi+sIfv2t2
-         qQwrWtNws0aIRkmUgCWdQ7ny85XkhMcDMXAEwpK2O9D0B/RMY/DZCHdht2NNL2Pcv5xD
-         A7tRp0bK0YiFXXIEL8wRMYnx0onBu18iIkG8jx3SZ7kXgF0612AMJwXI72yOzNkBXaFI
-         WLabxVgjkSFnx93LN9prTkx9BIUb2rZ3ZFi4vDmmePciwR5QJ/W5IiYdlKK93mnOK57M
-         iTlW4LSzm3QVhWEkrjSSaGLnj3OvHez24BP7S3Jd0Iv53RBIa8L3gHFzODQL760A8xS5
-         J2kw==
-X-Gm-Message-State: ACrzQf19A3aHe6zFeEBMhs3YLlmfm5iUUEhHCuFR34BUr7durcCe+QAF
-        yorTe1wIdezh12QFVSfjyXI=
-X-Google-Smtp-Source: AMsMyM7PqQHIqiNzvjRfHR31TquvU7+drjnsZSGV2P8wd3GE+8c639RBVAGVuSkHo2WXvBcprxLD4g==
-X-Received: by 2002:a17:90b:1c09:b0:203:af4d:ed6 with SMTP id oc9-20020a17090b1c0900b00203af4d0ed6mr29329956pjb.243.1664078059806;
-        Sat, 24 Sep 2022 20:54:19 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-10.three.co.id. [180.214.232.10])
-        by smtp.gmail.com with ESMTPSA id nh23-20020a17090b365700b00202fbd9c21dsm4039275pjb.48.2022.09.24.20.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 20:54:19 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5B2F5101C72; Sun, 25 Sep 2022 10:54:15 +0700 (WIB)
-Date:   Sun, 25 Sep 2022 10:54:14 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux MM and miscellaneous subsystems list 
-        <linux-mm@kvack.org>, Thorsten Leemhuis <linux@leemhuis.info>,
-        Kees Cook <keescook@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 5/7] docs: move asm-annotations.rst into core-api
-Message-ID: <Yy/Q5lcP127z8p3S@debian.me>
-References: <20220922204138.153146-1-corbet@lwn.net>
- <20220922204138.153146-6-corbet@lwn.net>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1s6u3MbbzYH+IkZ6LBMDMsWJQ9Gm59p9uP/t36mf1Ek=;
+        b=SSU5Jtw57Dx9wBjVB7xjBWRQA3l8pCZNGbqNX7KP09rkl85E3VgprOJFfDltoDyIFL
+         TVVST7VE4fV3rNnvIPymmD1Lu745ruf3Lu4Z++FX9dS9MZz+1KgruZzEZoEIjlAPCLHQ
+         V+WZpmo3KhsCa5EGKGB09epQ7JIfkBJkPMJ2krpamVwQDULKoquZpa8VxOHGM25RufYP
+         Yxv7LyiDzrZJuYrDg8zpaz4Cyd7M2JZk0xqtckERB/O+mWquFWBvGx/K/J0CJB+9NjOe
+         dOCr31GkKYK2T6HlZJkK/BrVQy+xvp8uILCdrdlUEQtRocLBLih48QVLugRLqfVqKm14
+         qs1g==
+X-Gm-Message-State: ACrzQf1utlB4dBVJcauOAJ90tSJWfpgueZfUAKoRAHM5SArTtjsNW4jy
+        04FQKeeCsvX2A4EnvynytJSSIJvOd6vJ3FdUljNvGxqiTDl+
+X-Google-Smtp-Source: AMsMyM7fVOztWsTEIcXvCazZx3eN9Xv8KrloipNCFoVuW+OByv0vZk0qXchhzfh3mB6ODqAH/tVm+LUHYEY7fJW9IenmZcZln2Lh
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OTixsmsn8fwN+mIX"
-Content-Disposition: inline
-In-Reply-To: <20220922204138.153146-6-corbet@lwn.net>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2e08:b0:6a1:30d1:7ca7 with SMTP id
+ o8-20020a0566022e0800b006a130d17ca7mr7400434iow.45.1664079576999; Sat, 24 Sep
+ 2022 21:19:36 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 21:19:36 -0700
+In-Reply-To: <000000000000e4630c05e974c1eb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000010ae6e05e978b83e@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in evict
+From:   syzbot <syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
---OTixsmsn8fwN+mIX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+HEAD commit:    3db61221f4e8 Merge tag 'io_uring-6.0-2022-09-23' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=120a2035080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b74cf8fcd7378d8be7c
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=163d8eff080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=159bfd60880000
 
-On Thu, Sep 22, 2022 at 02:41:36PM -0600, Jonathan Corbet wrote:
-> diff --git a/Documentation/asm-annotations.rst b/Documentation/core-api/a=
-sm-annotations.rst
-> similarity index 97%
-> rename from Documentation/asm-annotations.rst
-> rename to Documentation/core-api/asm-annotations.rst
-> index a64f2ca469d4..bc514ed59887 100644
-> --- a/Documentation/asm-annotations.rst
-> +++ b/Documentation/core-api/asm-annotations.rst
-> @@ -43,10 +43,11 @@ annotated objects like this, tools can be run on them=
- to generate more useful
->  information. In particular, on properly annotated objects, ``objtool`` c=
-an be
->  run to check and fix the object if needed. Currently, ``objtool`` can re=
-port
->  missing frame pointer setup/destruction in functions. It can also
-> -automatically generate annotations for :doc:`ORC unwinder <x86/orc-unwin=
-der>`
-> +automatically generate annotations for the ORC unwinder
-> +(Documentation/x86/orc-unwinder.rst)
->  for most code. Both of these are especially important to support reliable
-> -stack traces which are in turn necessary for :doc:`Kernel live patching
-> -<livepatch/livepatch>`.
-> +stack traces which are in turn necessary for kernel live patching
-> +(Documentation/livepatch/livepatch.rst).
-> =20
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com
 
-Hi jon,
+==================================================================
+BUG: KASAN: stack-out-of-bounds in native_save_fl arch/x86/include/asm/irqflags.h:35 [inline]
+BUG: KASAN: stack-out-of-bounds in arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+BUG: KASAN: stack-out-of-bounds in arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
+BUG: KASAN: stack-out-of-bounds in lock_acquire+0x1c3/0x3c0 kernel/locking/lockdep.c:5669
+Read of size 8 at addr ffffc90004dcf95f by task syz-executor479/11095
 
-kernel test robot reported non-existent reference ([1]), so I have
-applied the fixup:
+CPU: 0 PID: 11095 Comm: syz-executor479 Not tainted 6.0.0-rc6-syzkaller-00291-g3db61221f4e8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x65/0x4b0 mm/kasan/report.c:317
+ print_report+0x108/0x1f0 mm/kasan/report.c:433
+ kasan_report+0xc3/0xf0 mm/kasan/report.c:495
+ native_save_fl arch/x86/include/asm/irqflags.h:35 [inline]
+ arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+ arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
+ lock_acquire+0x1c3/0x3c0 kernel/locking/lockdep.c:5669
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ inode_sb_list_del fs/inode.c:503 [inline]
+ evict+0x161/0x620 fs/inode.c:654
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4bae6c908a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 f8 03 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffca10c1e08 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffca10c1e60 RCX: 00007f4bae6c908a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffca10c1e20
+RBP: 00007ffca10c1e20 R08: 00007ffca10c1e60 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020001b80
+R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000110
+ </TASK>
 
----- >8 ----
+The buggy address belongs to stack of task syz-executor479/11095
+ and is located at offset 31 in frame:
+ lock_acquire+0x0/0x3c0 kernel/locking/lockdep.c:5621
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 79e759aac543b8..812af52f97d2cf 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3751,7 +3751,7 @@ sub process {
- 		if ($realfile =3D~ /\.S$/ &&
- 		    $line =3D~ /^\+\s*(?:[A-Z]+_)?SYM_[A-Z]+_(?:START|END)(?:_[A-Z_]+)?\=
-s*\(\s*\.L/) {
- 			WARN("AVOID_L_PREFIX",
--			     "Avoid using '.L' prefixed local symbol names for denoting a range=
- of code via 'SYM_*_START/END' annotations; see Documentation/asm-annotatio=
-ns.rst\n" . $herecurr);
-+			     "Avoid using '.L' prefixed local symbol names for denoting a range=
- of code via 'SYM_*_START/END' annotations; see Documentation/core-api/asm-=
-annotations.rst\n" . $herecurr);
- 		}
-=20
- # check we are in a valid source file C or perl if not then ignore this hu=
-nk
+This frame has 3 objects:
+ [32, 40) 'flags.i.i.i87'
+ [64, 72) 'flags.i.i.i'
+ [96, 136) 'hlock'
 
-Thanks.
+The buggy address belongs to the virtual mapping at
+ [ffffc90004dc8000, ffffc90004dd1000) created by:
+ dup_task_struct+0x8b/0x490 kernel/fork.c:977
 
-[1]: https://lore.kernel.org/linux-doc/202209240904.XQP4YAP7-lkp@intel.com/
+The buggy address belongs to the physical page:
+page:ffffea0001d86440 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x76191
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 3696, tgid 3696 (syz-executor479), ts 1675853778124, free_ts 1675836504134
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5515
+ vm_area_alloc_pages mm/vmalloc.c:2958 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3026 [inline]
+ __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3196
+ alloc_thread_stack_node+0x307/0x500 kernel/fork.c:312
+ dup_task_struct+0x8b/0x490 kernel/fork.c:977
+ copy_process+0x637/0x3f20 kernel/fork.c:2085
+ kernel_clone+0x21f/0x790 kernel/fork.c:2671
+ __do_sys_clone kernel/fork.c:2805 [inline]
+ __se_sys_clone kernel/fork.c:2789 [inline]
+ __x64_sys_clone+0x228/0x290 kernel/fork.c:2789
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page_list+0xb4/0x7b0 mm/page_alloc.c:3522
+ release_pages+0x22c3/0x2540 mm/swap.c:1012
+ tlb_batch_pages_flush mm/mmu_gather.c:58 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
+ tlb_flush_mmu+0x850/0xa70 mm/mmu_gather.c:262
+ tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:353
+ exit_mmap+0x1cb/0x520 mm/mmap.c:3118
+ __mmput+0x111/0x3a0 kernel/fork.c:1187
+ exit_mm+0x1ef/0x2c0 kernel/exit.c:510
+ do_exit+0x4e1/0x20a0 kernel/exit.c:782
+ do_group_exit+0x23b/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
---=20
-An old man doll... just what I always wanted! - Clara
+Memory state around the buggy address:
+ ffffc90004dcf800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90004dcf880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc90004dcf900: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 f2 f2 f2
+                                                    ^
+ ffffc90004dcf980: 00 f2 f2 f2 00 00 00 00 00 f3 f3 f3 f3 f3 f3 f3
+ ffffc90004dcfa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
---OTixsmsn8fwN+mIX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYy/Q4gAKCRD2uYlJVVFO
-o7MPAQDujup0SzeW5zTycZQtQZgsmzjQSDKiWIxeAuIIqTQbhQEA7ZTsHRac1o7+
-Va39BSNqoDYZwCmSS//CGkRf0kYTAAM=
-=9WuZ
------END PGP SIGNATURE-----
-
---OTixsmsn8fwN+mIX--
