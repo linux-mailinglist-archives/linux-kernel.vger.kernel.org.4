@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768D55E9281
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4C55E9294
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiIYLHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 07:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S232425AbiIYLLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 07:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbiIYLHB (ORCPT
+        with ESMTP id S232631AbiIYLLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 07:07:01 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5959C31EEB
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:06:32 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id i26so6730774lfp.11
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6qiFysm9YOq22jr+04Jj1ATXUz8nTarw0VSyiTjbRuo=;
-        b=KQj4Lxpy7J5c5gtfdn2MCnns59x82sYbZgv+SsKYGc+KtkPtQbxD9V5MkvijEtFyop
-         jWaT/Pr8UzaITtZMpFladmxahteM8r9ioOmcbUY0Hjy0TLxqt3vdxo18/9pfQqOaaroh
-         uShMvSt9QU+U9eIGk3G3X/dyK+m1Hoktrh8qT9X+EGLy/4lKUikwo+BoogkZE91S0/Sv
-         JRTYnbzoRIy8bQWk4J0RsFOR8zOXWzX2rVVTnGsuO22Fm1uCqQnaR3LQl5utfJOJXDIQ
-         dw/HvaUkKjlP1KrQ2iXnlStpbSIBfQkX/zwXzD8vzO23hplm+UiLWIur5cWzWr8s2TTw
-         KcnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=6qiFysm9YOq22jr+04Jj1ATXUz8nTarw0VSyiTjbRuo=;
-        b=5Kxkhk4ZXgErpUsmDg95/W6eBMfDLlxmxY5WQSV9i11rmAt50Ld5jz5STC+Z5MetBj
-         3i2JIdLmzLMbNzzKx/HOLYqTcj5LSOpFic3Nsb7WpljR3aPrITIxreJiFtKT19gbVzwe
-         SB0keIfWL9XVN3oo1uKJM9Fj6H5e8+I4ugHYArG1SiF+UK4dYwNQb5xtuTK+eaJpAJE/
-         /1TtqGLzUK8PDSSlS0fOiyGp2ND8c6/dJTPJWMJpPnuqyI+rGCJoKLMP5sGm37cbRVsN
-         JzEYwJ/c/tjlFd/ogHEtYjqCH34PsMZpHzIdK74J3FnIyUqCUjfq169d+4gTThN0m2Gr
-         DXiw==
-X-Gm-Message-State: ACrzQf2/c9UVBEQFGiZilqwjxyl5bQqFB6PUf9DS9E07ahiqNDlG4Aj/
-        UZgp9mH1Wqowkk67KpjHNs91Jw==
-X-Google-Smtp-Source: AMsMyM7oWDuDuRm2HN3Eq/tJq4ODnuaLzn5fRVS06W0QrFg8y8fwIm4+jL3RjWbiYRuP+iBkrdqwjA==
-X-Received: by 2002:a05:6512:1289:b0:49f:1b3d:88c5 with SMTP id u9-20020a056512128900b0049f1b3d88c5mr6834604lfs.499.1664103989735;
-        Sun, 25 Sep 2022 04:06:29 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u19-20020ac258d3000000b00492dadd8143sm2177265lfo.168.2022.09.25.04.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 04:06:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 15/15] dt-bindings: pinctrl: qcom,sc7280: correct number of GPIOs
-Date:   Sun, 25 Sep 2022 13:06:08 +0200
-Message-Id: <20220925110608.145728-16-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
-References: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
+        Sun, 25 Sep 2022 07:11:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BE1237C3;
+        Sun, 25 Sep 2022 04:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664104195;
+        bh=WSEpFFTzAxr0EcxOgi+67U8ODH6/CZQ0Yv1M9TPP0js=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=lVxMjC9WPtBuY5ai82OTPnw4PYPRzcsAKGcH0CGCQxK2sgtrG9eJnrjJzDPZxy0x1
+         RFZb8SIjhDZ7H6lXHQuq0zo7Pb1V1VyV9t+dhwvoE8pMd1KcCfgA0Vd31UnNcYL/xt
+         vxRPlJWLzZVNaelHLDxZxICP7Yu5z9Gvp3+dnqGM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.188.118]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXXuB-1okxCO2vB1-00Z0tT; Sun, 25
+ Sep 2022 13:09:55 +0200
+Message-ID: <d11a981a-1974-3092-5c81-e1f8c998c440@gmx.de>
+Date:   Sun, 25 Sep 2022 13:09:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] video: fbdev: arkfb: Remove the unused function
+ dac_read_reg()
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220914102301.87981-1-jiapeng.chong@linux.alibaba.com>
+ <20220914102301.87981-3-jiapeng.chong@linux.alibaba.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220914102301.87981-3-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:C63TvgR0x02Kn5A7dmsLiaUjX6yF/lOw2ac5uz2oMvHy8Swwp1y
+ OXMPgTFDPW/rUQ4Iy5anbOveh862N7oc7xDQ78CCJQr53YajKcikIBDl+1AuTl8NsDpJV3G
+ 2Wzf6B344LlWT9Dzb18GX7XuDFopzSN/mzmdrZuZ89RiVV7VbU1ZPik1GkvUqHW+6Tko9Ns
+ 155bSHCTe9gcaxH+j5GnA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t/O4rTPLZmc=:SAbJGTGOyNCS3EFSBVYZFk
+ oVOik03pdvV6pgQVCf1dj3GiERrEdeO553mp2wMJT6O6qPcT8IP/l7OpSCSua4FsEnF1Gt2C2
+ QUv7Pc+VhHFghdXO/s3XrYJItexP6pVF2iL3NXNM2ZQ85x6nokvRx4EZPaGnVxlKOblHHwhX1
+ I6NtiPGH8jYXfPpHrgkRAPpMkuc+tuGR/V4X/lfkgQk3TsY9vmS3xRSSuW15E99iSqNKcUGX4
+ UMrAJKp8J8Roj7OvWpPVqTZVYaSeMViLLa7Iz9leXACF3ZvejpwK2/fa0eaUUlEflTdw3+f4s
+ xD0pCGesU5Q07c2LLcLrGB8tnswqlONCRaO5uwSvUPSK1k9ElMMkrBPJpTDWZzvEFDoRNmPIv
+ nx5LvSamIoMlbADuFM96/vXigvKjn+dpRyvn3uF93nMifFtgNptfCx5FztVkVsUADpvRvhCab
+ VD0MhMDUhZ6E+XKnmO2GfEewj+FzqDZOadcLL5zT6AT2Q1Std6OsqIDloRsYMzpzV3VwjImy6
+ 3CHFHxGo9A+wt45TZJeOBLTnk4Ki/7745DE577SK9OXixWcu2v5+MusCpli5hMW2v8ifhKfYE
+ DSeet6c+WVKnyWFg/K60TfmjnCMeSZafnekJ3r1qhQeUScLe2mJPzRwcvZpdVF10c2gzbNQBy
+ ZBX8KChI6q2CiiJiip49Qem3WDoFOF5xG1mHfe5HbfsRcLwLQmi4iO3dMfIcGpDBXEmgRq49r
+ e/K3zCUVjULBWANLr56HH7t9d75BwPY8WsoZCa0WwCFfRtCP42d8f5pDpaSrSOwMog0Y/TFWx
+ NVgJOY7tXTh9rkrvnryWktN8VTXPM31pMCcBrfFnXfqUbSo4dFbmArPA/OK92ybceCPl77M5V
+ bVfY+uwOuiWLw6wlGrskxmL1iD01dmV1JHJrC+juPw5qLTB1al1KBVqjXQ7BlFMQGeKOmxWbj
+ A0ej4ZWVALrBo84w30+7tQuqe9b7qSuWgiGsCQUbjV27qnm2kdo3A0BGgX8/SqEGZiNZkEGAq
+ KSzv6KpmhkdpbOe4mGrI2KRQfXoSV3ClsjnNzAX1hZEbAkSc56llt9zZVGAcjLTUjovuvMOKZ
+ dsIvuo97iiIQYL1KMgmYU1YY7ai/KKfeG70NIxkqg0CmvedcGdSp6sPpRsKzUQI2j+FvMnGHL
+ JN2PG+hxQHkxsB3GF/xBpgFyxq
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC7280 has 175 GPIOs (gpio0-174), so correct size of gpio-line-names and
-narrow the pattern for matching pin names.
+On 9/14/22 12:23, Jiapeng Chong wrote:
+> The function dac_read_reg() is defined in the arkfb.c file, but not
+> called elsewhere, so delete this unused function.
+>
+> drivers/video/fbdev/arkfb.c:322:18: warning: unused function 'dac_read_r=
+eg'.
+>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2155
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml    | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+applied.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-index 1db05c43d58c..2a6b5a719d18 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-@@ -43,7 +43,7 @@ properties:
-     maxItems: 1
- 
-   gpio-line-names:
--    maxItems: 174
-+    maxItems: 175
- 
-   wakeup-parent: true
- 
-@@ -70,7 +70,7 @@ $defs:
-           subnode.
-         items:
-           oneOf:
--            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-7][0-9]|18[0-2])$"
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-4])$"
-             - enum: [ sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk,
-                       sdc2_cmd, sdc2_data, ufs_reset ]
-         minItems: 1
-@@ -132,7 +132,7 @@ $defs:
-       - if:
-           properties:
-             pins:
--              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-7][0-9]|18[0-2])$"
-+              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-4])$"
-         then:
-           required:
-             - function
--- 
-2.34.1
+Thanks,
+Helge
+
+> ---
+>   drivers/video/fbdev/arkfb.c | 8 --------
+>   1 file changed, 8 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
+> index a317d9fe1d67..5f8fec9e5fd4 100644
+> --- a/drivers/video/fbdev/arkfb.c
+> +++ b/drivers/video/fbdev/arkfb.c
+> @@ -318,14 +318,6 @@ struct dac_info
+>   	void *data;
+>   };
+>
+> -
+> -static inline u8 dac_read_reg(struct dac_info *info, u8 reg)
+> -{
+> -	u8 code[2] =3D {reg, 0};
+> -	info->dac_read_regs(info->data, code, 1);
+> -	return code[1];
+> -}
+> -
+>   static inline void dac_read_regs(struct dac_info *info, u8 *code, int =
+count)
+>   {
+>   	info->dac_read_regs(info->data, code, count);
 
