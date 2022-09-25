@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185415E9447
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFE55E944A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiIYQSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 12:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S230381AbiIYQSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 12:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiIYQSU (ORCPT
+        with ESMTP id S232877AbiIYQSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 12:18:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29E72CCA8
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 09:18:18 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1ocUKd-00067l-Rx; Sun, 25 Sep 2022 18:18:15 +0200
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-09-25]
-Date:   Sun, 25 Sep 2022 16:18:15 +0000
-Message-Id: <166412229677.822304.14973265664331660600@leemhuis.info>
+        Sun, 25 Sep 2022 12:18:36 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D62CDE1;
+        Sun, 25 Sep 2022 09:18:35 -0700 (PDT)
+Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id A2FFBC6FA5;
+        Sun, 25 Sep 2022 16:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664122714; bh=4FYGCgQFF9T6Rzp32aL6VP51rUdPoPVkxoGxiLSBfl0=;
+        h=From:To:Cc:Subject:Date;
+        b=xaga2AO8bH8lPkagTpQUpa5uoYFZnZi+1o9oBHuz9RGgkgfxhiz2EiIrM1QsYsNED
+         CVmmlVr8XcoQ9qVmxgTswJNQH1Kj03aBVrVrHwyPzT87dsUWvKDLeMp1g5opPXBZ0G
+         AJffvpow0wDIJLhn81ukb/U5si1BiEG7QIQo86dk=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ARM: dts: qcom: pm8941: fix vadc channel node names
+Date:   Sun, 25 Sep 2022 18:18:20 +0200
+Message-Id: <20220925161821.78030-1-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.37.3
-Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664122698;04c86a0c;
-X-HE-SMSGID: 1ocUKd-00067l-Rx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is a slightly edited report from regzbot listing all
-regression from this cycle that the bot and I are currently aware of.
+Node names for the channel are supposed to be adc-chan@REG.
 
-I'm only aware of two regressions introduced this cycle. The kernel
-panic on arm64/rock960 was just reported yesterday and already
-investigated afaics; the one about graphical issues on Lenovo Yoga
-is more than a week old, but it's is now dealt with and it currently
-sounds like this won't hit many systems.
+Use this format and at the same time sort the nodes by reg value.
 
-HTH, Ciao, Thorsten
-
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
+ arch/arm/boot/dts/qcom-pm8941.dtsi | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-Hi, this is regzbot, the Linux kernel regression tracking bot.
+diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
+index 9cd49deb9fa7..3c15eecf2f21 100644
+--- a/arch/arm/boot/dts/qcom-pm8941.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
+@@ -101,26 +101,33 @@ pm8941_vadc: adc@3100 {
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+ 
+-			bat_temp {
+-				reg = <VADC_LR_MUX1_BAT_THERM>;
++
++			adc-chan@6 {
++				reg = <VADC_VBAT_SNS>;
+ 			};
+-			die_temp {
++
++			adc-chan@8 {
+ 				reg = <VADC_DIE_TEMP>;
+ 			};
+-			ref_625mv {
++
++			adc-chan@9 {
+ 				reg = <VADC_REF_625MV>;
+ 			};
+-			ref_1250v {
++
++			adc-chan@10 {
+ 				reg = <VADC_REF_1250MV>;
+ 			};
+-			ref_gnd {
++
++			adc-chan@14 {
+ 				reg = <VADC_GND_REF>;
+ 			};
+-			ref_vdd {
++
++			adc-chan@15 {
+ 				reg = <VADC_VDD_VADC>;
+ 			};
+-			vbat_sns {
+-				reg = <VADC_VBAT_SNS>;
++
++			adc-chan@48 {
++				reg = <VADC_LR_MUX1_BAT_THERM>;
+ 			};
+ 		};
+ 
+-- 
+2.37.3
 
-Currently I'm aware of 44 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-=======================================================
-current cycle (v5.19.. aka v6.0-rc), culprit identified
-=======================================================
-
-
-[ *NEW* ] arm64 / rock960 : kernel panic (NULL pointer dereference)
--------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/4f398e4c-973b-7843-2f75-27324d109277@linaro.org/
-https://lore.kernel.org/lkml/4f398e4c-973b-7843-2f75-27324d109277@linaro.org/
-
-By Daniel Lezcano; 0 days ago; 6 activities, latest 0 days ago.
-Introduced in 14facbc1871a (v6.0-rc1)
-
-Recent activities from: Michael Nazzareno Trimarchi (4), Daniel
-  Lezcano (2)
-
-One patch associated with this regression:
-* Re: v6.0-rc6 - arm64 / rock960 : kernel panic
-  https://lore.kernel.org/lkml/CAOf5uwnfCCwHjSXTurMtyEpZc_tF8bH=fxfwBzOtHcfM_S4tYg@mail.gmail.com/
-  0 days ago, by Michael Nazzareno Trimarchi
-
-
-Graphical issues on Lenovo Yoga 7 14ARB7 laptop since v6.0-rc1 (bisected)
--------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se/
-https://lore.kernel.org/lkml/c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se/
-
-By August Wikerfors; 7 days ago; 5 activities, latest 1 days ago.
-Introduced in 7cc191ee7621 (v6.0-rc1)
-
-Recent activities from: August Wikerfors (2), Leo Li (1), Alex
-  Deucher (1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/166352773747.517659.4028966645485480297@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
