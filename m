@@ -2,225 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172115E94D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A2A5E94EA
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiIYR3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S232086AbiIYRbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbiIYR3n (ORCPT
+        with ESMTP id S231175AbiIYRbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:29:43 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B26116A
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:29:41 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id x3-20020a056e021ca300b002f855cd264cso961970ill.7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:29:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=66U40s+MoF25LmjgYHwF1MlI5TQqzrH9qiUYQezJtdI=;
-        b=N1OvD/1IZrNpGSxNSXBGyF6BbaXTcVFUP+YjwTuSOzRJbeGlGCR+Q9qNAqfQTogyO3
-         Oi5nSuf4FbVFuwzyz4pPkSBnfWJpSyCeLcOm7nR8Dsaerqo0cBS1158fBMQ32f4toy+F
-         c2GPpQlNEQFd9rqZy1S2HaMYhPtjZXXTCyOf8oPXxHkfG2eQiJSGEyGVMx7bzjqgZu2G
-         g0hbBAHrfMz9iruceMKNJHC4W6buSl8V8ex3HE3mE6edEQUIfkTHaEK/6nN6DP91y8yP
-         DxpIoNuOEISvQUKto5VB5BEENSCviYTdof2avHVEdvuNUcebr0lf6uEzYo3Hue3PI69X
-         B/cQ==
-X-Gm-Message-State: ACrzQf0gq9WeLUGrsKj1mkcQ9BykmHl6phV6Ku/i1ddOv8HcXc18C2Xz
-        E+R6VFvgsEmsQ9Q91qMaNzwL/qEO/48fpHZ/DcrQsnqR3WAn
-X-Google-Smtp-Source: AMsMyM4fpIt5Z7Va2QvhdihjVDvzF34Yp0vWI/TymbL28wOI9x7f1oRrHXlm1iMyrHAAiU+G710yLg8A74oEze+VK7iMtgK80dxR
+        Sun, 25 Sep 2022 13:31:01 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AD2FAC8;
+        Sun, 25 Sep 2022 10:30:59 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28P9RRbQ012930;
+        Sun, 25 Sep 2022 17:30:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
+ b=vB8fwz1QNSI9DbAGqVP3cSU0uDtAXWtGCfQ5sNcCcYfckSdL+2ShziYuBCLHqnGSnAOy
+ B1EWehTifboUfCTom5DEttp2QabPbGZ6CBnblbcOu3Fz33VefAoBrfSaNG+V1FrvVzAi
+ nc9OdsfWjB3n3SosJWeBglSJ2LX9VljVW5yJ2E2pr7nW5sbVD9yRtF7Xm1xTyLpx8JYj
+ MFRYbfsA6OdI1q7m0KwaZx+jGHTjZ1b8hjX8R7p6CSY2lx1MUlmdSCVDfkL6DjFGvO+M
+ g+N5qdR89JLBt97RIDq5AUFgdyNwKhROz9AYX8glq7wgTrCVnIugj1RrGsNvRblQkh2X Ww== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jsstphyga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Sep 2022 17:30:57 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28PCFvO5019704;
+        Sun, 25 Sep 2022 17:30:56 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpu83pss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Sep 2022 17:30:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jmPB8AgC/6qIv4fCPSM9JbbaHwVGvwEGbStwDjQfOtEUMTEKXcfMdnFZrzrQ48vY6YMlZ6/hsdVrBADXOnrxmSWuBP2d0NlrPcNVb2FFsfzTZhwQ41zfSa0s6OlUqY+476IM4ImggD71wRs9HOkLKFSfdMLQ8Cdfr5PUkT/VPxkJculX1L9Wu/U7CEyPYfLca/JQZbr80UTC77RCzYlFlpZDssNNoToUDERCsQRKpiH6NSR6A2cuADt6E7mu3M/L05cz8U4AOGkdElSj+IW0wFmsYnX+x5mflnZuN00QGI1hsGCSvje87ZujK5GuQMLwj4FgWss1o1NgOEfxz6ba4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
+ b=XcciLjwuPjW2eFlO8CGaUh+NCNWcroOgeIkZ81AvIfI66NYcDZmZtcys+s78WXfT7sZrPvZ7WAU5wTCdamU2LewbHz6/04OcJZbFsGpRDDEmYSiPYhdlXc2zoNOgefPrtup0YEn1ikLu1z3u/hyRPtZTHGR+fUKojUS3p6yuyiY6LvKAHc/b+yVse1QNaOTsDpzeqVQqSlgqV7Z35eE+GkgkPoH0xpjrb9dPjNvLWhqtM7P18WjA24CMvXNbsLdM1z+XC8uo5xvJCyDEyErne53j978cbhZpeb6Ike55gjRRX/PrnZmHNXPdkDD2Gfvu0ZjQhGQTA44SOpTRpCCT0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
+ b=Cws1HXIkMVpPE76lfVfZklK6pVjjSNt3+b3Pw++f+z2ClH53LnjUR2J52ydpYTrSWy8CyH6XBKsODT5Zjuy4HPKSIc5SulfwJfZWE0rEsg4RnK7iFju4m/Cre2Y+qmRm/HViCIEHEoDlaV6IlNH7baggyjbnJZ3ppYipeFfteOc=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by BLAPR10MB5124.namprd10.prod.outlook.com (2603:10b6:208:325::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.22; Sun, 25 Sep
+ 2022 17:30:54 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::a497:8929:2c6f:7351]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::a497:8929:2c6f:7351%5]) with mapi id 15.20.5654.020; Sun, 25 Sep 2022
+ 17:30:54 +0000
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: wd33c93: remove dead code related to the
+ long-gone config WD33C93_PIO
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1v8pbpdj7.fsf@ca-mkp.ca.oracle.com>
+References: <20220920112921.25275-1-lukas.bulwahn@gmail.com>
+Date:   Sun, 25 Sep 2022 13:30:52 -0400
+In-Reply-To: <20220920112921.25275-1-lukas.bulwahn@gmail.com> (Lukas Bulwahn's
+        message of "Tue, 20 Sep 2022 13:29:21 +0200")
+Content-Type: text/plain
+X-ClientProxiedBy: SN7PR04CA0026.namprd04.prod.outlook.com
+ (2603:10b6:806:f2::31) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bac:b0:2f2:45c2:235c with SMTP id
- n12-20020a056e021bac00b002f245c2235cmr8346032ili.128.1664126981090; Sun, 25
- Sep 2022 10:29:41 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 10:29:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000091b65005e983c19d@google.com>
-Subject: [syzbot] KASAN: invalid-free in io_clean_op
-From:   syzbot <syzbot+edfd15cd4246a3fc615a@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|BLAPR10MB5124:EE_
+X-MS-Office365-Filtering-Correlation-Id: 52341f03-7bed-4a5e-3bfe-08da9f1bb310
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: avtcCSXMNLaN9X5jPgAqQqeTDO1YDrSHZqFQd0IKh8nybxBxL9J3k2nzSyF5MhDnWwejYLchx+ZVYAnLJtddGF/tWtxoFrNEhWa6YF12gW6e+CEqSwvf8ELLriC9wnvl33tBeKn9a0RobH94gW5b0GbvCVG6YQslUhqjS5QTg8dzhSKfSLbcdfS7Wv63bbKELN4l+mpLYqjB7Z5MaaffC0LLO7RKklBQKl3dSFg3PS8N/7mHETukSq7suBsrO1JrWe369u4U98xNjPPDVhwDvVd+x3YYaO643gCrfeqr99/yD6nKYxB9oBkKysdjhFCkXi2haaSzSlj1uPs8G9vooGUw/QqMDKehfqv1Cn9VdYduzZsj2Nap65GOSUlk+tF05XYE1iOAQtpYsHhGA0E+u4+Cj5/FVHDT9ZJzsiBocmdHux6A+Tpk8RAsPFIyW3IYR7R70wFKlwdqAtsxp3yukNfoe9lSVQftKgd1zsu8e31y1lCuDhSDeljLpn5TL/bPEIYoW/X1+de8aVNvWmC1MAuvs3csOB922I+r5GhJAtisgqjblRaLkQfnCBnF0I4e3cZ9kvGLsBGDCXDHA4aX1IxwqC7m04gyAtaMnu10K6dsnntD+cSz5XCRdDof+J4+za0dy7DAHaLXkehZFUp0f6x1Y9qkYcxc+FsB3HqJkVpYuS8zzWBUaipkZXfW+shX2n4o9ny6FmpSfou5+nrGCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199015)(38100700002)(86362001)(5660300002)(41300700001)(36916002)(4326008)(558084003)(8936002)(8676002)(6916009)(54906003)(316002)(66946007)(6486002)(66476007)(66556008)(478600001)(26005)(6506007)(6512007)(186003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CV37ggsbGlw4BkiE9QW8xDiUvQ7yUo3JlprCLOIqC9SCLCUFVOFIKie/pNPG?=
+ =?us-ascii?Q?bGRMYCA2CaHX7ddxFv+QLuF+/V536H7HXiGDbGTCwoBDjEgsqnnWeev+G33z?=
+ =?us-ascii?Q?Wx6c8/gnmSLLyL73JaFrLxI3iC53g62UP9dHCE7mdDft5zSPCvDnhSe9Y8J3?=
+ =?us-ascii?Q?lkIAAhA2tEM9t18u/mYMNFUjpve8P2azvwNxJEI6MfYBY2PglwDBVOe/uh66?=
+ =?us-ascii?Q?QTyznq0cpPliYbk0VNhdzb46odfadqv5yjxKc+19Cw3NWqb4dmxmw9pAqK33?=
+ =?us-ascii?Q?5Kd0DXbWavxW8Az3hqI3Tx+TvnSaBEj+6XHtgqkT31ewDw7RFKHW51Xli+kg?=
+ =?us-ascii?Q?8P7BTHQAvuvxzQnwUJr0JFnwBjCzaXgxygUdj/DCMAMovV2n1PEdQXpIKZnA?=
+ =?us-ascii?Q?s1ff7JM7WNazzUS9ZOCAVc0GATHzyqQCBv0FppvtrWxE76THbLNCvWDeouO7?=
+ =?us-ascii?Q?NPm3pQlg21faiwEyG/fiUvKKADi35FWxPnK/bde6VXutvrfVGbEZKc/hxdZw?=
+ =?us-ascii?Q?qnqNvKtpk3A/+Uly92PkpHr3n2xZ1+6P1WrBTk0Mpn/68cRDt+U/PUXHYEe3?=
+ =?us-ascii?Q?Zj07Cbr/qnYC/Dqts5HIVnv4N56lEjzR1HO0kR5me9IP1rISpcmwJWQ8T2mx?=
+ =?us-ascii?Q?MJA+S6rgC1Gt4gk6mF5rYt8pA2mi/o9PvFQ/lqYDfOfnTiqyI32el13vDcry?=
+ =?us-ascii?Q?yKnns7FuOx6qC/OxPdPCoPQEoZ2Z/HCI5uUHK6HJZjGIt44tUS197Ri3OTlY?=
+ =?us-ascii?Q?Tgcb7JiM1TYhzucgSnriECuB1HwWA7JLreZjYUbkUh+vStGXwbyzyib3iE7V?=
+ =?us-ascii?Q?93TZQO2PiQN+7NYCR3IlVh9xSCK7OfBuhpvkVMmMv1dxyCJmiLXnoGQcNhf6?=
+ =?us-ascii?Q?30waL2JqHTEVh6dhRLjzsM5plAuB2PEuVPjA8nomkH21kL3f4HxbLM6Y5FU4?=
+ =?us-ascii?Q?g1OVvnjvNhR6/K0706if5o1yVcFizan/JxXeHCoOItFW7a08woG9fQbErqyg?=
+ =?us-ascii?Q?70qpf9sszprfpduTQ0Bkh12QjGjHfev0QO2HbxMEPMuQL7uxjM+Wq7eTxPkn?=
+ =?us-ascii?Q?IeNlkGpLJEGs0euhmcT7aK2b24Aujn7wKX8SJoxEH8LEwQUlgItoLzXnRn85?=
+ =?us-ascii?Q?iNwdJgeCIHDfiIrjjwfoQM/m3CG9+J5pAUxutYEqPCc4jzoeSPTbesY6Bfr/?=
+ =?us-ascii?Q?Bkz1WUkXRAFGOdsuVyi32s8s6Yr3rfUj9wkbgCQotvcmRyVNHmcloRa107Pf?=
+ =?us-ascii?Q?NkSFUpe1hC0E5D7gBSiwKzIC41ZYQfJ2rZ2Tk5Co64kXfSo3P+EUoQ6N2U35?=
+ =?us-ascii?Q?nYU+U7ySrJt+1Phk0Q+7heDNe3C3kDmDYQCG0WNu6UKPtgMlYRuNeTebR2G0?=
+ =?us-ascii?Q?HEBjpqcQZZPn1IDPdwuHSMheu3JLrrDiup8VCt1+br2rzZLqZ9A22YW4H9Ny?=
+ =?us-ascii?Q?fPHTBmjXLRtdVe/I1mpMowaHHL/NrrJdTW6yyZMIQhVu7UvGIpV1vdUitR4m?=
+ =?us-ascii?Q?Bcyk6d3oVANy1HdHD6UuB0CZ+homqMV/iTUsTCehP0qc8ReFQ57w0qkMw+rO?=
+ =?us-ascii?Q?FoyB9FWzKB0kDV9Ii2vZsu7HHd4lvzLm8mtbgRX4C1NQu/JXgrx4hSNvoTlZ?=
+ =?us-ascii?Q?vw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52341f03-7bed-4a5e-3bfe-08da9f1bb310
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2022 17:30:54.4872
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AePSeZ5ZD43NoSvVTLN/vx6OOEyKLd1/wwbobdoXGsNHNtfsgOQkk+m3TZji8+V7R1V63wRbeNvr+Ox+ox2M43eJ5RoLeam/jVERDgii/kU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5124
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-25_01,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209250127
+X-Proofpoint-ORIG-GUID: B8dH6A8h1i2ImwdM_gxXoGpqTWLK5DeQ
+X-Proofpoint-GUID: B8dH6A8h1i2ImwdM_gxXoGpqTWLK5DeQ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+Lukas,
 
-HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1608cadf080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=edfd15cd4246a3fc615a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=144acdef080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10686540880000
+> The historical commit 5e018f7e60c9 ("Remove PC9800 support") from 2004
+> in linux's history.git removed the config WD33C93_PIO to tweak the
+> scsi wd33c93 driver for the PC9800.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+edfd15cd4246a3fc615a@syzkaller.appspotmail.com
+Applied to 6.1/scsi-staging, thanks!
 
-==================================================================
-BUG: KASAN: double-free in slab_free mm/slub.c:3599 [inline]
-BUG: KASAN: double-free in __kmem_cache_free+0xab/0x3b0 mm/slub.c:3612
-Free of addr ffff88801e642000 by task syz-executor374/3609
-
-CPU: 0 PID: 3609 Comm: syz-executor374 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:284 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:395
- kasan_report_invalid_free+0x97/0x1b0 mm/kasan/report.c:460
- ____kasan_slab_free+0x185/0x1c0 mm/kasan/common.c:225
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1669 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1695
- slab_free mm/slub.c:3599 [inline]
- __kmem_cache_free+0xab/0x3b0 mm/slub.c:3612
- io_clean_op+0x581/0xb10 io_uring/io_uring.c:1699
- io_free_batch_list+0x46f/0x7e0 io_uring/io_uring.c:1305
- __io_submit_flush_completions+0x22b/0x2e0 io_uring/io_uring.c:1343
- io_submit_flush_completions io_uring/io_uring.c:171 [inline]
- ctx_flush_and_put+0xdf/0x1b0 io_uring/io_uring.c:1003
- tctx_task_work+0x153/0x4a0 io_uring/io_uring.c:1087
- task_work_run+0x16b/0x270 kernel/task_work.c:179
- ptrace_notify+0x114/0x140 kernel/signal.c:2354
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:251 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:278
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:296
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f10ee5d8bb9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff7120f998 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
-RAX: 00000000000040b2 RBX: 0000000000000003 RCX: 00007f10ee5d8bb9
-RDX: 0000000000000000 RSI: 00000000000040b2 RDI: 0000000000000003
-RBP: 00007f10ee59cd60 R08: 0000000020000000 R09: 0000000000000008
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f10ee59cdf0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 3609:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- ____kasan_kmalloc mm/kasan/common.c:330 [inline]
- __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- __do_kmalloc_node mm/slab_common.c:934 [inline]
- __kmalloc+0x54/0xc0 mm/slab_common.c:947
- kmalloc include/linux/slab.h:564 [inline]
- io_alloc_async_data+0x9b/0x160 io_uring/io_uring.c:1590
- io_msg_alloc_async io_uring/net.c:138 [inline]
- io_msg_alloc_async_prep io_uring/net.c:147 [inline]
- io_sendmsg_prep_async+0x19b/0x3c0 io_uring/net.c:221
- io_req_prep_async+0x1d9/0x300 io_uring/io_uring.c:1613
- io_submit_sqe io_uring/io_uring.c:2137 [inline]
- io_submit_sqes+0xfcd/0x1df0 io_uring/io_uring.c:2276
- __do_sys_io_uring_enter+0xac6/0x2410 io_uring/io_uring.c:3216
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 3609:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1669 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1695
- slab_free mm/slub.c:3599 [inline]
- __kmem_cache_free+0xab/0x3b0 mm/slub.c:3612
- io_send_zc_cleanup+0x133/0x180 io_uring/net.c:916
- io_clean_op+0xf4/0xb10 io_uring/io_uring.c:1684
- io_free_batch_list+0x46f/0x7e0 io_uring/io_uring.c:1305
- __io_submit_flush_completions+0x22b/0x2e0 io_uring/io_uring.c:1343
- io_submit_flush_completions io_uring/io_uring.c:171 [inline]
- ctx_flush_and_put+0xdf/0x1b0 io_uring/io_uring.c:1003
- tctx_task_work+0x153/0x4a0 io_uring/io_uring.c:1087
- task_work_run+0x16b/0x270 kernel/task_work.c:179
- ptrace_notify+0x114/0x140 kernel/signal.c:2354
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:251 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:278
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:296
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88801e642000
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 0 bytes inside of
- 512-byte region [ffff88801e642000, ffff88801e642200)
-
-The buggy address belongs to the physical page:
-page:ffffea0000799000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1e640
-head:ffffea0000799000 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff888011841c80 dead000000100010 0000000000000000
-raw: 0000000000000000 dead000000000001 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0x52800(GFP_NOWAIT|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 1, tgid 1 (swapper/0), ts 7630490778, free_ts 0
- prep_new_page mm/page_alloc.c:2538 [inline]
- get_page_from_freelist+0x1092/0x2d20 mm/page_alloc.c:4287
- __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5546
- alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2113
- alloc_pages+0x22f/0x270 mm/mempolicy.c:2275
- alloc_slab_page mm/slub.c:1739 [inline]
- allocate_slab+0x213/0x300 mm/slub.c:1884
- new_slab mm/slub.c:1937 [inline]
- ___slab_alloc+0xac1/0x1430 mm/slub.c:3119
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3217
- slab_alloc_node mm/slub.c:3302 [inline]
- __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3375
- kmalloc_node_trace+0x1d/0x60 mm/slab_common.c:1027
- kmalloc_node include/linux/slab.h:581 [inline]
- kzalloc_node include/linux/slab.h:706 [inline]
- iolatency_pd_alloc+0xc1/0x1c0 block/blk-iolatency.c:961
- blkcg_activate_policy block/blk-cgroup.c:1425 [inline]
- blkcg_activate_policy+0x1e4/0xba0 block/blk-cgroup.c:1398
- blk_iolatency_init+0x290/0x5e0 block/blk-iolatency.c:777
- blkcg_init_queue+0x17d/0x620 block/blk-cgroup.c:1302
- __alloc_disk_node+0x29d/0x650 block/genhd.c:1366
- __blk_alloc_disk+0x35/0x90 block/genhd.c:1405
- brd_alloc.part.0+0x281/0x760 drivers/block/brd.c:391
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff88801e641f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88801e641f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88801e642000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff88801e642080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88801e642100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Martin K. Petersen	Oracle Linux Engineering
