@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897915E9327
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 14:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB36A5E932A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 14:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiIYMiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 08:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S232159AbiIYMkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 08:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiIYMiS (ORCPT
+        with ESMTP id S229965AbiIYMkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 08:38:18 -0400
-Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6802EF0F
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 05:38:17 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
-Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
-        id 9D3AA28C96; Sun, 25 Sep 2022 14:38:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=valentin-vidic.from.hr; s=2020; t=1664109493;
-        bh=sI5bSDz03qw9PgGUZ6xzO739DROzd9HDc5NcK+8TBOE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sD2FdlIJxv89+b0FdQl0JyDMjw9uyYZRP2n0trHwg0HlLcAPyO5ruu6ce+s1K5ZZE
-         F3LMZ237chIWEA8ktWbtVM95DEHuJ+cJAMZ3hIvtXoDYTgEiqn9/1C34Lc4smVhPRs
-         ehkMg03WvdzybepfguHF/FgKhuT2UayFEhDl7QoeuqkRBNkcdwWSKwBV1fIgeqd2Q5
-         DG2n2QGrZoA44u8AAWTWmQx6IpwHc5w7lPqF9Hy3oA3Sn18vScusa97IrrGH31itR4
-         TvLaLG+Oj8BVLzwfXW8B+0Pt/L3ITZeUisWJPkhQbTALv3454vG47UBXpgI9453sU1
-         Biik47eHomhGXMDUw1Zbs8qQenZSOM0FgphN+/apIrwGFwDMapDMtU3kQRd7uS4sf7
-         bcsVwArSUMsPxvEf3Zb2npPkKVtW51VhSr15UzEKPDDqUYaGbCVCcTY9fitxKBPzyz
-         KaVYBM9rJOpQBizSQ5c0PwvAuwOuuHQNocb4UFaXyy//adYX+T6xlGxY5hGJPClO0A
-         GiNUz5dWu15lGA7XefoOdp/fS6zWCGVjjPa4b8eET7FOX2RQRup+7DF7b3uQqz8VOc
-         Am/uu5QmXJowlc7RUotzobk5WM9aC+0Wu93daK/V4A/wd8Sm1OKwuMjDW/iMFkmuF4
-         IySMGKYyLwYj3tURR4nZPWT0=
-From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Valentin Vidic <vvidic@valentin-vidic.from.hr>
-Subject: [PATCH v2] staging: rtl8192e: fix CamelCase variables
-Date:   Sun, 25 Sep 2022 14:38:10 +0200
-Message-Id: <20220925123810.2492865-1-vvidic@valentin-vidic.from.hr>
-X-Mailer: git-send-email 2.30.2
+        Sun, 25 Sep 2022 08:40:01 -0400
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C76E20F79;
+        Sun, 25 Sep 2022 05:39:57 -0700 (PDT)
+Message-ID: <ce61fb9a-dcf4-27a2-ac03-62060a1512f9@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1664109595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OXUDIYwGS8VQVu3j8KhtahQQnFOQ52Ygtum7FlzQF2Q=;
+        b=eOF+RH4Gwk0Wt8HCyeyTDsQaH9OC+2fvvQtX/WG/mqdKDEO1c5HVQiAtdL1ahS+olMee36
+        Xt280jYvWK1ZDTUr13B0zYE2TVKgmgS9JH5ojzFrsUVupBzOoli90t+MZlUOX5BJcRKbfc
+        gqpOKDifPJO6HYTYe8QYMifHMdFkna8Zs1VyMY9CG3oKQCgtm2e9wy5pLKD7YIdXP5nk0V
+        1Ua4wKOlgHOP6FG/UyWp83qie5+8z0Y0HFKZzOQZVT3cUsQOV/CN4wa4hr9f9SSkCMwgZu
+        XbcFVY9x9wBaFNSigtTDjhf1tc+YEUt1dTBYTLwevb4C8Lzz1JPIcye5v7iwSA==
+Date:   Sun, 25 Sep 2022 14:39:54 +0200
 MIME-Version: 1.0
+Subject: Re: [PATCH] arm64: dts: rockchip: fix quartz64-a bluetooth
+ configuration
+To:     Lev Popov <leo@nabam.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220925123144.70639-1-leo@nabam.net>
+Content-Language: da-DK
+From:   Dan Johansen <strit@manjaro.org>
+Organization: Manjaro ARM
+In-Reply-To: <20220925123144.70639-1-leo@nabam.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,71 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch warnings for variables: LinkCtrlReg, DeviceID,
-RevisionID, IrqLine.
 
-Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
----
-v2: rebase on staging-testing branch
-
- drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 24 ++++++++++-----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-index 886bf4ba2adf..81e1bb856c60 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-@@ -16,9 +16,9 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
- 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
- 
- 	u8 tmp;
--	u16 LinkCtrlReg;
-+	u16 link_ctrl_reg;
- 
--	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &LinkCtrlReg);
-+	pcie_capability_read_word(priv->pdev, PCI_EXP_LNKCTL, &link_ctrl_reg);
- 
- 	pci_read_config_byte(pdev, 0x98, &tmp);
- 	tmp |= BIT4;
-@@ -31,28 +31,28 @@ static void _rtl92e_parse_pci_configuration(struct pci_dev *pdev,
- bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
- {
- 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
--	u16 DeviceID;
--	u8  RevisionID;
--	u16 IrqLine;
-+	u16 device_id;
-+	u8  revision_id;
-+	u16 irq_line;
- 
--	DeviceID = pdev->device;
--	RevisionID = pdev->revision;
--	pci_read_config_word(pdev, 0x3C, &IrqLine);
-+	device_id = pdev->device;
-+	revision_id = pdev->revision;
-+	pci_read_config_word(pdev, 0x3C, &irq_line);
- 
- 	priv->card_8192 = priv->ops->nic_type;
- 
--	if (DeviceID == 0x8192) {
--		switch (RevisionID) {
-+	if (device_id == 0x8192) {
-+		switch (revision_id) {
- 		case HAL_HW_PCI_REVISION_ID_8192PCIE:
- 			dev_info(&pdev->dev,
- 				 "Adapter(8192 PCI-E) is found - DeviceID=%x\n",
--				 DeviceID);
-+				 device_id);
- 			priv->card_8192 = NIC_8192E;
- 			break;
- 		case HAL_HW_PCI_REVISION_ID_8192SE:
- 			dev_info(&pdev->dev,
- 				 "Adapter(8192SE) is found - DeviceID=%x\n",
--				 DeviceID);
-+				 device_id);
- 			priv->card_8192 = NIC_8192SE;
- 			break;
- 		default:
+Den 25.09.2022 kl. 14.31 skrev Lev Popov:
+> For "Quartz64 Model A" add missing RTS line to the UART interface used by
+> bluetooth and swap bluetooth host-wakeup and device-wakeup gpio pins to
+> match the boards physical layout. This changes are necessary to make
+> bluetooth provided by the wireless module work.
+You should add
+Fixes:  cd414d5ac1fdeecf0617737e688a1af00858253a (arm64: dts: rockchip: 
+rename Quartz64-A bluetooth gpios)
+I think, as that was the last commit that touched the gpio lines.
+> Signed-off-by: Lev Popov <leo@nabam.net>
+> ---
+>   arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> index a05460b92415..91908081c5ed 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> @@ -740,7 +740,7 @@ &uart0 {
+>   
+>   &uart1 {
+>   	pinctrl-names = "default";
+> -	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
+> +	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn &uart1m0_rtsn>;
+>   	status = "okay";
+>   	uart-has-rtscts;
+>   
+> @@ -748,8 +748,8 @@ bluetooth {
+>   		compatible = "brcm,bcm43438-bt";
+>   		clocks = <&rk817 1>;
+>   		clock-names = "lpo";
+> -		device-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+> -		host-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
+> +		host-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+> +		device-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
+>   		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
 -- 
-2.30.2
-
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
