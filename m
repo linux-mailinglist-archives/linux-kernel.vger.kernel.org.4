@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F645E921F
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7A35E9232
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiIYKez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 06:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S231916AbiIYKrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 06:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiIYKet (ORCPT
+        with ESMTP id S229958AbiIYKrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 06:34:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B92EE0A;
-        Sun, 25 Sep 2022 03:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664102084; x=1695638084;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AzjMN8M1hyW76bzY/qqhHv+8AwzopllUtlSeYRDbq7M=;
-  b=EWiRWUnTjr0DDhNkuB2cmAKQdgSKBqAb6te6YFmZD99KuX95o/pd+EPQ
-   UhxCqHG6ktyYyVWItb8HFDjtvscRiZ9DE10kIeTZsy9NqPsVkkc6Z5yrj
-   9YQBDkrZemoiYp9S7CU/aUlqAnlOvUy5r4pMJkHY3YCIM3VbZPEji4M6R
-   si3+MJUyPHMup2Xjw6SwV4GDPcfPqeFC+3PcQasWEyRM97VRCaknD+6gu
-   TyiiWvN7bQig84SLXzomSZWsb8HcGFkQT4fZrQobJfLPFLXtC2/3cpd+Z
-   Yb+wTZ0a0Xpf5xBNqw4GQyupTbR8oxFjANlROhVkLw3PYVMC3mcw3rsLV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="299573871"
-X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
-   d="scan'208";a="299573871"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 03:34:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
-   d="scan'208";a="623019177"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 03:34:39 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     bigeasy@linutronix.de, tglx@linutronix.de,
-        akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
-Subject: [PATCH] irq_work: Migrate the remaining work of the offline CPU on PREEMPT_RT
-Date:   Sun, 25 Sep 2022 18:41:11 +0800
-Message-Id: <20220925104111.1454100-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 25 Sep 2022 06:47:40 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E6140DD
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:47:38 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id a9-20020a056e0208a900b002f6b21181f5so3326135ilt.10
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:47:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=aeFDslDbeN/sdlaghzABmXmbk9CO2jZ/ZNvXiaw3gj8=;
+        b=HFQEGZhbbRgmFeLlQHXiaCpBnApR0KxrIrDssSEkyShSt5x2GQBAKTyFN+TvPAwVEA
+         ZccCitBWGf9lcnvjkSlFZnR4W/flmm5FQYBYV3pp047DPgpg/s9kRLwzjl5Jtc+a0irZ
+         7P4HykoNZlebTxDvr6T1Jwhb0NcfPM/rfTeBY+ecQA6G9PHwAHcD8Vdm9nEmdixp3H6h
+         Lsh/YNyRmJZ9nFSOMZB2ymhFiq7KEZKD6JGjm7/vvFn608iGstVuYmSxRBEY8UBEUnWJ
+         sT5Tx56W+voR/jubYLBYtTmmJmXsSJZ9HKmDqA1gVouSBDeZOYUI6YlnkogV25ayaHET
+         F5qw==
+X-Gm-Message-State: ACrzQf0K6/HF3+Xz4FaChsMZkqMPy5m9c4+zwSUM4wdjVo/suBCtzyHw
+        nMeNEfPBqXWX9LL0gCTLJN7BrbKKoLwftR1tRtdnswvMFPTX
+X-Google-Smtp-Source: AMsMyM5953B5jFu38cPPTq8xCVCqwW/VfSMiHzzN8+aZr3hnuSQ3+O+dOwy+ZP0iCZMwZiwBZ1cuCZN/++gO2G7y30mOipsgT2JT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1242:b0:2f6:8aac:3b1f with SMTP id
+ j2-20020a056e02124200b002f68aac3b1fmr8168238ilq.68.1664102858097; Sun, 25 Sep
+ 2022 03:47:38 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 03:47:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ba0dcb05e97e239b@google.com>
+Subject: [syzbot] kernel panic: stack is corrupted in lock_release (3)
+From:   syzbot <syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CPU goes offline and invoke CPU_DYING callbacks, the
-smpcfd_dying_cpu() be invoked to flush the remaining irq_work of the
-offline CPU, for lazy irq_work, will wakeup per-CPU irq_work kthreads
-to invoke callbacks, but the irq_work kthreads are in TASK_PARKED
-state, will not get the actual wakeup, resulting in the remaining lazy
-irq_work not being executed.
+Hello,
 
-This commit requeue remaining of lazy irq_work to online CPU.
+syzbot found the following issue on:
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+HEAD commit:    3db61221f4e8 Merge tag 'io_uring-6.0-2022-09-23' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10135a88880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
+dashboard link: https://syzkaller.appspot.com/bug?extid=4353c86db4e58720cd11
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1792e6e4880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1059fcdf080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 264192
+Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: lock_release+0x7f4/0x820
+CPU: 0 PID: 9489 Comm: syz-executor322 Not tainted 6.0.0-rc6-syzkaller-00291-g3db61221f4e8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ panic+0x2d6/0x715 kernel/panic.c:274
+ __stack_chk_fail+0x12/0x20 kernel/panic.c:706
+ lock_release+0x7f4/0x820
+ __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
+ _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
+ spin_unlock include/linux/spinlock.h:389 [inline]
+ inode_wait_for_writeback+0x242/0x2c0 fs/fs-writeback.c:1474
+ evict+0x277/0x620 fs/inode.c:662
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe603d0835a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 08 01 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd6ef632a8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffd6ef63300 RCX: 00007fe603d0835a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6ef632c0
+RBP: 00007ffd6ef632c0 R08: 00007ffd6ef63300 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000bc0
+R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000068
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
 ---
- include/linux/irq_work.h |  1 +
- kernel/cpu.c             |  1 +
- kernel/irq_work.c        | 20 ++++++++++++++++++++
- 3 files changed, 22 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
-index 8cd11a223260..900d9053a62d 100644
---- a/include/linux/irq_work.h
-+++ b/include/linux/irq_work.h
-@@ -66,6 +66,7 @@ void irq_work_sync(struct irq_work *work);
- void irq_work_run(void);
- bool irq_work_needs_cpu(void);
- void irq_work_single(void *arg);
-+void irq_work_migrate(int cpu);
- #else
- static inline bool irq_work_needs_cpu(void) { return false; }
- static inline void irq_work_run(void) { }
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..70461b6d785d 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1075,6 +1075,7 @@ static int takedown_cpu(unsigned int cpu)
- 
- 	tick_cleanup_dead_cpu(cpu);
- 	rcutree_migrate_callbacks(cpu);
-+	irq_work_migrate(cpu);
- 	return 0;
- }
- 
-diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-index 7afa40fe5cc4..bfa21468c2df 100644
---- a/kernel/irq_work.c
-+++ b/kernel/irq_work.c
-@@ -242,6 +242,26 @@ static void irq_work_run_list(struct llist_head *list)
- 		irq_work_single(work);
- }
- 
-+void irq_work_migrate(int cpu)
-+{
-+	struct irq_work *work, *tmp;
-+	struct llist_node *llnode;
-+	struct llist_head *list = per_cpu_ptr(&lazy_list, cpu);
-+
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-+		return;
-+
-+	if (llist_empty(list))
-+		return;
-+
-+	llnode = llist_del_all(list);
-+	llist_for_each_entry_safe(work, tmp, llnode, node.llist) {
-+		atomic_set(&work->node.a_flags, 0);
-+		irq_work_queue(work);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(irq_work_migrate);
-+
- /*
-  * hotplug calls this through:
-  *  hotplug_cfd() -> flush_smp_call_function_queue()
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
