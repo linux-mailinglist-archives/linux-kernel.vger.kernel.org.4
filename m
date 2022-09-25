@@ -2,118 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7A35E9232
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3253A5E923A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiIYKrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 06:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S231175AbiIYLA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 07:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiIYKrk (ORCPT
+        with ESMTP id S229557AbiIYLA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 06:47:40 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E6140DD
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:47:38 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a9-20020a056e0208a900b002f6b21181f5so3326135ilt.10
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:47:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=aeFDslDbeN/sdlaghzABmXmbk9CO2jZ/ZNvXiaw3gj8=;
-        b=HFQEGZhbbRgmFeLlQHXiaCpBnApR0KxrIrDssSEkyShSt5x2GQBAKTyFN+TvPAwVEA
-         ZccCitBWGf9lcnvjkSlFZnR4W/flmm5FQYBYV3pp047DPgpg/s9kRLwzjl5Jtc+a0irZ
-         7P4HykoNZlebTxDvr6T1Jwhb0NcfPM/rfTeBY+ecQA6G9PHwAHcD8Vdm9nEmdixp3H6h
-         Lsh/YNyRmJZ9nFSOMZB2ymhFiq7KEZKD6JGjm7/vvFn608iGstVuYmSxRBEY8UBEUnWJ
-         sT5Tx56W+voR/jubYLBYtTmmJmXsSJZ9HKmDqA1gVouSBDeZOYUI6YlnkogV25ayaHET
-         F5qw==
-X-Gm-Message-State: ACrzQf0K6/HF3+Xz4FaChsMZkqMPy5m9c4+zwSUM4wdjVo/suBCtzyHw
-        nMeNEfPBqXWX9LL0gCTLJN7BrbKKoLwftR1tRtdnswvMFPTX
-X-Google-Smtp-Source: AMsMyM5953B5jFu38cPPTq8xCVCqwW/VfSMiHzzN8+aZr3hnuSQ3+O+dOwy+ZP0iCZMwZiwBZ1cuCZN/++gO2G7y30mOipsgT2JT
+        Sun, 25 Sep 2022 07:00:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4A13137C;
+        Sun, 25 Sep 2022 04:00:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD4DB8101B;
+        Sun, 25 Sep 2022 11:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42331C433C1;
+        Sun, 25 Sep 2022 11:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664103652;
+        bh=Yfe0qoHburx2QsggZnRv2F3jtxrdv7EAgwg7pMzvbfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cR3jqIT0OHmGHNnWY5YOTQCJCGDzG3BMXwfQsvJ+T4xtT7NmDbfm4RaWq++75C+fR
+         Q8fPWhPnYBpTcx5KalN11+aEqKOssqyTINoKSwpvJAiWzgAIZlOdXMp+krY/EN8KMK
+         HGD+BjjhuRt2Cg3Fp8L8+W4KNoWNt4mvNeq+p37Q=
+Date:   Sun, 25 Sep 2022 13:00:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     wangyong <yongw.pur@gmail.com>
+Cc:     jaewon31.kim@samsung.com, linux-kernel@vger.kernel.org,
+        mhocko@kernel.org, stable@vger.kernel.org, wang.yong12@zte.com.cn,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 stable-4.19 1/3] mm/page_alloc: use ac->high_zoneidx
+ for classzone_idx
+Message-ID: <YzA04ZZI/1OH8oRT@kroah.com>
+References: <Yyn7MoSmV43Gxog4@kroah.com>
+ <20220925103529.13716-1-yongw.pur@gmail.com>
+ <20220925103529.13716-2-yongw.pur@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1242:b0:2f6:8aac:3b1f with SMTP id
- j2-20020a056e02124200b002f68aac3b1fmr8168238ilq.68.1664102858097; Sun, 25 Sep
- 2022 03:47:38 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 03:47:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ba0dcb05e97e239b@google.com>
-Subject: [syzbot] kernel panic: stack is corrupted in lock_release (3)
-From:   syzbot <syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220925103529.13716-2-yongw.pur@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Sep 25, 2022 at 03:35:27AM -0700, wangyong wrote:
+> From: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> 
+> [ backport of commit 3334a45eb9e2bb040c880ef65e1d72357a0a008b ]
 
-syzbot found the following issue on:
+This is from 5.8.  What about the 5.4.y kernel?  Why would someone
+upgrading from 4.19.y to 5.4.y suffer a regression here?
 
-HEAD commit:    3db61221f4e8 Merge tag 'io_uring-6.0-2022-09-23' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10135a88880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
-dashboard link: https://syzkaller.appspot.com/bug?extid=4353c86db4e58720cd11
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1792e6e4880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1059fcdf080000
+And why wouldn't someone who has this issue just not use 5.10.y instead?
+What prevents someone from moving off of 4.19.y at this point in time?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com
+thanks,
 
-loop0: detected capacity change from 0 to 264192
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: lock_release+0x7f4/0x820
-CPU: 0 PID: 9489 Comm: syz-executor322 Not tainted 6.0.0-rc6-syzkaller-00291-g3db61221f4e8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- panic+0x2d6/0x715 kernel/panic.c:274
- __stack_chk_fail+0x12/0x20 kernel/panic.c:706
- lock_release+0x7f4/0x820
- __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
- _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
- spin_unlock include/linux/spinlock.h:389 [inline]
- inode_wait_for_writeback+0x242/0x2c0 fs/fs-writeback.c:1474
- evict+0x277/0x620 fs/inode.c:662
- ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe603d0835a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 08 01 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd6ef632a8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd6ef63300 RCX: 00007fe603d0835a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6ef632c0
-RBP: 00007ffd6ef632c0 R08: 00007ffd6ef63300 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000bc0
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000068
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+greg k-h
