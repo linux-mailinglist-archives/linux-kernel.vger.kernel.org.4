@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D335E94C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CA85E94CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbiIYRXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S233113AbiIYRZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiIYRXw (ORCPT
+        with ESMTP id S233099AbiIYRZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:23:52 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37A2DA83;
-        Sun, 25 Sep 2022 10:23:50 -0700 (PDT)
-Received: from vpenguin.haus.lokal ([91.64.235.177]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MzhWp-1pP7rt1ePh-00vgdE; Sun, 25 Sep 2022 19:23:44 +0200
-From:   Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-To:     mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
-Date:   Sun, 25 Sep 2022 19:22:37 +0200
-Message-Id: <20220925172236.2288-1-jens.glathe@oldschoolsolutions.biz>
-X-Mailer: git-send-email 2.25.1
+        Sun, 25 Sep 2022 13:25:05 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF4E1581F;
+        Sun, 25 Sep 2022 10:25:02 -0700 (PDT)
+Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 737D0C70AF;
+        Sun, 25 Sep 2022 17:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664126699; bh=gKxa9GeyzLAWF33Cp8eC3WSkvGoRY/nboLcvMyMj2L0=;
+        h=From:To:Cc:Subject:Date;
+        b=W1P1sggthMZvuK1oBcqxMk8SzRlQ1F+drk1me/tq2XYWXUw/Ggz8xxUOZqFNufgfL
+         8boHEg3esAbrpPWvLVsA7UfpfA9ttlNafgRyoEh3M6VDUVd2pQcFPdpo94vMhkfy0w
+         acU5zb74HquRvAO+xP/dPupBhesYfrwcHiXbi+6Y=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ARM: dts: qcom: msm8974: Align dsi phy-names with schema
+Date:   Sun, 25 Sep 2022 19:24:42 +0200
+Message-Id: <20220925172443.92900-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:ib8aAaNZUx8RMF41/ytzL4yIwOYo+axTAou/YN4YgJ2Fb3x2L7G
- 4pZrztwLyTRJnnRPpmEWmVBDZjd0kn7I2jnSiwMiN5oLnxsUS3GB8LI+XJ51b/8uhT75YTz
- 56jY25h6WEYrfWI2a65iXWclFWp2WC+5e8KS1Jtl08tF/EDEQXL8MOhXfXmSTdNDP+mTO1R
- cHut++ZtU4LrS5oEvCpFA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OLKIUPcAzgM=:JQN1iSiSHQWUjn+drjSvTB
- /HcjKOK2xHql2li/C5+GTPUZKxykAp6WGyaEKk84XbaZAeC1G9pYL548BI73DEaOwRY7dNfCr
- gYxHaY0rOwH2BIch0B7WjWYDhzGJdUGBrwlikG847BuchvI/nBRisRZ1bLXn0rWmWQWNIXEWc
- SrDARoaFOLE+f/M0rxVHKsFvON+0ymemWGjATulB/d3jgxAPI8Q0R2gSW4UuO/GbWxmtzuk5c
- 3yqN7eaaxSrtx/yJasblTrOdVDlG31PriVq97K4Xpi52y1swHoUf9a8I9ZHXh1DGWgQIUl74S
- wDH9Bl/CiyjYY3i7nAMHba0NyitiIJ8ene0QRpgPW9XiamJMrkA1hs6EXYj35o0YvC+BZDnqt
- xACCpyEsmQIjhjVdbudn8hMPRjQlweJxiuMtTO3ra85TuQmzZWYdCMhD/2GbtSHL/z+NnVJEc
- HZgo0GdIdal55RGl/bUJ1evv7uLZbLLtHABs7FVGqNphM/V9zqCPpl0+ong0scv1YLVV4peDG
- VJ+47A+T/vYYjYB6eyWIRqGvsT6aSnaVwy1iDifwX0eCeK9a7dpFhqQDu+PHPPS1L9agLDowf
- jY1nIWno2Y2nQ7BKs3mleDnNxrOJnO3aeVQieOEFTw4apS2CKaX0enys/AGUf+0fqCZOwHdV1
- Eql4q34jBkv3W25uFZXcrIrbFeVCzi5v/zNVvocUmO0JcJhuR8WUw9LYkI2kThB25V9wClkB+
- x1NZkbG0QDZ3xgBGlkEG1CRxWKB42ux1vNxKjbx2T2Rua6Vst5iibrIpNccX5TkDhrW5bvzDT
- Bv6bZZFmgAElY2D3W50LC7RxkzUkQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-only if it reports as a V0.96 XHCI controller. Appears to fix the errors
-"xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
-current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
-often) when using a r8152 USB3 ethernet adapter with integrated hub.
+Use dsi instead of dsi-phy as required by the binding.
 
-Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/usb/host/xhci-pci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index dce6c0ec8d34..d1b8e7148dd1 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -306,8 +306,12 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	}
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 620900e5ffd5..da247d799492 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -1571,7 +1571,7 @@ dsi0: dsi@fd922800 {
+ 					      "core_mmss";
  
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
--		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
-+		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
-+		/* try to tame the ASMedia 1042 controller which is 0.96 */
-+		if (xhci->hci_version == 0x96)
-+			xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
-+	}
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+ 				phys = <&dsi0_phy>;
+-				phy-names = "dsi-phy";
++				phy-names = "dsi";
+ 
+ 				status = "disabled";
+ 
 -- 
-2.25.1
+2.37.3
 
----
-Hi there, a "try again" with git send-email and the corrected patch. Hope this works now.
-
-with best regards
-
-Jens Glathe
