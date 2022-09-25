@@ -2,66 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6525E919B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 10:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6975E91A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 10:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIYIHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 04:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S230089AbiIYIUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 04:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIYIHj (ORCPT
+        with ESMTP id S229621AbiIYIUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 04:07:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047D2B03;
-        Sun, 25 Sep 2022 01:07:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2695B80CB8;
-        Sun, 25 Sep 2022 08:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151BFC433D6;
-        Sun, 25 Sep 2022 08:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664093255;
-        bh=4+HQ/HtpR+I029bH05/L0sM1XIbsA+lesCpihxplKls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FzsqHrLri5e++0iiUeI2ZDEBPGKPRKp5RduATYb8R77P/7Wx/ImupqllVwB7NCCE9
-         Nc2ZhxB074SG7JfXh5+ddA7avrfDlNmXB7g9xJc9wsmfhxxf95ak+WW3EOMK4mBOAE
-         EhYUmfb2ETRT/UEUD/MQoGptBMhv0ObCu5liw9gE=
-Date:   Sun, 25 Sep 2022 10:07:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite
- being a V0.96 controller
-Message-ID: <YzAMRPjywl0f4uSY@kroah.com>
-References: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
- <Yy7ENBX2Zo3vNgB1@kroah.com>
- <em98cdb3f1-82c0-4fd3-92af-9c3d062b3d0c@35bdcead.com>
+        Sun, 25 Sep 2022 04:20:49 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99629831
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 01:20:46 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so2086238wms.4
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 01:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3f7xryob0fjp6E4pNLcCzs6IRZqkpNTpwM4Ki3mJWfc=;
+        b=tKILDON0dYSkuS1KXcE9usQK+2lgvJ4U5Vi7MJ7mSJ1DGm0pKT/ZESeve4LOnEK8pz
+         szirFAU0vYZBagmvdZ0t53biGOBPwzcYEqFr6BsOkqpB4J3fnuV1avWQwkXWMYRBUtY+
+         LAHXwtr6FldJ9igXbF48vr5wDo48XC1mvOm/ELILJBxkWeauPkrKCaNfTdtVDEBDpGAH
+         oKbxQnaYZvuwKvqTcVvmDMoVYWZ8HIsDYiP/TMlMmb0KjcJo8kPhagrKqYInZFsb8Pxz
+         PJaLoDeoUJYmgq4LiqELDdZHPiBQZSl5tTY9hQYBC/PfyjIo7hHqBogF07l7vrrYHFaq
+         cfOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3f7xryob0fjp6E4pNLcCzs6IRZqkpNTpwM4Ki3mJWfc=;
+        b=RwDyc1QSwKeK+bqODafZh/+/OgxoUuYmugWmh7dFCAhefQ/ca0mLdH3tsbtWsFI6DE
+         4n9Y8xl9Y2c4t5Q+Paoih4Wvl2OgVTbus0kTnbIxAaFku+XrmQUrDhFSagcTo6Whpk5r
+         15ch6BDmS+dCFv+fneWb68YXEHrTLW8n5uZRb+iTI6wFhtgBbrzloy0nMaL8dNGZX007
+         8WZyUBnWk4NbnjHwDFH/ZknHepPlizZ/nJva29x95RUzvyUH2CIHE32WRNcTVwE7Wyk8
+         HjH6bBM2AHoHavwD8TATkXh4B24V8Jc6fuafABXRe6RklzDnrtT36f+8l5YXF6WGuKI8
+         WbpQ==
+X-Gm-Message-State: ACrzQf30ZfA1Y0NmFCgecSohjZ+YhNtEwobw7ItKOU8ahXWsyNWojsvu
+        rUpzWaKMIy9/RPY2CuLzu1sfzw==
+X-Google-Smtp-Source: AMsMyM4cqxu5WJGMnD/9bR1PxxPIazd9fL7WS6iN33LiqEvKrjfIVowpwiRISp5yWEonAQq1k5kbug==
+X-Received: by 2002:a05:600c:4e8b:b0:3b4:c8ce:be87 with SMTP id f11-20020a05600c4e8b00b003b4c8cebe87mr19206401wmq.157.1664094044671;
+        Sun, 25 Sep 2022 01:20:44 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id x12-20020adfffcc000000b0022ac672654dsm11225689wrs.58.2022.09.25.01.20.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 01:20:43 -0700 (PDT)
+Message-ID: <9db42de1-50c4-8738-6d8b-774cc6d5756e@baylibre.com>
+Date:   Sun, 25 Sep 2022 10:20:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <em98cdb3f1-82c0-4fd3-92af-9c3d062b3d0c@35bdcead.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 1/1] arm64: dts: mediatek: mt8183: disable thermal
+ zones without trips.
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        daniel.lezcano@linaro.org
+References: <20220921-mt8183-disables-thermal-zones-up-v2-0-4a31a0b19e1e@baylibre.com>
+ <20220921-mt8183-disables-thermal-zones-up-v2-1-4a31a0b19e1e@baylibre.com>
+ <a5838d66-21dc-4905-03c5-ea049e3bd055@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <a5838d66-21dc-4905-03c5-ea049e3bd055@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 07:50:48AM +0000, Jens Glathe wrote:
-> Hi there,
-> 
-> I'm a bit at a loss here. This is a three-line change, and I get loads of
-> warnings regarding "please, no spaces at beginning of lines".
+Hi Krzysztof,
 
-Yes, that's not allowed, kernel development uses tabs, not spaces.  Fix
-that up and resend and all should be good.
+On 9/25/22 09:57, Krzysztof Kozlowski wrote:
+> On 21/09/2022 11:05, Amjad Ouled-Ameur wrote:
+>> Thermal zones without trip point are not registered by thermal core.
+>>
+>> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+>> only.
+>>
+>> Disable the zones above and keep only cpu_thermal enabled.
+> Please test your patches before sending upstream. :(
+My apologies for the inconvenience, I mistakenly missed the error,
 
-thanks,
+will send a proper V3.
 
-greg k-h
+
+Regards,
+
+Amjad
+
+> Best regards,
+> Krzysztof
+>
