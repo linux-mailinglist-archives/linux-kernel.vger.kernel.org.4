@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF34D5E92D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7992E5E92D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 13:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiIYLug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 07:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S231887AbiIYLyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 07:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiIYLud (ORCPT
+        with ESMTP id S231511AbiIYLyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 07:50:33 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7591F25C5A
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:50:32 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id q3-20020a056e0220e300b002f5e648e02eso3377676ilv.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:50:32 -0700 (PDT)
+        Sun, 25 Sep 2022 07:54:33 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065432D74E
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:54:29 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id q17so4648497lji.11
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 04:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Q46V3bJGY5zK2gbUyWGrQRsMlQhZzKF53118KkxntJ8=;
+        b=n5CpgP2J1Z1DA5Itg2vYm43fttQpqbE/BycyCWdr1poja6mSAQfBJUaN7s1j5xR31j
+         k494Hkw1628M3V4SKcYP2Z4KZUkrRPvnHUt4XVgXAtwjxjZPEriBxFd1TUEWPcnUmLzY
+         zZun2J6E7Hl6iOp3rl8RiozOqiNHUbVyyGaUnKK1vOISsHj4e8/+LU+8l3+2gjyIFEB9
+         2bQAozw+iVeIf+Mic47g7u9aD4ks0Z0suwOkZ4fAoqTQhm9TZXB78zlHszHagl4Rlb4K
+         Anns1kkb2TyG19FTg1PbA8PmJy+izOLmYe0VPigHtjmv5uYZaSHtijZh6dKYjWcTGVT2
+         dtXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=ZsyAs/UrNKZYnPlEhsRU7jhr/lUz9DbDWBlnRMCzylY=;
-        b=Of6YIcfBPV1HVpivjl4jmSfwPE0tAM39ZNMDpACWQQkO1gNV4IoufmH5Yaj8AxGxvx
-         hGQegI1gXySifcwIe2XOUuLDyUV0+gidRaGA7NKJnv5Ws4/rh4eRPytEwufrj4VHQCAK
-         FiIKxidbwcRUC4xjKum9PsyO38lOUISCT3NUc1ENMKnuz1ZJ2P8cZ5rGV6cK/ncSm53D
-         d3ZLuhQnTq6QrGe9O1rBWashJCFTZtfz/UyqnSC0Vd4DKZ7aFzGh80mFYuCmxIHUxLuT
-         eKm9OmeP/xRTw4cqpiW6g/sHhe2YxgzwdCksCvNQejkmWEz3y01eoVkJy6hjSZ2ZivAz
-         wZ7A==
-X-Gm-Message-State: ACrzQf1kQ1/xmubJgitiZMNgxvyuTit2nrEZki2Rc18h95V6MmnENuh3
-        dN2OLzTyFuihqqpf0BWfjWj7/ymAFHgF3ompQNMHP5bRKzBl
-X-Google-Smtp-Source: AMsMyM649fTx1p8ApeLTacsEufTCfeyokopzG7Hr0zurD4Wz8jMeZrlPoO0l9C8kM4NgOc6DV53mkIE9hu96p4SF1BmqdIiaxgnb
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Q46V3bJGY5zK2gbUyWGrQRsMlQhZzKF53118KkxntJ8=;
+        b=GjY4vAopQamY4uoFrt66YaYEvUMpRSb9zBYa2nfPgXgg7N6dY8copg8qKAyNscB6Uu
+         tKRrNJHrfHX26qby3alb+hgZ45JFgtEj0Son1BeJLeWHKRHokjZn8P5jxZ7kfwQogPXH
+         7qGHldkCq0pKBiUgOXw4ZizQOSFEus1z5Ys2b04Fcb4QEC3DTKM3D6W083ofNA4cnBKA
+         vLrNO5+RbNckc5a3VGlcKoXgV65h2cUBOMHkNX7B7Dikp59yTKNJj0HHIyAbmg1UYufB
+         y/qqumNl63Vc1xGA3ProntvcTZshhwRPshTlo+eXjH/p8E9tHSQp/hKsOY8jkrzImN3V
+         rnnw==
+X-Gm-Message-State: ACrzQf29AjMAwq21/bCUCfjJC+w6HIgpIITukrx5v/DZY9oA1fjPTd9G
+        9Z2ZZQFScV9ep28NX2KJBtJ756CUtgtVEg==
+X-Google-Smtp-Source: AMsMyM5XLWU55ymLsZdVdphhQDPQJN/T6CnftbdVvYYEq2iLQstLu/xbqjofALcr2z8IxLxOviUD9Q==
+X-Received: by 2002:a05:651c:211:b0:26b:e743:b4b0 with SMTP id y17-20020a05651c021100b0026be743b4b0mr5919239ljn.527.1664106867404;
+        Sun, 25 Sep 2022 04:54:27 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k20-20020a2eb754000000b0026c64fd8f0csm2015407ljo.71.2022.09.25.04.54.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 04:54:26 -0700 (PDT)
+Message-ID: <441153f6-26ee-cbb2-fe42-101de91952c5@linaro.org>
+Date:   Sun, 25 Sep 2022 13:54:25 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a6b:194:0:b0:6a0:d2fd:d481 with SMTP id
- 142-20020a6b0194000000b006a0d2fdd481mr7276229iob.78.1664106631881; Sun, 25
- Sep 2022 04:50:31 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 04:50:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a96c0b05e97f0444@google.com>
-Subject: [syzbot] WARNING in u32_change
-From:   syzbot <syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2] pinctrl: qcom: restrict drivers per ARM/ARM64
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220925112103.148836-1-krzysztof.kozlowski@linaro.org>
+ <08E290AD-C842-4BF2-9C57-2CE59A4C5D88@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <08E290AD-C842-4BF2-9C57-2CE59A4C5D88@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,78 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 25/09/2022 13:43, Dmitry Baryshkov wrote:
+> 
+> 
+> On 25 September 2022 14:21:03 GMT+03:00, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>> There is no point to allow selecting pin-controller drivers for Qualcomm
+>> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
+>> kernel configuration more difficult as many do not remember the Qualcomm
+>> SoCs.  There won't be a single image for ARMv7 and ARMv8/9 SoCs, so no
+>> features/options are lost.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> I haven't checked which restrictions apply to msm8916 at this moment, but it might be worth adding 'depends on ARM || ARM64 || COMPILE_TEST'
 
-syzbot found the following issue on:
+This is limited by ARCH_QCOM (top-level if in the file), so I am not
+sure what would be benefits.
 
-HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16becbd5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-dashboard link: https://syzkaller.appspot.com/bug?extid=a2c4601efc75848ba321
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13bc196f080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152b15f8880000
+Best regards,
+Krzysztof
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-memcpy: detected field-spanning write (size 80) of single field "&n->sel" at net/sched/cls_u32.c:1043 (size 16)
-WARNING: CPU: 0 PID: 3608 at net/sched/cls_u32.c:1043 u32_change+0x2962/0x3250 net/sched/cls_u32.c:1043
-Modules linked in:
-CPU: 0 PID: 3608 Comm: syz-executor971 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-RIP: 0010:u32_change+0x2962/0x3250 net/sched/cls_u32.c:1043
-Code: f4 df 14 fa 48 8b b5 78 fe ff ff b9 10 00 00 00 48 c7 c2 20 f7 f5 8a 48 c7 c7 a0 f6 f5 8a c6 05 55 b3 63 06 01 e8 db d6 df 01 <0f> 0b e9 73 f3 ff ff e8 c2 df 14 fa 48 c7 c7 00 fc f5 8a e8 66 ed
-RSP: 0018:ffffc90003d7f300 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffffc90003d7f618 RCX: 0000000000000000
-RDX: ffff8880235f1d40 RSI: ffffffff81620348 RDI: fffff520007afe52
-RBP: ffffc90003d7f4a0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 203a7970636d656d R12: ffff888021d420e0
-R13: ffffc90003d7f5b8 R14: ffff888021d43c30 R15: ffff888021d42000
-FS:  0000555555f71300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000064a110 CR3: 000000002824c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- tc_new_tfilter+0x938/0x2190 net/sched/cls_api.c:2146
- rtnetlink_rcv_msg+0x955/0xca0 net/core/rtnetlink.c:6082
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
- __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f97a4bf4e69
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdcaf10028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f97a4bf4e69
-RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000006
-RBP: 00007f97a4bb9010 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f97a4bb90a0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
