@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6125E94F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78D25E94F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiIYReV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S232569AbiIYRe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiIYReR (ORCPT
+        with ESMTP id S232081AbiIYRew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:34:17 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6A11263E;
-        Sun, 25 Sep 2022 10:34:16 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id x29so5223577ljq.2;
-        Sun, 25 Sep 2022 10:34:16 -0700 (PDT)
+        Sun, 25 Sep 2022 13:34:52 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3726320
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:34:50 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id e187so5774578ybh.10
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:34:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1DQ+A/zmD61KcVWpqhZ9SC5wsRL6ZDGy3hAgi5YTkDc=;
-        b=UijSseiqh2+vp4Q/LyKtcj2SfBAYd9gmhEueKBqgn3kZ9bj4ZzsxjuA7GJ2mtCwebV
-         7IiSj8LCJGT/BKnIZfL+gA6db82MkkJ4M8Jnk59sckLtvm50CNJi+EsIt6Y/9eN2YSwA
-         gNMm0Dyn8periyXf2cQmbbkpFgIQ/uMRI4eDeR8zGd7zQk7cCY8WSHDhtL94K/zRBrug
-         hDaqZVPKw/8ZogDKeqDEkSQvAAernhPUi8u5QeROomK9+qZfhUip5EQBWPSqLYBrLgZd
-         9PhaHSE1cNByxo8scwvTLJ+ddBMnZdJfEcsACiCoknK9ZwHQ99yx829ZjpQNrlqmFteI
-         JMJw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=n9PlaQOOKzBXBufnbzlBXwI7lSGQ9ax7LkG3qVTKbck=;
+        b=AswNFAOs8gXUhgvwU31qgNkJDpBw3PVdxE9bvZtoIoujyVVRg9ydAtTlGVPpyKaENc
+         jqta+SqwkR+V9ZyNdRFrOl4Pjoxots2V5dTFEsPcIwWWzMSH+ecE6u4+0EvXSaUJZRVS
+         WSnr1rQW/Au9NudnzVFj96U45wOWJlNp6ucrZZQggj9FCudMj2UUjwcPVS+1eD5MQsdy
+         UXgsS8nkVpW3dfyXvT7hfGFMA1AVD2WpdCCI7vLM62ahCQjNFL/1gKbPH5hrwIxyh2XZ
+         8Q3vzpNKZ56pi8B6nQrjBjS7MnZ8rBI+Ldu58TY6WfSXdl6MzpAYuGfP+GIgnieWqMU2
+         XyEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1DQ+A/zmD61KcVWpqhZ9SC5wsRL6ZDGy3hAgi5YTkDc=;
-        b=LPbFazOfqFwj+iYy3cyP+6mVTkzNuzDcdmuW7v6en4edTz2SBLQ0Z63C2JjxeSNT3b
-         hkh2TEzatW18afvvgJ+ChDn6PiNMxej2tupDs1mqmD01pBXSK1alqcGVzNvmP6i+zx++
-         Eym1cvkirYOCEuK4MOHu77uhIDL7iZB7Cs2Jk+Oh0JHd1j2GWLtFGsGqwh3tQZpYiDiJ
-         Kdd0DtjzsOzv/T9SzHaPm1W5dyS4nb4tV4PEidoyvy5mF+uJ3lVEEYI1i8UThPnTGVGW
-         BEoHKPyTxA7B/CPycgM0l0kFwqw4x0EkdrgCDOdJtu/IWRbatS0DaBRZDBHPQnoacxLK
-         nH6g==
-X-Gm-Message-State: ACrzQf0jHGCOxgOVK03Ph/Y/7hXw51i0NtzyrXxBUZdgdGNNYt1rf0ul
-        48kEh/1N67imOwIsc0oRMzHdLNwIGxRoIQ==
-X-Google-Smtp-Source: AMsMyM41QqjkVazWGZHBljkGkZ9s122zhTeKQ7ipVJutemr+qo5GleK5ppHy1cI8u3eFeI18Dr2Arg==
-X-Received: by 2002:a2e:7d13:0:b0:26c:4062:acfe with SMTP id y19-20020a2e7d13000000b0026c4062acfemr6443232ljc.201.1664127255061;
-        Sun, 25 Sep 2022 10:34:15 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id b17-20020ac247f1000000b004a100c21eaesm672434lfp.97.2022.09.25.10.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 10:34:14 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 20:34:12 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     caihuoqing <caihuoqing@baidu.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH 0/3] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <20220925173412.u2ez6rbmfc5fupdn@mobilestation>
-References: <20220921064859.10328-1-cai.huoqing@linux.dev>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=n9PlaQOOKzBXBufnbzlBXwI7lSGQ9ax7LkG3qVTKbck=;
+        b=qbRcLeDUt7jvj0BC02q2u1wut/UEbupjtkS1RWjwI+VOEHwOkkqYgRNcSBQ6mjeMim
+         qfSCe6sY3MzinmRBSI6IebCGTa7sl0SDJd3ySAIzwWpCzzLlFH6j4SSLURFukWRRXQs/
+         y8K21Cx7pBVwUb34w6MRCSrOg8dstal1g3tdyfmmqGWSC9mN3/iSucRgVTjVHHEWHUlu
+         Eim07mqoqb++iR79/qfcFiJ2VRrBqslp0SP9Ijj4Yq2v4HvC4J1nyXJ88ci6EXBy/h5T
+         puudMyBIck+yFsDnVXjAbv5FSWplGFQt/oNJeYKnN/nl+Ng6zJHMcLohM6w+QcKSC65Z
+         P1Cg==
+X-Gm-Message-State: ACrzQf3LnCmVLWXp0hEx4Q0yxwgXIzj2TFOfL0z9ZeFKTjnG1y/10463
+        L8WAhbTXGceZkTIjiv8U/sIoNQNUJb/Aw+SozeurKA==
+X-Google-Smtp-Source: AMsMyM4Fjp6sUZCuxwCE/Pr6W2Ay9yKj6LMbJIhzi8XwIMqs0g0FEq6lNLhDBGX7wQ1tjKiCBJ0+qbYZbHSsQRCEjjA=
+X-Received: by 2002:a25:80d0:0:b0:6b3:f287:93a4 with SMTP id
+ c16-20020a2580d0000000b006b3f28793a4mr16906910ybm.427.1664127289111; Sun, 25
+ Sep 2022 10:34:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921064859.10328-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <000000000000a96c0b05e97f0444@google.com> <CAM0EoMnJ=STtk5BnZ9oJtnkXY2Q+Px2cKa4gowFRGpp40UNKww@mail.gmail.com>
+ <CAM0EoMm9uBQQepMb5bda1vR-Okw-tPp2nnf6TvfA0FzPu_D_2A@mail.gmail.com>
+ <CANn89i+4pgJe8M1cjLF6SkqG1Yp6e+5J2xEkMdSChiVYKMC09g@mail.gmail.com>
+ <CAM0EoMkLdOUQ3yrBuYsLdZvqniZ_r0VoACzOzKCo1VVzYeyPbw@mail.gmail.com> <CAM0EoMmr8trH0EOtOfvTpYiTq1tt7RUamf1u_R0+USOU_gYUVg@mail.gmail.com>
+In-Reply-To: <CAM0EoMmr8trH0EOtOfvTpYiTq1tt7RUamf1u_R0+USOU_gYUVg@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 25 Sep 2022 10:34:37 -0700
+Message-ID: <CANn89i+6NpmCyGdicmv+BiQqhUZ71TfN+P4=9NGpV4GxOba1Cw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in u32_change
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     syzbot <syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,66 +77,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 02:48:49PM +0800, Cai Huoqing wrote:
-> From: caihuoqing <caihuoqing@baidu.com>
-> 
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.
-> The same applies when you have multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are alignmented to byte.dmaengine: dw-edma: Add support for native HDMA
-> 
-> These series based on the series
-> https://lore.kernel.org/dmaengine/20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru/
+On Sun, Sep 25, 2022 at 10:13 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+>
+> To be clear, that splat didnt happen for me.
+> Is there something else syzbot does to activate it?
 
-Great! Thanks for rebasing on top of my series. I'll have a look at
-your patchset in several weeks (two or most likely three) since the
-next merge window is upon us and neither mine nor your patchset will
-get into the Bjorn/Vinod repos before that anyway.
+Sure, please look at:
 
--Sergey
+commit 54d9469bc515dc5fcbc20eecbe19cea868b70d68
+Author: Kees Cook <keescook@chromium.org>
+Date:   Thu Jun 24 15:39:26 2021 -0700
 
-> 
-> Cai Huoqing (3):
->   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
->     dw_edma_plat_ops
->   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
->     abstract controller operation
->   dmaengine: dw-edma: Add support for native HDMA
-> 
->  drivers/dma/dw-edma/Makefile             |   6 +-
->  drivers/dma/dw-edma/dw-edma-core.c       |  65 ++---
->  drivers/dma/dw-edma/dw-edma-core.h       |  19 ++
->  drivers/dma/dw-edma/dw-edma-pcie.c       |   4 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c    |  90 ++++++-
->  drivers/dma/dw-edma/dw-edma-v0-core.h    |  14 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c    | 304 +++++++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-core.h    |  17 ++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 150 +++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 ++
->  drivers/dma/dw-edma/dw-hdma-v0-regs.h    |  98 ++++++++
->  include/linux/dma/edma.h                 |   7 +-
->  12 files changed, 725 insertions(+), 71 deletions(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> 
-> -- 
-> 2.25.1
-> 
+    fortify: Add run-time WARN for cross-field memcpy()
+
+
+>
+> cheers,
+> jamal
+>
+> On Sun, Sep 25, 2022 at 1:08 PM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+> >
+> > Yes, after testing i realize there is nothing wrong here.
+> > What warning was i supposed to see from running the reproducer?
+> >
+> > We will still add the test will multiple keys later
+> >
+> > cheers,
+> > jamal
+> >
+> > On Sun, Sep 25, 2022 at 12:29 PM Eric Dumazet <edumazet@google.com> wrote:
+> > >
+> > > On Sun, Sep 25, 2022 at 9:14 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+> > > >
+> > > > On Sun, Sep 25, 2022 at 11:38 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+> > > > >
+> > > > > Is there a way to tell the boat "looking into it?"
+> > > >
+> > > >
+> > > > I guess I have to swim across to it to get the message;->
+> > > >
+> > > > I couldnt see the warning message  but it is obvious by inspection that
+> > > > the memcpy is broken. We should add more test coverage.
+> > > > This should fix it. Will send a formal patch later:
+> > > >
+> > > > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> > > > index 4d27300c2..591cbbf27 100644
+> > > > --- a/net/sched/cls_u32.c
+> > > > +++ b/net/sched/cls_u32.c
+> > > > @@ -1019,7 +1019,7 @@ static int u32_change(struct net *net, struct
+> > > > sk_buff *in_skb,
+> > > >         }
+> > > >
+> > > >         s = nla_data(tb[TCA_U32_SEL]);
+> > > > -       sel_size = struct_size(s, keys, s->nkeys);
+> > > > +       sel_size = struct_size(s, keys, s->nkeys) + sizeof(n->sel);
+> > > >         if (nla_len(tb[TCA_U32_SEL]) < sel_size) {
+> > > >                 err = -EINVAL;
+> > > >                 goto erridr;
+> > >
+> > > This patch is not needed, please look at struct_size() definition.
+> > >
+> > > Here, we might switch to unsafe_memcpy() instead of memcpy()
