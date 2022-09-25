@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2725E937A
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F445E937D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiIYNl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 09:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S231837AbiIYNnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 09:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiIYNlX (ORCPT
+        with ESMTP id S231739AbiIYNnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 09:41:23 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597F42AE13;
-        Sun, 25 Sep 2022 06:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Dj7nhKh/NArGj0oG4bk8DRORTaIrXKrcLhcogP+lz6Y=; b=mKTRISh+9VUbiTu6AFs6FLolcC
-        /3vzWHEzmuBqdRgSNr4qIMUTn8MPy8XsDcGb/Oc8vnfXhgruqjh9SG8lp+yw+AEaq9IHUt/iPLorf
-        9Oqvq27xlLoRmgLtsqSgAdOSrRGHg1uftXBbmVLe8Vm7Ap2ba4w+n3fXq0Ow8+maapsed4Z9xv6/X
-        OO/bA1/AqNFwaWNq01MleVSm8m1MumatrOFGVfH4B3t/iEyazD4fIDhWn9j/3j6AXxV/g2470Y86M
-        KFvL4eA56ENiMlda+2ajRQ0rqdknkLzuCfQKFTClcoZNFriZ+PUMihrcGkq/eY0NXajjjceVCM4PF
-        RYD6cg5A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ocRsk-003ckC-1i;
-        Sun, 25 Sep 2022 13:41:18 +0000
-Date:   Sun, 25 Sep 2022 14:41:18 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     syzbot <syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: Re: [syzbot] kernel panic: stack is corrupted in lock_release (3)
-Message-ID: <YzBafjvhv1qfv5A1@ZenIV>
-References: <000000000000ba0dcb05e97e239b@google.com>
+        Sun, 25 Sep 2022 09:43:22 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28022AC4F
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:43:19 -0700 (PDT)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id cRuaoxFHkPMmacRuao7pdV; Sun, 25 Sep 2022 15:43:18 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 25 Sep 2022 15:43:18 +0200
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Russell King <linux@armlinux.org.uk>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] headers: Remove some left-over license text in include/uapi/drm/
+Date:   Sun, 25 Sep 2022 15:43:00 +0200
+Message-Id: <e5cacd121ddb2a595cede602036b1bdfbee020d5.1664113376.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000ba0dcb05e97e239b@google.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,42 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 03:47:38AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    3db61221f4e8 Merge tag 'io_uring-6.0-2022-09-23' of git://..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10135a88880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4353c86db4e58720cd11
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1792e6e4880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1059fcdf080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com
+There is already a SPDX-License-Identifier tag, so the corresponding
+license text can be removed.
 
-[ntfs_fill_super() failure exits are still buggered]
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ include/uapi/drm/armada_drm.h  |  4 ----
+ include/uapi/drm/etnaviv_drm.h | 12 ------------
+ include/uapi/drm/exynos_drm.h  |  5 -----
+ include/uapi/drm/omap_drm.h    | 12 ------------
+ 4 files changed, 33 deletions(-)
 
-Folks, could syzbot be taught that ntfs involved in testing means that
-ntfs maintainers need to be on Cc?
+diff --git a/include/uapi/drm/armada_drm.h b/include/uapi/drm/armada_drm.h
+index af1c14c837c5..f711e63a9758 100644
+--- a/include/uapi/drm/armada_drm.h
++++ b/include/uapi/drm/armada_drm.h
+@@ -2,10 +2,6 @@
+ /*
+  * Copyright (C) 2012 Russell King
+  *  With inspiration from the i915 driver
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+  */
+ #ifndef DRM_ARMADA_IOCTL_H
+ #define DRM_ARMADA_IOCTL_H
+diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
+index af024d90453d..13dd1d1a9d41 100644
+--- a/include/uapi/drm/etnaviv_drm.h
++++ b/include/uapi/drm/etnaviv_drm.h
+@@ -1,18 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ /*
+  * Copyright (C) 2015 Etnaviv Project
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License version 2 as published by
+- * the Free Software Foundation.
+- *
+- * This program is distributed in the hope that it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- *
+- * You should have received a copy of the GNU General Public License along with
+- * this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ #ifndef __ETNAVIV_DRM_H__
+diff --git a/include/uapi/drm/exynos_drm.h b/include/uapi/drm/exynos_drm.h
+index a51aa1c618c1..a96fa566433c 100644
+--- a/include/uapi/drm/exynos_drm.h
++++ b/include/uapi/drm/exynos_drm.h
+@@ -6,11 +6,6 @@
+  *	Inki Dae <inki.dae@samsung.com>
+  *	Joonyoung Shim <jy0922.shim@samsung.com>
+  *	Seung-Woo Kim <sw0312.kim@samsung.com>
+- *
+- * This program is free software; you can redistribute  it and/or modify it
+- * under  the terms of  the GNU General  Public License as published by the
+- * Free Software Foundation;  either version 2 of the  License, or (at your
+- * option) any later version.
+  */
+ 
+ #ifndef _UAPI_EXYNOS_DRM_H_
+diff --git a/include/uapi/drm/omap_drm.h b/include/uapi/drm/omap_drm.h
+index 5a142fad473c..b51dad32122d 100644
+--- a/include/uapi/drm/omap_drm.h
++++ b/include/uapi/drm/omap_drm.h
+@@ -4,18 +4,6 @@
+  *
+  * Copyright (C) 2011 Texas Instruments
+  * Author: Rob Clark <rob@ti.com>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License version 2 as published by
+- * the Free Software Foundation.
+- *
+- * This program is distributed in the hope that it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- *
+- * You should have received a copy of the GNU General Public License along with
+- * this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ #ifndef __OMAP_DRM_H__
+-- 
+2.34.1
 
-FWIW,
-
-1) failing d_make_root() does *NOT* need the caller to drop inode; it consumes
-inode reference itself, precisely to make that failure exits easier.
-
-2) you never set ->i_op to NULL.  Initial value is to an empty method table;
-nothing out of alloc_inode(), let alone iget5_locked() should ever see
-NULL ->i_op there.
-
-3) the same goes for ->i_fop; it should never be NULL.  Initial value points
-to an empty method table; if you don't want any methods, leave it as-is.
-Yes, even for symlinks.
-
-That - from quick eyeballing the code in question.  There might be more (and
-almost certainly is).  The thing is, ntfs3 clearly corrupts memory of failure
-exits in mount, and syzbot reports in that direction really ought to go to ntfs
-folks; Cc to fsdevel is OK, but at least mark those as likely to be ntfs-related.
