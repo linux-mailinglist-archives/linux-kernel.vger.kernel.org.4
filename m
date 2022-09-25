@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C094F5E952B
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E435E9531
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiIYR5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S232494AbiIYSDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 14:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbiIYR5K (ORCPT
+        with ESMTP id S230411AbiIYSD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:57:10 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6760E27CF1;
-        Sun, 25 Sep 2022 10:57:09 -0700 (PDT)
-Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 91113C6FA5;
-        Sun, 25 Sep 2022 17:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1664128597; bh=Kc0NJqkKtqH6tjfWTTCzXyBx6K9bYu22ZzH8VqMyDBw=;
-        h=From:To:Cc:Subject:Date;
-        b=e0/cmwa5Y9X0BrY9ODgSr1SGVIV9pVmqZC5/nuzWZOlCIJDBSFnMJmINKVwI7xk7p
-         9cBJ9kvVLYaXMrv2RzPiROKgBa+owaxnnSNGSw/2z4WQ9fw+1O8TkyzPD+6Z5JcBde
-         t5F4Whi3IphBoiiTuV9MLmo3v8K+HKbfxCpjjMd8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: msm8974-sony-*: fix multi-led node name
-Date:   Sun, 25 Sep 2022 19:56:30 +0200
-Message-Id: <20220925175631.103535-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.37.3
+        Sun, 25 Sep 2022 14:03:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF69C2EF35
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:03:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6929FB80D8D
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D8B5C433D6;
+        Sun, 25 Sep 2022 18:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664129004;
+        bh=9FET3PaCzmyIcog+YS95QW0L9d7rytIwKw9jtfpwb4U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CEU7VzfkgrOaJ8jntLWEZhx3p7CfpfWBnyichsUQeZ+6Iyx44/MGdUnawm3X/oorS
+         HQIOuF2DqdwZl/keRDcd8uJXm+lc9qw26HhD6HJEWmRRvr76v1mjYkqrl4RKeBUNsT
+         vyE+pxJmPKazxajf8teshPpsT/N0QcHTrPbBIshdEGb+wTLYiTGEvIgTgXlL3tSeQ/
+         sLvRq7m1GvbFIGw18b7cKoaBJXnGTzOtges/EucnEbwWVpOzDnFonhM15A86u3+DOO
+         YxwQueNESlDvbKskYuEcDUGjleWf5TmqvojTF73KozxjxpWenhYZR27o5GL4X7UQ7Y
+         pOM1QlSEBe8bw==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH 0/4] riscv: entry: further clean up and VMAP_STACK fix
+Date:   Mon, 26 Sep 2022 01:53:52 +0800
+Message-Id: <20220925175356.681-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The name rgb-led is not allowed, multi-led is supposed to be used.
+I planed to do similar generic entry transaction as Guo Ren did[1], and
+I have some commits in local. Since Guo has sent out the series, so I
+dropped my version and just provide those in my local repo but missing
+in Guo's series. However, this doesn't mean this series depends on
+Guo's series, in fact except the first one, the remaining three patches
+are independent on generic entry.
 
-<snip>/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb: pm8941@1: pwm: 'rgb-led' does not match any of the regexes: '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
-        From schema: <snip>/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+NOTE: patch4 can also clean up arch/riscv/kernel/mcount-dyn.S as well
+but there's a trivial difference in the context saving, I dunno whether
+is it better to clean up mcount-dyn.S too, any suggestions are welcome.
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi           | 2 +-
- .../arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[1]https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/T/#t
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index 5a70683d9103..c1d97190ea71 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -178,7 +178,7 @@ &pm8941_lpg {
- 
- 	qcom,power-source = <1>;
- 
--	rgb-led {
-+	multi-led {
- 		color = <LED_COLOR_ID_RGB>;
- 		function = LED_FUNCTION_STATUS;
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 85348562e861..94daa1a3240a 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -295,7 +295,7 @@ &pm8941_lpg {
- 
- 	qcom,power-source = <1>;
- 
--	rgb-led {
-+	multi-led {
- 		color = <LED_COLOR_ID_RGB>;
- 		function = LED_FUNCTION_STATUS;
- 
+Jisheng Zhang (4):
+  riscv: remove extra level wrappers of trace_hardirqs_{on,off}
+  riscv: consolidate ret_from_kernel_thread into ret_from_fork
+  riscv: fix race when vmap stack overflow and remove shadow_stack
+  riscv: entry: consolidate general regs saving into save_gp
+
+ arch/riscv/include/asm/asm-prototypes.h |   1 -
+ arch/riscv/include/asm/thread_info.h    |   4 +-
+ arch/riscv/kernel/Makefile              |   2 -
+ arch/riscv/kernel/asm-offsets.c         |   1 +
+ arch/riscv/kernel/entry.S               | 150 +++++++-----------------
+ arch/riscv/kernel/process.c             |   5 +-
+ arch/riscv/kernel/trace_irq.c           |  27 -----
+ arch/riscv/kernel/trace_irq.h           |  11 --
+ arch/riscv/kernel/traps.c               |  15 +--
+ 9 files changed, 47 insertions(+), 169 deletions(-)
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
+
 -- 
-2.37.3
+2.34.1
 
