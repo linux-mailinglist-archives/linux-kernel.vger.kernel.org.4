@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C8F5E96AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 00:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5F25E96B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 00:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiIYWbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 18:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S231175AbiIYWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 18:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiIYWa5 (ORCPT
+        with ESMTP id S229812AbiIYWwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 18:30:57 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975CE28E16;
-        Sun, 25 Sep 2022 15:30:55 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id g20so5601617ljg.7;
-        Sun, 25 Sep 2022 15:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=a0hPbzQaBpMZbWVLyY6Ndr2md1EPl8heRcl2lfx1uao=;
-        b=prIsjwSViz1wXo7G4+dw2QMAUYRqb+JaN8xLaFU0Mpm720vsQlKbiP86kSyjK6/J2f
-         UGL1JMA+tZbm+36axWkxsWe76LZ50jIgn88og12tFEhHuVazHWUXqmuxCGQQTATOLLmZ
-         spdrcaq4Lzuq2ssEmvib39fmILwUzpX8VRsbe7Lq+Qajv529JR0stTj6IQi6cEHLkmKh
-         OafABWRhWwcww6JDyoK0lU7XrAFw9x3u/15eQrfGPJIta/7hVKMeZBDesROTh0WhRfJi
-         Nfd032HRBElAfY2jFOTPhNqIK1eLWkfEokcM8b151gDnjM4vSzgW3h4PbTqXJUyDvznl
-         W5NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=a0hPbzQaBpMZbWVLyY6Ndr2md1EPl8heRcl2lfx1uao=;
-        b=gAlFmgyZTnyggUK+6w5HNuc2f3JCjR9nQm+JveIwHSL/ygAkn8xKRad6N0ThML26ll
-         ZHI4Tz+bxHR/7Qt5z1URJybe6U+f9mVHIeoNt88/WIpMJKIr45BcIfc4vHeYfOUxcKnf
-         L2rZb1W2W93lwiI5oL37oYSTItVo697/7O64nEsfRw7zovKFyYBHwmyZEddIGDzw5ioj
-         gG/rzbXubFyHGzEdqqiBak22IwOOdE5v7DtcphAoxdLDGF9Z4sZviUuczWxGCX8O/1MY
-         MpGnV9Z6pvlotfXPX/R76pCiK5dUqBz59z/9B3onmlT7cm/Y2KePbn9RIlXkVGWRSQa+
-         1wzg==
-X-Gm-Message-State: ACrzQf37CXm6GdfKPC9+iJ9JNN4/h0TYFku6nK3oC8lOP/SgQrBnM8xm
-        QJSnycm1tXvYcgilVGTV1xY=
-X-Google-Smtp-Source: AMsMyM6HNh9b7WyDnzcSuSoW1HsGYT8oADEab3CivQY//vuQJo3RvP7/TJc7qf3WbBEZsPmwfLKAhQ==
-X-Received: by 2002:a2e:7d13:0:b0:26c:4062:acfe with SMTP id y19-20020a2e7d13000000b0026c4062acfemr6763157ljc.201.1664145053791;
-        Sun, 25 Sep 2022 15:30:53 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056512110a00b0049f9c732858sm2322995lfg.254.2022.09.25.15.30.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 15:30:53 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 01:30:51 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Rafael Antognolli <Rafael.Antognolli@intel.com>,
-        Scott Bauer <scott.bauer@intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] block: sed-opal: Cache-line-align the cmd/resp
- buffers
-Message-ID: <20220925223051.5vem3ab4267jlxeg@mobilestation>
-References: <20220909191916.16013-1-Sergey.Semin@baikalelectronics.ru>
- <20220909191916.16013-3-Sergey.Semin@baikalelectronics.ru>
- <20220910053203.GB23052@lst.de>
- <20220911162854.ivoeyzilpboplldw@mobilestation>
+        Sun, 25 Sep 2022 18:52:19 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F142A706
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 15:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664146338; x=1695682338;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oSpAJI+Sflg4S4/9V24kGd4lQ+/U/pcM2tTcNLjPWME=;
+  b=TBkZ3JGEF+kZlwRRcyXX2twyROycjIHqSyUCUIkQbeLcGtop+zBC6sFA
+   GVp7U0SGu3FoVG+w3UavWgp8aW8+ZPaCHLkRcYnIL2F6fKIw/8uKeA8TH
+   hxFUtDLy3TpsN2C1yiDEU2JvC7OUPU9LNWH7tHv/wwre20hK7E2W5xUfb
+   G2S7H62/HcZxigM7CCHYW0ptHshxYC/snP2YxxruNtr/2kwU41raoz03h
+   Dmf9oCq7rgcCYaG+SuPirRklV4Rin2zy/46o3l7Ilv4LqBayttzhHRmHW
+   qvgNg5clnweTF7h10W0BQ52YJODk+4cLWGRHNqz2QJ6C/ZPDnmGfgtI8Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="364932318"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="364932318"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 15:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="949643383"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Sep 2022 15:52:16 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ocaTw-0008SU-1B;
+        Sun, 25 Sep 2022 22:52:16 +0000
+Date:   Mon, 26 Sep 2022 06:51:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 02a42cd778750c33d55876321fa68e906122247e
+Message-ID: <6330db7f.NC2HOxj91cjrIWlK%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220911162854.ivoeyzilpboplldw@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@Jens, @Revanth, @Jonathan do you have anything to say regarding the
-patch and what @Christoph suggested?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 02a42cd778750c33d55876321fa68e906122247e  Merge branch into tip/master: 'x86/timers'
 
-On Sun, Sep 11, 2022 at 07:28:57PM +0300, Serge Semin wrote:
-> Hello Christoph
-> 
-> On Sat, Sep 10, 2022 at 07:32:03AM +0200, Christoph Hellwig wrote:
-> > On Fri, Sep 09, 2022 at 10:19:16PM +0300, Serge Semin wrote:
-> > > In accordance with [1] the DMA-able memory buffers must be
-> > > cacheline-aligned otherwise the cache writing-back and invalidation
-> > > performed during the mapping may cause the adjacent data being lost. It's
-> > > specifically required for the DMA-noncoherent platforms. Seeing the
-> > > opal_dev.{cmd,resp} buffers are used for DMAs in the NVME and SCSI/SD
-> > > drivers in framework of the nvme_sec_submit() and sd_sec_submit() methods
-> > > respectively we must make sure the passed buffers are cacheline-aligned to
-> > > prevent the denoted problem.
-> >
->  
-> > Same comment as for the previous one, this should work, but I think
-> > separate allocations for the DMAable buffers would document the intent
-> > much better.  Given that the opal initialization isn't a fast path
-> > I don't think that the overhead should matter either.
-> 
-> Thanks for the comment. I see your point. Let's hear the subsystem
-> maintainers out for their opinion regarding the most suitable solution
-> in this case. If they get to agree with you I'll resend the series
-> with altered fixes.
-> 
-> -Sergey
+elapsed time: 723m
+
+configs tested: 58
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arc                                 defconfig
+s390                             allmodconfig
+x86_64                              defconfig
+x86_64                        randconfig-a002
+alpha                               defconfig
+powerpc                           allnoconfig
+arm                                 defconfig
+s390                                defconfig
+arc                  randconfig-r043-20220925
+x86_64                               rhel-8.3
+x86_64                        randconfig-a013
+i386                             allyesconfig
+i386                          randconfig-a001
+s390                 randconfig-r044-20220925
+x86_64                        randconfig-a011
+i386                          randconfig-a003
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+s390                             allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a015
+riscv                randconfig-r042-20220925
+i386                          randconfig-a016
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+arm                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+hexagon              randconfig-r045-20220925
+hexagon              randconfig-r041-20220925
+i386                          randconfig-a013
+i386                          randconfig-a002
+x86_64                        randconfig-a012
+i386                          randconfig-a011
+x86_64                        randconfig-a003
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+i386                          randconfig-a004
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
