@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D91F5E9440
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9431E5E9443
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiIYQNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 12:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S232732AbiIYQOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 12:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiIYQNk (ORCPT
+        with ESMTP id S231564AbiIYQOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 12:13:40 -0400
+        Sun, 25 Sep 2022 12:14:06 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6192C66A;
-        Sun, 25 Sep 2022 09:13:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7D52C108;
+        Sun, 25 Sep 2022 09:14:05 -0700 (PDT)
 Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 3A6F7C70AF;
-        Sun, 25 Sep 2022 16:13:33 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0EBBEC7939;
+        Sun, 25 Sep 2022 16:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1664122413; bh=erdiCxZ8T7FcIaqDJLtAw5Fr6IV0GHUaZke+uh6Zg9w=;
-        h=From:To:Cc:Subject:Date;
-        b=umPK3Y7b90BTp7DuHokZemgcqwyA+SZw18HoeXmQelT/Khj/bOJc1VXvwzJ4X69kg
-         oCtJ1nHp2TowLTCNjl/s3qZSvMhvTvU7+SLkVDqCs3uhsCJudaj20He2uDVx2qN5eI
-         1NxIeUtHdaDBC3jhLHYxcMBX2wehV7TF0bwiK3MU=
+        t=1664122414; bh=zFKxfd0dMlvrCiDZJhyrqFzYOUW3pACNlLwaXhJ5hy8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=FIeeBEHEtD1qcZTyHI8XaJZrSDB/6+Z5UZ4QJBjqALJfn3xj5wR15ESdvuWAoRm0O
+         v7kG0N+mRjtdQPhgO1D7PQphik/qSOG+E63Zwls7Tf1qr6wmGSh0gH+cvKN3iGwHFo
+         3MSMmWq3qJWZogo3pJ0m8tZBvp65XKGAbjy1EoSc=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -33,57 +33,45 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] ARM: dts: qcom: fix msm8974 tsens compatible
-Date:   Sun, 25 Sep 2022 18:13:16 +0200
-Message-Id: <20220925161317.76356-1-luca@z3ntu.xyz>
+Subject: [PATCH 2/2] ARM: dts: qcom: apq8084: add tsens interrupt
+Date:   Sun, 25 Sep 2022 18:13:17 +0200
+Message-Id: <20220925161317.76356-2-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220925161317.76356-1-luca@z3ntu.xyz>
+References: <20220925161317.76356-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings mandate the use of the fallback compatible qcom,tsens-v0_1 for
-msm8974. Add it to fix the warning.
+Add the interrupt for tsens, based on the information from downstream
+msm-3.4 dts.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/arm/boot/dts/qcom-apq8084.dtsi | 2 +-
- arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/qcom-apq8084.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index f2fb7c975af8..defc0602d750 100644
+index defc0602d750..593672f827ed 100644
 --- a/arch/arm/boot/dts/qcom-apq8084.dtsi
 +++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -258,7 +258,7 @@ tsens_backup: backup@440 {
- 		};
- 
- 		tsens: thermal-sensor@fc4a8000 {
--			compatible = "qcom,msm8974-tsens";
-+			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
- 			reg = <0xfc4a9000 0x1000>, /* TM */
- 			      <0xfc4a8000 0x1000>; /* SROT */
+@@ -264,6 +264,8 @@ tsens: thermal-sensor@fc4a8000 {
  			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 7a9be0acf3f5..cf8af99a4864 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -1116,7 +1116,7 @@ cnoc: interconnect@fc480000 {
+ 			nvmem-cell-names = "calib", "calib_backup";
+ 			#qcom,sensors = <11>;
++			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "uplow";
+ 			#thermal-sensor-cells = <1>;
  		};
- 
- 		tsens: thermal-sensor@fc4a9000 {
--			compatible = "qcom,msm8974-tsens";
-+			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
- 			reg = <0xfc4a9000 0x1000>, /* TM */
- 			      <0xfc4a8000 0x1000>; /* SROT */
- 			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
+ 		timer@f9020000 {
 -- 
 2.37.3
 
