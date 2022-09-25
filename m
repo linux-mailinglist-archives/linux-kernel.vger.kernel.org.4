@@ -2,68 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F305E9471
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D456F5E9474
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbiIYQo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 12:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S231970AbiIYQq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 12:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiIYQow (ORCPT
+        with ESMTP id S231805AbiIYQq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 12:44:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C46B10FFF;
-        Sun, 25 Sep 2022 09:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664124288; x=1695660288;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=KY8IHaxepFaMwRh+/xVos1AWOk1yXT54Oq8rCUg0kG4=;
-  b=YVOX87VjfoiCBpY/UJ+1RcnzLoZTQWTMnCRiXkL8gcVGYf8Ue+C36Gly
-   dwxEyUPUE7cBtWdgYUD1iFzjjFSdZo02IydHllrb/b6xTXzLStNmAz9IW
-   /lgaEumtwiCMmkOudKhpg2TARrK+El7LL9YZb1dJUfL3Uf0jBq37jFwcE
-   YdZ9l22A/cN65xdlLoz4amdSu5gN3PXN4qtMhpgfgQt/09o5w4lRTZOyc
-   KuHoSjKuXJvGGLypFShghNYtC12i16ZhrE7v9Eh+RDxNGZ4e++PUuXVk1
-   xwST1Kb8pHNJC4MNvHRRjRCBVgKZBFSfZSVYx2mKncpWf0OJDZ3PwX4Is
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="362706373"
-X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
-   d="scan'208";a="362706373"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 09:44:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,344,1654585200"; 
-   d="scan'208";a="689294159"
-Received: from obyrd-mobl2.amr.corp.intel.com (HELO [10.212.210.57]) ([10.212.210.57])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 09:44:46 -0700
-Message-ID: <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
-Date:   Sun, 25 Sep 2022 09:44:45 -0700
+        Sun, 25 Sep 2022 12:46:26 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5843C2AE11
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 09:46:24 -0700 (PDT)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id cUlpocSZLOizNcUlpockmE; Sun, 25 Sep 2022 18:46:22 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 25 Sep 2022 18:46:22 +0200
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] comedi: Remove some left-over license text
+Date:   Sun, 25 Sep 2022 18:46:19 +0200
+Message-Id: <cf0ef8f65f7dfa4d7422a3c63a37a50c29ec6e26.1664124369.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
-Content-Language: en-US
-To:     syzbot <syzbot+cdcd5043ce8155d92ab1@syzkaller.appspotmail.com>,
-        bp@alien8.de, brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        seanjc@google.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, thomas.lendacky@amd.com, x86@kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>
-References: <00000000000076f3a305e97e9229@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <00000000000076f3a305e97e9229@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +42,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/25/22 04:18, syzbot wrote:
-> ------------[ cut here ]------------
-> CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: 0xffffffffa0401000 - 0xffffffffa0401fff PFN 7d8d5
-> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 verify_rwx arch/x86/mm/pat/set_memory.c:600 [inline]
-> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr arch/x86/mm/pat/set_memory.c:1569 [inline]
-> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr_set_clr+0x1f40/0x2020 arch/x86/mm/pat/set_memory.c:1691
-> Modules linked in:
+There is already a SPDX-License-Identifier tag, so the corresponding
+license text can be removed.
 
-Yay, one of these that isn't due to wonky 32-bit kernels!
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Most of the remaining duplicated license text is generated by
+convert_csv_to_c.py.  Remaining files should be updated once this script is
+run. (I don't have it on my system and can't do it myself)
+---
+ drivers/comedi/drivers/ni_routes.c            | 10 ----
+ drivers/comedi/drivers/ni_routes.h            | 10 ----
+ .../drivers/ni_routing/ni_device_routes.h     | 10 ----
+ .../ni_routing/tools/convert_csv_to_c.py      | 60 -------------------
+ .../drivers/tests/comedi_example_test.c       | 10 ----
+ drivers/comedi/drivers/tests/ni_routes_test.c | 10 ----
+ drivers/comedi/drivers/tests/unittest.h       | 10 ----
+ 7 files changed, 120 deletions(-)
 
-This one looks to be naughty intentionally:
+diff --git a/drivers/comedi/drivers/ni_routes.c b/drivers/comedi/drivers/ni_routes.c
+index 295a3a9ee0c9..0facc8a48ee3 100644
+--- a/drivers/comedi/drivers/ni_routes.c
++++ b/drivers/comedi/drivers/ni_routes.c
+@@ -5,16 +5,6 @@
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ #include <linux/module.h>
+diff --git a/drivers/comedi/drivers/ni_routes.h b/drivers/comedi/drivers/ni_routes.h
+index cff8a463a03f..4e5f28d0208f 100644
+--- a/drivers/comedi/drivers/ni_routes.h
++++ b/drivers/comedi/drivers/ni_routes.h
+@@ -5,16 +5,6 @@
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ #ifndef _COMEDI_DRIVERS_NI_ROUTES_H
+diff --git a/drivers/comedi/drivers/ni_routing/ni_device_routes.h b/drivers/comedi/drivers/ni_routing/ni_device_routes.h
+index 09e4e172c659..ee340884dd8e 100644
+--- a/drivers/comedi/drivers/ni_routing/ni_device_routes.h
++++ b/drivers/comedi/drivers/ni_routing/ni_device_routes.h
+@@ -5,16 +5,6 @@
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+diff --git a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+index 90378fb50580..b7473b22bd01 100755
+--- a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
++++ b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+@@ -128,16 +128,6 @@ class DeviceRoutes(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+@@ -159,16 +149,6 @@ class DeviceRoutes(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+@@ -196,16 +176,6 @@ class DeviceRoutes(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+@@ -301,16 +271,6 @@ class RouteValues(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+@@ -338,16 +298,6 @@ class RouteValues(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+@@ -375,16 +325,6 @@ class RouteValues(CSVCollection):
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ /*
+diff --git a/drivers/comedi/drivers/tests/comedi_example_test.c b/drivers/comedi/drivers/tests/comedi_example_test.c
+index 81d074bcdea5..bb03aba5f44e 100644
+--- a/drivers/comedi/drivers/tests/comedi_example_test.c
++++ b/drivers/comedi/drivers/tests/comedi_example_test.c
+@@ -5,16 +5,6 @@
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ #include <linux/module.h>
+diff --git a/drivers/comedi/drivers/tests/ni_routes_test.c b/drivers/comedi/drivers/tests/ni_routes_test.c
+index 652362486ff6..4b281a823565 100644
+--- a/drivers/comedi/drivers/tests/ni_routes_test.c
++++ b/drivers/comedi/drivers/tests/ni_routes_test.c
+@@ -5,16 +5,6 @@
+  *
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ #include <linux/module.h>
+diff --git a/drivers/comedi/drivers/tests/unittest.h b/drivers/comedi/drivers/tests/unittest.h
+index b0b34e058aad..1eef944b2597 100644
+--- a/drivers/comedi/drivers/tests/unittest.h
++++ b/drivers/comedi/drivers/tests/unittest.h
+@@ -6,16 +6,6 @@
+  *  COMEDI - Linux Control and Measurement Device Interface
+  *  Copyright (C) 2016 Spencer E. Olson <olsonse@umich.edu>
+  *  based of parts of drivers/of/unittest.c
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+  */
+ 
+ #ifndef _COMEDI_DRIVERS_TESTS_UNITTEST_H
+-- 
+2.34.1
 
-> void *bpf_jit_alloc_exec_page(void)
-> {
-...
->         /* Keep image as writeable. The alternative is to keep flipping ro/rw
->          * every time new program is attached or detached.
->          */
->         set_memory_x((long)image, 1);
->         return image;
-> }
-
-For STRICT_KERNEL_RWX kernels, I think we would really rather that this
-code *did* flip ro/rw every time a new BPF program is attached or detached.
