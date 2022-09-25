@@ -2,135 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD5B5E94C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D335E94C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiIYRTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S233094AbiIYRXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233080AbiIYRTj (ORCPT
+        with ESMTP id S232458AbiIYRXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:19:39 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C82DA1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:19:35 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h9-20020a056e021b8900b002f19c2a1836so3701784ili.23
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:19:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=PsXujgeal9wQJe4mJZK5lU6/DKbFJBuwezONBEQonpI=;
-        b=JVRtMREvc1M9PgNaIuDmwlDHP/NpWNhX6OuJxP5IBI8oh+QoK0Mh2cpzgIfFdYBlBD
-         KSO7n88twkC9xPD0XNu+1EcHYrWzhm0c6+DIhOtK/4HG12n6U7k32jXmVnyIIIGBj1G4
-         tiRyzKi963PigfRxTI0bWOrcRZiUlr372sO8hmXAQ6996wSBmBf0cMc0PJ4f5VCf79or
-         I4VKD94ZtbW1DWpArwqLXJRXUJNSLtYXHXYv+3xsTbM78bZ0WxqHbccwVnapV6LAsOfO
-         a1HFGW/GaXFdHoHWt7+BVBXrr2THWjeLWYs+Z+bEl3h//0uCEpxXY7MokUByPSry4jjB
-         PL/w==
-X-Gm-Message-State: ACrzQf1GSsnE4EjlegxTFVb3YlbmnsoGE3wh1iM02zrev2xo1ET5xjnn
-        gkkPM09nJv1Xy+QSFimd3rqv7IsJ85i7dP/1c5wh8dyIWoR/
-X-Google-Smtp-Source: AMsMyM7069qTVbupernHxdT4XXjI4Q8RUU1QVOflKJDDM3SGa18vFDi2+V8otOAakax0XDDeOF+24cOX4QLZfjqbwh3/mLY2WFu7
+        Sun, 25 Sep 2022 13:23:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37A2DA83;
+        Sun, 25 Sep 2022 10:23:50 -0700 (PDT)
+Received: from vpenguin.haus.lokal ([91.64.235.177]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MzhWp-1pP7rt1ePh-00vgdE; Sun, 25 Sep 2022 19:23:44 +0200
+From:   Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+To:     mathias.nyman@intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
+Date:   Sun, 25 Sep 2022 19:22:37 +0200
+Message-Id: <20220925172236.2288-1-jens.glathe@oldschoolsolutions.biz>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:388a:b0:35a:e02d:ca1e with SMTP id
- b10-20020a056638388a00b0035ae02dca1emr9750526jav.133.1664126374463; Sun, 25
- Sep 2022 10:19:34 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 10:19:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000694eea05e9839d2d@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Write in alloc_buddy_huge_page
-From:   syzbot <syzbot+db491b09f5907cdb5984@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:ib8aAaNZUx8RMF41/ytzL4yIwOYo+axTAou/YN4YgJ2Fb3x2L7G
+ 4pZrztwLyTRJnnRPpmEWmVBDZjd0kn7I2jnSiwMiN5oLnxsUS3GB8LI+XJ51b/8uhT75YTz
+ 56jY25h6WEYrfWI2a65iXWclFWp2WC+5e8KS1Jtl08tF/EDEQXL8MOhXfXmSTdNDP+mTO1R
+ cHut++ZtU4LrS5oEvCpFA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OLKIUPcAzgM=:JQN1iSiSHQWUjn+drjSvTB
+ /HcjKOK2xHql2li/C5+GTPUZKxykAp6WGyaEKk84XbaZAeC1G9pYL548BI73DEaOwRY7dNfCr
+ gYxHaY0rOwH2BIch0B7WjWYDhzGJdUGBrwlikG847BuchvI/nBRisRZ1bLXn0rWmWQWNIXEWc
+ SrDARoaFOLE+f/M0rxVHKsFvON+0ymemWGjATulB/d3jgxAPI8Q0R2gSW4UuO/GbWxmtzuk5c
+ 3yqN7eaaxSrtx/yJasblTrOdVDlG31PriVq97K4Xpi52y1swHoUf9a8I9ZHXh1DGWgQIUl74S
+ wDH9Bl/CiyjYY3i7nAMHba0NyitiIJ8ene0QRpgPW9XiamJMrkA1hs6EXYj35o0YvC+BZDnqt
+ xACCpyEsmQIjhjVdbudn8hMPRjQlweJxiuMtTO3ra85TuQmzZWYdCMhD/2GbtSHL/z+NnVJEc
+ HZgo0GdIdal55RGl/bUJ1evv7uLZbLLtHABs7FVGqNphM/V9zqCPpl0+ong0scv1YLVV4peDG
+ VJ+47A+T/vYYjYB6eyWIRqGvsT6aSnaVwy1iDifwX0eCeK9a7dpFhqQDu+PHPPS1L9agLDowf
+ jY1nIWno2Y2nQ7BKs3mleDnNxrOJnO3aeVQieOEFTw4apS2CKaX0enys/AGUf+0fqCZOwHdV1
+ Eql4q34jBkv3W25uFZXcrIrbFeVCzi5v/zNVvocUmO0JcJhuR8WUw9LYkI2kThB25V9wClkB+
+ x1NZkbG0QDZ3xgBGlkEG1CRxWKB42ux1vNxKjbx2T2Rua6Vst5iibrIpNccX5TkDhrW5bvzDT
+ Bv6bZZFmgAElY2D3W50LC7RxkzUkQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+only if it reports as a V0.96 XHCI controller. Appears to fix the errors
+"xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
+current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
+often) when using a r8152 USB3 ethernet adapter with integrated hub.
 
-syzbot found the following issue on:
+Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+---
+ drivers/usb/host/xhci-pci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16ea4288880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=db491b09f5907cdb5984
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=134606ef080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c83cff080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+db491b09f5907cdb5984@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: null-ptr-deref in atomic_cmpxchg include/linux/atomic/atomic-instrumented.h:503 [inline]
-BUG: KASAN: null-ptr-deref in page_ref_freeze include/linux/page_ref.h:318 [inline]
-BUG: KASAN: null-ptr-deref in alloc_buddy_huge_page.isra.0+0x103/0x230 mm/hugetlb.c:1960
-Write of size 4 at addr 0000000000000034 by task syz-executor107/3608
-
-CPU: 0 PID: 3608 Comm: syz-executor107 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_cmpxchg include/linux/atomic/atomic-instrumented.h:503 [inline]
- page_ref_freeze include/linux/page_ref.h:318 [inline]
- alloc_buddy_huge_page.isra.0+0x103/0x230 mm/hugetlb.c:1960
- alloc_fresh_huge_page+0x395/0x530 mm/hugetlb.c:2013
- alloc_surplus_huge_page+0x139/0x2f0 mm/hugetlb.c:2227
- alloc_buddy_huge_page_with_mpol mm/hugetlb.c:2304 [inline]
- alloc_huge_page+0xbf6/0x1180 mm/hugetlb.c:2919
- hugetlb_no_page mm/hugetlb.c:5571 [inline]
- hugetlb_fault+0x1056/0x1e60 mm/hugetlb.c:5796
- follow_hugetlb_page+0x3f3/0x1850 mm/hugetlb.c:6291
- __get_user_pages+0x2cb/0xf10 mm/gup.c:1146
- __get_user_pages_locked mm/gup.c:1378 [inline]
- __get_user_pages_remote+0x18f/0x830 mm/gup.c:2131
- pin_user_pages_remote+0x6c/0xb0 mm/gup.c:3189
- process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
- process_vm_rw_core.constprop.0+0x43b/0x980 mm/process_vm_access.c:215
- process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
- __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
- __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
- __x64_sys_process_vm_writev+0xdf/0x1b0 mm/process_vm_access.c:298
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff4166016c9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff99de70c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000137
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007ff4166016c9
-RDX: 0000000000000001 RSI: 0000000020000000 RDI: 0000000000000e18
-RBP: 00007fff99de70e0 R08: 000000000000023a R09: 0000000000000000
-R10: 0000000020121000 R11: 0000000000000246 R12: 0000000000000003
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-==================================================================
-
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index dce6c0ec8d34..d1b8e7148dd1 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -306,8 +306,12 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+-		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
++		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
++		/* try to tame the ASMedia 1042 controller which is 0.96 */
++		if (xhci->hci_version == 0x96)
++			xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
++	}
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+-- 
+2.25.1
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Hi there, a "try again" with git send-email and the corrected patch. Hope this works now.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+with best regards
+
+Jens Glathe
