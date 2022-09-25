@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726165E91F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 11:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001A65E91F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIYJ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 05:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S229889AbiIYKAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 06:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiIYJ4n (ORCPT
+        with ESMTP id S229763AbiIYKAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 05:56:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CE732EEB
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 02:56:41 -0700 (PDT)
+        Sun, 25 Sep 2022 06:00:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641CC25C54;
+        Sun, 25 Sep 2022 03:00:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78F8DCE0BB0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 09:56:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8342FC433C1;
-        Sun, 25 Sep 2022 09:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664099795;
-        bh=m5ZvaOY1yNIGujLkDMj9U05VMTl6/h4zxsF9bxZObFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dcJrbxOjw+FvjJN38b1OZUgznru2uPnxI+odurUM8zH73fiXkSauXV+aIi5jviBAE
-         bsbcrtKuVJS0M6+ZEx3C8zVwPfQXWv3mJkcpls3Fg1vtzJBVgUIcUGp+VqCQxtemaa
-         4mFDd1qQTQWoU0A2nelVn72rRlji1N62P3Usnr2uu9SFWkmVKplZN6HWUh6qvfdi0o
-         ZqSaDyeKEU7OBr/UxojjAyDIcn8UtmgoG7TGQdJbV0vcVi2e0YMJTi8vEZCgAergcc
-         zhjmMpmYJ2mBTRvwKmzv4gn+Or1IGzrsuZfjLxpt2B4P7fH8cnRpcyBPj9wBi2vR0D
-         yR7b9bXQQLOkg==
-Date:   Sun, 25 Sep 2022 10:56:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] riscv/vdso: typo therefor
-Message-ID: <YzAlz6BJhNC5fX/Y@spud>
-References: <20220925004757.9089-1-heinrich.schuchardt@canonical.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA64E60DFB;
+        Sun, 25 Sep 2022 10:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0E5C433C1;
+        Sun, 25 Sep 2022 10:00:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Fpm8nP0f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664100032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NQwKz8Q4mOrZejIu/u6IGYD9+wqNWFOpyS9jS1HdV5w=;
+        b=Fpm8nP0fyUK9BqpO+w/wSq9lNPRP1OEBEn7zfIkIrIW+ItAzHxynSI7JLh3p2nrqodD5wP
+        1nza4xqcPctVHmE6Ev4cfubkOQvQkWxlCWHAVOwAXfpKEVPUDhug1OgCuDvqGapHNz6LfO
+        LJtA7X38ov4EWDQN+BltuIaXeIV/4gE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5f6a0196 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 25 Sep 2022 10:00:32 +0000 (UTC)
+Date:   Sun, 25 Sep 2022 12:00:29 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v6 09/17] mips: use fallback for random_get_entropy()
+ instead of just c0 random
+Message-ID: <YzAmvfQcY2/gGwFQ@zx2c4.com>
+References: <20220423212623.1957011-1-Jason@zx2c4.com>
+ <20220423212623.1957011-10-Jason@zx2c4.com>
+ <alpine.DEB.2.21.2204250113440.9383@angie.orcam.me.uk>
+ <YmicjVbkcppfzE1E@zx2c4.com>
+ <CAHmME9r-wTkNGVj0sBOM5LVY=jdAw99gne-1g-mwjBnk3q7VqQ@mail.gmail.com>
+ <alpine.DEB.2.21.2206241407240.22231@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220925004757.9089-1-heinrich.schuchardt@canonical.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2206241407240.22231@angie.orcam.me.uk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 02:47:57AM +0200, Heinrich Schuchardt wrote:
-> The adverbs 'therefor' and 'therefore' have different meaning.
-> As the meaning here is 'consequently' the spelling should be 'therefore'.
+Hey Maciej,
 
-Heh, had to go look that one up!
-https://www.grammarly.com/blog/therefore-vs-therefor/
+On Fri, Jun 24, 2022 at 02:25:17PM +0100, Maciej W. Rozycki wrote:
+> Hi Jason,
+> 
+> > > There is lots of optimization potential on a few fronts we've identified
+> > > in this thread. Let's save these for a follow-up. I'd rather this
+> > > initial one be at least somewhat simple, so that as it gets optimized,
+> > > it'll be easy to handle regressions. Also, it probably makes sense for
+> > > you to send the patches for these, since you have both the hardware
+> > > chops and the hardware itself to assess these ideas. I am interested in
+> > > the topic though, so please do CC me.
+> > 
+> > Everything has been upstream for a little while now, which means
+> > development of this can move back to the proper MIPS tree like normal.
+> > Did you want to submit some optimizations? Would be happy to look at
+> > whatever you have in mind.
+> 
+>  Thank you for the heads-up!
+> 
+>  Unfortunately I'm a little stuck at the moment, especially as one of my
+> main MIPS machines (a 5Kc Malta system) died mid-May while operating.  It 
+> seems to be a faulty CPU core card and the base board may be fine, though 
+> I cannot know for sure as I only have one each and I don't have a logic 
+> analyser or at least a JTAG probe to peek at the system and see what's 
+> going on inside.
+> 
+>  If anyone knows a source of a replacement Malta, preferably with a 5Kc 
+> CoreLV CPU module or another 64-bit hard core card (a number of different 
+> ones have been made), then I'll appreciate if you let me know.  I feel 
+> rather depressed knowing that many if not most hit the scrapper already 
+> while they could still find a good use.  Somehow it is easier to get way 
+> more obsolete hardware from 1980/90s just because it was general purpose 
+> rather than niche.
+> 
+>  Otherwise I'll try to get back to this stuff later in the year with 
+> whatever I have that still runs, but don't hold your breath.  Sorry!
+> 
+>   Maciej
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Just thought I'd poke you about this, on the off chance that you found
+some new hardware and feel like tinkering around with cycle counters
+again. Some old MIPS platforms were recently dropped, too, which makes
+me wonder whether there's some room for more simplification here.
 
-> 
-> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> ---
->  arch/riscv/include/asm/vdso.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
-> index af981426fe0f..a7644f46d0e5 100644
-> --- a/arch/riscv/include/asm/vdso.h
-> +++ b/arch/riscv/include/asm/vdso.h
-> @@ -10,7 +10,7 @@
->  
->  /*
->   * All systems with an MMU have a VDSO, but systems without an MMU don't
-> - * support shared libraries and therefor don't have one.
-> + * support shared libraries and therefore don't have one.
->   */
->  #ifdef CONFIG_MMU
->  
-> -- 
-> 2.37.2
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Jason
