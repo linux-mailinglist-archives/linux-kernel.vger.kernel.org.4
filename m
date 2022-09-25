@@ -2,160 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A2A5E94EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BB35E94EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiIYRbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 13:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S232814AbiIYRbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiIYRbB (ORCPT
+        with ESMTP id S232795AbiIYRbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:31:01 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AD2FAC8;
-        Sun, 25 Sep 2022 10:30:59 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28P9RRbQ012930;
-        Sun, 25 Sep 2022 17:30:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
- b=vB8fwz1QNSI9DbAGqVP3cSU0uDtAXWtGCfQ5sNcCcYfckSdL+2ShziYuBCLHqnGSnAOy
- B1EWehTifboUfCTom5DEttp2QabPbGZ6CBnblbcOu3Fz33VefAoBrfSaNG+V1FrvVzAi
- nc9OdsfWjB3n3SosJWeBglSJ2LX9VljVW5yJ2E2pr7nW5sbVD9yRtF7Xm1xTyLpx8JYj
- MFRYbfsA6OdI1q7m0KwaZx+jGHTjZ1b8hjX8R7p6CSY2lx1MUlmdSCVDfkL6DjFGvO+M
- g+N5qdR89JLBt97RIDq5AUFgdyNwKhROz9AYX8glq7wgTrCVnIugj1RrGsNvRblQkh2X Ww== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jsstphyga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 25 Sep 2022 17:30:57 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28PCFvO5019704;
-        Sun, 25 Sep 2022 17:30:56 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpu83pss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 25 Sep 2022 17:30:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jmPB8AgC/6qIv4fCPSM9JbbaHwVGvwEGbStwDjQfOtEUMTEKXcfMdnFZrzrQ48vY6YMlZ6/hsdVrBADXOnrxmSWuBP2d0NlrPcNVb2FFsfzTZhwQ41zfSa0s6OlUqY+476IM4ImggD71wRs9HOkLKFSfdMLQ8Cdfr5PUkT/VPxkJculX1L9Wu/U7CEyPYfLca/JQZbr80UTC77RCzYlFlpZDssNNoToUDERCsQRKpiH6NSR6A2cuADt6E7mu3M/L05cz8U4AOGkdElSj+IW0wFmsYnX+x5mflnZuN00QGI1hsGCSvje87ZujK5GuQMLwj4FgWss1o1NgOEfxz6ba4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
- b=XcciLjwuPjW2eFlO8CGaUh+NCNWcroOgeIkZ81AvIfI66NYcDZmZtcys+s78WXfT7sZrPvZ7WAU5wTCdamU2LewbHz6/04OcJZbFsGpRDDEmYSiPYhdlXc2zoNOgefPrtup0YEn1ikLu1z3u/hyRPtZTHGR+fUKojUS3p6yuyiY6LvKAHc/b+yVse1QNaOTsDpzeqVQqSlgqV7Z35eE+GkgkPoH0xpjrb9dPjNvLWhqtM7P18WjA24CMvXNbsLdM1z+XC8uo5xvJCyDEyErne53j978cbhZpeb6Ike55gjRRX/PrnZmHNXPdkDD2Gfvu0ZjQhGQTA44SOpTRpCCT0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sun, 25 Sep 2022 13:31:17 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041B72ED79
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:31:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id y2so2925130qtv.5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 10:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0hXt6TYf3I6dUDg6ng5/DjVbtxAAqtW3Nk0f4XIE4ZQ=;
- b=Cws1HXIkMVpPE76lfVfZklK6pVjjSNt3+b3Pw++f+z2ClH53LnjUR2J52ydpYTrSWy8CyH6XBKsODT5Zjuy4HPKSIc5SulfwJfZWE0rEsg4RnK7iFju4m/Cre2Y+qmRm/HViCIEHEoDlaV6IlNH7baggyjbnJZ3ppYipeFfteOc=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by BLAPR10MB5124.namprd10.prod.outlook.com (2603:10b6:208:325::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.22; Sun, 25 Sep
- 2022 17:30:54 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::a497:8929:2c6f:7351]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::a497:8929:2c6f:7351%5]) with mapi id 15.20.5654.020; Sun, 25 Sep 2022
- 17:30:54 +0000
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: wd33c93: remove dead code related to the
- long-gone config WD33C93_PIO
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1v8pbpdj7.fsf@ca-mkp.ca.oracle.com>
-References: <20220920112921.25275-1-lukas.bulwahn@gmail.com>
-Date:   Sun, 25 Sep 2022 13:30:52 -0400
-In-Reply-To: <20220920112921.25275-1-lukas.bulwahn@gmail.com> (Lukas Bulwahn's
-        message of "Tue, 20 Sep 2022 13:29:21 +0200")
-Content-Type: text/plain
-X-ClientProxiedBy: SN7PR04CA0026.namprd04.prod.outlook.com
- (2603:10b6:806:f2::31) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=6Kuxk8rqToAIi+KWtXYDTt/k1nGpW4B/9707Tr2qqFA=;
+        b=A9JGyQ34aMSBbCgPlwGw6UnoxEVJf4nWwXQFt8DQqr2ZRX9k0yyocFBv7R+nwJA5Md
+         9bgfO+Ga25JbPzdNvIdhpE4zzPYx9Hy5GybjTS+HXLJ8SMiJvdq9aVQsT5hbe8VSr701
+         Iq5KmNUVCZdu1I96FWYf5Y2I+OzNagIbtLrRs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6Kuxk8rqToAIi+KWtXYDTt/k1nGpW4B/9707Tr2qqFA=;
+        b=lRPaF6nLq1AhjxnR7DkNUdIOjNhn3WINarm2s/d/RD1tqFL3lncyt3ZQwqnS9PMS9V
+         CLDKxWJQJk+ukc4hoDc3wkcWF6jM+PHWc4gE0OBta1TcEU0tbgGYx4QAswqYoO+HOq4F
+         ciPJDvwkrW8WkN3/zFKk5sg81LFTEzudKjw2zpGTVXCBDuf8oCDtADiJywlA/qM3x0qT
+         pADLg/BWzFCclDy+KNQL3KNOcZOjfdRK6MBFwL81h+YJsy/T3MSrV0rvDIK2az47lHi5
+         UUNfrg5fUFJbjt9KyfAHzGy/GV5xroApiWCQA32swzq7vJKI7sBUFxfBkCHSWC8+4jYn
+         ee5A==
+X-Gm-Message-State: ACrzQf2p297zBMqcp9ZmzLL975mcmt0iuzhNnkhEPg60Z45gzFHdcYYD
+        GBLddxUsNoBqpsr8gfwadA+/gg==
+X-Google-Smtp-Source: AMsMyM5s891B7uhkODjOz3jQs4qf6gXPhlAMXQH7E9Y86JDEvLQDVFV6B+FTwg+lIJ5Vt2Yiqyu75Q==
+X-Received: by 2002:a05:622a:38a:b0:35d:6ca:ff91 with SMTP id j10-20020a05622a038a00b0035d06caff91mr15059197qtx.532.1664127074058;
+        Sun, 25 Sep 2022 10:31:14 -0700 (PDT)
+Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id bj36-20020a05620a192400b006ceb8f36302sm10130246qkb.71.2022.09.25.10.31.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 10:31:13 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 17:31:13 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <YzCQYW6yRRBWWMXk@google.com>
+References: <20220923214408.GC4196@paulmck-ThinkPad-P17-Gen-1>
+ <4AE2CA06-8D91-42D7-9EE5-0C99BA7F9D13@joelfernandes.org>
+ <20220924211132.GE4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|BLAPR10MB5124:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52341f03-7bed-4a5e-3bfe-08da9f1bb310
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: avtcCSXMNLaN9X5jPgAqQqeTDO1YDrSHZqFQd0IKh8nybxBxL9J3k2nzSyF5MhDnWwejYLchx+ZVYAnLJtddGF/tWtxoFrNEhWa6YF12gW6e+CEqSwvf8ELLriC9wnvl33tBeKn9a0RobH94gW5b0GbvCVG6YQslUhqjS5QTg8dzhSKfSLbcdfS7Wv63bbKELN4l+mpLYqjB7Z5MaaffC0LLO7RKklBQKl3dSFg3PS8N/7mHETukSq7suBsrO1JrWe369u4U98xNjPPDVhwDvVd+x3YYaO643gCrfeqr99/yD6nKYxB9oBkKysdjhFCkXi2haaSzSlj1uPs8G9vooGUw/QqMDKehfqv1Cn9VdYduzZsj2Nap65GOSUlk+tF05XYE1iOAQtpYsHhGA0E+u4+Cj5/FVHDT9ZJzsiBocmdHux6A+Tpk8RAsPFIyW3IYR7R70wFKlwdqAtsxp3yukNfoe9lSVQftKgd1zsu8e31y1lCuDhSDeljLpn5TL/bPEIYoW/X1+de8aVNvWmC1MAuvs3csOB922I+r5GhJAtisgqjblRaLkQfnCBnF0I4e3cZ9kvGLsBGDCXDHA4aX1IxwqC7m04gyAtaMnu10K6dsnntD+cSz5XCRdDof+J4+za0dy7DAHaLXkehZFUp0f6x1Y9qkYcxc+FsB3HqJkVpYuS8zzWBUaipkZXfW+shX2n4o9ny6FmpSfou5+nrGCw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199015)(38100700002)(86362001)(5660300002)(41300700001)(36916002)(4326008)(558084003)(8936002)(8676002)(6916009)(54906003)(316002)(66946007)(6486002)(66476007)(66556008)(478600001)(26005)(6506007)(6512007)(186003)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CV37ggsbGlw4BkiE9QW8xDiUvQ7yUo3JlprCLOIqC9SCLCUFVOFIKie/pNPG?=
- =?us-ascii?Q?bGRMYCA2CaHX7ddxFv+QLuF+/V536H7HXiGDbGTCwoBDjEgsqnnWeev+G33z?=
- =?us-ascii?Q?Wx6c8/gnmSLLyL73JaFrLxI3iC53g62UP9dHCE7mdDft5zSPCvDnhSe9Y8J3?=
- =?us-ascii?Q?lkIAAhA2tEM9t18u/mYMNFUjpve8P2azvwNxJEI6MfYBY2PglwDBVOe/uh66?=
- =?us-ascii?Q?QTyznq0cpPliYbk0VNhdzb46odfadqv5yjxKc+19Cw3NWqb4dmxmw9pAqK33?=
- =?us-ascii?Q?5Kd0DXbWavxW8Az3hqI3Tx+TvnSaBEj+6XHtgqkT31ewDw7RFKHW51Xli+kg?=
- =?us-ascii?Q?8P7BTHQAvuvxzQnwUJr0JFnwBjCzaXgxygUdj/DCMAMovV2n1PEdQXpIKZnA?=
- =?us-ascii?Q?s1ff7JM7WNazzUS9ZOCAVc0GATHzyqQCBv0FppvtrWxE76THbLNCvWDeouO7?=
- =?us-ascii?Q?NPm3pQlg21faiwEyG/fiUvKKADi35FWxPnK/bde6VXutvrfVGbEZKc/hxdZw?=
- =?us-ascii?Q?qnqNvKtpk3A/+Uly92PkpHr3n2xZ1+6P1WrBTk0Mpn/68cRDt+U/PUXHYEe3?=
- =?us-ascii?Q?Zj07Cbr/qnYC/Dqts5HIVnv4N56lEjzR1HO0kR5me9IP1rISpcmwJWQ8T2mx?=
- =?us-ascii?Q?MJA+S6rgC1Gt4gk6mF5rYt8pA2mi/o9PvFQ/lqYDfOfnTiqyI32el13vDcry?=
- =?us-ascii?Q?yKnns7FuOx6qC/OxPdPCoPQEoZ2Z/HCI5uUHK6HJZjGIt44tUS197Ri3OTlY?=
- =?us-ascii?Q?Tgcb7JiM1TYhzucgSnriECuB1HwWA7JLreZjYUbkUh+vStGXwbyzyib3iE7V?=
- =?us-ascii?Q?93TZQO2PiQN+7NYCR3IlVh9xSCK7OfBuhpvkVMmMv1dxyCJmiLXnoGQcNhf6?=
- =?us-ascii?Q?30waL2JqHTEVh6dhRLjzsM5plAuB2PEuVPjA8nomkH21kL3f4HxbLM6Y5FU4?=
- =?us-ascii?Q?g1OVvnjvNhR6/K0706if5o1yVcFizan/JxXeHCoOItFW7a08woG9fQbErqyg?=
- =?us-ascii?Q?70qpf9sszprfpduTQ0Bkh12QjGjHfev0QO2HbxMEPMuQL7uxjM+Wq7eTxPkn?=
- =?us-ascii?Q?IeNlkGpLJEGs0euhmcT7aK2b24Aujn7wKX8SJoxEH8LEwQUlgItoLzXnRn85?=
- =?us-ascii?Q?iNwdJgeCIHDfiIrjjwfoQM/m3CG9+J5pAUxutYEqPCc4jzoeSPTbesY6Bfr/?=
- =?us-ascii?Q?Bkz1WUkXRAFGOdsuVyi32s8s6Yr3rfUj9wkbgCQotvcmRyVNHmcloRa107Pf?=
- =?us-ascii?Q?NkSFUpe1hC0E5D7gBSiwKzIC41ZYQfJ2rZ2Tk5Co64kXfSo3P+EUoQ6N2U35?=
- =?us-ascii?Q?nYU+U7ySrJt+1Phk0Q+7heDNe3C3kDmDYQCG0WNu6UKPtgMlYRuNeTebR2G0?=
- =?us-ascii?Q?HEBjpqcQZZPn1IDPdwuHSMheu3JLrrDiup8VCt1+br2rzZLqZ9A22YW4H9Ny?=
- =?us-ascii?Q?fPHTBmjXLRtdVe/I1mpMowaHHL/NrrJdTW6yyZMIQhVu7UvGIpV1vdUitR4m?=
- =?us-ascii?Q?Bcyk6d3oVANy1HdHD6UuB0CZ+homqMV/iTUsTCehP0qc8ReFQ57w0qkMw+rO?=
- =?us-ascii?Q?FoyB9FWzKB0kDV9Ii2vZsu7HHd4lvzLm8mtbgRX4C1NQu/JXgrx4hSNvoTlZ?=
- =?us-ascii?Q?vw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52341f03-7bed-4a5e-3bfe-08da9f1bb310
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2022 17:30:54.4872
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AePSeZ5ZD43NoSvVTLN/vx6OOEyKLd1/wwbobdoXGsNHNtfsgOQkk+m3TZji8+V7R1V63wRbeNvr+Ox+ox2M43eJ5RoLeam/jVERDgii/kU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5124
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-25_01,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209250127
-X-Proofpoint-ORIG-GUID: B8dH6A8h1i2ImwdM_gxXoGpqTWLK5DeQ
-X-Proofpoint-GUID: B8dH6A8h1i2ImwdM_gxXoGpqTWLK5DeQ
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220924211132.GE4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Paul,
 
-Lukas,
+Back to Mutt for this one ;-)
 
-> The historical commit 5e018f7e60c9 ("Remove PC9800 support") from 2004
-> in linux's history.git removed the config WD33C93_PIO to tweak the
-> scsi wd33c93 driver for the PC9800.
+Replies below:
 
-Applied to 6.1/scsi-staging, thanks!
+On Sat, Sep 24, 2022 at 02:11:32PM -0700, Paul E. McKenney wrote:
+[...]
+> > >> +     */
+> > >> +    if (lazy && rhp) {
+> > >> +        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, NULL);
+> > >> +        rcu_cblist_enqueue(&rcl, rhp);
+> > > 
+> > > Would it makes sense to enqueue rhp onto ->nocb_bypass first, NULL out
+> > > rhp, then let the rcu_cblist_flush_enqueue() be common code?  Or did this
+> > > function grow a later use of rhp that I missed?
+> > 
+> > No that could be done, but it prefer to keep it this
+> >  way because rhp is a function parameter and I
+> > prefer not to modify those since it could add a
+> > bug in future where rhp passed by user is now
+> > NULL for some reason, half way through the
+> > function.
+> 
+> I agree that changing a function parameter is bad practice.
+> 
+> So the question becomes whether introducing a local would outweigh
+> consolidating this code.  Could you please at least give it a shot?
+> 
+> > >> +        WRITE_ONCE(rdp->lazy_len, 0);
+> > >> +    } else {
+> > >> +        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> > >> +        WRITE_ONCE(rdp->lazy_len, 0);
+> > > 
+> > > This WRITE_ONCE() can be dropped out of the "if" statement, correct?
+> > 
+> > Yes will update.
+> 
+> Thank you!
+> 
+> > > If so, this could be an "if" statement with two statements in its "then"
+> > > clause, no "else" clause, and two statements following the "if" statement.
+> > 
+> > I don’t think we can get rid of the else part but I’ll see what it looks like.
+> 
+> In the function header, s/rhp/rhp_in/, then:
+> 
+> 	struct rcu_head *rhp = rhp_in;
+> 
+> And then:
+> 
+> 	if (lazy && rhp) {
+> 		rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
+> 		rhp = NULL;
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+This enqueues on to the bypass list, where as if lazy && rhp, I want to queue
+the new rhp on to the main cblist. So the pseudo code in my patch is:
+
+if (lazy and rhp) then
+	1. flush bypass CBs on to main list.
+	2. queue new CB on to main list.
+else
+	1. flush bypass CBs on to main list
+	2. queue new CB on to bypass list.
+
+> 	}
+> 	rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> 	WRITE_ONCE(rdp->lazy_len, 0);
+> 
+> Or did I mess something up?
+
+So the rcu_cblist_flush_enqueue() has to happen before the
+rcu_cblist_enqueue() to preserve the ordering of flushing into the main list,
+and queuing on to the main list for the "if". Where as in your snip, the
+order is reversed.
+
+If I consolidate it then, it looks like the following. However, it is a bit
+more unreadable. I could instead just take the WRITE_ONCE out of both if/else
+and move it to after the if/else, that would be cleanest. Does that sound
+good to you? Thanks!
+
+---8<-----------------------
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 1a182b9c4f6c..bd3f54d314e8 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -327,10 +327,11 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+  *
+  * Note that this function always returns true if rhp is NULL.
+  */
+-static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
++static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp_in,
+ 				     unsigned long j, unsigned long flush_flags)
+ {
+ 	struct rcu_cblist rcl;
++	struct rcu_head *rhp = rhp_in;
+ 	bool lazy = flush_flags & FLUSH_BP_LAZY;
+ 
+ 	WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
+@@ -348,14 +349,13 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 	 * If the new CB requested was a lazy one, queue it onto the main
+ 	 * ->cblist so we can take advantage of a sooner grade period.
+ 	 */
+-	if (lazy && rhp) {
+-		rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, NULL);
+-		rcu_cblist_enqueue(&rcl, rhp);
+-		WRITE_ONCE(rdp->lazy_len, 0);
+-	} else {
+-		rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+-		WRITE_ONCE(rdp->lazy_len, 0);
+-	}
++	if (lazy && rhp)
++		rhp = NULL;
++	rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
++	if (lazy && rhp_in)
++		rcu_cblist_enqueue(&rcl, rhp_in);
++
++	WRITE_ONCE(rdp->lazy_len, 0);
+ 
+ 	rcu_segcblist_insert_pend_cbs(&rdp->cblist, &rcl);
+ 	WRITE_ONCE(rdp->nocb_bypass_first, j);
