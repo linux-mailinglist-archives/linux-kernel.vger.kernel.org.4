@@ -2,207 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E25E93A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722E95E93AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIYOgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 10:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S230385AbiIYOlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 10:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIYOgr (ORCPT
+        with ESMTP id S229539AbiIYOlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 10:36:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C2C2C11D;
-        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so4558119pjk.2;
-        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
+        Sun, 25 Sep 2022 10:41:16 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888972DE6
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 07:41:14 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id n12so6684346wrx.9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 07:41:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
-        b=L7kdF+Cc3zxrcMWuwHLUJxyjSek3kETxz+SxFXZlYc/JDwXSJA23VDwP0JernxRicQ
-         L2PbJDc5U6vyDZv4p3Jhk7SgbdOwQIiiQ7S4dmq9vy+iBEGPt4WYhUqiGmrsVQ8H/atq
-         QBiH04Un8dojeI+fkMfOzbqWL6A5ww1wKPJE4Z3CFVwbEwgUevhYk6G7hB6OZpII2/+3
-         fbfGCzXO4/mmQqJ6rYrMMAg4+2g8Dn3r8dU25LgkQhFp0bpQYQBqwUw+YfC/k++6OYcw
-         XT2cr6nLD9YItuH9HvFJ6XfoTmADXXv3BEtzqhQ9spmv7aqM+cST5Ex9mAIiSDzK1CLD
-         vTPg==
+        d=linaro.org; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Npocxvpr9TZgMWdDjzYbDm/3jhFMXbrb/YqHwxUq9pU=;
+        b=e/ku+ctZ/WzQJwWcAwDsMAPcqV8N3StqL5zVorcdJwg6TvocKPxVvvcz6ygp4F1jY+
+         s/bp3hPZUWE18bXXyrER1xxQJPIKiJaXGRkYj9vRXposrYaNrWkFwVTIRI1+OK1wGq1x
+         W2/m0YvDV18s4EeKsYYMZtSH259GUAru+ewfSzA+VJxLPoRfZUq5EDH14qjzsdZar2Bb
+         VXv3M7e7dxp2P97bkTkeufd15mq8/7DCX7dchpU/oggLZi9Z6kWq+U0JAd8wfJ+EQSzu
+         PfiSg50jsMx/LGvY/1lmTKPcm3ZR6LZkkZFFiDMQfSUaPZ10WLxG3Y8hHeTpw0xIFKbj
+         4hag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
-        b=7zDDt6ET9+yM7KX2OCDIitoOaGBE5KfB5d1A1tlmzCbcQ5gdhVgDUHke7yuNkAFPNL
-         zpvupFQ7527uu2/3qGZHoXD968c9+LBcjqPhWp58QdpeLB991np1QWi63lHNzugkYLBp
-         IoyYSeSyiubk2Rnsnz2khXiZ4Atvgh6q6qvEPQrboYszyr3rfswKL+NTVssTqXRsIj8i
-         mRJ56Y8LT4OOVbs/NDkRBbOOoFbhyL89914yg3DZljc+TToM/JFdrhMPWjnOzlYMM9rm
-         Wfd4v/jX7fBOORsfA4B/UoG9yXUlM0BgVPpV71GOfC6h5AaR4/s/xOfe+fGtlORrJbKQ
-         Lsdg==
-X-Gm-Message-State: ACrzQf0KZFzcFnmOFW+Mk3lZUCQvF57ebldEj+rqsjz7j+ynMcx5YGbt
-        OUaPj2E7OSTADd7M2CGNUyk=
-X-Google-Smtp-Source: AMsMyM4zEYaVLn00bDKQcUz1SjgekG1k7Zs5sjRiFKbPNcDAMS2r4MvSxQRncgEGxl+tqsZNdBvNLQ==
-X-Received: by 2002:a17:90b:1905:b0:202:cbf9:cd76 with SMTP id mp5-20020a17090b190500b00202cbf9cd76mr20557787pjb.171.1664116605782;
-        Sun, 25 Sep 2022 07:36:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm9970933pfg.129.2022.09.25.07.36.44
+        bh=Npocxvpr9TZgMWdDjzYbDm/3jhFMXbrb/YqHwxUq9pU=;
+        b=CAqLhy8MTyUNVPAafcCrxi7ATFVKw2/moPZAKUgeyVimJx32aH7Xy2MvsU3Zsv8RRF
+         vvtUH2cF7hzjLHlhhi9BeNEbXWL9X3J1TBeMlrVrAkvydatGwTew/ozwIAkpBP8td6lG
+         6fC/7L9Lp1BnNseobw9Tj9F+dATWyZiKdDG0Wqkx2DoLVgYlSWBq7rXghVVBERf7QBxP
+         uCgdwe4HTJHNPrhQe8IT7UdKMcREhsJM1yFEQJfsLy8MRGchvMyFMY2/ca4+hH7o2Qgy
+         alFEMukRc1ORdNtmogzlo8Ze3+LV8goT4q7FcBX2y2KQPWkCE05cMlXIJo+GiF+OF9Yt
+         wupQ==
+X-Gm-Message-State: ACrzQf37+dOPOnuf9JfjzDr9fOJcSWCJVzsQdPdKnornxVj0Q3cNQBxX
+        DQgI2v60Z9kVT95fm4bX2dQfhw==
+X-Google-Smtp-Source: AMsMyM6fLzIjom2/spigaatSVjPmV+ss/Yuew+5ILe3sB3w5bhqD1OYJt7C5GhlL4WWu6EBeOiNA7Q==
+X-Received: by 2002:a5d:4b84:0:b0:228:7e07:115e with SMTP id b4-20020a5d4b84000000b002287e07115emr10600822wrt.168.1664116872960;
+        Sun, 25 Sep 2022 07:41:12 -0700 (PDT)
+Received: from localhost.localdomain (91-160-61-128.subs.proxad.net. [91.160.61.128])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003b47b913901sm20774761wms.1.2022.09.25.07.41.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 07:36:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 07:36:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
-        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        git@xilinx.com, git@amd.com,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: Re: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog
- bindings to json-schema
-Message-ID: <20220925143643.GA1752768@roeck-us.net>
-References: <20220818150637.815-1-srinivas.neeli@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818150637.815-1-srinivas.neeli@xilinx.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 25 Sep 2022 07:41:12 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com
+Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v5 0/7]  Add latency priority for CFS class
+Date:   Sun, 25 Sep 2022 16:39:01 +0200
+Message-Id: <20220925143908.10846-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 08:36:37PM +0530, Srinivas Neeli wrote:
-> Convert Xilinx watchdog bindings to DT schema format using json-schema
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This patchset restarts the work about adding a latency priority to describe
+the latency tolerance of cfs tasks.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The patches [1-3] have been done by Parth:
+https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
 
-> ---
-> Changes in V2:
-> - Updated file name with compatible.
-> - Added subsystem name in subject prefix.
-> - Address minior comments.
-> ---
->  .../bindings/watchdog/of-xilinx-wdt.txt       | 26 -------
->  .../watchdog/xlnx,xps-timebase-wdt.yaml       | 68 +++++++++++++++++++
->  2 files changed, 68 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt b/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-> deleted file mode 100644
-> index c6ae9c9d5e3e..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -Xilinx AXI/PLB soft-core watchdog Device Tree Bindings
-> ----------------------------------------------------------
-> -
-> -Required properties:
-> -- compatible		: Should be "xlnx,xps-timebase-wdt-1.00.a" or
-> -			  "xlnx,xps-timebase-wdt-1.01.a".
-> -- reg			: Physical base address and size
-> -
-> -Optional properties:
-> -- clocks		: Input clock specifier. Refer to common clock
-> -			  bindings.
-> -- clock-frequency	: Frequency of clock in Hz
-> -- xlnx,wdt-enable-once	: 0 - Watchdog can be restarted
-> -			  1 - Watchdog can be enabled just once
-> -- xlnx,wdt-interval	: Watchdog timeout interval in 2^<val> clock cycles,
-> -			  <val> is integer from 8 to 31.
-> -
-> -Example:
-> -axi-timebase-wdt@40100000 {
-> -	clock-frequency = <50000000>;
-> -	compatible = "xlnx,xps-timebase-wdt-1.00.a";
-> -	clocks = <&clkc 15>;
-> -	reg = <0x40100000 0x10000>;
-> -	xlnx,wdt-enable-once = <0x0>;
-> -	xlnx,wdt-interval = <0x1b>;
-> -} ;
-> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> new file mode 100644
-> index 000000000000..493a1c954707
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/xlnx,xps-timebase-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx AXI/PLB softcore and window Watchdog Timer
-> +
-> +maintainers:
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> +  - Srinivas Neeli <srinivas.neeli@xilinx.com>
-> +
-> +description:
-> +  The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
-> +  WDT uses a dual-expiration architecture. After one expiration of
-> +  the timeout interval, an interrupt is generated and the WDT state
-> +  bit is set to one in the status register. If the state bit is not
-> +  cleared (by writing a one to the state bit) before the next
-> +  expiration of the timeout interval, a WDT reset is generated.
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,xps-timebase-wdt-1.01.a
-> +      - xlnx,xps-timebase-wdt-1.00.a
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    description: Frequency of clock in Hz
-> +
-> +  xlnx,wdt-interval:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Watchdog timeout interval
-> +    minimum: 8
-> +    maximum: 32
-> +
-> +  xlnx,wdt-enable-once:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +    description: If watchdog is configured as enable once,
-> +                 then the watchdog cannot be disabled after
-> +                 it has been enabled.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@40100000 {
-> +      compatible = "xlnx,xps-timebase-wdt-1.00.a";
-> +      reg = <0x40100000 0x1000>;
-> +      clock-frequency = <50000000>;
-> +      clocks = <&clkc 15>;
-> +      xlnx,wdt-enable-once = <0x0>;
-> +      xlnx,wdt-interval = <0x1b>;
-> +    };
-> +...
+I have just rebased and moved the set of latency priority outside the
+priority update. I have removed the reviewed tag because the patches
+are 2 years old.
+
+This aims to be a generic interface and the following patches is one use
+of it to improve the scheduling latency of cfs tasks.
+
+The patch [4] uses latency nice priority to define a latency offset
+and then decide if a cfs task can or should preempt the current
+running task. The patch gives some tests results with cyclictests and
+hackbench to highlight the benefit of latency priority for short
+interactive task or long intensive tasks.
+
+Patch [5] adds the support of latency nice priority to task group by
+adding a cpu.latency.nice field. The range is [-20:19] as for setting task
+latency priority.
+
+Patch [6] makes sched_core taking into account the latency offset.
+
+Patch [7] adds a rb tree to cover some corner cases where the latency
+sensitive task (priority < 0) is preempted by high priority task (RT/DL)
+or fails to preempt them. This patch ensures that tasks will have at least
+a slice of sched_min_granularity in priority at wakeup. The patch gives
+results to show the benefit in addition to patch 4.
+
+I have also backported the patchset on a dragonboard RB3 with an android
+mainline kernel based on v5.18 for a quick test. I have used the
+TouchLatency app which is part of AOSP and described to be a very good
+test to highlight jitter and jank frame sources of a system [1].
+In addition to the app, I have added some short running tasks waking-up
+regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
+without overloading it (and disabling EAS). The 1st results shows that the
+patchset helps to reduce the missed deadline frames from 5% to less than
+0.1% when the cpu.latency.nice of task group are set.
+
+I have also tested the patchset with the modified version of the alsa
+latency test that has been shared by Tim. The test quickly xruns with
+default latency nice priority 0 but is able to run without underuns with
+a latency -20 and hackbench running simultaneously.
+
+
+[1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
+
+Change since v4:
+- Removed permission checks to set latency priority. This enables user
+  without elevated priviledge like audio application to set their latency
+  priority as requested by Tim.
+- Removed cpu.latency and replaced it by cpu.latency.nice so we keep a
+  generic interface not tied to latency_offset which can be used to
+  implement other latency features.
+- Added an entry in Documentation/admin-guide/cgroup-v2.rst to describe
+  cpu.latency.nice.
+- Fix some typos.
+
+Change since v3:
+- Fix 2 compilation warnings raised by kernel test robot <lkp@intel.com>
+
+Change since v2:
+- Set a latency_offset field instead of saving a weight and computing it
+  on the fly.
+- Make latency_offset available for task group: cpu.latency
+- Fix some corner cases to make latency sensitive tasks schedule first and
+  add a rb tree for latency sensitive task.
+
+Change since v1:
+- fix typo
+- move some codes in the right patch to make bisect happy
+- simplify and fixed how the weight is computed
+- added support of sched core patch 7
+
+Parth Shah (3):
+  sched: Introduce latency-nice as a per-task attribute
+  sched/core: Propagate parent task's latency requirements to the child
+    task
+  sched: Allow sched_{get,set}attr to change latency_nice of the task
+
+Vincent Guittot (4):
+  sched/fair: Take into account latency priority at wakeup
+  sched/fair: Add sched group latency support
+  sched/core: Support latency priority with sched core
+  sched/fair: Add latency list
+
+ Documentation/admin-guide/cgroup-v2.rst |   8 +
+ include/linux/sched.h                   |   5 +
+ include/uapi/linux/sched.h              |   4 +-
+ include/uapi/linux/sched/types.h        |  19 +++
+ init/init_task.c                        |   1 +
+ kernel/sched/core.c                     | 106 +++++++++++++
+ kernel/sched/debug.c                    |   1 +
+ kernel/sched/fair.c                     | 189 +++++++++++++++++++++++-
+ kernel/sched/sched.h                    |  37 ++++-
+ tools/include/uapi/linux/sched.h        |   4 +-
+ 10 files changed, 366 insertions(+), 8 deletions(-)
+
+-- 
+2.17.1
+
