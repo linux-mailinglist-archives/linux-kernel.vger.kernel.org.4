@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6335E9378
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2725E937A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 15:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiIYNk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 09:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S231641AbiIYNl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 09:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIYNk4 (ORCPT
+        with ESMTP id S231506AbiIYNlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 09:40:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC3322BF9
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 06:40:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D2AC4CE0E0B
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 13:40:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A465C433C1;
-        Sun, 25 Sep 2022 13:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664113250;
-        bh=xKtKRzURGjJuqG0yMhXUwvYFPApsFgss21P4sOLHiao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHqjNgXrzzjEvCJJ2oxK4r7v/dj6LboSyQi8e6NSgFo5AOuiLkwM/Q2bztNNW+d+S
-         t7Z2agyf9qDH7cHCN9qXj+JnKWZgQzr4Uvc79ZnrA/BlOpBUwxiCZ0pDewHQN5o95I
-         TN4rIvTsEbXxJKg10o3L+cB6piOCl2rnqBLx3Sc0=
-Date:   Sun, 25 Sep 2022 15:40:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Tejun Heo <tj@kernel.org>,
-        syzbot <syzbot+8bee3285b9e190f1509e@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH] kernfs: fix UAF race condition in __kernfs_remove()
-Message-ID: <YzBaYHqldB39zD17@kroah.com>
-References: <000000000000646c9605e714ec6e@google.com>
- <7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp>
- <YzBT+hJ/fmp75j1P@kroah.com>
- <83be5776-4038-90d5-f202-9a6e97b6d551@I-love.SAKURA.ne.jp>
+        Sun, 25 Sep 2022 09:41:23 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597F42AE13;
+        Sun, 25 Sep 2022 06:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Dj7nhKh/NArGj0oG4bk8DRORTaIrXKrcLhcogP+lz6Y=; b=mKTRISh+9VUbiTu6AFs6FLolcC
+        /3vzWHEzmuBqdRgSNr4qIMUTn8MPy8XsDcGb/Oc8vnfXhgruqjh9SG8lp+yw+AEaq9IHUt/iPLorf
+        9Oqvq27xlLoRmgLtsqSgAdOSrRGHg1uftXBbmVLe8Vm7Ap2ba4w+n3fXq0Ow8+maapsed4Z9xv6/X
+        OO/bA1/AqNFwaWNq01MleVSm8m1MumatrOFGVfH4B3t/iEyazD4fIDhWn9j/3j6AXxV/g2470Y86M
+        KFvL4eA56ENiMlda+2ajRQ0rqdknkLzuCfQKFTClcoZNFriZ+PUMihrcGkq/eY0NXajjjceVCM4PF
+        RYD6cg5A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ocRsk-003ckC-1i;
+        Sun, 25 Sep 2022 13:41:18 +0000
+Date:   Sun, 25 Sep 2022 14:41:18 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     syzbot <syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: Re: [syzbot] kernel panic: stack is corrupted in lock_release (3)
+Message-ID: <YzBafjvhv1qfv5A1@ZenIV>
+References: <000000000000ba0dcb05e97e239b@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <83be5776-4038-90d5-f202-9a6e97b6d551@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <000000000000ba0dcb05e97e239b@google.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 10:20:27PM +0900, Tetsuo Handa wrote:
-> On 2022/09/25 22:13, Greg Kroah-Hartman wrote:
-> > Isn't this already handled by:
-> > 	https://lore.kernel.org/r/20220913121723.691454-1-lk@c--e.de
-> > 
-> > that will show up in the next linux-next tree.
+On Sun, Sep 25, 2022 at 03:47:38AM -0700, syzbot wrote:
+> Hello,
 > 
-> Oh, I didn't know that patch.
+> syzbot found the following issue on:
 > 
-> But is that patch complete, for there are three __kernfs_remove() callers?
+> HEAD commit:    3db61221f4e8 Merge tag 'io_uring-6.0-2022-09-23' of git://..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10135a88880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4353c86db4e58720cd11
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1792e6e4880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1059fcdf080000
 > 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+4353c86db4e58720cd11@syzkaller.appspotmail.com
 
-syzbot seems to think it works :)
+[ntfs_fill_super() failure exits are still buggered]
+
+Folks, could syzbot be taught that ntfs involved in testing means that
+ntfs maintainers need to be on Cc?
+
+FWIW,
+
+1) failing d_make_root() does *NOT* need the caller to drop inode; it consumes
+inode reference itself, precisely to make that failure exits easier.
+
+2) you never set ->i_op to NULL.  Initial value is to an empty method table;
+nothing out of alloc_inode(), let alone iget5_locked() should ever see
+NULL ->i_op there.
+
+3) the same goes for ->i_fop; it should never be NULL.  Initial value points
+to an empty method table; if you don't want any methods, leave it as-is.
+Yes, even for symlinks.
+
+That - from quick eyeballing the code in question.  There might be more (and
+almost certainly is).  The thing is, ntfs3 clearly corrupts memory of failure
+exits in mount, and syzbot reports in that direction really ought to go to ntfs
+folks; Cc to fsdevel is OK, but at least mark those as likely to be ntfs-related.
