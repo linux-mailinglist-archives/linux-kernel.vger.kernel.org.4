@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5855E9416
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD435E9419
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 17:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiIYPrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 11:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S232705AbiIYPvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 11:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiIYPrh (ORCPT
+        with ESMTP id S232628AbiIYPu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 11:47:37 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9C72BB1E;
-        Sun, 25 Sep 2022 08:47:36 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id bu4so1665123uab.6;
-        Sun, 25 Sep 2022 08:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date;
-        bh=IUa8wfuk/71VgaNbuYluKFoAwM2+Ac9n9e+sqJwT4h4=;
-        b=OKC80+Bw2kHZPIGtTh4Lb+BsbA8nQ9lGH+ecY7Awx7InMXPyFgE7lAdTj0DNciZHiR
-         OiNMDddgskfsckhf5SHjEMH0kQa/yLBWnHmlGbggQRZhSlpT/JH0ZCEO3ox7LpTEvzVy
-         vWGrwujBfiTEEdKlfpQHKGUxoy4GMnKjvICiAPDzvi2wO4iqpH4l807wGS6+pdSq77ek
-         8d6IU2Bxo3taiwnpCEFCw2wRZJyvTyRZBueDaGmVpIkd60jF7GvpZx5sTO9LSvQmW/vL
-         j3afUzzPUH46UGmJd9cFWalUQcdhvEVJHtbtgBuxDNbwKTY/RjmgWivWEt3Xnt2LrZdx
-         L4Lg==
+        Sun, 25 Sep 2022 11:50:59 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82632C119;
+        Sun, 25 Sep 2022 08:50:58 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id h21so2844223qta.3;
+        Sun, 25 Sep 2022 08:50:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=IUa8wfuk/71VgaNbuYluKFoAwM2+Ac9n9e+sqJwT4h4=;
-        b=C1Pe0lcA97e0J5HCtlpA6q+d0bdhvsOhrdmrhjn5SaDtZ4r4hVxIbxzmAyYSb0Yd7b
-         BrHBJCT7yq0OuzcHoEhMqNQ1v04e2OSajDkbjaO68IW6o8jTnwfYwpde6MR/7llRaLgJ
-         u9du35CZ7ivEkVmspBitIPISsDJCsKkKQ0PzzEqJ2yYb77lLJ39Fa1JWUrIeZD2fIVKt
-         MfFNoqhBHfYJrf1a9yOPn4EUnyaoWdFU9cpLrO2UAoa93+gaGumRPtfY8ueCqWvYRR7I
-         ChRxBLbuMq47MO8OzCsxgjFBSMl3oYebn3KUEGrxN8S2bFmJedtms/d8nJG93a+X54V5
-         Pc3Q==
-X-Gm-Message-State: ACrzQf32Ysi9IH2LQgb3TeifvZpqdTc/u4s7i6Rpy5SqtnryqN5trbbT
-        BBDHbt5EHjjMiFN2jTEKamEfkvixK9wadQe/swsubjpT
-X-Google-Smtp-Source: AMsMyM4EkXh0LvebuFqrr1Bt/3jI6MxI3NDcmd0KJHVY4W2eEpnWcJnu6FsgoLpAFWzodDQfkH6vbGKdmv4Pywqyhg0=
-X-Received: by 2002:a05:6130:64c:b0:390:f639:5ac4 with SMTP id
- bh12-20020a056130064c00b00390f6395ac4mr7103912uab.98.1664120855767; Sun, 25
- Sep 2022 08:47:35 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Nxf2CrxXqc9Pl8KiEukPF/0eo12TyS1Rnm/iFQzHhmM=;
+        b=uZAdcrJpUrykuv7WmflLaEvEvt+0nC6J4BIv03aZ15yU0GD3IUwzu4UT9d3MphsguQ
+         q9BgUBR3Q1vQ0WlcwTwQ76lGVqsTXyAQJXnhWc3W6Kg1SgVTPfL6f8W6jsPIrGN2ZgQ1
+         UQRJKc8h1M9yOU0L9a1pOpH+9d3ZAr6wi5Bv1KnY9sX12VZyqkHWnQw9NGDSL7wgfYUh
+         6xzVe2NEKOwuDlx4l4lXLENtn9b41A4iE4h+RXQrpvLjt0+3VK39LeB2olyQCOuEWCnb
+         97ySbx0+syBo8wa5oqb6rOU0PukBYhkLbMjNdRIOmDRBoo5SDAUWhbrF2MjbNY3PnjyX
+         xqDA==
+X-Gm-Message-State: ACrzQf2adDzBzVIUBNXGd+OCk+7PBpCZgG0/MMlylOir8XnJm/g7epAH
+        uwEkg1OXi0b+GSaFS8Nb11Chip7tRBuD6LsQdWw=
+X-Google-Smtp-Source: AMsMyM4F8cbu26Bgthte4Aurv5PJEBVBzXgfaYLN0c4YPu8+mdoV9Zfzz9VmFgNGC+t31Odbjea2oUcyPTrD1AksP6s=
+X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
+ hj10-20020a05622a620a00b0035cbf9e8748mr15070340qtb.494.1664121057185; Sun, 25
+ Sep 2022 08:50:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220919210559.1509179-1-yury.norov@gmail.com>
-In-Reply-To: <20220919210559.1509179-1-yury.norov@gmail.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Sun, 25 Sep 2022 08:47:24 -0700
-Message-ID: <CAAH8bW-TtZrvR5rZHVFXAHtfQySD85fqerxAAjUTN+eoh1bP2g@mail.gmail.com>
-Subject: Re: [PATCH 0/7] cpumask: repair cpumask_check()
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Yury Norov <yury.norov@gmail.com>
+References: <20220916043319.119716-1-kai.heng.feng@canonical.com>
+ <20220916043319.119716-2-kai.heng.feng@canonical.com> <CAJZ5v0gTEkZkyKkrjDZk0s+UVR9yPTtBJ_nzG40ZO9kgikFdqw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gTEkZkyKkrjDZk0s+UVR9yPTtBJ_nzG40ZO9kgikFdqw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 25 Sep 2022 17:50:45 +0200
+Message-ID: <CAJZ5v0h+3ez6=Hf7iJOAv1T7vs9qXudt90iuccDx84gGN=rbcA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping?
+On Sat, Sep 24, 2022 at 6:19 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Sep 16, 2022 at 6:33 AM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
+> > PowerEdge r440 hangs at reboot.
+> >
+> > The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
+> > system reboot to avoid triggering AER"), so use the new sysoff API to
+> > reinstate S5 for reboot on ACPI-based systems.
+> >
+> > Using S5 for reboot is default behavior under Windows, "A full shutdown
+> > (S5) occurs when a system restart is requested" [1].
+> >
+> > [1] https://docs.microsoft.com/en-us/windows/win32/power/system-power-state
+> >
+> > Cc: Josef Bacik <josef@toxicpanda.com>
+> > Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v4:
+> >  - Add comment and add more info to commit message.
+> > v3:
+> >  - Use new API to invoke ACPI S5.
+> > v2:
+> >  - Use do_kernel_power_off_prepare() instead.
+> >
+> >  drivers/acpi/sleep.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> > index ad4b2987b3d6e..0b557c0d405ef 100644
+> > --- a/drivers/acpi/sleep.c
+> > +++ b/drivers/acpi/sleep.c
+> > @@ -1088,6 +1088,14 @@ int __init acpi_sleep_init(void)
+> >                 register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
+> >                                          SYS_OFF_PRIO_FIRMWARE,
+> >                                          acpi_power_off, NULL);
+> > +
+> > +               /*
+> > +                * Windows uses S5 for reboot, so some BIOSes depend on it to
+> > +                * perform proper reboot.
+> > +                */
+> > +               register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
+> > +                                        SYS_OFF_PRIO_FIRMWARE,
+> > +                                        acpi_power_off_prepare, NULL);
+> >         } else {
+> >                 acpi_no_s5 = true;
+> >         }
+> > --
+>
+> Applied as 6.1 material with some edits in the changelog, thanks!
 
-On Mon, Sep 19, 2022 at 2:06 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> After switching cpumask to use nr_cpu_ids in [1], cpumask_check() started
-> generating many false-positive warnings. There are some more issues with
-> the cpumask_check() that brake it.
->
-> This series fixes cpumask_check() mess and addresses most of the
-> false-positive warnings observed on boot of x86_64 and arm64.
->
-> [1] https://lore.kernel.org/lkml/20220905230820.3295223-4-yury.norov@gmail.com/T/
->
-> Yury Norov (7):
->   cpumask: fix checking valid cpu range
->   net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}
->   cpumask: switch for_each_cpu{,_not} to use for_each_bit()
->   lib/find_bit: add find_next{,_and}_bit_wrap
->   lib/bitmap: introduce for_each_set_bit_wrap() macro
->   lib/find: optimize for_each() macros
->   lib/bitmap: add tests for for_each() iterators
->
->  include/linux/cpumask.h   |  37 ++----
->  include/linux/find.h      | 140 +++++++++++++++++-----
->  include/linux/netdevice.h |  10 +-
->  lib/cpumask.c             |  12 +-
->  lib/test_bitmap.c         | 244 +++++++++++++++++++++++++++++++++++++-
->  5 files changed, 375 insertions(+), 68 deletions(-)
->
-> --
-> 2.34.1
->
+And dropped due to a build failure.
+
+It looks like it depends on patch [1/2], but I haven't seen that one.
