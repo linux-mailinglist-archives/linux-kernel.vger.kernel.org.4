@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE555E9589
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22E35E958C
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiIYS5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 14:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S233002AbiIYS55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 14:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbiIYS5k (ORCPT
+        with ESMTP id S232971AbiIYS5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:57:40 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC53D2EF2E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id c81so6004195oif.3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
+        Sun, 25 Sep 2022 14:57:53 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AB72E9FE
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:51 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id g130so5941934oia.13
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kali.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=bqqG78pR7ezwwLzn7M7n9VDWc9F+Ofv/1iAE/Bm/ftU=;
-        b=AfC0cdfpVaBwj3CcA7oeO0Q6l8KZlfJtTPZr9qhYm1k6IJlENkYSYRdyLKw37AU9vE
-         k785gFHvSCRHViBJRXRg5X6uNVUm1cU3g6foHOFS/3dBHhx3ruuWbxlZKr2WhBo1Rh5c
-         AqWLdWZ42KhVFL01dJrDVy2h7hVwmu0JTmiOqm3c+XiU4UIsuSDDYUugvQp7gSUi/tVA
-         ZFh1CE0dyEZEAzQABEia1uLwT7sF4l8walPohpRjE2Pk3p01EcnkVxN+Yz90fQd6fcc/
-         7ID2V4sRFT9sJD28PhFXyVe4Y5Q859zWeCOKDr3fLKJHATNlAMnD/Fnv4F419h74v762
-         UYlA==
+        bh=Xkkurc7xmhFTAUmptTAIyBrQNuCw6O40NOONaEt5SY4=;
+        b=ODYOHUvchpeTI7kgg2hz3gdVa4Iql7GILhBLA5AMo4BkfIcIM9oUod7Ce3iLkQycID
+         1u6P0YqHGGfeY0UlyLTIOWbZGYzUSu9e+qQGztRmgt/92ptT+hZlATNlfdIDNVklRmgg
+         AbGE2XGF1oysM2ls2fvitmVio8TZTahF9dDEg1O/RbZu24YmMR1DT1WP1LStM/YZaDJw
+         zVbUBN6s1IltvVGe88QfJQcmv6gOfWBq1LFC2NIm9/4E6IjfidX66mrSl2wGod3UMQPD
+         l3X5TWf4Dsg9cUvnjTeJ2MVpUR7Pl2MRfLumQOIVOo3v/G6/qPqVl+SuoB/3e8G+iI6I
+         NbnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=bqqG78pR7ezwwLzn7M7n9VDWc9F+Ofv/1iAE/Bm/ftU=;
-        b=iJNaLWSyfLaq8SNNxJbJQl0hkaeDYmgmn1TxZeVEXmtVqdV1p/rt3PGloLc5Sq9se1
-         gKeMiTiyi5r2XtH01+7utVO6rmXBNB2ZBSqzYWkha4AgF+xnRYOwQftnWDLqBQsTbQSS
-         Of9/pz1XKZek82V00u3Cf89XVY6hGij+Z2FRmo56N/BGMldkoG8jpISEb81VsJDpi4Ti
-         z4V3LHUUaJy1nzC5l7wzXdxksDc39Eh0lI1MFB/AJphMYJO30/UvCYZ8JbL7L/0NeBpm
-         cOEq7R0VWqAeRcibu8IFJtwyih9fLxNpaBZ8sApin/mxNbRM4beFkEDJdM98S0O70MGj
-         cRiA==
-X-Gm-Message-State: ACrzQf3AM7CUt6sGW/4SRUg1HC6KTM3SVvOm3FinueWa9tpZbo9LKrMj
-        TYt1eLI79QRRsgSE4Aqhy02Gow==
-X-Google-Smtp-Source: AMsMyM6PPcl7/+jBEtRKosva+dM1Z8fxPO/owiGiHAPokcfw8mny0h3O3HTdso08LYBH2GJglszuKQ==
-X-Received: by 2002:a05:6808:188e:b0:350:6212:4f34 with SMTP id bi14-20020a056808188e00b0035062124f34mr13147961oib.144.1664132258120;
-        Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
+        bh=Xkkurc7xmhFTAUmptTAIyBrQNuCw6O40NOONaEt5SY4=;
+        b=XV15S9luwgecM3wuUEqfKxVU4qM7h5PixAH2+3IN8Gz/Nxk6AHjiUmWuIG6Dl51TVW
+         40C7V6GmA4OWOw8hP5/88JjVmSFL1U/MeXLVZvnwTWDNl667YWeXIheb9lYdndGL9Q6Q
+         CsDLL9asvtlVMlK9yNmbsZRHq4FsYsaE4zfXWXXBbQ1FmWQ3/oqahaln7/aDws0N+dQD
+         Vvr5QlyxI9rNtqrKCIiY6EJLwdLRQ9UhP1RhJGhk1542D5bSlEU1jQw6qthKUpzdAt0V
+         BV2dAOoE/1Wcs9j5cCWgvVvBs8/18Zh5bhOTpGSpNq113VThyRCGZHO9Z9gOxk8As8RM
+         atvQ==
+X-Gm-Message-State: ACrzQf1GnTo44Q1GvuTO7MI8keIgfAfenf4qJQJfWoRBsv96I4YyJSMj
+        x2z1qhOOA5VRKw20XFOfukSNDw==
+X-Google-Smtp-Source: AMsMyM5jPsdQ9cdIbbiQVtXHLiRsM8nEpBbYgdYcp0q8ndoeeUBtB5jMoDECVwj/c1rIncJJtzm2ZA==
+X-Received: by 2002:a05:6808:1892:b0:350:7c49:649f with SMTP id bi18-20020a056808189200b003507c49649fmr13224624oib.219.1664132271066;
+        Sun, 25 Sep 2022 11:57:51 -0700 (PDT)
 Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id a184-20020acab1c1000000b003436fa2c23bsm6281560oif.7.2022.09.25.11.57.36
+        by smtp.gmail.com with ESMTPSA id n124-20020acaef82000000b003502783c454sm6394656oih.0.2022.09.25.11.57.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 11:57:37 -0700 (PDT)
-Message-ID: <d337655c-dd86-2c99-fd26-5a4a44ea98fa@kali.org>
-Date:   Sun, 25 Sep 2022 13:57:35 -0500
+        Sun, 25 Sep 2022 11:57:50 -0700 (PDT)
+Message-ID: <bff64b90-078b-5cb7-edff-4d5308bb7e0b@kali.org>
+Date:   Sun, 25 Sep 2022 13:57:49 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 03/11] arm64: dts: qcom: sdm845: correct slimbus children
- unit addresses
+Subject: Re: [PATCH 05/11] arm64: dts: qcom: sdm845: drop unused slimbus dmas
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -68,14 +67,15 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
- <20220923161453.469179-4-krzysztof.kozlowski@linaro.org>
+ <20220923161453.469179-6-krzysztof.kozlowski@linaro.org>
 From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220923161453.469179-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220923161453.469179-6-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,32 +84,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 9/23/22 11:14 AM, Krzysztof Kozlowski wrote:
-> slimbus uses address-cells=2, so correct children unit addresses.
+> Bindings document only two DMA channels.  Linux driver also does not use
+> remaining rx2/tx2.
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   arch/arm64/boot/dts/qcom/sdm845.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 >
 > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 9db1fce6b198..2264bba69f84 100644
+> index 2264bba69f84..1213f78a8b7a 100644
 > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
 > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -3841,12 +3841,12 @@ ngd@1 {
->   				#address-cells = <2>;
->   				#size-cells = <0>;
+> @@ -3828,9 +3828,8 @@ slim: slim@171c0000 {
+>   			reg = <0 0x171c0000 0 0x2c000>;
+>   			interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
 >   
-> -				wcd9340_ifd: ifd@0{
-> +				wcd9340_ifd: ifd@0,0 {
->   					compatible = "slim217,250";
->   					reg = <0 0>;
->   				};
+> -			dmas = <&slimbam 3>, <&slimbam 4>,
+> -				<&slimbam 5>, <&slimbam 6>;
+> -			dma-names = "rx", "tx", "tx2", "rx2";
+> +			dmas = <&slimbam 3>, <&slimbam 4>;
+> +			dma-names = "rx", "tx";
 >   
-> -				wcd9340: codec@1{
-> +				wcd9340: codec@1,0 {
->   					compatible = "slim217,250";
->   					reg = <1 0>;
->   					slim-ifc-dev = <&wcd9340_ifd>;
+>   			iommus = <&apps_smmu 0x1806 0x0>;
+>   			#address-cells = <1>;
 
 Tested on Lenovo Yoga C630
 
