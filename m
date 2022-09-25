@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A425E9393
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB225E938E
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 16:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiIYOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 10:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S231332AbiIYOCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 10:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiIYOGQ (ORCPT
+        with ESMTP id S229674AbiIYOCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 10:06:16 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD9286F7;
-        Sun, 25 Sep 2022 07:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664114411;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=y4Fvb9tFgDidWGuwba+gD4vi++BPYzS+rjY1SrTWt8M=;
-    b=AEoxGvubdnYyLAIj4WH2a4LrXLrN95SyJ55FQXn2hx6lxdtg+qW/veoO6MyS6XVBKK
-    WFjt1YBpDE1JaFhdZbdjlvhG00HCGs51TvVxibl5B5yNLWZtRnt/AfROT5x0JjcIMlR4
-    tMMyJckPlJCoxKF3Nx7jPaWLM8kM8koslnUDOtY4n+YonlMG6LIRZIGIjreMmzs819Ym
-    vj90qO5/i4PMOY9b5FQCKkHunPQaSx71D0c+5RnFsHWC89NGhPEgde8mZ9pexKbBYJUs
-    +f4X1QCSOnq2910pycKvJcw3zovlYjMXEtp/y99muEt1Zd/tHTOdzE7D0RAw3FA7qZXK
-    co2A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85lg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.1.1 AUTH)
-    with ESMTPSA id dde14cy8PE0B5Wh
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 25 Sep 2022 16:00:11 +0200 (CEST)
-Date:   Sun, 25 Sep 2022 16:00:04 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/32] dt-bindings: pinctrl: qcom,msm8909-tlmm: do not
- require function on non-GPIOs
-Message-ID: <YzBe5NdhGqR+2bxN@gerhold.net>
-References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
- <20220924080459.13084-18-krzysztof.kozlowski@linaro.org>
+        Sun, 25 Sep 2022 10:02:52 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF06725594
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 07:02:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso4470164pjm.5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 07:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=zWgUGM/JTFTwLtZo+7BxbsDySLaY5hFmmAqfaepFGCs=;
+        b=ft+4GDXYKoIE7aQZAlGuHYutee1Z+zqC3UE+3bR6emon/0nAyDo52cDGApr9lAM9gc
+         gsb4AlSigFnAizXHShMjkXs1Yb7Eefi09Be/VDIOh+dt/aBS9eHv4j9qOCZu6tP15ztr
+         Kjshhl29lmohCRGXMxbWUlO+EGGg64hGVP191BuLUlOHDS5ritCG9eHsX+g5o9hUA2GP
+         2SxN9ckJ3TH4HMSQr7p4QBjVjOZF8ILxG+ms64DGWQqbV1p5H/3JpHAsSqKDtgKGIyPr
+         VzP2ItJwsdrlp0bC2Fs7xeZnp5vQVMS3Q8CWUnPYcKIHgYvMojK5WjyNjBGMClqzi3L8
+         oqoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zWgUGM/JTFTwLtZo+7BxbsDySLaY5hFmmAqfaepFGCs=;
+        b=WU4SgxrbofIUxPKRAycGZVf5QwFbNOhbgVomVgC4WGvcq+MG4LLj/JMMPvYNRMNVmy
+         yedlS6qdvHy1/SQIQr+t0d6kb8hdtY8FX2mFVqNm0mGP1K3pU5qnPyWz22wr+4COQAAN
+         BmmucH06dua+r1rw535ZGsmccYAazucJpYGABKe2bzPwLXx3Jvm2nSNEBUOX8d7hug0W
+         uQwqtG7SCfiKth9cr8nKQIFnlEiT7nJK0jc9lkWN0G9TdgR531Im+ZYJ4sRWIVbZDcFf
+         FIZ80Tvg71vXLKQCkvwWyeERUsf2Fp18nXJldTQgUuc2I48GTCuMduGgimEXnZcyVGzW
+         ZNMA==
+X-Gm-Message-State: ACrzQf0tCwCP1Z7eaS8K/tSESsnb+BbN4LtsD7XcOMmo0NHuEbnDvpKs
+        eE2jgK1gzVMYTdVbVo9UJQuoqP/ZMEd3DWIPdpBj5rtntfHM5EhM
+X-Google-Smtp-Source: AMsMyM7HVJ6EjMszIw6DN7PzcTx8SRNT6xgxOzCIVQ1BW3qPdQ4oEGYjvN/Leu2Ze6hmBC4AyojzGm/exFCnccPWeQU=
+X-Received: by 2002:a17:902:ccc2:b0:178:29e1:899e with SMTP id
+ z2-20020a170902ccc200b0017829e1899emr17465309ple.114.1664114571251; Sun, 25
+ Sep 2022 07:02:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924080459.13084-18-krzysztof.kozlowski@linaro.org>
+References: <CABXGCsN8LHqz7=OSvBpKCqKdV4L_4FPXtQ32bgYveA9yP2_xiQ@mail.gmail.com>
+ <20220925042031.GA9845@1wt.eu>
+In-Reply-To: <20220925042031.GA9845@1wt.eu>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Sun, 25 Sep 2022 19:02:39 +0500
+Message-ID: <CABXGCsOsm_QtFjd9KCYOc3E_4Tn_EVDhWifOPMU7_PZ7MC2big@mail.gmail.com>
+Subject: Re: Unable bisect issue because kernel not building from old commits
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     ast@kernel.org, yhs@fb.com, sean.wang@mediatek.com,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+>
+> Note that this looks more related to binutils here. Regardless, there
+> are pre-built toolchains including compiler+binutils for various gcc
+> versions from 4.9 and up here, for all supported architectures:
+>
+>    https://mirrors.edge.kernel.org/pub/tools/crosstool/
+>
+> These ones are sufficient to build a kernel and are likely easier to
+> deal with than trying to port a patch over a bisect session. For example
+> you could have luck with 7.5 which has been supported for a very long
+> time and still is supported.
 
-On Sat, Sep 24, 2022 at 10:04:44AM +0200, Krzysztof Kozlowski wrote:
-> Certain pins, like SDcard related, do not have functions and such should
-> not be required.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I don't quite understand how to switch to the downloaded binutils
+without breaking the distribution.
+I am building the kernel with the following command:
+$ make clean && make -j32 bzImage && make -j32 modules
 
-Thanks a lot for all your effort to clean this up!
+Thanks.
 
-> ---
->  .../bindings/pinctrl/qcom,msm8909-tlmm.yaml          | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> index b1735918fa90..e4332e628698 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> @@ -53,7 +53,6 @@ $defs:
->      description:
->        Pinctrl node's client devices use subnodes for desired pin configuration.
->        Client device subnodes use below standard properties.
-> -    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
->  
->      properties:
->        pins:
-> @@ -113,7 +112,16 @@ $defs:
->  
->      required:
->        - pins
-> -      - function
-> +
-> +    allOf:
-> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-> +      - if:
-> +          properties:
-> +            pins:
-> +              pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-7])$"
-> +        then:
-> +          required:
-> +            - function
->  
-
-Is it possible to place this into qcom,tlmm-common.yaml? If the pattern
-is only used to make "function" required for GPIOs, then it should not
-matter if it matches just the prefix ("^gpio") or the exact set of
-allowed GPIO numbers. The definition of the "pins" property will already
-take care of validating those.
-
-Or are there some Qcom SoCs where a GPIO without "function" is valid?
-
-Thanks,
-Stephan
+-- 
+Best Regards,
+Mike Gavrilov.
