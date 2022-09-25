@@ -2,158 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D32B5E96E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 01:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0F95E96E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 01:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiIYXSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 19:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S232589AbiIYXVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 19:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiIYXSo (ORCPT
+        with ESMTP id S232425AbiIYXVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 19:18:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF3629824
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 16:18:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55214B8128D
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B9DC433D6
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:18:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664147920;
-        bh=ir9kdaG2LaaAh6q3B/+kD0K7jgZwdQEk7RxO73YXov8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C6XHzStZMc34QAD1pUX5CZOj2iU/Xp8QgMlsGJ+JZJuiRN0ByXBaONRvBlamch0Ma
-         tjA9bWK08q4nCunFBLTtCLYi9vxzDS+mA3bLG0gaVmJwXh/ukCZRq6C+H92QOBExgQ
-         oKW5kSd9uZhha8Xy9WB9rmXoDSHbDM5MX0kGJ3RM9f3rP8ndFTqNkzMsbE6eNd4Eqy
-         Rr8/NHSryP9ma+eeCjy+/wqgXi2TfdZZMmNtuXf8cj0m7QIk5wXUlajLGngXmiY77S
-         CGnwFYJwj+HKgvxYgre5zBh5EEsreoXheuPiGAGmSEOxITXc1sGkzHgXkOL+LdAWk5
-         eGAuEFfbyxM5w==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278a61bd57so7219694fac.7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 16:18:40 -0700 (PDT)
-X-Gm-Message-State: ACrzQf15ZU9JYevgqGt21dquGlyE6SUMW3c/xNw9XzYVv5dzgvHmaI4I
-        F6IcODZf4UZBhWaUaERi/E5+pb6AS77c/B8XMSE=
-X-Google-Smtp-Source: AMsMyM5En5NGgLYHFu5c/5LTPvS4iDYtENMXq3gobkQCiXjCYHqIzdAuJ14JOjvxpya8Hqmy0rIjUt08Rfjuo7MzuhY=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr17385757oao.112.1664147919201; Sun, 25
- Sep 2022 16:18:39 -0700 (PDT)
+        Sun, 25 Sep 2022 19:21:35 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8146D2982C;
+        Sun, 25 Sep 2022 16:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=VoMnbl/yC4fSqlCopgwm/mqk4gIbOdlbbIcobHH1MtA=; b=xGL0aD11N9pHmMy8pRruqzl71G
+        fuT4BeLghdRGsbgxfFNtgPKgw1MSOn6acIDZ4eMfWSWUuj8uhRBT/6X8wCgAReXLOnyjx3pv1LZCs
+        sN8kAiidG/EcKRv9V6IP9ZS1JgUYYxFeyPZc5wkaRm0+1CK9qhx5fC7MHOYBvuX9lAZdSqfYEGxSi
+        mIADaiZILR8P95o62DGJyEcSB27POeLq/QX9ef1FuOpj3UPoHavQOAYgFZr+OEA84qFAktEYA0Bhs
+        asfsUwlnF+vtN6xmgkCxmKdqL5Y6W8uhoma1X4N5wAXdstaEkBeN86Ar5vh00H3ecDaAT4IVTxxqh
+        ZoJqY65Q==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ocavt-000BGy-3B; Sun, 25 Sep 2022 23:21:09 +0000
+Message-ID: <fce2a20f-4fe3-2fca-5666-0f804ed220c6@infradead.org>
+Date:   Sun, 25 Sep 2022 16:21:06 -0700
 MIME-Version: 1.0
-References: <20220925175356.681-1-jszhang@kernel.org> <20220925175356.681-2-jszhang@kernel.org>
-In-Reply-To: <20220925175356.681-2-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 26 Sep 2022 07:18:26 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSXDYLk07yYU-fUNg12k_7+Pmm8tQDnsRHw4Ka5vX8JyA@mail.gmail.com>
-Message-ID: <CAJF2gTSXDYLk07yYU-fUNg12k_7+Pmm8tQDnsRHw4Ka5vX8JyA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] riscv: remove extra level wrappers of trace_hardirqs_{on,off}
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        tech-board@lists.linuxfoundation.org,
+        Song Liu <songliubraving@fb.com>,
+        Kernel Team <Kernel-team@fb.com>
+Cc:     Borislav Petkov <bp@alien8.de>, brijesh.singh@amd.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, jane.chu@oracle.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, seanjc@google.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>
+References: <00000000000076f3a305e97e9229@google.com>
+ <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
+ <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
 
-I would involve the patch in the generic entry series, okay?
 
-On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Since riscv is converted to generic entry, there's no need for the
-> extra wrappers of trace_hardirqs_{on,off}.
->
-> Tested with llvm + irqsoff.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/kernel/Makefile    |  2 --
->  arch/riscv/kernel/trace_irq.c | 27 ---------------------------
->  arch/riscv/kernel/trace_irq.h | 11 -----------
->  3 files changed, 40 deletions(-)
->  delete mode 100644 arch/riscv/kernel/trace_irq.c
->  delete mode 100644 arch/riscv/kernel/trace_irq.h
->
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 01da14e21019..11ee206cc235 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -69,8 +69,6 @@ obj-$(CONFIG_CPU_PM)          += suspend_entry.o suspend.o
->  obj-$(CONFIG_FUNCTION_TRACER)  += mcount.o ftrace.o
->  obj-$(CONFIG_DYNAMIC_FTRACE)   += mcount-dyn.o
->
-> -obj-$(CONFIG_TRACE_IRQFLAGS)   += trace_irq.o
-> -
->  obj-$(CONFIG_PERF_EVENTS)      += perf_callchain.o
->  obj-$(CONFIG_HAVE_PERF_REGS)   += perf_regs.o
->  obj-$(CONFIG_RISCV_SBI)                += sbi.o
-> diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-> deleted file mode 100644
-> index 095ac976d7da..000000000000
-> --- a/arch/riscv/kernel/trace_irq.c
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> - */
-> -
-> -#include <linux/irqflags.h>
-> -#include <linux/kprobes.h>
-> -#include "trace_irq.h"
-> -
-> -/*
-> - * trace_hardirqs_on/off require the caller to setup frame pointer properly.
-> - * Otherwise, CALLER_ADDR1 might trigger an pagging exception in kernel.
-> - * Here we add one extra level so they can be safely called by low
-> - * level entry code which $fp is used for other purpose.
-> - */
-> -
-> -void __trace_hardirqs_on(void)
-> -{
-> -       trace_hardirqs_on();
-> -}
-> -NOKPROBE_SYMBOL(__trace_hardirqs_on);
-> -
-> -void __trace_hardirqs_off(void)
-> -{
-> -       trace_hardirqs_off();
-> -}
-> -NOKPROBE_SYMBOL(__trace_hardirqs_off);
-> diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-> deleted file mode 100644
-> index 99fe67377e5e..000000000000
-> --- a/arch/riscv/kernel/trace_irq.h
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-> - */
-> -#ifndef __TRACE_IRQ_H
-> -#define __TRACE_IRQ_H
-> -
-> -void __trace_hardirqs_on(void);
-> -void __trace_hardirqs_off(void);
-> -
-> -#endif /* __TRACE_IRQ_H */
-> --
-> 2.34.1
->
+On 9/25/22 14:55, Alexei Starovoitov wrote:
+> On Sun, Sep 25, 2022 at 9:44 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>>
+>> On 9/25/22 04:18, syzbot wrote:
+>>> ------------[ cut here ]------------
+>>> CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: 0xffffffffa0401000 - 0xffffffffa0401fff PFN 7d8d5
+>>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 verify_rwx arch/x86/mm/pat/set_memory.c:600 [inline]
+>>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr arch/x86/mm/pat/set_memory.c:1569 [inline]
+>>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr_set_clr+0x1f40/0x2020 arch/x86/mm/pat/set_memory.c:1691
+>>> Modules linked in:
+>>
+>> Yay, one of these that isn't due to wonky 32-bit kernels!
+>>
+>> This one looks to be naughty intentionally:
+>>
+>>> void *bpf_jit_alloc_exec_page(void)
+>>> {
+>> ...
+>>>         /* Keep image as writeable. The alternative is to keep flipping ro/rw
+>>>          * every time new program is attached or detached.
+>>>          */
+>>>         set_memory_x((long)image, 1);
+>>>         return image;
+>>> }
+>>
+>> For STRICT_KERNEL_RWX kernels, I think we would really rather that this
+>> code *did* flip ro/rw every time a new BPF program is attached or detached.
+> 
+> Steven Rostedt noticed that comment around the middle of August
+> and told you and Peter about it.
+> Then Peter added a WARN_ONCE in commit
+> https://lore.kernel.org/all/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net/
+> to explicitly trigger that known issue.
+> Sure enough the fedora fails to boot on linux-next since then,
+> because systemd is loading bpf programs that use bpf trampoline.
+> The boot issue was was reported 3 days ago:
+> https://lore.kernel.org/bpf/c84cc27c1a5031a003039748c3c099732a718aec.camel@kernel.org/T/#u
+> Now we're trying to urgently address it with:
+> https://lore.kernel.org/bpf/20220923211837.3044723-1-song@kernel.org/
+> 
+> So instead of pinging us with your w^x concern you've decided
+> to fail hard in -next to force the issue and
+> now acting like this is something surprising to you?!
+> 
+> This is Code of Conduct "worthy" behavior demonstrated
+> by a newly elected member of the Technical Advisory Board.
+> Please consider resigning.
+> A TAB member should be better than this.
 
+If it is (and I don't see it), just file a complaint.
+Don't try to be the enforcer.
 
 -- 
-Best Regards
- Guo Ren
+~Randy
