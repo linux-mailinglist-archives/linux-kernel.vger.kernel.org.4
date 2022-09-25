@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC315E91FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1A55E920A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 12:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiIYKHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 06:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
+        id S231390AbiIYKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 06:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiIYKHT (ORCPT
+        with ESMTP id S231244AbiIYKUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 06:07:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053182F658;
-        Sun, 25 Sep 2022 03:07:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DE8C6068C;
-        Sun, 25 Sep 2022 10:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4831C433C1;
-        Sun, 25 Sep 2022 10:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664100438;
-        bh=zlpoVVnJkiDuk0yXJbjiyJ92BfoyGTcKVWHPSNH/Q4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rr+0KUBp+DomVZlSUpT81467stBA08w7bFb6FF7fucOxYFxsQzBv81bhm+/LtZ0P3
-         zhA3efJ2RzQpAmLZLAD4ERA2kntyuPA+C/JJ4vm//m3pAFDMKVHJxD/+UEn42NUbgj
-         uRYdoYImwHz6G8AKBT6WyE5XXXa55bXRzVKCgFNY=
-Date:   Sun, 25 Sep 2022 12:07:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite
- being a V0.96 controller
-Message-ID: <YzAoUyw1opYHVFGB@kroah.com>
-References: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
- <Yy7ENBX2Zo3vNgB1@kroah.com>
- <em98cdb3f1-82c0-4fd3-92af-9c3d062b3d0c@35bdcead.com>
- <YzAMRPjywl0f4uSY@kroah.com>
- <emf600f901-91ef-4aea-931e-9f6fc5f42c86@689b6561.com>
+        Sun, 25 Sep 2022 06:20:04 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CDC1E3FF
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:20:01 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z25so6713193lfr.2
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 03:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Q1Tiar2NG81eBXy634cm6RIb1sHCUqEEdTntn7Dwa60=;
+        b=E282Z+gc026IzLcax1MjsFldPbPHOCZk8Z3gvxrzOdyQu6aU00YW7W7gm23OEBT+iu
+         E2GHjhNKgtkw1dsuqF6Wm44ezLbwlTucJ1asStpdCPRUzve8DuuZgxdMF4V2rS414RH5
+         mHGzGLjd0r4yG4neK2DPUppYlZiMr3aKwxEFAVB5C9FD9z3xiMZZM2blIkpfHc4wdIiM
+         ZoQzk+f4/VDnfG7I1fhx1mhZiKNb2/Hade2jEtOm2Mf7oPMVBhD2I/7HhS9UtEyoDmp5
+         3XPUK/xOkWkh2jLoMAy5lnHotSxriBo1QvxcHaxL0qnhFwlPfQO06dde9nV/G9XNH516
+         HGKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Q1Tiar2NG81eBXy634cm6RIb1sHCUqEEdTntn7Dwa60=;
+        b=GiypLk63HNPrEwpJdvV78QuYLGgay+K1scCYrnAo0ZPoYZL18kDv7BygzZCBmq5rYK
+         zirYPLqbBZTC0SVAGvud2+5xG2aH0lDQuiKdhD5sIRYcqyG9DKz0pMmW/ziVLLJo550o
+         rSFXtxb4O/cfmW7FnZqJFsaNgQXY15ohXR+HDLvHJnt50Vkd8PiuWcEv4IOm72ckvzTa
+         GoAWjdsnugpvR/sdeae91jvXlBiz8eo9ao5Mjzjhr0uXkAljs4SQJD92rHNBBp9eP76F
+         wCQ/DCjb3OyJNRV44Gymg1pQHEChBBxbZDfyHfQtqi052yxgD0pFCG2cr7SnsNMDBgrv
+         RnAg==
+X-Gm-Message-State: ACrzQf0uS8Xfg8V9eyrfrTAJI8cZDDgiTvSQUoV6QaVhp7iSANfwvVgu
+        jpUsy9Xm5JwCofp8MI9NUHnj9A==
+X-Google-Smtp-Source: AMsMyM5w9xY155pOsigPz8r8UH7WsYRwThsQ4esn6QOijIxVhBQuTA36CU8wVrxoEf9zrhHef+4GVQ==
+X-Received: by 2002:a05:6512:688:b0:498:fe57:b5f with SMTP id t8-20020a056512068800b00498fe570b5fmr6501865lfe.209.1664101199695;
+        Sun, 25 Sep 2022 03:19:59 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v10-20020a2ea60a000000b0026d92a5f97asm173394ljp.111.2022.09.25.03.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 03:19:59 -0700 (PDT)
+Message-ID: <a90d0b34-9ec9-d8cf-9e15-9de157b17728@linaro.org>
+Date:   Sun, 25 Sep 2022 12:19:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <emf600f901-91ef-4aea-931e-9f6fc5f42c86@689b6561.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] ARM: qcom_defconfig: enable rest of ARMv7 SoCs
+ pinctrl drivers
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220925091920.34891-1-krzysztof.kozlowski@linaro.org>
+ <YzAnaXDqFrZWq9n/@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YzAnaXDqFrZWq9n/@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,89 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 10:02:53AM +0000, Jens Glathe wrote:
-> Yep, found it. Them pesky editors...
+On 25/09/2022 12:03, Stephan Gerhold wrote:
+> On Sun, Sep 25, 2022 at 11:19:19AM +0200, Krzysztof Kozlowski wrote:
+>> Enable rest of ARMv7 SoCs pin controller drivers.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  arch/arm/configs/qcom_defconfig | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+>> index 7d8b6884fd00..4971de49be36 100644
+>> --- a/arch/arm/configs/qcom_defconfig
+>> +++ b/arch/arm/configs/qcom_defconfig
+>> @@ -131,14 +131,20 @@ CONFIG_PINCTRL_APQ8064=y
+>>  CONFIG_PINCTRL_APQ8084=y
+>>  CONFIG_PINCTRL_IPQ4019=y
+>>  CONFIG_PINCTRL_IPQ8064=y
+>> +CONFIG_PINCTRL_MSM8226=y
+>>  CONFIG_PINCTRL_MSM8660=y
+>>  CONFIG_PINCTRL_MSM8960=y
+>> +CONFIG_PINCTRL_MDM9607=y
+>>  CONFIG_PINCTRL_MDM9615=y
+>>  CONFIG_PINCTRL_MSM8X74=y
+>> +CONFIG_PINCTRL_MSM8909=y
+>> +CONFIG_PINCTRL_MSM8916=y
 > 
-> thanks,
+> Thanks for adding MSM8916! (it's used on both ARM32 and ARM64)
 > 
-> Jens Glathe
+>> +CONFIG_PINCTRL_MSM8976=y
 > 
-> ---
-> 
-> > From 8d6e467569118b83a4622edf09768ba20aef5086 Mon Sep 17 00:00:00 2001
-> From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> Date: Sun, 28 Aug 2022 16:23:41 +0200
-> Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a
->  V0.96 controller
-> 
-> only if it reports as a V0.96 XHCI controller. Appears to fix the errors
-> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
-> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
-> often) when using a r8152 USB3 ethernet adapter with integrated hub.
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> ---
->  drivers/usb/host/xhci-pci.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index dce6c0ec8d34..d1b8e7148dd1 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -306,8 +306,12 @@ static void xhci_pci_quirks(struct device *dev, struct
-> xhci_hcd *xhci)
->      }
-> 
->      if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> -        pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
-> +        pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
-> +        /* try to tame the ASMedia 1042 controller which is 0.96 */
-> +        if (xhci->hci_version == 0x96)
-> +            xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
->          xhci->quirks |= XHCI_BROKEN_STREAMS;
-> +    }
->      if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
->          pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
->          xhci->quirks |= XHCI_TRUST_TX_LENGTH;
-> --
-> 2.25.1
-> 
-> ---
-> 
-> replaced spaces with tabs
+> This one should be added to the ARM64 defconfig, I doubt anyone uses it
+> with ARM32. :)
 
+True. I'll send a v2. Thanks!
 
-Hi,
+Best regards,
+Krzysztof
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
-
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
