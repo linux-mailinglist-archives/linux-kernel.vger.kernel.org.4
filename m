@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0F95E96E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 01:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19355E96E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 01:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiIYXVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 19:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S232185AbiIYXVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 19:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiIYXVf (ORCPT
+        with ESMTP id S230173AbiIYXVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 19:21:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8146D2982C;
-        Sun, 25 Sep 2022 16:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=VoMnbl/yC4fSqlCopgwm/mqk4gIbOdlbbIcobHH1MtA=; b=xGL0aD11N9pHmMy8pRruqzl71G
-        fuT4BeLghdRGsbgxfFNtgPKgw1MSOn6acIDZ4eMfWSWUuj8uhRBT/6X8wCgAReXLOnyjx3pv1LZCs
-        sN8kAiidG/EcKRv9V6IP9ZS1JgUYYxFeyPZc5wkaRm0+1CK9qhx5fC7MHOYBvuX9lAZdSqfYEGxSi
-        mIADaiZILR8P95o62DGJyEcSB27POeLq/QX9ef1FuOpj3UPoHavQOAYgFZr+OEA84qFAktEYA0Bhs
-        asfsUwlnF+vtN6xmgkCxmKdqL5Y6W8uhoma1X4N5wAXdstaEkBeN86Ar5vh00H3ecDaAT4IVTxxqh
-        ZoJqY65Q==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocavt-000BGy-3B; Sun, 25 Sep 2022 23:21:09 +0000
-Message-ID: <fce2a20f-4fe3-2fca-5666-0f804ed220c6@infradead.org>
-Date:   Sun, 25 Sep 2022 16:21:06 -0700
+        Sun, 25 Sep 2022 19:21:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65739248F1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 16:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664148080;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sCD0xx2zMa4gS6Q6TKSN9kVDHDoO1KNdmd+17CQdIKI=;
+        b=W96fRnxurw6tUDCPaR7fSuCMu2fhFpHRsAQjdVkBmdlXhNB1BhQQlXPLEhk21pS3hzotyq
+        vVEs4tUE3dJ+dxjWQT6/kMPcTWAOo70QHrzr/xUgEnHvB3UkDxMozVT/Gn4n8AcHlWi01i
+        X1ALIGuE5HmNW/pNrrEqZj/r3b+w2/Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-_NE_ZJrjOMeXaolZDVnXTw-1; Sun, 25 Sep 2022 19:21:16 -0400
+X-MC-Unique: _NE_ZJrjOMeXaolZDVnXTw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6511A85A583;
+        Sun, 25 Sep 2022 23:21:15 +0000 (UTC)
+Received: from [10.64.54.126] (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5B4A3140EBF3;
+        Sun, 25 Sep 2022 23:21:11 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH] KVM: arm64: vgic: Remove duplicate check in
+ update_affinity_collection()
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        will@kernel.org, eric.auger@redhat.com, yuzhe@nfschina.com,
+        oliver.upton@linux.dev, shan.gavin@gmail.com,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>
+References: <20220923065447.323445-1-gshan@redhat.com>
+ <87bkr5hto4.wl-maz@kernel.org>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <61dad836-2c4d-e462-3f52-1524db437629@redhat.com>
+Date:   Mon, 26 Sep 2022 09:21:08 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
+In-Reply-To: <87bkr5hto4.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        tech-board@lists.linuxfoundation.org,
-        Song Liu <songliubraving@fb.com>,
-        Kernel Team <Kernel-team@fb.com>
-Cc:     Borislav Petkov <bp@alien8.de>, brijesh.singh@amd.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, jane.chu@oracle.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, seanjc@google.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>
-References: <00000000000076f3a305e97e9229@google.com>
- <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
- <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Marc,
 
-
-On 9/25/22 14:55, Alexei Starovoitov wrote:
-> On Sun, Sep 25, 2022 at 9:44 AM Dave Hansen <dave.hansen@intel.com> wrote:
->>
->> On 9/25/22 04:18, syzbot wrote:
->>> ------------[ cut here ]------------
->>> CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: 0xffffffffa0401000 - 0xffffffffa0401fff PFN 7d8d5
->>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 verify_rwx arch/x86/mm/pat/set_memory.c:600 [inline]
->>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr arch/x86/mm/pat/set_memory.c:1569 [inline]
->>> WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr_set_clr+0x1f40/0x2020 arch/x86/mm/pat/set_memory.c:1691
->>> Modules linked in:
->>
->> Yay, one of these that isn't due to wonky 32-bit kernels!
->>
->> This one looks to be naughty intentionally:
->>
->>> void *bpf_jit_alloc_exec_page(void)
->>> {
->> ...
->>>         /* Keep image as writeable. The alternative is to keep flipping ro/rw
->>>          * every time new program is attached or detached.
->>>          */
->>>         set_memory_x((long)image, 1);
->>>         return image;
->>> }
->>
->> For STRICT_KERNEL_RWX kernels, I think we would really rather that this
->> code *did* flip ro/rw every time a new BPF program is attached or detached.
+On 9/24/22 9:56 PM, Marc Zyngier wrote:
+> Side note: please make sure you always Cc all the KVM/arm64 reviewers
+> when sending patches (now added).
 > 
-> Steven Rostedt noticed that comment around the middle of August
-> and told you and Peter about it.
-> Then Peter added a WARN_ONCE in commit
-> https://lore.kernel.org/all/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net/
-> to explicitly trigger that known issue.
-> Sure enough the fedora fails to boot on linux-next since then,
-> because systemd is loading bpf programs that use bpf trampoline.
-> The boot issue was was reported 3 days ago:
-> https://lore.kernel.org/bpf/c84cc27c1a5031a003039748c3c099732a718aec.camel@kernel.org/T/#u
-> Now we're trying to urgently address it with:
-> https://lore.kernel.org/bpf/20220923211837.3044723-1-song@kernel.org/
-> 
-> So instead of pinging us with your w^x concern you've decided
-> to fail hard in -next to force the issue and
-> now acting like this is something surprising to you?!
-> 
-> This is Code of Conduct "worthy" behavior demonstrated
-> by a newly elected member of the Technical Advisory Board.
-> Please consider resigning.
-> A TAB member should be better than this.
 
-If it is (and I don't see it), just file a complaint.
-Don't try to be the enforcer.
+Sure. The reason, why I didn't run './scripts/get_maintainer.pl' to get
+all reviewers, is the patch is super simple one :)
 
--- 
-~Randy
+> On Fri, 23 Sep 2022 07:54:47 +0100,
+> Gavin Shan <gshan@redhat.com> wrote:
+>>
+>> The ITS collection is guranteed to be !NULL when update_affinity_collection()
+>> is called. So we needn't check ITE's collection with NULL because the
+>> check has been included to the later one.
+> 
+> It took me a while to understand what you meant by this: the 'coll'
+> parameter to update_affinity_collection() is never NULL, so comparing
+> it with 'ite->collection' is enough to cover both the NULL case and
+> the "another collection" case.
+> 
+> If you agree with this, I can directly fix the commit message when
+> applying the patch.
+> 
+
+Yes, the commit message is accurate and correct. Please help to apply
+your commit message directly :)
+
+Thanks,
+Gavin
+
