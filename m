@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452BF5E95C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 21:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84E55E95D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 22:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbiIYTz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 15:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S232535AbiIYUV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 16:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbiIYTz4 (ORCPT
+        with ESMTP id S230173AbiIYUVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 15:55:56 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E702716D
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 12:55:51 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d82so4771566pfd.10
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 12:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=BbC1wgZUGA3VG7aRyXwF4yEsg/v9U58AhC2p3t+lydk=;
-        b=RutrL0MsAkUUROpcd5FYbEbC+/QokzgyVRCH/j8FRvV09XIHjBTZFKRA8Xg3HfRtrC
-         dSe1KElRTg3X3b9Y3dU3Teg+d++0XdXmT3zMdekEmbqJrHhXl2hYzsZpgj04J9OG2J0o
-         YoEDLQvLkEWYwH669Eo73wyB5z2ASBAtOEnI4XS0Enmw3BfQoFBc0L3WT9ReLRi2MunM
-         MGukH+BEyYfUTsGnuE5IqXy/9quwp049VZyFx/5WjNAdrMEBOUlO5iiH/7P1l1btWojG
-         nGDrMd3EOL9n+NcItLtkZy+BCwTJIG3kGVy/SzbXn1kSlc7v7Kngz5mjNVinfdpuUs1x
-         90UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BbC1wgZUGA3VG7aRyXwF4yEsg/v9U58AhC2p3t+lydk=;
-        b=PkLENb9tgb54169/Lk+He7qHHV7Deq5oqs/kQ0pXBvOpZOwSBSc71W2+H8YWjklK12
-         5furnWdOE2kDreviKoIWbrtu7MKEcVaZ8DaWUf+4x6C2vH55jPFFMlbSx3Jz60LRsbwk
-         4A1nmKZCSgHjh21/RYoF5GELXdlIhpq3KU7cSxYH0+UaPXI08kHLV7IlPfqFEYsIqUik
-         131pnMzE9J2Aya/rnMODfxAp9V0d8ZPb7i4gW0c6/c/ShIcUWfMct0clVHdtcCASGuVq
-         qTwe33rc08Xx4hnMF2MnwnYiRbOrrwKSiNYNeUjSWOCzW4CS2MrI2ThufM0YGtW/rGJM
-         PLZw==
-X-Gm-Message-State: ACrzQf2sAvxctM3CoCFkHI0o/7GiSBlVWVfH9UeAY1Jz2coMKQscqJJI
-        Vd9gN1Arloen7amr03KNMTKpLQ==
-X-Google-Smtp-Source: AMsMyM4t+v6XPNUaxap0bWu9i+f5KlhpaoKfnyU0oegKA9jcmE3xZdN3m0RuFmaVQ1i28NrVV1ICGQ==
-X-Received: by 2002:a65:6cc7:0:b0:42a:4d40:8dc1 with SMTP id g7-20020a656cc7000000b0042a4d408dc1mr17069878pgw.321.1664135750972;
-        Sun, 25 Sep 2022 12:55:50 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c60:7faa:3d17:778b:4e63:9e61? ([2401:4900:1c60:7faa:3d17:778b:4e63:9e61])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170902b18100b00176ad86b213sm9507680plr.259.2022.09.25.12.55.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 12:55:50 -0700 (PDT)
-Message-ID: <d3205b59-6b6e-2983-9e2a-39354cd1803e@linaro.org>
-Date:   Mon, 26 Sep 2022 01:25:45 +0530
+        Sun, 25 Sep 2022 16:21:55 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F7F2612B;
+        Sun, 25 Sep 2022 13:21:54 -0700 (PDT)
+Received: from g550jk.. (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 28B46C78D0;
+        Sun, 25 Sep 2022 20:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1664137312; bh=dBhg2i9VbI4tROrm8sG5HnARD1c5C/VJOwF6+8C7fTI=;
+        h=From:To:Cc:Subject:Date;
+        b=duDgC2cz8jcVEo1s4tDc1Ni+jB+An74D0jqAovmJiOEN7uzXENG1HrmXHcpbduTDS
+         JagqAMh1oaKh3PJybvGTa/MQKD8WtfIY46xgn/sm1/VTfGDGvJeEwXsGeEezN4u/0S
+         Prc0RGBGixWwPWyEHYmgBk8ZYmrb6d2SAk89zgHw=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom-pma8084: fix vadc channel node names
+Date:   Sun, 25 Sep 2022 22:21:43 +0200
+Message-Id: <20220925202143.123208-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] dt-bindings: dma: Make minor fixes to qcom,bam-dma
- binding doc
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org, agross@kernel.org,
-        dmaengine@vger.kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, andersson@kernel.org
-References: <20220918081119.295364-1-bhupesh.sharma@linaro.org>
- <d7507d61-9d16-c2d3-2066-5e2f9afd6eb9@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <d7507d61-9d16-c2d3-2066-5e2f9afd6eb9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Node names for the channel are supposed to be adc-chan@REG.
 
-On 9/18/22 2:19 PM, Krzysztof Kozlowski wrote:
-> On 18/09/2022 09:11, Bhupesh Sharma wrote:
->> As a user recently noted, the qcom,bam-dma binding document
->> describes the BAM DMA node incorrectly.
-> 
-> It's a bit confusing - what is exactly incorrectly described by binding?
-> You did not make any changes to the binding itself...
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/qcom-pma8084.dtsi | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-Sorry for the late reply. Your comment just skipped through my mail 
-filters :(
+diff --git a/arch/arm/boot/dts/qcom-pma8084.dtsi b/arch/arm/boot/dts/qcom-pma8084.dtsi
+index e77602e9f95c..7ad573c7b4ac 100644
+--- a/arch/arm/boot/dts/qcom-pma8084.dtsi
++++ b/arch/arm/boot/dts/qcom-pma8084.dtsi
+@@ -64,22 +64,27 @@ pma8084_vadc: adc@3100 {
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+ 
+-			die_temp {
++			adc-chan@8 {
+ 				reg = <VADC_DIE_TEMP>;
+ 			};
+-			ref_625mv {
++
++			adc-chan@9 {
+ 				reg = <VADC_REF_625MV>;
+ 			};
+-			ref_1250v {
++
++			adc-chan@10 {
+ 				reg = <VADC_REF_1250MV>;
+ 			};
+-			ref_buf_625mv {
++
++			adc-chan@12 {
+ 				reg = <VADC_SPARE1>;
+ 			};
+-			ref_gnd {
++
++			adc-chan@14 {
+ 				reg = <VADC_GND_REF>;
+ 			};
+-			ref_vdd {
++
++			adc-chan@15 {
+ 				reg = <VADC_VDD_VADC>;
+ 			};
+ 		};
+-- 
+2.37.3
 
-I understand your point. I should have made the commit message more 
-descriptive (infact now I look at it, I see some key words are actually 
-missing from the commit message).
-
-The commit message should infact read as:
-
-"As a user recently noted, the qcom,bam-dma binding document
-describes the BAM DMA node *in the example section* incorrectly. Fix the 
-same by making it consistent with the node present inside 'qcom-msm8974' 
-dts file, *namely the 'reg' and 'interrupt' values which are incorrect. 
-While looking at the example in the binding document, the user noted 
-that its incorrect when compared with both the 'msm8974' upstream as 
-well as downstream dts files.*
-
-I hope the bold text (which I added above), helps clear the purpose of 
-the patch better.
-
-Please let me know your views.
-
-Thanks,
-Bhupesh
