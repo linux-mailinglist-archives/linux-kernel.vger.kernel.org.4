@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33B05E9585
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE555E9589
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 20:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiIYS53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 14:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S231867AbiIYS5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 14:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiIYS50 (ORCPT
+        with ESMTP id S232925AbiIYS5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 14:57:26 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7404F2ED79
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:24 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id n124so5981168oih.7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:24 -0700 (PDT)
+        Sun, 25 Sep 2022 14:57:40 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC53D2EF2E
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id c81so6004195oif.3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kali.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=bu2u6MTlzgmQ7/o236tbswT/S+hmMK8el6BxRtvYroA=;
-        b=ZPGr5rAUGy2KV5aNoCc1rEnrPZ5mlb3mZ4682X1UEgSiigC+ZOMQDxD55z5zwcrq+m
-         zwchswryQxF3uSB1Xr1n9xhGqquBG6g+VaT9fvGF6XG7REzpWe2PMOWlYTuvrGtzXEdC
-         iM0PY5oXGRVYzizvUIxz/qiGexXmtg1xBWwWUJaSAyarFshUIHiI+fVW3l2um8iySLtk
-         bjABQXxWYjGIKvv9gpmm1KniuGyseQASgxn6knaXSWHytYf7ZluDQzpaNEixdZYZ02mt
-         jpyceI63g3Fy0qOLrswv1EPOue6vAZ/4hxcZLazZF6Ad6Z0IuYW74BXz2YoDLJ+T+3TJ
-         4Cvg==
+        bh=bqqG78pR7ezwwLzn7M7n9VDWc9F+Ofv/1iAE/Bm/ftU=;
+        b=AfC0cdfpVaBwj3CcA7oeO0Q6l8KZlfJtTPZr9qhYm1k6IJlENkYSYRdyLKw37AU9vE
+         k785gFHvSCRHViBJRXRg5X6uNVUm1cU3g6foHOFS/3dBHhx3ruuWbxlZKr2WhBo1Rh5c
+         AqWLdWZ42KhVFL01dJrDVy2h7hVwmu0JTmiOqm3c+XiU4UIsuSDDYUugvQp7gSUi/tVA
+         ZFh1CE0dyEZEAzQABEia1uLwT7sF4l8walPohpRjE2Pk3p01EcnkVxN+Yz90fQd6fcc/
+         7ID2V4sRFT9sJD28PhFXyVe4Y5Q859zWeCOKDr3fLKJHATNlAMnD/Fnv4F419h74v762
+         UYlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=bu2u6MTlzgmQ7/o236tbswT/S+hmMK8el6BxRtvYroA=;
-        b=v1mxAsQiiEpBZmHOeI/KkNKVlHc6VTIvgfo51gpkZ96dRBu/aKDEcP6uZ+2XCf24Xa
-         a+haoj4QBRhIEiXv+u2oj3eRbR5iMeFNOYzFFUnFW7EO9LOH1+cGHGhPRIKVLeqpbOPh
-         GewKd+bguPMW+0IHE9CCIFZpEijHVO0UA9ay6xFvGtkijRqBQtRJBQLtJ5/P3nBEslcP
-         WMrn5bqAp/MzhC/QVLL63CwJnq/g4e/3WgyxzzdRaXBmIGYcWkIchmFml+AuwzbUFwMj
-         U9adS3pGB4EEutne97Pp7WmMxd81yAXHUczIQfF4ap7vgIPpd8W8iCYNYAvL9Pvt+f+V
-         +VOA==
-X-Gm-Message-State: ACrzQf3ewpKUqNtT4h2U3abS/1QMhgupa3fH+UY4hMFTf6St8y9ktiF5
-        pQqLi8EO1UhFO3eYvP9VsH++uw==
-X-Google-Smtp-Source: AMsMyM4UbbkRyY+RbHC7z2TBwmCMfRBg4MPdTzWV9KKqCchzzAATPseVdg5Jh0p3R4rxCcErrgKoFg==
-X-Received: by 2002:aca:2b08:0:b0:350:6fde:bb88 with SMTP id i8-20020aca2b08000000b003506fdebb88mr8242649oik.31.1664132243417;
-        Sun, 25 Sep 2022 11:57:23 -0700 (PDT)
+        bh=bqqG78pR7ezwwLzn7M7n9VDWc9F+Ofv/1iAE/Bm/ftU=;
+        b=iJNaLWSyfLaq8SNNxJbJQl0hkaeDYmgmn1TxZeVEXmtVqdV1p/rt3PGloLc5Sq9se1
+         gKeMiTiyi5r2XtH01+7utVO6rmXBNB2ZBSqzYWkha4AgF+xnRYOwQftnWDLqBQsTbQSS
+         Of9/pz1XKZek82V00u3Cf89XVY6hGij+Z2FRmo56N/BGMldkoG8jpISEb81VsJDpi4Ti
+         z4V3LHUUaJy1nzC5l7wzXdxksDc39Eh0lI1MFB/AJphMYJO30/UvCYZ8JbL7L/0NeBpm
+         cOEq7R0VWqAeRcibu8IFJtwyih9fLxNpaBZ8sApin/mxNbRM4beFkEDJdM98S0O70MGj
+         cRiA==
+X-Gm-Message-State: ACrzQf3AM7CUt6sGW/4SRUg1HC6KTM3SVvOm3FinueWa9tpZbo9LKrMj
+        TYt1eLI79QRRsgSE4Aqhy02Gow==
+X-Google-Smtp-Source: AMsMyM6PPcl7/+jBEtRKosva+dM1Z8fxPO/owiGiHAPokcfw8mny0h3O3HTdso08LYBH2GJglszuKQ==
+X-Received: by 2002:a05:6808:188e:b0:350:6212:4f34 with SMTP id bi14-20020a056808188e00b0035062124f34mr13147961oib.144.1664132258120;
+        Sun, 25 Sep 2022 11:57:38 -0700 (PDT)
 Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id by5-20020a056830608500b0063b2251a78asm6786808otb.12.2022.09.25.11.57.21
+        by smtp.gmail.com with ESMTPSA id a184-20020acab1c1000000b003436fa2c23bsm6281560oif.7.2022.09.25.11.57.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 11:57:22 -0700 (PDT)
-Message-ID: <687b5cf5-313c-c5ca-a96e-eeb4442fde18@kali.org>
-Date:   Sun, 25 Sep 2022 13:57:20 -0500
+        Sun, 25 Sep 2022 11:57:37 -0700 (PDT)
+Message-ID: <d337655c-dd86-2c99-fd26-5a4a44ea98fa@kali.org>
+Date:   Sun, 25 Sep 2022 13:57:35 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 01/11] arm64: dts: qcom: sdm845: drop unused slimbus
- properties
+Subject: Re: [PATCH 03/11] arm64: dts: qcom: sdm845: correct slimbus children
+ unit addresses
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -68,9 +68,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
- <20220923161453.469179-2-krzysztof.kozlowski@linaro.org>
+ <20220923161453.469179-4-krzysztof.kozlowski@linaro.org>
 From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220923161453.469179-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220923161453.469179-4-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,29 +84,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 9/23/22 11:14 AM, Krzysztof Kozlowski wrote:
-> Drop properties from slimbus node: unneeded status and
-> downstream-related qcom,apps-ch-pipes/qcom,ea-pc (not documented, not
-> used).
+> slimbus uses address-cells=2, so correct children unit addresses.
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   arch/arm64/boot/dts/qcom/sdm845.dtsi | 3 ---
->   1 file changed, 3 deletions(-)
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
 > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index d761da47220d..9db1fce6b198 100644
+> index 9db1fce6b198..2264bba69f84 100644
 > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
 > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -3828,9 +3828,6 @@ slim: slim@171c0000 {
->   			reg = <0 0x171c0000 0 0x2c000>;
->   			interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
+> @@ -3841,12 +3841,12 @@ ngd@1 {
+>   				#address-cells = <2>;
+>   				#size-cells = <0>;
 >   
-> -			qcom,apps-ch-pipes = <0x780000>;
-> -			qcom,ea-pc = <0x270>;
-> -			status = "okay";
->   			dmas = <&slimbam 3>, <&slimbam 4>,
->   				<&slimbam 5>, <&slimbam 6>;
->   			dma-names = "rx", "tx", "tx2", "rx2";
+> -				wcd9340_ifd: ifd@0{
+> +				wcd9340_ifd: ifd@0,0 {
+>   					compatible = "slim217,250";
+>   					reg = <0 0>;
+>   				};
+>   
+> -				wcd9340: codec@1{
+> +				wcd9340: codec@1,0 {
+>   					compatible = "slim217,250";
+>   					reg = <1 0>;
+>   					slim-ifc-dev = <&wcd9340_ifd>;
 
 Tested on Lenovo Yoga C630
 
