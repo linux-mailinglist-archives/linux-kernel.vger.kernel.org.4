@@ -2,143 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE875E9489
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 18:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA465E948F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Sep 2022 19:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbiIYQ7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 12:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S229850AbiIYRBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 13:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIYQ7O (ORCPT
+        with ESMTP id S229824AbiIYRA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 12:59:14 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6B12B277;
-        Sun, 25 Sep 2022 09:59:13 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28PCSnrh003824;
-        Sun, 25 Sep 2022 16:58:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=NmCHfXGm2Ce/d4eCQqGTIFWeBL7QqPHNJkiBlQdaEsY=;
- b=IOqAzVS7F2/FSb4LPnf3jcxKZ5Hqvqou9LFuauElFDEUVyL/aqr9uR5ipMuM96RnjCbq
- GDymlbih3xaI0GtVDr8cMOS8V14+oGeoZEMNSH6ote8O+GmpAi3ecvNzAnsHZOwGtdTK
- ohLi6eU5gZFCG0282ESDsUO2SpOwqBGm9eSNy26LA6mrRaszg4voAOoFE4NG5ExecF6L
- ZXX+RFUEFO/FJldP/FAeHBFye45ysmAhrpGvev4LY1cp3vcCauxYYpcfcTdsIvcnUIQU
- yHCV27EXpAmyvXu8/5+mb36CV2U3l01ynUjHFJF3Tt0/oAfgS27IJhchqHfy9DFQBlOU aQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jssub9x4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 25 Sep 2022 16:58:59 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28PCI9Jo019153;
-        Sun, 25 Sep 2022 16:58:58 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpvck8cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 25 Sep 2022 16:58:58 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iuGqAdQaihvdqM0gaF3gq3vj2ZJa/d04kDLeSDN/vhQh/VGn7lr8ZDYQm4kaE5T9ctnW4kvfA1pIxQBShNyDpSDHyHdGTL2kYhlgL81Ns3iDEpmjEBJs2x/8s6VpAzK4sZJwybjWrs3gnul7mDEa/yHoLfJjNOyNcBC6ikGjcNRK2/C9vDfLGwrDvYZ0w6l0hQhSLbEONAkGt79Q154QxpwFmNa90sAmDFud9pAugBjEMWCV87darsuCJXUdotlZ4FSmBUQpYH6pOUVuZpwvorAYfJ9tnfjIfJfmXQm0G1omnZYpiAr/eXoHLlcoyvrBQ5Hls03mMGzG7r0cI6CIWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NmCHfXGm2Ce/d4eCQqGTIFWeBL7QqPHNJkiBlQdaEsY=;
- b=O79gEnoUlMJOtqLbcmnRAiHhB6dZz9mLvCqv3YKOnLJgKSoME0BWlp8sESct09mMXEiPei8MQY0C3pDt+OeORPlPfQ9IwIFth4iA7s7k8fVy3lkbWs7qPen5HuiZ42MkvpN+JsJDA086csJpzaTneBFziDpmvuweqpgk/mBIpu07SIXS9DFRSy/7OrjQV+YocfrBtL0mNPx1oCvGOekfMsDo4GuBSZcGeTXgHCB8DuQp80woTUEeykc638MJgaiktxoo37diRaBtvZjfz5F8/hwx78vnz89UVGbFGCtI1GiPIRCph61mYF9Yzp/DrHdlJhSeLIfjPm+O3DPe5QU+aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sun, 25 Sep 2022 13:00:59 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DF62B1A9;
+        Sun, 25 Sep 2022 10:00:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id v4so4608321pgi.10;
+        Sun, 25 Sep 2022 10:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NmCHfXGm2Ce/d4eCQqGTIFWeBL7QqPHNJkiBlQdaEsY=;
- b=VhHE+QH0/rlZTwOHRokjU4Bt0Eg/AXzOwJfXuCZxYNVJGFPO25wTTSJjLVXn3hhcrkNWUBG4z2Mnzi7EwYJmlLRZX2hFJlF4qOGbTI+6geJApJU42ZR7jpnh0YEmQKRdMQtxXiCFtDW6u/UoDylCMsgIiD7w5zGFWPWsubF57ts=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by SA1PR10MB5687.namprd10.prod.outlook.com (2603:10b6:806:23f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Sun, 25 Sep
- 2022 16:58:56 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::a497:8929:2c6f:7351]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::a497:8929:2c6f:7351%5]) with mapi id 15.20.5654.020; Sun, 25 Sep 2022
- 16:58:56 +0000
-To:     John Garry <john.garry@huawei.com>
-Cc:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH] scsi: pm8001: Fix running_req for internal abort commands
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1zgenqtkt.fsf@ca-mkp.ca.oracle.com>
-References: <1663854664-76165-1-git-send-email-john.garry@huawei.com>
-Date:   Sun, 25 Sep 2022 12:58:53 -0400
-In-Reply-To: <1663854664-76165-1-git-send-email-john.garry@huawei.com> (John
-        Garry's message of "Thu, 22 Sep 2022 21:51:04 +0800")
-Content-Type: text/plain
-X-ClientProxiedBy: DS7PR03CA0319.namprd03.prod.outlook.com
- (2603:10b6:8:2b::27) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date;
+        bh=mQCpHD3b/oNCevN1QdhnwOd9ghkLwiR4HAI/Op4UuAA=;
+        b=bf8hrf7c6j8YQs+sOdKjxNXSefn9xJG6UauB5PFVUdvSCMOO06soFxo6uSM5d7CdTu
+         Lq8zhjPSjKXyQq/x4t+UHwoeEZJP3A2o2wAP+1EwbE8PLnmcJ4/Uq0SHXE4kJN1LgZlh
+         KyusDiO+XksJkRFbDE1UtOHZ3THL9uS9I5h3pVP1TQzDoQ3oWYOV8uWe2wQ4DLhzO6xM
+         BTngVtZnw+6VKOH3hVXK/w5hifpw43RzmpqAiWxK5qJo07ryAthcV5UNgb9BTdV4L32l
+         gVB4YacWjbp3ZFKmy6/NDzbWf+7wMrwl+EfXYp2z5+DdT23dnJdvEhkiWRvN5Mimgnz3
+         AFpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=mQCpHD3b/oNCevN1QdhnwOd9ghkLwiR4HAI/Op4UuAA=;
+        b=cTYhVYlGh6lTFF8qKyfj+4IyL269BJozQsMLIt/UJD6UbdaQkc0w1Hqow2I/RS9JUm
+         mOVNaWLs+HA4JRhPiISsmXQiVOLoUeeYtpJTuvAczW+Pdh+QCHbVfWp1cPvZ+AVELz2w
+         ao6Tl8b5I25yhdHro6j+Ic9wZDDhNaZBhvNVEAdT2BnHf1vOAaZMp8I/QUUZZKTkO5ds
+         B5H4K1RA0qxVHCokyTmH29O6mbF6ua4aSfuoIp2ojwy8ALIbuFlScdXWX+LcCqIXLn9J
+         P+FqtG28eW+VbVxihDewwIt009JneQ2BhUZhZs4OgLP0RCLVx6PgM4CV8FHelso0b8eH
+         SX9g==
+X-Gm-Message-State: ACrzQf0mL/hssyz11uYMZJS6YjbREgAtoARd2qSjDv1vgGhR0XPeT6W3
+        n085Gf5c+YQxVp0kQtGN0mxnnp5u3Zrjjw==
+X-Google-Smtp-Source: AMsMyM6jgUS4ubKgESzfz+N9IM1J19XaOtd5m/aHe9WxopcH66fZ8/ZlVBJuzJsUTY/l33Io5pHCoQ==
+X-Received: by 2002:a63:86c8:0:b0:43b:63ae:dc8a with SMTP id x191-20020a6386c8000000b0043b63aedc8amr16647335pgd.578.1664125256819;
+        Sun, 25 Sep 2022 10:00:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e2-20020a631e02000000b0042b5b036da4sm8998400pge.68.2022.09.25.10.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 10:00:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 25 Sep 2022 10:00:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH v4 2/6] watchdog: npcm: Enable clock if provided
+Message-ID: <20220925170053.GA1761191@roeck-us.net>
+References: <20220610072141.347795-1-j.neuschaefer@gmx.net>
+ <20220610072141.347795-3-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SA1PR10MB5687:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82d178ac-fc72-4ec5-70dc-08da9f173b91
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YkqmMyIXJB+Ml91cnpo9rkglLYsVUTdxkwZPzZrGKuLzZzIujcEdRs6Ec/rHC9lMZ97VM1Tmb5yVpM3sYi3sB6iHOJW/lshn/Q7hizJC8jkoZkTcjLaGTXXc+U/26zGTvlfIygQsZPeQo0s7gGoi5mZPqqu0YdNURkD6DXFAwV7D/BF7skEqxP0lZyz2Gedzx7DOz8KlXLSPeN7Xb1/vHtQlDuXWQMjIh15OFrh+ot+Fi83Z92F5KkbGQCvcp5poPht5Db25BcVF8BoZBgQTS1jCdR+qwQA2+ytPMCJ3ffJ4c68tybyQLkP1tyDr5hfkIVxH3pqdQIXJxfc0ZfL5HFRGI3/EbZmfAdSgnGahuoD2Q4owdzoqhe9eBSznYVdiIpQqItJFmsERaXSpzf7pDvdIBgXfR6jyaHev5J0kWPe62akFAR49HR6iyRqd0JUmYFSklP2oldeG7e8rxAs94uCHF9QmjtXiSLYFBsovxqZ6ZmbxVvUVU6ph7qNBWmDaE6rj4es20042wb6GcRDokWwofadlaZe7WapEjYHsdR4U+O6ksY5ALEZ/ltOurQC5dw3rLTIr1Acaj+e5C0qZ3Byze54rBM4J6qnkQRRj0FLy+2lpThaMPET9x53Q+pMtON5nFoKH07ufuvlATFklTQBez2dempGkxDJyKIOSKatEfznEgu7k4SzqTT9z6hdzuFCu+4MYDwRjjFlUDhZy7w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199015)(54906003)(6916009)(38100700002)(316002)(5660300002)(2906002)(6512007)(8936002)(86362001)(26005)(186003)(4326008)(41300700001)(8676002)(6666004)(66556008)(66946007)(66476007)(6506007)(36916002)(6486002)(558084003)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bZCmsV03Vl9rvc2NjpuVpfkX9tYg08QA6zeF3YQJQ7Wms1qOsjTIeWw7NFnq?=
- =?us-ascii?Q?ozeKcltSjJ4JvLe6EduAh3977ufEpUwkye0hE6J7PkJVYSqC5+dyuz614W+5?=
- =?us-ascii?Q?cZWUytxPEp0hXuvpRvDzMB5Ir+PcCB8cPZiuFslNI3uF7ua5daAhgc2V+XXx?=
- =?us-ascii?Q?PFCqEnVuLvfc5SddGqeJnx2oyfFw7vm9y28YSrP7ZDHJzTHZFLkX2KV6ZuBC?=
- =?us-ascii?Q?hA8qycksRwDHUb8sKob1jgzHJeXM9GCRINaOAHieog9s4/d/3qHsOHMEjmdP?=
- =?us-ascii?Q?MDpayT9LFIMY4NBLqvOQZRDCir64oarYutDUaiNphsmYNmpz50G9RgmweiMA?=
- =?us-ascii?Q?okvssocTDyl++W+lX3c91qkLHVRx8XjJ+DDLrJjlIOqFSChEByzXK+WxoiUk?=
- =?us-ascii?Q?iEs9QXogqHJyXs0K+unCcfRT9hk9j6HW8c0yfhlJzL5a7wBikyCAs3dY4vOi?=
- =?us-ascii?Q?bI3k3E8Lj3AcDbaKtzaN7YsO3Kp0oaSqdOkUYwqaQsAlXp8JIrNMoQSv2g9n?=
- =?us-ascii?Q?3cHP2BR0FAxiHCMZXOoGeErxOIZXzDS7JZBjcuQl8N8H+b100kWpjGsUonZa?=
- =?us-ascii?Q?8/+BlxBn4UeNYazjqqOGYx4mXenA6p3Eo7fJ8rnsYMzrjnzN6gh3O0V+cA2V?=
- =?us-ascii?Q?dRCS/d5LlKvy/trxUfSvzf9dfmiQovgAcXQy4Xr7uJvxUwlIlYYhVvWZzJ4M?=
- =?us-ascii?Q?dG4mU+GmeXaQjOCRtWd5aeSkNFAxI5WQleoP6Yq2UqdYrblEEvBEMNYfcP0e?=
- =?us-ascii?Q?FLYR1yDLUlMs16x+Ndrt66g7qt4FpVNbLsw7Sey3slYH648hc3M63LAK3LoF?=
- =?us-ascii?Q?srlSA4PKPqFi3ve5+Iysm6BZ/BINBRL6gkf8hf49xlYgzLbBxz3WkIv22W1v?=
- =?us-ascii?Q?672mXddRLalJ89pxbgfqvv0g/1eDJKoOez8PANbJz+nM9ZpXMCo/eV0nSE3i?=
- =?us-ascii?Q?VH2SjeAEwA9HlRhvELcI9o5+/SCA1rFmUh+0zJqwHAIc7z5RXjlo10H/e2PL?=
- =?us-ascii?Q?f+J9YmPSZ2nRRXt5pNmRsPzmtije2j+nO8drPK/byavBVxO6N6ojZ2De/SA1?=
- =?us-ascii?Q?XBVso1rxiD20SiKM2tEy7iP7APxFQUcurOg7PhxIEGdHU4GvzG+PzoCKbqzg?=
- =?us-ascii?Q?ROXp6a7E9C41twkOElTZgYesGoCpbSraSktuJjKocrc4+NjLmnmXrYMxGoxJ?=
- =?us-ascii?Q?NUAflLVxUIKIFb9891UVDCj4P4eAzW1rAwgYNNhIoSKZBGb0LpggqPCqgIkX?=
- =?us-ascii?Q?TxbY76b0NRvvoHtPu8VXem3PY748kKylaW4sl1fQLoc7sbmB/DiwIH2RpeDo?=
- =?us-ascii?Q?tmOyGJqDqiGANPmIYtG+6ghNqfmMHOofcVxx0/wuwoUceYVp2M67fgMoIPZX?=
- =?us-ascii?Q?06vOU2fY6XIh03Cj+USnG0RSdnfxkcfDPWz0C0hrDHO5+VN4j2nWHjKWYQuw?=
- =?us-ascii?Q?9C0L06Hp8enpj8j8LEheVMts2I+L+kGlMb2Q3a19zdCi6LG+SRFqSYrQM8Nq?=
- =?us-ascii?Q?w32LTp35XDBPppia4ZN3/sbgkXm6kWMmJ8jf5YG9Y+vVen1X0Caw8w5PGUTS?=
- =?us-ascii?Q?6plcoQDg/zykhqlwJWR2gJmQrmgGh5irqvbNGZ0rougwXW7S2zPtT4nV/vN0?=
- =?us-ascii?Q?QQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82d178ac-fc72-4ec5-70dc-08da9f173b91
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2022 16:58:56.0203
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1aiuw+G5KQcuwSKZAQtxKMxQtSmjzlYFUJ588ZU7Sfl+ARwBNpVuHrHUm5IJwP9pLyxNBGKZVOWr79/ChkipyQ5C/G8XmwnRkwmg1RkoIbI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5687
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-25_01,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=988 malwarescore=0
- suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209250124
-X-Proofpoint-GUID: Xb1kxDgtlXoWoI71vl5DjIrjUs_QyZz3
-X-Proofpoint-ORIG-GUID: Xb1kxDgtlXoWoI71vl5DjIrjUs_QyZz3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220610072141.347795-3-j.neuschaefer@gmx.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,12 +91,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 10, 2022 at 09:21:37AM +0200, Jonathan Neuschäfer wrote:
+> On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
+> clocks are individually gated and ungated. Therefore, the watchdog
+> driver must be able to ungate the watchdog clock.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-John,
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> Disabling the remote phy for a SATA disk causes a hang:
-
-Applied to 6.1/scsi-staging, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> ---
+> 
+> v4:
+> - Don't disable clock in npcm_wdt_restart function
+> 
+> v3:
+> - https://lore.kernel.org/lkml/20220508194333.2170161-4-j.neuschaefer@gmx.net/
+> - Add enable/disable calls to npcm_wdt_restart handler
+> - Not applied due to the above change:  Acked-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> v2:
+> - https://lore.kernel.org/lkml/20220429172030.398011-4-j.neuschaefer@gmx.net/
+> - Add clk_disable_unprepare call, suggested by Guenter Roeck
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20220422183012.444674-4-j.neuschaefer@gmx.net/
+> ---
+>  drivers/watchdog/npcm_wdt.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> --
+> 2.35.1
+> 
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 28a24caa2627c..a5dd1c2301374 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -3,6 +3,7 @@
+>  // Copyright (c) 2018 IBM Corp.
+> 
+>  #include <linux/bitops.h>
+> +#include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -43,6 +44,7 @@
+>  struct npcm_wdt {
+>  	struct watchdog_device  wdd;
+>  	void __iomem		*reg;
+> +	struct clk		*clk;
+>  };
+> 
+>  static inline struct npcm_wdt *to_npcm_wdt(struct watchdog_device *wdd)
+> @@ -66,6 +68,9 @@ static int npcm_wdt_start(struct watchdog_device *wdd)
+>  	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
+>  	u32 val;
+> 
+> +	if (wdt->clk)
+> +		clk_prepare_enable(wdt->clk);
+> +
+>  	if (wdd->timeout < 2)
+>  		val = 0x800;
+>  	else if (wdd->timeout < 3)
+> @@ -100,6 +105,9 @@ static int npcm_wdt_stop(struct watchdog_device *wdd)
+> 
+>  	writel(0, wdt->reg);
+> 
+> +	if (wdt->clk)
+> +		clk_disable_unprepare(wdt->clk);
+> +
+>  	return 0;
+>  }
+> 
+> @@ -147,6 +155,10 @@ static int npcm_wdt_restart(struct watchdog_device *wdd,
+>  {
+>  	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
+> 
+> +	/* For reset, we start the WDT clock and leave it running. */
+> +	if (wdt->clk)
+> +		clk_prepare_enable(wdt->clk);
+> +
+>  	writel(NPCM_WTR | NPCM_WTRE | NPCM_WTE, wdt->reg);
+>  	udelay(1000);
+> 
+> @@ -191,6 +203,10 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->reg))
+>  		return PTR_ERR(wdt->reg);
+> 
+> +	wdt->clk = devm_clk_get_optional(&pdev->dev, NULL);
+> +	if (IS_ERR(wdt->clk))
+> +		return PTR_ERR(wdt->clk);
+> +
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq < 0)
+>  		return irq;
