@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1ED5EAF6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961EB5EAF71
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiIZSRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S229642AbiIZSR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiIZSQ7 (ORCPT
+        with ESMTP id S231349AbiIZSRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:16:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB839F18A;
-        Mon, 26 Sep 2022 11:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ta2fqcORnTPhm6SqYBRMkwwfMiYClGmt06JcabgqfpQ=; b=UpWOL/SaSMuiNnVO3YXv9vgiwU
-        QEZCudfajDBURy71rTA2XbtSEKCmGMx783wOqvc1ASC8/hdHv0TZI4uVCkP7oJhgHxpXxgpPa6+13
-        j0LebLryLy8t7VlKmkPKi47xFSzpQOuhIeVUzNWBMwRjOr88nOuVLzRSua/nz8WZY8JfiLlh983de
-        TEr95we4+wkK8tMKUGmtKlCR1BF4XS+MxCimif8AYhPDaLvePCcGTl1Yb5Wp/IbhiT7mUdfrhUjky
-        RbA/b5V6s+kpGsnTX8jZ7MA8srLjzJCY0M6rG/qAPysoNyjAFuPTW46W2UZ3delHOVqcqM+izQyDM
-        rgCDAklw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocsVH-00Aigs-UN; Mon, 26 Sep 2022 18:06:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 98A2430007E;
-        Mon, 26 Sep 2022 20:06:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 742262B6B2F7B; Mon, 26 Sep 2022 20:06:46 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 20:06:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
-        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
-        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>,
-        Amit Shah <amit@kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
-References: <20220822114649.055452969@infradead.org>
- <20220923072104.2013212-1-borntraeger@linux.ibm.com>
- <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
- <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
- <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
- <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
- <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
- <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
- <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
- <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
+        Mon, 26 Sep 2022 14:17:34 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CFD1FF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:08:11 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id c11so4609312qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=zbTeqblGxrVphEvYs4g+Za5JLZuDmNmIQK0NJlTmwT8=;
+        b=oVxNzol03dnNpfu8QmUcTpPCYwZXy8WzsbfWjT6qo9tTEJ9iGCHEgdXPYUPRVRN2YZ
+         +LlCMbPpzeDXNNo0t6CHPpWw14cpueJclTJ2scnlnjI4Z/v+6k14CtruMcIGHgTWFmYt
+         +gh+eg4XVZ3nM64TeZh1XxY3CwUxU9B7zrcHrf9CRrhveWswrZWYVokVNWw2hYV9J3Qp
+         3S0AGlHwV+UkIaqzP7blQzYcawju1Qm80RnCAmsrkxLdD7citixAx2Q00PhjeUYD/Z6G
+         /Vm6CcPxGXdXrrGNrFuQFZcgPEMPo9O+OfK9R3Ib27TyKzj2Z8l/hFSusyXtzAoiMjuZ
+         utUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zbTeqblGxrVphEvYs4g+Za5JLZuDmNmIQK0NJlTmwT8=;
+        b=rVsRo+dCx89Hh2uYDRpphkH1e1cHuwgaYnX8O+GIiIbXSgCKCVbpGWWZ2oe99nxscP
+         b9ilu1XqzaOSi3eo+oC80EivtbtVKE6/nEKbv95zCeEg0K2gO9vwepB0j93QFrUOBfNG
+         W0ZLhB+HWAQDdyOEJic2VoaODiTA17bE9sTXlhm/8KoFeVeXMURfIN2vAScGXwc5sfh7
+         Wlkcir9DU6t6CvLCO+hbUZ+OAMWG8p9M+OjPCAwu+JEweWhbCfNw9ByxFfM7RFbP1hH/
+         BZZ1glab2YIG/lz6t4R8HZQ8+c7TUJQdrr8dirEvKaaeaPeBAINLA+TxH6g4xZKSxAvq
+         CnKg==
+X-Gm-Message-State: ACrzQf3Y0sIVEu2NfadoHc5faU6DuRI9l2tRMifO4QcrCPnCriMN0Moe
+        cDZ7AtIXB/nHMB0V24sWZDoivJ8ouiomZ+pntOE=
+X-Google-Smtp-Source: AMsMyM6eatwvx5/wUwL+eLNx14HtahXAw8TMeZ969Y1GO53xCjGzunGRKw9qVUVg1OwbN1vRJZCXK9zcWeDR8JgSTpM=
+X-Received: by 2002:a05:622a:8b:b0:35d:430d:e53d with SMTP id
+ o11-20020a05622a008b00b0035d430de53dmr3962001qtw.391.1664215690624; Mon, 26
+ Sep 2022 11:08:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <9c0210393a8da6fb6887a111a986eb50dfc1b895.1664050880.git.andreyknvl@google.com>
+ <20220925100312.6bfecb122b314862ad7b2dd4@linux-foundation.org>
+In-Reply-To: <20220925100312.6bfecb122b314862ad7b2dd4@linux-foundation.org>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 26 Sep 2022 20:07:59 +0200
+Message-ID: <CA+fCnZe3SYq1c50hKdR3eoALz+kHE2MdUkbcbG0dhUFjaKkPNw@mail.gmail.com>
+Subject: Re: [PATCH mm v2] kasan: fix array-bounds warnings in tests
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:49:16PM +0200, Christian Borntraeger wrote:
+On Sun, Sep 25, 2022 at 7:03 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> > --- a/mm/kasan/kasan_test.c
+> > +++ b/mm/kasan/kasan_test.c
+> > @@ -333,6 +333,8 @@ static void krealloc_more_oob_helper(struct kunit *test,
+> >       ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
+> >       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
+> >
+> > +     OPTIMIZER_HIDE_VAR(ptr2);
+> > +
+> >       /* All offsets up to size2 must be accessible. */
+> >       ptr2[size1 - 1] = 'x';
+> >       ptr2[size1] = 'x';
+> > @@ -365,6 +367,8 @@ static void krealloc_less_oob_helper(struct kunit *test,
+> >       ptr2 = krealloc(ptr1, size2, GFP_KERNEL);
+> >       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr2);
+> >
+> > +     OPTIMIZER_HIDE_VAR(ptr2);
+>
+> What chance does a reader have of working out why this is here?  If
+> "little" then a code comment would be a nice way of saving that poor
+> person for having to dive into the git history.
 
-> Hmm,
-> 
-> #define ___wait_is_interruptible(state)                                         \
->         (!__builtin_constant_p(state) ||                                        \
->                 state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)          \
-> 
-> That would not trigger when state is also TASK_FREEZABLE, no?
-
-Spot on!
-
-signal_pending_state() writes that as:
-
-	state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)
-
-which is the correct form.
-
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 14ad8a0e9fac..7f5a51aae0a7 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -281,7 +281,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
- 
- #define ___wait_is_interruptible(state)						\
- 	(!__builtin_constant_p(state) ||					\
--		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
-+	 (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
- 
- extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
- 
-
-Let me go git-grep some to see if there's more similar fail.
+Will add in v3. Thank you, Andrew!
