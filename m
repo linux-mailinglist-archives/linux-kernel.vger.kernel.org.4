@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E28B5EA675
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945A05EA692
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiIZMqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S234353AbiIZMyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbiIZMq1 (ORCPT
+        with ESMTP id S233938AbiIZMyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:46:27 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20602.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::602])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F83312C1E7;
-        Mon, 26 Sep 2022 04:22:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZ646eksIQ55R0Q2n4hC3OjcyWhl+wZXAUIJCJErBoQtCGjbtO0fRWwZJmiMaJiwE10gklAEX+gHYAcAkB1lKShu26u/8gHhhEmYF3IlZEMSeRduuM/aOXj7BlEDlqMsqXxKGGlmOF1eF/FJ4TWElZVewCjEDEn3saH8LSeqWUX7TUqMa0Hzeyh4YOV93z48hg4wF9XKGeUTbdgj840KbagPuVR2BnWr6fDALjRo8F84ZZriWiHqAXx2O8J55QJK76VnB/ROtBCUltSI4IM51zRKiJUEdd7e3G5jhYJviAvkOeTn5xXKGV/St46Oslg5hAeSkrBMLhG1jcVvIHU06A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4aIetMs+MwwAxyYeVs8PJrfVcFCyU5mV12z4iXx9oWU=;
- b=Zi+ynmy4+EzfVuDjh89xIGEsEu6UkVqLpD4N1LYaMXhSBCYqHPcG1PrlFM55kQ9rD/x/Nw9fZVyxNKoHWYM+mhpu5cgTcJNfCHE+aTYhibmGSvhY+flNSqZD1mwLAiCTnNHPpbeuX37R8cw+9Hh/QDcksNZQuXxWaDvrM76LpuDHaFimyuGR87rC4acED+RaOs60eZAnJnWVGTr0Y6ffCdgPYnorX35nRH3NzE0LpwZOzlZ8cpZGr46r5WFCVs4LSECL+lR5ikCOJbb0ldYK1/HZHq6WL5bjY5JUoZDCUQ8G+bIt+bgx1FVd02ibAbPXKNSdAeDI76Rza/SP2mQV5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4aIetMs+MwwAxyYeVs8PJrfVcFCyU5mV12z4iXx9oWU=;
- b=c7xclNqgEFtbjbao7yVysUyrcPvPUZlvO5l1ehYGuVPDbeGzNxwIiW38oViw58hgY67HJGkCsGs6QBJn9IDFw/L3ukYjQMoNtlQa4BwLb7r8flWi9hGRXF11ToJc0vJ5PuVHHfEdPjf38V47WyjioFFZLFPYq3/npsjzFDfUTDs2UAJtv4wkYZSUUC2O+N2J1ghq4MNktb0zk2RTHbCmRQfK40Nrq0MCax87wtTAkPNnnpvU8JCFLx2R1/AmItyMPdcrzjm1sjPQP2o758yuDVGTb21fU7uCM1c6M7LEfrRrgBWHj6avnXlxgVaO4FAzLVgq9ywoAZk9ISPtkWq8EA==
-Received: from DM6PR21CA0010.namprd21.prod.outlook.com (2603:10b6:5:174::20)
- by MW4PR12MB7215.namprd12.prod.outlook.com (2603:10b6:303:228::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Mon, 26 Sep
- 2022 11:19:40 +0000
-Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:174:cafe::bb) by DM6PR21CA0010.outlook.office365.com
- (2603:10b6:5:174::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0 via Frontend
- Transport; Mon, 26 Sep 2022 11:19:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 11:19:40 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 26 Sep
- 2022 04:19:31 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- rnnvmail202.nvidia.com (10.129.68.7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 26 Sep 2022 04:19:30 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 26 Sep 2022 04:19:30 -0700
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Mon, 26 Sep 2022 04:19:27 -0700
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
-        <sagar.tv@gmail.com>
-Subject: [PATCH V2] PCI: dwc: Fix n_fts[] array overrun
-Date:   Mon, 26 Sep 2022 16:49:23 +0530
-Message-ID: <20220926111923.22487-1-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220919143123.28250-1-vidyas@nvidia.com>
-References: <20220919143123.28250-1-vidyas@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 26 Sep 2022 08:54:04 -0400
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2333A153EDD
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:28:51 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id c24so5953057plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=JYDoWINnTnWSLstS0U4CDHaR+NWzszIow/uHYNqrLqs=;
+        b=g8lNQl16VInhr8fQ1rv/n0nIZV//JkcF0keGq+gempO8uCVYTU+H63nmK7nU2hMpLe
+         Njj07s3zeBlBr9UexgLer+HpLpvJaqQbyQQ0eF53+TYDbRmpJY5e7NU1vvn2iGQMLsym
+         SSMHR03IeaQnlN88FvM6YVl9uXdvs60c6ZFzaYqWpI8cr2YdUNi3lD/Cvex2tuHMmkiO
+         9HT3fHoGkirhHn2fIHZbC7dHRabAMNZq5N36tDboZzbGj2j7LByFRuI1ePq+53bTM+6b
+         FqOUhWcKzXIktRRsimpfBGLrWmfh/BSsgnG5989KrDLosVrijb0yVGgjaAQd67+cCwmq
+         S21A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=JYDoWINnTnWSLstS0U4CDHaR+NWzszIow/uHYNqrLqs=;
+        b=xKM7ZvDj9hQXUQo9rq4Bhs5LGBnwKKgG4h+OYYVlJNo8TJ/sk/5EbJwzsXGMtwApyx
+         BctRplxM84D9B5bBBHqyjX9kk9S0xvc6ztBJJzI9ZJjh2coSh+7rHV0WpCUmBGfy9JDj
+         +NHWSszPd4PevY23jwcr8TB3J+9GHqfj00GeXwBswtY4ZLyTsS3ODLYFKXt8Kkalsf02
+         M1gf+Q2bbw8RFAwzGRaUpSPuci1f/3Vv+lCX6JV5LxlFwRDpc32hA6VyplzjCkMwUHKP
+         HQEtZhtbpDQ4TVonXte0LjIumKzAOSk+wD8aww2Tncn0VFBJYQb57HR4DiYJHb40u1tH
+         5mBw==
+X-Gm-Message-State: ACrzQf3oOqWOAgN4JxQzp8Is5PaGWk+pwSXa2I2JBOImImkUqc9m6aKS
+        EywG8b2+WRabSV4FDav8G3T2HUtAXU/08w==
+X-Google-Smtp-Source: AMsMyM74+1NNHJgu7WyQesL5hoEKzfq6L9qRrAIaL/fTtmfCUGntVGvjnG3d33XG33OgJMgTUCkgjA==
+X-Received: by 2002:a17:903:44e:b0:178:8492:d0ff with SMTP id iw14-20020a170903044e00b001788492d0ffmr21768016plb.146.1664191340419;
+        Mon, 26 Sep 2022 04:22:20 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:95f8:d0c3:cac:4cc3:5957])
+        by smtp.gmail.com with ESMTPSA id mm10-20020a17090b358a00b002005f5ab6a8sm6277418pjb.29.2022.09.26.04.22.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 04:22:19 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, agross@kernel.org, dmaengine@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org
+Subject: [PATCH v2] dt-bindings: dma: Make minor fixes to qcom,bam-dma binding doc
+Date:   Mon, 26 Sep 2022 16:52:00 +0530
+Message-Id: <20220926112200.1948080-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT025:EE_|MW4PR12MB7215:EE_
-X-MS-Office365-Filtering-Correlation-Id: eba42414-1336-4ea2-39bc-08da9fb10127
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zRo4WH1vMli67WQsskTeACu12y3NIOBXjbfKL5JsI/fKSWPbge2D8oWeBXF2FHZBmdaxwq4TvAt8NkViACxBkOOfb6HtVpueQHHoDy10efwkaS+DTZecb8pHPicqG4yy8D2U/c77TKMh0tnaGqI4g1mXI+3m6qL4aDTJXEOOrqmY/cNl9kXyNSwwGFDc4DeaOrcmacl+38KgERS9zsqgAS/yTNOGfYh9/vheWh1X0raql+yKEf8z/s3Fw9mPSbaOI1APguZiZg5KvCWgIEbgJdO70OqEGVbFqofCQu7oFL3ww58PYwUWOVohQRV9hMKcdxpYccvSTb0IyWnLi8u6a9wJfeuYXERzfAkqOYZy4gIezi1jkBgPtjcs4hRffoP100YY6HQzdiCAXs21HGlbkEiYHhi/Q7rBoO3SRF8IHzX0WPE8qP4SYpTN0bupHJjWzIvVUUXSCBY8/NjWcpzBufqSrmIX09GfyFWH+Zkqz4ziG8RXnxMdsZZTol6eUK3guFPgchvsJ4cPQt9G7/H4m94qL47pu2pCVDoSZmAOBcX+VuZRps61admwiVWGhCFXX6l2HhMmhmT5NOUNksRhvaoWXjsq5u3M2HfL/NuF96H49JUiHqqjrLAgG9jANACb39aGBX61d9EVbWuyx6/paBzPQ+D1AVOZFNM+XjFtwou6vWwo0trbqmvgyZj+yq1SCDOvSVtpJZmiCJtmL4w2NRA0qtdbNqz/fIboPvNUCR3ARIBJbhCQOnAhso9rcxjCE39rDbd0lXNNqTrhS1yePQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199015)(46966006)(36840700001)(40470700004)(26005)(40480700001)(5660300002)(1076003)(8936002)(7696005)(6666004)(110136005)(336012)(54906003)(2616005)(186003)(426003)(8676002)(40460700003)(70206006)(70586007)(2906002)(86362001)(4326008)(316002)(41300700001)(36860700001)(83380400001)(82310400005)(47076005)(478600001)(36756003)(356005)(7636003)(82740400003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 11:19:40.2159
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eba42414-1336-4ea2-39bc-08da9fb10127
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7215
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
-incorrectly uses pci->link_gen in deriving the index to the
-n_fts[] array also introducing the issue of accessing beyond the
-boundaries of array for greater than Gen-2 speeds. This change fixes
-that issue.
+As a user recently noted, the qcom,bam-dma binding document
+describes the msm8974 BAM DMA node in the 'example section'
+incorrectly. Fix the same by making it consistent with the node
+present inside 'qcom-msm8974' dts file, namely the 'reg' and
+'interrupt' values which are incorrect in the 'example section'.
 
-Fixes: aeaa0bfe8965 ("PCI: dwc: Move N_FTS setup to common setup")
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-Acked-by: Jingoo Han <jingoohan1@gmail.com>
+While at it also make two additioanal minor cleanups:
+ - mention Bjorn's new email ID in the document, and
+ - add SDM845 in the comment line for the SoCs on which
+   qcom,bam-v1.7.0 version is supported.
+
+Fixes: 4f46cc1b88b3 ("dt-bindings: dma: Convert Qualcomm BAM DMA binding to json format")
+Cc: konrad.dybcio@somainline.org
+Cc: robh+dt@kernel.org
+Cc: andersson@kernel.org
+Cc: krzysztof.kozlowski@linaro.org
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
-V2:
-* Addressed review comments from Bjorn
-* Added "Acked-by: Jingoo Han <jingoohan1@gmail.com>"
+- v1 can be seen here: https://lore.kernel.org/all/20220918081119.295364-1-bhupesh.sharma@linaro.org/
+- Fixed Krzysztof's comments on v1 regarding describing the problem more
+  clearly in the commit log.
 
- drivers/pci/controller/dwc/pcie-designware.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index 650a7f22f9d0..3df687667f27 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -649,7 +649,7 @@ void dw_pcie_setup(struct dw_pcie *pci)
- 	if (pci->n_fts[1]) {
- 		val = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
- 		val &= ~PORT_LOGIC_N_FTS_MASK;
--		val |= pci->n_fts[pci->link_gen - 1];
-+		val |= pci->n_fts[1];
- 		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
- 	}
+diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+index 9bf3a1b164f1..003098caf709 100644
+--- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+@@ -8,7 +8,7 @@ title: Qualcomm Technologies Inc BAM DMA controller
  
+ maintainers:
+   - Andy Gross <agross@kernel.org>
+-  - Bjorn Andersson <bjorn.andersson@linaro.org>
++  - Bjorn Andersson <andersson@kernel.org>
+ 
+ allOf:
+   - $ref: "dma-controller.yaml#"
+@@ -20,7 +20,7 @@ properties:
+       - qcom,bam-v1.3.0
+         # MSM8974, APQ8074 and APQ8084
+       - qcom,bam-v1.4.0
+-        # MSM8916
++        # MSM8916 and SDM845
+       - qcom,bam-v1.7.0
+ 
+   clocks:
+@@ -90,8 +90,8 @@ examples:
+ 
+     dma-controller@f9944000 {
+         compatible = "qcom,bam-v1.4.0";
+-        reg = <0xf9944000 0x15000>;
+-        interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++        reg = <0xf9944000 0x19000>;
++        interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&gcc GCC_BLSP2_AHB_CLK>;
+         clock-names = "bam_clk";
+         #dma-cells = <1>;
 -- 
-2.17.1
+2.37.1
 
