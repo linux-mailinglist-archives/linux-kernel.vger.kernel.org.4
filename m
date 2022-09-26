@@ -2,93 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5D85EB392
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421245EB394
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiIZVtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S230217AbiIZVuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIZVtu (ORCPT
+        with ESMTP id S229547AbiIZVuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:49:50 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA299792C4;
-        Mon, 26 Sep 2022 14:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664228989; x=1695764989;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7TT080Crbah1HOhPKORs2ZNGlgRDfHlqPppfwXjOuaw=;
-  b=WC3tPOJEDMDsF2094BX8hZxagInet2gwyRd6qMxv46VJILgnRvo3XjYv
-   zKXaurPI/mooTVTFrlhOMPqXn5aAWyVR1ceRRRuKY5LgRMY6ofUteuMWr
-   eR68jX0a8x7XliyoeTjTfhEkSQZiUSM9Z69L3yhE03P8Kg4rfnZhA4ppS
-   HcsbUUx0aM9saKbQIvmQvsyStuU4plxhwBALd2ycJpkdVRLL6o29DRrlo
-   BKo9ojGsmzPHtUeWPMjl8lkn3JQNr4akIk9sXhWMGzRqJL9rVLc01YlrI
-   7l9JZjaAnn3uN7rvkVkkmGJbHYsMB1btkAtTOFG+YrNcHA+bMcDqDp+tK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="362982005"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="362982005"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="763611668"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="763611668"
-Received: from yzhou16-mobl.amr.corp.intel.com (HELO [10.209.44.81]) ([10.209.44.81])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:47 -0700
-Message-ID: <faa01372-07b0-3438-9305-123a3de9cc47@intel.com>
-Date:   Mon, 26 Sep 2022 14:49:46 -0700
+        Mon, 26 Sep 2022 17:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ADEA4856;
+        Mon, 26 Sep 2022 14:50:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF6B061470;
+        Mon, 26 Sep 2022 21:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD44C433D7;
+        Mon, 26 Sep 2022 21:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664229009;
+        bh=l0Dc2OIgK6lDM9BiZQEoOrqzj1XCqlR7nr3AsvHsNAI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=l5jarwkxEMBNTo7wGZhpGo/oDMGwId6FaZfNamx8do5p5G+EuOLUw80blLhpv/S7S
+         +hBOIRjwVEoOvePV14Do9qikJyGZ6ARj/bGv2YeMCRdt8pwLXiFmCX6W63XKKIm5vs
+         pDJXisCZM2a8yS814sMGAX9UuEpwC03U/B7W2VTOXBCWGCwdEBjiWb6UYVZfNG48pV
+         0wqvAq185oVotTBuCn1T3GBEloYhwgiRUDCnQo7w084FgCiT1bfb1DVj6sU07AxYgm
+         JrxazJJrYJhPT/FuXA+ScF7vbtOUxklEBgau8OFzELTpOVTiL4D+DhAgUpvvksTLwp
+         FF11Pp95h2GIA==
+Date:   Mon, 26 Sep 2022 16:50:03 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Subash Abhinov Kasiviswanathan <quic_subashab@quicinc.com>,
+        Sean Tranchetti <quic_stranche@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] net: ethernet: rmnet: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YzIei3tLO1IWtMjs@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ACPI: processor idle: Practically limit "Dummy wait"
- workaround to old Intel systems
-Content-Language: en-US
-To:     Kim Phillips <kim.phillips@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-acpi@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        stable@vger.kernel.org
-References: <20220922184745.3252932-1-dave.hansen@intel.com>
- <78d13a19-2806-c8af-573e-7f2625edfab8@intel.com>
- <54572271-d5ca-820f-911e-19fd9d80ae2c@intel.com>
- <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/22 11:36, Kim Phillips wrote:
-> Can it be cc:stable@vger.kernel.org, since it applies cleanly as far
-> back as this v5.4 commit?:
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length arrays
+declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
-I just sent the pull request to Linus for this fix.  I realized that I
-didn't tag it for stable@.  If it gets applied, I'll send a request for
-it to be picked up for stable@, via "Option 2":
+This helper allows for flexible-array members in unions.
 
-> Option 2
-> ********
-> 
-> After the patch has been merged to Linus' tree, send an email to
-> stable@vger.kernel.org containing the subject of the patch, the commit ID,
-> why you think it should be applied, and what kernel version you wish it to
-> be applied to.
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://github.com/KSPP/linux/issues/221
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/ethernet/qualcomm/rmnet/rmnet_map.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry about that.
+diff --git a/drivers/net/ethernet/qualcomm/rmnet/rmnet_map.h b/drivers/net/ethernet/qualcomm/rmnet/rmnet_map.h
+index e5a0b38f7dbe..2b033060fc20 100644
+--- a/drivers/net/ethernet/qualcomm/rmnet/rmnet_map.h
++++ b/drivers/net/ethernet/qualcomm/rmnet/rmnet_map.h
+@@ -19,7 +19,7 @@ struct rmnet_map_control_command {
+ 			__be16 flow_control_seq_num;
+ 			__be32 qos_id;
+ 		} flow_control;
+-		u8 data[0];
++		DECLARE_FLEX_ARRAY(u8, data);
+ 	};
+ }  __aligned(1);
+ 
+-- 
+2.34.1
+
