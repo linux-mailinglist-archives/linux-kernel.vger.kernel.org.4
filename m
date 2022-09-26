@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499645EA14A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6745E9F2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiIZKrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S234765AbiIZKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236839AbiIZKos (ORCPT
+        with ESMTP id S235268AbiIZKTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0B5564D8;
-        Mon, 26 Sep 2022 03:25:45 -0700 (PDT)
+        Mon, 26 Sep 2022 06:19:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9534A100;
+        Mon, 26 Sep 2022 03:15:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 235EA60B9A;
-        Mon, 26 Sep 2022 10:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356A2C43140;
-        Mon, 26 Sep 2022 10:25:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1A7CB80926;
+        Mon, 26 Sep 2022 10:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50212C433D7;
+        Mon, 26 Sep 2022 10:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187943;
-        bh=wYMWX1RdKzeoF4adCEB63kIZCJOyfUXgVp3rUBJ24FE=;
+        s=korg; t=1664187333;
+        bh=hfeg6mZ8P27OTI5Sp6kpeYMIBefb3IVBcgJnv8V1ERU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hCYqNtnDOLuGH69uCMy8cMALO7FJApT4iWcZx2p8OaFAcEK+B7jwA7WLl1mS3ROR/
-         NzRggAjoKRfRX1YlhghHzR8BohQ0Pi0lTCmP7x09uL5MWd6tQ5Ke6K38mjuEkBjxhX
-         d4rNhKfMKRgmrq0qK6FfLXFcPZvy2eSchCbzFTQA=
+        b=dX9VrFeMSvGUXwbpRpmEX/0daYQBN8xigY7XkQiOFH7DPFwEGvijQ2XH2W4AzhPtq
+         WwFIKewBFRb2wvoqlJDuGJTBH4Shpx84ByzRYZIH29wW7nRqlIn6opSE6S2XtUWy5f
+         unj+Nqkm4Efnc9uBtmy1YuJZLf+F8rI4yiLpl0ic=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Ryzhov <iryzhov@nfware.com>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 069/120] netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
-Date:   Mon, 26 Sep 2022 12:11:42 +0200
-Message-Id: <20220926100753.514780869@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 15/40] ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+Date:   Mon, 26 Sep 2022 12:11:43 +0200
+Message-Id: <20220926100738.801122304@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Ryzhov <iryzhov@nfware.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 39aebedeaaa95757f5c1f2ddb5f43fdddbf478ca ]
+commit 51bdc8bb82525cd70feb92279c8b7660ad7948dd upstream.
 
-ct_sip_next_header and ct_sip_get_header return an absolute
-value of matchoff, not a shift from current dataoff.
-So dataoff should be assigned matchoff, not incremented by it.
+The newly added stac_check_power_status() caused a compile warning
+when CONFIG_SND_HDA_INPUT_BEEP is disabled.  Fix it.
 
-This issue can be seen in the scenario when there are multiple
-Contact headers and the first one is using a hostname and other headers
-use IP addresses. In this case, ct_sip_walk_headers will work as follows:
-
-The first ct_sip_get_header call to will find the first Contact header
-but will return -1 as the header uses a hostname. But matchoff will
-be changed to the offset of this header. After that, dataoff should be
-set to matchoff, so that the next ct_sip_get_header call find the next
-Contact header. But instead of assigning dataoff to matchoff, it is
-incremented by it, which is not correct, as matchoff is an absolute
-value of the offset. So on the next call to the ct_sip_get_header,
-dataoff will be incorrect, and the next Contact header may not be
-found at all.
-
-Fixes: 05e3ced297fe ("[NETFILTER]: nf_conntrack_sip: introduce SIP-URI parsing helper")
-Signed-off-by: Igor Ryzhov <iryzhov@nfware.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 414d38ba8710 ("ALSA: hda/sigmatel: Keep power up while beep is enabled")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/20220905130630.2845-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_conntrack_sip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_sigmatel.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_sip.c
-index b83dc9bf0a5d..78fd9122b70c 100644
---- a/net/netfilter/nf_conntrack_sip.c
-+++ b/net/netfilter/nf_conntrack_sip.c
-@@ -477,7 +477,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 				return ret;
- 			if (ret == 0)
- 				break;
--			dataoff += *matchoff;
-+			dataoff = *matchoff;
- 		}
- 		*in_header = 0;
- 	}
-@@ -489,7 +489,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 			break;
- 		if (ret == 0)
- 			return ret;
--		dataoff += *matchoff;
-+		dataoff = *matchoff;
- 	}
+--- a/sound/pci/hda/patch_sigmatel.c
++++ b/sound/pci/hda/patch_sigmatel.c
+@@ -4485,7 +4485,9 @@ static int stac_suspend(struct hda_codec
  
- 	if (in_header)
--- 
-2.35.1
-
+ static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
+ {
++#ifdef CONFIG_SND_HDA_INPUT_BEEP
+ 	struct sigmatel_spec *spec = codec->spec;
++#endif
+ 	int ret = snd_hda_gen_check_power_status(codec, nid);
+ 
+ #ifdef CONFIG_SND_HDA_INPUT_BEEP
 
 
