@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7B85E9B66
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C4C5E9B75
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbiIZIAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S232185AbiIZICB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiIZH7n (ORCPT
+        with ESMTP id S233727AbiIZIBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:59:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D85DFF1;
-        Mon, 26 Sep 2022 00:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664179027; x=1695715027;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=91OQkbf/d555l82Oyt8s1+1wuCP9eUN+PBdU79ijhAY=;
-  b=MbhgQgAwHhaDgEq/t3EqDG+10ce337DhYneR0IjtafnBYKk/b4p6M62c
-   0mJs6pQVeYCE0CMQMAdJluy72SmNEfrSZS5sJuSqtZEAeyxkTgfUIE76C
-   DZXAHfMXe7nFCD2dO4YwWUeTST0ODbLyD2INDOdntJEhggnLUbeI38GAh
-   rnQ2RP/p558oF56tUGHgtiwXWlz9uWtg74p24niTXhFZaleP/D02zw6OV
-   LGDRQd3LAvdp6NeWN783jv5ts+MWlet1L+omJG3g1+8f5g9bQw9Hls37s
-   9pZI2ML6pW/q0ozh4uv4Pq4ch8dyft3/l9+NjahJybAIRQyNq3I+DcHNU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="288105572"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="288105572"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 00:57:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="683435575"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="683435575"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Sep 2022 00:56:54 -0700
-Message-ID: <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
-Date:   Mon, 26 Sep 2022 10:58:18 +0300
+        Mon, 26 Sep 2022 04:01:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02614C27;
+        Mon, 26 Sep 2022 00:58:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8A36179F;
+        Mon, 26 Sep 2022 07:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85251C433C1;
+        Mon, 26 Sep 2022 07:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664179131;
+        bh=jfuwhFd5PczoIXgvji7jNDdS65hU/TTDtOFWvgEpYkI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=GCIatT1Gc/erxM3rdkI/8g7syX2EzY43d6RY9O+fWQUdcXRuyiUDtbvpnl60m7dE+
+         2hHqu72oyFVsX4ntX4wXxY+UDRxa8AzF24r8pQDDmoqhG/pdyMDuzLPD8O4VauEEUl
+         2XSuoHx8i7aA0x3Uj8Z3QMBfujxRHshTsS1sRVRluCpBkAN3MltLOp8V0a/pNOmEqY
+         vAT7RtTC2bIb0/ClWsmnnclQtV2Im5Dl85mLrfXyuZ0Dbjt+i4BqX/ve4Hd2AbJdJ1
+         0tfGBkzPGfZm8pNH/aTWBqPL4AJ/rT8cq1qQTCqdVHwvl0uR2DQiL0spjUkMyiThdb
+         ZMl452H4brgTQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>
+Cc:     Franky Lin <franky.lin@broadcom.com>, <aspriel@gmail.com>,
+        <hante.meuleman@broadcom.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <marcan@marcan.st>, <linus.walleij@linaro.org>,
+        <rmk+kernel@armlinux.org.uk>, <soontak.lee@cypress.com>,
+        <linux-wireless@vger.kernel.org>,
+        <SHA-cyfmac-dev-list@infineon.com>,
+        <brcm80211-dev-list.pdl@broadcom.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] wifi: brcmfmac: pcie: add missing pci_disable_device() in brcmf_pcie_get_resource()
+References: <20220923093806.3108119-1-ruanjinjie@huawei.com>
+        <CA+8PC_eCwv321DxoCMOrWNLw7NWkT9F0sD-=8GzygEXPJHFWWA@mail.gmail.com>
+        <b5e39818-2961-ba3d-8552-f618c19f8fe6@huawei.com>
+Date:   Mon, 26 Sep 2022 10:58:45 +0300
+In-Reply-To: <b5e39818-2961-ba3d-8552-f618c19f8fe6@huawei.com> (Ruan Jinjie's
+        message of "Sat, 24 Sep 2022 09:00:12 +0800")
+Message-ID: <878rm64le2.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Content-Language: en-US
-To:     liulongfang <liulongfang@huawei.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yisen.zhuang@huawei.com
-References: <20220915011134.58400-1-liulongfang@huawei.com>
- <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
- <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] xhci: print warning when HCE was set
-In-Reply-To: <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.9.2022 5.35, liulongfang wrote:
-> On 2022/9/22 21:01, Mathias Nyman Wrote:
->> Hi
->>
->> On 15.9.2022 4.11, Longfang Liu wrote:
->>> When HCE(Host Controller Error) is set, it means that the xhci hardware
->>> controller has an error at this time, but the current xhci driver
->>> software does not log this event.
+Ruan Jinjie <ruanjinjie@huawei.com> writes:
+
+> On 2022/9/24 0:50, Franky Lin wrote:
+>> On Fri, Sep 23, 2022 at 2:42 AM ruanjinjie <ruanjinjie@huawei.com> wrote:
 >>>
->>> By adding an HCE event detection in the xhci interrupt processing
->>> interface, a warning log is output to the system, which is convenient
->>> for system device status tracking.
->>>
->>
->> xHC should cease all activity when it sets HCE, and is probably not
->> generating interrupts anymore.
->>
->> Would probably be more useful to check for HCE at timeouts than in the
->> interrupt handler.
->>
-> 
-> Which function of the driver code is this timeout in?
+>>> Add missing pci_disable_device() if brcmf_pcie_get_resource() fails.
+>> 
+>> Did you encounter any issue because of the absensent
+>> pci_disable_device? A bit more context will be very helpful.
+>> 
+>
+> We use static analysis via coccinelle to find the above issue. The
+> command we use is below:
+>
+> spatch -I include -timeout 60 -very_quiet -sp_file
+> pci_disable_device_missing.cocci
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 
-xhci_handle_command_timeout() will usually trigger at some point,
+Please include this information to the commit log, it helps to
+understand the background of the fix.
 
-> 
->> If this is something seen on actual hardware then it makes sense to add it.
->>
-> 
-> This HCE error is sure to report an interrupt on the chip we are using.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-Ok, then makes sense to add this patch.
-
-Thanks
--Mathias
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
