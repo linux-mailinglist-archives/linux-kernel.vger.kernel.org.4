@@ -2,175 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE295E9BAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076565E9BAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbiIZIJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S233517AbiIZIJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiIZIIW (ORCPT
+        with ESMTP id S234568AbiIZIIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:08:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B01C175A0;
-        Mon, 26 Sep 2022 01:07:35 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q7n8A7013326;
-        Mon, 26 Sep 2022 08:07:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=8KxBTyQl85/P5K+ZX1VVt+lAou+SJNnJIYiPEW/OYyg=;
- b=AO9TeGQp5679Q04v/9hQl7nWUSzlmirdDzniuKbOqkdIHTV5q3edVIyW3Ar2YEtByyKj
- 1o87aUdNcfZZGbC+Q0P2p8hUuyJRmvKyGzbktphKZW3HA4e2tRAS+PXZLP+tX+gbcwP8
- MBzn/I1rC/xxjKitqJXLjMRm1lbBaQVgYFc5o3W7H8BnMrxqU+d569lktKs4xuGgSBoT
- vU5XQtgzr11X31Hlt0uJ2QhWEv3xM1zSLGKL0ptrH8+50R0WhgYote3/IkU8GiQHlvBW
- hM1oPaExBk5d51rr4w6pJXAMxTwgG/yaVXaJLRoutg2mGcvIAHcmejIOGy8+nM/a5u5/ BA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8160gy8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 08:07:05 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28Q7oYai018412;
-        Mon, 26 Sep 2022 08:07:04 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8160gw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 08:07:04 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28Q871ba008234;
-        Mon, 26 Sep 2022 08:07:01 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3jssh91jff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 08:07:01 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28Q86xlY2621998
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Sep 2022 08:06:59 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C0CC5204F;
-        Mon, 26 Sep 2022 08:06:59 +0000 (GMT)
-Received: from [9.171.20.172] (unknown [9.171.20.172])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B8B0E5204E;
-        Mon, 26 Sep 2022 08:06:58 +0000 (GMT)
-Message-ID: <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
-Date:   Mon, 26 Sep 2022 10:06:58 +0200
+        Mon, 26 Sep 2022 04:08:55 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA4E316
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:08:48 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id c192-20020a1c35c9000000b003b51339d350so4545258wma.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bM94JXTwoxg3mZXJqopeDPFgq+t13ym1AVWz3fY3lAg=;
+        b=gLaUgQB7xW1C1Xo+Dbbw2TpgFeOjXOEhKxPe1E7MyeFknYZFutpCqD5Q8JqqRaCSgd
+         Hl5e4ehqKzCSgFwdnLAvWFnJv2KS2cADvNqTSbKCAc8N0IY1k5VqxCvEyiiCfeXDrPey
+         pjoZ5wxyzzUzhJuYPdWtJarK7q68R5qcRBFe0R3dyTqHa4aPiIqCly3ECubMQ4AQP2lR
+         vH9avtdJD4gysIjXSggH0JMQTG+nCy7E1SH2lK/Vl4VALjJ6HM6vdquqkMdhlZXkF+o+
+         2zhUTtO347oRfyvpn6ZvcFALoNR6f4zp9JKHgd14fchcfLAKYobjWcgr0pU6SIgDutys
+         p16Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bM94JXTwoxg3mZXJqopeDPFgq+t13ym1AVWz3fY3lAg=;
+        b=uL88SCVWgVPxzy5PbMiLlZBESxQUmYdiQM4rJZj2fz6ITVqdxFQQLX1JLA4RHMMZSK
+         IA9bab6WBcVR6Nti1X5FmLjbTCggZARPef64d0GdG1saxphuEylKaYeNuP+ZOwcUjx0F
+         JDOAjTqgrchykRHJVi0mnlfg1T4GBpK8zjvN4lxxVusijXbu0qo1OcNzgAQ7sgIErBcB
+         OTvqjodXyAyiwsVEtCHUsg58mb8Ef5xHmckq74eB+wBgzVQwtH/aysc7teSeFKbhPp2q
+         TbFlB5hxYjG3KrSENlqKpdlTPRQFJ7kNUivxb/LS7OC0zPyfmV3LDUj/02HXZgXrrxMb
+         2D6w==
+X-Gm-Message-State: ACrzQf0fVY43UaRMRnpTTESGQl2x2wlrD5kCP6Fb0QYOVWX8tZrTKGG0
+        +c8L8uxtkQ5n4a8j3DY07PM=
+X-Google-Smtp-Source: AMsMyM7HeA3RU2O6rzTcJbHTwzScGNhpifcczC2uWjK1Y6uSxGvQWCKlANRNCiUeQOW6ul4nZjrjnA==
+X-Received: by 2002:a05:600c:5488:b0:3b5:634:731 with SMTP id iv8-20020a05600c548800b003b506340731mr12226196wmb.188.1664179726652;
+        Mon, 26 Sep 2022 01:08:46 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.32.249])
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d6642000000b0022ac61ebb14sm13421078wrw.22.2022.09.26.01.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 01:08:46 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     javierm@redhat.com
+Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        mripard@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
+        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, geert@linux-m68k.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v5 0/3] KUnit tests for RGB888, XRGB2101010 and grayscale
+Date:   Mon, 26 Sep 2022 10:08:34 +0200
+Message-Id: <20220926080837.65734-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     peterz@infradead.org
-Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
-        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
-        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>
-References: <20220822114649.055452969@infradead.org>
- <20220923072104.2013212-1-borntraeger@linux.ibm.com>
- <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
-In-Reply-To: <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CGJVb7I0yKNYoi5kH6E6pRg6LtYaRHTF
-X-Proofpoint-ORIG-GUID: cqlyfogLqMsyEc2aCPyo4Kg0sROizuQN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_06,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=895 bulkscore=0
- adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
- malwarescore=0 phishscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209260050
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello everyone,
+
+This series is a follow up on my work adding KUnit test to the XRGB8888
+conversion functions. This time RGB888, XRGB2101010 and gray8 are added.
+
+Best wishes,
+Jose
+
+v1 -> v2:
+
+    Tested-by: Maíra Canal <mairacanal@riseup.net>
+    Reviewed-by: David Gow <davidgow@google.com>
+
+v2 -> v3:
+
+    Export symbol drm_fb_xrgb8888_to_xrgb2101010()
+
+v3 -> v4:
+
+    Rebased on top of Maíra's prefix renaming work:
+    https://lore.kernel.org/dri-devel/20220911191756.203118-1-mairacanal@riseup.net/T/
+
+v4 -> v5:
+
+    Acked-by: Maxime Ripard <maxime@cerno.tech>
+    Remove reduntant "_test" suffix
+    Sort test alphabetically
+
+José Expósito (3):
+  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb888()
+  drm/format-helper: Add KUnit tests for
+    drm_fb_xrgb8888_to_xrgb2101010()
+  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
+
+ drivers/gpu/drm/drm_format_helper.c           |   1 +
+ .../gpu/drm/tests/drm_format_helper_test.c    | 190 ++++++++++++++++++
+ 2 files changed, 191 insertions(+)
 
 
-Am 23.09.22 um 09:53 schrieb Christian Borntraeger:
-> Am 23.09.22 um 09:21 schrieb Christian Borntraeger:
->> Peter,
->>
->> as a heads-up. This commit (bisected and verified) triggers a
->> regression in our KVM on s390x CI. The symptom is that a specific
->> testcase (start a guest with next kernel and a poky ramdisk,
->> then ssh via vsock into the guest and run the reboot command) now
->> takes much longer (300 instead of 20 seconds). From a first look
->> it seems that the sshd takes very long to end during shutdown
->> but I have not looked into that yet.
->> Any quick idea?
->>
->> Christian
-> 
-> the sshd seems to hang in virtio-serial (not vsock).
+base-commit: 961bcdf956a4645745407a5d919be8757549b062
+prerequisite-patch-id: 605f4eb1bbdb8ed39cb2ebed95768d922486099f
+prerequisite-patch-id: 3818f7fa7c81927c8a88607c4955a45d614ee69a
+prerequisite-patch-id: 634952f085f249f2e18893a3f8344a2ff27c13ad
+prerequisite-patch-id: fe7ea3dd385fe6c64d7c5c8d65ebe6f9c7ab047b
+prerequisite-patch-id: c92ac7a03faee6e1000637928628e7fd127d0159
+prerequisite-patch-id: f52fbd427e8730c62b5554f68713e6fa742ffcab
+prerequisite-patch-id: 1a2dc68fd107316fd1d1bb91376fe19bdb039147
+prerequisite-patch-id: d91c951338cfe9f06e8b8aa74856f6dc08ac8212
+prerequisite-patch-id: 41a65e680affc8011670762aec58c373030ef4ea
+prerequisite-patch-id: bbd5bf45c2185a9f2a551447247ce13f81df7c2a
+prerequisite-patch-id: 9802d5e3291f150a9ceba345628bbf04be972aba
+prerequisite-patch-id: 0bae228d241c6c5567c0b58fa4447a3bcb35d5f2
+prerequisite-patch-id: e2ed4b2c89623279d2201a81259b49ce56c5bb38
+prerequisite-patch-id: 57b3203672cf7617dc1d63d3eb1373e3b2b7ca34
+prerequisite-patch-id: 85c127f8e3d55e4210a00d5c84e2c4f92e2e16ad
+prerequisite-patch-id: cad729f2d039e636d2f3f937a9f26b1fb4455388
+prerequisite-patch-id: c9e696a62ea5f2d4407914ff7a8371e285f33d55
+prerequisite-patch-id: 08f30e5572d2e5a8153b563dd4d8fa0ece2cc575
+prerequisite-patch-id: c7f7be4f8e90e5eb473a82c293a6b6a0f417e2ba
+prerequisite-patch-id: b0c636c391f5d0ebb50a07222f3e41f48cab8c76
+prerequisite-patch-id: 705cc9ff7eb3e3e2873cfdb68c2d2272fde38baf
+prerequisite-patch-id: cfbe2b5cbfd69cf9f0b11c7c329cf8ec5a2ecff4
+prerequisite-patch-id: e7df3b6bbfb6bb87efaf39e73f2e4ed1f83558af
+prerequisite-patch-id: 554f79bc7984201131876865f5c1765c20f84ab5
+prerequisite-patch-id: 3b848305159028d4b7e1dd9013050aba60f0ca41
+prerequisite-patch-id: 9e9b33181259f59bf03f1fe9b3ef1d6160ae89d9
+prerequisite-patch-id: 9aefed850bf64f9015299473087fadf015d246eb
+prerequisite-patch-id: 3f886741cdfeff02432de1b0f5ed9d25a2847576
+prerequisite-patch-id: 3e81b7138067f19ee34bd7a418c01444979ccab3
+prerequisite-patch-id: 59d64b331417360de507c782fc7c33af1ac6dfc3
+prerequisite-patch-id: 8b35c6be1c70eaabcd1644a38731139f5be3153a
+prerequisite-patch-id: d0008bddf1653ff2452f349b018eaeb3bbcae698
+prerequisite-patch-id: dc45c65927286ed6da022ffae1f861cd74efe89d
+prerequisite-patch-id: 79665be026f637db6b4ab52cb6cebfb0406c5bb8
+prerequisite-patch-id: df37cbcb0f8716cf806910c742bbca83574bee00
+prerequisite-patch-id: ea87b84377d7878f9608166731cdbd5acfa0d44b
+prerequisite-patch-id: 0158c508dd88a47c2a241a144c73b197bc84a533
+prerequisite-patch-id: efbf15a64e673484a4d3187596f2c913e726ef1a
+prerequisite-patch-id: 920ebf96ab5fda37dcabd5febf6d8b4123fa141b
+prerequisite-patch-id: 8bb836f74b1a7fdc5352ad53eedaa763815a3e04
+prerequisite-patch-id: 04c88d73e6c470f9e31864c0a5cd5b3307c54417
+prerequisite-patch-id: 55cf446abf46692670cf6591fb3f012e6aeb256b
+prerequisite-patch-id: f28093a62972e0106b15128241fd4946e0c25cd9
+prerequisite-patch-id: e9c3e896c6d3d8199abca3a2d4f852ee6f8b6539
+prerequisite-patch-id: 588661d6d23181fc73748ae49699990fb003d3ee
+prerequisite-patch-id: 3edb549d3f36417d929da4be9a0da15c325c8ab7
+prerequisite-patch-id: 7897a7b1e3ec3fd588dc4788bbff4bb399683b1e
+prerequisite-patch-id: 05f5209e92385701c23665d7825c4d00a1abfd72
+prerequisite-patch-id: 634075ca9541a14809bdef5df8c9240134773117
+prerequisite-patch-id: 1cfe8abd19e3b8ab5d2ba30991ff5366dedf16db
+prerequisite-patch-id: 831a7a6cf76aa3bd41af7764113c48749e40431d
+-- 
+2.25.1
 
-FWIW, sshd does not seem to hang, instead it seems to busy loop in
-wait_port_writable calling into the scheduler over and over again.
-
-
-> 
-> PID: 237      TASK: 81d1a100          CPU: 1    COMMAND: "sshd"
->   LOWCORE INFO:
->    -psw      : 0x0404e00180000000 0x0000000131ceb136
->    -function : __list_add_valid at 131ceb136
->    -prefix   : 0x00410000
->    -cpu timer: 0x7fffffd3ec4f33d4
->    -clock cmp: 0x2639f08006283e00
->    -general registers:
->       0x00000008dcea2dce 0x00000001387d44b8
->       0x0000000081d1a228 0x00000001387d44b8
->       0x00000001387d44b8 0x00000001387d44b8
->       0x00000001387d3800 0x00000001387d3700
->       0x0000000081d1a100 0x00000001387d44b8
->       0x00000001387d44b8 0x0000000081d1a228
->       0x0000000081d1a100 0x0000000081d1a100
->       0x0000000131608b32 0x00000380004b7aa8
->    -access registers:
->       0x000003ff 0x8fff5870 0000000000 0000000000
->       0000000000 0000000000 0000000000 0000000000
->       0000000000 0000000000 0000000000 0000000000
->       0000000000 0000000000 0000000000 0000000000
->    -control registers:
->       0x00a0000014966a10 0x0000000133348007
->       0x00000000028c6140 000000000000000000
->       0x000000000000ffff 0x00000000028c6140
->       0x0000000033000000 0x0000000081f001c7
->       0x0000000000008000 000000000000000000
->       000000000000000000 000000000000000000
->       000000000000000000 0x0000000133348007
->       0x00000000db000000 0x00000000028c6000
->    -floating point registers:
->       0x000003ffb82a9761 0x0000006400000000
->       0x000003ffb82a345c 000000000000000000
->       0x0000000000007fff 0x000003ffe22fe000
->       000000000000000000 0x000003ffe22fa51c
->       0x000003ffb81889c0 000000000000000000
->       0x000002aa3ce2b470 000000000000000000
->       000000000000000000 000000000000000000
->       000000000000000000 000000000000000000
-> 
->   #0 [380004b7b00] pick_next_task at 1315f2088
->   #1 [380004b7b98] __schedule at 13215e954
->   #2 [380004b7c08] schedule at 13215eeea
->   #3 [380004b7c38] wait_port_writable at 3ff80149b2e [virtio_console]
->   #4 [380004b7cc0] port_fops_write at 3ff8014a282 [virtio_console]
->   #5 [380004b7d40] vfs_write at 131889e3c
->   #6 [380004b7e00] ksys_write at 13188a2e8
->   #7 [380004b7e50] __do_syscall at 13215761c
->   #8 [380004b7e98] system_call at 132166332
->   PSW:  0705000180000000 000003ff8f8f3a2a (user space)
->   GPRS: 0000000000000015 000003ff00000000 ffffffffffffffda 000002aa02fc68a0
->         0000000000000015 0000000000000015 0000000000000000 000002aa02fc68a0
->         0000000000000004 000003ff8f8f3a08 0000000000000015 0000000000000000
->         000003ff8ffa9f58 0000000000000000 000002aa02365b20 000003ffdf4798d0
