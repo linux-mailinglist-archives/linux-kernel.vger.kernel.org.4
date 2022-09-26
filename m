@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E76E5EA3F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271725EA2D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238174AbiIZLhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S237509AbiIZLPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238101AbiIZLgP (ORCPT
+        with ESMTP id S237632AbiIZLNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:36:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B1EB494;
-        Mon, 26 Sep 2022 03:44:01 -0700 (PDT)
+        Mon, 26 Sep 2022 07:13:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540561DAC;
+        Mon, 26 Sep 2022 03:36:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2A69B8095D;
-        Mon, 26 Sep 2022 10:43:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6B2C433C1;
-        Mon, 26 Sep 2022 10:43:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C03860C79;
+        Mon, 26 Sep 2022 10:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A5DC433D6;
+        Mon, 26 Sep 2022 10:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189035;
-        bh=FNlNUpO7zOVpbzBzSiXTkd1MoY2CKoYDpVut8xj5Jag=;
+        s=korg; t=1664188473;
+        bh=zmOjWxkhM1V1ZrODRFUduVy3DgEmiPDGvKEwK9BkK+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i/l1YqAhjNVDGRWH1sS9UtWHTfpxVbcZjhZa/mB+e8miEJ0NCppL+jlbBV/YemA7+
-         2+sPo6//AmLY8foA9oT8N+Zj1Pz5X5ZVDbXwAAN5iDTzTqkZ5f5CVDnzg98+DQ+mjr
-         M+UBaZT3lHEQJjxof6Ig99cb/kqkPVIusgB8wM6Y=
+        b=IYKlUaWAFXoj7PACF+3Vk7jsrCzfqpMUuV9fUJrJHVsg5G/rojVUgbtud5I1E+5Bg
+         Em3yc/jvMGpHA/BrQyc8Uodt0ZXqbeJMAwd/OjMkVeCq8D/mh9KIwNEjvp7WYrvNX8
+         dWfgXLAuj1wutYWcLc4Yzpr43M8Zzh4maJ+XT2LI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH 5.19 052/207] gpio: mockup: Fix potential resource leakage when register a chip
+        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 007/148] usb: dwc3: gadget: Prevent repeat pullup()
 Date:   Mon, 26 Sep 2022 12:10:41 +0200
-Message-Id: <20220926100808.957917375@linuxfoundation.org>
+Message-Id: <20220926100756.315444893@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-commit 02743c4091ccfb246f5cdbbe3f44b152d5d12933 upstream.
+[ Upstream commit 69e131d1ac4e52a59ec181ab4f8aa8c48cd8fb64 ]
 
-If creation of software node fails, the locally allocated string
-array is left unfreed. Free it on error path.
+Don't do soft-disconnect if it's previously done. Likewise, don't do
+soft-connect if the device is currently connected and running. It would
+break normal operation.
 
-Fixes: 6fda593f3082 ("gpio: mockup: Convert to use software nodes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Currently the caller of pullup() (udc's sysfs soft_connect) only checks
+if it had initiated disconnect to prevent repeating soft-disconnect. It
+doesn't check for soft-connect. To be safe, let's keep the check here
+regardless whether the udc core is fixed.
+
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/1c1345bd66c97a9d32f77d63aaadd04b7b037143.1650593829.git.Thinh.Nguyen@synopsys.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-mockup.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/dwc3/gadget.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/gpio/gpio-mockup.c
-+++ b/drivers/gpio/gpio-mockup.c
-@@ -533,8 +533,10 @@ static int __init gpio_mockup_register_c
- 	}
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 761065336322..61499b657129 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2442,6 +2442,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	int			ret;
  
- 	fwnode = fwnode_create_software_node(properties, NULL);
--	if (IS_ERR(fwnode))
-+	if (IS_ERR(fwnode)) {
-+		kfree_strarray(line_names, ngpio);
- 		return PTR_ERR(fwnode);
-+	}
- 
- 	pdevinfo.name = "gpio-mockup";
- 	pdevinfo.id = idx;
+ 	is_on = !!is_on;
++
++	if (dwc->pullups_connected == is_on)
++		return 0;
++
+ 	dwc->softconnect = is_on;
+ 	/*
+ 	 * Per databook, when we want to stop the gadget, if a control transfer
+-- 
+2.35.1
+
 
 
