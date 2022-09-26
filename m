@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4779C5EA335
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40C15E9FBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbiIZLVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S235444AbiIZK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiIZLTg (ORCPT
+        with ESMTP id S235467AbiIZK0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:19:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E23E5300D;
-        Mon, 26 Sep 2022 03:39:04 -0700 (PDT)
+        Mon, 26 Sep 2022 06:26:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7CA3FA12;
+        Mon, 26 Sep 2022 03:18:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDAE7B80942;
-        Mon, 26 Sep 2022 10:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39252C433C1;
-        Mon, 26 Sep 2022 10:37:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EE0DB80930;
+        Mon, 26 Sep 2022 10:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEAFC433C1;
+        Mon, 26 Sep 2022 10:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188639;
-        bh=eugTPWA4tapPEbaTlrgjMVBwSsaEBg3CTel76hGAlhM=;
+        s=korg; t=1664187503;
+        bh=Tbxxrcgh3NePnoXuNMJDxvg8ntbWKR5LUqSxLZ3lIHQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YN9RYezYVrwQSHHkitTOCGrm4JWA8pKQYxgOOCLQezCh4g5lcXmFoglWAXandmzTa
-         kHErSsIGrpwdammrPBafWP8x7YtrlSzBY4pssRiADa55KhcxwlVEGzccf8hSkFMSAw
-         MjNuN7D1De3LzXLapFfXX9mkBPGgVknA2+h65ymo=
+        b=uNWxOJXYGLWyEtVvoc0/Q17o2PI5bnr56L9ABJU0i1aGVa82+KwEUo8O7O4ts9Xqo
+         LKuOAXiE+zo0hmPiopcdGDeZ1ac0UrCnVi82aikVRie2SXdGCbhDpTcV1ss1zcEg4l
+         IBYYFxi3wmU67qqJOT9fFnVCC27QCDS/5alkcn/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 073/148] net: phy: aquantia: wait for the suspend/resume operations to finish
-Date:   Mon, 26 Sep 2022 12:11:47 +0200
-Message-Id: <20220926100758.771162872@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 29/58] ALSA: hda: add Intel 5 Series / 3400 PCI DID
+Date:   Mon, 26 Sep 2022 12:11:48 +0200
+Message-Id: <20220926100742.529655798@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,122 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-[ Upstream commit ca2dccdeeb49a7e408112d681bf447984c845292 ]
+commit 4d40ceef4745536289012670103c59264e0fb3ec upstream.
 
-The Aquantia datasheet notes that after issuing a Processor-Intensive
-MDIO operation, like changing the low-power state of the device, the
-driver should wait for the operation to finish before issuing a new MDIO
-command.
+Handle 0x3b57 variant with same AZX_DCAPS_INTEL_PCH_NOPM
+capabilities as 0x3b56. In practise this allow use of HDMI/DP
+display audio via i915.
 
-The new aqr107_wait_processor_intensive_op() function is added which can
-be used after these kind of MDIO operations. At the moment, we are only
-adding it at the end of the suspend/resume calls.
-
-The issue was identified on a board featuring the AQR113C PHY, on
-which commands like 'ip link (..) up / down' issued without any delays
-between them would render the link on the PHY to remain down.
-The issue was easy to reproduce with a one-liner:
- $ ip link set dev ethX down; ip link set dev ethX up; \
- ip link set dev ethX down; ip link set dev ethX up;
-
-Fixes: ac9e81c230eb ("net: phy: aquantia: add suspend / resume callbacks for AQR107 family")
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220906130451.1483448-1-ioana.ciornei@nxp.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+BugLink: https://gitlab.freedesktop.org/drm/intel/-/issues/2751
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220912183716.2126312-1-kai.vehmanen@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/aquantia_main.c | 53 ++++++++++++++++++++++++++++++---
- 1 file changed, 49 insertions(+), 4 deletions(-)
+ sound/pci/hda/hda_intel.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index 3221224525ac..2f2765d7f84c 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -90,6 +90,9 @@
- #define VEND1_GLOBAL_FW_ID_MAJOR		GENMASK(15, 8)
- #define VEND1_GLOBAL_FW_ID_MINOR		GENMASK(7, 0)
- 
-+#define VEND1_GLOBAL_GEN_STAT2			0xc831
-+#define VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG	BIT(15)
-+
- #define VEND1_GLOBAL_RSVD_STAT1			0xc885
- #define VEND1_GLOBAL_RSVD_STAT1_FW_BUILD_ID	GENMASK(7, 4)
- #define VEND1_GLOBAL_RSVD_STAT1_PROV_ID		GENMASK(3, 0)
-@@ -124,6 +127,12 @@
- #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL2	BIT(1)
- #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL3	BIT(0)
- 
-+/* Sleep and timeout for checking if the Processor-Intensive
-+ * MDIO operation is finished
-+ */
-+#define AQR107_OP_IN_PROG_SLEEP		1000
-+#define AQR107_OP_IN_PROG_TIMEOUT	100000
-+
- struct aqr107_hw_stat {
- 	const char *name;
- 	int reg;
-@@ -598,16 +607,52 @@ static void aqr107_link_change_notify(struct phy_device *phydev)
- 		phydev_info(phydev, "Aquantia 1000Base-T2 mode active\n");
- }
- 
-+static int aqr107_wait_processor_intensive_op(struct phy_device *phydev)
-+{
-+	int val, err;
-+
-+	/* The datasheet notes to wait at least 1ms after issuing a
-+	 * processor intensive operation before checking.
-+	 * We cannot use the 'sleep_before_read' parameter of read_poll_timeout
-+	 * because that just determines the maximum time slept, not the minimum.
-+	 */
-+	usleep_range(1000, 5000);
-+
-+	err = phy_read_mmd_poll_timeout(phydev, MDIO_MMD_VEND1,
-+					VEND1_GLOBAL_GEN_STAT2, val,
-+					!(val & VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG),
-+					AQR107_OP_IN_PROG_SLEEP,
-+					AQR107_OP_IN_PROG_TIMEOUT, false);
-+	if (err) {
-+		phydev_err(phydev, "timeout: processor-intensive MDIO operation\n");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
- static int aqr107_suspend(struct phy_device *phydev)
- {
--	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
--				MDIO_CTRL1_LPOWER);
-+	int err;
-+
-+	err = phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
-+			       MDIO_CTRL1_LPOWER);
-+	if (err)
-+		return err;
-+
-+	return aqr107_wait_processor_intensive_op(phydev);
- }
- 
- static int aqr107_resume(struct phy_device *phydev)
- {
--	return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
--				  MDIO_CTRL1_LPOWER);
-+	int err;
-+
-+	err = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
-+				 MDIO_CTRL1_LPOWER);
-+	if (err)
-+		return err;
-+
-+	return aqr107_wait_processor_intensive_op(phydev);
- }
- 
- static int aqr107_probe(struct phy_device *phydev)
--- 
-2.35.1
-
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -2634,6 +2634,8 @@ static const struct pci_device_id azx_id
+ 	/* 5 Series/3400 */
+ 	{ PCI_DEVICE(0x8086, 0x3b56),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
++	{ PCI_DEVICE(0x8086, 0x3b57),
++	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
+ 	/* Poulsbo */
+ 	{ PCI_DEVICE(0x8086, 0x811b),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
 
 
