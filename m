@@ -2,100 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27355EAC6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05125EAE44
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbiIZQZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S231134AbiIZRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbiIZQZE (ORCPT
+        with ESMTP id S230452AbiIZRe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:25:04 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD8B12AFA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:14:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso12791518pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=TQR1b+nzyuc8ov+hBmAb0rAfJyo96VnisRwO/RamCmo=;
-        b=GJ6jsH7IGUIZ2la75NmNaElN/vQ22kVn/gulzr5q86Zr/Iy721K4WYpP6Uf9UZccn/
-         vO76EQgbtaH9E1nfXhmz1HX7GnYpyjRDVD2tAJ6MyAXoI6H8IHSA57fONEgToTEPg0no
-         6r+nf8kr4HgOJPz1QUAHdq0XxYRV8Z1N2idvIilddDxu/J9XxMavdc3FVqF/3EvONspb
-         6JaYD12I6GWJFCu4LY6+5/OKGgynu/A6XkvS60kx2cajVBiAJzFozuO3rzSJhOOJ7zm0
-         TFEUfsmZjpxeemg1XygonGSI+QRKPNaFGVjgGFFBv1j7uRFdtQQys688cAbRIZ3YB2wH
-         7zxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=TQR1b+nzyuc8ov+hBmAb0rAfJyo96VnisRwO/RamCmo=;
-        b=76HfS94JMUXnFJqpyPnDieYeA4iav+l9c9L78WaTYypVEJPJi9NpUi7+Uygl4b+AOg
-         oZ47A6aeKswMFgAoe5tYXrk8UMj3las0F52Ba1TdzOL8tLCdAbX9+F8EydVigMUOh7vB
-         2HVUajEYySTm8mIUoJnd+SPVjy8XWQ5nDZFGybYZsLyOX1o5Yucbfbp2b82wFZZfxZW7
-         zVzBif4KtbCDIjYrMvAAQIbESOQmr78QG3UYx/CmR5kXcASUrd//T2Tw7ijxooKuvOye
-         9XTs7YWcvWA3AfBuO9LQKnMnqHMxqH+P4bJyof+TXhbRakMrMX5LyT6fkCWU7EEu6sJ2
-         71SA==
-X-Gm-Message-State: ACrzQf00cIysyuBd0BWs/4c1kY1S3Uj+vD6F6ZSKpJEbXesbwUzicdIx
-        X2yuGSl+8XIKT4qrG21KKVH0QYDYpWIZRGuI7+o=
-X-Google-Smtp-Source: AMsMyM540lqnCiojFfAVfariKQjTwcr9GDI3uV0TU7MbUBM1MkqXmyvE7AYhOD6hS8D3xz6dIVyKrAcIGila4Q5Ut0E=
-X-Received: by 2002:a17:903:240b:b0:178:a475:6644 with SMTP id
- e11-20020a170903240b00b00178a4756644mr22794609plo.96.1664205263101; Mon, 26
- Sep 2022 08:14:23 -0700 (PDT)
+        Mon, 26 Sep 2022 13:34:56 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 127B9DEA2;
+        Mon, 26 Sep 2022 09:54:37 -0700 (PDT)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 2CED02040;
+        Mon, 26 Sep 2022 17:15:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202205; t=1664205355;
+        bh=O6butbHEYXb4X2YTzbhHaO1UylgtvPZjvHMs4RWdSvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JxiznzBra2+BR0qTR5UGFsIS055L/CO0mxcmXg0liP/AVCsFSQKoKe14LpHaJbWZq
+         FgCcdSEqNKm2Zvscjpvz+wXc2/WNHgqWmEt6gtzVkFbn2oXSOs4oFUTTV5OdNDPbik
+         VmLNpwl42PU4fGkCmeCPH72iCPnx9s7Au5MWnfq/4SwU1fJ/5fy4ghQ59j/BhNs/gF
+         O0NIjhWLPooszMQD9CESnym/nwt81rkLslMJT3q5MI47CLz0/eT0wG7Ph25DCPWQmg
+         otmjxCCN4BdkhYarHKUGCthMm17n/rJL0IVxWzqO+7nUXKBL+k2xgJzL2lDutxhiH6
+         A3lHbNvWfb9iAZuCuiLnOoX/DuPd3Ql64EK0O8pkOqRgqFZnO+x5/tNQtGD8ucZBmU
+         NGLj80zd2+EX24UgFgblGYsxhE9z+VqY1nOWdHSA54utZWReTwioykSH3JpQZ9Z6lL
+         SOajSAx/JkXbJKzXKyfACYFS5hTjqqPs01szTRAHmJMsBEZmsemjmQyD4y5yy0Cu9r
+         fnK/vh8+NTajE8JE5O6rxw3GE9NYgv9hV47R7jKN3hmYI2VssBFbrvkR/JZp7j5TGm
+         7046P4UREg7FSI835qcareeyEqAYUdhinIFp3jy+LoHeR4oiV4+byeK2iRoKS2gAaV
+         iC9wAhSX2hd6n4+6TBNeIUYA=
+Date:   Mon, 26 Sep 2022 17:15:54 +0200
+From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linux MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v4 02/18] a.out: remove define-only CMAGIC, previously
+ magic number
+Message-ID: <20220926151554.7gxd6unp5727vw3c@tarta.nabijaczleweli.xyz>
+References: <YyMlovoskUcHLEb7@kroah.com>
+ <9cbea062df7125ef43e2e0b2a67ede6ad1c5f27e.1663280877.git.nabijaczleweli@nabijaczleweli.xyz>
+ <CAMuHMdWxf=+CnwXT61VvYhcHi093rz=0ftWQXKVviMunzE1HHw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:2821:b0:2f4:5df4:ad0b with HTTP; Mon, 26 Sep 2022
- 08:14:22 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <michellegoodman358@gmail.com>
-Date:   Mon, 26 Sep 2022 15:14:22 +0000
-Message-ID: <CAAnwc9usbG67afgi1TX_kFsJKyPNcL7cckvD2pJAa=qM-o6-ng@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="owvvegzmxe7bs6ov"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWxf=+CnwXT61VvYhcHi093rz=0ftWQXKVviMunzE1HHw@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1031 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [michellegoodman358[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [michellegoodman358[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht erhalten.
-Ich brauche schnelle Antworten
 
-Ich danke dir sehr.
-Michelle
+--owvvegzmxe7bs6ov
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+On Mon, Sep 26, 2022 at 10:16:02AM +0200, Geert Uytterhoeven wrote:
+> Thanks for your patch, which is now commit 53c2bd679017277f
+> ("a.out: remove define-only CMAGIC, previously magic number") in
+> driver-core/driver-core-next.
+>=20
+> On Fri, Sep 16, 2022 at 12:40 AM =D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabij=
+aczleweli.xyz> wrote:
+> > The last user was removed in 5.1 in
+> > commit 08300f4402ab ("a.out: remove core dumping support")
+> > but this is part of the UAPI headers, so this may want to either wait
+> > until a.out is removed entirely, or be removed from the magic number doc
+> > and silently remain in the header
+>=20
+> Indeed. This is part of uapi, and might break some unknown
+> userspace, while the gain is limited.  Do we really want to reduce
+> include/uapi/linux/a.out.h piecewise (e.g. N_BADMAG() seems to be
+> unused, too), instead of keeping it until a.out support is removed
+> completely?
+
+Not really, but it looked like a magic number in the magic-number.rst
+sense due to the field being "magic" and the unintuitive type naming:
+I hadn't realised it's part of the on-disk format
+re-examination shows that it very well may be (have been).
+
+> Anyway, even at that point, it might be wise to keep the header file
+> around, as people have expressed the desire to run a.out binaries
+> through a userspace-compatibility wrapper.
+
+Agreed. Scissor-patch that reverts the removal below.
+
+> > A cursory glance on DCS didn't show any user code actually using this
+> > value
+>=20
+> What is DCS?
+
+Debian Code Search; in this case my query was:
+  https://codesearch.debian.net/search?q=3D%5CbCMAGIC%5Cb&literal=3D0
+
+There's a few false positives here but all results that are using CMAGIC
+to mean this CMAGIC (and aren't hurd code copied from linux)
+just re-define it.
+
+> >  Documentation/process/magic-number.rst                    | 1 -
+> >  Documentation/translations/it_IT/process/magic-number.rst | 1 -
+> >  Documentation/translations/zh_CN/process/magic-number.rst | 1 -
+> >  Documentation/translations/zh_TW/process/magic-number.rst | 1 -
+> >  include/uapi/linux/a.out.h                                | 3 ---
+> >  5 files changed, 7 deletions(-)
+> >=20
+> > diff --git a/include/uapi/linux/a.out.h b/include/uapi/linux/a.out.h
+> > index 5fafde3798e5..bb15da96df2a 100644
+> > --- a/include/uapi/linux/a.out.h
+> > +++ b/include/uapi/linux/a.out.h
+> > @@ -70,9 +70,6 @@ enum machine_type {
+> >     The first page is unmapped to help trap NULL pointer references */
+> >  #define QMAGIC 0314
+> >
+> > -/* Code indicating core file.  */
+> > -#define CMAGIC 0421
+> > -
+> >  #if !defined (N_BADMAG)
+> >  #define N_BADMAG(x)      (N_MAGIC(x) !=3D OMAGIC         \
+> >                         && N_MAGIC(x) !=3D NMAGIC         \
+>=20
+> Gr{oetje,eeting}s,
+>                         Geert
+
+Best,
+=D0=BD=D0=B0=D0=B1
+
+-- >8 --
+Subject: [PATCH] a.out: restore CMAGIC
+
+Part of UAPI and the on-disk format:
+this means that it's not a magic number per magic-number.rst,
+and it's best to leave it untouched to avoid breaking userspace
+and suffer the same fate as a.out in general
+
+Fixes: commit 53c2bd679017 ("a.out: remove define-only CMAGIC,
+ previously magic number")
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ include/uapi/linux/a.out.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/uapi/linux/a.out.h b/include/uapi/linux/a.out.h
+index bb15da96df2a..5fafde3798e5 100644
+--- a/include/uapi/linux/a.out.h
++++ b/include/uapi/linux/a.out.h
+@@ -70,6 +70,9 @@ enum machine_type {
+    The first page is unmapped to help trap NULL pointer references */
+ #define QMAGIC 0314
+=20
++/* Code indicating core file.  */
++#define CMAGIC 0421
++
+ #if !defined (N_BADMAG)
+ #define N_BADMAG(x)	  (N_MAGIC(x) !=3D OMAGIC		\
+ 			&& N_MAGIC(x) !=3D NMAGIC		\
+--=20
+2.30.2
+
+
+--owvvegzmxe7bs6ov
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMxwikACgkQvP0LAY0m
+WPFsOg/+LbOR74Qel4hfE8PDMr9APMECOWl5vTlxh+SZqgou2UJ8HIQ6kqweyyZi
+ap9urcIzyiIb4lnGUWSLMyGG89H6paRIAr8pPX/wLWOkkXpukCg77CnwbqZrQCO3
+etsnNxwThtjN23Y4ggMhHwZ85Nn6RnhmzFcHHZ2UsfbyYjnGT85eZHhUzh8uFjjF
+J2UEdff3e4dx32vGw+SRbzxre1g/fCXB1Yp8dcvvQ9vLJjxHqayK2uNVjVF3Cbmk
+c71dYu38EEcAymYByMwDqiV1gKpisguLzsRctH2ZK6H7k1UakLutLH9GnRAeNJ+Z
+6p/rb02O6N5yFGyXzjix74ILOWhhv/+HJ8D2EFWM02ictMrttjawVCcGSkU048d0
+h3hSMEXR8vAcVu9utZyW1lMotDJHvcdlPYE9hA+Mem82B/+w6qIszvkG2//JO7So
+HkkPkWEeel+3vWSfdilM1DhlX5aFgzdB74DrJywFbOzjwL4kYiKi53AEF0VJgCOd
+vEcX/vxN8oVUxaaHL7Tun0UkWYCS1hpt8A74rbrWhdflM+Oc4c7A+0d9ga8MFM4f
+CDygsPBClz2WthgcNV+1RfVh257MDurYIqmaLcenaQOBF5Z/6wHAnE5ne0D5oN0d
+uYDvV2jjjSHts0sLJssHo3QEJr78NIMxC7G1ETfF42lWzGLPRUs=
+=qrkH
+-----END PGP SIGNATURE-----
+
+--owvvegzmxe7bs6ov--
