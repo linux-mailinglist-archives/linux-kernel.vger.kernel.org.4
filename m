@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899375EA4E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309655EA256
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236616AbiIZL4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S234970AbiIZLGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238364AbiIZLx2 (ORCPT
+        with ESMTP id S237232AbiIZLEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:53:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8EE1F636;
-        Mon, 26 Sep 2022 03:49:42 -0700 (PDT)
+        Mon, 26 Sep 2022 07:04:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0214F39C;
+        Mon, 26 Sep 2022 03:33:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD395B80976;
-        Mon, 26 Sep 2022 10:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3CFC433C1;
-        Mon, 26 Sep 2022 10:49:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 500E860CEF;
+        Mon, 26 Sep 2022 10:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4277EC433D7;
+        Mon, 26 Sep 2022 10:33:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189355;
-        bh=e0dN7MrU8TIdgGaJFqTE0O157ZpkWC3tkGGG1Eoh4NQ=;
+        s=korg; t=1664188406;
+        bh=HwZx95QBBLtExNnRGltg/Imjeh2uE5xtRtIqxW2Z1ig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V/zoiy62DIHaoDdTcyjEDngzyNrYa+d6D3dn8UmzEcJ1VPyEBYqPLH2ChXmjvpkKp
-         zAYARpqcfBcZgNG9VrHbGw/+S03X4ogJSgj0iabJDylsKlze/9blm/vT0Bof/7nN9v
-         7vFXIM8yFkZwkqE4WIv+lGqddCIK3GaxcCFNdjwk=
+        b=HUc7+78gLJOCKUhDYGnfQ7TFdVnp/jBW5U7Ym1phvIewXCJqYf/8UaBk6huk/L8fw
+         +R28yezTMvXdxciwI0Th4pRGimj5uslmpLGYI8fals+mcFr9Kd/i3ZDZB/1/cDrQG7
+         rwIQhDDUPxB62iO4lo00dQI7Z9aXgiL0bG+uGnS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Homin Rhee <hominlab@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.19 159/207] io_uring: ensure that cached task references are always put on exit
+        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: [PATCH 5.10 122/141] vfio/type1: fix vaddr_get_pfns() return in vfio_pin_page_external()
 Date:   Mon, 26 Sep 2022 12:12:28 +0200
-Message-Id: <20220926100813.774193328@linuxfoundation.org>
+Message-Id: <20220926100758.876908959@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,49 +53,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Daniel Jordan <daniel.m.jordan@oracle.com>
 
-commit e775f93f2ab976a2cdb4a7b53063cbe890904f73 upstream.
+commit 4ab4fcfce5b540227d80eb32f1db45ab615f7c92 upstream.
 
-io_uring caches task references to avoid doing atomics for each of them
-per request. If a request is put from the same task that allocated it,
-then we can maintain a per-ctx cache of them. This obviously relies
-on io_uring always pruning caches in a reliable way, and there's
-currently a case off io_uring fd release where we can miss that.
+vaddr_get_pfns() now returns the positive number of pfns successfully
+gotten instead of zero.  vfio_pin_page_external() might return 1 to
+vfio_iommu_type1_pin_pages(), which will treat it as an error, if
+vaddr_get_pfns() is successful but vfio_pin_page_external() doesn't
+reach vfio_lock_acct().
 
-One example is a ring setup with IOPOLL, which relies on the task
-polling for completions, which will free them. However, if such a task
-submits a request and then exits or closes the ring without reaping
-the completion, then ring release will reap and put. If release happens
-from that very same task, the completed request task refs will get
-put back into the cache pool. This is problematic, as we're now beyond
-the point of pruning caches.
+Fix it up in vfio_pin_page_external().  Found by inspection.
 
-Manually drop these caches after doing an IOPOLL reap. This releases
-references from the current task, which is enough. If another task
-happens to be doing the release, then the caching will not be
-triggered and there's no issue.
-
-Cc: stable@vger.kernel.org
-Fixes: e98e49b2bbf7 ("io_uring: extend task put optimisations")
-Reported-by: Homin Rhee <hominlab@gmail.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: be16c1fd99f4 ("vfio/type1: Change success value of vaddr_get_pfn()")
+Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Message-Id: <20210308172452.38864-1-daniel.m.jordan@oracle.com>
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- io_uring/io_uring.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/vfio/vfio_iommu_type1.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -10951,6 +10951,9 @@ static __cold void io_ring_ctx_wait_and_
- 		io_poll_remove_all(ctx, NULL, true);
- 		/* if we failed setting up the ctx, we might not have any rings */
- 		io_iopoll_try_reap_events(ctx);
-+		/* drop cached put refs after potentially doing completions */
-+		if (current->io_uring)
-+			io_uring_drop_tctx_refs(current);
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -671,7 +671,12 @@ static int vfio_pin_page_external(struct
+ 		return -ENODEV;
+ 
+ 	ret = vaddr_get_pfns(mm, vaddr, 1, dma->prot, pfn_base, pages);
+-	if (ret == 1 && do_accounting && !is_invalid_reserved_pfn(*pfn_base)) {
++	if (ret != 1)
++		goto out;
++
++	ret = 0;
++
++	if (do_accounting && !is_invalid_reserved_pfn(*pfn_base)) {
+ 		ret = vfio_lock_acct(dma, 1, true);
+ 		if (ret) {
+ 			put_pfn(*pfn_base, dma->prot);
+@@ -683,6 +688,7 @@ static int vfio_pin_page_external(struct
+ 		}
  	}
  
- 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
++out:
+ 	mmput(mm);
+ 	return ret;
+ }
 
 
