@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789B55EA8CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFBD5EA8C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbiIZOoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S235226AbiIZOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbiIZOnI (ORCPT
+        with ESMTP id S234931AbiIZOlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:43:08 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765AA6E2EA;
-        Mon, 26 Sep 2022 06:05:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VQo1ZLP_1664197498;
-Received: from j66e01291.sqa.eu95.tbsite.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VQo1ZLP_1664197498)
-          by smtp.aliyun-inc.com;
-          Mon, 26 Sep 2022 21:05:24 +0800
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     john.garry@huawei.com, will@kernel.org, james.clark@arm.com,
-        mike.leach@linaro.org, leo.yan@linaro.org, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, german.gomez@arm.com, timothy.hayes@arm.com,
-        alisaidi@amazon.com, xueshuai@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, renyu.zj@linux.alibaba.com
-Subject: [PATCH] perf arm-spe: augment the data source type with neoverse_spe list
-Date:   Mon, 26 Sep 2022 21:03:16 +0800
-Message-Id: <1664197396-42672-1-git-send-email-renyu.zj@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 10:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17C5F8E;
+        Mon, 26 Sep 2022 06:03:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B70360D28;
+        Mon, 26 Sep 2022 13:03:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4537FC433C1;
+        Mon, 26 Sep 2022 13:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664197401;
+        bh=edJaC8g1NJfxM/VM8JJRmUgz2AQBoTwZ3IVbR7mOLq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DXTuqS1NXrFWtXtkxtylwVBsmXUV1U+2ku5hyqo+1zO5qQYJLrt5pVYDLZXh2C/ZL
+         S/amDgP55wKJ22aTnyjiCEGPfnCfEnExHSA/4e7qHxj3PCTV45CHBul2J0lqL2Urfw
+         ZAu6rfg7NbgaX0vQ5V2fT2hTVhw7Prwzyn6s0Yly6au2Adxa9G3d/pgzjmeDZ8t56n
+         GzsE6m1jE9DhVFYcbDv++KXyo39Wcx4aVlycEmzNVTMWxk3GQw5g8UjAY5lECAqLb8
+         dARMFHo0fyNGNgHSlKb8kkINoTxEZpzE6Za3fzTNy+Dk5ZzcPb5ElgoHHrhLgadX5y
+         QzJxhGsN0q7Tg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DBEA3403B0; Mon, 26 Sep 2022 14:03:18 +0100 (IST)
+Date:   Mon, 26 Sep 2022 14:03:18 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf record: Fix segmentation fault in
+ record__read_lost_samples()
+Message-ID: <YzGjFobeqkrilrEj@kernel.org>
+References: <20220924113346.1110909-1-leo.yan@linaro.org>
+ <CAM9d7ci2RJOTz08eGRgLMVpS0TmwN=q=UNA_Z3wbSHCC2pMygQ@mail.gmail.com>
+ <Yy+rBbzvoTWOI+SJ@leoy-huanghe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy+rBbzvoTWOI+SJ@leoy-huanghe>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When synthesizing event with SPE data source, commit 4e6430cbb1a9("perf
-arm-spe: Use SPE data source for neoverse cores") augment the type with
-source information by MIDR. However, is_midr_in_range only compares the
-first entry in neoverse_spe.
+Em Sun, Sep 25, 2022 at 09:12:37AM +0800, Leo Yan escreveu:
+> Hi Namhyung,
+> 
+> On Sat, Sep 24, 2022 at 09:52:09AM -0700, Namhyung Kim wrote:
+> 
+> [...]
+> 
+> > > In the unprivileged mode perf fails to open PMU event, the function
+> > > record__open() returns error and "session->evlist" is NULL; this leads
+> > > to segmentation fault when iterates "session->evlist" in the function
+> > > record__read_lost_samples().
+> > >
+> > > This patch checks "session->evlist" in record__read_lost_samples(), if
+> > > "session->evlist" is NULL then the function directly bails out to avoid
+> > > segmentation fault.
+> > >
+> > > Fixes: a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
+> > > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > 
+> > Thanks for the fix and sorry for the inconvenience.
+> > Actually I sent the same fix a few weeks ago.
+> > 
+> > https://lore.kernel.org/r/20220909235024.278281-1-namhyung@kernel.org
+> 
+> Thanks a lot for the info and fix.  The patch in above link looks good
+> to me!  Please ignore this one.
 
-Change is_midr_in_range to is_midr_in_range_list to traverse the
-neoverse_spe array so that all neoverse cores synthesize event with data
-source packet.
+Took that as an Acked-by: Leo, thanks!
 
-Fixes: 4e6430cbb1a9("perf arm-spe: Use SPE data source for neoverse cores")
-Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
----
- tools/perf/util/arm-spe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index 22dcfe0..906476a 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -498,7 +498,7 @@ static void arm_spe__synth_data_source_generic(const struct arm_spe_record *reco
- static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
- {
- 	union perf_mem_data_src	data_src = { 0 };
--	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
-+	bool is_neoverse = is_midr_in_range_list(midr, neoverse_spe);
- 
- 	if (record->op == ARM_SPE_LD)
- 		data_src.mem_op = PERF_MEM_OP_LOAD;
--- 
-1.8.3.1
-
+- Arnaldo
