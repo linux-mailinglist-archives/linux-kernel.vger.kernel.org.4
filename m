@@ -2,156 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB745E9798
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BC65E97A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiIZBEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S232377AbiIZBOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiIZBEd (ORCPT
+        with ESMTP id S231169AbiIZBOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:04:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C1B124
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664154270; x=1695690270;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=ewrjyWVMkrf0F3lb0gU9athQ8P36/hdOKSpNw/dHgsc=;
-  b=Mi6qTqsgffohmMZpodJXagQjeEmk8OqDTeaFdXTHm6OSBEWqGwK7Yi5U
-   CvZ4LrOl4UPqY4gn6bHCWcYSuhaF58PmqvURhTCf0NXKD25OMkKwmrnXn
-   g5Q8oXgmKxI35LCII6GsBLO1/NjRhp2recmQBRXLIBcq4DDTU8iJuk/9e
-   hbIdsDSf/AzGRihp7yZ+4yAd0U2dCYOB9VW0s2N7e7cmNJjOZRtVI/hkl
-   67BW6EVzMCAW62vJDNKZJYGI5WyKLcNqyyerpcx8lcxyDb+/9p6EsU59B
-   joRlB07ITLS6ctAyv+8Y8smoOH38HUqPnSF82TEAmSa/pMcJkn7aTDlcR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="284027796"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="284027796"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 18:04:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="796142485"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 18:04:25 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-Subject: Re: [PATCH v4] mm/demotion: Expose memory tier details via sysfs
-References: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com>
-        <874jwyjyy9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <3a966604-77c5-e6fc-1541-2fed7c71cc0c@linux.ibm.com>
-Date:   Mon, 26 Sep 2022 09:04:16 +0800
-In-Reply-To: <3a966604-77c5-e6fc-1541-2fed7c71cc0c@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 23 Sep 2022 16:05:30 +0530")
-Message-ID: <87zgenhrov.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 25 Sep 2022 21:14:43 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F22C6341;
+        Sun, 25 Sep 2022 18:14:40 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQe-WH6_1664154876;
+Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQe-WH6_1664154876)
+          by smtp.aliyun-inc.com;
+          Mon, 26 Sep 2022 09:14:37 +0800
+Message-ID: <58b7485d-94fa-f333-ff14-9a4a1ce0284a@linux.alibaba.com>
+Date:   Mon, 26 Sep 2022 09:14:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH] drivers/perf: fix return value check in
+ ali_drw_pmu_probe()
+Content-Language: en-US
+To:     Sun Ke <sunke32@huawei.com>, will@kernel.org, mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20220924032127.313156-1-sunke32@huawei.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220924032127.313156-1-sunke32@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-13.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-> On 9/23/22 1:37 PM, Huang, Ying wrote:
->> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>=20
->>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory t=
-ier
->>> related details can be found. All allocated memory tiers will be listed
->>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->>>
->>> The nodes which are part of a specific memory tier can be listed via
->>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->>=20
->> It appears that XXXs is used for mask while XXXs_list is used for list?
->> For example,
->>=20
->> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus
->> 0,00100004
->> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
->> 2,20
->>=20
->> It's better to follow the this convention?
->>=20
->
-> That is not followed in other parts of the kernel. I was loking at cpuset=
-=20
->
-> $cat cpuset.cpus.effective=20
-> 0-7
 
-Per my understanding, cpuset isn't sysfs, but cgroupfs?
+在 2022/9/24 AM11:21, Sun Ke 写道:
+> In case of error, devm_ioremap_resource() returns ERR_PTR(),
+> and never returns NULL. The NULL test in the return value
+> check should be replaced with IS_ERR().
+> 
+> Fixes: cf7b61073e45 ("drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710 SoC")
+> Signed-off-by: Sun Ke <sunke32@huawei.com>
 
-I did some research in my system,
+Good catch, thank you for fixing.
 
-$ grep . $(find /sys/devices | grep 'list$')
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-and
+Cheers,
+Shuai
 
-$ grep . $(find /sys/devices | grep 'cpus$')
 
-I found that the cpus/cpus_list convention is used in
 
-- pci
-
-  /sys/devices/pci0000:64/0000:64:0d.2/local_cpulist:0-35
-  /sys/devices/pci0000:64/0000:64:0c.2/local_cpus:f,ffffffff
-
-- system
-
-  /sys/devices/system/cpu/cpu7/topology/core_cpus_list:7,25
-  /sys/devices/system/cpu/cpu7/topology/core_cpus:0,02000080
-
-- block
-
-  /sys/devices/virtual/block/loop1/mq/0/cpu_list:0, 1, 2, ...
-
-- net
-
-  /sys/devices/virtual/net/lo/queues/rx-0/rps_cpus:0,00000000
-
-And I haven't found any exception in sysfs of my system.  Can you find
-some?
-
-Best Regards,
-Huang, Ying
-
->>> A directory hierarchy looks like
->>> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
->>> memory_tier4/
->>> =E2=94=9C=E2=94=80=E2=94=80 nodes
->>> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tiering
->>> =E2=94=94=E2=94=80=E2=94=80 uevent
->>>
->>> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
->>> 0,2
->>>
->>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>=20
->> Best Regards,
->> Huang, Ying
->>=20
->> [snip]
+> ---
+>  drivers/perf/alibaba_uncore_drw_pmu.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
+> index 82729b874f09..a7689fecb49d 100644
+> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
+> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+> @@ -658,8 +658,8 @@ static int ali_drw_pmu_probe(struct platform_device *pdev)
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	drw_pmu->cfg_base = devm_ioremap_resource(&pdev->dev, res);
+> -	if (!drw_pmu->cfg_base)
+> -		return -ENOMEM;
+> +	if (IS_ERR(drw_pmu->cfg_base))
+> +		return PTR_ERR(drw_pmu->cfg_base);
+>  
+>  	name = devm_kasprintf(drw_pmu->dev, GFP_KERNEL, "ali_drw_%llx",
+>  			      (u64) (res->start >> ALI_DRW_PMU_PA_SHIFT));
