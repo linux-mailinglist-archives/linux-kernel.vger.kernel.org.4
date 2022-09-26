@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC125E9B30
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A125E9ABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiIZHtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S234105AbiIZHpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbiIZHr5 (ORCPT
+        with ESMTP id S234138AbiIZHof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:47:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACC38692
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:45:28 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k10so9504304lfm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=rip9dlqrCxUoqsfVIdKnVGZs/mVmoXJ1pwJE84kTnM0=;
-        b=D+Sofw07TQjXsyVzkAZSP/EqENOZTmJh7z5imb4KgyLruWfeofVYZIuVnrbADfB2aI
-         YnwgsQXXpejlU0PWRUnmJOgKLO4j4KtjUaXaaQJRigytDhdOXABb9WOEwJ9PmZyMyfHW
-         03WkOJFzpowoJ1af3SK9SXAx8uVskwmeOCLsIl/cTaDTtbp1GhEyq6QPp2I8DcT6jWo3
-         4IRmDdyPGPaIYGi9SLdv7LoETkYcofvI5TGEX9N0bxHI7W7WF+pf8ODB4vC9PFiOdsCR
-         m7iG8cix2ygL+IMurOcYrG0oQkPSUteLFXVxNRMFB70eL5zNP8DQPKb4Se9NFK/Qj1CE
-         G50w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rip9dlqrCxUoqsfVIdKnVGZs/mVmoXJ1pwJE84kTnM0=;
-        b=QCl5Rif3OCagn1++T2sAPZarTFmkl04epD4tButA6X/cQSDtxBYuKFTie5hBEyZJWP
-         FHaXVBPxGwrV/cPF4g3NiVk/UGO53yu00EAX2r7jx085PdadPynJpsJf9a7aFNG/9IEx
-         eXgHrCawVjU1E7nF9Ox7njYUAPFtZhcxkX9a8jLaf1KGDEGvC5aohXmC/GImp2MWKAhG
-         /207viVKxNNN2pL/tKiGO26ODSUGXbzK8t2y91E7J+dP6UvCqB8Ftze1qAn9AOwZ+sa3
-         Ai0/DgvU+DmRQAaSJFZkTH4gyMJyjq3dzYibJd6caNmNNlhD+7dQ4scwSADXVO4nLETD
-         PaOg==
-X-Gm-Message-State: ACrzQf37+7atwO2xc3mwO8vIxYfqV716NvB0jnvyi/v4j5DBKny65Z77
-        ZnI0fG1Y7mnjRNceFHwHVTiuPQ==
-X-Google-Smtp-Source: AMsMyM5jtk4k+suGHJrz0z+fgzKwhx4QWJeS4953XmFEzGBPsdZBw0u1HDdVkLuW46e0/S4jqXRagA==
-X-Received: by 2002:a05:6512:3d17:b0:497:9e34:94f2 with SMTP id d23-20020a0565123d1700b004979e3494f2mr7891109lfv.285.1664178328055;
-        Mon, 26 Sep 2022 00:45:28 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g6-20020a19e046000000b004978e51b691sm2453298lfj.266.2022.09.26.00.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 00:45:27 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 33/33] dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example (remaining piece)
-Date:   Mon, 26 Sep 2022 09:44:15 +0200
-Message-Id: <20220926074415.53100-34-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926074415.53100-1-krzysztof.kozlowski@linaro.org>
-References: <20220926074415.53100-1-krzysztof.kozlowski@linaro.org>
+        Mon, 26 Sep 2022 03:44:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5570E18;
+        Mon, 26 Sep 2022 00:44:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77D37B80E0E;
+        Mon, 26 Sep 2022 07:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC0DC4347C;
+        Mon, 26 Sep 2022 07:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664178272;
+        bh=zBd0nArrnoxpH7BK8G59CVIeT52Rmoc4NPF1f78MmAU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=mevbU99/eYutUpCn1H9p1DPCf79291EqQRj1MRmDDpWnPEaMJbWCxqmKRWpB5ybmp
+         rpKBvILUtYi4W6N7bI/kUmv6hlXNcML6Xs1ZD/ji012sDLEhQnDSAvdykmM+pNo1Km
+         e5Y4yKJ+bM4AYYMisnkTeDOywfDt3lDHdavQAZeKvGAqWIzx+dokm3kTgGh6UmqnJ6
+         S7ujFPSP7OUAgWfuuelJvpMPsvNzaHRgUwq0EMN99C04k7RoM0OgViq/rYpTUw9j6R
+         oUOVGx/siC1s4xEZNHjVksSgMnra1sLsRGB8FVIeh0qZeDVPISU6Pufpkx7u4yZfKY
+         PJWIfK90Uud7Q==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v1 1/3] coding-style.rst: document BUG() and WARN() rules ("do not crash the kernel")
+References: <20220920122302.99195-1-david@redhat.com>
+        <20220920122302.99195-2-david@redhat.com> <87pmfp8hnj.fsf@kernel.org>
+        <d1ceedca-b28e-c47e-aa0d-aa1cb36d12b9@redhat.com>
+Date:   Mon, 26 Sep 2022 10:44:23 +0300
+In-Reply-To: <d1ceedca-b28e-c47e-aa0d-aa1cb36d12b9@redhat.com> (David
+        Hildenbrand's message of "Thu, 22 Sep 2022 16:12:05 +0200")
+Message-ID: <87leq64m20.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,29 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings example should be indented with 4-spaces.  Previous adjustment
-missefd one spot.
+David Hildenbrand <david@redhat.com> writes:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml    | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>> +Use WARN_ON_ONCE() rather than WARN() or WARN_ON()
+>>> +**************************************************
+>>> +
+>>> +WARN_ON_ONCE() is generally preferred over WARN() or WARN_ON(), because it
+>>> +is common for a given warning condition, if it occurs at all, to occur
+>>> +multiple times. This can fill up and wrap the kernel log, and can even slow
+>>> +the system enough that the excessive logging turns into its own, additional
+>>> +problem.
+>>
+>> FWIW I have had cases where WARN() messages caused a reboot, maybe
+>> mention that here? In my case the logging was so excessive that the
+>> watchdog wasn't updated and in the end the device was forcefully
+>> rebooted.
+>>
+>
+> That should be covered by the last part, no? What would be your suggestion?
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
-index b9ab130cd558..0b251caaebf2 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
-@@ -139,8 +139,8 @@ examples:
-         gpio-ranges = <&tlmm 0 0 230>;
- 
-         gpio-wo-subnode-state {
--                pins = "gpio1";
--                function = "gpio";
-+            pins = "gpio1";
-+            function = "gpio";
-         };
- 
-         uart-w-subnodes-state {
+I was just thinking that maybe make it more obvious that even WARN_ON()
+can crash the system, something along these lines:
+
+"..., additional problem like stalling the system so much that it causes
+a reboot."
+
 -- 
-2.34.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
