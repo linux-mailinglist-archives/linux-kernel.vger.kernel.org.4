@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53A35E999D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A6D5E99A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiIZGgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S233784AbiIZGgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiIZGgC (ORCPT
+        with ESMTP id S233782AbiIZGgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:36:02 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2EEDF9B;
-        Sun, 25 Sep 2022 23:35:37 -0700 (PDT)
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 28Q6Z98M023619;
-        Mon, 26 Sep 2022 15:35:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 28Q6Z98M023619
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664174109;
-        bh=44eH+aJRD4kb7a/sBAIoIbN4tM4QpzduS3Oc5jWF0cA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JA7wjsoa5emabzSMfT9gMz5fvTDe0D99rsbZXbGl8bKQk9PcUZ/mIJK6WsO/82Tqt
-         QSx4OpRQ54n2OMNxR3tESeh2fTmT7dsMpLrwUu7mJ61LqpWPPNGl6GKu6log47wGg2
-         FYBnLu24GKIn8JzGeq5imYNBxcpI/QtF4ttwiPndSSR7GLWc6NRd+WW26Iidr/JUse
-         Zi+afw6flpJYObJLRhk3JWUrldDHICDY1rTOBY3dXQ+Pqiy/NCw/LItuHpa30T1fS6
-         NNwRccsJcY2d4N/6iW9SBfKPp/KeVUFeWgzT/31SW1LuqPddxSoPbOIafTALt3DbUo
-         aA/ESRY+jTMHw==
-X-Nifty-SrcIP: [209.85.160.50]
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-12803ac8113so8000776fac.8;
-        Sun, 25 Sep 2022 23:35:09 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2qqI+2kzi8o4Mm3+37vhO8l/cVQnRorcM6o2i3o1u1Axk3H4R2
-        zRc5lnbO9wZM/PVUuD5WgbyXc70J+KNtLAFnb4U=
-X-Google-Smtp-Source: AMsMyM5nsiQbYnKEjk6ON7K9Xsbl+NsHX9f/ZF2hI0K78moxWk9I+PrSV5t6gvkzbkJFQPLytPxVWwWTY+4HwBT3krQ=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr11223766oab.287.1664174108461; Sun, 25
- Sep 2022 23:35:08 -0700 (PDT)
+        Mon, 26 Sep 2022 02:36:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4798F1EAE8;
+        Sun, 25 Sep 2022 23:36:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9710661757;
+        Mon, 26 Sep 2022 06:36:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06A2C433C1;
+        Mon, 26 Sep 2022 06:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664174168;
+        bh=RZWqL6mqGtYB3W7YZL1NmlDx5eOD8rP55uoSBbEQ7zk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=te8u1O9i9c9mofZaPXRCXAhTN2NGWJE0QLtKRMautYWAj4BKsMYlDcwDNSJiIQLwh
+         JIg85KBLn3FjJYRHIPXql9VB7qDYM3AMCqf3Dr6KHXbAqONeIn3W2pj9b07hvWbpH7
+         4RrOyk/iCFNL/SYLxOsFLwBKi8Gm5tF5+7jpWrJVlepS2ZD7mE3kzwFSmAml2rQ4Ln
+         50G0Euw0BFTla11EagWXsrBNV6K1koFxRhLdKviLEaaHFkeLdnnBiwEOHnd4rY9v5o
+         N99LbczJfUs0dNMnzC5gOLvbhx6zLp38gf0CqduV/ShpJlD5l0KfAE2KDxo2a+xbMn
+         a9b+fhgOw7Kfg==
+Message-ID: <eb8883bc-1328-acd8-2c41-af877cecbfa4@kernel.org>
+Date:   Mon, 26 Sep 2022 08:36:01 +0200
 MIME-Version: 1.0
-References: <20220926012609.3976305-1-masahiroy@kernel.org>
-In-Reply-To: <20220926012609.3976305-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 26 Sep 2022 15:34:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASkcs8gdi-pRf5EYs6PDOgTK-HLoWCsqiWTDUX-kS-bcg@mail.gmail.com>
-Message-ID: <CAK7LNASkcs8gdi-pRf5EYs6PDOgTK-HLoWCsqiWTDUX-kS-bcg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: suppress warnings for single builds of
- vmlinux.lds, *.a, etc.
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [V14,08/15] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
+ compatible
+Content-Language: en-US
+To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
+References: <20220915064337.2686-1-irui.wang@mediatek.com>
+ <20220915064337.2686-9-irui.wang@mediatek.com>
+ <3bbdfb31-2ba2-7345-54c7-82a67d95e30f@kernel.org>
+ <f0b80a0d60172e9c286c0cd3b599875a345ae4f0.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <f0b80a0d60172e9c286c0cd3b599875a345ae4f0.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,70 +73,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:27 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> vmlinux-deps is unneeded because the dependency can directly list
-> $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
->
-> Do not cancel the rule; building an individual vmlinux.lds, built-in.a,
-> or lib.a is working now, but the warning "overriding recipe for target"
-> is shown.
->
-> Without this patch:
->
->   $ make arch/x86/kernel/vmlinux.lds
->   Makefile:1798: warning: overriding recipe for target 'arch/x86/kernel/vmlinux.lds'
->   Makefile:1162: warning: ignoring old recipe for target 'arch/x86/kernel/vmlinux.lds'
->     [ snip ]
->     LDS     arch/x86/kernel/vmlinux.lds
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+On 26/09/2022 03:56, kyrie.wu wrote:
+> On Fri, 2022-09-23 at 13:28 +0200, Krzysztof Kozlowski wrote:
+>> On 15/09/2022 08:43, Irui Wang wrote:
+>>> From: kyrie wu <kyrie.wu@mediatek.com>
+>>>
+>>> Add mediatek,mt8195-jpgdec compatible to binding document.
+>>
+>> Use scripts/get_maintainers.pl to CC all maintainers and relevant
+>> mailing lists.
+>>
+>>>
+>>> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+>>> Signed-off-by: irui wang <irui.wang@mediatek.com>
+>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>> ---
+>>>  .../media/mediatek,mt8195-jpegdec.yaml        | 169
+>>> ++++++++++++++++++
+>>>  1 file changed, 169 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/media/mediatek,mt8195-
+>>> jpegdec.yaml
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/media/mediatek,mt8195-
+>>> jpegdec.yaml
+>>> b/Documentation/devicetree/bindings/media/mediatek,mt8195-
+>>> jpegdec.yaml
+>>> new file mode 100644
+>>> index 000000000000..9135cf889d1e
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-
+>>> jpegdec.yaml
+>>> @@ -0,0 +1,169 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: 
+>>> https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml*__;Iw!!CTRNKA9wMg0ARbw!yu00-_vltBz3bkDyzkeH2PENGyfi_megjPx815JiqrNVa28ZU7kcFYidMEos_id7$
+>>>  
+>>> +$schema: 
+>>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!yu00-_vltBz3bkDyzkeH2PENGyfi_megjPx815JiqrNVa28ZU7kcFYidMAikt6uh$
+>>>  
+>>> +
+>>> +title: MediaTek JPEG Encoder Device Tree Bindings
+>>> +
+>>> +maintainers:
+>>> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+>>> +
+>>> +description:
+>>> +  MediaTek JPEG Decoder is the JPEG decode hardware present in
+>>> MediaTek SoCs
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>
+>> You do not have more than one item. Skip items.
+> 
+> Hello Krzysztof,
+> 
+> The device node has the compatible of "mediatek,mt8195-jpgdec",
+> if skip this item, it may case dt-binding checking error.
+
+No, this won't happen if you use correct syntax.
+
+> For another, we may extend this items in the future.
+
+Not really, that would be change of ABI. If you have already list of
+devices, include them now.
 
 
-I take this back.
+Best regards,
+Krzysztof
 
-
-After testing this, I noticed vmlinux was not correctly rebuilt.
-
-
-
-
-
->
->  Makefile | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 244c07f1cc70..3e6974b4ebf2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1118,7 +1118,8 @@ endif
->  export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
->  export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
->
-> -vmlinux-deps := $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
-> +# The actual objects are generated when descending.
-> +$(sort $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)): .
->
->  # Recurse until adjust_autoksyms.sh is satisfied
->  PHONY += autoksyms_recursive
-> @@ -1157,10 +1158,6 @@ vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
->
->  targets := vmlinux
->
-> -# The actual objects are generated when descending,
-> -# make sure no implicit rule kicks in
-> -$(sort $(vmlinux-deps)): . ;
-> -
->  filechk_kernel.release = \
->         echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
->
-> --
-> 2.34.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
