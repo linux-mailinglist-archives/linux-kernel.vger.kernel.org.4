@@ -2,113 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653135E99A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4D05E99AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiIZGhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S233588AbiIZGia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiIZGhd (ORCPT
+        with ESMTP id S233322AbiIZGi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:37:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE04101C8;
-        Sun, 25 Sep 2022 23:37:31 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MbXxS00xZzHthl;
-        Mon, 26 Sep 2022 14:32:43 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 14:37:29 +0800
-Subject: Re: [PATCH v2 0/8] scsi: libsas: sas address comparation refactor
-To:     Jinpu Wang <jinpu.wang@ionos.com>
-CC:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <john.garry@huawei.com>
-References: <20220924073455.2186805-1-yanaijie@huawei.com>
- <CAMGffE=6BGVLqTbO3SGFZhCYDjo0U=Ay+JO4h+pNi10Hcb0w9g@mail.gmail.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <b1cd66fa-411c-2d68-45d7-89aa6219c3cf@huawei.com>
-Date:   Mon, 26 Sep 2022 14:37:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 26 Sep 2022 02:38:26 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58907DF5C
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:38:25 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a10so6363296ljq.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=W3hxzdrBIum1j0xz9YZTHAUg/0XjqqL/D7mMmLIxdR4=;
+        b=ePexRndPURvdCW/6uFFqR/iEiqGsxFN63U0+E7Mw/SDz4ZwwNEHsmVHumFqZeMYCUP
+         w8s7D75BCLIzBKqYzi2ogsSYLQfENPA4YBlkAy7xmGIaZVpzOBLJOJBVmSgV8B9AxENp
+         4k9tn5vOQllbiqS/XTVubaMGN3+gj9u09UhLCVk0TYFk8T5lw7S/gkcV2EfEw/3L/JMQ
+         D1Pt/0hEH58mgxQwVwA1fUt8341UKEQFrik2uQZ70jnH8wajATyMJdZbd8uzdTiFw7/8
+         s4sXMk+6hYNL9CHWmFGnedd4ZzjP6bKJB+in83kJvdPYJbbwwdg5MwyBBVmi4j+WhIEb
+         IqSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=W3hxzdrBIum1j0xz9YZTHAUg/0XjqqL/D7mMmLIxdR4=;
+        b=hlaAloPOMsBUrPXdz22s4SiOq1HO0dsLWLLWeWwTz0oVhkntZ2EdJHMExsqSfy5kls
+         OYd1VcOrE1soV08unWVYbM6OM0A25t0GNLwyLLMEkl3b74LTh+/HyPg5z79po06lKkVJ
+         g3Jo++9/fgTpIXE8+6hj7thi57cUo078g1PYtA10WWRpik50SJQz6JBvC6Z/1z93IU9n
+         hg8nLxb6FYhQlXtxscGfjsrAhABEMcuifB/kLfHZYGD/35AAnLmeQOhAx981m8vPGGco
+         pLgR5WB9RMsM4efeh4VVfuVryXM778vZaX3yBBhUmOMo5DaisLxoY6v6Z9FLKHisgZND
+         VMyg==
+X-Gm-Message-State: ACrzQf3XiYfZx+HVdVGIyt6+ad7lsbr7WTs63aV1u9LCfJIFm7d7avbH
+        Jx1aJGYSv1Sq//vHOYh8hya1bQ==
+X-Google-Smtp-Source: AMsMyM7zYhJnhCTUeUDjnpPqlK+tH954E2LgxBK1i8gOU2GZVXuiyg0sE4TRiLJTrdd7ByA6IdiJnQ==
+X-Received: by 2002:a05:651c:a04:b0:26c:50df:75ad with SMTP id k4-20020a05651c0a0400b0026c50df75admr6942132ljq.416.1664174303703;
+        Sun, 25 Sep 2022 23:38:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b5-20020ac25625000000b004a050ddc4ecsm1321680lff.125.2022.09.25.23.38.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 23:38:23 -0700 (PDT)
+Message-ID: <bd99a454-8cee-edb9-bc34-ce0be280bd90@linaro.org>
+Date:   Mon, 26 Sep 2022 08:38:21 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAMGffE=6BGVLqTbO3SGFZhCYDjo0U=Ay+JO4h+pNi10Hcb0w9g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 15/17] dt-bindings: display: mediatek: dpi: Add
+ compatible for MediaTek MT8195
 Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, Pablo Sun <pablo.sun@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-15-4844816c9808@baylibre.com>
+ <e993c25e-f334-e1ca-73f8-58cf141c521e@linaro.org>
+ <CAGXv+5FYjj6=WHWBvNRDmpw2Ux8RJ4a2fT1gXk3+eXSqt9poeQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAGXv+5FYjj6=WHWBvNRDmpw2Ux8RJ4a2fT1gXk3+eXSqt9poeQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/9/26 14:09, Jinpu Wang wrote:
-> On Sat, Sep 24, 2022 at 9:24 AM Jason Yan <yanaijie@huawei.com> wrote:
+On 26/09/2022 07:24, Chen-Yu Tsai wrote:
+> On Thu, Sep 22, 2022 at 3:20 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> Sas address conversion and comparation is widely used in libsas and
->> drivers. However they are all opencoded and to avoid the line spill over
->> 80 columns, are mostly split into multi-lines.
+>> On 19/09/2022 18:56, Guillaume Ranquet wrote:
+>>> Add dt-binding documentation of dpi for MediaTek MT8195 SoC.
+>>>
+>>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+>>> index 5bb23e97cf33..2c7ecef54986 100644
+>>> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+>>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+>>> @@ -24,6 +24,7 @@ properties:
+>>>        - mediatek,mt8183-dpi
+>>>        - mediatek,mt8186-dpi
+>>>        - mediatek,mt8192-dpi
+>>> +      - mediatek,mt8195-dpi
+>>>        - mediatek,mt8195-dp-intf
 >>
->> To make the code easier to read, introduce some helpers with clearer
->> semantics and replace the opencoded segments with them.
->>
->> v1->v2:
->>    First factor out sas_find_attached_phy() and replace LLDDs's code
->>          with it.
->>    Remove three too simple helpers.
->>    Rename the helpers with 'sas_' prefix.
->>
-> Hi Jason,
+>> Aren't these the same?
 > 
-> Thx for doing this.
->> Jason Yan (8):
->>    scsi: libsas: introduce sas_find_attached_phy() helper
->>    scsi: pm8001: use sas_find_attached_phy() instead of open coded
->>    scsi: mvsas: use sas_find_attached_phy() instead of open coded
->>    scsi: hisi_sas: use sas_find_attathed_phy() instead of open coded
-> These 4 look good to me.
-> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-
-Hi Jack,
-Thank you very much for the review.
-
->>    scsi: libsas: introduce sas address comparation helpers
->>    scsi: libsas: use sas_phy_match_dev_addr() instead of open coded
->>    scsi: libsas: use sas_phy_addr_same() instead of open coded
->>    scsi: libsas: use sas_phy_match_port_addr() instead of open coded
-> These helpers are too simple to replace, we add more loc in the end.
-
-The initial purpose to introduce these helpers is to stop cutting 
-compare expressions into two lines and to make the code looks clean. We 
-add more loc in the end because of function declaration and more blank 
-lines between them.
-
-Thanks,
-Jason
-
->>
->>   drivers/scsi/hisi_sas/hisi_sas_main.c | 12 ++------
->>   drivers/scsi/libsas/sas_expander.c    | 40 ++++++++++++++++-----------
->>   drivers/scsi/libsas/sas_internal.h    | 17 ++++++++++++
->>   drivers/scsi/mvsas/mv_sas.c           | 15 +++-------
->>   drivers/scsi/pm8001/pm8001_sas.c      | 16 ++++-------
->>   include/scsi/libsas.h                 |  2 ++
->>   6 files changed, 54 insertions(+), 48 deletions(-)
->>
->> --
->> 2.31.1
->>
-> .
+> *-dpi are MIPI DPI (as in parallel data with DDR modes) encoders.
+> *-dp-intf are Display Port encoder.
 > 
+> Totally distinguishable. :)
+> 
+> The hardware blocks seem similar upon cursory comparison of the register
+> tables, with the base layout being the same, and sharing registers for
+> basic settings such as the display timings.
+> 
+> The DPI ones have some extra registers, presumably to control the signals
+> or output width. The DP one has some registers of its own that only make
+> sense for Display Port.
+
+OK.
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
