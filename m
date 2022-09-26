@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B0B5EA4C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDAD5EA2EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238637AbiIZLw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S237428AbiIZLQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238525AbiIZLvt (ORCPT
+        with ESMTP id S237633AbiIZLPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:51:49 -0400
+        Mon, 26 Sep 2022 07:15:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D05B76751;
-        Mon, 26 Sep 2022 03:48:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD3165270;
+        Mon, 26 Sep 2022 03:37:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9B260B4A;
-        Mon, 26 Sep 2022 10:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65952C433D6;
-        Mon, 26 Sep 2022 10:46:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C09F60769;
+        Mon, 26 Sep 2022 10:37:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC1AC433C1;
+        Mon, 26 Sep 2022 10:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189218;
-        bh=klu/CdF2GgcnLipy5mv8tLdF/E32HaFbW96q4R9qV+0=;
+        s=korg; t=1664188623;
+        bh=Rlz1uuBrqfQ6EF641OQ2/zzhC5dy/G4tP1g7Ph7c544=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDoE596Xd2FjObqJHpJEHkq/kVQ4dGG8zp9GrBJhTFf5dyQifF9Bzp+QGDZmVY6DX
-         ULjMu1IKxCo1T9FOSKnTXMhRKSOum1FJmQxIXfuIL89Gj5wXBYbDv6zV0tpRrtsI+n
-         1HhkRrX6AeTR1uA/X+HKStXx2GNOVbOHzHbM940I=
+        b=Ra2XtkiF0oA00jt0i/M7TJxEOqXPpdCd9H4fDSpElKGXf6xDMSZN8OtKjO5/kqLNl
+         FeD7nYPfUIGtpM46zRSa+GRtD9adhoLLUyZl/OK2ulS1tqnqMNWTedgjKaOcjg7ltX
+         Y1MVukx1blsMAJ5uLMttM0ma2YYcfSxNazDNkbXI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 113/207] iavf: Fix bad page state
+Subject: [PATCH 5.15 068/148] netfilter: nfnetlink_osf: fix possible bogus match in nf_osf_find()
 Date:   Mon, 26 Sep 2022 12:11:42 +0200
-Message-Id: <20220926100811.659677514@linuxfoundation.org>
+Message-Id: <20220926100758.594885630@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Norbert Zulinski <norbertx.zulinski@intel.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 66039eb9015eee4f7ff0c99b83c65c7ecb3c8190 ]
+[ Upstream commit 559c36c5a8d730c49ef805a72b213d3bba155cc8 ]
 
-Fix bad page state, free inappropriate page in handling dummy
-descriptor. iavf_build_skb now has to check not only if rx_buffer is
-NULL but also if size is zero, same thing in iavf_clean_rx_irq.
-Without this patch driver would free page that will be used
-by napi_build_skb.
+nf_osf_find() incorrectly returns true on mismatch, this leads to
+copying uninitialized memory area in nft_osf which can be used to leak
+stale kernel stack data to userspace.
 
-Fixes: a9f49e006030 ("iavf: Fix handling of dummy receive descriptors")
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 22c7652cdaa8 ("netfilter: nft_osf: Add version option support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/nfnetlink_osf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 4c3f3f419110..18b6a702a1d6 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -1393,7 +1393,7 @@ static struct sk_buff *iavf_build_skb(struct iavf_ring *rx_ring,
- #endif
- 	struct sk_buff *skb;
+diff --git a/net/netfilter/nfnetlink_osf.c b/net/netfilter/nfnetlink_osf.c
+index 0fa2e2030427..ee6840bd5933 100644
+--- a/net/netfilter/nfnetlink_osf.c
++++ b/net/netfilter/nfnetlink_osf.c
+@@ -269,6 +269,7 @@ bool nf_osf_find(const struct sk_buff *skb,
+ 	struct nf_osf_hdr_ctx ctx;
+ 	const struct tcphdr *tcp;
+ 	struct tcphdr _tcph;
++	bool found = false;
  
--	if (!rx_buffer)
-+	if (!rx_buffer || !size)
- 		return NULL;
- 	/* prefetch first cache line of first page */
- 	va = page_address(rx_buffer->page) + rx_buffer->page_offset;
-@@ -1551,7 +1551,7 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		/* exit if we failed to retrieve a buffer */
- 		if (!skb) {
- 			rx_ring->rx_stats.alloc_buff_failed++;
--			if (rx_buffer)
-+			if (rx_buffer && size)
- 				rx_buffer->pagecnt_bias++;
- 			break;
- 		}
+ 	memset(&ctx, 0, sizeof(ctx));
+ 
+@@ -283,10 +284,11 @@ bool nf_osf_find(const struct sk_buff *skb,
+ 
+ 		data->genre = f->genre;
+ 		data->version = f->version;
++		found = true;
+ 		break;
+ 	}
+ 
+-	return true;
++	return found;
+ }
+ EXPORT_SYMBOL_GPL(nf_osf_find);
+ 
 -- 
 2.35.1
 
