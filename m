@@ -2,97 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45045EA19D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5165EA1A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbiIZKwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S236860AbiIZKx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237009AbiIZKuT (ORCPT
+        with ESMTP id S234299AbiIZKuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:50:19 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5225C58B61;
-        Mon, 26 Sep 2022 03:27:18 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id b23so6217663pfp.9;
-        Mon, 26 Sep 2022 03:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=C8rX11bO0E5A9d+MVyn6i3C/40tS4roRj787StsOFrw=;
-        b=lbODLGrycZbW3aySNFBK2tNaiw+EJ9Hs7QLs5p2ZS4dbB/I8xFEzRe9/44qLPmmg5o
-         YiZTJYC9CRsURi3DjHKUL8pzTk54WUrd7xki+q0dZhulhKrUhjKCq4WNL2ItD9ZdOPVz
-         qXUQYEuUtiSf0L56gO5+9PqCEbzhRFj12C3BgEYAjuV8b8YnhbbnWFjo8sZ9PHQ2Rl67
-         ztdRdL5z5izMfb3LaYymCDvsHN3slUfwQtckZ5V3GPXI33zJJn0zAmTTcV7Su6atEKr+
-         sPG6oVoVT2qf5HSHB45J+fPoPoi55hhovs38h18SeMJOzk+g9oeqoyTYraVphqOplFh/
-         MK7A==
+        Mon, 26 Sep 2022 06:50:39 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEF958DFA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:27:27 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id i15so4033154qvp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:27:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=C8rX11bO0E5A9d+MVyn6i3C/40tS4roRj787StsOFrw=;
-        b=2MZPX6XP/05yJ53em4PyOIkjwlOEIsK4oZdr3WxA7H0Fm93u6NZQj0eZUEBTyOlSmb
-         rC1rBKVMFf+LDeivT8RgNL1La+LFpClUsn1jPCMlZ3mcRGqp9L9PRAxVXAfPB97cRmdf
-         Vwi/izqQ1THzuodphvVsvqjlAy/vMQkDDRB5etJwWHljsaRxUCg2d2pH28SVOsKe5zMN
-         sSetgIbWjhvCrP2Bwo5dW9xLq2SUbrpGXmwBaP1bqQfxpVdqqSqxr/wrsHhzPzCS8nr4
-         qyhkdEZJBhaNrCE77QUQS5B7rhotAJWKpjQe63Np31V3pgZ7qjnVKgXrQKXFQL/OruLa
-         tuvw==
-X-Gm-Message-State: ACrzQf3tUEvK90mXaIMOfOINJBVVRc8IVAcP1kgqfGVYgotw2rKfZRFK
-        /QcCyCCnKWRtkE4YFAKcNnz+8IEwnC4MO8Rpw5I=
-X-Google-Smtp-Source: AMsMyM5DrN3IbbsoTe5WI4Fp/tfb0WeoIEJzl3snUphNtI1RjqLbpPr1YKNGATrULX5M8to6GHbfEA8Shm8pZYH5vgU=
-X-Received: by 2002:a63:1f49:0:b0:43b:a2df:857 with SMTP id
- q9-20020a631f49000000b0043ba2df0857mr19845053pgm.137.1664188037524; Mon, 26
- Sep 2022 03:27:17 -0700 (PDT)
+        bh=wvCseJKa4wntAVz+3aizGq2aXDX4B8OJZy0Gi3dyPRI=;
+        b=ODWMZy8ZSbgmcQGjz9qsusG03Kr61jRyOvAYlPec7ntWGid2DPB6vQoaLDWHJfvtA1
+         W0HNn0//+dQlHZ20XvFetP8rWlba0iSytJqWbYR4LP7SYwXzRy/VItlK3zfustNbgd8H
+         5PTD3LykFpaJScOw8/DcJYJMbdwWGaANd62vjphgrkMO8nNbtjedgAkY5KWwjizvktTV
+         E3dEaoNlwqxi7+AEfXTzXCqDr2Rj/GboCUTX0r5pxdkhfuZCYREv731CsmkLNhilB5Ux
+         /GmhkN0mdgfz5dkPNs1ZYmNkqRFf6D9TCHUkBeGZAf5aLn0gP770pBLvu4QQ2bM0k2ko
+         oOhQ==
+X-Gm-Message-State: ACrzQf2HjJE/t6Ztogc9fngK7Peam6+xqnh563561O2qLKPSWEiURHjF
+        cPwwhTnWNChUCAUAzH1oi8omIhXWdkDI6A==
+X-Google-Smtp-Source: AMsMyM77IlXbBKNImx64H7qpuLlitne3bqi2ZjBNruPZz/LnkzAdD406sK/uxGE5ZvActk8OFR/ljA==
+X-Received: by 2002:a0c:e888:0:b0:4aa:a307:4dca with SMTP id b8-20020a0ce888000000b004aaa3074dcamr16095672qvo.91.1664188045826;
+        Mon, 26 Sep 2022 03:27:25 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id bl21-20020a05620a1a9500b006bb0f9b89cfsm11104301qkb.87.2022.09.26.03.27.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 03:27:25 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3457bc84d53so64255357b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:27:25 -0700 (PDT)
+X-Received: by 2002:a81:1691:0:b0:345:17df:4fc6 with SMTP id
+ 139-20020a811691000000b0034517df4fc6mr19158627yww.502.1664188045078; Mon, 26
+ Sep 2022 03:27:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CABXGCsP0znm9pS-MiKtyxTXR7XiyFVqen0qzNpicGHDZKCzbwg@mail.gmail.com>
- <4e7992e2-c635-e571-faa3-08fd9ee5c975@leemhuis.info>
-In-Reply-To: <4e7992e2-c635-e571-faa3-08fd9ee5c975@leemhuis.info>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Mon, 26 Sep 2022 15:27:06 +0500
-Message-ID: <CABXGCsPg4mEe0RfJeXCGQ_WatbHgGi16Xw9DFKxPLV8QNi777A@mail.gmail.com>
-Subject: Re: After commit 44fa75f207d8a106bc75e6230db61e961fdbf8a8 Wi-Fi
- (mt7921e) speed significantly decreased
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     jelonek.jonas@gmail.com, johannes.berg@intel.com,
-        lorenzo.bianconi83@gmail.com, sean.wang@mediatek.com,
-        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220923170340.4099226-1-Jason@zx2c4.com> <20220923170340.4099226-3-Jason@zx2c4.com>
+In-Reply-To: <20220923170340.4099226-3-Jason@zx2c4.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Sep 2022 12:27:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXPcXq_F0dQdJ5nV2io1eDhJs7BZf+TmXWPqGVn9xeLNA@mail.gmail.com>
+Message-ID: <CAMuHMdXPcXq_F0dQdJ5nV2io1eDhJs7BZf+TmXWPqGVn9xeLNA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] m68k: rework BI_VIRT_RNG_SEED as BI_RNG_SEED
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        Laurent Vivier <laurent@vivier.eu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 9:38 AM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> FWIW, there is a patch under discussion fixing a problem found in that
-> commit:
->
-> https://lore.kernel.org/all/20220829144147.484787-2-jelonek.jonas@gmail.com/
->
-> To quote the first para:
->
-> ```
-> This patch modifies the annotation of supported tx-power levels for a
-> wifi device in ieee80211_hw. This annotation was introduced with commit
-> 44fa75f207d8a106bc75e6230db61e961fdbf8a8 to be able to operate on power
-> indices instead of absolute power values, providing better support for
-> different hardware capabilities.
-> ```
->
-> Not totally sure if that might be relevant to your problem
+Hi Jason,
 
-I checked this patch and it did not solve my issue.
+On Fri, Sep 23, 2022 at 7:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> This is useful on !virt platforms for kexec, so change things from
+> BI_VIRT_RNG_SEED to be BI_RNG_SEED, and simply remove BI_VIRT_RNG_SEED
+> because it only ever lasted one release, and nothing is broken by not
+> having it. At the same time, keep a comment noting that it's been
+> removed, so that ID isn't reused.
+>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Laurent Vivier <laurent@vivier.eu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
--- 
-Best Regards,
-Mike Gavrilov.
+The approach LGTM, but given my doubts on [PATCH v3 2/3], I think this
+patch should be moved up, to not depend on [2/3].
+
+> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> @@ -13,13 +13,8 @@
+>  #define BI_VIRT_VIRTIO_BASE    0x8004
+>  #define BI_VIRT_CTRL_BASE      0x8005
+>
+> -/*
+> - * A random seed used to initialize the RNG. Record format:
+> - *
+> - *   - length       [ 2 bytes, 16-bit big endian ]
+> - *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
+> - */
+> -#define BI_VIRT_RNG_SEED       0x8006
+> +/* No longer used -- replaced with BI_RNG_SEED -- but don't reuse this index:
+> + *     #define BI_VIRT_RNG_SEED        0x8006 */
+
+Please drop the space before TAB.
+
+> --- a/arch/m68k/include/uapi/asm/bootinfo.h
+> +++ b/arch/m68k/include/uapi/asm/bootinfo.h
+> @@ -64,7 +64,13 @@ struct mem_info {
+>                                         /* (struct mem_info) */
+>  #define BI_COMMAND_LINE                0x0007  /* kernel command line parameters */
+>                                         /* (string) */
+> -
+> +/*
+> + * A random seed used to initialize the RNG. Record format:
+> + *
+> + *   - length       [ 2 bytes, 16-bit big endian ]
+> + *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
+
+While experimenting, I noticed this must actually be a 4-byte alignment,
+as data[] is an integral multiple of __be32 words:
+
+    struct bi_record {
+            __be16 tag;                     /* tag ID */
+            __be16 size;                    /* size of record (in bytes) */
+            __be32 data[];                  /* data */
+    };
+
+m68kboot[1] and kexec-boot[2] do implement the correct rounding,
+but qemu's BOOTINFOSTR()[3] and BOOTINFODATA()[4] do not.
+Sorry for missing that before, I guess I was misled by the existing
+bug in BOOTINFOSTR().
+
+Consequently, both kexec-tools[5] and the m68k-bootinfo tool[6] cannot
+parse /proc/bootinfo if the size is not a multiple of 4, which can
+easily be triggered by changing the command line of the m68k virt
+machine.
+
+> + */
+> +#define BI_RNG_SEED            0x0008
+>
+>      /*
+>       *  Linux/m68k Architectures (BI_MACHTYPE)
+
+[1] https://github.com/geertu/m68kboot/blob/master/common/bootinf.c#L171
+[2] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/tree/kexec/arch/m68k/bootinfo.c#n60
+[3] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/m68k/bootinfo.h;h=bd8b212fd35ce216917e07eb67783b5b69f1e11b;hb=HEAD#l57
+[4] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/m68k/bootinfo.h;h=bd8b212fd35ce216917e07eb67783b5b69f1e11b;hb=HEAD#l73
+[5] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/tree/kexec/arch/m68k/bootinfo.c#n106
+[6] https://github.com/geertu/m68k-bootinfo/blob/master/m68k-bootinfo.c#L466
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
