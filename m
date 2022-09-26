@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA705EA059
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BB75EA1EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbiIZKgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S237008AbiIZLAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236022AbiIZKdw (ORCPT
+        with ESMTP id S236935AbiIZK62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232113DF3D;
-        Mon, 26 Sep 2022 03:20:47 -0700 (PDT)
+        Mon, 26 Sep 2022 06:58:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4395D4E607;
+        Mon, 26 Sep 2022 03:30:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA17060AD6;
-        Mon, 26 Sep 2022 10:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3176C433C1;
-        Mon, 26 Sep 2022 10:20:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72DCD60B2F;
+        Mon, 26 Sep 2022 10:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64412C433D6;
+        Mon, 26 Sep 2022 10:29:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187646;
-        bh=MvrFLzVPgqzDsrlIxsZUvsUYtPzd3vuBgQC+nZ43MeU=;
+        s=korg; t=1664188143;
+        bh=qXn6G5+O2GeajqWF/n7m8ZupCIpLYVCM9er/Kpf0koM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PqtbYIUhBZF4l6M4pbvS8xIc+5Ns+YIBKws5sHb6Im/Yj5nAwRmGgVZHrb3pTXpDn
-         7r+Xl8VwQFQ6yG4e1QvXKQSwIkov/fBhmRwomUvNB9NRJnvuFGrLJ2abQh1KI7/qQ1
-         4mlpIp6vGKt5zq9h5yPNNFZvO6+R8WwOEEgDES7w=
+        b=QQCXAa6xxZxq9fRgZ3Pa03UxhlOs1kCYcZVVZbld0qr8zF1sPf1EEm7NHtLg3Qlva
+         tXawv7ZbNq3/rXenWiA/AaFKD/0/OF5KNbCyxMCdMx7/1i56D6PPpehuRgKa2mE/5C
+         rqBJjZy5fEEQKUj0c9VzTn7Kg8Ryy00EbdHCw+xo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sergiu Moga <sergiu.moga@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 016/120] ASoC: nau8824: Fix semaphore unbalance at error paths
-Date:   Mon, 26 Sep 2022 12:10:49 +0200
-Message-Id: <20220926100751.194408985@linuxfoundation.org>
+Subject: [PATCH 5.10 024/141] tty: serial: atmel: Preserve previous USART mode if RS485 disabled
+Date:   Mon, 26 Sep 2022 12:10:50 +0200
+Message-Id: <20220926100755.427306606@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,99 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Sergiu Moga <sergiu.moga@microchip.com>
 
-[ Upstream commit 5628560e90395d3812800a8e44a01c32ffa429ec ]
+[ Upstream commit 692a8ebcfc24f4a5bea0eb2967e450f584193da6 ]
 
-The semaphore of nau8824 wasn't properly unlocked at some error
-handling code paths, hence this may result in the unbalance (and
-potential lock-up).  Fix them to handle the semaphore up properly.
+Whenever the atmel_rs485_config() driver method would be called,
+the USART mode is reset to normal mode before even checking if
+RS485 flag is set, thus resulting in losing the previous USART
+mode in the case where the checking fails.
 
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220823081000.2965-3-tiwai@suse.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Some tools, such as `linux-serial-test`, lead to the driver calling
+this method when doing the setup of the serial port: after setting the
+port mode (Hardware Flow Control, Normal Mode, RS485 Mode, etc.),
+`linux-serial-test` tries to enable/disable RS485 depending on
+the commandline arguments that were passed.
+
+Example of how this issue could reveal itself:
+When doing a serial communication with Hardware Flow Control through
+`linux-serial-test`, the tool would lead to the driver roughly doing
+the following:
+- set the corresponding bit to 1 (ATMEL_US_USMODE_HWHS bit in the
+ATMEL_US_MR register) through the atmel_set_termios() to enable
+Hardware Flow Control
+- disable RS485 through the atmel_config_rs485() method
+Thus, when the latter is called, the mode will be reset and the
+previously set bit is unset, leaving USART in normal mode instead of
+the expected Hardware Flow Control mode.
+
+This fix ensures that this reset is only done if the checking for
+RS485 succeeds and that the previous mode is preserved otherwise.
+
+Fixes: e8faff7330a35 ("ARM: 6092/1: atmel_serial: support for RS485 communications")
+Cc: stable <stable@kernel.org>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Link: https://lore.kernel.org/r/20220824142902.502596-1-sergiu.moga@microchip.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/nau8824.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/tty/serial/atmel_serial.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/nau8824.c b/sound/soc/codecs/nau8824.c
-index c8ccfa2fff84..a95fe3fff1db 100644
---- a/sound/soc/codecs/nau8824.c
-+++ b/sound/soc/codecs/nau8824.c
-@@ -1072,6 +1072,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
- 	struct snd_soc_component *component = dai->component;
- 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
- 	unsigned int val_len = 0, osr, ctrl_val, bclk_fs, bclk_div;
-+	int err = -EINVAL;
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index e7526060926d..b7872ad3e762 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -295,9 +295,6 @@ static int atmel_config_rs485(struct uart_port *port,
  
- 	nau8824_sema_acquire(nau8824, HZ);
+ 	mode = atmel_uart_readl(port, ATMEL_US_MR);
  
-@@ -1088,7 +1089,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
- 		osr &= NAU8824_DAC_OVERSAMPLE_MASK;
- 		if (nau8824_clock_check(nau8824, substream->stream,
- 			nau8824->fs, osr))
--			return -EINVAL;
-+			goto error;
- 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
- 			NAU8824_CLK_DAC_SRC_MASK,
- 			osr_dac_sel[osr].clk_src << NAU8824_CLK_DAC_SRC_SFT);
-@@ -1098,7 +1099,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
- 		osr &= NAU8824_ADC_SYNC_DOWN_MASK;
- 		if (nau8824_clock_check(nau8824, substream->stream,
- 			nau8824->fs, osr))
--			return -EINVAL;
-+			goto error;
- 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
- 			NAU8824_CLK_ADC_SRC_MASK,
- 			osr_adc_sel[osr].clk_src << NAU8824_CLK_ADC_SRC_SFT);
-@@ -1119,7 +1120,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
- 		else if (bclk_fs <= 256)
- 			bclk_div = 0;
- 		else
--			return -EINVAL;
-+			goto error;
- 		regmap_update_bits(nau8824->regmap,
- 			NAU8824_REG_PORT0_I2S_PCM_CTRL_2,
- 			NAU8824_I2S_LRC_DIV_MASK | NAU8824_I2S_BLK_DIV_MASK,
-@@ -1140,15 +1141,17 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
- 		val_len |= NAU8824_I2S_DL_32;
- 		break;
- 	default:
--		return -EINVAL;
-+		goto error;
- 	}
- 
- 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
- 		NAU8824_I2S_DL_MASK, val_len);
-+	err = 0;
- 
-+ error:
- 	nau8824_sema_release(nau8824);
- 
--	return 0;
-+	return err;
- }
- 
- static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
-@@ -1157,8 +1160,6 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
- 	unsigned int ctrl1_val = 0, ctrl2_val = 0;
- 
--	nau8824_sema_acquire(nau8824, HZ);
+-	/* Resetting serial mode to RS232 (0x0) */
+-	mode &= ~ATMEL_US_USMODE;
 -
- 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
- 	case SND_SOC_DAIFMT_CBM_CFM:
- 		ctrl2_val |= NAU8824_I2S_MS_MASTER;
-@@ -1200,6 +1201,8 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 		return -EINVAL;
- 	}
+ 	if (rs485conf->flags & SER_RS485_ENABLED) {
+ 		dev_dbg(port->dev, "Setting UART to RS485\n");
+ 		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
+@@ -307,6 +304,7 @@ static int atmel_config_rs485(struct uart_port *port,
  
-+	nau8824_sema_acquire(nau8824, HZ);
-+
- 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
- 		NAU8824_I2S_DF_MASK | NAU8824_I2S_BP_MASK |
- 		NAU8824_I2S_PCMB_EN, ctrl1_val);
+ 		atmel_uart_writel(port, ATMEL_US_TTGR,
+ 				  rs485conf->delay_rts_after_send);
++		mode &= ~ATMEL_US_USMODE;
+ 		mode |= ATMEL_US_USMODE_RS485;
+ 	} else {
+ 		dev_dbg(port->dev, "Setting UART to RS232\n");
 -- 
 2.35.1
 
