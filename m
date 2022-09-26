@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887DE5EA282
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBDE5EA4D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbiIZLJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
+        id S238647AbiIZLxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbiIZLH1 (ORCPT
+        with ESMTP id S238601AbiIZLwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:07:27 -0400
+        Mon, 26 Sep 2022 07:52:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED124F184;
-        Mon, 26 Sep 2022 03:34:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D945754C;
+        Mon, 26 Sep 2022 03:49:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7591AB80951;
-        Mon, 26 Sep 2022 10:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E10C433D6;
-        Mon, 26 Sep 2022 10:32:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B928B80185;
+        Mon, 26 Sep 2022 10:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70244C433C1;
+        Mon, 26 Sep 2022 10:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188358;
-        bh=d3/eqmFXu7LB/HIH21OLTWzjzAcENNgY5giWW1aZF/Q=;
+        s=korg; t=1664189271;
+        bh=STN83xp9evJqJZLuHCkw/lnhnKc/4/65pi4u/jxUtL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ng1zSi9cu77960wa1GowV1BOXGfE4+VlRYxcjuC4uwnbruGVFG9Q5gWl2xQyVYgWz
-         n8QhdZ18G267SZ615Igo4ZD8QNEUjmBU3bJG5P3NubStIJMNb/4RFeI7U6SGcinbZW
-         vTeKPmmZAhY8LWIUoqjGFpDcglzZ+O6xio8/Pejw=
+        b=OmqE4zLP/ChAG/2vvubjZZt0pruflxHRqzG0NnPpcs39G9/DVrPxJIgzOsp+c8CKV
+         2hg6BBPBVTWY8NOZT5SXJngSJFks6cLslTYY4mBEoPISqYsflrRQ00q4KcLYhxqD9M
+         IreD0VjOoX6qPOnaaFRfqvuUcTLg/4CxiHm0odTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Liang He <windhl@126.com>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 092/141] of: mdio: Add of_node_put() when breaking out of for_each_xx
+Subject: [PATCH 5.19 129/207] wireguard: netlink: avoid variable-sized memcpy on sockaddr
 Date:   Mon, 26 Sep 2022 12:11:58 +0200
-Message-Id: <20220926100757.760655669@linuxfoundation.org>
+Message-Id: <20220926100812.320737292@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 1c48709e6d9d353acaaac1d8e33474756b121d78 ]
+[ Upstream commit 26c013108c12b94bc023bf19198a4300596c98b1 ]
 
-In of_mdiobus_register(), we should call of_node_put() for 'child'
-escaped out of for_each_available_child_of_node().
+Doing a variable-sized memcpy is slower, and the compiler isn't smart
+enough to turn this into a constant-size assignment.
 
-Fixes: 66bdede495c7 ("of_mdio: Fix broken PHY IRQ in case of probe deferral")
-Co-developed-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220913125659.3331969-1-windhl@126.com
+Further, Kees' latest fortified memcpy will actually bark, because the
+destination pointer is type sockaddr, not explicitly sockaddr_in or
+sockaddr_in6, so it thinks there's an overflow:
+
+    memcpy: detected field-spanning write (size 28) of single field
+    "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+
+Fix this by just assigning by using explicit casts for each checked
+case.
+
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reported-by: syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/mdio/of_mdio.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireguard/netlink.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/mdio/of_mdio.c b/drivers/net/mdio/of_mdio.c
-index ea0bf13e8ac3..5bae47f3da40 100644
---- a/drivers/net/mdio/of_mdio.c
-+++ b/drivers/net/mdio/of_mdio.c
-@@ -332,6 +332,7 @@ int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
- 	return 0;
+diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
+index d0f3b6d7f408..5c804bcabfe6 100644
+--- a/drivers/net/wireguard/netlink.c
++++ b/drivers/net/wireguard/netlink.c
+@@ -436,14 +436,13 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
+ 	if (attrs[WGPEER_A_ENDPOINT]) {
+ 		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
+ 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
++		struct endpoint endpoint = { { { 0 } } };
  
- unregister:
-+	of_node_put(child);
- 	mdiobus_unregister(mdio);
- 	return rc;
- }
+-		if ((len == sizeof(struct sockaddr_in) &&
+-		     addr->sa_family == AF_INET) ||
+-		    (len == sizeof(struct sockaddr_in6) &&
+-		     addr->sa_family == AF_INET6)) {
+-			struct endpoint endpoint = { { { 0 } } };
+-
+-			memcpy(&endpoint.addr, addr, len);
++		if (len == sizeof(struct sockaddr_in) && addr->sa_family == AF_INET) {
++			endpoint.addr4 = *(struct sockaddr_in *)addr;
++			wg_socket_set_peer_endpoint(peer, &endpoint);
++		} else if (len == sizeof(struct sockaddr_in6) && addr->sa_family == AF_INET6) {
++			endpoint.addr6 = *(struct sockaddr_in6 *)addr;
+ 			wg_socket_set_peer_endpoint(peer, &endpoint);
+ 		}
+ 	}
 -- 
 2.35.1
 
