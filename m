@@ -2,138 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5369C5E9CB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622AD5E9CB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbiIZI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S234632AbiIZJAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbiIZI7R (ORCPT
+        with ESMTP id S234413AbiIZI7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:59:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA5D3DBE0;
-        Mon, 26 Sep 2022 01:59:15 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mbc5q017czWhBL;
-        Mon, 26 Sep 2022 16:55:10 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 16:59:13 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
-        <yangyicong@hisilicon.com>, <wsa@kernel.org>, <robh@kernel.org>
-Subject: Re: [PATCH next v5 1/2] i2c: hisi: Add initial device tree support
-To:     Weilong Chen <chenweilong@huawei.com>, <xuwei5@huawei.com>
-References: <20220920072215.161331-1-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <5629396c-a964-c2ba-8f8b-8bb6c4c78939@huawei.com>
-Date:   Mon, 26 Sep 2022 16:59:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 26 Sep 2022 04:59:50 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914A4233;
+        Mon, 26 Sep 2022 01:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fPCxvmc2DBE43wFG2vddH622TgaWjDjckiQMxbrPvHs=; b=mQ/UCJVAfxVljFWNLkEMdVdYJf
+        hGWFtFlOCMMrhhfzpLzf6EnNmaMUB5nSNTB4ZqN26R37j8knBIsS9+OjesDO+m4bIQ89sMWHxR+Ux
+        d0+HEEe7qSundbBuobyTBbXd606W4hgaSo46P6XUl5MYMCMSkbvQq2iBfm5RscNfjQiCobr/Z0ipD
+        Gl9QSbKJwDmgbnIwnVYV2YZpchjM+Ie/NtJKRavrVsW+a2MSaMSLRpnbN/NCU7clQajTixA1kOq1S
+        PQlv4+uiUzXyXMmKFV6w0Ayrf9GCtqydvM1gsZMFAR5FDCEZTV6nsHDi+g6iQH9M7aIxyAfFqL67h
+        qHpeg56w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34490)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ocjxS-0000DE-UC; Mon, 26 Sep 2022 09:59:22 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ocjxM-00050w-R4; Mon, 26 Sep 2022 09:59:16 +0100
+Date:   Mon, 26 Sep 2022 09:59:16 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Stockholm syndrome with Linux wireless?
+Message-ID: <YzFp5BdPPgcqG7zK@shell.armlinux.org.uk>
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+ <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+ <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+ <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+ <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+ <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+ <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk>
+ <CACRpkdYwJLO18t08zqu_Y1gaSpZJMc+3MFxRUtQzLkJF2MqmqQ@mail.gmail.com>
+ <87wn9q35tp.fsf_-_@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220920072215.161331-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wn9q35tp.fsf_-_@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/20 15:22, Weilong Chen wrote:
-> The HiSilicon I2C controller can be used on embedded platform, which
-> boot from devicetree.
+On Mon, Sep 26, 2022 at 11:20:18AM +0300, Kalle Valo wrote:
+> (changing the subject as this has nothing to do with brcmfmac)
 > 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
-> Change since v4:
-> - Remove the protection for the headers for ACPI/OF
-> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/
+> Linus Walleij <linus.walleij@linaro.org> writes:
 > 
->  drivers/i2c/busses/Kconfig    |  2 +-
->  drivers/i2c/busses/i2c-hisi.c | 15 ++++++++++++++-
->  2 files changed, 15 insertions(+), 2 deletions(-)
+> > On Thu, Sep 22, 2022 at 3:31 PM Alvin Šipraga <ALSI@bang-olufsen.dk> wrote:
+> >
+> >> I would also point out that the BCM4359 is equivalent to the
+> >> CYW88359/CYW89359 chipset, which we are using in some of our
+> >> products. Note that this is a Cypress chipset (identifiable by the
+> >> Version: ... (... CY) tag in the version string). But the FW Konrad is
+> >> linking appears to be for a Broadcom chipset.
+> >
+> > This just makes me think about Peter Robinsons seminar at
+> > LPC last week...
+> > "All types of wireless in Linux are terrible and why the vendors
+> > should feel bad"
+> > https://lpc.events/event/16/contributions/1278/attachments/1120/2153/wireless-issues.pdf
 > 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 0c48d8a9f44a..81f6936c312f 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
->  
->  config I2C_HISI
->  	tristate "HiSilicon I2C controller"
-> -	depends on (ARM64 && ACPI) || COMPILE_TEST
-> +	depends on ARM64 || COMPILE_TEST
->  	help
->  	  Say Y here if you want to have Hisilicon I2C controller support
->  	  available on the Kunpeng Server.
-> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> index 76c3d8f6fc3c..67031024217c 100644
-> --- a/drivers/i2c/busses/i2c-hisi.c
-> +++ b/drivers/i2c/busses/i2c-hisi.c
-> @@ -5,6 +5,7 @@
->   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
->   */
->  
-> +#include <linux/acpi.h>
->  #include <linux/bits.h>
->  #include <linux/bitfield.h>
->  #include <linux/completion.h>
-> @@ -13,6 +14,7 @@
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> +#include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/units.h>
-> @@ -483,17 +485,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
->  	{ "HISI03D1", 0 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
-> +#endif
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id hisi_i2c_dts_ids[] = {
-> +	{ .compatible = "hisilicon,hisi-i2c", },
-
-The patch itself looks good to me:
-
-Acked-by: Yicong Yang <yangyicong@hisilicon.com>
-
-It's better to have a tag from xuwei for HiSilicon's DTS stuff.
-
-Thanks.
-
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
-> +#endif
->  
->  static struct platform_driver hisi_i2c_driver = {
->  	.probe		= hisi_i2c_probe,
->  	.driver		= {
->  		.name	= "hisi-i2c",
-> -		.acpi_match_table = hisi_i2c_acpi_ids,
-> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
-> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
->  	},
->  };
->  module_platform_driver(hisi_i2c_driver);
+> Thanks, this was a good read! I'm always interested about user and
+> downstream feedback, both good and bad :) But I didn't get the Stockholm
+> syndrome comment in the end, what does he mean with that?
 > 
+> BTW we have a wireless workshop in netdevconf 0x16, it would be great to
+> have there a this kind of session discussing user pain points:
+> 
+> https://netdevconf.info/0x16/session.html?Wireless-Workshop
+
+You asked. :)
+
+It's probably outside of your control as it's probably firmware issues
+is when using Broadcom or TI WiFi in AP mode, and the resulting
+instability.
+
+Over the years, SolidRun have used Broadcom 4329 and 4330 chipsets on
+their iMX6 products, and then switched to using a TI WL18xx chipset.
+I forget what the issues were with the Broadcom chipsets, as I'm
+currently using the TI variants.
+
+In order to keep the WiFi network stable, I implemented a userspace
+program that polls the WL18xx statistics in debugfs every 100ms, and
+when it seems the adapter has got stuck, it takes the interface down
+and brings it back up again to reset stuff. This seems to improve the
+overall stability, but it's still far from perfect as one regularly
+sees latency go through the roof.
+
+I recently noticed (earlier this month) a bigger problem with it -
+I had one laptop running zoom, another laptop running interactive
+stuff, and while zoom was running, the other laptop basically lost
+network access - which came back when zoom was stopped. I'm not
+sure what was going on there, because if you don't have the ability
+to do interactive stuff it's pretty hard to debug what's going on
+at the machine with the AP.
+
+I've just looked at that machine, which has been mostly idle (as in
+no clients connected) and I see:
+
+[271559.346460] wlcore: ERROR Tx stuck (in FW) for 5000 ms. Starting recovery
+[271559.353395] WARNING: CPU: 1 PID: 6395 at drivers/net/wireless/ti/wlcore/main.c:803 wl12xx_queue_recovery_work.part.0+0x50/0x54 [wlcore]
+
+with the resutling entirely useless backtrace - that's 3 days, 3 hours
+and 25 minutes ago, which would make it Friday 6:25am when nothing
+was connected to the wifi network.
+
+I've turned off all the runtime PM for the hardware path for wifi
+conenctivity (every single power/control file is forced to "on") so
+it isn't being triggered by some runtime PM behaviour.
+
+Like I think many, I've come to the conclusion that WiFi is just a
+completely unstable medium, and wired networking is just far superior,
+even though it comes with the nusience of needing wires.
+
+I don't think this is the fault of the Linux WiFi core code, I think
+this is down to vendors, and vendors just do not want to know about
+problems.
+
+That said, running this stuff in AP mode isn't vendors primary goal,
+since that isn't what most users want to do, so it's probably
+understandable that AP mode tends to be flakey.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
