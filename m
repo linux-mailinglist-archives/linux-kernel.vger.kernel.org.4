@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049DA5EA42F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B469F5EA055
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbiIZLlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S236010AbiIZKgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiIZLk6 (ORCPT
+        with ESMTP id S235995AbiIZKds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:40:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FC84D80C;
-        Mon, 26 Sep 2022 03:45:29 -0700 (PDT)
+        Mon, 26 Sep 2022 06:33:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06081402D2;
+        Mon, 26 Sep 2022 03:20:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE98160BA5;
-        Mon, 26 Sep 2022 10:44:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1E7C433C1;
-        Mon, 26 Sep 2022 10:44:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D5260BB7;
+        Mon, 26 Sep 2022 10:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4DBC433C1;
+        Mon, 26 Sep 2022 10:20:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189067;
-        bh=EbzNcFdyCzwHoRdRE4DsMCPjZPvGEdjHYWMP72mW22s=;
+        s=korg; t=1664187650;
+        bh=ej2tE7gZWV9cHhIiuMetz5wTyN3WfyfLSQZWx7J+Hu0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wYF5CPE5k+Flt8TuIRHmjzCqKoiGzRB8tfTFDKMVt7/haKfYgqqckT8ASySbIrZE3
-         Sr4RifuvUDXQY54xD+1sUz8PPaKSsBkEvnkzWJzcCzs4QHJ3f8s1nNngdiiUlCdrJg
-         xgCGzykcONUaAFZ08UK2AAZ3jCSgR6x8E1V4f8ZE=
+        b=tvD4tf7F+n298aNBzeZ9lT+CY0AyUb//dBtODZox38RJc9aWY+XNH81BpRGDlDyi2
+         R9/5izKLnblN2BJ81Bz9tLEbJHmY3nLIEmR0LKomOGTaheNRpNcdkBrfN5gG1BWsa+
+         0HpT/kfNQJMm1v8gE70eco9+64BzVbo88CXQn+UQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sinan Kaya <Sinan.Kaya@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.19 061/207] net: mana: Add rmb after checking owner bits
+        stable@vger.kernel.org, Xiaolei Wang <xiaolei.wang@windriver.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 017/120] regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
 Date:   Mon, 26 Sep 2022 12:10:50 +0200
-Message-Id: <20220926100809.340503618@linuxfoundation.org>
+Message-Id: <20220926100751.233965623@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haiyang Zhang <haiyangz@microsoft.com>
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
 
-commit 6fd2c68da55c552f86e401ebe40c4a619025ef69 upstream.
+[ Upstream commit 78e1e867f44e6bdc72c0e6a2609a3407642fb30b ]
 
-Per GDMA spec, rmb is necessary after checking owner_bits, before
-reading EQ or CQ entries.
+The pfuze_chip::regulator_descs is an array of size
+PFUZE100_MAX_REGULATOR, the pfuze_chip::pfuze_regulators
+is the pointer to the real regulators of a specific device.
+The number of real regulator is supposed to be less than
+the PFUZE100_MAX_REGULATOR, so we should use the size of
+'regulator_num * sizeof(struct pfuze_regulator)' in memcpy().
+This fixes the out of bounds access bug reported by KASAN.
 
-Add rmb in these two places to comply with the specs.
-
-Cc: stable@vger.kernel.org
-Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-Reported-by: Sinan Kaya <Sinan.Kaya@microsoft.com>
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Link: https://lore.kernel.org/r/1662928805-15861-1-git-send-email-haiyangz@microsoft.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Link: https://lore.kernel.org/r/20220825111922.1368055-1-xiaolei.wang@windriver.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microsoft/mana/gdma_main.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/regulator/pfuze100-regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -370,6 +370,11 @@ static void mana_gd_process_eq_events(vo
- 			break;
- 		}
+diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
+index f873d97100e2..13609942d45c 100644
+--- a/drivers/regulator/pfuze100-regulator.c
++++ b/drivers/regulator/pfuze100-regulator.c
+@@ -788,7 +788,7 @@ static int pfuze100_regulator_probe(struct i2c_client *client,
+ 		((pfuze_chip->chip_id == PFUZE3000) ? "3000" : "3001"))));
  
-+		/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+		 * reading eqe.
-+		 */
-+		rmb();
-+
- 		mana_gd_process_eqe(eq);
+ 	memcpy(pfuze_chip->regulator_descs, pfuze_chip->pfuze_regulators,
+-		sizeof(pfuze_chip->regulator_descs));
++		regulator_num * sizeof(struct pfuze_regulator));
  
- 		eq->head++;
-@@ -1107,6 +1112,11 @@ static int mana_gd_read_cqe(struct gdma_
- 	if (WARN_ON_ONCE(owner_bits != new_bits))
- 		return -1;
- 
-+	/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+	 * reading completion info
-+	 */
-+	rmb();
-+
- 	comp->wq_num = cqe->cqe_info.wq_num;
- 	comp->is_sq = cqe->cqe_info.is_sq;
- 	memcpy(comp->cqe_data, cqe->cqe_data, GDMA_COMP_DATA_SIZE);
+ 	ret = pfuze_parse_regulators_dt(pfuze_chip);
+ 	if (ret)
+-- 
+2.35.1
+
 
 
