@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1D65EA4B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF32D5EA527
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbiIZLup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S239197AbiIZL6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbiIZLtT (ORCPT
+        with ESMTP id S239294AbiIZLzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:19 -0400
+        Mon, 26 Sep 2022 07:55:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28D37539E;
-        Mon, 26 Sep 2022 03:48:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C346B7674C;
+        Mon, 26 Sep 2022 03:50:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C74DD60AD6;
-        Mon, 26 Sep 2022 10:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA039C433C1;
-        Mon, 26 Sep 2022 10:39:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9994760A1E;
+        Mon, 26 Sep 2022 10:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7942C433D6;
+        Mon, 26 Sep 2022 10:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188747;
-        bh=3BvDZ6ejrWOywt6uTeACcA1u6Kx705dRV1/o7/aPg+Q=;
+        s=korg; t=1664189341;
+        bh=DB6JJ0OuAQG/wy+oVUXwoV1NXhvvQF13oov5s/pVZwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H5M5I5WvyHLZP+gqHCS73Din/kv60ZJlhk608ZSC4fLooCcCkFJkCvI2z8L4sVqwq
-         RIRZ0VDYuXH1HXfqDbTW9Wkcz+RJeTf5kWhW8pCs7fpnkNeQnrRkuO/MPROG7qdWcY
-         pHVKyxXCOG52fqmIG5EVhS0bh2eXcj6YcMFko5co=
+        b=t9zbYKz2BW/iYuMFQIh99nm16rlKyMw7vJ6algIQVT496NnCZS53wUIAu4AqNIdjB
+         NNAN05R/U+LqvUQYboxoD9FSbe4QomG36zMWew4IOP5DOTzH4Axn/Qw2QO4OXOo51T
+         S8vTm2QR9288kLxEeU1AVXR1ggDClcr8ZU9cBZn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Jussi Maki <joamaki@gmail.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 108/148] perf kcore_copy: Do not check /proc/modules is unchanged
-Date:   Mon, 26 Sep 2022 12:12:22 +0200
-Message-Id: <20220926100800.166496927@linuxfoundation.org>
+Subject: [PATCH 5.19 154/207] bonding: fix NULL deref in bond_rr_gen_slave_id
+Date:   Mon, 26 Sep 2022 12:12:23 +0200
+Message-Id: <20220926100813.544905260@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +56,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Jonathan Toppins <jtoppins@redhat.com>
 
-[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
+[ Upstream commit 0e400d602f46360752e4b32ce842dba3808e15e6 ]
 
-/proc/kallsyms and /proc/modules are compared before and after the copy
-in order to ensure no changes during the copy.
+Fix a NULL dereference of the struct bonding.rr_tx_counter member because
+if a bond is initially created with an initial mode != zero (Round Robin)
+the memory required for the counter is never created and when the mode is
+changed there is never any attempt to verify the memory is allocated upon
+switching modes.
 
-However /proc/modules also might change due to reference counts changing
-even though that does not make any difference.
+This causes the following Oops on an aarch64 machine:
+    [  334.686773] Unable to handle kernel paging request at virtual address ffff2c91ac905000
+    [  334.694703] Mem abort info:
+    [  334.697486]   ESR = 0x0000000096000004
+    [  334.701234]   EC = 0x25: DABT (current EL), IL = 32 bits
+    [  334.706536]   SET = 0, FnV = 0
+    [  334.709579]   EA = 0, S1PTW = 0
+    [  334.712719]   FSC = 0x04: level 0 translation fault
+    [  334.717586] Data abort info:
+    [  334.720454]   ISV = 0, ISS = 0x00000004
+    [  334.724288]   CM = 0, WnR = 0
+    [  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000008044d662000
+    [  334.733944] [ffff2c91ac905000] pgd=0000000000000000, p4d=0000000000000000
+    [  334.740734] Internal error: Oops: 96000004 [#1] SMP
+    [  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xgene_hwmon
+    [  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g64ae13ed4784 #4
+    [  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v (SCP: 1.08.20211002) 12/01/2021
+    [  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+    [  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
+    [  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+    [  334.807962] sp : ffff8000221733e0
+    [  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002217357c
+    [  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff980fa000
+    [  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff981029c0
+    [  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 0000000000000014
+    [  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaabe2f5a62
+    [  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 0000000000000000
+    [  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac857178ec
+    [  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007c2b3742
+    [  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9f554400
+    [  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff981029c0
+    [  334.882532] Call trace:
+    [  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
+    [  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+    [  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
+    [  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
+    [  334.905622]  dev_hard_start_xmit+0xb4/0x220
+    [  334.909798]  __dev_queue_xmit+0x1a0/0x720
+    [  334.913799]  arp_xmit+0x3c/0xbc
+    [  334.916932]  arp_send_dst+0x98/0xd0
+    [  334.920410]  arp_solicit+0xe8/0x230
+    [  334.923888]  neigh_probe+0x60/0xb0
+    [  334.927279]  __neigh_event_send+0x3b0/0x470
+    [  334.931453]  neigh_resolve_output+0x70/0x90
+    [  334.935626]  ip_finish_output2+0x158/0x514
+    [  334.939714]  __ip_finish_output+0xac/0x1a4
+    [  334.943800]  ip_finish_output+0x40/0xfc
+    [  334.947626]  ip_output+0xf8/0x1a4
+    [  334.950931]  ip_send_skb+0x5c/0x100
+    [  334.954410]  ip_push_pending_frames+0x3c/0x60
+    [  334.958758]  raw_sendmsg+0x458/0x6d0
+    [  334.962325]  inet_sendmsg+0x50/0x80
+    [  334.965805]  sock_sendmsg+0x60/0x6c
+    [  334.969286]  __sys_sendto+0xc8/0x134
+    [  334.972853]  __arm64_sys_sendto+0x34/0x4c
+    [  334.976854]  invoke_syscall+0x78/0x100
+    [  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
+    [  334.985287]  do_el0_svc+0x38/0x4c
+    [  334.988591]  el0_svc+0x34/0x10c
+    [  334.991724]  el0t_64_sync_handler+0x11c/0x150
+    [  334.996072]  el0t_64_sync+0x190/0x194
+    [  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
+    [  335.005810] ---[ end trace 0000000000000000 ]---
+    [  335.010416] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+    [  335.017279] SMP: stopping secondary CPUs
+    [  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
+    [  335.027456] PHYS_OFFSET: 0x80000000
+    [  335.030932] CPU features: 0x0000,0085c029,19805c82
+    [  335.035713] Memory Limit: none
+    [  335.038756] Rebooting in 180 seconds..
 
-Any modules loaded or unloaded should be visible in changes to kallsyms,
-so it is not necessary to check /proc/modules also anyway.
+The fix is to allocate the memory in bond_open() which is guaranteed
+to be called before any packets are processed.
 
-Remove the comparison checking that /proc/modules is unchanged.
-
-Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
-Reported-by: Daniel Dao <dqminh@cloudflare.com>
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Tested-by: Daniel Dao <dqminh@cloudflare.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 848ca9182a7d ("net: bonding: Use per-cpu rr_tx_counter")
+CC: Jussi Maki <joamaki@gmail.com>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/symbol-elf.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/net/bonding/bond_main.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index cb7b24493782..6c183df191aa 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -2091,8 +2091,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
-  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
-  * is not the same for the kernel map and the modules map.  That happens because
-  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
-- * kallsyms and modules files are compared with their copies to check that
-- * modules have not been loaded or unloaded while the copies were taking place.
-+ * kallsyms file is compared with its copy to check that modules have not been
-+ * loaded or unloaded while the copies were taking place.
-  *
-  * Return: %0 on success, %-1 on failure.
-  */
-@@ -2155,9 +2155,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
- 			goto out_extract_close;
- 	}
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 83852e6719e2..ab7cb48f8dfd 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -4155,6 +4155,12 @@ static int bond_open(struct net_device *bond_dev)
+ 	struct list_head *iter;
+ 	struct slave *slave;
  
--	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
--		goto out_extract_close;
++	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
++		bond->rr_tx_counter = alloc_percpu(u32);
++		if (!bond->rr_tx_counter)
++			return -ENOMEM;
++	}
++
+ 	/* reset slave->backup and slave->inactive */
+ 	if (bond_has_slaves(bond)) {
+ 		bond_for_each_slave(bond, slave, iter) {
+@@ -6210,15 +6216,6 @@ static int bond_init(struct net_device *bond_dev)
+ 	if (!bond->wq)
+ 		return -ENOMEM;
+ 
+-	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN) {
+-		bond->rr_tx_counter = alloc_percpu(u32);
+-		if (!bond->rr_tx_counter) {
+-			destroy_workqueue(bond->wq);
+-			bond->wq = NULL;
+-			return -ENOMEM;
+-		}
+-	}
 -
- 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
- 		goto out_extract_close;
+ 	spin_lock_init(&bond->stats_lock);
+ 	netdev_lockdep_set_classes(bond_dev);
  
 -- 
 2.35.1
