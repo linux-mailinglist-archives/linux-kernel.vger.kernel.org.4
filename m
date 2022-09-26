@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0835EA0D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1094D5EA0D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236371AbiIZKmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S236368AbiIZKmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbiIZKj6 (ORCPT
+        with ESMTP id S236050AbiIZKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 06:39:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE53E77B;
-        Mon, 26 Sep 2022 03:23:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120DC543E7;
+        Mon, 26 Sep 2022 03:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0578FB80924;
-        Mon, 26 Sep 2022 10:23:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FCCC433C1;
-        Mon, 26 Sep 2022 10:23:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0BAB8092B;
+        Mon, 26 Sep 2022 10:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64155C433C1;
+        Mon, 26 Sep 2022 10:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187820;
-        bh=/KzNBC/1o7m8B9RSy27+tliksvw2eqi39Mn6M3WBaDs=;
+        s=korg; t=1664187823;
+        bh=RKOpVFNMZWBiILH99dSIKHVuiodIBHC1WyT1+BwZlKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zNr4jX+L5UVJf9zNzuXTdlHyTUUGBIoZ7RHb3Acba3IhtAIf7UsjCK727A/sacNSk
-         X8/Dk4ptiq/E+1bs2cGoqsQc3/KNmzC8zIqC6beVrbZBaxqRy6FAeeos1agyTE3Uua
-         +HaDEEzYEuxotOLHN4YMjPQuLKu7Pv+dY58DBjzQ=
+        b=FoKN56LEYiloB992S5QCYJHwDnjch+ZlQPiVYUw7J1gvENGm4gZIJq1dzd8JyVXrq
+         pyRMCTw0vJeqXkesn+rxKhtFr9GEgE6rtHVFHWmtOZ1ABtPFNqsZN2u/q76LWJRaRV
+         dj5vkH/wMvhP8xV6wy0QVa7z9eMpQXBe8BjMTp14=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 038/120] usb: xhci-mtk: add a function to (un)load bandwidth info
-Date:   Mon, 26 Sep 2022 12:11:11 +0200
-Message-Id: <20220926100752.083339049@linuxfoundation.org>
+Subject: [PATCH 5.4 039/120] usb: xhci-mtk: add some schedule error number
+Date:   Mon, 26 Sep 2022 12:11:12 +0200
+Message-Id: <20220926100752.123244444@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
 References: <20220926100750.519221159@linuxfoundation.org>
@@ -55,102 +55,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 338af695fffb12a9407c376ce0cebce896c15050 ]
+[ Upstream commit ccda8c224c0701caac007311d06a2de9543a7590 ]
 
-Extract a function to load/unload bandwidth info, and remove
-a dummy check of TT offset.
+This is used to provide more information about which case
+causes bandwidth schedule failure.
 
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/6fbc000756a4a4a7efbce651b785fee7561becb6.1615170625.git.chunfeng.yun@mediatek.com
+Link: https://lore.kernel.org/r/9771f44093053b581e9c4be4b7fb68d9fcecad08.1615170625.git.chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c | 37 ++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 21 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c | 44 ++++++++++++++++++++++++++-------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index b1da3cb077c9..9a9685f74940 100644
+index 9a9685f74940..a6ec75bf2def 100644
 --- a/drivers/usb/host/xhci-mtk-sch.c
 +++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -375,7 +375,6 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
- 					sch_ep->bw_budget_table[j];
- 		}
- 	}
--	sch_ep->allocated = used;
- }
+@@ -25,6 +25,13 @@
+  */
+ #define TT_MICROFRAMES_MAX 9
  
- static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
-@@ -509,6 +508,19 @@ static void update_sch_tt(struct usb_device *udev,
- 		list_del(&sch_ep->tt_endpoint);
- }
++/* schedule error type */
++#define ESCH_SS_Y6		1001
++#define ESCH_SS_OVERLAP		1002
++#define ESCH_CS_OVERFLOW	1003
++#define ESCH_BW_OVERFLOW	1004
++#define ESCH_FIXME		1005
++
+ /* mtk scheduler bitmasks */
+ #define EP_BPKTS(p)	((p) & 0x7f)
+ #define EP_BCSCOUNT(p)	(((p) & 0x7) << 8)
+@@ -32,6 +39,24 @@
+ #define EP_BOFFSET(p)	((p) & 0x3fff)
+ #define EP_BREPEAT(p)	(((p) & 0x7fff) << 16)
  
-+static int load_ep_bw(struct usb_device *udev, struct mu3h_sch_bw_info *sch_bw,
-+		      struct mu3h_sch_ep_info *sch_ep, bool loaded)
++static char *sch_error_string(int err_num)
 +{
-+	if (sch_ep->sch_tt)
-+		update_sch_tt(udev, sch_ep, loaded);
-+
-+	/* update bus bandwidth info */
-+	update_bus_bw(sch_bw, sch_ep, loaded);
-+	sch_ep->allocated = loaded;
-+
-+	return 0;
++	switch (err_num) {
++	case ESCH_SS_Y6:
++		return "Can't schedule Start-Split in Y6";
++	case ESCH_SS_OVERLAP:
++		return "Can't find a suitable Start-Split location";
++	case ESCH_CS_OVERFLOW:
++		return "The last Complete-Split is greater than 7";
++	case ESCH_BW_OVERFLOW:
++		return "Bandwidth exceeds the maximum limit";
++	case ESCH_FIXME:
++		return "FIXME, to be resolved";
++	default:
++		return "Unknown";
++	}
 +}
 +
- static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
+ static int is_fs_or_ls(enum usb_device_speed speed)
  {
- 	u32 boundary = sch_ep->esit;
-@@ -535,7 +547,6 @@ static int check_sch_bw(struct usb_device *udev,
+ 	return speed == USB_SPEED_FULL || speed == USB_SPEED_LOW;
+@@ -395,7 +420,7 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+ 		for (j = 0; j < sch_ep->cs_count; j++) {
+ 			tmp = tt->fs_bus_bw[base + j] + sch_ep->bw_cost_per_microframe;
+ 			if (tmp > FS_PAYLOAD_MAX)
+-				return -ERANGE;
++				return -ESCH_BW_OVERFLOW;
+ 		}
+ 	}
+ 
+@@ -421,11 +446,11 @@ static int check_sch_tt(struct usb_device *udev,
+ 		 * must never schedule Start-Split in Y6
+ 		 */
+ 		if (!(start_ss == 7 || last_ss < 6))
+-			return -ERANGE;
++			return -ESCH_SS_Y6;
+ 
+ 		for (i = 0; i < sch_ep->cs_count; i++)
+ 			if (test_bit(offset + i, tt->ss_bit_map))
+-				return -ERANGE;
++				return -ESCH_SS_OVERLAP;
+ 
+ 	} else {
+ 		u32 cs_count = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
+@@ -435,14 +460,14 @@ static int check_sch_tt(struct usb_device *udev,
+ 		 * must never schedule Start-Split in Y6
+ 		 */
+ 		if (start_ss == 6)
+-			return -ERANGE;
++			return -ESCH_SS_Y6;
+ 
+ 		/* one uframe for ss + one uframe for idle */
+ 		start_cs = (start_ss + 2) % 8;
+ 		last_cs = start_cs + cs_count - 1;
+ 
+ 		if (last_cs > 7)
+-			return -ERANGE;
++			return -ESCH_CS_OVERFLOW;
+ 
+ 		if (sch_ep->ep_type == ISOC_IN_EP)
+ 			extra_cs_count = (last_cs == 7) ? 1 : 2;
+@@ -454,7 +479,7 @@ static int check_sch_tt(struct usb_device *udev,
+ 			cs_count = 7; /* HW limit */
+ 
+ 		if (test_bit(offset, tt->ss_bit_map))
+-			return -ERANGE;
++			return -ESCH_SS_OVERLAP;
+ 
+ 		sch_ep->cs_count = cs_count;
+ 		/* one for ss, the other for idle */
+@@ -547,7 +572,7 @@ static int check_sch_bw(struct usb_device *udev,
  	u32 esit_boundary;
  	u32 min_num_budget;
  	u32 min_cs_count;
--	bool tt_offset_ok = false;
- 	int ret;
+-	int ret;
++	int ret = 0;
  
  	/*
-@@ -552,8 +563,6 @@ static int check_sch_bw(struct usb_device *udev,
- 			ret = check_sch_tt(udev, sch_ep, offset);
- 			if (ret)
- 				continue;
--			else
--				tt_offset_ok = true;
- 		}
+ 	 * Search through all possible schedule microframes.
+@@ -588,7 +613,7 @@ static int check_sch_bw(struct usb_device *udev,
  
- 		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
-@@ -585,29 +594,15 @@ static int check_sch_bw(struct usb_device *udev,
+ 	/* check bandwidth */
+ 	if (min_bw > bw_boundary)
+-		return -ERANGE;
++		return ret ? ret : -ESCH_BW_OVERFLOW;
+ 
+ 	sch_ep->offset = min_index;
  	sch_ep->cs_count = min_cs_count;
- 	sch_ep->num_budget_microframes = min_num_budget;
+@@ -765,7 +790,8 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
  
--	if (sch_ep->sch_tt) {
--		/* all offset for tt is not ok*/
--		if (!tt_offset_ok)
--			return -ERANGE;
--
--		update_sch_tt(udev, sch_ep, 1);
--	}
--
--	/* update bus bandwidth info */
--	update_bus_bw(sch_bw, sch_ep, 1);
--
--	return 0;
-+	return load_ep_bw(udev, sch_bw, sch_ep, true);
- }
- 
- static void destroy_sch_ep(struct usb_device *udev,
- 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
- {
- 	/* only release ep bw check passed by check_sch_bw() */
--	if (sch_ep->allocated) {
--		update_bus_bw(sch_bw, sch_ep, 0);
--		if (sch_ep->sch_tt)
--			update_sch_tt(udev, sch_ep, 0);
--	}
-+	if (sch_ep->allocated)
-+		load_ep_bw(udev, sch_bw, sch_ep, false);
- 
- 	if (sch_ep->sch_tt)
- 		drop_tt(udev);
+ 		ret = check_sch_bw(udev, sch_bw, sch_ep);
+ 		if (ret) {
+-			xhci_err(xhci, "Not enough bandwidth!\n");
++			xhci_err(xhci, "Not enough bandwidth! (%s)\n",
++				 sch_error_string(-ret));
+ 			return -ENOSPC;
+ 		}
+ 	}
 -- 
 2.35.1
 
