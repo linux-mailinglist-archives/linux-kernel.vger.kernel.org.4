@@ -2,67 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475145E9844
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 05:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694D45E9846
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 05:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiIZDeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 23:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S233173AbiIZDiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 23:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233290AbiIZDeN (ORCPT
+        with ESMTP id S230128AbiIZDiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 23:34:13 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D703264A7;
-        Sun, 25 Sep 2022 20:34:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQek2VS_1664163236;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VQek2VS_1664163236)
-          by smtp.aliyun-inc.com;
-          Mon, 26 Sep 2022 11:34:02 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     peter@piie.net
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] acerhdf: remove unneeded semicolon
-Date:   Mon, 26 Sep 2022 11:33:11 +0800
-Message-Id: <20220926033311.84765-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sun, 25 Sep 2022 23:38:18 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBE62612D
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 20:38:17 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id v1so5040382plo.9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 20:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=6Kb4i0mm6v9pZwbBNK1La/6ffxmbjpXjTkCflKZS3Mw=;
+        b=M7KqJY/7x2gd1PCsMuoLwDKeICBqKrtnRWM2bztZmkzd/A+6MHl1gbKPWdDuJbBakh
+         PObbN+N9EUBGqIsKWMx5ikDS+Lg/xwj5vIkhB+Ekifcxg5SwEyOECa5ZhL2uiNwOLRci
+         I1z2OHsX/u7lOEzhLt3eP6aJGMfsOzEGSYm816K66IK3mR5+12u6qLR1NROPV3tEPvH2
+         l2t3XatAqMc58mSloeRlA1DCry7YZhVa27mKiNC9holgSmDdk3FmwjTTuwYhwiF+/Rai
+         rgsPtkZSy0uc70R9npGAOlByKBHXm3mbYJOD1ieitPokI7+2RpmYhYIsBt/KxG5Xb+Zz
+         9HMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6Kb4i0mm6v9pZwbBNK1La/6ffxmbjpXjTkCflKZS3Mw=;
+        b=Mff7wvkHQWkSovCHozTtsZ6fO5/r+BlwtDoYHuNrpfvXOPfPvD5e71/LW6gsj+Lh0K
+         l/+FMqPgYLUo2AL5LY8ajbPDFDvhRv7jFL9PfSUCfo/ttEWGv4JrxWBmk/p2JTbXrfyA
+         6ehiS9yRY+IHh4tRctuh0fjznbTyfsdtqCP5gmwoE/fcZ/tXQKvvcG2tXYusXc4HbOAH
+         k8rkics7DqozQ4TZJseJ3+CuIqKIYTf4LaWkWhLvMq1iJo+24xiaYRsHd40UIT5uthqw
+         +i/bTxotedS/EQets2rDTbzvOQ9sNUiz55bgXXrhgIwBZbf4UaltiJjRgI7ErGp/th0y
+         X0GA==
+X-Gm-Message-State: ACrzQf19V1VDAOuOqgN6h9HmnpjxAJIGFxhYFHu7fXzgMhxxf+wcYoKf
+        dU84Xx0TMJHt999rcS0BK8UPbA==
+X-Google-Smtp-Source: AMsMyM7Bdnsa1flHbxEuWPOlLVF87TvYWHB19s570bZFaFP3UAWPt+/Oi5dgiSPE44oZUDmmTQeNVw==
+X-Received: by 2002:a17:90b:4f8d:b0:202:dd39:c03a with SMTP id qe13-20020a17090b4f8d00b00202dd39c03amr35063928pjb.71.1664163496691;
+        Sun, 25 Sep 2022 20:38:16 -0700 (PDT)
+Received: from [10.76.43.192] ([61.120.150.75])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b0015e8d4eb219sm10185058ple.99.2022.09.25.20.38.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 20:38:16 -0700 (PDT)
+Message-ID: <b3ff8456-fe0e-95a0-cccd-e94025a82560@bytedance.com>
+Date:   Mon, 26 Sep 2022 11:38:10 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+From:   Gang Li <ligang.bdlg@bytedance.com>
+Subject: Re: Re: [RFC PATCH v1] mm: oom: introduce cpuset oom
+To:     David Rientjes <rientjes@google.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220921064710.89663-1-ligang.bdlg@bytedance.com>
+ <18621b07-256b-7da1-885a-c96dfc8244b6@google.com>
+Content-Language: en-US
+In-Reply-To: <18621b07-256b-7da1-885a-c96dfc8244b6@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/platform/x86/acerhdf.c:344:2-3: Unneeded semicolon.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2271
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/platform/x86/acerhdf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/9/23 03:18, David Rientjes wrote:
+> On Wed, 21 Sep 2022, Gang Li wrote:
+> 
+>> cpuset confine processes to processor and memory node subsets.
+>> When a process in cpuset triggers oom, it may kill a completely
+>> irrelevant process on another numa node, which will not release any
+>> memory for this cpuset.
+>>
+>> It seems that `CONSTRAINT_CPUSET` is not really doing much these
+>> days. Using CONSTRAINT_CPUSET, we can easily achieve node aware oom
+>> killing by selecting victim from the cpuset which triggers oom.
+>>
+>> Suggested-by: Michal Hocko <mhocko@suse.com>
+>> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+> 
+> Hmm, is this the right approach?
+> 
+> If a cpuset results in a oom condition, is there a reason why we'd need to
+> find a process from within that cpuset to kill?  I think the idea is to
+> free memory on the oom set of nodes (cpuset.mems) and that can happen by
+> killing a process that is not a member of this cpuset.
+> 
+Hi,
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index a7407aa032ba..b48c6c5da147 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -341,7 +341,7 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
- 		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
- 		       fanoff, fanon, fanon);
- 		fanoff = fanon;
--	};
-+	}
- 
- 	trips[0].temperature = fanon;
- 	trips[0].hysteresis  = fanon - fanoff;
--- 
-2.20.1.7.g153144c
+My last patch implemented this idea[1][2]. But it needs to inc/dec a per 
+mm_struct counter on every page allocation/release/migration.
 
+As the Unixbench show, this takes 0%-3% performance loss on different 
+workloads[2]. So Michal Hocko inspired me to use cpuset[3].
+
+[1]. 
+https://lore.kernel.org/all/20220512044634.63586-1-ligang.bdlg@bytedance.com/
+[2]. 
+https://lore.kernel.org/all/20220708082129.80115-1-ligang.bdlg@bytedance.com/
+[3]. https://lore.kernel.org/all/YoJ%2FioXwGTdCywUE@dhcp22.suse.cz/
+
+> I understand the challenges of creating a NUMA aware oom killer to target
+> memory that is actually resident on an oom node, but this approach doesn't
+> seem right and could actually lead to pathological cases where a small
+> process trying to fork in an otherwise empty cpuset is repeatedly oom
+> killing when we'd actually prefer to kill a single large process.
+> 
+
+I think there are three ways to achieve NUMA aware oom killer:
+
+1. Count every page operations, which cause performance loss[2].
+2. Iterate over pages(like show_numa_map) for all processes, which may 
+stuck oom.
+3. Select victim in a cpuset, which may leads to pathological kill.(this 
+patch)
+
+None of them are perfect and I'm getting stuck, do you have any ideas?
