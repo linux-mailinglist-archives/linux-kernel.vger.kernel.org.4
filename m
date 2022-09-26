@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B29F5E9C14
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D284A5E9C19
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbiIZIa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S234356AbiIZIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234354AbiIZIaX (ORCPT
+        with ESMTP id S234353AbiIZIcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:30:23 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0F1F2C0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:30:20 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id s6so9640765lfo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=yc8eh2ppDZZcDWiITniWISunAPkC/g7sS7I8UZwuluQ=;
-        b=zpbdWAHHJu56K2xc8KOgyLKSj8qOfxEsKQI+kac9U7+4w9tMwjeWo4o35q4Vk0jxWu
-         FbJYxVRWgJkVtwq7T9/9mqc1ibZvXSE1BL9vhvk5ihjtffFKmoXmuIqq/DlEBoAdq/39
-         +zsmubOMQvjhn0p6cN8frRKED8F5R883zIGZwHlfXZXzppVxgvS/L6PP1kj9bdCb53Nh
-         l39isR4HHmGCNScNZfJM62TvFV1TD4e3sbDCUruQ8nZWFIfbLRM+7U4L40mrwtkPAl6b
-         7qOuFZALtHXONa4Sa7O3R2cd/FPqeYwrv3nkNli9Y+F264fTFvWPpN+uGQ0xdh8ilANV
-         Bn6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yc8eh2ppDZZcDWiITniWISunAPkC/g7sS7I8UZwuluQ=;
-        b=ndy0h5VkGPz9wfgxaFcyS7ih++e10c6zjJjjHp4V0pFzslyYPm8+8mrqAVJtHJiFdK
-         VPBdURZ4zbQMDywZGRryvrFScRtWiDs58KVOB0xaOOJ+EYmhNoF9DOKhAGC9Zz6B4Kcm
-         /YeiuTE68qmOKuwsj2DwqeGHA/FEMoW/nR0N299GJ3bAnBUTG1LmBArqJrYgNOXgYkfj
-         VVYDyXj1RkxKy9i/A79JUo6HdxeYqsdq3q0VBXW1KUZt25nxz5LGWMWRI4OWOSoLxWlt
-         28sc6YHLOxeJzf8uQ7o58O22SP93HO9L7U1bVkXDmy2W0FGdPkOuh9s1QY56WcuUesGs
-         mJZQ==
-X-Gm-Message-State: ACrzQf0t36lBB04E/vKARJ7rbdZdPLo5FTYRL8eUlKzfpkVLVgS9Tdg2
-        FjkzTYf0JRBIrWhs+18BCpyyYg==
-X-Google-Smtp-Source: AMsMyM4Lzz4cmKCm4wv5NBgqln7unwSID9Ng2e832jbMYlUh2kXSCavmOuKZy9aDB1F8rZiWx8s8sg==
-X-Received: by 2002:a05:6512:1315:b0:492:cbc8:e10d with SMTP id x21-20020a056512131500b00492cbc8e10dmr7972243lfu.41.1664181019045;
-        Mon, 26 Sep 2022 01:30:19 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y2-20020a2e5442000000b0026c41574790sm2292842ljd.30.2022.09.26.01.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:30:18 -0700 (PDT)
-Message-ID: <263a2ca5-089e-3ca5-7eea-f09c542d0e7b@linaro.org>
-Date:   Mon, 26 Sep 2022 10:30:17 +0200
+        Mon, 26 Sep 2022 04:32:43 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCA736862;
+        Mon, 26 Sep 2022 01:32:41 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@breakpoint.cc>)
+        id 1ocjXL-00030q-0S; Mon, 26 Sep 2022 10:32:23 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     <netdev@vger.kernel.org>
+Cc:     tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        Florian Westphal <fw@strlen.de>,
+        Martin Zaharinov <micron10@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: [PATCH net] rhashtable: fix crash due to mm api change
+Date:   Mon, 26 Sep 2022 10:31:39 +0200
+Message-Id: <20220926083139.48069-1-fw@strlen.de>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] dt-bindings: phy: Add compatible for Mediatek MT8188
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, chunfeng.yun@mediatek.com, kishon@ti.com,
-        vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        chunkuang.hu@kernel.org, p.zabel@pengutronix.de
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1664180045-19095-1-git-send-email-xinlei.lee@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1664180045-19095-1-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 10:14, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
-> 
-> Add dt-binding documentation of dsi-phy for MediaTek MT8188 SoC.
-> 
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml | 1 +
+Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+ kernel BUG at mm/vmalloc.c:2437!
+ invalid opcode: 0000 [#1] SMP
+ CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
+ [..]
+ RIP: 0010:__get_vm_area_node+0x120/0x130
+  __vmalloc_node_range+0x96/0x1e0
+  kvmalloc_node+0x92/0xb0
+  bucket_table_alloc.isra.0+0x47/0x140
+  rhashtable_try_insert+0x3a4/0x440
+  rhashtable_insert_slow+0x1b/0x30
+ [..]
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, this now
+falls through to vmalloc and hits code paths that assume GFP_KERNEL.
 
-Best regards,
-Krzysztof
+I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
+maintainers rejected it.
+
+This patch is partial revert of
+commit 93f976b5190d ("lib/rhashtable: simplify bucket_table_alloc()"),
+to avoid kvmalloc for ATOMIC case.
+
+As kvmalloc doesn't warn when used with ATOMIC, kernel will only crash
+once vmalloc fallback occurs, so we may see more crashes in other areas
+in the future.
+
+Most other callers seem ok but kvm_mmu_topup_memory_cache looks like it
+might be affected by the same breakage, so Cc kvm@.
+
+Reported-by: Martin Zaharinov <micron10@gmail.com>
+Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
+Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org
+Signed-off-by: Florian Westphal <fw@strlen.de>
+---
+ lib/rhashtable.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+index e12bbfb240b8..9451f411bc71 100644
+--- a/lib/rhashtable.c
++++ b/lib/rhashtable.c
+@@ -181,7 +181,13 @@ static struct bucket_table *bucket_table_alloc(struct rhashtable *ht,
+ 	int i;
+ 	static struct lock_class_key __key;
+ 
+-	tbl = kvzalloc(struct_size(tbl, buckets, nbuckets), gfp);
++	size = struct_size(tbl, buckets, nbuckets);
++
++	/* kvmalloc API does not support GFP_KERNEL anymore */
++	if ((gfp & GFP_KERNEL) != GFP_KERNEL)
++		tbl = kzalloc(size, gfp | __GFP_NOWARN | __GFP_NORETRY);
++	else
++		tbl = kvzalloc(size, gfp);
+ 
+ 	size = nbuckets;
+ 
+-- 
+2.37.3
 
