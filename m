@@ -2,161 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F159D5EA8D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338E25EA8E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiIZOo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S235302AbiIZOqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiIZOn4 (ORCPT
+        with ESMTP id S235029AbiIZOpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:43:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A0085590;
-        Mon, 26 Sep 2022 06:06:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2DB0B80977;
-        Mon, 26 Sep 2022 13:06:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E66DC433D6;
-        Mon, 26 Sep 2022 13:06:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664197608;
-        bh=k6Ja2GHJ3y49BN5GulLQB08Ww/f3AOj5+iE3g4xLt6M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j0gCsKmd0OoOAfm0LzMBfFtfO7rCrBzd/02H6/GGGw7CPSCK204PRd8TbD4qjcoSG
-         qv6Kh1kzdD1tITgfodu5eVmE9h6Ap9cHY3ZlCFC1xoRo8ivxqD9T1O0pu0HTDuSh18
-         kF0C0R2Zzc9O9PrKI9lZI0z97xGTaubbW1ZtoKSScc6OleYZaBQUfFNKSW9ltKBFfA
-         2Sx9Wkq+ADSXZPpPgQpGvmuh8Q1duhacW4KkNdk6rAGuhnoMtvp3Zy3iweSt8yMc40
-         3Iz1rhLvpZ5UM6PvO8YLx+Drz+P1rcGFRXQO1oLc6E11N2P96zQicfPWsgEZjt5Aqo
-         tFdUFr9CsQV9Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8D5C2403B0; Mon, 26 Sep 2022 14:06:46 +0100 (IST)
-Date:   Mon, 26 Sep 2022 14:06:46 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH v4] perf tools: Get a perf cgroup more portably in BPF
-Message-ID: <YzGj5tVqATdzxhod@kernel.org>
-References: <20220923063205.772936-1-namhyung@kernel.org>
+        Mon, 26 Sep 2022 10:45:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC464D26E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664197737; x=1695733737;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SfCM96TxwsHe8l6IFW6sZKJUTVbs5ZftYlxk6lHmRVQ=;
+  b=YN+EYFm9FslMFJIm9jYUPiKzg3o1CMEOoy0xI9YzZGYedSL6X9zjHqI5
+   IIKBMPMvTXlNf+QNmS6eO5DwCEZ3kBpvIs2JXV+/s6L7BODRQBKM9eQ73
+   +b+aaPFK+hd21oDrDzJ9zOBAtWIXypNQAO6RkaVTsirtSOR8tpNVZ7pcK
+   Loeo12Too7BL6k11YIxSptMO0G6Ih7jPQvU4/57Rfxel2Zz+tn5s2mTRX
+   GgLGEwjDY0A3LQuUbSMYzPGcQaDqQzTyhPo9nmBTEVIJUjUgIGHwmKj8O
+   thqbQYNVS45Vep6U3W/JPrAU/6iTw3HEgUvE3rGGDt26MxhgvvJ/O0e/Y
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="182099107"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2022 06:08:55 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 26 Sep 2022 06:08:55 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 26 Sep 2022 06:08:52 -0700
+Date:   Mon, 26 Sep 2022 14:07:27 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Conor Dooley <conor@kernel.org>, <senozhatsky@chromium.org>,
+        <rostedt@goodmis.org>, <john.ogness@linutronix.de>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [resend][bug] low-probability console lockups since 5.19
+Message-ID: <YzGkD5LvFmZIOtnx@wendy>
+References: <Yy3dsSgpDnovBdEn@spud>
+ <YzF/1wlROxiK4XvD@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220923063205.772936-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzF/1wlROxiK4XvD@alley>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Sep 22, 2022 at 11:32:05PM -0700, Namhyung Kim escreveu:
-> The perf_event_cgrp_id can be different on other configurations.
-> To be more portable as CO-RE, it needs to get the cgroup subsys id
-> using the bpf_core_enum_value() helper.
+On Mon, Sep 26, 2022 at 12:32:55PM +0200, Petr Mladek wrote:
+> On Fri 2022-09-23 17:24:17, Conor Dooley wrote:
+> > Hey all,
+> > 
+> > Been bisecting a bug that is causing a boot failure in my CI & have
+> > ended up here.. The bug in question is a low(ish) probability lock up
+> > of the serial console, I would estimate about 1-in-5 chance on the
+> > boards I could actually trigger it on which it has taken me so long
+> > to realise that this was an actual problem. Thinking back on it, there
+> > were other failures that I would retroactively attribute to this
+> > problem too, but I had earlycon disabled and I chalked the hangs at
+> > "Starting kernel" down to pre-release hardware since the other boots
+> > in a CI job would not fail (we boot the same config multiple times),
+> > Silly me I guess!
+> > 
+> > In a boot failure (with earlycon & keep_bootcon enabled) I see the
+> > likes of [0]:
+> > [    0.485063] NFS: Registering the id_resolver key type
+> > [    0.491051] Key type id_resolver registered
+> > [    0.495743] Key type id_legacy registered
+> > [    0.500528] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+> > [    0.508010] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+> > [    0.516857] 9p: Installing v9fs 9p2000 file system support
+> > [    0.524032] NET: Registered PF_ALG protocol family
+> > [    0.529562] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 247)
+> > [    0.537817] io scheduler mq-deadline registered
+> > [    0.542889] io scheduler kyber registered
+> > [    0.559682] microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000 ranges:
+> > [    0.568431] microchip-pcie 2000000000.pcie:      MEM 0x2008000000..0x2087ffffff -> 0x0008000000
+> > [    0.635633] microchip-pcie 2000000000.pcie: axi read request error
+> > [    0.642602] microchip-pcie 2000000000.pcie: axi read timeout
+> > [    0.776630] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.784133] microchip-pcie 2000000000.pcie: axi write request error
+> > [    0.791100] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.798543] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.805981] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.813421] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.820859] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    0.828295] microchip-pcie 2000000000.pcie: sec error in axi2pcie buffer
+> > [    1.579668] Freeing initrd memory: 7316K
+> > 
+> > The sec error stuff is unrelated & happens on good boots too - although
+> > there are far fewer lines of "sec error" there [1] (excuse the message
+> > duplication from the bootcon).
+> > 
+> > I was able to bisect the behaviour to this set of reverts, but I have
+> > low confidence as to which commit specifically caused it - it's hard
+> > to know that doing 20+ reboots on every commmit I built is enough to
+> > make sure I did not make a mistake. I had initially started the
+> > bisection between v6.0-rc6 & v6.0-rc1, and that lead me down a sub-tree
+> > of net which is why the bisect log starts at a "random" commit as that
+> > merge commit was the one blamed by the inital bisection.
+> > 
+> > git bisect start
+> > # status: waiting for both good and bad commits
+> > # bad: [5e8379351dbde61ea383e514f0f9ecb2c047cf4e] Merge tag 'net-5.19-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+> > git bisect bad 5e8379351dbde61ea383e514f0f9ecb2c047cf4e
+> > # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+> > git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+> > # good: [fbe86daca0ba878b04fa241b85e26e54d17d4229] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> > git bisect good fbe86daca0ba878b04fa241b85e26e54d17d4229
+> > # good: [2b8c612c6102f751e6e3e1bd425f64e9d3d3f638] kernel/reboot: Fix powering off using a non-syscall code paths
+> > git bisect good 2b8c612c6102f751e6e3e1bd425f64e9d3d3f638
+> > # good: [54c2cc79194c961a213c1d375fe3aa4165664cc4] Merge tag 'usb-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+> > git bisect good 54c2cc79194c961a213c1d375fe3aa4165664cc4
+> > # skip: [8f7ac50c97d30ae5ae48da3b516510d05a67b9e5] Merge tag 'sound-5.19-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
+> > git bisect skip 8f7ac50c97d30ae5ae48da3b516510d05a67b9e5
+> > # good: [cdd85786f4b3b9273e4376e69aa95a2d71722764] x86/tdx: Clarify RIP adjustments in #VE handler
+> > git bisect good cdd85786f4b3b9273e4376e69aa95a2d71722764
+> > # good: [8cc683833726912498130a0130fc3bd0d169ef59] Merge branch 'net-dp83822-fix-interrupt-floods'
+> > git bisect good 8cc683833726912498130a0130fc3bd0d169ef59
+> > # bad: [0840a7914caa14315a3191178a9f72c742477860] Merge tag 'char-misc-5.19-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
+> > git bisect bad 0840a7914caa14315a3191178a9f72c742477860
+> > # bad: [38bc4ac431684498126f9baa3a530e5a132f0173] Merge tag 'drm-fixes-2022-06-24' of git://anongit.freedesktop.org/drm/drm
+> > git bisect bad 38bc4ac431684498126f9baa3a530e5a132f0173
+> > # good: [399bd66e219e331976fe6fa6ab81a023c0c97870] Merge tag 'net-5.19-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+> > git bisect good 399bd66e219e331976fe6fa6ab81a023c0c97870
+> > # bad: [a237cfd6b7469d6f5eeaa45f30128ab78b5281a5] Merge tag 'block-5.19-2022-06-24' of git://git.kernel.dk/linux-block
+> > git bisect bad a237cfd6b7469d6f5eeaa45f30128ab78b5281a5
+> > # good: [92f20ff72066d8d7e2ffb655c2236259ac9d1c5d] Merge tag 'pm-5.19-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> > git bisect good 92f20ff72066d8d7e2ffb655c2236259ac9d1c5d
+> > # bad: [598f2404879336277a4320ac5000394b873e049a] Merge tag 'io_uring-5.19-2022-06-24' of git://git.kernel.dk/linux-block
+> > git bisect bad 598f2404879336277a4320ac5000394b873e049a
+> > # good: [386e4fb6962b9f248a80f8870aea0870ca603e89] io_uring: use original request task for inflight tracking
+> > git bisect good 386e4fb6962b9f248a80f8870aea0870ca603e89
+> > # good: [2d9ef940f89e0ab4fde7ba6f769d82f2a450c35a] Revert "printk: extend console_lock for per-console locking"
+> > git bisect good 2d9ef940f89e0ab4fde7ba6f769d82f2a450c35a
+> > # bad: [07a22b61946f0b80065b0ddcc703b715f84355f5] Revert "printk: add functions to prefer direct printing"
+> > git bisect bad 07a22b61946f0b80065b0ddcc703b715f84355f5
+> > # bad: [5831788afb17b89c5b531fb60cbd798613ccbb63] Revert "printk: add kthread console printers"
+> > git bisect bad 5831788afb17b89c5b531fb60cbd798613ccbb63
+> > # first bad commit: [5831788afb17b89c5b531fb60cbd798613ccbb63] Revert "printk: add kthread console printers"
+> > 
+> > On 5831788afb17 ("Revert "printk: add kthread console printers"") or on
+> > 07a22b61946f ("Revert "printk: add functions to prefer direct printing"")
+> > I was not able to reproduce the exact error conditions that I got on
+> > the current HEAD or any of the commits along my bisection, but instead I
+> > got something different [2]:
 > 
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
-> v4 changes)
->  * add a missing check in the off_cpu
+> This kind of problems became visible with introducing printk console
+> kthreads in 5.19-rc1. And it was actually the main reason why they
+> were reverted in 5.19-rc4.
 
-Thanks, applied.
+Right. I did notice that between rc1 & rc4 a lot of garbage messages
+as two printers "competed".
 
-- Arnaldo
-
- 
-> v3 changes)
->  * check compiler features for enum value
+> The mainline merge commits when they were introduced and reverted:
 > 
-> v2 changes)
->  * fix off_cpu.bpf.c too
->  * get perf_subsys_id only once
-> 
->  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
->  tools/perf/util/bpf_skel/off_cpu.bpf.c      | 18 ++++++++++++++----
->  2 files changed, 24 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> index 292c430768b5..8e7520e273db 100644
-> --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> @@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
->  
->  int enabled = 0;
->  int use_cgroup_v2 = 0;
-> +int perf_subsys_id = -1;
->  
->  static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->  {
-> @@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->  	int level;
->  	int cnt;
->  
-> -	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> +	if (perf_subsys_id == -1) {
-> +#if __has_builtin(__builtin_preserve_enum_value)
-> +		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-> +						     perf_event_cgrp_id);
-> +#else
-> +		perf_subsys_id = perf_event_cgrp_id;
-> +#endif
-> +	}
-> +	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
->  	level = BPF_CORE_READ(cgrp, level);
->  
->  	for (cnt = 0; i < MAX_LEVELS; i++) {
-> diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> index c4ba2bcf179f..38e3b287dbb2 100644
-> --- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> @@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
->  const volatile bool needs_cgroup = false;
->  const volatile bool uses_cgroup_v1 = false;
->  
-> +int perf_subsys_id = -1;
-> +
->  /*
->   * Old kernel used to call it task_struct->state and now it's '__state'.
->   * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-> @@ -119,11 +121,19 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
->  {
->  	struct cgroup *cgrp;
->  
-> -	if (uses_cgroup_v1)
-> -		cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> -	else
-> -		cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
-> +	if (!uses_cgroup_v1)
-> +		return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
-> +
-> +	if (perf_subsys_id == -1) {
-> +#if __has_builtin(__builtin_preserve_enum_value)
-> +		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-> +						     perf_event_cgrp_id);
-> +#else
-> +		perf_subsys_id = perf_event_cgrp_id;
-> +#endif
-> +	}
->  
-> +	cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
->  	return BPF_CORE_READ(cgrp, kn, id);
->  }
->  
-> -- 
-> 2.37.3.998.g577e59143f-goog
+> + introduced: commit 537e62c865dcb9b91 ("Merge tag 'printk-for-5.19'
+>   of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux")
 
--- 
+Prior to this my console behaved normally. After it, it started having
+the "competition" I mentioned above. Unfortunately I did not save any
+logs from this.
 
-- Arnaldo
+> + reverted: commit 9d882352bac8f2ff375 ("Merge tag 'printk-for-5.19-rc4'
+>   of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux
+
+After this commit is where the lockups started, I cannot reproduce it
+several dozens of reboots prior to v5.19-rc1. Maybe the behaviour was
+already there, but I cannot trigger any misbehaviour prior to v5.19-rc1.
+
+> The problem might happen when console write() callback is not properly
+> serialized against other operations on the same port. It might usually
+> happen even without the kthreads. But the kthreads significantly
+> increased the chance to hit the problem.
+> 
+> The best solution is to fix the console driver. So far, we
+> noticed two typical problems:
+> 
+> 1. Early console did not take port->lock. For example, see the commit
+>    589f892ac8ef244e47c5a0 ("serial: meson: acquire port->lock in startup()").
+
+If I don't have an early console, I lock up at "Starting kernel" & never
+get any output. Does that rule out the early console?
+> 
+> 2. Console driver expected that the write() callback would be called
+>    with IRQs disabled. For example, see the commit aabdbb1b7a5819e18
+>    ("serial: msm_serial: disable interrupts in __msm_console_write().
+
+I'll take a look at these I suppose & the new threaded printer stuff,
+and see if either makes a difference for me. Unfortunately, ~zero chance
+that I get anothing done prior to the merge window, but this is broken
+for me in v5.19 so I guess that makes no odds.
+
+I guess we should also sic regzbot on this thread so it does not get
+lost?
+
+Thanks,
+Conor.
