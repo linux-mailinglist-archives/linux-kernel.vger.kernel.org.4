@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E015E9E02
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589E45E9E03
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbiIZJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S233314AbiIZJj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbiIZJhq (ORCPT
+        with ESMTP id S234999AbiIZJhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 05:37:46 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893F2529D;
-        Mon, 26 Sep 2022 02:36:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VQkJzJn_1664185012;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VQkJzJn_1664185012)
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CD3E77E;
+        Mon, 26 Sep 2022 02:36:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VQjskeo_1664185014;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VQjskeo_1664185014)
           by smtp.aliyun-inc.com;
-          Mon, 26 Sep 2022 17:36:53 +0800
+          Mon, 26 Sep 2022 17:36:55 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -32,9 +32,9 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
         linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 15/16] crypto: arm64/sm4 - add CE implementation for GCM mode
-Date:   Mon, 26 Sep 2022 17:36:19 +0800
-Message-Id: <20220926093620.99898-16-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH 16/16] crypto: arm64/sm4 - add ARMv9 SVE cryptography acceleration implementation
+Date:   Mon, 26 Sep 2022 17:36:20 +0800
+Message-Id: <20220926093620.99898-17-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
 References: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
@@ -50,842 +50,1159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is a CE-optimized assembly implementation for GCM mode.
+Scalable Vector Extension (SVE) is the next-generation SIMD extension for
+arm64. SVE allows flexible vector length implementations with a range of
+possible values in CPU implementations. The vector length can vary from a
+minimum of 128 bits up to a maximum of 2048 bits, at 128-bit increments.
+The SVE design guarantees that the same application can run on different
+implementations that support SVE, without the need to recompile the code.
 
-Benchmark on T-Head Yitian-710 2.75 GHz, the data comes from the 224 and 224
-modes of tcrypt, and compared the performance before and after this patch (the
-driver used before this patch is gcm_base(ctr-sm4-ce,ghash-generic)).
-The abscissas are blocks of different lengths. The data is tabulated and the
+SVE was originally introduced by ARMv8, and ARMv9 introduced SVE2 to
+expand and improve it. Similar to the Crypto Extension supported by the
+NEON instruction set for the algorithm, SVE also supports the similar
+instructions, called cryptography acceleration instructions, but this is
+also optional instruction set.
+
+This patch uses SM4 cryptography acceleration instructions and SVE2
+instructions to optimize the SM4 algorithm for ECB/CBC/CFB/CTR modes.
+Since the encryption of CBC/CFB cannot be parallelized, the Crypto
+Extension instruction is used.
+
+Since no test environment with a Vector Length (VL) greater than 128 bits
+was found, the performance data was obtained on a machine with a VL is
+128 bits, because this driver is enabled when the VL is greater than 128
+bits, so this performance is only for reference. It can be seen from the
+data that there is little difference between the data optimized by Crypto
+Extension and SVE (VL=128 bits), and the optimization effect will be more
+obvious when VL=256 bits or longer.
+
+Benchmark on T-Head Yitian-710 2.75 GHz, the data comes from the 218 mode
+of tcrypt, and compared with that optimized by Crypto Extension.  The
+abscissas are blocks of different lengths. The data is tabulated and the
 unit is Mb/s:
 
-Before (gcm_base(ctr-sm4-ce,ghash-generic)):
+sm4-ce      |      16       64      128      256     1024     1420     4096
+------------+--------------------------------------------------------------
+    ECB enc |  315.18  1162.65  1815.66  2553.50  3692.91  3727.20  4001.93
+    ECB dec |  316.06  1172.97  1817.81  2554.66  3692.18  3786.54  4001.93
+    CBC enc |  304.82   629.54   768.65   864.72   953.90   963.32   974.06
+    CBC dec |  306.05  1142.53  1805.11  2481.67  3522.06  3587.87  3790.99
+    CFB enc |  309.48   635.70   774.44   865.85   950.62   952.68   968.24
+    CFB dec |  315.98  1170.38  1828.75  2509.72  3543.63  3539.40  3793.25
+    CTR enc |  285.83  1036.59  1583.50  2147.26  2933.54  2954.66  3041.14
+    CTR dec |  285.29  1037.47  1584.67  2145.51  2934.10  2950.89  3041.62
 
-gcm(sm4)     |     16      64      256      512     1024     1420     4096     8192
--------------+---------------------------------------------------------------------
-  GCM enc    |  25.24   64.65   104.66   116.69   123.81   125.12   129.67   130.62
-  GCM dec    |  25.40   64.80   104.74   116.70   123.81   125.21   129.68   130.59
-  GCM mb enc |  24.95   64.06   104.20   116.38   123.55   124.97   129.63   130.61
-  GCM mb dec |  24.92   64.00   104.13   116.34   123.55   124.98   129.56   130.48
-
-After:
-
-gcm-sm4-ce   |     16      64      256      512     1024     1420     4096     8192
--------------+---------------------------------------------------------------------
-  GCM enc    | 108.62  397.18   971.60  1283.92  1522.77  1513.39  1777.00  1806.96
-  GCM dec    | 116.36  398.14  1004.27  1319.11  1624.21  1635.43  1932.54  1974.20
-  GCM mb enc | 107.13  391.79   962.05  1274.94  1514.76  1508.57  1769.07  1801.58
-  GCM mb dec | 113.40  389.36   988.51  1307.68  1619.10  1631.55  1931.70  1970.86
+sm4-sve-ce (VL = 128 bits)
+    ECB enc |  310.00  1154.70  1813.26  2579.74  3766.90  3869.45  4100.26
+    ECB dec |  315.60  1176.22  1838.06  2593.69  3774.95  3878.42  4098.83
+    CBC enc |  303.44   622.65   764.67   861.40   953.18   963.05   973.77
+    CBC dec |  302.13  1091.15  1689.10  2267.79  3182.84  3242.68  3408.92
+    CFB enc |  296.62   620.41   762.94   858.96   948.18   956.04   967.67
+    CFB dec |  291.23  1065.50  1637.33  2228.12  3158.52  3213.35  3403.83
+    CTR enc |  272.27   959.35  1466.34  1934.24  2562.80  2595.87  2695.15
+    CTR dec |  273.40   963.65  1471.83  1938.97  2563.12  2597.25  2694.54
 
 Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- arch/arm64/crypto/Kconfig           |  16 +
- arch/arm64/crypto/Makefile          |   3 +
- arch/arm64/crypto/sm4-ce-gcm-core.S | 741 ++++++++++++++++++++++++++++
- arch/arm64/crypto/sm4-ce-gcm-glue.c | 286 +++++++++++
- 4 files changed, 1046 insertions(+)
- create mode 100644 arch/arm64/crypto/sm4-ce-gcm-core.S
- create mode 100644 arch/arm64/crypto/sm4-ce-gcm-glue.c
+ arch/arm64/crypto/Kconfig           |   19 +
+ arch/arm64/crypto/Makefile          |    3 +
+ arch/arm64/crypto/sm4-sve-ce-core.S | 1028 +++++++++++++++++++++++++++
+ arch/arm64/crypto/sm4-sve-ce-glue.c |  332 +++++++++
+ 4 files changed, 1382 insertions(+)
+ create mode 100644 arch/arm64/crypto/sm4-sve-ce-core.S
+ create mode 100644 arch/arm64/crypto/sm4-sve-ce-glue.c
 
 diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
-index 2611036a3e3f..6793d5bc3ee5 100644
+index 6793d5bc3ee5..bbb5a7a08af5 100644
 --- a/arch/arm64/crypto/Kconfig
 +++ b/arch/arm64/crypto/Kconfig
-@@ -297,6 +297,22 @@ config CRYPTO_SM4_ARM64_CE_CCM
+@@ -249,6 +249,25 @@ config CRYPTO_SM4_ARM64_CE_BLK
  	  - ARMv8 Crypto Extensions
  	  - NEON (Advanced SIMD) extensions
  
-+config CRYPTO_SM4_ARM64_CE_GCM
-+	tristate "AEAD cipher: SM4 in GCM mode (ARMv8 Crypto Extensions)"
++config CRYPTO_SM4_ARM64_SVE_CE_BLK
++	tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR (ARMv9 cryptography acceleration with SVE2)"
 +	depends on KERNEL_MODE_NEON
-+	select CRYPTO_ALGAPI
-+	select CRYPTO_AEAD
++	select CRYPTO_SKCIPHER
 +	select CRYPTO_SM4
 +	select CRYPTO_SM4_ARM64_CE_BLK
 +	help
-+	  AEAD cipher: SM4 cipher algorithms (OSCCA GB/T 32907-2016) with
-+	  GCM (Galois/Counter Mode) authenticated encryption mode (NIST SP800-38D)
++	  Length-preserving ciphers: SM4 cipher algorithms (OSCCA GB/T 32907-2016)
++	  with block cipher modes:
++	  - ECB (Electronic Codebook) mode (NIST SP800-38A)
++	  - CBC (Cipher Block Chaining) mode (NIST SP800-38A)
++	  - CFB (Cipher Feedback) mode (NIST SP800-38A)
++	  - CTR (Counter) mode (NIST SP800-38A)
 +
 +	  Architecture: arm64 using:
 +	  - ARMv8 Crypto Extensions
-+	  - PMULL (Polynomial Multiply Long) instructions
++	  - ARMv9 cryptography acceleration with SVE2
 +	  - NEON (Advanced SIMD) extensions
 +
- config CRYPTO_CRCT10DIF_ARM64_CE
- 	tristate "CRCT10DIF (PMULL)"
- 	depends on KERNEL_MODE_NEON && CRC_T10DIF
+ config CRYPTO_SM4_ARM64_NEON_BLK
+ 	tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR (NEON)"
+ 	depends on KERNEL_MODE_NEON
 diff --git a/arch/arm64/crypto/Makefile b/arch/arm64/crypto/Makefile
-index 843ea5266965..4818e204c2ac 100644
+index 4818e204c2ac..355dd9053434 100644
 --- a/arch/arm64/crypto/Makefile
 +++ b/arch/arm64/crypto/Makefile
-@@ -32,6 +32,9 @@ sm4-ce-y := sm4-ce-glue.o sm4-ce-core.o
- obj-$(CONFIG_CRYPTO_SM4_ARM64_CE_CCM) += sm4-ce-ccm.o
- sm4-ce-ccm-y := sm4-ce-ccm-glue.o sm4-ce-ccm-core.o
- 
-+obj-$(CONFIG_CRYPTO_SM4_ARM64_CE_GCM) += sm4-ce-gcm.o
-+sm4-ce-gcm-y := sm4-ce-gcm-glue.o sm4-ce-gcm-core.o
-+
+@@ -38,6 +38,9 @@ sm4-ce-gcm-y := sm4-ce-gcm-glue.o sm4-ce-gcm-core.o
  obj-$(CONFIG_CRYPTO_SM4_ARM64_NEON_BLK) += sm4-neon.o
  sm4-neon-y := sm4-neon-glue.o sm4-neon-core.o
  
-diff --git a/arch/arm64/crypto/sm4-ce-gcm-core.S b/arch/arm64/crypto/sm4-ce-gcm-core.S
++obj-$(CONFIG_CRYPTO_SM4_ARM64_SVE_CE_BLK) += sm4-sve-ce.o
++sm4-sve-ce-y := sm4-sve-ce-glue.o sm4-sve-ce-core.o
++
+ obj-$(CONFIG_CRYPTO_GHASH_ARM64_CE) += ghash-ce.o
+ ghash-ce-y := ghash-ce-glue.o ghash-ce-core.o
+ 
+diff --git a/arch/arm64/crypto/sm4-sve-ce-core.S b/arch/arm64/crypto/sm4-sve-ce-core.S
 new file mode 100644
-index 000000000000..7aa3ec18a289
+index 000000000000..caecbdf2536c
 --- /dev/null
-+++ b/arch/arm64/crypto/sm4-ce-gcm-core.S
-@@ -0,0 +1,741 @@
++++ b/arch/arm64/crypto/sm4-sve-ce-core.S
+@@ -0,0 +1,1028 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
-+ * SM4-GCM AEAD Algorithm using ARMv8 Crypto Extensions
-+ * as specified in rfc8998
-+ * https://datatracker.ietf.org/doc/html/rfc8998
++ * SM4 Cipher Algorithm for ARMv9 Crypto Extensions with SVE2
++ * as specified in
++ * https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
 + *
-+ * Copyright (C) 2016 Jussi Kivilinna <jussi.kivilinna@iki.fi>
++ * Copyright (C) 2022, Alibaba Group.
 + * Copyright (C) 2022 Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 + */
 +
 +#include <linux/linkage.h>
 +#include <asm/assembler.h>
-+#include "sm4-ce-asm.h"
 +
-+.arch	armv8-a+crypto
++.arch	armv8-a+crypto+sve+sve2
 +
-+.irp b, 0, 1, 2, 3, 24, 25, 26, 27, 28, 29, 30, 31
++.irp b, 0, 15, 24, 25, 26, 27, 28, 29, 30, 31
 +	.set .Lv\b\().4s, \b
++.endr
++
++.irp b, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, \
++		16, 24, 25, 26, 27, 28, 29, 30, 31
++	.set .Lz\b\().s, \b
 +.endr
 +
 +.macro sm4e, vd, vn
 +	.inst 0xcec08400 | (.L\vn << 5) | .L\vd
 +.endm
 +
++.macro sm4e_sve, zd, zn
++	.inst 0x4523e000 | (.L\zn << 5) | .L\zd
++.endm
++
++
 +/* Register macros */
 +
-+/* Used for both encryption and decryption */
-+#define	RHASH	v21
-+#define	RRCONST	v22
-+#define RZERO	v23
++#define RCTR        z16
++#define RCTRv       v16
++#define RIV         z16
++#define RIVv        v16
++#define RSWAP128    z17
++#define RZERO       z18
++#define RLE128_INC  z19
++
++#define RTMP0       z20
++#define RTMP0v      v20
++#define RTMP1       z21
++#define RTMP2       z22
++#define RTMP3       z23
++
 +
 +/* Helper macros. */
 +
-+/*
-+ * input: m0, m1
-+ * output: r0:r1 (low 128-bits in r0, high in r1)
-+ */
-+#define PMUL_128x128(r0, r1, m0, m1, T0, T1)			\
-+		ext		T0.16b, m1.16b, m1.16b, #8;	\
-+		pmull		r0.1q, m0.1d, m1.1d;		\
-+		pmull		T1.1q, m0.1d, T0.1d;		\
-+		pmull2		T0.1q, m0.2d, T0.2d;		\
-+		pmull2		r1.1q, m0.2d, m1.2d;		\
-+		eor		T0.16b, T0.16b, T1.16b;		\
-+		ext		T1.16b, RZERO.16b, T0.16b, #8;	\
-+		ext		T0.16b, T0.16b, RZERO.16b, #8;	\
-+		eor		r0.16b, r0.16b, T1.16b;		\
-+		eor		r1.16b, r1.16b, T0.16b;
++#define SM4_PREPARE(ptr)					\
++		adr_l		x7, .Lbswap128_mask;		\
++		ptrue		p0.b, ALL;			\
++		rdvl		x5, #1;				\
++		ld1b		{RSWAP128.b}, p0/z, [x7];	\
++								\
++		ld1		{v24.16b-v27.16b}, [ptr], #64;	\
++		ld1		{v28.16b-v31.16b}, [ptr];	\
++		dup		z24.q, z24.q[0];		\
++		dup		z25.q, z25.q[0];		\
++		dup		z26.q, z26.q[0];		\
++		dup		z27.q, z27.q[0];		\
++		dup		z28.q, z28.q[0];		\
++		dup		z29.q, z29.q[0];		\
++		dup		z30.q, z30.q[0];		\
++		dup		z31.q, z31.q[0];
 +
-+#define PMUL_128x128_4x(r0, r1, m0, m1, T0, T1,			\
-+			r2, r3, m2, m3, T2, T3,			\
-+			r4, r5, m4, m5, T4, T5,			\
-+			r6, r7, m6, m7, T6, T7)			\
-+		ext		T0.16b, m1.16b, m1.16b, #8;	\
-+		ext		T2.16b, m3.16b, m3.16b, #8;	\
-+		ext		T4.16b, m5.16b, m5.16b, #8;	\
-+		ext		T6.16b, m7.16b, m7.16b, #8;	\
-+		pmull		r0.1q, m0.1d, m1.1d;		\
-+		pmull		r2.1q, m2.1d, m3.1d;		\
-+		pmull		r4.1q, m4.1d, m5.1d;		\
-+		pmull		r6.1q, m6.1d, m7.1d;		\
-+		pmull		T1.1q, m0.1d, T0.1d;		\
-+		pmull		T3.1q, m2.1d, T2.1d;		\
-+		pmull		T5.1q, m4.1d, T4.1d;		\
-+		pmull		T7.1q, m6.1d, T6.1d;		\
-+		pmull2		T0.1q, m0.2d, T0.2d;		\
-+		pmull2		T2.1q, m2.2d, T2.2d;		\
-+		pmull2		T4.1q, m4.2d, T4.2d;		\
-+		pmull2		T6.1q, m6.2d, T6.2d;		\
-+		pmull2		r1.1q, m0.2d, m1.2d;		\
-+		pmull2		r3.1q, m2.2d, m3.2d;		\
-+		pmull2		r5.1q, m4.2d, m5.2d;		\
-+		pmull2		r7.1q, m6.2d, m7.2d;		\
-+		eor		T0.16b, T0.16b, T1.16b;		\
-+		eor		T2.16b, T2.16b, T3.16b;		\
-+		eor		T4.16b, T4.16b, T5.16b;		\
-+		eor		T6.16b, T6.16b, T7.16b;		\
-+		ext		T1.16b, RZERO.16b, T0.16b, #8;	\
-+		ext		T3.16b, RZERO.16b, T2.16b, #8;	\
-+		ext		T5.16b, RZERO.16b, T4.16b, #8;	\
-+		ext		T7.16b, RZERO.16b, T6.16b, #8;	\
-+		ext		T0.16b, T0.16b, RZERO.16b, #8;	\
-+		ext		T2.16b, T2.16b, RZERO.16b, #8;	\
-+		ext		T4.16b, T4.16b, RZERO.16b, #8;	\
-+		ext		T6.16b, T6.16b, RZERO.16b, #8;	\
-+		eor		r0.16b, r0.16b, T1.16b;		\
-+		eor		r2.16b, r2.16b, T3.16b; 	\
-+		eor		r4.16b, r4.16b, T5.16b; 	\
-+		eor		r6.16b, r6.16b, T7.16b; 	\
-+		eor		r1.16b, r1.16b, T0.16b; 	\
-+		eor		r3.16b, r3.16b, T2.16b; 	\
-+		eor		r5.16b, r5.16b, T4.16b; 	\
-+		eor		r7.16b, r7.16b, T6.16b;
++#define SM4_SVE_CE_CRYPT_BLK(b0)				\
++		revb		b0.s, p0/m, b0.s;		\
++		sm4e_sve	b0.s, z24.s;			\
++		sm4e_sve	b0.s, z25.s;			\
++		sm4e_sve	b0.s, z26.s;			\
++		sm4e_sve	b0.s, z27.s;			\
++		sm4e_sve	b0.s, z28.s;			\
++		sm4e_sve	b0.s, z29.s;			\
++		sm4e_sve	b0.s, z30.s;			\
++		sm4e_sve	b0.s, z31.s;			\
++		tbl		b0.b, {b0.b}, RSWAP128.b;	\
++		revb		b0.s, p0/m, b0.s;
 +
-+/*
-+ * input: r0:r1 (low 128-bits in r0, high in r1)
-+ * output: a
-+ */
-+#define REDUCTION(a, r0, r1, rconst, T0, T1)			\
-+		pmull2		T0.1q, r1.2d, rconst.2d;	\
-+		ext		T1.16b, T0.16b, RZERO.16b, #8;	\
-+		ext		T0.16b, RZERO.16b, T0.16b, #8;	\
-+		eor		r1.16b, r1.16b, T1.16b;		\
-+		eor		r0.16b, r0.16b, T0.16b;		\
-+		pmull		T0.1q, r1.1d, rconst.1d;	\
-+		eor		a.16b, r0.16b, T0.16b;
++#define SM4_SVE_CE_CRYPT_BLK4(b0, b1, b2, b3)			\
++		revb		b0.s, p0/m, b0.s;		\
++		revb		b1.s, p0/m, b1.s;		\
++		revb		b2.s, p0/m, b2.s;		\
++		revb		b3.s, p0/m, b3.s;		\
++		sm4e_sve	b0.s, z24.s;			\
++		sm4e_sve	b1.s, z24.s;			\
++		sm4e_sve	b2.s, z24.s;			\
++		sm4e_sve	b3.s, z24.s;			\
++		sm4e_sve	b0.s, z25.s;			\
++		sm4e_sve	b1.s, z25.s;			\
++		sm4e_sve	b2.s, z25.s;			\
++		sm4e_sve	b3.s, z25.s;			\
++		sm4e_sve	b0.s, z26.s;			\
++		sm4e_sve	b1.s, z26.s;			\
++		sm4e_sve	b2.s, z26.s;			\
++		sm4e_sve	b3.s, z26.s;			\
++		sm4e_sve	b0.s, z27.s;			\
++		sm4e_sve	b1.s, z27.s;			\
++		sm4e_sve	b2.s, z27.s;			\
++		sm4e_sve	b3.s, z27.s;			\
++		sm4e_sve	b0.s, z28.s;			\
++		sm4e_sve	b1.s, z28.s;			\
++		sm4e_sve	b2.s, z28.s;			\
++		sm4e_sve	b3.s, z28.s;			\
++		sm4e_sve	b0.s, z29.s;			\
++		sm4e_sve	b1.s, z29.s;			\
++		sm4e_sve	b2.s, z29.s;			\
++		sm4e_sve	b3.s, z29.s;			\
++		sm4e_sve	b0.s, z30.s;			\
++		sm4e_sve	b1.s, z30.s;			\
++		sm4e_sve	b2.s, z30.s;			\
++		sm4e_sve	b3.s, z30.s;			\
++		sm4e_sve	b0.s, z31.s;			\
++		sm4e_sve	b1.s, z31.s;			\
++		sm4e_sve	b2.s, z31.s;			\
++		sm4e_sve	b3.s, z31.s;			\
++		tbl		b0.b, {b0.b}, RSWAP128.b;	\
++		tbl		b1.b, {b1.b}, RSWAP128.b;	\
++		tbl		b2.b, {b2.b}, RSWAP128.b;	\
++		tbl		b3.b, {b3.b}, RSWAP128.b;	\
++		revb		b0.s, p0/m, b0.s;		\
++		revb		b1.s, p0/m, b1.s;		\
++		revb		b2.s, p0/m, b2.s;		\
++		revb		b3.s, p0/m, b3.s;
 +
-+#define SM4_CRYPT_PMUL_128x128_BLK(b0, r0, r1, m0, m1, T0, T1)	\
-+	rev32			b0.16b, b0.16b;			\
-+		ext		T0.16b, m1.16b, m1.16b, #8;	\
-+	sm4e			b0.4s, v24.4s;			\
-+		pmull		r0.1q, m0.1d, m1.1d;		\
-+	sm4e			b0.4s, v25.4s;			\
-+		pmull		T1.1q, m0.1d, T0.1d;		\
-+	sm4e			b0.4s, v26.4s;			\
-+		pmull2		T0.1q, m0.2d, T0.2d;		\
-+	sm4e			b0.4s, v27.4s;			\
-+		pmull2		r1.1q, m0.2d, m1.2d;		\
-+	sm4e			b0.4s, v28.4s;			\
-+		eor		T0.16b, T0.16b, T1.16b;		\
-+	sm4e			b0.4s, v29.4s;			\
-+		ext		T1.16b, RZERO.16b, T0.16b, #8;	\
-+	sm4e			b0.4s, v30.4s;			\
-+		ext		T0.16b, T0.16b, RZERO.16b, #8;	\
-+	sm4e			b0.4s, v31.4s;			\
-+		eor		r0.16b, r0.16b, T1.16b;		\
-+	rev64			b0.4s, b0.4s;			\
-+		eor		r1.16b, r1.16b, T0.16b;		\
-+	ext			b0.16b, b0.16b, b0.16b, #8;	\
-+	rev32			b0.16b, b0.16b;
++#define SM4_SVE_CE_CRYPT_BLK8(b0, b1, b2, b3, b4, b5, b6, b7)	\
++		revb		b0.s, p0/m, b0.s;		\
++		revb		b1.s, p0/m, b1.s;		\
++		revb		b2.s, p0/m, b2.s;		\
++		revb		b3.s, p0/m, b3.s;		\
++		revb		b4.s, p0/m, b4.s;		\
++		revb		b5.s, p0/m, b5.s;		\
++		revb		b6.s, p0/m, b6.s;		\
++		revb		b7.s, p0/m, b7.s;		\
++		sm4e_sve	b0.s, z24.s;			\
++		sm4e_sve	b1.s, z24.s;			\
++		sm4e_sve	b2.s, z24.s;			\
++		sm4e_sve	b3.s, z24.s;			\
++		sm4e_sve	b4.s, z24.s;			\
++		sm4e_sve	b5.s, z24.s;			\
++		sm4e_sve	b6.s, z24.s;			\
++		sm4e_sve	b7.s, z24.s;			\
++		sm4e_sve	b0.s, z25.s;			\
++		sm4e_sve	b1.s, z25.s;			\
++		sm4e_sve	b2.s, z25.s;			\
++		sm4e_sve	b3.s, z25.s;			\
++		sm4e_sve	b4.s, z25.s;			\
++		sm4e_sve	b5.s, z25.s;			\
++		sm4e_sve	b6.s, z25.s;			\
++		sm4e_sve	b7.s, z25.s;			\
++		sm4e_sve	b0.s, z26.s;			\
++		sm4e_sve	b1.s, z26.s;			\
++		sm4e_sve	b2.s, z26.s;			\
++		sm4e_sve	b3.s, z26.s;			\
++		sm4e_sve	b4.s, z26.s;			\
++		sm4e_sve	b5.s, z26.s;			\
++		sm4e_sve	b6.s, z26.s;			\
++		sm4e_sve	b7.s, z26.s;			\
++		sm4e_sve	b0.s, z27.s;			\
++		sm4e_sve	b1.s, z27.s;			\
++		sm4e_sve	b2.s, z27.s;			\
++		sm4e_sve	b3.s, z27.s;			\
++		sm4e_sve	b4.s, z27.s;			\
++		sm4e_sve	b5.s, z27.s;			\
++		sm4e_sve	b6.s, z27.s;			\
++		sm4e_sve	b7.s, z27.s;			\
++		sm4e_sve	b0.s, z28.s;			\
++		sm4e_sve	b1.s, z28.s;			\
++		sm4e_sve	b2.s, z28.s;			\
++		sm4e_sve	b3.s, z28.s;			\
++		sm4e_sve	b4.s, z28.s;			\
++		sm4e_sve	b5.s, z28.s;			\
++		sm4e_sve	b6.s, z28.s;			\
++		sm4e_sve	b7.s, z28.s;			\
++		sm4e_sve	b0.s, z29.s;			\
++		sm4e_sve	b1.s, z29.s;			\
++		sm4e_sve	b2.s, z29.s;			\
++		sm4e_sve	b3.s, z29.s;			\
++		sm4e_sve	b4.s, z29.s;			\
++		sm4e_sve	b5.s, z29.s;			\
++		sm4e_sve	b6.s, z29.s;			\
++		sm4e_sve	b7.s, z29.s;			\
++		sm4e_sve	b0.s, z30.s;			\
++		sm4e_sve	b1.s, z30.s;			\
++		sm4e_sve	b2.s, z30.s;			\
++		sm4e_sve	b3.s, z30.s;			\
++		sm4e_sve	b4.s, z30.s;			\
++		sm4e_sve	b5.s, z30.s;			\
++		sm4e_sve	b6.s, z30.s;			\
++		sm4e_sve	b7.s, z30.s;			\
++		sm4e_sve	b0.s, z31.s;			\
++		sm4e_sve	b1.s, z31.s;			\
++		sm4e_sve	b2.s, z31.s;			\
++		sm4e_sve	b3.s, z31.s;			\
++		sm4e_sve	b4.s, z31.s;			\
++		sm4e_sve	b5.s, z31.s;			\
++		sm4e_sve	b6.s, z31.s;			\
++		sm4e_sve	b7.s, z31.s;			\
++		tbl		b0.b, {b0.b}, RSWAP128.b;	\
++		tbl		b1.b, {b1.b}, RSWAP128.b;	\
++		tbl		b2.b, {b2.b}, RSWAP128.b;	\
++		tbl		b3.b, {b3.b}, RSWAP128.b;	\
++		tbl		b4.b, {b4.b}, RSWAP128.b;	\
++		tbl		b5.b, {b5.b}, RSWAP128.b;	\
++		tbl		b6.b, {b6.b}, RSWAP128.b;	\
++		tbl		b7.b, {b7.b}, RSWAP128.b;	\
++		revb		b0.s, p0/m, b0.s;		\
++		revb		b1.s, p0/m, b1.s;		\
++		revb		b2.s, p0/m, b2.s;		\
++		revb		b3.s, p0/m, b3.s;		\
++		revb		b4.s, p0/m, b4.s;		\
++		revb		b5.s, p0/m, b5.s;		\
++		revb		b6.s, p0/m, b6.s;		\
++		revb		b7.s, p0/m, b7.s;
 +
-+#define SM4_CRYPT_PMUL_128x128_BLK3(b0, b1, b2,			\
-+				    r0, r1, m0, m1, T0, T1,	\
-+				    r2, r3, m2, m3, T2, T3,	\
-+				    r4, r5, m4, m5, T4, T5)	\
-+	rev32			b0.16b, b0.16b;			\
-+	rev32			b1.16b, b1.16b;			\
-+	rev32			b2.16b, b2.16b;			\
-+		ext		T0.16b, m1.16b, m1.16b, #8;	\
-+		ext		T2.16b, m3.16b, m3.16b, #8;	\
-+		ext		T4.16b, m5.16b, m5.16b, #8;	\
-+	sm4e			b0.4s, v24.4s;			\
-+	sm4e			b1.4s, v24.4s;			\
-+	sm4e			b2.4s, v24.4s;			\
-+		pmull		r0.1q, m0.1d, m1.1d;		\
-+		pmull		r2.1q, m2.1d, m3.1d;		\
-+		pmull		r4.1q, m4.1d, m5.1d;		\
-+	sm4e			b0.4s, v25.4s;			\
-+	sm4e			b1.4s, v25.4s;			\
-+	sm4e			b2.4s, v25.4s;			\
-+		pmull		T1.1q, m0.1d, T0.1d;		\
-+		pmull		T3.1q, m2.1d, T2.1d;		\
-+		pmull		T5.1q, m4.1d, T4.1d;		\
-+	sm4e			b0.4s, v26.4s;			\
-+	sm4e			b1.4s, v26.4s;			\
-+	sm4e			b2.4s, v26.4s;			\
-+		pmull2		T0.1q, m0.2d, T0.2d;		\
-+		pmull2		T2.1q, m2.2d, T2.2d;		\
-+		pmull2		T4.1q, m4.2d, T4.2d;		\
-+	sm4e			b0.4s, v27.4s;			\
-+	sm4e			b1.4s, v27.4s;			\
-+	sm4e			b2.4s, v27.4s;			\
-+		pmull2		r1.1q, m0.2d, m1.2d;		\
-+		pmull2		r3.1q, m2.2d, m3.2d;		\
-+		pmull2		r5.1q, m4.2d, m5.2d;		\
-+	sm4e			b0.4s, v28.4s;			\
-+	sm4e			b1.4s, v28.4s;			\
-+	sm4e			b2.4s, v28.4s;			\
-+		eor		T0.16b, T0.16b, T1.16b;		\
-+		eor		T2.16b, T2.16b, T3.16b;		\
-+		eor		T4.16b, T4.16b, T5.16b;		\
-+	sm4e			b0.4s, v29.4s;			\
-+	sm4e			b1.4s, v29.4s;			\
-+	sm4e			b2.4s, v29.4s;			\
-+		ext		T1.16b, RZERO.16b, T0.16b, #8;	\
-+		ext		T3.16b, RZERO.16b, T2.16b, #8;	\
-+		ext		T5.16b, RZERO.16b, T4.16b, #8;	\
-+	sm4e			b0.4s, v30.4s;			\
-+	sm4e			b1.4s, v30.4s;			\
-+	sm4e			b2.4s, v30.4s;			\
-+		ext		T0.16b, T0.16b, RZERO.16b, #8;	\
-+		ext		T2.16b, T2.16b, RZERO.16b, #8;	\
-+		ext		T4.16b, T4.16b, RZERO.16b, #8;	\
-+	sm4e			b0.4s, v31.4s;			\
-+	sm4e			b1.4s, v31.4s;			\
-+	sm4e			b2.4s, v31.4s;			\
-+		eor		r0.16b, r0.16b, T1.16b;		\
-+		eor		r2.16b, r2.16b, T3.16b;		\
-+		eor		r4.16b, r4.16b, T5.16b;		\
-+	rev64			b0.4s, b0.4s;			\
-+	rev64			b1.4s, b1.4s;			\
-+	rev64			b2.4s, b2.4s;			\
-+		eor		r1.16b, r1.16b, T0.16b;		\
-+		eor		r3.16b, r3.16b, T2.16b;		\
-+		eor		r5.16b, r5.16b, T4.16b;		\
-+	ext			b0.16b, b0.16b, b0.16b, #8;	\
-+	ext			b1.16b, b1.16b, b1.16b, #8;	\
-+	ext			b2.16b, b2.16b, b2.16b, #8;	\
-+		eor		r0.16b, r0.16b, r2.16b;		\
-+		eor		r1.16b, r1.16b, r3.16b;		\
-+	rev32			b0.16b, b0.16b;			\
-+	rev32			b1.16b, b1.16b;			\
-+	rev32			b2.16b, b2.16b;			\
-+		eor		r0.16b, r0.16b, r4.16b;		\
-+		eor		r1.16b, r1.16b, r5.16b;
++#define SM4_CE_CRYPT_BLK(b0)					\
++		rev32		b0.16b, b0.16b;			\
++		sm4e		b0.4s, v24.4s;			\
++		sm4e		b0.4s, v25.4s;			\
++		sm4e		b0.4s, v26.4s;			\
++		sm4e		b0.4s, v27.4s;			\
++		sm4e		b0.4s, v28.4s;			\
++		sm4e		b0.4s, v29.4s;			\
++		sm4e		b0.4s, v30.4s;			\
++		sm4e		b0.4s, v31.4s;			\
++		rev64		b0.4s, b0.4s;			\
++		ext		b0.16b, b0.16b, b0.16b, #8;	\
++		rev32		b0.16b, b0.16b;
 +
-+#define inc32_le128(vctr)					\
-+		mov		vctr.d[1], x9;			\
-+		add		w6, w9, #1;			\
-+		mov		vctr.d[0], x8;			\
-+		bfi		x9, x6, #0, #32;		\
-+		rev64		vctr.16b, vctr.16b;
++#define inc_le128(zctr)						\
++		mov		RCTRv.d[1], x8;			\
++		mov		RCTRv.d[0], x7;			\
++		mov		zctr.d, RLE128_INC.d;		\
++		dup		RCTR.q, RCTR.q[0];		\
++		adds		x8, x8, x5, LSR #4;		\
++		adclt		zctr.d, RCTR.d, RZERO.d;	\
++		adclt		RCTR.d, zctr.d, RZERO.d;	\
++		adc		x7, x7, xzr;			\
++		trn1		zctr.d, RCTR.d, zctr.d;		\
++		revb		zctr.d, p0/m, zctr.d;
 +
-+#define GTAG_HASH_LENGTHS(vctr0, vlen)					\
-+		ld1		{vlen.16b}, [x7];			\
-+		/* construct CTR0 */					\
-+		/* the lower 32-bits of initial IV is always be32(1) */	\
-+		mov		x6, #0x1;				\
-+		bfi		x9, x6, #0, #32;			\
-+		mov		vctr0.d[0], x8;				\
-+		mov		vctr0.d[1], x9;				\
-+		rbit		vlen.16b, vlen.16b;			\
-+		rev64		vctr0.16b, vctr0.16b;			\
-+		/* authtag = GCTR(CTR0, GHASH) */			\
-+		eor		RHASH.16b, RHASH.16b, vlen.16b;		\
-+		SM4_CRYPT_PMUL_128x128_BLK(vctr0, RR0, RR1, RHASH, RH1,	\
-+					   RTMP0, RTMP1);		\
-+		REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3);	\
-+		rbit		RHASH.16b, RHASH.16b;			\
-+		eor		RHASH.16b, RHASH.16b, vctr0.16b;
++#define inc_le128_4x(zctr0, zctr1, zctr2, zctr3)		\
++		mov		v8.d[1], x8;			\
++		mov		v8.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr0.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v9.d[1], x8;			\
++		mov		v9.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr1.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v10.d[1], x8;			\
++		mov		v10.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr2.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v11.d[1], x8;			\
++		mov		v11.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr3.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		dup		z8.q, z8.q[0];			\
++		dup		z9.q, z9.q[0];			\
++		dup		z10.q, z10.q[0];		\
++		dup		z11.q, z11.q[0];		\
++		adclt		zctr0.d, z8.d, RZERO.d;		\
++		adclt		zctr1.d, z9.d, RZERO.d;		\
++		adclt		zctr2.d, z10.d, RZERO.d;	\
++		adclt		zctr3.d, z11.d, RZERO.d;	\
++		adclt		z8.d, zctr0.d, RZERO.d;		\
++		adclt		z9.d, zctr1.d, RZERO.d;		\
++		adclt		z10.d, zctr2.d, RZERO.d;	\
++		adclt		z11.d, zctr3.d, RZERO.d;	\
++		trn1		zctr0.d, z8.d, zctr0.d;		\
++		trn1		zctr1.d, z9.d, zctr1.d;		\
++		trn1		zctr2.d, z10.d, zctr2.d;	\
++		trn1		zctr3.d, z11.d, zctr3.d;	\
++		revb		zctr0.d, p0/m, zctr0.d;		\
++		revb		zctr1.d, p0/m, zctr1.d;		\
++		revb		zctr2.d, p0/m, zctr2.d;		\
++		revb		zctr3.d, p0/m, zctr3.d;
 +
++#define inc_le128_8x(zctr0, zctr1, zctr2, zctr3,		\
++		     zctr4, zctr5, zctr6, zctr7)		\
++		mov		v8.d[1], x8;			\
++		mov		v8.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr0.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v9.d[1], x8;			\
++		mov		v9.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr1.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v10.d[1], x8;			\
++		mov		v10.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr2.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v11.d[1], x8;			\
++		mov		v11.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr3.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v12.d[1], x8;			\
++		mov		v12.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr4.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v13.d[1], x8;			\
++		mov		v13.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr5.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v14.d[1], x8;			\
++		mov		v14.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr6.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		mov		v15.d[1], x8;			\
++		mov		v15.d[0], x7;			\
++		adds		x8, x8, x5, LSR #4;		\
++		mov		zctr7.d, RLE128_INC.d;		\
++		adc		x7, x7, xzr;			\
++		dup		z8.q, z8.q[0];			\
++		dup		z9.q, z9.q[0];			\
++		dup		z10.q, z10.q[0];		\
++		dup		z11.q, z11.q[0];		\
++		dup		z12.q, z12.q[0];		\
++		dup		z13.q, z13.q[0];		\
++		dup		z14.q, z14.q[0];		\
++		dup		z15.q, z15.q[0];		\
++		adclt		zctr0.d, z8.d, RZERO.d;		\
++		adclt		zctr1.d, z9.d, RZERO.d;		\
++		adclt		zctr2.d, z10.d, RZERO.d;	\
++		adclt		zctr3.d, z11.d, RZERO.d;	\
++		adclt		zctr4.d, z12.d, RZERO.d;	\
++		adclt		zctr5.d, z13.d, RZERO.d;	\
++		adclt		zctr6.d, z14.d, RZERO.d;	\
++		adclt		zctr7.d, z15.d, RZERO.d;	\
++		adclt		z8.d, zctr0.d, RZERO.d;		\
++		adclt		z9.d, zctr1.d, RZERO.d;		\
++		adclt		z10.d, zctr2.d, RZERO.d;	\
++		adclt		z11.d, zctr3.d, RZERO.d;	\
++		adclt		z12.d, zctr4.d, RZERO.d;	\
++		adclt		z13.d, zctr5.d, RZERO.d;	\
++		adclt		z14.d, zctr6.d, RZERO.d;	\
++		adclt		z15.d, zctr7.d, RZERO.d;	\
++		trn1		zctr0.d, z8.d, zctr0.d;		\
++		trn1		zctr1.d, z9.d, zctr1.d;		\
++		trn1		zctr2.d, z10.d, zctr2.d;	\
++		trn1		zctr3.d, z11.d, zctr3.d;	\
++		trn1		zctr4.d, z12.d, zctr4.d;	\
++		trn1		zctr5.d, z13.d, zctr5.d;	\
++		trn1		zctr6.d, z14.d, zctr6.d;	\
++		trn1		zctr7.d, z15.d, zctr7.d;	\
++		revb		zctr0.d, p0/m, zctr0.d;		\
++		revb		zctr1.d, p0/m, zctr1.d;		\
++		revb		zctr2.d, p0/m, zctr2.d;		\
++		revb		zctr3.d, p0/m, zctr3.d;		\
++		revb		zctr4.d, p0/m, zctr4.d;		\
++		revb		zctr5.d, p0/m, zctr5.d;		\
++		revb		zctr6.d, p0/m, zctr6.d;		\
++		revb		zctr7.d, p0/m, zctr7.d;
 +
-+/* Register macros for encrypt and ghash */
-+
-+/* can be the same as input v0-v3 */
-+#define	RR1	v0
-+#define	RR3	v1
-+#define	RR5	v2
-+#define	RR7	v3
-+
-+#define	RR0	v4
-+#define	RR2	v5
-+#define	RR4	v6
-+#define	RR6	v7
-+
-+#define RTMP0	v8
-+#define RTMP1	v9
-+#define RTMP2	v10
-+#define RTMP3	v11
-+#define RTMP4	v12
-+#define RTMP5	v13
-+#define RTMP6	v14
-+#define RTMP7	v15
-+
-+#define	RH1	v16
-+#define	RH2	v17
-+#define	RH3	v18
-+#define	RH4	v19
 +
 +.align 3
-+SYM_FUNC_START(sm4_ce_pmull_ghash_setup)
++SYM_FUNC_START(sm4_sve_ce_crypt)
 +	/* input:
 +	 *   x0: round key array, CTX
-+	 *   x1: ghash table
-+	 */
-+	SM4_PREPARE(x0)
-+
-+	adr_l		x2, .Lghash_rconst
-+	ld1r		{RRCONST.2d}, [x2]
-+
-+	eor		RZERO.16b, RZERO.16b, RZERO.16b
-+
-+	/* H = E(K, 0^128) */
-+	rev32		v0.16b, RZERO.16b
-+	SM4_CRYPT_BLK_BE(v0)
-+
-+	/* H ^ 1 */
-+	rbit		RH1.16b, v0.16b
-+
-+	/* H ^ 2 */
-+	PMUL_128x128(RR0, RR1, RH1, RH1, RTMP0, RTMP1)
-+	REDUCTION(RH2, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+	/* H ^ 3 */
-+	PMUL_128x128(RR0, RR1, RH2, RH1, RTMP0, RTMP1)
-+	REDUCTION(RH3, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+	/* H ^ 4 */
-+	PMUL_128x128(RR0, RR1, RH2, RH2, RTMP0, RTMP1)
-+	REDUCTION(RH4, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+	st1		{RH1.16b-RH4.16b}, [x1]
-+
-+	ret
-+SYM_FUNC_END(sm4_ce_pmull_ghash_setup)
-+
-+.align 3
-+SYM_FUNC_START(pmull_ghash_update)
-+	/* input:
-+	 *   x0: ghash table
-+	 *   x1: ghash result
++	 *   x1: dst
 +	 *   x2: src
 +	 *   w3: nblocks
 +	 */
-+	ld1		{RH1.16b-RH4.16b}, [x0]
++	uxtw		x3, w3
++	SM4_PREPARE(x0)
 +
-+	ld1		{RHASH.16b}, [x1]
-+	rbit		RHASH.16b, RHASH.16b
++.Lcrypt_loop_8x:
++	sub		x3, x3, x5, LSR #1		/* x3 - (8 * VL) */
++	tbnz		x3, #63, .Lcrypt_4x
 +
-+	adr_l		x4, .Lghash_rconst
-+	ld1r		{RRCONST.2d}, [x4]
++	ld1b		{z0.b}, p0/z, [x2]
++	ld1b		{z1.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z2.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z3.b}, p0/z, [x2, #3, MUL VL]
++	ld1b		{z4.b}, p0/z, [x2, #4, MUL VL]
++	ld1b		{z5.b}, p0/z, [x2, #5, MUL VL]
++	ld1b		{z6.b}, p0/z, [x2, #6, MUL VL]
++	ld1b		{z7.b}, p0/z, [x2, #7, MUL VL]
 +
-+	eor		RZERO.16b, RZERO.16b, RZERO.16b
++	SM4_SVE_CE_CRYPT_BLK8(z0, z1, z2, z3, z4, z5, z6, z7)
 +
-+.Lghash_loop_4x:
-+	cmp		w3, #4
-+	blt		.Lghash_loop_1x
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++	st1b		{z4.b}, p0, [x1, #4, MUL VL]
++	st1b		{z5.b}, p0, [x1, #5, MUL VL]
++	st1b		{z6.b}, p0, [x1, #6, MUL VL]
++	st1b		{z7.b}, p0, [x1, #7, MUL VL]
 +
-+	sub		w3, w3, #4
++	addvl		x2, x2, #8
++	addvl		x1, x1, #8
 +
-+	ld1		{v0.16b-v3.16b}, [x2], #64
++	cbz		x3, .Lcrypt_end
++	b		.Lcrypt_loop_8x
 +
-+	rbit		v0.16b, v0.16b
-+	rbit		v1.16b, v1.16b
-+	rbit		v2.16b, v2.16b
-+	rbit		v3.16b, v3.16b
++.Lcrypt_4x:
++	add		x3, x3, x5, LSR #1
++	cmp		x3, x5, LSR #2
++	blt		.Lcrypt_loop_1x
 +
-+	/*
-+	 * (in0 ^ HASH) * H^4 => rr0:rr1
-+	 * (in1)        * H^3 => rr2:rr3
-+	 * (in2)        * H^2 => rr4:rr5
-+	 * (in3)        * H^1 => rr6:rr7
-+	 */
-+	eor		RHASH.16b, RHASH.16b, v0.16b
++	sub		x3, x3, x5, LSR #2		/* x3 - (4 * VL) */
 +
-+	PMUL_128x128_4x(RR0, RR1, RHASH, RH4, RTMP0, RTMP1,
-+			RR2, RR3, v1, RH3, RTMP2, RTMP3,
-+			RR4, RR5, v2, RH2, RTMP4, RTMP5,
-+			RR6, RR7, v3, RH1, RTMP6, RTMP7)
++	ld1b		{z0.b}, p0/z, [x2]
++	ld1b		{z1.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z2.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z3.b}, p0/z, [x2, #3, MUL VL]
 +
-+	eor		RR0.16b, RR0.16b, RR2.16b
-+	eor		RR1.16b, RR1.16b, RR3.16b
-+	eor		RR0.16b, RR0.16b, RR4.16b
-+	eor		RR1.16b, RR1.16b, RR5.16b
-+	eor		RR0.16b, RR0.16b, RR6.16b
-+	eor		RR1.16b, RR1.16b, RR7.16b
++	SM4_SVE_CE_CRYPT_BLK4(z0, z1, z2, z3)
 +
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP0, RTMP1)
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
 +
-+	cbz		w3, .Lghash_end
-+	b		.Lghash_loop_4x
++	addvl		x2, x2, #4
++	addvl		x1, x1, #4
 +
-+.Lghash_loop_1x:
-+	sub		w3, w3, #1
++	cbz		x3, .Lcrypt_end
++
++.Lcrypt_loop_1x:
++	cmp		x3, x5, LSR #4
++	blt		.Lcrypt_ce_loop_1x
++
++	sub		x3, x3, x5, LSR #4		/* x3 - VL */
++
++	ld1b		{z0.b}, p0/z, [x2]
++
++	SM4_SVE_CE_CRYPT_BLK(z0)
++
++	st1b		{z0.b}, p0, [x1]
++
++	addvl		x2, x2, #1
++	addvl		x1, x1, #1
++
++	cbz		x3, .Lcrypt_end
++	b		.Lcrypt_loop_1x
++
++.Lcrypt_ce_loop_1x:
++	sub		x3, x3, #1
 +
 +	ld1		{v0.16b}, [x2], #16
-+	rbit		v0.16b, v0.16b
-+	eor		RHASH.16b, RHASH.16b, v0.16b
++	SM4_CE_CRYPT_BLK(v0)
++	st1		{v0.16b}, [x1], #16
 +
-+	PMUL_128x128(RR0, RR1, RHASH, RH1, RTMP0, RTMP1)
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3)
++	cbnz		x3, .Lcrypt_ce_loop_1x
 +
-+	cbnz		w3, .Lghash_loop_1x
-+
-+.Lghash_end:
-+	rbit		RHASH.16b, RHASH.16b
-+	st1		{RHASH.2d}, [x1]
-+
++.Lcrypt_end:
 +	ret
-+SYM_FUNC_END(pmull_ghash_update)
++SYM_FUNC_END(sm4_sve_ce_crypt)
 +
 +.align 3
-+SYM_FUNC_START(sm4_ce_pmull_gcm_enc)
++SYM_FUNC_START(sm4_sve_ce_cbc_dec)
++	/* input:
++	 *   x0: round key array, CTX
++	 *   x1: dst
++	 *   x2: src
++	 *   x3: iv (big endian, 128 bit)
++	 *   w4: nblocks
++	 */
++	uxtw		x4, w4
++	SM4_PREPARE(x0)
++
++	ld1		{RIVv.16b}, [x3]
++	ext		RIV.b, RIV.b, RIV.b, #16
++
++.Lcbc_dec_loop_8x:
++	sub		x4, x4, x5, LSR #1		/* x4 - (8 * VL) */
++	tbnz		x4, #63, .Lcbc_dec_4x
++
++	ld1b		{z15.b}, p0/z, [x2]
++	ld1b		{z14.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z13.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z12.b}, p0/z, [x2, #3, MUL VL]
++	ld1b		{z11.b}, p0/z, [x2, #4, MUL VL]
++	ld1b		{z10.b}, p0/z, [x2, #5, MUL VL]
++	ld1b		{z9.b}, p0/z, [x2, #6, MUL VL]
++	ld1b		{z8.b}, p0/z, [x2, #7, MUL VL]
++	rev		z0.b, z15.b
++	rev		z1.b, z14.b
++	rev		z2.b, z13.b
++	rev		z3.b, z12.b
++	rev		z4.b, z11.b
++	rev		z5.b, z10.b
++	rev		z6.b, z9.b
++	rev		z7.b, z8.b
++	rev		RTMP0.b, RIV.b
++	ext		z7.b, z7.b, z6.b, #16
++	ext		z6.b, z6.b, z5.b, #16
++	ext		z5.b, z5.b, z4.b, #16
++	ext		z4.b, z4.b, z3.b, #16
++	ext		z3.b, z3.b, z2.b, #16
++	ext		z2.b, z2.b, z1.b, #16
++	ext		z1.b, z1.b, z0.b, #16
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z7.b, z7.b
++	rev		z6.b, z6.b
++	rev		z5.b, z5.b
++	rev		z4.b, z4.b
++	rev		z3.b, z3.b
++	rev		z2.b, z2.b
++	rev		z1.b, z1.b
++	rev		z0.b, z0.b
++	mov		RIV.d, z8.d
++
++	SM4_SVE_CE_CRYPT_BLK8(z15, z14, z13, z12, z11, z10, z9, z8)
++
++	eor		z0.d, z0.d, z15.d
++	eor		z1.d, z1.d, z14.d
++	eor		z2.d, z2.d, z13.d
++	eor		z3.d, z3.d, z12.d
++	eor		z4.d, z4.d, z11.d
++	eor		z5.d, z5.d, z10.d
++	eor		z6.d, z6.d, z9.d
++	eor		z7.d, z7.d, z8.d
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++	st1b		{z4.b}, p0, [x1, #4, MUL VL]
++	st1b		{z5.b}, p0, [x1, #5, MUL VL]
++	st1b		{z6.b}, p0, [x1, #6, MUL VL]
++	st1b		{z7.b}, p0, [x1, #7, MUL VL]
++
++	addvl		x2, x2, #8
++	addvl		x1, x1, #8
++
++	cbz		x4, .Lcbc_dec_end
++	b		.Lcbc_dec_loop_8x
++
++.Lcbc_dec_4x:
++	add		x4, x4, x5, LSR #1
++	cmp		x4, x5, LSR #2
++	blt		.Lcbc_dec_loop_1x
++
++	sub		x4, x4, x5, LSR #2		/* x4 - (4 * VL) */
++
++	ld1b		{z15.b}, p0/z, [x2]
++	ld1b		{z14.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z13.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z12.b}, p0/z, [x2, #3, MUL VL]
++	rev		z0.b, z15.b
++	rev		z1.b, z14.b
++	rev		z2.b, z13.b
++	rev		z3.b, z12.b
++	rev		RTMP0.b, RIV.b
++	ext		z3.b, z3.b, z2.b, #16
++	ext		z2.b, z2.b, z1.b, #16
++	ext		z1.b, z1.b, z0.b, #16
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z3.b, z3.b
++	rev		z2.b, z2.b
++	rev		z1.b, z1.b
++	rev		z0.b, z0.b
++	mov		RIV.d, z12.d
++
++	SM4_SVE_CE_CRYPT_BLK4(z15, z14, z13, z12)
++
++	eor		z0.d, z0.d, z15.d
++	eor		z1.d, z1.d, z14.d
++	eor		z2.d, z2.d, z13.d
++	eor		z3.d, z3.d, z12.d
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++
++	addvl		x2, x2, #4
++	addvl		x1, x1, #4
++
++	cbz		x4, .Lcbc_dec_end
++
++.Lcbc_dec_loop_1x:
++	cmp		x4, x5, LSR #4
++	blt		.Lcbc_dec_ce
++
++	sub		x4, x4, x5, LSR #4		/* x4 - VL */
++
++	ld1b		{z15.b}, p0/z, [x2]
++	rev		RTMP0.b, RIV.b
++	rev		z0.b, z15.b
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z0.b, z0.b
++	mov		RIV.d, z15.d
++
++	SM4_SVE_CE_CRYPT_BLK(z15)
++
++	eor		z0.d, z0.d, z15.d
++	st1b		{z0.b}, p0, [x1]
++
++	addvl		x2, x2, #1
++	addvl		x1, x1, #1
++
++	cbz		x4, .Lcbc_dec_end
++	b		.Lcbc_dec_loop_1x
++
++.Lcbc_dec_ce:
++	rev		RIV.s, RIV.s
++	tbl		RIV.b, {RIV.b}, RSWAP128.b
++
++.Lcbc_dec_ce_loop_1x:
++	sub		x4, x4, #1
++
++	ld1		{v15.16b}, [x2], #16
++	mov		v0.16b, RIVv.16b
++	mov		RIVv.16b, v15.16b
++	SM4_CE_CRYPT_BLK(v15)
++	eor		v0.16b, v0.16b, v15.16b
++	st1		{v0.16b}, [x1], #16
++
++	cbnz		x4, .Lcbc_dec_ce_loop_1x
++
++	ext		RIV.b, RIV.b, RIV.b, #16
++
++.Lcbc_dec_end:
++	/* store new IV */
++	rev		RIV.s, RIV.s
++	tbl		RIV.b, {RIV.b}, RSWAP128.b
++	st1		{RIVv.16b}, [x3]
++
++	ret
++SYM_FUNC_END(sm4_sve_ce_cbc_dec)
++
++.align 3
++SYM_FUNC_START(sm4_sve_ce_cfb_dec)
++	/* input:
++	 *   x0: round key array, CTX
++	 *   x1: dst
++	 *   x2: src
++	 *   x3: iv (big endian, 128 bit)
++	 *   w4: nblocks
++	 */
++	uxtw		x4, w4
++	SM4_PREPARE(x0)
++
++	ld1		{RIVv.16b}, [x3]
++	ext		RIV.b, RIV.b, RIV.b, #16
++
++.Lcfb_dec_loop_8x:
++	sub		x4, x4, x5, LSR #1		/* x4 - (8 * VL) */
++	tbnz		x4, #63, .Lcfb_dec_4x
++
++	ld1b		{z15.b}, p0/z, [x2]
++	ld1b		{z14.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z13.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z12.b}, p0/z, [x2, #3, MUL VL]
++	ld1b		{z11.b}, p0/z, [x2, #4, MUL VL]
++	ld1b		{z10.b}, p0/z, [x2, #5, MUL VL]
++	ld1b		{z9.b}, p0/z, [x2, #6, MUL VL]
++	ld1b		{z8.b}, p0/z, [x2, #7, MUL VL]
++	rev		z0.b, z15.b
++	rev		z1.b, z14.b
++	rev		z2.b, z13.b
++	rev		z3.b, z12.b
++	rev		z4.b, z11.b
++	rev		z5.b, z10.b
++	rev		z6.b, z9.b
++	rev		z7.b, z8.b
++	rev		RTMP0.b, RIV.b
++	ext		z7.b, z7.b, z6.b, #16
++	ext		z6.b, z6.b, z5.b, #16
++	ext		z5.b, z5.b, z4.b, #16
++	ext		z4.b, z4.b, z3.b, #16
++	ext		z3.b, z3.b, z2.b, #16
++	ext		z2.b, z2.b, z1.b, #16
++	ext		z1.b, z1.b, z0.b, #16
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z7.b, z7.b
++	rev		z6.b, z6.b
++	rev		z5.b, z5.b
++	rev		z4.b, z4.b
++	rev		z3.b, z3.b
++	rev		z2.b, z2.b
++	rev		z1.b, z1.b
++	rev		z0.b, z0.b
++	mov		RIV.d, z8.d
++
++	SM4_SVE_CE_CRYPT_BLK8(z0, z1, z2, z3, z4, z5, z6, z7)
++
++	eor		z0.d, z0.d, z15.d
++	eor		z1.d, z1.d, z14.d
++	eor		z2.d, z2.d, z13.d
++	eor		z3.d, z3.d, z12.d
++	eor		z4.d, z4.d, z11.d
++	eor		z5.d, z5.d, z10.d
++	eor		z6.d, z6.d, z9.d
++	eor		z7.d, z7.d, z8.d
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++	st1b		{z4.b}, p0, [x1, #4, MUL VL]
++	st1b		{z5.b}, p0, [x1, #5, MUL VL]
++	st1b		{z6.b}, p0, [x1, #6, MUL VL]
++	st1b		{z7.b}, p0, [x1, #7, MUL VL]
++
++	addvl		x2, x2, #8
++	addvl		x1, x1, #8
++
++	cbz		x4, .Lcfb_dec_end
++	b		.Lcfb_dec_loop_8x
++
++.Lcfb_dec_4x:
++	add		x4, x4, x5, LSR #1
++	cmp		x4, x5, LSR #2
++	blt		.Lcfb_dec_loop_1x
++
++	sub		x4, x4, x5, LSR #2		/* x4 - (4 * VL) */
++
++	ld1b		{z15.b}, p0/z, [x2]
++	ld1b		{z14.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z13.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z12.b}, p0/z, [x2, #3, MUL VL]
++	rev		z0.b, z15.b
++	rev		z1.b, z14.b
++	rev		z2.b, z13.b
++	rev		z3.b, z12.b
++	rev		RTMP0.b, RIV.b
++	ext		z3.b, z3.b, z2.b, #16
++	ext		z2.b, z2.b, z1.b, #16
++	ext		z1.b, z1.b, z0.b, #16
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z3.b, z3.b
++	rev		z2.b, z2.b
++	rev		z1.b, z1.b
++	rev		z0.b, z0.b
++	mov		RIV.d, z12.d
++
++	SM4_SVE_CE_CRYPT_BLK4(z0, z1, z2, z3)
++
++	eor		z0.d, z0.d, z15.d
++	eor		z1.d, z1.d, z14.d
++	eor		z2.d, z2.d, z13.d
++	eor		z3.d, z3.d, z12.d
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++
++	addvl		x2, x2, #4
++	addvl		x1, x1, #4
++
++	cbz		x4, .Lcfb_dec_end
++
++.Lcfb_dec_loop_1x:
++	cmp		x4, x5, LSR #4
++	blt		.Lcfb_dec_ce
++
++	sub		x4, x4, x5, LSR #4		/* x4 - VL */
++
++	ld1b		{z15.b}, p0/z, [x2]
++	rev		RTMP0.b, RIV.b
++	rev		z0.b, z15.b
++	ext		z0.b, z0.b, RTMP0.b, #16
++	rev		z0.b, z0.b
++	mov		RIV.d, z15.d
++
++	SM4_SVE_CE_CRYPT_BLK(z0)
++
++	eor		z0.d, z0.d, z15.d
++	st1b		{z0.b}, p0, [x1]
++
++	addvl		x2, x2, #1
++	addvl		x1, x1, #1
++
++	cbz		x4, .Lcfb_dec_end
++	b		.Lcfb_dec_loop_1x
++
++.Lcfb_dec_ce:
++	rev		RIV.s, RIV.s
++	tbl		RIV.b, {RIV.b}, RSWAP128.b
++
++.Lcfb_dec_ce_loop_1x:
++	sub		x4, x4, #1
++
++	ld1		{v15.16b}, [x2], #16
++	mov		v0.16b, RIVv.16b
++	mov		RIVv.16b, v15.16b
++	SM4_CE_CRYPT_BLK(v0)
++	eor		v0.16b, v0.16b, v15.16b
++	st1		{v0.16b}, [x1], #16
++
++	cbnz		x4, .Lcfb_dec_ce_loop_1x
++
++	ext		RIV.b, RIV.b, RIV.b, #16
++
++.Lcfb_dec_end:
++	/* store new IV */
++	rev		RIV.s, RIV.s
++	tbl		RIV.b, {RIV.b}, RSWAP128.b
++	st1		{RIVv.16b}, [x3]
++
++	ret
++SYM_FUNC_END(sm4_sve_ce_cfb_dec)
++
++.align 3
++SYM_FUNC_START(sm4_sve_ce_ctr_crypt)
 +	/* input:
 +	 *   x0: round key array, CTX
 +	 *   x1: dst
 +	 *   x2: src
 +	 *   x3: ctr (big endian, 128 bit)
-+	 *   w4: nbytes
-+	 *   x5: ghash result
-+	 *   x6: ghash table
-+	 *   x7: lengths (only for last block)
++	 *   w4: nblocks
 +	 */
++	uxtw		x4, w4
 +	SM4_PREPARE(x0)
 +
-+	ldp		x8, x9, [x3]
++	dup		RZERO.d, #0
++	adr_l		x6, .Lle128_inc
++	ld1b		{RLE128_INC.b}, p0/z, [x6]
++
++	ldp		x7, x8, [x3]
++	rev		x7, x7
 +	rev		x8, x8
-+	rev		x9, x9
 +
-+	ld1		{RH1.16b-RH4.16b}, [x6]
++.Lctr_loop_8x:
++	sub		x4, x4, x5, LSR #1		/* x4 - (8 * VL) */
++	tbnz		x4, #63, .Lctr_4x
 +
-+	ld1		{RHASH.16b}, [x5]
-+	rbit		RHASH.16b, RHASH.16b
++	inc_le128_8x(z0, z1, z2, z3, z4, z5, z6, z7)
 +
-+	adr_l		x6, .Lghash_rconst
-+	ld1r		{RRCONST.2d}, [x6]
++	ld1b		{z8.b}, p0/z, [x2]
++	ld1b		{z9.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z10.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z11.b}, p0/z, [x2, #3, MUL VL]
++	ld1b		{z12.b}, p0/z, [x2, #4, MUL VL]
++	ld1b		{z13.b}, p0/z, [x2, #5, MUL VL]
++	ld1b		{z14.b}, p0/z, [x2, #6, MUL VL]
++	ld1b		{z15.b}, p0/z, [x2, #7, MUL VL]
 +
-+	eor		RZERO.16b, RZERO.16b, RZERO.16b
++	SM4_SVE_CE_CRYPT_BLK8(z0, z1, z2, z3, z4, z5, z6, z7)
 +
-+	cbz		w4, .Lgcm_enc_hash_len
++	eor		z0.d, z0.d, z8.d
++	eor		z1.d, z1.d, z9.d
++	eor		z2.d, z2.d, z10.d
++	eor		z3.d, z3.d, z11.d
++	eor		z4.d, z4.d, z12.d
++	eor		z5.d, z5.d, z13.d
++	eor		z6.d, z6.d, z14.d
++	eor		z7.d, z7.d, z15.d
 +
-+.Lgcm_enc_loop_4x:
-+	cmp		w4, #(4 * 16)
-+	blt		.Lgcm_enc_loop_1x
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
++	st1b		{z4.b}, p0, [x1, #4, MUL VL]
++	st1b		{z5.b}, p0, [x1, #5, MUL VL]
++	st1b		{z6.b}, p0, [x1, #6, MUL VL]
++	st1b		{z7.b}, p0, [x1, #7, MUL VL]
 +
-+	sub		w4, w4, #(4 * 16)
++	addvl		x2, x2, #8
++	addvl		x1, x1, #8
 +
-+	/* construct CTRs */
-+	inc32_le128(v0)			/* +0 */
-+	inc32_le128(v1)			/* +1 */
-+	inc32_le128(v2)			/* +2 */
-+	inc32_le128(v3)			/* +3 */
++	cbz		x4, .Lctr_end
++	b		.Lctr_loop_8x
 +
-+	ld1		{RTMP0.16b-RTMP3.16b}, [x2], #64
++.Lctr_4x:
++	add		x4, x4, x5, LSR #1
++	cmp		x4, x5, LSR #2
++	blt		.Lctr_loop_1x
 +
-+	SM4_CRYPT_BLK4(v0, v1, v2, v3)
++	sub		x4, x4, x5, LSR #2		/* x4 - (4 * VL) */
 +
-+	eor		v0.16b, v0.16b, RTMP0.16b
-+	eor		v1.16b, v1.16b, RTMP1.16b
-+	eor		v2.16b, v2.16b, RTMP2.16b
-+	eor		v3.16b, v3.16b, RTMP3.16b
-+	st1		{v0.16b-v3.16b}, [x1], #64
++	inc_le128_4x(z0, z1, z2, z3)
 +
-+	/* ghash update */
++	ld1b		{z8.b}, p0/z, [x2]
++	ld1b		{z9.b}, p0/z, [x2, #1, MUL VL]
++	ld1b		{z10.b}, p0/z, [x2, #2, MUL VL]
++	ld1b		{z11.b}, p0/z, [x2, #3, MUL VL]
 +
-+	rbit		v0.16b, v0.16b
-+	rbit		v1.16b, v1.16b
-+	rbit		v2.16b, v2.16b
-+	rbit		v3.16b, v3.16b
++	SM4_SVE_CE_CRYPT_BLK4(z0, z1, z2, z3)
 +
-+	/*
-+	 * (in0 ^ HASH) * H^4 => rr0:rr1
-+	 * (in1)        * H^3 => rr2:rr3
-+	 * (in2)        * H^2 => rr4:rr5
-+	 * (in3)        * H^1 => rr6:rr7
-+	 */
-+	eor		RHASH.16b, RHASH.16b, v0.16b
++	eor		z0.d, z0.d, z8.d
++	eor		z1.d, z1.d, z9.d
++	eor		z2.d, z2.d, z10.d
++	eor		z3.d, z3.d, z11.d
 +
-+	PMUL_128x128_4x(RR0, RR1, RHASH, RH4, RTMP0, RTMP1,
-+			RR2, RR3, v1, RH3, RTMP2, RTMP3,
-+			RR4, RR5, v2, RH2, RTMP4, RTMP5,
-+			RR6, RR7, v3, RH1, RTMP6, RTMP7)
++	st1b		{z0.b}, p0, [x1]
++	st1b		{z1.b}, p0, [x1, #1, MUL VL]
++	st1b		{z2.b}, p0, [x1, #2, MUL VL]
++	st1b		{z3.b}, p0, [x1, #3, MUL VL]
 +
-+	eor		RR0.16b, RR0.16b, RR2.16b
-+	eor		RR1.16b, RR1.16b, RR3.16b
-+	eor		RR0.16b, RR0.16b, RR4.16b
-+	eor		RR1.16b, RR1.16b, RR5.16b
-+	eor		RR0.16b, RR0.16b, RR6.16b
-+	eor		RR1.16b, RR1.16b, RR7.16b
++	addvl		x2, x2, #4
++	addvl		x1, x1, #4
 +
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP0, RTMP1)
++	cbz		x4, .Lctr_end
 +
-+	cbz		w4, .Lgcm_enc_hash_len
-+	b		.Lgcm_enc_loop_4x
++.Lctr_loop_1x:
++	cmp		x4, x5, LSR #4
++	blt		.Lctr_ce_loop_1x
 +
-+.Lgcm_enc_loop_1x:
-+	cmp		w4, #16
-+	blt		.Lgcm_enc_tail
++	sub		x4, x4, x5, LSR #4		/* x4 - VL */
 +
-+	sub		w4, w4, #16
++	inc_le128(z0)
++	ld1b		{z8.b}, p0/z, [x2]
 +
-+	/* construct CTRs */
-+	inc32_le128(v0)
++	SM4_SVE_CE_CRYPT_BLK(z0)
 +
-+	ld1		{RTMP0.16b}, [x2], #16
++	eor		z0.d, z0.d, z8.d
++	st1b		{z0.b}, p0, [x1]
 +
-+	SM4_CRYPT_BLK(v0)
++	addvl		x2, x2, #1
++	addvl		x1, x1, #1
 +
-+	eor		v0.16b, v0.16b, RTMP0.16b
++	cbz		x4, .Lctr_end
++	b		.Lctr_loop_1x
++
++.Lctr_ce_loop_1x:
++	sub		x4, x4, #1
++
++	/* inc_le128 for CE */
++	mov		v0.d[1], x8
++	mov		v0.d[0], x7
++	adds		x8, x8, #1
++	rev64		v0.16b, v0.16b
++	adc		x7, x7, xzr
++
++	ld1		{v8.16b}, [x2], #16
++
++	SM4_CE_CRYPT_BLK(v0)
++
++	eor		v0.16b, v0.16b, v8.16b
 +	st1		{v0.16b}, [x1], #16
 +
-+	/* ghash update */
-+	rbit		v0.16b, v0.16b
-+	eor		RHASH.16b, RHASH.16b, v0.16b
-+	PMUL_128x128(RR0, RR1, RHASH, RH1, RTMP0, RTMP1)
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3)
++	cbnz		x4, .Lctr_ce_loop_1x
 +
-+	cbz		w4, .Lgcm_enc_hash_len
-+	b		.Lgcm_enc_loop_1x
-+
-+.Lgcm_enc_tail:
-+	/* construct CTRs */
-+	inc32_le128(v0)
-+	SM4_CRYPT_BLK(v0)
-+
-+	/* load permute table */
-+	adr_l		x0, .Lcts_permute_table
-+	add		x0, x0, #32
-+	sub		x0, x0, w4, uxtw
-+	ld1		{v3.16b}, [x0]
-+
-+.Lgcm_enc_tail_loop:
-+	/* do encrypt */
-+	ldrb		w0, [x2], #1	/* get 1 byte from input */
-+	umov		w6, v0.b[0]	/* get top crypted byte */
-+	eor		w6, w6, w0	/* w6 = CTR ^ input */
-+	strb		w6, [x1], #1	/* store out byte */
-+
-+	/* shift right out one byte */
-+	ext		v0.16b, v0.16b, v0.16b, #1
-+	/* the last ciphertext is placed in high bytes */
-+	ins		v0.b[15], w6
-+
-+	subs		w4, w4, #1
-+	bne		.Lgcm_enc_tail_loop
-+
-+	/* padding last block with zeros */
-+	tbl		v0.16b, {v0.16b}, v3.16b
-+
-+	/* ghash update */
-+	rbit		v0.16b, v0.16b
-+	eor		RHASH.16b, RHASH.16b, v0.16b
-+	PMUL_128x128(RR0, RR1, RHASH, RH1, RTMP0, RTMP1)
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+.Lgcm_enc_hash_len:
-+	cbz		x7, .Lgcm_enc_end
-+
-+	GTAG_HASH_LENGTHS(v1, v3)
-+
-+	b		.Lgcm_enc_ret
-+
-+.Lgcm_enc_end:
++.Lctr_end:
 +	/* store new CTR */
++	rev		x7, x7
 +	rev		x8, x8
-+	rev		x9, x9
-+	stp		x8, x9, [x3]
-+
-+	rbit		RHASH.16b, RHASH.16b
-+
-+.Lgcm_enc_ret:
-+	/* store new MAC */
-+	st1		{RHASH.2d}, [x5]
++	stp		x7, x8, [x3]
 +
 +	ret
-+SYM_FUNC_END(sm4_ce_pmull_gcm_enc)
-+
-+#undef	RR1
-+#undef	RR3
-+#undef	RR5
-+#undef	RR7
-+#undef	RR0
-+#undef	RR2
-+#undef	RR4
-+#undef	RR6
-+#undef RTMP0
-+#undef RTMP1
-+#undef RTMP2
-+#undef RTMP3
-+#undef RTMP4
-+#undef RTMP5
-+#undef RTMP6
-+#undef RTMP7
-+#undef	RH1
-+#undef	RH2
-+#undef	RH3
-+#undef	RH4
-+
-+
-+/* Register macros for decrypt */
-+
-+/* v0-v2 for building CTRs, v3-v5 for saving inputs */
-+
-+#define	RR1	v6
-+#define	RR3	v7
-+#define	RR5	v8
-+
-+#define	RR0	v9
-+#define	RR2	v10
-+#define	RR4	v11
-+
-+#define RTMP0	v12
-+#define RTMP1	v13
-+#define RTMP2	v14
-+#define RTMP3	v15
-+#define RTMP4	v16
-+#define RTMP5	v17
-+
-+#define	RH1	v18
-+#define	RH2	v19
-+#define	RH3	v20
++SYM_FUNC_END(sm4_sve_ce_ctr_crypt)
 +
 +.align 3
-+SYM_FUNC_START(sm4_ce_pmull_gcm_dec)
-+	/* input:
-+	 *   x0: round key array, CTX
-+	 *   x1: dst
-+	 *   x2: src
-+	 *   x3: ctr (big endian, 128 bit)
-+	 *   w4: nbytes
-+	 *   x5: ghash result
-+	 *   x6: ghash table
-+	 *   x7: lengths (only for last block)
-+	 */
-+	SM4_PREPARE(x0)
-+
-+	ldp		x8, x9, [x3]
-+	rev		x8, x8
-+	rev		x9, x9
-+
-+	ld1		{RH1.16b-RH3.16b}, [x6]
-+
-+	ld1		{RHASH.16b}, [x5]
-+	rbit		RHASH.16b, RHASH.16b
-+
-+	adr_l		x6, .Lghash_rconst
-+	ld1r		{RRCONST.2d}, [x6]
-+
-+	eor		RZERO.16b, RZERO.16b, RZERO.16b
-+
-+	cbz		w4, .Lgcm_dec_hash_len
-+
-+.Lgcm_dec_loop_3x:
-+	cmp		w4, #(3 * 16)
-+	blt		.Lgcm_dec_loop_1x
-+
-+	sub		w4, w4, #(3 * 16)
-+
-+	ld1		{v3.16b-v5.16b}, [x2], #(3 * 16)
-+
-+	/* construct CTRs */
-+	inc32_le128(v0)			/* +0 */
-+	rbit		v6.16b, v3.16b
-+	inc32_le128(v1)			/* +1 */
-+	rbit		v7.16b, v4.16b
-+	inc32_le128(v2)			/* +2 */
-+	rbit		v8.16b, v5.16b
-+
-+	eor		RHASH.16b, RHASH.16b, v6.16b
-+
-+	/* decrypt & ghash update */
-+	SM4_CRYPT_PMUL_128x128_BLK3(v0, v1, v2,
-+				    RR0, RR1, RHASH, RH3, RTMP0, RTMP1,
-+				    RR2, RR3, v7, RH2, RTMP2, RTMP3,
-+				    RR4, RR5, v8, RH1, RTMP4, RTMP5)
-+
-+	eor		v0.16b, v0.16b, v3.16b
-+	eor		v1.16b, v1.16b, v4.16b
-+	eor		v2.16b, v2.16b, v5.16b
-+
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP0, RTMP1)
-+
-+	st1		{v0.16b-v2.16b}, [x1], #(3 * 16)
-+
-+	cbz		w4, .Lgcm_dec_hash_len
-+	b		.Lgcm_dec_loop_3x
-+
-+.Lgcm_dec_loop_1x:
-+	cmp		w4, #16
-+	blt		.Lgcm_dec_tail
-+
-+	sub		w4, w4, #16
-+
-+	ld1		{v3.16b}, [x2], #16
-+
-+	/* construct CTRs */
-+	inc32_le128(v0)
-+	rbit		v6.16b, v3.16b
-+
-+	eor		RHASH.16b, RHASH.16b, v6.16b
-+
-+	SM4_CRYPT_PMUL_128x128_BLK(v0, RR0, RR1, RHASH, RH1, RTMP0, RTMP1)
-+
-+	eor		v0.16b, v0.16b, v3.16b
-+
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+	st1		{v0.16b}, [x1], #16
-+
-+	cbz		w4, .Lgcm_dec_hash_len
-+	b		.Lgcm_dec_loop_1x
-+
-+.Lgcm_dec_tail:
-+	/* construct CTRs */
-+	inc32_le128(v0)
-+	SM4_CRYPT_BLK(v0)
-+
-+	/* load permute table */
-+	adr_l		x0, .Lcts_permute_table
-+	add		x0, x0, #32
-+	sub		x0, x0, w4, uxtw
-+	ld1		{v3.16b}, [x0]
-+
-+.Lgcm_dec_tail_loop:
-+	/* do decrypt */
-+	ldrb		w0, [x2], #1	/* get 1 byte from input */
-+	umov		w6, v0.b[0]	/* get top crypted byte */
-+	eor		w6, w6, w0	/* w6 = CTR ^ input */
-+	strb		w6, [x1], #1	/* store out byte */
-+
-+	/* shift right out one byte */
-+	ext		v0.16b, v0.16b, v0.16b, #1
-+	/* the last ciphertext is placed in high bytes */
-+	ins		v0.b[15], w0
-+
-+	subs		w4, w4, #1
-+	bne		.Lgcm_dec_tail_loop
-+
-+	/* padding last block with zeros */
-+	tbl		v0.16b, {v0.16b}, v3.16b
-+
-+	/* ghash update */
-+	rbit		v0.16b, v0.16b
-+	eor		RHASH.16b, RHASH.16b, v0.16b
-+	PMUL_128x128(RR0, RR1, RHASH, RH1, RTMP0, RTMP1)
-+	REDUCTION(RHASH, RR0, RR1, RRCONST, RTMP2, RTMP3)
-+
-+.Lgcm_dec_hash_len:
-+	cbz		x7, .Lgcm_dec_end
-+
-+	GTAG_HASH_LENGTHS(v1, v3)
-+
-+	b		.Lgcm_dec_ret
-+
-+.Lgcm_dec_end:
-+	/* store new CTR */
-+	rev		x8, x8
-+	rev		x9, x9
-+	stp		x8, x9, [x3]
-+
-+	rbit		RHASH.16b, RHASH.16b
-+
-+.Lgcm_dec_ret:
-+	/* store new MAC */
-+	st1		{RHASH.2d}, [x5]
++SYM_FUNC_START(sm4_sve_get_vl)
++	/* VL in bytes */
++	rdvl		x0, #1
 +
 +	ret
-+SYM_FUNC_END(sm4_ce_pmull_gcm_dec)
++SYM_FUNC_END(sm4_sve_get_vl)
++
 +
 +	.section	".rodata", "a"
 +	.align 4
-+.Lcts_permute_table:
-+	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-+	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-+	.byte		 0x0,  0x1,  0x2,  0x3,  0x4,  0x5,  0x6,  0x7
-+	.byte		 0x8,  0x9,  0xa,  0xb,  0xc,  0xd,  0xe,  0xf
-+	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-+	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
++.Lbswap128_mask:
++	.byte		0x0c, 0x0d, 0x0e, 0x0f, 0x08, 0x09, 0x0a, 0x0b
++	.byte		0x04, 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03
++	.byte		0x1c, 0x1d, 0x1e, 0x1f, 0x18, 0x19, 0x1a, 0x1b
++	.byte		0x14, 0x15, 0x16, 0x17, 0x10, 0x11, 0x12, 0x13
++	.byte		0x2c, 0x2d, 0x2e, 0x2f, 0x28, 0x29, 0x2a, 0x2b
++	.byte		0x24, 0x25, 0x26, 0x27, 0x20, 0x21, 0x22, 0x23
++	.byte		0x3c, 0x3d, 0x3e, 0x3f, 0x38, 0x39, 0x3a, 0x3b
++	.byte		0x34, 0x35, 0x36, 0x37, 0x30, 0x31, 0x32, 0x33
++	.byte		0x4c, 0x4d, 0x4e, 0x4f, 0x48, 0x49, 0x4a, 0x4b
++	.byte		0x44, 0x45, 0x46, 0x47, 0x40, 0x41, 0x42, 0x43
++	.byte		0x5c, 0x5d, 0x5e, 0x5f, 0x58, 0x59, 0x5a, 0x5b
++	.byte		0x54, 0x55, 0x56, 0x57, 0x50, 0x51, 0x52, 0x53
++	.byte		0x6c, 0x6d, 0x6e, 0x6f, 0x68, 0x69, 0x6a, 0x6b
++	.byte		0x64, 0x65, 0x66, 0x67, 0x60, 0x61, 0x62, 0x63
++	.byte		0x7c, 0x7d, 0x7e, 0x7f, 0x78, 0x79, 0x7a, 0x7b
++	.byte		0x74, 0x75, 0x76, 0x77, 0x70, 0x71, 0x72, 0x73
++	.byte		0x8c, 0x8d, 0x8e, 0x8f, 0x88, 0x89, 0x8a, 0x8b
++	.byte		0x84, 0x85, 0x86, 0x87, 0x80, 0x81, 0x82, 0x83
++	.byte		0x9c, 0x9d, 0x9e, 0x9f, 0x98, 0x99, 0x9a, 0x9b
++	.byte		0x94, 0x95, 0x96, 0x97, 0x90, 0x91, 0x92, 0x93
++	.byte		0xac, 0xad, 0xae, 0xaf, 0xa8, 0xa9, 0xaa, 0xab
++	.byte		0xa4, 0xa5, 0xa6, 0xa7, 0xa0, 0xa1, 0xa2, 0xa3
++	.byte		0xbc, 0xbd, 0xbe, 0xbf, 0xb8, 0xb9, 0xba, 0xbb
++	.byte		0xb4, 0xb5, 0xb6, 0xb7, 0xb0, 0xb1, 0xb2, 0xb3
++	.byte		0xcc, 0xcd, 0xce, 0xcf, 0xc8, 0xc9, 0xca, 0xcb
++	.byte		0xc4, 0xc5, 0xc6, 0xc7, 0xc0, 0xc1, 0xc2, 0xc3
++	.byte		0xdc, 0xdd, 0xde, 0xdf, 0xd8, 0xd9, 0xda, 0xdb
++	.byte		0xd4, 0xd5, 0xd6, 0xd7, 0xd0, 0xd1, 0xd2, 0xd3
++	.byte		0xec, 0xed, 0xee, 0xef, 0xe8, 0xe9, 0xea, 0xeb
++	.byte		0xe4, 0xe5, 0xe6, 0xe7, 0xe0, 0xe1, 0xe2, 0xe3
++	.byte		0xfc, 0xfd, 0xfe, 0xff, 0xf8, 0xf9, 0xfa, 0xfb
++	.byte		0xf4, 0xf5, 0xf6, 0xf7, 0xf0, 0xf1, 0xf2, 0xf3
 +
-+.Lghash_rconst:
-+	.quad		0x87
-diff --git a/arch/arm64/crypto/sm4-ce-gcm-glue.c b/arch/arm64/crypto/sm4-ce-gcm-glue.c
++.Lle128_inc:
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	.byte		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+diff --git a/arch/arm64/crypto/sm4-sve-ce-glue.c b/arch/arm64/crypto/sm4-sve-ce-glue.c
 new file mode 100644
-index 000000000000..e90ea0f17beb
+index 000000000000..fc797b72b5f0
 --- /dev/null
-+++ b/arch/arm64/crypto/sm4-ce-gcm-glue.c
-@@ -0,0 +1,286 @@
++++ b/arch/arm64/crypto/sm4-sve-ce-glue.c
+@@ -0,0 +1,332 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
-+ * SM4-GCM AEAD Algorithm using ARMv8 Crypto Extensions
-+ * as specified in rfc8998
-+ * https://datatracker.ietf.org/doc/html/rfc8998
++ * SM4 Cipher Algorithm, using ARMv9 Crypto Extensions with SVE2
++ * as specified in
++ * https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
 + *
++ * Copyright (C) 2022, Alibaba Group.
 + * Copyright (C) 2022 Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 + */
 +
@@ -894,276 +1211,321 @@ index 000000000000..e90ea0f17beb
 +#include <linux/kernel.h>
 +#include <linux/cpufeature.h>
 +#include <asm/neon.h>
-+#include <crypto/b128ops.h>
-+#include <crypto/scatterwalk.h>
-+#include <crypto/internal/aead.h>
++#include <asm/simd.h>
++#include <crypto/internal/simd.h>
 +#include <crypto/internal/skcipher.h>
 +#include <crypto/sm4.h>
 +#include "sm4-ce.h"
 +
-+asmlinkage void sm4_ce_pmull_ghash_setup(const u32 *rkey_enc, u8 *ghash_table);
-+asmlinkage void pmull_ghash_update(const u8 *ghash_table, u8 *ghash,
-+				   const u8 *src, unsigned int nblocks);
-+asmlinkage void sm4_ce_pmull_gcm_enc(const u32 *rkey_enc, u8 *dst,
++asmlinkage void sm4_sve_ce_crypt(const u32 *rkey, u8 *dst,
++				 const u8 *src, unsigned int nblocks);
++asmlinkage void sm4_sve_ce_cbc_dec(const u32 *rkey_dec, u8 *dst,
++				   const u8 *src, u8 *iv,
++				   unsigned int nblocks);
++asmlinkage void sm4_sve_ce_cfb_dec(const u32 *rkey_enc, u8 *dst,
++				   const u8 *src, u8 *iv,
++				   unsigned int nblocks);
++asmlinkage void sm4_sve_ce_ctr_crypt(const u32 *rkey_enc, u8 *dst,
 +				     const u8 *src, u8 *iv,
-+				     unsigned int nbytes, u8 *ghash,
-+				     const u8 *ghash_table, const u8 *lengths);
-+asmlinkage void sm4_ce_pmull_gcm_dec(const u32 *rkey_enc, u8 *dst,
-+				     const u8 *src, u8 *iv,
-+				     unsigned int nbytes, u8 *ghash,
-+				     const u8 *ghash_table, const u8 *lengths);
-+
-+#define GHASH_BLOCK_SIZE	16
-+#define GCM_IV_SIZE		12
-+
-+struct sm4_gcm_ctx {
-+	struct sm4_ctx key;
-+	u8 ghash_table[16 * 4];
-+};
++				     unsigned int nblocks);
++asmlinkage unsigned int sm4_sve_get_vl(void);
 +
 +
-+static int gcm_setkey(struct crypto_aead *tfm, const u8 *key,
++static int sm4_setkey(struct crypto_skcipher *tfm, const u8 *key,
 +		      unsigned int key_len)
 +{
-+	struct sm4_gcm_ctx *ctx = crypto_aead_ctx(tfm);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
 +
 +	if (key_len != SM4_KEY_SIZE)
 +		return -EINVAL;
 +
 +	kernel_neon_begin();
-+
-+	sm4_ce_expand_key(key, ctx->key.rkey_enc, ctx->key.rkey_dec,
++	sm4_ce_expand_key(key, ctx->rkey_enc, ctx->rkey_dec,
 +			  crypto_sm4_fk, crypto_sm4_ck);
-+	sm4_ce_pmull_ghash_setup(ctx->key.rkey_enc, ctx->ghash_table);
-+
 +	kernel_neon_end();
++
 +	return 0;
 +}
 +
-+static int gcm_setauthsize(struct crypto_aead *tfm, unsigned int authsize)
++static int ecb_crypt(struct skcipher_request *req, const u32 *rkey)
 +{
-+	switch (authsize) {
-+	case 4:
-+	case 8:
-+	case 12 ... 16:
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static void gcm_calculate_auth_mac(struct aead_request *req, u8 ghash[])
-+{
-+	struct crypto_aead *aead = crypto_aead_reqtfm(req);
-+	struct sm4_gcm_ctx *ctx = crypto_aead_ctx(aead);
-+	u8 __aligned(8) buffer[GHASH_BLOCK_SIZE];
-+	u32 assoclen = req->assoclen;
-+	struct scatter_walk walk;
-+	unsigned int buflen = 0;
-+
-+	scatterwalk_start(&walk, req->src);
-+
-+	do {
-+		u32 n = scatterwalk_clamp(&walk, assoclen);
-+		u8 *p, *ptr;
-+
-+		if (!n) {
-+			scatterwalk_start(&walk, sg_next(walk.sg));
-+			n = scatterwalk_clamp(&walk, assoclen);
-+		}
-+
-+		p = ptr = scatterwalk_map(&walk);
-+		assoclen -= n;
-+		scatterwalk_advance(&walk, n);
-+
-+		if (n + buflen < GHASH_BLOCK_SIZE) {
-+			memcpy(&buffer[buflen], ptr, n);
-+			buflen += n;
-+		} else {
-+			unsigned int nblocks;
-+
-+			if (buflen) {
-+				unsigned int l = GHASH_BLOCK_SIZE - buflen;
-+
-+				memcpy(&buffer[buflen], ptr, l);
-+				ptr += l;
-+				n -= l;
-+
-+				pmull_ghash_update(ctx->ghash_table, ghash,
-+						   buffer, 1);
-+			}
-+
-+			nblocks = n / GHASH_BLOCK_SIZE;
-+			if (nblocks) {
-+				pmull_ghash_update(ctx->ghash_table, ghash,
-+						   ptr, nblocks);
-+				ptr += nblocks * GHASH_BLOCK_SIZE;
-+			}
-+
-+			buflen = n % GHASH_BLOCK_SIZE;
-+			if (buflen)
-+				memcpy(&buffer[0], ptr, buflen);
-+		}
-+
-+		scatterwalk_unmap(p);
-+		scatterwalk_done(&walk, 0, assoclen);
-+	} while (assoclen);
-+
-+	/* padding with '0' */
-+	if (buflen) {
-+		memset(&buffer[buflen], 0, GHASH_BLOCK_SIZE - buflen);
-+		pmull_ghash_update(ctx->ghash_table, ghash, buffer, 1);
-+	}
-+}
-+
-+static int gcm_crypt(struct aead_request *req, struct skcipher_walk *walk,
-+		     struct sm4_gcm_ctx *ctx, u8 ghash[],
-+		     void (*sm4_ce_pmull_gcm_crypt)(const u32 *rkey_enc,
-+				u8 *dst, const u8 *src, u8 *iv,
-+				unsigned int nbytes, u8 *ghash,
-+				const u8 *ghash_table, const u8 *lengths))
-+{
-+	u8 __aligned(8) iv[SM4_BLOCK_SIZE];
-+	be128 __aligned(8) lengths;
++	struct skcipher_walk walk;
++	unsigned int nbytes;
 +	int err;
 +
-+	memset(ghash, 0, SM4_BLOCK_SIZE);
++	err = skcipher_walk_virt(&walk, req, false);
 +
-+	lengths.a = cpu_to_be64(req->assoclen * 8);
-+	lengths.b = cpu_to_be64(walk->total * 8);
++	while ((nbytes = walk.nbytes) > 0) {
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		unsigned int nblocks;
 +
-+	memcpy(iv, walk->iv, GCM_IV_SIZE);
-+	put_unaligned_be32(2, iv + GCM_IV_SIZE);
-+
-+	kernel_neon_begin();
-+
-+	if (req->assoclen)
-+		gcm_calculate_auth_mac(req, ghash);
-+
-+	do {
-+		unsigned int tail = walk->nbytes % SM4_BLOCK_SIZE;
-+		const u8 *src = walk->src.virt.addr;
-+		u8 *dst = walk->dst.virt.addr;
-+
-+		if (walk->nbytes == walk->total) {
-+			tail = 0;
-+
-+			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
-+					       walk->nbytes, ghash,
-+					       ctx->ghash_table,
-+					       (const u8 *)&lengths);
-+		} else if (walk->nbytes - tail) {
-+			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
-+					       walk->nbytes - tail, ghash,
-+					       ctx->ghash_table, NULL);
-+		}
-+
-+		kernel_neon_end();
-+
-+		err = skcipher_walk_done(walk, tail);
-+		if (err)
-+			return err;
-+		if (walk->nbytes)
++		nblocks = nbytes / SM4_BLOCK_SIZE;
++		if (nblocks) {
 +			kernel_neon_begin();
-+	} while (walk->nbytes > 0);
 +
-+	return 0;
++			sm4_sve_ce_crypt(rkey, dst, src, nblocks);
++
++			kernel_neon_end();
++		}
++
++		err = skcipher_walk_done(&walk, nbytes % SM4_BLOCK_SIZE);
++	}
++
++	return err;
 +}
 +
-+static int gcm_encrypt(struct aead_request *req)
++static int ecb_encrypt(struct skcipher_request *req)
 +{
-+	struct crypto_aead *aead = crypto_aead_reqtfm(req);
-+	struct sm4_gcm_ctx *ctx = crypto_aead_ctx(aead);
-+	u8 __aligned(8) ghash[SM4_BLOCK_SIZE];
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++
++	return ecb_crypt(req, ctx->rkey_enc);
++}
++
++static int ecb_decrypt(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++
++	return ecb_crypt(req, ctx->rkey_dec);
++}
++
++static int cbc_crypt(struct skcipher_request *req, const u32 *rkey,
++		     void (*sm4_cbc_crypt)(const u32 *rkey, u8 *dst,
++				const u8 *src, u8 *iv, unsigned int nblocks))
++{
 +	struct skcipher_walk walk;
++	unsigned int nbytes;
 +	int err;
 +
-+	err = skcipher_walk_aead_encrypt(&walk, req, false);
-+	if (err)
-+		return err;
++	err = skcipher_walk_virt(&walk, req, false);
 +
-+	err = gcm_crypt(req, &walk, ctx, ghash, sm4_ce_pmull_gcm_enc);
-+	if (err)
-+		return err;
++	while ((nbytes = walk.nbytes) > 0) {
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		unsigned int nblocks;
 +
-+	/* copy authtag to end of dst */
-+	scatterwalk_map_and_copy(ghash, req->dst, req->assoclen + req->cryptlen,
-+				 crypto_aead_authsize(aead), 1);
++		nblocks = nbytes / SM4_BLOCK_SIZE;
++		if (nblocks) {
++			kernel_neon_begin();
 +
-+	return 0;
++			sm4_cbc_crypt(rkey, dst, src, walk.iv, nblocks);
++
++			kernel_neon_end();
++		}
++
++		err = skcipher_walk_done(&walk, nbytes % SM4_BLOCK_SIZE);
++	}
++
++	return err;
 +}
 +
-+static int gcm_decrypt(struct aead_request *req)
++static int cbc_encrypt(struct skcipher_request *req)
 +{
-+	struct crypto_aead *aead = crypto_aead_reqtfm(req);
-+	unsigned int authsize = crypto_aead_authsize(aead);
-+	struct sm4_gcm_ctx *ctx = crypto_aead_ctx(aead);
-+	u8 __aligned(8) ghash[SM4_BLOCK_SIZE];
-+	u8 authtag[SM4_BLOCK_SIZE];
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++
++	return cbc_crypt(req, ctx->rkey_enc, sm4_ce_cbc_enc);
++}
++
++static int cbc_decrypt(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++
++	return cbc_crypt(req, ctx->rkey_dec, sm4_sve_ce_cbc_dec);
++}
++
++static int cfb_crypt(struct skcipher_request *req,
++		     void (*sm4_cfb_crypt)(const u32 *rkey, u8 *dst,
++				const u8 *src, u8 *iv, unsigned int nblocks))
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
 +	struct skcipher_walk walk;
++	unsigned int nbytes;
 +	int err;
 +
-+	err = skcipher_walk_aead_decrypt(&walk, req, false);
-+	if (err)
-+		return err;
++	err = skcipher_walk_virt(&walk, req, false);
 +
-+	err = gcm_crypt(req, &walk, ctx, ghash, sm4_ce_pmull_gcm_dec);
-+	if (err)
-+		return err;
++	while ((nbytes = walk.nbytes) > 0) {
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		unsigned int nblocks;
 +
-+	/* compare calculated auth tag with the stored one */
-+	scatterwalk_map_and_copy(authtag, req->src,
-+				 req->assoclen + req->cryptlen - authsize,
-+				 authsize, 0);
++		nblocks = nbytes / SM4_BLOCK_SIZE;
++		if (nblocks) {
++			kernel_neon_begin();
 +
-+	if (crypto_memneq(authtag, ghash, authsize))
-+		return -EBADMSG;
++			sm4_cfb_crypt(ctx->rkey_enc, dst, src,
++				      walk.iv, nblocks);
 +
-+	return 0;
++			kernel_neon_end();
++
++			dst += nblocks * SM4_BLOCK_SIZE;
++			src += nblocks * SM4_BLOCK_SIZE;
++			nbytes -= nblocks * SM4_BLOCK_SIZE;
++		}
++
++		/* tail */
++		if (walk.nbytes == walk.total && nbytes > 0) {
++			u8 keystream[SM4_BLOCK_SIZE];
++
++			sm4_ce_crypt_block(ctx->rkey_enc, keystream, walk.iv);
++			crypto_xor_cpy(dst, src, keystream, nbytes);
++			nbytes = 0;
++		}
++
++		err = skcipher_walk_done(&walk, nbytes);
++	}
++
++	return err;
 +}
 +
-+static struct aead_alg sm4_gcm_alg = {
-+	.base = {
-+		.cra_name		= "gcm(sm4)",
-+		.cra_driver_name	= "gcm-sm4-ce",
-+		.cra_priority		= 400,
-+		.cra_blocksize		= 1,
-+		.cra_ctxsize		= sizeof(struct sm4_gcm_ctx),
-+		.cra_module		= THIS_MODULE,
-+	},
-+	.ivsize		= GCM_IV_SIZE,
-+	.chunksize	= SM4_BLOCK_SIZE,
-+	.maxauthsize	= SM4_BLOCK_SIZE,
-+	.setkey		= gcm_setkey,
-+	.setauthsize	= gcm_setauthsize,
-+	.encrypt	= gcm_encrypt,
-+	.decrypt	= gcm_decrypt,
++static int cfb_encrypt(struct skcipher_request *req)
++{
++	return cfb_crypt(req, sm4_ce_cfb_enc);
++}
++
++static int cfb_decrypt(struct skcipher_request *req)
++{
++	return cfb_crypt(req, sm4_sve_ce_cfb_dec);
++}
++
++static int ctr_crypt(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct skcipher_walk walk;
++	unsigned int nbytes;
++	int err;
++
++	err = skcipher_walk_virt(&walk, req, false);
++
++	while ((nbytes = walk.nbytes) > 0) {
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		unsigned int nblocks;
++
++		nblocks = nbytes / SM4_BLOCK_SIZE;
++		if (nblocks) {
++			kernel_neon_begin();
++
++			sm4_sve_ce_ctr_crypt(ctx->rkey_enc, dst, src,
++					     walk.iv, nblocks);
++
++			kernel_neon_end();
++
++			dst += nblocks * SM4_BLOCK_SIZE;
++			src += nblocks * SM4_BLOCK_SIZE;
++			nbytes -= nblocks * SM4_BLOCK_SIZE;
++		}
++
++		/* tail */
++		if (walk.nbytes == walk.total && nbytes > 0) {
++			u8 keystream[SM4_BLOCK_SIZE];
++
++			sm4_ce_crypt_block(ctx->rkey_enc, keystream, walk.iv);
++			crypto_inc(walk.iv, SM4_BLOCK_SIZE);
++			crypto_xor_cpy(dst, src, keystream, nbytes);
++			nbytes = 0;
++		}
++
++		err = skcipher_walk_done(&walk, nbytes);
++	}
++
++	return err;
++}
++
++static struct skcipher_alg sm4_algs[] = {
++	{
++		.base = {
++			.cra_name		= "ecb(sm4)",
++			.cra_driver_name	= "ecb-sm4-sve-ce",
++			.cra_priority		= 500,
++			.cra_blocksize		= SM4_BLOCK_SIZE,
++			.cra_ctxsize		= sizeof(struct sm4_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.min_keysize	= SM4_KEY_SIZE,
++		.max_keysize	= SM4_KEY_SIZE,
++		.setkey		= sm4_setkey,
++		.encrypt	= ecb_encrypt,
++		.decrypt	= ecb_decrypt,
++	}, {
++		.base = {
++			.cra_name		= "cbc(sm4)",
++			.cra_driver_name	= "cbc-sm4-sve-ce",
++			.cra_priority		= 500,
++			.cra_blocksize		= SM4_BLOCK_SIZE,
++			.cra_ctxsize		= sizeof(struct sm4_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.min_keysize	= SM4_KEY_SIZE,
++		.max_keysize	= SM4_KEY_SIZE,
++		.ivsize		= SM4_BLOCK_SIZE,
++		.setkey		= sm4_setkey,
++		.encrypt	= cbc_encrypt,
++		.decrypt	= cbc_decrypt,
++	}, {
++		.base = {
++			.cra_name		= "cfb(sm4)",
++			.cra_driver_name	= "cfb-sm4-sve-ce",
++			.cra_priority		= 500,
++			.cra_blocksize		= 1,
++			.cra_ctxsize		= sizeof(struct sm4_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.min_keysize	= SM4_KEY_SIZE,
++		.max_keysize	= SM4_KEY_SIZE,
++		.ivsize		= SM4_BLOCK_SIZE,
++		.chunksize	= SM4_BLOCK_SIZE,
++		.setkey		= sm4_setkey,
++		.encrypt	= cfb_encrypt,
++		.decrypt	= cfb_decrypt,
++	}, {
++		.base = {
++			.cra_name		= "ctr(sm4)",
++			.cra_driver_name	= "ctr-sm4-sve-ce",
++			.cra_priority		= 500,
++			.cra_blocksize		= 1,
++			.cra_ctxsize		= sizeof(struct sm4_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.min_keysize	= SM4_KEY_SIZE,
++		.max_keysize	= SM4_KEY_SIZE,
++		.ivsize		= SM4_BLOCK_SIZE,
++		.chunksize	= SM4_BLOCK_SIZE,
++		.setkey		= sm4_setkey,
++		.encrypt	= ctr_crypt,
++		.decrypt	= ctr_crypt,
++	}
 +};
 +
-+static int __init sm4_ce_gcm_init(void)
++static int __init sm4_sve_ce_init(void)
 +{
-+	if (!cpu_have_named_feature(PMULL))
++	if (sm4_sve_get_vl() <= 16)
 +		return -ENODEV;
 +
-+	return crypto_register_aead(&sm4_gcm_alg);
++	return crypto_register_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
 +}
 +
-+static void __exit sm4_ce_gcm_exit(void)
++static void __exit sm4_sve_ce_exit(void)
 +{
-+	crypto_unregister_aead(&sm4_gcm_alg);
++	crypto_unregister_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
 +}
 +
-+static const struct cpu_feature sm4_ce_gcm_cpu_feature[] = {
-+	{ cpu_feature(PMULL) },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(cpu, sm4_ce_gcm_cpu_feature);
++module_cpu_feature_match(SVESM4, sm4_sve_ce_init);
++module_exit(sm4_sve_ce_exit);
 +
-+module_cpu_feature_match(SM4, sm4_ce_gcm_init);
-+module_exit(sm4_ce_gcm_exit);
-+
-+MODULE_DESCRIPTION("Synchronous SM4 in GCM mode using ARMv8 Crypto Extensions");
-+MODULE_ALIAS_CRYPTO("gcm(sm4)");
++MODULE_DESCRIPTION("SM4 ECB/CBC/CFB/CTR using ARMv9 Crypto Extensions with SVE2");
++MODULE_ALIAS_CRYPTO("sm4-sve-ce");
++MODULE_ALIAS_CRYPTO("sm4");
++MODULE_ALIAS_CRYPTO("ecb(sm4)");
++MODULE_ALIAS_CRYPTO("cbc(sm4)");
++MODULE_ALIAS_CRYPTO("cfb(sm4)");
++MODULE_ALIAS_CRYPTO("ctr(sm4)");
 +MODULE_AUTHOR("Tianjia Zhang <tianjia.zhang@linux.alibaba.com>");
 +MODULE_LICENSE("GPL v2");
 -- 
