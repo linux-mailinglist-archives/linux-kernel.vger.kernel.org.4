@@ -2,118 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6521E5EA658
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADED5EA7D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbiIZMlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S234428AbiIZOBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236685AbiIZMkb (ORCPT
+        with ESMTP id S234392AbiIZOAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:40:31 -0400
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B117310CA5B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:17:18 -0700 (PDT)
-Received: by mail-vs1-f47.google.com with SMTP id m65so6190144vsc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:17:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Lmh1Xq7Cw51uqBYTm5xf2C78YKt/PjveAkuJS0FQxk4=;
-        b=rU+6F/tQrx7PVNGzy/Upg5lqNKd6bFtTWrnTC7Vpf2gzUvB1UUsg5oNq9J10bC7WQd
-         n3VmuPRyYOQakMClzUJ7NcXes74t0JvoacyODnJzV+jH94uwLGSSMnNyLyuD9NC4x/nC
-         lGxBLgS8P8q3qA2qlR0QWiu8P/BCi24GwKT6qGWN2Moi59LPkXGKuiv+uSm6BZA/H7RP
-         uYoFzGcQ5rCCG6kBkhIiHmQ5GqEUuCASUwS0Qz+TtZmLHH/zzV7oc5dSZPmBPGmRD/Ib
-         E0sNgmMs7noVi7JC3ZA2X4dikMX25Iw2f+jnO97JbhH6+hD//xe85hJye+6pbU3TGWyh
-         klZA==
-X-Gm-Message-State: ACrzQf36GIrLwY5fY9FnyyZDT0eiqoCO+h22zvHK/3VjwX/hhNwStAf4
-        dKB+NXNEgzpnVVtdCxfnq7f0R7oqaNJ43g==
-X-Google-Smtp-Source: AMsMyM5J/Lr42lWHpzXW2+YWzCVN/o0YAcD5twu5BMmsFwmKemAt4f8QABryol2yovhE7gzWE7Ubyw==
-X-Received: by 2002:a05:6214:2589:b0:4af:7db6:2a4e with SMTP id fq9-20020a056214258900b004af7db62a4emr401315qvb.116.1664188769054;
-        Mon, 26 Sep 2022 03:39:29 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id az35-20020a05620a172300b0069fe1dfbeffsm11608771qkb.92.2022.09.26.03.39.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 03:39:28 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 65so304318ybp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:39:28 -0700 (PDT)
-X-Received: by 2002:a81:758a:0:b0:345:450b:6668 with SMTP id
- q132-20020a81758a000000b00345450b6668mr19133647ywc.316.1664188452440; Mon, 26
- Sep 2022 03:34:12 -0700 (PDT)
+        Mon, 26 Sep 2022 10:00:44 -0400
+Received: from smtp2.uni-freiburg.de (smtp2.uni-freiburg.de [IPv6:2001:7c0:2500:4::25:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538034F196
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:14:08 -0700 (PDT)
+Delivery-date: Mon, 26 Sep 2022 14:14:08 +0200
+Received: from fe2.uni-freiburg.de ([132.230.2.222] helo=uni-freiburg.de) port 45028 
+        by smtp2.uni-freiburg.de with esmtp
+        ( Exim )
+        id 1oclX9-0003QR-08
+        for linux-kernel@vger.kernel.org;
+        Mon, 26 Sep 2022 12:40:18 +0200
+Received: from [132.230.8.113] (account simon.rettberg@rz.uni-freiburg.de HELO computer)
+  by mail.uni-freiburg.de (CommuniGate Pro SMTP 6.3.14)
+  with ESMTPSA id 96347721; Mon, 26 Sep 2022 12:40:18 +0200
+Date:   Mon, 26 Sep 2022 12:40:17 +0200
+From:   Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Ville =?UTF-8?B?U3lyasOkbMOk?=" <ville.syrjala@linux.intel.com>
+Subject: [PATCH RESEND] drm/display: Don't assume dual mode adaptors support
+ i2c sub-addressing
+Message-ID: <20220926124017.529806df@computer>
+Organization: Rechenzentrum Uni Freiburg
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
- <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de> <20220926101716.urehomr2lzv5pqln@houat>
-In-Reply-To: <20220926101716.urehomr2lzv5pqln@houat>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 26 Sep 2022 12:34:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXonxXiw4x2PvnQ=xedOQO1y=K0O8g1+ixeSvXmzcOOVw@mail.gmail.com>
-Message-ID: <CAMuHMdXonxXiw4x2PvnQ=xedOQO1y=K0O8g1+ixeSvXmzcOOVw@mail.gmail.com>
-Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
- display modes
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Current dual mode adaptor ("DP++") detection code assumes that all adaptors
+support i2c sub-addressing for read operations from the DP-HDMI adaptor ID
+buffer.  It has been observed that multiple adaptors do not in fact
+support this, and always return data starting at register 0.  On
+affected adaptors, the code failed to read the proper registers that
+would identify the device as a type 2 adaptor, and handled those as
+type 1, limiting the TMDS clock to 165MHz.
+Fix this by always reading the ID buffer starting from offset 0, and
+discarding any bytes before the actual offset of interest.
 
-On Mon, Sep 26, 2022 at 12:17 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> On Fri, Sep 23, 2022 at 11:05:48AM +0200, Thomas Zimmermann wrote:
-> > > +   /* 63.556us * 13.5MHz = 858 pixels */
-> >
-> > I kind of get what the comment wants to tell me, but the units don't add up.
->
-> I'm not sure how it doesn't add up?
->
-> We have a frequency in Hz (equivalent to s^-1) and a duration in s, so
-> the result ends up with no dimension, which is to be expected for a
-> number of periods?
+Signed-off-by: Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
+Reviewed-by: Rafael Gieschke <rafael.gieschke@rz.uni-freiburg.de>
+---
+(Resend because of no response, probably my fault since I ran
+get_maintainers on a shallow clone and missed a bunch of people)
 
-To make the units add up, it should be 13.5 Mpixel/s
-(which is what a pixel clock of 13.5 MHz really means ;-)
+We had problems with multiple different "4k ready" DP++ adaptors only
+resulting in 1080p resolution on Linux. While one of them turned out to
+actually just be a type1 adaptor, the others, according to the data
+retreived via i2cdump, were in fact proper type2 adaptors, advertising a
+TMDS clock of 300MHz. As it turned out, none of them supported
+sub-addressing when reading from the DP-HDMI adaptor ID buffer via i2c.
+The existing code suggested that this is known to happen with "broken"
+type1 adaptors, but evidently, type2 adaptors are also affected.
+We tried finding authoritative documentation on whether or not this is
+allowed behavior, but since all the official VESA docs are paywalled,
+the best we could come up with was the spec sheet for Texas Instruments'
+SNx5DP149 chip family.[1] It explicitly mentions that sub-adressing is
+supported for register writes, but *not* for reads (See NOTE in
+section 8.5.3). Unless TI blatantly and openly decided to violate the
+VESA spec, one could take that as a strong hint that sub-addressing is
+in fact not mandated by VESA.
 
-Gr{oetje,eeting}s,
+[1] https://www.ti.com/lit/ds/symlink/sn75dp149.pdf
 
-                        Geert
+ .../gpu/drm/display/drm_dp_dual_mode_helper.c | 52 ++++++++++---------
+ 1 file changed, 28 insertions(+), 24 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
+index 3ea53bb67..6147da983 100644
+--- a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
++++ b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
+@@ -63,23 +63,42 @@
+ ssize_t drm_dp_dual_mode_read(struct i2c_adapter *adapter,
+ 			      u8 offset, void *buffer, size_t size)
+ {
++	int ret;
++	u8 zero = 0;
++	char *tmpbuf;
++	/*
++	 * As sub-addressing is not supported by all adaptors,
++	 * always explicitly read from the start and discard
++	 * any bytes that come before the requested offset.
++	 * This way, no matter whether the adaptor supports it
++	 * or not, we'll end up reading the proper data.
++	 */
+ 	struct i2c_msg msgs[] = {
+ 		{
+ 			.addr = DP_DUAL_MODE_SLAVE_ADDRESS,
+ 			.flags = 0,
+ 			.len = 1,
+-			.buf = &offset,
++			.buf = &zero,
+ 		},
+ 		{
+ 			.addr = DP_DUAL_MODE_SLAVE_ADDRESS,
+ 			.flags = I2C_M_RD,
+-			.len = size,
+-			.buf = buffer,
++			.len = size + offset,
++			.buf = NULL,
+ 		},
+ 	};
+-	int ret;
+ 
++	tmpbuf = kmalloc(size + offset, GFP_KERNEL);
++	if (!tmpbuf)
++		return -ENOMEM;
++
++	msgs[1].buf = tmpbuf;
+ 	ret = i2c_transfer(adapter, msgs, ARRAY_SIZE(msgs));
++	if (ret == ARRAY_SIZE(msgs))
++		memcpy(buffer, tmpbuf + offset, size);
++
++	kfree(tmpbuf);
++
+ 	if (ret < 0)
+ 		return ret;
+ 	if (ret != ARRAY_SIZE(msgs))
+@@ -208,18 +227,6 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_detect(const struct drm_device *dev,
+ 	if (ret)
+ 		return DRM_DP_DUAL_MODE_UNKNOWN;
+ 
+-	/*
+-	 * Sigh. Some (maybe all?) type 1 adaptors are broken and ack
+-	 * the offset but ignore it, and instead they just always return
+-	 * data from the start of the HDMI ID buffer. So for a broken
+-	 * type 1 HDMI adaptor a single byte read will always give us
+-	 * 0x44, and for a type 1 DVI adaptor it should give 0x00
+-	 * (assuming it implements any registers). Fortunately neither
+-	 * of those values will match the type 2 signature of the
+-	 * DP_DUAL_MODE_ADAPTOR_ID register so we can proceed with
+-	 * the type 2 adaptor detection safely even in the presence
+-	 * of broken type 1 adaptors.
+-	 */
+ 	ret = drm_dp_dual_mode_read(adapter, DP_DUAL_MODE_ADAPTOR_ID,
+ 				    &adaptor_id, sizeof(adaptor_id));
+ 	drm_dbg_kms(dev, "DP dual mode adaptor ID: %02x (err %zd)\n", adaptor_id, ret);
+@@ -233,11 +240,10 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_detect(const struct drm_device *dev,
+ 				return DRM_DP_DUAL_MODE_TYPE2_DVI;
+ 		}
+ 		/*
+-		 * If neither a proper type 1 ID nor a broken type 1 adaptor
+-		 * as described above, assume type 1, but let the user know
+-		 * that we may have misdetected the type.
++		 * If not a proper type 1 ID, still assume type 1, but let
++		 * the user know that we may have misdetected the type.
+ 		 */
+-		if (!is_type1_adaptor(adaptor_id) && adaptor_id != hdmi_id[0])
++		if (!is_type1_adaptor(adaptor_id))
+ 			drm_err(dev, "Unexpected DP dual mode adaptor ID %02x\n", adaptor_id);
+ 
+ 	}
+@@ -343,10 +349,8 @@ EXPORT_SYMBOL(drm_dp_dual_mode_get_tmds_output);
+  * @enable: enable (as opposed to disable) the TMDS output buffers
+  *
+  * Set the state of the TMDS output buffers in the adaptor. For
+- * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register. As
+- * some type 1 adaptors have problems with registers (see comments
+- * in drm_dp_dual_mode_detect()) we avoid touching the register,
+- * making this function a no-op on type 1 adaptors.
++ * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register.
++ * Type1 adaptors do not support any register writes.
+  *
+  * Returns:
+  * 0 on success, negative error code on failure
+-- 
+2.35.1
