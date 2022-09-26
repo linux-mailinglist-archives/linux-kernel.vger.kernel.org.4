@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FC15EA32C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF0E5E9FF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237776AbiIZLUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S235684AbiIZKbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237794AbiIZLTA (ORCPT
+        with ESMTP id S235849AbiIZK3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:19:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A4266132;
-        Mon, 26 Sep 2022 03:38:20 -0700 (PDT)
+        Mon, 26 Sep 2022 06:29:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60A146215;
+        Mon, 26 Sep 2022 03:19:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE2C760C07;
-        Mon, 26 Sep 2022 10:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2251C433C1;
-        Mon, 26 Sep 2022 10:36:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4193EB80835;
+        Mon, 26 Sep 2022 10:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5660CC433C1;
+        Mon, 26 Sep 2022 10:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188602;
-        bh=WEEfMD2dT1tFkX8ppiPqb6orrscDsDIG1alo8oNgaC8=;
+        s=korg; t=1664187553;
+        bh=9BkiyLBsVzXzC2PyiRUjj1lfylL5hzUuyzqnpUyygY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SWuRq9heBZQ7UwruvU7pIzRLfqTmrP2OKe4lMsKvko0/9z32IBBDY0z9ufxfSxPPX
-         wkBMxXKM5rqLg8U56tWppdBwQVIUvnp7GTvbELWjbf2J9qK4/WXeKvIZoKf6G4DSYO
-         rrtmcOtgYTD/u9o0rTY4Zwhs7xmQfVLnDTlGqOB8=
+        b=EN0lLV9nU0beqZaC7GHnqply8jfrCem3YhRDsv+E8c2B38GoniwHuOn73CMp490zi
+         YKdiYNrXBTW1atkJiUV4Xuo85bjcngzhIG3NPR9AUMEb7mTivHlSr5yw4cj1EujjX7
+         bikASeEA9I6PVm0zOjbeGyWuxOsPF6Mrugc4qOFQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 062/148] drm/mediatek: dsi: Add atomic {destroy,duplicate}_state, reset callbacks
+        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 17/58] video: fbdev: pxa3xx-gcu: Fix integer overflow in pxa3xx_gcu_write
 Date:   Mon, 26 Sep 2022 12:11:36 +0200
-Message-Id: <20220926100758.363532229@linuxfoundation.org>
+Message-Id: <20220926100742.062048441@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-[ Upstream commit eeda05b5e92f51d9a09646ecb493f0a1e872a6ef ]
+[ Upstream commit a09d2d00af53b43c6f11e6ab3cb58443c2cac8a7 ]
 
-Add callbacks for atomic_destroy_state, atomic_duplicate_state and
-atomic_reset to restore functionality of the DSI driver: this solves
-vblank timeouts when another bridge is present in the chain.
+In pxa3xx_gcu_write, a count parameter of type size_t is passed to words of
+type int.  Then, copy_from_user() may cause a heap overflow because it is used
+as the third argument of copy_from_user().
 
-Tested bridge chain: DSI <=> ANX7625 => aux-bus panel
-
-Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operations")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/video/fbdev/pxa3xx-gcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index ac14e598a14f..fc437d4d4e2d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -796,10 +796,13 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
+diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
+index 43695a33f062..aec0b85db5bf 100644
+--- a/drivers/video/fbdev/pxa3xx-gcu.c
++++ b/drivers/video/fbdev/pxa3xx-gcu.c
+@@ -394,7 +394,7 @@ pxa3xx_gcu_write(struct file *file, const char *buff,
+ 	struct pxa3xx_gcu_batch	*buffer;
+ 	struct pxa3xx_gcu_priv *priv = to_pxa3xx_gcu_priv(file);
  
- static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
- 	.attach = mtk_dsi_bridge_attach,
-+	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
- 	.atomic_disable = mtk_dsi_bridge_atomic_disable,
-+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
- 	.atomic_enable = mtk_dsi_bridge_atomic_enable,
- 	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
- 	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
-+	.atomic_reset = drm_atomic_helper_bridge_reset,
- 	.mode_set = mtk_dsi_bridge_mode_set,
- };
+-	int words = count / 4;
++	size_t words = count / 4;
  
+ 	/* Does not need to be atomic. There's a lock in user space,
+ 	 * but anyhow, this is just for statistics. */
 -- 
 2.35.1
 
