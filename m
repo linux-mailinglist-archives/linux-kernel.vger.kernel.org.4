@@ -2,173 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AD15EA7BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10975EA7CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiIZN5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 09:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S233507AbiIZN7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 09:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235081AbiIZN4n (ORCPT
+        with ESMTP id S234806AbiIZN7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:56:43 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0DB151DDE;
-        Mon, 26 Sep 2022 05:11:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 777CF5C0136;
-        Mon, 26 Sep 2022 08:10:32 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 26 Sep 2022 08:10:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1664194232; x=1664280632; bh=SX
-        ZXZRhuf9JevySNewTG6qOkVzPewIE+tsCRVShJcVU=; b=CeNTx2AJFtWG1toroK
-        mxZOBthTTsNUsUp2GTEyj5bTHXS0tByAQrhP3pF08Vd1O+llD7AmDcc4pTBta4F+
-        AnobgsRcte3ZQ+eWpfDNdcDi8GVxK7oXGq27whyXTEqebaahCuXjCd/uTbD5gunX
-        TqXJWOjG7BpLcSBS/rtqXGuLiSG01jZs8IjTLHXLOAClFaFjxWW53uI4MRl7PzOs
-        OuUq2nj2OyErm9YyLtjBQ9zlKLhPxzIFm2SxzN9RR6d0ixOWorbffBOpNaBrRLX4
-        OnT+Mbl0hZRuLob7Jpsn14DI1HmkQBin750+NondDQsz6KB3/YiD4Nda3ybVVyqC
-        2IXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664194232; x=1664280632; bh=SXZXZRhuf9JevySNewTG6qOkVzPe
-        wIE+tsCRVShJcVU=; b=HCUsALZL5QHHesHRLIK/3ubAYtM1sEqjZtwxqMiz9WYY
-        BBvC8gCTPor24gDICjNj29er09W8ivNCoZVqhrsIBDeH1ARPY2SCta25rIpThdoS
-        3ccBHFvHFMdAml/WfZHaonq3gWjM6Qgj39BTrnWpr/H+v1YXNqFP6zEh53Iq9J9B
-        z/4ablLBlW5BKuiIX0RS8Zt8gf2jIzEh3Yu727sBswCtlcG4IXL7OoOelCnyytPr
-        AeguqSA0H8W2I7qVNIaUmjDEWMsUFNkSigFniJnH/7KgA/Bl/07ZC3/g/yffSCbr
-        NGwSb/GhRxHNE+7CpezJPqFcW/0aaC6ALW0ytlLukg==
-X-ME-Sender: <xms:t5YxY0iVmb2QufbQg7CpLiJ9SU-SUOQGfa2qquV727juQvVJtAlCIQ>
-    <xme:t5YxY9Bb2QzSShIF_G4wjkz00dwuGUkXl08ahBFsUzHhy4Io2DmusDaqZWwGzII6d
-    gprM7GmFYUV3bOpoYk>
-X-ME-Received: <xmr:t5YxY8FPKbxrtSus8pO5XaSMpsHAmTeTN_GyrtzwJ3qeSRM6IaVb2C9BSklnqiaPddAb8Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:t5YxY1THDWS48myTelQbWRkO5tELFEQqwxFTmBRSkbT9yjFngkp9vQ>
-    <xmx:t5YxYxwbp9Cnd7HxGV9roLf_nfaVRIbbzAoAjgZvTjoQ-25oNgQoUw>
-    <xmx:t5YxYz5POMAsSOXp7R5mgxmbSsNowYtDkp0ld0cho3S8yoM0htuOhw>
-    <xmx:uJYxY6_XBBliy7KcDoLgUBgX0mymCQgynNhg_Towr2bVvy9Esxf7qg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Sep 2022 08:10:31 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DE00E104928; Mon, 26 Sep 2022 15:10:27 +0300 (+03)
-Date:   Mon, 26 Sep 2022 15:10:27 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Message-ID: <20220926121027.xc2cgzuiafcssmea@box.shutemov.name>
-References: <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
- <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com>
- <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
- <984e07ed-914f-93ca-a141-3fc8677878e0@intel.com>
- <CAAH4kHawguTEuDVyz1ysSbH0X_mT=SvxLi=UhwEzXM0abbWefg@mail.gmail.com>
- <YxncAElGrPEGRYg1@linux.ibm.com>
- <CAAH4kHaP8JUh0Z4rF83=2RZTGMATT5MHot6rAnAwt79PL64mVQ@mail.gmail.com>
- <YxpCaQARczhZQmq2@linux.ibm.com>
- <f72f7325-adc6-89d5-7cbc-647442308233@amd.com>
- <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
+        Mon, 26 Sep 2022 09:59:21 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F8983064;
+        Mon, 26 Sep 2022 05:13:28 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id s9so3915947qkg.4;
+        Mon, 26 Sep 2022 05:13:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5r7Zsy4+xPvvNRbJAnwrit2mQEm2o8Jih1/oFy1rujE=;
+        b=0VG9vmeSy/Tg0y8l2TQuhKAnQ0ikXT5Npc+QQD2AqwYSoiutyUCpXn/2f2vCI1gs4a
+         uvFbSpP2LE3SHsxBCVIzykDJAVKhnQryhL6dNWvQad8zOQeICXsFYVm+RI5O9pu6875H
+         tNuPFbr1YT/fYq5wmtaehppjv4/kOiS5Q2g/x85Le5AGkqd4VPngyoPDz2fKMVS0Ac/1
+         ahYr//gCaoxjaed4cyqMECVlW2tXMWngKJB5n87HnOueNIvYFAOpXhaZaTlX9o048obv
+         lfux6S4GTuKll4L42IKoKPZH/cQW3AJIT+b9Sz2cwcSWDJIn+H+DkhIYCzDHDS/qL2nq
+         RZfg==
+X-Gm-Message-State: ACrzQf2rjAtEGarPL59Y5ZXXNgumPfwrInqwn3muMzk9qohoz5ZeGDxl
+        5kGeW2+o9RObAULKdX0cPn7/RR7ld6vuYQ==
+X-Google-Smtp-Source: AMsMyM7NnE3wwNQtKKLnMdbCUO9jA2iug6iqil27nztxYrLQX9gus2mjul8Wg7xu8T3oc+3wLz2aeA==
+X-Received: by 2002:a05:620a:51cb:b0:6ce:5e82:7802 with SMTP id cx11-20020a05620a51cb00b006ce5e827802mr13751247qkb.715.1664194357277;
+        Mon, 26 Sep 2022 05:12:37 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006ce7cd81359sm11648062qkb.110.2022.09.26.05.12.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 05:12:36 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-349c4310cf7so66356617b3.3;
+        Mon, 26 Sep 2022 05:12:36 -0700 (PDT)
+X-Received: by 2002:a81:758a:0:b0:345:450b:6668 with SMTP id
+ q132-20020a81758a000000b00345450b6668mr19505687ywc.316.1664194356174; Mon, 26
+ Sep 2022 05:12:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919104606.96553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220919104606.96553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Sep 2022 14:12:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVNsDqu6WCHK37SiJ51_vO4HiwHG7KvkXBqO6i0hCaO_w@mail.gmail.com>
+Message-ID: <CAMuHMdVNsDqu6WCHK37SiJ51_vO4HiwHG7KvkXBqO6i0hCaO_w@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: Kconfig: Explicitly select GPIOLIB and
+ PINCTRL config under SOC_RENESAS
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 04:03:02AM +0300, Kirill A. Shutemov wrote:
-> On Thu, Sep 22, 2022 at 09:31:12AM -0500, Tom Lendacky wrote:
-> > On 9/8/22 14:28, Mike Rapoport wrote:
-> > > On Thu, Sep 08, 2022 at 09:23:07AM -0700, Dionna Amalie Glaze wrote:
-> > > > > 
-> > > > > Looks like the first access to the memory map fails, although I think
-> > > > > it's not in INIT_LIST_HEAD() but rather in init_page_count().
-> > > > > 
-> > > > > I'd start with making sure that page_alloc::memmap_alloc() actually returns
-> > > > > accepted memory. If you build kernel with CONFIG_DEBUG_VM=y the memory map
-> > > > > will poisoned in this function, so my guess is it'd crash there.
-> > > > > 
-> > > > 
-> > > > That's a wonderful hint, thank you! I did not run this test
-> > > > CONFIG_DEBUG_VM set, but you think it's possible it could still be
-> > > > here?
-> > > 
-> > > It depends on how you configured your kernel. Say, defconfig does not set
-> > > it.
-> > > 
-> > 
-> > I also hit the issue at 256GB. My config is using CONFIG_SPARSEMEM_VMEMMAP
-> > and fails in memmap_init_range() when attempting to add the first PFN. It
-> > looks like the underlying page that is backing the vmemmap has not been
-> > accepted (I receive a #VC 0x404 => page not validated).
-> > 
-> > Kirill, is this a path that you've looked at? It would appear that somewhere
-> > in the vmemmap_populate_hugepages() path, some memory acceptance needs to be
-> > done for the pages that are used to back vmemmap. I'm not very familiar with
-> > this code, so I'm not sure why everything works for a guest with 255GB of
-> > memory, but then fails for a guest with 256GB of memory.
-> 
-> Hm. I don't have machine that large at hands at the moment. And I have not
-> looked at the codepath before.
-> 
-> I will try to look into the issue.
+On Mon, Sep 19, 2022 at 12:46 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> GPIOLIB and PINCTRL config options are required by all ARM32/ARM64/RISC-V
+> Renesas SoCs, so instead of selecting them under ARCH_RENESAS for each
+> architecture just explicitly select them under SOC_RENESAS config option
+> which will be visible for all the three architectures (if ARCH_RENESAS is
+> enabled).
+>
+> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I'm not able to trigger the bug.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
-With help of vm.overcommit_memory=1, I was managed boot TDX guest to shell
-with 256G and 1T of guest memory just fine.
+> Note, only when this patch is merged I'll post the patches to drop GPIOLIB
+> and PINCTRL from [0] and [1] to avoid bisect build failures.
 
-Any chance it is SEV-SNP specific?
+Great!
 
-Or maybe there some difference in kernel config? Could you share yours?
+Gr{oetje,eeting}s,
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
