@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF605EA4E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E1E5EA374
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238312AbiIZL4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S235716AbiIZLZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiIZLxH (ORCPT
+        with ESMTP id S238007AbiIZLXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:53:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC44B1F9;
-        Mon, 26 Sep 2022 03:49:32 -0700 (PDT)
+        Mon, 26 Sep 2022 07:23:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197A043E6D;
+        Mon, 26 Sep 2022 03:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9388B80977;
-        Mon, 26 Sep 2022 10:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412AAC433D6;
-        Mon, 26 Sep 2022 10:49:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E202F60C0D;
+        Mon, 26 Sep 2022 10:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A43C433C1;
+        Mon, 26 Sep 2022 10:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189349;
-        bh=pWaRJyjXJ4O6BGgYMnwLbJO+Jhs/QYK2pFYO54lvYUo=;
+        s=korg; t=1664188766;
+        bh=JXZj6lNusKKzwTQlu5y1VwDInsIzQ4IgA76LmAqU26Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQqHEjS+X1Mp1R9XePRsK9NjjkvZv5b/c/o+fSO/QlA2fdw15QrlYybR9F093FatP
-         UTheemVFZwxYN7mRyVelx8i2PnGKH0t8iJX4+9tnYbmY2e+ME/wEwGgOXvaw/27Cfi
-         j+CEow4ERj3pvECurPyKJ3lyuACRcp5M/9N6t6yY=
+        b=YzF2hSU5VAlSY/idUqbCZ+Ce6WZed11/w41o+EOz9O6+tTH2cNZ9QYzy+jcdaE5Km
+         Pr6/37dP0pExQbQzmLZWV8/l7nEW+KxARpMJLowcyxrINt/3Nk9HftyjuiGTswHiqH
+         BaCnWqleAXA3wFCDCftSQTFNQuiqsIpV13WBrB+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Gospodarek <gospo@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 157/207] bnxt: prevent skb UAF after handing over to PTP worker
-Date:   Mon, 26 Sep 2022 12:12:26 +0200
-Message-Id: <20220926100813.673579991@linuxfoundation.org>
+Subject: [PATCH 5.15 113/148] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
+Date:   Mon, 26 Sep 2022 12:12:27 +0200
+Message-Id: <20220926100800.367951360@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Sean Anderson <seanga2@gmail.com>
 
-[ Upstream commit c31f26c8f69f776759cbbdfb38e40ea91aa0dd65 ]
+[ Upstream commit 878e2405710aacfeeb19364c300f38b7a9abfe8f ]
 
-When reading the timestamp is required bnxt_tx_int() hands
-over the ownership of the completed skb to the PTP worker.
-The skb should not be used afterwards, as the worker may
-run before the rest of our code and free the skb, leading
-to a use-after-free.
+There is a separate receive path for small packets (under 256 bytes).
+Instead of allocating a new dma-capable skb to be used for the next packet,
+this path allocates a skb and copies the data into it (reusing the existing
+sbk for the next packet). There are two bytes of junk data at the beginning
+of every packet. I believe these are inserted in order to allow aligned DMA
+and IP headers. We skip over them using skb_reserve. Before copying over
+the data, we must use a barrier to ensure we see the whole packet. The
+current code only synchronizes len bytes, starting from the beginning of
+the packet, including the junk bytes. However, this leaves off the final
+two bytes in the packet. Synchronize the whole packet.
 
-Since dev_kfree_skb_any() accepts NULL make the loss of
-ownership more obvious and set skb to NULL.
+To reproduce this problem, ping a HME with a payload size between 17 and
+214
 
-Fixes: 83bb623c968e ("bnxt_en: Transmit and retrieve packet timestamps")
-Reviewed-by: Andy Gospodarek <gospo@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Link: https://lore.kernel.org/r/20220921201005.335390-1-kuba@kernel.org
+	$ ping -s 17 <hme_address>
+
+which will complain rather loudly about the data mismatch. Small packets
+(below 60 bytes on the wire) do not have this issue. I suspect this is
+related to the padding added to increase the minimum packet size.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220920235018.1675956-1-seanga2@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/sun/sunhme.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 964354536f9c..111a952f880e 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -662,7 +662,6 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index b05ee2e0e305..735f24a70626 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2039,9 +2039,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
  
- 	for (i = 0; i < nr_pkts; i++) {
- 		struct bnxt_sw_tx_bd *tx_buf;
--		bool compl_deferred = false;
- 		struct sk_buff *skb;
- 		int j, last;
- 
-@@ -671,6 +670,8 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
- 		skb = tx_buf->skb;
- 		tx_buf->skb = NULL;
- 
-+		tx_bytes += skb->len;
-+
- 		if (tx_buf->is_push) {
- 			tx_buf->is_push = 0;
- 			goto next_tx_int;
-@@ -691,8 +692,9 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
- 		}
- 		if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_IN_PROGRESS)) {
- 			if (bp->flags & BNXT_FLAG_CHIP_P5) {
-+				/* PTP worker takes ownership of the skb */
- 				if (!bnxt_get_tx_ts_p5(bp, skb))
--					compl_deferred = true;
-+					skb = NULL;
- 				else
- 					atomic_inc(&bp->ptp_cfg->tx_avail);
- 			}
-@@ -701,9 +703,7 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
- next_tx_int:
- 		cons = NEXT_TX(cons);
- 
--		tx_bytes += skb->len;
--		if (!compl_deferred)
--			dev_kfree_skb_any(skb);
-+		dev_kfree_skb_any(skb);
- 	}
- 
- 	netdev_tx_completed_queue(txq, nr_pkts, tx_bytes);
+ 			skb_reserve(copy_skb, 2);
+ 			skb_put(copy_skb, len);
+-			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			skb_copy_from_linear_data(skb, copy_skb->data, len);
+-			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			/* Reuse original ring buffer. */
+ 			hme_write_rxd(hp, this,
+ 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
 -- 
 2.35.1
 
