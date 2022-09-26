@@ -2,112 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423D45EA24D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCAA5EA332
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiIZLFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S237802AbiIZLVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiIZLER (ORCPT
+        with ESMTP id S237899AbiIZLTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:04:17 -0400
+        Mon, 26 Sep 2022 07:19:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4345F994;
-        Mon, 26 Sep 2022 03:33:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1004B49B;
+        Mon, 26 Sep 2022 03:38:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3095DB80691;
-        Mon, 26 Sep 2022 10:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96534C433D7;
-        Mon, 26 Sep 2022 10:30:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1875B8094D;
+        Mon, 26 Sep 2022 10:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E629C433D6;
+        Mon, 26 Sep 2022 10:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188242;
-        bh=GmsPVQjk22w5J/YIIk1+Ibh2hLoTPH+XqkuhKb9rjus=;
+        s=korg; t=1664188651;
+        bh=971n08AYl3dtsKP2QZadAmqYTFkWUifprnyIL6rmiZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZiEuwTeFOUECaA1BGxSw0k2HxhuDiNlcQnx3f08XqHve4Q4N/QnDxkqm9g1NQU7jm
-         ukKGZ3LENqdKq1uHBafpQPTe4JHcj9DAH63vNj1fDdJHUlHHDQLaLIaigqyRBqHKd3
-         LWlvBABwpr8QvFE3bAd4Ig0rmETayra8kkEAyM9k=
+        b=YvMqQzz8lBry2RAbjyq7ZYXoZls+7Jh3OAzK9AYFAw12PdxKrV252n00ZxxAC2wWw
+         sDnytmF8ilhY5moNQZTG8yE1ByWYRuUm6ZLEwkDT+tvB66svWY3YkJkMdojDZsZRI7
+         Xl40bHPuOsjcDqSkCEICWC7P7fg4vFIBX8RrNo2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 085/141] iavf: Fix set max MTU size with port VLAN and jumbo frames
+Subject: [PATCH 5.15 077/148] net: bonding: Unsync device addresses on ndo_stop
 Date:   Mon, 26 Sep 2022 12:11:51 +0200
-Message-Id: <20220926100757.522257618@linuxfoundation.org>
+Message-Id: <20220926100758.920700319@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 399c98c4dc50b7eb7e9f24da7ffdda6f025676ef ]
+[ Upstream commit 86247aba599e5b07d7e828e6edaaebb0ef2b1158 ]
 
-After setting port VLAN and MTU to 9000 on VF with ice driver there
-was an iavf error
-"PF returned error -5 (IAVF_ERR_PARAM) to our request 6".
+Netdev drivers are expected to call dev_{uc,mc}_sync() in their
+ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
+This is mentioned in the kerneldoc for those dev_* functions.
 
-During queue configuration, VF's max packet size was set to
-IAVF_MAX_RXBUFFER but on ice max frame size was smaller by VLAN_HLEN
-due to making some space for port VLAN as VF is not aware whether it's
-in a port VLAN. This mismatch in sizes caused ice to reject queue
-configuration with ERR_PARAM error. Proper max_mtu is sent from ice PF
-to VF with GET_VF_RESOURCES msg but VF does not look at this.
+The bonding driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
+ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
+already been emptied in unregister_netdevice_many() before ndo_uninit is
+called. This mistake can result in addresses being leftover on former bond
+slaves after a bond has been deleted; see test_LAG_cleanup() in the last
+patch in this series.
 
-In iavf change max_frame from IAVF_MAX_RXBUFFER to max_mtu
-received from pf with GET_VF_RESOURCES msg to make vf's
-max_frame_size dependent from pf. Add check if received max_mtu is
-not in eligible range then set it to IAVF_MAX_RXBUFFER.
+Add unsync calls, via bond_hw_addr_flush(), at their expected location,
+bond_close().
+Add dev_mc_add() call to bond_open() to match the above change.
 
-Fixes: dab86afdbbd1 ("i40e/i40evf: Change the way we limit the maximum frame size for Rx")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+v3:
+* When adding or deleting a slave, only sync/unsync, add/del addresses if
+  the bond is up. In other cases, it is taken care of at the right time by
+  ndo_open/ndo_set_rx_mode/ndo_stop.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_virtchnl.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_main.c | 47 ++++++++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index ff479bf72144..5deee75bc436 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-@@ -241,11 +241,14 @@ int iavf_get_vf_config(struct iavf_adapter *adapter)
- void iavf_configure_queues(struct iavf_adapter *adapter)
- {
- 	struct virtchnl_vsi_queue_config_info *vqci;
--	struct virtchnl_queue_pair_info *vqpi;
-+	int i, max_frame = adapter->vf_res->max_mtu;
- 	int pairs = adapter->num_active_queues;
--	int i, max_frame = IAVF_MAX_RXBUFFER;
-+	struct virtchnl_queue_pair_info *vqpi;
- 	size_t len;
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index afeb213d02fc..01d2c0591eb8 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -883,7 +883,8 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
+ 		if (bond->dev->flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(old_active->dev, -1);
  
-+	if (max_frame > IAVF_MAX_RXBUFFER || !max_frame)
-+		max_frame = IAVF_MAX_RXBUFFER;
+-		bond_hw_addr_flush(bond->dev, old_active->dev);
++		if (bond->dev->flags & IFF_UP)
++			bond_hw_addr_flush(bond->dev, old_active->dev);
+ 	}
+ 
+ 	if (new_active) {
+@@ -894,10 +895,12 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
+ 		if (bond->dev->flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(new_active->dev, 1);
+ 
+-		netif_addr_lock_bh(bond->dev);
+-		dev_uc_sync(new_active->dev, bond->dev);
+-		dev_mc_sync(new_active->dev, bond->dev);
+-		netif_addr_unlock_bh(bond->dev);
++		if (bond->dev->flags & IFF_UP) {
++			netif_addr_lock_bh(bond->dev);
++			dev_uc_sync(new_active->dev, bond->dev);
++			dev_mc_sync(new_active->dev, bond->dev);
++			netif_addr_unlock_bh(bond->dev);
++		}
+ 	}
+ }
+ 
+@@ -2130,13 +2133,15 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 			}
+ 		}
+ 
+-		netif_addr_lock_bh(bond_dev);
+-		dev_mc_sync_multiple(slave_dev, bond_dev);
+-		dev_uc_sync_multiple(slave_dev, bond_dev);
+-		netif_addr_unlock_bh(bond_dev);
++		if (bond_dev->flags & IFF_UP) {
++			netif_addr_lock_bh(bond_dev);
++			dev_mc_sync_multiple(slave_dev, bond_dev);
++			dev_uc_sync_multiple(slave_dev, bond_dev);
++			netif_addr_unlock_bh(bond_dev);
+ 
+-		if (BOND_MODE(bond) == BOND_MODE_8023AD)
+-			dev_mc_add(slave_dev, lacpdu_mcast_addr);
++			if (BOND_MODE(bond) == BOND_MODE_8023AD)
++				dev_mc_add(slave_dev, lacpdu_mcast_addr);
++		}
+ 	}
+ 
+ 	bond->slave_cnt++;
+@@ -2407,7 +2412,8 @@ static int __bond_release_one(struct net_device *bond_dev,
+ 		if (old_flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(slave_dev, -1);
+ 
+-		bond_hw_addr_flush(bond_dev, slave_dev);
++		if (old_flags & IFF_UP)
++			bond_hw_addr_flush(bond_dev, slave_dev);
+ 	}
+ 
+ 	slave_disable_netpoll(slave);
+@@ -3961,6 +3967,9 @@ static int bond_open(struct net_device *bond_dev)
+ 		/* register to receive LACPDUs */
+ 		bond->recv_probe = bond_3ad_lacpdu_recv;
+ 		bond_3ad_initiate_agg_selection(bond, 1);
 +
- 	if (adapter->current_op != VIRTCHNL_OP_UNKNOWN) {
- 		/* bail because we already have a command pending */
- 		dev_err(&adapter->pdev->dev, "Cannot configure queues, command %d pending\n",
++		bond_for_each_slave(bond, slave, iter)
++			dev_mc_add(slave->dev, lacpdu_mcast_addr);
+ 	}
+ 
+ 	if (bond_mode_can_use_xmit_hash(bond))
+@@ -3972,6 +3981,7 @@ static int bond_open(struct net_device *bond_dev)
+ static int bond_close(struct net_device *bond_dev)
+ {
+ 	struct bonding *bond = netdev_priv(bond_dev);
++	struct slave *slave;
+ 
+ 	bond_work_cancel_all(bond);
+ 	bond->send_peer_notif = 0;
+@@ -3979,6 +3989,19 @@ static int bond_close(struct net_device *bond_dev)
+ 		bond_alb_deinitialize(bond);
+ 	bond->recv_probe = NULL;
+ 
++	if (bond_uses_primary(bond)) {
++		rcu_read_lock();
++		slave = rcu_dereference(bond->curr_active_slave);
++		if (slave)
++			bond_hw_addr_flush(bond_dev, slave->dev);
++		rcu_read_unlock();
++	} else {
++		struct list_head *iter;
++
++		bond_for_each_slave(bond, slave, iter)
++			bond_hw_addr_flush(bond_dev, slave->dev);
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 
