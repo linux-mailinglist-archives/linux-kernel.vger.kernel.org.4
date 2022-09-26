@@ -2,89 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AC25E97B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5536E5E97BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiIZB2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S232965AbiIZBgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbiIZB1y (ORCPT
+        with ESMTP id S232535AbiIZBgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:27:54 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC72B269;
-        Sun, 25 Sep 2022 18:27:50 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id UAB00147;
-        Mon, 26 Sep 2022 09:27:47 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
- 15.1.2507.12; Mon, 26 Sep 2022 09:27:47 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <richardcochran@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] ptp: Remove usage of the deprecated ida_simple_xxx API
-Date:   Sun, 25 Sep 2022 21:27:44 -0400
-Message-ID: <20220926012744.3363-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Sun, 25 Sep 2022 21:36:22 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC69D21817;
+        Sun, 25 Sep 2022 18:36:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQeBORE_1664156177;
+Received: from 30.97.56.143(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQeBORE_1664156177)
+          by smtp.aliyun-inc.com;
+          Mon, 26 Sep 2022 09:36:17 +0800
+Message-ID: <45b4b583-d108-b8a2-eee3-3bce755f31ed@linux.alibaba.com>
+Date:   Mon, 26 Sep 2022 09:36:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   20229260927472881b93d13ea070290ca676091240bcf
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V6 0/7] ublk_drv: add USER_RECOVERY support
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, ming.lei@redhat.com
+Cc:     xiaoguang.wang@linux.alibaba.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joseph.qi@linux.alibaba.com
+References: <20220923153919.44078-1-ZiyangZhang@linux.alibaba.com>
+ <88fb97a1-23a1-9f75-a9fa-54b233e0a39e@kernel.dk>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <88fb97a1-23a1-9f75-a9fa-54b233e0a39e@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-13.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc_xxx()/ida_free() instead of
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
+On 2022/9/24 09:12, Jens Axboe wrote:
+> 
+> I'm going to apply 1-6 for 6.1, applying the doc patch is difficult as
+> it only went into 6.0 past forking off the 6.1 block branch. Would you
+> mind resending the 7/7 patch once the merge window opens and I've pushed
+> the previous bits? I may forget otherwise...
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/ptp/ptp_clock.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+OK, I will resend the doc patch.
 
-diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
-index 688cde320bb0..51cae72bb6db 100644
---- a/drivers/ptp/ptp_clock.c
-+++ b/drivers/ptp/ptp_clock.c
-@@ -174,7 +174,7 @@ static void ptp_clock_release(struct device *dev)
- 	mutex_destroy(&ptp->tsevq_mux);
- 	mutex_destroy(&ptp->pincfg_mux);
- 	mutex_destroy(&ptp->n_vclocks_mux);
--	ida_simple_remove(&ptp_clocks_map, ptp->index);
-+	ida_free(&ptp_clocks_map, ptp->index);
- 	kfree(ptp);
- }
- 
-@@ -217,7 +217,7 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
- 	if (ptp == NULL)
- 		goto no_memory;
- 
--	index = ida_simple_get(&ptp_clocks_map, 0, MINORMASK + 1, GFP_KERNEL);
-+	index = ida_alloc_max(&ptp_clocks_map, MINORMASK, GFP_KERNEL);
- 	if (index < 0) {
- 		err = index;
- 		goto no_slot;
-@@ -332,7 +332,7 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
- 	mutex_destroy(&ptp->tsevq_mux);
- 	mutex_destroy(&ptp->pincfg_mux);
- 	mutex_destroy(&ptp->n_vclocks_mux);
--	ida_simple_remove(&ptp_clocks_map, index);
-+	ida_free(&ptp_clocks_map, index);
- no_slot:
- 	kfree(ptp);
- no_memory:
--- 
-2.27.0
-
+Regards,
+Zhang
