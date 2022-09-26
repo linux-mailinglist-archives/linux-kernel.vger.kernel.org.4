@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC35EB35E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684DE5EB364
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIZVnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S229961AbiIZVoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiIZVnV (ORCPT
+        with ESMTP id S229559AbiIZVoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:43:21 -0400
+        Mon, 26 Sep 2022 17:44:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EEA50E8;
-        Mon, 26 Sep 2022 14:43:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27277A260B;
+        Mon, 26 Sep 2022 14:44:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 716A261470;
-        Mon, 26 Sep 2022 21:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C117C433D6;
-        Mon, 26 Sep 2022 21:43:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5E4C61387;
+        Mon, 26 Sep 2022 21:44:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB347C433D6;
+        Mon, 26 Sep 2022 21:43:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664228599;
-        bh=yDsLJI6CYGz3X6/q58qiIO0l/wci+HoSYbTYvzlJ7BA=;
+        s=k20201202; t=1664228642;
+        bh=l/lWJrT4cHiOPDK7ygIeGv7vATX25bNh8bpEBLU1M/w=;
         h=Date:From:To:Cc:Subject:From;
-        b=Wo4hh7jWXqgL9EBmMTYJ5FEhmLTj/hY41/Xu70oR7+DDRB0zDnfwgxYkOV5BXW19p
-         5Sj1sZwjjgbGx7peQ9WEr47yHEaTi7TRyG5qP7eyd2lojpxc1FpLi+QfyhWuJvh+or
-         tutGhqFaMK6brnJYvXb5Yn1xmawieRLFlKag8CVeRdn9j+mulcIr6Cas+klbNJrlts
-         XaQ38ABFoI+1gENdJ1OmHqPad7Mli6V1thW13RRK+Dn1K9Suzwq7p6y9ZWUiXbe92T
-         auM7skXSdwTLUfmW7yM9lYqqb/t9GcFA2d5wtU0cpZfGgrqN58K9w1wBpekjeNLkWb
-         8inCKolEP48qw==
-Date:   Mon, 26 Sep 2022 16:43:15 -0500
+        b=dHWzkwPfoc2i2YpAkIG5D2BDig+nx/fYd4f/IQrpYPFIpvruiuOk81hfIKJkGwdEL
+         Pyg3Oa3zG8VIvPBQDALhZ8OkDPekTW9kcFGK3xWmwsQdwOjkz775V7bSDkOuOmAIH1
+         EL92Jut+cMYQUBRd8UgjrCbQSZ6eBP6naEC9dd/2h15dF8S11kUeqIShFtQMV/ftxy
+         wu9ijQqg6HdX0J6UTL6zQudoK2brincVUaAeuIgj12CpY9rOBOljabLrUftrFShKkJ
+         0NyEjF605JhLBX7RFBd0CocLPP1BOdDhOCaJoQdfdAj7oy9+pZ0wDl72NINYMDo8KE
+         dPyIesWa6qtcg==
+Date:   Mon, 26 Sep 2022 16:43:56 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Coly Li <colyli@suse.de>,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH][next] bcache: Replace zero-length arrays with
+Subject: [PATCH][next] can: ucan: Replace zero-length array with
  DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIc8z+QaHvqPjLX@work>
+Message-ID: <YzIdHDdz30BH4SAv@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -62,38 +67,26 @@ helper macro.
 This helper allows for flexible-array members in unions.
 
 Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/213
+Link: https://github.com/KSPP/linux/issues/214
 Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/md/bcache/bcache_ondisk.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/can/usb/ucan.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/bcache/bcache_ondisk.h b/drivers/md/bcache/bcache_ondisk.h
-index 97413586195b..d086a0ce4bc2 100644
---- a/drivers/md/bcache/bcache_ondisk.h
-+++ b/drivers/md/bcache/bcache_ondisk.h
-@@ -359,8 +359,8 @@ struct jset {
- 	__u64			prio_bucket[MAX_CACHES_PER_SET];
- 
- 	union {
--		struct bkey	start[0];
--		__u64		d[0];
-+		DECLARE_FLEX_ARRAY(struct bkey, start);
-+		DECLARE_FLEX_ARRAY(__u64, d);
- 	};
- };
- 
-@@ -424,8 +424,8 @@ struct bset {
- 	__u32			keys;
- 
- 	union {
--		struct bkey	start[0];
--		__u64		d[0];
-+		DECLARE_FLEX_ARRAY(struct bkey, start);
-+		DECLARE_FLEX_ARRAY(__u64, d);
- 	};
- };
+diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+index 7c35f50fda4e..b53e709943bc 100644
+--- a/drivers/net/can/usb/ucan.c
++++ b/drivers/net/can/usb/ucan.c
+@@ -245,7 +245,8 @@ struct ucan_message_in {
+ 		/* CAN transmission complete
+ 		 * (type == UCAN_IN_TX_COMPLETE)
+ 		 */
+-		struct ucan_tx_complete_entry_t can_tx_complete_msg[0];
++		DECLARE_FLEX_ARRAY(struct ucan_tx_complete_entry_t,
++				   can_tx_complete_msg);
+ 	} __aligned(0x4) msg;
+ } __packed __aligned(0x4);
  
 -- 
 2.34.1
