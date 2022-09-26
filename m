@@ -2,97 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7605EA7FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6608F5EA7E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbiIZOJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S233599AbiIZOGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbiIZOIk (ORCPT
+        with ESMTP id S234303AbiIZOGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:08:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186ED24D;
-        Mon, 26 Sep 2022 05:19:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 26 Sep 2022 10:06:00 -0400
+X-Greylist: delayed 1298 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 05:17:19 PDT
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E9ED86FEE;
+        Mon, 26 Sep 2022 05:17:18 -0700 (PDT)
+Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 68BA31F8AA;
-        Mon, 26 Sep 2022 12:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664193738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z5yBy6W2fnTZVXsf//nbkl+cALY92UVk+B+WQamcjzo=;
-        b=teQ+cileX93nVAfM0CquqykdkJ/g++nir/f0UTviBL1F8Lost0M1xCMd+msl2JwjyhVHJz
-        BFxhuR0Uc2//hJBcT52KonqOfKhHjOZSpulwLUcCCi8Cywz7EK9dqg3iICMQ7yQH3WwF9n
-        B+6jAM0rkgp/jFwShic1qOItxFZQMJQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 49AE3139BD;
-        Mon, 26 Sep 2022 12:02:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E1C5D8qUMWM5RAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 26 Sep 2022 12:02:18 +0000
-Date:   Mon, 26 Sep 2022 14:02:17 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, urezki@gmail.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <YzGUyWlYd15uLu7G@dhcp22.suse.cz>
-References: <20220923103858.26729-1-fw@strlen.de>
- <Yy20toVrIktiMSvH@dhcp22.suse.cz>
- <20220923133512.GE22541@breakpoint.cc>
- <YzFZf0Onm6/UH7/I@dhcp22.suse.cz>
- <20220926075639.GA908@breakpoint.cc>
- <YzFplwSxwwsLpzzX@dhcp22.suse.cz>
- <YzFxHlYoncuDl2fM@dhcp22.suse.cz>
- <20220926100800.GB12777@breakpoint.cc>
+        by mail.8bytes.org (Postfix) with ESMTPSA id CBBCA222669;
+        Mon, 26 Sep 2022 14:06:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1664193983;
+        bh=WVitcPg/m0RCQapt+963hXu42ZEdMg6DpnM7zzVkG7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mfs2aCFLhFgubexofJvVdFPUQ1goMDU5ZQQKmyqtHjeLT505bLm+bkKr6w5JB+rv5
+         dG9m8/sClA4WhKhUKm/A3Z4EfAW7zaReAIkCa314Sfsbrw1jrRoagebtELrlSRIC1U
+         2468lRBDfWpXrHgFLOscZOs4H88TCNv4rIb+/pEXYvLLf7yDMp3gMouvk+AMvwg5Mb
+         ktLHqA97ir54KvwlIkvVLP/RPVb1p9J+lDOms+bz42nh44sqJotvF1Z+//HW+9eO3u
+         baKuKx9BUXtlO6XWcXkzShlYNYrfF0kPGoB6NJVB3Yejf/5HOl3iU3lBuEzNVc7JE8
+         CIw2HVCukJMgQ==
+Date:   Mon, 26 Sep 2022 14:06:21 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iommu: arm,smmu-v3: Relax order of
+ interrupt names
+Message-ID: <YzGVvSmkCeKECSTn@8bytes.org>
+References: <20220916133145.1910549-1-jean-philippe@linaro.org>
+ <20220922210855.GC12945@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926100800.GB12777@breakpoint.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220922210855.GC12945@willie-the-truck>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-09-22 12:08:00, Florian Westphal wrote:
-> Michal Hocko <mhocko@suse.com> wrote:
-> > +		old_tbl = rht_dereference_rcu(ht->tbl, ht);
-> > +		size = tbl->size;
-> > +
-> > +		data = ERR_PTR(-EBUSY);
-> > +
-> > +		if (rht_grow_above_75(ht, tbl))
-> > +			size *= 2;
-> > +		/* Do not schedule more than one rehash */
-> > +		else if (old_tbl != tbl)
-> > +			return data;
-> > +
-> > +		data = ERR_PTR(-ENOMEM);
-> > +
-> > +		rcu_read_unlock();
-> > +		new_tbl = bucket_table_alloc(ht, size, GFP_KERNEL);
-> > +		rcu_read_lock();
+On Thu, Sep 22, 2022 at 10:08:56PM +0100, Will Deacon wrote:
+> Acked-by: Will Deacon <will@kernel.org>
 > 
-> I don't think this is going to work, there can be callers that
-> rely on rcu protected data structures getting free'd.
+> Joerg -- please can you take this one directly for 6.1? I don't actually
+> have any other SMMU patches queued, so it doesn't seem worth sending a pull
+> request just for this.
 
-The caller of this function drops RCU for each retry, why should be the
-called function any special?
--- 
-Michal Hocko
-SUSE Labs
+Applied, thanks.
