@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7375EA38F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564025EA442
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237861AbiIZL1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S236410AbiIZLmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbiIZL0b (ORCPT
+        with ESMTP id S238253AbiIZLmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:26:31 -0400
+        Mon, 26 Sep 2022 07:42:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B8069F6F;
-        Mon, 26 Sep 2022 03:40:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EC571991;
+        Mon, 26 Sep 2022 03:45:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20FD1B8068A;
-        Mon, 26 Sep 2022 10:40:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F59C433D6;
-        Mon, 26 Sep 2022 10:40:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EF9CB80925;
+        Mon, 26 Sep 2022 10:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970ADC433D6;
+        Mon, 26 Sep 2022 10:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188834;
-        bh=yPR+aSuoNrFsZhZZCkn3ZC1acLKJnWnud/6ONVX08PM=;
+        s=korg; t=1664188428;
+        bh=8U7n+Red/wpu8WLZ1/kwp1ZzGtokSIwdUCrDDd5qVOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=llnUN3/2R4m5q5ff/AGPCm14Yk0JxvuRSX6CWv7ZvVfOMzwjgGDw7xUK+StSTWpIF
-         ZPiPlPR6ZYAixu5GfwBg0xuGAhpjw8ER+SP6FQVmRJOtuAAtVneN1B5np/KORzLEiU
-         5brxEaw/DkhzUY/0pg+sWHsUfezmJgGPWgtr7N2o=
+        b=aaaOv5QWEnuNIc/k8TK0k1xzWRPBHuApUHgAkd9X1ctJgkrAqCpVNZNvF7+V8RPgO
+         ILkeEU6Ft0pzKJRSmgfdkjcRsAYBkFH7McD7eCK7RZubXFqZJH6IYGmEaDjeiTZ+mz
+         fKxn9T1V1EcoQpxFUUGp4xD/W1d0+7r/O13I6zoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        stable <stable@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5.15 119/148] serial: Create uart_xmit_advance()
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 127/141] drm/gma500: Fix BUG: sleeping function called from invalid context errors
 Date:   Mon, 26 Sep 2022 12:12:33 +0200
-Message-Id: <20220926100800.598374044@linuxfoundation.org>
+Message-Id: <20220926100759.062395323@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit e77cab77f2cb3a1ca2ba8df4af45bb35617ac16d upstream.
+[ Upstream commit 63e37a79f7bd939314997e29c2f5a9f0ef184281 ]
 
-A very common pattern in the drivers is to advance xmit tail
-index and do bookkeeping of Tx'ed characters. Create
-uart_xmit_advance() to handle it.
+gma_crtc_page_flip() was holding the event_lock spinlock while calling
+crtc_funcs->mode_set_base() which takes ww_mutex.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220901143934.8850-2-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The only reason to hold event_lock is to clear gma_crtc->page_flip_event
+on mode_set_base() errors.
+
+Instead unlock it after setting gma_crtc->page_flip_event and on
+errors re-take the lock and clear gma_crtc->page_flip_event it
+it is still set.
+
+This fixes the following WARN/stacktrace:
+
+[  512.122953] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:870
+[  512.123004] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1253, name: gnome-shell
+[  512.123031] preempt_count: 1, expected: 0
+[  512.123048] RCU nest depth: 0, expected: 0
+[  512.123066] INFO: lockdep is turned off.
+[  512.123080] irq event stamp: 0
+[  512.123094] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[  512.123134] hardirqs last disabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123176] softirqs last  enabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123207] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[  512.123233] Preemption disabled at:
+[  512.123241] [<0000000000000000>] 0x0
+[  512.123275] CPU: 3 PID: 1253 Comm: gnome-shell Tainted: G        W         5.19.0+ #1
+[  512.123304] Hardware name: Packard Bell dot s/SJE01_CT, BIOS V1.10 07/23/2013
+[  512.123323] Call Trace:
+[  512.123346]  <TASK>
+[  512.123370]  dump_stack_lvl+0x5b/0x77
+[  512.123412]  __might_resched.cold+0xff/0x13a
+[  512.123458]  ww_mutex_lock+0x1e/0xa0
+[  512.123495]  psb_gem_pin+0x2c/0x150 [gma500_gfx]
+[  512.123601]  gma_pipe_set_base+0x76/0x240 [gma500_gfx]
+[  512.123708]  gma_crtc_page_flip+0x95/0x130 [gma500_gfx]
+[  512.123808]  drm_mode_page_flip_ioctl+0x57d/0x5d0
+[  512.123897]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.123936]  drm_ioctl_kernel+0xa1/0x150
+[  512.123984]  drm_ioctl+0x21f/0x420
+[  512.124025]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.124070]  ? rcu_read_lock_bh_held+0xb/0x60
+[  512.124104]  ? lock_release+0x1ef/0x2d0
+[  512.124161]  __x64_sys_ioctl+0x8d/0xd0
+[  512.124203]  do_syscall_64+0x58/0x80
+[  512.124239]  ? do_syscall_64+0x67/0x80
+[  512.124267]  ? trace_hardirqs_on_prepare+0x55/0xe0
+[  512.124300]  ? do_syscall_64+0x67/0x80
+[  512.124340]  ? rcu_read_lock_sched_held+0x10/0x80
+[  512.124377]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  512.124411] RIP: 0033:0x7fcc4a70740f
+[  512.124442] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+[  512.124470] RSP: 002b:00007ffda73f5390 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  512.124503] RAX: ffffffffffffffda RBX: 000055cc9e474500 RCX: 00007fcc4a70740f
+[  512.124524] RDX: 00007ffda73f5420 RSI: 00000000c01864b0 RDI: 0000000000000009
+[  512.124544] RBP: 00007ffda73f5420 R08: 000055cc9c0b0cb0 R09: 0000000000000034
+[  512.124564] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000c01864b0
+[  512.124584] R13: 0000000000000009 R14: 000055cc9df484d0 R15: 000055cc9af5d0c0
+[  512.124647]  </TASK>
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220906203852.527663-2-hdegoede@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/serial_core.h |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/gpu/drm/gma500/gma_display.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -300,6 +300,23 @@ struct uart_state {
- /* number of characters left in xmit buffer before we ask for more */
- #define WAKEUP_CHARS		256
+diff --git a/drivers/gpu/drm/gma500/gma_display.c b/drivers/gpu/drm/gma500/gma_display.c
+index 3df6d6e850f5..70148ae16f14 100644
+--- a/drivers/gpu/drm/gma500/gma_display.c
++++ b/drivers/gpu/drm/gma500/gma_display.c
+@@ -529,15 +529,18 @@ int gma_crtc_page_flip(struct drm_crtc *crtc,
+ 		WARN_ON(drm_crtc_vblank_get(crtc) != 0);
  
-+/**
-+ * uart_xmit_advance - Advance xmit buffer and account Tx'ed chars
-+ * @up: uart_port structure describing the port
-+ * @chars: number of characters sent
-+ *
-+ * This function advances the tail of circular xmit buffer by the number of
-+ * @chars transmitted and handles accounting of transmitted bytes (into
-+ * @up's icount.tx).
-+ */
-+static inline void uart_xmit_advance(struct uart_port *up, unsigned int chars)
-+{
-+	struct circ_buf *xmit = &up->state->xmit;
-+
-+	xmit->tail = (xmit->tail + chars) & (UART_XMIT_SIZE - 1);
-+	up->icount.tx += chars;
-+}
-+
- struct module;
- struct tty_driver;
+ 		gma_crtc->page_flip_event = event;
++		spin_unlock_irqrestore(&dev->event_lock, flags);
  
+ 		/* Call this locked if we want an event at vblank interrupt. */
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 		if (ret) {
+-			gma_crtc->page_flip_event = NULL;
+-			drm_crtc_vblank_put(crtc);
++			spin_lock_irqsave(&dev->event_lock, flags);
++			if (gma_crtc->page_flip_event) {
++				gma_crtc->page_flip_event = NULL;
++				drm_crtc_vblank_put(crtc);
++			}
++			spin_unlock_irqrestore(&dev->event_lock, flags);
+ 		}
+-
+-		spin_unlock_irqrestore(&dev->event_lock, flags);
+ 	} else {
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 	}
+-- 
+2.35.1
+
 
 
