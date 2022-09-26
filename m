@@ -2,121 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A9D5EAE4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDFD5EAE4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiIZRhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S231131AbiIZRit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiIZRhG (ORCPT
+        with ESMTP id S230489AbiIZRi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:37:06 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1EABC0E;
-        Mon, 26 Sep 2022 09:59:15 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QF0AF5025993;
-        Mon, 26 Sep 2022 16:59:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=+PHttfptqZAAP87O1z2h3TnIUx513ASyRdQuwlYwMHA=;
- b=Ux8pYaEgZDXjhNg75OM3feddd8HqkSAHV0qJ4D3FmHBEGHr3iPxhGmyjf/HHEIJb7Pl6
- FxxQPuWrWSlB5Ydz/3IsxchZ8yg0MM4axPKoVrxKtJ4a/ZNaev6A3E1cv5/02MIrnFhG
- 32j1SNxqKU0cuswr/KfEaVllCDrHHJJ6TUQOVo3o0s8rvlFMQFovjHhBTZZEO4ncQ/SL
- XcMtU622xTY3uS81lNtDm6L53GUj01v07HiI4bpbpz7p53MiqkG1g5yoCIb2FuNf2HEh
- hTFKxudpPOn3TGCuock/P4nGRK5wRwaF3xamwI7IYf0Mg2pm9Xmv9xTdMSiWRfeRlDUd mw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jue008dts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 16:59:06 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QGx6UO010843
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 16:59:06 GMT
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 26 Sep
- 2022 09:59:05 -0700
-Date:   Mon, 26 Sep 2022 09:59:04 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <martin.botka@somainline.org>,
-        <angelogioacchino.delregno@somainline.org>,
-        <marijn.suijten@somainline.org>, <jamipkettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
-Message-ID: <20220926165904.GA17938@quicinc.com>
-References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
- <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
- <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
- <20220924000932.GA1450@quicinc.com>
- <fcc5bc9f-6b6b-b9ca-45aa-ff2c880a4774@linaro.org>
+        Mon, 26 Sep 2022 13:38:28 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0996D7B2A5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:00:54 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id w20so6768439ply.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=z5Lh0ZhCLRw/22KvXbygZ6bO5ygerKn8ycKcsm/8PeY=;
+        b=GF29IhcRkn0LFKGpPlho8n9jNHDJuVjJJl/tu6MpVOjKY/AnTlaX5+CLBpFUS/a/m7
+         CP+vp4FkmFbwv61qjmlFHTlYhMB9OeEzTDO+QPi+QXV3LZFxTY/+6hnGjmedgdJExQm6
+         5HzvJdv/1E6rESOwnVzeKmFBWlksph7/+m+QHnN3i88tBqwmVQaQUWDaV0luanNx5VRM
+         jHXv0GAOHgF/MXkFXuarv+dVxVzXkH5PEgjvb400JFKombpcoU/5QgoqrUE89gKovUhP
+         INWrlCf0KZVM+341Fh1yEapH9hBpCCiWyNFyubq3N2jAe5/oHKOPFPbSPPlLimuOWtqt
+         exQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=z5Lh0ZhCLRw/22KvXbygZ6bO5ygerKn8ycKcsm/8PeY=;
+        b=dANH9a9u3orBHtjEr7MpYq5QJLcgdYUuQp9+364Y6XSeJC7n/nBKQ3sL+ilKVAPoCw
+         A7PwPL+w8clEm424pQDFHNB/Kyzd6ODnI2gPC+K8eix3YrQwlbJicDl1fwGdVQ0vFMA6
+         lWK+fmHXsDsB5f8R1t38nVNF5S/rPWGZ3WTXzQrJdXtTM6TvzckkCjWql9XUe0ovMV78
+         o6t6T+77flLgRIlED4peyXjrLVMKmKdh/wVpSRWqJ4eL9JQDsvsmM/Z8BlIyFKnkKgjK
+         GNMhDiE310r6za0oljRR/Dd+popbgvI/ZRgLgFpGdPpUz8PBoNf+m2M+ueGoumSbJQl2
+         UKew==
+X-Gm-Message-State: ACrzQf11EtclCkVb+0y7GVxMV2gxnyLgToqhQe1wtpjxDLm5D+Ttn8KD
+        hs0DmaF3JFVtvrkk0LuGEmu5gg==
+X-Google-Smtp-Source: AMsMyM6ahqFXSv7YPIk5kT0Cm18LWgqTBk9xRe/9LMgLfpWknm6OmYdDCsh9UwwPPP1A7tJZ3WE2Bw==
+X-Received: by 2002:a17:902:bb88:b0:178:24f6:4dfc with SMTP id m8-20020a170902bb8800b0017824f64dfcmr22660977pls.169.1664211653540;
+        Mon, 26 Sep 2022 10:00:53 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090a400b00b0020396a060cdsm6783923pjc.13.2022.09.26.10.00.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 10:00:53 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 17:00:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH v3 07/28] KVM: x86: Inhibit APIC memslot if x2APIC and
+ AVIC are enabled
+Message-ID: <YzHawRN8vpEzP7XD@google.com>
+References: <20220920233134.940511-1-seanjc@google.com>
+ <20220920233134.940511-8-seanjc@google.com>
+ <e84ebf0a7ac9322bd0cfa742ef6dd2bbfdac0df9.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fcc5bc9f-6b6b-b9ca-45aa-ff2c880a4774@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8opTOlmVR14iX-kUQiFXEJInD6HMrkME
-X-Proofpoint-ORIG-GUID: 8opTOlmVR14iX-kUQiFXEJInD6HMrkME
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=872 suspectscore=0 spamscore=0 bulkscore=0
- adultscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209260108
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e84ebf0a7ac9322bd0cfa742ef6dd2bbfdac0df9.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sep 24 2022 10:17, Krzysztof Kozlowski wrote:
-> On 24/09/2022 02:09, Guru Das Srinagesh wrote:
-> > On Sep 21 2022 20:43, Konrad Dybcio wrote:
-> >> Does it? I did not define this compatible in the driver, so it does
-> >> not consume any clocks.
-> > 
-> > The bindings should describe only those compatibles that the driver supports -
-> > that is, both the driver and its bindings should be in sync.
+On Fri, Sep 23, 2022, Maxim Levitsky wrote:
+> On Tue, 2022-09-20 at 23:31 +0000, Sean Christopherson wrote:
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 2c96c43c313a..6475c882b359 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1132,6 +1132,17 @@ enum kvm_apicv_inhibit {
+> >  	 * AVIC is disabled because SEV doesn't support it.
+> >  	 */
+> >  	APICV_INHIBIT_REASON_SEV,
+> > +
+> > +	/*
+> > +	 * Due to sharing page tables across vCPUs, the xAPIC memslot must be
+> > +	 * deleted if any vCPU has x2APIC enabled as SVM doesn't provide fully
+> > +	 * independent controls for AVIC vs. x2AVIC, and also because SVM
+> > +	 * supports a "hybrid" AVIC mode for CPUs that support AVIC but not
+> > +	 * x2AVIC.  Note, this isn't a "full" inhibit and is tracked separately.
+> > +	 * AVIC can still be activated, but KVM must not create SPTEs for the
+> > +	 * APIC base.  For simplicity, this is sticky.
+> > +	 */
+> > +	APICV_INHIBIT_REASON_X2APIC,
 > 
-> That's not entirely true. Bindings describe the hardware in the most
-> complete way we can. Not the driver. Whether driver supports something
-> or not, is not relevant here, except that we don't want to document
-> non-existing things or stuff out of tree.
-
-Is this only applicable to compatibles or device tree properties in general?
-
-> > 
-> > Could you please update the driver with this compatible as well? Let's not
-> > merge this change without that first.
+> Hi Sean!
 > 
-> This could be even merged without change in the driver. However it's not
-> the case here as driver already supports it, so your request is fulfilled.
+> So assuming that I won't object to making it SVM specific (I still think
+> that VMX should also inhibit this memslot because this is closer to x86 spec,
+> but if you really want it this way, I won't fight over it):
 
-My concern is that if somebody specifies a compatible/device tree property that
-the driver doesn't support, their expectations from adding that change will not
-be met. In addition to having the bindings describe HW in full, I think the
-driver should also be in sync with it for this reason.
+Heh, I don't necessarily "want" it this way, it's more that I don't see a compelling
+reason to change KVM's behavior and risk silently causing a performance regression.
+If KVM didn't already have the "APIC base may have RAM semantics" quirk, and/or if
+this were the initial APICv implementation and thus no possible users, then I would
+probably also vote to give APICv the same treatment.
 
-Thank you.
+> I somewhat don't like this inhibit, because now it is used just to say
+> 'I am AVIC'.
+> 
+> What do you think if you just move the code that removes the memslot to SVM,
+> to avic_set_virtual_apic_mode?
 
-Guru Das.
+Suffers the same SRCU issue (see below) :-/
+
+Given the SRCU problem, I'd prefer to keep the management of the memslot in common
+code, even though I agree it's a bit silly.  And KVM_REQ_UNBLOCK is a perfect fit
+for dealing with the SRCU issue, i.e. handling this in AVIC code would require
+another hook on top of spreading the memslot management across x86 and SVM code.
+
+> > @@ -1169,10 +1180,11 @@ struct kvm_arch {
+> >  	struct kvm_apic_map __rcu *apic_map;
+> >  	atomic_t apic_map_dirty;
+> >  
+> > -	/* Protects apic_access_memslot_enabled and apicv_inhibit_reasons */
+> > -	struct rw_semaphore apicv_update_lock;
+> > -
+> >  	bool apic_access_memslot_enabled;
+> > +	bool apic_access_memslot_inhibited;
+> 
+> So the apic_access_memslot_enabled currently tracks if the memslot is enabled.
+> As I see later in the patch when you free the memslot, you set it to false,
+> which means that if a vCPU is created after that (it can happen in theory),
+> the memslot will be created again :(
+> 
+> I say we need 'enabled', and 'allocated' booleans instead. Inhibit will set
+> enabled to false, and then on next vcpu run, that will free the memslot.
+> 
+> when enabled == false, the code needs to be changed to not allocate it again.
+
+This should be handled already.  apic_access_memslot_enabled is toggled from
+true=>false if and only if apic_access_memslot_inhibited is set, and the "enabled"
+flag is protected by slots_lock.  Thus, newly created vCPUs are guaranteed to
+either see apic_access_memslot_enabled==true or apic_access_memslot_inhibited==true.
+
+  int kvm_alloc_apic_access_page(struct kvm *kvm)
+  {
+	struct page *page;
+	void __user *hva;
+	int ret = 0;
+
+	mutex_lock(&kvm->slots_lock);
+	if (kvm->arch.apic_access_memslot_enabled ||
+	    kvm->arch.apic_access_memslot_inhibited)  <=== prevents reallocation
+		goto out;
+
+  out:
+	mutex_unlock(&kvm->slots_lock);
+	return ret;
+  }
+
+That could be made more obvious by adding a WARN in kvm_free_apic_access_page(), i.e.
+
+  void kvm_free_apic_access_page(struct kvm *kvm)
+  {
+	WARN_ON_ONCE(!kvm->arch.apic_access_memslot_inhibited);
+
+	mutex_lock(&kvm->slots_lock);
+
+	if (kvm->arch.apic_access_memslot_enabled) {
+		__x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT, 0, 0);
+		kvm->arch.apic_access_memslot_enabled = false;
+	}
+
+	mutex_unlock(&kvm->slots_lock);
+  }
+
+> > +
+> > +	/* Protects apicv_inhibit_reasons */
+> > +	struct rw_semaphore apicv_update_lock;
+> >  	unsigned long apicv_inhibit_reasons;
+> >  
+> >  	gpa_t wall_clock;
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index 99994d2470a2..70f00eda75b2 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -2394,9 +2394,26 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+> >  		}
+> >  	}
+> >  
+> > -	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
+> > +	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE)) {
+> >  		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
+> >  
+> > +		/*
+> > +		 * Mark the APIC memslot as inhibited if x2APIC is enabled and
+> > +		 * the x2APIC inhibit is required.  The actual deletion of the
+> > +		 * memslot is handled by vcpu_run() as SRCU may or may not be
+> > +		 * held at this time, i.e. updating memslots isn't safe.  Don't
+> > +		 * check apic_access_memslot_inhibited, this vCPU needs to
+> > +		 * ensure the memslot is deleted before re-entering the guest,
+> > +		 * i.e. needs to make the request even if the inhibit flag was
+> > +		 * already set by a different vCPU.
+> > +		 */
+> > +		if (vcpu->kvm->arch.apic_access_memslot_enabled &&
+> > +		    static_call(kvm_x86_check_apicv_inhibit_reasons)(APICV_INHIBIT_REASON_X2APIC)) {
+> > +			vcpu->kvm->arch.apic_access_memslot_inhibited = true;
+> > +			kvm_make_request(KVM_REQ_UNBLOCK, vcpu);
+> 
+> You are about to remove the KVM_REQ_UNBLOCK in other patch series.
+
+No, KVM_REQ_UNHALT is being removed.  KVM_REQ_UNBLOCK needs to stay, although it
+has a rather weird name, e.g. KVM_REQ_WORK would probably be better.
+
+> How about just raising KVM_REQ_APICV_UPDATE on current vCPU
+> and having a special case in kvm_vcpu_update_apicv of 
+> 
+> if (apic_access_memslot_enabled == false && apic_access_memslot_allocaed == true) {
+> 	drop srcu lock
+
+This was my initial thought as well, but the issue is that SRCU may or may not be
+held, and so the unlock+lock would need to be conditional.  That's technically a
+solvable problem, as it's possible to detect if SRCU is held, but I really don't
+want to rely on kvm_vcpu.srcu_depth for anything other than proving that KVM doesn't
+screw up SRCU.
+
+> 	free the memslot
+> 	take srcu lock
+> }
