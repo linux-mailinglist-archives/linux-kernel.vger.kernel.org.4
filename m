@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467185EA2E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A38C5EA10E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbiIZLQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S236326AbiIZKpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237538AbiIZLPN (ORCPT
+        with ESMTP id S236201AbiIZKm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:15:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BB162AAB;
-        Mon, 26 Sep 2022 03:36:50 -0700 (PDT)
+        Mon, 26 Sep 2022 06:42:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491FB18E24;
+        Mon, 26 Sep 2022 03:24:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC80460CEF;
-        Mon, 26 Sep 2022 10:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF6EC433D7;
-        Mon, 26 Sep 2022 10:35:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C2F8B80915;
+        Mon, 26 Sep 2022 10:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBC7C433C1;
+        Mon, 26 Sep 2022 10:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188537;
-        bh=ZefyUdyjrZLLfgXROT+Cq73VQjC9GSiMHSF4lSNyBcw=;
+        s=korg; t=1664187833;
+        bh=vSdOEAMstmSmfi3lFpIiRMp77RLfuMXmUwhvpHUwSLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xmen2ttELWJlMCvjVFioEVUqIJXTmShPbSZwDtu/2CzpSkmiS8MBDnsQLXFIk2+M0
-         oHzbldVpQkbfBbHMhaHGhe2kVX0ysOuvN4sQKZh68j3A7BnWtrrGP5YAsbJC4cdnqO
-         zLkTCejH7nsgNJGbqjXOas1qF9oXlSAK+aPFBjuc=
+        b=G1FJf31N8W013+wnJtBFSTrwuML3r9kwchZefiWuredUO2uFA7MVdeeUab10oBD2C
+         lnoXwbrxrbi+6zBQY+9j5zQ4UCFIWRMBELXqMCHhPeXoVsHkVgRcjCChtZABYluKlF
+         stp9XIKVouK+gebxC7n6b7xmiLGj6Lj2Uuf6bs74=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 040/148] efi: x86: Wipe setup_data on pure EFI boot
-Date:   Mon, 26 Sep 2022 12:11:14 +0200
-Message-Id: <20220926100757.527201838@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 042/120] iio:adc:mcp3911: Switch to generic firmware properties.
+Date:   Mon, 26 Sep 2022 12:11:15 +0200
+Message-Id: <20220926100752.250813953@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-commit 63bf28ceb3ebbe76048c3fb2987996ca1ae64f83 upstream.
+[ Upstream commit 4efc1c614d334883cce09c38aa3fe74d3fb0bbf0 ]
 
-When booting the x86 kernel via EFI using the LoadImage/StartImage boot
-services [as opposed to the deprecated EFI handover protocol], the setup
-header is taken from the image directly, and given that EFI's LoadImage
-has no Linux/x86 specific knowledge regarding struct bootparams or
-struct setup_header, any absolute addresses in the setup header must
-originate from the file and not from a prior loading stage.
+This allows use of the driver with other types of firmware such as ACPI
+PRP0001 based probing.
 
-Since we cannot generally predict where LoadImage() decides to load an
-image (*), such absolute addresses must be treated as suspect: even if a
-prior boot stage intended to make them point somewhere inside the
-[signed] image, there is no way to validate that, and if they point at
-an arbitrary location in memory, the setup_data nodes will not be
-covered by any signatures or TPM measurements either, and could be made
-to contain an arbitrary sequence of SETUP_xxx nodes, which could
-interfere quite badly with the early x86 boot sequence.
+Also part of a general attempt to remove direct use of of_ specific
+accessors from IIO.
 
-(*) Note that, while LoadImage() does take a buffer/size tuple in
-addition to a device path, which can be used to provide the image
-contents directly, it will re-allocate such images, as the memory
-footprint of an image is generally larger than the PE/COFF file
-representation.
+Added an include for mod_devicetable.h whilst here to cover the
+struct of_device_id definition.
 
-Cc: <stable@vger.kernel.org> # v5.10+
-Link: https://lore.kernel.org/all/20220904165321.1140894-1-Jason@zx2c4.com/
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Kent Gustavsson <kent@minoris.se>
+Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Stable-dep-of: cfbd76d5c9c4 ("iio: adc: mcp3911: correct "microchip,device-addr" property")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/libstub/x86-stub.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/iio/adc/mcp3911.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -414,6 +414,13 @@ efi_status_t __efiapi efi_pe_entry(efi_h
- 	hdr->ramdisk_image = 0;
- 	hdr->ramdisk_size = 0;
+diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+index 4e2e8e819b1e..cd8b1bab9cf0 100644
+--- a/drivers/iio/adc/mcp3911.c
++++ b/drivers/iio/adc/mcp3911.c
+@@ -10,6 +10,8 @@
+ #include <linux/err.h>
+ #include <linux/iio/iio.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/spi/spi.h>
  
-+	/*
-+	 * Disregard any setup data that was provided by the bootloader:
-+	 * setup_data could be pointing anywhere, and we have no way of
-+	 * authenticating or validating the payload.
-+	 */
-+	hdr->setup_data = 0;
-+
- 	efi_stub_entry(handle, sys_table_arg, boot_params);
- 	/* not reached */
+@@ -209,12 +211,13 @@ static const struct iio_info mcp3911_info = {
+ 	.write_raw = mcp3911_write_raw,
+ };
  
+-static int mcp3911_config(struct mcp3911 *adc, struct device_node *of_node)
++static int mcp3911_config(struct mcp3911 *adc)
+ {
++	struct device *dev = &adc->spi->dev;
+ 	u32 configreg;
+ 	int ret;
+ 
+-	of_property_read_u32(of_node, "device-addr", &adc->dev_addr);
++	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
+ 	if (adc->dev_addr > 3) {
+ 		dev_err(&adc->spi->dev,
+ 			"invalid device address (%i). Must be in range 0-3.\n",
+@@ -298,7 +301,7 @@ static int mcp3911_probe(struct spi_device *spi)
+ 		}
+ 	}
+ 
+-	ret = mcp3911_config(adc, spi->dev.of_node);
++	ret = mcp3911_config(adc);
+ 	if (ret)
+ 		goto clk_disable;
+ 
+-- 
+2.35.1
+
 
 
