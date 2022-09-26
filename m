@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203385EAC87
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC445EAC8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiIZQai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S229990AbiIZQaz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Sep 2022 12:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiIZQaE (ORCPT
+        with ESMTP id S229824AbiIZQaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:30:04 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939053D5BE;
-        Mon, 26 Sep 2022 08:19:38 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b6so7803520ljr.10;
-        Mon, 26 Sep 2022 08:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=OGpiz7DrXLbyEGUvGioYWcGeQmimAIgmZsGGAj7dQSA=;
-        b=FM/QSpsl9HRXb7Az3q5pdLDqcfRZg6dmgzdKz/885xXExusv224Ok1u3n/enuJVVkr
-         gyoFOalal3x/jBvpD8/LWzH+EEx8Gv/qLFgR3FXRQIPZNx535GCZxHHMZ3v+oPBn39zu
-         kEYUnfKZPAo6AP18p84hIaWCzkRfcdu3B2ykybB8G70dOafxvogBtHNnE+rCDPP9O9F9
-         87dGZlpvRr8kF1gidvtdGT2n+yul7DBxYEe3BXHa3dAnNYtxeg14D2w7bE/kgrEzFMaO
-         xjh85xQMFbHinuq0qLEWuYWqvoKIwgL6CoM6jJ3ldyPBNwhBhOc9dkVk1+1lGt6U/H24
-         Vn2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=OGpiz7DrXLbyEGUvGioYWcGeQmimAIgmZsGGAj7dQSA=;
-        b=UEiAtOU8p6UPi21eQwhEoEXwhMGACv//1D3eaL9Apjp/1edIqItu4i3KIN27mG3EcT
-         l5Oph1RGeV9ElyhIXW6NJlFhCF+qw8w7x7yVLQ8A71L0etoQyYyZ6KhfLKr1FiY8fbuy
-         4jcFDOW5dUFYlkG95HZtFBsu34zzgEtWDt8HLJNaIsp1C3ORL9+bKSa9U4j81Duye/ng
-         HczArCvk3UP+Lioy+W75Cbn5GuLxYy5PVNF+45cZHcfzUzFOY2lAGGmyy7GlbV4rSV6R
-         URBNGlyjz0h8HEVpoPTkCahs+eW+PspHvG9CbXPqBfxiWGZ0wlP9sTfyfZqPvuR1TB5N
-         drlQ==
-X-Gm-Message-State: ACrzQf0GQDGCSHjk5KT6Nqp+/B00PDSir17ZP5uoBze/Fp133cRdOubh
-        i+pXy+xpXcKjXeJ0SphOGTzLAwGOxa66159oEGgu+7jCAqY=
-X-Google-Smtp-Source: AMsMyM5zc61RxuhR2Y4ijoh3FERMhlCr/m68ZGAKQaq/idAa9n7UnKcHre25YArXLiPba8S/PHLOlzU2/vuUF/ATOl4=
-X-Received: by 2002:a2e:bf29:0:b0:25f:fbd5:b693 with SMTP id
- c41-20020a2ebf29000000b0025ffbd5b693mr8224453ljr.372.1664205576422; Mon, 26
- Sep 2022 08:19:36 -0700 (PDT)
+        Mon, 26 Sep 2022 12:30:18 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C24FBE1C;
+        Mon, 26 Sep 2022 08:19:49 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1ocptT-0006F9-1V; Mon, 26 Sep 2022 17:19:39 +0200
+Date:   Mon, 26 Sep 2022 17:19:39 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        Martin Zaharinov <micron10@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
+Message-ID: <20220926151939.GG12777@breakpoint.cc>
+References: <20220926083139.48069-1-fw@strlen.de>
+ <YzFp4H/rbdov7iDg@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20220926100806.522017616@linuxfoundation.org>
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-From:   Fenil Jain <fkjainco@gmail.com>
-Date:   Mon, 26 Sep 2022 20:49:23 +0530
-Message-ID: <CAHokDBkXPsJEKE4U1HXbnV0id31Hii7hrgSd7EA1Je3m66m9Lw@mail.gmail.com>
-Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <YzFp4H/rbdov7iDg@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Greg,
+Michal Hocko <mhocko@suse.com> wrote:
+> On Mon 26-09-22 10:31:39, Florian Westphal wrote:
+> > Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+> >  kernel BUG at mm/vmalloc.c:2437!
+> >  invalid opcode: 0000 [#1] SMP
+> >  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
+> >  [..]
+> >  RIP: 0010:__get_vm_area_node+0x120/0x130
+> >   __vmalloc_node_range+0x96/0x1e0
+> >   kvmalloc_node+0x92/0xb0
+> >   bucket_table_alloc.isra.0+0x47/0x140
+> >   rhashtable_try_insert+0x3a4/0x440
+> >   rhashtable_insert_slow+0x1b/0x30
+> >  [..]
+> > 
+> > bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, this now
+> > falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+> > 
+> > I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
+> > maintainers rejected it.
+> > 
+> > This patch is partial revert of
+> > commit 93f976b5190d ("lib/rhashtable: simplify bucket_table_alloc()"),
+> > to avoid kvmalloc for ATOMIC case.
+> > 
+> > As kvmalloc doesn't warn when used with ATOMIC, kernel will only crash
+> > once vmalloc fallback occurs, so we may see more crashes in other areas
+> > in the future.
+> > 
+> > Most other callers seem ok but kvm_mmu_topup_memory_cache looks like it
+> > might be affected by the same breakage, so Cc kvm@.
+> > 
+> > Reported-by: Martin Zaharinov <micron10@gmail.com>
+> > Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
+> > Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
+> > Cc: Michal Hocko <mhocko@suse.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: kvm@vger.kernel.org
+> > Signed-off-by: Florian Westphal <fw@strlen.de>
+> 
+> Please continue in the original email thread until we sort out the most
+> reasonable solution for this.
 
-Ran tests and boot tested on my system, no regressions found
-
-Tested-by: Fenil Jain <fkjainco@gmail.com>
+I've submitted a v2 using Michals proposed fix for kvmalloc api, if
+thats merged no fixes are required in the callers, so this rhashtable
+patch can be discarded.
