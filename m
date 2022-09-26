@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E685E9C03
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93CF5E9C4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbiIZI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S234360AbiIZIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbiIZI12 (ORCPT
+        with ESMTP id S234486AbiIZIpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:27:28 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF24371B8;
-        Mon, 26 Sep 2022 01:27:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MbbRj5Klgzl7ZR;
-        Mon, 26 Sep 2022 16:25:37 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.102.38])
-        by APP4 (Coremail) with SMTP id gCh0CgAHf45oYjFjX1aNBQ--.36343S7;
-        Mon, 26 Sep 2022 16:27:22 +0800 (CST)
-From:   Wei Yongjun <weiyongjun@huaweicloud.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] gpio: sim: document use case for interrupt controller
-Date:   Mon, 26 Sep 2022 08:44:28 +0000
-Message-Id: <20220926084428.1792815-4-weiyongjun@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926084428.1792815-1-weiyongjun@huaweicloud.com>
-References: <20220926084428.1792815-1-weiyongjun@huaweicloud.com>
+        Mon, 26 Sep 2022 04:45:00 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E43F65DA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:44:58 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id n15so9062470wrq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=Q2VHep0+S40i1p+8tHTWFQVTsADjWZtNk4KlaS/+6IU=;
+        b=B8wU22HEQEXAoRs+kdf3JbXUeTaSc0ydIHClfeu61HSRqXlKiO8URjQP6ty6JInOBt
+         Pd0eXvz1Blg1WTYNtiUJ1NFcEzg+5tpRi7VNdCULHguXlxxFbumUm+oA2YjDh96nGLQf
+         vO1PwqMjzefS9TEIpW4j9k7nPUewthEUaOvHxku+wmvIsyXze8g7XVy1nZxKEmiIwoop
+         2CN5fQK0OA4psjRdAx4AintQNC7X3WDmMPbHBgVmqmByn8FGx2/LYYxS1TU2LqHxNzSQ
+         PKQI2wAjxOBptEccG+I0XibmnO8TblKFc1oEuSo6CTm8+MiEg/QxAoButs3/06SXg3IS
+         9Bbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q2VHep0+S40i1p+8tHTWFQVTsADjWZtNk4KlaS/+6IU=;
+        b=hnW7pAZSPmXLK5XtHP2O3PIwzh7qW11XTQ/L3eGzM6KYc0X67G1RqQq289HetNtzg2
+         IrCeYPF9vMIiqlUS5dI2siKdbDFeph6evY0KfIDFpoYpfJBgnrDC3J7PMT4QI5lI8Z90
+         aJWNTcGECgedOgm+w23IgiKGs3+7Lk6DCKbRH6pvzTF0qjfPlJXhnZFM1JB0kmGOMPQ1
+         Ri2lNToiaM7+Vw7HTBl+/eBRca1QaCvDzvmbL8mDTL/GEJ+/eLs7VWoUs7kfPOpFtcNf
+         BS4xrqhXkcBqjeCp22TomUUZaJQrrVo6o/OpcNfmZ6Zqbp52RQamPsSJEeirkWmTazAT
+         MiDQ==
+X-Gm-Message-State: ACrzQf0sndNPZOq+p2LD6ESs5L0ka1c8k0qZmBRTkUc35jhsdQNqcVCX
+        RXS40jhW68QiUu7JNDUAZ6D1Mg==
+X-Google-Smtp-Source: AMsMyM6QE5gySzzoBXOvadp7NTp1YMUx5JraXDuA/09ie0hE1RG7ZEgUl3WI1WJ8+id0uyygQ7DlKw==
+X-Received: by 2002:a05:6000:14c:b0:22a:c14a:29f8 with SMTP id r12-20020a056000014c00b0022ac14a29f8mr12623103wrx.588.1664181897129;
+        Mon, 26 Sep 2022 01:44:57 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id ba30-20020a0560001c1e00b00228655a5c8fsm13767785wrb.28.2022.09.26.01.44.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 01:44:56 -0700 (PDT)
+Message-ID: <638ca37e-2d2f-0247-8584-01002dea7e06@linaro.org>
+Date:   Mon, 26 Sep 2022 10:44:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHf45oYjFjX1aNBQ--.36343S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7urWDXrWrZr1rCry7XF1fJFb_yoW8Wr4fpF
-        1DKryIqw1kGF17C3yFyF4Sk3sxZw1rGrZ5u3Z2kF4rJFyrtryvq3yjyryrXF18XrWUXay5
-        ZrZa9F10kr1qyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxU2PEfUUUUU
-X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: pm8941: fix vadc channel node names
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220925161821.78030-1-luca@z3ntu.xyz>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220925161821.78030-1-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+On 25/09/2022 18:18, Luca Weiss wrote:
+> Node names for the channel are supposed to be adc-chan@REG.
+> 
+> Use this format and at the same time sort the nodes by reg value.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>   arch/arm/boot/dts/qcom-pm8941.dtsi | 25 ++++++++++++++++---------
+>   1 file changed, 16 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> index 9cd49deb9fa7..3c15eecf2f21 100644
+> --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> @@ -101,26 +101,33 @@ pm8941_vadc: adc@3100 {
+>   			#size-cells = <0>;
+>   			#io-channel-cells = <1>;
+>   
+> -			bat_temp {
+> -				reg = <VADC_LR_MUX1_BAT_THERM>;
+> +
+> +			adc-chan@6 {
+> +				reg = <VADC_VBAT_SNS>;
+>   			};
+> -			die_temp {
+> +
+> +			adc-chan@8 {
+>   				reg = <VADC_DIE_TEMP>;
+>   			};
+> -			ref_625mv {
+> +
+> +			adc-chan@9 {
+>   				reg = <VADC_REF_625MV>;
+>   			};
+> -			ref_1250v {
+> +
+> +			adc-chan@10 {
+>   				reg = <VADC_REF_1250MV>;
+>   			};
+> -			ref_gnd {
+> +
+> +			adc-chan@14 {
+>   				reg = <VADC_GND_REF>;
+>   			};
+> -			ref_vdd {
+> +
+> +			adc-chan@15 {
+>   				reg = <VADC_VDD_VADC>;
+>   			};
+> -			vbat_sns {
+> -				reg = <VADC_VBAT_SNS>;
+> +
+> +			adc-chan@48 {
+> +				reg = <VADC_LR_MUX1_BAT_THERM>;
+>   			};
+>   		};
+>   
 
-Add document for using GPIO sim as interrupt controller.
+Here aswell, I don't see where this is required, bindings doesn't mandate this naming:
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- Documentation/admin-guide/gpio/gpio-sim.rst | 44 +++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+patternProperties:
 
-diff --git a/Documentation/admin-guide/gpio/gpio-sim.rst b/Documentation/admin-guide/gpio/gpio-sim.rst
-index d8a90c81b9ee..7ccb3f80c90e 100644
---- a/Documentation/admin-guide/gpio/gpio-sim.rst
-+++ b/Documentation/admin-guide/gpio/gpio-sim.rst
-@@ -132,3 +132,47 @@ group there are two attibutes:
-     ``value`` - allows to read the current value of the line which may be
-                 different from the pull if the line is being driven from
-                 user-space
-+
-+An example device-tree code defining a GPIO simulator as interrupt controller:
-+
-+.. code-block :: none
-+
-+    gpio-sim {
-+        compatible = "gpio-simulator";
-+
-+        bank0 {
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+            ngpios = <16>;
-+
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+
-+            line0 {
-+                gpio-hog;
-+                gpios = <0 1>;
-+                input;
-+                line-name = "irq-sim";
-+            }
-+        };
-+    };
-+
-+    spi: spi {
-+        compatible = "spi-mockup";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        can0: can@1 {
-+            compatible = "microchip,mcp2515";
-+            reg = <1>;
-+            interrupt-parent = <&bank0>;
-+            interrupts = <0 IRQ_TYPE_EDGE_BOTH>;
-+        }
-+    };
-+
-+Trigger irq by writing value to pull setting:
-+
-+.. code-block :: none
-+
-+    $ echo pull-down > /sys/devices/platform/gpio-sim/gpiochipX/sim_gpio0/pull
-+    $ echo pull-up > /sys/devices/platform/gpio-sim/gpiochipX/sim_gpio0/pull
--- 
-2.34.1
-
+    "^.*@[0-9a-f]+$":
+Neil
