@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A5F5E9F29
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE535EA4B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbiIZKUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S238599AbiIZLuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiIZKSm (ORCPT
+        with ESMTP id S239084AbiIZLtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:18:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A5649B40;
-        Mon, 26 Sep 2022 03:15:25 -0700 (PDT)
+        Mon, 26 Sep 2022 07:49:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0212B75CE8;
+        Mon, 26 Sep 2022 03:48:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E79C60B97;
-        Mon, 26 Sep 2022 10:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000AFC433D6;
-        Mon, 26 Sep 2022 10:15:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FE47B80835;
+        Mon, 26 Sep 2022 10:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66600C433C1;
+        Mon, 26 Sep 2022 10:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187324;
-        bh=vN9yVk82ZFk4dEwgCx+4IuPIPCT6CZf5RbGU+zOwaSc=;
+        s=korg; t=1664189215;
+        bh=qYDUVPcIKSYGJQ6zNzCwrkC/y4sC7sO2DLHi4sBmVCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QVNk5Fs9XjqmVY5AB+uGrwmdcdGy7Im5GV2NvKBBSBNQQTuZOi0VOcxTGXJlGYITf
-         KcuG3ZQI/+D47UDCoa5XIXcVaZ2WCl7fCoWnU2Uoyg82RbryJqQ5rdqY2yIU8cah1Z
-         fnOxwP4R9YMuSj1IEb7h+KZqshl0RShQR1I3qyIk=
+        b=rr5qnVl64QG/VF27vdF/pKdvHpQveei0z6843s9JjE17m6yCM/eXm2IuhTAxNAYM5
+         PwbQqf1OMLcAQwRRaVvUxBC9F+BwIRA/LCANEVJgDDAI3VGfVJnUBIlvlpY0CV7wZ5
+         h/BkK1vFFy3UIOWAYWA1fU3JLbOLgz9nh9Pg7Tg0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Thomas Meyer <thomas@m3y3r.de>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 12/40] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
-Date:   Mon, 26 Sep 2022 12:11:40 +0200
-Message-Id: <20220926100738.689498854@linuxfoundation.org>
+Subject: [PATCH 5.19 112/207] um: fix default console kernel parameter
+Date:   Mon, 26 Sep 2022 12:11:41 +0200
+Message-Id: <20220926100811.621399975@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+From: Christian Lamparter <chunkeey@gmail.com>
 
-[ Upstream commit ba912afbd611d3a5f22af247721a071ad1d5b9e0 ]
+[ Upstream commit 782b1f70f8a8b28571949d2ba43fe88b96d75ec3 ]
 
-For irq_domain_associate() to work the virq descriptor has to be
-pre-allocated in advance. Otherwise the following happens:
+OpenWrt's UML with 5.15 was producing odd errors/warnings during preinit
+part of the early userspace portion:
 
-WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
-error: virq128 is not allocated
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
-        ...
-Call Trace:
-[<ffffffff801344c4>] show_stack+0x9c/0x130
-[<ffffffff80769550>] dump_stack+0x90/0xd0
-[<ffffffff801576d0>] __warn+0x118/0x130
-[<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
-[<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
-[<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
-[<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
-[<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
-[<ffffffff80a3cc00>] start_kernel+0x404/0x698
+|[    0.000000] Kernel command line: ubd0=root.img root=98:0 console=tty
+|[...]
+|[    0.440000] random: jshn: uninitialized urandom read (4 bytes read)
+|[    0.460000] random: jshn: uninitialized urandom read (4 bytes read)
+|/etc/preinit: line 47: can't create /dev/tty: No such device or address
+|/etc/preinit: line 48: can't create /dev/tty: No such device or address
+|/etc/preinit: line 58: can't open /dev/tty: No such device or address
+|[...] repeated many times
 
-Use irq_alloc_desc_at() to avoid the above problem.
+That "/dev/tty" came from the command line (which is automatically
+added if no console= parameter was specified for the uml binary).
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The TLDP project tells the following about the /dev/tty:
+<https://tldp.org/HOWTO/Text-Terminal-HOWTO-7.html#ss7.3>
+| /dev/tty stands for the controlling terminal (if any) for the current
+| process.[...]
+| /dev/tty is something like a link to the actually terminal device[..]
+
+The "(if any)" is important here, since it's possible for processes to
+not have a controlling terminal.
+
+I think this was a simple typo and the author wanted tty0 there.
+
+CC: Thomas Meyer <thomas@m3y3r.de>
+Fixes: d7ffac33631b ("um: stdio_console: Make preferred console")
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/um/kernel/um_arch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
-index a27b3d70393f..657e626cc41e 100644
---- a/arch/mips/cavium-octeon/octeon-irq.c
-+++ b/arch/mips/cavium-octeon/octeon-irq.c
-@@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
- static int octeon_irq_force_ciu_mapping(struct irq_domain *domain,
- 					int irq, int line, int bit)
- {
-+	struct device_node *of_node;
-+	int ret;
-+
-+	of_node = irq_domain_get_of_node(domain);
-+	if (!of_node)
-+		return -EINVAL;
-+	ret = irq_alloc_desc_at(irq, of_node_to_nid(of_node));
-+	if (ret < 0)
-+		return ret;
-+
- 	return irq_domain_associate(domain, irq, line << 6 | bit);
- }
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index e0de60e503b9..d9e023c78f56 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -33,7 +33,7 @@
+ #include "um_arch.h"
  
+ #define DEFAULT_COMMAND_LINE_ROOT "root=98:0"
+-#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty"
++#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty0"
+ 
+ /* Changed in add_arg and setup_arch, which run before SMP is started */
+ static char __initdata command_line[COMMAND_LINE_SIZE] = { 0 };
 -- 
 2.35.1
 
