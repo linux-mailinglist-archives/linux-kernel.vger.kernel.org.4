@@ -2,206 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9D25E9DC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208075E9DF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbiIZJg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S233836AbiIZJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiIZJgY (ORCPT
+        with ESMTP id S234690AbiIZJhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:36:24 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6542B22BDA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:36:22 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id A27792B0689B;
-        Mon, 26 Sep 2022 05:36:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 26 Sep 2022 05:36:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664184976; x=1664192176; bh=iMhV2MQCYE
-        l08x7MCNwj+bMXhT0kipZzBnwNpIfB8gg=; b=nJeRGFALZvB203VwJ3MiqZV0H9
-        SgOgeQdWX4BuXqw5zho/RS25xCKP8KzdQRqm2mCuyRCuOyNsg99A+lAMh76HqDOD
-        x+eTg6WYdZgrHKS0zSICLvO8j/3SJP13HCCOJDkPl0uPhzva8dlItg1Ao8XIGumK
-        Vbx9nh+ELeMIBIDKskokk2eSRhBBTy+Ebrn/rCkgwq5UieGaMJkByqoK+baIJH2C
-        5/HTEUfuOUF0Aewimr0CqDc5o4qad0/cuXBZvtQDDPTeP6obnNVGzbrPy1O7EYyt
-        KA2581CvfZVH/CjRitmTgJKzFxhYz6lW5pJezzh6VmVJ0W1Vk1jK/Rf7r3oA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664184976; x=1664192176; bh=iMhV2MQCYEl08x7MCNwj+bMXhT0k
-        ipZzBnwNpIfB8gg=; b=SvSPhEi02+Ihox7kOmDVhX4pbeqMyi4CJjvjX99cbEyr
-        +Smb2FJx3Ykc2JdeOsoir0jS89/4SjDKcOp0VS69YroKe5ZScShh/wzbeal++grP
-        T3kz/sLVTtvTxyWcC7amFT8p0IQ7unvvIhjLZMctMR9p2aebfl5O2flACUCM2iCZ
-        2P5b3wXbgjghbYrR6Kyohv5VMzKI7Yp0WJKOOxliNMEAlU2NYmH7nDfcOatZJmwA
-        R60diWPuTdqMHff6/EjwHJOUIq8bKG5D5uiy2lrUcwW+cHnxd0gbHlloPbAiVSxw
-        3+0du3C5VZZ06FibJPIilHWQYsr44TrJRhrXkcRR1Q==
-X-ME-Sender: <xms:j3IxY2-QhYgO74s3trfwff3DryeNTqQlmXsu9yGRCxphn4GACYCIvw>
-    <xme:j3IxY2tV7NB_e-mau1S7WaAft2UEAesKgySU0wjigMGs7JoPvAF_XnZv8xyRwLir7
-    96x3L2BZSiZ3G5aD1o>
-X-ME-Received: <xmr:j3IxY8DYYskkI72wKJw06xyNYUTiZjyG07uxoj73uLs5P24I9NFaDGqbqIho>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:j3IxY-c1tiNct3gIbQHjSvEYT5Xb3k1T-pot_aoZBis1vo7mxgBG4A>
-    <xmx:j3IxY7NBOijxM_Ba2H7o24TnGSFShkp4aYK8hhYtoN3RnR8bUq6Ebw>
-    <xmx:j3IxY4lnv8PCJVU1vCHuVIUJ7mwiGoNPkRCtxB_VBaxHfk_3O1upOg>
-    <xmx:kHIxY0ttx0rynzRFEyFoPEdNc13wMnnQR88F_DEk4Ml1iNEFAY-Kynb_HoE>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Sep 2022 05:36:14 -0400 (EDT)
-Date:   Mon, 26 Sep 2022 11:36:12 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 02/33] drm/tests: Add Kunit Helpers
-Message-ID: <20220926093612.wvbou2srbo3uinar@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-2-f733a0ed9f90@cerno.tech>
- <3f7000ab-b845-a7e8-f215-02121da779b7@tronnes.org>
- <c7bd9bcb-77a1-9f2d-fe93-afefac5e6def@tronnes.org>
+        Mon, 26 Sep 2022 05:37:02 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD2E2251E;
+        Mon, 26 Sep 2022 02:36:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VQkJzGX_1664185001;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VQkJzGX_1664185001)
+          by smtp.aliyun-inc.com;
+          Mon, 26 Sep 2022 17:36:42 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH 09/16] crypto: arm64/sm4 - add CE implementation for CTS-CBC mode
+Date:   Mon, 26 Sep 2022 17:36:13 +0800
+Message-Id: <20220926093620.99898-10-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
+References: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wdbx6g5pylyw5se6"
-Content-Disposition: inline
-In-Reply-To: <c7bd9bcb-77a1-9f2d-fe93-afefac5e6def@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch is a CE-optimized assembly implementation for CTS-CBC mode.
 
---wdbx6g5pylyw5se6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Benchmark on T-Head Yitian-710 2.75 GHz, the data comes from the 218 mode of
+tcrypt, and compared the performance before and after this patch (the driver
+used before this patch is cts(cbc-sm4-ce)). The abscissas are blocks of
+different lengths. The data is tabulated and the unit is Mb/s:
 
-Hi Noralf,
+Before:
 
-On Sat, Sep 24, 2022 at 08:06:17PM +0200, Noralf Tr=F8nnes wrote:
-> Den 24.09.2022 19.56, skrev Noralf Tr=F8nnes:
-> >=20
-> >=20
-> > Den 22.09.2022 16.25, skrev Maxime Ripard:
-> >> As the number of kunit tests in KMS grows further, we start to have
-> >> multiple test suites that, for example, need to register a mock DRM
-> >> driver to interact with the KMS function they are supposed to test.
-> >>
-> >> Let's add a file meant to provide those kind of helpers to avoid
-> >> duplication.
-> >>
-> >> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >>
-> >> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Ma=
-kefile
-> >> index 2d9f49b62ecb..b29ef1085cad 100644
-> >> --- a/drivers/gpu/drm/tests/Makefile
-> >> +++ b/drivers/gpu/drm/tests/Makefile
-> >> @@ -8,6 +8,7 @@ obj-$(CONFIG_DRM_KUNIT_TEST) +=3D \
-> >>  	drm_format_helper_test.o \
-> >>  	drm_format_test.o \
-> >>  	drm_framebuffer_test.o \
-> >> +	drm_kunit_helpers.o \
-> >>  	drm_mm_test.o \
-> >>  	drm_plane_helper_test.o \
-> >>  	drm_rect_test.o
-> >> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/d=
-rm/tests/drm_kunit_helpers.c
-> >> new file mode 100644
-> >> index 000000000000..7ebd620481c1
-> >> --- /dev/null
-> >> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
-> >> @@ -0,0 +1,54 @@
-> >> +#include <drm/drm_drv.h>
-> >> +#include <drm/drm_managed.h>
-> >> +
-> >> +#include <linux/device.h>
-> >> +
-> >> +static const struct drm_mode_config_funcs drm_mode_config_funcs =3D {
-> >> +};
-> >> +
-> >> +static const struct drm_driver drm_mode_driver =3D {
-> >> +};
-> >> +
-> >> +static void drm_kunit_free_device(struct drm_device *drm, void *ptr)
-> >> +{
-> >> +	struct device *dev =3D ptr;
-> >> +
-> >> +	root_device_unregister(dev);
-> >> +}
-> >> +
-> >> +struct drm_device *drm_kunit_device_init(const char *name)
-> >> +{
-> >> +	struct drm_device *drm;
-> >> +	struct device *dev;
-> >> +	int ret;
-> >> +
-> >> +	dev =3D root_device_register(name);
-> >> +	if (IS_ERR(dev))
-> >> +		return ERR_CAST(dev);
-> >> +
-> >> +	drm =3D drm_dev_alloc(&drm_mode_driver, dev);
-> >=20
-> > I can't find drm being freed anywhere?
-> > Maybe you could assign it to drm->managed.final_kfree.
+cts(cbc-sm4-ce) |      16       64      128      256     1024     1420     4096
+----------------+--------------------------------------------------------------
+    CTS-CBC enc |  286.09   297.17   457.97   627.75   868.58   900.80   957.69
+    CTS-CBC dec |  286.67   285.63   538.35   947.08  2241.03  2577.32  3391.14
 
-There's a drm_dev_put in the test_exit hook which should free it.
+After:
 
-> Perhaps a better solution would be to use devm_drm_dev_alloc() and
-> unregister the root device on exit. That avoids reaching into the drm
-> managed internals and it looks more like a regular driver.
+cts-cbc-sm4-ce  |      16       64      128      256     1024     1420     4096
+----------------+--------------------------------------------------------------
+    CTS-CBC enc |  288.19   428.80   593.57   741.04   911.73   931.80   950.00
+    CTS-CBC dec |  292.22   468.99   838.23  1380.76  2741.17  3036.42  3409.62
 
-But yeah, this is a good idea, I'll do it.
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ arch/arm64/crypto/sm4-ce-core.S | 102 ++++++++++++++++++++++++++++++++
+ arch/arm64/crypto/sm4-ce-glue.c |  94 +++++++++++++++++++++++++++++
+ 2 files changed, 196 insertions(+)
 
-Maxime
+diff --git a/arch/arm64/crypto/sm4-ce-core.S b/arch/arm64/crypto/sm4-ce-core.S
+index 9e4b4f01cdf3..414d29f8110b 100644
+--- a/arch/arm64/crypto/sm4-ce-core.S
++++ b/arch/arm64/crypto/sm4-ce-core.S
+@@ -306,6 +306,100 @@ SYM_FUNC_START(sm4_ce_cbc_dec)
+ 	ret
+ SYM_FUNC_END(sm4_ce_cbc_dec)
+ 
++.align 3
++SYM_FUNC_START(sm4_ce_cbc_cts_enc)
++	/* input:
++	 *   x0: round key array, CTX
++	 *   x1: dst
++	 *   x2: src
++	 *   x3: iv (big endian, 128 bit)
++	 *   w4: nbytes
++	 */
++	SM4_PREPARE(x0)
++
++	sub		w5, w4, #16
++	uxtw		x5, w5
++
++	ld1		{RIV.16b}, [x3]
++
++	ld1		{v0.16b}, [x2]
++	eor		RIV.16b, RIV.16b, v0.16b
++	SM4_CRYPT_BLK(RIV)
++
++	/* load permute table */
++	adr_l		x6, .Lcts_permute_table
++	add		x7, x6, #32
++	add		x6, x6, x5
++	sub		x7, x7, x5
++	ld1		{v3.16b}, [x6]
++	ld1		{v4.16b}, [x7]
++
++	/* overlapping loads */
++	add		x2, x2, x5
++	ld1		{v1.16b}, [x2]
++
++	/* create Cn from En-1 */
++	tbl		v0.16b, {RIV.16b}, v3.16b
++	/* padding Pn with zeros */
++	tbl		v1.16b, {v1.16b}, v4.16b
++
++	eor		v1.16b, v1.16b, RIV.16b
++	SM4_CRYPT_BLK(v1)
++
++	/* overlapping stores */
++	add		x5, x1, x5
++	st1		{v0.16b}, [x5]
++	st1		{v1.16b}, [x1]
++
++	ret
++SYM_FUNC_END(sm4_ce_cbc_cts_enc)
++
++.align 3
++SYM_FUNC_START(sm4_ce_cbc_cts_dec)
++	/* input:
++	 *   x0: round key array, CTX
++	 *   x1: dst
++	 *   x2: src
++	 *   x3: iv (big endian, 128 bit)
++	 *   w4: nbytes
++	 */
++	SM4_PREPARE(x0)
++
++	sub		w5, w4, #16
++	uxtw		x5, w5
++
++	ld1		{RIV.16b}, [x3]
++
++	/* load permute table */
++	adr_l		x6, .Lcts_permute_table
++	add		x7, x6, #32
++	add		x6, x6, x5
++	sub		x7, x7, x5
++	ld1		{v3.16b}, [x6]
++	ld1		{v4.16b}, [x7]
++
++	/* overlapping loads */
++	ld1		{v0.16b}, [x2], x5
++	ld1		{v1.16b}, [x2]
++
++	SM4_CRYPT_BLK(v0)
++	/* select the first Ln bytes of Xn to create Pn */
++	tbl		v2.16b, {v0.16b}, v3.16b
++	eor		v2.16b, v2.16b, v1.16b
++
++	/* overwrite the first Ln bytes with Cn to create En-1 */
++	tbx		v0.16b, {v1.16b}, v4.16b
++	SM4_CRYPT_BLK(v0)
++	eor		v0.16b, v0.16b, RIV.16b
++
++	/* overlapping stores */
++	add		x5, x1, x5
++	st1		{v2.16b}, [x5]
++	st1		{v0.16b}, [x1]
++
++	ret
++SYM_FUNC_END(sm4_ce_cbc_cts_dec)
++
+ .align 3
+ SYM_FUNC_START(sm4_ce_cfb_enc)
+ 	/* input:
+@@ -576,3 +670,11 @@ SYM_FUNC_END(sm4_ce_ctr_enc)
+ .Lbswap128_mask:
+ 	.byte		0x0c, 0x0d, 0x0e, 0x0f, 0x08, 0x09, 0x0a, 0x0b
+ 	.byte		0x04, 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03
++
++.Lcts_permute_table:
++	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
++	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
++	.byte		 0x0,  0x1,  0x2,  0x3,  0x4,  0x5,  0x6,  0x7
++	.byte		 0x8,  0x9,  0xa,  0xb,  0xc,  0xd,  0xe,  0xf
++	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
++	.byte		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+diff --git a/arch/arm64/crypto/sm4-ce-glue.c b/arch/arm64/crypto/sm4-ce-glue.c
+index 63abcadc684b..4d4072c7bfa2 100644
+--- a/arch/arm64/crypto/sm4-ce-glue.c
++++ b/arch/arm64/crypto/sm4-ce-glue.c
+@@ -16,6 +16,7 @@
+ #include <asm/simd.h>
+ #include <crypto/internal/simd.h>
+ #include <crypto/internal/skcipher.h>
++#include <crypto/scatterwalk.h>
+ #include <crypto/sm4.h>
+ 
+ #define BYTES2BLKS(nbytes)	((nbytes) >> 4)
+@@ -29,6 +30,10 @@ asmlinkage void sm4_ce_cbc_enc(const u32 *rkey, u8 *dst, const u8 *src,
+ 			       u8 *iv, unsigned int nblocks);
+ asmlinkage void sm4_ce_cbc_dec(const u32 *rkey, u8 *dst, const u8 *src,
+ 			       u8 *iv, unsigned int nblocks);
++asmlinkage void sm4_ce_cbc_cts_enc(const u32 *rkey, u8 *dst, const u8 *src,
++				   u8 *iv, unsigned int nbytes);
++asmlinkage void sm4_ce_cbc_cts_dec(const u32 *rkey, u8 *dst, const u8 *src,
++				   u8 *iv, unsigned int nbytes);
+ asmlinkage void sm4_ce_cfb_enc(const u32 *rkey, u8 *dst, const u8 *src,
+ 			       u8 *iv, unsigned int nblks);
+ asmlinkage void sm4_ce_cfb_dec(const u32 *rkey, u8 *dst, const u8 *src,
+@@ -153,6 +158,78 @@ static int sm4_cbc_decrypt(struct skcipher_request *req)
+ 	return sm4_cbc_crypt(req, ctx, false);
+ }
+ 
++static int sm4_cbc_cts_crypt(struct skcipher_request *req, bool encrypt)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct sm4_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct scatterlist *src = req->src;
++	struct scatterlist *dst = req->dst;
++	struct scatterlist sg_src[2], sg_dst[2];
++	struct skcipher_request subreq;
++	struct skcipher_walk walk;
++	int cbc_blocks;
++	int err;
++
++	if (req->cryptlen < SM4_BLOCK_SIZE)
++		return -EINVAL;
++
++	if (req->cryptlen == SM4_BLOCK_SIZE)
++		return sm4_cbc_crypt(req, ctx, encrypt);
++
++	skcipher_request_set_tfm(&subreq, tfm);
++	skcipher_request_set_callback(&subreq, skcipher_request_flags(req),
++				      NULL, NULL);
++
++	/* handle the CBC cryption part */
++	cbc_blocks = DIV_ROUND_UP(req->cryptlen, SM4_BLOCK_SIZE) - 2;
++	if (cbc_blocks) {
++		skcipher_request_set_crypt(&subreq, src, dst,
++					   cbc_blocks * SM4_BLOCK_SIZE,
++					   req->iv);
++
++		err = sm4_cbc_crypt(&subreq, ctx, encrypt);
++		if (err)
++			return err;
++
++		dst = src = scatterwalk_ffwd(sg_src, src, subreq.cryptlen);
++		if (req->dst != req->src)
++			dst = scatterwalk_ffwd(sg_dst, req->dst,
++					       subreq.cryptlen);
++	}
++
++	/* handle ciphertext stealing */
++	skcipher_request_set_crypt(&subreq, src, dst,
++				   req->cryptlen - cbc_blocks * SM4_BLOCK_SIZE,
++				   req->iv);
++
++	err = skcipher_walk_virt(&walk, &subreq, false);
++	if (err)
++		return err;
++
++	kernel_neon_begin();
++
++	if (encrypt)
++		sm4_ce_cbc_cts_enc(ctx->rkey_enc, walk.dst.virt.addr,
++				   walk.src.virt.addr, walk.iv, walk.nbytes);
++	else
++		sm4_ce_cbc_cts_dec(ctx->rkey_dec, walk.dst.virt.addr,
++				   walk.src.virt.addr, walk.iv, walk.nbytes);
++
++	kernel_neon_end();
++
++	return skcipher_walk_done(&walk, 0);
++}
++
++static int sm4_cbc_cts_encrypt(struct skcipher_request *req)
++{
++	return sm4_cbc_cts_crypt(req, true);
++}
++
++static int sm4_cbc_cts_decrypt(struct skcipher_request *req)
++{
++	return sm4_cbc_cts_crypt(req, false);
++}
++
+ static int sm4_cfb_encrypt(struct skcipher_request *req)
+ {
+ 	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
+@@ -342,6 +419,22 @@ static struct skcipher_alg sm4_algs[] = {
+ 		.setkey		= sm4_setkey,
+ 		.encrypt	= sm4_ctr_crypt,
+ 		.decrypt	= sm4_ctr_crypt,
++	}, {
++		.base = {
++			.cra_name		= "cts(cbc(sm4))",
++			.cra_driver_name	= "cts-cbc-sm4-ce",
++			.cra_priority		= 400,
++			.cra_blocksize		= SM4_BLOCK_SIZE,
++			.cra_ctxsize		= sizeof(struct sm4_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.min_keysize	= SM4_KEY_SIZE,
++		.max_keysize	= SM4_KEY_SIZE,
++		.ivsize		= SM4_BLOCK_SIZE,
++		.walksize	= SM4_BLOCK_SIZE * 2,
++		.setkey		= sm4_setkey,
++		.encrypt	= sm4_cbc_cts_encrypt,
++		.decrypt	= sm4_cbc_cts_decrypt,
+ 	}
+ };
+ 
+@@ -365,5 +458,6 @@ MODULE_ALIAS_CRYPTO("ecb(sm4)");
+ MODULE_ALIAS_CRYPTO("cbc(sm4)");
+ MODULE_ALIAS_CRYPTO("cfb(sm4)");
+ MODULE_ALIAS_CRYPTO("ctr(sm4)");
++MODULE_ALIAS_CRYPTO("cts(cbc(sm4))");
+ MODULE_AUTHOR("Tianjia Zhang <tianjia.zhang@linux.alibaba.com>");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.24.3 (Apple Git-128)
 
---wdbx6g5pylyw5se6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYzFyjAAKCRDj7w1vZxhR
-xfL5AP9r8SOCVdiPcnR+tkP1VdDT4xdxvsJmgcz60MJ5iuvezwEAwp/UpYjOSXCb
-YrQ0Vm/0KNnlKIDIInbF28eMSo1bSw0=
-=31r4
------END PGP SIGNATURE-----
-
---wdbx6g5pylyw5se6--
