@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D215EA378
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AE45EA299
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbiIZLZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S237524AbiIZLLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238098AbiIZLYI (ORCPT
+        with ESMTP id S234739AbiIZLJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:24:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB6E2A269;
-        Mon, 26 Sep 2022 03:40:20 -0700 (PDT)
+        Mon, 26 Sep 2022 07:09:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9989C520AD;
+        Mon, 26 Sep 2022 03:35:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0033F60B6A;
-        Mon, 26 Sep 2022 10:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FDBC433C1;
-        Mon, 26 Sep 2022 10:40:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8A2DB80691;
+        Mon, 26 Sep 2022 10:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F6BC433D6;
+        Mon, 26 Sep 2022 10:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188819;
-        bh=9DEejuMfkrhuIDbcoEKbjnyHibaoLFWXahlnTgslgB0=;
+        s=korg; t=1664188409;
+        bh=un+fMfDkfKr7GlPinYtqsWpS83xYwTGg7yXUxWNg6xE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aFAAH7gSXvLKObZ0TrBjHVoh0VZh9NSTHcTi5KL+XwuLVUCH1oWVs736zsXPK4e3m
-         aEuOKQ91ayb+SrgF0K6bUK/d82+KbL02+ISH5KMwyXG55F1NboTZZ5iJXJvG2GMG3P
-         yRbJaf+q9sTQ1uLXtJxJJQUQTYWSLo08TwPLH/co=
+        b=BxvWdiC40Z5rSLmGriPpCIjSV0mY/6eYXODSfn3cc3Qp07fRngm14dj/VRlOgVhsA
+         AHRqBcxt6n0GkPQ/JkUTkylzAz8vFMIlgD0cVI5ixCK+3dJsNWhjinIEvsJkC3JLXJ
+         a63C+tlCjBA21DeES49gETWt+dffQmT7CZDzWKls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 132/148] drm/amd/display: Mark dml30s UseMinimumDCFCLK() as noinline for stack usage
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 5.10 140/141] ext4: limit the number of retries after discarding preallocations blocks
 Date:   Mon, 26 Sep 2022 12:12:46 +0200
-Message-Id: <20220926100801.163130396@linuxfoundation.org>
+Message-Id: <20220926100759.536419723@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,58 +53,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit 41012d715d5d7b9751ae84b8fb255e404ac9c5d0 ]
+commit 80fa46d6b9e7b1527bfd2197d75431fd9c382161 upstream.
 
-This function consumes a lot of stack space and it blows up the size of
-dml30_ModeSupportAndSystemConfigurationFull() with clang:
+This patch avoids threads live-locking for hours when a large number
+threads are competing over the last few free extents as they blocks
+getting added and removed from preallocation pools.  From our bug
+reporter:
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-  void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-       ^
-  1 error generated.
+   A reliable way for triggering this has multiple writers
+   continuously write() to files when the filesystem is full, while
+   small amounts of space are freed (e.g. by truncating a large file
+   -1MiB at a time). In the local filesystem, this can be done by
+   simply not checking the return code of write (0) and/or the error
+   (ENOSPACE) that is set. Over NFS with an async mount, even clients
+   with proper error checking will behave this way since the linux NFS
+   client implementation will not propagate the server errors [the
+   write syscalls immediately return success] until the file handle is
+   closed. This leads to a situation where NFS clients send a
+   continuous stream of WRITE rpcs which result in ERRNOSPACE -- but
+   since the client isn't seeing this, the stream of writes continues
+   at maximum network speed.
 
-Commit a0f7e7f759cf ("drm/amd/display: fix i386 frame size warning")
-aimed to address this for i386 but it did not help x86_64.
+   When some space does appear, multiple writers will all attempt to
+   claim it for their current write. For NFS, we may see dozens to
+   hundreds of threads that do this.
 
-To reduce the amount of stack space that
-dml30_ModeSupportAndSystemConfigurationFull() uses, mark
-UseMinimumDCFCLK() as noinline, using the _for_stack variant for
-documentation. While this will increase the total amount of stack usage
-between the two functions (1632 and 1304 bytes respectively), it will
-make sure both stay below the limit of 2048 bytes for these files. The
-aforementioned change does help reduce UseMinimumDCFCLK()'s stack usage
-so it should not be reverted in favor of this change.
+   The real-world scenario of this is database backup tooling (in
+   particular, github.com/mdkent/percona-xtrabackup) which may write
+   large files (>1TiB) to NFS for safe keeping. Some temporary files
+   are written, rewound, and read back -- all before closing the file
+   handle (the temp file is actually unlinked, to trigger automatic
+   deletion on close/crash.) An application like this operating on an
+   async NFS mount will not see an error code until TiB have been
+   written/read.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1681
-Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Tested-by: Maíra Canal <mairacanal@riseup.net>
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+   The lockup was observed when running this database backup on large
+   filesystems (64 TiB in this case) with a high number of block
+   groups and no free space. Fragmentation is generally not a factor
+   in this filesystem (~thousands of large files, mostly contiguous
+   except for the parts written while the filesystem is at capacity.)
+
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/ext4/mballoc.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-index e3d9f1decdfc..518672a2450f 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-@@ -6658,8 +6658,7 @@ static double CalculateUrgentLatency(
- 	return ret;
- }
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -4959,6 +4959,7 @@ ext4_fsblk_t ext4_mb_new_blocks(handle_t
+ 	ext4_fsblk_t block = 0;
+ 	unsigned int inquota = 0;
+ 	unsigned int reserv_clstrs = 0;
++	int retries = 0;
+ 	u64 seq;
  
--
--static void UseMinimumDCFCLK(
-+static noinline_for_stack void UseMinimumDCFCLK(
- 		struct display_mode_lib *mode_lib,
- 		int MaxInterDCNTileRepeaters,
- 		int MaxPrefetchMode,
--- 
-2.35.1
-
+ 	might_sleep();
+@@ -5061,7 +5062,8 @@ repeat:
+ 			ar->len = ac->ac_b_ex.fe_len;
+ 		}
+ 	} else {
+-		if (ext4_mb_discard_preallocations_should_retry(sb, ac, &seq))
++		if (++retries < 3 &&
++		    ext4_mb_discard_preallocations_should_retry(sb, ac, &seq))
+ 			goto repeat;
+ 		/*
+ 		 * If block allocation fails then the pa allocated above
 
 
