@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720FA5EB1A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B3F5EB1A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiIZTwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S229923AbiIZTwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiIZTwC (ORCPT
+        with ESMTP id S230131AbiIZTwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:52:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A61F9EE;
-        Mon, 26 Sep 2022 12:52:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D0186129B;
-        Mon, 26 Sep 2022 19:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4B4C433D6;
-        Mon, 26 Sep 2022 19:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664221919;
-        bh=bgsgz2grzEE537Qs/RlpiyBgkh/XZEjx6j5sbTdljEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GfathvNGTX/eVb4grOp75I+Zxhe7wdYp/8VWxsVc+vqao/jfHLRispl/UbNN1A1Za
-         VftObsznsr0CoBnfgOSZrOY8tSu3zUdN7OCptiWY48D16fG6UXloJp5SHHpOxQ1tMH
-         d2ZATmJEdSk87zwSfXUHxQHRdEx0hOOWOl0BEkMpdSt3NeRHIA+q1SMbj7aAjsS9kt
-         3eU11ioUwSxNjTgyJwMAuwsPrGlsarQ44Jh6DDgli7bnL5trhKLn2B70/XsjXaxJ29
-         aQbDQwZgFwsBMP2w8qRiADXB2+MkFAPs/WkKUlBitK2K0gWo9yyCIie0D2RN9nCg+6
-         qW++12Pqm5G6g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A9D1B403B0; Mon, 26 Sep 2022 20:51:56 +0100 (IST)
-Date:   Mon, 26 Sep 2022 20:51:56 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, john.garry@huawei.com,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        florian.fischer@muhq.space
-Subject: Re: [PATCH -next 2/5] perf: Fix incorrectly parsed flags in filter
-Message-ID: <YzIC3EpZaDNQlFOe@kernel.org>
-References: <20220926031440.28275-1-chenzhongjin@huawei.com>
- <20220926031440.28275-3-chenzhongjin@huawei.com>
+        Mon, 26 Sep 2022 15:52:17 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6C21E712;
+        Mon, 26 Sep 2022 12:52:14 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id c19so4814109qkm.7;
+        Mon, 26 Sep 2022 12:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=R38P8eP5UIItO6LW6v5vYMPVeWKU0b6TSYKF1qq6IIg=;
+        b=d6XvObJsgqVasI/tLzxisO2rBxiH4DzUJwf8Q70t4Bf6ybL1esB9cpeOWq8xSXBRz9
+         6gePLe2xBxwniodxDAA16qWFCoV4/rp+y5hKSuc0u329rwsgT7ZrrdzTkKyfvsh/DM85
+         vNvpIcMODkpsS9rHko9UZB5HCtkv1hO5n46IDqJzIBXG/mPxlx3IiseV/zBwJg7zOSAh
+         mWdqGVJGHttnInagzoaIAEfmR1LuWPgpo3mZ1YbEYQ++tWU5rkW2K/cp1jzXOS8gecda
+         ZE3spIIF19uvRX4M0gt2x/FrynXHavvvzUYPcYICHI1ZjtVix7lgYKfMgV9bNgltNCUG
+         jO4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=R38P8eP5UIItO6LW6v5vYMPVeWKU0b6TSYKF1qq6IIg=;
+        b=20iGxIu2wJ0Q1i4MBDwGcVcCfMPPLZIFEA5hKh8CB5VaiPayHfO7GG0THOdajx5uH2
+         PMzveRKfb3q0X4g+Q46PFi/SN4KAKokgbH588KZCNW4QpI7ZbWe87y4eTzMEZieaQ1pr
+         iSAwvVEFWOSI8jJxmFlPW7PZRIkM96fUxXDt7V9EoR3Ku7REiVrxpyUVMQDt/KXMfuna
+         guzXheaMDntXIsSlojLAOxZx0vz082IkyJcvlDUUJphAztmrRPV4DyV5Hbs3cTQvFb8j
+         oz2EXqnj1HbLXBL1Nzynfet/dUZPCiJUAREmeqYx30SGcSA6ufGdeOe+9ASOcVCe9SUg
+         0fbQ==
+X-Gm-Message-State: ACrzQf1SvuNDBLCF+erhotGZ01S3M7gRjOxktsEYGp6Je4vHLvUwu/Il
+        Fn8xy7649LoxK5ei9Rab8dA=
+X-Google-Smtp-Source: AMsMyM5VOS0xaIBFzYq7CunoDLBSEgWHgq+D9qUvHAi4zhzy4EDr7PrBwunb6h1Vh94PFbffarqeRw==
+X-Received: by 2002:a05:620a:2627:b0:6b9:1b05:7b9 with SMTP id z39-20020a05620a262700b006b91b0507b9mr15945805qko.776.1664221933081;
+        Mon, 26 Sep 2022 12:52:13 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id n2-20020a05620a294200b006cfaee39ccesm956005qkp.114.2022.09.26.12.52.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 12:52:12 -0700 (PDT)
+Message-ID: <c8254c17-5017-58c8-7d01-37d76d9bc6fc@gmail.com>
+Date:   Mon, 26 Sep 2022 12:52:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926031440.28275-3-chenzhongjin@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.4 000/115] 5.4.215-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220926163546.791705298@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220926163546.791705298@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Sep 26, 2022 at 11:14:37AM +0800, Chen Zhongjin escreveu:
-> When parsing flags in filter, the strtoul function uses wrong parsing
-> condition (tok[1] = 'x'), which can make the flags be corrupted and
-> treat all numbers start with 0 as hex.
+On 9/26/22 09:36, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.215 release.
+> There are 115 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> In fact strtoul() will auto test hex format when base == 0 (See
-> _parse_integer_fixup_radix). So there is no need to test this again.
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
 > 
-> Remove the unnessesary is_hexa test.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Fixes: 154c978d484c ("libbeauty: Introduce strarray__strtoul_flags()")
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->  tools/perf/builtin-trace.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.215-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-> index c7bb7a8222a6..7ecd76428440 100644
-> --- a/tools/perf/builtin-trace.c
-> +++ b/tools/perf/builtin-trace.c
-> @@ -615,11 +615,8 @@ bool strarray__strtoul_flags(struct strarray *sa, char *bf, size_t size, u64 *re
->  		if (isalpha(*tok) || *tok == '_') {
->  			if (!strarray__strtoul(sa, tok, toklen, &val))
->  				return false;
-> -		} else {
-> -			bool is_hexa = tok[0] == 0 && (tok[1] = 'x' || tok[1] == 'X');
-> -
-> -			val = strtoul(tok, NULL, is_hexa ? 16 : 0);
-> -		}
-> +		} else
-> +			val = strtoul(tok, NULL, 0);
->  
->  		*ret |= (1 << (val - 1));
->  
-> -- 
-> 2.17.1
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-
-- Arnaldo
+Florian
