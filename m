@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCAA5EA332
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699155E9EE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237802AbiIZLVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S235102AbiIZKPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237899AbiIZLTT (ORCPT
+        with ESMTP id S235004AbiIZKPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:19:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1004B49B;
-        Mon, 26 Sep 2022 03:38:53 -0700 (PDT)
+        Mon, 26 Sep 2022 06:15:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8508B47B9B;
+        Mon, 26 Sep 2022 03:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1875B8094D;
-        Mon, 26 Sep 2022 10:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E629C433D6;
-        Mon, 26 Sep 2022 10:37:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57607B80918;
+        Mon, 26 Sep 2022 10:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F6CC433D6;
+        Mon, 26 Sep 2022 10:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188651;
-        bh=971n08AYl3dtsKP2QZadAmqYTFkWUifprnyIL6rmiZE=;
+        s=korg; t=1664187254;
+        bh=ifI8ILlDcfdr/lMcjAqelB1TbPdmRi3UrdXfsGepMJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YvMqQzz8lBry2RAbjyq7ZYXoZls+7Jh3OAzK9AYFAw12PdxKrV252n00ZxxAC2wWw
-         sDnytmF8ilhY5moNQZTG8yE1ByWYRuUm6ZLEwkDT+tvB66svWY3YkJkMdojDZsZRI7
-         Xl40bHPuOsjcDqSkCEICWC7P7fg4vFIBX8RrNo2s=
+        b=ZUYfH0Rxiv9J2fnkTc8B1SJGX8zGgIcUxrxjC/kdB21Eyt1k0N4ZmI5S+kEY3xp22
+         C2v5a6JCK5aPywT+/FzaI7uMJmihl0IeDwGwbTMEzm6OWcv2XsAHf3XL9dWviX+aTH
+         E5VlmIm8YfyHIyuQki3MWp+3S2N+qQY4iwX0JJMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        stable@vger.kernel.org, Lu Wei <luwei32@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 077/148] net: bonding: Unsync device addresses on ndo_stop
+Subject: [PATCH 4.9 20/30] ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
 Date:   Mon, 26 Sep 2022 12:11:51 +0200
-Message-Id: <20220926100758.920700319@linuxfoundation.org>
+Message-Id: <20220926100736.883102343@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,139 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: Lu Wei <luwei32@huawei.com>
 
-[ Upstream commit 86247aba599e5b07d7e828e6edaaebb0ef2b1158 ]
+[ Upstream commit 81225b2ea161af48e093f58e8dfee6d705b16af4 ]
 
-Netdev drivers are expected to call dev_{uc,mc}_sync() in their
-ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
-This is mentioned in the kerneldoc for those dev_* functions.
+If an AF_PACKET socket is used to send packets through ipvlan and the
+default xmit function of the AF_PACKET socket is changed from
+dev_queue_xmit() to packet_direct_xmit() via setsockopt() with the option
+name of PACKET_QDISC_BYPASS, the skb->mac_header may not be reset and
+remains as the initial value of 65535, this may trigger slab-out-of-bounds
+bugs as following:
 
-The bonding driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
-ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
-already been emptied in unregister_netdevice_many() before ndo_uninit is
-called. This mistake can result in addresses being leftover on former bond
-slaves after a bond has been deleted; see test_LAG_cleanup() in the last
-patch in this series.
+=================================================================
+UG: KASAN: slab-out-of-bounds in ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
+PU: 2 PID: 1768 Comm: raw_send Kdump: loaded Not tainted 6.0.0-rc4+ #6
+ardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-1.fc33
+all Trace:
+print_address_description.constprop.0+0x1d/0x160
+print_report.cold+0x4f/0x112
+kasan_report+0xa3/0x130
+ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
+ipvlan_start_xmit+0x29/0xa0 [ipvlan]
+__dev_direct_xmit+0x2e2/0x380
+packet_direct_xmit+0x22/0x60
+packet_snd+0x7c9/0xc40
+sock_sendmsg+0x9a/0xa0
+__sys_sendto+0x18a/0x230
+__x64_sys_sendto+0x74/0x90
+do_syscall_64+0x3b/0x90
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Add unsync calls, via bond_hw_addr_flush(), at their expected location,
-bond_close().
-Add dev_mc_add() call to bond_open() to match the above change.
+The root cause is:
+  1. packet_snd() only reset skb->mac_header when sock->type is SOCK_RAW
+     and skb->protocol is not specified as in packet_parse_headers()
 
-v3:
-* When adding or deleting a slave, only sync/unsync, add/del addresses if
-  the bond is up. In other cases, it is taken care of at the right time by
-  ndo_open/ndo_set_rx_mode/ndo_stop.
+  2. packet_direct_xmit() doesn't reset skb->mac_header as dev_queue_xmit()
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+In this case, skb->mac_header is 65535 when ipvlan_xmit_mode_l2() is
+called. So when ipvlan_xmit_mode_l2() gets mac header with eth_hdr() which
+use "skb->head + skb->mac_header", out-of-bound access occurs.
+
+This patch replaces eth_hdr() with skb_eth_hdr() in ipvlan_xmit_mode_l2()
+and reset mac header in multicast to solve this out-of-bound bug.
+
+Fixes: 2ad7bf363841 ("ipvlan: Initial check-in of the IPVLAN driver.")
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 47 ++++++++++++++++++++++++---------
- 1 file changed, 35 insertions(+), 12 deletions(-)
+ drivers/net/ipvlan/ipvlan_core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index afeb213d02fc..01d2c0591eb8 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -883,7 +883,8 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
- 		if (bond->dev->flags & IFF_ALLMULTI)
- 			dev_set_allmulti(old_active->dev, -1);
+diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
+index 6c0982a39486..7668584c3843 100644
+--- a/drivers/net/ipvlan/ipvlan_core.c
++++ b/drivers/net/ipvlan/ipvlan_core.c
+@@ -441,7 +441,6 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
  
--		bond_hw_addr_flush(bond->dev, old_active->dev);
-+		if (bond->dev->flags & IFF_UP)
-+			bond_hw_addr_flush(bond->dev, old_active->dev);
- 	}
- 
- 	if (new_active) {
-@@ -894,10 +895,12 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
- 		if (bond->dev->flags & IFF_ALLMULTI)
- 			dev_set_allmulti(new_active->dev, 1);
- 
--		netif_addr_lock_bh(bond->dev);
--		dev_uc_sync(new_active->dev, bond->dev);
--		dev_mc_sync(new_active->dev, bond->dev);
--		netif_addr_unlock_bh(bond->dev);
-+		if (bond->dev->flags & IFF_UP) {
-+			netif_addr_lock_bh(bond->dev);
-+			dev_uc_sync(new_active->dev, bond->dev);
-+			dev_mc_sync(new_active->dev, bond->dev);
-+			netif_addr_unlock_bh(bond->dev);
-+		}
- 	}
- }
- 
-@@ -2130,13 +2133,15 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
- 			}
- 		}
- 
--		netif_addr_lock_bh(bond_dev);
--		dev_mc_sync_multiple(slave_dev, bond_dev);
--		dev_uc_sync_multiple(slave_dev, bond_dev);
--		netif_addr_unlock_bh(bond_dev);
-+		if (bond_dev->flags & IFF_UP) {
-+			netif_addr_lock_bh(bond_dev);
-+			dev_mc_sync_multiple(slave_dev, bond_dev);
-+			dev_uc_sync_multiple(slave_dev, bond_dev);
-+			netif_addr_unlock_bh(bond_dev);
- 
--		if (BOND_MODE(bond) == BOND_MODE_8023AD)
--			dev_mc_add(slave_dev, lacpdu_mcast_addr);
-+			if (BOND_MODE(bond) == BOND_MODE_8023AD)
-+				dev_mc_add(slave_dev, lacpdu_mcast_addr);
-+		}
- 	}
- 
- 	bond->slave_cnt++;
-@@ -2407,7 +2412,8 @@ static int __bond_release_one(struct net_device *bond_dev,
- 		if (old_flags & IFF_ALLMULTI)
- 			dev_set_allmulti(slave_dev, -1);
- 
--		bond_hw_addr_flush(bond_dev, slave_dev);
-+		if (old_flags & IFF_UP)
-+			bond_hw_addr_flush(bond_dev, slave_dev);
- 	}
- 
- 	slave_disable_netpoll(slave);
-@@ -3961,6 +3967,9 @@ static int bond_open(struct net_device *bond_dev)
- 		/* register to receive LACPDUs */
- 		bond->recv_probe = bond_3ad_lacpdu_recv;
- 		bond_3ad_initiate_agg_selection(bond, 1);
-+
-+		bond_for_each_slave(bond, slave, iter)
-+			dev_mc_add(slave->dev, lacpdu_mcast_addr);
- 	}
- 
- 	if (bond_mode_can_use_xmit_hash(bond))
-@@ -3972,6 +3981,7 @@ static int bond_open(struct net_device *bond_dev)
- static int bond_close(struct net_device *bond_dev)
+ static int ipvlan_process_outbound(struct sk_buff *skb)
  {
- 	struct bonding *bond = netdev_priv(bond_dev);
-+	struct slave *slave;
+-	struct ethhdr *ethh = eth_hdr(skb);
+ 	int ret = NET_XMIT_DROP;
  
- 	bond_work_cancel_all(bond);
- 	bond->send_peer_notif = 0;
-@@ -3979,6 +3989,19 @@ static int bond_close(struct net_device *bond_dev)
- 		bond_alb_deinitialize(bond);
- 	bond->recv_probe = NULL;
- 
-+	if (bond_uses_primary(bond)) {
-+		rcu_read_lock();
-+		slave = rcu_dereference(bond->curr_active_slave);
-+		if (slave)
-+			bond_hw_addr_flush(bond_dev, slave->dev);
-+		rcu_read_unlock();
-+	} else {
-+		struct list_head *iter;
+ 	/* The ipvlan is a pseudo-L2 device, so the packets that we receive
+@@ -451,6 +450,8 @@ static int ipvlan_process_outbound(struct sk_buff *skb)
+ 	if (skb_mac_header_was_set(skb)) {
+ 		/* In this mode we dont care about
+ 		 * multicast and broadcast traffic */
++		struct ethhdr *ethh = eth_hdr(skb);
 +
-+		bond_for_each_slave(bond, slave, iter)
-+			bond_hw_addr_flush(bond_dev, slave->dev);
-+	}
-+
- 	return 0;
- }
+ 		if (is_multicast_ether_addr(ethh->h_dest)) {
+ 			pr_debug_ratelimited(
+ 				"Dropped {multi|broad}cast of type=[%x]\n",
+@@ -520,7 +521,7 @@ static int ipvlan_xmit_mode_l3(struct sk_buff *skb, struct net_device *dev)
+ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	const struct ipvl_dev *ipvlan = netdev_priv(dev);
+-	struct ethhdr *eth = eth_hdr(skb);
++	struct ethhdr *eth = skb_eth_hdr(skb);
+ 	struct ipvl_addr *addr;
+ 	void *lyr3h;
+ 	int addr_type;
+@@ -544,6 +545,7 @@ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
+ 		return dev_forward_skb(ipvlan->phy_dev, skb);
  
+ 	} else if (is_multicast_ether_addr(eth->h_dest)) {
++		skb_reset_mac_header(skb);
+ 		ipvlan_skb_crossing_ns(skb, NULL);
+ 		ipvlan_multicast_enqueue(ipvlan->port, skb);
+ 		return NET_XMIT_SUCCESS;
 -- 
 2.35.1
 
