@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC85EA146
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2875EA4A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234316AbiIZKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S238915AbiIZLsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiIZKon (ORCPT
+        with ESMTP id S238393AbiIZLqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8094F19B;
-        Mon, 26 Sep 2022 03:25:38 -0700 (PDT)
+        Mon, 26 Sep 2022 07:46:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337C774346;
+        Mon, 26 Sep 2022 03:47:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C443B80926;
-        Mon, 26 Sep 2022 10:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDB4C433D6;
-        Mon, 26 Sep 2022 10:25:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2E4E60BAA;
+        Mon, 26 Sep 2022 10:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A78C433C1;
+        Mon, 26 Sep 2022 10:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187931;
-        bh=FGL8GAtxfMw4n0JvjxgP9LDX324kIAJjB3fsedpwHWk=;
+        s=korg; t=1664189242;
+        bh=DsKjnZ4x2S6AWzYKSIX0+p/vijGEZh6XriUnf40hdao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MpgQpCA5PWFARMpmE/NbWALNj45k4wT2XVqGcLVVLxwHD1upcj4y3VyqN94B6Fhiw
-         ZuIfMvYkcAzvLxF7EFC0I19rJlLnM7TrqjziJBb5iktuHv65Do/oTpQFQ86O9Fikep
-         NSI2Jnv1J5f3yT4r0PaLEtKdpKeXSPqrj8Uqnzr4=
+        b=AohMUNLZACJ0kMQph38boMS0RApKkS1gAkSvATT7Q5M3w+Rlk6+nckPrD3pEdjxtf
+         HIhdOYbYZK7Sr78iAM7wsCZVdFVxBinouBO3C6exSwYs+EXMxivX9RtS8q2nyK6oP0
+         NI4iTdWppWLQLcYqFjr9UxwRcBroAE01KGEPMuIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 075/120] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
-Date:   Mon, 26 Sep 2022 12:11:48 +0200
-Message-Id: <20220926100753.759758477@linuxfoundation.org>
+Subject: [PATCH 5.19 120/207] sfc: fix null pointer dereference in efx_hard_start_xmit
+Date:   Mon, 26 Sep 2022 12:11:49 +0200
+Message-Id: <20220926100811.937789679@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-[ Upstream commit 502550123bee6a2ffa438409b5b9aad4d6db3a8c ]
+[ Upstream commit 0a242eb2913a4aa3d6fbdb86559f27628e9466f3 ]
 
-The lantiq WDT driver uses clk_get_io(), which is not exported,
-so export it to fix a build error:
+Trying to get the channel from the tx_queue variable here is wrong
+because we can only be here if tx_queue is NULL, so we shouldn't
+dereference it. As the above comment in the code says, this is very
+unlikely to happen, but it's wrong anyway so let's fix it.
 
-ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
+I hit this issue because of a different bug that caused tx_queue to be
+NULL. If that happens, this is the error message that we get here:
+  BUG: unable to handle kernel NULL pointer dereference at 0000000000000020
+  [...]
+  RIP: 0010:efx_hard_start_xmit+0x153/0x170 [sfc]
 
-Fixes: 287e3f3f4e68 ("MIPS: lantiq: implement support for clkdev api")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: John Crispin <john@phrozen.org>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 12804793b17c ("sfc: decouple TXQ type from label")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/20220914111135.21038-1-ihuguet@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/lantiq/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/sfc/tx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-index 7a623684d9b5..2d5a0bcb0cec 100644
---- a/arch/mips/lantiq/clk.c
-+++ b/arch/mips/lantiq/clk.c
-@@ -50,6 +50,7 @@ struct clk *clk_get_io(void)
- {
- 	return &cpu_clk_generic[2];
- }
-+EXPORT_SYMBOL_GPL(clk_get_io);
+diff --git a/drivers/net/ethernet/sfc/tx.c b/drivers/net/ethernet/sfc/tx.c
+index 138bca611341..80ed7f760bd3 100644
+--- a/drivers/net/ethernet/sfc/tx.c
++++ b/drivers/net/ethernet/sfc/tx.c
+@@ -549,7 +549,7 @@ netdev_tx_t efx_hard_start_xmit(struct sk_buff *skb,
+ 		 * previous packets out.
+ 		 */
+ 		if (!netdev_xmit_more())
+-			efx_tx_send_pending(tx_queue->channel);
++			efx_tx_send_pending(efx_get_tx_channel(efx, index));
+ 		return NETDEV_TX_OK;
+ 	}
  
- struct clk *clk_get_ppe(void)
- {
 -- 
 2.35.1
 
