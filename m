@@ -2,149 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AAC5E97CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AC65E97D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiIZBt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S233217AbiIZBwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiIZBtW (ORCPT
+        with ESMTP id S230128AbiIZBwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:49:22 -0400
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4472AE02;
-        Sun, 25 Sep 2022 18:49:20 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id B9B7D1E80D3D;
-        Mon, 26 Sep 2022 09:45:14 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vbs55Yj4xvMW; Mon, 26 Sep 2022 09:45:11 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 6268F1E80D10;
-        Mon, 26 Sep 2022 09:45:11 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
-        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        arnd@arndb.de
-Cc:     x86@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH v4] hyperv: simplify and rename generate_guest_id
-Date:   Mon, 26 Sep 2022 09:48:50 +0800
-Message-Id: <20220926014850.3202-1-kunyu@nfschina.com>
+        Sun, 25 Sep 2022 21:52:17 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D2E2B1A1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:52:15 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id UAA00010;
+        Mon, 26 Sep 2022 09:52:10 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.12; Mon, 26 Sep 2022 09:52:11 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <ogabbay@kernel.org>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] habanalabs: Use simplified API for p2p dist calc
+Date:   Sun, 25 Sep 2022 21:52:08 -0400
+Message-ID: <20220926015208.3794-1-liubo03@inspur.com>
 X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   2022926095210313cce5187fcc4c8f93a89f569eab40d
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The generate_guest_id function is more suitable for use after the
-following modifications.
-1. Modify the type of the guest_id variable to u64, which is compatible
-with the caller.
-2. Remove all parameters from the function, and write the parameter
-(LINUX_VERSION_CODE) passed in by the actual call into the function
-implementation.
-3. Rename the function to make it clearly a Hyper-V related function,
-and modify it to hv_generate_guest_id.
+Use the simplified API that calculates distance between two devices.
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
-
---------
- v2: Fix generate_guest_id to hv_generate_guest_id.
- v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: simp
-     lify ... and remove extra spaces 
- v4: Remove #include <linux/version.h> in the calling file, and add #inclu
-     de <linux/version.h> in the function implementation file
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
- arch/arm64/hyperv/mshyperv.c   |  3 +--
- arch/x86/hyperv/hv_init.c      |  3 +--
- include/asm-generic/mshyperv.h | 12 +++++-------
- 3 files changed, 7 insertions(+), 11 deletions(-)
+ drivers/misc/habanalabs/common/memory.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index bbbe351e9045..637186f4df1f 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -13,7 +13,6 @@
- #include <linux/acpi.h>
- #include <linux/export.h>
- #include <linux/errno.h>
--#include <linux/version.h>
- #include <linux/cpuhotplug.h>
- #include <asm/mshyperv.h>
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index ef28f3b37b93..99b1d6ce26ae 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1689,7 +1689,7 @@ static int hl_dmabuf_attach(struct dma_buf *dmabuf,
+ 	hl_dmabuf = dmabuf->priv;
+ 	hdev = hl_dmabuf->ctx->hdev;
  
-@@ -38,7 +37,7 @@ static int __init hyperv_init(void)
- 		return 0;
+-	rc = pci_p2pdma_distance_many(hdev->pdev, &attachment->dev, 1, true);
++	rc = pci_p2pdma_distance(hdev->pdev, attachment->dev, true);
  
- 	/* Setup the guest ID */
--	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
-+	guest_id = hv_generate_guest_id();
- 	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
- 
- 	/* Get the features and hints from Hyper-V */
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 3de6d8b53367..04d32cd3e838 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -19,7 +19,6 @@
- #include <asm/mshyperv.h>
- #include <asm/idtentry.h>
- #include <linux/kexec.h>
--#include <linux/version.h>
- #include <linux/vmalloc.h>
- #include <linux/mm.h>
- #include <linux/hyperv.h>
-@@ -426,7 +425,7 @@ void __init hyperv_init(void)
- 	 * 1. Register the guest ID
- 	 * 2. Enable the hypercall and register the hypercall page
- 	 */
--	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
-+	guest_id = hv_generate_guest_id();
- 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
- 
- 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index c05d2ce9b6cd..9155575b7e34 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -25,6 +25,7 @@
- #include <linux/nmi.h>
- #include <asm/ptrace.h>
- #include <asm/hyperv-tlfs.h>
-+#include <linux/version.h>
- 
- struct ms_hyperv_info {
- 	u32 features;
-@@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
- }
- 
- /* Generate the guest OS identifier as described in the Hyper-V TLFS */
--static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
--				       __u64 d_info2)
-+static inline u64 hv_generate_guest_id(void)
- {
--	__u64 guest_id = 0;
-+	u64 guest_id;
- 
--	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
--	guest_id |= (d_info1 << 48);
--	guest_id |= (kernel_version << 16);
--	guest_id |= d_info2;
-+	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
-+	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
- 
- 	return guest_id;
- }
+ 	if (rc < 0)
+ 		attachment->peer2peer = false;
 -- 
-2.18.2
+2.27.0
 
