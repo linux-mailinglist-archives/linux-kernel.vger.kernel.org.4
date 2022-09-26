@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E3B5E9CCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C98D5E9CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiIZJCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S234700AbiIZJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiIZJBr (ORCPT
+        with ESMTP id S234618AbiIZJBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:01:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24C53F1E1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qGz/4WBzDws5s0dWIslPd0rxEq1gYJueg7G4eGqmaEw=; b=OlAutqAnyNEQv/PgRvhkRsTEkt
-        572PGSiCWQybcUZTj6jlzXoMa1KdQ27EERRK274n2GohZGYyW9s1ri6E1PYKXlWGwyQLwhQ+//isR
-        tUWy5hoV18lE3ateeyEC3b7Ghs8nn6o9R5f6F1oeNdPp0mQ3zAatCfquJ2la5GWuHk+CIPn3H3Fcm
-        ZN2GfwIW3MsMfPOx6P59KKMxWTvrGF2uNLiMt4K1wVmi+YnJDtnDcoyRymudBeowSqDufdK2pyJH+
-        tf8Ly7M738CQ4ZOX87JnIZZWx40sKZiAq37pZJAehTqdrt61yzlIIU3V5F2wl8S99yeHkhF19fC7n
-        CCjru+dQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocjzL-00Fzbe-Kj; Mon, 26 Sep 2022 09:01:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C05CF300023;
-        Mon, 26 Sep 2022 11:01:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A7DF929A12A26; Mon, 26 Sep 2022 11:01:17 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 11:01:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     YingChi Long <me@inclyc.cn>
-Cc:     tglx@linutronix.de, ndesaulniers@google.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/fpu: use __alignof__ to avoid UB in TYPE_ALIGN
-Message-ID: <YzFqXbVptttrzoDe@hirez.programming.kicks-ass.net>
-References: <20220925153151.2467884-1-me@inclyc.cn>
+        Mon, 26 Sep 2022 05:01:37 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429863F1F0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:01:35 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id w8so9731259lft.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1YIkQh6EoBkOuxOCzgI3t385pFWOcemUGZ5titnY28I=;
+        b=mNnIdQUAvC8xMLnw6y7rxl4Q0Xe4xkNX229EecK1KJhgEGEelhvP+ssi5124OO6C97
+         4BvLvcYr/Vtk77T0LacYX7TAXWz8URQF4wU+23TyMboIr0PSvddcEr6Hsc9np1cH8LoK
+         SEXVjzKvNbxhJEWKaCNfCJvcn6w++Dqq28CvNUgM+Zs/kCL/kvIpoB2fCP6YSa6gKz2c
+         Ijz3fRbf7CeczLcgqYSjUeKgyv5YpRjRqUDWln47Y9IW5gVgFjEiZyiqH4+Amxq1aRfB
+         l0ufNKsC2vv4hyUMJu3V1c3+D+Fvut+x9rMz8OIFsrMSkKlKv/w50UH0SPCf5FxjsHvo
+         urrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1YIkQh6EoBkOuxOCzgI3t385pFWOcemUGZ5titnY28I=;
+        b=r2IJv2IV35KwrbAB8WD9onr8lJWmRqRBxW1Y1NYnnrUI/p5iqZtRS9RF/fQEHWaDKS
+         Aodl9XVJ/blyugYPlz2rntDn+TyFCbT46yvMswLzFoGZz5xasxvDK9iJnap4kWpV50wn
+         MnwnwyTEKk0pFAv1ZOsf0eEeAiYWgMqLZL+/cgDQq/j7ZDinsjhwKTncruhzKbI0qHzc
+         omNa3DO0VSR6LUWT4wtLv32thfhaZTCma2D24kHiWMrnrtjeZ9IA1OVDODnNqPQ8LFMX
+         sVqG9bRBtMmOsvevzyBbYlsmAScLKUdUTmInHq1UVt4gGl+xgreqWI2NxJykDbYll1Lw
+         cZ6w==
+X-Gm-Message-State: ACrzQf3iS/zKkdCCutOKimqB7PYRT4UuLLigf3T5Hj6Ykje7by9hDvq+
+        eld6Yrp5MY4VntciKkqVsRuSQA==
+X-Google-Smtp-Source: AMsMyM4NMCbfNca19c+S2SFzmkji42Sj5zUFCNk62dA4ymhkBx29a6yBnY2hmEpbVNjyPJRM9fe4pg==
+X-Received: by 2002:a05:6512:3e17:b0:49d:9fd5:da61 with SMTP id i23-20020a0565123e1700b0049d9fd5da61mr9029683lfv.270.1664182893504;
+        Mon, 26 Sep 2022 02:01:33 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b00499f9ba6af0sm2469120lfq.207.2022.09.26.02.01.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 02:01:32 -0700 (PDT)
+Message-ID: <8c16fdda-6cc7-998b-882c-f52bd9813aaa@linaro.org>
+Date:   Mon, 26 Sep 2022 11:01:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220925153151.2467884-1-me@inclyc.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RESEND PATCH v3 6/7] dt-bindings: spi: spi-zynqmp-qspi: Add
+ support for Xilinx Versal QSPI
+Content-Language: en-US
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     akumarma@amd.com, git@amd.com, michal.simek@xilinx.com,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        amit.kumar-mahapatra@amd.com
+References: <20220926063327.20753-1-amit.kumar-mahapatra@xilinx.com>
+ <20220926063327.20753-7-amit.kumar-mahapatra@xilinx.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220926063327.20753-7-amit.kumar-mahapatra@xilinx.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 11:31:50PM +0800, YingChi Long wrote:
-> WG14 N2350 made very clear that it is an UB having type definitions with
-> in "offsetof". This patch change the implementation of macro
-> "TYPE_ALIGN" to builtin "__alignof__" to avoid undefined behavior.
+On 26/09/2022 08:33, Amit Kumar Mahapatra wrote:
+> Add new compatible to support QSPI controller on Xilinx Versal SoCs.
+
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+
+This is still not fixed.
+
 > 
-> I've grepped all source files to find any type definitions within
-> "offsetof".
-> 
->     offsetof\(struct .*\{ .*,
-> 
-> This implementation of macro "TYPE_ALIGN" seemes to be the only case of
-> type definitions within offsetof in the kernel codebase.
-> 
-> Signed-off-by: YingChi Long <me@inclyc.cn>
-> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 > ---
->  arch/x86/kernel/fpu/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-> index 621f4b6cac4a..41425ba0b6b1 100644
-> --- a/arch/x86/kernel/fpu/init.c
-> +++ b/arch/x86/kernel/fpu/init.c
-> @@ -134,7 +134,7 @@ static void __init fpu__init_system_generic(void)
->  }
+> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+> index fafde1c06be6..5ed651084896 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+> @@ -14,7 +14,9 @@ allOf:
 >  
->  /* Get alignment of the TYPE. */
-> -#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
-> +#define TYPE_ALIGN(TYPE) __alignof__(TYPE)
+>  properties:
+>    compatible:
+> -    const: xlnx,zynqmp-qspi-1.0
+> +    enum:
+> +      - xlnx,versal-qspi-1.0
+> +      - xlnx,zynqmp-qspi-1.0
 
-IIRC there's a problem with alignof() in that it will return the ABI
-alignment instead of that preferred or natural alignment for some types.
+With fixed subject:
 
-Notably I think 'long long' has 4 byte alignment on i386 and some other
-32bit archs.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-That said; please just replace the *one* instance of TYPE_ALIGN entirely
-and get rid of the thing.
+Best regards,
+Krzysztof
+
