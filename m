@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AFB5EA513
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0588A5EA390
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239079AbiIZL5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S237958AbiIZL1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239205AbiIZLyu (ORCPT
+        with ESMTP id S234847AbiIZL0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C10B785AB;
-        Mon, 26 Sep 2022 03:50:26 -0700 (PDT)
+        Mon, 26 Sep 2022 07:26:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BABC69F4A;
+        Mon, 26 Sep 2022 03:40:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93F8E60B2F;
-        Mon, 26 Sep 2022 10:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6851C433D6;
-        Mon, 26 Sep 2022 10:50:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E96BD609FE;
+        Mon, 26 Sep 2022 10:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5914C433D6;
+        Mon, 26 Sep 2022 10:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189425;
-        bh=zcF7iAfpBljxrp6SL+VwuiFaA9Cu7r63gUi7FJYR51M=;
+        s=korg; t=1664188847;
+        bh=p308GEKL87lFJ0U7hsKmHpyPZR1lRw7skm/TfB2cL2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ANSkJR0UOe2QgAujfFVM5bbOkjSUpqRfDI7QxQ3GbDkjGzrHVsLVX6CLKQrK1HVHo
-         TYCdR4TQmxjN0FaW9JtjS56jrT6x9VnHly4oWCEI4B03igwnmW7ZS/tSnbrRQK/Dt7
-         5ohEuuVOVzBHoD8bd7uW2c8pBEfEdAnzykBrvoS8=
+        b=zuHlKXhZbIAHBmVBkAccjAayF6SWl3sQQZ15IR3QcsDASjpPC48EXE5ElRyQAwYGu
+         4LaaJRR43i+m5FKUmoeNOqWd2fblt5hwhMSh//3op+6jL9ZMk9qaSYvjkhF6pqEGSJ
+         RTPFonfz7dHPHUdE+kdRR2SUEOQhT5kICH8ezjT0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Arthur Marsh <arthur.marsh@internode.on.net>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 184/207] drm/amd/display: Mark dml30s UseMinimumDCFCLK() as noinline for stack usage
-Date:   Mon, 26 Sep 2022 12:12:53 +0200
-Message-Id: <20220926100814.842720755@linuxfoundation.org>
+Subject: [PATCH 5.15 140/148] drm/amdgpu: dont register a dirty callback for non-atomic
+Date:   Mon, 26 Sep 2022 12:12:54 +0200
+Message-Id: <20220926100801.461684305@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 41012d715d5d7b9751ae84b8fb255e404ac9c5d0 ]
+[ Upstream commit abbc7a3dafb91b9d4ec56b70ec9a7520f8e13334 ]
 
-This function consumes a lot of stack space and it blows up the size of
-dml30_ModeSupportAndSystemConfigurationFull() with clang:
+Some asics still support non-atomic code paths.
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-  void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-       ^
-  1 error generated.
-
-Commit a0f7e7f759cf ("drm/amd/display: fix i386 frame size warning")
-aimed to address this for i386 but it did not help x86_64.
-
-To reduce the amount of stack space that
-dml30_ModeSupportAndSystemConfigurationFull() uses, mark
-UseMinimumDCFCLK() as noinline, using the _for_stack variant for
-documentation. While this will increase the total amount of stack usage
-between the two functions (1632 and 1304 bytes respectively), it will
-make sure both stay below the limit of 2048 bytes for these files. The
-aforementioned change does help reduce UseMinimumDCFCLK()'s stack usage
-so it should not be reverted in favor of this change.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1681
-Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Tested-by: Maíra Canal <mairacanal@riseup.net>
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Fixes: 66f99628eb2440 ("drm/amdgpu: use dirty framebuffer helper")
+Reported-by: Arthur Marsh <arthur.marsh@internode.on.net>
+Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-index f47d82da115c..42a567e71439 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-@@ -6651,8 +6651,7 @@ static double CalculateUrgentLatency(
- 	return ret;
- }
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+index 47fb722ab374..d3d2c214554e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+@@ -36,6 +36,7 @@
+ #include <linux/pm_runtime.h>
+ #include <drm/drm_crtc_helper.h>
+ #include <drm/drm_damage_helper.h>
++#include <drm/drm_drv.h>
+ #include <drm/drm_edid.h>
+ #include <drm/drm_gem_framebuffer_helper.h>
+ #include <drm/drm_fb_helper.h>
+@@ -491,6 +492,11 @@ bool amdgpu_display_ddc_probe(struct amdgpu_connector *amdgpu_connector,
+ static const struct drm_framebuffer_funcs amdgpu_fb_funcs = {
+ 	.destroy = drm_gem_fb_destroy,
+ 	.create_handle = drm_gem_fb_create_handle,
++};
++
++static const struct drm_framebuffer_funcs amdgpu_fb_funcs_atomic = {
++	.destroy = drm_gem_fb_destroy,
++	.create_handle = drm_gem_fb_create_handle,
+ 	.dirty = drm_atomic_helper_dirtyfb,
+ };
  
--
--static void UseMinimumDCFCLK(
-+static noinline_for_stack void UseMinimumDCFCLK(
- 		struct display_mode_lib *mode_lib,
- 		int MaxInterDCNTileRepeaters,
- 		int MaxPrefetchMode,
+@@ -1111,7 +1117,10 @@ int amdgpu_display_gem_fb_verify_and_init(
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = drm_framebuffer_init(dev, &rfb->base, &amdgpu_fb_funcs);
++	if (drm_drv_uses_atomic_modeset(dev))
++		ret = drm_framebuffer_init(dev, &rfb->base, &amdgpu_fb_funcs_atomic);
++	else
++		ret = drm_framebuffer_init(dev, &rfb->base, &amdgpu_fb_funcs);
+ 	if (ret)
+ 		goto err;
+ 
 -- 
 2.35.1
 
