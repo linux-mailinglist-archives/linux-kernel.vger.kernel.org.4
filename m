@@ -2,163 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569AE5E976A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 02:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396B55E9773
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 02:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbiIZAd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 20:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S232705AbiIZAhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 20:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiIZAch (ORCPT
+        with ESMTP id S233169AbiIZAhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 20:32:37 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2111.outbound.protection.outlook.com [40.107.96.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AC22F662;
-        Sun, 25 Sep 2022 17:31:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BdfZuqNZHYE4SV1nAGCgwBdFiFMXwSdVgItsCQI/nyHG1+hJoA9ddAfDFSToo0MB7iIzMxvEIDK4TXvy5qEEbghIF+xbqp0DZEFzQ+RLp/0RxTb5KLlaQB16uw89qyUSu9WiZRY+pLuWydcyDkwgKdTNLNF1J2E9od3plID/QmeFk7p7iqZbdawzgKGqEm613XwQeG5ZyAwiKtJtdbAA5z2qLWO/z8S2APadzpmt4eQz6BMa6qItgOF6AgGdwd/fPVyvqfOrjWWq+1pde8/12YetbEbKgNlqLCoVegKu2X/VUwbatbJf0rwBUm1jyb6MaEQOhc1p1hngHbll/FIRbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YC5g1ocJuDiF8rbRilSLDB2qkCF+FTUQ/rftX0G9Q+8=;
- b=NNk+i/dJ5/BzoxDaNUy/hFwXdj1cwP8+3AyOs181Yu/RaC0LpRmUCXAFrrgrNc+rfJL6IlWeHIOpPeXIMXk2rQ75bTfkyr/X4gMnm18EvCdzuHCgN8Nd5dJ0mIv5A3rZp71w18VTxLhy0y3dpdu9TizxortkyOBOrSXoKQ9bXVwSo1AyY8yfFn8bOKnK0qhJZFAS97EZ20pH1vCJAw/9ec/bRpGtIFz7iGkuHoryQLbZAHw2pgNjTG73tneC85iiobN7mCQMY/90S+vH5YOtfIUszM5MrEmmtTt1Sr65xADWOeuG9DBpiq30ZREjROOY2SYlfqjIhUGuXG2JifUjhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Sun, 25 Sep 2022 20:37:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F0325EA5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 17:37:13 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso5205200pjm.5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 17:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YC5g1ocJuDiF8rbRilSLDB2qkCF+FTUQ/rftX0G9Q+8=;
- b=BHauCrzkuNMeNqwDcOHHPBri97vRxhjWnCtILLWwSQVnR2+IzKhQaNcYCWvJ+g/YQsdjj0YvZS9KwhNknR7yRybVYqUFDzz69DLzYlHaWeVs8fs9RCU8tyubGfcodx/w+ZJ4llZwVVP4Sjn1kagEzE23O6epTussPkJlS2+xFVw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BLAPR10MB4849.namprd10.prod.outlook.com
- (2603:10b6:208:321::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
- 2022 00:30:27 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b417:2ac7:1925:8f69]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b417:2ac7:1925:8f69%4]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 00:30:27 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH v3 net-next 14/14] mfd: ocelot: add external ocelot switch control
-Date:   Sun, 25 Sep 2022 17:29:28 -0700
-Message-Id: <20220926002928.2744638-15-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926002928.2744638-1-colin.foster@in-advantage.com>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0260.namprd04.prod.outlook.com
- (2603:10b6:303:88::25) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JUqSNEPLCMNTTpKfM7Crxzu6WwUvly/09+gzrj81knI=;
+        b=oIwNpZQ5Y1z1143vFXyrfwGUJZ75JghkszOcBwSh0YmtZPbQHOcWWnAfns5g+sbQ/D
+         wiZ6Ijn8aWt3loyhafcrd2u+HcNQ1wlNI/8R7IsXEDiIp43xc5Tl50hy97o7WZC7QwAe
+         AYwaR/MB0DrbVUA991Ly8rZD21O7YmLTAEl4A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JUqSNEPLCMNTTpKfM7Crxzu6WwUvly/09+gzrj81knI=;
+        b=J3P7+tgo+dLiZ24+NUGqkt4Tmql/nFGjtChO8jH0yofLoMvrHmg13sPyUQ4imRmOgX
+         caSAaF9f/iM2MeM6ZBaw8QGO8nrKKxam19KMDMuLSP/2j/guKv3r2qTuYsQsZNub1CuN
+         R6Ya7NO7Wa93UzZF2dFQghVNj0gbOPqg9ezh63fXc7mfSOb0xnda+PuOwBNH0Yaqblrv
+         W/ISdwpgxK13Y0n7eC0K52Fgx6dloJJ/TNwj7Ug/xLgBRI3Xgui3ETzP6WzU5j0EglAJ
+         LPpoqplojxhLsHmlEyUy5WwH86ABOXh/8paZRhnmYvdkmIFROOW2FXxbnzh4XU+CWWTw
+         fzFA==
+X-Gm-Message-State: ACrzQf3hGfs18zWzk2xyClDFIZCjXGuarCz3JEt6KXoCK8pXCWUVmY3X
+        dl9P+BMVf0OcLM3UbLoo4GO1Nw==
+X-Google-Smtp-Source: AMsMyM6cpOhuwKFpZGu/GN3489Z0nCbt+/1a9GngZAzI09XYZxSG0DMGO11e73UWrmykWT+QugME+g==
+X-Received: by 2002:a17:903:120d:b0:179:d027:66f0 with SMTP id l13-20020a170903120d00b00179d02766f0mr7587416plh.61.1664152632485;
+        Sun, 25 Sep 2022 17:37:12 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 69-20020a621748000000b0053725e331a1sm10589061pfx.82.2022.09.25.17.37.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 17:37:11 -0700 (PDT)
+Date:   Sun, 25 Sep 2022 17:37:10 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
+        chris@chris-wilson.co.uk, matthew.auld@intel.com,
+        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
+        nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
+        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
+        mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
+        vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com
+Subject: Re: [PATCH v11 3/9] compiler_types.h: Add assert_same_type to catch
+ type mis-match while compiling
+Message-ID: <202209251032.71251A8@keescook>
+References: <20220923082628.3061408-1-gwan-gyeong.mun@intel.com>
+ <20220923082628.3061408-4-gwan-gyeong.mun@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|BLAPR10MB4849:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53c99098-da02-4712-2f21-08da9f564f51
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lxb9bDwBkVK/NPqaf9R9zdXx13t1OZQnlUnMFA2tQWlGClGAwrNh2chx41guIVQIgsTJY5H+UVMMIf5XMHe7Cbn23d/VG8D+k+gBI/NPyIC4ojYxfsmRysQDy3oBLHvWLW244SYoItkvgAMJEMv0E6rJZpHAUErxJmKWrfStbeCCjev6LXSZhfgCPUTcawBHc0Il1DEZn8m6tGOxQK6LJjio6LYx5bbqzQIN6I/JtllU+kOso2Uuq5ddM6Hf76cZyzaiLRNTupysqX2mj1IOPu/F47ogncvAMbyyTzD4wwx9jyQrLSegiRe69BaWys9u/hZs5LpVBzpqgEY9hQvxvJxPq44Ps0k4iEL3ehs9MQmh6EwCB4UIEqHV1OEDjbdgLRDZrNmMzMOx3g7jRK6B3xYlQkxFIuGEEYyZ4nHFnO/kmbTxFZdL06sAZnrJ4Aq/C8cIVMnQY8rvpfmCUiJsVeA0LvQmhGkhHBMqRjZKBI4eSgqw9GjA1gALv79X8+gNPjETrkxUbQWGXIOmP2GiIfGIkPurnVIq4UKWnsFgkXtaLGSGod2ujSX56bVi7zHPZrq0aN+6K7b9i5++dROCvWfRhgvRvzQ5fc/+vCD5R4mbaLNMlDqQTppNlJaRTTc/08EUBjonFmAFgFBDI59iPeSQ52mRkzy2eTLqTOtQyOs6p/ki/gVeqjKtWjBUqxKAxHquf6HXxE6V9ULFFtnDiAUIp936ZvEfJAkaFjdAHZdPR+Eg420zyaGocm2NhiWY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(376002)(39830400003)(366004)(136003)(451199015)(54906003)(38100700002)(478600001)(6486002)(316002)(2906002)(2616005)(6506007)(6512007)(26005)(5660300002)(1076003)(8936002)(7416002)(186003)(52116002)(86362001)(8676002)(38350700002)(36756003)(44832011)(4744005)(41300700001)(66946007)(66556008)(4326008)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QZ9zBR/trxrMaFZaITUr//Weh9jYqd+RPUDts3AUj8gZIrxd+PNrwxOFU7Hl?=
- =?us-ascii?Q?DuZ26tWOg9AEYoV+97h8ixBfoP7YFgqa3JcPxUFDN0MOcshRrFJDqmeFK93/?=
- =?us-ascii?Q?GrsqWTiGS6a8O30BgNhbX3wyXqjseTua0448x3Yk/kZBFSjSvsuX47NDZoRI?=
- =?us-ascii?Q?DJcGnCRg7Wsu2A9FPeKgC+aurY8EMs5p4cJyKhFhl+BqXtKNKEEI/jLn8qJb?=
- =?us-ascii?Q?s2vLBtekiQFzya+jyTYvNnqxSs+PcvKm5qvRaxrzjqZgBrtz5YUHBeA/yyyY?=
- =?us-ascii?Q?0S0mNhNnLMnepuZWx/GZGGrGi5MievbYHKWnwfJKmSGJa2oZw/2wEY4a3bWH?=
- =?us-ascii?Q?hbGxyfcl3CRgbeROsMQmxfLOX19rhrHZMl0YGltNgj5ZKsuWBVGO93ESlmNv?=
- =?us-ascii?Q?KaqdEwrOaLa5pU7F2vneA+eEjQrYtzNl10AKeXVcA9z6qrVL6ESRWU2jf0O4?=
- =?us-ascii?Q?BWo0AlYkEdqITClHyvdOnoxYHgWDXFja++wG1BBrdCyazPdCa+LFsiaqhv1Q?=
- =?us-ascii?Q?zRTv5gsHQrecseAufhvHSoAqQZ9N9GVIUXc5L6XMiTahraCJS37J16V6kKgx?=
- =?us-ascii?Q?ehSt2cp435cFzA6YjQbrRw3agRYvfMLMraGRoVEkhk5VUkWYNZ4YuNnsPLlD?=
- =?us-ascii?Q?2mzrS4BswGdtBnIoYGGFHYa8UbU3SmSXi7i38OwDAkZwv4cLcrjEMaocVg6U?=
- =?us-ascii?Q?A7ZDk2bW5P0T16MtUP3PsXPPx35/564U65Euqf7J+Gt2w52guyKdD0ANC2Xj?=
- =?us-ascii?Q?XYRK+VIn4+Xmz0pWyEGe/6cDAiL7e+s43TabVMNSXBIoLIPESvFPawhK8Ilb?=
- =?us-ascii?Q?gPrRZ+7Yn/UQmt6S0DkVlbgzgaAgiETL+tqzjwgR5cvsbMZmi75YyH9Yudn5?=
- =?us-ascii?Q?gjp+fQJX+aSFPE4LKGABKVl40aSHWtxET0gHW+i0RMpIX3aDXsqLvx01ERxo?=
- =?us-ascii?Q?tDhRCVOdtAS6xlV5MMFraJs5rsDByTGrdjbpSSNDuwAbV0MYyT8zT6VIkzRB?=
- =?us-ascii?Q?DJUV7HEGGavMy709sIllZkE6AkkLQpjJ28WrAQVf8xslbBcLW0rmjO17yCct?=
- =?us-ascii?Q?plzIonQRvnmSH/SRIhNLxwup4270OUuY8+6u7hoX4Euu01ua2hUpJKMcZ/pg?=
- =?us-ascii?Q?DEXiaqVpB9HGA5tLVt6ZdKvpaWhkjYdEwhEcmG6KR1+5yrt95X0T3VjfZsav?=
- =?us-ascii?Q?NkOsr87mLiIw43CibigFkcA2IpV6vFypED/fQguW+6kUtyDVTp9HuUI12Wx2?=
- =?us-ascii?Q?o4am11K9aBhJ00+yXneEKrLD2ia+GqVWzDkYEeOUjzPKXsEGdBConJqTL7Da?=
- =?us-ascii?Q?S8BbyUZwrWZ8h/bcx2nYYVJA9zsyLUlmItkFMQKXWoMv0Y7EOznTxgRxL3Gv?=
- =?us-ascii?Q?/JYQ92LPG8SG6AbBJ8ChYWfuZ2a0/hc5CUthoyr4D8agQsIgg2Ey/uCZh8io?=
- =?us-ascii?Q?qcDHyVtLJm3C/c0g38NA/DQB4ioj5JNh+OiIppnnXycO6tNoMIoiHlWzNN+L?=
- =?us-ascii?Q?kXOrnkNF9sWzf3XDMicB+wHHVnUEdFxKMd55neBSMf2CT0xfSrGvC1jEgj1A?=
- =?us-ascii?Q?rV0W/meJFehbOFs53BQ9pUZ3mVK87O9HDZ8OzAbLTm7QEsn4pHomPdEgucCb?=
- =?us-ascii?Q?evUFpJPRMargdpucvG79/hk=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53c99098-da02-4712-2f21-08da9f564f51
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 00:30:27.7289
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LMpRkY0aWxt8ZGrpJwbHRg4MqgFMNvsNkneuk3HS0M/J7m0L1ZEplGq/BDQo4/UzSngGJ+AQLMQHfhSjXuiiJ59b3Ns3a0Vkog0Xdm5u9Io=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4849
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923082628.3061408-4-gwan-gyeong.mun@intel.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Utilize the existing ocelot MFD interface to add switch functionality to
-the Microsemi VSC7512 chip.
+On Fri, Sep 23, 2022 at 11:26:22AM +0300, Gwan-gyeong Mun wrote:
+> Adds assert_same_type and assert_same_typable macros to catch type
+> mis-match while compiling. The existing typecheck() macro outputs build
+> warnings, but the newly added assert_same_type() macro uses the
+> static_assert macro (which uses _Static_assert keyword and it introduced
+> in C11) to generate a build break when the types are different and can be
+> used to detect explicit build errors. Unlike the assert_same_type() macro,
+> assert_same_typable() macro allows a constant value as the second argument.
+> Since static_assert is used at compile time and it requires
+> constant-expression as an argument [1][2], overflows_type_ret_const_expr()
+> is newly added. There is overflows_type() that has the same behavior, but
+> the macro uses __builtin_add_overflow() internally, and
+> __builtin_add_overflows returns a bool type [3], so it is difficult to use
+> as an argument of _Static_assert. The assert_same_type and
+> assert_same_typable macros have been added to compiler_types.h, but the
+> overflows_type_ret_const_expr macro has been added to overflow.h
+> So, overflow.h has to be included to use assert_same_typable which
+> internally uses overflows_type_ret_const_expr.
+> And it adds unit tests for overflows_type, overflows_type_ret_const_expr,
+> assert_same_type and assert_same_typable. The overflows_type has been added
+> as well to compare whether the overflows_type_ret_const_expr unit test has
+> the same as the result.
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
+I spent some time rewriting the code in this patch. I think it's really
+close, but I wanted to tweak how things were being defined, naming, etc.
 
-v3
-    * No change
+Notes below, and I'll send my proposed patch separately...
 
-v2
-    * New patch, broken out from a previous one
+> [...]
+> +#define overflows_type_ret_const_expr(x,T) (			\
 
----
- drivers/mfd/ocelot-core.c | 3 +++
- 1 file changed, 3 insertions(+)
+For the "overflows_type" defines, I think this reads a bit better:
 
-diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-index 702555fbdcc5..8b4d813d3139 100644
---- a/drivers/mfd/ocelot-core.c
-+++ b/drivers/mfd/ocelot-core.c
-@@ -190,6 +190,9 @@ static const struct mfd_cell vsc7512_devs[] = {
- 		.use_of_reg = true,
- 		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
- 		.resources = vsc7512_miim1_resources,
-+	}, {
-+		.name = "ocelot-switch",
-+		.of_compatible = "mscc,vsc7512-switch",
- 	},
- };
- 
+#define __overflows_type_constexpr(x, T) (                      \
+        is_unsigned_type(typeof(x)) ?                           \
+                (x) > type_max(typeof(T)) ? 1 : 0               \
+        : is_unsigned_type(typeof(T)) ?                         \
+                (x) < 0 || (x) > type_max(typeof(T)) ? 1 : 0    \
+                : (x) < type_min(typeof(T)) ||                  \
+                  (x) > type_max(typeof(T)) ? 1 : 0 )
+
+#define __overflows_type(x, T)          ({      \
+        typeof(T) v = 0;                        \
+        check_add_overflow((x), v, &v);         \
+})
+
+#define overflows_type(n, T)                                    \
+        __builtin_choose_expr(__is_constexpr(n),                \
+                              __overflows_type_constexpr(n, T), \
+                              __overflows_type(n, T))
+
+> [...]
+> +/**
+> + * assert_same_type - abort compilation if the first argument's data type and
+> + *                    the second argument's data type are not the same
+> + * @t1: data type or variable
+> + * @t2: data type or variable
+> + *
+> + * The first and second arguments can be data types or variables or mixed (the
+> + * first argument is the data type and the second argument is variable or vice
+> + * versa). It determines whether the first argument's data type and the second
+> + * argument's data type are the same while compiling, and it aborts compilation
+> + * if the two types are not the same.
+> + * See also assert_same_typable().
+> + */
+> +#define assert_same_type(t1, t2) static_assert(__same_type(t1, t2))
+
+I still think I'd rather avoid a define for this. It doesn't seem worth
+4 characters of savings to just have to type it out:
+
+	static_assert(__same_type(a, b))
+
+> [...]
+> +#define assert_same_typable(t, n) static_assert(			       \
+> +		__builtin_choose_expr(__builtin_constant_p(n),		       \
+> +				      overflows_type_ret_const_expr(n,t) == 0, \
+> +				      __same_type(t, n)))
+
+This one I'd like to convert into something closer in naming convention to
+"__same_type". Also note that "__builtin_constant_p()" doesn't actually
+work here: it needs to be __is_constexpr(). So, I propose:
+
+#define __castable_to_type(n, T)				\
+		__builtin_choose_expr(__is_constexpr(n),	\
+			__overflows_type_constexpr(n, T),	\
+			__same_type(n, T))
+
+Then we can do:
+
+	static_assert(__castable_to_type(INT_MAX, size_t));
+
+> [...[
+> +static void overflows_type_test(struct kunit *test)
+> +{
+> +/* Args are: first type, secound type, value, overflow expected */
+> +#define TEST_OVERFLOWS_TYPE(t1, t2, v, of) do {				\
+> +	t1 __t1 = v;							\
+> +	t2 __t2;							\
+> +	bool __of;							\
+> +	__of = overflows_type(v, t2);					\
+> +	if (__of != of) {						\
+> +		KUNIT_EXPECT_EQ_MSG(test, __of, of,			\
+> +			"expected overflows_type(%s, %s) to%s overflow\n", \
+> +			#v, #t2, of ? "" : " not");			\
+> +	}								\
+> [...]
+> +	__of = overflows_type_ret_const_expr(__t1, __t2) ? true : false;\
+> +	if (__of != of) {						\
+> +		KUNIT_EXPECT_EQ_MSG(test, __of, of,			\
+> +			"expected overflows_type_ret_const_expr(%s, %s) to%s overflow\n", \
+> +			#t1" __t1 = "#v, #t2" __t2", of ? "" : " not");	\
+> +	}								\
+
+These tests are excellent! I've adapted them a little bit to avoid some
+of their internal redundancy. (i.e. the above blocks are basically
+almost entire the same, etc).
+
+-Kees
+
 -- 
-2.25.1
-
+Kees Cook
