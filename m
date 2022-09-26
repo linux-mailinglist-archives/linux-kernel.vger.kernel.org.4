@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19F85EB5D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4375EB5DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiIZXgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S230395AbiIZXhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiIZXgH (ORCPT
+        with ESMTP id S229528AbiIZXhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:36:07 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46608876A7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:36:06 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id z20so729469plb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:36:06 -0700 (PDT)
+        Mon, 26 Sep 2022 19:37:39 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0938287F9C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:37:37 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so14005154pjq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=0Ri0hdyjjQOCW9kUZSLE4SDFJDME1VH1Qa6o9N0mexY=;
-        b=AGkHGYtfdRbpfuxKoojjixISpAe8IesyJuPmj6h2nNoEMMJKdqYuOf258wbI5GGL6h
-         StWZAJ6gBdgJfEm7YNyxsKCadRk573WbDemjW9XH4S6sNbHohLtF3YualJcz36w0IE74
-         u03tAXARDZrQEUXYN/A5n7FbVgPQ1Wu6pmOmaBS2p4leqvBaiJ4piNB5Dh5L8gyAmsJs
-         AYoxkn4/KWAr/UgYTJ1kUMS6BnuNSot1h3Hbbi8Wy7T6PzoQhUvXs2YjUPdKJXtxsfHl
-         yH/sPogyTHv3DwHHoHckWUHaQ9HdPl89utssdsjjy72lpyU+QM1NUp1FL/7Pz5b2/pF9
-         q8LQ==
+        bh=KjIJcMu3j47863rruoPF+gRowBl1pX33rzUpZJzpgKY=;
+        b=kA3Wow+Cy1NPefOHwt4wlLxeC3b4cz0oOKWyCx8F6hj0fHOKBrI5p/iJKBaXHWEZ/0
+         dg8TKvgE4ZisSNAg+pvZ2rrH6uPErC15MDJcPUBOHRFfv/n40crMquSW9uAZh5tNpO97
+         oYKAKSIbjzO6DB9ivITC48fSSmSkvpPv57YbuczBAHp/IyaU5wTCZo2xTpQhmJl80HDA
+         L8dAxxbLUuGq/EvQEf08+mKOS4pv+nGZRozVveLl3enya8GECDeykoItZI9tUZFcg2es
+         eisFgmhl+oN8AvJy3bTszGK/leazPVzDWdgHib4WBV1dBWfkA9/YJnLCs3IZavSMVpD/
+         Bj8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0Ri0hdyjjQOCW9kUZSLE4SDFJDME1VH1Qa6o9N0mexY=;
-        b=xIun3LLyNNbgI9pbd8/rZj+ysseQC7Bz2UlUdlCXyOfeuu2U/JnqnrCWZAU4yAmIAE
-         BIvH9q8MV9Vh9Pv9PfRgD2URCjufrN4A/eVGRr9p2fm/r5DsdkGieBCztnE3yVwf4XLp
-         HdLDYVW6KRh/ShIz4FguR3/uBtr31hDrGQZiVEy3Ar4TB+MxKRbEU0g0DsZYEg7jU7qM
-         h1HAQATQdB2JAWBaEX7g4vghFbYWdtCRclWVpfbWY6Du/MU3y0QxKuY9QeSKW6Wmn/Ae
-         LHKGBRTqKVmkpAdw+aoIB0NOrSs7wBHDwYBsmWK9TuQXijK3qNx2wrrTB2Pdr1nxJ0SI
-         WXMQ==
-X-Gm-Message-State: ACrzQf2Gx3YXMwMaYd2N2pNY8o0rH4IYU645P7MT7TDUsyaP2R6Vs5kr
-        v5576xEj5f9IAMsvF/LHlAwaBZ4cRZw2epGCeDqywwNiEj0=
-X-Google-Smtp-Source: AMsMyM7g50/OEn6XsgXnuVK+DYvnqUG0NJ6k22vHXlyV7oD0oosObQo+N9q/cHWolJpYaKNE/7WziFhf7YP1VRbg2Tk=
-X-Received: by 2002:a17:90b:384b:b0:200:3215:878b with SMTP id
- nl11-20020a17090b384b00b002003215878bmr1246782pjb.176.1664235365540; Mon, 26
- Sep 2022 16:36:05 -0700 (PDT)
+        bh=KjIJcMu3j47863rruoPF+gRowBl1pX33rzUpZJzpgKY=;
+        b=HzN6bcthnnUXlaVlV9wAhd65Pi/afC5mcEJ2G3KRcQjU+uF8DlA/8H2jfn4qCV+Z2p
+         wq3UDBgyctTws0TSxINOc7wzEiD7W8hO9sIWHpL2HZo25CA0YEnp6fkgO9dXHVZ6ZWC1
+         9YFiHtACS+0onALnwY3EGuSZiFUGd4/C5l5FGMQ0rbqJjqxepaZXtHfvEz4hrL8JPmcV
+         dd5bAoErAufI2WOyaGLCpqEAB/z4/HKtrfEabtJIwklrp9xj080LOsGhWkTouKPaN3QQ
+         V8odtMtGHFdVR/H3vdmviArJSSRepe2m5c8fYV4rxJYAdNhU/PABXuBG690gXgSJbx85
+         IvEQ==
+X-Gm-Message-State: ACrzQf3u7RYCU8bfU2RgTPsGtGPbmbF5Q8KUQ6rXipaqTWCAebtAGIZ3
+        +rsmqMZJFcLGNBvMn3HztTx/d2I2lZ8Zu0mvLO55fQ==
+X-Google-Smtp-Source: AMsMyM6AQvbyCxZs18zCw8yhX3gLnr4hVjYGPIHK/1lOaW50c7UnNTF6H7HSfrNfwg5vbOtFxhhGXJTUXuiWW54RNpE=
+X-Received: by 2002:a17:902:d143:b0:178:456b:8444 with SMTP id
+ t3-20020a170902d14300b00178456b8444mr24515711plt.137.1664235457301; Mon, 26
+ Sep 2022 16:37:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-8-vannapurve@google.com> <YyuFkmJRP/4ynKqD@google.com>
-In-Reply-To: <YyuFkmJRP/4ynKqD@google.com>
+ <20220915000448.1674802-9-vannapurve@google.com> <YyuGgX/wA+wvLiOg@google.com>
+In-Reply-To: <YyuGgX/wA+wvLiOg@google.com>
 From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 26 Sep 2022 16:35:54 -0700
-Message-ID: <CAGtprH8SVWQM=NpNaQtDsg7d=xuQJS-JRzw9KZ0XvV8KdRCkow@mail.gmail.com>
-Subject: Re: [V2 PATCH 7/8] Kvm: selftests: x86: Execute cpu specific vmcall instruction
+Date:   Mon, 26 Sep 2022 16:37:26 -0700
+Message-ID: <CAGtprH9n10JgKAR1ims-KJSG0ehOkqYR5EWx7MNZne7MXnAsPg@mail.gmail.com>
+Subject: Re: [V2 PATCH 8/8] KVM: selftests: x86: xen: Execute cpu specific
+ vmcall instruction
 To:     David Matlack <dmatlack@google.com>
 Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -74,31 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 2:43 PM David Matlack <dmatlack@google.com> wrote:
+On Wed, Sep 21, 2022 at 2:47 PM David Matlack <dmatlack@google.com> wrote:
 >
-> On Thu, Sep 15, 2022 at 12:04:47AM +0000, Vishal Annapurve wrote:
-> > Update the vmcall instruction invocation to happen according to the cpu
-> > type.
+> On Thu, Sep 15, 2022 at 12:04:48AM +0000, Vishal Annapurve wrote:
+> > Update xen specific hypercall invocation to execute cpu specific vmcall
+> > instructions.
 > >
 > > Suggested-by: Sean Christopherson <seanjc@google.com>
 > > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > > ---
-> >  tools/testing/selftests/kvm/include/x86_64/processor.h    | 8 ++++++++
-> >  tools/testing/selftests/kvm/x86_64/vmx_apic_access_test.c | 2 +-
-> >  .../selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c    | 2 +-
-> >  tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c  | 2 +-
->
-> What's the reason to use kvm_hypercall() for these tests? All of these
-> are Intel-specific. i.e. is_amd_cpu() will always return false.
->
-
-That's right. This change is attempting to have hypercalls from guest
-code done via a common API as far as possible.
-
-> >  4 files changed, 11 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> >  .../selftests/kvm/x86_64/xen_shinfo_test.c    | 64 +++++++------------
+> >  .../selftests/kvm/x86_64/xen_vmcall_test.c    | 14 ++--
+> >  2 files changed, 34 insertions(+), 44 deletions(-)
 > > ...
+> > diff --git a/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c b/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
+> > index 88914d48c65e..e78f1b5d3af8 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/xen_vmcall_test.c
+> > @@ -37,10 +37,16 @@ static void guest_code(void)
+> >       register unsigned long r9 __asm__("r9") = ARGVALUE(6);
+> >
+> >       /* First a direct invocation of 'vmcall' */
+> > -     __asm__ __volatile__("vmcall" :
+> > -                          "=a"(rax) :
+> > -                          "a"(rax), "D"(rdi), "S"(rsi), "d"(rdx),
+> > -                          "r"(r10), "r"(r8), "r"(r9));
+> > +     if (is_amd_cpu())
+> > +             __asm__ __volatile__("vmmcall" :
+> > +                     "=a"(rax) :
+> > +                     "a"(rax), "D"(rdi), "S"(rsi), "d"(rdx),
+> > +                     "r"(r10), "r"(r8), "r"(r9));
+> > +     else
+> > +             __asm__ __volatile__("vmcall" :
+> > +                     "=a"(rax) :
+> > +                     "a"(rax), "D"(rdi), "S"(rsi), "d"(rdx),
+> > +                     "r"(r10), "r"(r8), "r"(r9));
+>
+> Can we create common helper functions or macros for doing hypercalls to
+> reduce the amount of duplicated inline assembly?
+>
+
+Ack, will fix this in the next series.
+
+> >       GUEST_ASSERT(rax == RETVALUE);
+> >
+> >       /* Fill in the Xen hypercall page */
 > > --
 > > 2.37.2.789.g6183377224-goog
 > >
