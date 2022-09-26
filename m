@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7325EB5CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A92A5EB5D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiIZXdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S229866AbiIZXek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiIZXdW (ORCPT
+        with ESMTP id S230166AbiIZXeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:33:22 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C2F7B782
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:33:19 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id l14so5285134qvq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:33:19 -0700 (PDT)
+        Mon, 26 Sep 2022 19:34:37 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCEE632A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:34:35 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 135so10301442ybl.9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date;
-        bh=g1wLBAvnQ8SzjlNR0NcnJNCPTuqcD1TxoST+iFzU5DU=;
-        b=TPtmNCxRdqwoGgun2c+N57orO9Thu5oxdH9XRQCtiekHggtCaEF4mWFRlIZhPp7rR3
-         T8ZSY5slsDiczjGUJqHtXxRmDg9KvvyD/Pj+a04YmwF1Z2uL74F2fDm9dSzQoH1L1O1x
-         y6yTrikL7h19tF3NFAyo0jx9bgCKOjhczDkyY=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=l7SnbtLPEM732+/qIFc6jUHik8WmAvcTMIc2OL0ANLM=;
+        b=R/HBbSp8ZJdNsQ2bHMipIXtlmDXh/g7gTfzr+ZE4jgKVfrItATo6fTj+K5nI3jN0wv
+         dRBcjiDu2s96Qg1T1y79+dy1rfiuJMVZObK+Z4WhFDkuI6ZWno0ffVC46TyRsXZXvZNG
+         mbTXe1HZ0ZEF5uzn+d/Ud4tXACBJWQaRAkIWtQLgVMnS4vOukcOWC8KitL+uwEfuOvQF
+         5sy53EMF5HrhTVqQxim+ZeylqICZANm7/4rWDzOc0p2xoPpW0QzHZcSUUEVod955cQXt
+         xD7EIppmTgkUhAXCzs2L77dEEJ8h03X/WutMB5pMOKLXy/teP2ojpDqHawvanI7Y5Gkh
+         DoPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=g1wLBAvnQ8SzjlNR0NcnJNCPTuqcD1TxoST+iFzU5DU=;
-        b=2RDcMfHFwJiFOMsOAkIn+HdqMa4uXDc3mo0GsgGB3tQQBRBwdVzSrhdOdG7rnrjUFu
-         3Am3skOc1pjTeizb64hSsxXzzx5v1zyiBTv9S+/YY6rRHLL8PCk6KwLcwRXJJfgZfGJv
-         0qLBHWFhDioXvxEIayFVEofMSTfuExvrjs5ap+5LhMQV0C33beMMmw93Lkbo40DxSbfG
-         oeDQ30Gr7lnKy4J07LkQ10wk4IYnsLQHpQtt9ZOz0jNXgBQzIFelj/BcJYeVSjXyBuRW
-         XR3HB0naR93jUi1oPDRUrFU0dWLM/z5jeiZRFOis5xpJN6tLtO0ycM7RQyfol4aQbr+r
-         +fIg==
-X-Gm-Message-State: ACrzQf0TMuKsuMwEmsMWnQfdoYyQwk4PREWwWaIPx1JEnRjfAyUrk8bY
-        R6JzSfQ06PJRJRZLwW10VH99YGzM2FPY3x28
-X-Google-Smtp-Source: AMsMyM6+YJngYvppWphoKw9V7qsQF5A2jFzjuVp+Qu7qykiaG+ayy+yia8vuWbFHitrQUEJjYm8W1A==
-X-Received: by 2002:a0c:b20b:0:b0:4ad:c33:8ad with SMTP id x11-20020a0cb20b000000b004ad0c3308admr19599545qvd.129.1664235198434;
-        Mon, 26 Sep 2022 16:33:18 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1003:b132:37f:2047:987d:1b5f:cf31])
-        by smtp.gmail.com with ESMTPSA id x1-20020a05620a14a100b006ced196a73fsm12500071qkj.135.2022.09.26.16.33.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 16:33:18 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Date:   Mon, 26 Sep 2022 19:33:17 -0400
-Message-Id: <A78761F4-5922-418A-AFA3-01101C399778@joelfernandes.org>
-References: <20220926223751.GZ4196@paulmck-ThinkPad-P17-Gen-1>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-In-Reply-To: <20220926223751.GZ4196@paulmck-ThinkPad-P17-Gen-1>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=l7SnbtLPEM732+/qIFc6jUHik8WmAvcTMIc2OL0ANLM=;
+        b=bYrwsDqOpDNBRFYg+RPX2m2aykgQU6vhz+iZragoAUloaLCAVvYtfMgosmk7j0RJ62
+         cbjMpf5pR/93b50oqZtCB/nKl88GrUaJfDvh3tTafrw5eqXgSgnVR7WKBrzOyQghtyry
+         Rhi/oKBlXtMEQtVu4waovTqmN0ecekZ3e/udnSbo0tWGMaayN9+joMSH0syEhMLscktA
+         FR+ghNXC26Yl8/d/lrgWzj1U6o3ibmVEe+aI2SIcVeGrEl5FjTVeMcIOhWwg75d3exAK
+         at2tIRgsA0npcJGT+vl1JRxGmLrVt++c9vrlAPKiO36jEejF8ZTqHwr3TqPTQt4JqCfj
+         lZjw==
+X-Gm-Message-State: ACrzQf1HhyQdqw/px7KPr+g0B7osgcvuA88jVGLXV9w11vicZ8pVjLS4
+        zUMvLb459dYsxjoc9N1Evs+4NMkeYjjkjqdNrWjMgw==
+X-Google-Smtp-Source: AMsMyM7Z9uPtPHRyKMi7tSAsgduZnZLsWG66mPrbstXnDaqJKv9A0z+k2PuYb6LVgVs4uFiCEcZwbNyRnUV/CWxX0qA=
+X-Received: by 2002:a25:4fc2:0:b0:680:f309:48e5 with SMTP id
+ d185-20020a254fc2000000b00680f30948e5mr24198828ybb.0.1664235274918; Mon, 26
+ Sep 2022 16:34:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
+ <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
+In-Reply-To: <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 26 Sep 2022 16:34:08 -0700
+Message-ID: <CALzav=fGpN0C1duR8ArnAUyko5bqytNS_V47eBa9JM89pehyAw@mail.gmail.com>
+Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oupton@google.com>, Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 26, 2022 at 4:27 PM Vishal Annapurve <vannapurve@google.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
+> > > Cache the vendor CPU type in a global variable so that multiple calls
+> > > to is_intel_cpu() do not need to re-execute CPUID.
+> > >
+> > > Add cpu vendor check in kvm_hypercall() so that it executes correct
+> > > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
+> > > exit to KVM which anyway tries to patch the instruction according to
+> > > the cpu type.
+> >
+> > The commit shortlog makes no mention (nor even implies) that this commit
+> > adds AMD support to kvm_hypercall(). Please break this commit up into 2.
+> > One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
+> > support to kvm_hypercall().
+> >
+> > If you really want to keep this as one commit (I don't know what the
+> > benefit would be), please change the shortlog and commit message to
+> > focus on the kvm_hypercall() change, as that is the real goal of this
+> > commit. The precomputation is arguably and implementation detail. e.g.
+> >
+>
+> is_amd_cpu is used by guest code within fix_hypercall_test.c, just
+> caching the result will break the guest code execution. I have clubbed
+> these two changes together in order to ensure that is_amd_cpu works
+> fine for both host userspace and guest vm logic.
 
+Ah, so the sync_global_to_guest() part needs to go in the patch that
+adds caching to is_amd_cpu().
 
-> On Sep 26, 2022, at 6:37 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Mon, Sep 26, 2022 at 09:07:12PM +0000, Joel Fernandes wrote:
->> Hi Paul,
->>=20
->> On Mon, Sep 26, 2022 at 10:42:40AM -0700, Paul E. McKenney wrote:
->> [..]
->>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
->>>>>>>> +    } else {
->>>>>>>> +        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
->>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
->>>>>>>=20
->>>>>>> This WRITE_ONCE() can be dropped out of the "if" statement, correct?=
+But the point still stands that adding AMD support to kvm_hypercall()
+is a logically independent change.
 
->>>>>>=20
->>>>>> Yes will update.
->>>>>=20
->>>>> Thank you!
->>>>>=20
->>>>>>> If so, this could be an "if" statement with two statements in its "t=
-hen"
->>>>>>> clause, no "else" clause, and two statements following the "if" stat=
-ement.
->>>>>>=20
->>>>>> I don=E2=80=99t think we can get rid of the else part but I=E2=80=99l=
-l see what it looks like.
->>>>>=20
->>>>> In the function header, s/rhp/rhp_in/, then:
->>>>>=20
->>>>>    struct rcu_head *rhp =3D rhp_in;
->>>>>=20
->>>>> And then:
->>>>>=20
->>>>>    if (lazy && rhp) {
->>>>>        rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
->>>>>        rhp =3D NULL;
->>>>=20
->>>> This enqueues on to the bypass list, where as if lazy && rhp, I want to=
- queue
->>>> the new rhp on to the main cblist. So the pseudo code in my patch is:
->>>>=20
->>>> if (lazy and rhp) then
->>>>    1. flush bypass CBs on to main list.
->>>>    2. queue new CB on to main list.
->>>=20
->>> And the difference is here, correct?  I enqueue to the bypass list,
->>> which is then flushed (in order) to the main list.  In contrast, you
->>> flush the bypass list, then enqueue to the main list.  Either way,
->>> the callback referenced by rhp ends up at the end of ->cblist.
->>>=20
->>> Or am I on the wrong branch of this "if" statement?
->>=20
->> But we have to flush first, and then queue the new one. Otherwise wouldn'=
-t
->> the callbacks be invoked out of order? Or did I miss something?
->=20
-> I don't think so...
->=20
-> We want the new callback to be last, right?  One way to do that is to
-> flush the bypass, then queue the new callback onto ->cblist.  Another way
-> to do that is to enqueue the new callback onto the end of the bypass,
-> then flush the bypass.  Why wouldn't these result in the same order?
-
-Yes you are right, sorry. I was fixated on the main list. Both your snippet a=
-nd my patch will be equivalent then. However I find your snippet a bit confu=
-sing, as in it is not immediately obvious - why would we queue something on t=
-o a list, if we were about to flush it. But any way, it does make it a cleve=
-r piece of code in some sense and I am ok with doing it this way ;-)
-
-Thanks,
-
-  - Joel
-
-
->=20
->>>> else
->>>>    1. flush bypass CBs on to main list
->>>>    2. queue new CB on to bypass list.
->>>>=20
->>>>>    }
->>>>>    rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
->>>>>    WRITE_ONCE(rdp->lazy_len, 0);
->>>>>=20
->>>>> Or did I mess something up?
->>>>=20
->>>> So the rcu_cblist_flush_enqueue() has to happen before the
->>>> rcu_cblist_enqueue() to preserve the ordering of flushing into the main=
- list,
->>>> and queuing on to the main list for the "if". Where as in your snip, th=
-e
->>>> order is reversed.
->>>=20
->>> Did I pick the correct branch of the "if" statement above?  Or were you
->>> instead talking about the "else" clause?
->>>=20
->>> I would have been more worried about getting cblist->len right.
->>=20
->> Hmm, I think my concern was more the ordering of callbacks, and moving th=
-e
->> write to length should be Ok.
->=20
-> OK, sounds good to me!  ;-)
->=20
->>>> If I consolidate it then, it looks like the following. However, it is a=
- bit
->>>> more unreadable. I could instead just take the WRITE_ONCE out of both i=
-f/else
->>>> and move it to after the if/else, that would be cleanest. Does that sou=
-nd
->>>> good to you? Thanks!
->>>=20
->>> Let's first figure out whether or not we are talking past one another.  ;=
--)
->>=20
->> Haha yeah :-)
->=20
-> So were we?  ;-)
->=20
->                            Thanx, Paul
+>
+> >   KVM: selftest: Add support for AMD to kvm_hypercall()
+> >
+> >   Make it possible to use kvm_hypercall() on AMD by checking if running
+> >   on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
+> >   avoid executing CPUID in the guest on every call t kvm_hypercall()
+> >   (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
+> >   as part of kvm_selftest_arch_init() and sync it into the guest
+> >   after loading the ELF image.
+> >
+> > But again, it'd be cleaner just to split it up. Caching the result of
+> > is_{intel,amd}_cpu() is useful in its own right, independent of the
+> > kvm_hypercall() change.
+> >
+> > >
+> > > ...
+> > >
+> > > @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+> > >
+> > >  void kvm_selftest_arch_init(void)
+> > >  {
+> > > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+> > >  }
+> > >
+> > >  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> > >  {
+> > > +     sync_global_to_guest(vm, is_cpu_amd);
+> > >  }
+> > > --
+> > > 2.37.2.789.g6183377224-goog
+> > >
