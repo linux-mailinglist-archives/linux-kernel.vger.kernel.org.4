@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD3B5EA652
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABBC5EA6A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiIZMi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S234101AbiIZM5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiIZMiW (ORCPT
+        with ESMTP id S235659AbiIZM5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:38:22 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8576BC7;
-        Mon, 26 Sep 2022 04:15:29 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 3D6111C09D6; Mon, 26 Sep 2022 13:14:07 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 13:14:08 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.14 05/40] efi/libstub: Disable Shadow Call Stack
-Message-ID: <20220926111408.GF8978@amd>
-References: <20220926100738.148626940@linuxfoundation.org>
- <20220926100738.422260948@linuxfoundation.org>
+        Mon, 26 Sep 2022 08:57:09 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AB6160E77
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:31:05 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3450a7358baso64753977b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=WvDse09bmVqe1v4bAMTxO1zF42M4yNVVMYmxZQhWitQ=;
+        b=xdf57XKzjdyAQ9JfIDTR4dZFijfC7ZSxuluOmfABDC/fyCasGGVkK0noDxxxMT1bYs
+         eNd6miXruXqog21Vm8KOZGauYAKx1TCMmnvIBVFNx+tLH9svmLyr6KOc20Sy0H2vAy02
+         Mx0zddjMpJBKfG7Z/0yWkrMMgb0fngqUytR6U8Wa5SXKt268V8Ntd28P/BpIRClN+lD7
+         ya2jDOizOmDkWhU9Q38TO+O1P/3pyY4MKUdAEgNNbbZAz0ypEykROEhdjSGa11AxUhpZ
+         6i/0mWtyMzvrS9QcZs0bSYJ1DQnhNyZppq0yfCXExyPnUxedti+OfULym6lLY2NHipky
+         60KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=WvDse09bmVqe1v4bAMTxO1zF42M4yNVVMYmxZQhWitQ=;
+        b=yiYV4Ht/HWMDDUQYJILVygrjOqGiO0jxxoynJBHoAJ76nKRkDimAP2G9AqI8dzx10G
+         KhV3a8QFjx0C0on2/Ge4y2VLsDT9coD2nBNf8nfPTnNSvRnTvpOPOC+KzdMDcYTgUJiJ
+         CWVxi9WpQf0hGXgwP8+DRIaZmmio0kmfRzsV29/N9xjFBqDcM5lDi5p6Utd7gRGsMj5B
+         3dPEI8RhxC4+3EUAPykwtr3m8ErtaJZQV5DUdJxl92eI9Q8qjpl3NnS1bVSDAwwzuxhM
+         1bQWjLRZR2/0c9i4+UC/3hf+K8En6q4XPm1XsJLc8EuJpFPeBH6j9qLN38orpo5dHO7f
+         1E7g==
+X-Gm-Message-State: ACrzQf08czU36a27QXGhLF7WDjJDNQrrKBZc5cNJUbLv5STMDiPJuF4O
+        kLPKh4+Z6INKnOuIjJZrtV473xxIgt55eTu4RZrK9IDyGO8=
+X-Google-Smtp-Source: AMsMyM5Tz7DUFDW33OpYyhT8+unBKHG5TNYkQGqQQnVd2QORmiiOiYZshfL+0/MqqJBQPrposOqCWQOY4K7zjY7ltNg=
+X-Received: by 2002:a0d:d68a:0:b0:350:a7f0:7b69 with SMTP id
+ y132-20020a0dd68a000000b00350a7f07b69mr8231573ywd.132.1664190989438; Mon, 26
+ Sep 2022 04:16:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="l+goss899txtYvYf"
-Content-Disposition: inline
-In-Reply-To: <20220926100738.422260948@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+References: <20220720073326.19591-1-krzysztof.kozlowski@linaro.org> <7fdcff6a-9db9-a9d0-4013-7d3ff5fd5d8c@linaro.org>
+In-Reply-To: <7fdcff6a-9db9-a9d0-4013-7d3ff5fd5d8c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 26 Sep 2022 14:16:18 +0300
+Message-ID: <CAA8EJprom=CfxPQke5JjZi0CSSvvB=cw1RxOO8StLThpASG3ew@mail.gmail.com>
+Subject: Re: [PATCH v5] dt-bindings: qcom: document preferred compatible naming
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 26 Sept 2022 at 12:30, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/07/2022 09:33, Krzysztof Kozlowski wrote:
+> > Compatibles can come in two formats.  Either "vendor,ip-soc" or
+> > "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+> > DT schema file documenting preferred policy and enforcing it for all new
+> > compatibles, except few existing patterns.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> >
+>
+> Guys,
+>
+> This is waiting for two months. If you do not like it, please respond
+> with some comments.
 
---l+goss899txtYvYf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'd say, this is good, it documents what was agreed before.
 
-Hi!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> From: Sami Tolvanen <samitolvanen@google.com>
->=20
-> [ Upstream commit cc49c71d2abe99c1c2c9bedf0693ad2d3ee4a067 ]
->=20
-> Shadow stacks are not available in the EFI stub, filter out SCS
-> flags.
-
-AFAICT, SCS is not available in 4.19, CC_FLAGS_SCS is not defined
-there, and we should apply this patch.
-
-Best regards,
-								Pavel
-
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -23,6 +23,9 @@ KBUILD_CFLAGS			:=3D $(cflags-y) -DDISABLE_BRANCH_PROFI=
-LING \
->  				   $(call cc-option,-ffreestanding) \
->  				   $(call cc-option,-fno-stack-protector)
-> =20
-> +# remove SCS flags from all objects in this directory
-> +KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
-> +
->  GCOV_PROFILE			:=3D n
->  KASAN_SANITIZE			:=3D n
->  UBSAN_SANITIZE			:=3D n
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---l+goss899txtYvYf
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmMxiYAACgkQMOfwapXb+vJO8wCfRJcnTdlYvAAYKyxzfCJlZPhG
-pcUAnRKoLshX7g8z+DpqBFIm3v5a3Bdp
-=Um+2
------END PGP SIGNATURE-----
-
---l+goss899txtYvYf--
+-- 
+With best wishes
+Dmitry
