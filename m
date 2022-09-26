@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185625EA51D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CB05EA3A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239113AbiIZL6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S235374AbiIZL37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239252AbiIZLy6 (ORCPT
+        with ESMTP id S238085AbiIZL3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1547786CD;
-        Mon, 26 Sep 2022 03:50:33 -0700 (PDT)
+        Mon, 26 Sep 2022 07:29:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D066B8D7;
+        Mon, 26 Sep 2022 03:41:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 326FC60AD6;
-        Mon, 26 Sep 2022 10:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A5AC433C1;
-        Mon, 26 Sep 2022 10:48:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28955B80930;
+        Mon, 26 Sep 2022 10:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75FBDC433C1;
+        Mon, 26 Sep 2022 10:32:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189326;
-        bh=Nzip3Mw9RbGvjK9JI6FZQBgCbCA9OMQCLsOQWX+m7Ds=;
+        s=korg; t=1664188325;
+        bh=HuiIgQggbdGWw/dmxjWvslyAIgVeUHvyyjtYOiJ4BeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yJtz0TBDWVZS+pyH79hpvMOFaW59PA7h9GlSsuVg51vhwhqeOIBdysW5JDhmJRyCJ
-         BLUS0/qWtYsgiCPL1Qqx3dRFzcW+aR4MFQIBAhk+nF6zoMSyoowI35k3u5flQopHF8
-         AiHCkP5Lp+ICo6uD/YimCFeAY2A0P/ScJI8VcsCk=
+        b=Wb33YQdeF4AmhyftmALbRaNCmv/A5LsSi5EoMZT2SV9grOhsbIAQqmtH0ZsUOQX6K
+         mikgoKJ2iitlRzMvCnLgqwGaHgF9cTksv4lyS0kshNnZAgSW3JDa0vamDTPnBbKhpf
+         YQKiVG8ssof6IMzzCuiLkHlJoYOxXQfsiaccdk1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 150/207] drm/mediatek: dsi: Move mtk_dsi_stop() call back to mtk_dsi_poweroff()
+Subject: [PATCH 5.10 113/141] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
 Date:   Mon, 26 Sep 2022 12:12:19 +0200
-Message-Id: <20220926100813.361519555@linuxfoundation.org>
+Message-Id: <20220926100758.540545785@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+From: Sean Anderson <seanga2@gmail.com>
 
-[ Upstream commit 90144dd8b0d137d9e78ef34b3c418e51a49299ad ]
+[ Upstream commit 878e2405710aacfeeb19364c300f38b7a9abfe8f ]
 
-As the comment right before the mtk_dsi_stop() call advises,
-mtk_dsi_stop() should only be called after
-mtk_drm_crtc_atomic_disable(). That's because that function calls
-drm_crtc_wait_one_vblank(), which requires the vblank irq to be enabled.
+There is a separate receive path for small packets (under 256 bytes).
+Instead of allocating a new dma-capable skb to be used for the next packet,
+this path allocates a skb and copies the data into it (reusing the existing
+sbk for the next packet). There are two bytes of junk data at the beginning
+of every packet. I believe these are inserted in order to allow aligned DMA
+and IP headers. We skip over them using skb_reserve. Before copying over
+the data, we must use a barrier to ensure we see the whole packet. The
+current code only synchronizes len bytes, starting from the beginning of
+the packet, including the junk bytes. However, this leaves off the final
+two bytes in the packet. Synchronize the whole packet.
 
-Previously mtk_dsi_stop(), being in mtk_dsi_poweroff() and guarded by a
-refcount, would only be called at the end of
-mtk_drm_crtc_atomic_disable(), through the call to mtk_crtc_ddp_hw_fini().
-Commit cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from
-enable/disable and define new funcs") moved the mtk_dsi_stop() call to
-mtk_output_dsi_disable(), causing it to be called before
-mtk_drm_crtc_atomic_disable(), and consequently generating vblank
-timeout warnings during suspend.
+To reproduce this problem, ping a HME with a payload size between 17 and
+214
 
-Move the mtk_dsi_stop() call back to mtk_dsi_poweroff() so that we have
-a working vblank irq during mtk_drm_crtc_atomic_disable() and stop
-getting vblank timeout warnings.
+	$ ping -s 17 <hme_address>
 
-Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Link: http://lists.infradead.org/pipermail/linux-mediatek/2022-August/046713.html
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+which will complain rather loudly about the data mismatch. Small packets
+(below 60 bytes on the wire) do not have this issue. I suspect this is
+related to the padding added to increase the minimum packet size.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220920235018.1675956-1-seanga2@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dsi.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ drivers/net/ethernet/sun/sunhme.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index e98b4aca2cb9..9a3b86c29b50 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -685,6 +685,16 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
- 	if (--dsi->refcount != 0)
- 		return;
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index 69fc47089e62..940db4ec5714 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2063,9 +2063,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
  
-+	/*
-+	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-+	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
-+	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
-+	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
-+	 * after dsi is fully set.
-+	 */
-+	mtk_dsi_stop(dsi);
-+
-+	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
- 	mtk_dsi_reset_engine(dsi);
- 	mtk_dsi_lane0_ulp_mode_enter(dsi);
- 	mtk_dsi_clk_ulp_mode_enter(dsi);
-@@ -735,17 +745,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
- 	if (!dsi->enabled)
- 		return;
- 
--	/*
--	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
--	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
--	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
--	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
--	 * after dsi is fully set.
--	 */
--	mtk_dsi_stop(dsi);
--
--	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
--
- 	dsi->enabled = false;
- }
- 
+ 			skb_reserve(copy_skb, 2);
+ 			skb_put(copy_skb, len);
+-			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			skb_copy_from_linear_data(skb, copy_skb->data, len);
+-			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			/* Reuse original ring buffer. */
+ 			hme_write_rxd(hp, this,
+ 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
 -- 
 2.35.1
 
