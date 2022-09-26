@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AFB5EA4A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D355EA54E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238923AbiIZLsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S239139AbiIZMAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238540AbiIZLqE (ORCPT
+        with ESMTP id S238943AbiIZL46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:46:04 -0400
+        Mon, 26 Sep 2022 07:56:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D58674CDA;
-        Mon, 26 Sep 2022 03:47:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A084179EDF;
+        Mon, 26 Sep 2022 03:51:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C3C3B80926;
-        Mon, 26 Sep 2022 10:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D9EC433D6;
-        Mon, 26 Sep 2022 10:41:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14B88B807EC;
+        Mon, 26 Sep 2022 10:50:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601BCC433D7;
+        Mon, 26 Sep 2022 10:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188875;
-        bh=nkTo4kgOVzMVNdgbzyC07o/v4i4vF8Ba7SloRGnTvrE=;
+        s=korg; t=1664189456;
+        bh=IRzKGaMuCquRf/sme99rrXbn39SAxWDascXm7dwT+Q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S57zn0Fs6JGNZEsatpVB1pyg7X8unU3De+zbPm7vCkOORKhjV8YunUybbX9qybyAJ
-         BSqPHckg1I74qxoB5ZuOj1skG2ITRiAXbqH+x8DNBQ0COnuZYD/N7oNZjlqmOu0vE+
-         Z28H5qcACEFiA5oaNV/ClmImF3E8n8a3G3NC+MNg=
+        b=ZPZgnpkgvcGRmJAbYxTxPGNcWHq9b2OvNuewOvF8Km9uxrp/QcFu3s/4Xn9sqDzPM
+         F3Jj7GwCCWI6aeQvTRWTzdj3J4Z814jKyzsw8Zyor+kA+dp7kIVVaK5pANKRleCJpS
+         3V9ILuMCxusFBVUJ7lJK/mQhaUn3dj+5gCBvC8r0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 5.15 148/148] ext4: use locality group preallocation for small closed files
-Date:   Mon, 26 Sep 2022 12:13:02 +0200
-Message-Id: <20220926100801.796536949@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Peter Rosin <peda@axentia.se>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 194/207] i2c: mux: harden i2c_mux_alloc() against integer overflows
+Date:   Mon, 26 Sep 2022 12:13:03 +0200
+Message-Id: <20220926100815.281336579@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit a9f2a2931d0e197ab28c6007966053fdababd53f upstream.
+[ Upstream commit b7af938f4379a884f15713319648a7653497a907 ]
 
-Curently we don't use any preallocation when a file is already closed
-when allocating blocks (from writeback code when converting delayed
-allocation). However for small files, using locality group preallocation
-is actually desirable as that is not specific to a particular file.
-Rather it is a method to pack small files together to reduce
-fragmentation and for that the fact the file is closed is actually even
-stronger hint the file would benefit from packing. So change the logic
-to allow locality group preallocation in this case.
+A couple years back we went through the kernel an automatically
+converted size calculations to use struct_size() instead.  The
+struct_size() calculation is protected against integer overflows.
 
-Fixes: 196e402adf2e ("ext4: improve cr 0 / cr 1 group scanning")
-CC: stable@kernel.org
-Reported-and-tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
-Link: https://lore.kernel.org/r/20220908092136.11770-4-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However it does not make sense to use the result from struct_size()
+for additional math operations as that would negate any safeness.
+
+Fixes: 1f3b69b6b939 ("i2c: mux: Use struct_size() in devm_kzalloc()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/mballoc.c |   27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ drivers/i2c/i2c-mux.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -5169,6 +5169,7 @@ static void ext4_mb_group_or_file(struct
- 	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
- 	int bsbits = ac->ac_sb->s_blocksize_bits;
- 	loff_t size, isize;
-+	bool inode_pa_eligible, group_pa_eligible;
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index 774507b54b57..313904be5f3b 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -243,9 +243,10 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
+ 				   int (*deselect)(struct i2c_mux_core *, u32))
+ {
+ 	struct i2c_mux_core *muxc;
++	size_t mux_size;
  
- 	if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
- 		return;
-@@ -5176,25 +5177,27 @@ static void ext4_mb_group_or_file(struct
- 	if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
- 		return;
- 
-+	group_pa_eligible = sbi->s_mb_group_prealloc > 0;
-+	inode_pa_eligible = true;
- 	size = ac->ac_o_ex.fe_logical + EXT4_C2B(sbi, ac->ac_o_ex.fe_len);
- 	isize = (i_size_read(ac->ac_inode) + ac->ac_sb->s_blocksize - 1)
- 		>> bsbits;
- 
-+	/* No point in using inode preallocation for closed files */
- 	if ((size == isize) && !ext4_fs_is_busy(sbi) &&
--	    !inode_is_open_for_write(ac->ac_inode)) {
--		ac->ac_flags |= EXT4_MB_HINT_NOPREALLOC;
--		return;
--	}
--
--	if (sbi->s_mb_group_prealloc <= 0) {
--		ac->ac_flags |= EXT4_MB_STREAM_ALLOC;
--		return;
--	}
-+	    !inode_is_open_for_write(ac->ac_inode))
-+		inode_pa_eligible = false;
- 
--	/* don't use group allocation for large files */
- 	size = max(size, isize);
--	if (size > sbi->s_mb_stream_request) {
--		ac->ac_flags |= EXT4_MB_STREAM_ALLOC;
-+	/* Don't use group allocation for large files */
-+	if (size > sbi->s_mb_stream_request)
-+		group_pa_eligible = false;
-+
-+	if (!group_pa_eligible) {
-+		if (inode_pa_eligible)
-+			ac->ac_flags |= EXT4_MB_STREAM_ALLOC;
-+		else
-+			ac->ac_flags |= EXT4_MB_HINT_NOPREALLOC;
- 		return;
- 	}
- 
+-	muxc = devm_kzalloc(dev, struct_size(muxc, adapter, max_adapters)
+-			    + sizeof_priv, GFP_KERNEL);
++	mux_size = struct_size(muxc, adapter, max_adapters);
++	muxc = devm_kzalloc(dev, size_add(mux_size, sizeof_priv), GFP_KERNEL);
+ 	if (!muxc)
+ 		return NULL;
+ 	if (sizeof_priv)
+-- 
+2.35.1
+
 
 
