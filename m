@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143F95E9874
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1177F5E9876
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiIZEcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 00:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S232731AbiIZEhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 00:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiIZEcG (ORCPT
+        with ESMTP id S232677AbiIZEhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 00:32:06 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5BE29C93
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:32:03 -0700 (PDT)
+        Mon, 26 Sep 2022 00:37:00 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8A8023162
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EOXSU
-        nUQ5k5lxHEHYK8vHC6q/lIWKm+EaDrJEcZCf7M=; b=Eljd88f09e/TnSE/8+9Lw
-        cnFwwrqi3H3z2IvggfuCb+VwrQq2Db/HBZfSDi0Dy9U48Fgq2Dj0jmsxppnsDtSC
-        Z40CRKLZyrNGHdKM5anwdw2hT+XmL7p6oAVH6oMRVLX/+StRrwHecPfZ4B4jzXe6
-        WCbojYTVQqTmdeYPHpALjU=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=upktR
+        5lgfIuLOHJPkkkdFm6RUFNixxRyonGuz72UZ2c=; b=mJJtnKOBeJeZVRVOuIUnV
+        vnOwn4/ZyPHM4ncZrUdGT9frAENhzLo2qliz2ZK+SCqfNKNlodlloEf9SFbnCXrF
+        pEGOT9XmfcdwSbNjYLF4VIcUoHUV51NIWRe7EEuUGR2bcPnLMi+Tbn8EYDbZ91Z/
+        HQidZiqm17u8tjvuFc+6f0=
 Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp2 (Coremail) with SMTP id GtxpCgDnI9oUKzFjd0b9gQ--.51165S2;
-        Mon, 26 Sep 2022 12:31:17 +0800 (CST)
+        by smtp3 (Coremail) with SMTP id G9xpCgB3hWhDLDFjxP8ngg--.49616S2;
+        Mon, 26 Sep 2022 12:36:19 +0800 (CST)
 From:   Zheng Wang <zyytlz.wz@163.com>
 To:     dimitri.sivanich@hpe.com
 Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
@@ -31,18 +31,18 @@ Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
         alex000young@gmail.com, security@kernel.org,
         Zheng Wang <zyytlz.wz@163.com>
 Subject: [PATCH] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Mon, 26 Sep 2022 12:31:15 +0800
-Message-Id: <20220926043115.560612-1-zyytlz.wz@163.com>
+Date:   Mon, 26 Sep 2022 12:36:18 +0800
+Message-Id: <20220926043618.566326-1-zyytlz.wz@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgDnI9oUKzFjd0b9gQ--.51165S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKw1fZr4DuFyfWFg_yoWrCw1fpa
-        12g348ArW3XF4rursrta1kWFW3Ca48JFWUGr9rt3sY9w4FyFs8GryDJas0qr4DurW0qr4a
-        yF45tFnI9an0gaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
+X-CM-TRANSID: G9xpCgB3hWhDLDFjxP8ngg--.49616S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKw1fZr4DuFyfWFg_yoWrCF45pa
+        12g348ArW3XF4rurs7ta1kWFW3Ca48JFW5Cr9rtwnY9w4FyFs8GryDJas0qr4DurW0qr4a
+        yF45tFnI9an0gaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zROtxDUUUUU=
 X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBWIU1Xl4SnH-gAAsT
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAOIU1Xl4SnSDwAAsh
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -60,7 +60,6 @@ Fix it by introducing a return value to see if it's in error path or not.
 Free the gts in caller if gru_check_chiplet_assignment check failed.
 
 Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-             Zhuorao Yang <alex000young@gmail.com>
 
 Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 
