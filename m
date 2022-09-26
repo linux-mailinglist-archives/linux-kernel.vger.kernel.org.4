@@ -2,111 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237EB5E9CB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5369C5E9CB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiIZI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S234599AbiIZI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiIZI7P (ORCPT
+        with ESMTP id S234594AbiIZI7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:59:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD14F3DBC4;
-        Mon, 26 Sep 2022 01:59:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 82E8421D36;
-        Mon, 26 Sep 2022 08:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664182753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Lb/jC5elVDHJVD4iZP6e8+D+hP4jLe4mPHbNOrwg2Y=;
-        b=JWX1NuBwi+fFMrBUtA0Zb00NPb6CAYHpzM7/2hIUs7ghzr2e04MTjoo/o5YivNBSfp3bBZ
-        q/4mPhv/F1b3+VLD0Nkp0Pf5n0sCJPNs5UqkIs8bv2cwDP7ewF/2IeXJLn3EG8gZWcjR6Y
-        7NEqZSEI6NUVBN9wNUrFFKZyvWhFRLg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 620A913486;
-        Mon, 26 Sep 2022 08:59:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id R7icFeFpMWNCZwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 26 Sep 2022 08:59:13 +0000
-Date:   Mon, 26 Sep 2022 10:59:12 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, tgraf@suug.ch, urezki@gmail.com,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        Martin Zaharinov <micron10@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
-Message-ID: <YzFp4H/rbdov7iDg@dhcp22.suse.cz>
-References: <20220926083139.48069-1-fw@strlen.de>
+        Mon, 26 Sep 2022 04:59:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA5D3DBE0;
+        Mon, 26 Sep 2022 01:59:15 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mbc5q017czWhBL;
+        Mon, 26 Sep 2022 16:55:10 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 16:59:13 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <yangyicong@hisilicon.com>, <wsa@kernel.org>, <robh@kernel.org>
+Subject: Re: [PATCH next v5 1/2] i2c: hisi: Add initial device tree support
+To:     Weilong Chen <chenweilong@huawei.com>, <xuwei5@huawei.com>
+References: <20220920072215.161331-1-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <5629396c-a964-c2ba-8f8b-8bb6c4c78939@huawei.com>
+Date:   Mon, 26 Sep 2022 16:59:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926083139.48069-1-fw@strlen.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220920072215.161331-1-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-09-22 10:31:39, Florian Westphal wrote:
-> Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
->  kernel BUG at mm/vmalloc.c:2437!
->  invalid opcode: 0000 [#1] SMP
->  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
->  [..]
->  RIP: 0010:__get_vm_area_node+0x120/0x130
->   __vmalloc_node_range+0x96/0x1e0
->   kvmalloc_node+0x92/0xb0
->   bucket_table_alloc.isra.0+0x47/0x140
->   rhashtable_try_insert+0x3a4/0x440
->   rhashtable_insert_slow+0x1b/0x30
->  [..]
+On 2022/9/20 15:22, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
 > 
-> bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, this now
-> falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+> Change since v4:
+> - Remove the protection for the headers for ACPI/OF
+> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/
 > 
-> I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
-> maintainers rejected it.
+>  drivers/i2c/busses/Kconfig    |  2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 15 ++++++++++++++-
+>  2 files changed, 15 insertions(+), 2 deletions(-)
 > 
-> This patch is partial revert of
-> commit 93f976b5190d ("lib/rhashtable: simplify bucket_table_alloc()"),
-> to avoid kvmalloc for ATOMIC case.
-> 
-> As kvmalloc doesn't warn when used with ATOMIC, kernel will only crash
-> once vmalloc fallback occurs, so we may see more crashes in other areas
-> in the future.
-> 
-> Most other callers seem ok but kvm_mmu_topup_memory_cache looks like it
-> might be affected by the same breakage, so Cc kvm@.
-> 
-> Reported-by: Martin Zaharinov <micron10@gmail.com>
-> Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
-> Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: kvm@vger.kernel.org
-> Signed-off-by: Florian Westphal <fw@strlen.de>
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 0c48d8a9f44a..81f6936c312f 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..67031024217c 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -5,6 +5,7 @@
+>   * Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/bits.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/completion.h>
+> @@ -13,6 +14,7 @@
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/units.h>
+> @@ -483,17 +485,28 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI
+>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  	{ "HISI03D1", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+> +#endif
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,hisi-i2c", },
 
-Please continue in the original email thread until we sort out the most
-reasonable solution for this.
--- 
-Michal Hocko
-SUSE Labs
+The patch itself looks good to me:
+
+Acked-by: Yicong Yang <yangyicong@hisilicon.com>
+
+It's better to have a tag from xuwei for HiSilicon's DTS stuff.
+
+Thanks.
+
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+> +#endif
+>  
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> 
