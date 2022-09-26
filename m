@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE635EA566
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0805EA54B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239108AbiIZMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S239123AbiIZMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239254AbiIZL6h (ORCPT
+        with ESMTP id S238528AbiIZL4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:58:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E587B7B286;
-        Mon, 26 Sep 2022 03:52:07 -0700 (PDT)
+        Mon, 26 Sep 2022 07:56:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD967960B;
+        Mon, 26 Sep 2022 03:51:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E084B80185;
-        Mon, 26 Sep 2022 10:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC71C433D6;
-        Mon, 26 Sep 2022 10:50:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ADB360C17;
+        Mon, 26 Sep 2022 10:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 139AFC433C1;
+        Mon, 26 Sep 2022 10:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189410;
-        bh=OJR+Kvk3y51iZ6Yjl4qfoMm5F58M8vlAqHec4fKuqLM=;
+        s=korg; t=1664189416;
+        bh=Tb00sjBAY3nprOehK04zLLPf89XDrBubey8KUxfTO+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tqFQlgzWbdv/AIYtolb0yAr8OafU+29c7LC4g0JUyYFRky1gku9GtK9mT4KaYA0nf
-         voM8Yh+V8VQ3asvp92yxIittY9Z9FDTfxUhGsRtI3wbJ94EHIGp1h6dmmdS+e6c4V/
-         3OoJQyb2xFsdFQIFgqfnFrebddWpZkNVeSpLeLwA=
+        b=LCE3cZ949iWzr+X6asa9CJUJWT7H7PE5rFKD7VPfdK2mPWLQC+8LmAoEB9KmGekew
+         TVlNVnWrqjZszdFDPQeDbVHqfr/6m5LI5OdqkpmsHMnwBbWy7ajuqhQUgTnpKvWJL6
+         8mrMxQ7yOhTSUYa+RjhGBaA1vqYezOghQf29RjfY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
+        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
+        Krunoslav Kovac <Krunoslav.Kovac@amd.com>,
+        Aric Cyr <Aric.Cyr@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Yao Wang1 <Yao.Wang1@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 179/207] drm/amdgpu: add HDP remap functionality to nbio 7.7
-Date:   Mon, 26 Sep 2022 12:12:48 +0200
-Message-Id: <20220926100814.634068640@linuxfoundation.org>
+Subject: [PATCH 5.19 181/207] drm/amd/display: Limit user regamma to a valid value
+Date:   Mon, 26 Sep 2022 12:12:50 +0200
+Message-Id: <20220926100814.709822293@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -54,47 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Yao Wang1 <Yao.Wang1@amd.com>
 
-[ Upstream commit 8c5708d3da37b8c7c3c22c7e945b9a76a7c9539b ]
+[ Upstream commit 3601d620f22e37740cf73f8278eabf9f2aa19eb7 ]
 
-Was missing before and would have resulted in a write to
-a non-existant register. Normally APUs don't use HDP, but
-other asics could use this code and APUs do use the HDP
-when used in passthrough.
+[Why]
+For HDR mode, we get total 512 tf_point and after switching to SDR mode
+we actually get 400 tf_point and the rest of points(401~512) still use
+dirty value from HDR mode. We should limit the rest of the points to max
+value.
 
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
+[How]
+Limit the value when coordinates_x.x > 1, just like what we do in
+translate_from_linear_space for other re-gamma build paths.
+
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Reviewed-by: Krunoslav Kovac <Krunoslav.Kovac@amd.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Pavle Kotarac <Pavle.Kotarac@amd.com>
+Signed-off-by: Yao Wang1 <Yao.Wang1@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/gpu/drm/amd/display/modules/color/color_gamma.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c b/drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c
-index cdc0c9779848..6c1fd471a4c7 100644
---- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_7.c
-@@ -28,6 +28,14 @@
- #include "nbio/nbio_7_7_0_sh_mask.h"
- #include <uapi/linux/kfd_ioctl.h>
+diff --git a/drivers/gpu/drm/amd/display/modules/color/color_gamma.c b/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
+index 64a38f08f497..5a51be753e87 100644
+--- a/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
++++ b/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
+@@ -1603,6 +1603,7 @@ static void interpolate_user_regamma(uint32_t hw_points_num,
+ 	struct fixed31_32 lut2;
+ 	struct fixed31_32 delta_lut;
+ 	struct fixed31_32 delta_index;
++	const struct fixed31_32 one = dc_fixpt_from_int(1);
  
-+static void nbio_v7_7_remap_hdp_registers(struct amdgpu_device *adev)
-+{
-+	WREG32_SOC15(NBIO, 0, regBIF_BX0_REMAP_HDP_MEM_FLUSH_CNTL,
-+		     adev->rmmio_remap.reg_offset + KFD_MMIO_REMAP_HDP_MEM_FLUSH_CNTL);
-+	WREG32_SOC15(NBIO, 0, regBIF_BX0_REMAP_HDP_REG_FLUSH_CNTL,
-+		     adev->rmmio_remap.reg_offset + KFD_MMIO_REMAP_HDP_REG_FLUSH_CNTL);
-+}
+ 	i = 0;
+ 	/* fixed_pt library has problems handling too small values */
+@@ -1631,6 +1632,9 @@ static void interpolate_user_regamma(uint32_t hw_points_num,
+ 			} else
+ 				hw_x = coordinates_x[i].x;
+ 
++			if (dc_fixpt_le(one, hw_x))
++				hw_x = one;
 +
- static u32 nbio_v7_7_get_rev_id(struct amdgpu_device *adev)
- {
- 	u32 tmp;
-@@ -237,4 +245,5 @@ const struct amdgpu_nbio_funcs nbio_v7_7_funcs = {
- 	.ih_doorbell_range = nbio_v7_7_ih_doorbell_range,
- 	.ih_control = nbio_v7_7_ih_control,
- 	.init_registers = nbio_v7_7_init_registers,
-+	.remap_hdp_registers = nbio_v7_7_remap_hdp_registers,
- };
+ 			norm_x = dc_fixpt_mul(norm_factor, hw_x);
+ 			index = dc_fixpt_floor(norm_x);
+ 			if (index < 0 || index > 255)
 -- 
 2.35.1
 
