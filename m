@@ -2,154 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935F35EB4AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3268D5EB4AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiIZWlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S229916AbiIZWli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiIZWlU (ORCPT
+        with ESMTP id S229932AbiIZWle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:41:20 -0400
-Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1349740561
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:41:18 -0700 (PDT)
-Received: from c-24-17-218-140.hsd1.wa.comcast.net ([24.17.218.140] helo=srivatsab-a02.vmware.com)
-        by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <srivatsa@csail.mit.edu>)
-        id 1ocwmo-009QTb-AH;
-        Mon, 26 Sep 2022 18:41:14 -0400
-Subject: Re: [PATCH] smp/hotplug, x86/vmware: Put offline vCPUs in halt
- instead of mwait
-To:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Juergen Gross <jgross@suse.com>, x86@kernel.org,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        ganb@vmware.com, sturlapati@vmware.com, bordoloih@vmware.com,
-        ankitja@vmware.com, keerthanak@vmware.com, namit@vmware.com,
-        srivatsab@vmware.com, kvm ML <kvm@vger.kernel.org>
-References: <165843627080.142207.12667479241667142176.stgit@csail.mit.edu>
- <Yy1attxrEMDmCFBa@hirez.programming.kicks-ass.net> <Yy2OPR0b3pG2Ia+v@zn.tnic>
-From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Message-ID: <108b8d67-11e6-d888-437a-4f04d0c04c66@csail.mit.edu>
-Date:   Mon, 26 Sep 2022 15:41:02 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        Mon, 26 Sep 2022 18:41:34 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABB90806
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:41:33 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id m81so10075246oia.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tz2cEwqQBI5KOid9Ym3jdh1CtIss2mqT+yeVpI5D5SM=;
+        b=5WMM3Qo+EagYcdk/4XzPR7M1Nkp26RLOWPb1x61inBt4ynUprqDGH/n2uKScMC+AV0
+         EcFTOsJ5mdWcraZ1soCsfLi7zx5w0vD/VBx5UsNCU5hsv98jWYpXFxAnSq162zbHwfMx
+         iqLiAf99fvx4Bmp4Z2Bt3Tz4f+c4u0SJditYcS0saNoVVvvEDIiw4VAuTOXVoOpURqDs
+         l5S/Xz9djK88fduZ+aQgRsHpuZF3xxnJwOqhpcVPGQ3n7OUFOqtY0lcurwbzfVsrLbco
+         vxExn+Zqc/jBXo9VBrKMIPYnRCffnj/oBxm1X3GS0LIglmabtIgcE8YOTyR+w1dDwro1
+         YTLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tz2cEwqQBI5KOid9Ym3jdh1CtIss2mqT+yeVpI5D5SM=;
+        b=xRD3RLAacnn2tqFo1vFb5NMqPqXVj3Jc6XbGqXV1H3inqXORJhhi6rIIVkk+HV9+No
+         PJ/eQrhs8HkWLKUVwi8hH5yV2iIndWo1CqM+dTQPZvX00yWU5Qg4nls4EdsfRbFcEAsJ
+         ZkmomdB1VRr/Hc7mjnnG0LJrwPn3KMvG1SW9v2rLWbM/msfUuZ0Uver3qBHi6FtOOHpb
+         7R81u6vsqqs6jHfopTnJ6M+SAuMajQfPZK+a64MdI+nAG1tLSvFagJsE7ADeoIdK3ybB
+         7I4+WE0+o1N7Ou9cXwm1n/+3Z3RepUhhCmkUFknK3a13Vik2PCr28OmXX2fEg+4CzrX0
+         ZAeg==
+X-Gm-Message-State: ACrzQf1ItiGVh9hehUJpHHc7+cdpFHFg3bJmf61kHLXueSRlA1WtAHFE
+        W2db0Q7rFj210fDIfk75pjyhgLPWHVMp2zr1OBy3yTgXzQ==
+X-Google-Smtp-Source: AMsMyM4w8nRvJwif6MuQV1Y60DIJ5t08oIJfRG7hIO1WM7+Mw7vUvSGUBu9AGMzwflSnF4bjdKW2wOh01hwIbLeR7Ws=
+X-Received: by 2002:a05:6808:144b:b0:350:a06a:f8cb with SMTP id
+ x11-20020a056808144b00b00350a06af8cbmr488080oiv.51.1664232092411; Mon, 26 Sep
+ 2022 15:41:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yy2OPR0b3pG2Ia+v@zn.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926131643.146502-1-nathanl@linux.ibm.com> <20220926131643.146502-3-nathanl@linux.ibm.com>
+In-Reply-To: <20220926131643.146502-3-nathanl@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 26 Sep 2022 18:41:21 -0400
+Message-ID: <CAHC9VhS9kJ4aEp_Y_imcsj_0JOn523Au=ct6uQEPjNDVVjYxVg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] powerpc/rtas: block error injection when locked down
+To:     Nathan Lynch <nathanl@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jmorris@namei.org,
+        mpe@ellerman.id.au, serge@hallyn.com, ajd@linux.ibm.com,
+        gcwilson@linux.ibm.com, nayna@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/22 3:45 AM, Borislav Petkov wrote:
-> + kvm ML and leaving the whole mail quoted in for them.
-> 
-> On Fri, Sep 23, 2022 at 09:05:26AM +0200, Peter Zijlstra wrote:
->> On Thu, Jul 21, 2022 at 01:44:33PM -0700, Srivatsa S. Bhat wrote:
->>> From: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
->>>
->>> VMware ESXi allows enabling a passthru mwait CPU-idle state in the
->>> guest using the following VMX option:
->>>
->>> monitor_control.mwait_in_guest = "TRUE"
->>>
->>> This lets a vCPU in mwait to remain in guest context (instead of
->>> yielding to the hypervisor via a VMEXIT), which helps speed up
->>> wakeups from idle.
->>>
->>> However, this runs into problems with CPU hotplug, because the Linux
->>> CPU offline path prefers to put the vCPU-to-be-offlined in mwait
->>> state, whenever mwait is available. As a result, since a vCPU in mwait
->>> remains in guest context and does not yield to the hypervisor, an
->>> offline vCPU *appears* to be 100% busy as viewed from ESXi, which
->>> prevents the hypervisor from running other vCPUs or workloads on the
->>> corresponding pCPU (particularly when vCPU - pCPU mappings are
->>> statically defined by the user).
->>
->> I would hope vCPU pinning is a mandatory thing when MWAIT passthrough it
->> set?
->>
->>> [ Note that such a vCPU is not
->>> actually busy spinning though; it remains in mwait idle state in the
->>> guest ].
->>>
->>> Fix this by overriding the CPU offline play_dead() callback for VMware
->>> hypervisor, by putting the CPU in halt state (which actually yields to
->>> the hypervisor), even if mwait support is available.
->>>
->>> Signed-off-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
->>> ---
->>
->>> +static void vmware_play_dead(void)
->>> +{
->>> +	play_dead_common();
->>> +	tboot_shutdown(TB_SHUTDOWN_WFS);
->>> +
->>> +	/*
->>> +	 * Put the vCPU going offline in halt instead of mwait (even
->>> +	 * if mwait support is available), to make sure that the
->>> +	 * offline vCPU yields to the hypervisor (which may not happen
->>> +	 * with mwait, for example, if the guest's VMX is configured
->>> +	 * to retain the vCPU in guest context upon mwait).
->>> +	 */
->>> +	hlt_play_dead();
->>> +}
->>>  #endif
->>>  
->>>  static __init int activate_jump_labels(void)
->>> @@ -349,6 +365,7 @@ static void __init vmware_paravirt_ops_setup(void)
->>>  #ifdef CONFIG_SMP
->>>  		smp_ops.smp_prepare_boot_cpu =
->>>  			vmware_smp_prepare_boot_cpu;
->>> +		smp_ops.play_dead = vmware_play_dead;
->>>  		if (cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
->>>  					      "x86/vmware:online",
->>>  					      vmware_cpu_online,
->>
->> No real objection here; but would not something like the below fix the
->> problem more generally? I'm thinking MWAIT passthrough for *any*
->> hypervisor doesn't want play_dead to use it.
->>
+On Mon, Sep 26, 2022 at 9:18 AM Nathan Lynch <nathanl@linux.ibm.com> wrote:
+>
+> The error injection facility on pseries VMs allows corruption of
+> arbitrary guest memory, potentially enabling a sufficiently privileged
+> user to disable lockdown or perform other modifications of the running
+> kernel via the rtas syscall.
+>
+> Block the PAPR error injection facility from being opened or called
+> when locked down.
+>
+> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+> ---
+>  arch/powerpc/kernel/rtas.c | 25 ++++++++++++++++++++++++-
+>  include/linux/security.h   |  1 +
+>  security/security.c        |  1 +
+>  3 files changed, 26 insertions(+), 1 deletion(-)
 
-That would be better indeed, thank you!
+The lockdown changes are trivial, but they look fine to me.
 
->> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
->> index f24227bc3220..166cb3aaca8a 100644
->> --- a/arch/x86/kernel/smpboot.c
->> +++ b/arch/x86/kernel/smpboot.c
->> @@ -1759,6 +1759,8 @@ static inline void mwait_play_dead(void)
->>  		return;
->>  	if (!this_cpu_has(X86_FEATURE_CLFLUSH))
->>  		return;
->> +	if (this_cpu_has(X86_FEATURE_HYPERVISOR))
->> +		return;
->>  	if (__this_cpu_read(cpu_info.cpuid_level) < CPUID_MWAIT_LEAF)
->>  		return;
-> 
-> Yeah, it would be nice if we could get a consensus here from all
-> relevant HVs.
-> 
+Acked-by: Paul Moore <paul@paul-moore.com> (LSM)
 
-I'll send out a v2 after trying out these changes.
-
-Thank you!
-
-Regards,
-Srivatsa
-VMware Photon OS
+-- 
+paul-moore.com
