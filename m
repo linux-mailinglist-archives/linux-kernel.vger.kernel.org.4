@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF645E9FD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DFC5E9F25
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbiIZKaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S235182AbiIZKUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiIZK1r (ORCPT
+        with ESMTP id S235147AbiIZKSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:27:47 -0400
+        Mon, 26 Sep 2022 06:18:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529A24DF1F;
-        Mon, 26 Sep 2022 03:18:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2C53FA3F;
+        Mon, 26 Sep 2022 03:15:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52823B8093B;
-        Mon, 26 Sep 2022 10:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88813C433D6;
-        Mon, 26 Sep 2022 10:18:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47AE6B80924;
+        Mon, 26 Sep 2022 10:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC24C433D6;
+        Mon, 26 Sep 2022 10:15:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187519;
-        bh=4rwkvD/DNcjNXfcsWGkTsOeqnSDE+8I7hUNF1BK6CT8=;
+        s=korg; t=1664187312;
+        bh=lacPAtZsEPiZpm46yptQlJb7OhqxDdXtZKNT0DH6wYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=utQ1AlSFcPw0HyY7HPmnQYcV1Q4ZHQRlGk5ZoQFFt8KK/Vj9zrMRij4ltMtpJ1jlm
-         sLei4jx2w16w7WHg5GHD3sjfmZBGDrfR81X+diIzk4JwJTbDh8TbCaidKPrJmLQKR9
-         w17hYyQCX+ezWohxCBL7cmebZCdIExU3DZV6Tf+U=
+        b=GrQmEAPw9BgBAhWrgXRJ6R41JBnXBbydc+dAFUwg6+UuPlTH2OMkz/QOT0cu8CnHe
+         GofiqtMkSAWrmIiTi1Un9bUh75ozcKxr8df0XvJzCtKBBjEYdZL7UzV4gCYeczKh2Q
+         pah/eRaguKe13dJTyEIqqfWSTIKWCdYBmW21+FsA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Youling Tang <tangyouling@loongson.cn>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/58] mksysmap: Fix the mismatch of L0 symbols in System.map
+        stable@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 04/30] video: fbdev: skeletonfb: Fix syntax errors in comments
 Date:   Mon, 26 Sep 2022 12:11:35 +0200
-Message-Id: <20220926100742.028511893@linuxfoundation.org>
+Message-Id: <20220926100736.313886468@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Youling Tang <tangyouling@loongson.cn>
+From: Xiang wangx <wangxiang@cdjrlc.com>
 
-[ Upstream commit c17a2538704f926ee4d167ba625e09b1040d8439 ]
+[ Upstream commit fc378794a2f7a19cf26010dc33b89ba608d4c70f ]
 
-When System.map was generated, the kernel used mksysmap to filter the
-kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
+Delete the redundant word 'its'.
 
-$ cat System.map | grep L0
-9000000000221540 t L0
-
-The L0 symbol exists in System.map, but not in .tmp_System.map. When
-"cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
-data" error message in link-vmlinux.sh script.
-
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/mksysmap | 2 +-
+ drivers/video/fbdev/skeletonfb.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/mksysmap b/scripts/mksysmap
-index 9aa23d15862a..ad8bbc52267d 100755
---- a/scripts/mksysmap
-+++ b/scripts/mksysmap
-@@ -41,4 +41,4 @@
- # so we just ignore them to let readprofile continue to work.
- # (At least sparc64 has __crc_ in the middle).
+diff --git a/drivers/video/fbdev/skeletonfb.c b/drivers/video/fbdev/skeletonfb.c
+index f948baa16d82..254bb6e2187c 100644
+--- a/drivers/video/fbdev/skeletonfb.c
++++ b/drivers/video/fbdev/skeletonfb.c
+@@ -96,7 +96,7 @@ static struct fb_fix_screeninfo xxxfb_fix = {
  
--$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
-+$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
+     /*
+      * 	Modern graphical hardware not only supports pipelines but some 
+-     *  also support multiple monitors where each display can have its  
++     *  also support multiple monitors where each display can have
+      *  its own unique data. In this case each display could be  
+      *  represented by a separate framebuffer device thus a separate 
+      *  struct fb_info. Now the struct xxx_par represents the graphics
 -- 
 2.35.1
 
