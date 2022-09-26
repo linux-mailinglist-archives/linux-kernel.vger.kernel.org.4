@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E5E5EA0B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527345EA206
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiIZKkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S237177AbiIZLBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbiIZKjC (ORCPT
+        with ESMTP id S237090AbiIZK6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:02 -0400
+        Mon, 26 Sep 2022 06:58:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98054CA2A;
-        Mon, 26 Sep 2022 03:22:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378525AC5B;
+        Mon, 26 Sep 2022 03:30:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A9C60C13;
-        Mon, 26 Sep 2022 10:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCA7C433D7;
-        Mon, 26 Sep 2022 10:22:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C606A60C13;
+        Mon, 26 Sep 2022 10:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F52C433D6;
+        Mon, 26 Sep 2022 10:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187776;
-        bh=hcZDXeQDxdVuyJ5ymRRkRVN0FZjYJSq5O2pvudqyo+4=;
+        s=korg; t=1664188171;
+        bh=YYTFbARachQY8D+x5GJQOXKPYgbQ+8PCBvzfA+jz50c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fHTuJZO5AFfxlTEDbmS+zRBGdrtmHJXRLrbORHPLdqIokESdPyrsLMu6K6s6LkLc1
-         RPXZnemByD4fYKKICjyjmp2KORePNUWL60wkWalp1Rsd8aD0S9ohn+IqMaJAQ1M3+E
-         ZVwLwksIljc0LMeBHKxbPGEK3wI28QEE1D2Bv6II=
+        b=d7VRM57vd77C53bTPZLAUveK+MQIMkUJ+mAR46cIzrsmmG0ZZtXmeI3uWVKVWiJKb
+         zYQ5Fxs9ysoR9FxAXFzTzV34TbBG229NCJ7FaU0nMIAW5kGSyp3ZdCIH5W9hMS1/6D
+         8r8gTiAdS5w3LcYYAHU5d9ROUHyK01TZYyRFH+2M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 056/120] ALSA: hda/tegra: set depop delay for tegra
-Date:   Mon, 26 Sep 2022 12:11:29 +0200
-Message-Id: <20220926100752.849014990@linuxfoundation.org>
+        stable@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
+        <nfraprado@collabora.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 064/141] drm/mediatek: dsi: Add atomic {destroy,duplicate}_state, reset callbacks
+Date:   Mon, 26 Sep 2022 12:11:30 +0200
+Message-Id: <20220926100756.761322528@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohan Kumar <mkumard@nvidia.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-commit 3c4d8c24fb6c44f426e447b04800b0ed61a7b5ae upstream.
+[ Upstream commit eeda05b5e92f51d9a09646ecb493f0a1e872a6ef ]
 
-Reduce the suspend time by setting depop delay to 10ms for
-tegra.
+Add callbacks for atomic_destroy_state, atomic_duplicate_state and
+atomic_reset to restore functionality of the DSI driver: this solves
+vblank timeouts when another bridge is present in the chain.
 
-Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220913053641.23299-1-mkumard@nvidia.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested bridge chain: DSI <=> ANX7625 => aux-bus panel
+
+Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operations")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_hdmi.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -3703,6 +3703,7 @@ static int patch_tegra_hdmi(struct hda_c
- 	if (err)
- 		return err;
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 7d37d2a01e3c..b8c1a3c1c517 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -791,10 +791,13 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
  
-+	codec->depop_delay = 10;
- 	codec->patch_ops.build_pcms = tegra_hdmi_build_pcms;
- 	spec = codec->spec;
- 	spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+ static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+ 	.attach = mtk_dsi_bridge_attach,
++	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+ 	.atomic_disable = mtk_dsi_bridge_atomic_disable,
++	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+ 	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+ 	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
+ 	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
++	.atomic_reset = drm_atomic_helper_bridge_reset,
+ 	.mode_set = mtk_dsi_bridge_mode_set,
+ };
+ 
+-- 
+2.35.1
+
 
 
