@@ -2,187 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49AF5EACCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6785EACD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIZQml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S229666AbiIZQnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIZQlb (ORCPT
+        with ESMTP id S229648AbiIZQlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:41:31 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2046.outbound.protection.outlook.com [40.107.21.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBF9199
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:29:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jx40fp2TjTvmwnsQfkkBSJnHWYCX2fA/LVM2UvbKY+HNwbuMF3zQTv5bjpo0iSO0rUJcdce5Okw6CsDwCWAERPcGqk1ZB2M/NeLyTnc8Y/C1fKN4m9F7a1WUQHhHuuVw3oa/6a/3Yjc9/6JDn7uAM7jjbXHubP9UcbTj8Tjs4kBhjeayOqB2U2FcPKYlWKlG8dUYGWT7LtghLRg6GsUMkz2ELHFeEs7JiFyr2mSbN9J561yBol0qXRM910e5QXK2Kh3tFw2fv0b9j49afMK/DMf1xBRAOaL0dh1RCqEovU1d+8teJUuk8LgybuO5zT3AErFfQKiXtSIMqANZgrhJsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9HY0O8rOWHJgE2ypf8yinz4Uk0wsWLwEPUUlPrIlZH4=;
- b=COUzUNS4rLD1+8MSy5iC3R7tSAR2VDbrAWJWEHlVxM60uHyz7gR7IFXRLhilphVIlpvb2xl7SgFWoZuyVbJa2pEEiTT129xp54jy+7H4xYkxyNt0UR6GufFfgy8HFrE9/6IRAPGehIl7AZmibKlkK2W/wR9+foRVREXUXGcn/DvowT+2EXm/iarxubGB/ebW7QOLVbGdTcpquXtBsgTBLfzBb/1V2rlhCRjjk4wIHCWoNBSVDIammcveSG+ValpGCyKOmUbCMynyQ7YRiCx5FWlDwbhE5Ulj5xDa1MO4crog8jyJ56kPCxAqbowEweoCHcyyeKJnsZpZzNvHr+RZtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9HY0O8rOWHJgE2ypf8yinz4Uk0wsWLwEPUUlPrIlZH4=;
- b=PSEwpFpQqRboTWF0Ecyb46HJjW8eFdK8fIJnKn7ZzbZOcSARHIKSctu2ezQypMGJkgKlunFmg1AG6iGEQoWkxZ5AubymfZqOoINu/jXb9CvqBlIA9CuS1gyu1SvqnjlEK6aMGHqYnN8rDtP83jRiY6865RaqMrqj+Nn6L5iNXLX4WwXIqrq0Y28F5wbyyT/zd08yJa8GvsRNvUPe8LFym/MF4cQx5x6Xji4U1JkeiIHRNVXAZ0tduxvoXmAs+zfa7x9c/tcNKV7uRxg7dlvYjQ0oBoSmuE7VyfMMOw2mn+6UoetuIEqPyLtKzCg6d3ZdAwGNpQjEu/VibJG/N+WCJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by DU2PR04MB8743.eurprd04.prod.outlook.com (2603:10a6:10:2e1::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
- 2022 15:29:34 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::358f:58dc:c0c2:1155]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::358f:58dc:c0c2:1155%7]) with mapi id 15.20.5654.016; Mon, 26 Sep 2022
- 15:29:34 +0000
-Message-ID: <b3e43a0a-35cd-e695-0291-5d28616cc818@suse.com>
-Date:   Mon, 26 Sep 2022 17:29:32 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/3] xen/pv: allow pmu msr accesses to cause GP
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20220926141849.21805-1-jgross@suse.com>
- <20220926141849.21805-2-jgross@suse.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <20220926141849.21805-2-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0098.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a1::14) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Mon, 26 Sep 2022 12:41:55 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDACB57E0E;
+        Mon, 26 Sep 2022 08:30:49 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QCTm1b014930;
+        Mon, 26 Sep 2022 15:30:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kU9b44Kdwow6VsO17G9gwzumrAY2ZBNpSNpGbjF/zH4=;
+ b=RI+HrIF2XEwlfwxLOCKPrTTQDQy9mbiKRbYAVZl7KTsQBidVMTQKSR0W5qtWdGTn3YmS
+ JctChUnKX8OJS6OkhlJU2eKMjnTnsJxKXYQUolwWg2XK9KSB15Tq5ztAHOAEFEE7445p
+ y8raaVlXHAACazORPiIK6qFPQpYY/CLmaPOmxATiYVVPQcoXOkpt0WwI6UumHsklq8zb
+ XMQ+hxhs0A+8Vcnp4pXbXUfK25cp7DZhLDMk9WXfpJgWn69P2wFRutR4pL/yYj8VpOVN
+ gck8zPw8WOHBAQr9AMc/3FrlC9D79g11Zrm6TpBuW9A26H5/ZMsu0eFcSZTIizja43Pv RQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jua2us08g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 15:30:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QFUPQ8023317
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 15:30:26 GMT
+Received: from [10.216.15.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 26 Sep
+ 2022 08:30:16 -0700
+Message-ID: <5d2f7167-818a-a655-9885-b71a3e91733e@quicinc.com>
+Date:   Mon, 26 Sep 2022 21:00:11 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|DU2PR04MB8743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24786e85-a242-426a-b506-08da9fd3e9f2
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wlLCAs5VVeYDuqeFud2ptCIAlpaZ4gFPwqtDZgXW9WP4VmnXsXUmkfDNChmh30/D94I82jjnxAQIG+wU4hRRHuqWRqPliMh4a+kTy8RkAh81sS7WAy0j7lOfQtqzksYDrylSHN/5cJYAcPHxIj6X7b3GeCChtkwn5sGcAS3p8/Zg3PnMyKYisO3H2msy+CupuWHWE64ZIf08G1DWdh+clvgKKaUbYg80iXg/+wNSALMzfPY6tX5w5TI73IWIo5FxzP6tchhSxZ70pSPeE1ztyi9ATLnFi4Mlfrn3MxzmQwVMHrM8wbu8u3fXXXOjrDT2bMcbfGO9zbbvSO3USFcM1xG6gnv4ZPtojCAEzBJZGLtEV65xwwDLQke4SqQxwpwuwLx1tpIPtLqhnw0Eqew60apEK3R/5g6ADVLKDsm6CqipeVOE5bOObnCpiqPXZZYXRCELxVEorkxgf0aZB+qNsN1oQUdRHXtnNz4R6f72xmOIEAaBZB0IjHg8m1tOKw4Jdw7ZYqtLlLXVA0yx7FeT/5oMV4NFEobDxFE4VoCyImTfYILybyQxW+FPc4lwz/iwshge/jsiSUrcsCq45B/wR7vSICbt3B3lEsEPCMNkN8/l3SBNL+c7aHDAyRSstMBSyrKgTBUv8gIvsIkMjTcssZL+ho/mKYZMNTTOe0Kb+lb+w0p5o82ZscCikjOsgc3U0d2/oL7nBityfkBHOEpVNj1wko7RAf8wImFitc1WksbTE31UtOBdKerzNxhQZj13Hq1mWI5jBokIN0rjjvJnNzN8DEu0GqFaYgyzhOrcpRA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(366004)(376002)(396003)(346002)(451199015)(6636002)(37006003)(54906003)(4326008)(6486002)(66946007)(66476007)(66556008)(478600001)(8676002)(316002)(5660300002)(31686004)(41300700001)(8936002)(6862004)(53546011)(6512007)(26005)(6506007)(2616005)(83380400001)(38100700002)(2906002)(186003)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RStFcGJFaHNrbUNOSEJteklEMGZoVkkvY3BiaVlxdnY5eDBFdmhZd0ppU2Rr?=
- =?utf-8?B?a3RsZkt6OGUxMTBIMitqNG8xTWJDU1BJdzZNVnVHbFFsUVlHNTYvcEJpWEZi?=
- =?utf-8?B?YkUwMFRBQlFPdVdYdDFkK2JCTnFxdjVjZVA5aEZENmowWUZDUklZRDIybGNw?=
- =?utf-8?B?eitSRHYwUzJaZUhGVDFLK3hNZldRbVVPMmo0NmJ1ZXg4ZnhHdmdpVzhpb0E4?=
- =?utf-8?B?VGhucC9aYzlNNHZiYXZ1bzgxZUM2SzlKVis1WXVJaklZOW9lU010ZVFESVRo?=
- =?utf-8?B?bjNvWExod3JpUExGWm5zNTBxQVNySFVNS2NSUWIrY0VlR3NZWHVaV2dqVGsx?=
- =?utf-8?B?K1VDQlZyKzZ6WHBiNDlYT2Q5RDRKU1FBY1QzZCtYeDhpYitTN1VDMlhweHJK?=
- =?utf-8?B?Uk4rS2d0eldLeXh3c3Y5alVoRm9aSDRMSjBxQWRKNHJvSXhUVWZSbUowdm9R?=
- =?utf-8?B?dEFiTy8xVU5kNk5xb3BNZ2dQUlRpa1JqMmlIaUxBMTAyZ2V1MTY3dzhWNzdJ?=
- =?utf-8?B?WkZXeGl3V3RxYlNFZEQ1WEE0cUJ6SWQ3Um96RWI1STl1Vjd2NWxZNWtkbFF3?=
- =?utf-8?B?dnQrNWJ2bFB3ejVhOEwvcUVnL2lQVGxMcUh1NGloZzhzblRtQmYwU2NiMTNq?=
- =?utf-8?B?aHh4WnVHc2grNWtGZElZcDVaWmxtdVc4OWVPNktISWVEU0thTlErNktvRFQw?=
- =?utf-8?B?SHpwNy84ZmZldTY0WWc1bnl6Tzc4d2pLV0FtcG1YRVExb0hXUXNwc1RiSWFk?=
- =?utf-8?B?dHcwYm5OVklDZ2F1TmVvdk5tL0dUZFJUZTZYNm8wQk4vcEtuck9ZUnBwektz?=
- =?utf-8?B?eDI4eHMyUFB0bWpXWEhBa2d3bkZnSjJvR081bUkrdU1tekNHZ1pNTENZdG9z?=
- =?utf-8?B?eFR1ZE8vU25qZ0JsTGsvREtYMmcxaFA3QzRvaFhRdUdhdEc5eFN5Nm5nWGZa?=
- =?utf-8?B?RUUrUHRoWThnTktOVzhnMVpXejNnN0p0cFNaWnRmL3R0cVh3ZWZ2RHBRMmRT?=
- =?utf-8?B?QUdPN0ZQR240dFRhNldscUNGejhNYy9qSjhDd1EyWnJEbkRiK2t5M1N2eXRC?=
- =?utf-8?B?dFg0Mm1DNXQyUlV6TFQ1eUVWa1g2WExESml2c2NCYUhtblJTSEwrdUU3OGN6?=
- =?utf-8?B?VGRJQVZ2Ym94S1pFYVdFczR2c29nZkpWcm1hd2hzM2NLeGNBdGJ5WUl5djIx?=
- =?utf-8?B?cENqZnhYRHNCNEo1VkJoZFg4NXhqcXA2Qi9ydEN4RjhES3RnR2ZsVWsyQ2tr?=
- =?utf-8?B?Nm42L21xSXNVa2RCZ0xhSUN0WHNZWEVReHVHOFB3SmNwanMyMFMzQ3FNcGRl?=
- =?utf-8?B?QkpITUJtdEhSblBGY05EWkxqSXJGMjdSQ1hOeCthM2lJU2d2QUNFUHNiQm9z?=
- =?utf-8?B?dW45ZGdIY3FNZzh6RTNTQmVIMytkVVhMNVhGL2c4QlIrM2lEbGw2bTNWQ1Vu?=
- =?utf-8?B?RFFNTW9nQ3BsZGp3d2tNNXRoaDFhSDNWRDBLU1RnZnRsWG9jdERVcGU4Z2dG?=
- =?utf-8?B?dkYycGVjbS9xQXFheHZkNHpDMC95OWtzSjRrSzRRRHRHU0xiU0tydGJrYk1R?=
- =?utf-8?B?ZjB3em52dFdTZmpiU0tQUGg1MDdmWi9WTHR0VDFyWEZEQ1hwdkh6OGtuZ0ti?=
- =?utf-8?B?K1JNaWcvbVl2cFVQMncrcGUvVkxlc0JPQk9LSmRvQW0ycG5VV2J1MGwrbm1V?=
- =?utf-8?B?VitjQXBscmZWNE96QkFKYnJnbmh4aUE0cVd4VHdwd3lXckphaHZ5cHZqcDNK?=
- =?utf-8?B?MXRXWEI0OHJ0cmtUeEtzUFk4VENSYkNmNDJrYTluRlQ0ODFoVWt6WjJyVzZl?=
- =?utf-8?B?WTRPK3FuYVpBOHdJSW5uR2FFaFNmaTlJMCtRNW1zeGxXQkRPbGVTUElpaXlo?=
- =?utf-8?B?WjFLNkxOVFo3azEyb1FSUmhlQnZPQm1SS1VWU1hMZWNEZVZUb0U3ZFd1Q1Js?=
- =?utf-8?B?TGpZNmcrMk5rcHhpYlVQLzZyVFJGR29Qa2g2K2NzQ0JyK1J2WEVEV0pNVy9W?=
- =?utf-8?B?VlZ1ZUFMMjdqdkQ5eFVyeDNzRVlMbE9RdjdYUndnUm0xMm04bGM5aTFoSmYy?=
- =?utf-8?B?L0xoYUpYS3FlYTZsZER0ZTU1TmNnNHZWZnBBUzI5ZTBjcWlITmJ6dlF3WElt?=
- =?utf-8?Q?rHoHkPQEhdXF+XS5gNnrCBBYV?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24786e85-a242-426a-b506-08da9fd3e9f2
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 15:29:33.9353
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HW/+la+40AhrjEQnNfIrNfZGQDx8hVu9xqt4l7TWgaNvKeBoaLVbLjbtkwHjgZ7szNmG3b1kQAH7zFLaGyaQtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8743
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
+        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        <svarbanov@mm-sol.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <linux-phy@lists.infradead.org>,
+        <vkoul@kernel.org>, <kishon@ti.com>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>
+References: <20220923142611.GA1389970@bhelgaas>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20220923142611.GA1389970@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MFrFhmIF7fAJ5ZdhzBXjWbyopZnBZq11
+X-Proofpoint-ORIG-GUID: MFrFhmIF7fAJ5ZdhzBXjWbyopZnBZq11
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=489 clxscore=1015
+ malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209260098
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.09.2022 16:18, Juergen Gross wrote:
-> Today pmu_msr_read() and pmu_msr_write() fall back to the safe variants
-> of read/write MSR in case the MSR access isn't emulated via Xen. Allow
-> the caller to select the potentially faulting variant by passing NULL
-> for the error pointer.
 
-Maybe make this "the sole caller" or some such? Because if there were
-multiple, they might easily disagree on what the best meaning of passing
-NULL is.
+On 9/23/2022 7:56 PM, Bjorn Helgaas wrote:
+> On Fri, Sep 23, 2022 at 07:29:31AM +0530, Krishna Chaitanya Chundru wrote:
+>> On 9/23/2022 12:12 AM, Bjorn Helgaas wrote:
+>>> On Thu, Sep 22, 2022 at 09:09:28PM +0530, Krishna Chaitanya Chundru wrote:
+>>>> On 9/21/2022 10:26 PM, Bjorn Helgaas wrote:
+>>>>> On Wed, Sep 21, 2022 at 03:23:35PM +0530, Krishna Chaitanya Chundru wrote:
+>>>>>> On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
+>>>>>>> On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
+>>>>>>>> In qcom platform PCIe resources( clocks, phy etc..) can
+>>>>>>>> released when the link is in L1ss to reduce the power
+>>>>>>>> consumption. So if the link is in L1ss, release the PCIe
+>>>>>>>> resources. And when the system resumes, enable the PCIe
+>>>>>>>> resources if they released in the suspend path.
+>>>>>>> What's the connection with L1.x?  Links enter L1.x based on
+>>>>>>> activity and timing.  That doesn't seem like a reliable
+>>>>>>> indicator to turn PHYs off and disable clocks.
+>>>>>> This is a Qcom PHY-specific feature (retaining the link state in
+>>>>>> L1.x with clocks turned off).  It is possible only with the link
+>>>>>> being in l1.x. PHY can't retain the link state in L0 with the
+>>>>>> clocks turned off and we need to re-train the link if it's in L2
+>>>>>> or L3. So we can support this feature only with L1.x.  That is
+>>>>>> the reason we are taking l1.x as the trigger to turn off clocks
+>>>>>> (in only suspend path).
+>>>>> This doesn't address my question.  L1.x is an ASPM feature, which
+>>>>> means hardware may enter or leave L1.x autonomously at any time
+>>>>> without software intervention.  Therefore, I don't think reading the
+>>>>> current state is a reliable way to decide anything.
+>>>> After the link enters the L1.x it will come out only if there is
+>>>> some activity on the link.  AS system is suspended and NVMe driver
+>>>> is also suspended( queues will  freeze in suspend) who else can
+>>>> initiate any data.
+>>> I don't think we can assume that nothing will happen to cause exit
+>>> from L1.x.  For instance, PCIe Messages for INTx signaling, LTR, OBFF,
+>>> PTM, etc., may be sent even though we think the device is idle and
+>>> there should be no link activity.
+>> I don't think after the link enters into L1.x there will some
+>> activity on the link as you mentioned, except for PCIe messages like
+>> INTx/MSI/MSIX. These messages also will not come because the client
+>> drivers like NVMe will keep their device in the lowest power mode.
+>>
+>> The link will come out of L1.x only when there is config or memory
+>> access or some messages to trigger the interrupts from the devices.
+>> We are already making sure this access will not be there in S3.  If
+>> the link is in L0 or L0s what you said is expected but not in L1.x
+> Forgive me for being skeptical, but we just spent a few months
+> untangling the fact that some switches send PTM request messages even
+> when they're in a non-D0 state.  We expected that devices in D3hot
+> would not send such messages because "why would they?"  But it turns
+> out the spec allows that, and they actually *do*.
+>
+> I don't think it's robust interoperable design for a PCI controller
+> driver like qcom to assume anything about PCI devices unless it's
+> required by the spec.
+>
+> Bjorn
+ From pci spec 4, in sec 5.5
+"Ports that support L1 PM Substates must not require a reference clock 
+while in L1 PM Substates
+other than L1.0".
+If there is no reference clk we can say there is no activity on the link.
+If anything needs to be sent (such as LTR, or some messages ), the link 
+needs to be back in L0 before it
+sends the packet to the link partner.
 
-> --- a/arch/x86/xen/pmu.c
-> +++ b/arch/x86/xen/pmu.c
-> @@ -293,22 +293,24 @@ static bool xen_amd_pmu_emulate(unsigned int msr, u64 *val, bool is_read)
->  bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err)
->  {
->  	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL) {
-> -		if (is_amd_pmu_msr(msr)) {
-> -			if (!xen_amd_pmu_emulate(msr, val, 1))
-> -				*val = native_read_msr_safe(msr, err);
-> -			return true;
-> +		if (!is_amd_pmu_msr(msr))
-> +			return false;
-> +		if (!xen_amd_pmu_emulate(msr, val, 1)) {
-> +			*val = err ? native_read_msr_safe(msr, err)
-> +				   : native_read_msr(msr);
->  		}
-> +		return true;
+To exit from L1.x clkreq pin should be asserted.
 
-Minor remark: Fold this and ...
+In suspend after turning off clocks and phy we can enable to trigger an 
+interrupt whenever the clk req pin asserts.
+In that interrupt handler, we can enable the pcie resources back.
 
->  	} else {
->  		int type, index;
->  
-> -		if (is_intel_pmu_msr(msr, &type, &index)) {
-> -			if (!xen_intel_pmu_emulate(msr, val, type, index, 1))
-> -				*val = native_read_msr_safe(msr, err);
-> -			return true;
-> +		if (!is_intel_pmu_msr(msr, &type, &index))
-> +			return false;
-> +		if (!xen_intel_pmu_emulate(msr, val, type, index, 1)) {
-> +			*val = err ? native_read_msr_safe(msr, err)
-> +				   : native_read_msr(msr);
->  		}
-> +		return true;
-
-... this by moving them ...
-
->  	}
-> -
-> -	return false;
->  }
-
-... above here? You might even de-duplicate the native_read_msr{,_safe}()
-invocations by moving them out of the if/else ...
-
-Jan
+What are your thoughts on this?
