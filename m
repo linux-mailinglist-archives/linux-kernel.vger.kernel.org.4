@@ -2,119 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A2E5EA9F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E027C5EA9ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235952AbiIZPNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S235963AbiIZPNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235854AbiIZPMu (ORCPT
+        with ESMTP id S235798AbiIZPNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:12:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5414674DEC;
-        Mon, 26 Sep 2022 06:53:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 26 Sep 2022 11:13:04 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D9E78BE2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:53:14 -0700 (PDT)
+Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7472560DD7;
-        Mon, 26 Sep 2022 13:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B751AC433D6;
-        Mon, 26 Sep 2022 13:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664200384;
-        bh=G2mFLM1SSBAD6TZuV4aMLZzwYiNdepsid1TuuiSrE0A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nDyHInp2m/7CLFgFdOA2GAzHsc4525Z62dnhSre8c84SN8Ha+T3fDOHfGG2Dz0qho
-         MRO1N0mOTVKcfDF4mUwXYV67LxRqtLXX9B3d6gmLEstgFc5X+HFpXtlSiefAkPTGtx
-         5UvVKFsHUs0tyXItrWsoABBORXjTkD85++vXzBmhGHeHBrdQGjlbk/c4poEUzp99EO
-         6FupLqYpG4VirB14P2up0619ixxDeSB4o4QgRx9TkSU/0PvA1UdeKZl9PeuU/0SvyG
-         SC3MO/+yLuV3wMSFJxiGX00CZ+PDMvzVQGl/BG/GmkBsCdaACubFl/Q4+JKiwwcgE3
-         4v/2Bvkqehd7Q==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.1
-Date:   Mon, 26 Sep 2022 16:53:01 +0300
-Message-Id: <20220926135301.28372-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        by mail.8bytes.org (Postfix) with ESMTPSA id 561102227B5;
+        Mon, 26 Sep 2022 15:53:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1664200393;
+        bh=5PaDoyKNdKDJX2cMsX5qdadmFvQXzf7iGroKCZ22kGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LIaJMQZuZnjV8USISuWc3CvctvFHVU4mCJ+uaxRx6mSE0YdvCeBoGzszZ8p7nuIQD
+         gykJWLIV26oCfMYZxE1Xd7UwTFn/TRRJieRDAfKeHvYqnatLVAsejDPiTcsdvN0/Bt
+         jC4P4JQXeeobG6zBfI/7g/3BcCfN2EMgfumfp++JHZ77FcJs2ffRdUc67AANP8Zwdl
+         BcmAIKoRWe5hMBXqr0jM5jv8vLLY9FzAsnNe/hvQmE3iDST87BmIBGWSbvTGqwVmqM
+         OSTPMP2Gqdt3ebLCPxtrx4QJfyIAYXEPqU9AfKNIYm18tX5ncWpIwo1YCrckgq0/+i
+         TDIxu2W5q5PJQ==
+Date:   Mon, 26 Sep 2022 15:53:12 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 0/6] [PULL REQUEST] Intel IOMMU updates for Linux
+ v6.1
+Message-ID: <YzGuyA0vaNGDfTtZ@8bytes.org>
+References: <20220926131529.4045281-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926131529.4045281-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On Mon, Sep 26, 2022 at 09:15:23PM +0800, Lu Baolu wrote:
+> Lu Baolu (5):
+>   iommu/vt-d: Remove unnecessary SVA data accesses in page fault path
+>   iommu/vt-d: Decouple PASID & PRI enabling from SVA
+>   iommu/vt-d: Remove pasid_set_eafe()
+>   iommu/vt-d: Avoid unnecessary global IRTE cache invalidation
+>   iommu/vt-d: Avoid unnecessary global DMA cache invalidation
+> 
+> Yi Liu (1):
+>   iommu/vt-d: Rename cap_5lp_support to cap_fl5lp_support
 
-This is the pull request with interconnect changes for the 6.1-rc1 merge
-window. It contains some tiny updates. The details are in the signed tag.
-
-All patches have been in linux-next. Please pull into char-misc-next when
-possible.
-
-Thanks,
-Georgi
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.1-rc1
-
-for you to fetch changes up to 7360d55ba1993cb59267507d04b7e62c40bad424:
-
-  Merge branch 'icc-ignore-return-val' into icc-next (2022-09-20 15:57:00 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.1
-
-These are the interconnect changes for the 6.1-rc1 merge window, which
-this time are tiny. One is a series to convert the remove() callback of
-platform devices to return void instead of int. The other change is
-enabling modular support for a driver.
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Georgi Djakov (1):
-      Merge branch 'icc-ignore-return-val' into icc-next
-
-Huang Yiwei (1):
-      interconnect: qcom: Kconfig: Make INTERCONNECT_QCOM tristate
-
-Uwe Kleine-König (8):
-      interconnect: imx: Ignore return value of icc_provider_del() in .remove()
-      interconnect: icc-rpm: Ignore return value of icc_provider_del() in .remove()
-      interconnect: icc-rpmh: Ignore return value of icc_provider_del() in .remove()
-      interconnect: msm8974: Ignore return value of icc_provider_del() in .remove()
-      interconnect: osm-l3: Ignore return value of icc_provider_del() in .remove()
-      interconnect: sm8450: Ignore return value of icc_provider_del() in .remove()
-      interconnect: Make icc_provider_del() return void
-      interconnect: imx: Make imx_icc_unregister() return void
-
- drivers/interconnect/core.c            | 10 +++-----
- drivers/interconnect/imx/imx.c         |  4 +--
- drivers/interconnect/imx/imx.h         |  2 +-
- drivers/interconnect/imx/imx8mm.c      |  4 ++-
- drivers/interconnect/imx/imx8mn.c      |  4 ++-
- drivers/interconnect/imx/imx8mp.c      |  4 ++-
- drivers/interconnect/imx/imx8mq.c      |  4 ++-
- drivers/interconnect/qcom/Kconfig      |  2 +-
- drivers/interconnect/qcom/icc-common.c |  3 +++
- drivers/interconnect/qcom/icc-rpm.c    |  4 ++-
- drivers/interconnect/qcom/icc-rpmh.c   |  4 ++-
- drivers/interconnect/qcom/msm8974.c    |  4 ++-
- drivers/interconnect/qcom/osm-l3.c     |  4 ++-
- drivers/interconnect/qcom/sm8450.c     |  4 ++-
- include/linux/interconnect-provider.h  |  5 ++--
- 15 files changed, 39 insertions(+), 23 deletions(-)
+Applied, thanks Baolu.
