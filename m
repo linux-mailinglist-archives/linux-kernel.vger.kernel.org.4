@@ -2,56 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FDD5E9E83
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B3C5E9E85
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234691AbiIZKBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S234736AbiIZKBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbiIZKBg (ORCPT
+        with ESMTP id S234498AbiIZKBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:01:36 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19871B3D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:01:34 -0700 (PDT)
-Received: from 4.cn (unknown [10.20.4.148])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OF5eDFj4CoiAA--.60647S2;
-        Mon, 26 Sep 2022 18:01:29 +0800 (CST)
-From:   Jun Yi <yijun@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Mao Bibo <maobibo@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Remove useless header branch.h
-Date:   Mon, 26 Sep 2022 18:01:29 +0800
-Message-Id: <20220926100129.1907890-1-yijun@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Mon, 26 Sep 2022 06:01:41 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F31915FC4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:01:40 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id EF96E2B0682F;
+        Mon, 26 Sep 2022 06:01:34 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 26 Sep 2022 06:01:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1664186494; x=1664193694; bh=WCZmCAbKUP
+        B8V/dy4D1u2e0awoL+XJkcSsRkdm6+wHI=; b=uDRU/N4HsyiNDw98y2Q/Bs1VP2
+        iOm0QEY2ULuXESBq9q3/5ONB1kS6wfCiJ/KH+LB8sfBv4eWmQpndHAtPXPt9zD1x
+        Jja1TbCtTQxJ3OCS6ZGu5+4zjjM8PLEe9xiY6RUNybMVub51j6B2tVm10glcJGmh
+        ZGZlWP9gRQ66Ix5LW3YDsGSSrzGw25Y7A7uO5IMGl4qGlWkcsulLZiA4zSFmnmLh
+        H9XIs8clIgTyhTwNQyv7L58dL/dSPHZphfWYMuvf9twjotVoraSj7ha02dMZeRlB
+        w8JqVMt8DnnBq6jqC03xuKsglLxT+0fU47uv73psQdGu4O3QUHdXKnga5y3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664186494; x=1664193694; bh=WCZmCAbKUPB8V/dy4D1u2e0awoL+
+        XJkcSsRkdm6+wHI=; b=Rug80Q+sMwxGaCBKoR9jTq3KVEOUjZqyG8wmAbICk/8y
+        U7Qb8l9mipmoRtWHRpu0jk4KbgeqcepH/6cUBcLB6zIMAriAWceG9e9XlLkJhrzc
+        Udv/NMuUXR8Gvwdy/qNx8l91X5rkvipJeG4B7qcJefayRPw/Oqfwtm2G5gsX7WD/
+        Y3ioIKmJxSdjbc+Nyu65ipugqKeKiSxPbOLx0sO0e2s8GqX0y7NSG+JP1xXtipkq
+        KvIdr6w49jjsBz7ZjFEqVzW4qUmRsffLEgBm1x36UHBKLIqivB+7B1+tOch6xZ11
+        FNaGncWvlEeQIhpj5wNxgI3rJlPdut6hR3ytFwbqQw==
+X-ME-Sender: <xms:fXgxY5mdo2kfVTZ0H8K4RmkdAQruihfTdqZxFowQpanMMgUwrX6kvg>
+    <xme:fXgxY02sQzkLx6OD4lOEA4Nwem9HZs-4LKtXRBRzaDzV5_pMOowktPimCtlvN2FOQ
+    LvM5CFR5oj_5PEZ1oc>
+X-ME-Received: <xmr:fXgxY_ri-cIGor6hHugV8NJuzVelHO76BQLl3z6gcwf2qY9YDTu288EVpZkY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:fngxY5msrdWHVg1xIxjHF0u1zUZ5tvrhkwkubF0xshtSnCE_jn7QtQ>
+    <xmx:fngxY323Uwtoh6YXZp8h4kBfOVCjEMI5VDk0aj3DPY3x6YFgbEetlA>
+    <xmx:fngxY4sKohdqqPpob5hg3AExMcSGYS0P-dUl7R1gi0usdP2LhToMCQ>
+    <xmx:fngxY3W09_EJXTf_SxnejTQX4auzwNfKkrHlS3B8ypz-DpseAPV0A6-F9YQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Sep 2022 06:01:33 -0400 (EDT)
+Date:   Mon, 26 Sep 2022 12:01:31 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 09/33] drm/connector: Add TV standard property
+Message-ID: <20220926100131.o5xtslzcmez5z2r3@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-9-f733a0ed9f90@cerno.tech>
+ <80138f62-faec-5f7e-a8bd-235318a4e4c2@tronnes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx9OF5eDFj4CoiAA--.60647S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtF4DGr4rXw48WFW8tw48Xrb_yoW3Wwb_Z3
-        Wxuw1UWw4rA3yFvw1j9rW5G3WY9ay0vF1Fk3Z2vrZ3Cas8tw15trZ8J3Z8Arn0gFZ5Grs8
-        Z3yDKrn0kF15tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: p1lm30o6or00hjvr0hdfq/1tbiAQABAWMwRN0RYAAAs6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gulwpck2gltavjpu"
+Content-Disposition: inline
+In-Reply-To: <80138f62-faec-5f7e-a8bd-235318a4e4c2@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +107,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The content of LoongArch's branch.h is porting from
-MIPS which includes some functions about delay slot,
-so inline the definitions and remove the header.
 
-Signed-off-by: Jun Yi <yijun@loongson.cn>
----
- arch/loongarch/kernel/traps.c | 2 --
- 1 file changed, 2 deletions(-)
+--gulwpck2gltavjpu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index aa1c95aaf595..ec888eda3d45 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -477,8 +477,6 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
- 
- 	die_if_kernel("Reserved instruction in kernel code", regs);
- 
--	compute_return_era(regs);
--
- 	if (unlikely(get_user(opcode, era) < 0)) {
- 		status = SIGSEGV;
- 		current->thread.error_code = 1;
--- 
-2.31.1
+On Sat, Sep 24, 2022 at 05:52:29PM +0200, Noralf Tr=F8nnes wrote:
+> Den 22.09.2022 16.25, skrev Maxime Ripard:
+> > The TV mode property has been around for a while now to select and get =
+the
+> > current TV mode output on an analog TV connector.
+> >=20
+> > Despite that property name being generic, its content isn't and has been
+> > driver-specific which makes it hard to build any generic behaviour on t=
+op
+> > of it, both in kernel and user-space.
+> >=20
+> > Let's create a new enum tv norm property, that can contain any of the
+> > analog TV standards currently supported by kernel drivers. Each driver =
+can
+> > then pass in a bitmask of the modes it supports, and the property
+> > creation function will filter out the modes not supported.
+> >=20
+> > We'll then be able to phase out the older tv mode property.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>
+> Please can you add per patch changelogs, it's hard to review when I have
+> to recall what might have happened with each patch. If you do it drm
+> style and put in the commit message it should be easy enough to do.
 
+I certainly don't want to start that discussion, but I'm really not a
+fan of that format either. I'll do it for that series if you prefer.
+
+> > +/**
+> > + * enum drm_connector_tv_mode - Analog TV output mode
+> > + *
+> > + * This enum is used to indicate the TV output mode used on an analog =
+TV
+> > + * connector.
+> > + *
+> > + * WARNING: The values of this enum is uABI since they're exposed in t=
+he
+> > + * "TV mode" connector property.
+> > + */
+> > +enum drm_connector_tv_mode {
+> > +	/**
+> > +	 * @DRM_MODE_TV_MODE_NONE: Placeholder to not default on one
+> > +	 * variant or the other when nothing is set.
+> > +	 */
+> > +	DRM_MODE_TV_MODE_NONE =3D 0,
+>=20
+> How is this supposed to be used?
+
+It's not supposed to be used. It was a suggestion from Mateusz to avoid
+to default to any standard when we don't initialize something. I don't
+have any strong feeling about it, so I can drop it if you prefer.
+
+Maxime
+
+--gulwpck2gltavjpu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYzF4ewAKCRDj7w1vZxhR
+xbZ+AP4xTTgpQpCXWXC6q7QOdRlNGR0Mnjaq7VCWTRYpDjbKxAD9F8HZA9VHM/b9
+pZlXPcfdA5JuIglRNfLb9ooPZ9hiAw8=
+=vOcp
+-----END PGP SIGNATURE-----
+
+--gulwpck2gltavjpu--
