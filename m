@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF45EB1CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F475EB1CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiIZUIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        id S229517AbiIZUIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiIZUIE (ORCPT
+        with ESMTP id S229906AbiIZUIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 16:08:04 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7B763F02;
-        Mon, 26 Sep 2022 13:08:00 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d24so7236309pls.4;
-        Mon, 26 Sep 2022 13:08:00 -0700 (PDT)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C465649;
+        Mon, 26 Sep 2022 13:08:02 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id b21so7224313plz.7;
+        Mon, 26 Sep 2022 13:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=xcLNKADRqeZX1gPJ62SQBYBy+AG2Qgoe/TxJimAn0lM=;
-        b=YbT2CUGn0c6XGd/eeoifQgCub7e/5eiCESX9snX7y4O4OkBVvhWR8KemYQCG3qYryf
-         T8mICpADND8cLkH2j6D/IPlYEIZQ78p5ZRzAcpfOgr2O+du5rDGwTYBkSoRa1a+KTdzb
-         9jeH7cx6KZSmURpCUf9EDaTBN3Ffhx9K4WTM1fzvtvDStS6JGV/QynWUfcOlR/gX+TPN
-         fCUlLv8CTl6gNvQOqf6w5jc5Axy5jTn5E5my6EvwQLxIpNtgnIGPLxE+FNXxjrjgjVfz
-         bCJtd/nfKcxwecxzKjiP9VVrnWcp32tPoHdsROQmLobjIhSgIOSSRn8XD5qbIzjGozTk
-         znSw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
+        bh=Y8C8oz+huARdrMZgl9qptQi98PJBj+1V0jnBMtVXEHc=;
+        b=oIFsN6ZpRJ9RlO4+FgFopaehngnc+SMKCc9/qz8xJY2oGvri/GfyRfZw4pjG6Ru2J/
+         9KTGKLC4MPZvuoIbYeziEiWgES76R5amclyIuvqH7ycO8IATwTdk/SF1aCpODl3TcEE6
+         eo3VAiUcRMkKZhu6LueGpbyKuhXi5c3NwtD30+DD5BHZ7Db5iOqR0jIEgu+EuxTp0doe
+         zGdPPnGSsIQFHM1Oz6HpO7t518TWGVOY27uLfV36zjxcIbwiWKY09ShwfWJxLOG8nx4X
+         dVHVy0QAScNA6M+Tvche0s8ZtATctXyJnTLq+v2QlAssbBdzvtFXyeAluA8BttkrQHLn
+         w/zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=xcLNKADRqeZX1gPJ62SQBYBy+AG2Qgoe/TxJimAn0lM=;
-        b=VN3/hvsugvg0TIq6mFEt9YjAFIU7AGuxM/nrLBXfPHk7v4Urx1T/F0Fuqdspd/upgA
-         0NSYTeS556yLS0Uc/Uh1X88O1hoiRX2YER+ARwXgfOrxwqHVS0PX1YAwXzFq0CNjAoku
-         5OHneGWCrmSeZSlTAKafPgsanG2dzgtxR551U/usC3YeUXYGjdm8GplOqm/v3g7NlVp2
-         Z1QJP+KBKxRyRp5wCbSMDpANjF4fKLyMGWP0BFkMGZlVBaKZLykf9SRPq+hZjKhWcf1T
-         Rh+TtrEgDCAPQ8y/nQaUHOmdPkLykXtVoqkjeD7xIz0QrXchwAxk12xEOEfE2ZbvdTS+
-         9zvA==
-X-Gm-Message-State: ACrzQf0ylrpOY2xjDEUCleGbcEYFKqDe86KHsYd+npu0HaOOGguZQFUu
-        r6YJdl6LAmFfJ+ph7cHYjaI=
-X-Google-Smtp-Source: AMsMyM4od1sr6bHJV2kBrH8AMW4zdbU1jbZR5G0MgF+E4yd/oz8IkA6ch9dHkrnsqydYqTwaJzssrA==
-X-Received: by 2002:a17:903:4ca:b0:179:d21f:f04b with SMTP id jm10-20020a17090304ca00b00179d21ff04bmr11322301plb.7.1664222880165;
-        Mon, 26 Sep 2022 13:08:00 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=Y8C8oz+huARdrMZgl9qptQi98PJBj+1V0jnBMtVXEHc=;
+        b=a9i8vubNqwu+BvUc78U7p09P+2Di/Kq9SoT1LjxswPZZv7gk4y0prEBsbruQgMEn5F
+         n+ig4xAPHsHynuTKVd/3Mob/nND9US1ERFGQrJv+/5wGr8ZnmsHco9/S7hSNZDCjyr4M
+         Nzk8rbzOe1BNcDnGyHI2FGaUzeN/vOA1n76BS4O4kC0sk91Oh19cwvEcNC6Zy6CKVT4N
+         VgJ6EOGNkEoAOJPmOJBJIehkcvdkt9rVDiQ1NouTxdOU//5SWXDN9o60U/KYiVsdTE5z
+         NwbVF8vi42gniCaJ0Hh4SeDmSSil/dX2vV6mOtA07Etm20mcvCniJ8q6c37RVz+fcBXy
+         4yiw==
+X-Gm-Message-State: ACrzQf2ScwIrxN9FIc1N7LFBB7ikXspkdBVp3XYECz4bpdIOyjEiDJMv
+        MeeOrRcddf+SAZvwIdlpbBU=
+X-Google-Smtp-Source: AMsMyM4cVqm+vOFXLn3YmloxorW5nhHq4yqmkJ4Xp+oG8SjrdHMuDcclWwioApBWL6wJzELflhfqsQ==
+X-Received: by 2002:a17:902:848e:b0:178:54ce:c108 with SMTP id c14-20020a170902848e00b0017854cec108mr24307924plo.134.1664222881536;
+        Mon, 26 Sep 2022 13:08:01 -0700 (PDT)
 Received: from balhae.corp.google.com ([2620:15c:2c1:200:2d32:19ce:817e:166])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa78bd5000000b00540c24ba181sm12510148pfd.120.2022.09.26.13.07.58
+        by smtp.gmail.com with ESMTPSA id s21-20020aa78bd5000000b00540c24ba181sm12510148pfd.120.2022.09.26.13.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 13:07:59 -0700 (PDT)
+        Mon, 26 Sep 2022 13:08:01 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -61,10 +62,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         Leo Yan <leo.yan@linaro.org>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Subject: [PATCHSET 0/6] perf stat: Small random cleanups (v1)
-Date:   Mon, 26 Sep 2022 13:07:51 -0700
-Message-Id: <20220926200757.1161448-1-namhyung@kernel.org>
+Subject: [PATCH 1/6] perf stat: Convert perf_stat_evsel.res_stats array
+Date:   Mon, 26 Sep 2022 13:07:52 -0700
+Message-Id: <20220926200757.1161448-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+In-Reply-To: <20220926200757.1161448-1-namhyung@kernel.org>
+References: <20220926200757.1161448-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,38 +80,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It uses only one member, no need to have it as an array.
 
-I'm working on perf stat and I found some items to clean up.  This time
-I removed runtime stats for per-thread aggregation mode which we can simply
-use thread map index to compare the shadow stat values in the rt_stat.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/stat-display.c |  2 +-
+ tools/perf/util/stat.c         | 10 +++-------
+ tools/perf/util/stat.h         |  2 +-
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-The code is available at 'perf/stat-cleanup-v1' branch in
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (6):
-  perf stat: Convert perf_stat_evsel.res_stats array
-  perf stat: Don't call perf_stat_evsel_id_init() repeatedly
-  perf stat: Rename saved_value->cpu_map_idx
-  perf stat: Use thread map index for shadow stat
-  perf stat: Kill unused per-thread runtime stats
-  perf stat: Don't compare runtime stat for shadow stats
-
- tools/perf/builtin-stat.c      |  54 ------
- tools/perf/util/stat-display.c |  22 ++-
- tools/perf/util/stat-shadow.c  | 320 ++++++++++++++++-----------------
- tools/perf/util/stat.c         |  20 +--
- tools/perf/util/stat.h         |   4 +-
- 5 files changed, 171 insertions(+), 249 deletions(-)
-
-
-base-commit: 62e64c9d2fd12839c02f1b3e8b873e7cb34e8720
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index b82844cb0ce7..234491f43c36 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -67,7 +67,7 @@ static void print_noise(struct perf_stat_config *config,
+ 		return;
+ 
+ 	ps = evsel->stats;
+-	print_noise_pct(config, stddev_stats(&ps->res_stats[0]), avg);
++	print_noise_pct(config, stddev_stats(&ps->res_stats), avg);
+ }
+ 
+ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index ce5e9e372fc4..6bcd3dc32a71 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -132,12 +132,9 @@ static void perf_stat_evsel_id_init(struct evsel *evsel)
+ 
+ static void evsel__reset_stat_priv(struct evsel *evsel)
+ {
+-	int i;
+ 	struct perf_stat_evsel *ps = evsel->stats;
+ 
+-	for (i = 0; i < 3; i++)
+-		init_stats(&ps->res_stats[i]);
+-
++	init_stats(&ps->res_stats);
+ 	perf_stat_evsel_id_init(evsel);
+ }
+ 
+@@ -440,7 +437,7 @@ int perf_stat_process_counter(struct perf_stat_config *config,
+ 	struct perf_counts_values *aggr = &counter->counts->aggr;
+ 	struct perf_stat_evsel *ps = counter->stats;
+ 	u64 *count = counter->counts->aggr.values;
+-	int i, ret;
++	int ret;
+ 
+ 	aggr->val = aggr->ena = aggr->run = 0;
+ 
+@@ -458,8 +455,7 @@ int perf_stat_process_counter(struct perf_stat_config *config,
+ 		evsel__compute_deltas(counter, -1, -1, aggr);
+ 	perf_counts_values__scale(aggr, config->scale, &counter->counts->scaled);
+ 
+-	for (i = 0; i < 3; i++)
+-		update_stats(&ps->res_stats[i], count[i]);
++	update_stats(&ps->res_stats, *count);
+ 
+ 	if (verbose > 0) {
+ 		fprintf(config->output, "%s: %" PRIu64 " %" PRIu64 " %" PRIu64 "\n",
+diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
+index 72713b344b79..3eba38a1a149 100644
+--- a/tools/perf/util/stat.h
++++ b/tools/perf/util/stat.h
+@@ -43,7 +43,7 @@ enum perf_stat_evsel_id {
+ };
+ 
+ struct perf_stat_evsel {
+-	struct stats		 res_stats[3];
++	struct stats		 res_stats;
+ 	enum perf_stat_evsel_id	 id;
+ 	u64			*group_data;
+ };
 -- 
 2.37.3.998.g577e59143f-goog
 
