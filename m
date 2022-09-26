@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4921E5EB3B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB66E5EB3FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiIZV6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S229909AbiIZWAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiIZV6K (ORCPT
+        with ESMTP id S229549AbiIZWAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:58:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03796DDDAF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:58:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B502AB8129E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:58:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73AAAC433C1;
-        Mon, 26 Sep 2022 21:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664229482;
-        bh=R66UuzONZLNxYOzVmH876Rwu5D+PGQldYkTL0v4hV4s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AFowkp2uaPahpUF+QS4ZqXkR4ncTsj/LNJ+lXiuQXDeDlD5MgQf+9PsTS7XCnjPKM
-         O34p0uymJgu52U6uuu+PTZ/VrT42hctBAckrLSBSBmdIzHPxicSuUiQfwfGSQHCsBI
-         X/mh26WK3mt+bNOI/hF27+ZZLF35kzgdfqlMyFy6qVRO8kJRBd9thZK+KcDsnVoCTI
-         O40Uc9BgZiiXye88i1JuU+VB50u0hDJ7FEULHlyx7PrroxB6bd/zXwHfN8IYN0Ooks
-         3Bo28J1Vx14NBFiICOQPG47uS43jWd5cHfgjC5pE9HPFeqjCy/xtFOpv7zY9Y1IQk9
-         KydlbOAY0F14g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E0E4C070C8;
-        Mon, 26 Sep 2022 21:58:02 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/urgent for 6.0{,-rc8}
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <67154681-0e0a-69d7-d4ee-21067c9b561c@intel.com>
-References: <67154681-0e0a-69d7-d4ee-21067c9b561c@intel.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <67154681-0e0a-69d7-d4ee-21067c9b561c@intel.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0-rc8
-X-PR-Tracked-Commit-Id: e400ad8b7e6a1b9102123c6240289a811501f7d9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a1375562c0a87f0fa2eaf3e8ce15824696d4170a
-Message-Id: <166422948237.31787.3528571378237338533.pr-tracker-bot@kernel.org>
-Date:   Mon, 26 Sep 2022 21:58:02 +0000
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Mon, 26 Sep 2022 18:00:20 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAB89F0F9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:00:19 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id b75so8013284pfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Z+V9HKEzE/RCD+QuWbpkWnuj/UNSjdfJYogyydpcU5E=;
+        b=kdUvjIZklCh7p0dy2cbAnFPWMnaQ9KU6pSVxgIsJWiq+Rg7+dTzBAtFdhyUWV/brDb
+         IpNU0HceJCKIFZWASfKOAiuYPFrkk0Borpnr6U537aRJejJsQ1FDpSlMfPthP5MEWXSa
+         tH5lEPrVqifpJ/Q2B8PMTZfLFiNA71z5Vn/X4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Z+V9HKEzE/RCD+QuWbpkWnuj/UNSjdfJYogyydpcU5E=;
+        b=px8f5oga04xMTowlt2GBf+7UVazSPB6z2rThaRfwIiI78ssCP63hh/2FDuokGUUmP9
+         R2S1d1q+nG5ZfD0WXpCk9VSnCcISm7pnKH/Ofpg4Z5H4b8EWNDhVVlU3E4CXlEILdi4k
+         q6SvsAjYhdMuywEZDoHd71J+GbCz1vFCjoizcXxdGez3nJPo+gAzQySWCKIBzMx9p+EZ
+         vPbDiJpNMqn1SRvPzuGJ+Wpmg4eFh6DDn/TRAtLUGAfldEQGiTZViXZP01MLylKBl9r2
+         HeIRxcIfC3ESalHPnqHdPYZFkzx6X5TwWNtiVfNmVfQ72HLeVdJob6d/RmSyUSJnXSVs
+         WnJg==
+X-Gm-Message-State: ACrzQf0I3aoVd3b41EgYMYpswep+h2oNsTBvrRqVeducxwHZyg6lzea+
+        Q7bfoaKRie+/fiyJ8NlpuAF/Aw==
+X-Google-Smtp-Source: AMsMyM6EH3TLoP5Ab4HNfRJxhe6hu7QGEmIFxPc9r5Y3xSUNCHlUgH+CVhBdd6e51YbiFdKv0fGl0Q==
+X-Received: by 2002:aa7:9e12:0:b0:53e:27d8:b71b with SMTP id y18-20020aa79e12000000b0053e27d8b71bmr25834865pfq.46.1664229619477;
+        Mon, 26 Sep 2022 15:00:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a24-20020aa794b8000000b0053e6d352ae4sm6408pfl.24.2022.09.26.15.00.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 15:00:18 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:00:17 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ASoC: SOF: control.h: Replace zero-length array
+ with DECLARE_FLEX_ARRAY() helper
+Message-ID: <202209261500.B594CC10@keescook>
+References: <YzIcZ11k8RiQtS2T@work>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzIcZ11k8RiQtS2T@work>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +68,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 26 Sep 2022 12:54:09 -0700:
+On Mon, Sep 26, 2022 at 04:40:55PM -0500, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated and we are moving towards adopting
+> C99 flexible-array members, instead. So, replace zero-length arrays
+> declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+> helper macro.
+> 
+> This helper allows for flexible-array members in unions.
+> 
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://github.com/KSPP/linux/issues/211
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0-rc8
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a1375562c0a87f0fa2eaf3e8ce15824696d4170a
-
-Thank you!
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook
