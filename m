@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D095EA545
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCAD5EA12B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbiIZL7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S236496AbiIZKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbiIZL4E (ORCPT
+        with ESMTP id S236452AbiIZKno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:56:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172E79EE1;
-        Mon, 26 Sep 2022 03:51:25 -0700 (PDT)
+        Mon, 26 Sep 2022 06:43:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E07864F5;
+        Mon, 26 Sep 2022 03:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A0E60C0B;
-        Mon, 26 Sep 2022 10:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A46C433C1;
-        Mon, 26 Sep 2022 10:49:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF8D5B80835;
+        Mon, 26 Sep 2022 10:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C434C433D6;
+        Mon, 26 Sep 2022 10:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189384;
-        bh=HhUWvdhXsgORzUEW66P9KeGIWYlywk0P52be4Y5L8Xc=;
+        s=korg; t=1664187897;
+        bh=rs/DNJTbTikkhyrwk9dFbjZrJq4u7VEgRZl2QMhDaeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GpbdZM6XAzQ6AYEQRFmzV1Rgk1ZKtDV6xQA0jQIUCmlyEpdMzWxKt0UJ091yJTgjQ
-         Mf3ODNIRS9C/fZhueeuuxlqX82ylomqeZXp6vgYL/j7VZGbNDRj1oFwvM3q7KhhHSx
-         TaGHUNh2ucVhpFtc76DBBKhJqEdg+ZRs+we9fZOk=
+        b=axUqUECPPHuCzTRpeP5bsWu63ujz3rDrlOrBoAhZIIkknmtyP38HkbRAjmKHL/eLq
+         URyIGLEXAW1Pkgl7q1pM4WZKVAKPhaZSiDPFAakftEWoeR9opeExKkMxktswXeiZAf
+         lZ/lpXTTbV4LLroQC8jrmwOFKv30vIJ30xs8mU4I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
-Subject: [PATCH 5.19 139/207] netfilter: ebtables: fix memory leak when blob is malformed
+        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 095/120] cifs: always initialize struct msghdr smb_msg completely
 Date:   Mon, 26 Sep 2022 12:12:08 +0200
-Message-Id: <20220926100812.744025470@linuxfoundation.org>
+Message-Id: <20220926100754.477823470@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Stefan Metzmacher <metze@samba.org>
 
-[ Upstream commit 62ce44c4fff947eebdf10bb582267e686e6835c9 ]
+[ Upstream commit bedc8f76b3539ac4f952114b316bcc2251e808ce ]
 
-The bug fix was incomplete, it "replaced" crash with a memory leak.
-The old code had an assignment to "ret" embedded into the conditional,
-restore this.
+So far we were just lucky because the uninitialized members
+of struct msghdr are not used by default on a SOCK_STREAM tcp
+socket.
 
-Fixes: 7997eff82828 ("netfilter: ebtables: reject blobs that don't provide all entry points")
-Reported-and-tested-by: syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
-Signed-off-by: Florian Westphal <fw@strlen.de>
+But as new things like msg_ubuf and sg_from_iter where added
+recently, we should play on the safe side and avoid potention
+problems in future.
+
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bridge/netfilter/ebtables.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/cifs/connect.c   | 7 ++-----
+ fs/cifs/transport.c | 6 +-----
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
-index 9a0ae59cdc50..4f385d52a1c4 100644
---- a/net/bridge/netfilter/ebtables.c
-+++ b/net/bridge/netfilter/ebtables.c
-@@ -1040,8 +1040,10 @@ static int do_replace_finish(struct net *net, struct ebt_replace *repl,
- 		goto free_iterate;
- 	}
+diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+index 86bdebd2ece6..f8127edb8973 100644
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -791,9 +791,6 @@ cifs_readv_from_socket(struct TCP_Server_Info *server, struct msghdr *smb_msg)
+ 	int length = 0;
+ 	int total_read;
  
--	if (repl->valid_hooks != t->valid_hooks)
-+	if (repl->valid_hooks != t->valid_hooks) {
-+		ret = -EINVAL;
- 		goto free_unlock;
-+	}
+-	smb_msg->msg_control = NULL;
+-	smb_msg->msg_controllen = 0;
+-
+ 	for (total_read = 0; msg_data_left(smb_msg); total_read += length) {
+ 		try_to_freeze();
  
- 	if (repl->num_counters && repl->num_counters != t->private->nentries) {
- 		ret = -EINVAL;
+@@ -844,7 +841,7 @@ int
+ cifs_read_from_socket(struct TCP_Server_Info *server, char *buf,
+ 		      unsigned int to_read)
+ {
+-	struct msghdr smb_msg;
++	struct msghdr smb_msg = {};
+ 	struct kvec iov = {.iov_base = buf, .iov_len = to_read};
+ 	iov_iter_kvec(&smb_msg.msg_iter, READ, &iov, 1, to_read);
+ 
+@@ -855,7 +852,7 @@ int
+ cifs_read_page_from_socket(struct TCP_Server_Info *server, struct page *page,
+ 	unsigned int page_offset, unsigned int to_read)
+ {
+-	struct msghdr smb_msg;
++	struct msghdr smb_msg = {};
+ 	struct bio_vec bv = {
+ 		.bv_page = page, .bv_len = to_read, .bv_offset = page_offset};
+ 	iov_iter_bvec(&smb_msg.msg_iter, READ, &bv, 1, to_read);
+diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
+index 079a4f6162ed..b98ae69edb8f 100644
+--- a/fs/cifs/transport.c
++++ b/fs/cifs/transport.c
+@@ -209,10 +209,6 @@ smb_send_kvec(struct TCP_Server_Info *server, struct msghdr *smb_msg,
+ 
+ 	*sent = 0;
+ 
+-	smb_msg->msg_name = NULL;
+-	smb_msg->msg_namelen = 0;
+-	smb_msg->msg_control = NULL;
+-	smb_msg->msg_controllen = 0;
+ 	if (server->noblocksnd)
+ 		smb_msg->msg_flags = MSG_DONTWAIT + MSG_NOSIGNAL;
+ 	else
+@@ -324,7 +320,7 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
+ 	sigset_t mask, oldmask;
+ 	size_t total_len = 0, sent, size;
+ 	struct socket *ssocket = server->ssocket;
+-	struct msghdr smb_msg;
++	struct msghdr smb_msg = {};
+ 	int val = 1;
+ 	__be32 rfc1002_marker;
+ 
 -- 
 2.35.1
 
