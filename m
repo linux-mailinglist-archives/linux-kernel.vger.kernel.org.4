@@ -2,163 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5505E9CC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E3B5E9CCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbiIZJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S233151AbiIZJCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234657AbiIZJBV (ORCPT
+        with ESMTP id S234582AbiIZJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:01:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CD73ED54;
-        Mon, 26 Sep 2022 02:01:18 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mbc9W0x43zpVbs;
-        Mon, 26 Sep 2022 16:58:23 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 17:01:16 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <yangyicong@hisilicon.com>
-Subject: Re: [PATCH next v5 2/2] dt-bindings: i2c: add entry for
- hisilicon,hisi-i2c
-To:     Weilong Chen <chenweilong@huawei.com>, <xuwei5@huawei.com>,
-        <wsa@kernel.org>, <robh+dt@kernel.org>, <robh@kernel.org>
-References: <20220920072215.161331-1-chenweilong@huawei.com>
- <20220920072215.161331-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <24de8f45-8d3e-2e9b-231b-f891e1829a0e@huawei.com>
-Date:   Mon, 26 Sep 2022 17:01:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 26 Sep 2022 05:01:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24C53F1E1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qGz/4WBzDws5s0dWIslPd0rxEq1gYJueg7G4eGqmaEw=; b=OlAutqAnyNEQv/PgRvhkRsTEkt
+        572PGSiCWQybcUZTj6jlzXoMa1KdQ27EERRK274n2GohZGYyW9s1ri6E1PYKXlWGwyQLwhQ+//isR
+        tUWy5hoV18lE3ateeyEC3b7Ghs8nn6o9R5f6F1oeNdPp0mQ3zAatCfquJ2la5GWuHk+CIPn3H3Fcm
+        ZN2GfwIW3MsMfPOx6P59KKMxWTvrGF2uNLiMt4K1wVmi+YnJDtnDcoyRymudBeowSqDufdK2pyJH+
+        tf8Ly7M738CQ4ZOX87JnIZZWx40sKZiAq37pZJAehTqdrt61yzlIIU3V5F2wl8S99yeHkhF19fC7n
+        CCjru+dQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ocjzL-00Fzbe-Kj; Mon, 26 Sep 2022 09:01:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C05CF300023;
+        Mon, 26 Sep 2022 11:01:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A7DF929A12A26; Mon, 26 Sep 2022 11:01:17 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 11:01:17 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     YingChi Long <me@inclyc.cn>
+Cc:     tglx@linutronix.de, ndesaulniers@google.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/fpu: use __alignof__ to avoid UB in TYPE_ALIGN
+Message-ID: <YzFqXbVptttrzoDe@hirez.programming.kicks-ass.net>
+References: <20220925153151.2467884-1-me@inclyc.cn>
 MIME-Version: 1.0
-In-Reply-To: <20220920072215.161331-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220925153151.2467884-1-me@inclyc.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/20 15:22, Weilong Chen wrote:
-> Add the new compatible for HiSilicon common i2c.
+On Sun, Sep 25, 2022 at 11:31:50PM +0800, YingChi Long wrote:
+> WG14 N2350 made very clear that it is an UB having type definitions with
+> in "offsetof". This patch change the implementation of macro
+> "TYPE_ALIGN" to builtin "__alignof__" to avoid undefined behavior.
 > 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-
+> I've grepped all source files to find any type definitions within
+> "offsetof".
+> 
+>     offsetof\(struct .*\{ .*,
+> 
+> This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+> type definitions within offsetof in the kernel codebase.
+> 
+> Signed-off-by: YingChi Long <me@inclyc.cn>
+> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
 > ---
-> Change since v4:
-> - Add description for SoC specific compatibles.
-> - Use the clock binding.
-> - Fix decimal, space, case, unused labels.
-> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/#m4e1c915ead04f4e2e48d69131053a966801625db
+>  arch/x86/kernel/fpu/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 72 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> new file mode 100644
-> index 000000000000..b06eb8cb88bc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HiSilicon common IIC controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,hisi-i2c
-> +    description:
-> +      The HiSilicon common IIC controller can be used for many different
-> +      types of SoC such as Huawei Ascend AI series chips. We use the common
-> +      string (hisi) for specific compatibles to avoid confusion caused by a
-> +      lot of different names.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    default: 400000
-> +
-> +  i2c-sda-falling-time-ns:
-> +    default: 343
-> +
-> +  i2c-scl-falling-time-ns:
-> +    default: 203
-> +
-> +  i2c-sda-hold-time-ns:
-> +    default: 830
-> +
-> +  i2c-scl-rising-time-ns:
-> +    default: 365
-> +
-> +  i2c-digital-filter-width-ns:
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c@5038b0000 {
-> +      compatible = "hisilicon,hisi-i2c";
-> +      reg = <0x38b0000 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      i2c-sda-falling-time-ns = <56>;
-> +      i2c-scl-falling-time-ns = <56>;
-> +      i2c-sda-hold-time-ns = <56>;
-> +      i2c-scl-rising-time-ns = <56>;
-> +      i2c-digital-filter;
-> +      i2c-digital-filter-width-ns = <0x0>;
-> +      clocks = <&alg_clk>;
-> +      clock-frequency = <400000>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d213a831133f..4c928a444e4b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9155,6 +9155,7 @@ L:	linux-i2c@vger.kernel.org
->  S:	Maintained
->  W:	https://www.hisilicon.com
->  F:	drivers/i2c/busses/i2c-hisi.c
-> +F:	Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+> diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+> index 621f4b6cac4a..41425ba0b6b1 100644
+> --- a/arch/x86/kernel/fpu/init.c
+> +++ b/arch/x86/kernel/fpu/init.c
+> @@ -134,7 +134,7 @@ static void __init fpu__init_system_generic(void)
+>  }
 >  
->  HISILICON LPC BUS DRIVER
->  M:	john.garry@huawei.com
-> 
+>  /* Get alignment of the TYPE. */
+> -#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+> +#define TYPE_ALIGN(TYPE) __alignof__(TYPE)
+
+IIRC there's a problem with alignof() in that it will return the ABI
+alignment instead of that preferred or natural alignment for some types.
+
+Notably I think 'long long' has 4 byte alignment on i386 and some other
+32bit archs.
+
+That said; please just replace the *one* instance of TYPE_ALIGN entirely
+and get rid of the thing.
