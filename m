@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2ADC5EA32F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670545EA223
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237783AbiIZLUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S237193AbiIZLCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237812AbiIZLTD (ORCPT
+        with ESMTP id S236873AbiIZK7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:19:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBFD52E56;
-        Mon, 26 Sep 2022 03:38:38 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC81F5E302;
+        Mon, 26 Sep 2022 03:31:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AA2BB80957;
-        Mon, 26 Sep 2022 10:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD622C433C1;
-        Mon, 26 Sep 2022 10:38:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1859AB802C5;
+        Mon, 26 Sep 2022 10:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5C1C433D6;
+        Mon, 26 Sep 2022 10:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188704;
-        bh=STN83xp9evJqJZLuHCkw/lnhnKc/4/65pi4u/jxUtL8=;
+        s=korg; t=1664188291;
+        bh=vFazs7HInMCqh67KKK3XIDtfo4xg8ilZMJ7GPB90J6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p4oudoJFzw3en4IWk/RrcGsRD4xBXHKw0f/DWz8LqTEsH/Sut+lL0fxbqMaCR3mtG
-         QNrrC8PRvC35O/h1P88YYxioA9O1AWWdyOqCl/AtfKTyIwWCdthtejiz4wUwxsKoho
-         KUe0nfcQMKS8q9m0qQaQnXtvZxSR2JC+GE4foImg=
+        b=g59iY0wOjaRLG5U3Jb3exdftuNGGmQhrzsTWCDuIDeqPn1g7/VdvnSEWlOrHaUa+b
+         F6d+mvAFFGgK3TSCKEbCozNC2HhPryOR4mczUVqvXiMMGyTYByHmlwiHPydwZrd18V
+         PL/31hNqQwiVn7QPsORyIo9AdwHFNHrlh/HkxHe0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 095/148] wireguard: netlink: avoid variable-sized memcpy on sockaddr
+Subject: [PATCH 5.10 103/141] net/sched: taprio: avoid disabling offload when it was never enabled
 Date:   Mon, 26 Sep 2022 12:12:09 +0200
-Message-Id: <20220926100759.641942551@linuxfoundation.org>
+Message-Id: <20220926100758.157822019@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 26c013108c12b94bc023bf19198a4300596c98b1 ]
+[ Upstream commit db46e3a88a09c5cf7e505664d01da7238cd56c92 ]
 
-Doing a variable-sized memcpy is slower, and the compiler isn't smart
-enough to turn this into a constant-size assignment.
+In an incredibly strange API design decision, qdisc->destroy() gets
+called even if qdisc->init() never succeeded, not exclusively since
+commit 87b60cfacf9f ("net_sched: fix error recovery at qdisc creation"),
+but apparently also earlier (in the case of qdisc_create_dflt()).
 
-Further, Kees' latest fortified memcpy will actually bark, because the
-destination pointer is type sockaddr, not explicitly sockaddr_in or
-sockaddr_in6, so it thinks there's an overflow:
+The taprio qdisc does not fully acknowledge this when it attempts full
+offload, because it starts off with q->flags = TAPRIO_FLAGS_INVALID in
+taprio_init(), then it replaces q->flags with TCA_TAPRIO_ATTR_FLAGS
+parsed from netlink (in taprio_change(), tail called from taprio_init()).
 
-    memcpy: detected field-spanning write (size 28) of single field
-    "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+But in taprio_destroy(), we call taprio_disable_offload(), and this
+determines what to do based on FULL_OFFLOAD_IS_ENABLED(q->flags).
 
-Fix this by just assigning by using explicit casts for each checked
-case.
+But looking at the implementation of FULL_OFFLOAD_IS_ENABLED()
+(a bitwise check of bit 1 in q->flags), it is invalid to call this macro
+on q->flags when it contains TAPRIO_FLAGS_INVALID, because that is set
+to U32_MAX, and therefore FULL_OFFLOAD_IS_ENABLED() will return true on
+an invalid set of flags.
 
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reported-by: syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com
+As a result, it is possible to crash the kernel if user space forces an
+error between setting q->flags = TAPRIO_FLAGS_INVALID, and the calling
+of taprio_enable_offload(). This is because drivers do not expect the
+offload to be disabled when it was never enabled.
+
+The error that we force here is to attach taprio as a non-root qdisc,
+but instead as child of an mqprio root qdisc:
+
+$ tc qdisc add dev swp0 root handle 1: \
+	mqprio num_tc 8 map 0 1 2 3 4 5 6 7 \
+	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0
+$ tc qdisc replace dev swp0 parent 1:1 \
+	taprio num_tc 8 map 0 1 2 3 4 5 6 7 \
+	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 base-time 0 \
+	sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
+	flags 0x0 clockid CLOCK_TAI
+Unable to handle kernel paging request at virtual address fffffffffffffff8
+[fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Call trace:
+ taprio_dump+0x27c/0x310
+ vsc9959_port_setup_tc+0x1f4/0x460
+ felix_port_setup_tc+0x24/0x3c
+ dsa_slave_setup_tc+0x54/0x27c
+ taprio_disable_offload.isra.0+0x58/0xe0
+ taprio_destroy+0x80/0x104
+ qdisc_create+0x240/0x470
+ tc_modify_qdisc+0x1fc/0x6b0
+ rtnetlink_rcv_msg+0x12c/0x390
+ netlink_rcv_skb+0x5c/0x130
+ rtnetlink_rcv+0x1c/0x2c
+
+Fix this by keeping track of the operations we made, and undo the
+offload only if we actually did it.
+
+I've added "bool offloaded" inside a 4 byte hole between "int clockid"
+and "atomic64_t picos_per_byte". Now the first cache line looks like
+below:
+
+$ pahole -C taprio_sched net/sched/sch_taprio.o
+struct taprio_sched {
+        struct Qdisc * *           qdiscs;               /*     0     8 */
+        struct Qdisc *             root;                 /*     8     8 */
+        u32                        flags;                /*    16     4 */
+        enum tk_offsets            tk_offset;            /*    20     4 */
+        int                        clockid;              /*    24     4 */
+        bool                       offloaded;            /*    28     1 */
+
+        /* XXX 3 bytes hole, try to pack */
+
+        atomic64_t                 picos_per_byte;       /*    32     0 */
+
+        /* XXX 8 bytes hole, try to pack */
+
+        spinlock_t                 current_entry_lock;   /*    40     0 */
+
+        /* XXX 8 bytes hole, try to pack */
+
+        struct sched_entry *       current_entry;        /*    48     8 */
+        struct sched_gate_list *   oper_sched;           /*    56     8 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+
+Fixes: 9c66d1564676 ("taprio: Add support for hardware offloading")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireguard/netlink.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ net/sched/sch_taprio.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
-index d0f3b6d7f408..5c804bcabfe6 100644
---- a/drivers/net/wireguard/netlink.c
-+++ b/drivers/net/wireguard/netlink.c
-@@ -436,14 +436,13 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
- 	if (attrs[WGPEER_A_ENDPOINT]) {
- 		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
- 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
-+		struct endpoint endpoint = { { { 0 } } };
- 
--		if ((len == sizeof(struct sockaddr_in) &&
--		     addr->sa_family == AF_INET) ||
--		    (len == sizeof(struct sockaddr_in6) &&
--		     addr->sa_family == AF_INET6)) {
--			struct endpoint endpoint = { { { 0 } } };
--
--			memcpy(&endpoint.addr, addr, len);
-+		if (len == sizeof(struct sockaddr_in) && addr->sa_family == AF_INET) {
-+			endpoint.addr4 = *(struct sockaddr_in *)addr;
-+			wg_socket_set_peer_endpoint(peer, &endpoint);
-+		} else if (len == sizeof(struct sockaddr_in6) && addr->sa_family == AF_INET6) {
-+			endpoint.addr6 = *(struct sockaddr_in6 *)addr;
- 			wg_socket_set_peer_endpoint(peer, &endpoint);
- 		}
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index eca525791013..384316c11e98 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -65,6 +65,7 @@ struct taprio_sched {
+ 	u32 flags;
+ 	enum tk_offsets tk_offset;
+ 	int clockid;
++	bool offloaded;
+ 	atomic64_t picos_per_byte; /* Using picoseconds because for 10Gbps+
+ 				    * speeds it's sub-nanoseconds per byte
+ 				    */
+@@ -1267,6 +1268,8 @@ static int taprio_enable_offload(struct net_device *dev,
+ 		goto done;
  	}
+ 
++	q->offloaded = true;
++
+ done:
+ 	taprio_offload_free(offload);
+ 
+@@ -1281,12 +1284,9 @@ static int taprio_disable_offload(struct net_device *dev,
+ 	struct tc_taprio_qopt_offload *offload;
+ 	int err;
+ 
+-	if (!FULL_OFFLOAD_IS_ENABLED(q->flags))
++	if (!q->offloaded)
+ 		return 0;
+ 
+-	if (!ops->ndo_setup_tc)
+-		return -EOPNOTSUPP;
+-
+ 	offload = taprio_offload_alloc(0);
+ 	if (!offload) {
+ 		NL_SET_ERR_MSG(extack,
+@@ -1302,6 +1302,8 @@ static int taprio_disable_offload(struct net_device *dev,
+ 		goto out;
+ 	}
+ 
++	q->offloaded = false;
++
+ out:
+ 	taprio_offload_free(offload);
+ 
 -- 
 2.35.1
 
