@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E263F5EA20D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3AD5E9F44
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbiIZLBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S235129AbiIZKWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237268AbiIZK7N (ORCPT
+        with ESMTP id S235249AbiIZKVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576C95C9D3;
-        Mon, 26 Sep 2022 03:31:01 -0700 (PDT)
+        Mon, 26 Sep 2022 06:21:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1BF4B4A3;
+        Mon, 26 Sep 2022 03:16:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95237B8093B;
-        Mon, 26 Sep 2022 10:29:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BE7C433D6;
-        Mon, 26 Sep 2022 10:29:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A240FB8091E;
+        Mon, 26 Sep 2022 10:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D68C433D7;
+        Mon, 26 Sep 2022 10:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188174;
-        bh=6tasvJ3bw1ZpODK/m7Ahrqs+W9D5eONd94fDDdQIjt4=;
+        s=korg; t=1664187364;
+        bh=oNBH8HAXn+y6fBbQmefAHGzvMjBfcArG+c+7kUIY7Gs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l1Dz1jvCl7IQgIDcNzvgk0HFR/29BxNQJ8BlahoAEhP2uHSM4NxQhJzH7QmudbKUb
-         rvjU0OYQ/ja/UuJMRS78j7lKED6N4KgLj3j+OCrfbGkGt4pHvu+owP07xs1lee2mK6
-         gVfYZlGSm6fY77nxpg9pDMqwujI7UiLPNpxNkg7w=
+        b=hVR0m5vMDU+LvDMFWATDf9FT9NdS2E03ylbMO2nmcICSY086oBNwOvlBFtwb9lJrE
+         Acq79tP3Yij3BUmngmLjvTmahUqrSi2CJIm2Bf/js54D13RtfYpR+OGWQkub06RonT
+         LdPucHwHbA0oSPo8LNQ4gP1hL+Lwdpxr/WYYnmf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        zain wang <wzz@rock-chips.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org,
+        Stuart Menefy <stuart.menefy@mathembedded.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 065/141] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+Subject: [PATCH 4.14 03/40] drm/meson: Correct OSD1 global alpha value
 Date:   Mon, 26 Sep 2022 12:11:31 +0200
-Message-Id: <20220926100756.789940782@linuxfoundation.org>
+Message-Id: <20220926100738.338184163@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zain wang <wzz@rock-chips.com>
+From: Stuart Menefy <stuart.menefy@mathembedded.com>
 
-[ Upstream commit 8123437cf46ea5a0f6ca5cb3c528d8b6db97b9c2 ]
+[ Upstream commit 6836829c8ea453c9e3e518e61539e35881c8ed5f ]
 
-We've found the AUX channel to be less reliable with PCLK_EDP at a
-higher rate (typically 25 MHz). This is especially important on systems
-with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
-use of AUX.
+VIU_OSD1_CTRL_STAT.GLOBAL_ALPHA is a 9 bit field, so the maximum
+value is 0x100 not 0xff.
 
-According to Rockchip, using any rate other than 24 MHz can cause
-"problems between syncing the PHY an PCLK", which leads to all sorts of
-unreliabilities around register operations.
+This matches the vendor kernel.
 
-Fixes: d67a38c5a623 ("arm64: dts: rockchip: move core edp from rk3399-kevin to shared chromebook")
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: zain wang <wzz@rock-chips.com>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Link: https://lore.kernel.org/r/20220830131212.v2.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
+Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220908155103.686904-1-stuart.menefy@mathembedded.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/meson/meson_plane.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 0d8458d55626..739937f70f8d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -237,6 +237,14 @@ &cdn_dp {
- &edp {
- 	status = "okay";
+diff --git a/drivers/gpu/drm/meson/meson_plane.c b/drivers/gpu/drm/meson/meson_plane.c
+index 85fa39e2be34..75132d0c5c28 100644
+--- a/drivers/gpu/drm/meson/meson_plane.c
++++ b/drivers/gpu/drm/meson/meson_plane.c
+@@ -105,7 +105,7 @@ static void meson_plane_atomic_update(struct drm_plane *plane,
  
-+	/*
-+	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
-+	 * set this here, because rk3399-gru.dtsi ensures we can generate this
-+	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
-+	 */
-+	assigned-clocks = <&cru PCLK_EDP>;
-+	assigned-clock-rates = <24000000>;
-+
- 	ports {
- 		edp_out: port@1 {
- 			reg = <1>;
+ 	/* Enable OSD and BLK0, set max global alpha */
+ 	priv->viu.osd1_ctrl_stat = OSD_ENABLE |
+-				   (0xFF << OSD_GLOBAL_ALPHA_SHIFT) |
++				   (0x100 << OSD_GLOBAL_ALPHA_SHIFT) |
+ 				   OSD_BLK0_ENABLE;
+ 
+ 	/* Set up BLK0 to point to the right canvas */
 -- 
 2.35.1
 
