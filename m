@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138BD5EA04A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409A5EA2B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbiIZKfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S235133AbiIZLN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiIZKdY (ORCPT
+        with ESMTP id S237591AbiIZLMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:24 -0400
+        Mon, 26 Sep 2022 07:12:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EDC22B1D;
-        Mon, 26 Sep 2022 03:20:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D9A606B3;
+        Mon, 26 Sep 2022 03:35:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E651360C62;
-        Mon, 26 Sep 2022 10:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4567C43148;
-        Mon, 26 Sep 2022 10:20:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34C3E60A55;
+        Mon, 26 Sep 2022 10:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D3EC433D6;
+        Mon, 26 Sep 2022 10:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187627;
-        bh=NV8t6kDUuThjpl5lc0UTvDfmdAH4R9M0OUya7m0Jjw4=;
+        s=korg; t=1664188444;
+        bh=i2VbnV8TJquhT5lBOblusidEuH6MomI3WvJqLd6uHBo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nlWKpqMmp1YrYyICOnXn7i58w8aYbagWb4h7k0j8ZdWv30pUphijgbKXNjS2tW4A+
-         pUFABe5iS4aIWkfpqXnQMkVV8HIc6TEvEl9Ef0Z5TTFf5Q4xfEudXVc9xNaGL7p5Ik
-         BvhY4mXGKi8YNtccJ77/41xcnbyzfRoOC/8DzgKc=
+        b=UcHFIuWqjic2VrFNB4in5lyaFjo6HxfG/Syarbu6bdWr1BvVFafo8GhDN+gPvEyE7
+         mJnT1ixbSOoQwYQuzTzFCifuOmh/Ta1rxYsMguojrd8BYRmPryp1EJgRx+2mCvjX9O
+         gRR0sXAmGfv9zYwRup0nbRq69hgduG1KLDFRaMVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 010/120] task_stack, x86/cea: Force-inline stack helpers
-Date:   Mon, 26 Sep 2022 12:10:43 +0200
-Message-Id: <20220926100750.941936998@linuxfoundation.org>
+Subject: [PATCH 5.15 010/148] usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop
+Date:   Mon, 26 Sep 2022 12:10:44 +0200
+Message-Id: <20220926100756.425721224@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
 
-[ Upstream commit e87f4152e542610d0b4c6c8548964a68a59d2040 ]
+[ Upstream commit 040f2dbd2010c43f33ad27249e6dac48456f4d99 ]
 
-Force-inline two stack helpers to fix the following objtool warnings:
+Relocate the pullups_connected check until after it is ensured that there
+are no runtime PM transitions.  If another context triggered the DWC3
+core's runtime resume, it may have already enabled the Run/Stop.  Do not
+re-run the entire pullup sequence again, as it may issue a core soft
+reset while Run/Stop is already set.
 
-  vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_stack() leaves .noinstr.text section
+This patch depends on
+  commit 69e131d1ac4e ("usb: dwc3: gadget: Prevent repeat pullup()")
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220324183607.31717-2-bp@alien8.de
-Stable-dep-of: 54c3931957f6 ("tracing: hold caller_addr to hardirq_{enable,disable}_ip")
+Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+Link: https://lore.kernel.org/r/20220728020647.9377-1-quic_wcheng@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/cpu_entry_area.h | 2 +-
- include/linux/sched/task_stack.h      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/gadget.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-index ea866c7bf31d..0d1d37d8b279 100644
---- a/arch/x86/include/asm/cpu_entry_area.h
-+++ b/arch/x86/include/asm/cpu_entry_area.h
-@@ -133,7 +133,7 @@ extern void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags);
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 484b5e1d921a..14dcdb923f40 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2470,9 +2470,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
  
- extern struct cpu_entry_area *get_cpu_entry_area(int cpu);
+ 	is_on = !!is_on;
  
--static inline struct entry_stack *cpu_entry_stack(int cpu)
-+static __always_inline struct entry_stack *cpu_entry_stack(int cpu)
- {
- 	return &get_cpu_entry_area(cpu)->entry_stack_page.stack;
- }
-diff --git a/include/linux/sched/task_stack.h b/include/linux/sched/task_stack.h
-index d10150587d81..1009b6b5ce40 100644
---- a/include/linux/sched/task_stack.h
-+++ b/include/linux/sched/task_stack.h
-@@ -16,7 +16,7 @@
-  * try_get_task_stack() instead.  task_stack_page will return a pointer
-  * that could get freed out from under you.
-  */
--static inline void *task_stack_page(const struct task_struct *task)
-+static __always_inline void *task_stack_page(const struct task_struct *task)
- {
- 	return task->stack;
- }
+-	if (dwc->pullups_connected == is_on)
+-		return 0;
+-
+ 	dwc->softconnect = is_on;
+ 	/*
+ 	 * Per databook, when we want to stop the gadget, if a control transfer
+@@ -2509,6 +2506,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 		return 0;
+ 	}
+ 
++	if (dwc->pullups_connected == is_on) {
++		pm_runtime_put(dwc->dev);
++		return 0;
++	}
++
+ 	if (!is_on) {
+ 		ret = dwc3_gadget_soft_disconnect(dwc);
+ 	} else {
 -- 
 2.35.1
 
