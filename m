@@ -2,152 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C1F5EB11F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C9D5EB121
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiIZTQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S229999AbiIZTQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiIZTQm (ORCPT
+        with ESMTP id S229571AbiIZTQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:16:42 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F9598C9F;
-        Mon, 26 Sep 2022 12:16:42 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id g12so4767442qts.1;
-        Mon, 26 Sep 2022 12:16:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=r/lBYF+GxrGFPkgG3fUr7thtRY0jkylkSgITRGPALVo=;
-        b=kT9yvpTfZ9jfOKajbS45EXlB6Je/kHQJ2Jnx9Tyma2Ux+2Cs66N4W5hjYRzIgoDCdd
-         VnaHTbMqzsQIQzZsjuXy+U4r+GE5dEaf8yPIn2ajzAX/E0FXEWWza3lzhv5+up9cWABo
-         YX5ybCrdY3BvwxvTWV5jRp1I3jKKqc8/cazGbO8Q+bMyIz14JbB344piB5D/hA3p2sQw
-         eKzADcBMrFuFqQnwmh6dbnoMjDPM3vXwR0qRwbEyqmQPw5feRDUe3IRngUu79WavnSDz
-         bftCMHnnwGFlDCXORmD3F7C/96NK/VMPX88XjLK5p0x7ItOC5zfqxcyFKH8tc9bCGGY1
-         CK3A==
-X-Gm-Message-State: ACrzQf3xSSLD7vhWcvkO0TgBAv25MtsOV3GvywaF+RBsUDQkowf7s0xN
-        Nn+CiJXHIHIoJshwZoWAZ5SIRN7399LbZJZ12hE=
-X-Google-Smtp-Source: AMsMyM7kUra5T9BxmDaHdVz7qdxJQtvyxzo1yyQOSOlmfq62Vr0tJ/Rv9Li4kxS/aNsGMQFZX5HehoiX/2K5dvCMO+s=
-X-Received: by 2002:a05:622a:1a08:b0:35c:d9b5:144b with SMTP id
- f8-20020a05622a1a0800b0035cd9b5144bmr19435966qtb.27.1664219801273; Mon, 26
- Sep 2022 12:16:41 -0700 (PDT)
+        Mon, 26 Sep 2022 15:16:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB2A9A6BE;
+        Mon, 26 Sep 2022 12:16:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F139B80D91;
+        Mon, 26 Sep 2022 19:16:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC39DC433D7;
+        Mon, 26 Sep 2022 19:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664219802;
+        bh=i8EKvkC0Tr2VPkNQzzRCboiKkQ7L74SHdGwxYZgB0zE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jb9lcMcyJ+upkvHXzMW8Akjnqe6cZtfhnDBXsdwLD5EMINm+uU5ljyye4rPM0Wp0i
+         e3SCYAwkuYur/jOcGct7P6IukXaCJBeJ5CDE26ozWImL97fCfLn9k6H0E8Y7m3R9Ik
+         bWS+JdilMfDtTRjhJvdBltLrrkX9rBHPaF3U+EzKqAJj5H+8WtBW0EPpgGlvSYESRR
+         bRbIyPSftQ19Pjk/koyJc8E6OkxQk6L4gM6c6mmMVjGviJiKQgx1jqTMIfWHJlrsxL
+         0SgL6Xki0M/yOqJhcIM60aFHOB8xdyM7DUPjkwAUYn/zQixmLrjRo1BMHAW0MXYk2p
+         Xt1lvhD1xdVCQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 008A5403B0; Mon, 26 Sep 2022 20:16:39 +0100 (IST)
+Date:   Mon, 26 Sep 2022 20:16:39 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf record: Fix segmentation fault in
+ record__read_lost_samples()
+Message-ID: <YzH6lxeZ2KYfK6lx@kernel.org>
+References: <20220924113346.1110909-1-leo.yan@linaro.org>
+ <CAM9d7ci2RJOTz08eGRgLMVpS0TmwN=q=UNA_Z3wbSHCC2pMygQ@mail.gmail.com>
+ <YzGiMdIRRE8ibCiD@kernel.org>
+ <YzG9Mz8t6aNn1ZwX@leoy-huanghe.lan>
 MIME-Version: 1.0
-References: <20220926140604.4173723-1-daniel.lezcano@linaro.org> <20220926140604.4173723-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20220926140604.4173723-3-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Sep 2022 21:16:29 +0200
-Message-ID: <CAJZ5v0i7oh_rfW5AW_4rsKhWksYssyY2uz=1GUK0sBo2CLT7Pg@mail.gmail.com>
-Subject: Re: [PATCH v5 02/30] thermal/sysfs: Do not make get_trip_hyst optional
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzG9Mz8t6aNn1ZwX@leoy-huanghe.lan>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 4:06 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The get_trip_hyst() ops is optional. It results all around the thermal
-> framework code a check against the ops pointer and different action
-> adding more complexity and making the code less readable and
-> understandable.
->
-> A zero hysteresis value is perfectly valid, so instead of adding more
-> circumvolutions in the code, create unconditionnaly the hysteresis and
-> use the thermal_zone_get_trip() function which returns a zero
-> hysteresis if the get_trip_hyst() is not defined.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Em Mon, Sep 26, 2022 at 10:54:43PM +0800, Leo Yan escreveu:
+> On Mon, Sep 26, 2022 at 01:59:29PM +0100, Arnaldo Carvalho de Melo wrote:
+> 
+> [...]
+> 
+> > > > Fixes: a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
+> > > > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > > 
+> > > Thanks for the fix and sorry for the inconvenience.
+> > > Actually I sent the same fix a few weeks ago.
+> > > 
+> > > https://lore.kernel.org/r/20220909235024.278281-1-namhyung@kernel.org
+> > 
+> > collecting it now, and adding that Fixes from Leo's patch, ok?
+> 
+> Yeah, I think it's good to add Fixes tag.  Just remind, actually
+> Namhyung has mentioned Fixed tag in above link:
+> 
+> "I didn't add a Fixes tag as it's not sent to Linus yet. But in case you want it.
+> 
+>   Fixes: a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
+> "
 
-I would change the subject to something like "thermal/sysfs: Always
-expose hysteresis attributes", because that's what the patch does
-IIUC.
+I'll add it.
 
-And in the changelog I would write something like the below:
+Sometimes I think about combining fixes with patches in my tree that
+didn't made it into Linus tree yet, so that we avoid having problems
+with 'git bisect', but I also try not to rebase acme/perf/core.
 
-"Instead of avoiding to expose the hysteresis attributes of a thermal
-zone when its get_trip_hyst() operation is not defined, which is
-confusing, expose them always and use the default
-thermal_zone_get_trip() function returning 0 hysteresis when that
-operation is not present.
+Perhaps in the future 'git bisect' will look at Fixes: tags :-)
 
-The hysteresis of 0 is perfectly valid, so this change should not
-introduce any backwards compatibility issues."
-
-> ---
->  drivers/thermal/thermal_sysfs.c | 25 +++++++++----------------
->  1 file changed, 9 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 75f6b151a58b..18cdd7cd0008 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -424,23 +424,20 @@ static int create_trip_attrs(struct thermal_zone_device *tz, int mask)
->                 return -ENOMEM;
->         }
->
-> -       if (tz->ops->get_trip_hyst) {
-> -               tz->trip_hyst_attrs = kcalloc(tz->num_trips,
-> -                                             sizeof(*tz->trip_hyst_attrs),
-> -                                             GFP_KERNEL);
-> -               if (!tz->trip_hyst_attrs) {
-> -                       kfree(tz->trip_type_attrs);
-> -                       kfree(tz->trip_temp_attrs);
-> -                       return -ENOMEM;
-> -               }
-> +       tz->trip_hyst_attrs = kcalloc(tz->num_trips,
-> +                                     sizeof(*tz->trip_hyst_attrs),
-> +                                     GFP_KERNEL);
-> +       if (!tz->trip_hyst_attrs) {
-> +               kfree(tz->trip_type_attrs);
-> +               kfree(tz->trip_temp_attrs);
-> +               return -ENOMEM;
->         }
->
->         attrs = kcalloc(tz->num_trips * 3 + 1, sizeof(*attrs), GFP_KERNEL);
->         if (!attrs) {
->                 kfree(tz->trip_type_attrs);
->                 kfree(tz->trip_temp_attrs);
-> -               if (tz->ops->get_trip_hyst)
-> -                       kfree(tz->trip_hyst_attrs);
-> +               kfree(tz->trip_hyst_attrs);
->                 return -ENOMEM;
->         }
->
-> @@ -473,9 +470,6 @@ static int create_trip_attrs(struct thermal_zone_device *tz, int mask)
->                 }
->                 attrs[indx + tz->num_trips] = &tz->trip_temp_attrs[indx].attr.attr;
->
-> -               /* create Optional trip hyst attribute */
-> -               if (!tz->ops->get_trip_hyst)
-> -                       continue;
->                 snprintf(tz->trip_hyst_attrs[indx].name, THERMAL_NAME_LENGTH,
->                          "trip_point_%d_hyst", indx);
->
-> @@ -512,8 +506,7 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
->
->         kfree(tz->trip_type_attrs);
->         kfree(tz->trip_temp_attrs);
-> -       if (tz->ops->get_trip_hyst)
-> -               kfree(tz->trip_hyst_attrs);
-> +       kfree(tz->trip_hyst_attrs);
->         kfree(tz->trips_attribute_group.attrs);
->  }
->
-> --
-> 2.34.1
->
+- Arnaldo
