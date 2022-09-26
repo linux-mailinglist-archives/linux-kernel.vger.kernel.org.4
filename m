@@ -2,208 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF9A5EADAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE23F5EADB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiIZRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S230241AbiIZRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiIZRKX (ORCPT
+        with ESMTP id S230091AbiIZRK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:10:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BC0E090;
-        Mon, 26 Sep 2022 09:18:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0032960B68;
-        Mon, 26 Sep 2022 16:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F85C433C1;
-        Mon, 26 Sep 2022 16:18:38 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 12:19:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/2] kunit: expose ftrace-based API for stubbing
- out functions during tests
-Message-ID: <20220926121946.5b409ca1@gandalf.local.home>
-In-Reply-To: <20220910212804.670622-3-davidgow@google.com>
-References: <20220910212804.670622-1-davidgow@google.com>
-        <20220910212804.670622-3-davidgow@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 26 Sep 2022 13:10:58 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8253A21E21
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:19:57 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b75so7189188pfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=riSPHNsF0xOhaGspUldr32iYpAlbd9kHHXWwrlmwZ2k=;
+        b=FIWI3/7v4gfpJFuMpLSMQfyTg3db+PwzbaWqx8f7E6SrbPbICQfwX4zFCWo9/9hxi9
+         w1bitAo9ZZgAdLVtAaqf/wH+eNIkSeZWzDZewh9RHvH81wnISjzxtCXWfY9el3PfwL4P
+         2IuJYBsunIRZ4FO2zjy4vnjAkEb89VjoIcyHgdPys49H1zzLVBZJkNJA8kZZaTS0tEtn
+         OMDN5jW5afmMonqZgKYZy2+DHUizQBWUgZC+G+3mtUOgXXeFx7hNpdw/z0wmC4eOhdTd
+         vHZT4t/gwi3hQ+98VjYDohxKTNHUMtWksbnx37KWYYgPEMupYeVZDUeEDXUJES3qNlTu
+         T1EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=riSPHNsF0xOhaGspUldr32iYpAlbd9kHHXWwrlmwZ2k=;
+        b=dFoIHJWkRuX7LBkhzeKGyHnPhfQ6EfH0d+oUNSBB1cCnOuV2cs9wsyxgIzWIw1bWZk
+         pmqWLDqWxu8cFVQvLcm9vn9byr032xjAIJeMac0XV+pc6olSeupp5/UB7H0AJwFR1Zos
+         Z1/vTZO+1nqH2Xo5fziG4oP7GjZ/Xy3moTQYuT4Tu3Y8O0gbMWh3+LVUGONNVzSn8Lby
+         XLUZs7aHAyTd+yxKWbMcy7PY+OJ2OWiA6KHxRfsLUcGy5g5IWAHfMBuoeNebcrGLCuLS
+         CQyo6vXzeYCQBCbY530OE9f/rWJDqD8pBqzAhsi/H3APcUtsRhTzL+dKTuB7pgAghfHW
+         DVHQ==
+X-Gm-Message-State: ACrzQf2QBsc58dRCCZKHtY2jzXzTnWOuyp6LNl/P8KapSC3W+BHDGO1Q
+        sEy5Y072C2ekDyU2pee6ltGiUw==
+X-Google-Smtp-Source: AMsMyM7peqaL0FeyMjAray29j78rgv40wbugk9BjKI2iAb7xx7yzdEdFI7np8fAM372vbK2vOI8DrQ==
+X-Received: by 2002:a05:6a00:2350:b0:541:b5bf:2774 with SMTP id j16-20020a056a00235000b00541b5bf2774mr24274454pfj.28.1664209196845;
+        Mon, 26 Sep 2022 09:19:56 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b15-20020a65578f000000b004348bd693a8sm11011159pgr.31.2022.09.26.09.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 09:19:56 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 16:19:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, jon@nutanix.com,
+        kevin.tian@intel.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [RFC v2] KVM: x86/vmx: Suppress posted interrupt notification
+ when CPU is in host
+Message-ID: <YzHRKO1v5N/BIQl6@google.com>
+References: <20220923085806.384344-1-chao.gao@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923085806.384344-1-chao.gao@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Sep 2022 05:28:04 +0800
-David Gow <davidgow@google.com> wrote:
+On Fri, Sep 23, 2022, Chao Gao wrote:
+> Set PID.SN right after VM exits and clear it before VM entry to minimize
+> the chance of hardware issuing PINs to a CPU when it's in host.
 
-> +++ b/lib/kunit/ftrace_stub.c
-> @@ -0,0 +1,137 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <kunit/test.h>
-> +
-> +#include <linux/typecheck.h>
-> +
-> +#include <linux/ftrace.h>
-> +#include <linux/sched.h>
-> +
-> +struct kunit_ftrace_stub_ctx {
-> +	struct kunit *test;
-> +	unsigned long real_fn_addr; /* used as a key to lookup the stub */
-> +	unsigned long replacement_addr;
-> +	struct ftrace_ops ops; /* a copy of kunit_stub_base_ops with .private set */
-> +};
-> +
-> +static void kunit_stub_trampoline(unsigned long ip, unsigned long parent_ip,
-> +				  struct ftrace_ops *ops,
-> +				  struct ftrace_regs *fregs)
-> +{
-> +	struct kunit_ftrace_stub_ctx *ctx = ops->private;
-> +	int lock_bit;
-> +
-> +	if (current->kunit_test != ctx->test)
-> +		return;
-> +
-> +	lock_bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> +	KUNIT_ASSERT_GE(ctx->test, lock_bit, 0);
-> +
-> +	ftrace_instruction_pointer_set(fregs, ctx->replacement_addr);
-> +
-> +	ftrace_test_recursion_unlock(lock_bit);
-> +}
-> +
-> +static struct ftrace_ops kunit_stub_base_ops = {
-> +	.func = &kunit_stub_trampoline,
-> +	.flags = FTRACE_OPS_FL_IPMODIFY |
-> +#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-> +		FTRACE_OPS_FL_SAVE_REGS |
-> +#endif
-> +		FTRACE_OPS_FL_DYNAMIC
-> +};
-> +
-> +static void __kunit_ftrace_stub_resource_free(struct kunit_resource *res)
-> +{
-> +	struct kunit_ftrace_stub_ctx *ctx = res->data;
-> +
-> +	unregister_ftrace_function(&ctx->ops);
-> +	kfree(ctx);
-> +}
-> +
-> +/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-> +static bool __kunit_ftrace_stub_resource_match(struct kunit *test,
-> +						struct kunit_resource *res,
-> +						void *match_real_fn_addr)
-> +{
-> +	/* This pointer is only valid if res is a static stub resource. */
-> +	struct kunit_ftrace_stub_ctx *ctx = res->data;
-> +
-> +	/* Make sure the resource is a static stub resource. */
-> +	if (res->free != &__kunit_ftrace_stub_resource_free)
-> +		return false;
-> +
-> +	return ctx->real_fn_addr == (unsigned long)match_real_fn_addr;
-> +}
-> +
-> +void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr)
-> +{
-> +	struct kunit_resource *res;
-> +
-> +	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-> +				"Tried to deactivate a NULL stub.");
-> +
-> +	/* Look up the existing stub for this function. */
-> +	res = kunit_find_resource(test,
-> +				  __kunit_ftrace_stub_resource_match,
-> +				  real_fn_addr);
-> +
-> +	/* Error out if the stub doesn't exist. */
-> +	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-> +				"Tried to deactivate a nonexistent stub.");
-> +
-> +	/* Free the stub. We 'put' twice, as we got a reference
-> +	 * from kunit_find_resource(). The free function will deactivate the
-> +	 * ftrace stub.
-> +	 */
-> +	kunit_remove_resource(test, res);
-> +	kunit_put_resource(res);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_deactivate_ftrace_stub);
-> +
-> +void __kunit_activate_ftrace_stub(struct kunit *test,
-> +				  const char *name,
-> +				  void *real_fn_addr,
-> +				  void *replacement_addr)
-> +{
-> +	unsigned long ftrace_ip;
-> +	struct kunit_ftrace_stub_ctx *ctx;
-> +	int ret;
-> +
-> +	ftrace_ip = ftrace_location((unsigned long)real_fn_addr);
-> +	if (!ftrace_ip)
-> +		KUNIT_ASSERT_FAILURE(test, "%s ip is invalid: not a function, or is marked notrace or inline", name);
-> +
-> +	/* Allocate the stub context, which contains pointers to the replacement
-> +	 * function and the test object. It's also registered as a KUnit
-> +	 * resource which can be looked up by address (to deactivate manually)
-> +	 * and is destroyed automatically on test exit.
-> +	 */
-> +	ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ctx, "failed to allocate kunit stub for %s", name);
-> +
-> +	ctx->test = test;
-> +	ctx->ops = kunit_stub_base_ops;
-> +	ctx->ops.private = ctx;
-> +	ctx->real_fn_addr = (unsigned long)real_fn_addr;
-> +	ctx->replacement_addr = (unsigned long)replacement_addr;
-> +
-> +	ret = ftrace_set_filter_ip(&ctx->ops, ftrace_ip, 0, 0);
-> +	if (ret) {
-> +		kfree(ctx);
-> +		KUNIT_ASSERT_FAILURE(test, "failed to set filter ip for %s: %d", name, ret);
+Toggling PID.SN as close to the world switch as possible is undesirable.  If KVM
+re-enters the guest without enabling IRQs, i.e. handles the VM-Exit in the fastpath,
+then the notification IRQ will be delivered in the guest.
 
-I don't know the KUNIT_ASSERT content, but I'm guessing that any failure is
-just to crash the kernel or something where you do not need to bail out of
-the function?
+The natural location to do the toggling is when KVM "toggles" software, i.e. when
+KVM sets IN_GUEST_MODE (clear SN) and OUTSIDE_GUEST_MODE (set SN).
 
+I believe that would also obviate the need to manually send a PI Notification IRQ,
+as the existing ->sync_pir_to_irr() call that exists to handle exactly this case
+(notification not sent or handled in host) would ensure any outstanding posted IRQ
+gets moved to the IRR and processed accordingly.
+
+> Opportunistically clean up vmx_vcpu_pi_put(); when a vCPU is preempted,
+
+Uh uh, this patch is already way, way too subtle and complex to tack on clean up.
+"Opportunistic" clean up is for cases where the clean up is a pure refactoring
+and/or has zero impact on functionality.
+
+> it is pointless to update PID.NV to wakeup vector since notification is
+> anyway suppressed. And since PID.SN should be already set for running
+> vCPUs, so, don't set it again for preempted vCPUs.
+
+I'm pretty sure this is wrong.  If the vCPU is preempted between prepare_to_rcuwait()
+and schedule(), then skipping pi_enable_wakeup_handler() will hang the guest if
+the wakeup event is a posted IRQ and the event arrives while the vCPU is preempted.
+
+> When IPI virtualization is enabled, this patch increases "perf bench" [*]
+> by 6.56%, and PIN count in 1 second drops from tens of thousands to
+> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
+> VM-exit round-trip latency.
+
+The overhead is more than likely due to pi_is_pir_empty() in the VM-Entry path,
+i.e. should in theory go away if PID.SN is clear/set at IN_GUEST_MODE and
+OUTSIDE_GUEST_MODE
+
+> Also honour PID.SN bit in vmx_deliver_posted_interrupt().
+
+Why?
+
+> When IPI virtualization is enabled, this patch increases "perf bench" [*]
+> by 6.56%, and PIN count in 1 second drops from tens of thousands to
+> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
+> VM-exit round-trip latency.
+> 
+> [*] test cmd: perf bench sched pipe -T. Note that we change the source
+> code to pin two threads to two different vCPUs so that it can reproduce
+> stable results.
+> 
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> ---
+> RFC: I am not sure whether the benefits outweighs the extra VM-exit cost.
+> 
+> Changes in v2 (addressed comments from Kevin):
+> - measure/estimate the impact to non-IPC-intensive cases
+> - don't tie PID.SN to vcpu->mode. Instead, clear PID.SN
+>   right before VM-entry and set it after VM-exit.
+
+Ah, sorry, missed v1.  Rather than key off of IN_GUEST_MODE in the sync path, add
+an explicit kvm_x86_ops hook to perform the transition.  I.e. make it explict.
+
+> - use !pi_is_pir_empty() in pi_enable_wakeup_handler() to
+>   check if any interrupt was posted after clearing SN.
+> - clean up vmx_vcpu_pi_put(). See comments above.
+> 
+>  arch/x86/kvm/lapic.c           |  2 ++
+>  arch/x86/kvm/vmx/posted_intr.c | 55 +++++++++++-----------------------
+>  arch/x86/kvm/vmx/vmx.c         | 34 ++++++++++++++++++++-
+>  3 files changed, 53 insertions(+), 38 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9dda989a1cf0..a9f27c6ce937 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -128,7 +128,9 @@ static inline int __apic_test_and_clear_vector(int vec, void *bitmap)
+>  }
+>  
+>  __read_mostly DEFINE_STATIC_KEY_DEFERRED_FALSE(apic_hw_disabled, HZ);
+> +EXPORT_SYMBOL_GPL(apic_hw_disabled);
+>  __read_mostly DEFINE_STATIC_KEY_DEFERRED_FALSE(apic_sw_disabled, HZ);
+> +EXPORT_SYMBOL_GPL(apic_sw_disabled);
+
+These exports will hopefully go away.
+
+>  static inline int apic_enabled(struct kvm_lapic *apic)
+>  {
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 1b56c5e5c9fb..9cec3dd88f75 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -70,12 +70,6 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>  	 * needs to be changed.
+>  	 */
+>  	if (pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR && vcpu->cpu == cpu) {
+> -		/*
+> -		 * Clear SN if it was set due to being preempted.  Again, do
+> -		 * this even if there is no assigned device for simplicity.
+> -		 */
+> -		if (pi_test_and_clear_sn(pi_desc))
+> -			goto after_clear_sn;
+>  		return;
+>  	}
+>  
+> @@ -101,11 +95,16 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>  		new.control = old.control;
+>  
+>  		/*
+> -		 * Clear SN (as above) and refresh the destination APIC ID to
+> -		 * handle task migration (@cpu != vcpu->cpu).
+> +		 * Set SN and refresh the destination APIC ID to handle
+> +		 * task migration (@cpu != vcpu->cpu).
+> +		 *
+> +		 * SN is cleared when a vCPU goes to blocked state so that
+> +		 * the blocked vCPU can be waken up on receiving a
+> +		 * notification. For a running/runnable vCPU, such
+> +		 * notifications are useless. Set SN bit to suppress them.
+>  		 */
+>  		new.ndst = dest;
+> -		new.sn = 0;
+> +		new.sn = 1;
+
+To handle the preempted case, I believe the correct behavior is to leave SN
+as-is, although that would require setting SN=1 during vCPU creation.  Arguably
+KVM should do that anyways when APICv is enabled.
+
+Hmm, or alternatively this should do the same?
+
+		new.sn = !kvm_vcpu_is_blocking();
+
+> @@ -172,8 +160,10 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
+>  	 * enabled until it is safe to call try_to_wake_up() on the task being
+>  	 * scheduled out).
+>  	 */
+> -	if (pi_test_on(&new))
+> +	if (!pi_is_pir_empty(pi_desc)) {
+> +		pi_set_on(pi_desc);
+
+As much as I wish we could get rid of kvm_arch_vcpu_blocking(), I actually think
+this would be a good application of that hook.  If PID.SN is cleared during
+kvm_arch_vcpu_blocking() and set during kvm_arch_vcpu_unblocking(), then I believe
+there's no need to manually check the PIR here, as any IRQ that isn't detected by
+kvm_vcpu_check_block() is guaranteed to set PID.ON=1.
+
+>  		apic->send_IPI_self(POSTED_INTR_WAKEUP_VECTOR);
 > +	}
-> +
-> +	ret = register_ftrace_function(&ctx->ops);
-> +	if (ret) {
-> +		kfree(ctx);
-> +		if (ret == -EBUSY)
-> +			KUNIT_ASSERT_FAILURE(test, "failed to register stub (-EBUSY) for %s, likely due to already stubbing it?", name);
-> +		KUNIT_ASSERT_FAILURE(test, "failed to register stub for %s: %d", name, ret);
-> +	}
-> +
-> +	/* Register the stub as a resource with a cleanup function */
-> +	kunit_alloc_resource(test, NULL,
-> +			     __kunit_ftrace_stub_resource_free,
-> +			     GFP_KERNEL, ctx);
+>  
+>  	local_irq_restore(flags);
+>  }
+> @@ -193,21 +183,12 @@ static bool vmx_needs_pi_wakeup(struct kvm_vcpu *vcpu)
+>  
+>  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
+>  {
+> -	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+> -
+>  	if (!vmx_needs_pi_wakeup(vcpu))
+>  		return;
+>  
+> -	if (kvm_vcpu_is_blocking(vcpu) && !vmx_interrupt_blocked(vcpu))
+> +	if (!vcpu->preempted && kvm_vcpu_is_blocking(vcpu) &&
 
-And I'm also guessing that there's no race concern with registering the
-free resource after enabling the function code?
+As above, I don't think skipping this for preempted is correct.
 
-Other than that, looks good to me.
+> +	    !vmx_interrupt_blocked(vcpu))
+>  		pi_enable_wakeup_handler(vcpu);
+> -
+> -	/*
+> -	 * Set SN when the vCPU is preempted.  Note, the vCPU can both be seen
+> -	 * as blocking and preempted, e.g. if it's preempted between setting
+> -	 * its wait state and manually scheduling out.
+> -	 */
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Assuming I'm correct, hoist the "note" above to document that KVM needs to enable
+the wakeup handler even when the vCPU is preempted.
 
--- Steve
+> -	if (vcpu->preempted)
+> -		pi_set_sn(pi_desc);
+>  }
+>  
+>  /*
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c9b49a09e6b5..949fb80eca3d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4186,6 +4186,9 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+>  	if (pi_test_and_set_pir(vector, &vmx->pi_desc))
+>  		return 0;
+>  
+> +	if (pi_test_sn(&vmx->pi_desc))
+> +		return 0;
 
-> +}
+Should be unnecessary.
