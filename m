@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432B75E9F7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3405E9FD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbiIZK0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S235656AbiIZKaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235377AbiIZKXg (ORCPT
+        with ESMTP id S235375AbiIZK2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:23:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82029A445;
-        Mon, 26 Sep 2022 03:17:11 -0700 (PDT)
+        Mon, 26 Sep 2022 06:28:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6FF491E9;
+        Mon, 26 Sep 2022 03:18:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C75A7CE10EF;
-        Mon, 26 Sep 2022 10:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C67C433C1;
-        Mon, 26 Sep 2022 10:16:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 950A6B80835;
+        Mon, 26 Sep 2022 10:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDBDC433D6;
+        Mon, 26 Sep 2022 10:18:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187414;
-        bh=NF2yEGR/cg3o7JkyY9xNLjF8yNV2cbYWzgoZV0XD4is=;
+        s=korg; t=1664187525;
+        bh=ca5roythMhaHkBzdHtuMVgWqhylGKDcDLuIspWrIoLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=STcNtzWNEJi1zLtN5rqFZLcJJdLb63mlPFeJBWeCcCBbseCJcnM/Ht0j6bPGtFIzm
-         roGDqj0sloXPlKYHBbtc5VRGUAVJHxUdIJ94tKAQgHL3J0rbQcLwsKO4L+ATNr3ccJ
-         mukFc8Rxxa3uYzsHSwIW04SmZ3gN7gDzuc2wc6bI=
+        b=nctFH5MG/FFUDvMoULgUK6/XKt1vLAmfgfZepSwmX5wniRzX0n1M0FOurCMCPm17f
+         Fh6U+o7HpqGMIuAzKYBQwxFlnB4g5uUO04buYyaj4IA/GWTQS4M+Un0aoAgK0D9z1N
+         stbjOqQ/WeuVDb6MWYrOVQ5S091uXfzG9S44XIBI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 26/40] iavf: Fix cached head and tail value for iavf_get_tx_pending
+Subject: [PATCH 4.19 35/58] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
 Date:   Mon, 26 Sep 2022 12:11:54 +0200
-Message-Id: <20220926100739.281461099@linuxfoundation.org>
+Message-Id: <20220926100742.755484965@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett.creeley@intel.com>
+From: Fabio Estevam <festevam@denx.de>
 
-[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
+[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
 
-The underlying hardware may or may not allow reading of the head or tail
-registers and it really makes no difference if we use the software
-cached values. So, always used the software cached values.
+The 'enable-active-low' property is not a valid one.
 
-Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
-Signed-off-by: Brett Creeley <brett.creeley@intel.com>
-Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Only 'enable-active-high' is valid, and when this property is absent
+the gpio regulator will act as active low by default.
+
+Remove the invalid 'enable-active-low' property.
+
+Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40evf/i40e_txrx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40evf/i40e_txrx.c b/drivers/net/ethernet/intel/i40evf/i40e_txrx.c
-index 4afdabbe95e8..d74a307da8f1 100644
---- a/drivers/net/ethernet/intel/i40evf/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40evf/i40e_txrx.c
-@@ -138,8 +138,11 @@ u32 i40evf_get_tx_pending(struct i40e_ring *ring, bool in_sw)
- {
- 	u32 head, tail;
- 
-+	/* underlying hardware might not allow access and/or always return
-+	 * 0 for the head/tail registers so just use the cached values
-+	 */
- 	head = ring->next_to_clean;
--	tail = readl(ring->tail);
-+	tail = ring->next_to_use;
- 
- 	if (head != tail)
- 		return (head < tail) ?
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index ce1320e4c106..6750b8100421 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -102,7 +102,6 @@ vcc3v3_sys: vcc3v3-sys {
+ 	vcc5v0_host: vcc5v0-host-regulator {
+ 		compatible = "regulator-fixed";
+ 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
+-		enable-active-low;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&vcc5v0_host_en>;
+ 		regulator-name = "vcc5v0_host";
 -- 
 2.35.1
 
