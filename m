@@ -2,63 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F945EA853
+	by mail.lfdr.de (Postfix) with ESMTP id E765D5EA855
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiIZOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S233940AbiIZOY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234790AbiIZOXz (ORCPT
+        with ESMTP id S234802AbiIZOXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 10:23:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E01181B;
-        Mon, 26 Sep 2022 05:34:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FBB1145E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:34:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6007FCE1130;
-        Mon, 26 Sep 2022 12:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 525C9C433D6;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 20D151F38A;
         Mon, 26 Sep 2022 12:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664195677;
-        bh=vW41fwAs8yIBAAXaBsitEXuJcX7gT1jTUr0chte7TQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VpxSd5W9pu6Liz8eesFvgkC10k4/VfcVRY48jH0XFMXa9yYO5qo+Iho/nDlEkO4JI
-         Hsc4kZStYodD31wZ3VuBO6onE9RksIfyc9hkFxzgKXxfIeQNIN18d6+k/Z9o4eyFUY
-         uObqF6AZGtHyFAcT5A3ar1jx6OVpp+sJgyWfZpTv0ydPyh+4e9D2P5/BdPvCwXm5x3
-         f+AqCJoRbgagsluLpXuMSPjLTNZVOAHRPWrBtTQHk4ugmPKqRTanvooUv1Daht0ktX
-         nLyDzIdh/JnpXsJsCWnkfC+n+BevcRFnBbemS/+EuPmKciLJMWwIK9hjFcVjsJ3RBH
-         +8avfzyeXXRVw==
-Received: by pali.im (Postfix)
-        id 8CA958A3; Mon, 26 Sep 2022 14:34:34 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 14:34:34 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Remi Pommarel <repk@triplefau.lt>, Xogium <contact@xogium.me>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>
-Subject: Re: [PATCH v2] PCI: aardvark: Implement workaround for PCIe
- Completion Timeout
-Message-ID: <20220926123434.2tqx4t6u3cnlrcx3@pali>
-References: <20220802123816.21817-1-pali@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664195677; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pZfEVr0F+eDUbTKMwdgidKtFX7VuirmYGY1O7jfs79E=;
+        b=ZJt6LzVTk7uUgNb/3+RfQS4n9gNmyE/Ndw3OtVGcUh3bb79rZhzJBODRYZZZq2QquYCc6L
+        RGqHr/EYJ6i3xOcwjiqpcU2ER9d6O9MRZgcYPOxOy1WDZXKyxVglBUKF4Mb4Afa7xVLS+Y
+        cqOAvXYCKS7IIiST8MsIPbwyJBZwvu4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664195677;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pZfEVr0F+eDUbTKMwdgidKtFX7VuirmYGY1O7jfs79E=;
+        b=mJY48elw8wJdWrhw2pCkaIypPsM43sG83ftl2OiftxYeqqyzno2SX0o3lzuEzQ12eeEVcO
+        NDbVNGZjP0yMZ3DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA48A13486;
+        Mon, 26 Sep 2022 12:34:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E1ijKFycMWOWUwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 26 Sep 2022 12:34:36 +0000
+Message-ID: <d50ed519-ba89-70e2-0f0c-b58593a3c060@suse.de>
+Date:   Mon, 26 Sep 2022 14:34:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220802123816.21817-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 06/33] drm/connector: Rename legacy TV property
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Karol Herbst <kherbst@redhat.com>, David Airlie <airlied@linux.ie>,
+        nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Emma Anholt <emma@anholt.net>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ben Skeggs <bskeggs@redhat.com>, linux-sunxi@lists.linux.dev,
+        intel-gfx@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
+ <fa71ae1c-f9ca-167c-7993-b698ea3473a0@suse.de>
+ <20220926095031.vlwsw7willi36yd4@houat>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220926095031.vlwsw7willi36yd4@houat>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------mwjZHgn1Ll4ReHR00ksHLHNN"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,83 +92,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Elad, could you please review this patch? I have implemented it
-according your instructions, including that full memory barrier as you
-described.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mwjZHgn1Ll4ReHR00ksHLHNN
+Content-Type: multipart/mixed; boundary="------------4FsZ219AqM5Fd5bD304l2D0A";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>
+Cc: Karol Herbst <kherbst@redhat.com>, David Airlie <airlied@linux.ie>,
+ nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ Phil Elwell <phil@raspberrypi.com>, Emma Anholt <emma@anholt.net>,
+ Samuel Holland <samuel@sholland.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Ben Skeggs <bskeggs@redhat.com>,
+ linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ Hans de Goede <hdegoede@redhat.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ linux-arm-kernel@lists.infradead.org,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Dom Cobley <dom@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ linux-kernel@vger.kernel.org,
+ Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <d50ed519-ba89-70e2-0f0c-b58593a3c060@suse.de>
+Subject: Re: [PATCH v2 06/33] drm/connector: Rename legacy TV property
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
+ <fa71ae1c-f9ca-167c-7993-b698ea3473a0@suse.de>
+ <20220926095031.vlwsw7willi36yd4@houat>
+In-Reply-To: <20220926095031.vlwsw7willi36yd4@houat>
 
-On Tuesday 02 August 2022 14:38:16 Pali Rohár wrote:
-> Marvell Armada 3700 Functional Errata, Guidelines, and Restrictions
-> document describes in erratum 3.12 PCIe Completion Timeout (Ref #: 251),
-> that PCIe IP does not support a strong-ordered model for inbound posted vs.
-> outbound completion.
-> 
-> As a workaround for this erratum, DIS_ORD_CHK flag in Debug Mux Control
-> register must be set. It disables the ordering check in the core between
-> Completions and Posted requests received from the link.
-> 
-> Marvell also suggests to do full memory barrier at the beginning of
-> aardvark summary interrupt handler before calling interrupt handlers of
-> endpoint drivers in order to minimize the risk for the race condition
-> documented in the Erratum between the DMA done status reading and the
-> completion of writing to the host memory.
-> 
-> More details about this issue and suggested workarounds are in discussion:
-> https://lore.kernel.org/linux-pci/BN9PR18MB425154FE5019DCAF2028A1D5DB8D9@BN9PR18MB4251.namprd18.prod.outlook.com/t/#u
-> 
-> It was reported that enabling this workaround fixes instability issues and
-> "Unhandled fault" errors when using 60 GHz WiFi 802.11ad card with Qualcomm
-> QCA6335 chip under significant load which were caused by interrupt status
-> stuck in the outbound CMPLT queue traced back to this erratum.
-> 
-> This workaround fixes also kernel panic triggered after some minutes of
-> usage 5 GHz WiFi 802.11ax card with Mediatek MT7915 chip:
-> 
->     Internal error: synchronous external abort: 96000210 [#1] SMP
->     Kernel panic - not syncing: Fatal exception in interrupt
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/pci/controller/pci-aardvark.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> index 060936ef01fe..3ae8a85ec72e 100644
-> --- a/drivers/pci/controller/pci-aardvark.c
-> +++ b/drivers/pci/controller/pci-aardvark.c
-> @@ -210,6 +210,8 @@ enum {
->  };
->  
->  #define VENDOR_ID_REG				(LMI_BASE_ADDR + 0x44)
-> +#define DEBUG_MUX_CTRL_REG			(LMI_BASE_ADDR + 0x208)
-> +#define     DIS_ORD_CHK				BIT(30)
->  
->  /* PCIe core controller registers */
->  #define CTRL_CORE_BASE_ADDR			0x18000
-> @@ -558,6 +560,11 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
->  		PCIE_CORE_CTRL2_TD_ENABLE;
->  	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
->  
-> +	/* Disable ordering checks, workaround for erratum 3.12 "PCIe completion timeout" */
-> +	reg = advk_readl(pcie, DEBUG_MUX_CTRL_REG);
-> +	reg |= DIS_ORD_CHK;
-> +	advk_writel(pcie, reg, DEBUG_MUX_CTRL_REG);
-> +
->  	/* Set lane X1 */
->  	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
->  	reg &= ~LANE_CNT_MSK;
-> @@ -1581,6 +1588,9 @@ static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
->  	struct advk_pcie *pcie = arg;
->  	u32 status;
->  
-> +	/* Full memory barrier (ARM dsb sy), workaround for erratum 3.12 "PCIe completion timeout" */
-> +	mb();
-> +
->  	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
->  	if (!(status & PCIE_IRQ_CORE_INT))
->  		return IRQ_NONE;
-> -- 
-> 2.20.1
-> 
+--------------4FsZ219AqM5Fd5bD304l2D0A
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMjYuMDkuMjIgdW0gMTE6NTAgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPiBI
+aSBUaG9tYXMsDQo+IA0KPiBPbiBGcmksIFNlcCAyMywgMjAyMiBhdCAxMDoxOTowOEFNICsw
+MjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMjIuMDku
+MjIgdW0gMTY6MjUgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPj4+IFRoZSBjdXJyZW50IHR2
+X21vZGUgaGFzIGRyaXZlci1zcGVjaWZpYyB2YWx1ZXMgdGhhdCBkb24ndCBhbGxvdyB0bw0K
+Pj4+IGVhc2lseSBzaGFyZSBjb2RlIHVzaW5nIGl0LCBlaXRoZXIgYXQgdGhlIHVzZXJzcGFj
+ZSBvciBrZXJuZWwgbGV2ZWwuDQo+Pj4NCj4+PiBTaW5jZSB3ZSdyZSBnb2luZyB0byBpbnRy
+b2R1Y2UgYSBuZXcsIGdlbmVyaWMsIHByb3BlcnR5IHRoYXQgZml0IHRoZQ0KPj4+IHNhbWUg
+cHVycG9zZSwgbGV0J3MgcmVuYW1lIHRoaXMgb25lIHRvIGxlZ2FjeV90dl9tb2RlIHRvIG1h
+a2UgaXQNCj4+PiBvYnZpb3VzIHdlIHNob3VsZCBtb3ZlIGF3YXkgZnJvbSBpdC4NCj4+Pg0K
+Pj4+IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNoPg0K
+Pj4NCj4+IEl0J3Mgbm90IHdyb25nLCBidXQgJ2xlZ2FjeScgaXMgYWxyZWFkeSBvdmVybG9h
+ZGVkIHdpdGggbWVhbmluZy4gSWYgeW91IGNhbiwNCj4+IG1heWJlIG5hbWUgaXQgJ2RyaXZl
+cl90dl9tb2RlX3Byb3BlcnR5JyBvciAnY3VzdG9tX3R2X21vZGVfcHJvcGVydHknDQo+PiBp
+bnN0ZWFkLg0KPj4NCj4+IEFja2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1h
+bm5Ac3VzZS5kZT4NCj4gDQo+IEknZCByZWFsbHkgbGlrZSB0byBwb2ludCBvdXQgdGhhdCBu
+ZXcgZHJpdmVycyBzaG91bGRuJ3QgYmUgdXNpbmcgdGhpcy4NCj4gSWYgd2UncmUgdXNpbmcg
+ZWl0aGVyIG9mIHlvdXIgcHJvcG9zYWxzIHRoZW4gd3JpdGVycyBtaWdodCBnZXQgdGhlDQo+
+IGltcHJlc3Npb24gdGhhdCB0aGlzIGlzIG9rIHRvIHVzLg0KPiANCj4gV291bGQgeW91IHBy
+ZWZlciBkZXByZWNhdGVkIHRvIGxlZ2FjeT8NCg0KSSdtIG1lcmVseSBzdWdnZXN0aW5nLiBD
+YWxsIGl0IGxlZ2FjeSB0aGVuLCBzbyB5b3UgZG9uJ3QgaGF2ZSB0byByZXdvcmsgDQphbGwg
+b2YgdGhlIHBhdGNoZXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IE1heGlt
+ZQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
+DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
+IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
+R2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+
+--------------4FsZ219AqM5Fd5bD304l2D0A--
+
+--------------mwjZHgn1Ll4ReHR00ksHLHNN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMxnFwFAwAAAAAACgkQlh/E3EQov+D5
+zxAApQncNTLl8QQvDR6j0KdUkawbSYKn0KSQRRJLEGBKoyje7U6mn4lVguZtodiDY7fz6EhuTR2S
+XPEbpcZaFmf1Y8hKEV8/zGry8ocN8Jy8cgF2frUr58KgkmDj0UUaD3m77Ee8NIs+r5oHtxSGbMI6
+8UoBjUIg+Q2gDNiBADBKQgo4D7pNXHLCT7KzKPs2tANKpUKegg4y6yUhBJ53G9LITKhHnkzlHiF8
+GjYfshimY0ockScV2lY3nFyPLLV3nrwGjgUM+B6owo76gHffD/qpMxZ+r3+Pd40hZAFwjlSypXe5
+XNtmKlDHbfXxlnR1td+sX3pqXAV42B8KHy3alsOji/DR2UGkXQrwWH/uXlr/K1iO+weuaK6ouX/5
+jXOnf1LCurNu/vLyt8fyWZqHmTcUwEGxXT6kQ7sNMoEMJk7v5rsjpa8Fvvyw9KHioil5bbj/wR4J
+MtiXhb/DRWMvUg0X95fYwgp55C++EGarVtwa7cPsFLYZLAdt2J8BmxFa8o3i1tvtpuVo44mMZ6EG
+7NiR1AQO7HA45dYWqlA/Z7PunFdaR0RfKrOyJFNTyG5EpZFCWWJDKMqBLP0mPWvfWr813jABNf+H
+RG4HrDn4MN3a9t5TZWt70qWeq7gGoIrJ0rKrPOf8hF00DPnWqN2UDGerPXOvHdSWqpbhULvcspRc
+amE=
+=qscO
+-----END PGP SIGNATURE-----
+
+--------------mwjZHgn1Ll4ReHR00ksHLHNN--
