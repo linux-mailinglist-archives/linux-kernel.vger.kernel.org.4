@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A055B5EA4FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D115EA297
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbiIZL4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S237504AbiIZLLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbiIZLxu (ORCPT
+        with ESMTP id S237794AbiIZLJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:53:50 -0400
+        Mon, 26 Sep 2022 07:09:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015D48CAF;
-        Mon, 26 Sep 2022 03:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA3D501A1;
+        Mon, 26 Sep 2022 03:35:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DDF1B80921;
-        Mon, 26 Sep 2022 10:49:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA2FC433C1;
-        Mon, 26 Sep 2022 10:49:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 734E8B8092F;
+        Mon, 26 Sep 2022 10:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B824AC433C1;
+        Mon, 26 Sep 2022 10:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189372;
-        bh=5Wecxc0YtwM+6k5gpDHuu2iI+A5vqPhrYMOoNyICU3w=;
+        s=korg; t=1664188431;
+        bh=QGczFgAHvbSQI3rwphu6DQAbiEnCcEoB8hmQoCSCrjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cT+qI3IyPIsyPDE6BHWc0YO4bKH4AMAts3Fh4BYuCmm0hSV6A1YPXJE0tJLD1tOLw
-         dF7yl9atS8vlnYe7Tll1EjHyFZYLUWrJ8nuh8UUDd0d4uY5cDUKrek5YjVXeKcYLyC
-         qUwR1GTF1Dx8/jVCJ/bqo1AvWp5HZeUDvcBDXjys=
+        b=mcY45A3m1WZrtYRz+V3Hg6jaZDg3gJMr1r4UkhyUmlZULRx4HogWmw/Usq3bVMyN9
+         VxCtFfcyjpQbEuSCJ94qiyq1z0+P1tcXiPVKUknHiOIuAcmZ65gx06YH/hKICh3gLo
+         cXibwFO8mNc/uIY3JOmP3Flew1ATmGIQOuYCtWog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marco Patalano <mpatalan@redhat.com>,
-        Muneendra <muneendra.kumar@broadcom.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.19 164/207] cgroup: cgroup_get_from_id() must check the looked-up kn is a directory
-Date:   Mon, 26 Sep 2022 12:12:33 +0200
-Message-Id: <20220926100814.011227446@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 128/141] gpio: ixp4xx: Make irqchip immutable
+Date:   Mon, 26 Sep 2022 12:12:34 +0200
+Message-Id: <20220926100759.099973151@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit df02452f3df069a59bc9e69c84435bf115cb6e37 upstream.
+[ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
 
-cgroup has to be one kernfs dir, otherwise kernel panic is caused,
-especially cgroup id is provide from userspace.
+This turns the IXP4xx GPIO irqchip into an immutable
+irqchip, a bit different from the standard template due
+to being hierarchical.
 
-Reported-by: Marco Patalano <mpatalan@redhat.com>
-Fixes: 6b658c4863c1 ("scsi: cgroup: Add cgroup_get_from_id()")
-Cc: Muneendra <muneendra.kumar@broadcom.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Cc: stable@vger.kernel.org # v5.14+
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
+for a rootfs on compact flash with IRQs from this GPIO
+block to the CF ATA controller.
+
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cgroup.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-ixp4xx.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6026,6 +6026,9 @@ struct cgroup *cgroup_get_from_id(u64 id
- 	if (!kn)
- 		goto out;
+diff --git a/drivers/gpio/gpio-ixp4xx.c b/drivers/gpio/gpio-ixp4xx.c
+index b3b050604e0b..6bd047e2ca46 100644
+--- a/drivers/gpio/gpio-ixp4xx.c
++++ b/drivers/gpio/gpio-ixp4xx.c
+@@ -67,6 +67,14 @@ static void ixp4xx_gpio_irq_ack(struct irq_data *d)
+ 	__raw_writel(BIT(d->hwirq), g->base + IXP4XX_REG_GPIS);
+ }
  
-+	if (kernfs_type(kn) != KERNFS_DIR)
-+		goto put;
++static void ixp4xx_gpio_mask_irq(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
 +
- 	rcu_read_lock();
++	irq_chip_mask_parent(d);
++	gpiochip_disable_irq(gc, d->hwirq);
++}
++
+ static void ixp4xx_gpio_irq_unmask(struct irq_data *d)
+ {
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+@@ -76,6 +84,7 @@ static void ixp4xx_gpio_irq_unmask(struct irq_data *d)
+ 	if (!(g->irq_edge & BIT(d->hwirq)))
+ 		ixp4xx_gpio_irq_ack(d);
  
- 	cgrp = rcu_dereference(*(void __rcu __force **)&kn->priv);
-@@ -6033,7 +6036,7 @@ struct cgroup *cgroup_get_from_id(u64 id
- 		cgrp = NULL;
++	gpiochip_enable_irq(gc, d->hwirq);
+ 	irq_chip_unmask_parent(d);
+ }
  
- 	rcu_read_unlock();
--
-+put:
- 	kernfs_put(kn);
- out:
- 	return cgrp;
+@@ -153,12 +162,14 @@ static int ixp4xx_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return irq_chip_set_type_parent(d, IRQ_TYPE_LEVEL_HIGH);
+ }
+ 
+-static struct irq_chip ixp4xx_gpio_irqchip = {
++static const struct irq_chip ixp4xx_gpio_irqchip = {
+ 	.name = "IXP4GPIO",
+ 	.irq_ack = ixp4xx_gpio_irq_ack,
+-	.irq_mask = irq_chip_mask_parent,
++	.irq_mask = ixp4xx_gpio_mask_irq,
+ 	.irq_unmask = ixp4xx_gpio_irq_unmask,
+ 	.irq_set_type = ixp4xx_gpio_irq_set_type,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static int ixp4xx_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+@@ -282,7 +293,7 @@ static int ixp4xx_gpio_probe(struct platform_device *pdev)
+ 	g->gc.owner = THIS_MODULE;
+ 
+ 	girq = &g->gc.irq;
+-	girq->chip = &ixp4xx_gpio_irqchip;
++	gpio_irq_chip_set_chip(girq, &ixp4xx_gpio_irqchip);
+ 	girq->fwnode = g->fwnode;
+ 	girq->parent_domain = parent;
+ 	girq->child_to_parent_hwirq = ixp4xx_gpio_child_to_parent_hwirq;
+-- 
+2.35.1
+
 
 
