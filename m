@@ -2,128 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8F65EA794
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECE45EA7C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbiIZNqk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Sep 2022 09:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S234165AbiIZN7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 09:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235777AbiIZNqI (ORCPT
+        with ESMTP id S233773AbiIZN6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:46:08 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26411F0CD4;
-        Mon, 26 Sep 2022 05:03:23 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id m9so4137712qvv.7;
-        Mon, 26 Sep 2022 05:03:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=SaeGFfTOoYPPNMnDMlSqLUlQsRoQlvLTy6YqET7HCeQ=;
-        b=tVZ+dHO+9vi/KXX/yMNb4hivLzik4c+Zdh+NgF3XV4PR8vtiMrya4u1A1SFhrnOm0P
-         rl0hzunKSTcp7yyfZeKEm50QfVlN66m5OMLpvQ9cDQv/WKvZ4iVkTV64FKXqULezmX5T
-         I2aY4h7579ZQ1nSFnMYvltHw/9wKHXao8TkLe87bfRlISk23b5NCgq+EZIiYv42ad5vE
-         /x3v2z3C/BAjmv1RtmTjeZFWJpg5ss4kH1ioc8UPCH0luuMB1WStrEKBREtTJVrXrSXx
-         FxXXwOF2gBhUX0z7TO6RzThF6I/wNDArRtcsiN87lIDn+NtcTaxTd4VeP65lbfBL6gAV
-         Hb8w==
-X-Gm-Message-State: ACrzQf1yJ3lnsdH0hni5i7cMOV0ZAVSPDsI5CgR8505eS2c9aJwpFk85
-        sXS7rCGlrfQdv1Syg9Z6REJSDoniumUZSVS32qerVwbT
-X-Google-Smtp-Source: AMsMyM7/fFwX9VyxYZBF5kTQMWkB4s/aTj3Dt6xogSwXwU4bik1xBNV8nUoQtyRHkI1PG6IPewSYERRcxTWdQvM04Y8=
-X-Received: by 2002:a05:6214:d8d:b0:4ad:5d9d:bda8 with SMTP id
- e13-20020a0562140d8d00b004ad5d9dbda8mr16614066qve.85.1664193664353; Mon, 26
- Sep 2022 05:01:04 -0700 (PDT)
+        Mon, 26 Sep 2022 09:58:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA771FD8B2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:12:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73DD460B55
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C40EC433B5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:02:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LiEuZy9+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664193759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KkFtIoUdR315WEH9/7niaUp6HiVQkpvQMuCb+rqRTTw=;
+        b=LiEuZy9+MEEaX3pxgawv57Y1kLtilQQqzNqD8c2vBGk1yVqfyDull4PK2nd/31msm88pMp
+        5pXCie5Ra7l1HH0TtUGi1Y6RG2qstrDCmPNSCp+ws9nTGZPN2ngxAd/D0jS2DuF+Cb9NxA
+        kAoqNfNkoTX7bGhO3lNeUguDkXgT06A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5a640f04 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 26 Sep 2022 12:02:39 +0000 (UTC)
+Received: by mail-vs1-f50.google.com with SMTP id d187so6290944vsd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:02:39 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1eQL+zPCJtQFIAT86SHg7dbBI3lGgm7f0KEDsYKasRLN480ZS7
+        Ne/IvJhod+bbnEsUOqFpW0z5hHr6MwIaP6/8utA=
+X-Google-Smtp-Source: AMsMyM4tjUxATVB54T/+nve/OPb0asHi6DUacBhJA49DCRB+qTWJY6A6o724lYZk8UZHJ7q6us+uim++ZIieCLtu8iI=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr7859616vsv.70.1664193758563; Mon, 26 Sep
+ 2022 05:02:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220808174107.38676-1-paul@crapouillou.net> <20220808174107.38676-2-paul@crapouillou.net>
- <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
- <HF07HR.3A0DTIDT17IF1@crapouillou.net> <20220925155239.7a37c19a@jic23-huawei>
-In-Reply-To: <20220925155239.7a37c19a@jic23-huawei>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Sep 2022 14:00:52 +0200
-Message-ID: <CAJZ5v0igQL_766obp2csNCg7b0g3g2+gkuqZXjUNL7Jj9Da7zQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
+References: <20220921185208.3549140-1-Jason@zx2c4.com> <20220921185208.3549140-2-Jason@zx2c4.com>
+ <CAMuHMdUuM85s1APoxRmXnw13hHHEGgo8Z9EKvpV6maaZPaVUfA@mail.gmail.com>
+ <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
+ <CAMuHMdUSF=ARvKTP33psHNWEqvSeUUDuWLRsUUA7LHa+12agng@mail.gmail.com>
+ <CAHmME9ocjS11ugpKKwmosqb2HUBf4_N74a056=OOoj06yD6wmQ@mail.gmail.com>
+ <CAMuHMdWruwCNqM3eLaaM9L+D+ZTw+t6z3O+rjNWTMiCQyj4_zQ@mail.gmail.com> <eb798159-c003-3b43-c891-039080e06e03@vivier.eu>
+In-Reply-To: <eb798159-c003-3b43-c891-039080e06e03@vivier.eu>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 26 Sep 2022 14:02:27 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rnxvDDu-hSG8PNJC+xs6khbgdMzXcaB79ByZjJd3RQjw@mail.gmail.com>
+Message-ID: <CAHmME9rnxvDDu-hSG8PNJC+xs6khbgdMzXcaB79ByZjJd3RQjw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] m68k: virt: generate new RNG seed on reboot
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 4:52 PM Jonathan Cameron <jic23@kernel.org> wrote:
+Hi Laurent,
+
+On Fri, Sep 23, 2022 at 3:10 PM Laurent Vivier <laurent@vivier.eu> wrote:
 >
-> On Thu, 25 Aug 2022 23:42:53 +0100
-> Paul Cercueil <paul@crapouillou.net> wrote:
->
-> > Hi Rafael,
+> Le 23/09/2022 =C3=A0 14:50, Geert Uytterhoeven a =C3=A9crit :
+> > Hi Jason,
 > >
-> > Le mar., août 23 2022 at 19:47:57 +0200, Rafael J. Wysocki
-> > <rafael@kernel.org> a écrit :
-> > > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil <paul@crapouillou.net>
-> > > wrote:
-> > >>
-> > >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It was not used
-> > >> anywhere
-> > >>  outside pm.h and pm_runtime.h, so it is safe to update it.
-> > >>
-> > >>  Before, this macro would take a few parameters to be used as sleep
-> > >> and
-> > >>  runtime callbacks. This made it unsuitable to use with different
-> > >>  callbacks, for instance the "noirq" ones.
-> > >>
-> > >>  It is now semantically different: instead of creating a
-> > >> conditionally
-> > >>  exported dev_pm_ops structure, it only contains part of the
-> > >> definition.
-> > >>
-> > >>  This macro should however never be used directly (hence the trailing
-> > >>  underscore). Instead, the following four macros are provided:
-> > >>  - EXPORT_DEV_PM_OPS(name)
-> > >>  - EXPORT_GPL_DEV_PM_OPS(name)
-> > >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
-> > >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
-> > >>
-> > >>  For instance, it is now possible to conditionally export noirq
-> > >>  suspend/resume PM functions like this:
-> > >>
-> > >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) = {
-> > >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-> > >>  };
-> > >>
-> > >>  The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS() and
-> > >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use these new
-> > >> macros.
-> > >>
-> > >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >
-> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > or please let me know if you need me to pick up this one.
+> > On Fri, Sep 23, 2022 at 2:26 PM Jason A. Donenfeld <Jason@zx2c4.com> wr=
+ote:
+> >> On Fri, Sep 23, 2022 at 2:23 PM Geert Uytterhoeven <geert@linux-m68k.o=
+rg> wrote:
+> >>>>>> +       if (rng_seed_record && rng_seed_record->size > sizeof(*rng=
+_seed_record) + 2) {
+> >>>>>> +               u16 len =3D rng_seed_record->size - sizeof(*rng_se=
+ed_record) - 2;
+> >>>>>> +               get_random_bytes((u8 *)rng_seed_record->data + 2, =
+len);
+> >>>>>> +               *(u16 *)rng_seed_record->data =3D len;
+> >>>
+> >>> Storing the length should use the proper cpu_to_be16 accessor.
+> >>
+> >> Okay, I'll do that for v2.
+> >>
+> >> (Simply out of curiosity, why? Isn't m68k always big endian and this
+> >> is arch/ code?)
 > >
-> > Could you pick this one up then, and make a branch for Jonathan?
+> > Yes it is.  But virt_parse_bootinfo() below already uses the right
+> > accessor.
+> >
+> > BTW, I guess people thought the same about PowerPC?
+> > Although I agree the probability of someone creating a little-endian
+> > m68k clone in an FPGA or SkyWater project and trying to run Linux on
+> > it quite low ;-)
+> >
+> >>>> The way I tested this is by having my initramfs just call
+> >>>> `reboot(RB_AUTOBOOT);`, and having add_bootloader_randomness() print
+> >>>> its contents to the console. I checked that it was both present and
+> >>>> different every time.
+> >>>
+> >>> Are you sure the new kernel did receive the same randomness as prepar=
+ed
+> >>> by get_random_bytes()? I would expect it to just reboot into qemu,
+> >>> reload the kernel from disk, and recreate a new bootinfo from scratch=
+,
+> >>> including generating a new random seed.
+> >>
+> >> Yes I'm sure. Without this patch, the new kernel sees the zeroed state=
+.
+> >
+> > That's interesting.  So QEMU preserves the old bootinfo, which is
+> > AFAIK not guaranteed to be still available (that's why I added
+> > save_bootinfo()).  Perhaps that works because only memory starting
+> > from a rounded-up value of _end will be used, and you're just lucky?
+> > I'm wondering what else it preserves. It sure has to reload the
+> > kernel image, as at least the data section will no longer contain the
+> > initialization values after a reboot...
+> >
+> > Laurent?
+> >
 >
-> Hi Paul, Rafael,
+> In QEMU the loader makes a copy of the kernel and the initrd and this cop=
+y is restored on a reset.
 >
-> What happened to this in the end?  I can't immediately find it on
-> any of the pm git tree branches.
+> I don't think there is a mechanism in QEMU to save the BOOTINFO section, =
+so I think it works by
+> luck. I will check.
 >
-> At this stage in the cycle it would be great if this patch at least
-> makes the merge window, so we can make use of it next cycle.
+> Thanks,
+> Laurent
 
-I thought that this would go in along with the other patches in the series.
+Are you sure about that? Or at least, could you point me to where you
+think this happens? I'm not as familiar as you with this code base,
+but I really am not seeing it. So far as I can tell, on reset, the pc
+and stack are reset to their initial places, after TCG resets the cpu
+registers to a known state. But the kernel is not reloaded. The same
+thing that was in memory before is used again.
 
-I can apply it directly, though, if needed.
-
-Thanks!
+Jason
