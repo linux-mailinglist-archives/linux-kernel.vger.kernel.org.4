@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7A45E9ED3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C985E9F32
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiIZKOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S235099AbiIZKVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234953AbiIZKOX (ORCPT
+        with ESMTP id S235010AbiIZKTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:14:23 -0400
+        Mon, 26 Sep 2022 06:19:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143712DD2;
-        Mon, 26 Sep 2022 03:14:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EC4B0D5;
+        Mon, 26 Sep 2022 03:15:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24347B8091F;
-        Mon, 26 Sep 2022 10:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D3DC433B5;
-        Mon, 26 Sep 2022 10:13:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 339BBB80835;
+        Mon, 26 Sep 2022 10:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F3FC433C1;
+        Mon, 26 Sep 2022 10:15:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187238;
-        bh=+HlodehJsQlscye+xQLIBUBOel0TVWnEATrYFU9oSTE=;
+        s=korg; t=1664187343;
+        bh=/LXL8CDauFBDZZrR8VJkV8i2xmCUwYLSFAG3lqru9tc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2FAfyLog4v+mAX7jtYnFDP6zzjnASL5v6toexHoayHhhjvbnYX28HtEnx6VJGbzs
-         ytsjOF9UwTjtgGQdUZhV082aBA0RPOOIfiR7i6zNMInlNNhriA0juSZrweOgMkDYKW
-         5/8avDWpJvleEHJR4j6m6fJKD/QcAqUf4P7ohbBA=
+        b=l+IoXKLrnU7nswbXyACsbhmE/hRWNGOFUhhYj610mRGDBRtby2+t9zER/+53fN43s
+         1iF19SQAsIaz0Vwz+9dJ3MT/zVIpY4MO4W0o1Kbpn0Q3kVes0/S9RHIObQ3Aizqjwq
+         1WAqLbTWEyaYIl51ISDlAmxW7Gxsc/euDXVoU96A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 15/30] ALSA: hda/tegra: set depop delay for tegra
+        stable@vger.kernel.org, Carl Yin <carl.yin@quectel.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.14 18/40] USB: serial: option: add Quectel BG95 0x0203 composition
 Date:   Mon, 26 Sep 2022 12:11:46 +0200
-Message-Id: <20220926100736.704387152@linuxfoundation.org>
+Message-Id: <20220926100738.924803482@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohan Kumar <mkumard@nvidia.com>
+From: Carl Yin(殷张成) <carl.yin@quectel.com>
 
-commit 3c4d8c24fb6c44f426e447b04800b0ed61a7b5ae upstream.
+commit f8f67eff6847f9b8d753fa029723bcc54296055a upstream.
 
-Reduce the suspend time by setting depop delay to 10ms for
-tegra.
+Add support for the following Quectel BG95 composition:
 
-Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220913053641.23299-1-mkumard@nvidia.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+0x0203: Diag + GNSS + Modem + ECM
+
+usb-devices output:
+T:  Bus=01 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0203 Rev= 0.00
+S:  Manufacturer=Quectel, Incorporated
+S:  Product=Quectel LPWA Module
+S:  SerialNumber=71d3a21b
+C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Carl Yin <carl.yin@quectel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_hdmi.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/serial/option.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -3247,6 +3247,7 @@ static int patch_tegra_hdmi(struct hda_c
- 	if (err)
- 		return err;
- 
-+	codec->depop_delay = 10;
- 	codec->patch_ops.build_pcms = tegra_hdmi_build_pcms;
- 	spec = codec->spec;
- 	spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1141,6 +1141,8 @@ static const struct usb_device_id option
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0xff, 0xff),
+ 	  .driver_info = NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0, 0) },
++	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x0203, 0xff), /* BG95-M3 */
++	  .driver_info = ZLP },
+ 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
 
 
