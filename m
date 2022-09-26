@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CC45E9ED5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66515EA20C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiIZKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S237244AbiIZLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234883AbiIZKOf (ORCPT
+        with ESMTP id S237280AbiIZK7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:14:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F5A2F01A;
-        Mon, 26 Sep 2022 03:14:04 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B375C968;
+        Mon, 26 Sep 2022 03:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54CBCB80918;
-        Mon, 26 Sep 2022 10:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE25C433D7;
-        Mon, 26 Sep 2022 10:14:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2613EB8094F;
+        Mon, 26 Sep 2022 10:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C377C43145;
+        Mon, 26 Sep 2022 10:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187242;
-        bh=CQYRF5PKqISVOE044XnvUyy2m8Idzz8OYW2ENNv+lu8=;
+        s=korg; t=1664188226;
+        bh=TPTqPH8lO4PrEtCqgz7vLf7xXCtNmo5sVkmCqzTcWpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t+bUXrgBKi+D2bnqocU9GzLo7WS4/11vmITcdIGVuW9jtci3R0kxJRAqH+x9q7qqe
-         +kJ5THqxrWcMpxMpLIXTxA0B6JaGPM6J9DrNkJJEGjKKqAW9mbc3kv0HbtI57EKVme
-         TOrCWOVKm6WrtfMaQAaGsjCfrTkItWTB4PXyHLA0=
+        b=sP1pscyow0sAFomdZ6nOljMV74w7KL1vlQA+yHwRihmIWEYr7YmbTKV3/p7GebeuG
+         G9pt8PIRGFtRV5ByjDnCBCYTsbDXmG9daeL+Ox6BeW8jsyyQ5J8SfqMAXuOSIntkWu
+         ahj05juouLmItWAkHGsAFUbwwn78zKhyeAyMnwsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 16/30] ALSA: hda: add Intel 5 Series / 3400 PCI DID
+        stable@vger.kernel.org, Heiko Schocher <hs@denx.de>,
+        Fabio Estevam <festevam@denx.de>, Marek Vasut <marex@denx.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 081/141] drm/panel: simple: Fix innolux_g121i1_l01 bus_format
 Date:   Mon, 26 Sep 2022 12:11:47 +0200
-Message-Id: <20220926100736.736591699@linuxfoundation.org>
+Message-Id: <20220926100757.391528875@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+From: Heiko Schocher <hs@denx.de>
 
-commit 4d40ceef4745536289012670103c59264e0fb3ec upstream.
+[ Upstream commit a7c48a0ab87ae52c087d663e83e56b8225ac4cce ]
 
-Handle 0x3b57 variant with same AZX_DCAPS_INTEL_PCH_NOPM
-capabilities as 0x3b56. In practise this allow use of HDMI/DP
-display audio via i915.
+innolux_g121i1_l01 sets bpc to 6, so use the corresponding bus format:
+MEDIA_BUS_FMT_RGB666_1X7X3_SPWG.
 
-BugLink: https://gitlab.freedesktop.org/drm/intel/-/issues/2751
-Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220912183716.2126312-1-kai.vehmanen@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4ae13e486866 ("drm/panel: simple: Add more properties to Innolux G121I1-L01")
+Signed-off-by: Heiko Schocher <hs@denx.de>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220826165021.1592532-1-festevam@denx.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/hda_intel.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/panel/panel-simple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -2316,6 +2316,8 @@ static const struct pci_device_id azx_id
- 	/* 5 Series/3400 */
- 	{ PCI_DEVICE(0x8086, 0x3b56),
- 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
-+	{ PCI_DEVICE(0x8086, 0x3b57),
-+	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
- 	/* Poulsbo */
- 	{ PCI_DEVICE(0x8086, 0x811b),
- 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index bf2c845ef3a2..b7b37082a9d7 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2201,7 +2201,7 @@ static const struct panel_desc innolux_g121i1_l01 = {
+ 		.enable = 200,
+ 		.disable = 20,
+ 	},
+-	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
++	.bus_format = MEDIA_BUS_FMT_RGB666_1X7X3_SPWG,
+ 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
+ };
+ 
+-- 
+2.35.1
+
 
 
