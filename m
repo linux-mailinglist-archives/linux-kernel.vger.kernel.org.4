@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBA35EA158
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870A45EA170
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiIZKui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S236573AbiIZKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236570AbiIZKqw (ORCPT
+        with ESMTP id S236261AbiIZKrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:46:52 -0400
+        Mon, 26 Sep 2022 06:47:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38B957232;
-        Mon, 26 Sep 2022 03:25:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701857252;
+        Mon, 26 Sep 2022 03:26:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB772B80915;
-        Mon, 26 Sep 2022 10:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2714FC433D7;
-        Mon, 26 Sep 2022 10:25:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD6EBB80925;
+        Mon, 26 Sep 2022 10:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C10C433D6;
+        Mon, 26 Sep 2022 10:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187955;
-        bh=e/6xeRdBd9WX29GIdGG1MC2Ct7nHdPDSrGxL1c8Rg5M=;
+        s=korg; t=1664187958;
+        bh=c0vbNjZDKh39S/tRoh2hkSUrBbZ58zaTq/Vq+FohNSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UnxVW89f4ggI4TP7VkB7ZnlMO+946TTChNENx7MbzA+vSPVTW2aX9o24JrD/Cd7Ij
-         ae7sLmrOx4/3Wx5DsmZAcXLfu87P8ZhjgC7lFGIqKEBgaF+1NX8nFBX5L8xlYsopkv
-         XSljZ5fPMAbDGie5BOmj30L0t89Hy74GNxkbCrdM=
+        b=FCJIDoOq22UENSi7NXWuNr6KoqVeiRRtsDUPo4Sk69vCd/naSv+JIgkbghxqVC+Ie
+         u0hBNIiSInqNmP62fSSp1Pnw6vqJh6V1sw4qdwgYUlG+Y/boJxaPAT6Exx4xS7Zov0
+         59rvTvjCet3NoLkqoP9QNdP+qI+udVoXwC0W6Keg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        Eric Sandeen <sandeen@redhat.com>,
+        stable@vger.kernel.org,
         "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Brian Foster <bfoster@redhat.com>,
         "Darrick J. Wong" <djwong@kernel.org>,
         Chandan Babu R <chandan.babu@oracle.com>
-Subject: [PATCH 5.4 115/120] xfs: use bitops interface for buf log item AIL flag check
-Date:   Mon, 26 Sep 2022 12:12:28 +0200
-Message-Id: <20220926100755.121201939@linuxfoundation.org>
+Subject: [PATCH 5.4 116/120] xfs: refactor agfl length computation function
+Date:   Mon, 26 Sep 2022 12:12:29 +0200
+Message-Id: <20220926100755.167350394@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
 References: <20220926100750.519221159@linuxfoundation.org>
@@ -56,38 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: "Darrick J. Wong" <darrick.wong@oracle.com>
 
-commit 826f7e34130a4ce756138540170cbe935c537a47 upstream.
+commit 1cac233cfe71f21e069705a4930c18e48d897be6 upstream.
 
-The xfs_log_item flags were converted to atomic bitops as of commit
-22525c17ed ("xfs: log item flags are racy"). The assert check for
-AIL presence in xfs_buf_item_relse() still uses the old value based
-check. This likely went unnoticed as XFS_LI_IN_AIL evaluates to 0
-and causes the assert to unconditionally pass. Fix up the check.
+Refactor xfs_alloc_min_freelist to accept a NULL @pag argument, in which
+case it returns the largest possible minimum length.  This will be used
+in an upcoming patch to compute the length of the AGFL at mkfs time.
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Fixes: 22525c17ed ("xfs: log item flags are racy")
-Reviewed-by: Eric Sandeen <sandeen@redhat.com>
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
 Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
 Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_buf_item.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/xfs/libxfs/xfs_alloc.c |   18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
---- a/fs/xfs/xfs_buf_item.c
-+++ b/fs/xfs/xfs_buf_item.c
-@@ -956,7 +956,7 @@ xfs_buf_item_relse(
- 	struct xfs_buf_log_item	*bip = bp->b_log_item;
+--- a/fs/xfs/libxfs/xfs_alloc.c
++++ b/fs/xfs/libxfs/xfs_alloc.c
+@@ -1998,24 +1998,32 @@ xfs_alloc_longest_free_extent(
+ 	return pag->pagf_flcount > 0 || pag->pagf_longest > 0;
+ }
  
- 	trace_xfs_buf_item_relse(bp, _RET_IP_);
--	ASSERT(!(bip->bli_item.li_flags & XFS_LI_IN_AIL));
-+	ASSERT(!test_bit(XFS_LI_IN_AIL, &bip->bli_item.li_flags));
++/*
++ * Compute the minimum length of the AGFL in the given AG.  If @pag is NULL,
++ * return the largest possible minimum length.
++ */
+ unsigned int
+ xfs_alloc_min_freelist(
+ 	struct xfs_mount	*mp,
+ 	struct xfs_perag	*pag)
+ {
++	/* AG btrees have at least 1 level. */
++	static const uint8_t	fake_levels[XFS_BTNUM_AGF] = {1, 1, 1};
++	const uint8_t		*levels = pag ? pag->pagf_levels : fake_levels;
+ 	unsigned int		min_free;
  
- 	bp->b_log_item = NULL;
- 	if (list_empty(&bp->b_li_list))
++	ASSERT(mp->m_ag_maxlevels > 0);
++
+ 	/* space needed by-bno freespace btree */
+-	min_free = min_t(unsigned int, pag->pagf_levels[XFS_BTNUM_BNOi] + 1,
++	min_free = min_t(unsigned int, levels[XFS_BTNUM_BNOi] + 1,
+ 				       mp->m_ag_maxlevels);
+ 	/* space needed by-size freespace btree */
+-	min_free += min_t(unsigned int, pag->pagf_levels[XFS_BTNUM_CNTi] + 1,
++	min_free += min_t(unsigned int, levels[XFS_BTNUM_CNTi] + 1,
+ 				       mp->m_ag_maxlevels);
+ 	/* space needed reverse mapping used space btree */
+ 	if (xfs_sb_version_hasrmapbt(&mp->m_sb))
+-		min_free += min_t(unsigned int,
+-				  pag->pagf_levels[XFS_BTNUM_RMAPi] + 1,
+-				  mp->m_rmap_maxlevels);
++		min_free += min_t(unsigned int, levels[XFS_BTNUM_RMAPi] + 1,
++						mp->m_rmap_maxlevels);
+ 
+ 	return min_free;
+ }
 
 
