@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2B55EA207
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065EF5E9F49
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237190AbiIZLBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S235317AbiIZKWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237191AbiIZK7C (ORCPT
+        with ESMTP id S235133AbiIZKVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45E5B7BB;
-        Mon, 26 Sep 2022 03:30:40 -0700 (PDT)
+        Mon, 26 Sep 2022 06:21:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C1A4BA68;
+        Mon, 26 Sep 2022 03:16:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E11CC60C94;
-        Mon, 26 Sep 2022 10:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E155DC433D6;
-        Mon, 26 Sep 2022 10:29:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F37EE60B7E;
+        Mon, 26 Sep 2022 10:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF965C433C1;
+        Mon, 26 Sep 2022 10:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188180;
-        bh=1JGr7LEV3Wr2rvR/26h69UgxUWkD3mhR1SV5NdHhshw=;
+        s=korg; t=1664187370;
+        bh=y7+eLYjbcVCNH/jVgiBmW+NgV5JOjwNfZtMYz35Va1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+iEHrPkW3RIxPEUpnNhMxrGQEzoDfY7n43D6UuJ0G00+jMbBRlph1po0YrD6pe4a
-         RXeIcbjpLSBFa948IS6hdAna1RWC65y1AoCMWN2d2/2p2VcBtVeGRDbRaKllmHHnvh
-         N4jQ1yI7LHnGL5gpx67fZr/gIC0Zv9/kDijGUArY=
+        b=Rwt5x/nZTzaMcy1Sa50UAUnFUcDz8k5JKd1rUKli+J/xsZur1wPS0ZNjdF803RaBO
+         TrwSr7lTntMH05aVOEwuh2kmawRBtV4MgXfFbdFdmJDucYJNIOPx2eey+Fp2VhE/lb
+         Dk7MjAXN2/1yH2sjY4azrwRVjLYcnMTbV5Bby4t8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 067/141] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
+        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 05/40] efi/libstub: Disable Shadow Call Stack
 Date:   Mon, 26 Sep 2022 12:11:33 +0200
-Message-Id: <20220926100756.858074672@linuxfoundation.org>
+Message-Id: <20220926100738.422260948@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Sami Tolvanen <samitolvanen@google.com>
 
-[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
+[ Upstream commit cc49c71d2abe99c1c2c9bedf0693ad2d3ee4a067 ]
 
-The 'enable-active-low' property is not a valid one.
+Shadow stacks are not available in the EFI stub, filter out SCS flags.
 
-Only 'enable-active-high' is valid, and when this property is absent
-the gpio regulator will act as active low by default.
-
-Remove the invalid 'enable-active-low' property.
-
-Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Suggested-by: James Morse <james.morse@arm.com>
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Will Deacon <will@kernel.org>
+Stable-dep-of: 1a3887924a7e ("efi: libstub: Disable struct randomization")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/firmware/efi/libstub/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-index 544110aaffc5..95bc7a5f61dd 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-@@ -102,7 +102,6 @@ vcc3v3_sys: vcc3v3-sys {
- 	vcc5v0_host: vcc5v0-host-regulator {
- 		compatible = "regulator-fixed";
- 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
--		enable-active-low;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&vcc5v0_host_en>;
- 		regulator-name = "vcc5v0_host";
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index 678bc910e080..54dbcec7e06f 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -23,6 +23,9 @@ KBUILD_CFLAGS			:= $(cflags-y) -DDISABLE_BRANCH_PROFILING \
+ 				   $(call cc-option,-ffreestanding) \
+ 				   $(call cc-option,-fno-stack-protector)
+ 
++# remove SCS flags from all objects in this directory
++KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
++
+ GCOV_PROFILE			:= n
+ KASAN_SANITIZE			:= n
+ UBSAN_SANITIZE			:= n
 -- 
 2.35.1
 
