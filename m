@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EE25E9796
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB745E9798
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbiIZBAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S233288AbiIZBEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbiIZBAB (ORCPT
+        with ESMTP id S229812AbiIZBEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:00:01 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545E3186E7
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:00:00 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y3so11000711ejc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nathanrossi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CklCJNhkPQ2aUgd9nkzbg3bJriRdeJ5r4RoiGqFwpSs=;
-        b=SBTdUC6xAJkx4jFAk3n924DRcJWjY+LWXFvTm0a5UINd3dXzT/24UP/lE4Rei8heQR
-         VdU1hGztX4ztWJ9i1wXohbOkmekPgpIgW9jNsxposcMBpcJsH/9IfBOBz62m68ivBSZJ
-         9I3+h0gxknquWMsMFnXSNHrKticc8lpEoAJVhlQq13h0adncF4GhwndcwG18747Gel0H
-         Oh7vKnZMLwUPHWp0dL1v6u8U0NWRxvRqjxcsOLsA9ZCYkqYFKYVh3sE9BAXgN4aLMgPW
-         kJKeekraLXNe305tEJmvIFK9n9+EiE0tXoZFAOjy+PM7FwzgmVI9Nk2acpwXbex+EJqO
-         ywVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CklCJNhkPQ2aUgd9nkzbg3bJriRdeJ5r4RoiGqFwpSs=;
-        b=vF0AbFWqLjnnyMaQzL6aJSasoSmLtmkQ4JbMWkKGSdKAidPIiPpo8d5/EVwv8FUHeV
-         +B6FDewVO/a7fNNAhJRtWmOkzNx0XYB+5g9cyGMep1oTbh1vZBT0tYI9sOirCL0JrTDf
-         9zE5IYTexLi7ldMIBnBjDFWfrG5KQIcSSjPfMOltJdI6d8dZKE1hO+xYeQvr+Zbc623N
-         uHx9yX7/4A042K8D+okARfRzmYQ+YcdqLyjKs/uWveZBXDnNPLgt5EZ/nKq65qyQDOEu
-         m1P9cVIbBc0FFI2nXL3n6Anhwecnic7tGfIn69wsoyvqbDBALQtlAIFv5s6I6QVtT5du
-         5tIw==
-X-Gm-Message-State: ACrzQf2SrahBi0bbsvjAJRAbIrNL8V4vlyexIwqktIiWHdItR2TRdpSB
-        DEZwb980WCW6sjYrQblTTpsQxZioOOy+8gEElzu2XQrqlb4=
-X-Google-Smtp-Source: AMsMyM6+xKqZKrbzgaqCGd0cer+u5TDe6cl9iVOPgtaK8AuwTdkOYVIURKlXqm2MQR73bpY2KUqMmwoiEaOH/pL2Lks=
-X-Received: by 2002:a17:907:da9:b0:783:a3b4:2cff with SMTP id
- go41-20020a1709070da900b00783a3b42cffmr1014418ejc.51.1664153998751; Sun, 25
- Sep 2022 17:59:58 -0700 (PDT)
+        Sun, 25 Sep 2022 21:04:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C1B124
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664154270; x=1695690270;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ewrjyWVMkrf0F3lb0gU9athQ8P36/hdOKSpNw/dHgsc=;
+  b=Mi6qTqsgffohmMZpodJXagQjeEmk8OqDTeaFdXTHm6OSBEWqGwK7Yi5U
+   CvZ4LrOl4UPqY4gn6bHCWcYSuhaF58PmqvURhTCf0NXKD25OMkKwmrnXn
+   g5Q8oXgmKxI35LCII6GsBLO1/NjRhp2recmQBRXLIBcq4DDTU8iJuk/9e
+   hbIdsDSf/AzGRihp7yZ+4yAd0U2dCYOB9VW0s2N7e7cmNJjOZRtVI/hkl
+   67BW6EVzMCAW62vJDNKZJYGI5WyKLcNqyyerpcx8lcxyDb+/9p6EsU59B
+   joRlB07ITLS6ctAyv+8Y8smoOH38HUqPnSF82TEAmSa/pMcJkn7aTDlcR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="284027796"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="284027796"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 18:04:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="796142485"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 18:04:25 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [PATCH v4] mm/demotion: Expose memory tier details via sysfs
+References: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com>
+        <874jwyjyy9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <3a966604-77c5-e6fc-1541-2fed7c71cc0c@linux.ibm.com>
+Date:   Mon, 26 Sep 2022 09:04:16 +0800
+In-Reply-To: <3a966604-77c5-e6fc-1541-2fed7c71cc0c@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Fri, 23 Sep 2022 16:05:30 +0530")
+Message-ID: <87zgenhrov.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220602065544.2552771-1-nathan@nathanrossi.com>
-In-Reply-To: <20220602065544.2552771-1-nathan@nathanrossi.com>
-From:   Nathan Rossi <nathan@nathanrossi.com>
-Date:   Mon, 26 Sep 2022 10:59:47 +1000
-Message-ID: <CA+aJhH3MoR410Df-j44G=byL7rsHyiLwG_5nKXVk48Hfxrb=UA@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
-To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Nathan Rossi <nathan.rossi@digi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 at 16:55, Nathan Rossi <nathan@nathanrossi.com> wrote:
->
-> From: Nathan Rossi <nathan.rossi@digi.com>
->
-> When retraining the link either the child or the parent device may have
-> the data link layer state machine of the respective devices move out of
-> the active state despite the physical link training being completed.
-> Depending on how long is takes for the devices to return to the active
-> state, the device may not be ready and any further reads/writes to the
-> device can fail.
->
-> This issue is present with the pci-mvebu controller paired with a device
-> supporting ASPM but without advertising the Slot Clock, where during
-> boot the pcie_aspm_cap_init call would cause common clocks to be made
-> consistent and then retrain the link. However the data link layer would
-> not be active before any device initialization (e.g. ASPM capability
-> queries, BAR configuration) causing improper configuration of the device
-> without error.
->
-> To ensure the child device is accessible, after the link retraining use
-> pcie_wait_for_link to perform the associated state checks and any needed
-> delays.
->
-> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
-> ---
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-Just pinging this patch, are there any comments or feedback for this change?
+> On 9/23/22 1:37 PM, Huang, Ying wrote:
+>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>=20
+>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory t=
+ier
+>>> related details can be found. All allocated memory tiers will be listed
+>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>>>
+>>> The nodes which are part of a specific memory tier can be listed via
+>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+>>=20
+>> It appears that XXXs is used for mask while XXXs_list is used for list?
+>> For example,
+>>=20
+>> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+>> 0,00100004
+>> # cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+>> 2,20
+>>=20
+>> It's better to follow the this convention?
+>>=20
+>
+> That is not followed in other parts of the kernel. I was loking at cpuset=
+=20
+>
+> $cat cpuset.cpus.effective=20
+> 0-7
 
-Thanks,
-Nathan
+Per my understanding, cpuset isn't sysfs, but cgroupfs?
 
->  drivers/pci/pcie/aspm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index a96b7424c9..4b8a1810be 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->                 reg16 &= ~PCI_EXP_LNKCTL_CCC;
->         pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
->
-> -       if (pcie_retrain_link(link))
-> +       /* Retrain link and then wait for the link to become active */
-> +       if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
->                 return;
->
->         /* Training failed. Restore common clock configurations */
-> ---
-> 2.36.1
+I did some research in my system,
+
+$ grep . $(find /sys/devices | grep 'list$')
+
+and
+
+$ grep . $(find /sys/devices | grep 'cpus$')
+
+I found that the cpus/cpus_list convention is used in
+
+- pci
+
+  /sys/devices/pci0000:64/0000:64:0d.2/local_cpulist:0-35
+  /sys/devices/pci0000:64/0000:64:0c.2/local_cpus:f,ffffffff
+
+- system
+
+  /sys/devices/system/cpu/cpu7/topology/core_cpus_list:7,25
+  /sys/devices/system/cpu/cpu7/topology/core_cpus:0,02000080
+
+- block
+
+  /sys/devices/virtual/block/loop1/mq/0/cpu_list:0, 1, 2, ...
+
+- net
+
+  /sys/devices/virtual/net/lo/queues/rx-0/rps_cpus:0,00000000
+
+And I haven't found any exception in sysfs of my system.  Can you find
+some?
+
+Best Regards,
+Huang, Ying
+
+>>> A directory hierarchy looks like
+>>> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
+>>> memory_tier4/
+>>> =E2=94=9C=E2=94=80=E2=94=80 nodes
+>>> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tiering
+>>> =E2=94=94=E2=94=80=E2=94=80 uevent
+>>>
+>>> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
+>>> 0,2
+>>>
+>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>=20
+>> Best Regards,
+>> Huang, Ying
+>>=20
+>> [snip]
