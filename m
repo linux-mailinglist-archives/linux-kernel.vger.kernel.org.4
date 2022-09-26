@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C365EA529
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236BB5EA3D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239278AbiIZL6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S234425AbiIZLer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiIZLzT (ORCPT
+        with ESMTP id S236110AbiIZLdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:55:19 -0400
+        Mon, 26 Sep 2022 07:33:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D88792D8;
-        Mon, 26 Sep 2022 03:50:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EFE6DAEC;
+        Mon, 26 Sep 2022 03:43:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 669C560AD6;
-        Mon, 26 Sep 2022 10:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EA0C433C1;
-        Mon, 26 Sep 2022 10:50:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 788C960C05;
+        Mon, 26 Sep 2022 10:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED6DC433D6;
+        Mon, 26 Sep 2022 10:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189447;
-        bh=wTrXeuY4sF/nmZ4OEG26edgOn2fk8co8QKNhySMR+Ws=;
+        s=korg; t=1664188871;
+        bh=4mYWBhP/Z3ougimx06u882IxvUodzoAatzPIsgpPIIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QYfswLxGGB7sB/knENRhT/HUi2VzA2rMCeM6+IYSuHtxKQgjGeYBCA966w9qPFZS8
-         a4EhEAZbyq68f7w+n94KHEQlLwPAQLxyWBtwVwpggnuulTvCpCOXAj4WBwTG1aEuXl
-         qg1fWYeZ1Ct2PrE075wFsa6fQf7KrRbAt6M+nkNI=
+        b=fMBhqhriFFZMBmXDYNX7Di08Z3cn71nrXvFGoo36JMksOgF3rJm9QtsghFUD+6f0d
+         nxLnMyoYsXf6wZ3dARLRM8rKjrV1lk7kgFZeNMpFVrUqPIx5Pz0WUzB6Pvao0dufTa
+         bERwXMBNPV066++79usuALuvUa6E/y/tRuic9No4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 191/207] i2c: mlxbf: incorrect base address passed during io write
-Date:   Mon, 26 Sep 2022 12:13:00 +0200
-Message-Id: <20220926100815.157819838@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.15 147/148] ext4: make directory inode spreading reflect flexbg size
+Date:   Mon, 26 Sep 2022 12:13:01 +0200
+Message-Id: <20220926100801.754569360@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Asmaa Mnebhi <asmaa@nvidia.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 2a5be6d1340c0fefcee8a6489cff7fd88a0d5b85 ]
+commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
 
-Correct the base address used during io write.
-This bug had no impact over the overall functionality of the read and write
-transactions. MLXBF_I2C_CAUSE_OR_CLEAR=0x18 so writing to (smbus->io + 0x18)
-instead of (mst_cause->ioi + 0x18) actually writes to the sc_low_timeout
-register which just sets the timeout value before a read/write aborts.
+Currently the Orlov inode allocator searches for free inodes for a
+directory only in flex block groups with at most inodes_per_group/16
+more directory inodes than average per flex block group. However with
+growing size of flex block group this becomes unnecessarily strict.
+Scale allowed difference from average directory count per flex block
+group with flex block group size as we do with other metrics.
 
-Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueField SoC)
-Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-mlxbf.c | 2 +-
+ fs/ext4/ialloc.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 8716032f030a..612736906440 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -669,7 +669,7 @@ static int mlxbf_i2c_smbus_enable(struct mlxbf_i2c_priv *priv, u8 slave,
- 	/* Clear status bits. */
- 	writel(0x0, priv->smbus->io + MLXBF_I2C_SMBUS_MASTER_STATUS);
- 	/* Set the cause data. */
--	writel(~0x0, priv->smbus->io + MLXBF_I2C_CAUSE_OR_CLEAR);
-+	writel(~0x0, priv->mst_cause->io + MLXBF_I2C_CAUSE_OR_CLEAR);
- 	/* Zero PEC byte. */
- 	writel(0x0, priv->smbus->io + MLXBF_I2C_SMBUS_MASTER_PEC);
- 	/* Zero byte count. */
--- 
-2.35.1
-
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -510,7 +510,7 @@ static int find_group_orlov(struct super
+ 		goto fallback;
+ 	}
+ 
+-	max_dirs = ndirs / ngroups + inodes_per_group / 16;
++	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
+ 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
+ 	if (min_inodes < 1)
+ 		min_inodes = 1;
 
 
