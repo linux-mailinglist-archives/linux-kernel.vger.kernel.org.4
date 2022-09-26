@@ -2,228 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC94C5EB318
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336045EB322
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiIZVaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        id S230045AbiIZVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiIZVaG (ORCPT
+        with ESMTP id S229832AbiIZVa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:30:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDDB3CBEA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664227803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WoZ9fgngRao8IT+B8E9l7WqjGAnK52AtXGsAOFoOmwE=;
-        b=gqPkCoAQEXqORUk3o6im4JzSArv6xL3j/IDtTmL469ivnDe5yMrRCk9Xr53ETfsGaUYo6m
-        tQb7OKQjmCMxAOJvxQRYcBq8iHB37974sy+5Cmi0kIMi3KvoZRYOL22cxpdWpY7tOSg7d6
-        nHV4I6mtZTWDKCjOkpdVbhKordrh4qs=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-149-2QUGcYejNCS3kE5aNmZ49w-1; Mon, 26 Sep 2022 17:30:00 -0400
-X-MC-Unique: 2QUGcYejNCS3kE5aNmZ49w-1
-Received: by mail-qv1-f72.google.com with SMTP id i10-20020ad45c6a000000b004a25d0fea96so4601990qvh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:30:00 -0700 (PDT)
+        Mon, 26 Sep 2022 17:30:57 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46BB70E6D;
+        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 129so6271827pgc.5;
+        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=CJgECI9GSZwbRImCn+I7/z8LmCg9UFNYzoXCC6Gp6b8=;
+        b=fWfHJ1EtHfULrHPqq+CX9bCj1kaALCWEIFQUeQkL1X6ZtPWa2p+FutjLJX2mnB4tFP
+         QUwZQQioanBVFwRupD0MqUOTeXTDyEu0vV9p7xX65+iENlzooh5wOBfVyUlagRutlDLA
+         M37yzHimmh6GVhYGEYJSJr3JGCA+R+3+aJpxCCHT8SEDvDSYUvzMCk6NDr5W2mIgGCMC
+         RxTLldMmW+Gfga1SQt03K71vVgR4dwWdU2tz3jUgNrdbMo1Od2+cuP8nXU4+F1eCwmNh
+         2rfH07VEo41+y/vOk7wqAxwrA8W6po2SwKV562XEV/M2FaGQhq2U7Z9RMojAhL3sNs8T
+         obwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WoZ9fgngRao8IT+B8E9l7WqjGAnK52AtXGsAOFoOmwE=;
-        b=v7mmu6xQv0+zX277fRW3wI1sCDeXxCaO5I070/806X5U52NZ6UscAG4Jnhc6K4BNlS
-         QbhxvT8Qwq0wxNSYNXQrE5qQdx1rOUf1wX/sP2qgQ0BU7BhLYk++0lwSfZ4UKS4oi1Q4
-         XHWeLQyBRpFfxFjdtYRylLFB3vy/d3J061MAlzQTkjut2qojWNhybWObDG64u1VtqakR
-         T1FDnmX26NMus2rARrp5EcRQXomxDMqTpDgtFs5wmBXn6bB+Az+IjXuQuT9NlLqU+8jJ
-         mFJiSPrMWkLfA9Z+vKDBfdXjPLHyKokQEwjdPbN6ueZ4i2XcPPALmtNNrMH+FQSUR2pc
-         JI5Q==
-X-Gm-Message-State: ACrzQf2nG1nT8bltbCFKh75/H8rkFOxJM4TxLaDu8ag//qAquHaEbKpv
-        Wxn89YLJ59zjBp4EmLodwDMwvobb2achjBj+jIQZ4u2kK7ZBkYVt23HOKgs0Oxm0KDR7cZY0yPj
-        EsFH55G5ctfmjA18mAKmSwG/k
-X-Received: by 2002:a05:620a:2987:b0:6ce:c029:5f03 with SMTP id r7-20020a05620a298700b006cec0295f03mr15801496qkp.157.1664227799812;
-        Mon, 26 Sep 2022 14:29:59 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5ooMLHPNGYGRP1IOKqLF5TpXz9XfH1OcMI3VMSbPod5U0TpcrkzXrJ+Bq2BgRX5qr4d9CtNA==
-X-Received: by 2002:a05:620a:2987:b0:6ce:c029:5f03 with SMTP id r7-20020a05620a298700b006cec0295f03mr15801473qkp.157.1664227799582;
-        Mon, 26 Sep 2022 14:29:59 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c48:e00:e786:1aff:4f5c:c549? ([2600:4040:5c48:e00:e786:1aff:4f5c:c549])
-        by smtp.gmail.com with ESMTPSA id y14-20020a05620a25ce00b006cfa7b944fdsm1686678qko.16.2022.09.26.14.29.56
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=CJgECI9GSZwbRImCn+I7/z8LmCg9UFNYzoXCC6Gp6b8=;
+        b=pazeLnCnC/LIR1YPMIukp/ZGKxmLxyixlQyKcQ5hj8rwz/0iJOERXq+gPx4640ApV3
+         tj5Kxx1qFZvSVrTnKhe3glhtujIc8BxvA+1ycO28J3wmlZL3Zdf07/f0hbPnDgF8L+Z3
+         b8QnDd2zdX65M+ZrCLUD8k/F10zVBPQnqBKV3CTf67FIGuqq3pls4Ghh+/i48VH9xU5F
+         YGtl9mma8ELZkz8PaF5XFztUhB1CcwXbadbegsyIzdk4wC1ySwj9Lvj8sbgUkehGh/re
+         c5TUNW2SKC7pboxd2mBWz434COTIGIb3cdXO5iXvgnQf1pXgA2Gq6OioihTM/n/Rc5cV
+         JPlg==
+X-Gm-Message-State: ACrzQf0iytnFIDscLwkYvjSgM+01giUsnKu5Iy52SNgZjaLelsr58pSC
+        qYV9xGRBNySaMm2XFqXQ2/k=
+X-Google-Smtp-Source: AMsMyM530VmWjcHqhukVESF49I5E0pR4S1Np4w9YJnGIorJFnLTGftQP3cSyhurkf4w2Ad7pGznUCQ==
+X-Received: by 2002:aa7:838a:0:b0:536:101a:9ccf with SMTP id u10-20020aa7838a000000b00536101a9ccfmr25585686pfm.18.1664227855098;
+        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
+Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id js17-20020a17090b149100b001fb0fc33d72sm7007744pjb.47.2022.09.26.14.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:29:57 -0700 (PDT)
-Message-ID: <d839ead12d782a184ca104d6b5f62184c0f178dd.camel@redhat.com>
-Subject: Re: [PATCH 5/7] nouveau/dmem: Refactor nouveau_dmem_fault_copy_one()
-From:   Lyude Paul <lyude@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alex Sierra <alex.sierra@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 26 Sep 2022 17:29:55 -0400
-In-Reply-To: <ea208905d853a0fdc277c2b5e74742593e53f767.1664171943.git-series.apopple@nvidia.com>
-References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
-         <ea208905d853a0fdc277c2b5e74742593e53f767.1664171943.git-series.apopple@nvidia.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 26 Sep 2022 14:30:54 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:30:53 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 2/6] vsock: return errors other than -ENOMEM to socket
+Message-ID: <YzIaDbYnbFUT6Jr/@bullseye>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
+ <20220926132145.utv2rzswhejhxrvb@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926132145.utv2rzswhejhxrvb@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-26 at 16:03 +1000, Alistair Popple wrote:
-> nouveau_dmem_fault_copy_one() is used during handling of CPU faults via
-> the migrate_to_ram() callback and is used to copy data from GPU to CPU
-> memory. It is currently specific to fault handling, however a future
-> patch implementing eviction of data during teardown needs similar
-> functionality.
+On Mon, Sep 26, 2022 at 03:21:45PM +0200, Stefano Garzarella wrote:
+> On Mon, Aug 15, 2022 at 10:56:05AM -0700, Bobby Eshleman wrote:
+> > This commit allows vsock implementations to return errors
+> > to the socket layer other than -ENOMEM. One immediate effect
+> > of this is that upon the sk_sndbuf threshold being reached -EAGAIN
+> > will be returned and userspace may throttle appropriately.
+> > 
+> > Resultingly, a known issue with uperf is resolved[1].
+> > 
+> > Additionally, to preserve legacy behavior for non-virtio
+> > implementations, hyperv/vmci force errors to be -ENOMEM so that behavior
+> > is unchanged.
+> > 
+> > [1]: https://gitlab.com/vsock/vsock/-/issues/1
+> > 
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > ---
+> > include/linux/virtio_vsock.h            | 3 +++
+> > net/vmw_vsock/af_vsock.c                | 3 ++-
+> > net/vmw_vsock/hyperv_transport.c        | 2 +-
+> > net/vmw_vsock/virtio_transport_common.c | 3 ---
+> > net/vmw_vsock/vmci_transport.c          | 9 ++++++++-
+> > 5 files changed, 14 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> > index 17ed01466875..9a37eddbb87a 100644
+> > --- a/include/linux/virtio_vsock.h
+> > +++ b/include/linux/virtio_vsock.h
+> > @@ -8,6 +8,9 @@
+> > #include <net/sock.h>
+> > #include <net/af_vsock.h>
+> > 
+> > +/* Threshold for detecting small packets to copy */
+> > +#define GOOD_COPY_LEN  128
+> > +
 > 
-> Refactor out the core functionality so that it is not specific to fault
-> handling.
+> This change seems unrelated.
 > 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_dmem.c | 59 +++++++++++++--------------
->  1 file changed, 29 insertions(+), 30 deletions(-)
+> Please move it in the patch where you need this.
+> Maybe it's better to add a prefix if we move it in an header file (e.g.
+> VIRTIO_VSOCK_...).
 > 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> index f9234ed..66ebbd4 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> @@ -139,44 +139,25 @@ static void nouveau_dmem_fence_done(struct nouveau_fence **fence)
->  	}
->  }
->  
-> -static vm_fault_t nouveau_dmem_fault_copy_one(struct nouveau_drm *drm,
-> -		struct vm_fault *vmf, struct migrate_vma *args,
-> -		dma_addr_t *dma_addr)
-> +static int nouveau_dmem_copy_one(struct nouveau_drm *drm, struct page *spage,
-> +				struct page *dpage, dma_addr_t *dma_addr)
->  {
->  	struct device *dev = drm->dev->dev;
-> -	struct page *dpage, *spage;
-> -	struct nouveau_svmm *svmm;
-> -
-> -	spage = migrate_pfn_to_page(args->src[0]);
-> -	if (!spage || !(args->src[0] & MIGRATE_PFN_MIGRATE))
-> -		return 0;
->  
-> -	dpage = alloc_page_vma(GFP_HIGHUSER, vmf->vma, vmf->address);
-> -	if (!dpage)
-> -		return VM_FAULT_SIGBUS;
->  	lock_page(dpage);
->  
->  	*dma_addr = dma_map_page(dev, dpage, 0, PAGE_SIZE, DMA_BIDIRECTIONAL);
->  	if (dma_mapping_error(dev, *dma_addr))
-> -		goto error_free_page;
-> +		return -EIO;
->  
-> -	svmm = spage->zone_device_data;
-> -	mutex_lock(&svmm->mutex);
-> -	nouveau_svmm_invalidate(svmm, args->start, args->end);
->  	if (drm->dmem->migrate.copy_func(drm, 1, NOUVEAU_APER_HOST, *dma_addr,
-> -			NOUVEAU_APER_VRAM, nouveau_dmem_page_addr(spage)))
-> -		goto error_dma_unmap;
-> -	mutex_unlock(&svmm->mutex);
-> +					 NOUVEAU_APER_VRAM,
-> +					 nouveau_dmem_page_addr(spage))) {
-> +		dma_unmap_page(dev, *dma_addr, PAGE_SIZE, DMA_BIDIRECTIONAL);
-> +		return -EIO;
-> +	}
+> Thanks,
+> Stefano
+> 
 
-Feel free to just align this with the starting (, as long as it doesn't go
-above 100 characters it doesn't really matter imho and would look nicer that
-way.
+Oh yes, definitely.
 
-Otherwise:
+Thanks,
+Bobby
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-
-Will look at the other patch in a moment
-
->  
-> -	args->dst[0] = migrate_pfn(page_to_pfn(dpage));
->  	return 0;
-> -
-> -error_dma_unmap:
-> -	mutex_unlock(&svmm->mutex);
-> -	dma_unmap_page(dev, *dma_addr, PAGE_SIZE, DMA_BIDIRECTIONAL);
-> -error_free_page:
-> -	__free_page(dpage);
-> -	return VM_FAULT_SIGBUS;
->  }
->  
->  static vm_fault_t nouveau_dmem_migrate_to_ram(struct vm_fault *vmf)
-> @@ -184,9 +165,11 @@ static vm_fault_t nouveau_dmem_migrate_to_ram(struct vm_fault *vmf)
->  	struct nouveau_drm *drm = page_to_drm(vmf->page);
->  	struct nouveau_dmem *dmem = drm->dmem;
->  	struct nouveau_fence *fence;
-> +	struct nouveau_svmm *svmm;
-> +	struct page *spage, *dpage;
->  	unsigned long src = 0, dst = 0;
->  	dma_addr_t dma_addr = 0;
-> -	vm_fault_t ret;
-> +	vm_fault_t ret = 0;
->  	struct migrate_vma args = {
->  		.vma		= vmf->vma,
->  		.start		= vmf->address,
-> @@ -207,9 +190,25 @@ static vm_fault_t nouveau_dmem_migrate_to_ram(struct vm_fault *vmf)
->  	if (!args.cpages)
->  		return 0;
->  
-> -	ret = nouveau_dmem_fault_copy_one(drm, vmf, &args, &dma_addr);
-> -	if (ret || dst == 0)
-> +	spage = migrate_pfn_to_page(src);
-> +	if (!spage || !(src & MIGRATE_PFN_MIGRATE))
-> +		goto done;
-> +
-> +	dpage = alloc_page_vma(GFP_HIGHUSER, vmf->vma, vmf->address);
-> +	if (!dpage)
-> +		goto done;
-> +
-> +	dst = migrate_pfn(page_to_pfn(dpage));
-> +
-> +	svmm = spage->zone_device_data;
-> +	mutex_lock(&svmm->mutex);
-> +	nouveau_svmm_invalidate(svmm, args.start, args.end);
-> +	ret = nouveau_dmem_copy_one(drm, spage, dpage, &dma_addr);
-> +	mutex_unlock(&svmm->mutex);
-> +	if (ret) {
-> +		ret = VM_FAULT_SIGBUS;
->  		goto done;
-> +	}
->  
->  	nouveau_fence_new(dmem->migrate.chan, false, &fence);
->  	migrate_vma_pages(&args);
-
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+> > enum virtio_vsock_metadata_flags {
+> > 	VIRTIO_VSOCK_METADATA_FLAGS_REPLY		= BIT(0),
+> > 	VIRTIO_VSOCK_METADATA_FLAGS_TAP_DELIVERED	= BIT(1),
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index e348b2d09eac..1893f8aafa48 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -1844,8 +1844,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
+> > 			written = transport->stream_enqueue(vsk,
+> > 					msg, len - total_written);
+> > 		}
+> > +
+> > 		if (written < 0) {
+> > -			err = -ENOMEM;
+> > +			err = written;
+> > 			goto out_err;
+> > 		}
+> > 
+> > diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+> > index fd98229e3db3..e99aea571f6f 100644
+> > --- a/net/vmw_vsock/hyperv_transport.c
+> > +++ b/net/vmw_vsock/hyperv_transport.c
+> > @@ -687,7 +687,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk, struct msghdr *msg,
+> > 	if (bytes_written)
+> > 		ret = bytes_written;
+> > 	kfree(send_buf);
+> > -	return ret;
+> > +	return ret < 0 ? -ENOMEM : ret;
+> > }
+> > 
+> > static s64 hvs_stream_has_data(struct vsock_sock *vsk)
+> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> > index 920578597bb9..d5780599fe93 100644
+> > --- a/net/vmw_vsock/virtio_transport_common.c
+> > +++ b/net/vmw_vsock/virtio_transport_common.c
+> > @@ -23,9 +23,6 @@
+> > /* How long to wait for graceful shutdown of a connection */
+> > #define VSOCK_CLOSE_TIMEOUT (8 * HZ)
+> > 
+> > -/* Threshold for detecting small packets to copy */
+> > -#define GOOD_COPY_LEN  128
+> > -
+> > static const struct virtio_transport *
+> > virtio_transport_get_ops(struct vsock_sock *vsk)
+> > {
+> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> > index b14f0ed7427b..c927a90dc859 100644
+> > --- a/net/vmw_vsock/vmci_transport.c
+> > +++ b/net/vmw_vsock/vmci_transport.c
+> > @@ -1838,7 +1838,14 @@ static ssize_t vmci_transport_stream_enqueue(
+> > 	struct msghdr *msg,
+> > 	size_t len)
+> > {
+> > -	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
+> > +	int err;
+> > +
+> > +	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
+> > +
+> > +	if (err < 0)
+> > +		err = -ENOMEM;
+> > +
+> > +	return err;
+> > }
+> > 
+> > static s64 vmci_transport_stream_has_data(struct vsock_sock *vsk)
+> > -- 
+> > 2.35.1
+> > 
+> 
+> _______________________________________________
+> Virtualization mailing list
+> Virtualization@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
