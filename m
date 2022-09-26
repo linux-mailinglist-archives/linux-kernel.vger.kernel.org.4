@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91875EA4C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125045E9F57
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbiIZLwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S235106AbiIZKZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238528AbiIZLvm (ORCPT
+        with ESMTP id S235260AbiIZKWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:51:42 -0400
+        Mon, 26 Sep 2022 06:22:47 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E3F75FF4;
-        Mon, 26 Sep 2022 03:48:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73764D167;
+        Mon, 26 Sep 2022 03:16:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 95932CE1101;
-        Mon, 26 Sep 2022 10:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A87EC433D6;
-        Mon, 26 Sep 2022 10:47:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CDF9DCE10E0;
+        Mon, 26 Sep 2022 10:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CB7C433D6;
+        Mon, 26 Sep 2022 10:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189253;
-        bh=nXLbPcp/lmo1PNRr7WbCA1M/+VZrKaywAvL2mtf1Ros=;
+        s=korg; t=1664187389;
+        bh=T0teuM9jDGq2pMTenHhgY7xx5k15KfwtAGAQpuY1ap0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCeNFU9S4YC3jFyeYvG5Xv1NkMfhs/nFQQ5YsC+Uek1EOTj2cWM68LuvdczKxATyX
-         Mz0rafHaxoPAmSAPhamvvcyYME2FVzFd7SUiNeEzjjARbCzRVFsyF4EN+LQo6j+RYD
-         /xC0IcDqZdRV77mmFQQxJDhh4U5E1u0C4Mi30+B0=
+        b=yHyjz9lKEjhq6HE3M8xg12JegLjXsiKA8rVYiCfZyqHgSD209A93h40zdzZ12HScm
+         Rng1cehMvoaL9d26ogVGhShBdbPe/aEZmtePOgwew8mWV2YOOF9lqvds5OPH26Fwud
+         1L0j74Ei4maaKB2tjB6FPeQDmMviPYVOSnn8WxKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Liang He <windhl@126.com>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 124/207] of: mdio: Add of_node_put() when breaking out of for_each_xx
+Subject: [PATCH 4.14 25/40] netfilter: nf_conntrack_irc: Tighten matching on DCC message
 Date:   Mon, 26 Sep 2022 12:11:53 +0200
-Message-Id: <20220926100812.121191117@linuxfoundation.org>
+Message-Id: <20220926100739.242883621@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: David Leadbeater <dgl@dgl.cx>
 
-[ Upstream commit 1c48709e6d9d353acaaac1d8e33474756b121d78 ]
+[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
 
-In of_mdiobus_register(), we should call of_node_put() for 'child'
-escaped out of for_each_available_child_of_node().
+CTCP messages should only be at the start of an IRC message, not
+anywhere within it.
 
-Fixes: 66bdede495c7 ("of_mdio: Fix broken PHY IRQ in case of probe deferral")
-Co-developed-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220913125659.3331969-1-windhl@126.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+While the helper only decodes packes in the ORIGINAL direction, its
+possible to make a client send a CTCP message back by empedding one into
+a PING request.  As-is, thats enough to make the helper believe that it
+saw a CTCP message.
+
+Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
+Signed-off-by: David Leadbeater <dgl@dgl.cx>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/mdio/of_mdio.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/mdio/of_mdio.c b/drivers/net/mdio/of_mdio.c
-index 9e3c815a070f..796e9c7857d0 100644
---- a/drivers/net/mdio/of_mdio.c
-+++ b/drivers/net/mdio/of_mdio.c
-@@ -231,6 +231,7 @@ int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
- 	return 0;
+diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
+index 814220f7be67..27e2f9785e5f 100644
+--- a/net/netfilter/nf_conntrack_irc.c
++++ b/net/netfilter/nf_conntrack_irc.c
+@@ -150,15 +150,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 	data = ib_ptr;
+ 	data_limit = ib_ptr + skb->len - dataoff;
  
- unregister:
-+	of_node_put(child);
- 	mdiobus_unregister(mdio);
- 	return rc;
- }
+-	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
+-	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
+-	while (data < data_limit - (19 + MINMATCHLEN)) {
+-		if (memcmp(data, "\1DCC ", 5)) {
++	/* Skip any whitespace */
++	while (data < data_limit - 10) {
++		if (*data == ' ' || *data == '\r' || *data == '\n')
++			data++;
++		else
++			break;
++	}
++
++	/* strlen("PRIVMSG x ")=10 */
++	if (data < data_limit - 10) {
++		if (strncasecmp("PRIVMSG ", data, 8))
++			goto out;
++		data += 8;
++	}
++
++	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
++	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
++	 */
++	while (data < data_limit - (21 + MINMATCHLEN)) {
++		/* Find first " :", the start of message */
++		if (memcmp(data, " :", 2)) {
+ 			data++;
+ 			continue;
+ 		}
++		data += 2;
++
++		/* then check that place only for the DCC command */
++		if (memcmp(data, "\1DCC ", 5))
++			goto out;
+ 		data += 5;
+-		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
++		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
+ 
+ 		iph = ip_hdr(skb);
+ 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
+@@ -174,7 +196,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 			pr_debug("DCC %s detected\n", dccprotos[i]);
+ 
+ 			/* we have at least
+-			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
++			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
+ 			 * data left (== 14/13 bytes) */
+ 			if (parse_dcc(data, data_limit, &dcc_ip,
+ 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
 -- 
 2.35.1
 
