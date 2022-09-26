@@ -2,99 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93E75E9B4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF30E5E9B57
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiIZH6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S234377AbiIZH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiIZH5e (ORCPT
+        with ESMTP id S234356AbiIZH62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:57:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4E3B974
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:51:40 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w8so9473359lft.12
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=jvYvVWLSf4e8Yu944Qnf0DCzJLFbXHx/b6AjfcFyxfg=;
-        b=Kl/ik9OP6N486uc3ipCE3PqQ2EnzmmRRIVsetjtVaSwuqxB3KcKxDYZsaVrrG7tocC
-         p+YmpNpCtt5hO0WTBfYSh1rZnOfK6argETuht+HyCDwGBgNWRaUSsG4l6hKH65HeDC5a
-         nITqMcklR5qVn/doCUCknHlKwh33wJqe5GXSC8FWxRVvRSEp2+oNSIAnGT1rlBEzRk/4
-         UdFj0X6Q6yMcqqXYm33FWhVlyaVURGpQATLNZqvHxPl2Avi0GkFfnhQuw5zmJ+jdR0bT
-         exzHy5eigO7oKeJ9ZdAVaOkVRuoyvDU6hlkJB6o1c5ivwpdMSO6USsUm7eT4om/W9VL+
-         FGwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=jvYvVWLSf4e8Yu944Qnf0DCzJLFbXHx/b6AjfcFyxfg=;
-        b=QlCJ9qGKSC6wJJaksGSugGVoXTeGkYo/+QWc7t3/C7mLNibWM6KoQTt2gNIv1bKm3b
-         TvLUgZiL6JfaLCvyzlngMF9S4epz4DN2phkoLNdzYP1Jlv3duBdIPw54lx269PkbfZPI
-         ZZ26iHrJ2HGLVv2nnS4SnaZt+SI0Px/O0fgzcZZUZPhtmjO7PAn6cP74s9sOCYQMvPtX
-         nHmbSTE7pxDgMloggcOZ5fnDOXWx+BQEdV/ZzzPmgGsQ2MhLjRPE6n1MW8BiFT2SgnDZ
-         YHVZ2zDUHBnz2I/mrJwh8KjCe6hewJvSrvQe18+otG9pHMc1kWXZ1j5Nvu8L18zq1JyB
-         vyfw==
-X-Gm-Message-State: ACrzQf2JkcqNbj1+ghiA6qLg5m6VIHZ2G6cOgLj2UngtIz0ARW3wi7li
-        pzoh45yk5x7ttg2d3Tnc1c9u5Q==
-X-Google-Smtp-Source: AMsMyM72gQh9BlSdHlb/fUZ1pBNnUC1vPovZqUS1FS9beAE/yju5eVqdX25l69BydVEZuU/PbcPKwA==
-X-Received: by 2002:a05:6512:1188:b0:499:6fbf:d751 with SMTP id g8-20020a056512118800b004996fbfd751mr8550642lfr.51.1664178698030;
-        Mon, 26 Sep 2022 00:51:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id i30-20020a198c5e000000b00485caa0f5dfsm2461378lfj.44.2022.09.26.00.51.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 00:51:37 -0700 (PDT)
-Message-ID: <aca7f1c2-488e-28b7-2ea5-ead507aa535c@linaro.org>
-Date:   Mon, 26 Sep 2022 09:51:35 +0200
+        Mon, 26 Sep 2022 03:58:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396B63C0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:54:39 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664178876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKhc8qFzuT7oDQPl2tzoXxQ/g8SoOYHWBX8Uw/Wsd50=;
+        b=v9FTBr3EuhPm2Jwmd5X3M0K/acEkHtVcDz1OBdSFY5EjKENEaH90IxjyHomZy22Qsps1nl
+        bzuXC3M0jlbGgarN/QCD8d1cfij3fnPCtRgsXS7i4+faexNWkI7n3yig1zioeJUSAnq+Yd
+        ks74rJVvZni/cZH6cL0Hh5H9OdLV+Iw3trgeJAeFpvvCMouFJmpp4LjViCRckR0csDDltS
+        FtJsYzJ5Z+M1ZKsC64tAdhThoH7o10/PQcbtRtCdcwux38CBjvunnHlLVbs4NXuUaNlFqa
+        sFZJF5P9fknPyXi+wjJHG1DghDd0WFqrVK+EuVXGYaDbLJncDLlFCr9N1aCHJg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664178876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKhc8qFzuT7oDQPl2tzoXxQ/g8SoOYHWBX8Uw/Wsd50=;
+        b=upHGNdMZLwWXlLY4p6BkuV5IeciHUtWKnMnqr0DfpcMFbD3it4R3xHMF7Q0LOT0hW6CvH+
+        KtJ1O/piM2cK4ADw==
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
+In-Reply-To: <YzEoYPSC5Qf2aL92@google.com>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-19-john.ogness@linutronix.de>
+ <YzEoYPSC5Qf2aL92@google.com>
+Date:   Mon, 26 Sep 2022 10:00:36 +0206
+Message-ID: <87leq6d0zn.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next] ASoC: codecs: wcd934x: Fix Kconfig dependency
-Content-Language: en-US
-To:     Ren Zhijie <renzhijie2@huawei.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-        james.schulman@cirrus.com, cy_huang@richtek.com,
-        flatmax@flatmax.com, pierre-louis.bossart@linux.intel.com,
-        lukas.bulwahn@gmail.com, srinivas.kandagatla@linaro.org
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20220926074042.13297-1-renzhijie2@huawei.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220926074042.13297-1-renzhijie2@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 09:40, Ren Zhijie wrote:
-> If CONFIG_REGMAP_SLIMBUS is not set,
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-> will be failed, like this:
-> 
-> sound/soc/codecs/wcd934x.o: In function `wcd934x_codec_probe':
-> wcd934x.c:(.text+0x3310): undefined reference to `__regmap_init_slimbus'
-> make: *** [vmlinux] Error 1
-> 
-> Add select REGMAP_SLIMBUS to config SND_SOC_WCD934X.
-> 
-> Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+On 2022-09-26, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
+> On (22/09/24 02:10), John Ogness wrote:
+>> +/**
+>> + * cons_print_dropped - Print 'dropped' message if required
+>> + * @desc:	Pointer to the output descriptor
+>> + *
+>> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
+>> + * not 0 and the regular format is requested. Extended format does not
+>> + * need this message because it prints the sequence numbers.
+>> + *
+>> + * In regular format the extended message buffer is not in use.
+>> + * So print into it at the beginning and move the resulting string
+>> + * just in front of the regular text buffer so that the message can
+>> + * be printed in one go.
+>> + *
+>> + * In case of a message this returns with @desc->outbuf and @desc->len
+>> + * updated. If no message is required then @desc is not modified.
+>> + */
+>> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
+>> +{
+>> +	struct cons_text_buf *txtbuf = desc->txtbuf;
+>> +	size_t len;
+>> +
+>> +	if (!desc->dropped || desc->extmsg)
+>> +		return;
+>> +
+>> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
+>> +		return;
+>> +
+>> +	/* Print it into ext_text which is unused */
+>> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
+>> +		       "** %lu printk messages dropped **\n", desc->dropped);
+>> +	desc->dropped = 0;
+>> +
+>> +	/* Copy it just below text so it goes out with one write */
+>> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
+>> +
+>> +	/* Update the descriptor */
+>> +	desc->len += len;
+>> +	desc->outbuf -= len;
+>
+> Oh, hmm. This does not look to me as a simplification. Quite
+> the opposite, moving cons_text_buf::text pointer to point to
+> cons_text_buf::text - strlen("... dropped messages...") looks
+> somewhat fragile.
 
+It relies on @ext_text and @text being packed together, which yes, may
+be fragile. As an alternative we could memcpy the message text (@text)
+to the end of the dropped message text. There would be enough room.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Generally speaking, the dropped text will be less text to copy. But
+since dropped messages are rare anyway, it might be worth copying more
+data so that the code is not fragile. It would also allow us to remove
+the __no_randomize_layout in "struct cons_text_buf".
 
-Best regards,
-Krzysztof
+If the end of cons_print_dropped was changed to:
 
+        memcpy(txtbuf->ext_text + len, txtbuf->text, desc->len);
+        desc->len += len;
+        desc->outbuf = txtbuf->ext_text;
+
+Would that be OK for you?
+
+> Is printing 'dropped' and outbuf messages in one go such an
+> important feature?
+
+I think it is a nice simplification. With the cons_text_buf, it makes it
+quite easy to implement.
+
+John
