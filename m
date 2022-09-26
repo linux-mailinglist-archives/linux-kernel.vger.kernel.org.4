@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE545EA367
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0804D5E9EF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbiIZLYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S233348AbiIZKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiIZLXN (ORCPT
+        with ESMTP id S234779AbiIZKQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:23:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B075FFE;
-        Mon, 26 Sep 2022 03:39:49 -0700 (PDT)
+        Mon, 26 Sep 2022 06:16:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD9B10043;
+        Mon, 26 Sep 2022 03:14:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6829B8094E;
-        Mon, 26 Sep 2022 10:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3622DC433C1;
-        Mon, 26 Sep 2022 10:38:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3919F60B4A;
+        Mon, 26 Sep 2022 10:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30150C43470;
+        Mon, 26 Sep 2022 10:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188728;
-        bh=PEX3wSNKs2vxJwN/EXKPcundSTbs6aVtPTh3ugkuGFw=;
+        s=korg; t=1664187281;
+        bh=dgTzuXvWpBNqEIEFup/8PQSrW0v3ksBIqp3m5roA2og=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zy0fsGsF/UGuJWLHOt28P4K/yrYI1j4fveuktO5JgbcLlHrEq+y3+nucKQsBwgt7i
-         yedoVsMt43/6oFX+AkRtbX7V7S3md5+q4HrX3tTtf+pC6zDLDHfuz2BeBDJyWNz24H
-         zQFesvkN7XAQlMD+VvVkreb1IyXSdMCO0okUbMfM=
+        b=N5Usqd5MU31VYDwWVLCggktKSBb5GlkxcvYJLToSq3EXynsv/2trBFBygA9FZP3SV
+         E5wmXB2ajlJ2YCfn0D1Ja/czFFg0UyMPZRcxqWtRKWfmMiWQLI9DbrVRm3hpxi7ss1
+         IuRdeuYc4Fs0bgWvydS83XH4GJpZAtTiwqlwqsWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 085/148] iavf: Fix set max MTU size with port VLAN and jumbo frames
+        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4.9 28/30] s390/dasd: fix Oops in dasd_alias_get_start_dev due to missing pavgroup
 Date:   Mon, 26 Sep 2022 12:11:59 +0200
-Message-Id: <20220926100759.240324244@linuxfoundation.org>
+Message-Id: <20220926100737.151359246@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Stefan Haberland <sth@linux.ibm.com>
 
-[ Upstream commit 399c98c4dc50b7eb7e9f24da7ffdda6f025676ef ]
+commit db7ba07108a48c0f95b74fabbfd5d63e924f992d upstream.
 
-After setting port VLAN and MTU to 9000 on VF with ice driver there
-was an iavf error
-"PF returned error -5 (IAVF_ERR_PARAM) to our request 6".
+Fix Oops in dasd_alias_get_start_dev() function caused by the pavgroup
+pointer being NULL.
 
-During queue configuration, VF's max packet size was set to
-IAVF_MAX_RXBUFFER but on ice max frame size was smaller by VLAN_HLEN
-due to making some space for port VLAN as VF is not aware whether it's
-in a port VLAN. This mismatch in sizes caused ice to reject queue
-configuration with ERR_PARAM error. Proper max_mtu is sent from ice PF
-to VF with GET_VF_RESOURCES msg but VF does not look at this.
+The pavgroup pointer is checked on the entrance of the function but
+without the lcu->lock being held. Therefore there is a race window
+between dasd_alias_get_start_dev() and _lcu_update() which sets
+pavgroup to NULL with the lcu->lock held.
 
-In iavf change max_frame from IAVF_MAX_RXBUFFER to max_mtu
-received from pf with GET_VF_RESOURCES msg to make vf's
-max_frame_size dependent from pf. Add check if received max_mtu is
-not in eligible range then set it to IAVF_MAX_RXBUFFER.
+Fix by checking the pavgroup pointer with lcu->lock held.
 
-Fixes: dab86afdbbd1 ("i40e/i40evf: Change the way we limit the maximum frame size for Rx")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org> # 2.6.25+
+Fixes: 8e09f21574ea ("[S390] dasd: add hyper PAV support to DASD device driver, part 1")
+Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
+Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220919154931.4123002-2-sth@linux.ibm.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_virtchnl.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/s390/block/dasd_alias.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index 7013769fc038..c6eb0d0748ea 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-@@ -244,11 +244,14 @@ int iavf_get_vf_config(struct iavf_adapter *adapter)
- void iavf_configure_queues(struct iavf_adapter *adapter)
+--- a/drivers/s390/block/dasd_alias.c
++++ b/drivers/s390/block/dasd_alias.c
+@@ -674,12 +674,12 @@ int dasd_alias_remove_device(struct dasd
+ struct dasd_device *dasd_alias_get_start_dev(struct dasd_device *base_device)
  {
- 	struct virtchnl_vsi_queue_config_info *vqci;
--	struct virtchnl_queue_pair_info *vqpi;
-+	int i, max_frame = adapter->vf_res->max_mtu;
- 	int pairs = adapter->num_active_queues;
--	int i, max_frame = IAVF_MAX_RXBUFFER;
-+	struct virtchnl_queue_pair_info *vqpi;
- 	size_t len;
+ 	struct dasd_eckd_private *alias_priv, *private = base_device->private;
+-	struct alias_pav_group *group = private->pavgroup;
+ 	struct alias_lcu *lcu = private->lcu;
+ 	struct dasd_device *alias_device;
++	struct alias_pav_group *group;
+ 	unsigned long flags;
  
-+	if (max_frame > IAVF_MAX_RXBUFFER || !max_frame)
-+		max_frame = IAVF_MAX_RXBUFFER;
-+
- 	if (adapter->current_op != VIRTCHNL_OP_UNKNOWN) {
- 		/* bail because we already have a command pending */
- 		dev_err(&adapter->pdev->dev, "Cannot configure queues, command %d pending\n",
--- 
-2.35.1
-
+-	if (!group || !lcu)
++	if (!lcu)
+ 		return NULL;
+ 	if (lcu->pav == NO_PAV ||
+ 	    lcu->flags & (NEED_UAC_UPDATE | UPDATE_PENDING))
+@@ -696,6 +696,11 @@ struct dasd_device *dasd_alias_get_start
+ 	}
+ 
+ 	spin_lock_irqsave(&lcu->lock, flags);
++	group = private->pavgroup;
++	if (!group) {
++		spin_unlock_irqrestore(&lcu->lock, flags);
++		return NULL;
++	}
+ 	alias_device = group->next;
+ 	if (!alias_device) {
+ 		if (list_empty(&group->aliaslist)) {
 
 
