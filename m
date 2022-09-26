@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1E25EA52B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D095EA545
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239373AbiIZL6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S238934AbiIZL7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239389AbiIZLzX (ORCPT
+        with ESMTP id S238216AbiIZL4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:55:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE53792FC;
-        Mon, 26 Sep 2022 03:50:52 -0700 (PDT)
+        Mon, 26 Sep 2022 07:56:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172E79EE1;
+        Mon, 26 Sep 2022 03:51:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CA33609FE;
-        Mon, 26 Sep 2022 10:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4157FC433D6;
-        Mon, 26 Sep 2022 10:49:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A0E60C0B;
+        Mon, 26 Sep 2022 10:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A46C433C1;
+        Mon, 26 Sep 2022 10:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189381;
-        bh=z7SuKfgkHhhVx3EK5dgX86TGPw3VKkalS3eiNPU2iUQ=;
+        s=korg; t=1664189384;
+        bh=HhUWvdhXsgORzUEW66P9KeGIWYlywk0P52be4Y5L8Xc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fOorNT6xbDsLsb2Tzcvy0D5aT7OHDyLKOGe/NBmZu10LHwvqGhA+pa/3dFLmUrowF
-         dmaC/K2GPc2hRo5yWeiHBhbujgShNgnhCAWpFbrQvlx7WGesE7UKvIin7W8GuZrsJl
-         G1bqvzSlhilBVTQdcvRWLlr+ymbVwzxmNuUJWIdw=
+        b=GpbdZM6XAzQ6AYEQRFmzV1Rgk1ZKtDV6xQA0jQIUCmlyEpdMzWxKt0UJ091yJTgjQ
+         Mf3ODNIRS9C/fZhueeuuxlqX82ylomqeZXp6vgYL/j7VZGbNDRj1oFwvM3q7KhhHSx
+         TaGHUNh2ucVhpFtc76DBBKhJqEdg+ZRs+we9fZOk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 138/207] netfilter: nf_tables: fix percpu memory leak at nf_tables_addchain()
-Date:   Mon, 26 Sep 2022 12:12:07 +0200
-Message-Id: <20220926100812.695709174@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
+Subject: [PATCH 5.19 139/207] netfilter: ebtables: fix memory leak when blob is malformed
+Date:   Mon, 26 Sep 2022 12:12:08 +0200
+Message-Id: <20220926100812.744025470@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -55,34 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 9a4d6dd554b86e65581ef6b6638a39ae079b17ac ]
+[ Upstream commit 62ce44c4fff947eebdf10bb582267e686e6835c9 ]
 
-It seems to me that percpu memory for chain stats started leaking since
-commit 3bc158f8d0330f0a ("netfilter: nf_tables: map basechain priority to
-hardware priority") when nft_chain_offload_priority() returned an error.
+The bug fix was incomplete, it "replaced" crash with a memory leak.
+The old code had an assignment to "ret" embedded into the conditional,
+restore this.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 3bc158f8d0330f0a ("netfilter: nf_tables: map basechain priority to hardware priority")
+Fixes: 7997eff82828 ("netfilter: ebtables: reject blobs that don't provide all entry points")
+Reported-and-tested-by: syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
 Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/bridge/netfilter/ebtables.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 3aaf36df69d4..2fde193c3d26 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -2243,6 +2243,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 		if (err < 0) {
- 			nft_chain_release_hook(&hook);
- 			kfree(basechain);
-+			free_percpu(stats);
- 			return err;
- 		}
- 		if (stats)
+diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
+index 9a0ae59cdc50..4f385d52a1c4 100644
+--- a/net/bridge/netfilter/ebtables.c
++++ b/net/bridge/netfilter/ebtables.c
+@@ -1040,8 +1040,10 @@ static int do_replace_finish(struct net *net, struct ebt_replace *repl,
+ 		goto free_iterate;
+ 	}
+ 
+-	if (repl->valid_hooks != t->valid_hooks)
++	if (repl->valid_hooks != t->valid_hooks) {
++		ret = -EINVAL;
+ 		goto free_unlock;
++	}
+ 
+ 	if (repl->num_counters && repl->num_counters != t->private->nentries) {
+ 		ret = -EINVAL;
 -- 
 2.35.1
 
