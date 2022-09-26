@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB935EA296
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B315EA3A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiIZLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S234619AbiIZL3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237792AbiIZLJi (ORCPT
+        with ESMTP id S238064AbiIZL2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:09:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3355856BBF;
-        Mon, 26 Sep 2022 03:35:21 -0700 (PDT)
+        Mon, 26 Sep 2022 07:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB44D4E3;
+        Mon, 26 Sep 2022 03:41:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03926B80915;
-        Mon, 26 Sep 2022 10:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349B3C433D7;
-        Mon, 26 Sep 2022 10:33:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D084560C0D;
+        Mon, 26 Sep 2022 10:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D889CC4347C;
+        Mon, 26 Sep 2022 10:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188412;
-        bh=YU5ZVW+vaaa0D5a/Gtln8E0+5y95LhWnRWKcQDa7Mfw=;
+        s=korg; t=1664188825;
+        bh=vHnUndqfAUgIC4CFjA3GVd9LuyKEXWeAedlA5iNxM6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lmsY6lA4zcgyJ0scuuiwY05KoN8+ZGz4biCqx02YeAAAz6soCdgO4gpCXD3xhQDFj
-         wZPG4IeyPc9Qn8xpLTTlGfmtGua+GQ85lVlrO/WpRdMQs4z5ZMzXKUTWk5v3nXh1bL
-         3lrD7r60CeVRWiMtmNd6UPhTHuo5ipdsvdQVK4rU=
+        b=yBywlQIOHluQ25jf3G0hNVXeIKNLxRHmFQVOj65NlYpUp0gsQCJE94xoAvf8xdy9j
+         wZh7cGy+emK5cPUVSOgsc/RXDYM396Hm1lAinBIupZc4ACLfI/jiifm+ftfLU5qD3d
+         eZ7IMdqBeHipAc03hccX765+E2kERLnCjuAFCNoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.10 141/141] ext4: make directory inode spreading reflect flexbg size
-Date:   Mon, 26 Sep 2022 12:12:47 +0200
-Message-Id: <20220926100759.579489997@linuxfoundation.org>
+        stable@vger.kernel.org, Li Jinlin <lijinlin3@huawei.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 134/148] fsdax: Fix infinite loop in dax_iomap_rw()
+Date:   Mon, 26 Sep 2022 12:12:48 +0200
+Message-Id: <20220926100801.239774251@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Li Jinlin <lijinlin3@huawei.com>
 
-commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
+[ Upstream commit 17d9c15c9b9e7fb285f7ac5367dfb5f00ff575e3 ]
 
-Currently the Orlov inode allocator searches for free inodes for a
-directory only in flex block groups with at most inodes_per_group/16
-more directory inodes than average per flex block group. However with
-growing size of flex block group this becomes unnecessarily strict.
-Scale allowed difference from average directory count per flex block
-group with flex block group size as we do with other metrics.
+I got an infinite loop and a WARNING report when executing a tail command
+in virtiofs.
 
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  WARNING: CPU: 10 PID: 964 at fs/iomap/iter.c:34 iomap_iter+0x3a2/0x3d0
+  Modules linked in:
+  CPU: 10 PID: 964 Comm: tail Not tainted 5.19.0-rc7
+  Call Trace:
+  <TASK>
+  dax_iomap_rw+0xea/0x620
+  ? __this_cpu_preempt_check+0x13/0x20
+  fuse_dax_read_iter+0x47/0x80
+  fuse_file_read_iter+0xae/0xd0
+  new_sync_read+0xfe/0x180
+  ? 0xffffffff81000000
+  vfs_read+0x14d/0x1a0
+  ksys_read+0x6d/0xf0
+  __x64_sys_read+0x1a/0x20
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The tail command will call read() with a count of 0. In this case,
+iomap_iter() will report this WARNING, and always return 1 which casuing
+the infinite loop in dax_iomap_rw().
+
+Fixing by checking count whether is 0 in dax_iomap_rw().
+
+Fixes: ca289e0b95af ("fsdax: switch dax_iomap_rw to use iomap_iter")
+Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Link: https://lore.kernel.org/r/20220725032050.3873372-1-lijinlin3@huawei.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/ialloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/dax.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/ext4/ialloc.c
-+++ b/fs/ext4/ialloc.c
-@@ -508,7 +508,7 @@ static int find_group_orlov(struct super
- 		goto fallback;
- 	}
+diff --git a/fs/dax.c b/fs/dax.c
+index 1d0658cf9dcf..4ab1c493c73f 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -1279,6 +1279,9 @@ dax_iomap_rw(struct kiocb *iocb, struct iov_iter *iter,
+ 	loff_t done = 0;
+ 	int ret;
  
--	max_dirs = ndirs / ngroups + inodes_per_group / 16;
-+	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
- 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
- 	if (min_inodes < 1)
- 		min_inodes = 1;
++	if (!iomi.len)
++		return 0;
++
+ 	if (iov_iter_rw(iter) == WRITE) {
+ 		lockdep_assert_held_write(&iomi.inode->i_rwsem);
+ 		iomi.flags |= IOMAP_WRITE;
+-- 
+2.35.1
+
 
 
