@@ -2,224 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C3A5EAD76
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897F75EADA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiIZRCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S230231AbiIZRI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiIZRB7 (ORCPT
+        with ESMTP id S230199AbiIZRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:01:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA1F719A5;
-        Mon, 26 Sep 2022 09:03:52 -0700 (PDT)
+        Mon, 26 Sep 2022 13:08:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33782630
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:14:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BA3160F5D;
-        Mon, 26 Sep 2022 16:03:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017D2C433C1;
-        Mon, 26 Sep 2022 16:03:50 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jRwrglaR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664208228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yC+mB8++NWbTwnc+d81VMyIZBYjffDEwBYgx9F3GGyE=;
-        b=jRwrglaRu5ykOLvLE4Xq5zQryp+KcB8K2Qp26r+DDqUwVf/bAE2ntajHWYKSg7qAMxxJhR
-        jEpCyduA9O5dsEVC18tn/7kg/Bq7mtd9WITm650SygWJpeUkRnILRMvP4NuSDRXYDRSFhU
-        3KCcg33Tjgv2Y0qJGnnDy0hYF/4nmjw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 579c2f2c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 26 Sep 2022 16:03:48 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] random: split initialization into early arch step and later non-arch step
-Date:   Mon, 26 Sep 2022 18:03:32 +0200
-Message-Id: <20220926160332.1473462-1-Jason@zx2c4.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DA8C60E74
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A613C433C1;
+        Mon, 26 Sep 2022 16:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664208871;
+        bh=9mZcmdodNYy0rjsITnD/NXiAYxYxK3U+9un+VPbrPkk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LBuE/xwGLEeZ6roaFJUFS6djsXxPwuG1dCuSfA81AoTrZn0z7J7G8x/NSMb6AYrgB
+         JDBr/L8v/m5x+vDaD7Y6lt9Ub1GkD9wqn2CGJFiXouY/AcK40BYnbS6QrAL5437hIx
+         rkL35UueI3VjGdjCFX63Afu0loMGh4pp5uzVNR8PEu70Tm9l+zo0gA0hJxrNPBax56
+         lzeSqkktvtttmgsOozfaswfETeYCcjcj9z/olFM+GzFGNsfgZJPPRXUZsx7EOdEyLd
+         FKVQlX0A5mJwxRJ2Ud77xCHhMS7KNQGGVj+oGJVJ4ZQiSNU5RzLjzEmz3j+9mTnJnK
+         2CQBAQ9vFtPCA==
+Date:   Tue, 27 Sep 2022 00:05:03 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 2/4] riscv: consolidate ret_from_kernel_thread into
+ ret_from_fork
+Message-ID: <YzHNr13U+SdwJHo1@xhacker>
+References: <20220925175356.681-1-jszhang@kernel.org>
+ <20220925175356.681-3-jszhang@kernel.org>
+ <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The full RNG initialization relies on some timestamps, made possible
-with general functions like time_init() and timekeeping_init(). However,
-these are only available rather late in initialization. Meanwhile, other
-things, such as memory allocator functions, make use of the RNG much
-earlier.
+On Mon, Sep 26, 2022 at 07:25:30AM +0800, Guo Ren wrote:
+> On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > The ret_from_kernel_thread() behaves similarly with ret_from_fork(),
+> > the only difference is whether call the fn(arg) or not, this can be
+> > acchieved by testing fn is NULL or not, I.E s0 is 0 or not.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/kernel/entry.S   | 11 +++--------
+> >  arch/riscv/kernel/process.c |  5 ++---
+> >  2 files changed, 5 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index 2207cf44a3bc..a3e1ed2fa2ac 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -323,20 +323,15 @@ END(handle_kernel_stack_overflow)
+> >
+> >  ENTRY(ret_from_fork)
+> >         call schedule_tail
+> > -       move a0, sp /* pt_regs */
+> > -       la ra, ret_from_exception
+> > -       tail syscall_exit_to_user_mode
+> > -ENDPROC(ret_from_fork)
+> > -
+> > -ENTRY(ret_from_kernel_thread)
+> > -       call schedule_tail
+> > +       beqz s0, 1f     /* not from kernel thread */
 
-So split RNG initialization into two phases. We can give arch randomness
-very early on, and then later, after timekeeping and such are available,
-initialize the rest.
+Hi Guo,
 
-This ensures that, for example, slabs are properly randomized if RDRAND
-is available. Another positive consequence is that on systems with
-RDRAND, running with CONFIG_WARN_ALL_UNSEEDED_RANDOM=y results in no
-warnings at all.
+> We can't use s0 as condition for ret_from_fork/ret_from_kernel_thread.
+> The s0=0 is also okay for ret_from_fork.
 
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-I intend to take this through the random.git tree, but reviews/acks
-would be appreciated, given that I'm touching init/main.c.
+IIUC, in ret_from_fork, the s0 comes p->thread.s[0] rather than s0 in
+pt_regs.
 
- drivers/char/random.c  | 47 ++++++++++++++++++++++++------------------
- include/linux/random.h |  3 ++-
- init/main.c            | 17 +++++++--------
- 3 files changed, 37 insertions(+), 30 deletions(-)
+> 
+>         /* p->thread holds context to be restored by __switch_to() */
+>         if (unlikely(args->fn)) {
+>                 /* Kernel thread */
+>                 memset(childregs, 0, sizeof(struct pt_regs));
+>                 childregs->gp = gp_in_global;
+>                 /* Supervisor/Machine, irqs on: */
+>                 childregs->status = SR_PP | SR_PIE;
+> 
+>                 p->thread.ra = (unsigned long)ret_from_kernel_thread;
+>                 p->thread.s[0] = (unsigned long)args->fn;
+>                 p->thread.s[1] = (unsigned long)args->fn_arg;
+>         } else {
+>                 *childregs = *(current_pt_regs());
+>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 if (usp) /* User fork */
+>                         childregs->sp = usp;
+>                 if (clone_flags & CLONE_SETTLS)
+>                         childregs->tp = tls;
+>                 childregs->a0 = 0; /* Return value of fork() */
+>                 p->thread.ra = (unsigned long)ret_from_fork;
+>         }
+>         p->thread.sp = (unsigned long)childregs; /* kernel sp */
+> 
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a90d96f4b3bb..1cb53495e8f7 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -772,18 +772,13 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
- static struct notifier_block pm_notifier = { .notifier_call = random_pm_notification };
- 
- /*
-- * The first collection of entropy occurs at system boot while interrupts
-- * are still turned off. Here we push in latent entropy, RDSEED, a timestamp,
-- * utsname(), and the command line. Depending on the above configuration knob,
-- * RDSEED may be considered sufficient for initialization. Note that much
-- * earlier setup may already have pushed entropy into the input pool by the
-- * time we get here.
-+ * This is called extremely early, before time keeping functionality is
-+ * available, but arch randomness is. Interrupts are not yet enabled.
-  */
--int __init random_init(const char *command_line)
-+void __init random_init_early(const char *command_line)
- {
--	ktime_t now = ktime_get_real();
--	size_t i, longs, arch_bits;
- 	unsigned long entropy[BLAKE2S_BLOCK_SIZE / sizeof(long)];
-+	size_t i, longs, arch_bits;
- 
- #if defined(LATENT_ENTROPY_PLUGIN)
- 	static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
-@@ -803,34 +798,46 @@ int __init random_init(const char *command_line)
- 			i += longs;
- 			continue;
- 		}
--		entropy[0] = random_get_entropy();
--		_mix_pool_bytes(entropy, sizeof(*entropy));
- 		arch_bits -= sizeof(*entropy) * 8;
- 		++i;
- 	}
--	_mix_pool_bytes(&now, sizeof(now));
--	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
-+
- 	_mix_pool_bytes(command_line, strlen(command_line));
-+
-+	if (trust_cpu)
-+		credit_init_bits(arch_bits);
-+}
-+
-+/*
-+ * This is called a little bit after the prior function, and now there is
-+ * access to timestamps counters. Interrupts are not yet enabled.
-+ */
-+void __init random_init(void)
-+{
-+	unsigned long entropy = random_get_entropy();
-+	ktime_t now = ktime_get_real();
-+
-+	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
-+	_mix_pool_bytes(&now, sizeof(now));
-+	_mix_pool_bytes(&entropy, sizeof(entropy));
- 	add_latent_entropy();
- 
- 	/*
--	 * If we were initialized by the bootloader before jump labels are
--	 * initialized, then we should enable the static branch here, where
-+	 * If we were initialized by the cpu or bootloader before jump labels
-+	 * are initialized, then we should enable the static branch here, where
- 	 * it's guaranteed that jump labels have been initialized.
- 	 */
- 	if (!static_branch_likely(&crng_is_ready) && crng_init >= CRNG_READY)
- 		crng_set_ready(NULL);
- 
-+	/* Reseed if already seeded by earlier phases. */
- 	if (crng_ready())
- 		crng_reseed();
--	else if (trust_cpu)
--		_credit_init_bits(arch_bits);
- 
- 	WARN_ON(register_pm_notifier(&pm_notifier));
- 
--	WARN(!random_get_entropy(), "Missing cycle counter and fallback timer; RNG "
--				    "entropy collection will consequently suffer.");
--	return 0;
-+	WARN(!entropy, "Missing cycle counter and fallback timer; RNG "
-+		       "entropy collection will consequently suffer.");
- }
- 
- /*
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 3fec206487f6..a9e6e16f9774 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -72,7 +72,8 @@ static inline unsigned long get_random_canary(void)
- 	return get_random_long() & CANARY_MASK;
- }
- 
--int __init random_init(const char *command_line);
-+void __init random_init_early(const char *command_line);
-+void __init random_init(void);
- bool rng_is_initialized(void);
- int wait_for_random_bytes(void);
- 
-diff --git a/init/main.c b/init/main.c
-index 1fe7942f5d4a..611886430e28 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -976,6 +976,9 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 		parse_args("Setting extra init args", extra_init_args,
- 			   NULL, 0, -1, -1, NULL, set_init_arg);
- 
-+	/* Call before any memory or allocators are initialized */
-+	random_init_early(command_line);
-+
- 	/*
- 	 * These use large bootmem allocations and must precede
- 	 * kmem_cache_init()
-@@ -1035,17 +1038,13 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	hrtimers_init();
- 	softirq_init();
- 	timekeeping_init();
--	kfence_init();
- 	time_init();
- 
--	/*
--	 * For best initial stack canary entropy, prepare it after:
--	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
--	 * - timekeeping_init() for ktime entropy used in random_init()
--	 * - time_init() for making random_get_entropy() work on some platforms
--	 * - random_init() to initialize the RNG from from early entropy sources
--	 */
--	random_init(command_line);
-+	/* This must be after timekeeping is initialized */
-+	random_init();
-+
-+	/* These make use of the initialized randomness */
-+	kfence_init();
- 	boot_init_stack_canary();
- 
- 	perf_event_init();
--- 
-2.37.3
+<snip>
 
+> > @@ -182,8 +180,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+> >                 if (clone_flags & CLONE_SETTLS)
+> >                         childregs->tp = tls;
+> >                 childregs->a0 = 0; /* Return value of fork() */
+> > -               p->thread.ra = (unsigned long)ret_from_fork;
+> > +               p->thread.s[0] = 0;
+
+Here we assign 0 to p->thread.s[0]
+
+Thanks
