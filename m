@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516BD5E9F98
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A386E5EA214
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbiIZK1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S236885AbiIZLBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiIZKYl (ORCPT
+        with ESMTP id S237322AbiIZK7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:24:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2334D829;
-        Mon, 26 Sep 2022 03:18:06 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BA75C946;
+        Mon, 26 Sep 2022 03:30:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D616B80926;
-        Mon, 26 Sep 2022 10:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC904C433D6;
-        Mon, 26 Sep 2022 10:17:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66C18B80936;
+        Mon, 26 Sep 2022 10:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7D1C433D6;
+        Mon, 26 Sep 2022 10:29:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187442;
-        bh=lhoE/cFx/P8/ivf4LvyubzIl1QwD9KbA+ytQn9KVuEY=;
+        s=korg; t=1664188165;
+        bh=f8KzB+VJph/qdRi5+VmDNwnvL9ovxEiPXo2pt1LmLH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tn2UlCQL0SL5oiQkihb9WyBlZJnBT8TpW6ClWt7K+3sKXHLb2vbWHNtihlOR4zJEX
-         EXLh4k3usQfkPf1JcUUK5+uCyiwfqvguTwQwZavQDUQXMublJd0niVMhoMwMfkrYGT
-         uerpEfDyz41hnpFe9Y5mWYQBKhhfyaYuOTdd5ECc=
+        b=Kb02Wmh6QbSjWS9b+cbZ5Sag1nXdDXxKj2Xxlq0rgl44wfECsVoUblL1TY7MXrSTy
+         qUpZIly30aJz1DODfYl2n292/fPxVcuGqDczdj6nGIUXEcY2xPXkyJja1ok9DmYJZH
+         Y/wFvqpLM3qhR6lPwalkWlRkwlFZ12Y/+lUlqRSs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 01/58] of: fdt: fix off-by-one error in unflatten_dt_nodes()
+        stable@vger.kernel.org, Meng Li <Meng.Li@windriver.com>,
+        Kent Gibson <warthog618@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.10 054/141] gpiolib: cdev: Set lineevent_state::irq after IRQ register successfully
 Date:   Mon, 26 Sep 2022 12:11:20 +0200
-Message-Id: <20220926100741.483470129@linuxfoundation.org>
+Message-Id: <20220926100756.412694014@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,41 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Meng Li <Meng.Li@windriver.com>
 
-[ Upstream commit 2f945a792f67815abca26fa8a5e863ccf3fa1181 ]
+commit 69bef19d6b9700e96285f4b4e28691cda3dcd0d1 upstream.
 
-Commit 78c44d910d3e ("drivers/of: Fix depth when unflattening devicetree")
-forgot to fix up the depth check in the loop body in unflatten_dt_nodes()
-which makes it possible to overflow the nps[] buffer...
+When running gpio test on nxp-ls1028 platform with below command
+gpiomon --num-events=3 --rising-edge gpiochip1 25
+There will be a warning trace as below:
+Call trace:
+free_irq+0x204/0x360
+lineevent_free+0x64/0x70
+gpio_ioctl+0x598/0x6a0
+__arm64_sys_ioctl+0xb4/0x100
+invoke_syscall+0x5c/0x130
+......
+el0t_64_sync+0x1a0/0x1a4
+The reason of this issue is that calling request_threaded_irq()
+function failed, and then lineevent_free() is invoked to release
+the resource. Since the lineevent_state::irq was already set, so
+the subsequent invocation of free_irq() would trigger the above
+warning call trace. To fix this issue, set the lineevent_state::irq
+after the IRQ register successfully.
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-analysis tool.
-
-Fixes: 78c44d910d3e ("drivers/of: Fix depth when unflattening devicetree")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/7c354554-006f-6b31-c195-cdfe4caee392@omp.ru
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 468242724143 ("gpiolib: cdev: refactor lineevent cleanup into lineevent_free")
+Cc: stable@vger.kernel.org
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+Reviewed-by: Kent Gibson <warthog618@gmail.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/of/fdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpiolib-cdev.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 9fecac72c358..7c284ca0212c 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -392,7 +392,7 @@ static int unflatten_dt_nodes(const void *blob,
- 	for (offset = 0;
- 	     offset >= 0 && depth >= initial_depth;
- 	     offset = fdt_next_node(blob, offset, &depth)) {
--		if (WARN_ON_ONCE(depth >= FDT_MAX_DEPTH))
-+		if (WARN_ON_ONCE(depth >= FDT_MAX_DEPTH - 1))
- 			continue;
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -1769,7 +1769,6 @@ static int lineevent_create(struct gpio_
+ 		ret = -ENODEV;
+ 		goto out_free_le;
+ 	}
+-	le->irq = irq;
  
- 		if (!IS_ENABLED(CONFIG_OF_KOBJ) &&
--- 
-2.35.1
-
+ 	if (eflags & GPIOEVENT_REQUEST_RISING_EDGE)
+ 		irqflags |= test_bit(FLAG_ACTIVE_LOW, &desc->flags) ?
+@@ -1783,7 +1782,7 @@ static int lineevent_create(struct gpio_
+ 	init_waitqueue_head(&le->wait);
+ 
+ 	/* Request a thread to read the events */
+-	ret = request_threaded_irq(le->irq,
++	ret = request_threaded_irq(irq,
+ 				   lineevent_irq_handler,
+ 				   lineevent_irq_thread,
+ 				   irqflags,
+@@ -1792,6 +1791,8 @@ static int lineevent_create(struct gpio_
+ 	if (ret)
+ 		goto out_free_le;
+ 
++	le->irq = irq;
++
+ 	fd = get_unused_fd_flags(O_RDONLY | O_CLOEXEC);
+ 	if (fd < 0) {
+ 		ret = fd;
 
 
