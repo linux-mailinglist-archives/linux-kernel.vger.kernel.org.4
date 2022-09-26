@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEBC5EB13E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D655EB141
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiIZTZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S229837AbiIZT0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiIZTZc (ORCPT
+        with ESMTP id S229597AbiIZT0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:25:32 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403AC3ED4F;
-        Mon, 26 Sep 2022 12:25:31 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1278624b7c4so10568433fac.5;
-        Mon, 26 Sep 2022 12:25:31 -0700 (PDT)
+        Mon, 26 Sep 2022 15:26:08 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92425A146;
+        Mon, 26 Sep 2022 12:26:04 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id a20so4745263qtw.10;
+        Mon, 26 Sep 2022 12:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=l+Ylk9b//7nM5mTF/JCsuVNj5uiO0MLoAvHLsDMzYN4=;
+        b=cI2ST1Qax8qktOIHjeYgTuoX4TzEN/mewsTIMufWIXGP+FntEEYpIOkgYvn8bQmuQj
+         4B2qdr7KHg3LPJH/g93/9G46uch8bXMKMoj/X/gwKlnH5+lHhkblOHeyEU6OKm0T9DSQ
+         Jq+1APPi0Vyp1ElmK7nKzW4eHOXrwaxnwvadiw6wxstOO+nhTIiuvqZsw9YwejckGBfb
+         AAH7aXyatPmXAzwC49CJ6J20zPndpRvV3DEBdlrZWTx5c9Wo7jwXgpGPlxYt7aDme5mz
+         Ynyg9eyA+RGaah++8Xha8Yjnk8Bar2nlysLYWYXTi1mnv1U5XYC6PbcaPaHjP6yfqg8L
+         4tbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wSlAs3Ov0qyrjU7F22uJf4Ts4qpxiIbcNCqQGXu5To8=;
-        b=h9cX9F+5wp6BHzjjsMW8qepMVmZZVk3cEaORfwHwnhictYdENd6IEtChVXe0ltTJ3d
-         3qG8YeE+lCH9vvnoM+1JoSNRqXvA5bX/X3dImUGGX8nSrNkfsRclaiu9CrFffqUpZ71a
-         N8A7ZGi0CmZRAoPruUorHPc2t0BPZJeaC2wTaWXB7sLYLTLt6m2/2/9UIeItWUpy6X1b
-         bLk7ChzcqZ2zle4UcpS2R6OxYDiXzO6Fw7lC/lorNLd4sE2ffon8NvqWPUKYVWOiTNHg
-         di2KCKpefB+VwxGpPHgfO7k21n2W79ncCZNjFG5y6hQUda1y6zGXnuYOeqcIbRJ17peq
-         Q87g==
-X-Gm-Message-State: ACrzQf01zgwHu8U/J2OaBHVoKySQR3RkJndIElJ28ciAFo5vku6Cz2mL
-        EQo0L5UG15ZXuSnTNxym3w==
-X-Google-Smtp-Source: AMsMyM7OEMrkEHBKBFwh58ANG9uZxsIgNS8g+IPXs3SnAsM46IvViigJ6s5H8yfe8cKpWha/Klnrpg==
-X-Received: by 2002:a05:6870:f216:b0:12c:2f14:b4a with SMTP id t22-20020a056870f21600b0012c2f140b4amr171512oao.186.1664220330418;
-        Mon, 26 Sep 2022 12:25:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q21-20020a4a8355000000b00475db5c28f9sm6948860oog.10.2022.09.26.12.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 12:25:29 -0700 (PDT)
-Received: (nullmailer pid 2638834 invoked by uid 1000);
-        Mon, 26 Sep 2022 19:25:28 -0000
-Date:   Mon, 26 Sep 2022 14:25:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] dt-bindings: interrupt-controller:
- realtek,rtl-intc: require parents
-Message-ID: <20220926192528.GA2638774-robh@kernel.org>
-References: <cover.1663617425.git.sander@svanheule.net>
- <ba3ae8e521ef82dd94f18a602ef53078f4a0d8d5.1663617425.git.sander@svanheule.net>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=l+Ylk9b//7nM5mTF/JCsuVNj5uiO0MLoAvHLsDMzYN4=;
+        b=Xugal5Oj0AnR2/tcZ5ZjyVRYsWkZCY5fV6HesSkjnZyg9QFb54Ec/XCSYXSWX0KJiZ
+         h+Hn4b5evssHUjbjCqfGKw0DelfAgPbr31/y6LxRPe+gw6QnOjkR49GFXbXtnB63HjFj
+         v6JB1c43V4O5Q3ecnMRNo8pNSc1VbN7ReFZajYz3BxrBmk577WGQnYAvfpoOmLxVIexn
+         PAMopQxjl+Ji0FVzvUXhYjYj8/FrgqEOUSY2mPlpxx2HQOrlspQYP1U+dtDuc+fkJiaD
+         C65+79PFUx7DYX4Vm+AukvzSJQ415vK+3BRq+dIPQRmKVNNuV+oNLWPbQvXuv8hOZSxb
+         ZVuA==
+X-Gm-Message-State: ACrzQf3YoPNo8992ekMZqx2EFIgpR6zEszcbni1Be0Au/GK5uttqA7PS
+        TgsW9TWALl84CpbyYi9KGVTfisjvK+Q=
+X-Google-Smtp-Source: AMsMyM4ednUq3Wrdb4DnYp8vSxPsaz8T4EIMmDveQ/qAZnfYxXb2BI3+bXTgiQiJU7CNJAortNdQ1Q==
+X-Received: by 2002:ac8:754c:0:b0:35c:caea:3e73 with SMTP id b12-20020ac8754c000000b0035ccaea3e73mr19696321qtr.504.1664220363879;
+        Mon, 26 Sep 2022 12:26:03 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s9-20020a05622a018900b0035d43c82da8sm1613547qtw.80.2022.09.26.12.26.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 12:26:03 -0700 (PDT)
+Message-ID: <36397608-ae17-5359-d3e2-4676aa9ecf97@gmail.com>
+Date:   Mon, 26 Sep 2022 12:25:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba3ae8e521ef82dd94f18a602ef53078f4a0d8d5.1663617425.git.sander@svanheule.net>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4.9 00/21] 4.9.330-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220926163533.310693334@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220926163533.310693334@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,43 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 22:24:42 +0200, Sander Vanheule wrote:
-> The interrupt router has 32 inputs, and up to 15 outputs connected to
-> the MIPS CPU's interrupts. The way these are mapped to each other is
-> runtime configurable. This controller can also mask individual interrupt
-> sources, and has a status register to indicate pending interrupts. This
-> means the controller is not transparent, and the use of "interrupt-map"
-> inappropriate. Instead, a list of parent interrupts should be specified.
+On 9/26/22 09:36, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.330 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Two-part compatibles are introduced to be able to require "interrupts"
-> for new devicetrees. For backward compatibility "interrupt-map" is still
-> allowed on these new compatibles, but deprecated. The old compatible,
-> with required "interrupt-map" and "#address-cells", is also deprecated.
-> The relevant descriptions are added or extended to more clearly describe
-> the functionality of this controller.
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
 > 
-> To prevent spurious changes to the binding when more SoCs are added,
-> "allOf" is used with one "if", and the compatible enum only has one
-> item.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.330-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
 > 
-> The example is updated to provide a correct example for RTL8380 SoCs.
+> thanks,
 > 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
-> Changes in v6:
-> - Allow interrupt-map for backwards compatibility, but mark as
->   deprecated.
-> - Update commit message to explain forward/backward compatibility
-> - Drop Rob's Reviewed-by because of above changes
-> 
-> Changes in v5:
-> - Add Rob's Reviewed-by
-> 
-> Changes in v4:
-> - Indicate more clearly that the controller is not transparent.
-> ---
->  .../realtek,rtl-intc.yaml                     | 60 ++++++++++++++-----
->  1 file changed, 45 insertions(+), 15 deletions(-)
-> 
+> greg k-h
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
