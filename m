@@ -2,144 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DCC5E9C26
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9C05E9C27
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiIZIgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S234441AbiIZIgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbiIZIgN (ORCPT
+        with ESMTP id S234438AbiIZIgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:36:13 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D63B21805
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:36:09 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w20so5553159ply.12
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=S3YpF0J9PK0ijK5OVv062WDbUS2SECLrB4bPkgAYd/0=;
-        b=KYWKxmq162iix/heLHpM0iiyJ+z2PHlMRbsxX3Ie4ZH30ZFBXFnrwTO7nTwzlOggqY
-         QaJDsuwxiPBjnApUhY3dAuCjh0SaYozYOw+2n4HdmNs/2kSwYLERAcfnpeIsmd6ka6J/
-         P652G+fWhEbPCBow1woX69hmjKg6+sxxBHU/KZX6dqaNLOKBJOPMacTLPGeVhIV2V3zd
-         zKwxCTgz/ZlB7vb/P8CwQCcA2xNZZeu6heFHZY77ztqxH9H3YoZc2/xfdGrOBksTi86L
-         sU5radxCmYaApM5VHHGhlPfGH9P/6hJCqJWNQAy12RWLHS92Be96CgUJIvBW6JLnFsD/
-         DJ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S3YpF0J9PK0ijK5OVv062WDbUS2SECLrB4bPkgAYd/0=;
-        b=nVUM0pW8PMvVyWmaWKgCoys6EXpKsoCljJSkGb/G71tpdFFyFxVSSJkCbMaQAj6aII
-         FaulGivMHz9FehEKmNFvJ17+VXDUXHan3WvcOLQOxtYjTGtm5iHKeZ0m2xeVNZUKSafj
-         9N6K1fxvywdlVhQSavID4MrBsa4PKQGEvDRzk7tSdOPzAuYJmNAztys7My4frN3TFk1k
-         fpyjwmcwww1SyY5mSa2XusSnDI6lgfGISTBljacXF+sGRzNZMz/S86l0N1ZctEDCghSv
-         3vtYLQLhFS4ZFYtoafe8qizGqi0KCKz6K0qCGqWXHAUN5MIBpBImMn9F2wx23J7g+rQA
-         OhZg==
-X-Gm-Message-State: ACrzQf2lyV3jENoNxnlTyfjj2UUcG/tYRhkON25DBRjUENZNwyrEH3UN
-        n7aFZhaZ8IAyLpiBRyAMcGjSmw==
-X-Google-Smtp-Source: AMsMyM7vBIo2AShmYXBLpIo583HiDxVFmEiIFH6HyfQjEFHGu4NJprUdzY8gcCKLuYXQiVqcR4r4Ew==
-X-Received: by 2002:a17:90b:1b51:b0:203:25f0:c25e with SMTP id nv17-20020a17090b1b5100b0020325f0c25emr24194880pjb.65.1664181368829;
-        Mon, 26 Sep 2022 01:36:08 -0700 (PDT)
-Received: from localhost ([122.172.85.153])
-        by smtp.gmail.com with ESMTPSA id w19-20020aa79553000000b00540fee4a680sm11428866pfq.41.2022.09.26.01.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 01:36:08 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 14:06:05 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, di.shen@unisoc.com
-Subject: Re: [PATCH v2] cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
-Message-ID: <20220926083605.b6vjrvg3a4u3rxxi@vireshk-i7>
-References: <20220926055130.yr67653e52vyuutv@vireshk-i7>
- <20220926083405.7801-1-xuewen.yan@unisoc.com>
+        Mon, 26 Sep 2022 04:36:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D721801
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:36:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6841618BC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:36:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA809C433C1;
+        Mon, 26 Sep 2022 08:36:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664181376;
+        bh=OQG5qDdXqyfqrCnb2aKHQ18w2I1CQolaz1GplFQGCYU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vd2Sq4F1NVL+Q4o07xq7d5sN/B/AdljC70kqf+PEqHiqkmGdSwq7EK0lbPdiG7MJ4
+         OBzpzsDgLLUpKg3vurC2n+9VLTWjModyf2ZrByMQzHPiDZ5fTR22+M+33cviJw61Dr
+         sOxrwmXvBFu19sRRTO78SdbLOati7SoGVMjzxLtQ=
+Date:   Mon, 26 Sep 2022 10:36:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, johannes@sipsolutions.net,
+        rafael@kernel.org
+Subject: Re: [PATCH V10] devcoredump: add context check in dev_coredumpm
+Message-ID: <YzFkfX0gOsOdtcGf@kroah.com>
+References: <20220926065126.46080-1-duoming@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926083405.7801-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220926065126.46080-1-duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-09-22, 16:34, Xuewen Yan wrote:
-> Before update thermal pressure, the max cpufreq should be limited.
-> Add QOS control for Lmh throttle cpufreq.
+On Mon, Sep 26, 2022 at 02:51:26PM +0800, Duoming Zhou wrote:
+> The dev_coredumpm(), dev_coredumpv() and dev_coredumpsg() could not
+> be used in atomic context, because they call kvasprintf_const() and
+> kstrdup() with GFP_KERNEL parameter. The process is shown below:
 > 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
-> v1->v2:
-> 	reabse to cpufreq/arm/linux-next;
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> dev_coredumpv(.., gfp_t gfp)
+>   dev_coredumpm(.., gfp_t gfp)
+>     dev_set_name
+>       kobject_set_name_vargs
+>         kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>           kstrdup(s, GFP_KERNEL); //may sleep
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index bb32659820ce..833589bc95e4 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -13,6 +13,7 @@
->  #include <linux/of_address.h>
->  #include <linux/of_platform.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_qos.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/units.h>
-> @@ -56,6 +57,8 @@ struct qcom_cpufreq_data {
->  	struct cpufreq_policy *policy;
+> This patch adds context check in dev_coredumpm() in order to show
+> dev_coredumpm() and its callers could not be used in atomic context.
+> 
+> What's more, this change can allow the api to evolve and will not
+> influence the users that call this api.
+> 
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes since v9:
+>   - v9: Add context check in dev_coredumpm().
+>   - v10: Remove the "Fixes" tag.
+> 
+>  drivers/base/devcoredump.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+> index f4d794d6bb8..806ee872f5f 100644
+> --- a/drivers/base/devcoredump.c
+> +++ b/drivers/base/devcoredump.c
+> @@ -255,6 +255,9 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+>  	struct devcd_entry *devcd;
+>  	struct device *existing;
 >  
->  	bool per_core_dcvs;
-> +
-> +	struct freq_qos_request throttle_freq_req;
->  };
->  
->  static unsigned long cpu_hw_rate, xo_rate;
-> @@ -321,6 +324,8 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
->  
->  	throttled_freq = freq_hz / HZ_PER_KHZ;
->  
-> +	freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
-> +
->  	/* Update thermal pressure (the boost frequencies are accepted) */
->  	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
->  
-> @@ -413,6 +418,14 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
->  	if (data->throttle_irq < 0)
->  		return data->throttle_irq;
->  
-> +	ret = freq_qos_add_request(&policy->constraints,
-> +				   &data->throttle_freq_req, FREQ_QOS_MAX,
-> +				   FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
->  	data->cancel_throttle = false;
->  	data->policy = policy;
->  
-> @@ -479,6 +492,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
->  	if (data->throttle_irq <= 0)
->  		return;
->  
-> +	freq_qos_remove_request(&data->throttle_freq_req);
->  	free_irq(data->throttle_irq, data);
->  }
->  
+> +	if (!gfpflags_normal_context(gfp))
+> +		goto free;
 
-Applied. Thanks.
+I still do not know why this is needed at all as there are no in-kernel
+abusers of this api.
 
--- 
-viresh
+We do not add code to the kernel for out-of-tree users, or "future
+users" at all, otherwise it would be unmaintable.
+
+thanks,
+
+greg k-h
