@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7635EA004
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC56E5E9F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiIZKcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S235355AbiIZK0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiIZKaJ (ORCPT
+        with ESMTP id S235440AbiIZKXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:30:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FBF1AD99;
-        Mon, 26 Sep 2022 03:19:51 -0700 (PDT)
+        Mon, 26 Sep 2022 06:23:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849D9DEDD;
+        Mon, 26 Sep 2022 03:17:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 023D660B5E;
-        Mon, 26 Sep 2022 10:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CA6C433D6;
-        Mon, 26 Sep 2022 10:19:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CE33ACE10E9;
+        Mon, 26 Sep 2022 10:16:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F7AC433D6;
+        Mon, 26 Sep 2022 10:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187590;
-        bh=xpf3VBCUV+vbajoUKGEU25izfAZdtkyl5dtrqwY9HQQ=;
+        s=korg; t=1664187411;
+        bh=LjL2pJ7jfJN9nliWkDI+Wueh5f4fUGrGKlyxUIDa3ZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gOrCPghycjvRnRiePZWm3q0arGCj6pHAOmKwVKyGoECvReubu0uLqXH0wLLJW/O8Y
-         4XIYxmPZw9gAlQOUEGy9mRKvtTnVaKI7PYYbkeUUTqx2VYf+gY0p7Wr4Ee1zW2yvSm
-         q2dUcMUB9En8L/5aeuIOlbdL+KUbwMasdliMPDLY=
+        b=bWru3uGTZtmIoPBfWBfQ//UB6zUJxezVdjNMwst+DmHX72t1xa2uFUXKdUMSkDhQW
+         Pl97O1MIkx6RK25cb8VekikRpDCmqDBJ2K1ZJxYmUyQUfPf8c6fZKkQWOyBs+5N0Vp
+         7DrpWbk+bPnO+YGNJCJbGoP1NUl+A8PZcDoP152Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 49/58] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dragos-Marian Panait <dragos.panait@windriver.com>
+Subject: [PATCH 4.14 40/40] media: em28xx: initialize refcount before kref_get
 Date:   Mon, 26 Sep 2022 12:12:08 +0200
-Message-Id: <20220926100743.247701751@linuxfoundation.org>
+Message-Id: <20220926100739.866179955@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <seanga2@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 878e2405710aacfeeb19364c300f38b7a9abfe8f ]
+commit c08eadca1bdfa099e20a32f8fa4b52b2f672236d upstream.
 
-There is a separate receive path for small packets (under 256 bytes).
-Instead of allocating a new dma-capable skb to be used for the next packet,
-this path allocates a skb and copies the data into it (reusing the existing
-sbk for the next packet). There are two bytes of junk data at the beginning
-of every packet. I believe these are inserted in order to allow aligned DMA
-and IP headers. We skip over them using skb_reserve. Before copying over
-the data, we must use a barrier to ensure we see the whole packet. The
-current code only synchronizes len bytes, starting from the beginning of
-the packet, including the junk bytes. However, this leaves off the final
-two bytes in the packet. Synchronize the whole packet.
+The commit 47677e51e2a4("[media] em28xx: Only deallocate struct
+em28xx after finishing all extensions") adds kref_get to many init
+functions (e.g., em28xx_audio_init). However, kref_init is called too
+late in em28xx_usb_probe, since em28xx_init_dev before will invoke
+those init functions and call kref_get function. Then refcount bug
+occurs in my local syzkaller instance.
 
-To reproduce this problem, ping a HME with a payload size between 17 and
-214
+Fix it by moving kref_init before em28xx_init_dev. This issue occurs
+not only in dev but also dev->dev_next.
 
-	$ ping -s 17 <hme_address>
-
-which will complain rather loudly about the data mismatch. Small packets
-(below 60 bytes on the wire) do not have this issue. I suspect this is
-related to the padding added to increase the minimum packet size.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220920235018.1675956-1-seanga2@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 47677e51e2a4 ("[media] em28xx: Only deallocate struct em28xx after finishing all extensions")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[DP: drop changes related to dev->dev_next as second tuner functionality was added in 4.16]
+Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/sun/sunhme.c | 4 ++--
+ drivers/media/usb/em28xx/em28xx-cards.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index 882908e74cc9..a4090163d870 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2064,9 +2064,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -3644,6 +3644,8 @@ static int em28xx_usb_probe(struct usb_i
+ 		goto err_free;
+ 	}
  
- 			skb_reserve(copy_skb, 2);
- 			skb_put(copy_skb, len);
--			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			skb_copy_from_linear_data(skb, copy_skb->data, len);
--			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			/* Reuse original ring buffer. */
- 			hme_write_rxd(hp, this,
- 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
--- 
-2.35.1
-
++	kref_init(&dev->ref);
++
+ 	dev->devno = nr;
+ 	dev->model = id->driver_info;
+ 	dev->alt   = -1;
+@@ -3730,8 +3732,6 @@ static int em28xx_usb_probe(struct usb_i
+ 			dev->dvb_xfer_bulk ? "bulk" : "isoc");
+ 	}
+ 
+-	kref_init(&dev->ref);
+-
+ 	request_modules(dev);
+ 
+ 	/*
 
 
