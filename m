@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274435EB4C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D4E5EB4CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiIZWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
+        id S229521AbiIZWwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiIZWsl (ORCPT
+        with ESMTP id S229457AbiIZWwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:48:41 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1132EA3D45
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:48:40 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id y141so6473400iof.5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=38Z7giVIplZZJ1lV21jaV5dNmGNLpaVl2kG7pznFZuE=;
-        b=hiM2Vh8VRTuk5sv5LPVPIQ6uIBcpDQT7Tesiukm9A5qJZ6GILd9k5pK8eVQuVSt+Pb
-         sDnoFDfNYvgM5sHQMa1oQi7WT7dHL9iX7m7iPH1SwDnEYm5G7+gMSln+fsvQuZajcbXA
-         IZ11FrKU7mtXvGouTS/n8rmwIr3G02/08/9Hg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=38Z7giVIplZZJ1lV21jaV5dNmGNLpaVl2kG7pznFZuE=;
-        b=ffUcXrocOOyp/FXQFOzHzkz8DJvFI2fahQC6aWDpa7ol/emlHho7qC/EsOPoD5CDZS
-         iJ5FhrceC9ufEjg0a1o08oMGR47L6/CbIuC8cVRnb1u7XdGUuwMGlQaH9R0yW1OTLipq
-         hStj30kTASunOo59Yz06yfnk+qjNQZRxXdsb7ERmUGTRgSmXoj0QRgqbNoMq8rqPGKHI
-         FYPWxw4BCsESARr/4FCMcpfrfN7uZDXl7l0w/uJQZNmRuAE79H2gT2s4xA1gobaZ1Oi0
-         heHzXq1tIZQ/chnWlnHcAUkPSr9H1TtS0O+o4TZbkFAWaRFXfgS/AlyRE2H0gjO534wi
-         9iJw==
-X-Gm-Message-State: ACrzQf37FhnKyUgDBuk+T1mfvPq19l0q5w5k0K3qitEmWu59qwumHgWf
-        C9EmvNq3A0Igv5XsxaJPeiz+cNDj2PM5IQ==
-X-Google-Smtp-Source: AMsMyM4IhDkSEwyeFjG3JALuMlJh60lExcdrX3D2A9eN9EYItnafYMugT87y+lRaTX2EFdCAwYYwCg==
-X-Received: by 2002:a05:6638:3398:b0:35a:3da9:fc7a with SMTP id h24-20020a056638339800b0035a3da9fc7amr12976259jav.87.1664232519411;
-        Mon, 26 Sep 2022 15:48:39 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u24-20020a02c958000000b00356744215f6sm7644730jao.47.2022.09.26.15.48.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 15:48:38 -0700 (PDT)
-Message-ID: <804c6db2-a541-657a-a84d-271bd6e95d19@linuxfoundation.org>
-Date:   Mon, 26 Sep 2022 16:48:38 -0600
+        Mon, 26 Sep 2022 18:52:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7487F134;
+        Mon, 26 Sep 2022 15:52:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E97CAB815D7;
+        Mon, 26 Sep 2022 22:52:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9030BC433B5;
+        Mon, 26 Sep 2022 22:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664232750;
+        bh=X+i9bYu7/jWxfKAIE3i62yvVnxdBvG/IiRya+AP0Akw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k+WJCcJepmSQ14q6DF5jb4UgCKZYbXeY7nACK6WAMaM/uPrYsQ+x8Qku3yU28PjFn
+         PBeq/7jXzTW5J7/I1aqFgjDWN6Qv9cXBfLIQh5FAgNZfj+dcU2GHS9dh5S7NTNVbP6
+         OsuUnzF7FrpO3kLanOffFkQtonPMofZ/ELbU56XCKeHwvPoSLxg+bV/2f7ehoFgFJl
+         FKdtkqoi+DknB7qodCR5V55GUwjO6qJ3LfnKEwE5FJhXqV8k/JlVDRy2jzgrI1B4JE
+         2KQ4vLyOR6v+Ll4oUKdjtWIV0Q+QHJHHuHkzMqbZFkJTnaS6fPFr9x02dCBwO2e9Nb
+         ora+TTneLbDhg==
+Received: by mail-ua1-f44.google.com with SMTP id p89so2961343uap.12;
+        Mon, 26 Sep 2022 15:52:30 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3UgtrfHDvTiB1MppHlZEiA8+Ofmk1wyQQ74kYZ8h1tM28qy/zP
+        KYOJkx3l7yOalzXNOecd+Ivx9qdBeEZ9YQPXSg==
+X-Google-Smtp-Source: AMsMyM43QjpEBGgBdeXDtHcyhT0+TUAlXLvP8qGgbv5J2u9gIos+nqDadyw2zzx9fWZeWcsqwCL4JDInZkzVBkDATYI=
+X-Received: by 2002:ab0:2715:0:b0:3c9:90c2:1aea with SMTP id
+ s21-20020ab02715000000b003c990c21aeamr7366736uao.77.1664232749469; Mon, 26
+ Sep 2022 15:52:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 000/148] 5.15.71-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20210416040924.2882771-1-danielwa@cisco.com> <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
+ <20220922205334.GV4320@zorba> <dcff9b0f-82c8-5aa7-0fff-b749a05fcb20@seco.com>
+ <20220922211026.GW4320@zorba> <1663881344.25129.23.camel@chimera>
+In-Reply-To: <1663881344.25129.23.camel@chimera>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 26 Sep 2022 17:52:18 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLibRSi2n389Q7cf+1gQSidvfiZHjHCcGirgi0hgJ53-A@mail.gmail.com>
+Message-ID: <CAL_JsqLibRSi2n389Q7cf+1gQSidvfiZHjHCcGirgi0hgJ53-A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] generic command line v4
+To:     Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Daniel Walker <danielwa@cisco.com>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/22 04:10, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.71 release.
-> There are 148 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.71-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Thu, Sep 22, 2022 at 4:15 PM Daniel Gimpelevich
+<daniel@gimpelevich.san-francisco.ca.us> wrote:
+>
+> On Thu, 2022-09-22 at 14:10 -0700, Daniel Walker wrote:
+> > On Thu, Sep 22, 2022 at 05:03:46PM -0400, Sean Anderson wrote:
+> [snip]
+> > > As recently as last month, someone's patch to add such support was
+> > > rejected for this reason [1].
+> > >
+> > > --Sean
+> > >
+> > > [1] https://lore.kernel.org/linux-arm-kernel/20220812084613.GA3107@willie-the-truck/
+> >
+> >
+> > I had no idea.. Thanks for pointing that out. I guess I will re-submit in that
+> > case.
+> >
+> > Daniel
+>
+> This has been happening repeatedly since circa 2014, on multiple
+> architectures. It's quite frustrating, really.
 
-Compiled and booted on my test system. No dmesg regressions.
+It must not be that important. From the last time, IMO Christophe's
+version was much closer to being merged than this series. This is not
+how you get things upstream:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+> * Dropped powerpc changes
+>   Christophe Leroy has reservations about the features for powerpc. I
+>   don't think his reservations are founded, and these changes should
+>   fully work on powerpc. However, I dropped these changes so Christophe
+>   can have more time to get comfortable with the changes.
 
-thanks,
--- Shuah
+Rob
