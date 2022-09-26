@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FBA5EA2AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5412A5EA0B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237501AbiIZLMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S236252AbiIZKk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237488AbiIZLLQ (ORCPT
+        with ESMTP id S236356AbiIZKjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:11:16 -0400
+        Mon, 26 Sep 2022 06:39:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E600B5FF5B;
-        Mon, 26 Sep 2022 03:35:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A5553D0C;
+        Mon, 26 Sep 2022 03:22:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80CA8B80972;
-        Mon, 26 Sep 2022 10:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2540C43142;
-        Mon, 26 Sep 2022 10:35:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8661B80915;
+        Mon, 26 Sep 2022 10:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4892DC433D6;
+        Mon, 26 Sep 2022 10:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188519;
-        bh=S43vwTN5FCS7lBOECRJGWC/D4MWhEcu9+0J4OAHEcZo=;
+        s=korg; t=1664187767;
+        bh=uL7SlwwZZ5lf4O8RXBnrMmtiQSNrVMXo+2zGJvQVkFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nv+NZeBJRCJ0fHBbiIaUtUmqPoSx9cURe5HxLHd8CJ9qVzGPKzZYkMpjV8Z5WDi45
-         ObhTkMvN3bqE2FN6qxHmZA2beYegrg6RAgOB0wsaq8v0Aip0u4DVH8O9aMmNqe2L5r
-         LFmOjOXDGpvxmPt6llGs8pcx7NYpFC6nhYcmcN0k=
+        b=QXEBYjQ87ygReiCa05PDidLT01G/lPN66jZj09HXdEXgpb4mo8McViYDUsfqfaz7u
+         cb3TFvf49CbS4rI2NL9W/S/8s58yvGcHT+zaMyRfecjJT18gcOgRSL2TF+FLOITSPF
+         nXN5RnlvI0R3BWNhy/hVuW0pkoIJ54yt1aFCjf/E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Raghunathan Srinivasan <raghunathan.srinivasan@intel.com>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.15 034/148] iommu/vt-d: Check correct capability for sagaw determination
-Date:   Mon, 26 Sep 2022 12:11:08 +0200
-Message-Id: <20220926100757.320220944@linuxfoundation.org>
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 036/120] usb: xhci-mtk: add only one extra CS for FS/LS INTR
+Date:   Mon, 26 Sep 2022 12:11:09 +0200
+Message-Id: <20220926100752.009518510@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,38 +53,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yi Liu <yi.l.liu@intel.com>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit 154897807050c1161cb2660e502fc0470d46b986 upstream.
+[ Upstream commit 1bf661daf6b084bc4d753f55b54f35dc98709685 ]
 
-Check 5-level paging capability for 57 bits address width instead of
-checking 1GB large page capability.
+In USB2 Spec:
+"11.18.5 TT Response Generation
+In general, there will be two (or more) complete-split
+transactions scheduled for a periodic endpoint.
+However, for interrupt endpoints, the maximum size of
+the full-/low-speed transaction guarantees that it can
+never require more than two complete-split transactions.
+Two complete-split transactions are only required
+when the transaction spans a microframe boundary."
 
-Fixes: 53fc7ad6edf2 ("iommu/vt-d: Correctly calculate sagaw value of IOMMU")
-Cc: stable@vger.kernel.org
-Reported-by: Raghunathan Srinivasan <raghunathan.srinivasan@intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Raghunathan Srinivasan <raghunathan.srinivasan@intel.com>
-Link: https://lore.kernel.org/r/20220916071212.2223869-2-yi.l.liu@intel.com
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Due to the maxp is 64, and less then 188 (at most in one
+microframe), seems never span boundary, so use only one CS
+for FS/LS interrupt transfer, this will save some bandwidth.
+
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/5b9ff09f53d23cf9e5c5437db4ffc18b798bf60c.1615170625.git.chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/intel/iommu.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mtk-sch.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -539,7 +539,7 @@ static unsigned long __iommu_calculate_s
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 450fa22b7dc7..59ba25ca018d 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -408,13 +408,11 @@ static int check_sch_tt(struct usb_device *udev,
  {
- 	unsigned long fl_sagaw, sl_sagaw;
+ 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
+ 	u32 extra_cs_count;
+-	u32 fs_budget_start;
+ 	u32 start_ss, last_ss;
+ 	u32 start_cs, last_cs;
+ 	int i;
  
--	fl_sagaw = BIT(2) | (cap_fl1gp_support(iommu->cap) ? BIT(3) : 0);
-+	fl_sagaw = BIT(2) | (cap_5lp_support(iommu->cap) ? BIT(3) : 0);
- 	sl_sagaw = cap_sagaw(iommu->cap);
+ 	start_ss = offset % 8;
+-	fs_budget_start = (start_ss + 1) % 8;
  
- 	/* Second level only. */
+ 	if (sch_ep->ep_type == ISOC_OUT_EP) {
+ 		last_ss = start_ss + sch_ep->cs_count - 1;
+@@ -450,16 +448,14 @@ static int check_sch_tt(struct usb_device *udev,
+ 		if (sch_ep->ep_type == ISOC_IN_EP)
+ 			extra_cs_count = (last_cs == 7) ? 1 : 2;
+ 		else /*  ep_type : INTR IN / INTR OUT */
+-			extra_cs_count = (fs_budget_start == 6) ? 1 : 2;
++			extra_cs_count = 1;
+ 
+ 		cs_count += extra_cs_count;
+ 		if (cs_count > 7)
+ 			cs_count = 7; /* HW limit */
+ 
+-		for (i = 0; i < cs_count + 2; i++) {
+-			if (test_bit(offset + i, tt->ss_bit_map))
+-				return -ERANGE;
+-		}
++		if (test_bit(offset, tt->ss_bit_map))
++			return -ERANGE;
+ 
+ 		sch_ep->cs_count = cs_count;
+ 		/* one for ss, the other for idle */
+-- 
+2.35.1
+
 
 
