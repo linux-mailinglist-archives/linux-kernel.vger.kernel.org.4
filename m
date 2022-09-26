@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE135EA2CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C39B5EA21E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237294AbiIZLO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
+        id S237163AbiIZLCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbiIZLNN (ORCPT
+        with ESMTP id S237391AbiIZK7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:13:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7461D5C;
-        Mon, 26 Sep 2022 03:36:00 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64635D113;
+        Mon, 26 Sep 2022 03:31:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E7E4B802C7;
-        Mon, 26 Sep 2022 10:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D43C433B5;
-        Mon, 26 Sep 2022 10:35:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EC5160A5C;
+        Mon, 26 Sep 2022 10:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD17C433D6;
+        Mon, 26 Sep 2022 10:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188559;
+        s=korg; t=1664188199;
         bh=zRrMrRABLsN3WrZIDEo2465rJQHnOyEX8cPMpJTlbZg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jr8Ix8qgPaKZN1PyAkxirZMRGGrFRWR+7MGcAECPoGOCTEQIUXhQ1wLOuW4Q2b0/x
-         v3uCGLZWjJm193HAv27w8hMr//Oood/e0+rtWfB6hcOngw/kVCXL7hoWHrDQBYiEFo
-         FmNV+28i2XZc2egySxUZdDMaQjZhrAuyfC6kdc8M=
+        b=tiTbE0AcM4NFeruLeG1+R98Cj7aPqucYwRWkL9oIq87t155cHFPRJjgpHEgqqSAQt
+         Hlwtie4mud9MKR5Mk0XveKbM6nsOofDgjmMgMIEOYr4GRsj9BTnUQqNPQ3Xz4RT0kp
+         l19JM/HfxaISU2qXjndf5tWUqQXH1hjv+/d6fskU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 046/148] riscv: fix a nasty sigreturn bug...
-Date:   Mon, 26 Sep 2022 12:11:20 +0200
-Message-Id: <20220926100757.736026480@linuxfoundation.org>
+Subject: [PATCH 5.10 055/141] riscv: fix a nasty sigreturn bug...
+Date:   Mon, 26 Sep 2022 12:11:21 +0200
+Message-Id: <20220926100756.441521697@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
