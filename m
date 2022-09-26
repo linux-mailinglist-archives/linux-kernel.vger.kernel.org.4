@@ -2,271 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE23F5EADB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65935EADB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiIZRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S230115AbiIZRLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiIZRK6 (ORCPT
+        with ESMTP id S229825AbiIZRLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:10:58 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8253A21E21
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:19:57 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b75so7189188pfb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=riSPHNsF0xOhaGspUldr32iYpAlbd9kHHXWwrlmwZ2k=;
-        b=FIWI3/7v4gfpJFuMpLSMQfyTg3db+PwzbaWqx8f7E6SrbPbICQfwX4zFCWo9/9hxi9
-         w1bitAo9ZZgAdLVtAaqf/wH+eNIkSeZWzDZewh9RHvH81wnISjzxtCXWfY9el3PfwL4P
-         2IuJYBsunIRZ4FO2zjy4vnjAkEb89VjoIcyHgdPys49H1zzLVBZJkNJA8kZZaTS0tEtn
-         OMDN5jW5afmMonqZgKYZy2+DHUizQBWUgZC+G+3mtUOgXXeFx7hNpdw/z0wmC4eOhdTd
-         vHZT4t/gwi3hQ+98VjYDohxKTNHUMtWksbnx37KWYYgPEMupYeVZDUeEDXUJES3qNlTu
-         T1EQ==
+        Mon, 26 Sep 2022 13:11:11 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05CF422FC;
+        Mon, 26 Sep 2022 09:20:09 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1279948d93dso9862666fac.10;
+        Mon, 26 Sep 2022 09:20:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=riSPHNsF0xOhaGspUldr32iYpAlbd9kHHXWwrlmwZ2k=;
-        b=dFoIHJWkRuX7LBkhzeKGyHnPhfQ6EfH0d+oUNSBB1cCnOuV2cs9wsyxgIzWIw1bWZk
-         pmqWLDqWxu8cFVQvLcm9vn9byr032xjAIJeMac0XV+pc6olSeupp5/UB7H0AJwFR1Zos
-         Z1/vTZO+1nqH2Xo5fziG4oP7GjZ/Xy3moTQYuT4Tu3Y8O0gbMWh3+LVUGONNVzSn8Lby
-         XLUZs7aHAyTd+yxKWbMcy7PY+OJ2OWiA6KHxRfsLUcGy5g5IWAHfMBuoeNebcrGLCuLS
-         CQyo6vXzeYCQBCbY530OE9f/rWJDqD8pBqzAhsi/H3APcUtsRhTzL+dKTuB7pgAghfHW
-         DVHQ==
-X-Gm-Message-State: ACrzQf2QBsc58dRCCZKHtY2jzXzTnWOuyp6LNl/P8KapSC3W+BHDGO1Q
-        sEy5Y072C2ekDyU2pee6ltGiUw==
-X-Google-Smtp-Source: AMsMyM7peqaL0FeyMjAray29j78rgv40wbugk9BjKI2iAb7xx7yzdEdFI7np8fAM372vbK2vOI8DrQ==
-X-Received: by 2002:a05:6a00:2350:b0:541:b5bf:2774 with SMTP id j16-20020a056a00235000b00541b5bf2774mr24274454pfj.28.1664209196845;
-        Mon, 26 Sep 2022 09:19:56 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b15-20020a65578f000000b004348bd693a8sm11011159pgr.31.2022.09.26.09.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 09:19:56 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:19:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, jon@nutanix.com,
-        kevin.tian@intel.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC v2] KVM: x86/vmx: Suppress posted interrupt notification
- when CPU is in host
-Message-ID: <YzHRKO1v5N/BIQl6@google.com>
-References: <20220923085806.384344-1-chao.gao@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Kv0hAbAuMDhiwxda9Nahgcb504NbJJsHBppTCWLGHHk=;
+        b=SpoOKxBMaiTuhWXtVbUqEjpWyrv7n+qAaH/V+5IVnZgVAWLgE2IWmZ+ZHBfz6fXxhf
+         WzsbVFUZRbRGwEIEOo7ep+zdDzDLQJ3cHLfI7s9Uqoaxey8wDYcFyz18+YI1kPeghl5i
+         FXE1Gp6uoo2b9C1sqITlN67QObndrIVo47E5TyA6nCDI+wiL9MIr66zKVDVt46Iqx54e
+         FMOAmcOfz2kmk6hgmi3FDbY1A9apNxxL4gwKj4h70Wcyp9tOoj+qPo1IKntxlgueqlst
+         DgW6kBZPO6LifE/pihwrxw/eGmiYX7o0WCoM867m7EkKfpb3KG8WQjO4bFqOUpZ2diWA
+         2MZA==
+X-Gm-Message-State: ACrzQf0HaEGcVcylP2MzTVRlYH8se2yrhKUQzz5xgc/NxUgLVuvW+Twp
+        nRGXf2BwdAVj+JYX8J1FzWpA+QOAvu/Olwk2gJY=
+X-Google-Smtp-Source: AMsMyM5Q/npal10pqlSTDATxeYfQgb/WeFnBXBfvmtNLmcHtmNAEuhq2WyMJ8EtkN3Iz6dih+p2IBRyznVjd5MCjK9c=
+X-Received: by 2002:a05:6870:524b:b0:12c:cfd2:81c0 with SMTP id
+ o11-20020a056870524b00b0012ccfd281c0mr12345018oai.209.1664209208682; Mon, 26
+ Sep 2022 09:20:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923085806.384344-1-chao.gao@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220903000210.1112014-1-namhyung@kernel.org> <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
+ <c4f7e14b-a229-6b23-b28d-880b8369e6d8@arm.com>
+In-Reply-To: <c4f7e14b-a229-6b23-b28d-880b8369e6d8@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 26 Sep 2022 09:19:59 -0700
+Message-ID: <CAM9d7ch36RGYJJEg2dnrauQnVX_f9MiE0RB99EU4ynNL-8CUVA@mail.gmail.com>
+Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
+To:     James Clark <james.clark@arm.com>
+Cc:     Marco Elver <elver@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022, Chao Gao wrote:
-> Set PID.SN right after VM exits and clear it before VM entry to minimize
-> the chance of hardware issuing PINs to a CPU when it's in host.
+Hello,
 
-Toggling PID.SN as close to the world switch as possible is undesirable.  If KVM
-re-enters the guest without enabling IRQs, i.e. handles the VM-Exit in the fastpath,
-then the notification IRQ will be delivered in the guest.
+On Mon, Sep 26, 2022 at 8:06 AM James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 03/09/2022 07:52, Marco Elver wrote:
+> > On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel.org> wrote:
+> >>
+> >> If it runs on an old kernel, perf_event_open would fail because of the
+> >> new fields sigtrap and sig_data.  Just skip the test if it failed.
+> >>
+> >> Cc: Marco Elver <elver@google.com>
+> >> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> >> ---
+> >>  tools/perf/tests/sigtrap.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> >> index e32ece90e164..7057566e6ae4 100644
+> >> --- a/tools/perf/tests/sigtrap.c
+> >> +++ b/tools/perf/tests/sigtrap.c
+> >> @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+> >>         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+> >>         if (fd < 0) {
+> >>                 pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> >> +               ret = TEST_SKIP;
+> >
+> > Wouldn't we be interested if perf_event_open() fails because it could
+> > actually be a bug? By skipping we'll be more likely to miss the fact
+> > there's a real problem.
+> >
+> > That's my naive thinking at least - what do other perf tests usually
+> > do in this case?
+>
+> I missed this discussion but I just submitted a patch with a similar
+> issue [1]. To me, it doesn't make sense to have the tests pass on older
+> kernels if this lowers the value of the tests by accepting possibly
+> invalid values. If you want to test older kernels then just use older
+> tests, but maybe there is some use case that I'm not aware of.
 
-The natural location to do the toggling is when KVM "toggles" software, i.e. when
-KVM sets IN_GUEST_MODE (clear SN) and OUTSIDE_GUEST_MODE (set SN).
+Thanks for your opinion.  But my test environment is running the tests
+on random machines which may run some old kernel.  I agree that it
+should not skip the real problems but I think we can find a good way
+to detect old, unsupported kernels reliably like using BTF.
 
-I believe that would also obviate the need to manually send a PI Notification IRQ,
-as the existing ->sync_pir_to_irr() call that exists to handle exactly this case
-(notification not sent or handled in host) would ensure any outstanding posted IRQ
-gets moved to the IRR and processed accordingly.
-
-> Opportunistically clean up vmx_vcpu_pi_put(); when a vCPU is preempted,
-
-Uh uh, this patch is already way, way too subtle and complex to tack on clean up.
-"Opportunistic" clean up is for cases where the clean up is a pure refactoring
-and/or has zero impact on functionality.
-
-> it is pointless to update PID.NV to wakeup vector since notification is
-> anyway suppressed. And since PID.SN should be already set for running
-> vCPUs, so, don't set it again for preempted vCPUs.
-
-I'm pretty sure this is wrong.  If the vCPU is preempted between prepare_to_rcuwait()
-and schedule(), then skipping pi_enable_wakeup_handler() will hang the guest if
-the wakeup event is a posted IRQ and the event arrives while the vCPU is preempted.
-
-> When IPI virtualization is enabled, this patch increases "perf bench" [*]
-> by 6.56%, and PIN count in 1 second drops from tens of thousands to
-> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
-> VM-exit round-trip latency.
-
-The overhead is more than likely due to pi_is_pir_empty() in the VM-Entry path,
-i.e. should in theory go away if PID.SN is clear/set at IN_GUEST_MODE and
-OUTSIDE_GUEST_MODE
-
-> Also honour PID.SN bit in vmx_deliver_posted_interrupt().
-
-Why?
-
-> When IPI virtualization is enabled, this patch increases "perf bench" [*]
-> by 6.56%, and PIN count in 1 second drops from tens of thousands to
-> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
-> VM-exit round-trip latency.
-> 
-> [*] test cmd: perf bench sched pipe -T. Note that we change the source
-> code to pin two threads to two different vCPUs so that it can reproduce
-> stable results.
-> 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> ---
-> RFC: I am not sure whether the benefits outweighs the extra VM-exit cost.
-> 
-> Changes in v2 (addressed comments from Kevin):
-> - measure/estimate the impact to non-IPC-intensive cases
-> - don't tie PID.SN to vcpu->mode. Instead, clear PID.SN
->   right before VM-entry and set it after VM-exit.
-
-Ah, sorry, missed v1.  Rather than key off of IN_GUEST_MODE in the sync path, add
-an explicit kvm_x86_ops hook to perform the transition.  I.e. make it explict.
-
-> - use !pi_is_pir_empty() in pi_enable_wakeup_handler() to
->   check if any interrupt was posted after clearing SN.
-> - clean up vmx_vcpu_pi_put(). See comments above.
-> 
->  arch/x86/kvm/lapic.c           |  2 ++
->  arch/x86/kvm/vmx/posted_intr.c | 55 +++++++++++-----------------------
->  arch/x86/kvm/vmx/vmx.c         | 34 ++++++++++++++++++++-
->  3 files changed, 53 insertions(+), 38 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 9dda989a1cf0..a9f27c6ce937 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -128,7 +128,9 @@ static inline int __apic_test_and_clear_vector(int vec, void *bitmap)
->  }
->  
->  __read_mostly DEFINE_STATIC_KEY_DEFERRED_FALSE(apic_hw_disabled, HZ);
-> +EXPORT_SYMBOL_GPL(apic_hw_disabled);
->  __read_mostly DEFINE_STATIC_KEY_DEFERRED_FALSE(apic_sw_disabled, HZ);
-> +EXPORT_SYMBOL_GPL(apic_sw_disabled);
-
-These exports will hopefully go away.
-
->  static inline int apic_enabled(struct kvm_lapic *apic)
->  {
-> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> index 1b56c5e5c9fb..9cec3dd88f75 100644
-> --- a/arch/x86/kvm/vmx/posted_intr.c
-> +++ b/arch/x86/kvm/vmx/posted_intr.c
-> @@ -70,12 +70,6 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
->  	 * needs to be changed.
->  	 */
->  	if (pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR && vcpu->cpu == cpu) {
-> -		/*
-> -		 * Clear SN if it was set due to being preempted.  Again, do
-> -		 * this even if there is no assigned device for simplicity.
-> -		 */
-> -		if (pi_test_and_clear_sn(pi_desc))
-> -			goto after_clear_sn;
->  		return;
->  	}
->  
-> @@ -101,11 +95,16 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
->  		new.control = old.control;
->  
->  		/*
-> -		 * Clear SN (as above) and refresh the destination APIC ID to
-> -		 * handle task migration (@cpu != vcpu->cpu).
-> +		 * Set SN and refresh the destination APIC ID to handle
-> +		 * task migration (@cpu != vcpu->cpu).
-> +		 *
-> +		 * SN is cleared when a vCPU goes to blocked state so that
-> +		 * the blocked vCPU can be waken up on receiving a
-> +		 * notification. For a running/runnable vCPU, such
-> +		 * notifications are useless. Set SN bit to suppress them.
->  		 */
->  		new.ndst = dest;
-> -		new.sn = 0;
-> +		new.sn = 1;
-
-To handle the preempted case, I believe the correct behavior is to leave SN
-as-is, although that would require setting SN=1 during vCPU creation.  Arguably
-KVM should do that anyways when APICv is enabled.
-
-Hmm, or alternatively this should do the same?
-
-		new.sn = !kvm_vcpu_is_blocking();
-
-> @@ -172,8 +160,10 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
->  	 * enabled until it is safe to call try_to_wake_up() on the task being
->  	 * scheduled out).
->  	 */
-> -	if (pi_test_on(&new))
-> +	if (!pi_is_pir_empty(pi_desc)) {
-> +		pi_set_on(pi_desc);
-
-As much as I wish we could get rid of kvm_arch_vcpu_blocking(), I actually think
-this would be a good application of that hook.  If PID.SN is cleared during
-kvm_arch_vcpu_blocking() and set during kvm_arch_vcpu_unblocking(), then I believe
-there's no need to manually check the PIR here, as any IRQ that isn't detected by
-kvm_vcpu_check_block() is guaranteed to set PID.ON=1.
-
->  		apic->send_IPI_self(POSTED_INTR_WAKEUP_VECTOR);
-> +	}
->  
->  	local_irq_restore(flags);
->  }
-> @@ -193,21 +183,12 @@ static bool vmx_needs_pi_wakeup(struct kvm_vcpu *vcpu)
->  
->  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
->  {
-> -	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
-> -
->  	if (!vmx_needs_pi_wakeup(vcpu))
->  		return;
->  
-> -	if (kvm_vcpu_is_blocking(vcpu) && !vmx_interrupt_blocked(vcpu))
-> +	if (!vcpu->preempted && kvm_vcpu_is_blocking(vcpu) &&
-
-As above, I don't think skipping this for preempted is correct.
-
-> +	    !vmx_interrupt_blocked(vcpu))
->  		pi_enable_wakeup_handler(vcpu);
-> -
-> -	/*
-> -	 * Set SN when the vCPU is preempted.  Note, the vCPU can both be seen
-> -	 * as blocking and preempted, e.g. if it's preempted between setting
-> -	 * its wait state and manually scheduling out.
-> -	 */
-
-Assuming I'm correct, hoist the "note" above to document that KVM needs to enable
-the wakeup handler even when the vCPU is preempted.
-
-> -	if (vcpu->preempted)
-> -		pi_set_sn(pi_desc);
->  }
->  
->  /*
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c9b49a09e6b5..949fb80eca3d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4186,6 +4186,9 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
->  	if (pi_test_and_set_pir(vector, &vmx->pi_desc))
->  		return 0;
->  
-> +	if (pi_test_sn(&vmx->pi_desc))
-> +		return 0;
-
-Should be unnecessary.
+Thanks,
+Namhyung
