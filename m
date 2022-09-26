@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4E45E9F06
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215A75EA121
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbiIZKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S236420AbiIZKpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbiIZKQ5 (ORCPT
+        with ESMTP id S236328AbiIZKnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:16:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B2315A24;
-        Mon, 26 Sep 2022 03:14:50 -0700 (PDT)
+        Mon, 26 Sep 2022 06:43:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EB94D80F;
+        Mon, 26 Sep 2022 03:24:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9A28B80921;
-        Mon, 26 Sep 2022 10:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C11C433D6;
-        Mon, 26 Sep 2022 10:14:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C22FCCE10E3;
+        Mon, 26 Sep 2022 10:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A59FC433C1;
+        Mon, 26 Sep 2022 10:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187278;
-        bh=P/jPu5lRTU5KAlw0BfvfSuAKw0KPbUzxhtuOZH99Lpk=;
+        s=korg; t=1664187863;
+        bh=XuPKIjgcGPsv9qh2PIZC14M+a1tA6bAZKLV8cvEU0AE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+VwhgMxkv/pozO2r5WADI3x959mQBVwkaWKqK/WEDOrIz+FqYREu0jxJya9Cp/mx
-         5ujp8HcgdYvMHQbBgrfu0IAhYP33rNVqh9uiWt83YIhRu5xg1m2qcicbDSd4uYA07g
-         gGWCcb7x5UHZuRIVa6O6Cy8pNfXhltaGfyBiw9WM=
+        b=s6XWOibz/JWBIInTdY5ZMXvwvukTDApiFvBg7sDXKFnJbbWofwBJc7eG7xdprVBBb
+         V/gi+kSRkH/U+MaHGIrRJKfn5sGgS/k6yVv2KZNw7IjB73pMy3zU2uiMkKNu9Ivyxh
+         jkfTF2mFS0GKv7ZYvYLtPRGGBsjw3vJbMpqMpUY4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4.9 27/30] serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 085/120] can: gs_usb: gs_can_open(): fix race dev->can.state condition
 Date:   Mon, 26 Sep 2022 12:11:58 +0200
-Message-Id: <20220926100737.111078157@linuxfoundation.org>
+Message-Id: <20220926100754.159565514@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit 754f68044c7dd6c52534ba3e0f664830285c4b15 upstream.
+[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
 
-DMA complete & stop paths did not correctly account Tx'ed characters
-into icount.tx. Using uart_xmit_advance() fixes the problem.
+The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
+has been started. On busy networks the CAN controller might receive
+CAN frame between and go into an error state before the dev->can.state
+is assigned.
 
-Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
-Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220901143934.8850-3-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Assign dev->can.state before starting the controller to close the race
+window.
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial-tegra.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -409,7 +409,7 @@ static void tegra_uart_tx_dma_complete(v
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
- 	spin_lock_irqsave(&tup->uport.lock, flags);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
- 		uart_write_wakeup(&tup->uport);
-@@ -493,7 +493,6 @@ static unsigned int tegra_uart_tx_empty(
- static void tegra_uart_stop_tx(struct uart_port *u)
- {
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
--	struct circ_buf *xmit = &tup->uport.state->xmit;
- 	struct dma_tx_state state;
- 	unsigned int count;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index bf4ab30186af..abd2a57b18cb 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -678,6 +678,7 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
  
-@@ -504,7 +503,7 @@ static void tegra_uart_stop_tx(struct ua
- 	dmaengine_tx_status(tup->tx_dma_chan, tup->tx_cookie, &state);
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- }
+ 	/* finally start device */
++	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
+ 	dm->flags = cpu_to_le32(flags);
+ 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
+@@ -694,13 +695,12 @@ static int gs_can_open(struct net_device *netdev)
+ 	if (rc < 0) {
+ 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
+ 		kfree(dm);
++		dev->can.state = CAN_STATE_STOPPED;
+ 		return rc;
+ 	}
  
+ 	kfree(dm);
+ 
+-	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+-
+ 	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
+-- 
+2.35.1
+
 
 
