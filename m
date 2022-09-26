@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA2B5E9C96
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670CA5E9C9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiIZIzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S233995AbiIZI4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbiIZIzh (ORCPT
+        with ESMTP id S230169AbiIZI4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:55:37 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3933C3C17F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:55:31 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t14so9076185wrx.8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:55:31 -0700 (PDT)
+        Mon, 26 Sep 2022 04:56:18 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A17399EF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:56:15 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so7693298wmr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=RPGb704O3Bne5Y0UDhxFzj56eq4BOkDrW8rdj0cFxk4=;
-        b=CqX+VBGfBXp/8y3OsL5mmBRTzQ/gqge2jlgfxI2WfNDlKUfLT7hzoHcGhmHU4nXHkD
-         eE96W4LQwIHsBEOUEIWcPhnDNGnhSwtx6HOUYuizQi6ags76Yb5V7lprDlCqV1SX0oLT
-         wSQTfHyFbzZblumxxOLIzJMIjneffXwS7i5rJZ4x9sunKDuWYEj9AKai6t0JHwD058CE
-         vz0GQI7U/Hz7HkODfhSH4DvyzLQDSeBBLJQTf2UBKefsS03onvcbVIHRJvyLR9zUNCRW
-         Ih+vXFlcp/QqhI1t91XcpJQEu6QZdgEdoEiDZgzH7ua6VxCAKEqpM7t0a8YFKe2d6kpZ
-         vrlg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=cMdvVG6gsVrl67bRH/yjYyvxFVJ/s7FYCJ8TDUHq/e8=;
+        b=oYcg6maKBAwLkrJtTzjJDgfU2YwyJZ4y3fiJoiClwcf/BM+Hw9KLQn4IhVUfFCSuar
+         6/wAvvVn6yftGiR1m/DDzR2zzHDpdKvETW4hJMvJ82LIWqKOCPPmqmTEZH6iyhMnCBVB
+         6R7IXRkcgOCIKo+Ota7tWwK+wH3X2pFqfHsGpQN8zkIHfn0RDTyM4+DfEqskaZd9erDO
+         nKW+zfPuyry/nDiXxPL4+ll5MP9SXNz5XRvxCggsi63u2tZ3RKF0+NdvBUVNinYkBFxT
+         Tfx9SjzqUbbT+SqywinllpMgAFp3c3DD+XRlguLKS1w7aXeX8CH5CwmGZ9tbMY8kpiKw
+         Ecmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RPGb704O3Bne5Y0UDhxFzj56eq4BOkDrW8rdj0cFxk4=;
-        b=r1QvZ6dvEioYl4OA0Mo+6LUrGpqJT4FPiTTZgDwy1VrXb6qUThSrFq9qSOrD45YLy3
-         x6WQMWpx52H6pUM4bFUGWakOsmAp5JD8GJ7lnpNZ+NF3vOjpiEgLMDH3D/TUaDHRblAS
-         bBLF1tpmQAJPcTsAOwNGtVt6EsCTvIvEwnFQt1L1l8xtLcTBa0VdtODikp+4vqBlQf7k
-         cig8+I8YBn+b695Y6ZeiA6VCUiVebjULoXjUaZmjt4ouykM02vUFTujapJ031KhR8bIw
-         sy5DObOQviFlaCg5clUhoTsrIyXA/t+bwJfbXNSw/XSia6l2RBq+HWFh0zPo1qEmrpty
-         IlmA==
-X-Gm-Message-State: ACrzQf34Zv9cRVvbKQb/H5obWvB8YH6+M5P947WZtqxlD7Wuw3jv34BR
-        WUcB3dAcvpuSCD6uVijQyTo=
-X-Google-Smtp-Source: AMsMyM7Q6ghS34g3/envwAUDHV+tFvaUN83njjBhlCE46x9SHw6GkbOe0qXVnHV/iIwgbBV03o9AdQ==
-X-Received: by 2002:adf:fe08:0:b0:22b:311:afcd with SMTP id n8-20020adffe08000000b0022b0311afcdmr12704761wrr.629.1664182529596;
-        Mon, 26 Sep 2022 01:55:29 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id c3-20020a5d63c3000000b0021e51c039c5sm13606592wrw.80.2022.09.26.01.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 01:55:28 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 09:55:27 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     nathan@kernel.org, ndesaulniers@google.com
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: mainline build failure for x86_64 and arm64 with clang
-Message-ID: <YzFo/+uF1jJ7gMIN@debian>
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=cMdvVG6gsVrl67bRH/yjYyvxFVJ/s7FYCJ8TDUHq/e8=;
+        b=ZnMWq3kz9OgBUuQpPQWTc14NoVpALEeBL0aVlwlUMA4cPJUZ1AM0SOpEa9tZ3G/YLc
+         u50g6ebQpXwbtL6voO2OSS7Tyzm5k94d61gY4bK87aaf8V5xj7L2lHXVwVjGyyb9ai4J
+         IEvVWP4OV6T1awBQzAgKZwDi3XBYjlLGv0l0jIHfdlbeNqDJxxiROCzrP07zy0Vm89mQ
+         nOGBV/y78i2UUQTl+trz1AUySFMI1PoNsnfrBbwQLW4jbZHEC2Z8I/bHT8QSdypUZk95
+         ccqXrrUchl9nKxoHK/FFr0zyfn6vdbV2XQxE++9CzuBcVRHQ50ZNCi8jY9O1MoKRMHyf
+         UB2A==
+X-Gm-Message-State: ACrzQf0opoDgR8GaHlB/Fh81nuAU71v4ljZsdbb8ZobdsHqrcBVC1dan
+        JYgpyqJfLLBgippeONxBPqNowg==
+X-Google-Smtp-Source: AMsMyM7pAEtgR9SQVfgG1QhJMXvMDKkf8XyniYQR7ul4iT246LQLXLILmqxGPic89ZHI2yzTTionMA==
+X-Received: by 2002:a05:600c:1990:b0:3b4:c326:d099 with SMTP id t16-20020a05600c199000b003b4c326d099mr13751533wmq.19.1664182573985;
+        Mon, 26 Sep 2022 01:56:13 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id l2-20020a05600c1d0200b003a62052053csm13123493wms.18.2022.09.26.01.56.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 01:56:13 -0700 (PDT)
+Message-ID: <2b57b492-8765-8629-1c94-ea04c0188792@linaro.org>
+Date:   Mon, 26 Sep 2022 10:56:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] ARM: dts: qcom: pm8941: adjust node names to bindings
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220925210229.128462-1-luca@z3ntu.xyz>
+ <20220925210229.128462-2-luca@z3ntu.xyz>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220925210229.128462-2-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi,
 
-Yesterday I updated my clang to:
-clang version 16.0.0 (https://github.com/llvm/llvm-project.git bcb1397bda667e75200ae0be9a65fd17dd0763d4)
+On 25/09/2022 23:02, Luca Weiss wrote:
+> pm8941-misc should be called 'extcon' and pm8941-coincell 'charger'.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>   arch/arm/boot/dts/qcom-pm8941.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> index 33517cccee01..01f14d5f314d 100644
+> --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> @@ -27,7 +27,7 @@ pwrkey@800 {
+>   			bias-pull-up;
+>   		};
+>   
+> -		usb_id: misc@900 {
+> +		usb_id: extcon@900 {
+>   			compatible = "qcom,pm8941-misc";
+>   			reg = <0x900>;
+>   			interrupts = <0x0 0x9 0 IRQ_TYPE_EDGE_BOTH>;
+> @@ -138,7 +138,7 @@ pm8941_iadc: adc@3600 {
+>   			qcom,external-resistor-micro-ohms = <10000>;
+>   		};
+>   
+> -		pm8941_coincell: coincell@2800 {
+> +		pm8941_coincell: charger@2800 {
+>   			compatible = "qcom,pm8941-coincell";
+>   			reg = <0x2800>;
+>   			status = "disabled";
 
-And with that I see new build failures of mainline.
+I think those changes are unrelated and should be split into 2 patches.
 
-I am not copying all the errors but others look similar to these.
-From x86_64 almodconfig:
-
-In file included from scripts/mod/devicetable-offsets.c:3:
-In file included from ./include/linux/mod_devicetable.h:13:
-In file included from ./include/linux/uuid.h:12:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-        q_len = strlen(q);
-                ^~~~~~~~~
-
-From x86_64 defconfig:
-
-In file included from arch/x86/kernel/asm-offsets.c:9:
-In file included from ./include/linux/crypto.h:20:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:9:
-./include/linux/find.h:119:31: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-                unsigned long val = *addr & GENMASK(size - 1, 0);
-                                            ^~~~~~~~~~~~~~~~~~~~
-./include/linux/bits.h:38:3: note: expanded from macro 'GENMASK'
-        (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/bits.h:25:3: note: expanded from macro 'GENMASK_INPUT_CHECK'
-                __is_constexpr((l) > (h)), (l) > (h), 0)))
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
-        (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                               ^
-./include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-#define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-
-
-From arm64 allmodconfig:
-
-In file included from scripts/mod/devicetable-offsets.c:3:
-In file included from ./include/linux/mod_devicetable.h:13:
-In file included from ./include/linux/uuid.h:12:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-        q_len = strlen(q);
-                ^~~~~~~~~
-./include/linux/fortify-string.h:131:24: note: expanded from macro 'strlen'
-        __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
-        (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-I dont know if its some regression introduced in clang, or really a kernel issue.
-
-I will go back to my previous clang version (329b972d416a) for now untill I know more.
-
--- 
-Regards
-Sudip
+Neil
