@@ -2,186 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37DF5EA914
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB885EA917
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiIZOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S229526AbiIZOwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbiIZOvs (ORCPT
+        with ESMTP id S235076AbiIZOvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:51:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22792BC31
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664198283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LtpLVF78yaQ8akL0eEAs7+Z0svwvAfFmddP3iRQwkjc=;
-        b=bfAofHbQn9pOaAefG1DJxnTqxuPKTeraNDC2ZWVQsRiCROA7pygeF2QdKMw5TbfgjJs7se
-        qlXjOOXr/V2Bffpe36bwP+HN53Uv8J48CykC8h0Zc8fmc9xMYKYBY5JUxIYwZEIdeNgZzN
-        dFr2q5mHMLlFD3VEQ+oTPlsum8j28z0=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-251-6qCkj__SM_S8e4-qY0kc_Q-1; Mon, 26 Sep 2022 09:18:02 -0400
-X-MC-Unique: 6qCkj__SM_S8e4-qY0kc_Q-1
-Received: by mail-qv1-f70.google.com with SMTP id lq8-20020a0562145b8800b004ad7229e4e9so3770521qvb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:18:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=LtpLVF78yaQ8akL0eEAs7+Z0svwvAfFmddP3iRQwkjc=;
-        b=LK0C/qGesXiY/pH+3YemKfhZ4VCJ4uyA1IHFkG2iC0GRksLO7Zqz4a8Yq3YkJrTRrV
-         cKoBTnEIomXHf3QgTvr5UR0Ny644IcQTWFX/LtDW4t2KFJnZFBJb7PgmeiUXxZTpZQJw
-         z8AsQxxhKYKTndnN+mPn4JHKW9MYsHzX/1QYufqq40zHzm0lDXE1DWWIZh6aqySNm4ql
-         9VfinPQ3jysZitI4RH83SGeG8vTT83/ZrrnA3dqzM/X5zU3H4ZT/UdSE9cHyLD/8nlOw
-         HX29BLumVUT1HsIrgcE8eQ/TNu4c1Z0i+cGsJNDnppedk5T3E2/vHv29j5lMwe+JxAbM
-         9qSQ==
-X-Gm-Message-State: ACrzQf1fCZgmvFTsnHaPs0bKJP88FwPhQoMiT9YEgrBhNXLRRCAhMNID
-        /qlrCJHhNT1qtbL3ppi6Av/kHBpNxyuC0feRhLB/WOaug909ZVADbN32rCp7E/WJVGX/Cuha4g/
-        SiuvpzCvy5r7w7/NEh67zrT7O
-X-Received: by 2002:a05:622a:654:b0:35c:f6e6:76b7 with SMTP id a20-20020a05622a065400b0035cf6e676b7mr17820462qtb.365.1664198278779;
-        Mon, 26 Sep 2022 06:17:58 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4X2VsELTxq8A6XavJEjjHhj8YKH3iZ07B183UX0OdOkc1HRRewWyFvSFtXrHzQS3LMX97ORg==
-X-Received: by 2002:a05:622a:654:b0:35c:f6e6:76b7 with SMTP id a20-20020a05622a065400b0035cf6e676b7mr17820441qtb.365.1664198278498;
-        Mon, 26 Sep 2022 06:17:58 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-222.retail.telecomitalia.it. [79.46.200.222])
-        by smtp.gmail.com with ESMTPSA id bm17-20020a05620a199100b006c73c3d288esm11765046qkb.131.2022.09.26.06.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 06:17:57 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 15:17:51 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
-Message-ID: <20220926131751.pdlc5mbx6gxqlmkx@sgarzare-redhat>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <3d1f32c4da81f8a0870e126369ba12bc8c4ad048.1660362668.git.bobby.eshleman@bytedance.com>
+        Mon, 26 Sep 2022 10:51:51 -0400
+Received: from mail-m118204.qiye.163.com (mail-m118204.qiye.163.com [115.236.118.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE7B81261B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:18:21 -0700 (PDT)
+Received: from [192.168.31.11] (unknown [221.212.176.62])
+        by mail-m118204.qiye.163.com (HMail) with ESMTPA id CCAA1A20452;
+        Mon, 26 Sep 2022 21:18:18 +0800 (CST)
+Message-ID: <0ed40d5b-a404-f424-c9c4-2adf1bf9750b@inclyc.cn>
+Date:   Mon, 26 Sep 2022 21:18:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <3d1f32c4da81f8a0870e126369ba12bc8c4ad048.1660362668.git.bobby.eshleman@bytedance.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] x86/fpu: use __alignof__ to avoid UB in TYPE_ALIGN
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     tglx@linutronix.de, ndesaulniers@google.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220925153151.2467884-1-me@inclyc.cn>
+ <YzFqXbVptttrzoDe@hirez.programming.kicks-ass.net>
+From:   YingChi Long <me@inclyc.cn>
+In-Reply-To: <YzFqXbVptttrzoDe@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUNNSR1WGR4fGhpISxkYThoZVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZS1VLVUtVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NQw6SDo4MjlOQjc5NhMiLThI
+        SSsKFDFVSlVKTU1PSkJDSEtLS0tIVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU1JWVdZCAFZQUhDQk03Bg++
+X-HM-Tid: 0a8379f2cee22d26kusnccaa1a20452
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:56:07AM -0700, Bobby Eshleman wrote:
->This commit adds a feature bit for virtio vsock to support datagrams.
->
->Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> drivers/vhost/vsock.c             | 3 ++-
-> include/uapi/linux/virtio_vsock.h | 1 +
-> net/vmw_vsock/virtio_transport.c  | 8 ++++++--
-> 3 files changed, 9 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->index b20ddec2664b..a5d1bdb786fe 100644
->--- a/drivers/vhost/vsock.c
->+++ b/drivers/vhost/vsock.c
->@@ -32,7 +32,8 @@
-> enum {
-> 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
-> 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
->-			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
->+			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
->+			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
-> };
->
-> enum {
->diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
->index 64738838bee5..857df3a3a70d 100644
->--- a/include/uapi/linux/virtio_vsock.h
->+++ b/include/uapi/linux/virtio_vsock.h
->@@ -40,6 +40,7 @@
->
-> /* The feature bitmap for virtio vsock */
-> #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
->+#define VIRTIO_VSOCK_F_DGRAM		2	/* Host support dgram vsock */
+Seems GCC __alignof__ is not evaluated to the minimum alignment of some 
+TYPE,
+and depends on fields of the struct.
 
-We already allocated bit 2 for F_NO_IMPLIED_STREAM , so we should use 3:
-https://github.com/oasis-tcs/virtio-spec/blob/26ed30ccb049fd51d6e20aad3de2807d678edb3a/virtio-vsock.tex#L22
-(I'll send patches to implement F_STREAM and F_NO_IMPLIED_STREAM 
-negotiation soon).
+ > Notably I think 'long long' has 4 byte alignment on i386 and some other
+ > 32bit archs.
 
-As long as it's RFC it's fine to introduce F_DGRAM, but we should first 
-change virtio-spec before merging this series.
+C11 _Alignof matches in the case (see godbolt link below). How about 
+switch to
+_Alignof?
 
-About the patch, we should only negotiate the new feature when we really 
-have DGRAM support. So, it's better to move this patch after adding 
-support for datagram.
 
-Thanks,
-Stefano
+Link: https://godbolt.org/z/T749MfM9o
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=10360
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52023
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69560
 
+On 2022/9/26 17:01, Peter Zijlstra wrote:
+> On Sun, Sep 25, 2022 at 11:31:50PM +0800, YingChi Long wrote:
+>> WG14 N2350 made very clear that it is an UB having type definitions with
+>> in "offsetof". This patch change the implementation of macro
+>> "TYPE_ALIGN" to builtin "__alignof__" to avoid undefined behavior.
+>>
+>> I've grepped all source files to find any type definitions within
+>> "offsetof".
+>>
+>>      offsetof\(struct .*\{ .*,
+>>
+>> This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+>> type definitions within offsetof in the kernel codebase.
+>>
+>> Signed-off-by: YingChi Long <me@inclyc.cn>
+>> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+>> ---
+>>   arch/x86/kernel/fpu/init.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+>> index 621f4b6cac4a..41425ba0b6b1 100644
+>> --- a/arch/x86/kernel/fpu/init.c
+>> +++ b/arch/x86/kernel/fpu/init.c
+>> @@ -134,7 +134,7 @@ static void __init fpu__init_system_generic(void)
+>>   }
+>>   
+>>   /* Get alignment of the TYPE. */
+>> -#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+>> +#define TYPE_ALIGN(TYPE) __alignof__(TYPE)
+> IIRC there's a problem with alignof() in that it will return the ABI
+> alignment instead of that preferred or natural alignment for some types.
 >
-> struct virtio_vsock_config {
-> 	__le64 guest_cid;
->diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->index c6212eb38d3c..073314312683 100644
->--- a/net/vmw_vsock/virtio_transport.c
->+++ b/net/vmw_vsock/virtio_transport.c
->@@ -35,6 +35,7 @@ static struct virtio_transport virtio_transport; /* 
->forward declaration */
-> struct virtio_vsock {
-> 	struct virtio_device *vdev;
-> 	struct virtqueue *vqs[VSOCK_VQ_MAX];
->+	bool has_dgram;
+> Notably I think 'long long' has 4 byte alignment on i386 and some other
+> 32bit archs.
 >
-> 	/* Virtqueue processing is deferred to a workqueue */
-> 	struct work_struct tx_work;
->@@ -709,7 +710,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> 	}
+> That said; please just replace the *one* instance of TYPE_ALIGN entirely
+> and get rid of the thing.
 >
-> 	vsock->vdev = vdev;
->-
-> 	vsock->rx_buf_nr = 0;
-> 	vsock->rx_buf_max_nr = 0;
-> 	atomic_set(&vsock->queued_replies, 0);
->@@ -726,6 +726,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
-> 		vsock->seqpacket_allow = true;
->
->+	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
->+		vsock->has_dgram = true;
->+
-> 	vdev->priv = vsock;
->
-> 	ret = virtio_vsock_vqs_init(vsock);
->@@ -820,7 +823,8 @@ static struct virtio_device_id id_table[] = {
-> };
->
-> static unsigned int features[] = {
->-	VIRTIO_VSOCK_F_SEQPACKET
->+	VIRTIO_VSOCK_F_SEQPACKET,
->+	VIRTIO_VSOCK_F_DGRAM
-> };
->
-> static struct virtio_driver virtio_vsock_driver = {
->-- 
->2.35.1
->
-
