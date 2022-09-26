@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2715EB4D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0033C5EB4DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiIZWyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S230156AbiIZWyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIZWyV (ORCPT
+        with ESMTP id S229607AbiIZWyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:54:21 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749219C206;
-        Mon, 26 Sep 2022 15:54:20 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 102-20020a9d0bef000000b0065a08449ab3so5401807oth.2;
-        Mon, 26 Sep 2022 15:54:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=5EDhuR5nnVVwjruloR7awR6vateNTWu+qdgS57G4+ss=;
-        b=GfUjwaDqOstrMBTTtopMAPKiBM8bujqLDXr5hrkT70DVB9xXExIpv7GJBnI4NPrQsy
-         Iwiu1kr0IWgCkbnn23j67fUeLKapv4nmouFhOY4i208x7pAbYLkular/gBDagKZyURdW
-         dI3I5mkzWndU3wRiOLToiZP2bqQmYNCuFX6VwSoZA0cMgoddP/X/CcnGqk6p5rmuLrmg
-         Ne9en0qLob6p2UxOnuMZoH+vi8F56ajZGbKsP1t2ffqrqxCKDJZ0JF5M30Alg7Ff344P
-         /dQG9TypjQlLWTX2NRqiJ+g8PT68f8VCkyS4/+wqbYm6OzMkFnoj5BWGLdhbXL1xT3NN
-         e4hA==
-X-Gm-Message-State: ACrzQf0xLJ7RRl85NR2yXPRMt7rZMIZLX8gnYlE/vFCLUsYSV8XvOtt1
-        3ylH820+s1tAC/G1GJfCcct8i1x3Tw==
-X-Google-Smtp-Source: AMsMyM6gx0UiVSc1eGg+lhLXNtx8z9hFLkWGQk5YyWHvgLfIkYCb2AvYqItyYBiX19891NSJPHzzTQ==
-X-Received: by 2002:a9d:7b56:0:b0:655:df1d:c9f8 with SMTP id f22-20020a9d7b56000000b00655df1dc9f8mr10227348oto.32.1664232859689;
-        Mon, 26 Sep 2022 15:54:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m13-20020a056870560d00b0011bde9f5745sm9491804oao.23.2022.09.26.15.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 15:54:19 -0700 (PDT)
-Received: (nullmailer pid 3114680 invoked by uid 1000);
-        Mon, 26 Sep 2022 22:54:18 -0000
-Date:   Mon, 26 Sep 2022 17:54:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, alsa-devel@alsa-project.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 09/11] dt-bindings: slimbus: convert bus description to
- DT schema
-Message-ID: <20220926225418.GA3114619-robh@kernel.org>
-References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
- <20220923161453.469179-10-krzysztof.kozlowski@linaro.org>
+        Mon, 26 Sep 2022 18:54:49 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF96288A03;
+        Mon, 26 Sep 2022 15:54:47 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 4F2316D9;
+        Mon, 26 Sep 2022 22:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4F2316D9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1664232886; bh=FwR2WYpE54nS6Bi8rW58E9/X3cSfe6Q+6dBH71Kd4Q4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=R+yIk9EgkhvUSV2cwqn/6+ueJ4nLyDC/34FqBLXS429BG3babwjXeadLuDqiyDtqK
+         Z4vlD05GHdaO1Mz806SZZ2x4bS8ofCJq060Lwi3IBW1Yax6cEPR8mShf6SXajPBTPc
+         0nU8feV91O4hCfvgAsWKOlNmmLk0WsIG4lgfZ9anN2kn2dl3DM5Du2h8Dt05MwhgVU
+         TCTLKdoA62/ZEd51iEhS/Sp590Spr9iEJTF3ip6+9rgzQrm0VXrxL8YhOYCnXXX8Q6
+         gRLrt3MqHsDb3fxPtI/XR1OfXkx5OAP/+pIgZTiU4fVW0+2YNKN9Y68H+GwPPS5ar9
+         O77LCGwCFWGRQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
+        broonie@kernel.org
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Manfred Spraul <manfred.spraul@de.bosch.com>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ jc_docs tree
+In-Reply-To: <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+References: <20220926210631.657728-1-broonie@kernel.org>
+ <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+Date:   Mon, 26 Sep 2022 16:54:45 -0600
+Message-ID: <878rm5rbka.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923161453.469179-10-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 18:14:51 +0200, Krzysztof Kozlowski wrote:
-> Convert the SLIMbus bus description bindings to DT Schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/slimbus/bus.txt       | 60 ------------
->  .../bindings/slimbus/slim-ngd-qcom-ctrl.txt   |  2 -
->  .../bindings/slimbus/slim-qcom-ctrl.txt       |  3 -
->  .../devicetree/bindings/slimbus/slimbus.yaml  | 95 +++++++++++++++++++
->  4 files changed, 95 insertions(+), 65 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/slimbus/bus.txt
->  create mode 100644 Documentation/devicetree/bindings/slimbus/slimbus.yaml
-> 
+=D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczleweli.xyz> writes:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> Hi!
+>
+> On Mon, Sep 26, 2022 at 10:06:31PM +0100, broonie@kernel.org wrote:
+>> Today's linux-next merge of the driver-core tree got a conflict in:
+>>=20
+>>   Documentation/process/magic-number.rst
+>>=20
+>> between commit:
+>>=20
+>>   32ba63d4b2e1a ("Doc update: Correct magic values from nbd protocol, V2=
+")
+>>=20
+>> from the jc_docs tree and commits:
+>>=20
+>>   82805818898dd ("Documentation: NBD_REPLY_MAGIC isn't a magic number")
+>>   bd5926220ffe0 ("nbd: remove define-only NBD_MAGIC, previously magic nu=
+mber")
+>>=20
+>> from the driver-core tree (and probably more for context).
+>
+> If I'm reading the merge right (very much not a given!),
+> it seems that the NBD_REPLY_MAGIC (and LO_MAGIC?) constant(s) survived:
+> they both need to go for reasons listed in
+>   bd5926220ffe0: LO_MAGIC doesn't exist
+>   82805818898dd: NBD_REPLY_MAGIC is part of the line protocol,
+>                  not a magic number=20
+>
+> This also reveals that I missed NBD_REQUEST_MAGIC
+> (needs to go, same reason as NBD_REPLY_MAGIC)
+> in the first pass, but that's unrelated here.
+
+I've been trying to make sense of that merge myself.  Is the right
+solution that I should just drop 32ba63d4b2e1a ?  Manfred, thoughts on
+that?
+
+Thanks,
+
+jon
