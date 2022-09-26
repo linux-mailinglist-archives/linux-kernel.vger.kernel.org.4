@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD215EA631
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EBF5EA671
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiIZMcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S237038AbiIZMpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235599AbiIZMbw (ORCPT
+        with ESMTP id S234994AbiIZMpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:31:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400B0D01FB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:10:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAB22B8010F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C4FC433C1;
-        Mon, 26 Sep 2022 11:08:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KGaXaRmV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664190526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OObOy+S69jXJ2m8R4UqnbrbT5rmgyhTY2SsHXjUDjcM=;
-        b=KGaXaRmV64IQYu1htPoCX6pumEUv+uWCtXrf6T/a4FpdExAyp307byo5WPkvWPutMYQKTz
-        F1pep/+jkSumXtjiXADTyiNXaOENdD8PcajHKun503XKTrMBX09igX2511ThJDeTpem61t
-        iioJs3mbZ36cfqHYK6loss+G1ZxeZQY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id be0ef589 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 26 Sep 2022 11:08:45 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 13:08:43 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v3 3/3] m68k: rework BI_VIRT_RNG_SEED as BI_RNG_SEED
-Message-ID: <YzGIO4IK9WXFyXsD@zx2c4.com>
-References: <20220923170340.4099226-1-Jason@zx2c4.com>
- <20220923170340.4099226-3-Jason@zx2c4.com>
- <CAMuHMdXPcXq_F0dQdJ5nV2io1eDhJs7BZf+TmXWPqGVn9xeLNA@mail.gmail.com>
+        Mon, 26 Sep 2022 08:45:08 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E2E122A53;
+        Mon, 26 Sep 2022 04:21:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NPk/bUeD+cAy4VJnsR9rjA2TiXxfijD8rXdgSx9qHXneTe5En0ymq6vpMW7lHJE+qK5ZxmRZb9sklDz5DviIyOcrOHlxVpvNbR1OFuHvWfdyDmOOfc1Acge3TjTLIRdqGFD6uXvD55QpQZ79Bi031QeSQ5zy7ksfo2TV9O1tiRHfiMjlGqh2f3LXMtsd0qddXnxx4dhbpU01uyLNZjatsYqzrv9I9G+xTcdQWbcwYrkPKmTBPxXeZy/9oM4BSJh8tkVyFjzoYwpfedfBo8FLEIBTfN3Owaejaesqen80grYD3orX67L4YReFzDGlp3tcFMM3gmk1fcxpQJaaEypgSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r5eze5+YQWrios3rmHq1T6wZRccDM2AX/gMN4BMlYSc=;
+ b=GNDvkgt28yk8vZhQX6RvsfHKB7pndaHnE6Cqp6j5b2Fse4viHep3v+SRkj4hHOgEbHWx6ktugi4SS8o4z7fw2fq40mwPnTn0zWuNcTEqL5csKA+t4HpVNpSDxa9UHofweieMOonvQ4YHt0yEOVgUOqcjOcIlPAJHKAQYb7GNgiVhhvtkJw0f60jmA/QnlF8/nHEF3R9/qZRSr3C1/v0LG4JLkTF8EglTVi7xIOK9d1AhHjHnOTM00TfLs83EvB9OnKs0GrOAqF2FMGozMUqd4kR0ovdvS4P23aHM80xNzoSvCvsaj6RUYHx3v+ty20/jQRAwZlhbeUHUbKDZYiE76g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r5eze5+YQWrios3rmHq1T6wZRccDM2AX/gMN4BMlYSc=;
+ b=d8rd0ELZQyzeZPc4pJ9MSNl6cPIrb8A+BXuX/xRZIy08iA+OqlMPqov1u3/POTSkT76mvlnCfbqOZrCrCtgmCqLQRyoFURASMe9gG/GvbtiwvG0N9063cv+wN3PNlfFhmu9FtddVoq4SjcL6Kl4JSetq+I+7WV6xXrHSEkC/FIItEWj69lLofAlLXI921P/Wx5t2+ei35dmz/l+fJMJQ3RL7urJW2XOdE+oPN6GQfKoITlQCfGwZ385EutHEEkqZ1aUlxW6QnP3R7nZdb4WksMOfnnKEntzPZ48RCbo+TYWyIzSQxzEBVB6HqQWAAYkyjTLR9Q9JmLhbmE1nqZIZgQ==
+Received: from MW4PR04CA0259.namprd04.prod.outlook.com (2603:10b6:303:88::24)
+ by IA0PR12MB7697.namprd12.prod.outlook.com (2603:10b6:208:433::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Mon, 26 Sep
+ 2022 11:10:36 +0000
+Received: from CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::95) by MW4PR04CA0259.outlook.office365.com
+ (2603:10b6:303:88::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
+ Transport; Mon, 26 Sep 2022 11:10:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT032.mail.protection.outlook.com (10.13.174.218) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 11:10:36 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 26 Sep
+ 2022 04:10:25 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 26 Sep
+ 2022 04:10:24 -0700
+Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 26 Sep 2022 04:10:21 -0700
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
+        <sagar.tv@gmail.com>
+Subject: [PATCH V2 0/2] Disable PTM for endpoint mode
+Date:   Mon, 26 Sep 2022 16:40:15 +0530
+Message-ID: <20220926111017.12655-1-vidyas@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXPcXq_F0dQdJ5nV2io1eDhJs7BZf+TmXWPqGVn9xeLNA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT032:EE_|IA0PR12MB7697:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8706f26f-e741-4227-a760-08da9fafbcf7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0d2oCeeCidAk6RqyEkbnmbn46uIRE6nrrBtWNzGOlHE234LskQZbheYsD/8B/f5NoJM1EjeA/MZq3Xm4lTwbs5HlnKXzgDtQAOz6lqLWu+e7pu5c4dXD/3AG5t0cs4ytJN4gNbyMIgU5RbomaefahC4clpwFweW1dhsEFmw+9oMi8GT068BJQtpOocnc11UiY38K7ke7Ac9Krnc4SGDu6d+UiZACYP/QdeTmZWrXQmx3Jt4hBQRuOBqGN2Yxq2S307izWmcg+9MSUV5gJSlziqFMZgkH70aP7DM15l5n0gOTQMJSGILWTQ9ED+RUk7DOekpy7l6LE9gK89pcMpdaP07Bg3lX/HTbMbLVTAuEHyL+E8Uofpgy/HHuQGPtT33a8G/J++Lb9lSlRFzjeH3JBxL4do4frVNqBKXS1zLwtvrMqPFI7Nwpr2kbh/rzB7LQc+YppA1N9c73ozJ971YK9tvkAT+et6ZA70SodXKOlDnlItIkaZDT5VEuWc8fqGYciAETs9dJEoxUDBNy/BVWPLQlnfybyUuHau7Xl88vYxnv3r8OBjrOIUa3G/GuAr9nZgv4t42ObreNfd0BtenHHjVpZy1j4IOeG0fzeXy2D0C+SEJXbRHcW63xSgkc7wbc81NCHw8pydL6KNH4RP5XUv2uj683TcZTRyosETlpS9019T6AvmfzVR1FcXEGgFHhApNaHKn9P74k6oGq4se8onKKU2R1rJ+BpgvL6yRkENgGoE8DZFqcydKdyNa1wEbUVUmwOyIv0xo7XaWBE3HbFQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199015)(46966006)(40470700004)(36840700001)(82740400003)(316002)(54906003)(356005)(40480700001)(7636003)(110136005)(40460700003)(8936002)(5660300002)(4744005)(36756003)(86362001)(8676002)(4326008)(70206006)(70586007)(2906002)(41300700001)(2616005)(26005)(82310400005)(426003)(47076005)(186003)(1076003)(336012)(6666004)(478600001)(7696005)(36860700001)(83380400001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 11:10:36.3849
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8706f26f-e741-4227-a760-08da9fafbcf7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7697
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+This patch series contains patches to disable PTM for endpoint mode
+as the PCIe compliance tool requires the PTM be disabled for the endpoint
+mode.
 
-On Mon, Sep 26, 2022 at 12:27:13PM +0200, Geert Uytterhoeven wrote:
-> The approach LGTM, but given my doubts on [PATCH v3 2/3], I think this
-> patch should be moved up, to not depend on [2/3].
+V2:
+* Addressed review comments from Jingoo Han
 
-I'll do that. But also, I'm not sure I yet agree with you about 2/3, so
-we should keep discussing that. (I'll still move it to 3/3 though.)
+Vidya Sagar (2):
+  PCI: Add PCI_PTM_CAP_RES macro
+  PCI: designware-ep: Disable PTM capabilities for EP mode
 
-> > -#define BI_VIRT_RNG_SEED       0x8006
-> > +/* No longer used -- replaced with BI_RNG_SEED -- but don't reuse this index:
-> > + *     #define BI_VIRT_RNG_SEED        0x8006 */
-> 
-> Please drop the space before TAB.
+ .../pci/controller/dwc/pcie-designware-ep.c    | 18 ++++++++++++++++++
+ include/uapi/linux/pci_regs.h                  |  1 +
+ 2 files changed, 19 insertions(+)
 
-Ack.
+-- 
+2.17.1
 
-> 
-> > --- a/arch/m68k/include/uapi/asm/bootinfo.h
-> > +++ b/arch/m68k/include/uapi/asm/bootinfo.h
-> > @@ -64,7 +64,13 @@ struct mem_info {
-> >                                         /* (struct mem_info) */
-> >  #define BI_COMMAND_LINE                0x0007  /* kernel command line parameters */
-> >                                         /* (string) */
-> > -
-> > +/*
-> > + * A random seed used to initialize the RNG. Record format:
-> > + *
-> > + *   - length       [ 2 bytes, 16-bit big endian ]
-> > + *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
-> 
-> While experimenting, I noticed this must actually be a 4-byte alignment,
-> as data[] is an integral multiple of __be32 words:
-> 
->     struct bi_record {
->             __be16 tag;                     /* tag ID */
->             __be16 size;                    /* size of record (in bytes) */
->             __be32 data[];                  /* data */
->     };
-> 
-> m68kboot[1] and kexec-boot[2] do implement the correct rounding,
-> but qemu's BOOTINFOSTR()[3] and BOOTINFODATA()[4] do not.
-> Sorry for missing that before, I guess I was misled by the existing
-> bug in BOOTINFOSTR().
-> 
-> Consequently, both kexec-tools[5] and the m68k-bootinfo tool[6] cannot
-> parse /proc/bootinfo if the size is not a multiple of 4, which can
-> easily be triggered by changing the command line of the m68k virt
-> machine.
-
-In my brief experience in working with this structure, I've just made
-sure that data[] is casted to (void*) or (u8*) or something, and then
-everything is fine. But the tools you've linked to expect 4 byte
-alignment. So, it sounds like what you're saying is that while we're at
-it with fixing the constant, I should also make sure seed data preserves
-4 byte alignment, and update the comment too? That's easy enough. I'll
-do that for v+1.
-
-Jason
