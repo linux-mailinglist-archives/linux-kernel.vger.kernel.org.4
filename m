@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E615E9FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC60C5E9F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235544AbiIZK3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S234500AbiIZKW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiIZK1l (ORCPT
+        with ESMTP id S235231AbiIZKVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:27:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71D14DF30;
-        Mon, 26 Sep 2022 03:18:46 -0700 (PDT)
+        Mon, 26 Sep 2022 06:21:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE264B496;
+        Mon, 26 Sep 2022 03:16:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AF349CE10E7;
-        Mon, 26 Sep 2022 10:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D9FC433C1;
-        Mon, 26 Sep 2022 10:18:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71883B80918;
+        Mon, 26 Sep 2022 10:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D7DC433C1;
+        Mon, 26 Sep 2022 10:16:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187513;
-        bh=pbT2fg2QOVi6U/rK8F+6R/wuL+JzTs9OXgQB/IY9PK8=;
+        s=korg; t=1664187361;
+        bh=mh9Ts3VjliOd39lqc9cAsyEEHpbMW0v8yhe2SgmiIGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cB0izfC79FybZE3P4Ec3pU+Cg0bCwYKdDmqZWDkWe9FGtzFGW2xpqS7sai91vgyCA
-         Rs47hYdDwi9K+sY9VkLfS39Y2ka4nj0EQuua4eKCI5byGX5Gw2uY1OrTPtw6//0bDu
-         fIXkmmxY+JBUWlmy/EMrEL/KxDMr/bZ+bxZaCZ5E=
+        b=V/+6rDOXjgTPjPAP0unqv749mo362BXV37jUmAmW2qhXYivOcbnpq48+Tkil353Mi
+         jg0JV5am7qA77nmuGWXakGUBP9j/PtmB5iPP3Bls/PjMmm4bE+tMFsW4EKFRuMP+yT
+         CiFKCJ7DNbT6gvvnXegINEQL7cc/ocQh1yJH8y4A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 4.19 32/58] riscv: fix a nasty sigreturn bug...
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 23/40] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
 Date:   Mon, 26 Sep 2022 12:11:51 +0200
-Message-Id: <20220926100742.656986719@linuxfoundation.org>
+Message-Id: <20220926100739.159643361@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Fabio Estevam <festevam@denx.de>
 
-commit 762df359aa5849e010ef04c3ed79d57588ce17d9 upstream.
+[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
 
-riscv has an equivalent of arm bug fixed by 653d48b22166 ("arm: fix
-really nasty sigreturn bug"); if signal gets caught by an interrupt that
-hits when we have the right value in a0 (-513), *and* another signal
-gets delivered upon sigreturn() (e.g. included into the blocked mask for
-the first signal and posted while the handler had been running), the
-syscall restart logics will see regs->cause equal to EXC_SYSCALL (we are
-in a syscall, after all) and a0 already restored to its original value
-(-513, which happens to be -ERESTARTNOINTR) and assume that we need to
-apply the usual syscall restart logics.
+The 'enable-active-low' property is not a valid one.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/YxJEiSq%2FCGaL6Gm9@ZenIV/
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Only 'enable-active-high' is valid, and when this property is absent
+the gpio regulator will act as active low by default.
+
+Remove the invalid 'enable-active-low' property.
+
+Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/kernel/signal.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -105,6 +105,8 @@ SYSCALL_DEFINE0(rt_sigreturn)
- 	if (restore_altstack(&frame->uc.uc_stack))
- 		goto badframe;
- 
-+	regs->cause = -1UL;
-+
- 	return regs->a0;
- 
- badframe:
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index 70fe6013d17c..c5981b99f958 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -139,7 +139,6 @@ vcc3v3_sys: vcc3v3-sys {
+ 	vcc5v0_host: vcc5v0-host-regulator {
+ 		compatible = "regulator-fixed";
+ 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
+-		enable-active-low;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&vcc5v0_host_en>;
+ 		regulator-name = "vcc5v0_host";
+-- 
+2.35.1
+
 
 
