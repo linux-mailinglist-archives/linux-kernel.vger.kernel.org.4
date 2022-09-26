@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF395EACCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A165EACD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiIZQmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S229586AbiIZQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiIZQlV (ORCPT
+        with ESMTP id S229524AbiIZQlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:41:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF46149D38;
-        Mon, 26 Sep 2022 08:29:05 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3555B660225B;
-        Mon, 26 Sep 2022 16:29:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664206143;
-        bh=nlq4IdmFkNAjJjqacvnPjUw6nzph3yIh2k8BmqgKtv0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=apBByvvEKv5QOCPxB2lfg8MkEDZjihxHUfLC8RJf72npPocYyK+Jg+xC9lbGVV90i
-         TT4l9p1jTX1Q4CnTRBdynjjwsUv+RpC/gza0Ai56MKWcTajHghhpmKyxHE8GKl2kjV
-         UPIRUDRshDBbDgKgBC8Qp+Ga8MkPNe7APt5KQsyTSiYuXHb2tR0q4RjpgLjNBpOR3c
-         RD0DaDBT9FdvNbvb8tgsj5TRGIrgb+Fw7iIYi3DF0xvM1kZOkHlz3RvPljkrEadXrQ
-         ZxwbKze82h03odNQQ/u6gihNO6TSolPSxi6lMkH8qc2LIswVn/jdR8yoW6cHZjNN9A
-         yOGP4m/PuB/oA==
-Message-ID: <4d1e8600-f73d-8d2b-2e7a-1b75be7624bd@collabora.com>
-Date:   Mon, 26 Sep 2022 17:29:00 +0200
+        Mon, 26 Sep 2022 12:41:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62586AE5D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:29:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEE7B1CE2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:29:45 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E60CF3F66F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:29:38 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 16:29:27 +0100
+From:   Liviu Dudau <Liviu.Dudau@arm.com>
+To:     Brian Starkey <brian.starkey@arm.com>
+Cc:     ville.syrjala@linux.intel.com, butterflyhuangxx@gmail.com,
+        tzimmermann@suse.de, jonas@kwiboo.se, airlied@linux.ie,
+        linux-kernel@vger.kernel.org,
+        George Kennedy <george.kennedy@oracle.com>,
+        dri-devel@lists.freedesktop.org, ben.davis@arm.com, nd@arm.com
+Subject: Re: [PATCH] drm/fourcc: Fix vsub/hsub for Q410 and Q401
+Message-ID: <YzHFVxJ7wvUKoIgX@e110455-lin.cambridge.arm.com>
+References: <YyA9Y+Cs8ZCYHXAT@intel.com>
+ <20220913144306.17279-1-brian.starkey@arm.com>
+ <YyCjmQUZGKP6e8H1@e110455-lin.cambridge.arm.com>
+ <20220926152119.aycl2thery6dtwyo@000377403353>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2] arm64: dts: mt8192: Add vcodec lat and core nodes
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220926105047.19419-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220926105047.19419-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220926152119.aycl2thery6dtwyo@000377403353>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/09/22 12:50, Allen-KH Cheng ha scritto:
-> Add vcodec lat and core nodes for mt8192 SoC.
+On Mon, Sep 26, 2022 at 04:21:19PM +0100, Brian Starkey wrote:
+> On Tue, Sep 13, 2022 at 04:36:57PM +0100, Liviu Dudau wrote:
+> > On Tue, Sep 13, 2022 at 03:43:06PM +0100, Brian Starkey wrote:
+> > > These formats are not subsampled, but that means hsub and vsub should be
+> > > 1, not 0.
+> > > 
+> > > Fixes: 94b292b27734 ("drm: drm_fourcc: add NV15, Q410, Q401 YUV formats")
+> > > Reported-by: George Kennedy <george.kennedy@oracle.com>
+> > > Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+> > > Signed-off-by: Brian Starkey <brian.starkey@arm.com>
+> > 
+> > Reviewed-by: Liviu Dudau <liviu.dudau@arm.com>
+> > 
+> > Should this be backported into stable releases? How far back to we go?
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
-> Change in v1:
->    * Replace node names with video-codec
->      [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
-> ---
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 60 ++++++++++++++++++++++++
->   1 file changed, 60 insertions(+)
+> Probably, git says 94b292b27734 is in since 5.10.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 6b20376191a7..214dfc6b0ed1 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1449,6 +1449,66 @@
->   			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
->   		};
->   
-> +		vcodec_dec: video-codec@16000000 {
-> +			compatible = "mediatek,mt8192-vcodec-dec";
-> +			reg = <0 0x16000000 0 0x1000>;
-> +			mediatek,scp = <&scp>;
-> +			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-> +			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges = <0 0 0 0x16000000 0 0x26000>;
-> +
-> +			vcodec_lat: video-codec@10000 {
+> Could someone merge this so it doesn't get lost again?
 
-Allen, this won't work :-(
-Check Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-...the schema requires vcodec-lat@[0-9a-f] and vcodec-core@[0-9a-f].
+I'll merge this into drm-misc-next-fixes this week and notify stable about it.
 
-If you want to call them all video-codec@addr, you have to also fix the schema.
+Best regards,
+Liviu
 
-P.S.: Did you try to run `make dtbs_check`?
+> 
+> Thanks,
+> -Brian
+> 
+> > 
+> > Best regards,
+> > Liviu
+> > 
+> > 
+> > > ---
+> > >  drivers/gpu/drm/drm_fourcc.c | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > Sorry, I lost track of this - I thought it got fixed after the previous
+> > > thread[1].
+> > > 
+> > > -Brian
+> > > 
+> > > [1] https://lore.kernel.org/all/26fdb955-10c8-a5d6-07b6-85a4374e7754@oracle.com/
+> > > 
+> > > diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+> > > index 07741b678798..6768b7d18b6f 100644
+> > > --- a/drivers/gpu/drm/drm_fourcc.c
+> > > +++ b/drivers/gpu/drm/drm_fourcc.c
+> > > @@ -263,12 +263,12 @@ const struct drm_format_info *__drm_format_info(u32 format)
+> > >  		  .vsub = 2, .is_yuv = true },
+> > >  		{ .format = DRM_FORMAT_Q410,		.depth = 0,
+> > >  		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
+> > > -		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
+> > > -		  .vsub = 0, .is_yuv = true },
+> > > +		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
+> > > +		  .vsub = 1, .is_yuv = true },
+> > >  		{ .format = DRM_FORMAT_Q401,		.depth = 0,
+> > >  		  .num_planes = 3, .char_per_block = { 2, 2, 2 },
+> > > -		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 0,
+> > > -		  .vsub = 0, .is_yuv = true },
+> > > +		  .block_w = { 1, 1, 1 }, .block_h = { 1, 1, 1 }, .hsub = 1,
+> > > +		  .vsub = 1, .is_yuv = true },
+> > >  		{ .format = DRM_FORMAT_P030,            .depth = 0,  .num_planes = 2,
+> > >  		  .char_per_block = { 4, 8, 0 }, .block_w = { 3, 3, 0 }, .block_h = { 1, 1, 0 },
+> > >  		  .hsub = 2, .vsub = 2, .is_yuv = true},
+> > > -- 
+> > > 2.25.1
+> > > 
+> > 
+> > -- 
+> > ====================
+> > | I would like to |
+> > | fix the world,  |
+> > | but they're not |
+> > | giving me the   |
+> >  \ source code!  /
+> >   ---------------
+> >     ¯\_(ツ)_/¯
 
-Regards,
-Angelo
-
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
