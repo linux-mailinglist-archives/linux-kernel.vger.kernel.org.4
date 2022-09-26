@@ -2,123 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595105E9BC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541145E9BC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbiIZIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S234246AbiIZIQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiIZIQY (ORCPT
+        with ESMTP id S233981AbiIZIQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:16:24 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3CD237E1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:16:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id s14so9025384wro.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=NznGcr0ykL64h72sno6OQWCYhPWC8fy80LMUKAAPWZo=;
-        b=MiRKVs3Rtii2kIXuPy0754f9kyzs9haf++zm/W+a0zFaZuuBNSQWSre2J6yR3Kz+vO
-         TwZUOk5osY2kglEjzs6Lon4LN+4DCQaX3us5RUIGwDmey2a4IlUQop5B9ao2uQKlEvLb
-         KwnlmYUX6QaQ/KqG+awbEbh9Mo6FcvLGD67ppj8Qhaxbit85ln/WgjBMRt4ZPtpnDHwy
-         iOYjzBXj9LHJzBu2ZUqO5DBcdieGMvR4VrIuy1vIVITxE8b+HoE18P7gZBRb4Hi2ikwm
-         5iMym5retT86FNWmVdJSgGSA/vSd1D65Luh/8CB/6dT5vVKthnnPyR+jW+7qXNJAhvjn
-         hV1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=NznGcr0ykL64h72sno6OQWCYhPWC8fy80LMUKAAPWZo=;
-        b=DIHW8Jn0KeMDce61NWUgki6mt5HrinvexVp1qapDd7lcl11e8uqIAOrbXgxMMXHB5C
-         OsQOqMcgbHFEFsuGDUu3cRzo+mtD9+TrHxIePLtso7YN3fi18SRm3H/F7mOuzJxPEj4d
-         DCzhHchCXNFBzXLXg3J/46gZqJbs6W7k2SnfP/wTL/yAo6MRBue37IUKzsoJxnpRet4J
-         w+60UO7ZD0rC4bdGmLYVSOSBQCUGiki1h3kGYrDkK25/Wt0ds5MbQUpzrEsFF/qgRQ7A
-         qE0GyGWkpssF+8jRuEVSMVGVRxJgvjXO924hHxIrTSNISWDys8YIVvZXeQBnjpDSSmqq
-         rHUQ==
-X-Gm-Message-State: ACrzQf3r3V4bYy0hZlbG+TrpVoIEp72MMwHJys+uo6Bhz+KGMNtGNT1M
-        gQBMAeO/a0Opia2d/ekl3DL57A==
-X-Google-Smtp-Source: AMsMyM6xtnia+VPZLtQatSc+KU54sbBg6zSPBECyIr7d4KrKwhDK5128gSjJ7QsR8YB6BuMpFAy/BA==
-X-Received: by 2002:adf:e38a:0:b0:22c:8b0b:df3 with SMTP id e10-20020adfe38a000000b0022c8b0b0df3mr8603530wrm.352.1664180179856;
-        Mon, 26 Sep 2022 01:16:19 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a5f4fccd4asm10772463wmb.35.2022.09.26.01.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:16:19 -0700 (PDT)
-Message-ID: <c944beec-44d8-0399-e568-7dd1c75193d5@linaro.org>
-Date:   Mon, 26 Sep 2022 10:16:13 +0200
+        Mon, 26 Sep 2022 04:16:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C9C237D0;
+        Mon, 26 Sep 2022 01:16:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C719E1FAE8;
+        Mon, 26 Sep 2022 08:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664180181; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S7tJvJmeVgcwGQymiuNAEIFNJSiUVLM6tuOUeD+Tp9U=;
+        b=Ob+3cySAgqComu24MU8tjAIwe9RmZUh/RPHDeeT3d+z4f99RG+f5FlItmpy/BqzT0XMm/7
+        MGmnjeBH3CV8zhUXIJlbzo9kffD5ZjQmGJZ0lodQAeXsMvIt0L+M6gKDMKI0W5JLu4F10M
+        jMVPaWi66rnbyd9U2H+o4FXoF5F7uc0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664180181;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S7tJvJmeVgcwGQymiuNAEIFNJSiUVLM6tuOUeD+Tp9U=;
+        b=4TDXTaxvqOcLewGFFypQ4cFCt5qEaS2l6bHg5WlB0WKJa4sWHRbTLvnVVsIDZsLiI6Lb8Q
+        pTNzC2W7+zDCdWAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AE1FF13486;
+        Mon, 26 Sep 2022 08:16:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sQp6KtVfMWPQUQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 26 Sep 2022 08:16:21 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5227AA0685; Mon, 26 Sep 2022 10:16:21 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 10:16:21 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next v2 2/2] ext4: factor out ext4_free_ext_path()
+Message-ID: <20220926081621.w4hmrqhykxke3qif@quack3>
+References: <20220924021211.3831551-1-yebin10@huawei.com>
+ <20220924021211.3831551-3-yebin10@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] ARM: qcom_defconfig: enable rest of ARMv7 SoCs
- pinctrl drivers
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220925112123.148897-1-krzysztof.kozlowski@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220925112123.148897-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924021211.3831551-3-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 13:21, Krzysztof Kozlowski wrote:
-> Enable rest of ARMv7 SoCs pin controller drivers.
+On Sat 24-09-22 10:12:11, Ye Bin wrote:
+> Factor out ext4_free_ext_path() to free extent path. As after previous patch
+> 'ext4_ext_drop_refs()' is only used in 'extents.c', so make it static.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Do not enable MSM8976 (Stephan)
-> ---
->   arch/arm/configs/qcom_defconfig | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-> index 7d8b6884fd00..b41716c1ec64 100644
-> --- a/arch/arm/configs/qcom_defconfig
-> +++ b/arch/arm/configs/qcom_defconfig
-> @@ -131,14 +131,19 @@ CONFIG_PINCTRL_APQ8064=y
->   CONFIG_PINCTRL_APQ8084=y
->   CONFIG_PINCTRL_IPQ4019=y
->   CONFIG_PINCTRL_IPQ8064=y
-> +CONFIG_PINCTRL_MSM8226=y
->   CONFIG_PINCTRL_MSM8660=y
->   CONFIG_PINCTRL_MSM8960=y
-> +CONFIG_PINCTRL_MDM9607=y
->   CONFIG_PINCTRL_MDM9615=y
->   CONFIG_PINCTRL_MSM8X74=y
-> +CONFIG_PINCTRL_MSM8909=y
-> +CONFIG_PINCTRL_MSM8916=y
->   CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
->   CONFIG_PINCTRL_QCOM_SSBI_PMIC=y
->   CONFIG_GPIOLIB=y
->   CONFIG_PINCTRL_SDX55=y
-> +CONFIG_PINCTRL_SDX65=y
->   CONFIG_GPIO_SYSFS=y
->   CONFIG_POWER_RESET=y
->   CONFIG_POWER_RESET_MSM=y
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/ext4.h           |   2 +-
+>  fs/ext4/extents.c        | 107 ++++++++++++++++-----------------------
+>  fs/ext4/extents_status.c |   3 +-
+>  fs/ext4/fast_commit.c    |   6 +--
+>  fs/ext4/migrate.c        |   3 +-
+>  fs/ext4/move_extent.c    |   9 ++--
+>  fs/ext4/verity.c         |   6 +--
+>  7 files changed, 54 insertions(+), 82 deletions(-)
+> 
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index e6674504ca2a..648ea9ccf65e 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -3713,7 +3713,7 @@ extern int ext4_ext_insert_extent(handle_t *, struct inode *,
+>  extern struct ext4_ext_path *ext4_find_extent(struct inode *, ext4_lblk_t,
+>  					      struct ext4_ext_path **,
+>  					      int flags);
+> -extern void ext4_ext_drop_refs(struct ext4_ext_path *);
+> +extern void ext4_free_ext_path(struct ext4_ext_path *);
+>  extern int ext4_ext_check_inode(struct inode *inode);
+>  extern ext4_lblk_t ext4_ext_next_allocated_block(struct ext4_ext_path *path);
+>  extern int ext4_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index c148bb97b527..4653acfa1723 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -106,6 +106,25 @@ static int ext4_ext_trunc_restart_fn(struct inode *inode, int *dropped)
+>  	return 0;
+>  }
+>  
+> +static void ext4_ext_drop_refs(struct ext4_ext_path *path)
+> +{
+> +	int depth, i;
+> +
+> +	if (!path)
+> +		return;
+> +	depth = path->p_depth;
+> +	for (i = 0; i <= depth; i++, path++) {
+> +		brelse(path->p_bh);
+> +		path->p_bh = NULL;
+> +	}
+> +}
+> +
+> +void ext4_free_ext_path(struct ext4_ext_path *path)
+> +{
+> +	ext4_ext_drop_refs(path);
+> +	kfree(path);
+> +}
+> +
+>  /*
+>   * Make sure 'handle' has at least 'check_cred' credits. If not, restart
+>   * transaction with 'restart_cred' credits. The function drops i_data_sem
+> @@ -632,8 +651,7 @@ int ext4_ext_precache(struct inode *inode)
+>  	ext4_set_inode_state(inode, EXT4_STATE_EXT_PRECACHED);
+>  out:
+>  	up_read(&ei->i_data_sem);
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	return ret;
+>  }
+>  
+> @@ -720,19 +738,6 @@ static void ext4_ext_show_move(struct inode *inode, struct ext4_ext_path *path,
+>  #define ext4_ext_show_move(inode, path, newblock, level)
+>  #endif
+>  
+> -void ext4_ext_drop_refs(struct ext4_ext_path *path)
+> -{
+> -	int depth, i;
+> -
+> -	if (!path)
+> -		return;
+> -	depth = path->p_depth;
+> -	for (i = 0; i <= depth; i++, path++) {
+> -		brelse(path->p_bh);
+> -		path->p_bh = NULL;
+> -	}
+> -}
+> -
+>  /*
+>   * ext4_ext_binsearch_idx:
+>   * binary search for the closest index of the given block
+> @@ -951,8 +956,7 @@ ext4_find_extent(struct inode *inode, ext4_lblk_t block,
+>  	return path;
+>  
+>  err:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	if (orig_path)
+>  		*orig_path = NULL;
+>  	return ERR_PTR(ret);
+> @@ -2170,8 +2174,7 @@ int ext4_ext_insert_extent(handle_t *handle, struct inode *inode,
+>  	err = ext4_ext_dirty(handle, inode, path + path->p_depth);
+>  
+>  cleanup:
+> -	ext4_ext_drop_refs(npath);
+> -	kfree(npath);
+> +	ext4_free_ext_path(npath);
+>  	return err;
+>  }
+>  
+> @@ -3057,8 +3060,7 @@ int ext4_ext_remove_space(struct inode *inode, ext4_lblk_t start,
+>  		}
+>  	}
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	path = NULL;
+>  	if (err == -EAGAIN)
+>  		goto again;
+> @@ -4371,8 +4373,7 @@ int ext4_ext_map_blocks(handle_t *handle, struct inode *inode,
+>  	allocated = map->m_len;
+>  	ext4_ext_show_leaf(inode, path);
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  
+>  	trace_ext4_ext_map_blocks_exit(inode, flags, map,
+>  				       err ? err : allocated);
+> @@ -5241,8 +5242,7 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
+>  			break;
+>  	}
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	return ret;
+>  }
+>  
+> @@ -5534,15 +5534,13 @@ static int ext4_insert_range(struct file *file, loff_t offset, loff_t len)
+>  					EXT4_GET_BLOCKS_METADATA_NOFAIL);
+>  		}
+>  
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  		if (ret < 0) {
+>  			up_write(&EXT4_I(inode)->i_data_sem);
+>  			goto out_stop;
+>  		}
+>  	} else {
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  	}
+>  
+>  	ret = ext4_es_remove_extent(inode, offset_lblk,
+> @@ -5762,10 +5760,8 @@ ext4_swap_extents(handle_t *handle, struct inode *inode1,
+>  		count -= len;
+>  
+>  	repeat:
+> -		ext4_ext_drop_refs(path1);
+> -		kfree(path1);
+> -		ext4_ext_drop_refs(path2);
+> -		kfree(path2);
+> +		ext4_free_ext_path(path1);
+> +		ext4_free_ext_path(path2);
+>  		path1 = path2 = NULL;
+>  	}
+>  	return replaced_count;
+> @@ -5844,8 +5840,7 @@ int ext4_clu_mapped(struct inode *inode, ext4_lblk_t lclu)
+>  	}
+>  
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  
+>  	return err ? err : mapped;
+>  }
+> @@ -5912,8 +5907,7 @@ int ext4_ext_replay_update_ex(struct inode *inode, ext4_lblk_t start,
+>  	ret = ext4_ext_dirty(NULL, inode, &path[path->p_depth]);
+>  	up_write(&EXT4_I(inode)->i_data_sem);
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	ext4_mark_inode_dirty(NULL, inode);
+>  	return ret;
+>  }
+> @@ -5931,8 +5925,7 @@ void ext4_ext_replay_shrink_inode(struct inode *inode, ext4_lblk_t end)
+>  			return;
+>  		ex = path[path->p_depth].p_ext;
+>  		if (!ex) {
+> -			ext4_ext_drop_refs(path);
+> -			kfree(path);
+> +			ext4_free_ext_path(path);
+>  			ext4_mark_inode_dirty(NULL, inode);
+>  			return;
+>  		}
+> @@ -5945,8 +5938,7 @@ void ext4_ext_replay_shrink_inode(struct inode *inode, ext4_lblk_t end)
+>  		ext4_ext_dirty(NULL, inode, &path[path->p_depth]);
+>  		up_write(&EXT4_I(inode)->i_data_sem);
+>  		ext4_mark_inode_dirty(NULL, inode);
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  	}
+>  }
+>  
+> @@ -5985,13 +5977,11 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
+>  		return PTR_ERR(path);
+>  	ex = path[path->p_depth].p_ext;
+>  	if (!ex) {
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  		goto out;
+>  	}
+>  	end = le32_to_cpu(ex->ee_block) + ext4_ext_get_actual_len(ex);
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  
+>  	/* Count the number of data blocks */
+>  	cur = 0;
+> @@ -6021,30 +6011,26 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
+>  	if (IS_ERR(path))
+>  		goto out;
+>  	numblks += path->p_depth;
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	while (cur < end) {
+>  		path = ext4_find_extent(inode, cur, NULL, 0);
+>  		if (IS_ERR(path))
+>  			break;
+>  		ex = path[path->p_depth].p_ext;
+>  		if (!ex) {
+> -			ext4_ext_drop_refs(path);
+> -			kfree(path);
+> +			ext4_free_ext_path(path);
+>  			return 0;
+>  		}
+>  		cur = max(cur + 1, le32_to_cpu(ex->ee_block) +
+>  					ext4_ext_get_actual_len(ex));
+>  		ret = skip_hole(inode, &cur);
+>  		if (ret < 0) {
+> -			ext4_ext_drop_refs(path);
+> -			kfree(path);
+> +			ext4_free_ext_path(path);
+>  			break;
+>  		}
+>  		path2 = ext4_find_extent(inode, cur, NULL, 0);
+>  		if (IS_ERR(path2)) {
+> -			ext4_ext_drop_refs(path);
+> -			kfree(path);
+> +			ext4_free_ext_path(path);
+>  			break;
+>  		}
+>  		for (i = 0; i <= max(path->p_depth, path2->p_depth); i++) {
+> @@ -6058,10 +6044,8 @@ int ext4_ext_replay_set_iblocks(struct inode *inode)
+>  			if (cmp1 != cmp2 && cmp2 != 0)
+>  				numblks++;
+>  		}
+> -		ext4_ext_drop_refs(path);
+> -		ext4_ext_drop_refs(path2);
+> -		kfree(path);
+> -		kfree(path2);
+> +		ext4_free_ext_path(path);
+> +		ext4_free_ext_path(path2);
+>  	}
+>  
+>  out:
+> @@ -6088,13 +6072,11 @@ int ext4_ext_clear_bb(struct inode *inode)
+>  		return PTR_ERR(path);
+>  	ex = path[path->p_depth].p_ext;
+>  	if (!ex) {
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  		return 0;
+>  	}
+>  	end = le32_to_cpu(ex->ee_block) + ext4_ext_get_actual_len(ex);
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  
+>  	cur = 0;
+>  	while (cur < end) {
+> @@ -6113,8 +6095,7 @@ int ext4_ext_clear_bb(struct inode *inode)
+>  					ext4_fc_record_regions(inode->i_sb, inode->i_ino,
+>  							0, path[j].p_block, 1, 1);
+>  				}
+> -				ext4_ext_drop_refs(path);
+> -				kfree(path);
+> +				ext4_free_ext_path(path);
+>  			}
+>  			ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
+>  			ext4_fc_record_regions(inode->i_sb, inode->i_ino,
+> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
+> index 23167efda95e..cd0a861853e3 100644
+> --- a/fs/ext4/extents_status.c
+> +++ b/fs/ext4/extents_status.c
+> @@ -667,8 +667,7 @@ static void ext4_es_insert_extent_ext_check(struct inode *inode,
+>  		}
+>  	}
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  }
+>  
+>  static void ext4_es_insert_extent_ind_check(struct inode *inode,
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index 067969f342eb..085cca17d72f 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -1776,8 +1776,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
+>  			ret = ext4_ext_insert_extent(
+>  				NULL, inode, &path, &newex, 0);
+>  			up_write((&EXT4_I(inode)->i_data_sem));
+> -			ext4_ext_drop_refs(path);
+> -			kfree(path);
+> +			ext4_free_ext_path(path);
+>  			if (ret)
+>  				goto out;
+>  			goto next;
+> @@ -1932,8 +1931,7 @@ static void ext4_fc_set_bitmaps_and_counters(struct super_block *sb)
+>  					for (j = 0; j < path->p_depth; j++)
+>  						ext4_mb_mark_bb(inode->i_sb,
+>  							path[j].p_block, 1, 1);
+> -					ext4_ext_drop_refs(path);
+> -					kfree(path);
+> +					ext4_free_ext_path(path);
+>  				}
+>  				cur += ret;
+>  				ext4_mb_mark_bb(inode->i_sb, map.m_pblk,
+> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+> index 54e7d3c95fd7..0a220ec9862d 100644
+> --- a/fs/ext4/migrate.c
+> +++ b/fs/ext4/migrate.c
+> @@ -56,8 +56,7 @@ static int finish_range(handle_t *handle, struct inode *inode,
+>  	retval = ext4_ext_insert_extent(handle, inode, &path, &newext, 0);
+>  err_out:
+>  	up_write((&EXT4_I(inode)->i_data_sem));
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	lb->first_pblock = 0;
+>  	return retval;
+>  }
+> diff --git a/fs/ext4/move_extent.c b/fs/ext4/move_extent.c
+> index 782bbda2a717..1f314eb6917d 100644
+> --- a/fs/ext4/move_extent.c
+> +++ b/fs/ext4/move_extent.c
+> @@ -32,8 +32,7 @@ get_ext_path(struct inode *inode, ext4_lblk_t lblock,
+>  	if (IS_ERR(path))
+>  		return PTR_ERR(path);
+>  	if (path[ext_depth(inode)].p_ext == NULL) {
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  		*ppath = NULL;
+>  		return -ENODATA;
+>  	}
+> @@ -106,8 +105,7 @@ mext_check_coverage(struct inode *inode, ext4_lblk_t from, ext4_lblk_t count,
+>  	}
+>  	ret = 1;
+>  out:
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	return ret;
+>  }
+>  
+> @@ -693,8 +691,7 @@ ext4_move_extents(struct file *o_filp, struct file *d_filp, __u64 orig_blk,
+>  		ext4_discard_preallocations(donor_inode, 0);
+>  	}
+>  
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  	ext4_double_up_write_data_sem(orig_inode, donor_inode);
+>  	unlock_two_nondirectories(orig_inode, donor_inode);
+>  
+> diff --git a/fs/ext4/verity.c b/fs/ext4/verity.c
+> index b051d19b5c8a..20cadfb740dc 100644
+> --- a/fs/ext4/verity.c
+> +++ b/fs/ext4/verity.c
+> @@ -298,16 +298,14 @@ static int ext4_get_verity_descriptor_location(struct inode *inode,
+>  	last_extent = path[path->p_depth].p_ext;
+>  	if (!last_extent) {
+>  		EXT4_ERROR_INODE(inode, "verity file has no extents");
+> -		ext4_ext_drop_refs(path);
+> -		kfree(path);
+> +		ext4_free_ext_path(path);
+>  		return -EFSCORRUPTED;
+>  	}
+>  
+>  	end_lblk = le32_to_cpu(last_extent->ee_block) +
+>  		   ext4_ext_get_actual_len(last_extent);
+>  	desc_size_pos = (u64)end_lblk << inode->i_blkbits;
+> -	ext4_ext_drop_refs(path);
+> -	kfree(path);
+> +	ext4_free_ext_path(path);
+>  
+>  	if (desc_size_pos < sizeof(desc_size_disk))
+>  		goto bad;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
