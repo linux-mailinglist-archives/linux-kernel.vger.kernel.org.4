@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0475EA39B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D285EA399
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237980AbiIZL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S233625AbiIZL20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237965AbiIZL1Y (ORCPT
+        with ESMTP id S237964AbiIZL1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:27:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DDE3B3;
-        Mon, 26 Sep 2022 03:41:09 -0700 (PDT)
+        Mon, 26 Sep 2022 07:27:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87386AA07;
+        Mon, 26 Sep 2022 03:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F006FB80972;
-        Mon, 26 Sep 2022 10:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D29C433D6;
-        Mon, 26 Sep 2022 10:40:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB4D60A36;
+        Mon, 26 Sep 2022 10:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E83DC433D6;
+        Mon, 26 Sep 2022 10:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188806;
-        bh=A3CykcyFmb5dPc3EiCtbcYody8l3T4oCjQVp3ikh9dg=;
+        s=korg; t=1664188809;
+        bh=50kLM76nyyhdmXbushh3HRygRTZC0Oc3WRLlXQ6F6Dg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SgWizo90b222K4Iha50Qc19+y7KiQq7z1XuRlZTGzyah7qN6z84dvpI04GxISoo5o
-         mBTu/v7v0uu09zGwJQZ/NqPzzBh3hxc4HVXTKh43R8vBT7p1Z/wayYJNJ2yI7xy4KI
-         p8ACqKb6+64WFjo3OIhW7FutsgsJwImx/9WNkcgc=
+        b=Q+Uf23/Ye+1rHOywr2VcrCemNvUX5vdClStkszcPogcH8jzaQQf6euUZ4dCzJ57Kj
+         zIEr6Nwr5Ew5551dwyGU3N9ovRgh3vIrDuw1u1/rxq1qMaVHwuBdYnCdFZFbVJkPGd
+         g2EnjVJYY9GnNEGpIEwY3h1KTBZ5etlrUqnOrX4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
+        Krunoslav Kovac <Krunoslav.Kovac@amd.com>,
+        Aric Cyr <Aric.Cyr@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Yao Wang1 <Yao.Wang1@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 128/148] drm/amdgpu: use dirty framebuffer helper
-Date:   Mon, 26 Sep 2022 12:12:42 +0200
-Message-Id: <20220926100800.981514741@linuxfoundation.org>
+Subject: [PATCH 5.15 129/148] drm/amd/display: Limit user regamma to a valid value
+Date:   Mon, 26 Sep 2022 12:12:43 +0200
+Message-Id: <20220926100801.019984994@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
 References: <20220926100756.074519146@linuxfoundation.org>
@@ -54,42 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hamza Mahfooz <hamza.mahfooz@amd.com>
+From: Yao Wang1 <Yao.Wang1@amd.com>
 
-[ Upstream commit 66f99628eb24409cb8feb5061f78283c8b65f820 ]
+[ Upstream commit 3601d620f22e37740cf73f8278eabf9f2aa19eb7 ]
 
-Currently, we aren't handling DRM_IOCTL_MODE_DIRTYFB. So, use
-drm_atomic_helper_dirtyfb() as the dirty callback in the amdgpu_fb_funcs
-struct.
+[Why]
+For HDR mode, we get total 512 tf_point and after switching to SDR mode
+we actually get 400 tf_point and the rest of points(401~512) still use
+dirty value from HDR mode. We should limit the rest of the points to max
+value.
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
+[How]
+Limit the value when coordinates_x.x > 1, just like what we do in
+translate_from_linear_space for other re-gamma build paths.
+
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Reviewed-by: Krunoslav Kovac <Krunoslav.Kovac@amd.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Pavle Kotarac <Pavle.Kotarac@amd.com>
+Signed-off-by: Yao Wang1 <Yao.Wang1@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/modules/color/color_gamma.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-index 5c08047adb59..47fb722ab374 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-@@ -35,6 +35,7 @@
- #include <linux/pci.h>
- #include <linux/pm_runtime.h>
- #include <drm/drm_crtc_helper.h>
-+#include <drm/drm_damage_helper.h>
- #include <drm/drm_edid.h>
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_fb_helper.h>
-@@ -490,6 +491,7 @@ bool amdgpu_display_ddc_probe(struct amdgpu_connector *amdgpu_connector,
- static const struct drm_framebuffer_funcs amdgpu_fb_funcs = {
- 	.destroy = drm_gem_fb_destroy,
- 	.create_handle = drm_gem_fb_create_handle,
-+	.dirty = drm_atomic_helper_dirtyfb,
- };
+diff --git a/drivers/gpu/drm/amd/display/modules/color/color_gamma.c b/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
+index ef742d95ef05..c707c9bfed43 100644
+--- a/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
++++ b/drivers/gpu/drm/amd/display/modules/color/color_gamma.c
+@@ -1597,6 +1597,7 @@ static void interpolate_user_regamma(uint32_t hw_points_num,
+ 	struct fixed31_32 lut2;
+ 	struct fixed31_32 delta_lut;
+ 	struct fixed31_32 delta_index;
++	const struct fixed31_32 one = dc_fixpt_from_int(1);
  
- uint32_t amdgpu_display_supported_domains(struct amdgpu_device *adev,
+ 	i = 0;
+ 	/* fixed_pt library has problems handling too small values */
+@@ -1625,6 +1626,9 @@ static void interpolate_user_regamma(uint32_t hw_points_num,
+ 			} else
+ 				hw_x = coordinates_x[i].x;
+ 
++			if (dc_fixpt_le(one, hw_x))
++				hw_x = one;
++
+ 			norm_x = dc_fixpt_mul(norm_factor, hw_x);
+ 			index = dc_fixpt_floor(norm_x);
+ 			if (index < 0 || index > 255)
 -- 
 2.35.1
 
