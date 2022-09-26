@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB0B5EA4B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2441A5E9FFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238381AbiIZLuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S235795AbiIZKcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbiIZLtF (ORCPT
+        with ESMTP id S235877AbiIZK33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFCA57201;
-        Mon, 26 Sep 2022 03:48:04 -0700 (PDT)
+        Mon, 26 Sep 2022 06:29:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B0D118;
+        Mon, 26 Sep 2022 03:19:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1C07B80171;
-        Mon, 26 Sep 2022 10:46:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DC2C433C1;
-        Mon, 26 Sep 2022 10:46:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5163760687;
+        Mon, 26 Sep 2022 10:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E79C433C1;
+        Mon, 26 Sep 2022 10:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189209;
-        bh=FGL8GAtxfMw4n0JvjxgP9LDX324kIAJjB3fsedpwHWk=;
+        s=korg; t=1664187574;
+        bh=0mJTwtfsM3JU847gcuOVwTHGzf5FOEHdXTIF2GM5PXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qS1xfuibYClXLDgk3xDCQSMh1DWwEvPW2KjG4z2X9RgSuQasFTaxBN+fefe0njhqn
-         mXrX0p1L7t6y1O9AdzF28lo/y9spGz6ff5G2U+pxAjfj0o8TvfbsKpDnbCGD1lrJ/F
-         801ehcMPKGx2Wv4ZVstyT2ffNpHimSoPylkVLQWE=
+        b=U1ziJMiKDwBGwP9S7/sZVkr3lepEY6xcNgS+hoT29a8HP2F0IUynFuH6xkCsKUb7R
+         PlWirCe7EU5LUDnPhO2vsYQq1fkl+QlbvlJ1Aq5YMvkYlqJiPIGdtOtzVPEiyPwdTv
+         p4NZgCWyPhTo2mh0STQj4UCRnAXayOezAKe9zTX4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        stable@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 110/207] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
+Subject: [PATCH 4.19 20/58] usb: dwc3: pci: add support for TigerLake Devices
 Date:   Mon, 26 Sep 2022 12:11:39 +0200
-Message-Id: <20220926100811.527633314@linuxfoundation.org>
+Message-Id: <20220926100742.179235864@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Felipe Balbi <felipe.balbi@linux.intel.com>
 
-[ Upstream commit 502550123bee6a2ffa438409b5b9aad4d6db3a8c ]
+[ Upstream commit b3649dee5fbb0f6585010e6e9313dfcbb075b22b ]
 
-The lantiq WDT driver uses clk_get_io(), which is not exported,
-so export it to fix a build error:
+This patch adds the necessary PCI ID for TGP-LP devices.
 
-ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
-
-Fixes: 287e3f3f4e68 ("MIPS: lantiq: implement support for clkdev api")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: John Crispin <john@phrozen.org>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Stable-dep-of: bad0d1d726ac ("usb: dwc3: pci: Add support for Intel Raptor Lake")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/lantiq/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-index 7a623684d9b5..2d5a0bcb0cec 100644
---- a/arch/mips/lantiq/clk.c
-+++ b/arch/mips/lantiq/clk.c
-@@ -50,6 +50,7 @@ struct clk *clk_get_io(void)
- {
- 	return &cpu_clk_generic[2];
- }
-+EXPORT_SYMBOL_GPL(clk_get_io);
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 5d5166373aa1..3ca582127f94 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -37,6 +37,7 @@
+ #define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
+ #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
+ #define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
++#define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
  
- struct clk *clk_get_ppe(void)
- {
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -355,6 +356,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
++
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
 -- 
 2.35.1
 
