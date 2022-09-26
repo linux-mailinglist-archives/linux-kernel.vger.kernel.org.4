@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F575EA20A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9F05EA052
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237236AbiIZLBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S235962AbiIZKfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237232AbiIZK7H (ORCPT
+        with ESMTP id S235912AbiIZKdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110634E86A;
-        Mon, 26 Sep 2022 03:30:49 -0700 (PDT)
+        Mon, 26 Sep 2022 06:33:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA45F4F67E;
+        Mon, 26 Sep 2022 03:20:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6934BB80915;
-        Mon, 26 Sep 2022 10:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D6CC433C1;
-        Mon, 26 Sep 2022 10:29:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC9CCB80924;
+        Mon, 26 Sep 2022 10:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347B2C433C1;
+        Mon, 26 Sep 2022 10:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188162;
-        bh=cK8B3WkbVBAYTuDXLByTeBjLGGmC+KvA8KcRA9a+1JA=;
+        s=korg; t=1664187640;
+        bh=Gl3ox5AJR7lPGqGsDshH8oHQ85CLeBRjmba8YdWvd+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pUyiUmyDtwWKg3Z723vcil/m5ZRnJz2VJ03w6XOR6OmAVHNjoCXy0n4Qjnc1Mqnmx
-         N4Raqna8jrHF4+iJ9gssNIygEF7uslENDVpMBH3Paw3r+0y+NS1LUnYv/mnkHUMAsP
-         8UKo2mbeECytF0PenmHCraJCjdUWurHO/zUZBw2E=
+        b=P1cvGEdaSgBE4irn1fxTAjbdT6YHv2JWOAZvftNQ2suR9JWfjSFMuOP9yd6DHgYxz
+         JOSkYv8e2MskK8cDRHEDItfsV9HpHqaoi/RvWOCMd2fx43npW5njYVaEDGUMQ8AZBg
+         BBg+u8d91uPg4Ge/qCAV+SYYNLQzbdKE9immYN+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 020/141] iio:adc:mcp3911: Switch to generic firmware properties.
-Date:   Mon, 26 Sep 2022 12:10:46 +0200
-Message-Id: <20220926100755.299003485@linuxfoundation.org>
+        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Chandan Babu R <chandan.babu@oracle.com>
+Subject: [PATCH 5.4 014/120] MAINTAINERS: add Chandan as xfs maintainer for 5.4.y
+Date:   Mon, 26 Sep 2022 12:10:47 +0200
+Message-Id: <20220926100751.114438914@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,69 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+From: Chandan Babu R <chandan.babu@oracle.com>
 
-[ Upstream commit 4efc1c614d334883cce09c38aa3fe74d3fb0bbf0 ]
+This is an attempt to direct the bots and humans that are testing
+LTS 5.4.y towards the maintainer of xfs in the 5.4.y tree.
 
-This allows use of the driver with other types of firmware such as ACPI
-PRP0001 based probing.
+Update Darrick's email address from upstream and add Chandan as xfs
+maintaier for the 5.4.y tree.
 
-Also part of a general attempt to remove direct use of of_ specific
-accessors from IIO.
-
-Added an include for mod_devicetable.h whilst here to cover the
-struct of_device_id definition.
-
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Kent Gustavsson <kent@minoris.se>
-Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Stable-dep-of: cfbd76d5c9c4 ("iio: adc: mcp3911: correct "microchip,device-addr" property")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Suggested-by: Darrick J. Wong <djwong@kernel.org>
+Link: https://lore.kernel.org/linux-xfs/Yrx6%2F0UmYyuBPjEr@magnolia/
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/mcp3911.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ MAINTAINERS |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index 65278270a75c..608842632925 100644
---- a/drivers/iio/adc/mcp3911.c
-+++ b/drivers/iio/adc/mcp3911.c
-@@ -10,6 +10,8 @@
- #include <linux/err.h>
- #include <linux/iio/iio.h>
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
- #include <linux/regulator/consumer.h>
- #include <linux/spi/spi.h>
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17864,7 +17864,8 @@ S:	Supported
+ F:	sound/xen/*
  
-@@ -209,12 +211,13 @@ static const struct iio_info mcp3911_info = {
- 	.write_raw = mcp3911_write_raw,
- };
- 
--static int mcp3911_config(struct mcp3911 *adc, struct device_node *of_node)
-+static int mcp3911_config(struct mcp3911 *adc)
- {
-+	struct device *dev = &adc->spi->dev;
- 	u32 configreg;
- 	int ret;
- 
--	of_property_read_u32(of_node, "device-addr", &adc->dev_addr);
-+	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
- 	if (adc->dev_addr > 3) {
- 		dev_err(&adc->spi->dev,
- 			"invalid device address (%i). Must be in range 0-3.\n",
-@@ -298,7 +301,7 @@ static int mcp3911_probe(struct spi_device *spi)
- 		}
- 	}
- 
--	ret = mcp3911_config(adc, spi->dev.of_node);
-+	ret = mcp3911_config(adc);
- 	if (ret)
- 		goto clk_disable;
- 
--- 
-2.35.1
-
+ XFS FILESYSTEM
+-M:	Darrick J. Wong <darrick.wong@oracle.com>
++M:	Chandan Babu R <chandan.babu@oracle.com>
++M:	Darrick J. Wong <djwong@kernel.org>
+ M:	linux-xfs@vger.kernel.org
+ L:	linux-xfs@vger.kernel.org
+ W:	http://xfs.org/
 
 
