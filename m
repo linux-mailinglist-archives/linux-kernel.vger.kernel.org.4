@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924635E9F2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFC25E9F08
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234799AbiIZKVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S234743AbiIZKSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235207AbiIZKSu (ORCPT
+        with ESMTP id S234891AbiIZKRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:18:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A6546DB8;
-        Mon, 26 Sep 2022 03:15:30 -0700 (PDT)
+        Mon, 26 Sep 2022 06:17:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B7836DF8;
+        Mon, 26 Sep 2022 03:15:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5DF8B80835;
-        Mon, 26 Sep 2022 10:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 139C5C433C1;
-        Mon, 26 Sep 2022 10:15:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 101D5B80925;
+        Mon, 26 Sep 2022 10:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6797FC433C1;
+        Mon, 26 Sep 2022 10:14:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187327;
-        bh=4rwkvD/DNcjNXfcsWGkTsOeqnSDE+8I7hUNF1BK6CT8=;
+        s=korg; t=1664187299;
+        bh=qKqAQRD6cxz9W/PwVbpSTLflZheubG7vtgJbTS+PnZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wKWfmAbasshPdJC8C362h8GzhJimV7b6gwTCFAgKzwpYw5EicEEh9DHgaxdZRSqtk
-         kmbSlNjuWDEpsWjU6mtRpnrlXDYqwnYOrer2M5ErcEoi6mjUptxFVU2L66JsA19hQG
-         a47Q9yvNNVuRddUAzI5O5wtSWaWjIMt6mvPJYXis=
+        b=vjOCGC/lTtLhVZJDmT6mN1hB4fEIFt+qPy/lkXkaRYtBP9kJXI2yisDR6BqkvxIj0
+         07V8opfoY3NEfltmWK9eM4H4F+J1G93M7uvmhZ/54JBkRy+uprv0d99UzlAlQvWf9R
+         4s56HroC5aGTCNTTfm2zOb7zqLnWFwRHzmnO/540=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Youling Tang <tangyouling@loongson.cn>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 13/40] mksysmap: Fix the mismatch of L0 symbols in System.map
+Subject: [PATCH 4.9 10/30] mips/pic32/pic32mzda: Fix refcount leak bugs
 Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100738.719276126@linuxfoundation.org>
+Message-Id: <20220926100736.537955607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Youling Tang <tangyouling@loongson.cn>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit c17a2538704f926ee4d167ba625e09b1040d8439 ]
+[ Upstream commit eb9e9bc4fa5fb489c92ec588b3fb35f042ba6d86 ]
 
-When System.map was generated, the kernel used mksysmap to filter the
-kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
+of_find_matching_node(), of_find_compatible_node() and
+of_find_node_by_path() will return node pointers with refcout
+incremented. We should call of_node_put() when they are not
+used anymore.
 
-$ cat System.map | grep L0
-9000000000221540 t L0
-
-The L0 symbol exists in System.map, but not in .tmp_System.map. When
-"cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
-data" error message in link-vmlinux.sh script.
-
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/mksysmap | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
+ arch/mips/pic32/pic32mzda/time.c | 3 +++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/mksysmap b/scripts/mksysmap
-index 9aa23d15862a..ad8bbc52267d 100755
---- a/scripts/mksysmap
-+++ b/scripts/mksysmap
-@@ -41,4 +41,4 @@
- # so we just ignore them to let readprofile continue to work.
- # (At least sparc64 has __crc_ in the middle).
+diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
+index 406c6c5cec29..f8985d4573e6 100644
+--- a/arch/mips/pic32/pic32mzda/init.c
++++ b/arch/mips/pic32/pic32mzda/init.c
+@@ -131,13 +131,18 @@ static int __init pic32_of_prepare_platform_data(struct of_dev_auxdata *lookup)
+ 		np = of_find_compatible_node(NULL, NULL, lookup->compatible);
+ 		if (np) {
+ 			lookup->name = (char *)np->name;
+-			if (lookup->phys_addr)
++			if (lookup->phys_addr) {
++				of_node_put(np);
+ 				continue;
++			}
+ 			if (!of_address_to_resource(np, 0, &res))
+ 				lookup->phys_addr = res.start;
++			of_node_put(np);
+ 		}
+ 	}
  
--$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
-+$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
++	of_node_put(root);
++
+ 	return 0;
+ }
+ 
+diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
+index 62a0a78b6c64..bfafe241c1b5 100644
+--- a/arch/mips/pic32/pic32mzda/time.c
++++ b/arch/mips/pic32/pic32mzda/time.c
+@@ -40,6 +40,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
+ 		goto default_map;
+ 
+ 	irq = irq_of_parse_and_map(node, 0);
++
++	of_node_put(node);
++
+ 	if (!irq)
+ 		goto default_map;
+ 
 -- 
 2.35.1
 
