@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD5B5EA266
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C0A5EA163
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237275AbiIZLGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S236541AbiIZKuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiIZLF4 (ORCPT
+        with ESMTP id S234288AbiIZKrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:05:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05544F6B0;
-        Mon, 26 Sep 2022 03:33:59 -0700 (PDT)
+        Mon, 26 Sep 2022 06:47:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAD856B8E;
+        Mon, 26 Sep 2022 03:26:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C9BC60C05;
-        Mon, 26 Sep 2022 10:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82142C433C1;
-        Mon, 26 Sep 2022 10:33:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3632E60B5E;
+        Mon, 26 Sep 2022 10:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44BB3C43143;
+        Mon, 26 Sep 2022 10:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188422;
-        bh=BPFEgtuDPRS6M4K2zKUGEDYswwOrwW1BnzLKphyFSNw=;
+        s=korg; t=1664187967;
+        bh=6/Y2u1ZYrdILy+QEFLEQf4SbkrYgHQ3YFEoUOqGIzOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AFJrB5iUUwwFlMtnQB7cYXsoJmdkIQC6gzCTFabKoASDW2N+zUN2cVS0kDf4CLslI
-         nNmU4fBWP7VNTOsG2DACdhVKhww+pE5XkOU4Wj/QmUj8IfNwvD78JyGXKpLemj6Zh4
-         VJKAsArIqeBZeHaC+is0O3j9KqlwI2yU/z00R3lk=
+        b=Tgqyu0CH0dIVlDi+re2+7dREnZVjORLlVntU34V/2MHb6r5CWgbxW4sOY3RKmFnwe
+         NsjFD0dhlYuga+qDeLqg7+w3nbos9vhTvYmBaMg84QLqCJwtWywdzQnaighWcqAtO8
+         YXi2T4HEQZRuC5FC+YQ7ogj6DG1PvJsLGtHErKTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 125/141] cifs: always initialize struct msghdr smb_msg completely
-Date:   Mon, 26 Sep 2022 12:12:31 +0200
-Message-Id: <20220926100758.986193625@linuxfoundation.org>
+        stable@vger.kernel.org, wenli xie <wlxie7296@gmail.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Brian Foster <bfoster@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Chandan Babu R <chandan.babu@oracle.com>
+Subject: [PATCH 5.4 119/120] xfs: fix an ABBA deadlock in xfs_rename
+Date:   Mon, 26 Sep 2022 12:12:32 +0200
+Message-Id: <20220926100755.268275705@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +56,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Metzmacher <metze@samba.org>
+From: "Darrick J. Wong" <darrick.wong@oracle.com>
 
-[ Upstream commit bedc8f76b3539ac4f952114b316bcc2251e808ce ]
+commit 6da1b4b1ab36d80a3994fd4811c8381de10af604 upstream.
 
-So far we were just lucky because the uninitialized members
-of struct msghdr are not used by default on a SOCK_STREAM tcp
-socket.
+When overlayfs is running on top of xfs and the user unlinks a file in
+the overlay, overlayfs will create a whiteout inode and ask xfs to
+"rename" the whiteout file atop the one being unlinked.  If the file
+being unlinked loses its one nlink, we then have to put the inode on the
+unlinked list.
 
-But as new things like msg_ubuf and sg_from_iter where added
-recently, we should play on the safe side and avoid potention
-problems in future.
+This requires us to grab the AGI buffer of the whiteout inode to take it
+off the unlinked list (which is where whiteouts are created) and to grab
+the AGI buffer of the file being deleted.  If the whiteout was created
+in a higher numbered AG than the file being deleted, we'll lock the AGIs
+in the wrong order and deadlock.
 
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Cc: stable@vger.kernel.org
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Therefore, grab all the AGI locks we think we'll need ahead of time, and
+in order of increasing AG number per the locking rules.
+
+Reported-by: wenli xie <wlxie7296@gmail.com>
+Fixes: 93597ae8dac0 ("xfs: Fix deadlock between AGI and AGF when target_ip exists in xfs_rename()")
+Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/connect.c   | 11 +++--------
- fs/cifs/transport.c |  6 +-----
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ fs/xfs/libxfs/xfs_dir2.h    |    2 --
+ fs/xfs/libxfs/xfs_dir2_sf.c |    2 +-
+ fs/xfs/xfs_inode.c          |   42 +++++++++++++++++++++++++-----------------
+ 3 files changed, 26 insertions(+), 20 deletions(-)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 6e7d5b9e84b8..d1c3086d7ddd 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -695,9 +695,6 @@ cifs_readv_from_socket(struct TCP_Server_Info *server, struct msghdr *smb_msg)
- 	int length = 0;
- 	int total_read;
- 
--	smb_msg->msg_control = NULL;
--	smb_msg->msg_controllen = 0;
--
- 	for (total_read = 0; msg_data_left(smb_msg); total_read += length) {
- 		try_to_freeze();
- 
-@@ -748,7 +745,7 @@ int
- cifs_read_from_socket(struct TCP_Server_Info *server, char *buf,
- 		      unsigned int to_read)
- {
--	struct msghdr smb_msg;
-+	struct msghdr smb_msg = {};
- 	struct kvec iov = {.iov_base = buf, .iov_len = to_read};
- 	iov_iter_kvec(&smb_msg.msg_iter, READ, &iov, 1, to_read);
- 
-@@ -758,15 +755,13 @@ cifs_read_from_socket(struct TCP_Server_Info *server, char *buf,
- ssize_t
- cifs_discard_from_socket(struct TCP_Server_Info *server, size_t to_read)
- {
--	struct msghdr smb_msg;
-+	struct msghdr smb_msg = {};
+--- a/fs/xfs/libxfs/xfs_dir2.h
++++ b/fs/xfs/libxfs/xfs_dir2.h
+@@ -124,8 +124,6 @@ extern int xfs_dir_lookup(struct xfs_tra
+ extern int xfs_dir_removename(struct xfs_trans *tp, struct xfs_inode *dp,
+ 				struct xfs_name *name, xfs_ino_t ino,
+ 				xfs_extlen_t tot);
+-extern bool xfs_dir2_sf_replace_needblock(struct xfs_inode *dp,
+-				xfs_ino_t inum);
+ extern int xfs_dir_replace(struct xfs_trans *tp, struct xfs_inode *dp,
+ 				struct xfs_name *name, xfs_ino_t inum,
+ 				xfs_extlen_t tot);
+--- a/fs/xfs/libxfs/xfs_dir2_sf.c
++++ b/fs/xfs/libxfs/xfs_dir2_sf.c
+@@ -947,7 +947,7 @@ xfs_dir2_sf_removename(
+ /*
+  * Check whether the sf dir replace operation need more blocks.
+  */
+-bool
++static bool
+ xfs_dir2_sf_replace_needblock(
+ 	struct xfs_inode	*dp,
+ 	xfs_ino_t		inum)
+--- a/fs/xfs/xfs_inode.c
++++ b/fs/xfs/xfs_inode.c
+@@ -3224,7 +3224,7 @@ xfs_rename(
+ 	struct xfs_trans	*tp;
+ 	struct xfs_inode	*wip = NULL;		/* whiteout inode */
+ 	struct xfs_inode	*inodes[__XFS_SORT_INODES];
+-	struct xfs_buf		*agibp;
++	int			i;
+ 	int			num_inodes = __XFS_SORT_INODES;
+ 	bool			new_parent = (src_dp != target_dp);
+ 	bool			src_is_directory = S_ISDIR(VFS_I(src_ip)->i_mode);
+@@ -3337,6 +3337,30 @@ xfs_rename(
+ 	}
  
  	/*
- 	 *  iov_iter_discard already sets smb_msg.type and count and iov_offset
- 	 *  and cifs_readv_from_socket sets msg_control and msg_controllen
- 	 *  so little to initialize in struct msghdr
- 	 */
--	smb_msg.msg_name = NULL;
--	smb_msg.msg_namelen = 0;
- 	iov_iter_discard(&smb_msg.msg_iter, READ, to_read);
- 
- 	return cifs_readv_from_socket(server, &smb_msg);
-@@ -776,7 +771,7 @@ int
- cifs_read_page_from_socket(struct TCP_Server_Info *server, struct page *page,
- 	unsigned int page_offset, unsigned int to_read)
- {
--	struct msghdr smb_msg;
-+	struct msghdr smb_msg = {};
- 	struct bio_vec bv = {
- 		.bv_page = page, .bv_len = to_read, .bv_offset = page_offset};
- 	iov_iter_bvec(&smb_msg.msg_iter, READ, &bv, 1, to_read);
-diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index 383ae8744c33..b137006f0fd2 100644
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -209,10 +209,6 @@ smb_send_kvec(struct TCP_Server_Info *server, struct msghdr *smb_msg,
- 
- 	*sent = 0;
- 
--	smb_msg->msg_name = NULL;
--	smb_msg->msg_namelen = 0;
--	smb_msg->msg_control = NULL;
--	smb_msg->msg_controllen = 0;
- 	if (server->noblocksnd)
- 		smb_msg->msg_flags = MSG_DONTWAIT + MSG_NOSIGNAL;
- 	else
-@@ -324,7 +320,7 @@ __smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 	sigset_t mask, oldmask;
- 	size_t total_len = 0, sent, size;
- 	struct socket *ssocket = server->ssocket;
--	struct msghdr smb_msg;
-+	struct msghdr smb_msg = {};
- 	__be32 rfc1002_marker;
- 
- 	if (cifs_rdma_enabled(server)) {
--- 
-2.35.1
-
++	 * Lock the AGI buffers we need to handle bumping the nlink of the
++	 * whiteout inode off the unlinked list and to handle dropping the
++	 * nlink of the target inode.  Per locking order rules, do this in
++	 * increasing AG order and before directory block allocation tries to
++	 * grab AGFs because we grab AGIs before AGFs.
++	 *
++	 * The (vfs) caller must ensure that if src is a directory then
++	 * target_ip is either null or an empty directory.
++	 */
++	for (i = 0; i < num_inodes && inodes[i] != NULL; i++) {
++		if (inodes[i] == wip ||
++		    (inodes[i] == target_ip &&
++		     (VFS_I(target_ip)->i_nlink == 1 || src_is_directory))) {
++			struct xfs_buf	*bp;
++			xfs_agnumber_t	agno;
++
++			agno = XFS_INO_TO_AGNO(mp, inodes[i]->i_ino);
++			error = xfs_read_agi(mp, tp, agno, &bp);
++			if (error)
++				goto out_trans_cancel;
++		}
++	}
++
++	/*
+ 	 * Directory entry creation below may acquire the AGF. Remove
+ 	 * the whiteout from the unlinked list first to preserve correct
+ 	 * AGI/AGF locking order. This dirties the transaction so failures
+@@ -3389,22 +3413,6 @@ xfs_rename(
+ 		 * In case there is already an entry with the same
+ 		 * name at the destination directory, remove it first.
+ 		 */
+-
+-		/*
+-		 * Check whether the replace operation will need to allocate
+-		 * blocks.  This happens when the shortform directory lacks
+-		 * space and we have to convert it to a block format directory.
+-		 * When more blocks are necessary, we must lock the AGI first
+-		 * to preserve locking order (AGI -> AGF).
+-		 */
+-		if (xfs_dir2_sf_replace_needblock(target_dp, src_ip->i_ino)) {
+-			error = xfs_read_agi(mp, tp,
+-					XFS_INO_TO_AGNO(mp, target_ip->i_ino),
+-					&agibp);
+-			if (error)
+-				goto out_trans_cancel;
+-		}
+-
+ 		error = xfs_dir_replace(tp, target_dp, target_name,
+ 					src_ip->i_ino, spaceres);
+ 		if (error)
 
 
