@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65BA5EA0B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3293F5EA496
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiIZKlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S238850AbiIZLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiIZKjG (ORCPT
+        with ESMTP id S238989AbiIZLp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D2D53D24;
-        Mon, 26 Sep 2022 03:23:00 -0700 (PDT)
+        Mon, 26 Sep 2022 07:45:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E7D7330B;
+        Mon, 26 Sep 2022 03:47:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B106560BB7;
-        Mon, 26 Sep 2022 10:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A097CC433D6;
-        Mon, 26 Sep 2022 10:22:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F208B60A37;
+        Mon, 26 Sep 2022 10:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD466C433C1;
+        Mon, 26 Sep 2022 10:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187749;
-        bh=sQ0KOxyIJ2tE6SiJCJZSw/9TB+BEdLMmOzgVUtu/Y7M=;
+        s=korg; t=1664189159;
+        bh=19KlRLI+ImLM1gK/lv/gMMi8YiwPQlSzvAQZM4tGZNc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yiQkCBtlLEAapPC/K8rP7Mw16yrh3utD0j1qJTOlSuQPF9+94TghI+Y01NwYr+ec4
-         2hZhUbLDfLNiHXsK7n3QBZNiiNvWKeKnyNU9OlLorweBSNDd1uGlQEXtNaGWklwOTq
-         zsRmMvLNCm9f3L6i8M3UBVmnRGI0jKzIkgyVqGfA=
+        b=Siaseete7FaqQhVZvO/Fb9m49qFTwHZHMwJkLc6OYJqCLI5ZrGLKE8ikgNqdfhv3z
+         e0w3HNyvUjgOp2nIXmmOJ5l+jYT1LvXfIU+kQRZhv9JtuPYqeFfUsl8Rjo0hweSc13
+         wODS0PFU+C9uQdxR1pGjaLUUyBfWiW90mgMCVxqc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 048/120] usb: add quirks for Lenovo OneLink+ Dock
+        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
+        Norbert Zulinski <norbertx.zulinski@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 092/207] iavf: Fix cached head and tail value for iavf_get_tx_pending
 Date:   Mon, 26 Sep 2022 12:11:21 +0200
-Message-Id: <20220926100752.518599154@linuxfoundation.org>
+Message-Id: <20220926100810.715575081@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+From: Brett Creeley <brett.creeley@intel.com>
 
-[ Upstream commit 3d5f70949f1b1168fbb17d06eb5c57e984c56c58 ]
+[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
 
-The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
-17ef:1018 upstream
-17ef:1019 downstream
+The underlying hardware may or may not allow reading of the head or tail
+registers and it really makes no difference if we use the software
+cached values. So, always used the software cached values.
 
-Those two controllers both have problems with some USB3.0 devices,
-particularly self-powered ones. Typical error messages include:
-
-  Timeout while waiting for setup device command
-  device not accepting address X, error -62
-  unable to enumerate USB device
-
-By process of elimination the controllers themselves were identified as
-the cause of the problem. Through trial and error the issue was solved
-by using USB_QUIRK_RESET_RESUME for both chips.
-
-Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220824191320.17883-1-jflf_kernel@gmx.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
+Signed-off-by: Brett Creeley <brett.creeley@intel.com>
+Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/quirks.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index f8f2de7899a9..dd7947547054 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -438,6 +438,10 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
- 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+index 06d18797d25a..4c3f3f419110 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
+ {
+ 	u32 head, tail;
  
-+	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) */
-+	{ USB_DEVICE(0x17ef, 0x1018), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x17ef, 0x1019), .driver_info = USB_QUIRK_RESET_RESUME },
-+
- 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
- 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
++	/* underlying hardware might not allow access and/or always return
++	 * 0 for the head/tail registers so just use the cached values
++	 */
+ 	head = ring->next_to_clean;
+-	tail = readl(ring->tail);
++	tail = ring->next_to_use;
  
+ 	if (head != tail)
+ 		return (head < tail) ?
 -- 
 2.35.1
 
