@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941E5EA067
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F00D5EA1B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbiIZKhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S236807AbiIZKzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236291AbiIZKen (ORCPT
+        with ESMTP id S236948AbiIZKyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:34:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CDC4A121;
-        Mon, 26 Sep 2022 03:21:31 -0700 (PDT)
+        Mon, 26 Sep 2022 06:54:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6F25A3F3;
+        Mon, 26 Sep 2022 03:28:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 756CCB80682;
-        Mon, 26 Sep 2022 10:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95EDC4314C;
-        Mon, 26 Sep 2022 10:21:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C31160AF0;
+        Mon, 26 Sep 2022 10:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3765C433C1;
+        Mon, 26 Sep 2022 10:27:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187674;
-        bh=u2rO/ercHtrvsYkINPsSjr86xEcZCu/JUchqEDLRKLc=;
+        s=korg; t=1664188066;
+        bh=hHRz2E5J/ZR57vbCMbyiREn4E4IpbW/zsRjMDzFY5Ck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cdszsFlqTW7HZ+OS1DwkrzEAJEI0n9NOZr9qM0clkdJpq1CMJOFqyVgCEwxQWDep+
-         ADM2mYaz57l+2UhZXno528DFyZ7U+Em1mwnPmddN5x49lYHc0boMpiPiG+zOwyuHPj
-         LbMVe3Zl+ROmpk+Mj9MTlkJsbQMNt7DpODVjNAlQ=
+        b=tZSIyFvFHjSIbK4TaQSOZbguNmks7N1OnrubCvugLrbVuHCxHi14sjtS7ekgmOMSy
+         aOxSEdynkB+3zBAhMQBRdvhPLns8DzB4B2Jfshd2hYTB1NuFc8Owdoz70pryo1Y/w8
+         2K0Q83w7LUKPYxOj8dtDOsXpa3msL5mth9Kam2VY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Jeffrey E Altman <jaltman@auristor.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 023/120] afs: Return -EAGAIN, not -EREMOTEIO, when a file already locked
+Subject: [PATCH 5.10 030/141] vfio/type1: Change success value of vaddr_get_pfn()
 Date:   Mon, 26 Sep 2022 12:10:56 +0200
-Message-Id: <20220926100751.471507380@linuxfoundation.org>
+Message-Id: <20220926100755.607176191@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +54,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Daniel Jordan <daniel.m.jordan@oracle.com>
 
-[ Upstream commit 0066f1b0e27556381402db3ff31f85d2a2265858 ]
+[ Upstream commit be16c1fd99f41abebc0bf965d5d29cd18c9d271e ]
 
-When trying to get a file lock on an AFS file, the server may return
-UAEAGAIN to indicate that the lock is already held.  This is currently
-translated by the default path to -EREMOTEIO.
+vaddr_get_pfn() simply returns 0 on success.  Have it report the number
+of pfns successfully gotten instead, whether from page pinning or
+follow_fault_pfn(), which will be used later when batching pinning.
 
-Translate it instead to -EAGAIN so that we know we can retry it.
+Change the last check in vfio_pin_pages_remote() for consistency with
+the other two.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeffrey E Altman <jaltman@auristor.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/166075761334.3533338.2591992675160918098.stgit@warthog.procyon.org.uk/
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+Stable-dep-of: 873aefb376bb ("vfio/type1: Unpin zero pages")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/misc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/vfio/vfio_iommu_type1.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/fs/afs/misc.c b/fs/afs/misc.c
-index 5334f1bd2bca..5171d6d99031 100644
---- a/fs/afs/misc.c
-+++ b/fs/afs/misc.c
-@@ -69,6 +69,7 @@ int afs_abort_to_error(u32 abort_code)
- 		/* Unified AFS error table */
- 	case UAEPERM:			return -EPERM;
- 	case UAENOENT:			return -ENOENT;
-+	case UAEAGAIN:			return -EAGAIN;
- 	case UAEACCES:			return -EACCES;
- 	case UAEBUSY:			return -EBUSY;
- 	case UAEEXIST:			return -EEXIST;
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index fbd438e9b9b0..2d26244f9c32 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -464,6 +464,10 @@ static int follow_fault_pfn(struct vm_area_struct *vma, struct mm_struct *mm,
+ 	return ret;
+ }
+ 
++/*
++ * Returns the positive number of pfns successfully obtained or a negative
++ * error code.
++ */
+ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
+ 			 int prot, unsigned long *pfn)
+ {
+@@ -480,7 +484,6 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
+ 				    page, NULL, NULL);
+ 	if (ret == 1) {
+ 		*pfn = page_to_pfn(page[0]);
+-		ret = 0;
+ 		goto done;
+ 	}
+ 
+@@ -494,8 +497,12 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
+ 		if (ret == -EAGAIN)
+ 			goto retry;
+ 
+-		if (!ret && !is_invalid_reserved_pfn(*pfn))
+-			ret = -EFAULT;
++		if (!ret) {
++			if (is_invalid_reserved_pfn(*pfn))
++				ret = 1;
++			else
++				ret = -EFAULT;
++		}
+ 	}
+ done:
+ 	mmap_read_unlock(mm);
+@@ -521,7 +528,7 @@ static long vfio_pin_pages_remote(struct vfio_dma *dma, unsigned long vaddr,
+ 		return -ENODEV;
+ 
+ 	ret = vaddr_get_pfn(current->mm, vaddr, dma->prot, pfn_base);
+-	if (ret)
++	if (ret < 0)
+ 		return ret;
+ 
+ 	pinned++;
+@@ -548,7 +555,7 @@ static long vfio_pin_pages_remote(struct vfio_dma *dma, unsigned long vaddr,
+ 	for (vaddr += PAGE_SIZE, iova += PAGE_SIZE; pinned < npage;
+ 	     pinned++, vaddr += PAGE_SIZE, iova += PAGE_SIZE) {
+ 		ret = vaddr_get_pfn(current->mm, vaddr, dma->prot, &pfn);
+-		if (ret)
++		if (ret < 0)
+ 			break;
+ 
+ 		if (pfn != *pfn_base + pinned ||
+@@ -574,7 +581,7 @@ static long vfio_pin_pages_remote(struct vfio_dma *dma, unsigned long vaddr,
+ 	ret = vfio_lock_acct(dma, lock_acct, false);
+ 
+ unpin_out:
+-	if (ret) {
++	if (ret < 0) {
+ 		if (!rsvd) {
+ 			for (pfn = *pfn_base ; pinned ; pfn++, pinned--)
+ 				put_pfn(pfn, dma->prot);
+@@ -618,7 +625,7 @@ static int vfio_pin_page_external(struct vfio_dma *dma, unsigned long vaddr,
+ 		return -ENODEV;
+ 
+ 	ret = vaddr_get_pfn(mm, vaddr, dma->prot, pfn_base);
+-	if (!ret && do_accounting && !is_invalid_reserved_pfn(*pfn_base)) {
++	if (ret == 1 && do_accounting && !is_invalid_reserved_pfn(*pfn_base)) {
+ 		ret = vfio_lock_acct(dma, 1, true);
+ 		if (ret) {
+ 			put_pfn(*pfn_base, dma->prot);
 -- 
 2.35.1
 
