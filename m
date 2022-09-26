@@ -2,172 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216B55EAC31
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CAB5EAC32
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235133AbiIZQOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S235396AbiIZQOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiIZQNH (ORCPT
+        with ESMTP id S236556AbiIZQNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:13:07 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2055.outbound.protection.outlook.com [40.92.99.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C77F39123;
-        Mon, 26 Sep 2022 08:01:49 -0700 (PDT)
+        Mon, 26 Sep 2022 12:13:43 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A13175BF;
+        Mon, 26 Sep 2022 08:02:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QmLZUD0cXhQ25HVCwKJyubrkC7WvYuAkLhQolpx4R3Uxke/Bpyg4xNkTAhcGaZMFpQc7cjgv7J3pJmZNVNm0YEZJm51x3gXBKV4ulGtDYqtc4GctwhMICkRv387YZ7cNPEQMEX/48la0QJtr2g9M2VE0jutFcUDnF0ssTiLH3YEM3jL1/y8QdCiqyAKBvhIKWCfhhxgWloMdOyy4NkfI0rQbT7G/DvhaSirWLBt6gnqQzso+iAAQ9R3JHj65qeuyUFj94erUHehu5k6DmHvyWkzUKECms7xbnrZNitGPGAD1wS61OHJ+V1Ysl2ojzIyUbF7KZBvs2IARQoJAy1kZqQ==
+ b=Hke4al7MIHtqunKKQ4ClKU++CrPo1aNGExFZ6oJvKfAEdU5ycTUBHDq5cdcVOWvGtxcF6eio5EqM/NmpG1MDS7TAW8YYgORXOfllaJPdmDoyG04Ej8ynUg7tvaUkg09CTMlWc+Wwce1vGaHwIkaPjNrzAuVWbzgGUQVrcbMVjpyEIkzgQgFxfYx3fLC9g8XE7dCkoqch0K62j90ym/+xM0vYg7r+hlfa4AO7EvmuqVKLpFgCVQrX1IhrLx/nTqFUGSxGX8sMPEUqrEycEgPbfavMNpzMuzrFrpNVnIsC9sbUH+oxI403RsSAzqF9J/BOWZiieeDeGKSj0f9joouqWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7PL/uBUVms+9QzCyE0OfwlVY6EVEcFls0NjAu923kx8=;
- b=i35OnqZCU5pj7E1gEzeriUuAL4NkB5drygNm3AuTB4/EOORIeNrJ6pwqnAfjBesqXKyi/lTobw+vhZKsWW7kTnMzhVnVQPkNBT3Hd5ggnN92SzcRzuCKzkhDmamAD9s5hsz5JBSnU3tqH03keVp/U9CIBZPdRPwvCKOFtu04KifENqmGv6HvG4ZjVvDB7mLB1Y5+JmY6lO7Sx8SiYJDhfyddUtYlDfY7AyDtFFFV4tESamWgJuCmM5BJ4GXqWooZKZi91+Z4wIaOdcJNJTWFbKXEA95nbrmz0cjJ3OTo+uj3Iqo6bpBNTZwLXQFvwkxHSqVyTnwQncKDfM/AzJuo/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=72jroKSeNpqDaUeXowzHy9ZkB/0f2n21N/R/8Y1N9uI=;
+ b=kQ4JGptdKfi899F+/mNCy7GM23isoetIfE0as6FUHDqs1xCn9uMnBodv393wmY1vpSND/WvTMpdu5Ze+qP1Sg1IdvnMbOQO+Thfiw4MYfgGPImoajXtbcd6xrd2myNNz7dqzJTDT/oML1k6rJtNnb80sXltdtaRSQosGsAJxZJCnz0bFDWqGnK2q9PE/JmZxIZOq4RlCzQlID0lL7mDxzPkvdWzJ0KtSpHxajdK2ZhgDWMvhRSZmrTLYaR5hx1eEHEbDlk0lrsyz/5+epF0cnpXq+9xRYvvJd2yQsoInadLqplb5YctHKTCq6xVuT04jF4jL6FvUE54PlZ9KvhOerw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7PL/uBUVms+9QzCyE0OfwlVY6EVEcFls0NjAu923kx8=;
- b=CQfp5sUwnSnsT6Qe+LvLVDzInw17lx4r1oeMrgEGvYST6xBwFRr4lGW/cSd3lKKQAeHr56dNDJ9wykv0ZyW4PuAiNFFHTlCZnybLySLpp+GfPXwip7jjQ4FGlN+TmosejiYLdBBVz1fgrk9Yk7r99roUz9yyasBcUWkq+kwfA+7dMcCdwdYdkv4G6+IjdTUQlJqbEBDDSICfFP+x7auiZ9a4qYWjpmAEJvVPycazU4Cs/8pZXAs5kpVlG53AWsOf6GOMm9HiX3La1Ozoqwim4YDAlQQcupSdrjzkivo+0FSoUFElxZ4suuIqaPdfkT4J5rPfN1ypYZbZAMct2Dfu9g==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TY3P286MB2627.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:252::14) with
+ bh=72jroKSeNpqDaUeXowzHy9ZkB/0f2n21N/R/8Y1N9uI=;
+ b=uS6She1mp5U2gcixfAlZYcLdorRJYhWx7PGjXp9HeUARkn/0yEdX4vx27oUKhur4ljXr2uLvAfLQt2mdQEjGN+QBdHTBV+Lt5vUE9w0W9LN+zNYXDVXmxRDLoxO3kXixt4sU5h0UcL1XbVvXrTXGWv/ooOX7sagyYgClRHfMZDfRBzz6PavD3o3W7JhkERDZkeR8v0BO/ZrYifcRU0gaH/KKLVbpI6mIUPu3XoRYisErnvWvn7eMvBAX2lBb/pPKi3tuxsW4bxXHKw2uGpmOC6IZVv9vHrrP/MeB0X6MvmuE4dWpZMZGiAxez0SQMeizp6mC6+7LRJ9kJTV6ae+HRA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by PH8PR12MB6938.namprd12.prod.outlook.com (2603:10b6:510:1bd::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Mon, 26 Sep
- 2022 15:01:47 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f093:ab8c:7e3:f312]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::f093:ab8c:7e3:f312%4]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 15:01:47 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     colyli@suse.de, kent.overstreet@gmail.com
-Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH] bcache: improve race performance of closure debug by rcu
-Date:   Mon, 26 Sep 2022 23:01:18 +0800
-Message-ID: <TYCP286MB2323ACFB89E58BE6A05232C1CA529@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [GEpU/+jqBe3ONKgB2AJD+PnffGJUhm4b]
-X-ClientProxiedBy: SI1PR02CA0041.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::18) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20220926150118.937036-1-set_pte_at@outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 15:02:23 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d9ae:c30e:ce3d:9cb3]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d9ae:c30e:ce3d:9cb3%7]) with mapi id 15.20.5654.026; Mon, 26 Sep 2022
+ 15:02:23 +0000
+Message-ID: <554df533-df52-ee69-6c6f-effba88b55e1@nvidia.com>
+Date:   Mon, 26 Sep 2022 20:32:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V4 0/3] PCI: designware-ep: Fix DBI access before core
+ init
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, dmitry.baryshkov@linaro.org,
+        linmq006@gmail.com, ffclaire1224@gmail.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220919224014.GA1030798@bhelgaas>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <20220919224014.GA1030798@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA0PR01CA0057.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:ac::15) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TY3P286MB2627:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa2510b0-9fdf-4096-cdfc-08da9fd00892
-X-MS-Exchange-SLBlob-MailProps: dx7TrgQSB6eMXPOMmUb6UNBfYDG/cmLPbviPIoBhI1zh1SMo4Bs3NYN8QJDsk6eO0MFo/RLG5Oso98zcPoDRD8GNF2Pp2lgY/IjIPxQuJHW3cnqw/4OHnhwjoSRgOBkc8jAEyei80FnhDhtwXBpJgSnwmxaliWcWwTR/B9Y7dVZzq0b/qXU23KUtfVey9z4GkdNgyxDN4uRrxQ1dAk/mGUrppWazA2NXRIJSPT1Qd1WWUzDAozSMjvsUua4BTVK3lxYIFffyL89Xdsh6t4axUSXCoI01YNVKLeA7ZGUjx2rrnHjWSOtKXk7jpg9HVpO69IbTgRjQe0HFpkAw9mlJVj/X0O997zOZLiGHZkd00H8QnNglcx85/wuiQvYmF4yb6MQZvlwybje88xjurS0krlLPdarOw/J0KSVHc2H9nTYzG5qibRI+7RN36u/P/b37pKRzAeUsgV1dbgKXGDCXN2S6ugcsnX/MK/vk2YEiXRaPOeL8B0WhNsUFv1gwl6VqkKspHgvFnxYy36qFa1ytZV5ANnpSBkTCVbawC62hUuStUh6QoR3JI2WvqWiPJyNjM8qNciUfhgBRQCaCMdMYgkkOY1jDaS6UIGbmUZOTTBkmZlEc9bVat80goYIGKzWVOlD91tj4g8hLmDQARbxfzOnfi4Q4TKNHwpWq7qvUwlvTPMb6LLA6tlSNhWWcUpM8tsr9RVHSHAMtQaQ37vLxR47JyErNDLfLUGERMyNF9228qVTf86lMS+D671xgFqRx52p4Rfhdg88=
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|PH8PR12MB6938:EE_
+X-MS-Office365-Filtering-Correlation-Id: a075f6be-b5d7-45af-3bde-08da9fd01d94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kbSX9q4vl2eo8yviE3z+8ve+P4zGJOdoOFr5/GKTMfaIkiPBgFSPm1KIGD2AYfzV3Z+H6RPCgozGYDo5uImQjPyYwjiejqKrWpnGnTu4QKyWyLY1J05R7omLcoZ3o5Py7pi+I1rrCG9d9ncgrkcDA5u+5IWT9R9RO9NzL42k+f2Les2F0mP7QojHFOElDzs/n8TvlYFD4scljpmaYb00DLWNRxHuOQHcCjU029ibGIWd7TpmYWuq6wQZZ775MsRnpdKga3IGC1KFFXSjZs9maDjJzBVKhcNViRdJIjkfTDnjUfK8rtCBjqd9ufcuixiXel+cDiydjllE0FMilqwE7hMM7QaZXmUKPgkFFcqN+OzFSiWd5HpX5mbz7eG+bx9iWrXENofTXGMkuRPoiP4cyfLvRHk/VmnQMWH6hHqDimyfnfoKhAjGlye/WMyJyS1kodajah3eawB6mVnxT8IFjsEgekcToiX+rcDGtKqjPZQxU3AUm/IaxJ6hHVpdFmw8LWOc3NfSdbzWFHuqcmzzOobhbY2lWQ+y7RU3g8OfAH2/fvCAgMWY6q1UZEklFRXxVxylTXeJiak9zNR9KsdbNMHcE4h/YKIJM1r8E+P3poDG4HkSHAes2AnDIuSQv3hF
+X-Microsoft-Antispam-Message-Info: rPiBj5K7dluMsDmELsi+FmvSTuhAP2YPNwPF64UKZoTu3xm7f4tK7qSH88PIblCrrGeBMiAietTa+1E6nfg5B7ylUo9vraHfZm+TrBkXbs/uNs0Vcn44bFo9W4IG6pDg4DSG/NZ/vuJe0dEGvrR8Wonprg6kfm5Le305HKc6oDyCXho9ZiKt21Hvs64q6TmkO+kJ7HH/Kz+V6vVaB97wMIcTAyRzHg/BBZ4RnxRI46iW4tOTfXkvKixlQ/t+mfEM02TRC00uKQosYbtSwAGQL0mHSMuHPBm7FNhoShL8JAhcrxiEcul4DjaFkE4HVj8mDDUb5CN4uCeLupbeGD1qd8CZcBoC1vXmRQ8o2/BY5n1JaMpQXL7ql6rzmf6xbiQRg1OTuCMfsSwDNDlgQksQGTdSDVZt914+hWorDHH726EhHZwGz9oVsDlBYy00MOU4vXBoUNsOkiLUjWYjNFCCNq+U36oYZ8vQobtWd2Mcte1CZ/75BeqhFXrgzFEa4XyAIxyj/W3pS9Yx4q3/osxy4Xo2jb+Bi1dWpcuMWJ6DZEBcM6gFo4L1yyweLA+lXKcIyUQMW2CXu96YLXdPSqz3jrKmxA4Z3kxo6PI7FE7w/5AXxsVd0EpP2fx5hHcowZ5YtRTbQv7skqSFsI2DuShVm9sRPq7dpC2uYO5GVbZFrD1LmyPmiDZtAcHnxy8WE0pFf/qLZ9IE/SABj8Jtbl/4fvjaWTujhP8CZHU35FML7RBKPy9496fPKUmxu2HLRr/MaBqDbqZbIqoWJuQ2CMhgTCxP+6JGlo4Axw/WHR1gsqlDcKdHk7Ubu01rYC6FbDVPtdw1rqq663ueIilUPzwMPqK29GeBdz9X30SHwck4UA2BWLVaxi7N6brn0WJ5Q5F6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(366004)(451199015)(36756003)(31686004)(6916009)(31696002)(86362001)(186003)(7416002)(5660300002)(2616005)(38100700002)(83380400001)(316002)(6506007)(53546011)(41300700001)(6512007)(6666004)(26005)(966005)(478600001)(66476007)(6486002)(66946007)(4326008)(66556008)(8676002)(8936002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HgfMjepfjCoEnipQl7a10OzeSHFrlVuKuzIrsBvWiBt31hpU5k5algqDyiFW?=
- =?us-ascii?Q?mxxOm3N+nPDrfdBiqYzq3nIiG3grW0acxbK5mj8JS3VnRpgDUbymxtZro2Q4?=
- =?us-ascii?Q?jiNSqZGT+V7s+40tWAC15ksxXsTAoz/Dvi69c/sWaKExSGVGNlfumJU5BrJC?=
- =?us-ascii?Q?f1noFjUHY43cVDH/9m/vS4nERYSLxoSqNnCGd1s13ZjF1xYuTSaDe/W/SzVT?=
- =?us-ascii?Q?MegCVROSQ6tcp8wbg9UeLd3KMq9BX84tHEmbmuL6kzdcgCNpkWkE51G7EFf9?=
- =?us-ascii?Q?MKqO4h0xBS6GJkjFfyQBzyMjX6tmOddiK7fGhuvUcUH2zAQmMfLf5fFuKald?=
- =?us-ascii?Q?ygYolqjyeFMUL9y+soXw0xPsiYTiq09mTlyflDBajjWRjGSs4M7A7l5JZh5w?=
- =?us-ascii?Q?uhWGiDrFs4ooV1JoITeP/ICj1s0iMx4MicNLkjQzzqOzEviLZbL4p7g/7vge?=
- =?us-ascii?Q?0PXoG1bOuRCnkmh57L85EQmVM86LNuirKki1PC2AXtUZVHXn1TXDjgNO5YUy?=
- =?us-ascii?Q?3tvgfKIxneDozNqyNV0S1b267YJXOEjOhHOEScXPLaJ3bOQUdEt9U+UtbiZl?=
- =?us-ascii?Q?FeopqnFq6GT/eC7hLHqUc4dB3K4/T05V8hc4RZISLvveatqIPgxyDHCjFEHQ?=
- =?us-ascii?Q?kSVKsOIzi8T8YOsHLp/mJWy32EOpsjZ6TQ8p83wfnDsAfvDHecWKep8LFQNU?=
- =?us-ascii?Q?Ao2J2oKQJBYdBpHAkoIw37C+mM3wwy/WncvGf1sKqbXX0Q0V6bnIB9M4mRtu?=
- =?us-ascii?Q?QY9xNqyb1pzE7+rG6Gbf9OuDMA8ej2GxMFponaHwXdv38UXTvFSF15AW2A9q?=
- =?us-ascii?Q?r0nJWKSlLUS+0R/78K1hHeoxr6aMUIxQsXgpNruXUjJNlFOXzJ654hBbOf+s?=
- =?us-ascii?Q?I5/GNU69riULIzh9ZjozzNB5kL+lyRq89HLoQeztUnCeUGBYnmhAvB9vH1db?=
- =?us-ascii?Q?ZpYSep9oWHT9aeeivaE3dPiI2lQEcoPTc8duF+8V05OUOEeWBb95d6IEo7wz?=
- =?us-ascii?Q?0pBdIA3G0zw5xEx7mrEtr0nWXbjVb4CS1noDXtaVbvY3WB4yMQXvtn6uVF7M?=
- =?us-ascii?Q?HSj452mGHPovvCuQaCTqt+Tr8j1UsYYr2luXYF/PbYtKnk4IVtlZ1hRCQJdn?=
- =?us-ascii?Q?yAOyV9D3B8XUHZhqP2ljVtd0y3JBT+SHRN9Wv/N+Q8PnH0QXO4Fi1AIlAYC4?=
- =?us-ascii?Q?ZWYuBRKWyqEzd6trPnm30vV/sZo7jTgPMh5q57Roqhmqb5PN7aUTQ3ewUIbF?=
- =?us-ascii?Q?/+CLjqUpt+87LJBMyeek8+aXXlHgPB+VmT+6Esn6Gw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa2510b0-9fdf-4096-cdfc-08da9fd00892
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WU1SeXp1NFVyclVmTUJQaTBxTWFPOFdYU3FMN3owQUpIOE84emdIdlZjM3JQ?=
+ =?utf-8?B?Z0JWSWNNVFBOcTNBWm8wODEvQ1FmVFU0SUdSTXJKWWxoOFJoTVRPbzRBSVNR?=
+ =?utf-8?B?LzBnMzhPQUhacmhsbzMyYktUeDdCWlFiSHJkQ1l1VHp5ekN3MlRKU011ZmpO?=
+ =?utf-8?B?cTlCcW5PcjFqdVZkTkdlQ29qUDkycTYzU1NOcGZiUGhqRXRNeHZkWWJYZjRL?=
+ =?utf-8?B?L0pCQWs1bGdxWWF1Qkg3WUZHd2s3S0Q5ckk1bGYxNDhieHJNQnR6bmRma1Ey?=
+ =?utf-8?B?SlZGS1k0VzZyVXB5WkthNEU3L29uZWs3akRXV0g5bjlBS2lpdHBBNG5TbnJY?=
+ =?utf-8?B?MCs4bmpobkJ6bE9GK2Z6VGc0bVkxTTRFR2tLUVNGOHpQdUxPdmt3bG9CNTFF?=
+ =?utf-8?B?NVpZV2MwMTdTdFJ1aCtWYkpPZHFDUU8rRUlPVmx5R0pmTklyaUFUbjlsN2RJ?=
+ =?utf-8?B?YzBJaXVQZE1KOW9uTjJnb0g0WTIyUTIvZUQ3b0tRR213dGZrTDYzRFphVzNQ?=
+ =?utf-8?B?MWEzL3M3ZnNiaVpMSWFCblBkV211NkVPL2JWZ2JyRmViMjlPZ2NlTlBDOXJS?=
+ =?utf-8?B?Q2dPR0JDWTlmSW02MHpIVzlZazFUWE5HTlRwNVV2aHIrMFNiMEx3aHlhTmhN?=
+ =?utf-8?B?eE1Qa0o0dGZoR01mQW5kT0drNEJRZzdCdHJ0eHFON3RGZlhBUlJzei95T0E2?=
+ =?utf-8?B?RzE2K2NIaUFVNTRwdkhObi9SeW8xai9BRGhsUmR2My9teGtwQmpxV1h2aVNY?=
+ =?utf-8?B?cVlLT2hTd1lnazlxN1RxY2tJRVpPeThhU0t1YkdtR01RK0MydDVyNnFkNHRG?=
+ =?utf-8?B?SlgzSEIrZU9mblc3VHZXSFdjenlUbHBSZkJRbnBmakhLQ0REWFhxNE92bktu?=
+ =?utf-8?B?YXp5bUc5MGV4cEhtVDR4eDZJYnVvS0VTbXhlTEsrU3J5WmdqaFE1RU9OUFhE?=
+ =?utf-8?B?VkNTME5OdkF6RVhyWk1taWhTd21sNThycWs1Um5NMmdYa1RzSU51YnZzZnhv?=
+ =?utf-8?B?dFl0ekFuWW9yMlRFcmx5MVA4L1pvTTBOdTM3WUhlV0pEbUZVUlZ2NmdIU3RS?=
+ =?utf-8?B?L29jTUZvVlY1cENTeUlxbnR6djdaMURTRjVRMHVuNUpsUmNLaVhQWHpxV1h0?=
+ =?utf-8?B?YVppblFpZmtWcGxrd2xBbnRLTnlIcmNXWExncnBNaDgxMjNEbWkxVE55NHRV?=
+ =?utf-8?B?ZUdST2l5NXhUSzBobFZ2TnpaZlYzYnJZdzZVTkQzdUUxckdsTWdjNzUzczBz?=
+ =?utf-8?B?bVhRRGFTVW5yVFEwMEc4ZHFhVVRIQmE1amZaM2EvaGI5TklkK0RVRnZaT0R5?=
+ =?utf-8?B?bjdkRncyWTRFM3B2VTZJckNaeWMrbk04SE4vK1JvV3h1YXZpd1BGaVZrWGQ4?=
+ =?utf-8?B?MHVvb3JXeXI2dmJLOVZuVHhRSS9zUVFPT2hsS3hMcmdnSzM4Ym1GNnZ0STNn?=
+ =?utf-8?B?TnJVWUFMWitHelA5RGc4cVNvVjlQaGtyelp1UUxaRG5GbVMraWhnL1ExTUda?=
+ =?utf-8?B?YW5wRTBmYkJ4OGx0clJRNmJWd3JQNldVbTBNdmFHNGhpM3BtcDdFNk5MWU9x?=
+ =?utf-8?B?ZUh4Z0hPaHFsMGV3ZHpnWGt5ZHpJekRZWXZnY3JqVEd3YVpCMXNXNTQxVGFS?=
+ =?utf-8?B?b29pSlhlOHhYOFNIS1VvRlptaUdodGVkaUx5WS81WEpVeDkyRzRodUdiNlln?=
+ =?utf-8?B?bzlwUXltQXMxODZ5Z0d4c3Yvem4xNlVpdFVFZDJRb0dQNVlJR28vai9jRFBm?=
+ =?utf-8?B?WnMwS1lHdEdDUHI2ai9SdmRLcmpsZjBLdHIvTEJFNkJYNnRXZ1h5WGRVWWRn?=
+ =?utf-8?B?Q011MHF5L1F4S3c4SStqT00wM2M3WkhIQktkRGJhTUJ4VVh4TmxQSGNXZXlE?=
+ =?utf-8?B?L3p3eUN5emRGdmdaVXlaaEpiQkJJejZTbjIyYzZydmVHeUxOL3QyL1BuYUhQ?=
+ =?utf-8?B?eVgwckVHOTNHMytwZzJmSFdJMHdrMnZ5RGs5ZzZ2RVgzemtma1A5ZlpuSWFS?=
+ =?utf-8?B?Q2F5UElZTmVndUVtWU9aK2N1cTVHMmE0U2tBQ1M5eVZyNmtCRmxIREg5SFMx?=
+ =?utf-8?B?ZzkzUHZHUkxqVXg4S1hnNGpwM21FRldlV1d3blRnWXRPQ21QcU5Ud0g0Y2Iz?=
+ =?utf-8?Q?4CVrzZUYnMIWqGKgk+ZhTRm4M?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a075f6be-b5d7-45af-3bde-08da9fd01d94
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 15:01:47.5023
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 15:02:23.0239
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3P286MB2627
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +DichAho7qBiKUc2plf4fL0jJSqTTGa5KwrSsqjmyRdy9hZBFnRLX06NlvgDUjUdIejbqpLt4/030KyTCPMJVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6938
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Closure debug system implements a closure list which is shared between
-readers and writers, and a spinlock protecting the concurrency access
-on it, which means that all readers and writers are mutual-exclusive,
-which brings overhead to performance.
 
-A rcu-based lock is introduced to solve the problem.
 
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
----
- drivers/md/bcache/closure.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On 9/20/2022 4:10 AM, Bjorn Helgaas wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Tue, Sep 20, 2022 at 12:03:39AM +0530, Vidya Sagar wrote:
+>> This series attempts to fix the issue with core register (Ex:- DBI) accesses
+>> causing system hang issues in platforms where there is a dependency on the
+>> availability of PCIe Reference clock from the host for their core
+>> initialization.
+>> This series is verified on Tegra194 & Tegra234 platforms.
+> 
+> I think this design is just kind of weird, specifically, the fact that
+> setting .core_init_notifier makes dw_pcie_ep_init() bail out early.
+> The usual pattern is more like "if the specific driver sets this
+> function pointer, the generic code calls it."
 
-diff --git a/drivers/md/bcache/closure.c b/drivers/md/bcache/closure.c
-index d8d9394a6beb..b019d6338589 100644
---- a/drivers/md/bcache/closure.c
-+++ b/drivers/md/bcache/closure.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/seq_file.h>
- #include <linux/sched/debug.h>
-+#include <linux/rculist.h>
- 
- #include "closure.h"
- 
-@@ -141,7 +142,7 @@ void closure_debug_create(struct closure *cl)
- 	cl->magic = CLOSURE_MAGIC_ALIVE;
- 
- 	spin_lock_irqsave(&closure_list_lock, flags);
--	list_add(&cl->all, &closure_list);
-+	list_add_rcu(&cl->all, &closure_list);
- 	spin_unlock_irqrestore(&closure_list_lock, flags);
- }
- 
-@@ -153,7 +154,7 @@ void closure_debug_destroy(struct closure *cl)
- 	cl->magic = CLOSURE_MAGIC_DEAD;
- 
- 	spin_lock_irqsave(&closure_list_lock, flags);
--	list_del(&cl->all);
-+	list_del_rcu(&cl->all);
- 	spin_unlock_irqrestore(&closure_list_lock, flags);
- }
- 
-@@ -163,9 +164,9 @@ static int debug_show(struct seq_file *f, void *data)
- {
- 	struct closure *cl;
- 
--	spin_lock_irq(&closure_list_lock);
-+	rcu_read_lock();
- 
--	list_for_each_entry(cl, &closure_list, all) {
-+	list_for_each_entry_rcu(cl, &closure_list, all) {
- 		int r = atomic_read(&cl->remaining);
- 
- 		seq_printf(f, "%p: %pS -> %pS p %p r %i ",
-@@ -184,7 +185,8 @@ static int debug_show(struct seq_file *f, void *data)
- 		seq_printf(f, "\n");
- 	}
- 
--	spin_unlock_irq(&closure_list_lock);
-+	rcu_read_unlock();
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+Thanks for the review Bjorn.
 
+Typically the PCIe endpoints run using the reference clock from the 
+hosts that they are connected to. Our hardware designers followed the 
+same approach here as well, but the main difference here being that the 
+controllers operating in the endpoint mode are not standalone 
+controllers but part of a bigger Tegra (/Qcom) systems.
+So, the complete controller initialization sequence just can't happen 
+during the boot stage itself, hence the boot initialization sequence 
+needs to be split into two parts viz a) early initialization - that just 
+parses DT, does the programming that doesn't depend on the reference 
+clock from host and b) does the programming that can only be performed 
+after reference clock is available from the host
+We are working with our hardware designers to avoid this dependency on 
+the reference clock from the host so that all the programming can happen 
+during boot itself and hardware is smart enough to switch to using the 
+reference clock from the host when it is available. But, this is for 
+future designs and Tegra194 & Tegra234 continue to have this limitation.
+
+> 
+> The name "dw_pcie_ep_init_complete()" is not as helpful as it could
+> be: it tells us something about what has happened before this point,
+> but it doesn't tell us anything about what dw_pcie_ep_init_complete()
+> *does*.
+
+To be inline with new ops ep_init_late that I added in this series, 
+would it be fine to name this as dw_pcie_ep_init_late()?
+
+> 
+> Same thing with dw_pcie_ep_init_notify() -- it doesn't tell us
+> anything about what the function *does*.
+
+Would it make more sense to rename it as dw_pcie_ep_linkup_notify()?
+
+   I see that it calls
+> pci_epc_init_notify(), which calls a notifier call chain (currently
+> always empty except for a test case).  I think pci_epc_linkup() is a
+> better name because it says something about what's happening: the link
+> is now up and we're telling somebody about it.  "pci_epc_init_notify()"
+> doesn't convey that.  "pci_epc_core_initialized()" might.
+
+Ok. I'll rename it to pci_epc_core_initialized().
+
+> 
+> It looks like both qcom and tegra wait for an interrupt before calling
+> dw_pcie_ep_init_notify(), but I'm a little concerned because I can't
+> figure out what specifically they do to start the process that
+> ultimately generates the interrupt.
+
+As part of 'start'ing the endpoint as mentioned in 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/PCI/endpoint/pci-test-howto.rst#n101
+we execute the following
+echo 1 > controllers/141a0000.pcie-ep/start
+that enables the interrupt generation for toggles on the PERST# line.
+
+   Presumably they request the IRQ
+> *before* starting the process, but there's not much between the
+> devm_request_threaded_irq() and the interrupt handler, which makes me
+> wonder if both are racy.
+
+I don't think there is any race between these two as the 'start' is 
+initiated from the user space. Not sure if I'm missing something here 
+though.
+
+> 
+>> Manivannan, could you please verify on qcom platforms?
+>>
+>> V4:
+>> * Addressed review comments from Bjorn and Manivannan
+>> * Added .ep_init_late() ops
+>> * Added patches to refactor code in qcom and tegra platforms
+>>
+>> Vidya Sagar (3):
+>>    PCI: designware-ep: Fix DBI access before core init
+>>    PCI: qcom-ep: Refactor EP initialization completion
+>>    PCI: tegra194: Refactor EP initialization completion
+>>
+>>   .../pci/controller/dwc/pcie-designware-ep.c   | 112 ++++++++++--------
+>>   drivers/pci/controller/dwc/pcie-designware.h  |  10 +-
+>>   drivers/pci/controller/dwc/pcie-qcom-ep.c     |  27 +++--
+>>   drivers/pci/controller/dwc/pcie-tegra194.c    |   4 +-
+>>   4 files changed, 85 insertions(+), 68 deletions(-)
+>>
+>> --
+>> 2.17.1
+>>
