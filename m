@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1655EA7F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DE15EA7D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiIZOIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S233827AbiIZOCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiIZOHz (ORCPT
+        with ESMTP id S234294AbiIZOBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:07:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51A868E0DB;
-        Mon, 26 Sep 2022 05:18:53 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWt6lzFjEDgiAA--.14903S2;
-        Mon, 26 Sep 2022 20:13:52 +0800 (CST)
-Subject: xxxxxx
-To:     zhuyinbo@loongson.cn
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
- <58fd6600.c0e4.1837908822e.Coremail.zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <911bc990-668d-bd95-0090-3879503b57e1@loongson.cn>
-Date:   Mon, 26 Sep 2022 20:13:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 26 Sep 2022 10:01:50 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9836C861C3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:15:03 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id c9so8112628ybf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=IRMvjWD71cG7GPIFc0vYJedzSDxUYjr8lfictCDyhMM=;
+        b=j8w9SFWXyPx9nMFZlSrBGbCzlGFuaHhz4CJj589Amd5Y/E7ILLnX2I8y44pU31h0Xg
+         epxkFGfBtZAHrmTI66ZF+UbOR8IYgDd4eUuLAmIF0oZ7aamFQJ9FC6Eqgx/WCp129Iy7
+         asnkmFMGJsm7RENyaO4WODWSKWCvvUlmPPwHixSmNRh6o3IlYKTSYw9qT7f9CYwvMwEU
+         gRk6QUcCYa/hbx0tuhdiGI8DvXJNWGux2FLcfzzts3GhDRDT7rg6YQ+gHcbdxgjpIeTo
+         CCqRBMemk6cIn2yH7U9vbpqRfx0dFc3QWYkMaDk1OFJgzudUy7io1iu+h0uetg8YH6u5
+         oZAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=IRMvjWD71cG7GPIFc0vYJedzSDxUYjr8lfictCDyhMM=;
+        b=nqKfI/iP5nvDHa8roSBELcfSmLx+RIwfUfBsnvzBg8ONwSQJztgCTGxblRQJQqqxzv
+         DpfAy3CiuDWbMlZZas2cccyZp9lVUmpsuMbPzkPWf0IYbqkqsSo82tf6T53tOexRHKo0
+         ad6BBQJb6WKofnZbWjr0p/H1IQS/xRrTk193XDYI+Epl+pSj0iwstj5atI4JqGJDQueu
+         E7zBU/6ZreE7iytJdZbbsDT5fy2jWWXN8paPn5DdSboF02aIhLH6W3kH6R5UvAA7jXR6
+         ZM7kouH4dWJnsQdl1+eFpIbs3yLfkuvNu1eddcUEckcJEi3GxDVQGsNkb0AgO/yyxaFq
+         5Tiw==
+X-Gm-Message-State: ACrzQf1cfnRwf0m56x1cLlxJli8Qc0yWwMndjfpw9QjCIKscy2O79aAC
+        0HzWYtDIOXFryiqkBhMo6pzB3fvIGoqGh82ekuL2f9sNSXY=
+X-Google-Smtp-Source: AMsMyM6nPtC8AhGacE4wH50tD3s5wshf8hF+i2L7goWt/EXimtD1G/BMn0wPgP3buWWmuHCKxCUYUvumdyMlunxkzdQ=
+X-Received: by 2002:a25:8889:0:b0:6b2:9b26:73e8 with SMTP id
+ d9-20020a258889000000b006b29b2673e8mr19801265ybl.46.1664194493054; Mon, 26
+ Sep 2022 05:14:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <58fd6600.c0e4.1837908822e.Coremail.zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8CxbWt6lzFjEDgiAA--.14903S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF4UWFyUKr45KrWktw1DZFb_yoW8uw4Upa
-        17Cay8Cr1kGr18Ca1kKFy3CFn0va48trnrWFnxG3sY9FZIywnxG3WfXFnruay7GFy0gFWj
-        grn7WwnFga1Yv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7VUbrOz3UUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220627064024.771037-1-appana.durga.rao@xilinx.com>
+In-Reply-To: <20220627064024.771037-1-appana.durga.rao@xilinx.com>
+From:   Michal Simek <monstr@monstr.eu>
+Date:   Mon, 26 Sep 2022 14:14:42 +0200
+Message-ID: <CAHTX3d+Fa9Np9gEA8HNSLFJC0MRbV0KDkmCdwbQtS48XM8Z5RA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] microblaze: Add support for TMR Subsystem
+To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Cc:     arnd@arndb.de, shorne@gmail.com, ebiederm@xmission.com,
+        appanad@amd.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, sam@ravnborg.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+po 27. 6. 2022 v 8:40 odes=C3=ADlatel Appana Durga Kedareswara rao
+<appana.durga.rao@xilinx.com> napsal:
+>
+> This patch series adds support for Triple Modular Redundancy Subsystem,
+> Triple Modular Redundancy (TMR) Microblaze solution provides soft error
+> detection, correction and recovery for Microblaze cores in the system.
+> The Xilinx/AMD Triple Modular Redundancy (TMR) solution in Vivado provide=
+s
+> all the necessary building blocks to implement a redundant triplicated
+> MicroBlaze subsystem. This processing subsystem is fault-tolerant and
+> continues to operate nominally after encountering an error. Together
+> with the capability to detect and recover from errors, the implementation
+> ensures the reliability of the entire subsystem, for more details about
+> IP please refer PG268[1].
+>
+> [1]: https://docs.xilinx.com/r/en-US/pg268-tmr/Triple-Modular-Redundancy-=
+TMR-v1.0-LogiCORE-IP-Product-Guide-PG268
+>
+> Appana Durga Kedareswara rao (3):
+>   microblaze: Add xmb_manager_register function
+>   microblaze: Add custom break vector handler for mb manager
+>   microblaze: Add support for error injection
+>
+>  arch/microblaze/Kconfig                       |  10 +
+>  .../include/asm/xilinx_mb_manager.h           |  29 ++
+>  arch/microblaze/kernel/asm-offsets.c          |   7 +
+>  arch/microblaze/kernel/entry.S                | 302 +++++++++++++++++-
+>  4 files changed, 347 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/microblaze/include/asm/xilinx_mb_manager.h
+>
+> --
+> 2.25.1
+>
 
-在 2022/9/26 下午5:02, Yinbo Zhu 写道:
->
->
->> -----原始邮件-----
->> 发件人: "Joe Perches" <joe@perches.com>
->> 发送时间:2022-09-21 10:06:55 (星期三)
->> 收件人: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit
->>   Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
->> 抄送: zhanghongchen <zhanghongchen@loongson.cn>
->> 主题: Re: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
->>
->> On Wed, 2022-09-21 at 09:56 +0800, Yinbo Zhu wrote:
->>> Add zhanghongchen and myself as maintainer of the loongson2 SoC
->>> series thermal driver.
->> []
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->> []
->>> @@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
->>>   F:	Documentation/loongarch/
->>>   F:	Documentation/translations/zh_CN/loongarch/
->>>   
->>> +LOONGSON2 SOC SERIES THERMAL DRIVER
->>> +M:	zhanghongchen <zhanghongchen@loongson.cn>
->>> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->>> +L:	linux-pm@vger.kernel.org
->>> +S:	Maintained
->>> +F:	Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>> +F:	drivers/thermal/loongson2_thermal.c
->>> +
->>>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->>>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
->>>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
->>  From the MAINTAINERS headers:
->>
->> 	S: *Status*, one of the following:
->> 	   Supported:	Someone is actually paid to look after this.
->> 	   Maintained:	Someone actually looks after it.
->>
->> If you both are being paid to maintain this driver,
->> this S: entry should be Supported.
-> Sorry for replying to you so late, because this email has entered the spam list.
-> I with zhanghongchen will focus on thermal driver and looks after it actually.
-> so add zhanghongchen with me as loongson2 thermal maintainer.
->
-> TKs,
-> BRs,
-> Yinbo Zhu.
+Applied.
+M
 
+
+--=20
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
