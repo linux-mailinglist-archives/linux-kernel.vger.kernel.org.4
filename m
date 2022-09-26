@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EBC5EA1BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6475EA068
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236841AbiIZKz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S236078AbiIZKhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237094AbiIZKyc (ORCPT
+        with ESMTP id S236271AbiIZKec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:54:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCF64DF1F;
-        Mon, 26 Sep 2022 03:28:51 -0700 (PDT)
+        Mon, 26 Sep 2022 06:34:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A5F5244F;
+        Mon, 26 Sep 2022 03:21:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4450560B2F;
-        Mon, 26 Sep 2022 10:27:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E809C433D6;
-        Mon, 26 Sep 2022 10:27:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DCB8B80835;
+        Mon, 26 Sep 2022 10:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE502C433D6;
+        Mon, 26 Sep 2022 10:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188072;
-        bh=oPft54DHIpY5K6ExZt9M95uV+sjVX2WTHJqXQZDMOqw=;
+        s=korg; t=1664187680;
+        bh=4rwkvD/DNcjNXfcsWGkTsOeqnSDE+8I7hUNF1BK6CT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s2LKr2KID8M8zJqri8VBD91M42KyGdaUbfSITmk4IfBUks/Li2PVxph7O0SBb4a0J
-         cy/zhQt7TBwABnw4d62EuGhcDrEml6u8DvL82Gw7dFPqGMTJ2j3+ZxwZ8GwDA484Hi
-         Q7BPlfp7/1LFN7v+AYAW1E/zQOSKQBhESCjxXLmo=
+        b=q17Wk631CulZmLU3YU5NX2HDqkv7gYzOMd/6AFlFB0uMVWj81GNyE00Ha6A3/cVRr
+         z4/ArQ5niZDvIrEMpgyR/s2fjk9F2UdANbEgZhSHIH39DF4WWp2NasOkmTRGcWMQ1h
+         2p2fyYHMRkDUY6S+abA4xcgGwsrWtX9MwUsfNIP8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luboslav Pivarc <lpivarc@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
+        stable@vger.kernel.org, Youling Tang <tangyouling@loongson.cn>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 032/141] vfio/type1: Unpin zero pages
+Subject: [PATCH 5.4 025/120] mksysmap: Fix the mismatch of L0 symbols in System.map
 Date:   Mon, 26 Sep 2022 12:10:58 +0200
-Message-Id: <20220926100755.663717983@linuxfoundation.org>
+Message-Id: <20220926100751.549437084@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Williamson <alex.williamson@redhat.com>
+From: Youling Tang <tangyouling@loongson.cn>
 
-[ Upstream commit 873aefb376bbc0ed1dd2381ea1d6ec88106fdbd4 ]
+[ Upstream commit c17a2538704f926ee4d167ba625e09b1040d8439 ]
 
-There's currently a reference count leak on the zero page.  We increment
-the reference via pin_user_pages_remote(), but the page is later handled
-as an invalid/reserved page, therefore it's not accounted against the
-user and not unpinned by our put_pfn().
+When System.map was generated, the kernel used mksysmap to filter the
+kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
 
-Introducing special zero page handling in put_pfn() would resolve the
-leak, but without accounting of the zero page, a single user could
-still create enough mappings to generate a reference count overflow.
+$ cat System.map | grep L0
+9000000000221540 t L0
 
-The zero page is always resident, so for our purposes there's no reason
-to keep it pinned.  Therefore, add a loop to walk pages returned from
-pin_user_pages_remote() and unpin any zero pages.
+The L0 symbol exists in System.map, but not in .tmp_System.map. When
+"cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
+data" error message in link-vmlinux.sh script.
 
-Cc: stable@vger.kernel.org
-Reported-by: Luboslav Pivarc <lpivarc@redhat.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Link: https://lore.kernel.org/r/166182871735.3518559.8884121293045337358.stgit@omen
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vfio/vfio_iommu_type1.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ scripts/mksysmap | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 0c15cffd5ef1..cd5c8b49d763 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -514,6 +514,18 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
- 	ret = pin_user_pages_remote(mm, vaddr, npages, flags | FOLL_LONGTERM,
- 				    pages, NULL, NULL);
- 	if (ret > 0) {
-+		int i;
-+
-+		/*
-+		 * The zero page is always resident, we don't need to pin it
-+		 * and it falls into our invalid/reserved test so we don't
-+		 * unpin in put_pfn().  Unpin all zero pages in the batch here.
-+		 */
-+		for (i = 0 ; i < ret; i++) {
-+			if (unlikely(is_zero_pfn(page_to_pfn(pages[i]))))
-+				unpin_user_page(pages[i]);
-+		}
-+
- 		*pfn = page_to_pfn(pages[0]);
- 		goto done;
- 	}
+diff --git a/scripts/mksysmap b/scripts/mksysmap
+index 9aa23d15862a..ad8bbc52267d 100755
+--- a/scripts/mksysmap
++++ b/scripts/mksysmap
+@@ -41,4 +41,4 @@
+ # so we just ignore them to let readprofile continue to work.
+ # (At least sparc64 has __crc_ in the middle).
+ 
+-$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
++$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
 -- 
 2.35.1
 
