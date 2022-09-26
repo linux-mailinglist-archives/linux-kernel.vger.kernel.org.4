@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336045EB322
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9A25EB328
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiIZVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S230070AbiIZVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiIZVa5 (ORCPT
+        with ESMTP id S229564AbiIZVbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:30:57 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46BB70E6D;
-        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 129so6271827pgc.5;
-        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=CJgECI9GSZwbRImCn+I7/z8LmCg9UFNYzoXCC6Gp6b8=;
-        b=fWfHJ1EtHfULrHPqq+CX9bCj1kaALCWEIFQUeQkL1X6ZtPWa2p+FutjLJX2mnB4tFP
-         QUwZQQioanBVFwRupD0MqUOTeXTDyEu0vV9p7xX65+iENlzooh5wOBfVyUlagRutlDLA
-         M37yzHimmh6GVhYGEYJSJr3JGCA+R+3+aJpxCCHT8SEDvDSYUvzMCk6NDr5W2mIgGCMC
-         RxTLldMmW+Gfga1SQt03K71vVgR4dwWdU2tz3jUgNrdbMo1Od2+cuP8nXU4+F1eCwmNh
-         2rfH07VEo41+y/vOk7wqAxwrA8W6po2SwKV562XEV/M2FaGQhq2U7Z9RMojAhL3sNs8T
-         obwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=CJgECI9GSZwbRImCn+I7/z8LmCg9UFNYzoXCC6Gp6b8=;
-        b=pazeLnCnC/LIR1YPMIukp/ZGKxmLxyixlQyKcQ5hj8rwz/0iJOERXq+gPx4640ApV3
-         tj5Kxx1qFZvSVrTnKhe3glhtujIc8BxvA+1ycO28J3wmlZL3Zdf07/f0hbPnDgF8L+Z3
-         b8QnDd2zdX65M+ZrCLUD8k/F10zVBPQnqBKV3CTf67FIGuqq3pls4Ghh+/i48VH9xU5F
-         YGtl9mma8ELZkz8PaF5XFztUhB1CcwXbadbegsyIzdk4wC1ySwj9Lvj8sbgUkehGh/re
-         c5TUNW2SKC7pboxd2mBWz434COTIGIb3cdXO5iXvgnQf1pXgA2Gq6OioihTM/n/Rc5cV
-         JPlg==
-X-Gm-Message-State: ACrzQf0iytnFIDscLwkYvjSgM+01giUsnKu5Iy52SNgZjaLelsr58pSC
-        qYV9xGRBNySaMm2XFqXQ2/k=
-X-Google-Smtp-Source: AMsMyM530VmWjcHqhukVESF49I5E0pR4S1Np4w9YJnGIorJFnLTGftQP3cSyhurkf4w2Ad7pGznUCQ==
-X-Received: by 2002:aa7:838a:0:b0:536:101a:9ccf with SMTP id u10-20020aa7838a000000b00536101a9ccfmr25585686pfm.18.1664227855098;
-        Mon, 26 Sep 2022 14:30:55 -0700 (PDT)
-Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
-        by smtp.gmail.com with ESMTPSA id js17-20020a17090b149100b001fb0fc33d72sm7007744pjb.47.2022.09.26.14.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:30:54 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 21:30:53 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 2/6] vsock: return errors other than -ENOMEM to socket
-Message-ID: <YzIaDbYnbFUT6Jr/@bullseye>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
- <20220926132145.utv2rzswhejhxrvb@sgarzare-redhat>
+        Mon, 26 Sep 2022 17:31:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D174D647E7;
+        Mon, 26 Sep 2022 14:31:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DA29B8114A;
+        Mon, 26 Sep 2022 21:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69695C433D7;
+        Mon, 26 Sep 2022 21:31:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JSF3Q0f9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664227898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wSpLFm27xoetrBI5uTPMQazc/5C4ahgd2M/Py/ahUW8=;
+        b=JSF3Q0f9P1Ptcv2SDsu2vVnXTq/MynGFbI0Xj6deMj7J85Bh384Pc7HnMM5Aw+bubiQXuA
+        aSWS4ImKueBMQ48QaUpQNP4sRFYF3ixwVsa9rRGqeseqIOjJDOpQ0Tuth211T+MGHykb6A
+        JK6PQUGFCiCc64t/FYtyiXgDGib6zIY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 01a7bf88 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 26 Sep 2022 21:31:37 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kasan-dev@googlegroups.com
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/2] random: split initialization into early step and later step
+Date:   Mon, 26 Sep 2022 23:31:29 +0200
+Message-Id: <20220926213130.1508261-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926132145.utv2rzswhejhxrvb@sgarzare-redhat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,127 +57,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 03:21:45PM +0200, Stefano Garzarella wrote:
-> On Mon, Aug 15, 2022 at 10:56:05AM -0700, Bobby Eshleman wrote:
-> > This commit allows vsock implementations to return errors
-> > to the socket layer other than -ENOMEM. One immediate effect
-> > of this is that upon the sk_sndbuf threshold being reached -EAGAIN
-> > will be returned and userspace may throttle appropriately.
-> > 
-> > Resultingly, a known issue with uperf is resolved[1].
-> > 
-> > Additionally, to preserve legacy behavior for non-virtio
-> > implementations, hyperv/vmci force errors to be -ENOMEM so that behavior
-> > is unchanged.
-> > 
-> > [1]: https://gitlab.com/vsock/vsock/-/issues/1
-> > 
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > ---
-> > include/linux/virtio_vsock.h            | 3 +++
-> > net/vmw_vsock/af_vsock.c                | 3 ++-
-> > net/vmw_vsock/hyperv_transport.c        | 2 +-
-> > net/vmw_vsock/virtio_transport_common.c | 3 ---
-> > net/vmw_vsock/vmci_transport.c          | 9 ++++++++-
-> > 5 files changed, 14 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
-> > index 17ed01466875..9a37eddbb87a 100644
-> > --- a/include/linux/virtio_vsock.h
-> > +++ b/include/linux/virtio_vsock.h
-> > @@ -8,6 +8,9 @@
-> > #include <net/sock.h>
-> > #include <net/af_vsock.h>
-> > 
-> > +/* Threshold for detecting small packets to copy */
-> > +#define GOOD_COPY_LEN  128
-> > +
-> 
-> This change seems unrelated.
-> 
-> Please move it in the patch where you need this.
-> Maybe it's better to add a prefix if we move it in an header file (e.g.
-> VIRTIO_VSOCK_...).
-> 
-> Thanks,
-> Stefano
-> 
+The full RNG initialization relies on some timestamps, made possible
+with general functions like time_init() and timekeeping_init(). However,
+these are only available rather late in initialization. Meanwhile, other
+things, such as memory allocator functions, make use of the RNG much
+earlier.
 
-Oh yes, definitely.
+So split RNG initialization into two phases. We can give arch randomness
+very early on, and then later, after timekeeping and such are available,
+initialize the rest.
 
-Thanks,
-Bobby
+This ensures that, for example, slabs are properly randomized if RDRAND
+is available. Without this, CONFIG_SLAB_FREELIST_RANDOM=y loses a degree
+of its security, because its random seed is potentially deterministic,
+since it hasn't yet incorporated RDRAND. It also makes it possible to
+use a better seed in kfence, which currently relies on only the cycle
+counter.
 
-> > enum virtio_vsock_metadata_flags {
-> > 	VIRTIO_VSOCK_METADATA_FLAGS_REPLY		= BIT(0),
-> > 	VIRTIO_VSOCK_METADATA_FLAGS_TAP_DELIVERED	= BIT(1),
-> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> > index e348b2d09eac..1893f8aafa48 100644
-> > --- a/net/vmw_vsock/af_vsock.c
-> > +++ b/net/vmw_vsock/af_vsock.c
-> > @@ -1844,8 +1844,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
-> > 			written = transport->stream_enqueue(vsk,
-> > 					msg, len - total_written);
-> > 		}
-> > +
-> > 		if (written < 0) {
-> > -			err = -ENOMEM;
-> > +			err = written;
-> > 			goto out_err;
-> > 		}
-> > 
-> > diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
-> > index fd98229e3db3..e99aea571f6f 100644
-> > --- a/net/vmw_vsock/hyperv_transport.c
-> > +++ b/net/vmw_vsock/hyperv_transport.c
-> > @@ -687,7 +687,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk, struct msghdr *msg,
-> > 	if (bytes_written)
-> > 		ret = bytes_written;
-> > 	kfree(send_buf);
-> > -	return ret;
-> > +	return ret < 0 ? -ENOMEM : ret;
-> > }
-> > 
-> > static s64 hvs_stream_has_data(struct vsock_sock *vsk)
-> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > index 920578597bb9..d5780599fe93 100644
-> > --- a/net/vmw_vsock/virtio_transport_common.c
-> > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > @@ -23,9 +23,6 @@
-> > /* How long to wait for graceful shutdown of a connection */
-> > #define VSOCK_CLOSE_TIMEOUT (8 * HZ)
-> > 
-> > -/* Threshold for detecting small packets to copy */
-> > -#define GOOD_COPY_LEN  128
-> > -
-> > static const struct virtio_transport *
-> > virtio_transport_get_ops(struct vsock_sock *vsk)
-> > {
-> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-> > index b14f0ed7427b..c927a90dc859 100644
-> > --- a/net/vmw_vsock/vmci_transport.c
-> > +++ b/net/vmw_vsock/vmci_transport.c
-> > @@ -1838,7 +1838,14 @@ static ssize_t vmci_transport_stream_enqueue(
-> > 	struct msghdr *msg,
-> > 	size_t len)
-> > {
-> > -	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
-> > +	int err;
-> > +
-> > +	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
-> > +
-> > +	if (err < 0)
-> > +		err = -ENOMEM;
-> > +
-> > +	return err;
-> > }
-> > 
-> > static s64 vmci_transport_stream_has_data(struct vsock_sock *vsk)
-> > -- 
-> > 2.35.1
-> > 
-> 
-> _______________________________________________
-> Virtualization mailing list
-> Virtualization@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+Another positive consequence is that on systems with RDRAND, running
+with CONFIG_WARN_ALL_UNSEEDED_RANDOM=y results in no warnings at all.
+
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c  | 47 ++++++++++++++++++++++++------------------
+ include/linux/random.h |  3 ++-
+ init/main.c            | 17 +++++++--------
+ 3 files changed, 37 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index a90d96f4b3bb..1cb53495e8f7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -772,18 +772,13 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
+ static struct notifier_block pm_notifier = { .notifier_call = random_pm_notification };
+ 
+ /*
+- * The first collection of entropy occurs at system boot while interrupts
+- * are still turned off. Here we push in latent entropy, RDSEED, a timestamp,
+- * utsname(), and the command line. Depending on the above configuration knob,
+- * RDSEED may be considered sufficient for initialization. Note that much
+- * earlier setup may already have pushed entropy into the input pool by the
+- * time we get here.
++ * This is called extremely early, before time keeping functionality is
++ * available, but arch randomness is. Interrupts are not yet enabled.
+  */
+-int __init random_init(const char *command_line)
++void __init random_init_early(const char *command_line)
+ {
+-	ktime_t now = ktime_get_real();
+-	size_t i, longs, arch_bits;
+ 	unsigned long entropy[BLAKE2S_BLOCK_SIZE / sizeof(long)];
++	size_t i, longs, arch_bits;
+ 
+ #if defined(LATENT_ENTROPY_PLUGIN)
+ 	static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
+@@ -803,34 +798,46 @@ int __init random_init(const char *command_line)
+ 			i += longs;
+ 			continue;
+ 		}
+-		entropy[0] = random_get_entropy();
+-		_mix_pool_bytes(entropy, sizeof(*entropy));
+ 		arch_bits -= sizeof(*entropy) * 8;
+ 		++i;
+ 	}
+-	_mix_pool_bytes(&now, sizeof(now));
+-	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
++
+ 	_mix_pool_bytes(command_line, strlen(command_line));
++
++	if (trust_cpu)
++		credit_init_bits(arch_bits);
++}
++
++/*
++ * This is called a little bit after the prior function, and now there is
++ * access to timestamps counters. Interrupts are not yet enabled.
++ */
++void __init random_init(void)
++{
++	unsigned long entropy = random_get_entropy();
++	ktime_t now = ktime_get_real();
++
++	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
++	_mix_pool_bytes(&now, sizeof(now));
++	_mix_pool_bytes(&entropy, sizeof(entropy));
+ 	add_latent_entropy();
+ 
+ 	/*
+-	 * If we were initialized by the bootloader before jump labels are
+-	 * initialized, then we should enable the static branch here, where
++	 * If we were initialized by the cpu or bootloader before jump labels
++	 * are initialized, then we should enable the static branch here, where
+ 	 * it's guaranteed that jump labels have been initialized.
+ 	 */
+ 	if (!static_branch_likely(&crng_is_ready) && crng_init >= CRNG_READY)
+ 		crng_set_ready(NULL);
+ 
++	/* Reseed if already seeded by earlier phases. */
+ 	if (crng_ready())
+ 		crng_reseed();
+-	else if (trust_cpu)
+-		_credit_init_bits(arch_bits);
+ 
+ 	WARN_ON(register_pm_notifier(&pm_notifier));
+ 
+-	WARN(!random_get_entropy(), "Missing cycle counter and fallback timer; RNG "
+-				    "entropy collection will consequently suffer.");
+-	return 0;
++	WARN(!entropy, "Missing cycle counter and fallback timer; RNG "
++		       "entropy collection will consequently suffer.");
+ }
+ 
+ /*
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 3fec206487f6..a9e6e16f9774 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -72,7 +72,8 @@ static inline unsigned long get_random_canary(void)
+ 	return get_random_long() & CANARY_MASK;
+ }
+ 
+-int __init random_init(const char *command_line);
++void __init random_init_early(const char *command_line);
++void __init random_init(void);
+ bool rng_is_initialized(void);
+ int wait_for_random_bytes(void);
+ 
+diff --git a/init/main.c b/init/main.c
+index 1fe7942f5d4a..0866e5d0d467 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -976,6 +976,9 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 		parse_args("Setting extra init args", extra_init_args,
+ 			   NULL, 0, -1, -1, NULL, set_init_arg);
+ 
++	/* Architectural and non-timekeeping rng init, before allocator init */
++	random_init_early(command_line);
++
+ 	/*
+ 	 * These use large bootmem allocations and must precede
+ 	 * kmem_cache_init()
+@@ -1035,17 +1038,13 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	hrtimers_init();
+ 	softirq_init();
+ 	timekeeping_init();
+-	kfence_init();
+ 	time_init();
+ 
+-	/*
+-	 * For best initial stack canary entropy, prepare it after:
+-	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
+-	 * - timekeeping_init() for ktime entropy used in random_init()
+-	 * - time_init() for making random_get_entropy() work on some platforms
+-	 * - random_init() to initialize the RNG from from early entropy sources
+-	 */
+-	random_init(command_line);
++	/* This must be after timekeeping is initialized */
++	random_init();
++
++	/* These make use of the fully initialized rng */
++	kfence_init();
+ 	boot_init_stack_canary();
+ 
+ 	perf_event_init();
+-- 
+2.37.3
+
