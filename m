@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385605EA23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9FB5EA0CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbiIZLEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S236362AbiIZKl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237059AbiIZLDZ (ORCPT
+        with ESMTP id S235893AbiIZKjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:03:25 -0400
+        Mon, 26 Sep 2022 06:39:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1E35EDF4;
-        Mon, 26 Sep 2022 03:32:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA884D15D;
+        Mon, 26 Sep 2022 03:23:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9224DB8094D;
-        Mon, 26 Sep 2022 10:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1923C433D6;
-        Mon, 26 Sep 2022 10:30:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5A1BB80835;
+        Mon, 26 Sep 2022 10:23:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE072C433D6;
+        Mon, 26 Sep 2022 10:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188208;
-        bh=Jf6oRZhil1xoJGyJp8jVwLBg4X5qkPjZTxNA897XdmM=;
+        s=korg; t=1664187817;
+        bh=mNPj2K9Tjb0i7RWUu5ToPPmzi3eN3KxqFd3F+KVTu9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MkozwcIZ4SL/z69reul6oToo5FyOZKkzzHJysMnlCw7h+l2kGEkmoUFFi3/mFCr/C
-         ivp06lRGYoMSClsYPj9U/LXc7r/X+4cf4tsgRkSXg5nG3GBAWzSP1VrkjYXVA+kt3a
-         2nRRTvlIgwGedKIUaMoK3OteS85MgDSOGUcPRjYI=
+        b=EDhkSlbOiTYeYsf9ZyemRWPxUPWeUPYMf+HGosRNLuBpqCKZGaUtFf8G4Olzg70PM
+         LcGNrSz77QR1lXoKczkdkT7XGcPSfcGRh+CqyxnmwkqcEB+mji+zcE60u+uskBS2H0
+         wjS550FHkV6duCD9cUnXd94fHJPCDESb+H6xRM2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 075/141] net: phy: aquantia: wait for the suspend/resume operations to finish
+Subject: [PATCH 5.4 068/120] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
 Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100757.166693051@linuxfoundation.org>
+Message-Id: <20220926100753.477996485@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,120 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
+From: Fabio Estevam <festevam@denx.de>
 
-[ Upstream commit ca2dccdeeb49a7e408112d681bf447984c845292 ]
+[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
 
-The Aquantia datasheet notes that after issuing a Processor-Intensive
-MDIO operation, like changing the low-power state of the device, the
-driver should wait for the operation to finish before issuing a new MDIO
-command.
+The 'enable-active-low' property is not a valid one.
 
-The new aqr107_wait_processor_intensive_op() function is added which can
-be used after these kind of MDIO operations. At the moment, we are only
-adding it at the end of the suspend/resume calls.
+Only 'enable-active-high' is valid, and when this property is absent
+the gpio regulator will act as active low by default.
 
-The issue was identified on a board featuring the AQR113C PHY, on
-which commands like 'ip link (..) up / down' issued without any delays
-between them would render the link on the PHY to remain down.
-The issue was easy to reproduce with a one-liner:
- $ ip link set dev ethX down; ip link set dev ethX up; \
- ip link set dev ethX down; ip link set dev ethX up;
+Remove the invalid 'enable-active-low' property.
 
-Fixes: ac9e81c230eb ("net: phy: aquantia: add suspend / resume callbacks for AQR107 family")
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220906130451.1483448-1-ioana.ciornei@nxp.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/aquantia_main.c | 53 ++++++++++++++++++++++++++++++---
- 1 file changed, 49 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index 75a62d1cc737..7045595f8d7d 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -89,6 +89,9 @@
- #define VEND1_GLOBAL_FW_ID_MAJOR		GENMASK(15, 8)
- #define VEND1_GLOBAL_FW_ID_MINOR		GENMASK(7, 0)
- 
-+#define VEND1_GLOBAL_GEN_STAT2			0xc831
-+#define VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG	BIT(15)
-+
- #define VEND1_GLOBAL_RSVD_STAT1			0xc885
- #define VEND1_GLOBAL_RSVD_STAT1_FW_BUILD_ID	GENMASK(7, 4)
- #define VEND1_GLOBAL_RSVD_STAT1_PROV_ID		GENMASK(3, 0)
-@@ -123,6 +126,12 @@
- #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL2	BIT(1)
- #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL3	BIT(0)
- 
-+/* Sleep and timeout for checking if the Processor-Intensive
-+ * MDIO operation is finished
-+ */
-+#define AQR107_OP_IN_PROG_SLEEP		1000
-+#define AQR107_OP_IN_PROG_TIMEOUT	100000
-+
- struct aqr107_hw_stat {
- 	const char *name;
- 	int reg;
-@@ -569,16 +578,52 @@ static void aqr107_link_change_notify(struct phy_device *phydev)
- 		phydev_info(phydev, "Aquantia 1000Base-T2 mode active\n");
- }
- 
-+static int aqr107_wait_processor_intensive_op(struct phy_device *phydev)
-+{
-+	int val, err;
-+
-+	/* The datasheet notes to wait at least 1ms after issuing a
-+	 * processor intensive operation before checking.
-+	 * We cannot use the 'sleep_before_read' parameter of read_poll_timeout
-+	 * because that just determines the maximum time slept, not the minimum.
-+	 */
-+	usleep_range(1000, 5000);
-+
-+	err = phy_read_mmd_poll_timeout(phydev, MDIO_MMD_VEND1,
-+					VEND1_GLOBAL_GEN_STAT2, val,
-+					!(val & VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG),
-+					AQR107_OP_IN_PROG_SLEEP,
-+					AQR107_OP_IN_PROG_TIMEOUT, false);
-+	if (err) {
-+		phydev_err(phydev, "timeout: processor-intensive MDIO operation\n");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
- static int aqr107_suspend(struct phy_device *phydev)
- {
--	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
--				MDIO_CTRL1_LPOWER);
-+	int err;
-+
-+	err = phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
-+			       MDIO_CTRL1_LPOWER);
-+	if (err)
-+		return err;
-+
-+	return aqr107_wait_processor_intensive_op(phydev);
- }
- 
- static int aqr107_resume(struct phy_device *phydev)
- {
--	return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
--				  MDIO_CTRL1_LPOWER);
-+	int err;
-+
-+	err = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
-+				 MDIO_CTRL1_LPOWER);
-+	if (err)
-+		return err;
-+
-+	return aqr107_wait_processor_intensive_op(phydev);
- }
- 
- static int aqr107_probe(struct phy_device *phydev)
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index 390b86ec6538..365fa9a3c5bf 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -102,7 +102,6 @@ vcc3v3_sys: vcc3v3-sys {
+ 	vcc5v0_host: vcc5v0-host-regulator {
+ 		compatible = "regulator-fixed";
+ 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
+-		enable-active-low;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&vcc5v0_host_en>;
+ 		regulator-name = "vcc5v0_host";
 -- 
 2.35.1
 
