@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908365EA177
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2C45EA357
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236670AbiIZKvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S235309AbiIZLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiIZKss (ORCPT
+        with ESMTP id S237737AbiIZLXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:48:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D8E57278;
-        Mon, 26 Sep 2022 03:26:19 -0700 (PDT)
+        Mon, 26 Sep 2022 07:23:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C7FDF66;
+        Mon, 26 Sep 2022 03:39:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B847FB80915;
-        Mon, 26 Sep 2022 10:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA1AC433D6;
-        Mon, 26 Sep 2022 10:26:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8540E604F5;
+        Mon, 26 Sep 2022 10:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D6CC433C1;
+        Mon, 26 Sep 2022 10:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187976;
-        bh=/TEysB9aXAw6YnUMtjKbjnb69VGEdNqHrGLDObPJF5I=;
+        s=korg; t=1664188738;
+        bh=NexvLtw/DG7sNlXCxEGCln2wY+hg4N3/kbn2/5Wj/O0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hS3e95NbOTHLUINvhaeGilYA9V6u+3Ng3xqdrx21+Ei8lqCtpvT0ZuvTmfPLL/TDi
-         /2ZvLAaFTkr/cM7jJg82JjWC67lklXIgfvsdybHlPgh95/1afz/fYLfx88ioYeH6yS
-         AhjD4A1BSZ56zbdtEtGFdNohyVZ5eoiOmUqGXmSI=
+        b=pi+VS+V51PvgKdNK5TBU0WGpd4E5IPTVQcdJRv9BMFHriTJ7NDv3bNwXMoeqDe3P6
+         5jaVrZvWWOOJ97/Q8UApZoQ4n5Kx+hRr52xbZaxwFmWnPm5hta5iyi43Zocs86I/IZ
+         LMxYvWRen+LnGWgk380TCdFyvyOBUfuG0Tf9zcB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandan.babu@oracle.com>
-Subject: [PATCH 5.4 106/120] xfs: add missing assert in xfs_fsmap_owner_from_rmap
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 105/148] can: gs_usb: gs_can_open(): fix race dev->can.state condition
 Date:   Mon, 26 Sep 2022 12:12:19 +0200
-Message-Id: <20220926100754.842710680@linuxfoundation.org>
+Message-Id: <20220926100800.054839168@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <darrick.wong@oracle.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit 110f09cb705af8c53f2a457baf771d2935ed62d4 upstream.
+[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
 
-The fsmap handler shouldn't fail silently if the rmap code ever feeds it
-a special owner number that isn't known to the fsmap handler.
+The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
+has been started. On busy networks the CAN controller might receive
+CAN frame between and go into an error state before the dev->can.state
+is assigned.
 
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Assign dev->can.state before starting the controller to close the race
+window.
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_fsmap.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/xfs/xfs_fsmap.c
-+++ b/fs/xfs/xfs_fsmap.c
-@@ -146,6 +146,7 @@ xfs_fsmap_owner_from_rmap(
- 		dest->fmr_owner = XFS_FMR_OWN_FREE;
- 		break;
- 	default:
-+		ASSERT(0);
- 		return -EFSCORRUPTED;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index e26b3d6f5b48..5a43e542b302 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -680,6 +680,7 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
+ 
+ 	/* finally start device */
++	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
+ 	dm->flags = cpu_to_le32(flags);
+ 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
+@@ -696,13 +697,12 @@ static int gs_can_open(struct net_device *netdev)
+ 	if (rc < 0) {
+ 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
+ 		kfree(dm);
++		dev->can.state = CAN_STATE_STOPPED;
+ 		return rc;
  	}
- 	return 0;
+ 
+ 	kfree(dm);
+ 
+-	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+-
+ 	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
+-- 
+2.35.1
+
 
 
