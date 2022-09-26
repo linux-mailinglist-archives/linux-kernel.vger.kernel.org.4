@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EA25E9F48
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7768B5EA211
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbiIZKWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S237111AbiIZLBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbiIZKVd (ORCPT
+        with ESMTP id S237286AbiIZK7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:21:33 -0400
+        Mon, 26 Sep 2022 06:59:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7E24BD09;
-        Mon, 26 Sep 2022 03:16:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BE55C972;
+        Mon, 26 Sep 2022 03:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4982B80925;
-        Mon, 26 Sep 2022 10:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2FEC433C1;
-        Mon, 26 Sep 2022 10:16:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABEEAB80930;
+        Mon, 26 Sep 2022 10:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD6BC433C1;
+        Mon, 26 Sep 2022 10:29:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187367;
-        bh=wBpXxC/J+OZ9Wga4TEXzHz6P8hWN5+kZEONleeXmSTY=;
+        s=korg; t=1664188177;
+        bh=8yjxeJaLsFyddxEoLe4GbCUknf9u3Le+pjnTTNM+Hg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XEW4a5gs1okg4r15PvinxHR8bRzp9vQ+g/vLF/Ym01W6F4qGqwzj1SAoKLiUSVXYE
-         +qyhvJ8QJ0PFNK+a10fA7+lIZx1ffWdSqnR9TQFzOXpLjD5VSRVySI9nnezPZseIfE
-         xx9mHFC9UaOoUQI6eDXQXCGfjNDROouj+LPPc0qU=
+        b=hMO1+3PF1obb5s/6k4Gq3hV2wyMCNmZw24+UjdB4RnZ7bFLtLfS7vGzl6/2pimRYz
+         twRqQAjuuB5FnBWYaSQQttLBgRhrCIiZ4NbEnd/+h+8icidPl7PwxN30dAa6BSxMpX
+         GBUcneqi3cVJRRMV7Q3ZrKE58pyt1+t73fL3AsGk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 04/40] parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 066/141] dmaengine: ti: k3-udma-private: Fix refcount leak bug in of_xudma_dev_get()
 Date:   Mon, 26 Sep 2022 12:11:32 +0200
-Message-Id: <20220926100738.380351889@linuxfoundation.org>
+Message-Id: <20220926100756.821231579@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,33 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 38238be4e881a5d0abbe4872b4cd6ed790be06c8 ]
+[ Upstream commit f9fdb0b86f087c2b7f6c6168dd0985a3c1eda87e ]
 
-Add missing iounmap() before return from ccio_probe(), if ccio_init_resources()
-fails.
+We should call of_node_put() for the reference returned by
+of_parse_phandle() in fail path or when it is not used anymore.
+Here we only need to move the of_node_put() before the check.
 
-Fixes: d46c742f827f ("parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: d70241913413 ("dmaengine: ti: k3-udma: Add glue layer for non DMAengine users")
+Signed-off-by: Liang He <windhl@126.com>
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Link: https://lore.kernel.org/r/20220720073234.1255474-1-windhl@126.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/parisc/ccio-dma.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/dma/ti/k3-udma-private.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
-index cc23b30337c1..afae74a99df1 100644
---- a/drivers/parisc/ccio-dma.c
-+++ b/drivers/parisc/ccio-dma.c
-@@ -1581,6 +1581,7 @@ static int __init ccio_probe(struct parisc_device *dev)
+diff --git a/drivers/dma/ti/k3-udma-private.c b/drivers/dma/ti/k3-udma-private.c
+index 8563a392f30b..dadab2feca08 100644
+--- a/drivers/dma/ti/k3-udma-private.c
++++ b/drivers/dma/ti/k3-udma-private.c
+@@ -31,14 +31,14 @@ struct udma_dev *of_xudma_dev_get(struct device_node *np, const char *property)
  	}
- 	ccio_ioc_init(ioc);
- 	if (ccio_init_resources(ioc)) {
-+		iounmap(ioc->ioc_regs);
- 		kfree(ioc);
- 		return -ENOMEM;
+ 
+ 	pdev = of_find_device_by_node(udma_node);
++	if (np != udma_node)
++		of_node_put(udma_node);
++
+ 	if (!pdev) {
+ 		pr_debug("UDMA device not found\n");
+ 		return ERR_PTR(-EPROBE_DEFER);
  	}
+ 
+-	if (np != udma_node)
+-		of_node_put(udma_node);
+-
+ 	ud = platform_get_drvdata(pdev);
+ 	if (!ud) {
+ 		pr_debug("UDMA has not been probed\n");
 -- 
 2.35.1
 
