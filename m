@@ -2,277 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178885EA803
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140CD5EA7E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbiIZOJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S233554AbiIZOGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiIZOI4 (ORCPT
+        with ESMTP id S234392AbiIZOGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:08:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45485C967
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:19:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF872B8092B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61D3C433D6;
-        Mon, 26 Sep 2022 12:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664194783;
-        bh=3dFjUeVFTYDOTKxnBaPoHVLxALKRMdwioADSEvQUaaw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cca7Kzab2ZhMJ4Y3wy9XSvKaLvRjxFa+kME5Hut+6t8TRt6l/BzRAbd0JRpJpqkTi
-         3LbAfBJY8DKwMOxJnrW6gUtcbthOvR2a2kaba0Fqudzu/wXZcljo0CM8O+WR0MqHwj
-         xTa7ic0sACmI9WT3qVq4ea/YgGqWOTpgvI2yAxY8=
-Date:   Mon, 26 Sep 2022 14:16:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernfs: fix a crash when two processes delete the same
- directory
-Message-ID: <YzGYFBv0pdt+DQg+@kroah.com>
-References: <alpine.LRH.2.02.2209260418360.16612@file01.intranet.prod.int.rdu2.redhat.com>
+        Mon, 26 Sep 2022 10:06:06 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668C0895F0;
+        Mon, 26 Sep 2022 05:17:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mugG10UEQ+VlukrbNPokrV1ojvF5hNFddFbnndwRVNfa/4130arT5dlKEVFLcrIxASAUeSDFEa7OfprRua/HIuiM28YesGkh7N+9kz+DSK1HF6EoCkh4V+dtEviqb24H6AQ9H4u9DwYFvy+XTGY9v4iAPcoTAAu6dd1z7Gv4JrFycpn3+3H+UI9tKdixTz2afH/uDlgyHvZHDkX7m4Z5QGqn7GybPArbTDnNU+Dw+afnwX/bQxB9iv2ULxmF0am0Q46KyqmMFMlbqugpi2EQUEDWOOceOohDFAILzR4p5t1x+Euqw37BlGaLrTiEnWG/f1PqqtrovffpbFubWBnCMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wtolnk/byvkGqCKlxCGImxHfbeUxjzWepxfjVAPv3EM=;
+ b=hCfFcpAOeAIMtN5cvD9OGphdAwS6rAdfS+8e4OXl3IdoZ+/ffcpVpWm3uYprT8E1zpO1od0qBmlUDHB1D9Y+aFGS+8nf61LntGPQk+d2YDd+UyZ0C5FE0yOrKHKq0xLhhGRbnHX5CQ2fht4DyKncj3a5vvP368EvN99ltAxjXjyu2iACSn/iUFHSoeLdzQsvkRDnrAKVCtzjrDrAO6U1pNbV7AzMEPOZVRELZD8ox7tB0eMsaNszyOs3DLONp8qTYnHGNusvOVCymbDqWsh3XnNLl2NCp2zzxSVvBI6zMzLdKP7f6zE0BDMktp9KCCwOqYuXpsZSOWHqTyjiR26wjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=xilinx.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wtolnk/byvkGqCKlxCGImxHfbeUxjzWepxfjVAPv3EM=;
+ b=GrxHEFQMDpkb/VjjNr8vgd7L8YIfYF4UZgGK2J+4eCPsX79Xp7CC9bwfiSnspwodHNhifeCGc8j850Q9lUKVyxyXMSVGaLhiQw1GPkzx6B4LRg+WTxtDt13IWPFScZk3HRCMjGrWYRKODznBetOwEUlYDqzoecQMPDVZ3Q9Hauc=
+Received: from MW4PR03CA0302.namprd03.prod.outlook.com (2603:10b6:303:dd::7)
+ by IA0PR12MB7506.namprd12.prod.outlook.com (2603:10b6:208:442::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 12:17:02 +0000
+Received: from CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dd:cafe::f) by MW4PR03CA0302.outlook.office365.com
+ (2603:10b6:303:dd::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
+ Transport; Mon, 26 Sep 2022 12:17:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT115.mail.protection.outlook.com (10.13.174.211) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 12:17:01 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 26 Sep
+ 2022 07:16:30 -0500
+Message-ID: <7e7ca7b9-9b19-654b-cfa4-de836a90c57d@amd.com>
+Date:   Mon, 26 Sep 2022 14:16:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2209260418360.16612@file01.intranet.prod.int.rdu2.redhat.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V2 0/9] Added Standard mode and SMBus support.
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>,
+        <michal.simek@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <radhey.shyam.pandey@amd.com>, <srinivas.goud@amd.com>,
+        <shubhrajyoti.datta@amd.com>
+References: <1663836294-5698-1-git-send-email-manikanta.guntupalli@xilinx.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <1663836294-5698-1-git-send-email-manikanta.guntupalli@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT115:EE_|IA0PR12MB7506:EE_
+X-MS-Office365-Filtering-Correlation-Id: 525b48dd-5f2d-4f7e-0803-08da9fb9048c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SLu0OvQ7Zf45OINHwPJGJzl88YuSk08DpGr2UMDG04uUe5YycrQRucQdATMswICjmfXpk46is8APTBeMoa6/dIRxEetxo/6dkNIuuXOezVAAEdWUYLR0h3nNNxm/wY9se80A90ZSprI9eoMKg9NM6CbBbEpdinnzjkkXwE/2becjVH1VOVxdtn0tCCd4Fx/BR7mh29XbeBybbUCmRE4kKNH6dMYZ6D6ESIKy7nxhh6q8MlDe3wvZO8dGZ0UtFdGkbC3HHu9VX3Zsaz25iwUdgWpxgy6PJcwYf9DRQPi98Ktxdec9/TQ9K27zmwIoVUD7iauP6P34UJBeB2fm8C6oXOjq490Y/391qc2VfmjP28unFpWKNOcqydYDFlUVQZTXmbN7Dmo6ya5WzECPVYDinj3sXkfHT4b7Q8frhsfxjNy1nvkf3xoAhNKhE7d0xhqXscBEj0+wD8vxI2DKpnK0+rE3KAeOIfNb+XTJuqF6/sYNna1X+0RLxK9l0MiREoYi0eVq1L3xUD7tepbC2rYlH+mO17aa5oSUMsQbCoJBFwvasfTWbqJ6CizNfTRoNe+fwoF8S50o46F+fXk6m9GK9sAlkat2qtYgRJmgoB/Ykn16DrLuPZJZlt52UIDb0Q4I2+M/BG6onU67Efs1GqgnP3d9tcznxbFXnmblxUuPlcwi0D+PpWzahBfYldZGvg5xxMucsUryiNjs2CHzQmtZNZnlNByfwPVQiTpwldFjcW1aPyHksFjDs5cPyHTDENZRWoXKpmTv7mR9QgL7Ogu6NK5jqVWpr7UvdfHSeQtlAncdk6lgCminXTzsiVwvO0uI/VaKnRWw9XiDxv9PMkbWMD1zOPN6d3Q7UeK7qDlojZFxFbVFC1ZrMDZEyq2MIF1J
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199015)(36840700001)(40470700004)(46966006)(2906002)(336012)(2616005)(16526019)(36756003)(186003)(41300700001)(6666004)(26005)(5660300002)(44832011)(53546011)(82740400003)(8936002)(40460700003)(40480700001)(86362001)(356005)(82310400005)(81166007)(31696002)(83380400001)(47076005)(426003)(36860700001)(54906003)(966005)(110136005)(16576012)(316002)(478600001)(31686004)(4326008)(70586007)(8676002)(70206006)(2101003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 12:17:01.8523
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 525b48dd-5f2d-4f7e-0803-08da9fb9048c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7506
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 07:04:52AM -0400, Mikulas Patocka wrote:
-> There is a crash when running the cryptsetup testsuite on Fedora Rawhide.
-> It can be reproduced by installing Rawhide with the 6.0-rc6 kernel,
-> downloading and compiling the cryptsetup repository and running this test
-> in a loop for about 15 minuts:
-> 	while ./integrity-compat-test; do :; done
+
+
+On 9/22/22 10:44, Manikanta Guntupalli wrote:
+> -Added standard mode for AXI I2C controller.
+> -Added Smbus block read support to xiic driver.
+> -Added 'xlnx,axi-iic-2.1' new IP version support.
+> -Added dynamic SCL frequency configuration support.
+> -Removed 'local_irq_save/restore' calls as discussed
+>   here: https://www.spinics.net/lists/linux-i2c/msg46483.html.
 > 
->  ------------[ cut here ]------------
->  WARNING: CPU: 0 PID: 50087 at fs/kernfs/dir.c:504 __kernfs_remove.part.0+0x26f/0x2b0
->  Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
->  Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
->  CPU: 0 PID: 50087 Comm: integritysetup Not tainted 6.0.0-0.rc6.41.fc38.x86_64 #1
->  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
->  RIP: 0010:__kernfs_remove.part.0+0x26f/0x2b0
->  Code: 0f 85 24 ff ff ff 4d 85 e4 0f 84 31 ff ff ff 41 0f b7 44 24 70 4c 89 e3 83 e0 0f 66 83 f8 01 0f 84 2c fe ff ff e9 50 fe ff ff <0f> 0b e9 53 fe ff ff 0f 0b e9 6b fe ff ff 48 8b 57 10 48 c7 c6 e8
->  RSP: 0018:ffffa2e001da7a78 EFLAGS: 00010246
->  RAX: 0000000000000000 RBX: ffff8e509d111380 RCX: 0000000080200015
->  RDX: 0000000000000000 RSI: fffff015c5744440 RDI: ffff8e509d1113c8
->  RBP: ffffa2e001da7ac0 R08: 0000000000000000 R09: 0000000080200015
->  R10: 0000000000000009 R11: ffff8e514b185488 R12: ffff8e509d111380
->  R13: ffff8e5114324f98 R14: ffff8e50401e92a0 R15: 0000000000000000
->  FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
->  Call Trace:
->   <TASK>
->   ? _raw_spin_unlock_irqrestore+0x23/0x40
->   ? kernfs_name_hash+0x12/0x80
->   kernfs_remove_by_name_ns+0x60/0xa0
->   sysfs_slab_add+0x166/0x200
->   __kmem_cache_create+0x3c9/0x4b0
->   kmem_cache_create_usercopy+0x202/0x340
->   kmem_cache_create+0x12/0x20
->   bioset_init+0x1fe/0x280
->   dm_table_complete+0x3cd/0x6f0
->   table_load+0x140/0x2c0
->   ? dev_suspend+0x2e0/0x2e0
->   ctl_ioctl+0x1f2/0x450
->   dm_ctl_ioctl+0xa/0x20
->   __x64_sys_ioctl+0x90/0xd0
->   do_syscall_64+0x5b/0x80
->   ? fpregs_restore_userregs+0x12/0xe0
->   ? exit_to_user_mode_prepare+0x18f/0x1f0
->   ? syscall_exit_to_user_mode+0x17/0x40
->   ? do_syscall_64+0x67/0x80
->   ? do_syscall_64+0x67/0x80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  RIP: 0033:0x7fbbbdf27daf
->  Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
->  RSP: 002b:00007ffc3c305540 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->  RAX: ffffffffffffffda RBX: 0000000001f897e0 RCX: 00007fbbbdf27daf
->  RDX: 0000000001f8e000 RSI: 00000000c138fd09 RDI: 0000000000000006
->  RBP: 0000000000000003 R08: 0000000001f8b150 R09: 0000000000000073
->  R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbbbe57c6b6
->  R13: 00007fbbbe57c38c R14: 0000000001f8e030 R15: 00007fbbbe57c78c
->   </TASK>
->  ---[ end trace 0000000000000000 ]---
->  ------------[ cut here ]------------
->  kernel BUG at mm/slub.c:381!
->  invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
->  CPU: 0 PID: 50087 Comm: integritysetup Tainted: G        W         -------  ---  6.0.0-0.rc6.41.fc38.x86_64 #1
->  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
->  RIP: 0010:__slab_free+0x11c/0x2f0
->  Code: 39 49 8b 04 24 48 89 4c 24 18 48 c1 e8 36 4c 8b ac c3 d8 00 00 00 4c 89 ef e8 90 a2 a3 00 48 8b 4c 24 18 48 89 44 24 20 eb 8e <0f> 0b f7 43 08 00 0d 21 00 75 cc 4d 85 ff 75 c7 80 4c 24 53 80 e9
->  RSP: 0018:ffffa2e001da7998 EFLAGS: 00010246
->  RAX: ffff8e5059948440 RBX: ffff8e5040042200 RCX: 0000000082000127
->  RDX: fffffffcab948440 RSI: fffff015c4665200 RDI: ffff8e5040042200
->  RBP: ffff8e5059948440 R08: 0000000000000001 R09: ffffffffae457f18
->  R10: 0000000000000009 R11: ffff8e514b185488 R12: fffff015c4665200
->  R13: ffff8e509d111398 R14: ffff8e5059948440 R15: ffff8e5059948440
->  FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
->  Call Trace:
->   <TASK>
->   ? osq_unlock+0xf/0x90
->   ? rwsem_down_write_slowpath+0x1fc/0x710
->   kernfs_put.part.0+0x58/0x1a0
->   __kernfs_remove.part.0+0x17c/0x2b0
->   ? _raw_spin_unlock_irqrestore+0x23/0x40
->   ? kernfs_name_hash+0x12/0x80
->   kernfs_remove_by_name_ns+0x60/0xa0
->   sysfs_slab_add+0x166/0x200
->   __kmem_cache_create+0x3c9/0x4b0
->   kmem_cache_create_usercopy+0x202/0x340
->   kmem_cache_create+0x12/0x20
->   bioset_init+0x1fe/0x280
->   dm_table_complete+0x3cd/0x6f0
->   table_load+0x140/0x2c0
->   ? dev_suspend+0x2e0/0x2e0
->   ctl_ioctl+0x1f2/0x450
->   dm_ctl_ioctl+0xa/0x20
->   __x64_sys_ioctl+0x90/0xd0
->   do_syscall_64+0x5b/0x80
->   ? fpregs_restore_userregs+0x12/0xe0
->   ? exit_to_user_mode_prepare+0x18f/0x1f0
->   ? syscall_exit_to_user_mode+0x17/0x40
->   ? do_syscall_64+0x67/0x80
->   ? do_syscall_64+0x67/0x80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  RIP: 0033:0x7fbbbdf27daf
->  Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
->  RSP: 002b:00007ffc3c305540 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->  RAX: ffffffffffffffda RBX: 0000000001f897e0 RCX: 00007fbbbdf27daf
->  RDX: 0000000001f8e000 RSI: 00000000c138fd09 RDI: 0000000000000006
->  RBP: 0000000000000003 R08: 0000000001f8b150 R09: 0000000000000073
->  R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbbbe57c6b6
->  R13: 00007fbbbe57c38c R14: 0000000001f8e030 R15: 00007fbbbe57c78c
->   </TASK>
->  Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
->  Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
->  ---[ end trace 0000000000000000 ]---
->  RIP: 0010:__slab_free+0x11c/0x2f0
->  Code: 39 49 8b 04 24 48 89 4c 24 18 48 c1 e8 36 4c 8b ac c3 d8 00 00 00 4c 89 ef e8 90 a2 a3 00 48 8b 4c 24 18 48 89 44 24 20 eb 8e <0f> 0b f7 43 08 00 0d 21 00 75 cc 4d 85 ff 75 c7 80 4c 24 53 80 e9
->  RSP: 0018:ffffa2e001da7998 EFLAGS: 00010246
->  RAX: ffff8e5059948440 RBX: ffff8e5040042200 RCX: 0000000082000127
->  RDX: fffffffcab948440 RSI: fffff015c4665200 RDI: ffff8e5040042200
->  RBP: ffff8e5059948440 R08: 0000000000000001 R09: ffffffffae457f18
->  R10: 0000000000000009 R11: ffff8e514b185488 R12: fffff015c4665200
->  R13: ffff8e509d111398 R14: ffff8e5059948440 R15: ffff8e5059948440
->  FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
+> Raviteja Narayanam (9):
+>    i2c: xiic: Add standard mode support for > 255 byte read transfers
+>    i2c: xiic: Fix Rx and Tx paths in standard mode repeated start
+>    i2c: xiic: Switch to Xiic standard mode for i2c-read
+>    i2c: xiic: Add wait for FIFO empty in send_tx
+>    i2c: xiic: Add smbus_block_read functionality
+>    i2c: xiic: Remove interrupt enable/disable in Rx path
+>    dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
+>    i2c: xiic: Update compatible with new IP version
+>    i2c: xiic: Add SCL frequency configuration support
 > 
-> The reason for the crash is this:
-> 
-> * create_bio_slab creates the bio slab with SLAB_TYPESAFE_BY_RCU - that
->   means that the slab destruction will be delayed by a rcu grace period
-> 
-> * when destroying a slab with SLAB_TYPESAFE_BY_RCU, the function
->   shutdown_cache adds the slab to a list and calls
->   slab_caches_to_rcu_destroy_workfn that will execute rcu_barrier() and
->   free slab caches that are on the list
-> 
-> * while slab_caches_to_rcu_destroy_workfn attempts to free the slab, the
->   function bioset_init creates another slab with the same name
-> 
-> * bioset_init goes down to sysfs_slab_add -> sysfs_remove_link ->
->   kernfs_remove_by_name -> kernfs_remove_by_name_ns
-> 
-> * simultaneously, slab_caches_to_rcu_destroy_workfn goes down to
->   kmem_cache_release which tries to unlink and release the slab kobject
-> 
-> * now, we have two processes that are simultaneously trying to delete the
->   same kobject
-> 
-> * kernfs_remove_by_name_ns wins the race, grabs the lock
->   &root->kernfs_rwsem and executes __kernfs_remove
-> 
-> * __kernfs_remove goes down to pos = kernfs_leftmost_descendant(kn), then
->   it calls kernfs_get(pos) and kernfs_drain(pos)
-> 
-> * kernfs_drain(pos) drops the &root->kernfs_rwsem lock temporarily
-> 
-> * while the lock is dropped, kmem_cache_release calls sysfs_slab_unlink
->   -> kobject_del -> __kobject_del -> sysfs_remove_dir -> kernfs_remove ->
->   __kernfs_remove
-> 
-> * kmem_cache_release calls sysfs_slab_release -> kobject_put -> kref_put
->   -> kobject_release -> kobject_cleanup - this frees the kobject
-> 
-> * then we go back to the process that dropped the lock &root->kernfs_rwsem
->   in kernfs_drain(pos) - the process re-acquires the lock and returns to
->   __kernfs_remove. The process still keeps reference to the "pos" kobject,
->   however it no longer keeps reference to the "kn" kobject (which was
->   freed in the step above). It executes kernfs_put(pos) and then continues
->   the loop with "kn" pointing to free memory
-> 
-> * kernfs_leftmost_descendant(kn) return "kn" because there are no files
->   under "kn". kernfs_get(pos) triggers a warning
->   WARN_ON(!atomic_read(&kn->count)). kernfs_put(pos) triggers a BUG in
->   set_freepointer because it attempts to free an object that is already
->   free
-> 
-> We fix this bug by grabbing a reference to "kn" in __kernfs_remove and
-> dropping it when we are done. This prevents "kn" from being released when
-> we drop the lock in kernfs_drain.
-> 
-> Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-> Reported-by: Milan Broz <gmazyland@gmail.com>
-> Cc: stable@vger.kernel.org
-> 
-> ---
->  fs/kernfs/dir.c |    8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> Index: linux-2.6/fs/kernfs/dir.c
-> ===================================================================
-> --- linux-2.6.orig/fs/kernfs/dir.c
-> +++ linux-2.6/fs/kernfs/dir.c
-> @@ -1364,6 +1364,12 @@ static void __kernfs_remove(struct kernf
->  		if (kernfs_active(pos))
->  			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
->  
-> +	/*
-> +	 * Make sure that kn won't go away while we drop the lock in
-> +	 * kernfs_drain().
-> +	 */
-> +	kernfs_get(kn);
-> +
->  	/* deactivate and unlink the subtree node-by-node */
->  	do {
->  		pos = kernfs_leftmost_descendant(kn);
-> @@ -1406,6 +1412,8 @@ static void __kernfs_remove(struct kernf
->  
->  		kernfs_put(pos);
->  	} while (pos != kn);
-> +
-> +	kernfs_put(kn);
->  }
->  
->  /**
+>   .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml     |   7 +-
+>   drivers/i2c/busses/i2c-xiic.c                 | 582 ++++++++++++++++--
+>   2 files changed, 537 insertions(+), 52 deletions(-)
 > 
 
-Can you see if 4abc99652812 ("kernfs: fix use-after-free in
-__kernfs_remove") in linux-next fixes this for you or not?  It seems to
-be the same issue, as was also reported at:
-	https://lore.kernel.org/r/7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp
+I was reviewing this code internally that's why
 
-thanks,
+Acked-by: Michal Simek <michal.simek@amd.com>
 
-greg k-h
+Thanks,
+Michal
