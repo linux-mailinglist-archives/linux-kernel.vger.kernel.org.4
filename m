@@ -2,132 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46BE5EB611
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232FC5EB5F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiI0AAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S229921AbiIZXr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiI0AAT (ORCPT
+        with ESMTP id S229706AbiIZXry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:00:19 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB35A9F0CA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:00:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C9qEbuu97hP0845r9fJFM5cDhtzraHHw8dhErpTJii5H+irjnzWs5tMYsAZl2q+hLvldwY+d1qr2V80Qhr7BgEw4BlG89k6+qWf7gBiVpHGJ6hfGUxP5HhbzTqWWv9P74GXmAhOeqMj2d7byGrRNrW2znbe/XoBowj6DRHGuMZUx8SJ2a6nPkQqto57MuHlT2XRHk35c8B2jJrBejMwORB06obF2/pXAMsjkHCsdnsY5WeaQLmw+PHEywkrXcLTvonB28mhWqyhXc7h0Z2Yg64M83mLKZKP6ETWczv1s8g7c5FoUVCYa+iNevX2Q6mukmn+cE096hjCMHUIXTKSQwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TpJ1PU95AZ/sqJVwfGjry3rRbeSqoSyrkxv5sBfHq8M=;
- b=GbbtpwuPJLmfqIh5Jm2atgjMmvA7BgKfa+Kci1GoHHoWz0rg6u7rFSG4zq0HwuQcyw+kupCvD+7f/LUvRtqt4M9KZhTKHnxKvhFGrVYeWxBzdY3qYDRwM722cexemtFzQtzNRPARPtigmTFiBV7SF6doGng4lgVMJQ24ecLeC0EhX6cjR6R6vQG7njvf87GyxMizogflxQf5B5cvFqExYypsdp1J6UlJjWJzAuPeVct3/rAUWZUcazPvxbIF8UNX7F9cFosbNu6KLhWiXHCZUEG7EInYYOWkDSWxktya7w8po3H69K5fSin3qRAt+LSp3WCaWgm/AAmWCObgSoC0yQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TpJ1PU95AZ/sqJVwfGjry3rRbeSqoSyrkxv5sBfHq8M=;
- b=S1/1cCZ/zOXD5h5nbYDBFo8u6XF1RVbD+f7/FuiYyNJG7LRCW6n4RsmQ1W72b3dX9+YEe+NOk4bfZ//1o6Rv/GpHiGrG592lTM4FhY+azDh/RIT3R4BBSV65936EzxarGDMzxA3/csq6RMEqZX4Sv3XqN+C8Hnurq5o+Ml+vw0Bw/SquWgWtkR4dAJ6mONSGB/9JgeoVeu1R7yErkIKLfcyW6wKOhiax04R8xsisx879wGFUEIC0TqtRyBem3vcUasfwGXfqxoMIOmOkn8WKwDkoVK8xaquJXrBrmUs1VT3ltA5FijdsIDOohFurC6DTX7GdIYo6EI25/NTJ2OArJQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by CH2PR12MB4182.namprd12.prod.outlook.com (2603:10b6:610:ae::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 00:00:14 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4064:6c13:72e5:a936]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4064:6c13:72e5:a936%5]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
- 00:00:14 +0000
-References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
- <072e1ce590fe101a4cdbd5e91b1702efebb6d0fd.1664171943.git-series.apopple@nvidia.com>
- <881735bda9b1ba0ecf3648af201840233508f206.camel@redhat.com>
- <6ff9dcc5-c34b-963f-f5e7-7038eecae98b@nvidia.com>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Lyude Paul <lyude@redhat.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alex Sierra <alex.sierra@amd.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 6/7] nouveau/dmem: Evict device private memory during
- release
-Date:   Tue, 27 Sep 2022 09:45:35 +1000
-In-reply-to: <6ff9dcc5-c34b-963f-f5e7-7038eecae98b@nvidia.com>
-Message-ID: <87k05plm9j.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: SYYP282CA0012.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:b4::22) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|CH2PR12MB4182:EE_
-X-MS-Office365-Filtering-Correlation-Id: d710396b-30d7-4da0-116f-08daa01b40f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rh9jh09XpjxUZw+MSu85pgVXuEsxpyz2CXvdFLGqOCjp5JCt4Thv+ioyQ1eBCgH6rzm9trYQupScJrQGODXBB7bwQJL96E4uAlLm7K1EOT8heqR/7FdpW3pt4ZfsKc7Todu14EUJUVdFjfUOi06bT05lgXm5GZp449ZOdrLtXxNr/olvZmtK3Ohy/Upab9C5biYpfKMxN0DAIKBJQgkMilDQXHPKOfICFJTZxxI/H6Nc5SFSppcRWKWC7OR6xdTeHssbJgVGMp/Z4Ppf22HwynRkAvBGoX2dIor6BLBQu8tZ2bgSpa3BCcgitSaVY+aiavWsE7GIqngepJ8fQ5HavoAt9wnGXdttHFzYA8GfdeOTn6jRaYNAN7Fn1opPAJrdiG9O36GrXfY8sPtmqsobed9XHwym1hmrWTMqvZ25HO8TqaCZkGUU1pI+dtn3aZu5kTJzFXrQ5IVlIzDg9bw/VmiGqv52nn4QDCVAWSmCZDuD8NvHC80iRXB0v5mTRqMSqsBu/li9EXJfSN80Fmaz/s28X1sWofy+2xcEiyKqyWvnJh4O0YYeMb1C7PiOOx35k2FNBSaEEl8LPfM+7ASoEe7vncGPVeJyH/gAABlJ4H6omgbk3ymdiv6T1SL5pnypGWX8mLSuS0oLaBuV1GYkq7jremTn2Ch40vJT4/XHStSY7Wx8HgiFwMH5B1mDTEqQXJp6CUI5vGy2djTipIhMxQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(451199015)(6666004)(83380400001)(41300700001)(26005)(9686003)(6512007)(186003)(6636002)(86362001)(6862004)(8936002)(2906002)(5660300002)(6506007)(7416002)(38100700002)(54906003)(8676002)(66476007)(316002)(66556008)(478600001)(6486002)(53546011)(66946007)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ikLGqD/7EEDvQ9bkzYFeeqN8oLOLGuenq3C9dWhPJAUtAM4+LeU9HDvn8xiA?=
- =?us-ascii?Q?ZtOvxIwITQdpjq/UG2Hv2Xki2WDFdmgSaT0ZdIArigUf9Dgxmnrpj9ACqasA?=
- =?us-ascii?Q?NfMXqZbz5rNWrUH6TJo6VtcmpUUxwTlSJ3UcUdj760NZ7vBXPqtdZnRrkffi?=
- =?us-ascii?Q?A3LC6VR6JaFqugIkM+ool8WtsupBhbTsK8BSKyh2VQE/pDJag3+J3YtBBF7b?=
- =?us-ascii?Q?5C80OF4uRxIPFLjOMTgbgIpjqViaol7jC9NnyRUT0CtH4BOcNkZHoHgdnywz?=
- =?us-ascii?Q?XdVSavFpVkIpruEmATfckQtzTgOD5ljzdXTh+MWsJHv0pRAo60WgFNOvlSnh?=
- =?us-ascii?Q?56mBGYq6Zl+gNqjMhSjavZzqE2PXT19zB+naAqp4Aek6HLvPMYMjUH9xvQMW?=
- =?us-ascii?Q?5tWL7I7/a6cKCDuKYjGYEFRXP9oggwDfeleZo6Z6scfgNoUETinx6GfYBxGl?=
- =?us-ascii?Q?5Z2XKANJ2WcyW0tvR+Q4RBJXCEvEaPcIZAUJyZxYLBKM4N4fSFeYHlm3xyON?=
- =?us-ascii?Q?Zhk8lzaRO/SdSzzyJkBcYBh1rZ+mKYsB0iE/2BXMSLC4iUuq+Id7qB9OC6Pd?=
- =?us-ascii?Q?s0HRxbn5cg8sN18yL3bRBnmoF8fxhB8iexS7vOp3/wYAaP0oO3XyFBt1meY7?=
- =?us-ascii?Q?xX7oKqjTMavhbhSO2HQXtsS3tcA1YGPTCAbTp/iX/FHJP8dKKuWl1IPqGW9M?=
- =?us-ascii?Q?aQnUis+U5SnsjtVOzCgBAeNpWtVQEc6ZruSj77LPCtX7u69nYv3qM9E66pe3?=
- =?us-ascii?Q?Eg4T6NlqA/yVOxm+wooUZEpZ0gcy0ureSX/uprA/hcniYNVlamxPPYEAQ8kA?=
- =?us-ascii?Q?/fiuCnLKaIgpdN/YrNEJgujPbkfMawRqdvYUollFISn6ZFOjUs4GYSBEN2r3?=
- =?us-ascii?Q?wbNV3HprSW8Al8FazZ7lFdF/KdkR1oT96syAHoSFe/NnSVUcKpx3Mve3CW62?=
- =?us-ascii?Q?rSOnh5J71gNpEk6Me8+IUPMB/hPj592CoUuuYP9WffpDEZULULs4J19P27ro?=
- =?us-ascii?Q?46JIlVOATiSP7++3KHU36/2G9kNYA1r6UxiVyUrn+aj1WA4wcapk0/W+pxoB?=
- =?us-ascii?Q?4nepUMe4zjefaHN+k2L7lFfsP3ZJaztiADwZabZ89BCIwY0l7fN1KeNLTPVr?=
- =?us-ascii?Q?ygWP/2BKBgCOgM8m2OqZIueUFXB4NPDL1IbilFTiWGdup4zytJtLSwWa9rmt?=
- =?us-ascii?Q?hklHWR42oBt2U+TtbxwjEepSR40OxbAItlwZGeueqC8ZYVWl7CJZrCSZc6TJ?=
- =?us-ascii?Q?mddtXF8f64KaNXC/iCjJNcRe2qesJl7Bssqc2Tst/TAuqsFfzD6VGMgP7Ja1?=
- =?us-ascii?Q?AfZkDMZnWKyXcISKwd7rtTiqGGyqdJTuXSmtl9n5g4gwZdwtwViwaP0Fscar?=
- =?us-ascii?Q?qp311p1amvItGn1m6uhiZ80/xmnnCkUfyPlmB0EbqHl8ENFst+eOugPiKIfx?=
- =?us-ascii?Q?xiWLKV/fazUIIUBrnyQcNz66aD9g/3urZXwFc/DWmQ49CBnrQ2tlKUk9kCXO?=
- =?us-ascii?Q?KxeaBkOtnnjwwurmDpy4D3yad6yiYEc0lWVB3AdonumW0NhLF3dcSIeV3lfx?=
- =?us-ascii?Q?4oAx7mmQ5cC9ema9AEY3pfMmIUMXgUedPmBgvTjp?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d710396b-30d7-4da0-116f-08daa01b40f4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 00:00:14.2050
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kzlfprhBapPoQkzJVuDZaeaUhK3msi3tpPICnuY4euJgDmG6cG6QICum59gjGHdWB5DaVRD8psbfpfKZgUi6Dw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4182
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 19:47:54 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0903492599
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:47:53 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id x18so5142693qkn.6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date;
+        bh=Ns4t/x9DBAySHPZtDToGSpr/LxaXlGe4KfUz12R2qF8=;
+        b=gdVQIqWhFcYJfh88PdaR/FPTLnYukfw1Vl026oJduRBQdkomvO0vwABmc4EojMkBh/
+         BY17WAoJiw+P5VbJYgypQLm30WF/5fXPDnQPlNev43fYV7LIm0ZrBCw3Upi41UqKijL1
+         Fyhqqvz2+6qnkqoninfJ5/lerZa+B8Up7KV7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Ns4t/x9DBAySHPZtDToGSpr/LxaXlGe4KfUz12R2qF8=;
+        b=uvOa9Vx0vZPJqLZZp9hfchtEaQ2kb8zpnq4uFqRBLCUIQovCWC8k/7+O4BgwqKmgyp
+         h5mf+BnF/a/KNc1yiFGnB4N7Q00qgt9eIpZ9FQ/MwVa5HHCKUoBU6oKcukXRXBA2fiik
+         S68PEEubddfdq6EWTHyhfJGtOjTwlbO149k81WpSWEQSbf9PpDlQBVypJbb4wUfUYujB
+         FMxYfNndDwZPXu5ACZoGv79J8d01LZHaSY5EZjhRt5fOfcXJmtPznm4k/Ap1fR5+C1mu
+         pMQ+qX2GxtLP5e2ZcAGWQXwTfgmPGdmm8gSMKUQ58WghYszD7++WpRF+mjOpy4QXlSbs
+         ZADg==
+X-Gm-Message-State: ACrzQf2xeLLPsrIyN0ew9KvDWXX6R3Cr6NDD3gVhCxH/LDTxj0RmymB1
+        sxD4vWgjf6iIzSRi4DECiYNm4g3Lbc2p5TpB
+X-Google-Smtp-Source: AMsMyM6k3drMMCfs/elpDmyPs5HZhc0KUfZxOZ92oKV/Da628vTY6uGSwgKRHMkcU+Z2l15e8Dh+zA==
+X-Received: by 2002:a05:620a:3724:b0:6ce:1a37:ef29 with SMTP id de36-20020a05620a372400b006ce1a37ef29mr16537662qkb.754.1664236071988;
+        Mon, 26 Sep 2022 16:47:51 -0700 (PDT)
+Received: from smtpclient.apple (26.sub-174-216-180.myvzw.com. [174.216.180.26])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05622a058c00b0035bafecff78sm12713257qtb.74.2022.09.26.16.47.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 16:47:51 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Date:   Mon, 26 Sep 2022 19:47:50 -0400
+Message-Id: <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
+References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+In-Reply-To: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -135,51 +71,126 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-John Hubbard <jhubbard@nvidia.com> writes:
 
-> On 9/26/22 14:35, Lyude Paul wrote:
->>> +	for (i = 0; i < npages; i++) {
->>> +		if (src_pfns[i] & MIGRATE_PFN_MIGRATE) {
->>> +			struct page *dpage;
->>> +
->>> +			/*
->>> +			 * _GFP_NOFAIL because the GPU is going away and there
->>> +			 * is nothing sensible we can do if we can't copy the
->>> +			 * data back.
->>> +			 */
->>
->> You'll have to excuse me for a moment since this area of nouveau isn't one of
->> my strongpoints, but are we sure about this? IIRC __GFP_NOFAIL means infinite
->> retry, in the case of a GPU hotplug event I would assume we would rather just
->> stop trying to migrate things to the GPU and just drop the data instead of
->> hanging on infinite retries.
->>
+> On Sep 26, 2022, at 6:32 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>=20
+> =EF=BB=BFOn Mon, Sep 26, 2022 at 09:02:21PM +0000, Joel Fernandes wrote:
+>> On Mon, Sep 26, 2022 at 09:32:44PM +0200, Uladzislau Rezki wrote:
+>> [...]
+>>>>>> On my KVM machine the boot time is affected:
+>>>>>>=20
+>>>>>> <snip>
+>>>>>> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Con=
+nection
+>>>>>> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
+>>>>>> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form=
+2 tray
+>>>>>> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
+>>>>>> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
+>>>>>> [  104.115418] process '/usr/bin/fstype' started with executable stac=
+k
+>>>>>> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data m=
+ode. Quota mode: none.
+>>>>>> [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +=
+AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +=
+GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 defau=
+lt-hierarchy=3Dhybrid)
+>>>>>> [  104.340193] systemd[1]: Detected virtualization kvm.
+>>>>>> [  104.340196] systemd[1]: Detected architecture x86-64.
+>>>>>> [  104.359032] systemd[1]: Set hostname to <pc638>.
+>>>>>> [  105.740109] random: crng init done
+>>>>>> [  105.741267] systemd[1]: Reached target Remote File Systems.
+>>>>>> <snip>
+>>>>>>=20
+>>>>>> 2 - 11 and second delay is between 32 - 104. So there are still users=
+ which must
+>>>>>> be waiting for "RCU" in a sync way.
+>>>>>=20
+>>>>> I was wondering if you can compare boot logs and see which timestamp d=
+oes the
+>>>>> slow down start from. That way, we can narrow down the callback. Also a=
+nother
+>>>>> idea is, add "trace_event=3Drcu:rcu_callback,rcu:rcu_invoke_callback
+>>>>> ftrace_dump_on_oops" to the boot params, and then manually call
+>>>>> "tracing_off(); panic();" from the code at the first printk that seems=
+ off in
+>>>>> your comparison of good vs bad. For example, if "crng init done" times=
+tamp is
+>>>>> off, put the "tracing_off(); panic();" there. Then grab the serial con=
+sole
+>>>>> output to see what were the last callbacks that was queued/invoked.
+>>>>=20
+>>>> We do seem to be in need of some way to quickly and easily locate the
+>>>> callback that needed to be _flush() due to a wakeup.
+>>>>=20
+>>> <snip>
+>>> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+>>> index aeea9731ef80..fe1146d97f1a 100644
+>>> --- a/kernel/workqueue.c
+>>> +++ b/kernel/workqueue.c
+>>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, s=
+truct rcu_work *rwork)
+>>>=20
+>>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(wor=
+k))) {
+>>>                rwork->wq =3D wq;
+>>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+>>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+>>>                return true;
+>>>        }
+>>>=20
+>>> <snip>
+>>>=20
+>>> ?
+>>>=20
+>>> But it does not fully solve my boot-up issue. Will debug tomorrow furthe=
+r.
+>>=20
+>> Ah, but at least its progress, thanks. Could you send me a patch to inclu=
+de
+>> in the next revision with details of this?
+>>=20
+>>>> Might one more proactive approach be to use Coccinelle to locate such
+>>>> callback functions?  We might not want -all- callbacks that do wakeups
+>>>> to use call_rcu_flush(), but knowing which are which should speed up
+>>>> slow-boot debugging by quite a bit.
+>>>>=20
+>>>> Or is there a better way to do this?
+>>>>=20
+>>> I am not sure what Coccinelle is. If we had something automated that mea=
+sures
+>>> a boot time and if needed does some profiling it would be good. Otherwis=
+e it
+>>> is a manual debugging mainly, IMHO.
+>>=20
+>> Paul, What about using a default-off kernel CONFIG that splats on all laz=
+y
+>> call_rcu() callbacks that do a wake up. We could use the trace hooks to d=
+o it
+>> in kernel I think. I can talk to Steve to get ideas on how to do that but=
+ I
+>> think it can be done purely from trace events (we might need a new
+>> trace_end_invoke_callback to fire after the callback is invoked). Thought=
+s?
+>=20
+> Could you look for wakeups invoked between trace_rcu_batch_start() and
+> trace_rcu_batch_end() that are not from interrupt context?  This would
+> of course need to be associated with a task rather than a CPU.
 
-No problem, thanks for taking a look!
+Yes this sounds good, but we also need to know if the callbacks are lazy or n=
+ot since wake-up is ok from a non lazy one. I think I=E2=80=99ll need a tabl=
+e to track that at queuing time.
 
-> Hi Lyude!
->
-> Actually, I really think it's better in this case to keep trying
-> (presumably not necessarily infinitely, but only until memory becomes
-> available), rather than failing out and corrupting data.
->
-> That's because I'm not sure it's completely clear that this memory is
-> discardable. And at some point, we're going to make this all work with
-> file-backed memory, which will *definitely* not be discardable--I
-> realize that we're not there yet, of course.
->
-> But here, it's reasonable to commit to just retrying indefinitely,
-> really. Memory should eventually show up. And if it doesn't, then
-> restarting the machine is better than corrupting data, generally.
+> Note that you would need to check for wakeups from interrupt handlers
+> even with the extra trace_end_invoke_callback().  The window where an
+> interrupt handler could do a wakeup would be reduced, but not eliminated.
 
-The memory is definitely not discardable here if the migration failed
-because that implies it is still mapped into some userspace process.
+True! Since this is a  debugging option, can we not just disable interrupts a=
+cross callback invocation?
 
-We could avoid restarting the machine by doing something similar to what
-happens during memory failure and killing every process that maps the
-page(s). But overall I think it's better to retry until memory is
-available, because that allows things like reclaim to work and in the
-worst case allows the OOM killer to select an appropriate task to kill.
-It also won't cause data corruption if/when we have file-backed memory.
+Thanks,
 
-> thanks,
+  - Joel
+
+>=20
+>                            Thanx, Paul
