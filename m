@@ -2,281 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318CE5EA61C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47485EA602
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiIZMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S236658AbiIZM1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbiIZM3t (ORCPT
+        with ESMTP id S236999AbiIZM01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:29:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D48CD131
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664190486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=uJ4tuDgk/IQBW5hLeWDZ/U0ldnuFw45dKSu1Rqix4Mw=;
-        b=H55ji/C/aikWzgmaqBEagKU8E+xMhhnEH1lgzlfZOkvQQscxmtis3R1n79HuCuHLWrhlMj
-        dswFR1fvvEx3y8mYbnGv5qPF/9EmJqPkhtDRDVhiGRuTTtH8xCP4uwhNkBU4zk/lzoQBlI
-        1LG3fZWEb01IwFRfoDdn+0QE4p1vXVc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-NXjcfWZQOM6F8LQbwYH9BA-1; Mon, 26 Sep 2022 07:04:52 -0400
-X-MC-Unique: NXjcfWZQOM6F8LQbwYH9BA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 26 Sep 2022 08:26:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8F95AC1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:07:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DDEB85A583;
-        Mon, 26 Sep 2022 11:04:52 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 686F81121314;
-        Mon, 26 Sep 2022 11:04:52 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 28QB4qIG012903;
-        Mon, 26 Sep 2022 07:04:52 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 28QB4qsT012898;
-        Mon, 26 Sep 2022 07:04:52 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 26 Sep 2022 07:04:52 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Milan Broz <gmazyland@gmail.com>
-cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] kernfs: fix a crash when two processes delete the same
- directory
-Message-ID: <alpine.LRH.2.02.2209260418360.16612@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0236B8010F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3759FC433C1;
+        Mon, 26 Sep 2022 11:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664190358;
+        bh=prT598LPdmnH/ccLfWrCiQyVa05sF+6rbvmn5huDLHU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ElsvJc2758gqGIPKzkGfmc7WWM/rvqKW1O5f7JkLzvdoHvY4En6vRVw1GPU4yZ16X
+         pBW0euwiLzIDjPd1+/1EEOLuk7dWB1LTRO5v61fiE84pbGNU+QYSWxsfXNMzSl4PMf
+         ceftkwY5I+JxawqlPo/FBWPnB9Pb4QpsJMIBoEVQYTjQVYsxxqMG8JFN+qEEDpJdmN
+         JiLCmm22kP33/vCdGR8yNsSxTc0uliX22korgDGP/eUsIUdzdUxLAUVfpLXKErLBWw
+         wiJZOm3e8OUwG5Yrv3JtdnzqtEA3rBPiZD0m+b827ajuZuz+b3WVIwGjRaZnFt5W/r
+         v0AzeMZCNR8xQ==
+Received: by pali.im (Postfix)
+        id EA8018A3; Mon, 26 Sep 2022 13:05:54 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Marcin Wojtas <mw@semihalf.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: kirkwood: enable Kirkwood driver for Armada 38x platforms
+Date:   Mon, 26 Sep 2022 13:05:33 +0200
+Message-Id: <20220926110533.13475-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220920132648.2008-2-pali@kernel.org>
+References: <20220920132648.2008-2-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a crash when running the cryptsetup testsuite on Fedora Rawhide.
-It can be reproduced by installing Rawhide with the 6.0-rc6 kernel,
-downloading and compiling the cryptsetup repository and running this test
-in a loop for about 15 minuts:
-	while ./integrity-compat-test; do :; done
+From: Marcin Wojtas <mw@semihalf.com>
 
- ------------[ cut here ]------------
- WARNING: CPU: 0 PID: 50087 at fs/kernfs/dir.c:504 __kernfs_remove.part.0+0x26f/0x2b0
- Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
- Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
- CPU: 0 PID: 50087 Comm: integritysetup Not tainted 6.0.0-0.rc6.41.fc38.x86_64 #1
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
- RIP: 0010:__kernfs_remove.part.0+0x26f/0x2b0
- Code: 0f 85 24 ff ff ff 4d 85 e4 0f 84 31 ff ff ff 41 0f b7 44 24 70 4c 89 e3 83 e0 0f 66 83 f8 01 0f 84 2c fe ff ff e9 50 fe ff ff <0f> 0b e9 53 fe ff ff 0f 0b e9 6b fe ff ff 48 8b 57 10 48 c7 c6 e8
- RSP: 0018:ffffa2e001da7a78 EFLAGS: 00010246
- RAX: 0000000000000000 RBX: ffff8e509d111380 RCX: 0000000080200015
- RDX: 0000000000000000 RSI: fffff015c5744440 RDI: ffff8e509d1113c8
- RBP: ffffa2e001da7ac0 R08: 0000000000000000 R09: 0000000080200015
- R10: 0000000000000009 R11: ffff8e514b185488 R12: ffff8e509d111380
- R13: ffff8e5114324f98 R14: ffff8e50401e92a0 R15: 0000000000000000
- FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
- Call Trace:
-  <TASK>
-  ? _raw_spin_unlock_irqrestore+0x23/0x40
-  ? kernfs_name_hash+0x12/0x80
-  kernfs_remove_by_name_ns+0x60/0xa0
-  sysfs_slab_add+0x166/0x200
-  __kmem_cache_create+0x3c9/0x4b0
-  kmem_cache_create_usercopy+0x202/0x340
-  kmem_cache_create+0x12/0x20
-  bioset_init+0x1fe/0x280
-  dm_table_complete+0x3cd/0x6f0
-  table_load+0x140/0x2c0
-  ? dev_suspend+0x2e0/0x2e0
-  ctl_ioctl+0x1f2/0x450
-  dm_ctl_ioctl+0xa/0x20
-  __x64_sys_ioctl+0x90/0xd0
-  do_syscall_64+0x5b/0x80
-  ? fpregs_restore_userregs+0x12/0xe0
-  ? exit_to_user_mode_prepare+0x18f/0x1f0
-  ? syscall_exit_to_user_mode+0x17/0x40
-  ? do_syscall_64+0x67/0x80
-  ? do_syscall_64+0x67/0x80
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
- RIP: 0033:0x7fbbbdf27daf
- Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
- RSP: 002b:00007ffc3c305540 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
- RAX: ffffffffffffffda RBX: 0000000001f897e0 RCX: 00007fbbbdf27daf
- RDX: 0000000001f8e000 RSI: 00000000c138fd09 RDI: 0000000000000006
- RBP: 0000000000000003 R08: 0000000001f8b150 R09: 0000000000000073
- R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbbbe57c6b6
- R13: 00007fbbbe57c38c R14: 0000000001f8e030 R15: 00007fbbbe57c78c
-  </TASK>
- ---[ end trace 0000000000000000 ]---
- ------------[ cut here ]------------
- kernel BUG at mm/slub.c:381!
- invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 0 PID: 50087 Comm: integritysetup Tainted: G        W         -------  ---  6.0.0-0.rc6.41.fc38.x86_64 #1
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
- RIP: 0010:__slab_free+0x11c/0x2f0
- Code: 39 49 8b 04 24 48 89 4c 24 18 48 c1 e8 36 4c 8b ac c3 d8 00 00 00 4c 89 ef e8 90 a2 a3 00 48 8b 4c 24 18 48 89 44 24 20 eb 8e <0f> 0b f7 43 08 00 0d 21 00 75 cc 4d 85 ff 75 c7 80 4c 24 53 80 e9
- RSP: 0018:ffffa2e001da7998 EFLAGS: 00010246
- RAX: ffff8e5059948440 RBX: ffff8e5040042200 RCX: 0000000082000127
- RDX: fffffffcab948440 RSI: fffff015c4665200 RDI: ffff8e5040042200
- RBP: ffff8e5059948440 R08: 0000000000000001 R09: ffffffffae457f18
- R10: 0000000000000009 R11: ffff8e514b185488 R12: fffff015c4665200
- R13: ffff8e509d111398 R14: ffff8e5059948440 R15: ffff8e5059948440
- FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
- Call Trace:
-  <TASK>
-  ? osq_unlock+0xf/0x90
-  ? rwsem_down_write_slowpath+0x1fc/0x710
-  kernfs_put.part.0+0x58/0x1a0
-  __kernfs_remove.part.0+0x17c/0x2b0
-  ? _raw_spin_unlock_irqrestore+0x23/0x40
-  ? kernfs_name_hash+0x12/0x80
-  kernfs_remove_by_name_ns+0x60/0xa0
-  sysfs_slab_add+0x166/0x200
-  __kmem_cache_create+0x3c9/0x4b0
-  kmem_cache_create_usercopy+0x202/0x340
-  kmem_cache_create+0x12/0x20
-  bioset_init+0x1fe/0x280
-  dm_table_complete+0x3cd/0x6f0
-  table_load+0x140/0x2c0
-  ? dev_suspend+0x2e0/0x2e0
-  ctl_ioctl+0x1f2/0x450
-  dm_ctl_ioctl+0xa/0x20
-  __x64_sys_ioctl+0x90/0xd0
-  do_syscall_64+0x5b/0x80
-  ? fpregs_restore_userregs+0x12/0xe0
-  ? exit_to_user_mode_prepare+0x18f/0x1f0
-  ? syscall_exit_to_user_mode+0x17/0x40
-  ? do_syscall_64+0x67/0x80
-  ? do_syscall_64+0x67/0x80
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
- RIP: 0033:0x7fbbbdf27daf
- Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
- RSP: 002b:00007ffc3c305540 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
- RAX: ffffffffffffffda RBX: 0000000001f897e0 RCX: 00007fbbbdf27daf
- RDX: 0000000001f8e000 RSI: 00000000c138fd09 RDI: 0000000000000006
- RBP: 0000000000000003 R08: 0000000001f8b150 R09: 0000000000000073
- R10: 0000000000000000 R11: 0000000000000246 R12: 00007fbbbe57c6b6
- R13: 00007fbbbe57c38c R14: 0000000001f8e030 R15: 00007fbbbe57c78c
-  </TASK>
- Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
- Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
- ---[ end trace 0000000000000000 ]---
- RIP: 0010:__slab_free+0x11c/0x2f0
- Code: 39 49 8b 04 24 48 89 4c 24 18 48 c1 e8 36 4c 8b ac c3 d8 00 00 00 4c 89 ef e8 90 a2 a3 00 48 8b 4c 24 18 48 89 44 24 20 eb 8e <0f> 0b f7 43 08 00 0d 21 00 75 cc 4d 85 ff 75 c7 80 4c 24 53 80 e9
- RSP: 0018:ffffa2e001da7998 EFLAGS: 00010246
- RAX: ffff8e5059948440 RBX: ffff8e5040042200 RCX: 0000000082000127
- RDX: fffffffcab948440 RSI: fffff015c4665200 RDI: ffff8e5040042200
- RBP: ffff8e5059948440 R08: 0000000000000001 R09: ffffffffae457f18
- R10: 0000000000000009 R11: ffff8e514b185488 R12: fffff015c4665200
- R13: ffff8e509d111398 R14: ffff8e5059948440 R15: ffff8e5059948440
- FS:  00007fbbbdc13880(0000) GS:ffff8e53afa00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 000055d1cdc94248 CR3: 0000000219990000 CR4: 00000000000006f0
+The audio unit of Marvell Armada38x SoC is similar to the ones comprised by
+other Marvell SoCs (Kirkwood, Dove and Armada 370). Therefore KW audio
+driver can be used to support it and this commit adds new compatible string
+to identify Armada 38x variant.
 
-The reason for the crash is this:
+Two new memory regions are added: first one for PLL configuration and
+the second one for choosing one of audio I/O modes (I2S or S/PDIF).
+For the latter purpose a new optional DT property is added ('spdif-mode').
 
-* create_bio_slab creates the bio slab with SLAB_TYPESAFE_BY_RCU - that
-  means that the slab destruction will be delayed by a rcu grace period
+kirkwood-i2s driver is extended by adding a new init function for Armada
+38x flavor and also a routine that enables PLL output (i.e. MCLK)
+configuration.
 
-* when destroying a slab with SLAB_TYPESAFE_BY_RCU, the function
-  shutdown_cache adds the slab to a list and calls
-  slab_caches_to_rcu_destroy_workfn that will execute rcu_barrier() and
-  free slab caches that are on the list
-
-* while slab_caches_to_rcu_destroy_workfn attempts to free the slab, the
-  function bioset_init creates another slab with the same name
-
-* bioset_init goes down to sysfs_slab_add -> sysfs_remove_link ->
-  kernfs_remove_by_name -> kernfs_remove_by_name_ns
-
-* simultaneously, slab_caches_to_rcu_destroy_workfn goes down to
-  kmem_cache_release which tries to unlink and release the slab kobject
-
-* now, we have two processes that are simultaneously trying to delete the
-  same kobject
-
-* kernfs_remove_by_name_ns wins the race, grabs the lock
-  &root->kernfs_rwsem and executes __kernfs_remove
-
-* __kernfs_remove goes down to pos = kernfs_leftmost_descendant(kn), then
-  it calls kernfs_get(pos) and kernfs_drain(pos)
-
-* kernfs_drain(pos) drops the &root->kernfs_rwsem lock temporarily
-
-* while the lock is dropped, kmem_cache_release calls sysfs_slab_unlink
-  -> kobject_del -> __kobject_del -> sysfs_remove_dir -> kernfs_remove ->
-  __kernfs_remove
-
-* kmem_cache_release calls sysfs_slab_release -> kobject_put -> kref_put
-  -> kobject_release -> kobject_cleanup - this frees the kobject
-
-* then we go back to the process that dropped the lock &root->kernfs_rwsem
-  in kernfs_drain(pos) - the process re-acquires the lock and returns to
-  __kernfs_remove. The process still keeps reference to the "pos" kobject,
-  however it no longer keeps reference to the "kn" kobject (which was
-  freed in the step above). It executes kernfs_put(pos) and then continues
-  the loop with "kn" pointing to free memory
-
-* kernfs_leftmost_descendant(kn) return "kn" because there are no files
-  under "kn". kernfs_get(pos) triggers a warning
-  WARN_ON(!atomic_read(&kn->count)). kernfs_put(pos) triggers a BUG in
-  set_freepointer because it attempts to free an object that is already
-  free
-
-We fix this bug by grabbing a reference to "kn" in __kernfs_remove and
-dropping it when we are done. This prevents "kn" from being released when
-we drop the lock in kernfs_drain.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Reported-by: Milan Broz <gmazyland@gmail.com>
-Cc: stable@vger.kernel.org
-
+Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+Tested-by: Star_Automation <star@marvell.com>
+Reviewed-by: Nadav Haklai <nadavh@marvell.com>
+Reviewed-by: Lior Amsalem <alior@marvell.com>
+Tested-by: Lior Amsalem <alior@marvell.com>
+Signed-off-by: Hezi Shahmoon <hezi@marvell.com>
+Reviewed-by: Neta Zur Hershkovits <neta@marvell.com>
+[pali: Fix support for pre-38x SoCs]
+Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- fs/kernfs/dir.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+Changes in v2:
+* Dropped all other patches as they were applied
+* Moved armada_38x_set_pll() call after error check per Andrew request
+---
+ .../devicetree/bindings/sound/mvebu-audio.txt |  14 +-
+ sound/soc/kirkwood/kirkwood-i2s.c             | 135 +++++++++++++++++-
+ sound/soc/kirkwood/kirkwood.h                 |   2 +
+ 3 files changed, 148 insertions(+), 3 deletions(-)
 
-Index: linux-2.6/fs/kernfs/dir.c
-===================================================================
---- linux-2.6.orig/fs/kernfs/dir.c
-+++ linux-2.6/fs/kernfs/dir.c
-@@ -1364,6 +1364,12 @@ static void __kernfs_remove(struct kernf
- 		if (kernfs_active(pos))
- 			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
+diff --git a/Documentation/devicetree/bindings/sound/mvebu-audio.txt b/Documentation/devicetree/bindings/sound/mvebu-audio.txt
+index cb8c07c81ce4..4f5dec5cb3c2 100644
+--- a/Documentation/devicetree/bindings/sound/mvebu-audio.txt
++++ b/Documentation/devicetree/bindings/sound/mvebu-audio.txt
+@@ -6,9 +6,14 @@ Required properties:
+   "marvell,kirkwood-audio" for Kirkwood platforms
+   "marvell,dove-audio" for Dove platforms
+   "marvell,armada370-audio" for Armada 370 platforms
++  "marvell,armada-380-audio" for Armada 38x platforms
  
-+	/*
-+	 * Make sure that kn won't go away while we drop the lock in
-+	 * kernfs_drain().
-+	 */
-+	kernfs_get(kn);
+ - reg: physical base address of the controller and length of memory mapped
+-  region.
++  region (named "i2s_regs").
++  With "marvell,armada-380-audio" two other regions are required:
++  first of those is dedicated for Audio PLL Configuration registers
++  (named "pll_regs") and the second one ("soc_ctrl") - for register
++  where one of exceptive I/O types (I2S or S/PDIF) is set.
+ 
+ - interrupts:
+   with "marvell,kirkwood-audio", the audio interrupt
+@@ -23,6 +28,13 @@ Required properties:
+ 	"internal" for the internal clock
+ 	"extclk" for the external clock
+ 
++Optional properties:
 +
- 	/* deactivate and unlink the subtree node-by-node */
- 	do {
- 		pos = kernfs_leftmost_descendant(kn);
-@@ -1406,6 +1412,8 @@ static void __kernfs_remove(struct kernf
- 
- 		kernfs_put(pos);
- 	} while (pos != kn);
++- spdif-mode:
++  Enable S/PDIF mode on Armada 38x SoC. Using this property
++  disables standard I2S I/O. Valid only with "marvell,armada-380-audio"
++  compatible string.
 +
-+	kernfs_put(kn);
- }
+ Example:
  
- /**
+ i2s1: audio-controller@b4000 {
+diff --git a/sound/soc/kirkwood/kirkwood-i2s.c b/sound/soc/kirkwood/kirkwood-i2s.c
+index 2a4ffe945177..afdf7d61e4c5 100644
+--- a/sound/soc/kirkwood/kirkwood-i2s.c
++++ b/sound/soc/kirkwood/kirkwood-i2s.c
+@@ -31,6 +31,122 @@
+ 	(SNDRV_PCM_FMTBIT_S16_LE | \
+ 	 SNDRV_PCM_FMTBIT_S24_LE)
+ 
++/* These registers are relative to the second register region -
++ * audio pll configuration.
++ */
++#define A38X_PLL_CONF_REG0			0x0
++#define     A38X_PLL_FB_CLK_DIV_OFFSET		10
++#define     A38X_PLL_FB_CLK_DIV_MASK		0x7fc00
++#define A38X_PLL_CONF_REG1			0x4
++#define     A38X_PLL_FREQ_OFFSET_MASK		0xffff
++#define     A38X_PLL_FREQ_OFFSET_VALID		BIT(16)
++#define     A38X_PLL_SW_RESET			BIT(31)
++#define A38X_PLL_CONF_REG2			0x8
++#define     A38X_PLL_AUDIO_POSTDIV_MASK		0x7f
++
++/* Bit below belongs to SoC control register corresponding to the third
++ * register region.
++ */
++#define A38X_SPDIF_MODE_ENABLE			BIT(27)
++
++static int armada_38x_i2s_init_quirk(struct platform_device *pdev,
++				     struct kirkwood_dma_data *priv,
++				     struct snd_soc_dai_driver *dai_drv)
++{
++	struct device_node *np = pdev->dev.of_node;
++	u32 reg_val;
++	int i;
++
++	priv->pll_config = devm_platform_ioremap_resource_byname(pdev, "pll_regs");
++	if (IS_ERR(priv->pll_config))
++		return -ENOMEM;
++
++	priv->soc_control = devm_platform_ioremap_resource_byname(pdev, "soc_ctrl");
++	if (IS_ERR(priv->soc_control))
++		return -ENOMEM;
++
++	/* Select one of exceptive modes: I2S or S/PDIF */
++	reg_val = readl(priv->soc_control);
++	if (of_property_read_bool(np, "spdif-mode")) {
++		reg_val |= A38X_SPDIF_MODE_ENABLE;
++		dev_info(&pdev->dev, "using S/PDIF mode\n");
++	} else {
++		reg_val &= ~A38X_SPDIF_MODE_ENABLE;
++		dev_info(&pdev->dev, "using I2S mode\n");
++	}
++	writel(reg_val, priv->soc_control);
++
++	/* Update available rates of mclk's fs */
++	for (i = 0; i < 2; i++) {
++		dai_drv[i].playback.rates |= SNDRV_PCM_RATE_192000;
++		dai_drv[i].capture.rates |= SNDRV_PCM_RATE_192000;
++	}
++
++	return 0;
++}
++
++static inline void armada_38x_set_pll(void __iomem *base, unsigned long rate)
++{
++	u32 reg_val;
++	u16 freq_offset = 0x22b0;
++	u8 audio_postdiv, fb_clk_div = 0x1d;
++
++	/* Set frequency offset value to not valid and enable PLL reset */
++	reg_val = readl(base + A38X_PLL_CONF_REG1);
++	reg_val &= ~A38X_PLL_FREQ_OFFSET_VALID;
++	reg_val &= ~A38X_PLL_SW_RESET;
++	writel(reg_val, base + A38X_PLL_CONF_REG1);
++
++	udelay(1);
++
++	/* Update PLL parameters */
++	switch (rate) {
++	default:
++	case 44100:
++		freq_offset = 0x735;
++		fb_clk_div = 0x1b;
++		audio_postdiv = 0xc;
++		break;
++	case 48000:
++		audio_postdiv = 0xc;
++		break;
++	case 96000:
++		audio_postdiv = 0x6;
++		break;
++	case 192000:
++		audio_postdiv = 0x3;
++		break;
++	}
++
++	reg_val = readl(base + A38X_PLL_CONF_REG0);
++	reg_val &= ~A38X_PLL_FB_CLK_DIV_MASK;
++	reg_val |= (fb_clk_div << A38X_PLL_FB_CLK_DIV_OFFSET);
++	writel(reg_val, base + A38X_PLL_CONF_REG0);
++
++	reg_val = readl(base + A38X_PLL_CONF_REG2);
++	reg_val &= ~A38X_PLL_AUDIO_POSTDIV_MASK;
++	reg_val |= audio_postdiv;
++	writel(reg_val, base + A38X_PLL_CONF_REG2);
++
++	reg_val = readl(base + A38X_PLL_CONF_REG1);
++	reg_val &= ~A38X_PLL_FREQ_OFFSET_MASK;
++	reg_val |= freq_offset;
++	writel(reg_val, base + A38X_PLL_CONF_REG1);
++
++	udelay(1);
++
++	/* Disable reset */
++	reg_val |= A38X_PLL_SW_RESET;
++	writel(reg_val, base + A38X_PLL_CONF_REG1);
++
++	/* Wait 50us for PLL to lock */
++	udelay(50);
++
++	/* Restore frequency offset value validity */
++	reg_val |= A38X_PLL_FREQ_OFFSET_VALID;
++	writel(reg_val, base + A38X_PLL_CONF_REG1);
++}
++
+ static int kirkwood_i2s_set_fmt(struct snd_soc_dai *cpu_dai,
+ 		unsigned int fmt)
+ {
+@@ -106,7 +222,10 @@ static void kirkwood_set_rate(struct snd_soc_dai *dai,
+ 		 * defined in kirkwood_i2s_dai */
+ 		dev_dbg(dai->dev, "%s: dco set rate = %lu\n",
+ 			__func__, rate);
+-		kirkwood_set_dco(priv->io, rate);
++		if (priv->pll_config)
++			armada_38x_set_pll(priv->pll_config, rate);
++		else
++			kirkwood_set_dco(priv->io, rate);
+ 
+ 		clks_ctrl = KIRKWOOD_MCLK_SOURCE_DCO;
+ 	} else {
+@@ -532,7 +651,10 @@ static int kirkwood_i2s_dev_probe(struct platform_device *pdev)
+ 
+ 	dev_set_drvdata(&pdev->dev, priv);
+ 
+-	priv->io = devm_platform_ioremap_resource(pdev, 0);
++	if (of_device_is_compatible(np, "marvell,armada-380-audio"))
++		priv->io = devm_platform_ioremap_resource_byname(pdev, "i2s_regs");
++	else
++		priv->io = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->io))
+ 		return PTR_ERR(priv->io);
+ 
+@@ -540,6 +662,14 @@ static int kirkwood_i2s_dev_probe(struct platform_device *pdev)
+ 	if (priv->irq < 0)
+ 		return priv->irq;
+ 
++	if (of_device_is_compatible(np, "marvell,armada-380-audio")) {
++		err = armada_38x_i2s_init_quirk(pdev, priv, soc_dai);
++		if (err < 0)
++			return err;
++		/* Set initial pll frequency */
++		armada_38x_set_pll(priv->pll_config, 44100);
++	}
++
+ 	if (np) {
+ 		priv->burst = 128;		/* might be 32 or 128 */
+ 	} else if (data) {
+@@ -623,6 +753,7 @@ static const struct of_device_id mvebu_audio_of_match[] = {
+ 	{ .compatible = "marvell,kirkwood-audio" },
+ 	{ .compatible = "marvell,dove-audio" },
+ 	{ .compatible = "marvell,armada370-audio" },
++	{ .compatible = "marvell,armada-380-audio" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, mvebu_audio_of_match);
+diff --git a/sound/soc/kirkwood/kirkwood.h b/sound/soc/kirkwood/kirkwood.h
+index a1733a6aace5..79bb9aa7f086 100644
+--- a/sound/soc/kirkwood/kirkwood.h
++++ b/sound/soc/kirkwood/kirkwood.h
+@@ -131,6 +131,8 @@
+ 
+ struct kirkwood_dma_data {
+ 	void __iomem *io;
++	void __iomem *pll_config;
++	void __iomem *soc_control;
+ 	struct clk *clk;
+ 	struct clk *extclk;
+ 	uint32_t ctl_play;
+-- 
+2.20.1
 
