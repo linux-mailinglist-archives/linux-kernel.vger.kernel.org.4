@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400345EA239
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C755EA52A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237218AbiIZLEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S239337AbiIZL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237356AbiIZLDy (ORCPT
+        with ESMTP id S239355AbiIZLzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:03:54 -0400
+        Mon, 26 Sep 2022 07:55:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA416958E;
-        Mon, 26 Sep 2022 03:32:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B7792CF;
+        Mon, 26 Sep 2022 03:50:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9793860CA3;
-        Mon, 26 Sep 2022 10:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D933C433C1;
-        Mon, 26 Sep 2022 10:31:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4D360C09;
+        Mon, 26 Sep 2022 10:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70AF9C433D6;
+        Mon, 26 Sep 2022 10:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188279;
-        bh=eJ+fDbbzA19SGMmU8INWJvoyHaXEcrggf1UMvpYzvDQ=;
+        s=korg; t=1664189375;
+        bh=5S56Dw+R7IJ9FhFrxtaBdZdRBb0t4edjr+D8FgpjfQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXafxHQspj1iy4sCDw6Kl3mxt7XeIPlIyewHKwf+32MJccZEkdsOVL5sLUg7BF5Bc
-         Hc5LBwLj/TMavknqCGm2UTieYVztIVrzS61tCqgMYwITCHMMld/xU+ZIzBq9lTdj7I
-         8zBeRrPpUoIQNmGa2nUm4riyfemSzUgpJYncLYVk=
+        b=kmmPnQ95IgLSrrAFNIaRRn/i6qPqz4NfIvewyq0J93xxzhjDuh0jMOxHFYVnHxUoG
+         DOzz5FuW0uiHNKeyL369H/08w13CjY0Hua0qI1gKdGusc2s4tvdaFT6q8LWCfrgzsn
+         vj+WM33K9MNb2vU7nO7yBlIQn35r8N5Fdx/NAhJM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 099/141] wireguard: ratelimiter: disable timings test by default
+        stable@vger.kernel.org,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Petr Oros <poros@redhat.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.19 136/207] ice: Fix interface being down after reset with link-down-on-close flag on
 Date:   Mon, 26 Sep 2022 12:12:05 +0200
-Message-Id: <20220926100758.018280750@linuxfoundation.org>
+Message-Id: <20220926100812.611517103@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,102 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Mateusz Palczewski <mateusz.palczewski@intel.com>
 
-[ Upstream commit 684dec3cf45da2b0848298efae4adf3b2aeafeda ]
+[ Upstream commit 8ac7132704f3fbd2095abb9459e5303ce8c9e559 ]
 
-A previous commit tried to make the ratelimiter timings test more
-reliable but in the process made it less reliable on other
-configurations. This is an impossible problem to solve without
-increasingly ridiculous heuristics. And it's not even a problem that
-actually needs to be solved in any comprehensive way, since this is only
-ever used during development. So just cordon this off with a DEBUG_
-ifdef, just like we do for the trie's randomized tests, so it can be
-enabled while hacking on the code, and otherwise disabled in CI. In the
-process we also revert 151c8e499f47.
+When performing a reset on ice driver with link-down-on-close flag on
+interface would always stay down. Fix this by moving a check of this
+flag to ice_stop() that is called only when user wants to bring
+interface down.
 
-Fixes: 151c8e499f47 ("wireguard: ratelimiter: use hrtimer in selftest")
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ab4ab73fc1ec ("ice: Add ethtool private flag to make forcing link down optional")
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Petr Oros <poros@redhat.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireguard/selftest/ratelimiter.c | 25 ++++++++------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_main.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireguard/selftest/ratelimiter.c b/drivers/net/wireguard/selftest/ratelimiter.c
-index ba87d294604f..d4bb40a695ab 100644
---- a/drivers/net/wireguard/selftest/ratelimiter.c
-+++ b/drivers/net/wireguard/selftest/ratelimiter.c
-@@ -6,29 +6,28 @@
- #ifdef DEBUG
- 
- #include <linux/jiffies.h>
--#include <linux/hrtimer.h>
- 
- static const struct {
- 	bool result;
--	u64 nsec_to_sleep_before;
-+	unsigned int msec_to_sleep_before;
- } expected_results[] __initconst = {
- 	[0 ... PACKETS_BURSTABLE - 1] = { true, 0 },
- 	[PACKETS_BURSTABLE] = { false, 0 },
--	[PACKETS_BURSTABLE + 1] = { true, NSEC_PER_SEC / PACKETS_PER_SECOND },
-+	[PACKETS_BURSTABLE + 1] = { true, MSEC_PER_SEC / PACKETS_PER_SECOND },
- 	[PACKETS_BURSTABLE + 2] = { false, 0 },
--	[PACKETS_BURSTABLE + 3] = { true, (NSEC_PER_SEC / PACKETS_PER_SECOND) * 2 },
-+	[PACKETS_BURSTABLE + 3] = { true, (MSEC_PER_SEC / PACKETS_PER_SECOND) * 2 },
- 	[PACKETS_BURSTABLE + 4] = { true, 0 },
- 	[PACKETS_BURSTABLE + 5] = { false, 0 }
- };
- 
- static __init unsigned int maximum_jiffies_at_index(int index)
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index f963036571e0..48befe1e2872 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -6627,7 +6627,7 @@ static void ice_napi_disable_all(struct ice_vsi *vsi)
+  */
+ int ice_down(struct ice_vsi *vsi)
  {
--	u64 total_nsecs = 2 * NSEC_PER_SEC / PACKETS_PER_SECOND / 3;
-+	unsigned int total_msecs = 2 * MSEC_PER_SEC / PACKETS_PER_SECOND / 3;
- 	int i;
+-	int i, tx_err, rx_err, link_err = 0, vlan_err = 0;
++	int i, tx_err, rx_err, vlan_err = 0;
  
- 	for (i = 0; i <= index; ++i)
--		total_nsecs += expected_results[i].nsec_to_sleep_before;
--	return nsecs_to_jiffies(total_nsecs);
-+		total_msecs += expected_results[i].msec_to_sleep_before;
-+	return msecs_to_jiffies(total_msecs);
- }
+ 	WARN_ON(!test_bit(ICE_VSI_DOWN, vsi->state));
  
- static __init int timings_test(struct sk_buff *skb4, struct iphdr *hdr4,
-@@ -43,12 +42,8 @@ static __init int timings_test(struct sk_buff *skb4, struct iphdr *hdr4,
- 	loop_start_time = jiffies;
+@@ -6661,20 +6661,13 @@ int ice_down(struct ice_vsi *vsi)
  
- 	for (i = 0; i < ARRAY_SIZE(expected_results); ++i) {
--		if (expected_results[i].nsec_to_sleep_before) {
--			ktime_t timeout = ktime_add(ktime_add_ns(ktime_get_coarse_boottime(), TICK_NSEC * 4 / 3),
--						    ns_to_ktime(expected_results[i].nsec_to_sleep_before));
--			set_current_state(TASK_UNINTERRUPTIBLE);
--			schedule_hrtimeout_range_clock(&timeout, 0, HRTIMER_MODE_ABS, CLOCK_BOOTTIME);
--		}
-+		if (expected_results[i].msec_to_sleep_before)
-+			msleep(expected_results[i].msec_to_sleep_before);
+ 	ice_napi_disable_all(vsi);
  
- 		if (time_is_before_jiffies(loop_start_time +
- 					   maximum_jiffies_at_index(i)))
-@@ -132,7 +127,7 @@ bool __init wg_ratelimiter_selftest(void)
- 	if (IS_ENABLED(CONFIG_KASAN) || IS_ENABLED(CONFIG_UBSAN))
- 		return true;
+-	if (test_bit(ICE_FLAG_LINK_DOWN_ON_CLOSE_ENA, vsi->back->flags)) {
+-		link_err = ice_force_phys_link_state(vsi, false);
+-		if (link_err)
+-			netdev_err(vsi->netdev, "Failed to set physical link down, VSI %d error %d\n",
+-				   vsi->vsi_num, link_err);
+-	}
+-
+ 	ice_for_each_txq(vsi, i)
+ 		ice_clean_tx_ring(vsi->tx_rings[i]);
  
--	BUILD_BUG_ON(NSEC_PER_SEC % PACKETS_PER_SECOND != 0);
-+	BUILD_BUG_ON(MSEC_PER_SEC % PACKETS_PER_SECOND != 0);
+ 	ice_for_each_rxq(vsi, i)
+ 		ice_clean_rx_ring(vsi->rx_rings[i]);
  
- 	if (wg_ratelimiter_init())
- 		goto out;
-@@ -172,7 +167,7 @@ bool __init wg_ratelimiter_selftest(void)
- 	++test;
- #endif
+-	if (tx_err || rx_err || link_err || vlan_err) {
++	if (tx_err || rx_err || vlan_err) {
+ 		netdev_err(vsi->netdev, "Failed to close VSI 0x%04X on switch 0x%04X\n",
+ 			   vsi->vsi_num, vsi->vsw->sw_id);
+ 		return -EIO;
+@@ -8876,6 +8869,16 @@ int ice_stop(struct net_device *netdev)
+ 		return -EBUSY;
+ 	}
  
--	for (trials = TRIALS_BEFORE_GIVING_UP;;) {
-+	for (trials = TRIALS_BEFORE_GIVING_UP; IS_ENABLED(DEBUG_RATELIMITER_TIMINGS);) {
- 		int test_count = 0, ret;
++	if (test_bit(ICE_FLAG_LINK_DOWN_ON_CLOSE_ENA, vsi->back->flags)) {
++		int link_err = ice_force_phys_link_state(vsi, false);
++
++		if (link_err) {
++			netdev_err(vsi->netdev, "Failed to set physical link down, VSI %d error %d\n",
++				   vsi->vsi_num, link_err);
++			return -EIO;
++		}
++	}
++
+ 	ice_vsi_close(vsi);
  
- 		ret = timings_test(skb4, hdr4, skb6, hdr6, &test_count);
+ 	return 0;
 -- 
 2.35.1
 
