@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D124D5EA1BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC1F5EA2A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236833AbiIZKzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S237581AbiIZLMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236963AbiIZKyL (ORCPT
+        with ESMTP id S237482AbiIZLLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:54:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4755A3F5;
-        Mon, 26 Sep 2022 03:28:24 -0700 (PDT)
+        Mon, 26 Sep 2022 07:11:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518CF5FF6E;
+        Mon, 26 Sep 2022 03:35:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0791960B60;
-        Mon, 26 Sep 2022 10:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB797C433D7;
-        Mon, 26 Sep 2022 10:28:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFAE4B80977;
+        Mon, 26 Sep 2022 10:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 453F9C433D7;
+        Mon, 26 Sep 2022 10:35:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188103;
-        bh=o5HIrW4qHK7OZ/wJL8tSpZVVInKZ5nZ9wVuNya5ERGg=;
+        s=korg; t=1664188513;
+        bh=X/tbq5gT5XmnA10jUM7iC4ihLfP2z726oiT/skJk538=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=koMjWH+zppUGioYZpekNWi+cv8HAQdQHfAHYkdVc7cbpPw7AET2oyo2/knhNWf+Oc
-         1wqWBmi4Gpq0fc4iIWBzF8h0wMoK5+9D60rumw4vRHRKyom/2XQa0Yi6MbmMH2kDtV
-         JJjBhURjuXpYj9kl9Epd+psN5PEvRCP6iUKFKLGM=
+        b=r4pKSpIbT+ScV2pBu8zRBuuG891p34Dlo8FRPFlJ7wJHE5Vr6OG7tQKVlGTj6zmhk
+         pgD6B+/OgkgYfYSWmScn08obT6R5k0Ab6Ue7g+WJd+XGdfOd+j7zDS0D9QMHPzVCRQ
+         7BP9ZU+hHXvZiMAz3+G+NpRIG2x8nW/6tipzSoX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
+        stable@vger.kernel.org,
+        Callum Osmotherly <callum.osmotherly@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 041/141] ALSA: hda/realtek: Add quirk for Huawei WRT-WX9
+Subject: [PATCH 5.15 033/148] ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5530 laptop
 Date:   Mon, 26 Sep 2022 12:11:07 +0200
-Message-Id: <20220926100755.947773837@linuxfoundation.org>
+Message-Id: <20220926100757.282322987@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,15 +54,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huangwenhui <huangwenhuia@uniontech.com>
+From: Callum Osmotherly <callum.osmotherly@gmail.com>
 
-commit cbcdf8c4d35cd74aee8581eb2f0453e0ecab7b05 upstream.
+commit 1885ff13d4c42910b37a0e3f7c2f182520f4eed1 upstream.
 
-Fixes headphone and headset microphone detection on Huawei WRT-WX9.
+Just as with the 5570 (and the other Dell laptops), this enables the two
+subwoofer speakers on the Dell Precision 5530 together with the main
+ones, significantly increasing the audio quality. I've tested this
+myself on a 5530 and can confirm it's working as expected.
 
-Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
+Signed-off-by: Callum Osmotherly <callum.osmotherly@gmail.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220913054622.15979-1-huangwenhuia@uniontech.com
+Link: https://lore.kernel.org/r/YyMjQO3mhyXlMbCf@piranha
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -70,13 +74,13 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/sound/pci/hda/patch_realtek.c
 +++ b/sound/pci/hda/patch_realtek.c
-@@ -9134,6 +9134,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x9e54, "LENOVO NB", ALC269_FIXUP_LENOVO_EAPD),
- 	SND_PCI_QUIRK(0x1849, 0x1233, "ASRock NUC Box 1100", ALC233_FIXUP_NO_AUDIO_JACK),
- 	SND_PCI_QUIRK(0x19e5, 0x3204, "Huawei MACH-WX9", ALC256_FIXUP_HUAWEI_MACH_WX9_PINS),
-+	SND_PCI_QUIRK(0x19e5, 0x320f, "Huawei WRT-WX9 ", ALC256_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1b35, 0x1235, "CZC B20", ALC269_FIXUP_CZC_B20),
- 	SND_PCI_QUIRK(0x1b35, 0x1236, "CZC TMI", ALC269_FIXUP_CZC_TMI),
- 	SND_PCI_QUIRK(0x1b35, 0x1237, "CZC L101", ALC269_FIXUP_CZC_L101),
+@@ -8836,6 +8836,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1028, 0x0871, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1028, 0x0872, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1028, 0x0873, "Dell Precision 3930", ALC255_FIXUP_DUMMY_LINEOUT_VERB),
++	SND_PCI_QUIRK(0x1028, 0x087d, "Dell Precision 5530", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x08ad, "Dell WYSE AIO", ALC225_FIXUP_DELL_WYSE_AIO_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x08ae, "Dell WYSE NB", ALC225_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x0935, "Dell", ALC274_FIXUP_DELL_AIO_LINEOUT_VERB),
 
 
