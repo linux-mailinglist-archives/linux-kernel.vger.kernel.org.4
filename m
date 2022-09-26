@@ -2,135 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D310F5EAEFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE725EAF05
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiIZSDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S229745AbiIZSD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiIZSCs (ORCPT
+        with ESMTP id S229868AbiIZSDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:02:48 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D323C171
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:43:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d24so6909616pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=j1xNXDgfZo4rQCUloSX2OISyyGpj+/52xFO6m1QKoSg=;
-        b=UzOwPftrjvmrZArl4bMMTI91OL+fLzFDzN5udnDK3S6fSIjemJ+l4ZBfgS/EzpOFKe
-         igF64i+JoXrdgCt+MrQ3aVb1pUCu2ZS/nDP+xk8hiCCeqUh7r04yZtVF9xO3CmeVygdU
-         uEEhHPMFUQANOiyvGh+n7RgFbgUV2jMJuNv5o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=j1xNXDgfZo4rQCUloSX2OISyyGpj+/52xFO6m1QKoSg=;
-        b=zj0LoKZeyHwGY4g5oks0EkW3MnB1itSYzvC5j7Zz02pD/nBEJiOmB1NutT5xWvL+Hs
-         PvFeHF9YTrd/dODKicCAMV+CQqgT2FAfVl40ajBujqyBCbKOQd5kHsO0886ljJDoQvDB
-         e9CQJvNGQ3leLgAhBCzz7LsROmJqVST/21z6DJLcU9HlJ9bltWUDVCk5FMBUgdnPZIZE
-         O3MB/C/fZBmI34VciJq0xPX+Y8PgXkfMYRcEH1Mhi2967/9F14rvWYrqVuSX6iyOqofU
-         RHr/aSeyY+9gb0OLFGVrJF/BmQ9IR2rbYg7fqGXI4hoXB+piASAv4+mir02MH5zBs0+K
-         tPIQ==
-X-Gm-Message-State: ACrzQf3xnzi6JVb6sJAf4QccjvBbAW5ZMaklv+CgEhOtPYe1QwJI4H2C
-        70OecbeAw+HehCej79ecRXRG+w==
-X-Google-Smtp-Source: AMsMyM5xWLaacP0gCWXU6Vb8l28VC2vEVwQVZZ9/J+o8DtAsSYddgLDFcn/434F8xIdqzAY64Upd4g==
-X-Received: by 2002:a17:90b:384f:b0:202:e1b9:5921 with SMTP id nl15-20020a17090b384f00b00202e1b95921mr38270671pjb.130.1664214213094;
-        Mon, 26 Sep 2022 10:43:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ij14-20020a170902ab4e00b0016c4546fbf9sm11612903plb.128.2022.09.26.10.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 10:43:32 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 10:43:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, 18801353760@163.com
-Subject: Re: [PATCH] wext: use flex array destination for memcpy()
-Message-ID: <202209261042.9B401F8D6@keescook>
-References: <00000000000070db2005e95a5984@google.com>
- <20220926150907.8551-1-yin31149@gmail.com>
+        Mon, 26 Sep 2022 14:03:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3133CDF7A;
+        Mon, 26 Sep 2022 10:44:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F7921CE2;
+        Mon, 26 Sep 2022 10:44:08 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.81.104])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DA163F73B;
+        Mon, 26 Sep 2022 10:43:57 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 18:43:51 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
+Message-ID: <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
+References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+ <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
+ <YzG51Jyd5zhvygtK@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926150907.8551-1-yin31149@gmail.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YzG51Jyd5zhvygtK@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:09:06PM +0800, Hawkins Jiawei wrote:
-> Syzkaller reports refcount bug as follows:
-
-"buffer overflow false positive" instead of "refcount bug"
-
-> ------------[ cut here ]------------
-> memcpy: detected field-spanning write (size 8) of single field
-> 	"&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
-> WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623
-> 	wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
-> Modules linked in:
-> CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted
-> 	6.0.0-rc6-next-20220921-syzkaller #0
-> [...]
-> Call Trace:
->  <TASK>
->  ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
->  wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
->  wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
->  wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
->  wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
->  sock_ioctl+0x285/0x640 net/socket.c:1220
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  [...]
->  </TASK>
+On Mon, Sep 26, 2022 at 03:40:20PM +0100, Catalin Marinas wrote:
+> On Thu, Sep 22, 2022 at 08:01:16PM +0200, Daniel Borkmann wrote:
+> > On 9/13/22 6:27 PM, Xu Kuohai wrote:
+> > > This series adds ftrace direct call for arm64, which is required to attach
+> > > bpf trampoline to fentry.
+> > > 
+> > > Although there is no agreement on how to support ftrace direct call on arm64,
+> > > no patch has been posted except the one I posted in [1], so this series
+> > > continues the work of [1] with the addition of long jump support. Now ftrace
+> > > direct call works regardless of the distance between the callsite and custom
+> > > trampoline.
+> > > 
+> > > [1] https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
+> > > 
+> > > v2:
+> > > - Fix compile and runtime errors caused by ftrace_rec_arch_init
+> > > 
+> > > v1: https://lore.kernel.org/bpf/20220913063146.74750-1-xukuohai@huaweicloud.com/
+> > > 
+> > > Xu Kuohai (4):
+> > >    ftrace: Allow users to disable ftrace direct call
+> > >    arm64: ftrace: Support long jump for ftrace direct call
+> > >    arm64: ftrace: Add ftrace direct call support
+> > >    ftrace: Fix dead loop caused by direct call in ftrace selftest
+> > 
+> > Given there's just a tiny fraction touching BPF JIT and most are around core arm64,
+> > it probably makes sense that this series goes via Catalin/Will through arm64 tree
+> > instead of bpf-next if it looks good to them. Catalin/Will, thoughts (Ack + bpf-next
+> > could work too, but I'd presume this just results in merge conflicts)?
 > 
-> Wireless events will be sent on the appropriate channels in
-> wireless_send_event(). Different wireless events may have different
-> payload structure and size, so kernel uses **len** and **cmd** field
-> in struct __compat_iw_event as wireless event common LCP part, uses
-> **pointer** as a label to mark the position of remaining different part.
-> 
-> Yet the problem is that, **pointer** is a compat_caddr_t type, which may
-> be smaller than the relative structure at the same position. So during
-> wireless_send_event() tries to parse the wireless events payload, it may
-> trigger the memcpy() run-time destination buffer bounds checking when the
-> relative structure's data is copied to the position marked by **pointer**.
-> 
-> This patch solves it by introducing flexible-array field **ptr_bytes**,
-> to mark the position of the wireless events remaining part next to
-> LCP part. What's more, this patch also adds **ptr_len** variable in
-> wireless_send_event() to improve its maintainability.
-> 
-> Reported-and-tested-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/00000000000070db2005e95a5984@google.com/
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> I think it makes sense for the series to go via the arm64 tree but I'd
+> like Mark to have a look at the ftrace changes first.
 
-Thanks for spinning this and getting it tested!
+From a quick scan, I still don't think this is quite right, and as it stands I
+believe this will break backtracing (as the instructions before the function
+entry point will not be symbolized correctly, getting in the way of
+RELIABLE_STACKTRACE). I think I was insufficiently clear with my earlier
+feedback there, as I have a mechanism in mind that wa a little simpler.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I'll try to reply with some more detail tomorrow, but I don't think this is the
+right approach, and as mentioned previously (and e.g. at LPC) I'd strongly
+prefer to *not* implement direct calls, so that we can have more consistent
+entry/exit handling.
 
--- 
-Kees Cook
+Thanks,
+Mark.
