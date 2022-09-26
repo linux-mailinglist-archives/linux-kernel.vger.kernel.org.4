@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5F35EA3F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3805EA186
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbiIZLhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S236751AbiIZKwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238081AbiIZLft (ORCPT
+        with ESMTP id S236891AbiIZKtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:35:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338646EF04;
-        Mon, 26 Sep 2022 03:43:50 -0700 (PDT)
+        Mon, 26 Sep 2022 06:49:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79F15809C;
+        Mon, 26 Sep 2022 03:26:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81BD2B8095B;
-        Mon, 26 Sep 2022 10:43:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C83C433C1;
-        Mon, 26 Sep 2022 10:43:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D5F0B80682;
+        Mon, 26 Sep 2022 10:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D58C433C1;
+        Mon, 26 Sep 2022 10:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189029;
-        bh=hbX0O4j5USK+7RKpbhjOSEOCaH0sBE6gjVM88scBssA=;
+        s=korg; t=1664188014;
+        bh=ElTOm2klxt85X0JKP/M2Yk+rb6HfPWLLC4D5yGfyYP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ru6Os3WQv+crTxS24IqmSwkuYbSEWls9F+cu75VkBzcWo/+Rbv9HDHwzv8KFYRIkO
-         bP9udvc7Ni6U9I9Bp2pBLc8rNU6UlHB8wkKKL3rmJx6ffrAfu+YPT2RJRsQhD8YxWJ
-         onzWpy9gjX1EPRX7oW2a95GSCo95TWe3jjsD4L+o=
+        b=ubqf16e2yJlpn2ODYSnCxPGztFI/0oyWRbAnvKeXn2+s7AWBNEO5+OfxCiUkdtFZi
+         Gp4UWv9/+CWx17tD/Ylz3KZxs25wZKgCwTMdCPFhvj2z3f2L6ivdtc9HPjLyRV3gLt
+         j5LicJuvGsbkEJ/1GsRsvbCBl1cMq8BGBZe5p5cA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.19 050/207] wifi: mt76: fix reading current per-tid starting sequence number for aggregation
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 013/141] usb: xhci-mtk: get the microframe boundary for ESIT
 Date:   Mon, 26 Sep 2022 12:10:39 +0200
-Message-Id: <20220926100808.862244223@linuxfoundation.org>
+Message-Id: <20220926100755.070920337@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,33 +53,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit c3a510e2b53785df31d882a773c4c0780b4c825f upstream.
+[ Upstream commit 7c986fbc16ae6b2f914a3ebf06a3a4a8d9bb0b7c ]
 
-The code was accidentally shifting register values down by tid % 32 instead of
-(tid * field_size) % 32.
+Tune the boundary for FS/LS ESIT due to CS:
+For ISOC out-ep, the controller starts transfer data after
+the first SS; for others, the data is already transferred
+before the last CS.
 
-Cc: stable@vger.kernel.org
-Fixes: a28bef561a5c ("mt76: mt7615: re-enable offloading of sequence number assignment")
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220826182329.18155-1-nbd@nbd.name
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/49e5a269a47984f3126a70c3fb471b0c2874b8c2.1615170625.git.chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mtk-sch.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-@@ -1138,7 +1138,7 @@ u32 mt7615_mac_get_sta_tid_sn(struct mt7
- 	offset %= 32;
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 8950d1f10a7f..450fa22b7dc7 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -513,22 +513,35 @@ static void update_sch_tt(struct usb_device *udev,
+ 		list_del(&sch_ep->tt_endpoint);
+ }
  
- 	val = mt76_rr(dev, addr);
--	val >>= (tid % 32);
-+	val >>= offset;
++static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
++{
++	u32 boundary = sch_ep->esit;
++
++	if (sch_ep->sch_tt) { /* LS/FS with TT */
++		/* tune for CS */
++		if (sch_ep->ep_type != ISOC_OUT_EP)
++			boundary++;
++		else if (boundary > 1) /* normally esit >= 8 for FS/LS */
++			boundary--;
++	}
++
++	return boundary;
++}
++
+ static int check_sch_bw(struct usb_device *udev,
+ 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	u32 offset;
+-	u32 esit;
+ 	u32 min_bw;
+ 	u32 min_index;
+ 	u32 worst_bw;
+ 	u32 bw_boundary;
++	u32 esit_boundary;
+ 	u32 min_num_budget;
+ 	u32 min_cs_count;
+ 	bool tt_offset_ok = false;
+ 	int ret;
  
- 	if (offset > 20) {
- 		addr += 4;
+-	esit = sch_ep->esit;
+-
+ 	/*
+ 	 * Search through all possible schedule microframes.
+ 	 * and find a microframe where its worst bandwidth is minimum.
+@@ -537,7 +550,8 @@ static int check_sch_bw(struct usb_device *udev,
+ 	min_index = 0;
+ 	min_cs_count = sch_ep->cs_count;
+ 	min_num_budget = sch_ep->num_budget_microframes;
+-	for (offset = 0; offset < esit; offset++) {
++	esit_boundary = get_esit_boundary(sch_ep);
++	for (offset = 0; offset < sch_ep->esit; offset++) {
+ 		if (is_fs_or_ls(udev->speed)) {
+ 			ret = check_sch_tt(udev, sch_ep, offset);
+ 			if (ret)
+@@ -546,7 +560,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 				tt_offset_ok = true;
+ 		}
+ 
+-		if ((offset + sch_ep->num_budget_microframes) > sch_ep->esit)
++		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
+ 			break;
+ 
+ 		worst_bw = get_max_bw(sch_bw, sch_ep, offset);
+-- 
+2.35.1
+
 
 
