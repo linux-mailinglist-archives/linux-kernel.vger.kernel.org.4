@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA25EA208
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E5E5EA0B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbiIZLBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S236244AbiIZKkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237220AbiIZK7G (ORCPT
+        with ESMTP id S236338AbiIZKjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C70C5AC4B;
-        Mon, 26 Sep 2022 03:30:45 -0700 (PDT)
+        Mon, 26 Sep 2022 06:39:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98054CA2A;
+        Mon, 26 Sep 2022 03:22:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F51CB80943;
-        Mon, 26 Sep 2022 10:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB86AC433D6;
-        Mon, 26 Sep 2022 10:29:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A9C60C13;
+        Mon, 26 Sep 2022 10:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCA7C433D7;
+        Mon, 26 Sep 2022 10:22:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188168;
-        bh=tMM/orUGFSjjL4eQY+VZYZBWlo9qcSJzCaONo3wf00w=;
+        s=korg; t=1664187776;
+        bh=hcZDXeQDxdVuyJ5ymRRkRVN0FZjYJSq5O2pvudqyo+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2bXwz6fsaMfF0AhyPsrhn+khyFosWXWlsE8/pfS01iI3DymZupQd/8S8RFy+2koAs
-         /czfXt3k8Zaatt1sEycHhEKXyArr18iznX53b+xC1t10hLB/CD2DEB5fxYC2V1wmNd
-         TOaBwucpYPMjSOwMDqX7D308j8pa42rETW/wUfco=
+        b=fHTuJZO5AFfxlTEDbmS+zRBGdrtmHJXRLrbORHPLdqIokESdPyrsLMu6K6s6LkLc1
+         RPXZnemByD4fYKKICjyjmp2KORePNUWL60wkWalp1Rsd8aD0S9ohn+IqMaJAQ1M3+E
+         ZVwLwksIljc0LMeBHKxbPGEK3wI28QEE1D2Bv6II=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 063/141] arm64: dts: rockchip: Pull up wlan wake# on Gru-Bob
+        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 056/120] ALSA: hda/tegra: set depop delay for tegra
 Date:   Mon, 26 Sep 2022 12:11:29 +0200
-Message-Id: <20220926100756.723100293@linuxfoundation.org>
+Message-Id: <20220926100752.849014990@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Mohan Kumar <mkumard@nvidia.com>
 
-[ Upstream commit e5467359a725de90b6b8d0dd865500f6373828ca ]
+commit 3c4d8c24fb6c44f426e447b04800b0ed61a7b5ae upstream.
 
-The Gru-Bob board does not have a pull-up resistor on its
-WLAN_HOST_WAKE# pin, but Kevin does. The production/vendor kernel
-specified the pin configuration correctly as a pull-up, but this didn't
-get ported correctly to upstream.
+Reduce the suspend time by setting depop delay to 10ms for
+tegra.
 
-This means Bob's WLAN_HOST_WAKE# pin is floating, causing inconsistent
-wakeup behavior.
-
-Note that bt_host_wake_l has a similar dynamic, but apparently the
-upstream choice was to redundantly configure both internal and external
-pull-up on Kevin (see the "Kevin has an external pull up" comment in
-rk3399-gru.dtsi). This doesn't cause any functional problem, although
-it's perhaps wasteful.
-
-Fixes: 8559bbeeb849 ("arm64: dts: rockchip: add Google Bob")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220822164453.1.I75c57b48b0873766ec993bdfb7bc1e63da5a1637@changeid
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220913053641.23299-1-mkumard@nvidia.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts         | 5 +++++
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 1 +
- 2 files changed, 6 insertions(+)
+ sound/pci/hda/patch_hdmi.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-index e6c1c94c8d69..07737b65d7a3 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-@@ -87,3 +87,8 @@ h1_int_od_l: h1-int-od-l {
- 		};
- 	};
- };
-+
-+&wlan_host_wake_l {
-+	/* Kevin has an external pull up, but Bob does not. */
-+	rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>;
-+};
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 1384dabbdf40..0d8458d55626 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -395,6 +395,7 @@ wifi_perst_l: wifi-perst-l {
- 	};
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -3703,6 +3703,7 @@ static int patch_tegra_hdmi(struct hda_c
+ 	if (err)
+ 		return err;
  
- 	wlan_host_wake_l: wlan-host-wake-l {
-+		/* Kevin has an external pull up, but Bob does not */
- 		rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
- 	};
- };
--- 
-2.35.1
-
++	codec->depop_delay = 10;
+ 	codec->patch_ops.build_pcms = tegra_hdmi_build_pcms;
+ 	spec = codec->spec;
+ 	spec->chmap.ops.chmap_cea_alloc_validate_get_type =
 
 
