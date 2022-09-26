@@ -2,118 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30495EAA20
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BB75EAADF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236050AbiIZPRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S236584AbiIZPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235936AbiIZPQt (ORCPT
+        with ESMTP id S236689AbiIZPYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:16:49 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B687E95B9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:26 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q1gGXc029311
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=QjTyb5cqB8JpM+faMD/4F0TT8m42x/Q1YTWctvgR8EE=;
- b=VOkC8FQpC4zEdwZGjv8fsTnFHjzx11x0ZIHzXALRfqbJai3D+nSPMcVHXjeYWtZPngaS
- py8aeP9W/ETmNQVOXK9sEN+jkRf8WlzTkRXW8DXU5Dnyzv3uBEqbbsMkH0EOslV8Kc56
- RQLYpWeoLlS37/SjxTAVLsl6t7xE5w2NoXU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jswxjucuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:26 -0700
-Received: from twshared14494.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 07:03:24 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 8CC906AEBEFC; Mon, 26 Sep 2022 07:03:17 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 3/3] io_uring: remove io_register_submitter
-Date:   Mon, 26 Sep 2022 07:03:04 -0700
-Message-ID: <20220926140304.1973990-4-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220926140304.1973990-1-dylany@fb.com>
-References: <20220926140304.1973990-1-dylany@fb.com>
+        Mon, 26 Sep 2022 11:24:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8A71E3D1;
+        Mon, 26 Sep 2022 07:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664201389; x=1695737389;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=kLBWR5qEV1U14bOBHrdj86S+fx8bShjKVx0oSvRe47k=;
+  b=iSJSXIFxmEPPzzhQPc8Aq8o5dPkLSD+Nk04JxvzeMf0ETHkKRtT0A/XG
+   Gm9rZW/FMCZ9Mk/wygBAcheoEHj3qBZnldcy+azn0woWxgMdAQsZwKvO8
+   MLi9TTLwzijWvRScze04ZMZURRt5yGnWOpePaxRSApG18DSY5qNmBWohP
+   qtNWnL9ywD6dZAw6KOnYG9tp1vYxaZqYryWbuEpULNd8Vm0TT52/ny4Rh
+   sNB/QJF3GHrOVNqyv+j0j8bxw5rEh5EGvEZ0j/dNWIlPx0lECYVzHB/1+
+   4YZlCpZzAPVkRG0nE+b6wfOh2nWNllXsxaRm0C1IVSsJfFvLQHuvUksCJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="365068855"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="365068855"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 07:09:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="651840417"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="651840417"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 26 Sep 2022 07:09:28 -0700
+Date:   Mon, 26 Sep 2022 22:04:51 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20220926140451.GA2658254@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <CA+EHjTzHTaDaAKEMjFHzXLBgUS4bMfnppzO==KeDGpyUKO0fCw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: wZxrtVmvBPDR-7QjwgDOFJfBecYOuSHC
-X-Proofpoint-GUID: wZxrtVmvBPDR-7QjwgDOFJfBecYOuSHC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTzHTaDaAKEMjFHzXLBgUS4bMfnppzO==KeDGpyUKO0fCw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this is no longer needed, as submitter_task is set at creation time.
+On Mon, Sep 26, 2022 at 11:26:45AM +0100, Fuad Tabba wrote:
+...
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- io_uring/tctx.c | 22 +++-------------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
+> > +
+> > +- KVM_MEM_PRIVATE can be set to indicate a new slot has private memory backed by
+> > +  a file descirptor(fd) and the content of the private memory is invisible to
+> 
+> s/descirptor/descriptor
 
-diff --git a/io_uring/tctx.c b/io_uring/tctx.c
-index dd0205fcdb13..4324b1cf1f6a 100644
---- a/io_uring/tctx.c
-+++ b/io_uring/tctx.c
-@@ -91,20 +91,6 @@ __cold int io_uring_alloc_task_context(struct task_str=
-uct *task,
- 	return 0;
- }
-=20
--static int io_register_submitter(struct io_ring_ctx *ctx)
--{
--	int ret =3D 0;
--
--	mutex_lock(&ctx->uring_lock);
--	if (!ctx->submitter_task)
--		ctx->submitter_task =3D get_task_struct(current);
--	else if (ctx->submitter_task !=3D current)
--		ret =3D -EEXIST;
--	mutex_unlock(&ctx->uring_lock);
--
--	return ret;
--}
--
- int __io_uring_add_tctx_node(struct io_ring_ctx *ctx)
- {
- 	struct io_uring_task *tctx =3D current->io_uring;
-@@ -151,11 +137,9 @@ int __io_uring_add_tctx_node_from_submit(struct io_r=
-ing_ctx *ctx)
- {
- 	int ret;
-=20
--	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER) {
--		ret =3D io_register_submitter(ctx);
--		if (ret)
--			return ret;
--	}
-+	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER
-+	    && ctx->submitter_task !=3D current)
-+		return -EEXIST;
-=20
- 	ret =3D __io_uring_add_tctx_node(ctx);
- 	if (ret)
---=20
-2.30.2
+Thanks.
 
+...
+
+>  static long kvm_vm_ioctl(struct file *filp,
+> >                            unsigned int ioctl, unsigned long arg)
+> >  {
+> > @@ -4645,14 +4672,20 @@ static long kvm_vm_ioctl(struct file *filp,
+> >                 break;
+> >         }
+> >         case KVM_SET_USER_MEMORY_REGION: {
+> > -               struct kvm_userspace_memory_region kvm_userspace_mem;
+> > +               struct kvm_user_mem_region mem;
+> > +               unsigned long size = sizeof(struct kvm_userspace_memory_region);
+> 
+> nit: should this be sizeof(struct mem)? That's more similar to the
+> existing code and makes it dependent on the size of mem regardless of
+> possible changes to its type in the future.
+
+Unluckily no, the size we need copy_from_user() depends on the flags,
+e.g. without KVM_MEM_PRIVATE, we can't safely copy that big size since
+the 'extended' part may not even exist.
+
+> 
+> > +
+> > +               kvm_sanity_check_user_mem_region_alias();
+> >
+> >                 r = -EFAULT;
+> > -               if (copy_from_user(&kvm_userspace_mem, argp,
+> > -                                               sizeof(kvm_userspace_mem)))
+> > +               if (copy_from_user(&mem, argp, size);
+> 
+> It gets fixed in a future patch, but the ; should be a ).
+
+Good catch, thanks!
+
+Chao
+> 
+> Cheers,
+> /fuad
