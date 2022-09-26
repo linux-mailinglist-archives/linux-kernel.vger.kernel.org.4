@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0828B5E9EDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495415EA2F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiIZKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S237635AbiIZLQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiIZKPA (ORCPT
+        with ESMTP id S237564AbiIZLQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:15:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F02F474EF;
-        Mon, 26 Sep 2022 03:14:10 -0700 (PDT)
+        Mon, 26 Sep 2022 07:16:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC455281B;
+        Mon, 26 Sep 2022 03:37:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29520B80915;
-        Mon, 26 Sep 2022 10:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0CEC433D6;
-        Mon, 26 Sep 2022 10:14:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 521C360769;
+        Mon, 26 Sep 2022 10:37:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433FDC4314A;
+        Mon, 26 Sep 2022 10:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187247;
-        bh=DuCVXBycHtx00cWzGmjUh6h/tEedhC39HX32If+p02g=;
+        s=korg; t=1664188645;
+        bh=kLtiPaAscgEUkyzW/uzRCbBAT6PSN9vSazZY9mpOl/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IDwFftUKCf1yUtpnl+JM8puFWgMvc1FEV7D7CMFYiQdruMNhA8OhM7cpfq+x/VOwc
-         ofKvwES+athermJfvTrFDDY+F8uxh+/lzoIFnUpNdBuxaWMAYNosgsvbnsSdaIHqcy
-         4lT87hZZfwfBnfYT0BWe3cet2mYHEt4AwLTXwvxo=
+        b=jkPFgmqWyvKK8tq9p0gUKn8tFXFR4q4xeqdTKKlcDUuVq85v/52cq7OGpP2WPhFAD
+         p3EC1joWN6DevxS0lPaRVyvre8cQoYV3w3NnCw+ReB9v48Pew6o2V8yAEja/GrrYZS
+         /zv3mVLrUnprzSScex3gtUUlu7ushfC7Oo8UMP3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Ryzhov <iryzhov@nfware.com>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 18/30] netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
+Subject: [PATCH 5.15 075/148] scsi: mpt3sas: Fix return value check of dma_get_required_mask()
 Date:   Mon, 26 Sep 2022 12:11:49 +0200
-Message-Id: <20220926100736.811484041@linuxfoundation.org>
+Message-Id: <20220926100758.854630727@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Ryzhov <iryzhov@nfware.com>
+From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-[ Upstream commit 39aebedeaaa95757f5c1f2ddb5f43fdddbf478ca ]
+[ Upstream commit e0e0747de0ea3dd87cdbb0393311e17471a9baf1 ]
 
-ct_sip_next_header and ct_sip_get_header return an absolute
-value of matchoff, not a shift from current dataoff.
-So dataoff should be assigned matchoff, not incremented by it.
+Fix the incorrect return value check of dma_get_required_mask().  Due to
+this incorrect check, the driver was always setting the DMA mask to 63 bit.
 
-This issue can be seen in the scenario when there are multiple
-Contact headers and the first one is using a hostname and other headers
-use IP addresses. In this case, ct_sip_walk_headers will work as follows:
-
-The first ct_sip_get_header call to will find the first Contact header
-but will return -1 as the header uses a hostname. But matchoff will
-be changed to the offset of this header. After that, dataoff should be
-set to matchoff, so that the next ct_sip_get_header call find the next
-Contact header. But instead of assigning dataoff to matchoff, it is
-incremented by it, which is not correct, as matchoff is an absolute
-value of the offset. So on the next call to the ct_sip_get_header,
-dataoff will be incorrect, and the next Contact header may not be
-found at all.
-
-Fixes: 05e3ced297fe ("[NETFILTER]: nf_conntrack_sip: introduce SIP-URI parsing helper")
-Signed-off-by: Igor Ryzhov <iryzhov@nfware.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Link: https://lore.kernel.org/r/20220913120538.18759-2-sreekanth.reddy@broadcom.com
+Fixes: ba27c5cf286d ("scsi: mpt3sas: Don't change the DMA coherent mask after allocations")
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_sip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_sip.c
-index 3a8dc39a9116..7dc23df7b4e3 100644
---- a/net/netfilter/nf_conntrack_sip.c
-+++ b/net/netfilter/nf_conntrack_sip.c
-@@ -471,7 +471,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 				return ret;
- 			if (ret == 0)
- 				break;
--			dataoff += *matchoff;
-+			dataoff = *matchoff;
- 		}
- 		*in_header = 0;
- 	}
-@@ -483,7 +483,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 			break;
- 		if (ret == 0)
- 			return ret;
--		dataoff += *matchoff;
-+		dataoff = *matchoff;
- 	}
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index fafa9fbf3b10..be024b2b6bd4 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -3005,7 +3005,7 @@ _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
  
- 	if (in_header)
+ 	if (ioc->is_mcpu_endpoint ||
+ 	    sizeof(dma_addr_t) == 4 || ioc->use_32bit_dma ||
+-	    dma_get_required_mask(&pdev->dev) <= 32)
++	    dma_get_required_mask(&pdev->dev) <= DMA_BIT_MASK(32))
+ 		ioc->dma_mask = 32;
+ 	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
+ 	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
 -- 
 2.35.1
 
