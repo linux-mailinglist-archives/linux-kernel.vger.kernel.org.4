@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E9A5E9C9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E671F5E9CA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiIZI4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S234580AbiIZI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234547AbiIZI41 (ORCPT
+        with ESMTP id S234563AbiIZI5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:56:27 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E2B3DBD6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:56:26 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l8so3995929wmi.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date;
-        bh=LivMufJfxLpe4WS1qV8qZqQ4CFkVL3CKwRAqAJHi1Es=;
-        b=MRgp3u3JMORAFJM1sdZCZ+fpbuvN/7UVQgKaoUDWgnopUmx0KzboYH4qBgaa586Mde
-         xjhaIqpQuYs6QeA3esTVl9PVqvdZ5WWnp8gzolizgYe/R3mJfJYbDVEzq/HN5SIGHWqs
-         ZWrlxyCysl9mkx+q0cGFTdlKtPWJE7gXl4F/u/rVlQ5MSmjOpkRdxoMG6UfV7cUXScjJ
-         /RpTRHqNag6vzFDFWtUM/WPB6ahMzKhSB9FOD52qmzoHJY74vIWpvcExI3Xn9t+YH4t5
-         61KB3VEE0zuIzig4eUNlE1jHmWXdiVHefncrl5Qm9cTQ/jUJbWpkEbgbVXKJ7a3afli9
-         lPFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=LivMufJfxLpe4WS1qV8qZqQ4CFkVL3CKwRAqAJHi1Es=;
-        b=DToaGOgvUVwPWcb5lkJEwnGeVBJzA7qDNQxsZw10f7zjitVX7mQ99pWaShPyjZFP4S
-         z7SVxEYNq/4s2V5yNgygWJJnNaXGtfz/t1AheRiz8orklpBZVzjWOkUq3vdFshmZnLoq
-         tQMRuVDg0F56FQJ5cwDsaqzvZvYyU0jHD9oiha0Z2ZdX96jXG80KaWlZ9G3drFXzbbOo
-         B1BBDYhOSa6i7opvswcgGtGBgNBBiJjTP9ByuLf6GGCq1EiX+hPV9mJCjMKJXiJivLcA
-         oBj5GE2wWmIoUOcfP4ACHsUcu8EhOb6iSXt+e1oQ0K5tr7r4C7lbh/jot9Il+5zt+Jt6
-         DnQQ==
-X-Gm-Message-State: ACrzQf26aFsTRE0BdLmrKJLCYdFBpiVISQtpjGgOOZG7lSVxDur9NZQq
-        hNpBUou9Djrmw0eSoIbO5Zum9w==
-X-Google-Smtp-Source: AMsMyM4Y59b0CEMYEx8UROytR1dUIY3XCcqskebtJQmrX/B7U6CuFkbooGLEL9GFVFs90Z58A0aXLQ==
-X-Received: by 2002:a05:600c:310b:b0:3b4:c709:4322 with SMTP id g11-20020a05600c310b00b003b4c7094322mr20567216wmo.141.1664182584628;
-        Mon, 26 Sep 2022 01:56:24 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id r14-20020a0560001b8e00b0022afcc11f65sm13731379wru.47.2022.09.26.01.56.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:56:24 -0700 (PDT)
-Message-ID: <199190a8-611a-7940-0109-a5a509b3dc87@linaro.org>
-Date:   Mon, 26 Sep 2022 10:56:19 +0200
+        Mon, 26 Sep 2022 04:57:39 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85B73DBD4;
+        Mon, 26 Sep 2022 01:57:37 -0700 (PDT)
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 28Q8vHsj010624;
+        Mon, 26 Sep 2022 17:57:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28Q8vHsj010624
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664182637;
+        bh=vlkbVUYC6luO+m9Ikti3NG43M3VtHm2puQBFVEFsQrY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KY7QXY1dq9zl60QZkjgo2j9B17vAiVIW7LuJ9oTkHb2YImiFCF3pUsOaFC5NNc0YU
+         rIBfQqtacpcxFCU2AihjOyIpNClPgY0ixCMdL4JV1r2gIc18T/zxhdckbLfZwFZmVD
+         dPNpZ/rRZLu4oMo1/oxJxo0yeOqowKjAJZpvrTizOex74idCZZpEYrHOxl6j/2x2dU
+         iiieZbX50Ca58ivODWDy8rU9iRsHXb4OzJX7QSkZTEaGTq5RUdFxe/9o2d6O0a1zyz
+         QP9yMVerbJWlQfT60eRsCf65o4wcc43oXSeFQ+tLGVdRFJJ69OQaZool3qV+t08Yuk
+         Uj7klbYVvXR6g==
+X-Nifty-SrcIP: [209.85.167.178]
+Received: by mail-oi1-f178.google.com with SMTP id v130so7462738oie.2;
+        Mon, 26 Sep 2022 01:57:17 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3gPOlO6xCNuUMHNxNLPNyeuFjAbdCfpTlrAs+lYAHbCwBrabMM
+        mmnwZDWg7kpn/dZqGoAWvSzLRwKzoPH8D0CAAyQ=
+X-Google-Smtp-Source: AMsMyM5lTuCqBocFYoR82VLsqcYSHYEXb4vwAWkRiOaytmxxtyxns+2TLiPuEomBdT8w0SIPiBJSgUYqG6rIWeplWQ0=
+X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
+ x12-20020a54400c000000b0034f99130262mr9358774oie.287.1664182636355; Mon, 26
+ Sep 2022 01:57:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] ARM: dts: qcom: pm8226: fix regulators node name
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220925210229.128462-1-luca@z3ntu.xyz>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220925210229.128462-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+In-Reply-To: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 26 Sep 2022 17:56:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS_vgMXAVdmSBV=nrXL5Covd2tMX0weXtst3WoL_JGwsw@mail.gmail.com>
+Message-ID: <CAK7LNAS_vgMXAVdmSBV=nrXL5Covd2tMX0weXtst3WoL_JGwsw@mail.gmail.com>
+Subject: Re: Any interest in building the Linux kernel from a MacOS host?
+To:     Nick Desaulniers <nick.desaulniers@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        asahi@lists.linux.dev,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 23:02, Luca Weiss wrote:
-> Adjust the node name to match bindings and fix the validation warning.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->   arch/arm/boot/dts/qcom-pm8226.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
-> index 9b7d9d04ded6..be8c8032a3b1 100644
-> --- a/arch/arm/boot/dts/qcom-pm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
-> @@ -98,7 +98,7 @@ pm8226_1: pm8226@1 {
->   		#address-cells = <1>;
->   		#size-cells = <0>;
->   
-> -		pm8226_spmi_regulators: pm8226-regulators {
-> +		pm8226_spmi_regulators: regulators {
->   			compatible = "qcom,pm8226-regulators";
->   		};
->   
+On Mon, Sep 26, 2022 at 4:51 PM Nick Desaulniers
+<nick.desaulniers@gmail.com> wrote:
+>
+> Not sure if this is potentially interesting to anyone but I was able
+> to get the kernel building from MacOS my M2 Air with a small amount of
+> effort (read: duct tape and bailing wire).  If this might seem helpful
+> to anyone's workflow, I wouldn't mind pursuing this (with some
+> cleanup, sending a more formal patch set).  Maybe this helps us
+> bootstrap or get Linux up and running sooner on these machines?
+>
+> Take a look at the commit message linked below for the trials & tribulati=
+ons:
+> https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340=
+355f471c1dfe95a
+>
+> Thanks,
+> ~Nick Desaulniers
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+
+I see some efforts in this direction, for example,
+
+
+commit dd2a3acaecd7abb2d43b09a823cf2e4c967fa2ac
+Author: Andreas Bie=C3=9Fmann <andreas@biessmann.de>
+Date:   Fri Feb 24 08:23:53 2012 +0100
+
+    mod/file2alias: make modpost compile on darwin again
+
+
+
+I do not mind a small amount of code addition.
+It may be broken from time to time because there are less number of
+developers testing kernel builds on macOS.
+
+
+--=20
+Best Regards
+Masahiro Yamada
