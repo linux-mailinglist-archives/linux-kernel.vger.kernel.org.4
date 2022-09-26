@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C735EA28D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03C25EA28B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiIZLKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S237332AbiIZLKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237411AbiIZLII (ORCPT
+        with ESMTP id S237024AbiIZLHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:08:08 -0400
+        Mon, 26 Sep 2022 07:07:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7AA5FF56;
-        Mon, 26 Sep 2022 03:34:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA141115A;
+        Mon, 26 Sep 2022 03:34:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40D60B80942;
-        Mon, 26 Sep 2022 10:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E8CC433D6;
-        Mon, 26 Sep 2022 10:34:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B21DB8094D;
+        Mon, 26 Sep 2022 10:34:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A104C433D6;
+        Mon, 26 Sep 2022 10:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188467;
-        bh=N3t1Fk/3q7GjP5+7SHbkjr93tAC2v25ZVbxLpcJQ0sM=;
+        s=korg; t=1664188470;
+        bh=1Bxz50YQJU45ALuFIYsur8Iyf++AyUmPZJtFtiqGc18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PBIk/4AkRF3XVB3Nf/5q7zpebIPiX3VQed/iepNI0g9IPF2yEi5o4DHER3dOQ9l/D
-         jl9ZoX3JGk6ZLP0zg+Opoe0quQ/XLc+j1J7azRjkHMDFiU3ig7tjDy5JCnrinKwRvm
-         dkzMkwbW4Y83BCC1kGVs7WIvTqRqi4O5jU1X68Ag=
+        b=XD2ys+InVeGt4mtVQGGzv2YP4+tFj72hn4/TLDLH3Q2wkWe3qKHvgi8aUpx6OS0nr
+         ylrVZVXK7z7KgqNSV+bF/iI4RbWNP6Ks41klNaP92F8FobytW48D+oEQvLbfQ5OK9i
+         Xf6ilQyzZ9WeVQccQsj9sLfcx7NNUBd+Z6hWqOUU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
+        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 005/148] usb: dwc3: gadget: Avoid starting DWC3 gadget during UDC unbind
-Date:   Mon, 26 Sep 2022 12:10:39 +0200
-Message-Id: <20220926100756.259989964@linuxfoundation.org>
+Subject: [PATCH 5.15 006/148] usb: dwc3: Issue core soft reset before enabling run/stop
+Date:   Mon, 26 Sep 2022 12:10:40 +0200
+Message-Id: <20220926100756.287627954@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
 References: <20220926100756.074519146@linuxfoundation.org>
@@ -54,88 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wesley Cheng <wcheng@codeaurora.org>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
 
-[ Upstream commit 8217f07a50236779880f13e87f99224cd9117f83 ]
+[ Upstream commit 0066472de157439d58454f4a55786f1045ea5681 ]
 
-There is a race present where the DWC3 runtime resume runs in parallel
-to the UDC unbind sequence.  This will eventually lead to a possible
-scenario where we are enabling the run/stop bit, without a valid
-composition defined.
+It is recommended by the Synopsis databook to issue a DCTL.CSftReset
+when reconnecting from a device-initiated disconnect routine.  This
+resolves issues with enumeration during fast composition switching
+cases, which result in an unknown device on the host.
 
-Thread#1 (handling UDC unbind):
-usb_gadget_remove_driver()
--->usb_gadget_disconnect()
-  -->dwc3_gadget_pullup(0)
---> continue UDC unbind sequence
--->Thread#2 is running in parallel here
-
-Thread#2 (handing next cable connect)
-__dwc3_set_mode()
-  -->pm_runtime_get_sync()
-    -->dwc3_gadget_resume()
-      -->dwc->gadget_driver is NOT NULL yet
-      -->dwc3_gadget_run_stop(1)
-      --> _dwc3gadget_start()
-...
-
-Fix this by tracking the pullup disable routine, and avoiding resuming
-of the DWC3 gadget.  Once the UDC is re-binded, that will trigger the
-pullup enable routine, which would handle enabling the DWC3 gadget.
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-Link: https://lore.kernel.org/r/20210917021852.2037-1-wcheng@codeaurora.org
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+Link: https://lore.kernel.org/r/20220316011358.3057-1-quic_wcheng@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Stable-dep-of: 040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/core.h   | 2 ++
- drivers/usb/dwc3/gadget.c | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/core.c   |  4 +---
+ drivers/usb/dwc3/core.h   |  2 ++
+ drivers/usb/dwc3/gadget.c | 11 +++++++++++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9c24cf46b9a0..b2ea4c2448d4 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -114,8 +114,6 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+ 	dwc->current_dr_role = mode;
+ }
+ 
+-static int dwc3_core_soft_reset(struct dwc3 *dwc);
+-
+ static void __dwc3_set_mode(struct work_struct *work)
+ {
+ 	struct dwc3 *dwc = work_to_dwc(work);
+@@ -265,7 +263,7 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+  * dwc3_core_soft_reset - Issues core soft reset and PHY reset
+  * @dwc: pointer to our context structure
+  */
+-static int dwc3_core_soft_reset(struct dwc3 *dwc)
++int dwc3_core_soft_reset(struct dwc3 *dwc)
+ {
+ 	u32		reg;
+ 	int		retries = 1000;
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index fd5d42ec5350..dbae57725f52 100644
+index dbae57725f52..077d03a33388 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1028,6 +1028,7 @@ struct dwc3_scratchpad_array {
-  * @tx_fifo_resize_max_num: max number of fifos allocated during txfifo resize
-  * @hsphy_interface: "utmi" or "ulpi"
-  * @connected: true when we're connected to a host, false otherwise
-+ * @softconnect: true when gadget connect is called, false when disconnect runs
-  * @delayed_status: true when gadget driver asks for delayed status
-  * @ep0_bounced: true when we used bounce buffer
-  * @ep0_expect_in: true when we expect a DATA IN transfer
-@@ -1247,6 +1248,7 @@ struct dwc3 {
- 	const char		*hsphy_interface;
+@@ -1510,6 +1510,8 @@ bool dwc3_has_imod(struct dwc3 *dwc);
+ int dwc3_event_buffers_setup(struct dwc3 *dwc);
+ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
  
- 	unsigned		connected:1;
-+	unsigned		softconnect:1;
- 	unsigned		delayed_status:1;
- 	unsigned		ep0_bounced:1;
- 	unsigned		ep0_expect_in:1;
++int dwc3_core_soft_reset(struct dwc3 *dwc);
++
+ #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+ int dwc3_host_init(struct dwc3 *dwc);
+ void dwc3_host_exit(struct dwc3 *dwc);
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 322754a7f91c..5f9a0ab09f4b 100644
+index 5f9a0ab09f4b..761065336322 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -2442,7 +2442,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	int			ret;
+@@ -2515,6 +2515,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 						dwc->ev_buf->length;
+ 		}
+ 	} else {
++		/*
++		 * In the Synopsys DWC_usb31 1.90a programming guide section
++		 * 4.1.9, it specifies that for a reconnect after a
++		 * device-initiated disconnect requires a core soft reset
++		 * (DCTL.CSftRst) before enabling the run/stop bit.
++		 */
++		spin_unlock_irqrestore(&dwc->lock, flags);
++		dwc3_core_soft_reset(dwc);
++		spin_lock_irqsave(&dwc->lock, flags);
++
++		dwc3_event_buffers_setup(dwc);
+ 		__dwc3_gadget_start(dwc);
+ 	}
  
- 	is_on = !!is_on;
--
-+	dwc->softconnect = is_on;
- 	/*
- 	 * Per databook, when we want to stop the gadget, if a control transfer
- 	 * is still in process, complete it and get the core into setup phase.
-@@ -4421,7 +4421,7 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
- {
- 	int			ret;
- 
--	if (!dwc->gadget_driver)
-+	if (!dwc->gadget_driver || !dwc->softconnect)
- 		return 0;
- 
- 	ret = __dwc3_gadget_start(dwc);
 -- 
 2.35.1
 
