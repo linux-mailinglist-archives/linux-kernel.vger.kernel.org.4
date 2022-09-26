@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE005EA467
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4EA5EA1D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbiIZLp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+        id S237012AbiIZK6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238371AbiIZLnR (ORCPT
+        with ESMTP id S236981AbiIZK5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:43:17 -0400
+        Mon, 26 Sep 2022 06:57:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A66F57F;
-        Mon, 26 Sep 2022 03:46:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1537215A38;
+        Mon, 26 Sep 2022 03:29:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B99AB8095D;
-        Mon, 26 Sep 2022 10:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4111C433D6;
-        Mon, 26 Sep 2022 10:45:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6C2AB80924;
+        Mon, 26 Sep 2022 10:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F2FC433D6;
+        Mon, 26 Sep 2022 10:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189113;
-        bh=5vhpMlxTnDNWWgoNyMjjqdMNjJme4PLpALZjigsOd5M=;
+        s=korg; t=1664188106;
+        bh=qw4b7gCBLgk/TTz3p1mNq0XzYNe83CUHqt/j2WlA+AM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bnv3NlPuelfcy6mo4K0inuyalQUfRSSZcrx7DPpNylXfAHRZPO/9RpuekMIGAan/k
-         Na33KIKDf6iYQujcBSgm7tz8or+gTLaMjx5mWzd0QiSMt/NjknwG+rQflfkoDR8Ib5
-         at3WTxmz9B4ItBfp5Zim1PbsTJuFXM542bt4xxnQ=
+        b=a1GdhHxckHvr2fb8F4h5aosm4i+LfLT8Qkhudu+sI5C5hvSnY1GERZMDFCEK8iq7M
+         PpkZQVy+/8fBhO5IqfjLgLHp6+Vdd0okJubPczWNw4J3/RSgRUAdMrYxkwyBFBcjb3
+         1LZlQl0YCy3+GEbspgIcUOMlK/81b/+yQmpiYkZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        zain wang <wzz@rock-chips.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 078/207] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
-Date:   Mon, 26 Sep 2022 12:11:07 +0200
-Message-Id: <20220926100810.068830966@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Callum Osmotherly <callum.osmotherly@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 042/141] ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5570 laptop
+Date:   Mon, 26 Sep 2022 12:11:08 +0200
+Message-Id: <20220926100755.977122296@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zain wang <wzz@rock-chips.com>
+From: Callum Osmotherly <callum.osmotherly@gmail.com>
 
-[ Upstream commit 8123437cf46ea5a0f6ca5cb3c528d8b6db97b9c2 ]
+commit bdc9b7396f7d4d6533e70fd8d5472f505b5ef58f upstream.
 
-We've found the AUX channel to be less reliable with PCLK_EDP at a
-higher rate (typically 25 MHz). This is especially important on systems
-with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
-use of AUX.
+The Dell Precision 5570 uses the same 4-speakers-on-ALC289 just like the
+previous Precision 5560. I replicated that patch onto this one, and can
+confirm that the audio is much better (the woofers are now working);
+I've tested it on my Dell Precision 5570.
 
-According to Rockchip, using any rate other than 24 MHz can cause
-"problems between syncing the PHY an PCLK", which leads to all sorts of
-unreliabilities around register operations.
-
-Fixes: d67a38c5a623 ("arm64: dts: rockchip: move core edp from rk3399-kevin to shared chromebook")
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: zain wang <wzz@rock-chips.com>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Link: https://lore.kernel.org/r/20220830131212.v2.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Callum Osmotherly <callum.osmotherly@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/YyGbWM5wEoFMbW2v@piranha
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index eed15fd61d62..af5810e5f5b7 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -244,6 +244,14 @@ &dmc {
- &edp {
- 	status = "okay";
- 
-+	/*
-+	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
-+	 * set this here, because rk3399-gru.dtsi ensures we can generate this
-+	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
-+	 */
-+	assigned-clocks = <&cru PCLK_EDP>;
-+	assigned-clock-rates = <24000000>;
-+
- 	ports {
- 		edp_out: port@1 {
- 			reg = <1>;
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8769,6 +8769,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1028, 0x0a9d, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x0a9e, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x0b19, "Dell XPS 15 9520", ALC289_FIXUP_DUAL_SPK),
++	SND_PCI_QUIRK(0x1028, 0x0b1a, "Dell Precision 5570", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x164a, "Dell", ALC293_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x164b, "Dell", ALC293_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x103c, 0x1586, "HP", ALC269_FIXUP_HP_MUTE_LED_MIC2),
 
 
