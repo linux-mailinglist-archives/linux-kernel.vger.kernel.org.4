@@ -2,66 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C77A5EA96E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1518A5EA972
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbiIZPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S235354AbiIZPCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbiIZPCF (ORCPT
+        with ESMTP id S235222AbiIZPCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:02:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1957F1F9F6;
-        Mon, 26 Sep 2022 06:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6584B80957;
-        Mon, 26 Sep 2022 13:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768C1C43141;
-        Mon, 26 Sep 2022 13:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664199153;
-        bh=Jz6DP2qDtaOk9/0nqGYgsv7iJeTNNd7VbI6rvUbEtZU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lmOkzmHbKb9NEFThf0uOdlwhhBO09Qyl+I8FarP8XjneRjoyj/Eeu22JUbATYCiGX
-         6mk+lGWvrhOzpC1F6neTHGMKa45AP9sYAE6ZNZ2B0NVAAOoEHAXTaUUF9/njqjRY5q
-         9DyXye5A4UmKCa7j7QTCspFCIPDJPESuj2iRkgEPYi2/rENGRMtU6OvZG43pW57f38
-         Fvc7m97QaTggBEfCcYwyhe/Jil9oCbEbD2pOqEAZqFKEo85PIpDwjI1nWggWYyOhfI
-         pSWVeO/UKKzhaMbloT6Dynino0Hz7rZvoJ7OlaJ2bV6x3zydopg2Fsvd+5rlFYf8n4
-         gbNr4/zpW6H/Q==
-Received: by mail-vs1-f41.google.com with SMTP id m66so6490782vsm.12;
-        Mon, 26 Sep 2022 06:32:33 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3dmaT8ECuUUojM9/g6WVdpXGdVPsr1+56DmKg9VOEAt94KW4g+
-        tNK0zf+oWsWG1KijtzpKfNZqKR1nY4yAfQcikQ==
-X-Google-Smtp-Source: AMsMyM4Zvo0h8Ur9ZYTvHGfcu0ge0lmxpjVtcKbAKW2ZKc4lKvrKvKTJjbemijDS8KVBrI9e5ZAp8VxbYvO5fKDQFY8=
-X-Received: by 2002:a67:3c7:0:b0:39b:45c2:6875 with SMTP id
- 190-20020a6703c7000000b0039b45c26875mr7717610vsd.6.1664199152365; Mon, 26 Sep
- 2022 06:32:32 -0700 (PDT)
+        Mon, 26 Sep 2022 11:02:07 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4512F20BE1;
+        Mon, 26 Sep 2022 06:32:58 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ocoEB-0004n3-QS; Mon, 26 Sep 2022 15:32:55 +0200
+Message-ID: <d93f7862-d27e-f030-85b0-093c6a8958f3@leemhuis.info>
+Date:   Mon, 26 Sep 2022 15:32:55 +0200
 MIME-Version: 1.0
-References: <20220914-arm-perf-tool-spe1-2-v2-v3-0-8189fc04dcc6@kernel.org>
- <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org> <CAM9d7ciNwe1HaYXjau6hv8yUmnZvvQU0=bNdf=EA589frkjptg@mail.gmail.com>
-In-Reply-To: <CAM9d7ciNwe1HaYXjau6hv8yUmnZvvQU0=bNdf=EA589frkjptg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 26 Sep 2022 08:32:21 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ8nhmx4U8efE2_FuVkacMYxHys4OZXv9PmdTXjZP1x4A@mail.gmail.com>
-Message-ID: <CAL_JsqJ8nhmx4U8efE2_FuVkacMYxHys4OZXv9PmdTXjZP1x4A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] perf: Skip and warn on unknown format 'configN' attrs
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3 #forregzbot
+Content-Language: en-US, de-DE
+To:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
+ <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+ <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
+ <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664199179;8f1cc255;
+X-HE-SMSGID: 1ocoEB-0004n3-QS
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +47,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 1:12 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Wed, Sep 14, 2022 at 1:09 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > If the kernel exposes a new perf_event_attr field in a format attr, perf
-> > will return an error stating the specified PMU can't be found. For
-> > example, a format attr with 'config3:0-63' causes an error as config3 is
-> > unknown to perf. This causes a compatibility issue between a newer
-> > kernel with older perf tool.
-> >
-> > Before this change with a kernel adding 'config3' I get:
-> >
-> > $ perf record -e arm_spe// -- true
-> > event syntax error: 'arm_spe//'
-> >                      \___ Cannot find PMU `arm_spe'. Missing kernel support?
-> > Run 'perf list' for a list of valid events
-> >
-> >  Usage: perf record [<options>] [<command>]
-> >     or: perf record [<options>] -- <command> [<options>]
-> >
-> >     -e, --event <event>   event selector. use 'perf list' to list
-> > available events
-> >
-> > After this change, I get:
-> >
-> > $ perf record -e arm_spe// -- true
-> > WARNING: 'arm_spe_0' format 'inv_event_filter' requires 'perf_event_attr::config3' which is not supported by this version of perf!
-> > [ perf record: Woken up 2 times to write data ]
-> > [ perf record: Captured and wrote 0.091 MB perf.data ]
-> >
-> > To support unknown configN formats, rework the YACC implementation to
-> > pass any config[0-9]+ format to perf_pmu__new_format() to handle with a
-> > warning.
->
-> It only handles configN formats but it might add a completely different
-> name later, right?
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-Right. An unknown configN is a warning. An unknown name is still an
-error as before. Given that sysfs format attrs are for mapping fields
-which could be anything to "generic" perf_event_attr fields, how would
-we ever have anything other than configN?
+On 08.09.22 15:59, Peter Rosin wrote:
+> 2022-09-08 at 14:06, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+>> to make this easily accessible to everyone.
+>>
+>> Peter, Codrin, could you help me out here please: I still have the
+>> regression report from Peter that started this thread in the list of
+>> tracked issues. From Peter's last msg quoted below it seems the thread
+>> just faded out without the regression being fixed. Or was it? If not:
+>> what can we do to finally get this resolved?
+> 
+> No, it is not resolved that I know of. We are only writing during
+> production, but are working around it by verifying and looping back.
+> Sometimes it takes surprisingly long for the loop to finish, but
+> it's not a huge deal. But it is of course not completely satisfying
+> either...
+> 
+> Reading is never a problem, so post-production behavior is sane.
 
-Rob
+FWIW, in that case:
+
+#regzbot backburner: a proper fix will take some time and reporter has a
+work-around
+
+
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+>> reports and sometimes miss something important when writing mails like
+>> this. If that's the case here, don't hesitate to tell me in a public
+>> reply, it's in everyone's interest to set the public record straight.
+>>
+>> On 30.06.22 09:44, Peter Rosin wrote:
+>>> 2022-06-10 at 22:51, Peter Rosin wrote:
+>>>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
+>>>>> On 09.06.2022 17:28, Peter Rosin wrote:
+>>>>>>
+>>>>>> I have not actually bisected this issue but reverting the effects of
+>>>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
+>>>>>> makes the problem go away.
+>>>>>>
+>>>>>> I.e. I need something like this in my dts
+>>>>>>
+>>>>>> &i2c2 {
+>>>>>>          status = "okay";
+>>>>>>
+>>>>>>          pinctrl-names = "default";
+>>>>>>          /delete-property/ pinctrl-1;
+>>>>>>          /delete-property/ sda-gpios;
+>>>>>>          /delete-property/ scl-gpios;
+>>>>>>
+>>>>>>          eeprom@50 {
+>>>>>>                  compatible = "st,24c64", "atmel,24c64";
+>>>>>>                  reg = <0x50>;
+>>>>>>                  wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
+>>>>>>          };
+>>>>>> };
+>>>>>>
+>>>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
+>>>>>> eeprom).
+>>>>>>
+>>>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
+>>>>>> are:
+>>>>>>
+>>>>>>          pinctrl-names = "default", "gpio";
+>>>>>>          pinctrl-0 = <&pinctrl_i2c2>;
+>>>>>>          pinctrl-1 = <&pinctrl_i2c2_gpio>;
+>>>>>>          sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
+>>>>>>          scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>>>>>
+>>>>>> I suspect that the underlying reason is that the bus recovery takes
+>>>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
+>>>>>> that this is chip specific, but I don't know that.
+>>>>>>
+>>>>>> I can work around the issue in user space with by writing in 4 byte
+>>>>>> chunks, like so
+>>>>>>
+>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
+>>>>>>
+>>>>>> but that is really ugly and gets slow too, about 20 seconds to program
+>>>>>> the full 8kB eeprom. With the above in my dts it takes a second or
+>>>>>> so (a bit more with dynamic debug active).
+>>>>>>
+>>>>>>
+>>>>>> If I run
+>>>>>>
+>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
+>>>>>>
+>>>>>> with a source.file of 8kB and the upstream dts properties in place, I can
+>>>>>> collect the following debug output from at24, i2c-core and i2c-at91:
+>>>>>>
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
+>>>>>>
+>>>>>> And then there is no more action. I.e. only a couple of 32 byte pages
+>>>>>> are written.
+>>>>>>
+>>>>>> With the above mentioned dts override in place I instead get this, which is
+>>>>>> a lot more sensible:
+>>>>>>
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
+>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
+>>>>>> ... snip ...
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
+>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
+>>>>>
+>>>>> could you please apply this patch-set [1] and let us know if it 
+>>>>> addresses your issue?
+>>>>>
+>>>>> Thanks and best regards,
+>>>>> Codrin
+>>>>>
+>>>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
+>>>>
+>>>> That series does indeed help! I'll reply with a tested-by etc on the
+>>>> first two patches, I can't test patch 3/3 with my sama5d3 board...
+>>>>
+>>>> Thank you very much!
+>>>
+>>> Since replying to the actual patches do not work for me, I'm writing here
+>>> instead. Sorry about that. As stated above, it /seems/ to work much better
+>>> with these patches. But I fooled myself and there is still some remaining
+>>> trouble. It is not uncommon that the second (32-byte) page in the eeprom
+>>> is not written correctly for whatever reason. I do not know why it's
+>>> always the second page that gets corrupted, but this is a bad problem since
+>>> the failure is completely silent.
+>>>
+>>> Cheers,
+>>> Peter
+>>
+>> #regzbot poke
+> 
