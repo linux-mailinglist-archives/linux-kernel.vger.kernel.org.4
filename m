@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3B05EA0CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8225EA0CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbiIZKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S236356AbiIZKly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236617AbiIZKjq (ORCPT
+        with ESMTP id S236626AbiIZKjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:46 -0400
+        Mon, 26 Sep 2022 06:39:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6614753D3D;
-        Mon, 26 Sep 2022 03:23:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A16351;
+        Mon, 26 Sep 2022 03:23:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA62A60BAF;
-        Mon, 26 Sep 2022 10:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD89CC433C1;
-        Mon, 26 Sep 2022 10:23:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB63F60B5E;
+        Mon, 26 Sep 2022 10:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF41C433C1;
+        Mon, 26 Sep 2022 10:23:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187811;
-        bh=eUck7UUqhWIihyDGGH5y1+ziQsswGYPBDFAwlecVRRE=;
+        s=korg; t=1664187814;
+        bh=IOsAm3lIFxWYA7MBy0NKgThbBpwCwNAPrcuyr9Vmt7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SqGr+boaHl0bFTBfQxghYcLGIX9wmDFjcMVpDQq3MTJ2G64IDZ3Ddd1cajEWc6mci
-         XRdMRmJ5aN11lJ/pv1/lblblJ5wOgETGBnbxH/SVt45xGQg2RZE6vcgZmZqumR0tBW
-         vl3cOGwJ+0y7cZoj6WfxMnPAzt/ZterW1Vj9t+PI=
+        b=s12E//BtVe7vAjKmG3VrmCs2qtb+KQ4YPXrwcicegfqSqgIRY0JhJA+32Kk6Sssq/
+         ipxSSBoT28JFOzQnIZdWyxE7BhkYifSOMInKB1IsRPHCk+deAhp/2xko/bOiirNCll
+         bx8LnkmMxuFH/I14F5W1w+Aye5oy1qqeALP/ZdQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        zain wang <wzz@rock-chips.com>,
+        Brian Norris <briannorris@chromium.org>,
         Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 066/120] arm64: dts: rockchip: Pull up wlan wake# on Gru-Bob
-Date:   Mon, 26 Sep 2022 12:11:39 +0200
-Message-Id: <20220926100753.400977347@linuxfoundation.org>
+Subject: [PATCH 5.4 067/120] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+Date:   Mon, 26 Sep 2022 12:11:40 +0200
+Message-Id: <20220926100753.431131212@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
 References: <20220926100750.519221159@linuxfoundation.org>
@@ -55,60 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: zain wang <wzz@rock-chips.com>
 
-[ Upstream commit e5467359a725de90b6b8d0dd865500f6373828ca ]
+[ Upstream commit 8123437cf46ea5a0f6ca5cb3c528d8b6db97b9c2 ]
 
-The Gru-Bob board does not have a pull-up resistor on its
-WLAN_HOST_WAKE# pin, but Kevin does. The production/vendor kernel
-specified the pin configuration correctly as a pull-up, but this didn't
-get ported correctly to upstream.
+We've found the AUX channel to be less reliable with PCLK_EDP at a
+higher rate (typically 25 MHz). This is especially important on systems
+with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
+use of AUX.
 
-This means Bob's WLAN_HOST_WAKE# pin is floating, causing inconsistent
-wakeup behavior.
+According to Rockchip, using any rate other than 24 MHz can cause
+"problems between syncing the PHY an PCLK", which leads to all sorts of
+unreliabilities around register operations.
 
-Note that bt_host_wake_l has a similar dynamic, but apparently the
-upstream choice was to redundantly configure both internal and external
-pull-up on Kevin (see the "Kevin has an external pull up" comment in
-rk3399-gru.dtsi). This doesn't cause any functional problem, although
-it's perhaps wasteful.
-
-Fixes: 8559bbeeb849 ("arm64: dts: rockchip: add Google Bob")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
+Fixes: d67a38c5a623 ("arm64: dts: rockchip: move core edp from rk3399-kevin to shared chromebook")
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220822164453.1.I75c57b48b0873766ec993bdfb7bc1e63da5a1637@changeid
+Signed-off-by: zain wang <wzz@rock-chips.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Link: https://lore.kernel.org/r/20220830131212.v2.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts         | 5 +++++
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 1 +
- 2 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-index a9f4d6d7d2b7..586351340da6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-@@ -77,3 +77,8 @@ h1_int_od_l: h1-int-od-l {
- 		};
- 	};
- };
-+
-+&wlan_host_wake_l {
-+	/* Kevin has an external pull up, but Bob does not. */
-+	rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>;
-+};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 7cd6d470c1cb..53185404d3c8 100644
+index 53185404d3c8..7416db3d27a7 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -397,6 +397,7 @@ wifi_perst_l: wifi-perst-l {
- 	};
+@@ -237,6 +237,14 @@ &cdn_dp {
+ &edp {
+ 	status = "okay";
  
- 	wlan_host_wake_l: wlan-host-wake-l {
-+		/* Kevin has an external pull up, but Bob does not */
- 		rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
- 	};
- };
++	/*
++	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
++	 * set this here, because rk3399-gru.dtsi ensures we can generate this
++	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
++	 */
++	assigned-clocks = <&cru PCLK_EDP>;
++	assigned-clock-rates = <24000000>;
++
+ 	ports {
+ 		edp_out: port@1 {
+ 			reg = <1>;
 -- 
 2.35.1
 
