@@ -2,217 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B735E9BB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE845E9BB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbiIZIJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S233274AbiIZIKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbiIZII4 (ORCPT
+        with ESMTP id S234247AbiIZIKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:08:56 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A26863EA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:08:53 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id n10so8859129wrw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vrEtLoLXJ0iTEl/AGiFoQ93+y9nVNiEw3gldZxWD548=;
-        b=XwJ/nd17lrK5HtYzpmPMlFKoPPzpoJAqnzR6WlZBiWnwK/24ANec4fDLbPd4eaCOh6
-         tOssfynso6DYUeCUwaxCaD6zurRolYnkJxNaSTWLxJbm6J8FrZwL9rXlKuRJf1neDqiX
-         sUE3TXl2zflQE+8r53ZDe+ny5BLYWUPTTKg/YpjL2bKdRa0XmKsRBclp9fqgMtWUb5Ox
-         jVB106riCFKsH/LV0uioIVbu5iyXcKzq1zInWUmeUOR40VaobgistM847zq9I5g5Aq3m
-         hN9htfjUNGHwgqgnzyu47maN6O2a/1LaapdsPJQgYpiBjP6XFvil7+sgqeSOGvv8YVXE
-         eYVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vrEtLoLXJ0iTEl/AGiFoQ93+y9nVNiEw3gldZxWD548=;
-        b=RR6i1LCYrhXui+Ncud/+HSsW/s1xlI16KT2xJqCBqRXgGDViIwtYK50g1FoehcSWdf
-         Om1zmCJjt7WQ9k1suv2ZBOyFilGSoBXlOhN3742ygrOdyYihlObxYuhxIMfsXnUKLxhx
-         VueSYH+cneX4gthDWz5Xll2thvJ/LcMe/BD4uIPRsLxaEm6ssIBmca7UBuUIY0YJm5ZU
-         Ns5HJ6kNBraK0VlMs/CXedI4OnYO7qNAAhg3bOuZvrSJqMvQjFANkY321bqwNjtc87RW
-         uI0/oKgKz2dd4lImSed2CGKoinW3IHQeLweZrUHe3M216uw3WwtBaaS9hSsTAkrhfsH1
-         YCXA==
-X-Gm-Message-State: ACrzQf1K0B2EBOiTztORgznsUrBe7k5F7ngRqI9axS2heB353Esamg2A
-        k4sSwu1dVe9stBre4sMy3pRs6AAf80IwSg==
-X-Google-Smtp-Source: AMsMyM7doUvgczCN/zuxOmb+pZhS7rZWQ0TKivw2LEyV7K7JifUKdp1a3ZYMlnTdMi34BMVMpsGelA==
-X-Received: by 2002:adf:f80b:0:b0:228:dbb9:5bdf with SMTP id s11-20020adff80b000000b00228dbb95bdfmr12549039wrp.327.1664179731590;
-        Mon, 26 Sep 2022 01:08:51 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d6642000000b0022ac61ebb14sm13421078wrw.22.2022.09.26.01.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 01:08:51 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        mripard@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
-        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, geert@linux-m68k.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v5 3/3] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_gray8()
-Date:   Mon, 26 Sep 2022 10:08:37 +0200
-Message-Id: <20220926080837.65734-4-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926080837.65734-1-jose.exposito89@gmail.com>
-References: <20220926080837.65734-1-jose.exposito89@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 04:10:13 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90C91572F;
+        Mon, 26 Sep 2022 01:10:03 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3F3B35C00D9;
+        Mon, 26 Sep 2022 04:10:02 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 26 Sep 2022 04:10:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1664179802; x=1664266202; bh=kU
+        oCi2yT1GwD1ISOCgS7Z4CUQnF93+E9jTByctv07pA=; b=kiA47cQdqnCwoNrsgU
+        wIO8oxm2UF8wrn048UyULmo6cmWkdwJTjaFpTAshkknSSK5s7ECibWNzoYNzeCoE
+        wmgQ2Oa4o7IMYPEXAHvtOdFG3lYNtuLdjOs8QeAqUAgOeTLn2VziDVg8uPE7mibz
+        1duHcPWT5/0o0pLA0ExVZhwyvZSNPfe1ToIL42MsVNh+wJo2vawOfcNcexyA1bvs
+        9EyynETxlwt/VoXSphFQFumH3K4XCvFjbSvwaF/ZjIUAfstW0NEuDvuAI/wj5Xst
+        5plKpbRgUBRd7wmGaGFXg7UFOyxzbAo+TyQYhDuyG2TakvpLWEGkgI/hG3I53xox
+        iksQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664179802; x=1664266202; bh=kUoCi2yT1GwD1ISOCgS7Z4CUQnF9
+        3+E9jTByctv07pA=; b=KKLgz9moR3Jb69T09+NZHuE/0e0JD65ExOz3uPzge2XY
+        24ooOcgBZJrQuxqF65s0gTlNJtmW2iE0ki1ClcDQwoYoJhx+Atom3l0rW7CzJ4za
+        VEpvFhEaV1zdFzYm5KttM2fUN39g688msOtIIlckBBzozypTTUG3AxjsvrAF4Pmu
+        KrCxzxMpjfkOnKcKvNUEI8VvOcP7iRIIUWeyYhL0SM5nBWLxJTzK8ocqOqk1BxRZ
+        BDfbMs65IrQ9QRJKxTvl/AR/YlRf4dz0hNAGYrHOcAoE0vgrCJ6btss5sMQaY3aW
+        Hn2B5fNQhVbObmIkodLIPKHLZwZjayY/XZaWDwj7hQ==
+X-ME-Sender: <xms:WV4xYzhIDIDVXGgSFLsmg4vdcx1gwkftdb0oMlFvxubCzA3Pz9yvXg>
+    <xme:WV4xYwAss_mJITZFcbTf1QYd2ikzI8RB7nsCpi6gwhk0763cp29bG_yjz_U9yzJ-t
+    dfbfV942WGb8V_YMjs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepgeegkeektdejveeiteffvddugffggeeuudehvdfgtddvudfgjedtuedu
+    vdevueevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdr
+    uggvvh
+X-ME-Proxy: <xmx:WV4xYzEUMtKswNS3oToI_WJsMsmiVxdC7GfmYQuMpgw3dXK6kUa1BA>
+    <xmx:WV4xYwQLht2Tx4uUZZTthtsabBN7bZ1rbPqGLpnU8QfQPOmRSNwTtg>
+    <xmx:WV4xYwwN7JuznA08G2hCE0tmMjrYL26lpQbwifZcXZz5dPFBReAAUw>
+    <xmx:Wl4xYzy2P6-GQXVmsGzTXZB3usRbZZhVPeRjBTW6KHmGLCv7KnGaMQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9E3F3A6007C; Mon, 26 Sep 2022 04:10:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <ba821ade-1573-4c35-8fbb-285283817147@app.fastmail.com>
+In-Reply-To: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+References: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+Date:   Mon, 26 Sep 2022 10:09:41 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Nick Desaulniers" <nick.desaulniers@gmail.com>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Hector Martin" <marcan@marcan.st>
+Cc:     "Nick Desaulniers" <ndesaulniers@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        "Linux Kbuild mailing list" <linux-kbuild@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: Any interest in building the Linux kernel from a MacOS host?
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the existing test cases to test the conversion from XRGB8888 to
-grayscale.
+On Mon, Sep 26, 2022, at 09:51, Nick Desaulniers wrote:
+> Not sure if this is potentially interesting to anyone but I was able
+> to get the kernel building from MacOS my M2 Air with a small amount of
+> effort (read: duct tape and bailing wire).  
 
-Tested-by: Maíra Canal <mairacanal@riseup.net>
-Reviewed-by: David Gow <davidgow@google.com>
-Acked-by: Maxime Ripard <maxime@cerno.tech>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- .../gpu/drm/tests/drm_format_helper_test.c    | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+I originally tried exactly that last year but I guess my duct tape wasn't
+quite strong enough ;)
 
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 4a2f3c0de060..8d86c250c2ec 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -16,6 +16,11 @@
- 
- #define TEST_BUF_SIZE 50
- 
-+struct convert_to_gray8_result {
-+	unsigned int dst_pitch;
-+	const u8 expected[TEST_BUF_SIZE];
-+};
-+
- struct convert_to_rgb332_result {
- 	unsigned int dst_pitch;
- 	const u8 expected[TEST_BUF_SIZE];
-@@ -42,6 +47,7 @@ struct convert_xrgb8888_case {
- 	unsigned int pitch;
- 	struct drm_rect clip;
- 	const u32 xrgb8888[TEST_BUF_SIZE];
-+	struct convert_to_gray8_result gray8_result;
- 	struct convert_to_rgb332_result rgb332_result;
- 	struct convert_to_rgb565_result rgb565_result;
- 	struct convert_to_rgb888_result rgb888_result;
-@@ -54,6 +60,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 		.pitch = 1 * 4,
- 		.clip = DRM_RECT_INIT(0, 0, 1, 1),
- 		.xrgb8888 = { 0x01FF0000 },
-+		.gray8_result = {
-+			.dst_pitch = 0,
-+			.expected = { 0x4C },
-+		},
- 		.rgb332_result = {
- 			.dst_pitch = 0,
- 			.expected = { 0xE0 },
-@@ -80,6 +90,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 			0x00000000, 0x00000000,
- 			0x00000000, 0x10FF0000,
- 		},
-+		.gray8_result = {
-+			.dst_pitch = 0,
-+			.expected = { 0x4C },
-+		},
- 		.rgb332_result = {
- 			.dst_pitch = 0,
- 			.expected = { 0xE0 },
-@@ -113,6 +127,15 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 			0x00000000, 0x550000FF, 0x66FF00FF, 0x00000000,
- 			0x00000000, 0x77FFFF00, 0x8800FFFF, 0x00000000,
- 		},
-+		.gray8_result = {
-+			.dst_pitch = 0,
-+			.expected = {
-+				0xFF, 0x00,
-+				0x4C, 0x99,
-+				0x19, 0x66,
-+				0xE5, 0xB2,
-+			},
-+		},
- 		.rgb332_result = {
- 			.dst_pitch = 0,
- 			.expected = {
-@@ -166,6 +189,14 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
- 			0xD16C7073, 0xA20E449C, 0xB2114D05,
- 			0xC2A80303, 0xD26C7073, 0xA30E449C,
- 		},
-+		.gray8_result = {
-+			.dst_pitch = 5,
-+			.expected = {
-+				0x3C, 0x33, 0x34, 0x00, 0x00,
-+				0x6F, 0x3C, 0x33, 0x00, 0x00,
-+				0x34, 0x6F, 0x3C, 0x00, 0x00,
-+			},
-+		},
- 		.rgb332_result = {
- 			.dst_pitch = 5,
- 			.expected = {
-@@ -257,6 +288,36 @@ static void convert_xrgb8888_case_desc(struct convert_xrgb8888_case *t,
- KUNIT_ARRAY_PARAM(convert_xrgb8888, convert_xrgb8888_cases,
- 		  convert_xrgb8888_case_desc);
- 
-+static void drm_test_fb_xrgb8888_to_gray8(struct kunit *test)
-+{
-+	const struct convert_xrgb8888_case *params = test->param_value;
-+	const struct convert_to_gray8_result *result = &params->gray8_result;
-+	size_t dst_size;
-+	__u8 *buf = NULL;
-+	__u32 *xrgb8888 = NULL;
-+	struct iosys_map dst, src;
-+
-+	struct drm_framebuffer fb = {
-+		.format = drm_format_info(DRM_FORMAT_XRGB8888),
-+		.pitches = { params->pitch, 0, 0 },
-+	};
-+
-+	dst_size = conversion_buf_size(DRM_FORMAT_R8, result->dst_pitch,
-+				       &params->clip);
-+	KUNIT_ASSERT_GT(test, dst_size, 0);
-+
-+	buf = kunit_kzalloc(test, dst_size, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
-+	iosys_map_set_vaddr(&dst, buf);
-+
-+	xrgb8888 = le32buf_to_cpu(test, params->xrgb8888, TEST_BUF_SIZE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, xrgb8888);
-+	iosys_map_set_vaddr(&src, xrgb8888);
-+
-+	drm_fb_xrgb8888_to_gray8(&dst, &result->dst_pitch, &src, &fb, &params->clip);
-+	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+}
-+
- static void drm_test_fb_xrgb8888_to_rgb332(struct kunit *test)
- {
- 	const struct convert_xrgb8888_case *params = test->param_value;
-@@ -382,6 +443,7 @@ static void drm_test_fb_xrgb8888_to_xrgb2101010(struct kunit *test)
- }
- 
- static struct kunit_case drm_format_helper_test_cases[] = {
-+	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_gray8, convert_xrgb8888_gen_params),
- 	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb332, convert_xrgb8888_gen_params),
- 	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb565, convert_xrgb8888_gen_params),
- 	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb888, convert_xrgb8888_gen_params),
--- 
-2.25.1
+> If this might seem helpful
+> to anyone's workflow, I wouldn't mind pursuing this (with some
+> cleanup, sending a more formal patch set).  Maybe this helps us
+> bootstrap or get Linux up and running sooner on these machines?
 
+I've been either using a Linux VM or just a bare metal system running
+on these machine for quite a while now to build kernels. This would've
+been useful when I originally started though and VMs weren't working very
+well yet so maybe it's still worth pursuing.
+
+
+>
+> Take a look at the commit message linked below for the trials & 
+> tribulations:
+> https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
+>
+> Thanks,
+> ~Nick Desaulniers
+
+
+Best,
+
+
+Sven
