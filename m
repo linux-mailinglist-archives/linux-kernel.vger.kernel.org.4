@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626FD5EB4A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF08C5EB4A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiIZWkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
+        id S229461AbiIZWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiIZWkP (ORCPT
+        with ESMTP id S229912AbiIZWkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:40:15 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA70E476F3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:40:09 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-127ba06d03fso11170819fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:40:09 -0700 (PDT)
+        Mon, 26 Sep 2022 18:40:31 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A2851427;
+        Mon, 26 Sep 2022 15:40:29 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id c7so9031510ljm.12;
+        Mon, 26 Sep 2022 15:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=4KiOCtK+FPFBaBSD234AcIQn4ASKrCbdEIcGR0w5qNk=;
-        b=7+CFRdW0czdFMr1fo9cqKgwdxvrbCUgUi7NgTJtgJQ3kn42uE8kl6ujsx/zLde2e27
-         T+ZOnm2/q3O/3H/OVE9eJGRXyUXjuBdxpYKtJLFjG/LrO+OesomoiF2jfjAw2Algu83k
-         Uh/WPeXaXa26ZafAV+73r8GzNQaMcLnAsBKdhXzSNvSHNDin8kJufynJ4zRompBBsn6k
-         HKNSoQoX+zfprEEdRC9e4yOGnbULJVD9jX2bSIOXTiU/S7i3CYEiMCtp20c69am4sxIV
-         trxEzqWF7S14zPqZwGBLxKhoUDbzRq4LqMx0VlPHXSwjodF5VvtQ7jN4w/9JNvvORLTo
-         sJCg==
+        bh=y72XdXz6R5ZX/ARjJcZ26pw4EoyPBrU9yVa6+CTk8aU=;
+        b=MUbphOcrpdLt5Iomx0drL3eOcQehL/fsyiEdAkz7QzmABbebFY7hoTuj00cvws+kQb
+         xdkQ7b5thEBkfj+yxxLT2UtP/Jlkz1uhSvDSgbkTR7NPFW8LG0NmyQB4gr/YmngT3CdE
+         oZKo3e09DksH1ZBc0B/lYsVvf8l99rwiHoHE8K1DPOU7wP3qn+38DPYtARw/uDpIqJws
+         kFyEkWHl4TFB/zConA/M2BLF+dxBVsC4VCgis8TNOSaH/XoKG5FdqRt3bdUfptxQY+pp
+         5AkIxUrWdYm8oOS3DNXwumRi/Pp1I+3aXZ1ig1ad9KVWTsr23F5TzvcRMaWzoXMl/wNY
+         RzUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4KiOCtK+FPFBaBSD234AcIQn4ASKrCbdEIcGR0w5qNk=;
-        b=Nmn21pgAwwfsJOU7fIewxuRuhvC204aOjQA7PjQVoRG2RB8/FbC0MNjBJXXbssVqcC
-         IMtkmzVBspYic3dDUQlscw2q665I/CKsgpy5RzdlzCi3LJj9Sw2Bup4TgdbefJUoyTCM
-         nk9PzJZDjWbvNqVmd5hhTqItWV9Pn6/B8s+AoWhlsu57jS09CDAIPiBMj7pteNM/26A5
-         TxvaOabHJWOmewRNT9T3ye8sXBptSHezhNB4EHTJC1rWmb/wDYwtnIDfVykML2apX4l5
-         xaG7bRlGHnsrGzQsDpF5n/ZP1Az6yJqhWta5eZxFCqaxz24k5+nP/FZccgpZy1rh6Q29
-         c//A==
-X-Gm-Message-State: ACrzQf30jt+RBg3OCtDVwROwY7jslT1OlGMsrqPO5zVAuv5KKlY1H3HK
-        k+zoOXjtWt5+X68xaA/UW47w9ya7R4r3NI8QpTpk
-X-Google-Smtp-Source: AMsMyM5Ll9Hz28q5EJA3C/EjbWd7oQiroSVNZyLN57TX2DOCveozh6b12WXc6/n86trpkP0syEDwGLAINQe6ZtKirUg=
-X-Received: by 2002:a05:6870:15c9:b0:101:e18b:d12d with SMTP id
- k9-20020a05687015c900b00101e18bd12dmr552208oad.51.1664232008652; Mon, 26 Sep
- 2022 15:40:08 -0700 (PDT)
+        bh=y72XdXz6R5ZX/ARjJcZ26pw4EoyPBrU9yVa6+CTk8aU=;
+        b=EoJ5o9IGyFaPCDv8AiHT9Y8DU+TRtrLfuVdfF5pyVLQwREwbnefB/aUxJG+wxvoe+L
+         0NVmhABjjBDi6YSPsZpaIs9T3YEpaZwZWh5lolzgNPg9L5H7/nkbyuoEn7YzqEZMjaZK
+         oVUX6uKlhwOxveeTO0frxgDtp6z01o/jUOiyCrw1Lsr7qgGRZcGipzXT+KlU4qePPFZx
+         zcTnKS+aCP+mm5ehNfU1ZWw8AuA7kkzsGmEkAAl/diMjyBMvz0Gfwcny/mjeYNDJcVTk
+         lpPGR4B38hxzRCHerD4p6hB83tI0neSYilspJxmj2gxLDI5hn5bdsksjT8DzGAKzW7AD
+         SYyg==
+X-Gm-Message-State: ACrzQf2Ffzuj/BhwGCmIP7jZAJ7D5E3Ax3N2ztvCUbC25d4U15AyvldZ
+        uLWQG+Jz2UJKTdjjeexZbubH9oOlg5yBU5jyVm8=
+X-Google-Smtp-Source: AMsMyM5W3/lV0mq0BREkCl59rHi1NZjUjoS6a/j3YY+f9eMLjaOBimG9gR98iWI/mtzQCNT2AD7QEJIr4upKEDPk1AI=
+X-Received: by 2002:a2e:a884:0:b0:25d:d8a2:d18c with SMTP id
+ m4-20020a2ea884000000b0025dd8a2d18cmr7917320ljq.305.1664232027695; Mon, 26
+ Sep 2022 15:40:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220926131643.146502-1-nathanl@linux.ibm.com> <20220926131643.146502-2-nathanl@linux.ibm.com>
-In-Reply-To: <20220926131643.146502-2-nathanl@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 26 Sep 2022 18:39:57 -0400
-Message-ID: <CAHC9VhQwypiLEwdiktaycyeMiArajgDd7YNiOoZ-XFaMx72Qqw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] powerpc/pseries: block untrusted device tree
- changes when locked down
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jmorris@namei.org,
-        mpe@ellerman.id.au, serge@hallyn.com, ajd@linux.ibm.com,
-        gcwilson@linux.ibm.com, nayna@linux.ibm.com
+References: <CABBYNZLdvOzTwnHp4GX9PiXVMr2SDjD1NCXLRJw1_XLvSuZyjw@mail.gmail.com>
+ <20220926220212.3170191-1-iam@sung-woo.kim>
+In-Reply-To: <20220926220212.3170191-1-iam@sung-woo.kim>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 26 Sep 2022 15:40:15 -0700
+Message-ID: <CABBYNZ+C_N=vSE6oUn2rDHq5EHCFtAAjtohbcpjMtKwwgqpqUQ@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: L2CAP: fix an illegal state transition from BT_DISCONN
+To:     Sungwoo Kim <iam@sung-woo.kim>
+Cc:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,88 +70,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 9:17 AM Nathan Lynch <nathanl@linux.ibm.com> wrote:
+Hi Kim,
+
+On Mon, Sep 26, 2022 at 3:06 PM Sungwoo Kim <iam@sung-woo.kim> wrote:
 >
-> The /proc/powerpc/ofdt interface allows the root user to freely alter
-> the in-kernel device tree, enabling arbitrary physical address writes
-> via drivers that could bind to malicious device nodes, thus making it
-> possible to disable lockdown.
->
-> Historically this interface has been used on the pseries platform to
-> facilitate the runtime addition and removal of processor, memory, and
-> device resources (aka Dynamic Logical Partitioning or DLPAR). Years
-> ago, the processor and memory use cases were migrated to designs that
-> happen to be lockdown-friendly: device tree updates are communicated
-> directly to the kernel from firmware without passing through untrusted
-> user space. I/O device DLPAR via the "drmgr" command in powerpc-utils
-> remains the sole legitimate user of /proc/powerpc/ofdt, but it is
-> already broken in lockdown since it uses /dev/mem to allocate argument
-> buffers for the rtas syscall. So only illegitimate uses of the
-> interface should see a behavior change when running on a locked down
-> kernel.
->
-> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
 > ---
->  arch/powerpc/platforms/pseries/reconfig.c | 5 +++++
->  include/linux/security.h                  | 1 +
->  security/security.c                       | 1 +
->  3 files changed, 7 insertions(+)
-
-Thanks for moving the definitions.
-
-Acked-by: Paul Moore <paul@paul-moore.com> (LSM)
-
-> diff --git a/arch/powerpc/platforms/pseries/reconfig.c b/arch/powerpc/platforms/pseries/reconfig.c
-> index cad7a0c93117..599bd2c78514 100644
-> --- a/arch/powerpc/platforms/pseries/reconfig.c
-> +++ b/arch/powerpc/platforms/pseries/reconfig.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kernel.h>
->  #include <linux/notifier.h>
->  #include <linux/proc_fs.h>
-> +#include <linux/security.h>
->  #include <linux/slab.h>
->  #include <linux/of.h>
+>  net/bluetooth/l2cap_core.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> @@ -361,6 +362,10 @@ static ssize_t ofdt_write(struct file *file, const char __user *buf, size_t coun
->         char *kbuf;
->         char *tmp;
+> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> index 2c9de67da..029de9f35 100644
+> --- a/net/bluetooth/l2cap_core.c
+> +++ b/net/bluetooth/l2cap_core.c
+> @@ -4294,13 +4294,13 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+>         mutex_lock(&conn->chan_lock);
 >
-> +       rv = security_locked_down(LOCKDOWN_DEVICE_TREE);
-> +       if (rv)
-> +               return rv;
-> +
->         kbuf = memdup_user_nul(buf, count);
->         if (IS_ERR(kbuf))
->                 return PTR_ERR(kbuf);
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 7bd0c490703d..39e7c0e403d9 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -114,6 +114,7 @@ enum lockdown_reason {
->         LOCKDOWN_IOPORT,
->         LOCKDOWN_MSR,
->         LOCKDOWN_ACPI_TABLES,
-> +       LOCKDOWN_DEVICE_TREE,
->         LOCKDOWN_PCMCIA_CIS,
->         LOCKDOWN_TIOCSSERIAL,
->         LOCKDOWN_MODULE_PARAMETERS,
-> diff --git a/security/security.c b/security/security.c
-> index 4b95de24bc8d..51bf66d4f472 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -52,6 +52,7 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
->         [LOCKDOWN_IOPORT] = "raw io port access",
->         [LOCKDOWN_MSR] = "raw MSR access",
->         [LOCKDOWN_ACPI_TABLES] = "modifying ACPI tables",
-> +       [LOCKDOWN_DEVICE_TREE] = "modifying device tree contents",
->         [LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
->         [LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
->         [LOCKDOWN_MODULE_PARAMETERS] = "unsafe module parameters",
+>         if (scid) {
+> -               chan = __l2cap_get_chan_by_scid(conn, scid);
+> +               chan = l2cap_get_chan_by_scid(conn, scid);
+>                 if (!chan) {
+>                         err = -EBADSLT;
+>                         goto unlock;
+>                 }
+>         } else {
+> -               chan = __l2cap_get_chan_by_ident(conn, cmd->ident);
+> +               chan = l2cap_get_chan_by_ident(conn, cmd->ident);
+>                 if (!chan) {
+>                         err = -EBADSLT;
+>                         goto unlock;
+> @@ -4336,6 +4336,7 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+>         }
+>
+>         l2cap_chan_unlock(chan);
+> +       l2cap_chan_put(chan);
+>
+>  unlock:
+>         mutex_unlock(&conn->chan_lock);
 > --
-> 2.37.3
->
+> 2.25.1
+
+Not quite right, we cannot lock conn->chan_lock since the likes of
+l2cap_get_chan_by_scid will also attempt to lock it:
+
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 770891f68703..4726d8979276 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4293,26 +4293,18 @@ static int l2cap_connect_create_rsp(struct
+l2cap_conn *conn,
+        BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
+               dcid, scid, result, status);
+
+-       mutex_lock(&conn->chan_lock);
+-
+        if (scid) {
+-               chan = __l2cap_get_chan_by_scid(conn, scid);
+-               if (!chan) {
+-                       err = -EBADSLT;
+-                       goto unlock;
+-               }
++               chan = l2cap_get_chan_by_scid(conn, scid);
++               if (!chan)
++                       return -EBADSLT;
+        } else {
+-               chan = __l2cap_get_chan_by_ident(conn, cmd->ident);
+-               if (!chan) {
+-                       err = -EBADSLT;
+-                       goto unlock;
+-               }
++               chan = l2cap_get_chan_by_ident(conn, cmd->ident);
++               if (!chan)
++                       return -EBADSLT;
+        }
+
+        err = 0;
+
+-       l2cap_chan_lock(chan);
+-
+        switch (result) {
+        case L2CAP_CR_SUCCESS:
+                l2cap_state_change(chan, BT_CONFIG);
+@@ -4338,9 +4330,7 @@ static int l2cap_connect_create_rsp(struct
+l2cap_conn *conn,
+        }
+
+        l2cap_chan_unlock(chan);
+-
+-unlock:
+-       mutex_unlock(&conn->chan_lock);
++       l2cap_chan_put(chan);
+
+        return err;
+ }
 
 
 -- 
-paul-moore.com
+Luiz Augusto von Dentz
