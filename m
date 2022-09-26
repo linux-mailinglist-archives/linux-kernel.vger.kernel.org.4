@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232095EA56C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A3A5EA57C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239154AbiIZMCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S238832AbiIZMG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239468AbiIZL7D (ORCPT
+        with ESMTP id S239078AbiIZMB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:59:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0641C7C30F;
-        Mon, 26 Sep 2022 03:52:57 -0700 (PDT)
+        Mon, 26 Sep 2022 08:01:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AA17CAA5;
+        Mon, 26 Sep 2022 03:53:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84E6060AD6;
-        Mon, 26 Sep 2022 10:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7724EC433C1;
-        Mon, 26 Sep 2022 10:51:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B57460A4D;
+        Mon, 26 Sep 2022 10:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F0EC433D6;
+        Mon, 26 Sep 2022 10:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189494;
-        bh=o1qr3piNBM7e3/1cDDu9nSnER9d/RqQc6r3ob5QHqps=;
+        s=korg; t=1664189500;
+        bh=I2iJTGmrjfeXtL80IU2V9HUQGt2jL1+AcdRt0kpwcE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DfrI1KKP7ZfaUuNes78SydbltPdOnA4GrYVIhTPaX056psR2i9U8A2mHrhec/78CJ
-         kT2+nEuSd8x1KdJojDlo1TD8iwhUoTgyP6UrHnTb/IUrXlbMnZvr765b1g5hdnU51U
-         zLVTGklF0Or2wvr/X33pvx2QL2zfKtyDFhaPLFGY=
+        b=IeAzB5mspSrFPJZepyv3tLtswtxBGkzF0ohmOSdFtnXsQCs0+KGwYDWuXfbb478t6
+         Wb4p8Iv1W6nNxTd1xE82o4Hkuk/QWmcHbiIoDXNA35K3de/w/2tiRAgx3XAtUnMlMU
+         +MsNItF0Fsjaxolrq1GJT34WNYNovLtjvy8Xp5jM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        stable@kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.19 200/207] ext4: fix bug in extents parsing when eh_entries == 0 and eh_depth > 0
-Date:   Mon, 26 Sep 2022 12:13:09 +0200
-Message-Id: <20220926100815.542682709@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH 5.19 202/207] ext4: make mballoc try target group first even with mb_optimize_scan
+Date:   Mon, 26 Sep 2022 12:13:11 +0200
+Message-Id: <20220926100815.642837527@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -55,82 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luís Henriques <lhenriques@suse.de>
+From: Jan Kara <jack@suse.cz>
 
-commit 29a5b8a137ac8eb410cc823653a29ac0e7b7e1b0 upstream.
+commit 4fca50d440cc5d4dc570ad5484cc0b70b381bc2a upstream.
 
-When walking through an inode extents, the ext4_ext_binsearch_idx() function
-assumes that the extent header has been previously validated.  However, there
-are no checks that verify that the number of entries (eh->eh_entries) is
-non-zero when depth is > 0.  And this will lead to problems because the
-EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+One of the side-effects of mb_optimize_scan was that the optimized
+functions to select next group to try were called even before we tried
+the goal group. As a result we no longer allocate files close to
+corresponding inodes as well as we don't try to expand currently
+allocated extent in the same group. This results in reaim regression
+with workfile.disk workload of upto 8% with many clients on my test
+machine:
 
-[  135.245946] ------------[ cut here ]------------
-[  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-[  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-[  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-[  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-[  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-[  135.256475] Code:
-[  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-[  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-[  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-[  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-[  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-[  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-[  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-[  135.277952] Call Trace:
-[  135.278635]  <TASK>
-[  135.279247]  ? preempt_count_add+0x6d/0xa0
-[  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-[  135.281612]  ? _raw_read_unlock+0x18/0x30
-[  135.282704]  ext4_map_blocks+0x294/0x5a0
-[  135.283745]  ? xa_load+0x6f/0xa0
-[  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-[  135.285646]  read_pages+0x67/0x1d0
-[  135.286492]  ? folio_add_lru+0x51/0x80
-[  135.287441]  page_cache_ra_unbounded+0x124/0x170
-[  135.288510]  filemap_get_pages+0x23d/0x5a0
-[  135.289457]  ? path_openat+0xa72/0xdd0
-[  135.290332]  filemap_read+0xbf/0x300
-[  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-[  135.292192]  new_sync_read+0x103/0x170
-[  135.293014]  vfs_read+0x15d/0x180
-[  135.293745]  ksys_read+0xa1/0xe0
-[  135.294461]  do_syscall_64+0x3c/0x80
-[  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+                     baseline               mb_optimize_scan
+Hmean     disk-1       2114.16 (   0.00%)     2099.37 (  -0.70%)
+Hmean     disk-41     87794.43 (   0.00%)    83787.47 *  -4.56%*
+Hmean     disk-81    148170.73 (   0.00%)   135527.05 *  -8.53%*
+Hmean     disk-121   177506.11 (   0.00%)   166284.93 *  -6.32%*
+Hmean     disk-161   220951.51 (   0.00%)   207563.39 *  -6.06%*
+Hmean     disk-201   208722.74 (   0.00%)   203235.59 (  -2.63%)
+Hmean     disk-241   222051.60 (   0.00%)   217705.51 (  -1.96%)
+Hmean     disk-281   252244.17 (   0.00%)   241132.72 *  -4.41%*
+Hmean     disk-321   255844.84 (   0.00%)   245412.84 *  -4.08%*
 
-This patch simply adds an extra check in __ext4_ext_check(), verifying that
-eh_entries is not 0 when eh_depth is > 0.
+Also this is causing huge regression (time increased by a factor of 5 or
+so) when untarring archive with lots of small files on some eMMC storage
+cards.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-Cc: Baokun Li <libaokun1@huawei.com>
-Cc: stable@kernel.org
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Baokun Li <libaokun1@huawei.com>
-Link: https://lore.kernel.org/r/20220822094235.2690-1-lhenriques@suse.de
+Fix the problem by making sure we try goal group first.
+
+Fixes: 196e402adf2e ("ext4: improve cr 0 / cr 1 group scanning")
+CC: stable@kernel.org
+Reported-and-tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Link: https://lore.kernel.org/all/20220727105123.ckwrhbilzrxqpt24@quack3/
+Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220908092136.11770-1-jack@suse.cz
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/extents.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ fs/ext4/mballoc.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
-+	if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
-+		error_msg = "eh_entries is 0 but eh_depth is > 0";
-+		goto corrupted;
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -1049,8 +1049,10 @@ static void ext4_mb_choose_next_group(st
+ {
+ 	*new_cr = ac->ac_criteria;
+ 
+-	if (!should_optimize_scan(ac) || ac->ac_groups_linear_remaining)
++	if (!should_optimize_scan(ac) || ac->ac_groups_linear_remaining) {
++		*group = next_linear_group(ac, *group, ngroups);
+ 		return;
 +	}
- 	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;
+ 
+ 	if (*new_cr == 0) {
+ 		ext4_mb_choose_next_group_cr0(ac, new_cr, group, ngroups);
+@@ -2630,7 +2632,7 @@ static noinline_for_stack int
+ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+ {
+ 	ext4_group_t prefetch_grp = 0, ngroups, group, i;
+-	int cr = -1;
++	int cr = -1, new_cr;
+ 	int err = 0, first_err = 0;
+ 	unsigned int nr = 0, prefetch_ios = 0;
+ 	struct ext4_sb_info *sbi;
+@@ -2705,13 +2707,11 @@ repeat:
+ 		ac->ac_groups_linear_remaining = sbi->s_mb_max_linear_groups;
+ 		prefetch_grp = group;
+ 
+-		for (i = 0; i < ngroups; group = next_linear_group(ac, group, ngroups),
+-			     i++) {
+-			int ret = 0, new_cr;
++		for (i = 0, new_cr = cr; i < ngroups; i++,
++		     ext4_mb_choose_next_group(ac, &new_cr, &group, ngroups)) {
++			int ret = 0;
+ 
+ 			cond_resched();
+-
+-			ext4_mb_choose_next_group(ac, &new_cr, &group, ngroups);
+ 			if (new_cr != cr) {
+ 				cr = new_cr;
+ 				goto repeat;
 
 
