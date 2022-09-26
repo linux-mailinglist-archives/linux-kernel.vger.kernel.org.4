@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384BF5EAB14
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8765EAB1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236409AbiIZPbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S236653AbiIZPbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237331AbiIZPac (ORCPT
+        with ESMTP id S237367AbiIZPah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:30:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044051EAE7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rhmwAa3yjvJEAtWrZIFUSXTAZj6LNMHdXMY1MRcUVwo=; b=Xxmx7kKKB1tsGVdyE48THLkO4x
-        giNesbp2ujEN48oFnmeyCreegaQ6+m4bIzQ1+Gre4+NYFBroVLvqMwLxEF60nUxgaWrHDUglzVrrS
-        8rmzuFiP0mVuO632RfDCzMxbFJjg2D3gAPva2VStpYlrbcSgxGy1PLKhhxj9C8xkSIxXArN1hIjZE
-        6kJuQHBEDbN1lZpY7IiR6ddxf8NedRp2t49xIM+9LexIROQL4jlDsYxk5t5dcspoa54SZWwGzgYuf
-        tR2fr9MhEv19cjgNfDhBqvf4y0uVJDA+9kx2fVnH443+9AEx3BIJBgwLUtG9VVXYHdzO++V9VTc2f
-        ZHRg56PQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34500)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ocot7-0000cH-SW; Mon, 26 Sep 2022 15:15:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ocot3-0005CR-Fg; Mon, 26 Sep 2022 15:15:09 +0100
-Date:   Mon, 26 Sep 2022 15:15:09 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: mm: Provide better fault message for permission
- fault
-Message-ID: <YzGz7QnI0EwGheqj@shell.armlinux.org.uk>
-References: <20220919103845.100809-1-wangkefeng.wang@huawei.com>
- <YzF7X2PBdps2MaG/@shell.armlinux.org.uk>
- <6fc308aa-a0ac-3f0e-b484-352512ad6793@huawei.com>
+        Mon, 26 Sep 2022 11:30:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A174F38F;
+        Mon, 26 Sep 2022 07:16:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85292B80AB3;
+        Mon, 26 Sep 2022 14:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431D9C433C1;
+        Mon, 26 Sep 2022 14:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664201776;
+        bh=TUYJYqSd4jor/lxJEt262VgRMafpQ9dsUBKaWm7idrI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nb2Ky3/q5mbHR+N52o5cXYMMAuMbt9/GsKrdxhHJF6rI23h19460jHISA14ah/wDe
+         E/flHbDCVDH2veA1DNmrqsmvnAu4Id6P0ELhY1XumCfI+8AQh8RDaWuiJyTY5Iu3MJ
+         te8RUQ9L7RFRNUMliLdCZYQE08CrxW9iYMe4/q/F8/7ERw4SaV2ExoVHgNAcUEYATX
+         waUXRc1tsQC10RiVP12glpHdcT8H4twilZ3hCp/rnF6keg1xEOQxQM6ERWDQ5Rws3N
+         iK0vw/fdftHElavp2jE+O59RVoq1M/fbVnZnZUuQEAWZV/0CHyp1CsFNPAoYTJcE07
+         2dGOLZtd9LhfQ==
+Received: by mail-lj1-f182.google.com with SMTP id b6so7579545ljr.10;
+        Mon, 26 Sep 2022 07:16:16 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2mJkttg/yBbSViPLhNH1fdHJn31j1/XXC0FOSrtEcgjtYwc2IH
+        WfEsICKqIulQd41oN5YPHJp1cWj9Dza0tbVMsUE=
+X-Google-Smtp-Source: AMsMyM5c8d1a2UhMc5k9AjXdsbaX+2CDsE/jo+VPh5QX+kWSUXCkxCIKYhHEUsPtBoQ/aXwnkIANy39qqzI0OfykCrE=
+X-Received: by 2002:a2e:8349:0:b0:26c:4311:9b84 with SMTP id
+ l9-20020a2e8349000000b0026c43119b84mr8218226ljh.152.1664201774254; Mon, 26
+ Sep 2022 07:16:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6fc308aa-a0ac-3f0e-b484-352512ad6793@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926100738.148626940@linuxfoundation.org> <20220926100738.463310701@linuxfoundation.org>
+ <20220926110826.GE8978@amd>
+In-Reply-To: <20220926110826.GE8978@amd>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 26 Sep 2022 16:16:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHOMuaBeR_LqVBKVtmGaJQg5hznSxow5bosQ9+NzhZ72A@mail.gmail.com>
+Message-ID: <CAMj1kXHOMuaBeR_LqVBKVtmGaJQg5hznSxow5bosQ9+NzhZ72A@mail.gmail.com>
+Subject: Re: [PATCH 4.14 06/40] efi: libstub: Disable struct randomization
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Daniel Marth <daniel.marth@inso.tuwien.ac.at>,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 09:26:50PM +0800, Kefeng Wang wrote:
-> 
-> On 2022/9/26 18:13, Russell King (Oracle) wrote:
-> > On Mon, Sep 19, 2022 at 06:38:45PM +0800, Kefeng Wang wrote:
-> > > If there is a permission fault in __do_kernel_fault(), we only
-> > > print the generic "paging request" message which don't show
-> > > read, write or excute information, let's provide better fault
-> > > message for them.
-> > I don't like this change. With CPUs that do not have the ability to
-> > relocate the vectors to 0xffff0000, the vectors live at address 0,
-> > so NULL pointer dereferences can produce permission faults.
-> The __do_user_fault(), do_DataAbort() and do_PrefetchAbort() shows
-> the FSR when printing, we could do it in die_kernel_fault(), and
-> which will be easy for us to check whether the page fault is permision
-> fault,
+On Mon, 26 Sept 2022 at 13:08, Pavel Machek <pavel@denx.de> wrote:
+>
+> Hi!
+>
+> > These structs look like the ideal randomization candidates to the
+> > randstruct plugin (as they only carry function pointers), but of course,
+> > these protocols are contracts between the firmware that exposes them,
+> > and the EFI applications (including our stubbed kernel) that invoke
+> > them. This means that struct randomization for EFI protocols is not a
+> > great idea, and given that the stub shares very little data with the
+> > core kernel that is represented as a randomizable struct, we're better
+> > off just disabling it completely here.
+>
+> > Cc: <stable@vger.kernel.org> # v4.14+
+>
+> AFAICT RANDSTRUCT_CFLAGS is not available in v4.19, so we should not
+> take this patch.
+>
 
-We print the hex value already in the oops:
+Ugh, as it turns out, this macro doesn't exist before v5.19 so it
+should not be backported beyond that version at all.
 
-Internal error: Oops: (fsr hex value) [#num] ...
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Greg, can you please drop this patch from all the -stable trees except
+v5.19? Thanks, and apologies for creating confusion.
