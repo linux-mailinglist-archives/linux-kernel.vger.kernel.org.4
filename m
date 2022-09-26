@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5255EAC4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5142C5EAC4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiIZQSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S236628AbiIZQSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236248AbiIZQRM (ORCPT
+        with ESMTP id S234313AbiIZQRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:17:12 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BFD5FA9C2F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:06:20 -0700 (PDT)
-Received: (qmail 410297 invoked by uid 1000); 26 Sep 2022 11:06:19 -0400
-Date:   Mon, 26 Sep 2022 11:06:19 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3] rapidio/tsi721: Replace flush_scheduled_work() with
- flush_work().
-Message-ID: <YzG/664Z5XqLD/yM@rowland.harvard.edu>
-References: <0e8a2023-7526-f03a-f520-efafbb0ef45c@I-love.SAKURA.ne.jp>
- <20220925102742.84ccc07ce1e8e591e4d5ce0f@linux-foundation.org>
- <d039cbbd-4aa7-58bf-b93d-be23443c52b6@I-love.SAKURA.ne.jp>
+        Mon, 26 Sep 2022 12:17:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A17C1B867E;
+        Mon, 26 Sep 2022 08:06:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10C521042;
+        Mon, 26 Sep 2022 08:06:34 -0700 (PDT)
+Received: from [10.57.0.51] (unknown [10.57.0.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A6683F66F;
+        Mon, 26 Sep 2022 08:06:26 -0700 (PDT)
+Message-ID: <c4f7e14b-a229-6b23-b28d-880b8369e6d8@arm.com>
+Date:   Mon, 26 Sep 2022 16:06:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d039cbbd-4aa7-58bf-b93d-be23443c52b6@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>, Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+References: <20220903000210.1112014-1-namhyung@kernel.org>
+ <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,50 +50,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 07:28:37PM +0900, Tetsuo Handa wrote:
-> On 2022/09/26 2:27, Andrew Morton wrote:
-> > On Sat, 24 Sep 2022 14:11:25 +0900 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
-> > 
-> >> Like commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue() using a
-> >> macro") says, flush_scheduled_work() is dangerous and will be forbidden.
-> >> We are on the way for removing all flush_scheduled_work() callers from
-> >> the kernel, and this patch is for removing flush_scheduled_work() call
-> >>  from tsi721 driver.
-> >>
-> >> Since "struct tsi721_device" is per a device struct, I assume that
-> >> tsi721_remove() needs to wait for only two works associated with that
-> >> device. Therefore, wait for only these works using flush_work().
-> >>
-> >> --- a/drivers/rapidio/devices/tsi721.c
-> >> +++ b/drivers/rapidio/devices/tsi721.c
-> >> @@ -2941,7 +2941,8 @@ static void tsi721_remove(struct pci_dev *pdev)
-> >>  
-> >>  	tsi721_disable_ints(priv);
-> >>  	tsi721_free_irq(priv);
-> >> -	flush_scheduled_work();
-> >> +	flush_work(&priv->idb_work);
-> >> +	flush_work(&priv->pw_work);
-> >>  	rio_unregister_mport(&priv->mport);
-> > 
-> > Why not use cancel_work[_sync](), as the flush_scheduled_work() comment
-> > recommends?
-> > 
+
+
+On 03/09/2022 07:52, Marco Elver wrote:
+> On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel.org> wrote:
+>>
+>> If it runs on an old kernel, perf_event_open would fail because of the
+>> new fields sigtrap and sig_data.  Just skip the test if it failed.
+>>
+>> Cc: Marco Elver <elver@google.com>
+>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>> ---
+>>  tools/perf/tests/sigtrap.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+>> index e32ece90e164..7057566e6ae4 100644
+>> --- a/tools/perf/tests/sigtrap.c
+>> +++ b/tools/perf/tests/sigtrap.c
+>> @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+>>         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+>>         if (fd < 0) {
+>>                 pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+>> +               ret = TEST_SKIP;
 > 
-> Alan Stern suggested to use cancel_work_sync() in
-> commit eef6a7d5c2f38ada ("workqueue: warn about flush_scheduled_work()")
-> and Tejun Heo suggested to use flush_work() in
-> https://lkml.kernel.org/r/YjivtdkpY+reW0Gt@slm.duckdns.org .
+> Wouldn't we be interested if perf_event_open() fails because it could
+> actually be a bug? By skipping we'll be more likely to miss the fact
+> there's a real problem.
 > 
-> Is there some reason to prefer one over the other?
-> I think that user-visible results between flush_work() and cancel_work_sync()
-> are the same because both wait until work completes.
+> That's my naive thinking at least - what do other perf tests usually
+> do in this case?
 
-No, you haven't got it quite right.  flush_work() waits until the work 
-completes, but cancel_work_sync() first tries to cancel the work item.  
-It then waits until the work item is either cancelled or completed.
+I missed this discussion but I just submitted a patch with a similar
+issue [1]. To me, it doesn't make sense to have the tests pass on older
+kernels if this lowers the value of the tests by accepting possibly
+invalid values. If you want to test older kernels then just use older
+tests, but maybe there is some use case that I'm not aware of.
 
-If the cancellation is successful (i.e., it happens before the work item 
-starts to run) then the call will return at that time and the work item 
-will never run -- hence it will never complete.
+[1]: "[PATCH 0/1] perf test: Fix attr tests for PERF_FORMAT_LOST"
 
-Alan Stern
+> 
+> Thanks,
+> -- Marco
