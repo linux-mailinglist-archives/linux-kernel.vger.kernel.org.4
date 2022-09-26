@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C085EA254
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53585EA377
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiIZLFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
+        id S233713AbiIZLZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiIZLE2 (ORCPT
+        with ESMTP id S238090AbiIZLYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:04:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E739A4A116;
-        Mon, 26 Sep 2022 03:33:27 -0700 (PDT)
+        Mon, 26 Sep 2022 07:24:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA5543EE;
+        Mon, 26 Sep 2022 03:40:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45EC860112;
-        Mon, 26 Sep 2022 10:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C293C433C1;
-        Mon, 26 Sep 2022 10:33:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81C5C609FB;
+        Mon, 26 Sep 2022 10:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C885C433D6;
+        Mon, 26 Sep 2022 10:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188400;
-        bh=sgHXT3LlirVMkqBoHOPqiiag2KMBYEjerSrFk8IJX/A=;
+        s=korg; t=1664188815;
+        bh=kdciQqLL5+YcG6bYcS7WbJQgVlTedWlujEX0Q5tDIyk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MNmCVVA6vug2uB2natxEItRPNKSvAUEW2Ale1BnYeaq0Qrda6m5PuyD77F6ey1lT4
-         Nwkv3bqhVIEnwwSxJC2bLXXFgKfU31orkFck+2h9zMHRMItQKu7LhOZeHRuIMjlpEP
-         jxtnsHjtmGk08+g9eZvcD7TSNY5qSseNDUEnPW+E=
+        b=jeeoHI9rNZlW/1I46Fb+fc9QqAYfn/4SLS638//JmQctJEWgy/PMs8B32BtGUlLjP
+         4cfJWxBMNrHViggVgi29iqUzVWKy/UqmzCxQ8BbWLiQyIg0cW+fH2ycDpn+zHpazhI
+         467vKE6WEL7RvrU7nvb3kAy0Ryj+UxZlY9uiBkZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Omar Avelar <omar.avelar@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH 5.10 138/141] devdax: Fix soft-reservation memory description
-Date:   Mon, 26 Sep 2022 12:12:44 +0200
-Message-Id: <20220926100759.459470879@linuxfoundation.org>
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 131/148] drm/amd/display: Reduce number of arguments of dml31s CalculateFlipSchedule()
+Date:   Mon, 26 Sep 2022 12:12:45 +0200
+Message-Id: <20220926100801.120885938@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,58 +58,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 67feaba413ec68daf4124e9870878899b4ed9a0e upstream.
+[ Upstream commit 21485d3da659b66c37d99071623af83ee1c6733d ]
 
-The "hmem" platform-devices that are created to represent the
-platform-advertised "Soft Reserved" memory ranges end up inserting a
-resource that causes the iomem_resource tree to look like this:
+Most of the arguments are identical between the two call sites and they
+can be accessed through the 'struct vba_vars_st' pointer. This reduces
+the total amount of stack space that
+dml31_ModeSupportAndSystemConfigurationFull() uses by 112 bytes with
+LLVM 16 (1976 -> 1864), helping clear up the following clang warning:
 
-340000000-43fffffff : hmem.0
-  340000000-43fffffff : Soft Reserved
-    340000000-43fffffff : dax0.0
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+  void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+      ^
+  1 error generated.
 
-This is because insert_resource() reparents ranges when they completely
-intersect an existing range.
-
-This matters because code that uses region_intersects() to scan for a
-given IORES_DESC will only check that top-level 'hmem.0' resource and
-not the 'Soft Reserved' descendant.
-
-So, to support EINJ (via einj_error_inject()) to inject errors into
-memory hosted by a dax-device, be sure to describe the memory as
-IORES_DESC_SOFT_RESERVED. This is a follow-on to:
-
-commit b13a3e5fd40b ("ACPI: APEI: Fix _EINJ vs EFI_MEMORY_SP")
-
-...that fixed EINJ support for "Soft Reserved" ranges in the first
-instance.
-
-Fixes: 262b45ae3ab4 ("x86/efi: EFI soft reservation to E820 enumeration")
-Reported-by: Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>
-Tested-by: Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>
-Cc: <stable@vger.kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Omar Avelar <omar.avelar@intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Mark Gross <markgross@kernel.org>
-Link: https://lore.kernel.org/r/166397075670.389916.7435722208896316387.stgit@dwillia2-xfh.jf.intel.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1681
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Tested-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dax/hmem/device.c |    1 +
- 1 file changed, 1 insertion(+)
+ .../dc/dml/dcn31/display_mode_vba_31.c        | 172 +++++-------------
+ 1 file changed, 47 insertions(+), 125 deletions(-)
 
---- a/drivers/dax/hmem/device.c
-+++ b/drivers/dax/hmem/device.c
-@@ -15,6 +15,7 @@ void hmem_register_device(int target_nid
- 		.start = r->start,
- 		.end = r->end,
- 		.flags = IORESOURCE_MEM,
-+		.desc = IORES_DESC_SOFT_RESERVED,
- 	};
- 	struct platform_device *pdev;
- 	struct memregion_info info;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index a6ce22d23b26..aa0507e01792 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -259,33 +259,13 @@ static void CalculateRowBandwidth(
+ 
+ static void CalculateFlipSchedule(
+ 		struct display_mode_lib *mode_lib,
++		unsigned int k,
+ 		double HostVMInefficiencyFactor,
+ 		double UrgentExtraLatency,
+ 		double UrgentLatency,
+-		unsigned int GPUVMMaxPageTableLevels,
+-		bool HostVMEnable,
+-		unsigned int HostVMMaxNonCachedPageTableLevels,
+-		bool GPUVMEnable,
+-		double HostVMMinPageSize,
+ 		double PDEAndMetaPTEBytesPerFrame,
+ 		double MetaRowBytes,
+-		double DPTEBytesPerRow,
+-		double BandwidthAvailableForImmediateFlip,
+-		unsigned int TotImmediateFlipBytes,
+-		enum source_format_class SourcePixelFormat,
+-		double LineTime,
+-		double VRatio,
+-		double VRatioChroma,
+-		double Tno_bw,
+-		bool DCCEnable,
+-		unsigned int dpte_row_height,
+-		unsigned int meta_row_height,
+-		unsigned int dpte_row_height_chroma,
+-		unsigned int meta_row_height_chroma,
+-		double *DestinationLinesToRequestVMInImmediateFlip,
+-		double *DestinationLinesToRequestRowInImmediateFlip,
+-		double *final_flip_bw,
+-		bool *ImmediateFlipSupportedForPipe);
++		double DPTEBytesPerRow);
+ static double CalculateWriteBackDelay(
+ 		enum source_format_class WritebackPixelFormat,
+ 		double WritebackHRatio,
+@@ -2923,33 +2903,13 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 				CalculateFlipSchedule(
+ 						mode_lib,
++						k,
+ 						HostVMInefficiencyFactor,
+ 						v->UrgentExtraLatency,
+ 						v->UrgentLatency,
+-						v->GPUVMMaxPageTableLevels,
+-						v->HostVMEnable,
+-						v->HostVMMaxNonCachedPageTableLevels,
+-						v->GPUVMEnable,
+-						v->HostVMMinPageSize,
+ 						v->PDEAndMetaPTEBytesFrame[k],
+ 						v->MetaRowByte[k],
+-						v->PixelPTEBytesPerRow[k],
+-						v->BandwidthAvailableForImmediateFlip,
+-						v->TotImmediateFlipBytes,
+-						v->SourcePixelFormat[k],
+-						v->HTotal[k] / v->PixelClock[k],
+-						v->VRatio[k],
+-						v->VRatioChroma[k],
+-						v->Tno_bw[k],
+-						v->DCCEnable[k],
+-						v->dpte_row_height[k],
+-						v->meta_row_height[k],
+-						v->dpte_row_height_chroma[k],
+-						v->meta_row_height_chroma[k],
+-						&v->DestinationLinesToRequestVMInImmediateFlip[k],
+-						&v->DestinationLinesToRequestRowInImmediateFlip[k],
+-						&v->final_flip_bw[k],
+-						&v->ImmediateFlipSupportedForPipe[k]);
++						v->PixelPTEBytesPerRow[k]);
+ 			}
+ 
+ 			v->total_dcn_read_bw_with_flip = 0.0;
+@@ -3669,61 +3629,43 @@ static void CalculateRowBandwidth(
+ 
+ static void CalculateFlipSchedule(
+ 		struct display_mode_lib *mode_lib,
++		unsigned int k,
+ 		double HostVMInefficiencyFactor,
+ 		double UrgentExtraLatency,
+ 		double UrgentLatency,
+-		unsigned int GPUVMMaxPageTableLevels,
+-		bool HostVMEnable,
+-		unsigned int HostVMMaxNonCachedPageTableLevels,
+-		bool GPUVMEnable,
+-		double HostVMMinPageSize,
+ 		double PDEAndMetaPTEBytesPerFrame,
+ 		double MetaRowBytes,
+-		double DPTEBytesPerRow,
+-		double BandwidthAvailableForImmediateFlip,
+-		unsigned int TotImmediateFlipBytes,
+-		enum source_format_class SourcePixelFormat,
+-		double LineTime,
+-		double VRatio,
+-		double VRatioChroma,
+-		double Tno_bw,
+-		bool DCCEnable,
+-		unsigned int dpte_row_height,
+-		unsigned int meta_row_height,
+-		unsigned int dpte_row_height_chroma,
+-		unsigned int meta_row_height_chroma,
+-		double *DestinationLinesToRequestVMInImmediateFlip,
+-		double *DestinationLinesToRequestRowInImmediateFlip,
+-		double *final_flip_bw,
+-		bool *ImmediateFlipSupportedForPipe)
++		double DPTEBytesPerRow)
+ {
++	struct vba_vars_st *v = &mode_lib->vba;
+ 	double min_row_time = 0.0;
+ 	unsigned int HostVMDynamicLevelsTrips;
+ 	double TimeForFetchingMetaPTEImmediateFlip;
+ 	double TimeForFetchingRowInVBlankImmediateFlip;
+ 	double ImmediateFlipBW;
++	double LineTime = v->HTotal[k] / v->PixelClock[k];
+ 
+-	if (GPUVMEnable == true && HostVMEnable == true) {
+-		HostVMDynamicLevelsTrips = HostVMMaxNonCachedPageTableLevels;
++	if (v->GPUVMEnable == true && v->HostVMEnable == true) {
++		HostVMDynamicLevelsTrips = v->HostVMMaxNonCachedPageTableLevels;
+ 	} else {
+ 		HostVMDynamicLevelsTrips = 0;
+ 	}
+ 
+-	if (GPUVMEnable == true || DCCEnable == true) {
+-		ImmediateFlipBW = (PDEAndMetaPTEBytesPerFrame + MetaRowBytes + DPTEBytesPerRow) * BandwidthAvailableForImmediateFlip / TotImmediateFlipBytes;
++	if (v->GPUVMEnable == true || v->DCCEnable[k] == true) {
++		ImmediateFlipBW = (PDEAndMetaPTEBytesPerFrame + MetaRowBytes + DPTEBytesPerRow) * v->BandwidthAvailableForImmediateFlip / v->TotImmediateFlipBytes;
+ 	}
+ 
+-	if (GPUVMEnable == true) {
++	if (v->GPUVMEnable == true) {
+ 		TimeForFetchingMetaPTEImmediateFlip = dml_max3(
+-				Tno_bw + PDEAndMetaPTEBytesPerFrame * HostVMInefficiencyFactor / ImmediateFlipBW,
+-				UrgentExtraLatency + UrgentLatency * (GPUVMMaxPageTableLevels * (HostVMDynamicLevelsTrips + 1) - 1),
++				v->Tno_bw[k] + PDEAndMetaPTEBytesPerFrame * HostVMInefficiencyFactor / ImmediateFlipBW,
++				UrgentExtraLatency + UrgentLatency * (v->GPUVMMaxPageTableLevels * (HostVMDynamicLevelsTrips + 1) - 1),
+ 				LineTime / 4.0);
+ 	} else {
+ 		TimeForFetchingMetaPTEImmediateFlip = 0;
+ 	}
+ 
+-	*DestinationLinesToRequestVMInImmediateFlip = dml_ceil(4.0 * (TimeForFetchingMetaPTEImmediateFlip / LineTime), 1) / 4.0;
+-	if ((GPUVMEnable == true || DCCEnable == true)) {
++	v->DestinationLinesToRequestVMInImmediateFlip[k] = dml_ceil(4.0 * (TimeForFetchingMetaPTEImmediateFlip / LineTime), 1) / 4.0;
++	if ((v->GPUVMEnable == true || v->DCCEnable[k] == true)) {
+ 		TimeForFetchingRowInVBlankImmediateFlip = dml_max3(
+ 				(MetaRowBytes + DPTEBytesPerRow * HostVMInefficiencyFactor) / ImmediateFlipBW,
+ 				UrgentLatency * (HostVMDynamicLevelsTrips + 1),
+@@ -3732,54 +3674,54 @@ static void CalculateFlipSchedule(
+ 		TimeForFetchingRowInVBlankImmediateFlip = 0;
+ 	}
+ 
+-	*DestinationLinesToRequestRowInImmediateFlip = dml_ceil(4.0 * (TimeForFetchingRowInVBlankImmediateFlip / LineTime), 1) / 4.0;
++	v->DestinationLinesToRequestRowInImmediateFlip[k] = dml_ceil(4.0 * (TimeForFetchingRowInVBlankImmediateFlip / LineTime), 1) / 4.0;
+ 
+-	if (GPUVMEnable == true) {
+-		*final_flip_bw = dml_max(
+-				PDEAndMetaPTEBytesPerFrame * HostVMInefficiencyFactor / (*DestinationLinesToRequestVMInImmediateFlip * LineTime),
+-				(MetaRowBytes + DPTEBytesPerRow * HostVMInefficiencyFactor) / (*DestinationLinesToRequestRowInImmediateFlip * LineTime));
+-	} else if ((GPUVMEnable == true || DCCEnable == true)) {
+-		*final_flip_bw = (MetaRowBytes + DPTEBytesPerRow * HostVMInefficiencyFactor) / (*DestinationLinesToRequestRowInImmediateFlip * LineTime);
++	if (v->GPUVMEnable == true) {
++		v->final_flip_bw[k] = dml_max(
++				PDEAndMetaPTEBytesPerFrame * HostVMInefficiencyFactor / (v->DestinationLinesToRequestVMInImmediateFlip[k] * LineTime),
++				(MetaRowBytes + DPTEBytesPerRow * HostVMInefficiencyFactor) / (v->DestinationLinesToRequestRowInImmediateFlip[k] * LineTime));
++	} else if ((v->GPUVMEnable == true || v->DCCEnable[k] == true)) {
++		v->final_flip_bw[k] = (MetaRowBytes + DPTEBytesPerRow * HostVMInefficiencyFactor) / (v->DestinationLinesToRequestRowInImmediateFlip[k] * LineTime);
+ 	} else {
+-		*final_flip_bw = 0;
++		v->final_flip_bw[k] = 0;
+ 	}
+ 
+-	if (SourcePixelFormat == dm_420_8 || SourcePixelFormat == dm_420_10 || SourcePixelFormat == dm_rgbe_alpha) {
+-		if (GPUVMEnable == true && DCCEnable != true) {
+-			min_row_time = dml_min(dpte_row_height * LineTime / VRatio, dpte_row_height_chroma * LineTime / VRatioChroma);
+-		} else if (GPUVMEnable != true && DCCEnable == true) {
+-			min_row_time = dml_min(meta_row_height * LineTime / VRatio, meta_row_height_chroma * LineTime / VRatioChroma);
++	if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_rgbe_alpha) {
++		if (v->GPUVMEnable == true && v->DCCEnable[k] != true) {
++			min_row_time = dml_min(v->dpte_row_height[k] * LineTime / v->VRatio[k], v->dpte_row_height_chroma[k] * LineTime / v->VRatioChroma[k]);
++		} else if (v->GPUVMEnable != true && v->DCCEnable[k] == true) {
++			min_row_time = dml_min(v->meta_row_height[k] * LineTime / v->VRatio[k], v->meta_row_height_chroma[k] * LineTime / v->VRatioChroma[k]);
+ 		} else {
+ 			min_row_time = dml_min4(
+-					dpte_row_height * LineTime / VRatio,
+-					meta_row_height * LineTime / VRatio,
+-					dpte_row_height_chroma * LineTime / VRatioChroma,
+-					meta_row_height_chroma * LineTime / VRatioChroma);
++					v->dpte_row_height[k] * LineTime / v->VRatio[k],
++					v->meta_row_height[k] * LineTime / v->VRatio[k],
++					v->dpte_row_height_chroma[k] * LineTime / v->VRatioChroma[k],
++					v->meta_row_height_chroma[k] * LineTime / v->VRatioChroma[k]);
+ 		}
+ 	} else {
+-		if (GPUVMEnable == true && DCCEnable != true) {
+-			min_row_time = dpte_row_height * LineTime / VRatio;
+-		} else if (GPUVMEnable != true && DCCEnable == true) {
+-			min_row_time = meta_row_height * LineTime / VRatio;
++		if (v->GPUVMEnable == true && v->DCCEnable[k] != true) {
++			min_row_time = v->dpte_row_height[k] * LineTime / v->VRatio[k];
++		} else if (v->GPUVMEnable != true && v->DCCEnable[k] == true) {
++			min_row_time = v->meta_row_height[k] * LineTime / v->VRatio[k];
+ 		} else {
+-			min_row_time = dml_min(dpte_row_height * LineTime / VRatio, meta_row_height * LineTime / VRatio);
++			min_row_time = dml_min(v->dpte_row_height[k] * LineTime / v->VRatio[k], v->meta_row_height[k] * LineTime / v->VRatio[k]);
+ 		}
+ 	}
+ 
+-	if (*DestinationLinesToRequestVMInImmediateFlip >= 32 || *DestinationLinesToRequestRowInImmediateFlip >= 16
++	if (v->DestinationLinesToRequestVMInImmediateFlip[k] >= 32 || v->DestinationLinesToRequestRowInImmediateFlip[k] >= 16
+ 			|| TimeForFetchingMetaPTEImmediateFlip + 2 * TimeForFetchingRowInVBlankImmediateFlip > min_row_time) {
+-		*ImmediateFlipSupportedForPipe = false;
++		v->ImmediateFlipSupportedForPipe[k] = false;
+ 	} else {
+-		*ImmediateFlipSupportedForPipe = true;
++		v->ImmediateFlipSupportedForPipe[k] = true;
+ 	}
+ 
+ #ifdef __DML_VBA_DEBUG__
+-	dml_print("DML::%s: DestinationLinesToRequestVMInImmediateFlip = %f\n", __func__, *DestinationLinesToRequestVMInImmediateFlip);
+-	dml_print("DML::%s: DestinationLinesToRequestRowInImmediateFlip = %f\n", __func__, *DestinationLinesToRequestRowInImmediateFlip);
++	dml_print("DML::%s: DestinationLinesToRequestVMInImmediateFlip = %f\n", __func__, v->DestinationLinesToRequestVMInImmediateFlip[k]);
++	dml_print("DML::%s: DestinationLinesToRequestRowInImmediateFlip = %f\n", __func__, v->DestinationLinesToRequestRowInImmediateFlip[k]);
+ 	dml_print("DML::%s: TimeForFetchingMetaPTEImmediateFlip = %f\n", __func__, TimeForFetchingMetaPTEImmediateFlip);
+ 	dml_print("DML::%s: TimeForFetchingRowInVBlankImmediateFlip = %f\n", __func__, TimeForFetchingRowInVBlankImmediateFlip);
+ 	dml_print("DML::%s: min_row_time = %f\n", __func__, min_row_time);
+-	dml_print("DML::%s: ImmediateFlipSupportedForPipe = %d\n", __func__, *ImmediateFlipSupportedForPipe);
++	dml_print("DML::%s: ImmediateFlipSupportedForPipe = %d\n", __func__, v->ImmediateFlipSupportedForPipe[k]);
+ #endif
+ 
+ }
+@@ -5405,33 +5347,13 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+ 						CalculateFlipSchedule(
+ 								mode_lib,
++								k,
+ 								HostVMInefficiencyFactor,
+ 								v->ExtraLatency,
+ 								v->UrgLatency[i],
+-								v->GPUVMMaxPageTableLevels,
+-								v->HostVMEnable,
+-								v->HostVMMaxNonCachedPageTableLevels,
+-								v->GPUVMEnable,
+-								v->HostVMMinPageSize,
+ 								v->PDEAndMetaPTEBytesPerFrame[i][j][k],
+ 								v->MetaRowBytes[i][j][k],
+-								v->DPTEBytesPerRow[i][j][k],
+-								v->BandwidthAvailableForImmediateFlip,
+-								v->TotImmediateFlipBytes,
+-								v->SourcePixelFormat[k],
+-								v->HTotal[k] / v->PixelClock[k],
+-								v->VRatio[k],
+-								v->VRatioChroma[k],
+-								v->Tno_bw[k],
+-								v->DCCEnable[k],
+-								v->dpte_row_height[k],
+-								v->meta_row_height[k],
+-								v->dpte_row_height_chroma[k],
+-								v->meta_row_height_chroma[k],
+-								&v->DestinationLinesToRequestVMInImmediateFlip[k],
+-								&v->DestinationLinesToRequestRowInImmediateFlip[k],
+-								&v->final_flip_bw[k],
+-								&v->ImmediateFlipSupportedForPipe[k]);
++								v->DPTEBytesPerRow[i][j][k]);
+ 					}
+ 					v->total_dcn_read_bw_with_flip = 0.0;
+ 					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+-- 
+2.35.1
+
 
 
