@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AF35EA203
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0552D5EA479
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiIZLAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S238630AbiIZLqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237063AbiIZK6l (ORCPT
+        with ESMTP id S238520AbiIZLnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:58:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012A54F19C;
-        Mon, 26 Sep 2022 03:30:13 -0700 (PDT)
+        Mon, 26 Sep 2022 07:43:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EE57286A;
+        Mon, 26 Sep 2022 03:46:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6C9460C05;
-        Mon, 26 Sep 2022 10:29:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C247DC433D6;
-        Mon, 26 Sep 2022 10:29:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC0E5B80925;
+        Mon, 26 Sep 2022 10:46:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA312C433D6;
+        Mon, 26 Sep 2022 10:46:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188159;
-        bh=SCkuQChrc7mP5hktMA3Vga9bYYyymxROxaXFL0Ekx6w=;
+        s=korg; t=1664189165;
+        bh=/8T1n28G2OkOlOq8doDkRAmA1DaEtWdSbd0oPGpyoF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tyZ3haQVwKNPMykrQdwQgyMv46az7e4D4FoRBtRwypnL7Dq+3YPUpFR0IrAXtM1EB
-         GW5S9rUhvDH3eWUFhTjDJH0mZlnE4yh7KXs/ztEdTo447pHuEqZiwnBdJztifHm5vn
-         FihHzVUIB0cixpH7rP39L4TQEpjYryDoT4fGJwNw=
+        b=CF+tl5w4EllW3z2N/SWrsbggyjWUtj0BbnCMF1Cv9bg4H/7mcPN9+RUVjJu3hgcoT
+         /vrAbTfZ4U+aln9yGKck50R+Rkk1aQql3Qd9Z5qgO91ByIUm4VKP34kCp7KsjoXfVi
+         VuBhKd/hboYhYHqFMJGumXapOMH+297gOYacvIuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 029/141] Revert "usb: add quirks for Lenovo OneLink+ Dock"
-Date:   Mon, 26 Sep 2022 12:10:55 +0200
-Message-Id: <20220926100755.574267053@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 5.19 067/207] perf/arm-cmn: Add more bits to child node address offset field
+Date:   Mon, 26 Sep 2022 12:10:56 +0200
+Message-Id: <20220926100809.597544349@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Ilkka Koskinen <ilkka@os.amperecomputing.com>
 
-[ Upstream commit 58bfe7d8e31014d7ce246788df99c56e3cfe6c68 ]
+commit 05d6f6d346fea2fa4580a0c2b6be207456bebb08 upstream.
 
-This reverts commit 3d5f70949f1b1168fbb17d06eb5c57e984c56c58.
+CMN-600 uses bits [27:0] for child node address offset while bits [30:28]
+are required to be zero.
 
-The quirk does not work properly, more work is needed to determine what
-should be done here.
+For CMN-650, the child node address offset field has been increased
+to include bits [29:0] while leaving only bit 30 set to zero.
 
-Reported-by: Oliver Neukum <oneukum@suse.com>
-Cc: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-Cc: stable <stable@kernel.org>
-Fixes: 3d5f70949f1b ("usb: add quirks for Lenovo OneLink+ Dock")
-Link: https://lore.kernel.org/r/9a17ea86-079f-510d-e919-01bc53a6d09f@gmx.com
+Let's include the missing two bits and assume older implementations
+comply with the spec and set bits [29:28] to 0.
+
+Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Fixes: 60d1504070c2 ("perf/arm-cmn: Support new IP features")
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20220808195455.79277-1-ilkka@os.amperecomputing.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/quirks.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/perf/arm-cmn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 03473e20e218..f03ee889ecc7 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -438,10 +438,6 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
- 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 80d8309652a4..b80a9b74662b 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -36,7 +36,7 @@
+ #define CMN_CI_CHILD_COUNT		GENMASK_ULL(15, 0)
+ #define CMN_CI_CHILD_PTR_OFFSET		GENMASK_ULL(31, 16)
  
--	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) */
--	{ USB_DEVICE(0x17ef, 0x1018), .driver_info = USB_QUIRK_RESET_RESUME },
--	{ USB_DEVICE(0x17ef, 0x1019), .driver_info = USB_QUIRK_RESET_RESUME },
--
- 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
- 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
+-#define CMN_CHILD_NODE_ADDR		GENMASK(27, 0)
++#define CMN_CHILD_NODE_ADDR		GENMASK(29, 0)
+ #define CMN_CHILD_NODE_EXTERNAL		BIT(31)
  
+ #define CMN_MAX_DIMENSION		12
 -- 
-2.35.1
+2.37.3
 
 
 
