@@ -2,196 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4C35EB3A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776845EB377
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiIZVwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S229551AbiIZVrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiIZVwE (ORCPT
+        with ESMTP id S229502AbiIZVr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:52:04 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC1FB3B2E;
-        Mon, 26 Sep 2022 14:52:03 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id f193so7785415pgc.0;
-        Mon, 26 Sep 2022 14:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nZktzK+zzsCjiwRA7br+CXR0Vc/qwKL2ngFhBD6+m64=;
-        b=TLVJoOL3zluMziQihUabADxccWS/xFw1pnySEi88cQkx3bjbVMWPdWUQt5b0c3BjxX
-         Z/E7MagaIg+4cKK745RhgOA/aCBswqEeGJPjXlbIMeXenM/1qRSMpnGd5P+rp3jeG4/p
-         gseud0za4Z9lgEGsbGIxNaIgNqw9GNyZGeQAAEzcZE3SF/UQNMIqh/k0c8tc6YkpBnle
-         f3G1rpEczuSi70dYZdmBEkFRQJwVbCd07j3DENNlSPRDmAsTvrW/rotZAnv2vca3CGvt
-         oMSTFGsKHFe2buKxfmSh9sUjVVUd4NpNJkdOa22s2wqVjRKTWRbotq5wOgvukCRX22EF
-         ieqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nZktzK+zzsCjiwRA7br+CXR0Vc/qwKL2ngFhBD6+m64=;
-        b=AUB6aFQXZt3zzv/RICOCaoDT5L/J372DLZKqtZuviPuC35QyVvj+w6Q3ZgR6jrk6oQ
-         xTz2N1/GiNnsTiipqepM6HDLcmWjE0vy3evcYrPYulY8kCtDLViOhu2UrYfiYM8kv78R
-         cz0XhNIkcL/2QnxsQFSwQBizr+IK9LLK4WUNx+rUHRY8XjD+Py70E6zpN+xzwun5HEaj
-         k2TfGfv21FzglVU2XomcGTUXcoFj3ynznvBTEWSxbsH/kaioOSO1wwozFJNt1ZLvMcMP
-         OaNL7TE/SmMdikaMFSgz3LO3rsYEyKFvVhTCuevEpCe8rqN1GbFs5D/wWy4tDffzlxIY
-         YVtw==
-X-Gm-Message-State: ACrzQf3pve4fD7xAHXaJX26GewTlWGNDajYWX2T2XlpChbhjk3PaxfNS
-        r3NKzikYJulRQ0EAbiHSzL0=
-X-Google-Smtp-Source: AMsMyM4T+ZuUoeZDY7V6nQrJ9QdjfWe5P5qUXQBQiuWQrJXCO1A7HT+7UKpdWFcIetN88mi41WTReQ==
-X-Received: by 2002:a63:f20e:0:b0:439:398f:80f8 with SMTP id v14-20020a63f20e000000b00439398f80f8mr21178677pgh.494.1664229122422;
-        Mon, 26 Sep 2022 14:52:02 -0700 (PDT)
-Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
-        by smtp.gmail.com with ESMTPSA id i64-20020a62c143000000b0053617cbe2d2sm12606746pfg.168.2022.09.26.14.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:52:01 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 21:52:00 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Eric Dumazet <edumazet@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 4/6] virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
-Message-ID: <YzIfADqYLMUHjf2a@bullseye>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <3d1f32c4da81f8a0870e126369ba12bc8c4ad048.1660362668.git.bobby.eshleman@bytedance.com>
- <20220926131751.pdlc5mbx6gxqlmkx@sgarzare-redhat>
+        Mon, 26 Sep 2022 17:47:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFFBA61EF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664228846; x=1695764846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5KrsFws6/eg5uAv6hHy56hUAKlUZzPPOyHoOX3dB1cw=;
+  b=P9myxfqs0k0P+0Dh6hLSgsbm+2UciaIlxi5uyV+mhrleKs2BucHVnRTm
+   qh+/IU7rHKt3UDL+BGNOxGpGMHgcZc9aQqE+HQZXVjrAUwhAtTbKA2hNu
+   08EOj/VPAv/HAAjnM1cTJoUa1kzpbo2+A809xC/d4tFVNcCqObfYcMz3q
+   CGNFbpn3TlpE/oLd/H7RtP3Gu/qDK7TQEUjbX9ejm703h+/VIQbd8r1C7
+   X7QxxYjfNoDc0mqDchcw4OQCKiPnDMAv2DTEQwy4+jQsBcEuSnlT753pc
+   Gtqr8zDAxpJWQWwpxZR2DwDkCSS7yyUKwl2fp1mgdF9Z9nNcuA87nJ1N4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="299870844"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="299870844"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:47:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="616569817"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="616569817"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga007.jf.intel.com with ESMTP; 26 Sep 2022 14:47:24 -0700
+Date:   Mon, 26 Sep 2022 14:53:38 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 03/23] sched/core: Initialize the class of a new task
+Message-ID: <20220926215338.GA5529@ranerica-svr.sc.intel.com>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-4-ricardo.neri-calderon@linux.intel.com>
+ <YzG92YDyBK/0W+5u@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926131751.pdlc5mbx6gxqlmkx@sgarzare-redhat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YzG92YDyBK/0W+5u@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 03:17:51PM +0200, Stefano Garzarella wrote:
-> On Mon, Aug 15, 2022 at 10:56:07AM -0700, Bobby Eshleman wrote:
-> > This commit adds a feature bit for virtio vsock to support datagrams.
+On Mon, Sep 26, 2022 at 02:57:29PM +0000, Joel Fernandes wrote:
+> Hi Ricardo,
+> 
+> On Fri, Sep 09, 2022 at 04:11:45PM -0700, Ricardo Neri wrote:
+> > New tasks shall start life as unclassified. They will be classified by
+> > hardware when they run.
 > > 
-> > Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > ---
-> > drivers/vhost/vsock.c             | 3 ++-
-> > include/uapi/linux/virtio_vsock.h | 1 +
-> > net/vmw_vsock/virtio_transport.c  | 8 ++++++--
-> > 3 files changed, 9 insertions(+), 3 deletions(-)
+> >  kernel/sched/core.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > > 
-> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> > index b20ddec2664b..a5d1bdb786fe 100644
-> > --- a/drivers/vhost/vsock.c
-> > +++ b/drivers/vhost/vsock.c
-> > @@ -32,7 +32,8 @@
-> > enum {
-> > 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
-> > 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
-> > -			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
-> > +			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
-> > +			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
-> > };
-> > 
-> > enum {
-> > diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
-> > index 64738838bee5..857df3a3a70d 100644
-> > --- a/include/uapi/linux/virtio_vsock.h
-> > +++ b/include/uapi/linux/virtio_vsock.h
-> > @@ -40,6 +40,7 @@
-> > 
-> > /* The feature bitmap for virtio vsock */
-> > #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
-> > +#define VIRTIO_VSOCK_F_DGRAM		2	/* Host support dgram vsock */
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index ee28253c9ac0..db548c1a25ef 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -4336,6 +4336,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+> >  	p->se.prev_sum_exec_runtime	= 0;
+> >  	p->se.nr_migrations		= 0;
+> >  	p->se.vruntime			= 0;
+> > +#ifdef CONFIG_SCHED_TASK_CLASSES
+> > +	p->class			= TASK_CLASS_UNCLASSIFIED;
+> > +#endif
 > 
-> We already allocated bit 2 for F_NO_IMPLIED_STREAM , so we should use 3:
-> https://github.com/oasis-tcs/virtio-spec/blob/26ed30ccb049fd51d6e20aad3de2807d678edb3a/virtio-vsock.tex#L22
-> (I'll send patches to implement F_STREAM and F_NO_IMPLIED_STREAM negotiation
-> soon).
-> 
-> As long as it's RFC it's fine to introduce F_DGRAM, but we should first
-> change virtio-spec before merging this series.
-> 
-> About the patch, we should only negotiate the new feature when we really
-> have DGRAM support. So, it's better to move this patch after adding support
-> for datagram.
+> I find the term 'class' very broad and unclear what kind of class (without
+> further reading). So I am worried about how this generic term usage plays
+> with Linux source code in the long-term (like what if someone else comes up
+> with a usage of term 'class' that is unrelated to IPC.)
 
-Roger that, I'll reorder that for v2 and also clarify the series by
-prefixing it with RFC.
-
-Before removing "RFC" from the series, I'll be sure to send out
-virtio-spec patches first.
-
-Thanks,
-Bobby
+Thank you very much for your review Joel! Yes, class seems too generic. It is
+meant to read, for instance, task_struct::class or p->class, or rq->current->
+class. This should imply that we are referring to the class of a task. But yes,
+I agree that it is too generic.
 
 > 
-> Thanks,
-> Stefano
-> 
-> > 
-> > struct virtio_vsock_config {
-> > 	__le64 guest_cid;
-> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> > index c6212eb38d3c..073314312683 100644
-> > --- a/net/vmw_vsock/virtio_transport.c
-> > +++ b/net/vmw_vsock/virtio_transport.c
-> > @@ -35,6 +35,7 @@ static struct virtio_transport virtio_transport; /*
-> > forward declaration */
-> > struct virtio_vsock {
-> > 	struct virtio_device *vdev;
-> > 	struct virtqueue *vqs[VSOCK_VQ_MAX];
-> > +	bool has_dgram;
-> > 
-> > 	/* Virtqueue processing is deferred to a workqueue */
-> > 	struct work_struct tx_work;
-> > @@ -709,7 +710,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> > 	}
-> > 
-> > 	vsock->vdev = vdev;
-> > -
-> > 	vsock->rx_buf_nr = 0;
-> > 	vsock->rx_buf_max_nr = 0;
-> > 	atomic_set(&vsock->queued_replies, 0);
-> > @@ -726,6 +726,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
-> > 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
-> > 		vsock->seqpacket_allow = true;
-> > 
-> > +	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
-> > +		vsock->has_dgram = true;
-> > +
-> > 	vdev->priv = vsock;
-> > 
-> > 	ret = virtio_vsock_vqs_init(vsock);
-> > @@ -820,7 +823,8 @@ static struct virtio_device_id id_table[] = {
-> > };
-> > 
-> > static unsigned int features[] = {
-> > -	VIRTIO_VSOCK_F_SEQPACKET
-> > +	VIRTIO_VSOCK_F_SEQPACKET,
-> > +	VIRTIO_VSOCK_F_DGRAM
-> > };
-> > 
-> > static struct virtio_driver virtio_vsock_driver = {
-> > -- 
-> > 2.35.1
-> > 
-> 
-> _______________________________________________
-> Virtualization mailing list
-> Virtualization@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> To that end, I was wondering if it could be renamed to p->ipc_class, and
+> CONFIG_SCHED_TASK_IPC_CLASSES, or something.
+
+This is a good suggestion. I will take it, unless others disagree.
+
+BR,
+Ricardo
