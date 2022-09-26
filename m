@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3065EAFDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40575EAFE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiIZS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S229637AbiIZSaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiIZS1l (ORCPT
+        with ESMTP id S229517AbiIZSaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:27:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2982E2E;
-        Mon, 26 Sep 2022 11:27:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 632CDB80ACC;
-        Mon, 26 Sep 2022 18:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89EEC433C1;
-        Mon, 26 Sep 2022 18:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664216832;
-        bh=h2Ceidh4tSheNB/iFG8vH+y4KkoBbzZ0Sz2+DSuNFes=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=EFwaq5e6kyYxw7NdRVhdeAoIoeUBhIC8dEO5QjM7ma9xwZglgTLAZVyBdrRMIDB4O
-         i66g3Bl2DYYQROl4eU3RFKFT/rruZhTod5VQCTpAD2XUjTtq9HJfXHg+dMO8VJhenw
-         nfXNGTjx1zNGrWOzFyZ5DZsosA/8VzL88H22+TFC/ZHncEyVAthohiOfppCJnk178h
-         qwqFXwjf54siBevVXAcqpPXMXL13C5YPBjE5SB2GawA4HvikZz+vx5TBk7APtnSC8+
-         887G58bOCXC8YGTV4CjhvmvmrRT5jVla3m4P6GBg2OrxLcPlI93rLvVG6PLHOKJyC/
-         n5mjXoI+7wNPA==
-Date:   Mon, 26 Sep 2022 13:27:10 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 1/3] PCI: Add standard PCI Config Address macros
-Message-ID: <20220926182710.GA1613197@bhelgaas>
+        Mon, 26 Sep 2022 14:30:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44291275DE
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:30:17 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id lx7so674173pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:30:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MCZYDn+YVfx+EQNPPsd9wcvedMh5vvetNCp1L39ZYgw=;
+        b=LvpGREEjm7+8YmtYqLvXQFOfbiNUNMEfQrpxyC5BkclXWEny0UJBPmTvSx4QkXYmYB
+         ey8/EWrwFMuz5IsXLDV2X/oooIv5PToh+X+7bb/vrHAtp/u8Vl+5nrzxKZxU6nYEc0dW
+         /oFDMvYnnz+EyQR//b8uTzW9gwGoX1++/xqbM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MCZYDn+YVfx+EQNPPsd9wcvedMh5vvetNCp1L39ZYgw=;
+        b=o8RRUnFCLFaMBOxwvmGtQIAni7u4jRu5VrdoFgsUoUnAFk8zWKkTy4E0vkhnYWx+wV
+         1TXteP0oqTWH5NooHmY8iKwA4LUDlRIUS3TX8lMHxfz1KwqJVC6REqr1g1y/rBBEk43u
+         Bf3Bsn3PDulBXdCmmlEInRqZ7QbZtYroY5Ovp0L1JsQpPQ71vBjikAncHsL/47FBJ9L2
+         NILVVcrWHZgVqmo52Q244WApxxeFknOJP1LQ7n5MShrNivsgCKabIR8YpFG+s+/JMMnI
+         anZzbQWBcGCF3A31NVIZl7ECP/ep+XrbyCHefcwoleeyaYR3CC1RQ2L1rjiCFbJEcSto
+         eODA==
+X-Gm-Message-State: ACrzQf1QYWeUFh2ncaFF0J5sM8pPjTcvfJ4tMilUf9cTp2H0ZDCeR1OB
+        3zmWgIYLthLen/joj3+7CJRiRUN+jw7o/g==
+X-Google-Smtp-Source: AMsMyM5Yzhy5P43og0jIvEGltlA0NX7N7Y28XUeKNSnFmP9iQTkOpTxO5kRO8PPkvnb+CHZo3iXABg==
+X-Received: by 2002:a17:902:ec8a:b0:178:488b:cbc2 with SMTP id x10-20020a170902ec8a00b00178488bcbc2mr24262251plg.114.1664217016793;
+        Mon, 26 Sep 2022 11:30:16 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k10-20020a170902c40a00b001782aee4881sm11689283plk.153.2022.09.26.11.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 11:30:15 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 11:30:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 2/2] minmax: clamp more efficiently by avoiding extra
+ comparison
+Message-ID: <202209261127.0FBA8B7@keescook>
+References: <CAHmME9pRXpTc2g5R-xj7hTrG00iQ6WLSSRooag1NPzJnyV90Nw@mail.gmail.com>
+ <20220926133435.1333846-1-Jason@zx2c4.com>
+ <20220926133435.1333846-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924092404.31776-2-pali@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220926133435.1333846-2-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,39 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 11:24:02AM +0200, Pali Rohár wrote:
-> Lot of PCI and PCIe controllers are using standard Config Address for PCI
-> Configuration Mechanism #1 (as defined in PCI Local Bus Specification) or
-> its extended version.
+On Mon, Sep 26, 2022 at 03:34:35PM +0200, Jason A. Donenfeld wrote:
+> [...]
+> In this case, we actually gain a branch, unfortunately, because the
+> compiler's replacement axioms no longer as cleanly apply.
 > 
-> So introduce new macros PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() in
-> include file drivers/pci/pci.h which can be suitable for PCI and PCIe
-> controllers which uses this type of access to PCI config space.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+> So all and all, this change is a bit of a mixed bag.
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+I'm on the fence -- I think the new macro is a more correct way to
+describe the operation, though on the other hand, the old way provides a
+simple way to compose the bounds checks.
 
-> +#define PCI_CONF1_BUS_SHIFT	16 /* Bus number */
-> +#define PCI_CONF1_DEV_SHIFT	11 /* Device number */
-> +#define PCI_CONF1_FUNC_SHIFT	8  /* Function number */
-> +
-> +#define PCI_CONF1_BUS_MASK	0xff
-> +#define PCI_CONF1_DEV_MASK	0x1f
-> +#define PCI_CONF1_FUNC_MASK	0x7
-> +#define PCI_CONF1_REG_MASK	0xfc /* Limit aligned offset to a maximum of 256B */
+I suspect we should probably optimize for _performance_, not code size,
+so if the new branch is actually visible via cycle counts in "perf"
+output, probably we shouldn't use this patch, and instead add a comment
+about why it is defined the way it is.
 
-Since all the above are used only in the macros below, I personally
-don't think they're really necessary and I would find it easier to
-read if they were just open-coded, e.g.,
+-Kees
 
-  +#define PCI_CONF1_BUS(x)     (((x) & 0xff) << 16)
-  +#define PCI_CONF1_DEV(x)	(((x) & 0x1f) << 11)
-  +#define PCI_CONF1_FUNC(x)	(((x) & 0x07) <<  8)
-  +#define PCI_CONF1_REG(x)     ( (x) & 0xfc)
-
-> +#define PCI_CONF1_ENABLE	BIT(31)
-> +#define PCI_CONF1_BUS(x)	(((x) & PCI_CONF1_BUS_MASK) << PCI_CONF1_BUS_SHIFT)
-> +#define PCI_CONF1_DEV(x)	(((x) & PCI_CONF1_DEV_MASK) << PCI_CONF1_DEV_SHIFT)
-> +#define PCI_CONF1_FUNC(x)	(((x) & PCI_CONF1_FUNC_MASK) << PCI_CONF1_FUNC_SHIFT)
-> +#define PCI_CONF1_REG(x)	((x) & PCI_CONF1_REG_MASK)
+-- 
+Kees Cook
