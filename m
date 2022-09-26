@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B600B5E9C1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898ED5E9C20
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiIZIdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S234413AbiIZIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiIZIcy (ORCPT
+        with ESMTP id S234176AbiIZIfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:32:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D99A3AE6C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664181170;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ZGYtOLY3FItcJklTsztDmIawuiBAYb+rnQ59of1z3Y=;
-        b=NLNSCarC+/bPrBR9pFoylnsGsZv4XN49oEZbjR0+iVvbPiUqTTigQaGr6qq990VIpd3Y6N
-        4/Ss5QECl8S+qpyIIe7Gf445Pz0rP7fNRpILgR0Q5GMFl+Z/MMJ+e8flQ1acSF16QcxY6j
-        1kTmPN2wAGQB5hBQlUUuLOhNvJm127w=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-170-bTN0ClZ-NXuaY6cmexAVyg-1; Mon, 26 Sep 2022 04:32:48 -0400
-X-MC-Unique: bTN0ClZ-NXuaY6cmexAVyg-1
-Received: by mail-wm1-f69.google.com with SMTP id fc12-20020a05600c524c00b003b5054c70d3so3831096wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:32:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=2ZGYtOLY3FItcJklTsztDmIawuiBAYb+rnQ59of1z3Y=;
-        b=t/RdInqe2X+AJHluUMzpnIKlsZPNpp7MDMiK9q5Wd5WwjXRmDb29FLT0mdgl4/bLB3
-         SMfULF3iH+AcPmstLXY4KcISqZbI7pqGvJmOo1rsigJ27FktklnWn2bmZ5zYmdm16iff
-         I/6unvMof1F++id1QVnY99Z4Lk6FCefdPs6lVenpDEQPYiX01Qzsfn7dWd4Joh4rlmWc
-         pV3KgRfzhGohP3aVPsvn8TX0sRCd3nXwqQBsn15M79Bo8N892he096QfDS+9bc/PAw0y
-         JD4r/hVP20aPkquXmV8Oy19it29CqFw6HXmcFfRgHhbXvcPvu827SoPM1yoIzUl77lZe
-         58mw==
-X-Gm-Message-State: ACrzQf1w567x7fq5GMVnk56n/r8zacvagu6l0+EnCh3XAEyu/eLrqdSz
-        p1LKVgaCbVy5mOoMHraVO+jkBvgvlb6NL16z49+Mnzl5DdStiqTpcJqYybxvU4VTgxTlXyYfN6Y
-        I5s7AuS34izR6hhZe95FbABeK
-X-Received: by 2002:a7b:ce97:0:b0:3b3:4136:59fe with SMTP id q23-20020a7bce97000000b003b3413659femr14230793wmj.24.1664181167079;
-        Mon, 26 Sep 2022 01:32:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5r+QgKNI1zWUxSeUKHpaNiNk/Wrai0XDoRmaIxA2kk5MN5p5JzGTH0lcnJ0escKeEkpByYlQ==
-X-Received: by 2002:a7b:ce97:0:b0:3b3:4136:59fe with SMTP id q23-20020a7bce97000000b003b3413659femr14230772wmj.24.1664181166762;
-        Mon, 26 Sep 2022 01:32:46 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7? (p200300cbc7034b00e0907fa6b7d6d4a7.dip0.t-ipconnect.de. [2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05600c3b0d00b003a2e92edeccsm11212861wms.46.2022.09.26.01.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:32:46 -0700 (PDT)
-Message-ID: <48590f80-fc58-bf67-5acf-082880a607b2@redhat.com>
-Date:   Mon, 26 Sep 2022 10:32:45 +0200
+        Mon, 26 Sep 2022 04:35:21 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7513DD8;
+        Mon, 26 Sep 2022 01:35:19 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 28Q8YCkJ085089
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Mon, 26 Sep 2022 16:34:12 +0800 (CST)
+        (envelope-from Xuewen.Yan@unisoc.com)
+Received: from BJ10918PCW.spreadtrum.com (10.0.74.50) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 26 Sep 2022 16:34:12 +0800
+From:   Xuewen Yan <xuewen.yan@unisoc.com>
+To:     <viresh.kumar@linaro.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <konrad.dybcio@somainline.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <rafael@kernel.org>, <di.shen@unisoc.com>
+Subject: [PATCH v2] cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
+Date:   Mon, 26 Sep 2022 16:34:05 +0800
+Message-ID: <20220926083405.7801-1-xuewen.yan@unisoc.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220926055130.yr67653e52vyuutv@vireshk-i7>
+References: <20220926055130.yr67653e52vyuutv@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] mm: fix misuse of update_mmu_cache() in
- do_anonymous_page()
-Content-Language: en-US
-To:     Muchun Song <muchun.song@linux.dev>,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-        chris@zankel.net, jcmvbkbc@gmail.com, maobibo@loongson.cn
-References: <20220924053239.91661-1-zhengqi.arch@bytedance.com>
- <3A09E40A-E2C5-4C6F-8550-DD0E17B7DAB9@linux.dev>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <3A09E40A-E2C5-4C6F-8550-DD0E17B7DAB9@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.74.50]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 28Q8YCkJ085089
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.09.22 03:43, Muchun Song wrote:
-> 
-> 
->> On Sep 24, 2022, at 13:32, Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->>
->> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
->> if PTE entry exists") said, we should update local TLB only on the
->> second thread. So fix the misuse of update_mmu_cache() by using
->> update_mmu_tlb() in the do_anonymous_page().
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> 
-> The change looks good to me. However, I am not sure what is the user-visible
-> effect to xtensa users. So Cc xtensa’s maintainer and the author of 7df676974359
-> to double check this.
+Before update thermal pressure, the max cpufreq should be limited.
+Add QOS control for Lmh throttle cpufreq.
 
-And if there is one, do we have a fixes tag?
+Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+---
+v1->v2:
+	reabse to cpufreq/arm/linux-next;
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index bb32659820ce..833589bc95e4 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -13,6 +13,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_opp.h>
++#include <linux/pm_qos.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/units.h>
+@@ -56,6 +57,8 @@ struct qcom_cpufreq_data {
+ 	struct cpufreq_policy *policy;
+ 
+ 	bool per_core_dcvs;
++
++	struct freq_qos_request throttle_freq_req;
+ };
+ 
+ static unsigned long cpu_hw_rate, xo_rate;
+@@ -321,6 +324,8 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 
+ 	throttled_freq = freq_hz / HZ_PER_KHZ;
+ 
++	freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
++
+ 	/* Update thermal pressure (the boost frequencies are accepted) */
+ 	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+ 
+@@ -413,6 +418,14 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
+ 	if (data->throttle_irq < 0)
+ 		return data->throttle_irq;
+ 
++	ret = freq_qos_add_request(&policy->constraints,
++				   &data->throttle_freq_req, FREQ_QOS_MAX,
++				   FREQ_QOS_MAX_DEFAULT_VALUE);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
++		return ret;
++	}
++
+ 	data->cancel_throttle = false;
+ 	data->policy = policy;
+ 
+@@ -479,6 +492,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+ 	if (data->throttle_irq <= 0)
+ 		return;
+ 
++	freq_qos_remove_request(&data->throttle_freq_req);
+ 	free_irq(data->throttle_irq, data);
+ }
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 
