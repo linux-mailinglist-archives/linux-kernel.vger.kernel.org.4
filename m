@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3293F5EA496
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4911B5EA2FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbiIZLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S237626AbiIZLRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238989AbiIZLp0 (ORCPT
+        with ESMTP id S237598AbiIZLQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:45:26 -0400
+        Mon, 26 Sep 2022 07:16:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E7D7330B;
-        Mon, 26 Sep 2022 03:47:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C065562;
+        Mon, 26 Sep 2022 03:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F208B60A37;
-        Mon, 26 Sep 2022 10:45:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD466C433C1;
-        Mon, 26 Sep 2022 10:45:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1F5160C05;
+        Mon, 26 Sep 2022 10:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BE1C433D7;
+        Mon, 26 Sep 2022 10:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189159;
-        bh=19KlRLI+ImLM1gK/lv/gMMi8YiwPQlSzvAQZM4tGZNc=;
+        s=korg; t=1664188562;
+        bh=5pgYAgWRlfBhf4Ua5UHCi4kfrnOq4a8R62kstjQsXp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Siaseete7FaqQhVZvO/Fb9m49qFTwHZHMwJkLc6OYJqCLI5ZrGLKE8ikgNqdfhv3z
-         e0w3HNyvUjgOp2nIXmmOJ5l+jYT1LvXfIU+kQRZhv9JtuPYqeFfUsl8Rjo0hweSc13
-         wODS0PFU+C9uQdxR1pGjaLUUyBfWiW90mgMCVxqc=
+        b=Pm+lcgxdNGly/cD5gmthf5vs/HGAuhK1akoMvBHbXEcvGFmU6S6UhzXhrbbOhUwYz
+         EDIImhXndr1s/LLJ8uIVQkGmjRahLuZUJ10MIuNbZ08Wds8ArHIm+wnRVnXia41318
+         /5/YA/oxXFm5RNgBCtudnKm5z4FNOlNEA7ipPPh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 092/207] iavf: Fix cached head and tail value for iavf_get_tx_pending
+        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 5.15 047/148] kasan: call kasan_malloc() from __kmalloc_*track_caller()
 Date:   Mon, 26 Sep 2022 12:11:21 +0200
-Message-Id: <20220926100810.715575081@linuxfoundation.org>
+Message-Id: <20220926100757.783271779@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +53,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett.creeley@intel.com>
+From: Peter Collingbourne <pcc@google.com>
 
-[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
+commit 5373b8a09d6e037ee0587cb5d9fe4cc09077deeb upstream.
 
-The underlying hardware may or may not allow reading of the head or tail
-registers and it really makes no difference if we use the software
-cached values. So, always used the software cached values.
+We were failing to call kasan_malloc() from __kmalloc_*track_caller()
+which was causing us to sometimes fail to produce KASAN error reports
+for allocations made using e.g. devm_kcalloc(), as the KASAN poison was
+not being initialized. Fix it.
 
-Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
-Signed-off-by: Brett Creeley <brett.creeley@intel.com>
-Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Cc: <stable@vger.kernel.org> # 5.15
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ mm/slub.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 06d18797d25a..4c3f3f419110 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
- {
- 	u32 head, tail;
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4920,6 +4920,8 @@ void *__kmalloc_track_caller(size_t size
+ 	/* Honor the call site pointer we received. */
+ 	trace_kmalloc(caller, ret, size, s->size, gfpflags);
  
-+	/* underlying hardware might not allow access and/or always return
-+	 * 0 for the head/tail registers so just use the cached values
-+	 */
- 	head = ring->next_to_clean;
--	tail = readl(ring->tail);
-+	tail = ring->next_to_use;
++	ret = kasan_kmalloc(s, ret, size, gfpflags);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL(__kmalloc_track_caller);
+@@ -4951,6 +4953,8 @@ void *__kmalloc_node_track_caller(size_t
+ 	/* Honor the call site pointer we received. */
+ 	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
  
- 	if (head != tail)
- 		return (head < tail) ?
--- 
-2.35.1
-
++	ret = kasan_kmalloc(s, ret, size, gfpflags);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL(__kmalloc_node_track_caller);
 
 
