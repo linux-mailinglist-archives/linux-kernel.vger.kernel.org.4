@@ -2,137 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04505E9D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A8D5E9D91
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiIZJZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:25:48 -0400
+        id S233214AbiIZJ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:27:23 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiIZJYc (ORCPT
+        with ESMTP id S233807AbiIZJ1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:24:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC532BAA;
-        Mon, 26 Sep 2022 02:24:01 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q9FOuZ027172;
-        Mon, 26 Sep 2022 09:23:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Cif+7TgFRVilkLXoKeIdvg2g/inFUxsmAymcuvW782c=;
- b=AR+rmzQ8VfE9VpEmZAO0fAPJtp936ZPxplR9SQ9bLojCUFvogO6bh0wSwDfIx5ka9UBI
- jpmkr4JH5Bb4KVdKxJb4kCdJ9udLKexyBHpefck6SB7V7NK/O+42dqJL88UjRcPbvgtE
- JWGTb6jyfrlXyP7d6ew7umanTcE2NdwyFkULmOHz/P/GPaZMxgLEvVLiwgAYy9haGg1s
- 5SlpVBcQLoMamec5vNSckhhEqXk728336NAFMY/n+6bi3enJxLnjg+DWlFdjec84du71
- CGzXg44tvNq1pp29a5G9ojosc7AP21pEf20NkP1o/dWwfO3YiIaEGHFU/D/uLepbI+Bz 1A== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju99j05sj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 09:23:46 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28Q9KJmM031545;
-        Mon, 26 Sep 2022 09:23:44 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3jssh8sn1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 09:23:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28Q9Nffn1507948
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Sep 2022 09:23:41 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 042534C040;
-        Mon, 26 Sep 2022 09:23:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45A534C046;
-        Mon, 26 Sep 2022 09:23:40 +0000 (GMT)
-Received: from [9.171.69.218] (unknown [9.171.69.218])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 26 Sep 2022 09:23:40 +0000 (GMT)
-Message-ID: <8ba5cee2-5e5c-6b73-3ac7-56e78e432698@linux.ibm.com>
-Date:   Mon, 26 Sep 2022 11:23:39 +0200
+        Mon, 26 Sep 2022 05:27:03 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF3943639
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:25:38 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q8lBv2020651;
+        Mon, 26 Sep 2022 09:25:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=mnv1WV5DcIyfqzyFMOLGidhCBr8Vy551iBa3jVn9ZS0=;
+ b=cN+VeJpsw2xVSlS/z/DNjQjJZujg47k72k9O4sVLchgSUk7UKFHcI+M8tlxQpDy3K3xo
+ XT4tVyhlnG5k/tGUPZ4GQY7KUmkySCLtZz82gJ22bixHhlRvVi5bs/QDeDMvRkyirjrw
+ QacHsU7iIcenC2h3XrGmLaaFFgJmJjNubZtsXSW7z5yrNbERv0ih3VLynZ5mZKBJ6eEW
+ OZR3jDyK7i32iQ+eNUFg+noq2JOAqPQjoR/tUaH+47GXroFgAz1a3Ry5FiF1OzpF6IeA
+ WK2krR6K4ifF+9Zd9/dk7BuXdsnUO9oM2fNjQgxUZycqOMGyX3I1ydzKkHMZC2heCluc Lg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jsstpk2jv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 09:25:12 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q97Rn9001466;
+        Mon, 26 Sep 2022 09:25:11 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpuy9u25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 09:25:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OF18bzx2Q/Ta7jI68PcXqOQuuGn6/LLgr0KyEkoWapfdGet23G2CnMvkhYib0jklxWu7pGFFsTEz86UXLAOV53jr2grGC/8xYhbLVNgo2ZXKNdDK4rRxydN6BScfOX8q8jQUJjd92PdxvqIOCMqxdz2LK1OEUG6YGgxs5EZH3UsfzrJNvQRMDddrkwMKX1uKynQ4ffbQRkamugY88kv6rWXElqdt5GCKNa4Pt9kofSXyk+qHdAkez6IYAMW/ONCMTJ3fObyQczbT+3UmnBxdQyoQejBSBvxHBJ/DOLKzTSLs0eF+OxBQbtB1RETwuodetK3Fs5XtKc9JxNP3+jBaTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mnv1WV5DcIyfqzyFMOLGidhCBr8Vy551iBa3jVn9ZS0=;
+ b=LbLypS0FRpQXQRtvTgfZxrEHWUrtiYMsaO3WGr44V5JpbKp8gF0dnDohjJ+iQnkuA/v9Gl4DhazsxVuhiwufeyhDQASph+FwJGUsrYUi0xVvGQdNwy6RrQiBwe39VCi5unQsBBaB/9wU3/3Qu202u/4inAzYwdw0EpkNzX0Zla+VmTh/fZFD3qb2oBOVq1fpPI0X/SrPL8lXItp5jOrOFd1txmJvsuHFVEfVgykWxzp3WAqE+q+2fat3QiNimCzR44wKbkgLMTKWO9/iWR7vOGv33MpVnkzBZaOXZhRtMlqkv78brTkNA4WK03BbiMm0aemRV+1ohKyhUgcTjNHC3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mnv1WV5DcIyfqzyFMOLGidhCBr8Vy551iBa3jVn9ZS0=;
+ b=JVKNfJPO1sixfaHW7vnSRjATtIJXiwkqh0LOrfNqE+f5/S95PXTLJOqeMk9c83J0TStKZjlH64c51Wiv//BOhijaJ9YNca0E2RXYdS/GB5HLVpzJlhkD46Xa5Q/dlsK/SbBPVjeCBMZaX6rmcSuAkhl4GkDUpWejEn6nH97Hs1A=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH7PR10MB5830.namprd10.prod.outlook.com
+ (2603:10b6:510:127::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 09:25:10 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 09:25:09 +0000
+Date:   Mon, 26 Sep 2022 12:24:59 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] staging: rtl8192e: Rename and remove variables in
+ rtl819x_HTProc.c
+Message-ID: <YzFv6/sbwTN03NEO@kadam>
+References: <cover.1664055213.git.philipp.g.hortmann@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1664055213.git.philipp.g.hortmann@gmail.com>
+X-ClientProxiedBy: MR1P264CA0179.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:58::9) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 2/3] s390/pci: remove unused bus_next field from struct
- zpci_dev
-Content-Language: en-US
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
- <20220922095239.2115309-3-schnelle@linux.ibm.com>
- <e0754578-1735-5811-0533-19ef0c6be2b0@linux.ibm.com>
-In-Reply-To: <e0754578-1735-5811-0533-19ef0c6be2b0@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Jg7UzVdwapWDme-DJ5wIli1NdMHtC_1N
-X-Proofpoint-GUID: Jg7UzVdwapWDme-DJ5wIli1NdMHtC_1N
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|PH7PR10MB5830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f63886b-beda-467e-0bbc-08da9fa10112
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zYA1Kgkk9mFSmuOqViHaj8U3d4J+3L5JlHzzEEVCvf615otGLtWxw+FP3vSKZzBPoYkHwzdktPomUW3JDtmGE0bMdZoEpK2feyCwsh4lLzGP6lU0yHPlE8fX8k5zCXQGCNmbmcdlIwIDl5o+nqu8PMyEGvIU0RMAaUALTK3c59iHa0vU5w0esOQEqULheR72tBlwPqyqVuYblh43sYKmVc7FLPLU02mPkWXTLmfiU9LX7D4cXTc8xv1944ZISIJmJaeGMoabcU+DHIgRy7YVhDFI9x/7crhcFbvFxwMFvAFH4s+UMXtA7a+rjQFEppQTOHJvU8ZEjzsAAOMs0eiuy5hvEFXIgDGCx0o/M1/njlJNWZ12A8cXtnuZQWt5zv/yHDznaMaickzkNfI1hypZMRzccCph+OCW009u3T4Vv4nRnTsAvOjmYOUbhnSunCaCqDBB7ptf43c5scxhRHWg9xm+A+WZxVJeSQa0ZULebtOQfIml3Ie1PljhUXF1/TyIbZlq472IIzjxTJOhsHIZQcuMSBZyFa6ricPOvT7dd6B+3M5ewGF7GAMAYcuSpZdshVwY4PXirAAKDAGKBotDpqrxLX5108PI2DKvcUwoulsmWOlOkVNWf66SfGMC8OePP7Q1q5KQ1AwGTTxeAQz7UAL2hvsuhexB4JLMUTZaB/xnzJCh7tTWRdrEQASlXZGHd6Qwl5oBBGwQ8O/zies4jA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(136003)(396003)(366004)(39860400002)(346002)(451199015)(33716001)(2906002)(4326008)(38100700002)(4744005)(86362001)(8936002)(44832011)(66476007)(66946007)(8676002)(66556008)(5660300002)(316002)(41300700001)(6916009)(186003)(26005)(478600001)(6512007)(9686003)(6486002)(6506007)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xhkRZKnPvjoD3+QmVkTnt/72sNuD7+1rEj3dNQ5awMgjGvfjOySxjpmwXRg8?=
+ =?us-ascii?Q?jsO1ule8X3m3j7KdIZR9+7oY9tFCVSN50+PoqKzBHkOsaXQg7VQay1KtLy59?=
+ =?us-ascii?Q?MP5+VmcfTRHIrIzuE3fbEz4B6lja9Ft+/u5RFhNrgWoVJe0Hh+eYowSqLsH7?=
+ =?us-ascii?Q?UYjt7l70pPb6wPA1Hn/L/JV8963uluLDWUp9lgMANFkMvjzzIv/wLatfahaa?=
+ =?us-ascii?Q?lJoufDxv/xYP3ryfwhbvnCDIG6zJqbwgYGu016Ti23/63UXSMgkk6aHwDqrU?=
+ =?us-ascii?Q?8Av+EntPuozy+lgeA7Z+QHdlLD8nDkxPZtyoNu+fc6N6jN4iIeTuqjm8kGH2?=
+ =?us-ascii?Q?sWpn9Q9Id4eZbd+T4xwbqOOAj2uHvEZBJUzTYdayXNGqZCWfMU+OTQ1EmMK/?=
+ =?us-ascii?Q?AvQ8kxykMLAueL7SMaoWZpkEAmuboKqKC4YGkonBcYnOcL1UWJKe6ETrjy9R?=
+ =?us-ascii?Q?qDIdhZT9Waau3lMvl/664fmvbaIaAQ5PxAAjVxCdu4jNjjU+Ym4kVIgV+61t?=
+ =?us-ascii?Q?JmYPY/kVlHyHcMoLOu1TYjrj8RO30BxD+cWuCdGdKD5ynRkgelHd3HXssM5x?=
+ =?us-ascii?Q?BQYIYWeOOVR502audj8RXz/G10JaFcZRORpIVU4FAXszmm4i9E9m+tZ4rsxt?=
+ =?us-ascii?Q?ULCqb+aOh+KEY/SOMCP1OnI070jQVEx37fyVsEDwrvKZMp4WZJD55zqag+uI?=
+ =?us-ascii?Q?kHbcz2e5Or++U+Q58txpM9my0q8bT+QD+0phtU4lRZJfaPxTJKB25DvR3xvS?=
+ =?us-ascii?Q?Z2QxjKv88TfCfITXfWOIADm0lutB+mNpByNHTildJOTnPzvJs/s15bFxUZQr?=
+ =?us-ascii?Q?iQsLf9i8DZHLVkYQLSUSpBK7HkXGAozVbhN7NlXyhGmX5+mHPncEaK4e3GXs?=
+ =?us-ascii?Q?drznb1/oo9fpMK4O4hMNBX/zEyiAwCHpf7K6H350W5zdpDxPuuBmKre6l5po?=
+ =?us-ascii?Q?lCb1yE3p2eAa2wRaOUtRp5zhBEuGMCHtrR7anRELIF/ISDFAQK8CMLvglZ/c?=
+ =?us-ascii?Q?C6wtCcuwAfppOHQb+FhZTcd4mGeWbZeQ4ua73ZsRjxgOofV/YUFTh5O0zbuT?=
+ =?us-ascii?Q?CPpQNeDtwtcPTZTVyqW9RF012AoZI98wLqr0QiCCO0NwERvNJq6QgywsqgZO?=
+ =?us-ascii?Q?HG6mcw2CUIXX6/J+1nx/2sdZSvCj9E8rAY4fA9yUTIk30lucjYJ6ZV8Ll4ZQ?=
+ =?us-ascii?Q?PV6jA6a65Gt7UqB66g9mTjiINnVMnNjnu1XUyvPsOnSDi62OSPpQzVkgUtRF?=
+ =?us-ascii?Q?q7Q2Xkxa461cJfnc5We/lvDGwzFqPJhUZz+/faE2cp2he1dwobMC26UdtDPc?=
+ =?us-ascii?Q?ieSwVWOguU53XtajjVt3/0SeE+CmVZu84aoCYWhCE2RleD/9CTTkH1d1R5iy?=
+ =?us-ascii?Q?CVTTkuTdda5AWBVYTti9bEO3QxaCFD5SYuSiy33/Ru3Vo5gHum25Xpv49HqX?=
+ =?us-ascii?Q?AgrNJS+o9JzkjM8GqvjNA0IyvudRTWzho6M5lqVlPONHX9SDJcJnvjy1um/Z?=
+ =?us-ascii?Q?f/mbtMqyeqgVOhrua28XtTAyuQXo9dwUK38d/a3yw+4hOomr89LQGLuJ20C6?=
+ =?us-ascii?Q?lrCK0JRfgjjzjeH6Yq131zbarUMn7tiEg9FNv/OJ?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f63886b-beda-467e-0bbc-08da9fa10112
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 09:25:09.8949
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KPhV/+STE0Ur/iNf4FH4d/+W48kNL0jHNogHtDZrsSNSNb8zqykIvO/YUhsVsyX03fwwd27C2RUGDVEUnxF/yI8j3oApmHiDFI4aUwUsTuE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5830
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-26_06,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209260057
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209260059
+X-Proofpoint-ORIG-GUID: LSot0IwdRzp-LgL7kKl8cWGPtTxCIn2U
+X-Proofpoint-GUID: LSot0IwdRzp-LgL7kKl8cWGPtTxCIn2U
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/26/22 11:17, Pierre Morel wrote:
+On Sun, Sep 25, 2022 at 12:02:50AM +0200, Philipp Hortmann wrote:
+> Rename and remove variables to avoid CamelCase which is not accepted by
+> checkpatch.
 > 
-> 
-> On 9/22/22 11:52, Niklas Schnelle wrote:
->> This field was added in commit 44510d6fa0c0 ("s390/pci: Handling
->> multifunctions") but is an unused remnant of an earlier version where
->> the devices on the virtual bus were connected in a linked list instead
->> of a fixed 256 entry array of pointers.
->>
->> It is also not used for the list of busses as that is threaded through
->> struct zpci_bus not through struct zpci_dev.
->>
->> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> 
-> Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-> 
+> Tested with rtl8192e
+> Transferred this patch over wlan connection of rtl8192e
 > 
 
-Also couldn't it be detached of the series and posted on its own?
+Thanks!
 
->> ---
->>   arch/s390/include/asm/pci.h | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
->> index 7b4cdadbc023..108e732d7b14 100644
->> --- a/arch/s390/include/asm/pci.h
->> +++ b/arch/s390/include/asm/pci.h
->> @@ -117,7 +117,6 @@ struct zpci_bus {
->>   struct zpci_dev {
->>       struct zpci_bus *zbus;
->>       struct list_head entry;        /* list of all zpci_devices, 
->> needed for hotplug, etc. */
->> -    struct list_head bus_next;
->>       struct kref kref;
->>       struct hotplug_slot hotplug_slot;
-> 
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+regards,
+dan carpenter
+
