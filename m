@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A615EA0BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DC55EA47C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiIZKlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S238671AbiIZLqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236372AbiIZKjI (ORCPT
+        with ESMTP id S238536AbiIZLno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344184BD34;
-        Mon, 26 Sep 2022 03:22:55 -0700 (PDT)
+        Mon, 26 Sep 2022 07:43:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38C872ED4;
+        Mon, 26 Sep 2022 03:46:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 17544CE10EC;
-        Mon, 26 Sep 2022 10:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8E9C433C1;
-        Mon, 26 Sep 2022 10:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F06DB80881;
+        Mon, 26 Sep 2022 10:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01322C433C1;
+        Mon, 26 Sep 2022 10:46:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187755;
-        bh=xP7XOWPMnFeVu890uppPhA3VUfoPZOvUcblwscp7WOw=;
+        s=korg; t=1664189171;
+        bh=Sm780qRk8F+ZTcd1ZBEChuYNOc8jrNgphySWx4jsQeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a5YeKm1D6OEhVIUxGa9VPIKW0XuQdLxnq5QyfY+3xR61fqL/tdNqKbTEggxAcU++R
-         q/9eRorin319mhVl3uKvWUag5x+WfRcZa9pqJaHRrWabO8TTRgA3Nqv+Ue9k/FRj2l
-         2ao4onxkYgzMrtjUe35S3HowhCd5m+lzqncobjak=
+        b=YAMBuTX5GovGadW9Pd5JaW0zdki8nFbG/kOile2PGNfKTFAhtz0UvKs23Mx9p7gml
+         QhmTHlEOHQBJA2VGyoA23O+JVH4CxL9oYl7hBPHa4R+CB/nxW+ZHHTGpVDxcG346Nb
+         dXP5gh/2gm5jDksvMrtFRnfzWMA1qF7dnvFfAdh8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 050/120] usb: cdns3: fix issue with rearming ISO OUT endpoint
-Date:   Mon, 26 Sep 2022 12:11:23 +0200
-Message-Id: <20220926100752.602823497@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 095/207] wifi: iwlwifi: Mark IWLMEI as broken
+Date:   Mon, 26 Sep 2022 12:11:24 +0200
+Message-Id: <20220926100810.858005608@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-[ Upstream commit b46a6b09fa056042a302b181a1941f0056944603 ]
+[ Upstream commit 8997f5c8a62760db69fd5c56116705796322c8ed ]
 
-ISO OUT endpoint is enabled during queuing first usb request
-in transfer ring and disabled when TRBERR is reported by controller.
-After TRBERR and before next transfer added to TR driver must again
-reenable endpoint but does not.
-To solve this issue during processing TRBERR event driver must
-set the flag EP_UPDATE_EP_TRBADDR in priv_ep->flags field.
+The iwlmei driver breaks iwlwifi when returning from suspend. The interface
+ends up in the 'down' state after coming back from suspend. And iwd doesn't
+touch the interface state, but wpa_supplicant does, so the bug only happens on
+iwd.
 
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-cc: <stable@vger.kernel.org>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Link: https://lore.kernel.org/r/20220825062137.5766-1-pawell@cadence.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The bug report[0] has been open for four months now, and no fix seems to be
+forthcoming. Since just disabling the iwlmei driver works as a workaround,
+let's mark the config option as broken until it can be fixed properly.
+
+[0] https://bugzilla.kernel.org/show_bug.cgi?id=215937
+
+Fixes: 2da4366f9e2c ("iwlwifi: mei: add the driver to allow cooperation with CSME")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Acked-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220907134450.1183045-1-toke@toke.dk
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/cdns3/gadget.c | 1 +
+ drivers/net/wireless/intel/iwlwifi/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 8bedf0504e92..d111cf81cece 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -1259,6 +1259,7 @@ static int cdns3_check_ep_interrupt_proceed(struct cdns3_endpoint *priv_ep)
- 				ep_cfg &= ~EP_CFG_ENABLE;
- 				writel(ep_cfg, &priv_dev->regs->ep_cfg);
- 				priv_ep->flags &= ~EP_QUIRK_ISO_OUT_EN;
-+				priv_ep->flags |= EP_UPDATE_EP_TRBADDR;
- 			}
- 			cdns3_transfer_completed(priv_dev, priv_ep);
- 		} else if (!(priv_ep->flags & EP_STALLED) &&
+diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
+index a647a406b87b..b20409f8c13a 100644
+--- a/drivers/net/wireless/intel/iwlwifi/Kconfig
++++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
+@@ -140,6 +140,7 @@ config IWLMEI
+ 	depends on INTEL_MEI
+ 	depends on PM
+ 	depends on CFG80211
++	depends on BROKEN
+ 	help
+ 	  Enables the iwlmei kernel module.
+ 
 -- 
 2.35.1
 
