@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAF55EA243
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511B85E9F75
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237276AbiIZLFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S235378AbiIZKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237422AbiIZLEI (ORCPT
+        with ESMTP id S235286AbiIZKXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:04:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB515F231;
-        Mon, 26 Sep 2022 03:33:09 -0700 (PDT)
+        Mon, 26 Sep 2022 06:23:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A584FDEA6;
+        Mon, 26 Sep 2022 03:16:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 356F2B80925;
-        Mon, 26 Sep 2022 10:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D057C433C1;
-        Mon, 26 Sep 2022 10:31:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 62824CE10E3;
+        Mon, 26 Sep 2022 10:16:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77068C433C1;
+        Mon, 26 Sep 2022 10:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188281;
-        bh=STN83xp9evJqJZLuHCkw/lnhnKc/4/65pi4u/jxUtL8=;
+        s=korg; t=1664187404;
+        bh=Oc1MWnQoNbV/pm3YZwsLXM5PtoU3drC/V01obMA+e88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+f+p7zdiofO3qn6nLjT0UxBx33xCScsJy1FQsJnHzvMDPIso+ENwno0vLMcWBVp0
-         KjH1S5FwYViUV5OubSpWw0f1ID87PJkvVW7PtU8EL99x2VmfIuNSs1bxl59JeV+9G+
-         wHDoGh2xzGGYLTdvZtOVNIO81jaJzIJqptiBCUDw=
+        b=AemJ0gz6pkZksts5GvfZ9XWgoQITCG+PJR6DSgDz+vmDc+XpQ7TpKZL2wtbpcxQQ7
+         UpJZzTf3OIEdgYjZSjKwfIogY2tINs8rQDlxEKFNB5EPDlvjZVwQ6eDLRx2x7PxNc7
+         J2ZAHuO1L9decgpmkaaGZ+lkrHH+QvHFosA2mM2k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 100/141] wireguard: netlink: avoid variable-sized memcpy on sockaddr
+        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 38/40] Drivers: hv: Never allocate anything besides framebuffer from framebuffer memory region
 Date:   Mon, 26 Sep 2022 12:12:06 +0200
-Message-Id: <20220926100758.051419605@linuxfoundation.org>
+Message-Id: <20220926100739.798016826@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 26c013108c12b94bc023bf19198a4300596c98b1 ]
+[ Upstream commit f0880e2cb7e1f8039a048fdd01ce45ab77247221 ]
 
-Doing a variable-sized memcpy is slower, and the compiler isn't smart
-enough to turn this into a constant-size assignment.
+Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
+DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
 
-Further, Kees' latest fortified memcpy will actually bark, because the
-destination pointer is type sockaddr, not explicitly sockaddr_in or
-sockaddr_in6, so it thinks there's an overflow:
+$ cat /proc/iomem
+...
+f8000000-fffbffff : PCI Bus 0000:00
+  f8000000-fbffffff : 0000:00:08.0
+    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+...
+fe0000000-fffffffff : PCI Bus 0000:00
+  fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+    fe0000000-fe07fffff : 2ba2:00:02.0
+      fe0000000-fe07fffff : mlx4_core
 
-    memcpy: detected field-spanning write (size 28) of single field
-    "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+the interesting part is the 'f8000000' region as it is actually the
+VM's framebuffer:
 
-Fix this by just assigning by using explicit casts for each checked
-case.
+$ lspci -v
+...
+0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA (prog-if 00 [VGA controller])
+	Flags: bus master, fast devsel, latency 0, IRQ 11
+	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
+...
 
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reported-by: syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+ hv_vmbus: registering driver hyperv_drm
+ hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Synthvid Version major 3, minor 5
+ hyperv_drm 0000:00:08.0: vgaarb: deactivate vga console
+ hyperv_drm 0000:00:08.0: BAR 0: can't reserve [mem 0xf8000000-0xfbffffff]
+ hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Cannot request framebuffer, boot fb still active?
+
+Note: "Cannot request framebuffer" is not a fatal error in
+hyperv_setup_gen1() as the code assumes there's some other framebuffer
+device there but we actually have some other PCI device (mlx4 in this
+case) config space there!
+
+The problem appears to be that vmbus_allocate_mmio() can use dedicated
+framebuffer region to serve any MMIO request from any device. The
+semantics one might assume of a parameter named "fb_overlap_ok"
+aren't implemented because !fb_overlap_ok essentially has no effect.
+The existing semantics are really "prefer_fb_overlap". This patch
+implements the expected and needed semantics, which is to not allocate
+from the frame buffer space when !fb_overlap_ok.
+
+Note, Gen2 VMs are usually unaffected by the issue because
+framebuffer region is already taken by EFI fb (in case kernel supports
+it) but Gen1 VMs may have this region unclaimed by the time Hyper-V PCI
+pass-through driver tries allocating MMIO space if Hyper-V DRM/FB drivers
+load after it. Devices can be brought up in any sequence so let's
+resolve the issue by always ignoring 'fb_mmio' region for non-FB
+requests, even if the region is unclaimed.
+
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Link: https://lore.kernel.org/r/20220827130345.1320254-4-vkuznets@redhat.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireguard/netlink.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/hv/vmbus_drv.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
-index d0f3b6d7f408..5c804bcabfe6 100644
---- a/drivers/net/wireguard/netlink.c
-+++ b/drivers/net/wireguard/netlink.c
-@@ -436,14 +436,13 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
- 	if (attrs[WGPEER_A_ENDPOINT]) {
- 		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
- 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
-+		struct endpoint endpoint = { { { 0 } } };
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index cdf7d39362fd..1c09b1a787f6 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1426,7 +1426,7 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
+ 			bool fb_overlap_ok)
+ {
+ 	struct resource *iter, *shadow;
+-	resource_size_t range_min, range_max, start;
++	resource_size_t range_min, range_max, start, end;
+ 	const char *dev_n = dev_name(&device_obj->device);
+ 	int retval;
  
--		if ((len == sizeof(struct sockaddr_in) &&
--		     addr->sa_family == AF_INET) ||
--		    (len == sizeof(struct sockaddr_in6) &&
--		     addr->sa_family == AF_INET6)) {
--			struct endpoint endpoint = { { { 0 } } };
--
--			memcpy(&endpoint.addr, addr, len);
-+		if (len == sizeof(struct sockaddr_in) && addr->sa_family == AF_INET) {
-+			endpoint.addr4 = *(struct sockaddr_in *)addr;
-+			wg_socket_set_peer_endpoint(peer, &endpoint);
-+		} else if (len == sizeof(struct sockaddr_in6) && addr->sa_family == AF_INET6) {
-+			endpoint.addr6 = *(struct sockaddr_in6 *)addr;
- 			wg_socket_set_peer_endpoint(peer, &endpoint);
- 		}
- 	}
+@@ -1461,6 +1461,14 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
+ 		range_max = iter->end;
+ 		start = (range_min + align - 1) & ~(align - 1);
+ 		for (; start + size - 1 <= range_max; start += align) {
++			end = start + size - 1;
++
++			/* Skip the whole fb_mmio region if not fb_overlap_ok */
++			if (!fb_overlap_ok && fb_mmio &&
++			    (((start >= fb_mmio->start) && (start <= fb_mmio->end)) ||
++			     ((end >= fb_mmio->start) && (end <= fb_mmio->end))))
++				continue;
++
+ 			shadow = __request_region(iter, start, size, NULL,
+ 						  IORESOURCE_BUSY);
+ 			if (!shadow)
 -- 
 2.35.1
 
