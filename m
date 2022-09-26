@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC935EAB96
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0328F5EAB8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbiIZPsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S234572AbiIZPsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236556AbiIZPsB (ORCPT
+        with ESMTP id S233734AbiIZPrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:48:01 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A3E5F73;
-        Mon, 26 Sep 2022 07:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664202848; x=1695738848;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CvP6K1Vorsow+70c6DvAAnB16X5penLoTqxCk6a67jA=;
-  b=iWxinrSyoQ5sH5ckodMjjP5DJEl1RcsiuwUl5UzmTE7NIr2HVj/N4y5c
-   hSKYulxLCT+LES5MHSsu4UdBe4YE5waIWIrmHxJDakplaN9qo5b9uAnk6
-   6sToRNHCY57HTLhB80yE95rMcg2WfiVqdO57DyrAuAWW6+iLrV10URoit
-   oqgNJyf69Gc6lGxdE4knGSWFH6gBz3Lw+nmoaraeic/oopNb1D673O5IW
-   +7JAGLtiDCUVyNQ91FGtUDwk3KR6X4jziOE4VRGSaLc6b+7i8qY+Tvqy6
-   940nnZl/8xTQKCvyl2m3q7DPaRK+iFidzZfKTRievNJ1hgRnCMigixdvi
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="115431607"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2022 07:34:05 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 26 Sep 2022 07:34:03 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 26 Sep 2022 07:34:01 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <sergiu.moga@microchip.com>, <claudiu.beznea@microchip.com>,
-        <richard.genoud@gmail.com>, <nicolas.ferre@microchip.com>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "kernel test robot" <lkp@intel.com>
-Subject: [PATCH] tty: serial: atmel: Add COMMON_CLK dependency to SERIAL_ATMEL
-Date:   Mon, 26 Sep 2022 17:32:45 +0300
-Message-ID: <20220926143244.485578-1-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Sep 2022 11:47:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 826A84BA53;
+        Mon, 26 Sep 2022 07:32:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E01461042;
+        Mon, 26 Sep 2022 07:32:59 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D5083F73B;
+        Mon, 26 Sep 2022 07:32:51 -0700 (PDT)
+Message-ID: <ae249149-a17f-7652-729b-262a977080a5@arm.com>
+Date:   Mon, 26 Sep 2022 15:32:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-GB
+To:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
+        mark.rutland@arm.com, baolin.wang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com, linux-pci@vger.kernel.org
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+ <20220917121036.14864-3-xueshuai@linux.alibaba.com>
+ <20220922165820.000017b6@huawei.com>
+ <d4edc6f4-e56f-4a19-3c34-b65d4903bfc0@linux.alibaba.com>
+ <20220923165423.00007dc6@huawei.com>
+ <89efd20f-65f2-c082-1eb4-4e308957ff59@linux.alibaba.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <89efd20f-65f2-c082-1eb4-4e308957ff59@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the driver makes use of `__clk_is_enabled()` in order to
-know whether a `clk_disable_unprepare()` is needed or not on the
-GCLK, a new dependency has been introduced: COMMON_CLK. If this
-`CONFIG_COMMON_CLK` is not enabled, whatever config may have this
-driver enabled without COMMON_CLK then an undefined reference to
-`__clk_is_enabled()` will be issued by the linker.
+On 2022-09-26 14:31, Shuai Xue wrote:
+> + Bjorn Helgaas
+> 
+> 在 2022/9/23 PM11:54, Jonathan Cameron 写道:
+>>
+>>>
+>>>>    
+>>>>> +#define RP_NUM_MAX				32 /* 2die * 4RC * 4Ctrol */
+>>>>
+>>>> This driver is 'almost' generic. So if you an avoid defines based on a particular
+>>>> platform that's definitely good!
+>>>
+>>> Good idea. How about defining RP_NUM_MAX as 64? As fars as I know,
+>>> some platfrom use 2 sockets, 2 die per socket.
+>>> Then 2 sockets * 2 dies * 4 Root Complex * 4 root port.
+>>
+>> Setting a reasonable maximum is fine - but make sure the code then fails with
+>> a suitable error message if there are more!
+> 
+> OK, I will add a discovery logic here and count PMU number at runtime.
+> 
+>>
+>>
+>>>>> +#define DWC_PCIE_LANE_SHIFT			4
+>>>>> +#define DWC_PCIE_LANE_MASK			GENMASK(9, 4)
+>>>>> +
+>>>>> +#define DWC_PCIE_EVENT_CNT_CTRL			0x8
+>>>>> +#define DWC_PCIE__CNT_EVENT_SELECT_SHIFT	16
+>>>>
+>>>> Why double __?  If point is , then
+>>>> naming works better
+>>>> DWC_PCIE_EVENT_CNT_CTRL_REG
+>>>> DWC_PCIE_EVENT_CNT_CTRL_EV_SELECT_MSK etc
+>>>
+>>> Yes, I point to use double `__` to indicate it is a field of register,
+>>> as CMN and CCN drivers do. I also considered naming with REG explicitly,
+>>> but the macro is so long that I often have to wrap code into multilines.
+>>> Any way, it's fine to rename if you still suggest to do so.
+>>
+>> I don't particularly mind.  This convention was new to me.
+> 
+> Haha, then I will leave the double `__` as CMN and CCN drivers do.
 
-Thus, make sure that, unless `CONFIG_COMMON_CLK` is enabled, this
-driver is not compiled.
+FWIW I'm not sure there's really any convention. CCN seems to use 
+double-underscores as distinct separators in a consistent 
+CCN_REG_NAME__FIELD_NAME__SUFFIX pattern. Conversely in CMN I used it as 
+an indication of the usual CMN_REG_NAME_FIELD_NAME_VALUE pattern being 
+abbreviated where it would have been uncomfortably long otherwise (and 
+particularly where the field name reflects the register name anyway); it 
+just seemed like a good visual cue to imply that something was missing.
 
-Fixes: 5e3ce1f26129 ("tty: serial: atmel: Make the driver aware of the existence of GCLK")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
- drivers/tty/serial/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index a18dd525e42b..1aec3cf002f7 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -127,6 +127,7 @@ config SERIAL_SB1250_DUART_CONSOLE
- 
- config SERIAL_ATMEL
- 	bool "AT91 on-chip serial port support"
-+	depends on COMMON_CLK
- 	depends on ARCH_AT91 || COMPILE_TEST
- 	select SERIAL_CORE
- 	select SERIAL_MCTRL_GPIO if GPIOLIB
--- 
-2.34.1
-
+Robin.
