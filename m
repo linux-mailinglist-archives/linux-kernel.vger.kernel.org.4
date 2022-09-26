@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A659E5EA27F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A655EA52E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbiIZLIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S239469AbiIZL7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbiIZLHP (ORCPT
+        with ESMTP id S238908AbiIZLyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:07:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987CF23BE1;
-        Mon, 26 Sep 2022 03:34:17 -0700 (PDT)
+        Mon, 26 Sep 2022 07:54:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5FE4CA39;
+        Mon, 26 Sep 2022 03:49:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21493609FE;
-        Mon, 26 Sep 2022 10:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156FBC433D6;
-        Mon, 26 Sep 2022 10:32:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43DA5B80926;
+        Mon, 26 Sep 2022 10:49:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8851DC433C1;
+        Mon, 26 Sep 2022 10:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188364;
-        bh=t/CdJeowKoIkUUXV3GUs+L273If4I8CeICo71n3PeEg=;
+        s=korg; t=1664189393;
+        bh=2TbbozwGCYo4oYPb7D3d7IgWjrP1CmeCObRzTOyfZ4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B0NapMWC1A1ZM5c3JGqJKQojYC95ak/bsBnZoLbEpsrPFFLeqk+MWNHhsB1izWzM2
-         Rf3wvTBjzHR3BkgMXi5C4qXWLE2mQuI5z44kjfHNGZRda3BaVTFb8TEozwRhqwtFlm
-         bPRV9dWAnmBYzDGe/mi/HFDHHYpT5lBdHfxSPAaQ=
+        b=Mbrlzphjn5gvXCs0SOxGln3zYx8ldSJLeYP61OnlvfN6COvRsx3paTF01iA8WMIdx
+         ZBPVe8P3d9FsTIdiwwlpt/CbUoVmv12lrfDf+hc2zPA+3gbzw0Zc5N/JFnJb6l7xwH
+         4f59KpQnQr+NvTL2vnZUSh1YV+1DKVa2f+evmstQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Roberto Ricci <rroberto2r@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/141] net: ipa: fix table alignment requirement
-Date:   Mon, 26 Sep 2022 12:12:00 +0200
-Message-Id: <20220926100757.837361076@linuxfoundation.org>
+Subject: [PATCH 5.19 132/207] ipv6: Fix crash when IPv6 is administratively disabled
+Date:   Mon, 26 Sep 2022 12:12:01 +0200
+Message-Id: <20220926100812.431984472@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,67 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Ido Schimmel <idosch@nvidia.com>
 
-[ Upstream commit e5d4e96b44cf20330c970c3e30ea0a8c3a23feca ]
+[ Upstream commit 76dd07281338da6951fdab3432ced843fa87839c ]
 
-We currently have a build-time check to ensure that the minimum DMA
-allocation alignment satisfies the constraint that IPA filter and
-route tables must point to rules that are 128-byte aligned.
+The global 'raw_v6_hashinfo' variable can be accessed even when IPv6 is
+administratively disabled via the 'ipv6.disable=1' kernel command line
+option, leading to a crash [1].
 
-But what's really important is that the actual allocated DMA memory
-has that alignment, even if the minimum is smaller than that.
+Fix by restoring the original behavior and always initializing the
+variable, regardless of IPv6 support being administratively disabled or
+not.
 
-Remove the BUILD_BUG_ON() call checking against minimim DMA alignment
-and instead verify at rutime that the allocated memory is properly
-aligned.
+[1]
+ BUG: unable to handle page fault for address: ffffffffffffffc8
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 173e18067 P4D 173e18067 PUD 173e1a067 PMD 0
+ Oops: 0000 [#1] PREEMPT SMP KASAN
+ CPU: 3 PID: 271 Comm: ss Not tainted 6.0.0-rc4-custom-00136-g0727a9a5fbc1 #1396
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+ RIP: 0010:raw_diag_dump+0x310/0x7f0
+ [...]
+ Call Trace:
+  <TASK>
+  __inet_diag_dump+0x10f/0x2e0
+  netlink_dump+0x575/0xfd0
+  __netlink_dump_start+0x67b/0x940
+  inet_diag_handler_cmd+0x273/0x2d0
+  sock_diag_rcv_msg+0x317/0x440
+  netlink_rcv_skb+0x15e/0x430
+  sock_diag_rcv+0x2b/0x40
+  netlink_unicast+0x53b/0x800
+  netlink_sendmsg+0x945/0xe60
+  ____sys_sendmsg+0x747/0x960
+  ___sys_sendmsg+0x13a/0x1e0
+  __sys_sendmsg+0x118/0x1e0
+  do_syscall_64+0x34/0x80
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Stable-dep-of: cf412ec33325 ("net: ipa: properly limit modem routing table use")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 0daf07e52709 ("raw: convert raw sockets to RCU")
+Reported-by: Roberto Ricci <rroberto2r@gmail.com>
+Tested-by: Roberto Ricci <rroberto2r@gmail.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220916084821.229287-1-idosch@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ipa/ipa_table.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ net/ipv6/af_inet6.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
-index f26cb9d706da..45e1d68b4694 100644
---- a/drivers/net/ipa/ipa_table.c
-+++ b/drivers/net/ipa/ipa_table.c
-@@ -118,14 +118,6 @@
- /* Check things that can be validated at build time. */
- static void ipa_table_validate_build(void)
- {
--	/* IPA hardware accesses memory 128 bytes at a time.  Addresses
--	 * referred to by entries in filter and route tables must be
--	 * aligned on 128-byte byte boundaries.  The only rule address
--	 * ever use is the "zero rule", and it's aligned at the base
--	 * of a coherent DMA allocation.
--	 */
--	BUILD_BUG_ON(ARCH_DMA_MINALIGN % IPA_TABLE_ALIGN);
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 9f6f4a41245d..1012012a061f 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -1069,13 +1069,13 @@ static int __init inet6_init(void)
+ 	for (r = &inetsw6[0]; r < &inetsw6[SOCK_MAX]; ++r)
+ 		INIT_LIST_HEAD(r);
+ 
++	raw_hashinfo_init(&raw_v6_hashinfo);
++
+ 	if (disable_ipv6_mod) {
+ 		pr_info("Loaded, but administratively disabled, reboot required to enable\n");
+ 		goto out;
+ 	}
+ 
+-	raw_hashinfo_init(&raw_v6_hashinfo);
 -
- 	/* Filter and route tables contain DMA addresses that refer
- 	 * to filter or route rules.  But the size of a table entry
- 	 * is 64 bits regardless of what the size of an AP DMA address
-@@ -669,6 +661,18 @@ int ipa_table_init(struct ipa *ipa)
- 	if (!virt)
- 		return -ENOMEM;
- 
-+	/* We put the "zero rule" at the base of our table area.  The IPA
-+	 * hardware requires rules to be aligned on a 128-byte boundary.
-+	 * Make sure the allocation satisfies this constraint.
-+	 */
-+	if (addr % IPA_TABLE_ALIGN) {
-+		dev_err(dev, "table address %pad not %u-byte aligned\n",
-+			&addr, IPA_TABLE_ALIGN);
-+		dma_free_coherent(dev, size, virt, addr);
-+
-+		return -ERANGE;
-+	}
-+
- 	ipa->table_virt = virt;
- 	ipa->table_addr = addr;
- 
+ 	err = proto_register(&tcpv6_prot, 1);
+ 	if (err)
+ 		goto out;
 -- 
 2.35.1
 
