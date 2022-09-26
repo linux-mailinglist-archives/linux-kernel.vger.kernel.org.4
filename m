@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBB35EB2DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B985EB2E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiIZVJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S231348AbiIZVLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiIZVJQ (ORCPT
+        with ESMTP id S230135AbiIZVLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:09:16 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B010A3467
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:09:13 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id l65so7905418pfl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=z2N8LaF32sVo0MzpvnaJgrHDNgj6iB+hPRs2AGkWfto=;
-        b=iNU6fF1RWdROt/mKhKh4y/8mQA0kXSsvh1U2vUwg0opVJI50FrW0nhkdSisbS+YFN9
-         B8Gv0OIsH5ynOXaMK89XrVLTRyEeZ4gikeERElQneRjRrgHWrUGTYPtORP/zSK1VOOZj
-         wsqw+bXF8lV8ERMgHOCH+e2L1ZvocMDhekVx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=z2N8LaF32sVo0MzpvnaJgrHDNgj6iB+hPRs2AGkWfto=;
-        b=4io3cfj9Y2TMAFCqSygHU+eJWZ86Ys6UoSDZSbrLfKU2vxtUsGBFKvQKaWztO9hevl
-         03PbbXwymfsZ0royXjcmQaQ/z7hzx2LTI3eVGnV3qjlBuuo8Z/c7YUOT292zzQgLPLOO
-         wvtPf49OoKTY3ZPdxw17Z3W+7Jf3oAWoJCINoF5HLRC3PxTXqQCCiyb/gZFKGnIY4L8d
-         rHM1D+eFAXTDWyf4OM7d14ihogWdyMFgzHQTQ9detgf931KsPdEI+15VOryr8c76sunv
-         n8C6reNoNgs4dyAlo4Eacatq91XjYDwKupwKMeTMoXuVn7CDApVK+K+IQ/s9j6Z34DEz
-         i+sQ==
-X-Gm-Message-State: ACrzQf39JIbKN/207HogCiZJcp83CXu1f8jP+FCTPioknfENo6BOXITS
-        FBqddy9IyNThfRMVUNAjuzey5A==
-X-Google-Smtp-Source: AMsMyM5WIe3hqBa57RBis752CH191gAYntlDiD5fJNhEuECKTcn7TB+Nt6Sb9VomPqk1ExNiN3sNcg==
-X-Received: by 2002:a63:3348:0:b0:439:db24:8b02 with SMTP id z69-20020a633348000000b00439db248b02mr21236503pgz.425.1664226552446;
-        Mon, 26 Sep 2022 14:09:12 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p7-20020aa79e87000000b005459e8a103asm12569831pfq.167.2022.09.26.14.09.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:09:11 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 14:09:10 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-doc@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] overflow: Fix kern-doc markup for functions
-Message-ID: <202209261408.59F78C0D@keescook>
-References: <20220926194713.1806917-1-keescook@chromium.org>
- <YzIUS/+H2YA7RBvA@casper.infradead.org>
+        Mon, 26 Sep 2022 17:11:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EE7186D9;
+        Mon, 26 Sep 2022 14:11:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B57FB61425;
+        Mon, 26 Sep 2022 21:11:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C17C433D6;
+        Mon, 26 Sep 2022 21:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664226670;
+        bh=wBlxcdqMbsu8JzbcV8TV943wkyA6SKcwME74jFBnb3o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jTX9cNJdn9LbGPylOQjsdTT/NvpsjIOUpOvir9tgdhQMv37HCySum+DdpXe9NnOxl
+         GwUuSMYTYiKg+bpIZYocanK6OTwANzzGxa6SAIntimr2XW6ZFgMegFgaGLel6t7cE/
+         iEGhHm4VUkf+aO9c/cB3U0LkvTsVmJAiKkvx4TEp8Ab48CbEyx02aiHx8oDAPDnIm8
+         B82GAa5GXcti8cX2X5aUMxPTyKpHhU6Ko3akJjua0vI+e87DzESK8oBBs0DjtjKpuD
+         cXKu27TcCg9Fut5JQco3IMHAxer93uTK8FZrUwQq2H5PRV7gM/aWnp5sYzS+CuosWm
+         ca16GSFwFTApQ==
+From:   broonie@kernel.org
+To:     Greg KH <greg@kroah.com>
+Cc:     Arthur Grillo <arthur.grillo@usp.br>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: linux-next: manual merge of the driver-core tree with the drm tree
+Date:   Mon, 26 Sep 2022 22:11:02 +0100
+Message-Id: <20220926211102.684323-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzIUS/+H2YA7RBvA@casper.infradead.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:06:19PM +0100, Matthew Wilcox wrote:
-> On Mon, Sep 26, 2022 at 12:47:13PM -0700, Kees Cook wrote:
-> > -/** check_add_overflow() - Calculate addition with overflow checking
-> > +/**
-> > + * check_add_overflow - Calculate addition with overflow checking
-> >   *
-> >   * @a: first addend
-> >   * @b: second addend
-> 
-> Why did you remove the ()?  And why didn't you delete the blank line?
-> According to our documentation, the canonical form is:
-> 
->   /**
->    * function_name() - Brief description of function.
->    * @arg1: Describe the first argument.
->    * @arg2: Describe the second argument.
->    *        One can provide multiple line descriptions
->    *        for arguments.
-> 
-> I don't usually complain about people getting that wrong, but when
-> people correct it to be wrong ...
+Hi all,
 
-Hunh, everywhere I'd looked didn't have the "()" (which seems
-redundant). The blank line was entirely aesthetics for me. If it's
-supposed to be without a blank, I can fix it up everwhere.
+Today's linux-next merge of the driver-core tree got a conflict in:
 
--- 
-Kees Cook
+  drivers/gpu/drm/Kconfig
+
+between commits:
+
+  ba8f16cd08190 ("drm: selftest: convert drm_damage_helper selftest to KUnit")
+  fc8d29e298cf4 ("drm: selftest: convert drm_mm selftest to KUnit")
+
+from the drm tree and commit:
+
+  84ec67288c10f ("drm_print: wrap drm_*_dbg in dyndbg descriptor factory macro")
+
+from the driver-core tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/Kconfig
+index 198ba846d34bf,2438e0dccfa16..0000000000000
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@@ -51,9 -50,22 +51,21 @@@ config DRM_DEBUG_M
+  
+  	  If in doubt, say "N".
+  
++ config DRM_USE_DYNAMIC_DEBUG
++ 	bool "use dynamic debug to implement drm.debug"
++ 	default y
++ 	depends on DRM
++ 	depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
++ 	depends on JUMP_LABEL
++ 	help
++ 	  Use dynamic-debug to avoid drm_debug_enabled() runtime overheads.
++ 	  Due to callsite counts in DRM drivers (~4k in amdgpu) and 56
++ 	  bytes per callsite, the .data costs can be substantial, and
++ 	  are therefore configurable.
++ 
+ -config DRM_DEBUG_SELFTEST
+ -	tristate "kselftests for DRM"
+ -	depends on DRM
+ -	depends on DEBUG_KERNEL
+ +config DRM_KUNIT_TEST
+ +	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
+ +	depends on DRM && KUNIT
+  	select PRIME_NUMBERS
+  	select DRM_DISPLAY_DP_HELPER
+  	select DRM_DISPLAY_HELPER
