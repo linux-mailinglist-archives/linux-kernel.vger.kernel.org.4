@@ -2,109 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA735EAE23
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220445EAE2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiIZRYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        id S230425AbiIZR1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiIZRXo (ORCPT
+        with ESMTP id S230420AbiIZR1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:23:44 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF45312BD92
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:38:23 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id pf10-20020a17090b1d8a00b002037c2aad2bso8024958pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=aBQtcstDZQqLeHVlIM75vGyKaWR65kO7/EjVsPGFbYA=;
-        b=EuXMliuCVgEb1UTMiKFb+ESdp6V3BzRKc+b7utuqQIOPOHNcwiAsdfKXv0CByTTMHO
-         A/cmtXWFZtS8qARFtlVgSMUoZBimXHF1wz4CNwGtGvIz2LwpajwPSKklhsP+tlMtwmql
-         maFFjcq1BNEqNzfcLBbn2QBILgjsUBkIRZDrEbP/Ee6rqtFXy5pVqdEqCVQYSaqQ/KxT
-         QmrCgi9T2QAhE8Au227HDc7b87Lxp9Qyw4xLEnUVSufrfkujevJSc2cuw0Zin34Kx5iF
-         dXhGmPgrci5SDslFl/iRJhPu5X5tnWB/YP+N83p2LX/+U7MLLaGbj62ZK1Etpu7gbWji
-         lPIQ==
+        Mon, 26 Sep 2022 13:27:01 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F058768E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:44:17 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id l84-20020a6b3e57000000b006a3fe90910cso4195233ioa.16
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:44:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=aBQtcstDZQqLeHVlIM75vGyKaWR65kO7/EjVsPGFbYA=;
-        b=1kg8tAD5yQFEwPjeYQ+Q0q4tGddi6HPIr6hGcaB7/XaP3ANx0HBLcX8iIdza+xwDa4
-         HXLyJol7YCBBboCsc9mEclBH8MbA4J9RMAg7BwgBrb1Tu0/Wj+mxrCJ3Y3A7HbYi4cYx
-         tYE/YADR2FBYEG1Kr0uOe5DdB85oUrJXPtl0p3EAzcDAU1SXr77xI7sWWwi88c3Lstds
-         JF9a45/kDznXNk7WFOHoF2BhSOkzxs5yMz8UxYZ8zJpuhuSDTMK1rFtkcU4273//iKQY
-         gEBTbtSpfMDiLIltdHPx1LPfEoW2ff60zWUoBzYCpBqmRKuNWEUEwQp7HJknN2KvH3Bi
-         Zn3g==
-X-Gm-Message-State: ACrzQf0YofVFjwnwhbOcB6e4+UzHo5Gil0d/l9yT7QoGK73e6X1YUbc6
-        UNGzEG6xHJiSZtUXy9s0lLEugHom6cDscjrpogGLOnD193r5K26KDS/t2puDqiUSJZ8C7FV04Ou
-        0iKzGohAJQBkxvEw7KRvJuq7NXgi7iqLgPJEOeeL5nEMHolf3OlPOKas1p2rBWjK4PV6MgtU=
-X-Google-Smtp-Source: AMsMyM7311CIPZJFPTAvVFfQHxqDeZdSosVfC0bK8XteC7QK27a6RZCjRZFQy2YWBurbmRyr0JE2qBn9lDea
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:90a:cd06:b0:203:ae0e:6a21 with SMTP id
- d6-20020a17090acd0600b00203ae0e6a21mr900179pju.0.1664210302025; Mon, 26 Sep
- 2022 09:38:22 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:38:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220926163815.332144-1-jstultz@google.com>
-Subject: [PATCH] MAINTAINERS: Add Sumit Semwal and Yongqin Liu as reviwers for
- kirin DRM driver
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        kernel-team@android.com, dri-devel@lists.freedesktop.org
+        bh=Jeurj+qz1RoEaY8Np1VP2ECVE074NEZB/B8wgW0chgw=;
+        b=Zx2L0ugHuLsQy5+roFOCHaX0LuzWXSQkDTYOQGoijm9qgb4Re1Cm3P/x6hlX9MgmkW
+         KDk1iNYh1syp8STNJsXFb8v8ecF7uIN4QjaSerx3i22RLc34miXKzgnDd+A+pIzWdTWp
+         c31JMpQRSUx5prFxMMgi5qDup+j/9yJs+hYrQB9YNMt2St3ybVvAxe23py7PnFT34dIw
+         OpjSd0Acsml9A6/aL9CQBcFwzdxUpS+ig9kJhzhxUnnpC5fVZmzHSewjsqKaaJWCPY7w
+         JUtcaGfDCu/sc++BZJzYGd+rI0yzaWbaKgwyI4Nm6owD9NAWOkKvsO0vC9mnqQ4hhFLr
+         HCJQ==
+X-Gm-Message-State: ACrzQf2UfWZq3fUJkH/f5oH+wGsVN/VVVulfTAZMO9puB17NFiKRXjm4
+        KNQ4O0/Jr0PC6at4XdDCwDS9feel0+QkemYe2/EwQ+HI493i
+X-Google-Smtp-Source: AMsMyM5TdYOqo9/j5yhwi8A3ye/aQ2mTqO7SD/tpctGeVYcI+xRqlABqLBN4n6paSSnUaRqoEqUqERPTb2qE5B1JYCm+cjIPQ300
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:20eb:b0:2f1:dc7a:c50c with SMTP id
+ q11-20020a056e0220eb00b002f1dc7ac50cmr11083690ilv.269.1664210622381; Mon, 26
+ Sep 2022 09:43:42 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 09:43:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fa882f05e9973a36@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in l2cap_conn_del
+From:   syzbot <syzbot+03450dacbc626061c3a3@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I no longer have access to the HiKey boards, so while I'm happy to
-review code, I wanted to add Sumit and Yongqin to the reviewers list
-so they would get CC'ed on future changes and would be able to have
-a chance to validate and provide Tested-by: tags
+Hello,
 
-Cc: Xinliang Liu <xinliang.liu@linaro.org>
-Cc: Tian Tao  <tiantao6@hisilicon.com>
-Cc: Yongqin Liu <yongqin.liu@linaro.org>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: kernel-team@android.com
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: John Stultz <jstultz@google.com>
+syzbot found the following issue on:
+
+HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14b32754880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
+dashboard link: https://syzkaller.appspot.com/bug?extid=03450dacbc626061c3a3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d389c4880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14269e38880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+03450dacbc626061c3a3@syzkaller.appspotmail.com
+
+Bluetooth: hci0: hardware error 0xff
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
+BUG: KASAN: use-after-free in __mutex_unlock_slowpath+0xa6/0x5e0 kernel/locking/mutex.c:916
+Read of size 8 at addr ffff888020ab34b8 by task kworker/u5:0/49
+
+CPU: 0 PID: 49 Comm: kworker/u5:0 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Workqueue: hci0 hci_error_reset
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:395
+ kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
+ __mutex_unlock_slowpath+0xa6/0x5e0 kernel/locking/mutex.c:916
+ l2cap_chan_unlock include/net/bluetooth/l2cap.h:860 [inline]
+ l2cap_conn_del+0x404/0x7b0 net/bluetooth/l2cap_core.c:1932
+ l2cap_disconn_cfm net/bluetooth/l2cap_core.c:8214 [inline]
+ l2cap_disconn_cfm+0x8c/0xc0 net/bluetooth/l2cap_core.c:8207
+ hci_disconn_cfm include/net/bluetooth/hci_core.h:1787 [inline]
+ hci_conn_hash_flush+0x122/0x260 net/bluetooth/hci_conn.c:2430
+ hci_dev_close_sync+0x5c4/0x1200 net/bluetooth/hci_sync.c:4804
+ hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
+ hci_error_reset+0x9e/0x140 net/bluetooth/hci_core.c:1059
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+Allocated by task 3621:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
+ kmalloc include/linux/slab.h:559 [inline]
+ kzalloc include/linux/slab.h:695 [inline]
+ l2cap_chan_create+0x40/0x930 net/bluetooth/l2cap_core.c:466
+ a2mp_chan_open net/bluetooth/a2mp.c:771 [inline]
+ amp_mgr_create+0x8f/0x960 net/bluetooth/a2mp.c:862
+ a2mp_channel_create+0x7d/0x150 net/bluetooth/a2mp.c:894
+ l2cap_data_channel net/bluetooth/l2cap_core.c:7571 [inline]
+ l2cap_recv_frame+0x48e3/0x8d90 net/bluetooth/l2cap_core.c:7726
+ l2cap_recv_acldata+0xaa6/0xc00 net/bluetooth/l2cap_core.c:8431
+ hci_acldata_packet net/bluetooth/hci_core.c:3793 [inline]
+ hci_rx_work+0x705/0x1230 net/bluetooth/hci_core.c:4028
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Freed by task 49:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1669 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1695
+ slab_free mm/slub.c:3599 [inline]
+ __kmem_cache_free+0xab/0x3b0 mm/slub.c:3612
+ l2cap_chan_destroy net/bluetooth/l2cap_core.c:509 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ l2cap_chan_put+0x22a/0x2d0 net/bluetooth/l2cap_core.c:533
+ l2cap_conn_del+0x3fc/0x7b0 net/bluetooth/l2cap_core.c:1930
+ l2cap_disconn_cfm net/bluetooth/l2cap_core.c:8214 [inline]
+ l2cap_disconn_cfm+0x8c/0xc0 net/bluetooth/l2cap_core.c:8207
+ hci_disconn_cfm include/net/bluetooth/hci_core.h:1787 [inline]
+ hci_conn_hash_flush+0x122/0x260 net/bluetooth/hci_conn.c:2430
+ hci_dev_close_sync+0x5c4/0x1200 net/bluetooth/hci_sync.c:4804
+ hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
+ hci_error_reset+0x9e/0x140 net/bluetooth/hci_core.c:1059
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
+ call_rcu+0x99/0x820 kernel/rcu/tree.c:2796
+ netlink_release+0xeff/0x1db0 net/netlink/af_netlink.c:815
+ __sock_release+0xcd/0x280 net/socket.c:650
+ sock_close+0x18/0x20 net/socket.c:1365
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16b/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888020ab3000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1208 bytes inside of
+ 2048-byte region [ffff888020ab3000, ffff888020ab3800)
+
+The buggy address belongs to the physical page:
+page:ffffea000082ac00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x20ab0
+head:ffffea000082ac00 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888011842000 dead000080080008 0000000000000000
+raw: 0000000000000000 dead000000000001 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 8393630899, free_ts 0
+ prep_new_page mm/page_alloc.c:2538 [inline]
+ get_page_from_freelist+0x1092/0x2d20 mm/page_alloc.c:4287
+ __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5546
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2113
+ alloc_pages+0x22f/0x270 mm/mempolicy.c:2275
+ alloc_slab_page mm/slub.c:1739 [inline]
+ allocate_slab+0x213/0x300 mm/slub.c:1884
+ new_slab mm/slub.c:1937 [inline]
+ ___slab_alloc+0xac1/0x1430 mm/slub.c:3119
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3217
+ slab_alloc_node mm/slub.c:3302 [inline]
+ __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3375
+ __do_kmalloc_node mm/slab_common.c:933 [inline]
+ __kmalloc+0x44/0xc0 mm/slab_common.c:947
+ kmalloc include/linux/slab.h:564 [inline]
+ kzalloc include/linux/slab.h:695 [inline]
+ rfkill_alloc+0xa6/0x2c0 net/rfkill/core.c:984
+ wiphy_new_nm+0x12d5/0x2090 net/wireless/core.c:527
+ wiphy_new include/net/cfg80211.h:5550 [inline]
+ virt_wifi_make_wiphy drivers/net/wireless/virt_wifi.c:363 [inline]
+ virt_wifi_init_module+0x64/0x3d6 drivers/net/wireless/virt_wifi.c:665
+ do_one_initcall+0x13d/0x780 init/main.c:1307
+ do_initcall_level init/main.c:1382 [inline]
+ do_initcalls init/main.c:1398 [inline]
+ do_basic_setup init/main.c:1417 [inline]
+ kernel_init_freeable+0x6ff/0x788 init/main.c:1637
+ kernel_init+0x1a/0x1d0 init/main.c:1525
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888020ab3380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888020ab3400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888020ab3480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                        ^
+ ffff888020ab3500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888020ab3580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
- MAINTAINERS | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f5ca4aefd184..11027cf9b670 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6875,9 +6875,11 @@ F:	drivers/gpu/drm/gma500/
- DRM DRIVERS FOR HISILICON
- M:	Xinliang Liu <xinliang.liu@linaro.org>
- M:	Tian Tao  <tiantao6@hisilicon.com>
--R:	John Stultz <jstultz@google.com>
- R:	Xinwei Kong <kong.kongxinwei@hisilicon.com>
- R:	Chen Feng <puck.chen@hisilicon.com>
-+R:	Sumit Semwal <sumit.semwal@linaro.org>
-+R:	Yongqin Liu <yongqin.liu@linaro.org>
-+R:	John Stultz <jstultz@google.com>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git git://anongit.freedesktop.org/drm/drm-misc
--- 
-2.37.3.998.g577e59143f-goog
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
