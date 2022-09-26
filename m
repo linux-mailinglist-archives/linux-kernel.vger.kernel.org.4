@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9685EA518
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72FB5EA1CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238521AbiIZL5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S236928AbiIZK5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbiIZLyv (ORCPT
+        with ESMTP id S236897AbiIZK4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53D877EAB;
-        Mon, 26 Sep 2022 03:50:21 -0700 (PDT)
+        Mon, 26 Sep 2022 06:56:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7D61155;
+        Mon, 26 Sep 2022 03:29:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F4B360A55;
-        Mon, 26 Sep 2022 10:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51BF6C433D6;
-        Mon, 26 Sep 2022 10:44:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 754D5B8091E;
+        Mon, 26 Sep 2022 10:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9BCC433C1;
+        Mon, 26 Sep 2022 10:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189057;
-        bh=nDbKPYGv0WWIC0OECH+w6mx4S1VD3cKtTgv94nJ/WmA=;
+        s=korg; t=1664188097;
+        bh=F3auYVdCRpTlIuUnMHJnN2IZNOqdqNBg44h/HUF2Hkw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mj9hKwcpn5688w6VqDuSsGdEPIxjeBBREbWp17NaAj6SnEXjRd/gK5xRdwPheX+Ll
-         K0bxVVykpRp8a3bITvIMilhdni7iI+LCm0YHR+0hVgqZdT7tglaEaC0BEVoor0eKhY
-         CN4azfgQ24FbyEFzemjWmU7NHtbCBXbg3u/+BdK8=
+        b=oGAVDLaufLnslQ1qgSBzG3GMfb9bLeO7BBAu6hb+7uQ9+xraGEKNH6/t9YHu6p06H
+         7kJlo8FJyPC9ah3cYn8MupVfXm3yIIZnNWcbSDQOMvIUPl9k3HYk3eDzAi3wjAs0Cc
+         SJgKyPdYT4s5CIhSJILaZe/Pjs00xnzerGssvOKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 5.19 059/207] kasan: call kasan_malloc() from __kmalloc_*track_caller()
+        stable@vger.kernel.org, Seunghui Lee <sh043.lee@samsung.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 022/141] mmc: core: Fix inconsistent sd3_bus_mode at UHS-I SD voltage switch failure
 Date:   Mon, 26 Sep 2022 12:10:48 +0200
-Message-Id: <20220926100809.246523707@linuxfoundation.org>
+Message-Id: <20220926100755.364891571@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Collingbourne <pcc@google.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 5373b8a09d6e037ee0587cb5d9fe4cc09077deeb upstream.
+[ Upstream commit 63f1560930e4e1c4f6279b8ae715c9841fe1a6d3 ]
 
-We were failing to call kasan_malloc() from __kmalloc_*track_caller()
-which was causing us to sometimes fail to produce KASAN error reports
-for allocations made using e.g. devm_kcalloc(), as the KASAN poison was
-not being initialized. Fix it.
+If re-initialization results is a different signal voltage, because the
+voltage switch failed previously, but not this time (or vice versa), then
+sd3_bus_mode will be inconsistent with the card because the SD_SWITCH
+command is done only upon first initialization.
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Cc: <stable@vger.kernel.org> # 5.15
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix by always reading SD_SWITCH information during re-initialization, which
+also means it does not need to be re-read later for the 1.8V fixup
+workaround.
+
+Note, brief testing showed SD_SWITCH took about 1.8ms to 2ms which added
+about 1% to 1.5% to the re-initialization time, so it's not particularly
+significant.
+
+Reported-by: Seunghui Lee <sh043.lee@samsung.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: Seunghui Lee <sh043.lee@samsung.com>
+Tested-by: Seunghui Lee <sh043.lee@samsung.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220815073321.63382-3-adrian.hunter@intel.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/slub.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/mmc/core/sd.c | 42 ++++++++++++++++--------------------------
+ 1 file changed, 16 insertions(+), 26 deletions(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4950,6 +4950,8 @@ void *__kmalloc_track_caller(size_t size
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc(caller, ret, size, s->size, gfpflags);
+diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+index 0b09cdaaeb6c..899768ed1688 100644
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -932,15 +932,16 @@ int mmc_sd_setup_card(struct mmc_host *host, struct mmc_card *card,
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
-+
- 	return ret;
- }
- EXPORT_SYMBOL(__kmalloc_track_caller);
-@@ -4981,6 +4983,8 @@ void *__kmalloc_node_track_caller(size_t
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
+ 		/* Erase init depends on CSD and SSR */
+ 		mmc_init_erase(card);
+-
+-		/*
+-		 * Fetch switch information from card.
+-		 */
+-		err = mmc_read_switch(card);
+-		if (err)
+-			return err;
+ 	}
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
++	/*
++	 * Fetch switch information from card. Note, sd3_bus_mode can change if
++	 * voltage switch outcome changes, so do this always.
++	 */
++	err = mmc_read_switch(card);
++	if (err)
++		return err;
 +
- 	return ret;
- }
- EXPORT_SYMBOL(__kmalloc_node_track_caller);
+ 	/*
+ 	 * For SPI, enable CRC as appropriate.
+ 	 * This CRC enable is located AFTER the reading of the
+@@ -1089,26 +1090,15 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
+ 	if (!v18_fixup_failed && !mmc_host_is_spi(host) && mmc_host_uhs(host) &&
+ 	    mmc_sd_card_using_v18(card) &&
+ 	    host->ios.signal_voltage != MMC_SIGNAL_VOLTAGE_180) {
+-		/*
+-		 * Re-read switch information in case it has changed since
+-		 * oldcard was initialized.
+-		 */
+-		if (oldcard) {
+-			err = mmc_read_switch(card);
+-			if (err)
+-				goto free_card;
+-		}
+-		if (mmc_sd_card_using_v18(card)) {
+-			if (mmc_host_set_uhs_voltage(host) ||
+-			    mmc_sd_init_uhs_card(card)) {
+-				v18_fixup_failed = true;
+-				mmc_power_cycle(host, ocr);
+-				if (!oldcard)
+-					mmc_remove_card(card);
+-				goto retry;
+-			}
+-			goto cont;
++		if (mmc_host_set_uhs_voltage(host) ||
++		    mmc_sd_init_uhs_card(card)) {
++			v18_fixup_failed = true;
++			mmc_power_cycle(host, ocr);
++			if (!oldcard)
++				mmc_remove_card(card);
++			goto retry;
+ 		}
++		goto cont;
+ 	}
+ 
+ 	/* Initialization sequence for UHS-I cards */
+-- 
+2.35.1
+
 
 
