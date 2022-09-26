@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F102D5EA3B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7425EA36D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbiIZLbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S237867AbiIZLZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiIZLaj (ORCPT
+        with ESMTP id S237869AbiIZLXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:30:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFDB6BCF9;
-        Mon, 26 Sep 2022 03:41:48 -0700 (PDT)
+        Mon, 26 Sep 2022 07:23:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7011BEA0;
+        Mon, 26 Sep 2022 03:39:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EA49B80920;
-        Mon, 26 Sep 2022 10:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB41C433D7;
-        Mon, 26 Sep 2022 10:32:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A36BF60C05;
+        Mon, 26 Sep 2022 10:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65286C433C1;
+        Mon, 26 Sep 2022 10:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188329;
-        bh=mveKo5nAQBKgWfRiaBTpsLS+shiq4LILIKnjrBq+yJk=;
+        s=korg; t=1664188741;
+        bh=ZdPKxg5UW1HEw759TXM5ScOiD9P0Pfppjo6F7MnLu3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wUEZAMy7IeQr0VcCnRxSeUbQRMYww9IWS95ihTrNEAY9cAX6sxmCGiOA2oixtP5V3
-         7tDoUhaVgicgQTXxAlAQhasufcEs/0j4wdLgJ0cOXNJmTFPTsJBpfUULMnxaTZ7Mu7
-         aYPdR+uCl+Jtw9Q80Nj0YL+uVnPRX74X0yOUDyTc=
+        b=ldzMh9ZYLoMxTCXnlxbxvQgSQkZDkrVbn6MOvMNy/X/l0Y2SPpvvExZueiffC0AIr
+         oFoG/nmdcpOrMiBC58qfbc4oOl5RzeooAis+2Fbu3v4bxGOKja7McE4/hB3xaIT7n3
+         abFSyS58GGqrpETS8Jwl0nRghGugb7kbAklhjBo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>, bpf@vger.kernel.org,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 114/141] net: sched: fix possible refcount leak in tc_new_tfilter()
+Subject: [PATCH 5.15 106/148] perf stat: Fix BPF program section name
 Date:   Mon, 26 Sep 2022 12:12:20 +0200
-Message-Id: <20220926100758.576827702@linuxfoundation.org>
+Message-Id: <20220926100800.089875531@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
 
-[ Upstream commit c2e1cfefcac35e0eea229e148c8284088ce437b5 ]
+[ Upstream commit 0d77326c3369e255715ed2440a78894ccc98dd69 ]
 
-tfilter_put need to be called to put the refount got by tp->ops->get to
-avoid possible refcount leak when chain->tmplt_ops != NULL and
-chain->tmplt_ops != tp->ops.
+It seems the recent libbpf got more strict about the section name.
+I'm seeing a failure like this:
 
-Fixes: 7d5509fa0d3d ("net: sched: extend proto ops with 'put' callback")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-Link: https://lore.kernel.org/r/20220921092734.31700-1-hbh25y@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+  $ sudo ./perf stat -a --bpf-counters --for-each-cgroup ^. sleep 1
+  libbpf: prog 'on_cgrp_switch': missing BPF prog type, check ELF section name 'perf_events'
+  libbpf: prog 'on_cgrp_switch': failed to load: -22
+  libbpf: failed to load object 'bperf_cgroup_bpf'
+  libbpf: failed to load BPF skeleton 'bperf_cgroup_bpf': -22
+  Failed to load cgroup skeleton
+
+The section name should be 'perf_event' (without the trailing 's').
+Although it's related to the libbpf change, it'd be better fix the
+section name in the first place.
+
+Fixes: 944138f048f7d759 ("perf stat: Enable BPF counter with --for-each-cgroup")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: bpf@vger.kernel.org
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/r/20220916184132.1161506-2-namhyung@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/cls_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index b8ffb7e4f696..c410a736301b 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -2124,6 +2124,7 @@ static int tc_new_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
- 	}
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 292c430768b5..c72f8ad96f75 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -176,7 +176,7 @@ static int bperf_cgroup_count(void)
+ }
  
- 	if (chain->tmplt_ops && chain->tmplt_ops != tp->ops) {
-+		tfilter_put(tp, fh);
- 		NL_SET_ERR_MSG(extack, "Chain template is set to a different filter kind");
- 		err = -EINVAL;
- 		goto errout;
+ // This will be attached to cgroup-switches event for each cpu
+-SEC("perf_events")
++SEC("perf_event")
+ int BPF_PROG(on_cgrp_switch)
+ {
+ 	return bperf_cgroup_count();
 -- 
 2.35.1
 
