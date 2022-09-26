@@ -2,202 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966EF5E985A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6475F5E985E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbiIZEAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 00:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S233111AbiIZEH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 00:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiIZEAs (ORCPT
+        with ESMTP id S232566AbiIZEHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 00:00:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E2011D321;
-        Sun, 25 Sep 2022 21:00:45 -0700 (PDT)
-Received: from zhuyinbo$loongson.cn ( [10.180.13.64] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Mon, 26 Sep 2022 12:00:39
- +0800 (GMT+08:00)
-X-Originating-IP: [10.180.13.64]
-Date:   Mon, 26 Sep 2022 12:00:39 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Yinbo Zhu" <zhuyinbo@loongson.cn>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        =?UTF-8?B?5YiY5L2p5a6d?= <liupeibao@loongson.cn>
-Subject: Re: Re: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2
- to json-schema
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <20220924174258.GA1011284-robh@kernel.org>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <20220921015605.17078-2-zhuyinbo@loongson.cn>
- <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
- <28a78a10.a7dd.1835f5aaf90.Coremail.zhuyinbo@loongson.cn>
- <a44244f2-fb96-0483-b529-d0f2b0b7e5d8@linaro.org>
- <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
- <20220924174258.GA1011284-robh@kernel.org>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: AkbSGGZvb3Rlcl90eHQ9NjgwMTo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Mon, 26 Sep 2022 00:07:23 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3672A971;
+        Sun, 25 Sep 2022 21:07:21 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c24so5107724plo.3;
+        Sun, 25 Sep 2022 21:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Qm3X/05NS0zu77FG0jv3QAwV3JQ0p1zGs2i7CKJezT4=;
+        b=KJzRCgshLV5KwFRGtGFt50Gon47mbHttQ5DvGxx+kFFR1vbf+7DMHE1JEr0E1Q0fbk
+         6UaEqXyjbUBUiynebGKjNlxxgvx0qy3nVvoIhgTHmaTIabPEKtdIFyP0Yt21X6pV6z8f
+         YQuMpnTz4wuoFK/27xYiuUK1KHgG9rpfYF8JQ6QRnM0YvS9gX7+bkZVo0oAjNCVBKvAC
+         gX3gdfau4AuLUtDcRzD8TrEYCVvP+M0L9m4x8Es6ju6xLqOvX1/RTQcMz/zaXN59UVXT
+         cLmO9NWscWGb7OdtRla7sbWUfPJeehrNyP54cDv6q5jlKukNcsvkC+BRt8h17Cg3vpyF
+         vZnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Qm3X/05NS0zu77FG0jv3QAwV3JQ0p1zGs2i7CKJezT4=;
+        b=qFXZb+JSGJr8tSBUUkrJ57PGz4+vyP8yvY517Jz5khDZfPKRfbNSJCy0duzEO5I+Vt
+         EQ5OqD3ogLfb53dC5jblGI657JuvtcopSOOrcyuOlR5T3JxyjBi5fm5UeY2uFuqlJi60
+         qxSXZuDf+4IqqNcKuLx2tRM6rDQFt2vEFencJX8INF2ASCnAUiTt3xdZ3T8uQJZ4lAm1
+         awqWxouRfYIPQLWMcc4QzE9MRmG1Ut9YVbmmWcVuDVRVSGyDK8mAk81yzrPstTzgEw1G
+         xIEuE3aJqLXL7A55Zs1XUWErMGQBlQqbIQdsUuGR+qZuNVu6QxzsrGrET2atQRhuDxWM
+         tSHA==
+X-Gm-Message-State: ACrzQf0HSIdfQQFsVkQ2U94OCnmP954lrjbuZUfFSTi/FOUJfqH5lUOk
+        iHWsQEw0CDiBlVuNkwZspJE=
+X-Google-Smtp-Source: AMsMyM4fIBGM1+CLjeHyDXW2GQpClYl42xw340YAwjZiZ8hWBZcND7mgTzlW+q94Y5F9ICoTl9Zp5A==
+X-Received: by 2002:a17:90a:c70b:b0:200:4366:d047 with SMTP id o11-20020a17090ac70b00b002004366d047mr34806483pjt.240.1664165241100;
+        Sun, 25 Sep 2022 21:07:21 -0700 (PDT)
+Received: from localhost.localdomain ([2601:601:9100:2c:40bc:2209:ea1d:5052])
+        by smtp.googlemail.com with ESMTPSA id y26-20020aa79afa000000b0053ebe7ffddcsm10886015pfp.116.2022.09.25.21.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 21:07:20 -0700 (PDT)
+From:   Shane Parslow <shaneparslow808@gmail.com>
+To:     shaneparslow808@gmail.com
+Cc:     M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: wwan: iosm: Fix 7360 WWAN card control channel mapping
+Date:   Sun, 25 Sep 2022 21:05:24 -0700
+Message-Id: <20220926040524.4017-1-shaneparslow808@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Message-ID: <4ce14e3c.bf79.18377f44118.Coremail.zhuyinbo@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8Ax1OHnIzFj7QgiAA--.7003W
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/1tbiAQABDGMwRN0HxwAAsG
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiUm9iIEhlcnJpbmciIDxy
-b2JoQGtlcm5lbC5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMjUgMDE6NDI6NTggKOaYn+ac
-n+aXpSkKPiDmlLbku7bkuro6ICLmnLHpk7bms6IiIDx6aHV5aW5ib0Bsb29uZ3Nvbi5jbj4KPiDm
-ioTpgIE6ICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8u
-b3JnPiwgIlJhZmFlbCBKIC4gV3lzb2NraSIgPHJhZmFlbEBrZXJuZWwub3JnPiwgIkRhbmllbCBM
-ZXpjYW5vIiA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4sICJBbWl0IEt1Y2hlcmlhIiA8YW1p
-dGtAa2VybmVsLm9yZz4sICJaaGFuZyBSdWkiIDxydWkuemhhbmdAaW50ZWwuY29tPiwgbGludXgt
-cG1Admdlci5rZXJuZWwub3JnLCBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZywgbGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZywgemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nv
-bi5jbj4KPiDkuLvpopg6IFJlOiBSZTogW1BBVENIIHYyIDIvM10gZHQtYmluZGluZ3M6IHRoZXJt
-YWw6IENvbnZlcnQgbG9vbmdzb24yIHRvIGpzb24tc2NoZW1hCj4gCj4gT24gVGh1LCBTZXAgMjIs
-IDIwMjIgYXQgMDk6Mzk6MzBBTSArMDgwMCwg5pyx6ZO25rOiIHdyb3RlOgo+ID4gCj4gPiAKPiA+
-IAo+ID4gPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4gPiA+IOWPkeS7tuS6ujogIktyenlzenRv
-ZiBLb3psb3dza2kiIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+Cj4gPiA+IOWPkemA
-geaXtumXtDoyMDIyLTA5LTIxIDE3OjMxOjExICjmmJ/mnJ/kuIkpCj4gPiA+IOaUtuS7tuS6ujog
-IuacsemTtuazoiIgPHpodXlpbmJvQGxvb25nc29uLmNuPgo+ID4gPiDmioTpgIE6ICJSYWZhZWwg
-SiAuIFd5c29ja2kiIDxyYWZhZWxAa2VybmVsLm9yZz4sICJEYW5pZWwgTGV6Y2FubyIgPGRhbmll
-bC5sZXpjYW5vQGxpbmFyby5vcmc+LCAiQW1pdCBLdWNoZXJpYSIgPGFtaXRrQGtlcm5lbC5vcmc+
-LCAiWmhhbmcgUnVpIiA8cnVpLnpoYW5nQGludGVsLmNvbT4sIGxpbnV4LXBtQHZnZXIua2VybmVs
-Lm9yZywgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmcsIHpoYW5naG9uZ2NoZW4gPHpoYW5naG9uZ2NoZW5AbG9vbmdzb24uY24+Cj4gPiA+IOS4
-u+mimDogUmU6IFtQQVRDSCB2MiAyLzNdIGR0LWJpbmRpbmdzOiB0aGVybWFsOiBDb252ZXJ0IGxv
-b25nc29uMiB0byBqc29uLXNjaGVtYQo+ID4gPiAKPiA+ID4gT24gMjEvMDkvMjAyMiAxMToyMiwg
-5pyx6ZO25rOiIHdyb3RlOgo+ID4gPiA+PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4gPiA+ID4+
-IOWPkeS7tuS6ujogIktyenlzenRvZiBLb3psb3dza2kiIDxrcnp5c3p0b2Yua296bG93c2tpQGxp
-bmFyby5vcmc+Cj4gPiA+ID4+IOWPkemAgeaXtumXtDoyMDIyLTA5LTIxIDE1OjA1OjAwICjmmJ/m
-nJ/kuIkpCj4gPiA+ID4+IOaUtuS7tuS6ujogIllpbmJvIFpodSIgPHpodXlpbmJvQGxvb25nc29u
-LmNuPiwgIlJhZmFlbCBKIC4gV3lzb2NraSIgPHJhZmFlbEBrZXJuZWwub3JnPiwgIkRhbmllbCBM
-ZXpjYW5vIiA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4sICJBbWl0IEt1Y2hlcmlhIiA8YW1p
-dGtAa2VybmVsLm9yZz4sICJaaGFuZyBSdWkiIDxydWkuemhhbmdAaW50ZWwuY29tPiwgIlJvYiBI
-ZXJyaW5nIiA8cm9iaCtkdEBrZXJuZWwub3JnPiwgIktyenlzenRvZiBLb3psb3dza2kiIDxrcnp5
-c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+LCBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcs
-IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-Cj4gPiA+ID4+IOaKhOmAgTogemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nvbi5j
-bj4KPiA+ID4gPj4g5Li76aKYOiBSZTogW1BBVENIIHYyIDIvM10gZHQtYmluZGluZ3M6IHRoZXJt
-YWw6IENvbnZlcnQgbG9vbmdzb24yIHRvIGpzb24tc2NoZW1hCj4gPiA+ID4+Cj4gPiA+ID4+IE9u
-IDIxLzA5LzIwMjIgMDM6NTYsIFlpbmJvIFpodSB3cm90ZToKPiA+ID4gPj4+IENvbnZlcnQgdGhl
-IGxvb25nc29uMiB0aGVybWFsIGJpbmRpbmcgdG8gRFQgc2NoZW1hIGZvcm1hdCB1c2luZwo+ID4g
-PiA+Pj4ganNvbi1zY2hlbWEuCj4gPiA+ID4+Cj4gPiA+ID4+IEluY29ycmVjdCBzdWJqZWN0IGFu
-ZCBpbmNvcnJlY3QgY29tbWl0IG1zZy4gVGhlcmUgaXMgbm8gY29udmVyc2lvbiBoZXJlLgo+ID4g
-PiA+IE91ciBzb2MgYXJjaGl0ZWN0dXJlIGlzIHRoZSBsb29uZ3NvbjIgc2VyaWVzLCBzbyB3ZSB3
-aWxsIG1vZGlmeSBpdCBhY2NvcmRpbmdseS4KPiA+ID4gCj4gPiA+IEhvdyB0aGUgc29jIGFyY2hp
-dGVjdHVyZSBpcyByZWxhdGVkIHRvIG15IGNvbW1lbnQgdGhhdCB5b3UgZG8gbm90Cj4gPiA+IHBl
-cmZvcm0gY29udmVyc2lvbj8KPiA+IEkgZ290IGl0LCBhbmQgSSB3aWxsIGFhZCBhIGNvbnZlcnNp
-b24uCj4gPiA+IAo+ID4gPiA+IAo+ID4gPiA+Pgo+ID4gPiA+Pj4KPiA+ID4gPj4+IFNpZ25lZC1v
-ZmYtYnk6IFlpbmJvIFpodSA8Yz4KPiA+ID4gPj4+IC0tLQo+ID4gPiA+Pj4gQ2hhbmdlIGluIHYy
-Ogo+ID4gPiA+Pj4gCQkxLiBBZGQgZGVzY3JpcHRpb24gYW5kIHR5cGUgYWJvdXQgdGhlICJpZCIu
-CQo+ID4gPiA+Pj4gCQkyLiBNYWtlIHRoZSBmaWxlbmFtZSB3YXMgYmFzZWQgb24gY29tcGF0aWJs
-ZS4KPiA+ID4gPj4+Cj4gPiA+ID4+PiAgLi4uL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRo
-ZXJtYWwueWFtbCAgIHwgNTIgKysrKysrKysrKysrKysrKysrKwo+ID4gPiA+Pj4gIDEgZmlsZSBj
-aGFuZ2VkLCA1MiBpbnNlcnRpb25zKCspCj4gPiA+ID4+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVybWFs
-LnlhbWwKPiA+ID4gPj4+Cj4gPiA+ID4+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRoZXJtYWwueWFtbCBiL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVybWFsLnlhbWwK
-PiA+ID4gPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiA+ID4+PiBpbmRleCAwMDAwMDAwMDAw
-MDAuLjI5OTRhZTNhNTZhYQo+ID4gPiA+Pj4gLS0tIC9kZXYvbnVsbAo+ID4gPiA+Pj4gKysrIGIv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRoZXJt
-YWwueWFtbAo+ID4gPiA+Pgo+ID4gPiA+Pgo+ID4gPiA+PiBObyBpbXByb3ZlbWVudHMgaGVyZS4g
-WW91IGlnbm9yZSBteSBjb21tZW50cywgc28gSSBhbSBnb2luZyB0byBOQUsgaXQuCj4gPiA+ID4g
-SSBkb24ndCBnZXQgeW91ciBwb2ludCwgdGhhdCBkdHMgY29tcGF0aWJsZSBpcyAibG9vbmdzb24s
-bG9vbmdzb24yLXRoZXJtYWwiLCBzbyB0aGlzIGRyaXZlciBmaWxlIG5hbWUgaXMgbmFtZWQKPiA+
-ID4gPiBsb29uZ3NvbjItdGhlcm1hbCB0aGF0IGFjY29yZGluZyB3aGF0IHlvdSBzYWlkIGFib3V0
-ICJGaWxlbmFtZSBiYXNlZCBvbiBjb21wYXRpYmxlLiIKPiA+ID4gPiBJZiB3aGF0IEkgdW5kZXJz
-dGFuZCBpcyBub3Qgd2hhdCB5b3UgZXhwZWN0LCBwbGVhc2UgdGVsbCBtZSBob3cgdG8gbW9kaWZ5
-IGl0Lgo+ID4gPiAKPiA+ID4gCj4gPiA+IEZpbGVuYW1lIG11c3QgbWF0Y2ggdGhlIGNvbXBhdGli
-bGUsIHNvOiBsb29uZ3Nvbixsb29uZ3NvbjItdGhlcm1hbC55YW1sCj4gPiBJIGdvdCBpdCwgYW5k
-IEkgd2lsbCBhZGQgYSBjb252ZXJzaW9uLgo+ID4gPiAKPiA+ID4gPj4KPiA+ID4gPj4KPiA+ID4g
-Pj4+IEBAIC0wLDAgKzEsNTIgQEAKPiA+ID4gPj4+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVy
-OiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkKPiA+ID4gPj4+ICslWUFNTCAxLjIKPiA+
-ID4gPj4+ICstLS0KPiA+ID4gPj4+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFz
-L3RoZXJtYWwvbG9vbmdzb24yLXRoZXJtYWwueWFtbCMKPiA+ID4gPj4+ICskc2NoZW1hOiBodHRw
-Oi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMKPiA+ID4gPj4+ICsKPiA+
-ID4gPj4+ICt0aXRsZTogVGhlcm1hbCBzZW5zb3JzIG9uIGxvb25nc29uMiBTb0NzCj4gPiA+ID4+
-PiArCj4gPiA+ID4+PiArbWFpbnRhaW5lcnM6Cj4gPiA+ID4+PiArICAtIHpoYW5naG9uZ2NoZW4g
-PHpoYW5naG9uZ2NoZW5AbG9vbmdzb24uY24+Cj4gPiA+ID4+PiArICAtIFlpbmJvIFpodSA8emh1
-eWluYm9AbG9vbmdzb24uY24+Cj4gPiA+ID4+PiArCj4gPiA+ID4+PiArcHJvcGVydGllczoKPiA+
-ID4gPj4+ICsgIGNvbXBhdGlibGU6Cj4gPiA+ID4+PiArICAgIGNvbnN0OiBsb29uZ3Nvbixsb29u
-Z3NvbjItdGhlcm1hbAo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gKyAgcmVnOgo+ID4gPiA+Pj4gKyAg
-ICBtYXhJdGVtczogMQo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gKyAgaWQ6Cj4gPiA+ID4+PiArICAg
-ICRyZWY6ICcvL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyJwo+ID4gPiA+
-Pgo+ID4gPiA+PiBObyBpbXByb3ZlbWVudHMgaGVyZSwgc28gbGV0IG1lIGJlIHNwZWNpZmljIC0g
-eW91IG5lZWQgdG8gcmVhbGx5IGp1c3RpZnkKPiA+ID4gPj4gc3VjaCBwcm9wZXJ0eSBvciBpdCBj
-YW5ub3QgZ28gdG8gc2NoZW1hLgo+ID4gPiA+IFRoZSBsb29uZ3NvbjJfdGhlcm1hbC5jIGRyaXZl
-ciBuZWVkIHBhcnNlIHRoaXMgImlkIiBwcm9wZXJ0eS4KPiA+ID4gCj4gPiA+IFRoaXMgaXMgbm90
-IHJlYXNvbiB0byBhZGQgcHJvcGVydGllcyB0byBEVC4gRFQgZGVzY3JpYmVzIHRoZSBoYXJkd2Fy
-ZSwKPiA+ID4gbm90IGRyaXZlciBiZWhhdmlvci4KPiA+ID4gCj4gPiA+IFdoeSBoYXJkd2FyZSBu
-ZWVkcyBhcmJpdHJhcnksIGFkZGl0aW9uYWwgYWRkcmVzc2luZyBudW1iZXIgaW5zdGVhZCBvZgo+
-ID4gPiBzdGFuZGFyZCB1bml0IGFkZHJlc3M/Cj4gPiBUaGUgbG9vbmdzb24yIHNlcmllcyBzb2Mg
-c3VwcG9ydHMgdXAgdG8gZm91ciBzZW5zb3JzLCBidXQgdGhlIDJLMTAwMCBoYXMgb25seSBvbmUg
-c2Vuc29yLCBzbyB0aGUgSUQgbXVzdCBiZSAwLiAKPiA+IEZvciB0aGUgMksxMDAwLCBpbiBvcmRl
-ciB0byBkaXN0aW5ndWlzaCB0aGUgZGlmZmVyZW5jZXMgYmV0d2VlbiBkaWZmZXJlbnQgaGFyZHdh
-cmUgaW4gdGhlIExvb25nc29uMiBTb0Mgc2VyaWVzLAo+ID4gdGhlIElEIGlzIGFkZGVkIHRvIHRo
-ZSBkdHMKPiAKPiBEaWZmZXJlbmNlcyBpbiBTb0NzIGlzIHdoYXQgJ2NvbXBhdGlibGUnIGlzIGZv
-ci4gSWYgJ2xvb25nc29uMicgaXMgbm90IGEgCj4gc3BlY2lmaWMgU29DLCB0aGVuIHlvdXIgY29t
-cGF0aWJsZSBzdHJpbmcgaXMgbm90IHNwZWNpZmljIGVub3VnaC4KSWYgb3RoZXIgbG9vbmdzb24y
-IHBsYXRmb3JtcyBhcmUgZGlmZmVyZW50IGZyb20gdGhlIHRoZXJtYWwgc2Vuc29yLCBJIHdpbGwg
-YWRkIGNvbXBhdGlibGUKImxvb25nc29uLGxvb25nc29uMi10aGVybWFsLXh4eCIsIHBsZWFzZSB5
-b3Ugbm90ZS4KCj4gCj4gPiA+IAo+ID4gPiA+Pgo+ID4gPiA+Pj4gKyAgICBkZXNjcmlwdGlvbjog
-fAo+ID4gPiA+Pj4gKyAgICAgIFNwZWNpZnkgdGhlIHRoZXJtYWwgc2Vuc29yIGlkLgo+ID4gPiA+
-Pj4gKyAgICBtaW5pbXVtOiAwCj4gPiA+ID4+PiArICAgIG1heGltdW06IDMKPiA+ID4gPj4+ICsK
-PiA+ID4gPj4+ICsgIGludGVycnVwdHM6Cj4gPiA+ID4+PiArICAgIG1heEl0ZW1zOiAxCj4gPiA+
-ID4+PiArCj4gPiA+ID4+PiArICAiI3RoZXJtYWwtc2Vuc29yLWNlbGxzIjoKPiA+ID4gPj4+ICsg
-ICAgY29uc3Q6IDEKPiAKPiBJZiBvbmUgU29DIG9ubHkgaGFzIDEgc2Vuc29yLCB0aGVuIHRoaXMg
-Y291bGQgYmUgMC4gSG93ZXZlciwgeW91IGRvbid0IAo+IGhhdmUgdG8gZG8gdGhhdCwgYnV0IGl0
-J3MgYW5vdGhlciB3YXkgdG8gZGlzdGluZ3Vpc2ggZGlmZmVyZW5jZXMuCm9rYXkgLEkgZ290IGl0
-Lgo+IAo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gK3JlcXVpcmVkOgo+ID4gPiA+Pj4gKyAgLSBjb21w
-YXRpYmxlCj4gPiA+ID4+PiArICAtIHJlZwo+ID4gPiA+Pj4gKyAgLSBpZAo+ID4gPiA+Pj4gKyAg
-LSBpbnRlcnJ1cHQtcGFyZW50Cj4gPiA+ID4+Cj4gPiA+ID4+IFdoeT8KPiA+ID4gPiBUaGUgaW50
-ZXJydXB0cyBvZiBvdXIgZHRzIGRvIG5vdCBzcGVjaWZ5IGFuIGludGVycnVwdCBwYXJlbnQsCj4g
-PiA+ID4gZWcuIGludGVycnVwdHMgPSA8NyBJUlFfVFlQRV9MRVZFTF9MT1c+Cj4gPiA+ID4gc28g
-d2UgbmVlZCB0byBhZGQgYW4gaW50ZXJydXB0IHBhcmVudCBwcm9wZXJ0eS4KPiA+ID4gCj4gPiA+
-IFlvdSBjYW4gYWRkIGJ1dCBJIGFtIGFza2luZyB3aHkgaXMgaXQgcmVxdWlyZWQ/Cj4gPiBTaW5j
-ZSB0aGVyZSBpcyBtb3JlIHRoYW4gb25lIGludGVycnVwdCBjb250cm9sbGVyIGluIHRoZSBMb29u
-Z3NvbjIgc2VyaWVzIHNvYywgdGhhdCBuZWVkIHRvIHNwZWNpZnkgdGhlIGludGVycnVwdCAKPiA+
-IGNvbnRyb2xsZXIgaW4gdGhlIGR0cywgdGhhdCBpcywgdGhlIGludGVycnVwdCBwYXJlbnQuICAg
-SWYgZGlmZmVyZW50IGludGVycnVwdCBwYXJlbnRzIGFyZSB1c2VkIGluIGR0cywgdGhlIGludGVy
-cnVwdCAKPiA+IG51bWJlcnMgYXJlIGRpZmZlcmVudC4KPiAKPiBJdCBpcyBwZXJmZWN0bHkgdmFs
-aWQgZm9yIHRoZSAnaW50ZXJydXB0LXBhcmVudCcgdG8gYmUgaW4gKmFueSogcGFyZW50IAo+IG5v
-ZGUuIFNvIGl0IGlzIG5ldmVyIHJlcXVpcmVkIGJ5IGFueSBiaW5kaW5nLgpJIGRvbid0IGdldCB5
-b3VyIG1lYW5pbmcsIFlvdSBtZWFuIEkgY2FuIGFkZCBpdCBpbiB0aGUgZHRzLCBidXQgSSBkb24n
-dCBuZWVkIHRvIGFkZCBpdCBpbiB0aGUgYmluZGluZyBmaWxlLCByaWdodD8KPiAKPiBSb2IKDQoN
-CuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/
-oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
-lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
-heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WP
-ke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuac
-rOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWI
-oOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWlu
-IGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGlj
-aCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNz
-IGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhl
-cmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3Ig
-cGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
-c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4g
-SWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2Vu
-ZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA==
+This patch fixes the control channel mapping for the 7360, which was
+previously the same as the 7560.
+
+As shown by the reverse engineering efforts of James Wah [1], the layout
+of channels on the 7360 is actually somewhat different from that of the
+7560.
+
+A new ipc_chnl_cfg is added specifically for the 7360. The new config
+updates channel 7 to be an AT port and removes the mbim interface, as
+it does not exist on the 7360. The config is otherwise left the same as
+the 7560. ipc_chnl_cfg_get is updated to switch between the two configs.
+In ipc_imem, a special case for the mbim port is removed as it no longer
+exists in the 7360 ipc_chnl_cfg.
+
+As a result of this, the second userspace AT port now functions whereas
+previously it was routed to the trace channel. Modem crashes ("confused
+phase", "msg timeout", "PORT open refused") resulting from garbage being
+sent to the modem are also fixed.
+
+[1] https://github.com/xmm7360/reversing
+
+Signed-off-by: Shane Parslow <shaneparslow808@gmail.com>
+---
+ drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c | 58 ++++++++++++++++++++---
+ drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h |  7 ++-
+ drivers/net/wwan/iosm/iosm_ipc_devlink.c  |  3 +-
+ drivers/net/wwan/iosm/iosm_ipc_imem.c     | 12 ++---
+ drivers/net/wwan/iosm/iosm_ipc_imem_ops.c |  3 +-
+ drivers/net/wwan/iosm/iosm_ipc_trace.c    |  3 +-
+ 6 files changed, 68 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
+index 128c999e08bb..011bae887f8b 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/wwan.h>
+ 
++#include "iosm_ipc_imem.h"
+ #include "iosm_ipc_chnl_cfg.h"
+ 
+ /* Max. sizes of a downlink buffers */
+@@ -28,10 +29,10 @@
+ /* MUX acc backoff 1ms */
+ #define IRQ_ACC_BACKOFF_MUX 1000
+ 
+-/* Modem channel configuration table
++/* 7560 modem channel configuration table
+  * Always reserve element zero for flash channel.
+  */
+-static struct ipc_chnl_cfg modem_cfg[] = {
++static struct ipc_chnl_cfg modem_cfg_7560[IPC_MEM_MAX_CHANNELS] = {
+ 	/* IP Mux */
+ 	{ IPC_MEM_IP_CHL_ID_0, IPC_MEM_PIPE_0, IPC_MEM_PIPE_1,
+ 	  IPC_MEM_MAX_TDS_MUX_LITE_UL, IPC_MEM_MAX_TDS_MUX_LITE_DL,
+@@ -66,11 +67,56 @@ static struct ipc_chnl_cfg modem_cfg[] = {
+ 	  IPC_MEM_MAX_DL_FLASH_BUF_SIZE, WWAN_PORT_UNKNOWN },
+ };
+ 
+-int ipc_chnl_cfg_get(struct ipc_chnl_cfg *chnl_cfg, int index)
++/* Channel layout for the 7360
++ * Copied from the 7560, and modified based on the reverse
++ * engineering efforts of James Wah
++ */
++static struct ipc_chnl_cfg modem_cfg_7360[IPC_MEM_MAX_CHANNELS] = {
++	/* IP Mux */
++	{ IPC_MEM_IP_CHL_ID_0, IPC_MEM_PIPE_0, IPC_MEM_PIPE_1,
++	  IPC_MEM_MAX_TDS_MUX_LITE_UL, IPC_MEM_MAX_TDS_MUX_LITE_DL,
++	  IPC_MEM_MAX_DL_MUX_LITE_BUF_SIZE, WWAN_PORT_UNKNOWN },
++	/* RPC - 0 */
++	{ IPC_MEM_CTRL_CHL_ID_1, IPC_MEM_PIPE_2, IPC_MEM_PIPE_3,
++	  IPC_MEM_MAX_TDS_RPC, IPC_MEM_MAX_TDS_RPC,
++	  IPC_MEM_MAX_DL_RPC_BUF_SIZE, WWAN_PORT_UNKNOWN },
++	/* Trace? */
++	{ IPC_MEM_CTRL_CHL_ID_2, IPC_MEM_PIPE_4, IPC_MEM_PIPE_5,
++	  IPC_MEM_TDS_TRC, IPC_MEM_TDS_TRC, IPC_MEM_MAX_DL_TRC_BUF_SIZE,
++	  WWAN_PORT_UNKNOWN },
++	/* Trace? */
++	{ IPC_MEM_CTRL_CHL_ID_3, IPC_MEM_PIPE_6, IPC_MEM_PIPE_7,
++	  IPC_MEM_TDS_TRC, IPC_MEM_TDS_TRC, IPC_MEM_MAX_DL_TRC_BUF_SIZE,
++	  WWAN_PORT_UNKNOWN },
++	/* IAT0 */
++	{ IPC_MEM_CTRL_CHL_ID_4, IPC_MEM_PIPE_8, IPC_MEM_PIPE_9,
++	  IPC_MEM_MAX_TDS_AT, IPC_MEM_MAX_TDS_AT, IPC_MEM_MAX_DL_AT_BUF_SIZE,
++	  WWAN_PORT_AT },
++	/* Unknown */
++	{ IPC_MEM_CTRL_CHL_ID_5, IPC_MEM_PIPE_10, IPC_MEM_PIPE_11,
++	  IPC_MEM_MAX_TDS_LOOPBACK, IPC_MEM_MAX_TDS_LOOPBACK,
++	  IPC_MEM_MAX_DL_LOOPBACK_SIZE, WWAN_PORT_UNKNOWN },
++	/* Unknown */
++	{ IPC_MEM_CTRL_CHL_ID_6, IPC_MEM_PIPE_12, IPC_MEM_PIPE_13,
++	  IPC_MEM_MAX_TDS_MBIM, IPC_MEM_MAX_TDS_MBIM,
++	  IPC_MEM_MAX_DL_MBIM_BUF_SIZE, WWAN_PORT_UNKNOWN },
++	/* IAT1 */
++	{ IPC_MEM_CTRL_CHL_ID_7, IPC_MEM_PIPE_14, IPC_MEM_PIPE_15,
++	  IPC_MEM_MAX_TDS_AT, IPC_MEM_MAX_TDS_AT,
++	  IPC_MEM_MAX_DL_AT_BUF_SIZE, WWAN_PORT_AT },
++};
++
++int ipc_chnl_cfg_get(struct ipc_chnl_cfg *chnl_cfg,
++		     struct pci_dev *dev, int index)
+ {
+-	if (index >= ARRAY_SIZE(modem_cfg)) {
+-		pr_err("index: %d and array size %zu", index,
+-		       ARRAY_SIZE(modem_cfg));
++	struct ipc_chnl_cfg *modem_cfg = modem_cfg_7560;
++
++	if (dev->device == INTEL_CP_DEVICE_7360_ID)
++		modem_cfg = modem_cfg_7360;
++
++	if (index >= IPC_MEM_MAX_CHANNELS) {
++		pr_err("index: %d and array size %d", index,
++		       IPC_MEM_MAX_CHANNELS);
+ 		return -ECHRNG;
+ 	}
+ 
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h
+index e77084e76718..4703c2baf3e1 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h
++++ b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h
+@@ -6,6 +6,8 @@
+ #ifndef IOSM_IPC_CHNL_CFG_H
+ #define IOSM_IPC_CHNL_CFG_H
+ 
++#include <linux/pci.h>
++
+ #include "iosm_ipc_mux.h"
+ 
+ /* Number of TDs on the trace channel */
+@@ -51,10 +53,11 @@ struct ipc_chnl_cfg {
+ /**
+  * ipc_chnl_cfg_get - Get pipe configuration.
+  * @chnl_cfg:		Array of ipc_chnl_cfg struct
++ * @dev:		PCI device struct of the modem
+  * @index:		Channel index (upto MAX_CHANNELS)
+  *
+  * Return: 0 on success and failure value on error
+  */
+-int ipc_chnl_cfg_get(struct ipc_chnl_cfg *chnl_cfg, int index);
+-
++int ipc_chnl_cfg_get(struct ipc_chnl_cfg *chnl_cfg,
++		      struct pci_dev *dev, int index);
+ #endif
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_devlink.c b/drivers/net/wwan/iosm/iosm_ipc_devlink.c
+index 17da85a8f337..e5dcff9845cc 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_devlink.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_devlink.c
+@@ -272,7 +272,8 @@ struct iosm_devlink *ipc_devlink_init(struct iosm_imem *ipc_imem)
+ 		goto region_create_fail;
+ 	}
+ 
+-	if (ipc_chnl_cfg_get(&chnl_cfg_flash, IPC_MEM_CTRL_CHL_ID_7) < 0)
++	if (ipc_chnl_cfg_get(&chnl_cfg_flash, ipc_imem->pcie->pci,
++			     IPC_MEM_CTRL_CHL_ID_7) < 0)
+ 		goto chnl_get_fail;
+ 
+ 	ipc_imem_channel_init(ipc_imem, IPC_CTYPE_CTRL,
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_imem.c b/drivers/net/wwan/iosm/iosm_ipc_imem.c
+index 1e6a47976642..98055532e065 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_imem.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_imem.c
+@@ -310,7 +310,9 @@ static void ipc_imem_dl_skb_process(struct iosm_imem *ipc_imem,
+ 		ipc_pcie_addr_unmap(ipc_imem->pcie, IPC_CB(skb)->len,
+ 				    IPC_CB(skb)->mapping,
+ 				    IPC_CB(skb)->direction);
+-		if (port_id == IPC_MEM_CTRL_CHL_ID_7)
++		/* 7360: Channel 7 is an AT port, do not fwd to devlink */
++		if (port_id == IPC_MEM_CTRL_CHL_ID_7 &&
++		    ipc_imem->pcie->pci->device != INTEL_CP_DEVICE_7360_ID)
+ 			ipc_imem_sys_devlink_notify_rx(ipc_imem->ipc_devlink,
+ 						       skb);
+ 		else if (ipc_is_trace_channel(ipc_imem, port_id))
+@@ -585,13 +587,9 @@ static void ipc_imem_run_state_worker(struct work_struct *instance)
+ 		ipc_imem->mux->wwan = ipc_imem->wwan;
+ 
+ 	while (ctrl_chl_idx < IPC_MEM_MAX_CHANNELS) {
+-		if (!ipc_chnl_cfg_get(&chnl_cfg_port, ctrl_chl_idx)) {
++		if (!ipc_chnl_cfg_get(&chnl_cfg_port, ipc_imem->pcie->pci,
++				      ctrl_chl_idx)) {
+ 			ipc_imem->ipc_port[ctrl_chl_idx] = NULL;
+-			if (ipc_imem->pcie->pci->device == INTEL_CP_DEVICE_7360_ID &&
+-			    chnl_cfg_port.wwan_port_type == WWAN_PORT_MBIM) {
+-				ctrl_chl_idx++;
+-				continue;
+-			}
+ 			if (chnl_cfg_port.wwan_port_type != WWAN_PORT_UNKNOWN) {
+ 				ipc_imem_channel_init(ipc_imem, IPC_CTYPE_CTRL,
+ 						      chnl_cfg_port,
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_imem_ops.c b/drivers/net/wwan/iosm/iosm_ipc_imem_ops.c
+index 57304a5adf68..6fd7d4a3c9f7 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_imem_ops.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_imem_ops.c
+@@ -90,7 +90,8 @@ void ipc_imem_wwan_channel_init(struct iosm_imem *ipc_imem,
+ 		return;
+ 	}
+ 
+-	ipc_chnl_cfg_get(&chnl_cfg, ipc_imem->nr_of_channels);
++	ipc_chnl_cfg_get(&chnl_cfg, ipc_imem->pcie->pci,
++			 ipc_imem->nr_of_channels);
+ 	ipc_imem_channel_init(ipc_imem, IPC_CTYPE_WWAN, chnl_cfg,
+ 			      IRQ_MOD_OFF);
+ 
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_trace.c b/drivers/net/wwan/iosm/iosm_ipc_trace.c
+index eeecfa3d10c5..6012f9099d6a 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_trace.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_trace.c
+@@ -137,7 +137,8 @@ struct iosm_trace *ipc_trace_init(struct iosm_imem *ipc_imem)
+ 	struct ipc_chnl_cfg chnl_cfg = { 0 };
+ 	struct iosm_trace *ipc_trace;
+ 
+-	ipc_chnl_cfg_get(&chnl_cfg, IPC_MEM_CTRL_CHL_ID_3);
++	ipc_chnl_cfg_get(&chnl_cfg, ipc_imem->pcie->pci,
++			 IPC_MEM_CTRL_CHL_ID_3);
+ 	ipc_imem_channel_init(ipc_imem, IPC_CTYPE_CTRL, chnl_cfg,
+ 			      IRQ_MOD_OFF);
+ 
+-- 
+2.37.3
+
