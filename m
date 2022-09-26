@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29975EA2E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B0B5EA4C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbiIZLQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S238637AbiIZLw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236020AbiIZLPO (ORCPT
+        with ESMTP id S238525AbiIZLvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:15:14 -0400
+        Mon, 26 Sep 2022 07:51:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CE265258;
-        Mon, 26 Sep 2022 03:36:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D05B76751;
+        Mon, 26 Sep 2022 03:48:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A836609FE;
-        Mon, 26 Sep 2022 10:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E5DC433C1;
-        Mon, 26 Sep 2022 10:36:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9B260B4A;
+        Mon, 26 Sep 2022 10:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65952C433D6;
+        Mon, 26 Sep 2022 10:46:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188618;
-        bh=YzwZ+d+bD+1c7lCL2iXpE240iPwQJFVL3vUdyqCAnWw=;
+        s=korg; t=1664189218;
+        bh=klu/CdF2GgcnLipy5mv8tLdF/E32HaFbW96q4R9qV+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xEqf9N0Vy0a1ohgriGzi/32Bee1R0yOSl7cuBr03ibl0ukjgTKb3yadUJ8pCNWuOP
-         jse447Z2etIcXtEk9c5VCuuQaLTWQ7u3e0kH0s6yyAtk+0OTE/jM9SvTwqfCwNyYrJ
-         pc3o6bymCkdlCjRTAZT029qNzJEoNi/P3CrHrViU=
+        b=EDoE596Xd2FjObqJHpJEHkq/kVQ4dGG8zp9GrBJhTFf5dyQifF9Bzp+QGDZmVY6DX
+         ULjMu1IKxCo1T9FOSKnTXMhRKSOum1FJmQxIXfuIL89Gj5wXBYbDv6zV0tpRrtsI+n
+         1HhkRrX6AeTR1uA/X+HKStXx2GNOVbOHzHbM940I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org,
+        Norbert Zulinski <norbertx.zulinski@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 067/148] netfilter: nf_conntrack_irc: Tighten matching on DCC message
-Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100758.557152913@linuxfoundation.org>
+Subject: [PATCH 5.19 113/207] iavf: Fix bad page state
+Date:   Mon, 26 Sep 2022 12:11:42 +0200
+Message-Id: <20220926100811.659677514@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,82 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Leadbeater <dgl@dgl.cx>
+From: Norbert Zulinski <norbertx.zulinski@intel.com>
 
-[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
+[ Upstream commit 66039eb9015eee4f7ff0c99b83c65c7ecb3c8190 ]
 
-CTCP messages should only be at the start of an IRC message, not
-anywhere within it.
+Fix bad page state, free inappropriate page in handling dummy
+descriptor. iavf_build_skb now has to check not only if rx_buffer is
+NULL but also if size is zero, same thing in iavf_clean_rx_irq.
+Without this patch driver would free page that will be used
+by napi_build_skb.
 
-While the helper only decodes packes in the ORIGINAL direction, its
-possible to make a client send a CTCP message back by empedding one into
-a PING request.  As-is, thats enough to make the helper believe that it
-saw a CTCP message.
-
-Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
-Signed-off-by: David Leadbeater <dgl@dgl.cx>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Fixes: a9f49e006030 ("iavf: Fix handling of dummy receive descriptors")
+Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
-index 18b90e334b5b..159e1e4441a4 100644
---- a/net/netfilter/nf_conntrack_irc.c
-+++ b/net/netfilter/nf_conntrack_irc.c
-@@ -151,15 +151,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 	data = ib_ptr;
- 	data_limit = ib_ptr + skb->len - dataoff;
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+index 4c3f3f419110..18b6a702a1d6 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+@@ -1393,7 +1393,7 @@ static struct sk_buff *iavf_build_skb(struct iavf_ring *rx_ring,
+ #endif
+ 	struct sk_buff *skb;
  
--	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
--	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
--	while (data < data_limit - (19 + MINMATCHLEN)) {
--		if (memcmp(data, "\1DCC ", 5)) {
-+	/* Skip any whitespace */
-+	while (data < data_limit - 10) {
-+		if (*data == ' ' || *data == '\r' || *data == '\n')
-+			data++;
-+		else
-+			break;
-+	}
-+
-+	/* strlen("PRIVMSG x ")=10 */
-+	if (data < data_limit - 10) {
-+		if (strncasecmp("PRIVMSG ", data, 8))
-+			goto out;
-+		data += 8;
-+	}
-+
-+	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
-+	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
-+	 */
-+	while (data < data_limit - (21 + MINMATCHLEN)) {
-+		/* Find first " :", the start of message */
-+		if (memcmp(data, " :", 2)) {
- 			data++;
- 			continue;
+-	if (!rx_buffer)
++	if (!rx_buffer || !size)
+ 		return NULL;
+ 	/* prefetch first cache line of first page */
+ 	va = page_address(rx_buffer->page) + rx_buffer->page_offset;
+@@ -1551,7 +1551,7 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
+ 		/* exit if we failed to retrieve a buffer */
+ 		if (!skb) {
+ 			rx_ring->rx_stats.alloc_buff_failed++;
+-			if (rx_buffer)
++			if (rx_buffer && size)
+ 				rx_buffer->pagecnt_bias++;
+ 			break;
  		}
-+		data += 2;
-+
-+		/* then check that place only for the DCC command */
-+		if (memcmp(data, "\1DCC ", 5))
-+			goto out;
- 		data += 5;
--		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
-+		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
- 
- 		iph = ip_hdr(skb);
- 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
-@@ -175,7 +197,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 			pr_debug("DCC %s detected\n", dccprotos[i]);
- 
- 			/* we have at least
--			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
-+			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
- 			 * data left (== 14/13 bytes) */
- 			if (parse_dcc(data, data_limit, &dcc_ip,
- 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
 -- 
 2.35.1
 
