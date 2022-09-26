@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70165EA0DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228495E9EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236395AbiIZKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S235068AbiIZKPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236255AbiIZKk7 (ORCPT
+        with ESMTP id S235048AbiIZKPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:40:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D6A4D4CD;
-        Mon, 26 Sep 2022 03:24:10 -0700 (PDT)
+        Mon, 26 Sep 2022 06:15:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FA7E016;
+        Mon, 26 Sep 2022 03:14:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA69960B5E;
-        Mon, 26 Sep 2022 10:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCA4C433C1;
-        Mon, 26 Sep 2022 10:24:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2E6060C0B;
+        Mon, 26 Sep 2022 10:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0490C433C1;
+        Mon, 26 Sep 2022 10:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187845;
-        bh=wnuHQaDecdsgn7LCuASgdHmwxkjgrjE5924QvXbP/6U=;
+        s=korg; t=1664187257;
+        bh=Yq2zNuwlh4qQrtWhiCD9oJKsITCsDdmBPn/mJK9Qrqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mrNj3gSXIuOkmPhcYQVML6hQJF4MqkVmxLkL2nsRIl63GRcKyk1XxfqAaeJ1vreU+
-         8ZRpDj/EuyRjp24LdKl0RQXPyWH6jGOOymEekAJbpiRQfTR0vyenAcSjPXWjLFrA+g
-         64JxUvKUrY7KkRoIm8R1D++gk6fi6t8fNg5MVZzo=
+        b=VjNtjvoJAxHl0oWhh3SqVNLpSi+QgQyKnHjhu/ANHpBegMMgY+kNfPwxEZaNT2+5u
+         oTme94c5VGuZhI/lDXJH6DmP6xMZVIjLdcleZWJ6bbdP53jQzti0SArHBtEJ4J4fnv
+         7lCBQp4gunbxyfGRtHlTQfnsTqpiKxA+Ew8X3Hwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 079/120] i40e: Fix VF set max MTU size
+Subject: [PATCH 4.9 21/30] net: team: Unsync device addresses on ndo_stop
 Date:   Mon, 26 Sep 2022 12:11:52 +0200
-Message-Id: <20220926100753.917494339@linuxfoundation.org>
+Message-Id: <20220926100736.912292608@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +54,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 372539def2824c43b6afe2403045b140f65c5acc ]
+[ Upstream commit bd60234222b2fd5573526da7bcd422801f271f5f ]
 
-Max MTU sent to VF is set to 0 during memory allocation. It cause
-that max MTU on VF is changed to IAVF_MAX_RXBUFFER and does not
-depend on data from HW.
+Netdev drivers are expected to call dev_{uc,mc}_sync() in their
+ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
+This is mentioned in the kerneldoc for those dev_* functions.
 
-Set max_mtu field in virtchnl_vf_resource struct to inform
-VF in GET_VF_RESOURCES msg what size should be max frame.
+The team driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
+ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
+already been emptied in unregister_netdevice_many() before ndo_uninit is
+called. This mistake can result in addresses being leftover on former team
+ports after a team device has been deleted; see test_LAG_cleanup() in the
+last patch in this series.
 
-Fixes: dab86afdbbd1 ("i40e/i40evf: Change the way we limit the maximum frame size for Rx")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Add unsync calls at their expected location, team_close().
+
+v3:
+* When adding or deleting a port, only sync/unsync addresses if the team
+  device is up. In other cases, it is taken care of at the right time by
+  ndo_open/ndo_set_rx_mode/ndo_stop.
+
+Fixes: 3d249d4ca7d0 ("net: introduce ethernet teaming device")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/intel/i40e/i40e_virtchnl_pf.c    | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/net/team/team.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-index 4080fdacca4c..16f5baafbbd5 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-@@ -1873,6 +1873,25 @@ static void i40e_del_qch(struct i40e_vf *vf)
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index 001dea7aaba3..657e12e0b5e2 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -1280,10 +1280,12 @@ static int team_port_add(struct team *team, struct net_device *port_dev)
+ 		}
  	}
+ 
+-	netif_addr_lock_bh(dev);
+-	dev_uc_sync_multiple(port_dev, dev);
+-	dev_mc_sync_multiple(port_dev, dev);
+-	netif_addr_unlock_bh(dev);
++	if (dev->flags & IFF_UP) {
++		netif_addr_lock_bh(dev);
++		dev_uc_sync_multiple(port_dev, dev);
++		dev_mc_sync_multiple(port_dev, dev);
++		netif_addr_unlock_bh(dev);
++	}
+ 
+ 	port->index = -1;
+ 	list_add_tail_rcu(&port->list, &team->port_list);
+@@ -1354,8 +1356,10 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
+ 	netdev_rx_handler_unregister(port_dev);
+ 	team_port_disable_netpoll(port);
+ 	vlan_vids_del_by_dev(port_dev, dev);
+-	dev_uc_unsync(port_dev, dev);
+-	dev_mc_unsync(port_dev, dev);
++	if (dev->flags & IFF_UP) {
++		dev_uc_unsync(port_dev, dev);
++		dev_mc_unsync(port_dev, dev);
++	}
+ 	dev_close(port_dev);
+ 	team_port_leave(team, port);
+ 
+@@ -1703,6 +1707,14 @@ static int team_open(struct net_device *dev)
+ 
+ static int team_close(struct net_device *dev)
+ {
++	struct team *team = netdev_priv(dev);
++	struct team_port *port;
++
++	list_for_each_entry(port, &team->port_list, list) {
++		dev_uc_unsync(port->dev, dev);
++		dev_mc_unsync(port->dev, dev);
++	}
++
+ 	return 0;
  }
  
-+/**
-+ * i40e_vc_get_max_frame_size
-+ * @vf: pointer to the VF
-+ *
-+ * Max frame size is determined based on the current port's max frame size and
-+ * whether a port VLAN is configured on this VF. The VF is not aware whether
-+ * it's in a port VLAN so the PF needs to account for this in max frame size
-+ * checks and sending the max frame size to the VF.
-+ **/
-+static u16 i40e_vc_get_max_frame_size(struct i40e_vf *vf)
-+{
-+	u16 max_frame_size = vf->pf->hw.phy.link_info.max_frame_size;
-+
-+	if (vf->port_vlan_id)
-+		max_frame_size -= VLAN_HLEN;
-+
-+	return max_frame_size;
-+}
-+
- /**
-  * i40e_vc_get_vf_resources_msg
-  * @vf: pointer to the VF info
-@@ -1973,6 +1992,7 @@ static int i40e_vc_get_vf_resources_msg(struct i40e_vf *vf, u8 *msg)
- 	vfres->max_vectors = pf->hw.func_caps.num_msix_vectors_vf;
- 	vfres->rss_key_size = I40E_HKEY_ARRAY_SIZE;
- 	vfres->rss_lut_size = I40E_VF_HLUT_ARRAY_SIZE;
-+	vfres->max_mtu = i40e_vc_get_max_frame_size(vf);
- 
- 	if (vf->lan_vsi_idx) {
- 		vfres->vsi_res[0].vsi_id = vf->lan_vsi_id;
 -- 
 2.35.1
 
