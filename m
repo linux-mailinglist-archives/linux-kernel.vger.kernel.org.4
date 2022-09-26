@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A825E9AE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E7A5E9B3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiIZHqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S234299AbiIZHw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiIZHpK (ORCPT
+        with ESMTP id S234266AbiIZHv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:45:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E51DF14;
-        Mon, 26 Sep 2022 00:44:52 -0700 (PDT)
+        Mon, 26 Sep 2022 03:51:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250E436DCB;
+        Mon, 26 Sep 2022 00:47:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62FD7617D8;
-        Mon, 26 Sep 2022 07:44:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9DCC433D6;
-        Mon, 26 Sep 2022 07:44:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C586617DE;
+        Mon, 26 Sep 2022 07:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A275C433C1;
+        Mon, 26 Sep 2022 07:46:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664178290;
-        bh=LmWrjgoUL9IPset2wdPLvegGqtEiITrCbJZGhnwP62k=;
+        s=k20201202; t=1664178412;
+        bh=FFVR//93gG0gyZZ/mzwulA0RcoMAWf0wqpd/J/L7u/s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i14R2V7mbV7g1X47iVWy/rKdNqvDfF3hM6kk47jaG3tQNs5WzBUHn0lBnu2cWv8mV
-         yp4/SMiRsJMzPD+dWI0qYp0ggTfAIUqiEkVlI9lUwC7uY6b2vlLKtCDjYu3RZupx5g
-         PHbOLWtNtihd27dkJiMM4xeY0z5JVpyH0jtsjBB9NiwBGfe1UzX+hikaYPb8xWWhgl
-         cBuapVcsFbDH2fqE+Rc7f0Xoi6fQ8XX8GcUmYcGWpI9YPaF8St0iRWGIpxWdGniIrp
-         RSvUTvKyQORcj7BJbZpzvgPT1GRT8oawVwMKZp67lroq9tGHTX+gdfOqEShEuRHUxg
-         gTDZpvoLmF0IA==
-Date:   Mon, 26 Sep 2022 08:44:45 +0100
+        b=EcPQPtxo4w7mrkmPUWj6qtpiX7DTvbaFFPeRTn40kuQ3Qfy1FCiDhqmZZwdr1NRXo
+         fjqpRNhGlWVsZMZTGYhfX9CYdi5iumzxa0ZT+zR0n0UMwo4j67CqrXaSRO8PBNoYC8
+         6BWEptTmb/sQkhdRjmPCd3Ho1U5HEg2laBzXyxuDPiCIbC7ZMB74QGLnUrsh9CNJNQ
+         IQ9RkhR51eopx1nNbJmXlwow4CUZiAp7ERREoc309jUS39b2kEkgtupaRPA3amU7FT
+         jmzcceTCuFedxAFv6aSOuL5YiaKdStYihptYsz657WxAjjek+dXxC2FD6aIkC3S646
+         t2vbsmkbyI34Q==
+Date:   Mon, 26 Sep 2022 08:46:44 +0100
 From:   Lee Jones <lee@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH] dt-bindings: mfd: dlg,da9063: add missing regulator
- patterns
-Message-ID: <YzFYbQ0CXvAuYJBx@google.com>
-References: <20220916190009.2292223-1-conor@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, lars@metafoo.de,
+        andriy.shevchenko@linux.intel.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, szunichen@gmail.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v12 3/5] iio: adc: mt6370: Add MediaTek MT6370 support
+Message-ID: <YzFY5FI0PrZqdAiZ@google.com>
+References: <cover.1663926551.git.chiaen_wu@richtek.com>
+ <9bf36f09bc5f002f2b09b7cc26edccf109516465.1663926551.git.chiaen_wu@richtek.com>
+ <20220924155525.5663bed8@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220916190009.2292223-1-conor@kernel.org>
+In-Reply-To: <20220924155525.5663bed8@jic23-huawei>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,29 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022, Conor Dooley wrote:
+On Sat, 24 Sep 2022, Jonathan Cameron wrote:
 
-> From: Conor Dooley <conor.dooley@microchip.com>
+> On Fri, 23 Sep 2022 10:51:24 +0800
+> ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 > 
-> Commit 5621d3977e29 ("dt-bindings: mfd: Add missing (unevaluated|
-> additional)Properties on child nodes") exposed a flaw in the original
-> binding, where "merged" versions of some regulators were missing,
-> leading to warnings on the HiFive Unmatched Devicetree.
+> > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> > 
+> > MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> > with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> > driver, display bias voltage supply, one general purpose LDO, and the
+> > USB Type-C & PD controller complies with the latest USB Type-C and PD
+> > standards.
+> > 
+> > Add support for the MT6370 ADC driver for system monitoring, including
+> > charger current, voltage, and temperature.
+> > 
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> Add the missing patterns (and merge some of the trivial ones).
+> This will have to either wait for next cycle, or go through mfd because
+> of the dt-bindings include which is in the mfd tree.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> I opted not to include a fixes tag for the conversion since it just
-> converted what was already there. I figured the original text binding
-> is just incomplete rather than "broken", but if you don't agree the
-> fixes tag would be:
-> Fixes: c7f15d43a5c5 ("mfd: devicetree: Add bindings for DA9063")
-> 
->  Documentation/devicetree/bindings/mfd/dlg,da9063.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Please make those dependencies clear in new versions.
 
-Applied, thanks.
+If the bindings come together in -next, then subsequently in Mainline,
+it shouldn't really matter.  It's only your IIO tree that the DT
+tooling with complain about, right?
 
 -- 
 Lee Jones [李琼斯]
