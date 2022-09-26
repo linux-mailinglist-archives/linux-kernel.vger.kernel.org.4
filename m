@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4735EA076
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E413A5EA2B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236150AbiIZKh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S234695AbiIZLNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236028AbiIZKgh (ORCPT
+        with ESMTP id S237457AbiIZLLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:36:37 -0400
+        Mon, 26 Sep 2022 07:11:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756C52DC7;
-        Mon, 26 Sep 2022 03:21:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE792606B1;
+        Mon, 26 Sep 2022 03:35:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD1760B9A;
-        Mon, 26 Sep 2022 10:21:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883B6C433C1;
-        Mon, 26 Sep 2022 10:21:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA24C609FB;
+        Mon, 26 Sep 2022 10:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F34C433C1;
+        Mon, 26 Sep 2022 10:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187715;
-        bh=xrRkTu9BEVuk84a5FzYfaxbwIhmMwPI5NfR3CH5GFAc=;
+        s=korg; t=1664188465;
+        bh=tv52t3b1albqinSUtqZaK46JAGXXbMdaRMBXhRPrD48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wg6WEf/0TnC46qg8Cdk2Yv4ZbqwUcpfIzcguEUtW2RUi90gGQGfOL+x63JdsEH197
-         Qwb9S+GkXJbD+kkss3CSQBYTKgCi95QnXqA2jNOGC4zMqAj4/mgmSgyc/B2Y9V81ka
-         s9xiBm1cLyU4nPnlDMr3oXH6gr0UuIYqFoyIYmUY=
+        b=WcWQG5aGVA0HXdafTwr8gBdq2+hinfZXyfJYSQ4eNo1ejF/nkR1Wfg0fw+jv9KXwt
+         q2qQ/6WJzab6qeDRL2oQFAN0dy9z47lQJbj8ihSdBXMbaohp0ej6A3pdM0aksgEaHB
+         8J5to5JwvZW2WnY7wSx8MbuV8whQ0zUOpmBFkK08=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stuart Menefy <stuart.menefy@mathembedded.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 005/120] drm/meson: Fix OSD1 RGB to YCbCr coefficient
+        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
+        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 004/148] staging: r8188eu: Add Rosewill USB-N150 Nano to device tables
 Date:   Mon, 26 Sep 2022 12:10:38 +0200
-Message-Id: <20220926100750.741589682@linuxfoundation.org>
+Message-Id: <20220926100756.232593153@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stuart Menefy <stuart.menefy@mathembedded.com>
+From: Larry Finger <Larry.Finger@lwfinger.net>
 
-[ Upstream commit 6463d3930ba5b6addcfc8f80a4543976a2fc7656 ]
+[ Upstream commit e01f5c8d6af231b3b09e23c1fe8a4057cdcc4e42 ]
 
-VPP_WRAP_OSD1_MATRIX_COEF22.Coeff22 is documented as being bits 0-12,
-not 16-28.
+This device is reported as using the RTL8188EUS chip.
 
-Without this the output tends to have a pink hue, changing it results
-in better color accuracy.
+It has the improbable USB ID of 0bda:ffef, which normally would belong
+to Realtek, but this ID works for the reporter.
 
-The vendor kernel doesn't use this register. However the code which
-sets VIU2_OSD1_MATRIX_COEF22 also uses bits 0-12. There is a slightly
-different style of registers for configuring some of the other matrices,
-which do use bits 16-28 for this coefficient, but those have names
-ending in MATRIX_COEF22_30, and this is not one of those.
-
-Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
-Fixes: 728883948b0d ("drm/meson: Add G12A Support for VIU setup")
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220908155243.687143-1-stuart.menefy@mathembedded.com
+Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220814175027.2689-1-Larry.Finger@lwfinger.net
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_viu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/os_dep/usb_intf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
-index 9991f0a43b1a..8d0938525978 100644
---- a/drivers/gpu/drm/meson/meson_viu.c
-+++ b/drivers/gpu/drm/meson/meson_viu.c
-@@ -91,7 +91,7 @@ static void meson_viu_set_g12a_osd1_matrix(struct meson_drm *priv,
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF11_12));
- 	writel(((m[9] & 0x1fff) << 16) | (m[10] & 0x1fff),
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF20_21));
--	writel((m[11] & 0x1fff) << 16,
-+	writel((m[11] & 0x1fff),
- 		priv->io_base +	_REG(VPP_WRAP_OSD1_MATRIX_COEF22));
- 
- 	writel(((m[18] & 0xfff) << 16) | (m[19] & 0xfff),
+diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
+index b6c6fa72de44..640f1ca2d985 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -30,6 +30,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
+ 	/*=== Realtek demoboard ===*/
+ 	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8179)}, /* 8188EUS */
+ 	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x0179)}, /* 8188ETV */
++	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0xffef)}, /* Rosewill USB-N150 Nano */
+ 	/*=== Customer ID ===*/
+ 	/****** 8188EUS ********/
+ 	{USB_DEVICE(0x07B8, 0x8179)}, /* Abocom - Abocom */
 -- 
 2.35.1
 
