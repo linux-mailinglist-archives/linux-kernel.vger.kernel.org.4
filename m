@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D855EA0FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE94B5EA21B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiIZKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S237049AbiIZLCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236284AbiIZKmc (ORCPT
+        with ESMTP id S237389AbiIZK7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:42:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496274D4E1;
-        Mon, 26 Sep 2022 03:24:21 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05C15C9CA;
+        Mon, 26 Sep 2022 03:31:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBD6AB80926;
-        Mon, 26 Sep 2022 10:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D28C43149;
-        Mon, 26 Sep 2022 10:23:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9152060C79;
+        Mon, 26 Sep 2022 10:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98FD3C433C1;
+        Mon, 26 Sep 2022 10:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187804;
-        bh=hHUaDJrxc6E0aVhxiuBcXlPxNUtmBzy1sqbl3JBWaKU=;
+        s=korg; t=1664188193;
+        bh=tQDvKdHglV3lGcAyaCA5FPn9n7w9PdqvimZODFmQzuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kiXMl7ihjiKplaf9jiCV38tym7DSwdAdbbZecDsIeGvfi7XDGFw69/dHlgDs4mNUp
-         eSC3PzYNN+alTJsI0bVk3VSWnZ6QmXivPudtriS6FO5FES9e6VLDmidqC7SVCloT8N
-         QIFp8FQIjzpo7KinGtzQ4vQD5C0DW5Pv0IZJnPZc=
+        b=tJYad4NS9+2FukKKKH3dnS2KYqG0EghbGuKaN8/cLdMrwz0rs8iG7fPRmjTHnJJ3W
+         zwCuWvnYKdv5ZfnWxx7O/K2YL375FdGXthfSIGQc094xiPl9+KxGKdLRgzQeHsHnXU
+         SujQbLF8563AP5sAu+BQgCY13rlU8IDjJ0AKx2lw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Peter Jones <pjones@redhat.com>
-Subject: [PATCH 5.4 064/120] efi: libstub: check Shim mode using MokSBStateRT
+        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
+        Norbert Zulinski <norbertx.zulinski@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 071/141] iavf: Fix cached head and tail value for iavf_get_tx_pending
 Date:   Mon, 26 Sep 2022 12:11:37 +0200
-Message-Id: <20220926100753.312509950@linuxfoundation.org>
+Message-Id: <20220926100757.018223006@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Brett Creeley <brett.creeley@intel.com>
 
-commit 5f56a74cc0a6d9b9f8ba89cea29cd7c4774cb2b1 upstream.
+[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
 
-We currently check the MokSBState variable to decide whether we should
-treat UEFI secure boot as being disabled, even if the firmware thinks
-otherwise. This is used by shim to indicate that it is not checking
-signatures on boot images. In the kernel, we use this to relax lockdown
-policies.
+The underlying hardware may or may not allow reading of the head or tail
+registers and it really makes no difference if we use the software
+cached values. So, always used the software cached values.
 
-However, in cases where shim is not even being used, we don't want this
-variable to interfere with lockdown, given that the variable may be
-non-volatile and therefore persist across a reboot. This means setting
-it once will persistently disable lockdown checks on a given system.
-
-So switch to the mirrored version of this variable, called MokSBStateRT,
-which is supposed to be volatile, and this is something we can check.
-
-Cc: <stable@vger.kernel.org> # v4.19+
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Reviewed-by: Peter Jones <pjones@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
+Signed-off-by: Brett Creeley <brett.creeley@intel.com>
+Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/libstub/secureboot.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/firmware/efi/libstub/secureboot.c
-+++ b/drivers/firmware/efi/libstub/secureboot.c
-@@ -19,7 +19,7 @@ static const efi_char16_t efi_SetupMode_
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+index 99983f7a0ce0..8f6269e9f6a7 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
+ {
+ 	u32 head, tail;
  
- /* SHIM variables */
- static const efi_guid_t shim_guid = EFI_SHIM_LOCK_GUID;
--static const efi_char16_t shim_MokSBState_name[] = L"MokSBState";
-+static const efi_char16_t shim_MokSBState_name[] = L"MokSBStateRT";
++	/* underlying hardware might not allow access and/or always return
++	 * 0 for the head/tail registers so just use the cached values
++	 */
+ 	head = ring->next_to_clean;
+-	tail = readl(ring->tail);
++	tail = ring->next_to_use;
  
- #define get_efi_var(name, vendor, ...) \
- 	efi_call_runtime(get_variable, \
-@@ -58,8 +58,8 @@ enum efi_secureboot_mode efi_get_secureb
- 
- 	/*
- 	 * See if a user has put the shim into insecure mode. If so, and if the
--	 * variable doesn't have the runtime attribute set, we might as well
--	 * honor that.
-+	 * variable doesn't have the non-volatile attribute set, we might as
-+	 * well honor that.
- 	 */
- 	size = sizeof(moksbstate);
- 	status = get_efi_var(shim_MokSBState_name, &shim_guid,
-@@ -68,7 +68,7 @@ enum efi_secureboot_mode efi_get_secureb
- 	/* If it fails, we don't care why. Default to secure */
- 	if (status != EFI_SUCCESS)
- 		goto secure_boot_enabled;
--	if (!(attr & EFI_VARIABLE_RUNTIME_ACCESS) && moksbstate == 1)
-+	if (!(attr & EFI_VARIABLE_NON_VOLATILE) && moksbstate == 1)
- 		return efi_secureboot_mode_disabled;
- 
- secure_boot_enabled:
+ 	if (head != tail)
+ 		return (head < tail) ?
+-- 
+2.35.1
+
 
 
