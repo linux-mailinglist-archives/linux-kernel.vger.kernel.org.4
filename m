@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5E95EA2E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B2E5EA2BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiIZLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S234837AbiIZLNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237586AbiIZLPc (ORCPT
+        with ESMTP id S237313AbiIZLMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:15:32 -0400
+        Mon, 26 Sep 2022 07:12:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CF36525C;
-        Mon, 26 Sep 2022 03:37:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0659561B1A;
+        Mon, 26 Sep 2022 03:35:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8CFFB80691;
-        Mon, 26 Sep 2022 10:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C38C433C1;
-        Mon, 26 Sep 2022 10:35:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FEF9B8055F;
+        Mon, 26 Sep 2022 10:35:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE456C433D6;
+        Mon, 26 Sep 2022 10:35:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188546;
-        bh=4jNDAPT6RbG2o3QkyUAz8HExfwylqHzvfN+G8bKnPuY=;
+        s=korg; t=1664188553;
+        bh=i0Xk2JQ7albmN+ARTUEeG9Xw8SDfh02w6i385L2WfnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XvHqq1E3gTDMEwEAcwIaNCxGkdoQTM6lpWYNOVO3arT3Kqs3QIz62504ycEfnOz3d
-         ThEX6/+qEXT8av6NdaMLynQPevALTQQqU5n+wXCfa5nOx7dmsvbLu5bN2Pnh0E8jsY
-         vvxPdf/LXm4vp9w2+qWlonGgZfowEsxQDqCMw9yc=
+        b=a4NFTGQG4wGW90WpZAkzdjIB453h0J2hvTqR0U1SRHXbLyUinEx55LjMjRg0X35+0
+         UlIS5xLSGTEU6tjIFsNd7zc8+r53hcq9wnhHi8UaKM2JpSkpS8b5r/HpYdTJ0FiXUJ
+         oBSUJuTgkMlDyt8UqUaLXpYA9NpeF7fSnxnfiWdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH 5.15 043/148] gpio: mockup: fix NULL pointer dereference when removing debugfs
-Date:   Mon, 26 Sep 2022 12:11:17 +0200
-Message-Id: <20220926100757.626042929@linuxfoundation.org>
+Subject: [PATCH 5.15 044/148] gpio: mockup: Fix potential resource leakage when register a chip
+Date:   Mon, 26 Sep 2022 12:11:18 +0200
+Message-Id: <20220926100757.663460468@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
 References: <20220926100756.074519146@linuxfoundation.org>
@@ -53,36 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <brgl@bgdev.pl>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit b7df41a6f79dfb18ba2203f8c5f0e9c0b9b57f68 upstream.
+commit 02743c4091ccfb246f5cdbbe3f44b152d5d12933 upstream.
 
-We now remove the device's debugfs entries when unbinding the driver.
-This now causes a NULL-pointer dereference on module exit because the
-platform devices are unregistered *after* the global debugfs directory
-has been recursively removed. Fix it by unregistering the devices first.
+If creation of software node fails, the locally allocated string
+array is left unfreed. Free it on error path.
 
-Fixes: 303e6da99429 ("gpio: mockup: remove gpio debugfs when remove device")
-Cc: Wei Yongjun <weiyongjun1@huawei.com>
+Fixes: 6fda593f3082 ("gpio: mockup: Convert to use software nodes")
 Cc: stable@vger.kernel.org
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-mockup.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-mockup.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 --- a/drivers/gpio/gpio-mockup.c
 +++ b/drivers/gpio/gpio-mockup.c
-@@ -618,9 +618,9 @@ static int __init gpio_mockup_init(void)
+@@ -554,8 +554,10 @@ static int __init gpio_mockup_register_c
+ 	}
  
- static void __exit gpio_mockup_exit(void)
- {
-+	gpio_mockup_unregister_pdevs();
- 	debugfs_remove_recursive(gpio_mockup_dbg_dir);
- 	platform_driver_unregister(&gpio_mockup_driver);
--	gpio_mockup_unregister_pdevs();
- }
+ 	fwnode = fwnode_create_software_node(properties, NULL);
+-	if (IS_ERR(fwnode))
++	if (IS_ERR(fwnode)) {
++		kfree_strarray(line_names, ngpio);
+ 		return PTR_ERR(fwnode);
++	}
  
- module_init(gpio_mockup_init);
+ 	pdevinfo.name = "gpio-mockup";
+ 	pdevinfo.id = idx;
 
 
