@@ -2,200 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788F65EA8BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5914F5EA8BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234724AbiIZOlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S235135AbiIZOly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbiIZOlE (ORCPT
+        with ESMTP id S234881AbiIZOlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:41:04 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0840FFF;
-        Mon, 26 Sep 2022 06:02:47 -0700 (PDT)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MXGzQ-1ol73l2YKk-00YjbJ; Mon, 26 Sep 2022 15:02:43 +0200
-Message-ID: <e0ee39d5-33e9-c7ae-a1e9-3b21e83c70fd@vivier.eu>
-Date:   Mon, 26 Sep 2022 15:02:42 +0200
+        Mon, 26 Sep 2022 10:41:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C7FDF50
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:02:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B958321E33;
+        Mon, 26 Sep 2022 13:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664197377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MT2Be4s7H7Cf1iKKuGB5u2tX1z99wlvHFDw8JE0Ktgs=;
+        b=UgN9+wXm5InDVAppBXWjV5XDPyX73h/bzd/K8pof6d0qkqqPdL8B+n5gN2lwvqYTCek4Q7
+        yoyGvZ3Ruu94Nt4Ik5/eGKVhhagnvZfFBi1CZj5K6+gvU29r0nLMNdEJCga6GtesKRlOQx
+        IJ7B3fZsMnJMwSKi8+TDHRyZtkt8zBQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664197377;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MT2Be4s7H7Cf1iKKuGB5u2tX1z99wlvHFDw8JE0Ktgs=;
+        b=xkhoRsvEK9y2ZToD8jzmFvb8V7/TitPaSiZDZCE6tZG3l7W9WvP2m/1XHxJZjL6Rayq4pG
+        DWIM0AixbK2WCiCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E8F9713486;
+        Mon, 26 Sep 2022 13:02:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gKkYNwCjMWN5YAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 26 Sep 2022 13:02:56 +0000
+Message-ID: <fb2dcbdd-057b-c3e6-0be7-3a8ee5822d4d@suse.de>
+Date:   Mon, 26 Sep 2022 15:02:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 2/2] m68k: virt: generate new RNG seed on reboot
-Content-Language: fr
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
+ display modes
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-References: <20220921185208.3549140-1-Jason@zx2c4.com>
- <20220921185208.3549140-2-Jason@zx2c4.com>
- <CAMuHMdUuM85s1APoxRmXnw13hHHEGgo8Z9EKvpV6maaZPaVUfA@mail.gmail.com>
- <CAHmME9pAsY4M=V0o4QLrrQiXwCvtiEO9FApBibXRiG41h-AgVA@mail.gmail.com>
- <CAMuHMdUSF=ARvKTP33psHNWEqvSeUUDuWLRsUUA7LHa+12agng@mail.gmail.com>
- <CAHmME9ocjS11ugpKKwmosqb2HUBf4_N74a056=OOoj06yD6wmQ@mail.gmail.com>
- <CAMuHMdWruwCNqM3eLaaM9L+D+ZTw+t6z3O+rjNWTMiCQyj4_zQ@mail.gmail.com>
- <eb798159-c003-3b43-c891-039080e06e03@vivier.eu>
- <CAHmME9rnxvDDu-hSG8PNJC+xs6khbgdMzXcaB79ByZjJd3RQjw@mail.gmail.com>
- <ae3232b2-4277-eee3-726c-30a3a21c41b7@vivier.eu>
- <CAHmME9omvDj6NcbrSth8P03ciRVf0VcQRDfTJix7yiCoBsg02g@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <CAHmME9omvDj6NcbrSth8P03ciRVf0VcQRDfTJix7yiCoBsg02g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4dR4GE5zXf36b73wkneVBW+qzkdI/0+upbsMDkyi4TmoiuO7jaq
- NPkH72vDiiLYZj0uDxRiCHPsMxrw+RMxWaSl91MAjllTo4/3HlVF8JH+CXLytSbkEhrA/3f
- DsCcBafDJOhd1TzBna5Gps7ums51ajPYDM+v8tW2QF+PvCqG4mLLPGugufi8jv5QgyQ65Rc
- RevvgCaN3g80XnG7fK67g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TW771hBLjm0=:huz3eFD7qe83G9hi7whCWu
- ZmCKzzusjDaTlXmX98N3KvzMnw5A2cxuZsCOhWhPX3ygnaiG7VfTctxOsrrglukuk5wGgnc0R
- m++Pf66mWXzo+EAn8EawZPeQPdgF1ZsJx+s9sRZKiMey2ibii2Q5PiWwSMfDR1P0VZ0oFNndH
- 0W1hPNIdJnFwsoLkK4t6M9qrT5I/T3G/4WkjPeJoln9bcxEGSkUZatz6bdeyn3X5NwNlaiGcs
- nHazFmROMiVC0IXELLs5O0XveTKjBdpWwCZRuj62dAU3Pj6hHHdLAucqw2fb8oFq8FK//sy/d
- QUV3tkTQvdV88VsNrHMSbOTvRxBIgC3NF68jhdgF18/vCbNNwNbBPLQySHdqNdRy0gSkFL4oh
- DGUItmsngSeyNltaBpDCnbzAvoJ46hkTY1z+mEktC9kEnilVJY4Rp9iDTZl5CUxspu7KD668e
- sHBm/zTebdGOZQLdGnLZrDVAYO692oerojc/ePapASDC7s8vQIuJ3oVf65MVCZydQ0Oip5E3c
- Bmr5U1YEVL4dFhBIUi/Rb8+aZ/TzzrrEz7UM44Gcydq6t5mSTs9V6GeqWFjPEDj8VVGjUVYBc
- hw7LnkRXmJvGC5GKGDwFCdM08vKeHzViTgxVs315uqkHD92Qrlrcs8jK27RFX6X8Bf3QN8Ktf
- ijzlNZfLVi3Q/U3f8q0dR/AcayP6ZsdtrOpQ1UDcNBCEEGuo0POmpUFuiQuRicyxpZFFw8lMV
- rIRiLENVxqvJq8edZzfPMpcrmcI66NNCA1MDOLeAOXzk09azuK9x1Wh9U0Hq9I1Ss1izouQGM
- rBzCe2T
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>, nouveau@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Emma Anholt <emma@anholt.net>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Ben Skeggs <bskeggs@redhat.com>,
+        linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
+ <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
+ <20220926101716.urehomr2lzv5pqln@houat>
+ <CAMuHMdXonxXiw4x2PvnQ=xedOQO1y=K0O8g1+ixeSvXmzcOOVw@mail.gmail.com>
+ <c714b53d-8e18-9105-9e27-8b783f246082@suse.de>
+ <20220926124259.o6fcfnxjy7gyzqz2@houat>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220926124259.o6fcfnxjy7gyzqz2@houat>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------VIX17lF7ne9Z5J5x4Xtg52tI"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 26/09/2022 à 14:56, Jason A. Donenfeld a écrit :
-> Hi Laurent,
-> 
-> On Mon, Sep 26, 2022 at 2:52 PM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> Hi Jason,
->>
->> Le 26/09/2022 à 14:02, Jason A. Donenfeld a écrit :
->>> Hi Laurent,
->>>
->>> On Fri, Sep 23, 2022 at 3:10 PM Laurent Vivier <laurent@vivier.eu> wrote:
->>>>
->>>> Le 23/09/2022 à 14:50, Geert Uytterhoeven a écrit :
->>>>> Hi Jason,
->>>>>
->>>>> On Fri, Sep 23, 2022 at 2:26 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->>>>>> On Fri, Sep 23, 2022 at 2:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>>>>>>> +       if (rng_seed_record && rng_seed_record->size > sizeof(*rng_seed_record) + 2) {
->>>>>>>>>> +               u16 len = rng_seed_record->size - sizeof(*rng_seed_record) - 2;
->>>>>>>>>> +               get_random_bytes((u8 *)rng_seed_record->data + 2, len);
->>>>>>>>>> +               *(u16 *)rng_seed_record->data = len;
->>>>>>>
->>>>>>> Storing the length should use the proper cpu_to_be16 accessor.
->>>>>>
->>>>>> Okay, I'll do that for v2.
->>>>>>
->>>>>> (Simply out of curiosity, why? Isn't m68k always big endian and this
->>>>>> is arch/ code?)
->>>>>
->>>>> Yes it is.  But virt_parse_bootinfo() below already uses the right
->>>>> accessor.
->>>>>
->>>>> BTW, I guess people thought the same about PowerPC?
->>>>> Although I agree the probability of someone creating a little-endian
->>>>> m68k clone in an FPGA or SkyWater project and trying to run Linux on
->>>>> it quite low ;-)
->>>>>
->>>>>>>> The way I tested this is by having my initramfs just call
->>>>>>>> `reboot(RB_AUTOBOOT);`, and having add_bootloader_randomness() print
->>>>>>>> its contents to the console. I checked that it was both present and
->>>>>>>> different every time.
->>>>>>>
->>>>>>> Are you sure the new kernel did receive the same randomness as prepared
->>>>>>> by get_random_bytes()? I would expect it to just reboot into qemu,
->>>>>>> reload the kernel from disk, and recreate a new bootinfo from scratch,
->>>>>>> including generating a new random seed.
->>>>>>
->>>>>> Yes I'm sure. Without this patch, the new kernel sees the zeroed state.
->>>>>
->>>>> That's interesting.  So QEMU preserves the old bootinfo, which is
->>>>> AFAIK not guaranteed to be still available (that's why I added
->>>>> save_bootinfo()).  Perhaps that works because only memory starting
->>>>> from a rounded-up value of _end will be used, and you're just lucky?
->>>>> I'm wondering what else it preserves. It sure has to reload the
->>>>> kernel image, as at least the data section will no longer contain the
->>>>> initialization values after a reboot...
->>>>>
->>>>> Laurent?
->>>>>
->>>>
->>>> In QEMU the loader makes a copy of the kernel and the initrd and this copy is restored on a reset.
->>>>
->>>> I don't think there is a mechanism in QEMU to save the BOOTINFO section, so I think it works by
->>>> luck. I will check.
->>>>
->>>> Thanks,
->>>> Laurent
->>>
->>> Are you sure about that? Or at least, could you point me to where you
->>> think this happens? I'm not as familiar as you with this code base,
->>> but I really am not seeing it. So far as I can tell, on reset, the pc
->>> and stack are reset to their initial places, after TCG resets the cpu
->>> registers to a known state. But the kernel is not reloaded. The same
->>> thing that was in memory before is used again.
->>
->> Yes, this is not clear in QEMU but I think this happens in rom_reset():
->>
->> hw/core/loader.c
->>
->> 1180         if (rom->mr) {
->> 1181             void *host = memory_region_get_ram_ptr(rom->mr);
->> 1182             memcpy(host, rom->data, rom->datasize);
->> 1183             memset(host + rom->datasize, 0, rom->romsize - rom->datasize);
->> 1184         } else {
->> 1185             address_space_write_rom(rom->as, rom->addr, MEMTXATTRS_UNSPECIFIED,
->> 1186                                     rom->data, rom->datasize);
->> 1187             address_space_set(rom->as, rom->addr + rom->datasize, 0,
->> 1188                               rom->romsize - rom->datasize,
->> 1189                               MEMTXATTRS_UNSPECIFIED);
->> 1190         }
->>
->> kernel and initrd are loaded with load_elf() and load_image_targphys() only once at startup by the
->> machine init function (virt_init()).
->>
->> rom_add_elf_program() adds the kernel to the ROM list
->> (in include/hw/elf_ops.h, glue(load_elf, SZ) that generates load_elf32() when SZ is 32...)
->>
->> rom_add_file() adds the initrd to the ROM list too.
->>
->> And ROMs are restored on reset from these copies by rom_reset().
->>
->> rom_reset() is registered as a reset handler with qemu_register_reset() by
->> rom_check_and_register_reset() at the end of the machine creation by qdev_machine_creation_done().
->>
->> So I think bootinfo are not restored because there is no such function calls. Perhaps they are saved
->> and restaured if they are stored in address space of one of the previous registered ROM.
-> 
-> Ahh interesting, thanks for the explanation.
-> 
-> So from my debugging, bootinfo is *not* restored, and the previous one
-> appears to be used. Fortunately it's intact and everything works well
-> on a reboot.
-> 
-> With that in mind, we now we have to decide whether to:
-> A) Go with my linux patch to write the rng seed before rebooting (3/3
-> in v4 of that series).
-> B) Not go with the linux patch, but instead make sure bootinfo is
-> restored to its previous value, and then also register a qemu reboot
-> notifier to refresh the seed in it, like what x86 does.
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------VIX17lF7ne9Z5J5x4Xtg52tI
+Content-Type: multipart/mixed; boundary="------------lTRY2DgwgxL7uejtpBvwWUwq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Karol Herbst <kherbst@redhat.com>, David Airlie <airlied@linux.ie>,
+ nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ Phil Elwell <phil@raspberrypi.com>, Emma Anholt <emma@anholt.net>,
+ Samuel Holland <samuel@sholland.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Ben Skeggs <bskeggs@redhat.com>, linux-sunxi@lists.linux.dev,
+ intel-gfx@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-arm-kernel@lists.infradead.org,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Dom Cobley <dom@raspberrypi.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ linux-kernel@vger.kernel.org,
+ Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <fb2dcbdd-057b-c3e6-0be7-3a8ee5822d4d@suse.de>
+Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
+ display modes
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
+ <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
+ <20220926101716.urehomr2lzv5pqln@houat>
+ <CAMuHMdXonxXiw4x2PvnQ=xedOQO1y=K0O8g1+ixeSvXmzcOOVw@mail.gmail.com>
+ <c714b53d-8e18-9105-9e27-8b783f246082@suse.de>
+ <20220926124259.o6fcfnxjy7gyzqz2@houat>
+In-Reply-To: <20220926124259.o6fcfnxjy7gyzqz2@houat>
 
-I prefer B :)
-It's cleaner and under QEMU control.
+--------------lTRY2DgwgxL7uejtpBvwWUwq
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks,
-Laurent
-> (A) sounds a lot easier to me. Opinions?
-> 
-> Jason
+SGkNCg0KQW0gMjYuMDkuMjIgdW0gMTQ6NDIgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPiBP
+biBNb24sIFNlcCAyNiwgMjAyMiBhdCAwMToxNzo1MlBNICswMjAwLCBUaG9tYXMgWmltbWVy
+bWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMjYuMDkuMjIgdW0gMTI6MzQgc2Nocmll
+YiBHZWVydCBVeXR0ZXJob2V2ZW46DQo+Pj4gSGkgTWF4aW1lLA0KPj4+DQo+Pj4gT24gTW9u
+LCBTZXAgMjYsIDIwMjIgYXQgMTI6MTcgUE0gTWF4aW1lIFJpcGFyZCA8bWF4aW1lQGNlcm5v
+LnRlY2g+IHdyb3RlOg0KPj4+PiBPbiBGcmksIFNlcCAyMywgMjAyMiBhdCAxMTowNTo0OEFN
+ICswMjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+Pj4+PiArICAgLyogNjMuNTU2
+dXMgKiAxMy41TUh6ID0gODU4IHBpeGVscyAqLw0KPj4+Pj4NCj4+Pj4+IEkga2luZCBvZiBn
+ZXQgd2hhdCB0aGUgY29tbWVudCB3YW50cyB0byB0ZWxsIG1lLCBidXQgdGhlIHVuaXRzIGRv
+bid0IGFkZCB1cC4NCj4+Pj4NCj4+Pj4gSSdtIG5vdCBzdXJlIGhvdyBpdCBkb2Vzbid0IGFk
+ZCB1cD8NCj4+Pj4NCj4+Pj4gV2UgaGF2ZSBhIGZyZXF1ZW5jeSBpbiBIeiAoZXF1aXZhbGVu
+dCB0byBzXi0xKSBhbmQgYSBkdXJhdGlvbiBpbiBzLCBzbw0KPj4+PiB0aGUgcmVzdWx0IGVu
+ZHMgdXAgd2l0aCBubyBkaW1lbnNpb24sIHdoaWNoIGlzIHRvIGJlIGV4cGVjdGVkIGZvciBh
+DQo+Pj4+IG51bWJlciBvZiBwZXJpb2RzPw0KPj4+DQo+Pj4gVG8gbWFrZSB0aGUgdW5pdHMg
+YWRkIHVwLCBpdCBzaG91bGQgYmUgMTMuNSBNcGl4ZWwvcw0KPj4+ICh3aGljaCBpcyB3aGF0
+IGEgcGl4ZWwgY2xvY2sgb2YgMTMuNSBNSHogcmVhbGx5IG1lYW5zIDstKQ0KPj4NCj4+IFNv
+cnQgb2YuIEl0IGxlYXZlcyB0aGUgdGltZSB2YWx1ZSBhcyBhIG1hZ2ljIG51bWJlciwgd2hp
+Y2ggb2JmdXNjYXRlcyB3aGF0J3MNCj4+IGhhcHBlbmluZy4NCj4+DQo+PiBUaGUgdW5pdCBm
+b3IgaHRvdGFsIGlzIHBpeGVscy9zY2FubGluZSBiZWNhdXNlIGlmIHlvdSBtdWx0aXBseSBp
+dCB3aXRoIHRoZQ0KPj4gbnVtYmVyIG9mIHNjYW5saW5lcyBwZXIgZnJhbWUgKHdoaWNoIGlz
+IGluIHZ0b3RhbCksIHlvdSBnZXQgcGl4ZWxzL2ZyYW1lLg0KPj4gTXVsdGlwbHlpbmcgd2l0
+aCB0aGUgZnJhbWVzIHBlciBzZWNvbmQgcmVzdWx0cyBpbiB0aGUgcGl4ZWwgY2xvY2sgaW4N
+Cj4+IHBpeGVscy9zZWNvbmQuDQo+IA0KPiBUaGF0J3MgdHJ1ZSwgYnV0IGJvdGggYXJlIHRy
+dWU/DQoNCkknbSBub3QgcXVpdGUgc3VyZSB3aGF0IHlvdSBtZWFuLiBJIHRyaWVkIHRvIHNh
+eSB0aGF0IHRoaXMgbWFnaWMgdGltZSANCnZhbHVlIG1ha2VzIGFsbCB0aGlzIGhhcmQgdG8g
+c2VlLg0KDQo+IA0KPj4gVGhhdCdzIGEgYml0IG11Y2ggZm9yIHRoaXMgY29tbWVudC4gSGVu
+Y2UsIEkgc3VnZ2VzdGVkIHRvIHJlbW92ZSB0aGVzZQ0KPj4gY29tbWVudHMgZW50aXJlbHkg
+YW5kIGRvY3VtZW50IHRoZSByZWxhdGlvbiBhbW9uZyB0aGUgbnVtYmVycyBpbiBhIG1vcmUN
+Cj4+IHByb21pbmVudCBsb2NhdGlvbi4gVGhlIGRvY3VtZW50YXRpb24gZm9yIGRybV9kaXNw
+bGF5X21vZGUgd291bGQgYmUgYSBnb29kDQo+PiBwbGFjZSwgSSBndWVzcy4NCj4gDQo+IEkn
+bSBub3Qgc3VyZSBJIHVuZGVyc3RhbmQgd2hhdCBpdCdzIGFib3V0LiBJdCdzIGFuIGV4cGxp
+Y2l0IHJlcXVpcmVtZW50DQo+IG9mIFBBTCBhbmQgTlRTQywgd2h5IHdvdWxkIHNvbWV0aGlu
+ZyBzbyBzcGVjaWZpYyBiZSBpbiB0aGUgZ2VuZXJpYw0KPiBkZWZpbml0aW9uIG9mIGRybV9k
+aXNwbGF5X21vZGU/DQoNCk5vdCBqdXN0IFRWIHNpZ25hbHMsIGl0J3MgdGhlIGNhc2UgZm9y
+IGFsbCBkaXNwbGF5cyB3ZXJlIHdlIGNvbnRyb2wgdGhlIA0KZWxlY3Ryb24gYmVhbSBpbiBz
+b21lIHdheSAoVkdBKS4gU3VjaCBkb2N1bWVudGF0aW9uIGNvdWxkIHRoZXJlZm9yZSBiZSAN
+CmFkZGVkIHRvIERSTSBpbiBhbiBhcHByb3ByaWF0ZSBwbGFjZS4gVGhhdCBtYWtlcyBpdCBl
+YXNpZXIgZm9yIG5ld2NvbWVycyANCnRvIHNlZSB3aHkgY2VydGFpbiBtb2RlcyBhcmUgZGVm
+aW5lZCB0aGUgd2F5IHRoZXkgYXJlLiAoQXQgZmlyc3QsIA0KZGlzcGxheSBtb2RlcyBjYW4g
+bG9vayBsaWtlIHRoZXkgYXJlIG1hZGUgdXAgcmFuZG9tbHkuKQ0KDQpGb3IgeW91ciB0ZXN0
+IGNhc2VzLCBtYXliZSBzaW1wbHkgcmVmZXIgdG8gdGhlIHJlbGV2YW50IHN0YW5kYXJkIGRv
+Y3VtZW50cy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gTWF4aW1lDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
+--------------lTRY2DgwgxL7uejtpBvwWUwq--
+
+--------------VIX17lF7ne9Z5J5x4Xtg52tI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMxowAFAwAAAAAACgkQlh/E3EQov+Dp
+2A/9FTzIBdYwbm4jm+v2I6UH+a+l8ZxwlaEV5t7dSN6faOFpdI+hTsdMxbxF16xyUqyle3KcWzvs
+2BV5jFLa+SeZLktkzfvIunf9xZ6T+wgH2l5HvGPJJv+7BWwxaVLtFPD9Vhs4vYh7IFsU7Uk3Uvcl
+RTkscFgaYXrQTUtaK98ckUR7V7J0wNnoZc57rvZk8kaJWxRI0g8tTN4mQrXXM6kMl4votVOFKWXr
+OgMBSKGjIqHBO2jmxdLCsOPE4SijlxFDYuUcM5RUk1N67CEjbG2oImO5SRJa5P5utJ7iSZdNt2jA
+TnUfQ8Cu23FjT94hvYfM4gNWWtTQsSpKcQq9UHVatnSoN0ybjzmIjkWOA/MkeQLRqwVWUMn7R6eQ
+c++m3vx5CD5VVzgRVZpcv2Y7b0K76EBTxa8WYW4PxQFNsL/f9QOkvJVh2Y8y0VnBpGQ+co5m+iv+
+W2PY6lmelCjcdxcgYTSwwPR6bxjfgjDhmcHIn4mI9LOoKqlt7DjMQNjpqiqRlE9YG2raIXPrWcv8
+k4rSyUtGXGUEebhnGkpH91RVelBl7QYl+PGio3aqM2A21pCuK2WFJ4bmSwO2uR+b7RtlUgaTLuj7
+tiPZVRE6h+jXRsuiGy41jkP07nv2EAHNIyeNhh1Q9E+H4fR6bMKK54wlTxcVxLa+k387fwwPNiO0
+ltM=
+=Kwqm
+-----END PGP SIGNATURE-----
+
+--------------VIX17lF7ne9Z5J5x4Xtg52tI--
