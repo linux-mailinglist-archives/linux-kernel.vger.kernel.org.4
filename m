@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B106D5E9DAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887825E9DB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbiIZJbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S234947AbiIZJbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbiIZJbW (ORCPT
+        with ESMTP id S235021AbiIZJb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:31:22 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809931372;
-        Mon, 26 Sep 2022 02:30:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E4BA922100;
-        Mon, 26 Sep 2022 09:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664184606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 26 Sep 2022 05:31:28 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC62255AC;
+        Mon, 26 Sep 2022 02:30:17 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 85EE1240005;
+        Mon, 26 Sep 2022 09:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664184615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bih9TmuQiIX+2I5xDF+OS0kAuWMZpXGCT3GD+YoKLCM=;
-        b=UFRF8LH7nYOh+cFoa+rPZ4LJVzLAlIMi4omuft9vyKbxhJNE5zH0yffwP/MrJ2NQk858V4
-        GPXbaFJLat68x/ZhEfKCReJr/gLCecipF+Nl5jADAN3yvxhToNCM14uLMuNHFdw2MEpYaC
-        WTYKdgD2npnLqSUq3t55LFOg4bv76Rg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C2E6D139BD;
-        Mon, 26 Sep 2022 09:30:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JE1nLB5xMWOgdwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 26 Sep 2022 09:30:06 +0000
-Date:   Mon, 26 Sep 2022 11:30:06 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, urezki@gmail.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <YzFxHlYoncuDl2fM@dhcp22.suse.cz>
-References: <20220923103858.26729-1-fw@strlen.de>
- <Yy20toVrIktiMSvH@dhcp22.suse.cz>
- <20220923133512.GE22541@breakpoint.cc>
- <YzFZf0Onm6/UH7/I@dhcp22.suse.cz>
- <20220926075639.GA908@breakpoint.cc>
- <YzFplwSxwwsLpzzX@dhcp22.suse.cz>
+        bh=4DIslgriYh/ETMrXcfHJGuJVgbSPAelyn/x0LZzTFuw=;
+        b=hZ5XaLg6Wt9nBt34WKi4TMYczvDeAu3+nimfXO7cj8VdOd5cFS4US/KXGRSzhxoDgfJjHQ
+        QsMwqfQatDBuYqhK8KfWLNkl5LPzR5/6WQITG/D71yIrrqGHuzoXjBUcuvs52qRG/kuoE7
+        XmS6Ig3DGmXKXnwUAjVWOANaqPFQhFlqfE+VQchDvNYcvV4RSJpJ9tWy3wZyuyay+lpTh6
+        8vnfHoU0lsEm1W4w1vxy6/LREPmniLDPXETky1/LnMzlF5t5djjH65g+KD/0EIoAhe/rNt
+        7yrHmDjvz3uH4oXu+2gVP0hhEc8nCyYFZS0kHM8R4CTDOTMTiNPeAnPBrYdBgg==
+Date:   Mon, 26 Sep 2022 11:30:13 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 5/8] phy: allwinner: phy-sun6i-mipi-dphy: Make RX support
+ optional
+Message-ID: <YzFxJUhypKHkSGgy@aptenodytes>
+References: <20220812075603.59375-1-samuel@sholland.org>
+ <20220812075603.59375-6-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xoZ1kkt8jdbs2RvB"
 Content-Disposition: inline
-In-Reply-To: <YzFplwSxwwsLpzzX@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220812075603.59375-6-samuel@sholland.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,112 +61,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-09-22 10:58:00, Michal Hocko wrote:
-[...]
-> A better option to me seems to be reworking the rhashtable_insert_rehash
-> to not rely on an atomic allocation. I am not familiar with that code
-> but it seems to me that the only reason this allocation mode is used is
-> due to rcu locking around rhashtable_try_insert. Is there any reason we
-> cannot drop the rcu lock, allocate with the full GFP_KERNEL allocation
-> power and retry with the pre allocated object? rhashtable_insert_slow is
-> already doing that to implement its never fail semantic.
 
-So a very blunt and likely not 100% correct take on this side of things.
-But it should give an idea at least.
---- 
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index e12bbfb240b8..fc547c43b05d 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -437,31 +437,11 @@ static void rht_deferred_worker(struct work_struct *work)
- }
- 
- static int rhashtable_insert_rehash(struct rhashtable *ht,
--				    struct bucket_table *tbl)
-+				    struct bucket_table *tbl,
-+				    struct bucket_table *new_tbl)
- {
--	struct bucket_table *old_tbl;
--	struct bucket_table *new_tbl;
--	unsigned int size;
- 	int err;
- 
--	old_tbl = rht_dereference_rcu(ht->tbl, ht);
--
--	size = tbl->size;
--
--	err = -EBUSY;
--
--	if (rht_grow_above_75(ht, tbl))
--		size *= 2;
--	/* Do not schedule more than one rehash */
--	else if (old_tbl != tbl)
--		goto fail;
--
--	err = -ENOMEM;
--
--	new_tbl = bucket_table_alloc(ht, size, GFP_ATOMIC | __GFP_NOWARN);
--	if (new_tbl == NULL)
--		goto fail;
--
- 	err = rhashtable_rehash_attach(ht, tbl, new_tbl);
- 	if (err) {
- 		bucket_table_free(new_tbl);
-@@ -471,17 +451,6 @@ static int rhashtable_insert_rehash(struct rhashtable *ht,
- 		schedule_work(&ht->run_work);
- 
- 	return err;
--
--fail:
--	/* Do not fail the insert if someone else did a rehash. */
--	if (likely(rcu_access_pointer(tbl->future_tbl)))
--		return 0;
--
--	/* Schedule async rehash to retry allocation in process context. */
--	if (err == -ENOMEM)
--		schedule_work(&ht->run_work);
--
--	return err;
- }
- 
- static void *rhashtable_lookup_one(struct rhashtable *ht,
-@@ -619,9 +588,33 @@ static void *rhashtable_try_insert(struct rhashtable *ht, const void *key,
- 		}
- 	} while (!IS_ERR_OR_NULL(new_tbl));
- 
--	if (PTR_ERR(data) == -EAGAIN)
--		data = ERR_PTR(rhashtable_insert_rehash(ht, tbl) ?:
-+	if (PTR_ERR(data) == -EAGAIN) {
-+		struct bucket_table *old_tbl;
-+		unsigned int size;
-+
-+		old_tbl = rht_dereference_rcu(ht->tbl, ht);
-+		size = tbl->size;
-+
-+		data = ERR_PTR(-EBUSY);
-+
-+		if (rht_grow_above_75(ht, tbl))
-+			size *= 2;
-+		/* Do not schedule more than one rehash */
-+		else if (old_tbl != tbl)
-+			return data;
-+
-+		data = ERR_PTR(-ENOMEM);
-+
-+		rcu_read_unlock();
-+		new_tbl = bucket_table_alloc(ht, size, GFP_KERNEL);
-+		rcu_read_lock();
-+
-+		if (!new_tbl)
-+			return data;
-+
-+		data = ERR_PTR(rhashtable_insert_rehash(ht, tbl, new_tbl) ?:
- 			       -EAGAIN);
-+	}
- 
- 	return data;
- }
+--xoZ1kkt8jdbs2RvB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Michal Hocko
-SUSE Labs
+Hi Samuel,
+
+On Fri 12 Aug 22, 02:56, Samuel Holland wrote:
+> While all variants of the DPHY likely support RX mode, the new variant
+> in the A100 is not used in this direction by the BSP, and it has some
+> analog register changes, so its RX power-on sequence is unknown. To be
+> safe, limit RX support to variants where the power-on sequence is known.
+
+Coming back to this series, with some minor cosmetic suggestions.
+
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>=20
+>  drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 25 +++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy/al=
+lwinner/phy-sun6i-mipi-dphy.c
+> index 3900f1650851..625c6e1e9990 100644
+> --- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+> +++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+> @@ -114,6 +114,10 @@ enum sun6i_dphy_direction {
+>  	SUN6I_DPHY_DIRECTION_RX,
+>  };
+> =20
+> +struct sun6i_dphy_variant {
+> +	bool	supports_rx;
+
+Since you're introducing a "tx_power_on" field later on, it would be more
+consistent to call this one "rx_supported".
+
+> +};
+> +
+>  struct sun6i_dphy {
+>  	struct clk				*bus_clk;
+>  	struct clk				*mod_clk;
+> @@ -123,6 +127,7 @@ struct sun6i_dphy {
+>  	struct phy				*phy;
+>  	struct phy_configure_opts_mipi_dphy	config;
+> =20
+> +	const struct sun6i_dphy_variant		*variant;
+>  	enum sun6i_dphy_direction		direction;
+>  };
+> =20
+> @@ -409,6 +414,10 @@ static int sun6i_dphy_probe(struct platform_device *=
+pdev)
+>  	if (!dphy)
+>  		return -ENOMEM;
+> =20
+> +	dphy->variant =3D device_get_match_data(&pdev->dev);
+> +	if (!dphy->variant)
+> +		return -EINVAL;
+> +
+>  	regs =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(regs)) {
+>  		dev_err(&pdev->dev, "Couldn't map the DPHY encoder registers\n");
+> @@ -445,8 +454,13 @@ static int sun6i_dphy_probe(struct platform_device *=
+pdev)
+>  	ret =3D of_property_read_string(pdev->dev.of_node, "allwinner,direction=
+",
+>  				      &direction);
+> =20
+> -	if (!ret && !strncmp(direction, "rx", 2))
+> +	if (!ret && !strncmp(direction, "rx", 2)) {
+> +		if (!dphy->variant->supports_rx) {
+> +			dev_err(&pdev->dev, "RX not supported on this variant\n");
+> +			return -EOPNOTSUPP;
+> +		}
+
+Maybe add a blank line here for readability.
+
+Looks good to me otherwise!
+
+Paul
+
+>  		dphy->direction =3D SUN6I_DPHY_DIRECTION_RX;
+> +	}
+> =20
+>  	phy_set_drvdata(dphy->phy, dphy);
+>  	phy_provider =3D devm_of_phy_provider_register(&pdev->dev, of_phy_simpl=
+e_xlate);
+> @@ -454,8 +468,15 @@ static int sun6i_dphy_probe(struct platform_device *=
+pdev)
+>  	return PTR_ERR_OR_ZERO(phy_provider);
+>  }
+> =20
+> +static const struct sun6i_dphy_variant sun6i_a31_mipi_dphy_variant =3D {
+> +	.supports_rx	=3D true,
+> +};
+> +
+>  static const struct of_device_id sun6i_dphy_of_table[] =3D {
+> -	{ .compatible =3D "allwinner,sun6i-a31-mipi-dphy" },
+> +	{
+> +		.compatible	=3D "allwinner,sun6i-a31-mipi-dphy",
+> +		.data		=3D &sun6i_a31_mipi_dphy_variant,
+> +	},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, sun6i_dphy_of_table);
+> --=20
+> 2.35.1
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--xoZ1kkt8jdbs2RvB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMxcSUACgkQ3cLmz3+f
+v9HgvggAgB23uIrZwveFcOqLL25MJcIrZoNcRPexfnFQcvz/nerHdLde83N+Q2uh
+IiksEqx3C3iRc3Tw1OGvzg9MDWMW+w/rFTo4Fwx6kO8QtfpQ15wL0pL/VX+CxCoB
+16cABES3igwy2adnVEWnWqEETdexJDgvKgXxVIalYB7pcoCKxnsyfQie6nMfiozz
+bkar91bBTlbbZ/tQcGWtYwF3HJhWxQDsTnrHRHolNTn8+2iGzldKjfNjjON8hTjI
+RIInNPKY64O2Qhep++QvfkERmjmfgewhQaHWOTWO9rEbgWhlTcULDX5idNGpJahn
+W1LA84xdKPzwLkQSXzqeZXZf3yRflw==
+=KS3e
+-----END PGP SIGNATURE-----
+
+--xoZ1kkt8jdbs2RvB--
