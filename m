@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF735EA3CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4355EA3A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237969AbiIZLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S234607AbiIZL3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiIZLcQ (ORCPT
+        with ESMTP id S237932AbiIZL2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:32:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181106D9E3;
-        Mon, 26 Sep 2022 03:42:47 -0700 (PDT)
+        Mon, 26 Sep 2022 07:28:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56306B150;
+        Mon, 26 Sep 2022 03:41:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75B7B60C56;
-        Mon, 26 Sep 2022 10:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7744DC433C1;
-        Mon, 26 Sep 2022 10:41:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49180B80942;
+        Mon, 26 Sep 2022 10:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BBBC433D6;
+        Mon, 26 Sep 2022 10:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188868;
-        bh=vOPXaVottFLXDjh23uGbUV0JWH7K6CBH8tJz+br+0xQ=;
+        s=korg; t=1664188878;
+        bh=xLv6Yp4tyzE+V2Ro4LgR0kyqrrBkxn5bGkLAx5w9QAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZSOn24NB9HEWfGLviwjupv5sTszcNJ/aRbLvkTzUe4NY62O9mTHLshs/Syx4AXLaD
-         UJOScs141G3IZZAOWjjGPGlPXzZ/Y2VxBQ0Nazc6kYSSQ+r86Q/v3Wrtl6qYAgHks1
-         DIs6gu0xxubMuu4uBs+6qUqTzrkrErcQOeCJQDEY=
+        b=oOSYu/LaN05Ijg+NnhPLnYQH4TnK4CY/odo9ex39IGeCAfZ8/YzFDlRA4jHNwPoYo
+         /3NsE0j0ybLJ+YCz1tjpw9DCWpau3RHMYdq+ToKyQ+VRvPNjCT1j+b1lvQ9SOaNPdr
+         gHR9/ud2haTjHTP9Zcaubkz8jkUwwU8Ln6mlycL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5.15 120/148] serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
-Date:   Mon, 26 Sep 2022 12:12:34 +0200
-Message-Id: <20220926100800.647242411@linuxfoundation.org>
+Subject: [PATCH 5.15 121/148] serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
+Date:   Mon, 26 Sep 2022 12:12:35 +0200
+Message-Id: <20220926100800.685080097@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
 References: <20220926100756.074519146@linuxfoundation.org>
@@ -56,48 +56,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 754f68044c7dd6c52534ba3e0f664830285c4b15 upstream.
+commit 1d10cd4da593bc0196a239dcc54dac24b6b0a74e upstream.
 
-DMA complete & stop paths did not correctly account Tx'ed characters
-into icount.tx. Using uart_xmit_advance() fixes the problem.
+Tx'ing does not correctly account Tx'ed characters into icount.tx.
+Using uart_xmit_advance() fixes the problem.
 
-Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
+Fixes: 2d908b38d409 ("serial: Add Tegra Combined UART driver")
 Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220901143934.8850-3-ilpo.jarvinen@linux.intel.com
+Link: https://lore.kernel.org/r/20220901143934.8850-4-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/serial-tegra.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/serial/tegra-tcu.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -525,7 +525,7 @@ static void tegra_uart_tx_dma_complete(v
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
- 	spin_lock_irqsave(&tup->uport.lock, flags);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
- 		uart_write_wakeup(&tup->uport);
-@@ -613,7 +613,6 @@ static unsigned int tegra_uart_tx_empty(
- static void tegra_uart_stop_tx(struct uart_port *u)
- {
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
--	struct circ_buf *xmit = &tup->uport.state->xmit;
- 	struct dma_tx_state state;
- 	unsigned int count;
+--- a/drivers/tty/serial/tegra-tcu.c
++++ b/drivers/tty/serial/tegra-tcu.c
+@@ -101,7 +101,7 @@ static void tegra_tcu_uart_start_tx(stru
+ 			break;
  
-@@ -624,7 +623,7 @@ static void tegra_uart_stop_tx(struct ua
- 	dmaengine_tx_status(tup->tx_dma_chan, tup->tx_cookie, &state);
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- }
+ 		tegra_tcu_write(tcu, &xmit->buf[xmit->tail], count);
+-		xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
++		uart_xmit_advance(port, count);
+ 	}
  
+ 	uart_write_wakeup(port);
 
 
