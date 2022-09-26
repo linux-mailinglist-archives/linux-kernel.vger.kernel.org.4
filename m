@@ -2,228 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA475EB17E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C7D5EB184
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiIZTqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S230126AbiIZTqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiIZTpl (ORCPT
+        with ESMTP id S230004AbiIZTp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:45:41 -0400
-Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EBAA15FFF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:45:25 -0700 (PDT)
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
-        with SMTP; 26 Sep 2022 22:45:19 +0300
-Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 28QJjIWE029234;
-        Mon, 26 Sep 2022 15:45:18 -0400
-Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 28QJjIcP024886;
-        Mon, 26 Sep 2022 15:45:18 -0400
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v6 5/5] i2c: i2c-mlxbf.c: remove device tree support
-Date:   Mon, 26 Sep 2022 15:45:07 -0400
-Message-Id: <20220926194507.24786-6-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220926194507.24786-1-asmaa@nvidia.com>
-References: <20220926194507.24786-1-asmaa@nvidia.com>
+        Mon, 26 Sep 2022 15:45:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887311EC49;
+        Mon, 26 Sep 2022 12:45:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FAFFB80DFA;
+        Mon, 26 Sep 2022 19:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CA4C433D7;
+        Mon, 26 Sep 2022 19:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664221550;
+        bh=MNeBI45oFNpk0bJm4bTOEibWr854TsU8hMwcCFMgC1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SRkCt+/DiuV5u8aJnb4Lo/H8IqidTDwYQchwL+tSHijnMdpY4jmYpLxQCdpkQVT5l
+         DJZCG/7KbMsNVRteV6Egr3eVanJvSJxOeFxnVzBY62MnzeS0cj7hGeiWX8vUISlmnR
+         /6NeaswEvOy+SME52iPEyTgQPy9qUuopJYJwY9QzzWKBC1ZpSkORx63YvTlUZKi4TZ
+         vYFvCq7KhnQD/FTdjx+g7H4HxXl4OPfVORgW2UVf8DM/GGeZA/RRQn3oCLnELOxduC
+         lDDrhtMifJRVkjwBY6QlVSxa8lQKsMLX3mcWQzM1yiPwmJcwrOr/ktjvy3j1WVHp2D
+         EsXLBn7JJuyFw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0CA74403B0; Mon, 26 Sep 2022 20:45:48 +0100 (IST)
+Date:   Mon, 26 Sep 2022 20:45:48 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/3] perf lock: Add -E/--entries option
+Message-ID: <YzIBbErRhxzk5ppd@kernel.org>
+References: <20220924004221.841024-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924004221.841024-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BlueField customers have to use the the BlueField firmware with
-UEFI ACPI tables so there is no need to have device tree
-support in the i2c-mlxbf.c driver. Remove the device tree
-binding documentation as well.
+Em Fri, Sep 23, 2022 at 05:42:19PM -0700, Namhyung Kim escreveu:
+> Like perf top, the -E option can limit number of entries to print.
+> It can be useful when users want to see top N contended locks only.
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 77 -------------------
- drivers/i2c/busses/i2c-mlxbf.c                | 49 +-----------
- 2 files changed, 1 insertion(+), 125 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+Thanks, applied.
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-deleted file mode 100644
-index 93198d5d43a6..000000000000
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-+++ /dev/null
-@@ -1,77 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/i2c/mellanox,i2c-mlxbf.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Mellanox I2C SMBus on BlueField SoCs
--
--maintainers:
--  - Khalil Blaiech <kblaiech@nvidia.com>
--
--allOf:
--  - $ref: /schemas/i2c/i2c-controller.yaml#
--
--properties:
--  compatible:
--    enum:
--      - mellanox,i2c-mlxbf1
--      - mellanox,i2c-mlxbf2
--
--  reg:
--    minItems: 3
--    items:
--      - description: Smbus block registers
--      - description: Cause master registers
--      - description: Cause slave registers
--      - description: Cause coalesce registers
--
--  interrupts:
--    maxItems: 1
--
--  clock-frequency:
--    enum: [ 100000, 400000, 1000000 ]
--    description:
--      bus frequency used to configure timing registers;
--      The frequency is expressed in Hz. Default is 100000.
--
--required:
--  - compatible
--  - reg
--  - interrupts
--
--unevaluatedProperties: false
--
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - mellanox,i2c-mlxbf1
--
--then:
--  properties:
--    reg:
--      maxItems: 3
--
--examples:
--  - |
--    i2c@2804000 {
--        compatible = "mellanox,i2c-mlxbf1";
--        reg = <0x02804000 0x800>,
--              <0x02801200 0x020>,
--              <0x02801260 0x020>;
--        interrupts = <57>;
--        clock-frequency = <100000>;
--    };
--
--  - |
--    i2c@2808800 {
--        compatible = "mellanox,i2c-mlxbf2";
--        reg = <0x02808800 0x600>,
--              <0x02808e00 0x020>,
--              <0x02808e20 0x020>,
--              <0x02808e40 0x010>;
--        interrupts = <57>;
--        clock-frequency = <400000>;
--    };
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 30e6ba1f412c..1127d07b56a6 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -2247,24 +2247,6 @@ static struct i2c_adapter_quirks mlxbf_i2c_quirks = {
- 	.max_write_len = MLXBF_I2C_MASTER_DATA_W_LENGTH,
- };
+- Arnaldo
+
  
--static const struct of_device_id mlxbf_i2c_dt_ids[] = {
--	{
--		.compatible = "mellanox,i2c-mlxbf1",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1]
--	},
--	{
--		.compatible = "mellanox,i2c-mlxbf2",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_2]
--	},
--	{
--		.compatible = "mellanox,i2c-mlxbf3",
--		.data = &mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_3]
--	},
--	{},
--};
--
--MODULE_DEVICE_TABLE(of, mlxbf_i2c_dt_ids);
--
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id mlxbf_i2c_acpi_ids[] = {
- 	{ "MLNXBF03", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1] },
-@@ -2315,31 +2297,6 @@ static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
- }
- #endif /* CONFIG_ACPI */
- 
--static int mlxbf_i2c_of_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
--{
--	const struct of_device_id *oid;
--	int bus_id = -1;
--
--	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
--		oid = of_match_node(mlxbf_i2c_dt_ids, dev->of_node);
--		if (!oid)
--			return -ENODEV;
--
--		priv->chip = oid->data;
--
--		bus_id = of_alias_get_id(dev->of_node, "i2c");
--		if (bus_id >= 0)
--			priv->bus = bus_id;
--	}
--
--	if (bus_id < 0) {
--		dev_err(dev, "Cannot get bus id");
--		return bus_id;
--	}
--
--	return 0;
--}
--
- static int mlxbf_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -2353,14 +2310,11 @@ static int mlxbf_i2c_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	ret = mlxbf_i2c_acpi_probe(dev, priv);
--	if (ret < 0 && ret != -ENOENT && ret != -ENXIO)
--		ret = mlxbf_i2c_of_probe(dev, priv);
--
- 	if (ret < 0)
- 		return ret;
- 
- 	/* This property allows the driver to stay backward compatible with older
--	 * ACPI table and device trees versions.
-+	 * ACPI tables.
- 	 * Starting BlueField-3 SoC, the "smbus" resource was broken down into 3
- 	 * separate resources "timer", "master" and "slave".
- 	 */
-@@ -2539,7 +2493,6 @@ static struct platform_driver mlxbf_i2c_driver = {
- 	.remove = mlxbf_i2c_remove,
- 	.driver = {
- 		.name = "i2c-mlxbf",
--		.of_match_table = mlxbf_i2c_dt_ids,
- #ifdef CONFIG_ACPI
- 		.acpi_match_table = ACPI_PTR(mlxbf_i2c_acpi_ids),
- #endif /* CONFIG_ACPI  */
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/Documentation/perf-lock.txt | 10 ++++++++++
+>  tools/perf/builtin-lock.c              | 20 +++++++++++++++-----
+>  2 files changed, 25 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+> index 5f2dc634258e..b23e76200ac2 100644
+> --- a/tools/perf/Documentation/perf-lock.txt
+> +++ b/tools/perf/Documentation/perf-lock.txt
+> @@ -94,6 +94,11 @@ REPORT OPTIONS
+>           EventManager_De       1845          1             636
+>           futex-default-S       1609          0               0
+>  
+> +-E::
+> +--entries=<value>::
+> +	Display this many entries.
+> +
+> +
+>  INFO OPTIONS
+>  ------------
+>  
+> @@ -105,6 +110,7 @@ INFO OPTIONS
+>  --map::
+>  	dump map of lock instances (address:name table)
+>  
+> +
+>  CONTENTION OPTIONS
+>  --------------
+>  
+> @@ -154,6 +160,10 @@ CONTENTION OPTIONS
+>  --stack-skip
+>  	Number of stack depth to skip when finding a lock caller (default: 3).
+>  
+> +-E::
+> +--entries=<value>::
+> +	Display this many entries.
+> +
+>  
+>  SEE ALSO
+>  --------
+> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> index 25d75fa09b90..1c0d52384d9e 100644
+> --- a/tools/perf/builtin-lock.c
+> +++ b/tools/perf/builtin-lock.c
+> @@ -58,6 +58,7 @@ static bool use_bpf;
+>  static unsigned long bpf_map_entries = 10240;
+>  static int max_stack_depth = CONTENTION_STACK_DEPTH;
+>  static int stack_skip = CONTENTION_STACK_SKIP;
+> +static int print_nr_entries = INT_MAX / 2;
+>  
+>  static enum {
+>  	LOCK_AGGR_ADDR,
+> @@ -1266,14 +1267,14 @@ static void print_result(void)
+>  	struct lock_stat *st;
+>  	struct lock_key *key;
+>  	char cut_name[20];
+> -	int bad, total;
+> +	int bad, total, printed;
+>  
+>  	pr_info("%20s ", "Name");
+>  	list_for_each_entry(key, &lock_keys, list)
+>  		pr_info("%*s ", key->len, key->header);
+>  	pr_info("\n\n");
+>  
+> -	bad = total = 0;
+> +	bad = total = printed = 0;
+>  	while ((st = pop_from_result())) {
+>  		total++;
+>  		if (st->broken)
+> @@ -1311,6 +1312,9 @@ static void print_result(void)
+>  			pr_info(" ");
+>  		}
+>  		pr_info("\n");
+> +
+> +		if (++printed >= print_nr_entries)
+> +			break;
+>  	}
+>  
+>  	print_bad_events(bad, total);
+> @@ -1476,7 +1480,7 @@ static void print_contention_result(struct lock_contention *con)
+>  {
+>  	struct lock_stat *st;
+>  	struct lock_key *key;
+> -	int bad, total;
+> +	int bad, total, printed;
+>  
+>  	list_for_each_entry(key, &lock_keys, list)
+>  		pr_info("%*s ", key->len, key->header);
+> @@ -1486,7 +1490,7 @@ static void print_contention_result(struct lock_contention *con)
+>  	else
+>  		pr_info("  %10s   %s\n\n", "type", "caller");
+>  
+> -	bad = total = 0;
+> +	bad = total = printed = 0;
+>  	if (use_bpf)
+>  		bad = bad_hist[BROKEN_CONTENDED];
+>  
+> @@ -1507,7 +1511,7 @@ static void print_contention_result(struct lock_contention *con)
+>  			/* st->addr contains tid of thread */
+>  			t = perf_session__findnew(session, pid);
+>  			pr_info("  %10d   %s\n", pid, thread__comm_str(t));
+> -			continue;
+> +			goto next;
+>  		}
+>  
+>  		pr_info("  %10s   %s\n", get_type_str(st), st->name);
+> @@ -1527,6 +1531,10 @@ static void print_contention_result(struct lock_contention *con)
+>  				pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
+>  			}
+>  		}
+> +
+> +next:
+> +		if (++printed >= print_nr_entries)
+> +			break;
+>  	}
+>  
+>  	print_bad_events(bad, total);
+> @@ -1878,6 +1886,7 @@ int cmd_lock(int argc, const char **argv)
+>  		    "combine locks in the same class"),
+>  	OPT_BOOLEAN('t', "threads", &show_thread_stats,
+>  		    "show per-thread lock stats"),
+> +	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
+>  	OPT_PARENT(lock_options)
+>  	};
+>  
+> @@ -1905,6 +1914,7 @@ int cmd_lock(int argc, const char **argv)
+>  	OPT_INTEGER(0, "stack-skip", &stack_skip,
+>  		    "Set the number of stack depth to skip when finding a lock caller, "
+>  		    "Default: " __stringify(CONTENTION_STACK_SKIP)),
+> +	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
+>  	OPT_PARENT(lock_options)
+>  	};
+>  
+> -- 
+> 2.37.3.998.g577e59143f-goog
+
 -- 
-2.30.1
 
+- Arnaldo
