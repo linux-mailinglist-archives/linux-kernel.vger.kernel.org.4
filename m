@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4475F5EAA83
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6375EAA84
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbiIZPWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S235895AbiIZPWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236284AbiIZPVB (ORCPT
+        with ESMTP id S236294AbiIZPVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:21:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD04E49;
-        Mon, 26 Sep 2022 07:07:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35F0FB80A4A;
-        Mon, 26 Sep 2022 14:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3383BC433C1;
-        Mon, 26 Sep 2022 14:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664201249;
-        bh=4yu64h7afppe4HawaBZDNUNqopaG8iMFWkzcqeDw+LI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Cy5WZoa97DwR0yz45KeAou/18GyOuEQ0uevuHZ2lbksiItz1CO7OqDhTWTcDNktAd
-         kDZQJtVvf8Z27NflqcwAxbhbAfSZER45TheMyNy99T/UVnt7vvd93gNIs7Pw6pVr4T
-         SEuW2keil7opRw47lqyRO9MAMbRIEkql2ZoAW/7ezR+GaCI3j8asg6hi6zDkhKnLQv
-         5r3cf2EMP7Y+rAopktDoYiww5vMKE04CDYJDrY6CH3u3WLB18LUr7/1bPi/BwprQhK
-         SFGmPeVZqu1gr+Z6IspQ7BH/k0abnE35rC1FBJKl13VCSJs5dx3zSh+RoTydjuLzk8
-         RUEV+k6vAaB2A==
-Message-ID: <05261a77-0412-d333-96fe-53c4238d4ea1@kernel.org>
-Date:   Mon, 26 Sep 2022 16:07:22 +0200
+        Mon, 26 Sep 2022 11:21:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 744E45D12C;
+        Mon, 26 Sep 2022 07:08:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB1BE1042;
+        Mon, 26 Sep 2022 07:08:15 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5E4B3F73B;
+        Mon, 26 Sep 2022 07:08:06 -0700 (PDT)
+Message-ID: <5569ad73-9699-e326-c1fb-e0753bbdde78@arm.com>
+Date:   Mon, 26 Sep 2022 15:08:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [V15,08/15] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
- compatible
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        kyrie wu <kyrie.wu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
-References: <20220926091433.18633-1-irui.wang@mediatek.com>
- <20220926091433.18633-9-irui.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220926091433.18633-9-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH RESEND v5 22/24] dmaengine: dw-edma: Bypass dma-ranges
+ mapping for the local setup
+Content-Language: en-GB
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822185332.26149-23-Sergey.Semin@baikalelectronics.ru>
+ <7a035b29-fca6-2650-c3c1-eedb3904c32d@arm.com>
+ <20220912012426.xcg4tu6wzogbirp6@mobilestation>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220912012426.xcg4tu6wzogbirp6@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,23 +60,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 11:14, Irui Wang wrote:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        jpgdec-master {
-> +                compatible = "mediatek,mt8195-jpgdec";
+On 2022-09-12 02:24, Serge Semin wrote:
+> On Wed, Aug 31, 2022 at 10:17:30AM +0100, Robin Murphy wrote:
+>> On 2022-08-22 19:53, Serge Semin wrote:
+>>> DW eDMA doesn't perform any translation of the traffic generated on the
+>>> CPU/Application side. It just generates read/write AXI-bus requests with
+>>> the specified addresses. But in case if the dma-ranges DT-property is
+>>> specified for a platform device node, Linux will use it to map the CPU
+>>> memory regions into the DMAable bus ranges. This isn't what we want for
+>>> the eDMA embedded into the locally accessed DW PCIe Root Port and
+>>> End-point. In order to work that around let's set the chan_dma_dev flag
+>>> for each DW eDMA channel thus forcing the client drivers to getting a
+>>> custom dma-ranges-less parental device for the mappings.
+>>>
+>>> Note it will only work for the client drivers using the
+>>> dmaengine_get_dma_device() method to get the parental DMA device.
+>>
+> 
+>> No, this is nonsense. If the DMA engine is on the host side of the bridge
+>> then it should not have anything to do with the PCI device at all, it should
+>> be associated with the platform device,
+> 
+> Well. The DMA-engine is embedded into the PCIe Root Port bus, is associated
+> with the platform device it's embedded to, and it doesn't have
+> anything to do with any particular PCI device.
+> 
+>> and thus any range mapping on the bridge itself would be irrelevant anyway.
+> 
+> Really? I find it otherwise. Please see the way the "dma-ranges"
+> property is parsed and works during the device-specific memory ranges
+> mapping when it's applicable for the PCIe Root Ports.
 
-Same problem.
+Sigh, that's a bug. Now I see where the confusion is coming from.
 
-Best regards,
-Krzysztof
+Annoyingly it's basically the exact thing I called out in 951d48855d86 
+when making dma-ranges work for non-OF PCI devices in the first place, 
+but apparently neither I nor anyone else thought of this particular edge 
+case at the time. Sorry about that. I'll have a look at how best to fix it.
 
+Everything else still stands, though. If you can't use the original 
+platform device for DMA API calls, at least configure the child device 
+properly by calling of_dma_configure() with the parent's DT node in the 
+expected manner (and manually remove its dma_range_map if you need an 
+immediate workaround).
+
+Thanks,
+Robin.
