@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43CA5EA05E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4395EA54A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiIZKgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S238916AbiIZMAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236105AbiIZKeI (ORCPT
+        with ESMTP id S238808AbiIZL42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:34:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5B05071F;
-        Mon, 26 Sep 2022 03:21:06 -0700 (PDT)
+        Mon, 26 Sep 2022 07:56:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C117A51F;
+        Mon, 26 Sep 2022 03:51:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E6360B60;
-        Mon, 26 Sep 2022 10:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7629FC433D6;
-        Mon, 26 Sep 2022 10:21:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83581B8091D;
+        Mon, 26 Sep 2022 10:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A66C433D7;
+        Mon, 26 Sep 2022 10:36:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187664;
-        bh=vc2SaGyRnaZR4m3lZSMRuuhRvo3SBJwINntZoyb+sSU=;
+        s=korg; t=1664188568;
+        bh=XoeU9sjbh21HwN/kzh1u++rF++h0tKsiYvBibbOtvas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SZVcrOFO9I2tWZ1e6OsplpDTeqi+FyMEDcy92cTc09VjeGtN8z5FRkNqayZABr/+N
-         4ZcbXMRiTnhMcrmw2cyWKe7bymn3fzOH40QpTqOPevbkZfY9R1W1Yftm84qTJp5a7g
-         UIVpVwQYGwucsLb7FMQ9ih40AP7ny7SwSlqh/hVo=
+        b=hjclM3Yk2TSGLm7f9Mewwx45DeSp2YD/CDTrPnCIBcjSJCuFh9U/wUqsRpfstGqUW
+         lza3iA2b9IU5UVhFSSvY83inq3zhniePCVBTW85LsCCrHASL+SoNPKoRp3EGqJJff5
+         5ATM3MupGu2DQXMPA3DrpDOQZk5ymbpPnn/2qXUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 020/120] ALSA: hda/sigmatel: Keep power up while beep is enabled
+        stable@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        feng xiangjun <fengxj325@gmail.com>,
+        Phil Auld <pauld@redhat.com>
+Subject: [PATCH 5.15 019/148] drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
 Date:   Mon, 26 Sep 2022 12:10:53 +0200
-Message-Id: <20220926100751.347617758@linuxfoundation.org>
+Message-Id: <20220926100756.793751668@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,71 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Phil Auld <pauld@redhat.com>
 
-[ Upstream commit 414d38ba871092aeac4ed097ac4ced89486646f7 ]
+commit d7f06bdd6ee87fbefa05af5f57361d85e7715b11 upstream.
 
-It seems that the beep playback doesn't work well on IDT codec devices
-when the codec auto-pm is enabled.  Keep the power on while the beep
-switch is enabled.
+As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
+This leads to very large file sizes:
 
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1200544
-Link: https://lore.kernel.org/r/20220904072750.26164-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+topology$ ls -l
+total 0
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
+
+Adjust the inequality to catch the case when NR_CPUS is configured
+to a small value.
+
+Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: stable@vger.kernel.org
+Cc: feng xiangjun <fengxj325@gmail.com>
+Reported-by: feng xiangjun <fengxj325@gmail.com>
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Link: https://lore.kernel.org/r/20220906203542.1796629-1-pauld@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_sigmatel.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ include/linux/cpumask.h |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
-index bfd3fe5eff31..7a8ecc21b347 100644
---- a/sound/pci/hda/patch_sigmatel.c
-+++ b/sound/pci/hda/patch_sigmatel.c
-@@ -209,6 +209,7 @@ struct sigmatel_spec {
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -1057,9 +1057,10 @@ cpumap_print_list_to_buf(char *buf, cons
+  * cover a worst-case of every other cpu being on one of two nodes for a
+  * very large NR_CPUS.
+  *
+- *  Use PAGE_SIZE as a minimum for smaller configurations.
++ *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
++ *  unsigned comparison to -1.
+  */
+-#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
++#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
+ 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
+ #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
  
- 	/* beep widgets */
- 	hda_nid_t anabeep_nid;
-+	bool beep_power_on;
- 
- 	/* SPDIF-out mux */
- 	const char * const *spdif_labels;
-@@ -4441,6 +4442,26 @@ static int stac_suspend(struct hda_codec *codec)
- 	stac_shutup(codec);
- 	return 0;
- }
-+
-+static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
-+{
-+	struct sigmatel_spec *spec = codec->spec;
-+	int ret = snd_hda_gen_check_power_status(codec, nid);
-+
-+#ifdef CONFIG_SND_HDA_INPUT_BEEP
-+	if (nid == spec->gen.beep_nid && codec->beep) {
-+		if (codec->beep->enabled != spec->beep_power_on) {
-+			spec->beep_power_on = codec->beep->enabled;
-+			if (spec->beep_power_on)
-+				snd_hda_power_up_pm(codec);
-+			else
-+				snd_hda_power_down_pm(codec);
-+		}
-+		ret |= spec->beep_power_on;
-+	}
-+#endif
-+	return ret;
-+}
- #else
- #define stac_suspend		NULL
- #endif /* CONFIG_PM */
-@@ -4453,6 +4474,7 @@ static const struct hda_codec_ops stac_patch_ops = {
- 	.unsol_event = snd_hda_jack_unsol_event,
- #ifdef CONFIG_PM
- 	.suspend = stac_suspend,
-+	.check_power_status = stac_check_power_status,
- #endif
- 	.reboot_notify = stac_shutup,
- };
--- 
-2.35.1
-
 
 
