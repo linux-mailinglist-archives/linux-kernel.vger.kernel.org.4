@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BFF5E9F79
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D9F5EA129
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbiIZK0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S236478AbiIZKqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiIZKXT (ORCPT
+        with ESMTP id S236422AbiIZKni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:23:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB29063DB;
-        Mon, 26 Sep 2022 03:16:48 -0700 (PDT)
+        Mon, 26 Sep 2022 06:43:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA340311;
+        Mon, 26 Sep 2022 03:24:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F2C60AF2;
-        Mon, 26 Sep 2022 10:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C82FC433C1;
-        Mon, 26 Sep 2022 10:16:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F192B80920;
+        Mon, 26 Sep 2022 10:24:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C838AC433C1;
+        Mon, 26 Sep 2022 10:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187401;
-        bh=75DfJ5Yqg1z2SFT3L+O7MKMIFpGoOqNpgcehWq6lixc=;
+        s=korg; t=1664187888;
+        bh=xLv6Yp4tyzE+V2Ro4LgR0kyqrrBkxn5bGkLAx5w9QAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CDRZutMSadYrucgvvmqJlNzUxVkAsZNgEhiV1aJWZoM8AGiz5yes6gkZCvVlC263X
-         STEd2jYp+8G72NsLjbHDNvK/LkmEOPM7xQaTh6xlbYHdaSJd5Q/9UqKHdOA4+IK9B1
-         fsgm+Hj3vitoSBaCB0gU+7Tfxf2WazydHxU7DWcY=
+        b=B0ne3X05JKpddJX5dI/9puus8VdSkopFYD2ypNzmoc1BOBdSo6Tv9IUA6dfbTDK7m
+         ZKZfpUhPZmbErkKO6UXhSrQDfusT6vaZb3+nRcKsq4+sbpql1IWcAE5iSiN5MpPJFZ
+         jYx3b9JE9WzG/PbsB7p56QArd4Ud6EP8gxFLiKHM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.14 37/40] s390/dasd: fix Oops in dasd_alias_get_start_dev due to missing pavgroup
+        stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.4 092/120] serial: tegra-tcu: Use uart_xmit_advance(), fixes icount.tx accounting
 Date:   Mon, 26 Sep 2022 12:12:05 +0200
-Message-Id: <20220926100739.750060494@linuxfoundation.org>
+Message-Id: <20220926100754.380471788@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit db7ba07108a48c0f95b74fabbfd5d63e924f992d upstream.
+commit 1d10cd4da593bc0196a239dcc54dac24b6b0a74e upstream.
 
-Fix Oops in dasd_alias_get_start_dev() function caused by the pavgroup
-pointer being NULL.
+Tx'ing does not correctly account Tx'ed characters into icount.tx.
+Using uart_xmit_advance() fixes the problem.
 
-The pavgroup pointer is checked on the entrance of the function but
-without the lcu->lock being held. Therefore there is a race window
-between dasd_alias_get_start_dev() and _lcu_update() which sets
-pavgroup to NULL with the lcu->lock held.
-
-Fix by checking the pavgroup pointer with lcu->lock held.
-
-Cc: <stable@vger.kernel.org> # 2.6.25+
-Fixes: 8e09f21574ea ("[S390] dasd: add hyper PAV support to DASD device driver, part 1")
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220919154931.4123002-2-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 2d908b38d409 ("serial: Add Tegra Combined UART driver")
+Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220901143934.8850-4-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd_alias.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/tty/serial/tegra-tcu.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/s390/block/dasd_alias.c
-+++ b/drivers/s390/block/dasd_alias.c
-@@ -675,12 +675,12 @@ int dasd_alias_remove_device(struct dasd
- struct dasd_device *dasd_alias_get_start_dev(struct dasd_device *base_device)
- {
- 	struct dasd_eckd_private *alias_priv, *private = base_device->private;
--	struct alias_pav_group *group = private->pavgroup;
- 	struct alias_lcu *lcu = private->lcu;
- 	struct dasd_device *alias_device;
-+	struct alias_pav_group *group;
- 	unsigned long flags;
+--- a/drivers/tty/serial/tegra-tcu.c
++++ b/drivers/tty/serial/tegra-tcu.c
+@@ -101,7 +101,7 @@ static void tegra_tcu_uart_start_tx(stru
+ 			break;
  
--	if (!group || !lcu)
-+	if (!lcu)
- 		return NULL;
- 	if (lcu->pav == NO_PAV ||
- 	    lcu->flags & (NEED_UAC_UPDATE | UPDATE_PENDING))
-@@ -697,6 +697,11 @@ struct dasd_device *dasd_alias_get_start
+ 		tegra_tcu_write(tcu, &xmit->buf[xmit->tail], count);
+-		xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
++		uart_xmit_advance(port, count);
  	}
  
- 	spin_lock_irqsave(&lcu->lock, flags);
-+	group = private->pavgroup;
-+	if (!group) {
-+		spin_unlock_irqrestore(&lcu->lock, flags);
-+		return NULL;
-+	}
- 	alias_device = group->next;
- 	if (!alias_device) {
- 		if (list_empty(&group->aliaslist)) {
+ 	uart_write_wakeup(port);
 
 
