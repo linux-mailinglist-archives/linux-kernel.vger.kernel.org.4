@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B35F5E9F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A6E5EA4B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235401AbiIZK1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S238265AbiIZLuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbiIZKYW (ORCPT
+        with ESMTP id S239007AbiIZLtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:24:22 -0400
+        Mon, 26 Sep 2022 07:49:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785854D4F2;
-        Mon, 26 Sep 2022 03:17:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E24874E2D;
+        Mon, 26 Sep 2022 03:48:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 182EA60B7E;
-        Mon, 26 Sep 2022 10:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB43C433D6;
-        Mon, 26 Sep 2022 10:17:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB13060A52;
+        Mon, 26 Sep 2022 10:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25BFC433C1;
+        Mon, 26 Sep 2022 10:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187454;
-        bh=6AUgvhBWZ4qO//g19Nt+ah5iKNNnDXtGxjr6VosGyaU=;
+        s=korg; t=1664189283;
+        bh=3XRtdySgANUF062d5PdoQWsO2QH60vfd36w+DOJ8NRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yeNjtZn+0G48XGu/nvVto/1IQZFU8fGZSZduf9SxKw+qDdgSvgSaZj3UVC7kEJn14
-         3Gkhnm7wAuZMFjpqFLVHHG34diD5zgmVzMS0ZmyFYDXIsQRaS9gMYHE09z82/X6GFr
-         XTCr5/bpboHZmFXG0dd1rfdDCJaTHDLFcn07msD0=
+        b=G9cdGlcgDWff5bi0HO3Fk8i31rF45nlMKJDOv2hV9/n86vezckUV6rUjhwdlsF/e5
+         TY7ITe7Hb+XPXv2qgxj0IGMnTasHF4PUl/crwoZywkPTUSii5aK29Z5zVRQDIeag/P
+         TeNRtXTZiWbcTXdDtGopK2uxeSYrEMuvuNcFMqfU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/58] ALSA: hda/sigmatel: Keep power up while beep is enabled
+Subject: [PATCH 5.19 103/207] scsi: qla2xxx: Fix memory leak in __qlt_24xx_handle_abts()
 Date:   Mon, 26 Sep 2022 12:11:32 +0200
-Message-Id: <20220926100741.895021418@linuxfoundation.org>
+Message-Id: <20220926100811.206373132@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,69 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-[ Upstream commit 414d38ba871092aeac4ed097ac4ced89486646f7 ]
+[ Upstream commit 601be20fc6a1b762044d2398befffd6bf236cebf ]
 
-It seems that the beep playback doesn't work well on IDT codec devices
-when the codec auto-pm is enabled.  Keep the power on while the beep
-switch is enabled.
+Commit 8f394da36a36 ("scsi: qla2xxx: Drop TARGET_SCF_LOOKUP_LUN_FROM_TAG")
+made the __qlt_24xx_handle_abts() function return early if
+tcm_qla2xxx_find_cmd_by_tag() didn't find a command, but it missed to clean
+up the allocated memory for the management command.
 
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1200544
-Link: https://lore.kernel.org/r/20220904072750.26164-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220914024924.695604-1-rafaelmendsr@gmail.com
+Fixes: 8f394da36a36 ("scsi: qla2xxx: Drop TARGET_SCF_LOOKUP_LUN_FROM_TAG")
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_sigmatel.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/scsi/qla2xxx/qla_target.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
-index 85c33f528d7b..2f6e4e3afd8f 100644
---- a/sound/pci/hda/patch_sigmatel.c
-+++ b/sound/pci/hda/patch_sigmatel.c
-@@ -222,6 +222,7 @@ struct sigmatel_spec {
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 62666df1a59e..4acff4e84b90 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -2151,8 +2151,10 @@ static int __qlt_24xx_handle_abts(struct scsi_qla_host *vha,
  
- 	/* beep widgets */
- 	hda_nid_t anabeep_nid;
-+	bool beep_power_on;
- 
- 	/* SPDIF-out mux */
- 	const char * const *spdif_labels;
-@@ -4463,6 +4464,26 @@ static int stac_suspend(struct hda_codec *codec)
- 	stac_shutup(codec);
- 	return 0;
- }
-+
-+static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
-+{
-+	struct sigmatel_spec *spec = codec->spec;
-+	int ret = snd_hda_gen_check_power_status(codec, nid);
-+
-+#ifdef CONFIG_SND_HDA_INPUT_BEEP
-+	if (nid == spec->gen.beep_nid && codec->beep) {
-+		if (codec->beep->enabled != spec->beep_power_on) {
-+			spec->beep_power_on = codec->beep->enabled;
-+			if (spec->beep_power_on)
-+				snd_hda_power_up_pm(codec);
-+			else
-+				snd_hda_power_down_pm(codec);
-+		}
-+		ret |= spec->beep_power_on;
+ 	abort_cmd = ha->tgt.tgt_ops->find_cmd_by_tag(sess,
+ 				le32_to_cpu(abts->exchange_addr_to_abort));
+-	if (!abort_cmd)
++	if (!abort_cmd) {
++		mempool_free(mcmd, qla_tgt_mgmt_cmd_mempool);
+ 		return -EIO;
 +	}
-+#endif
-+	return ret;
-+}
- #else
- #define stac_suspend		NULL
- #endif /* CONFIG_PM */
-@@ -4475,6 +4496,7 @@ static const struct hda_codec_ops stac_patch_ops = {
- 	.unsol_event = snd_hda_jack_unsol_event,
- #ifdef CONFIG_PM
- 	.suspend = stac_suspend,
-+	.check_power_status = stac_check_power_status,
- #endif
- 	.reboot_notify = stac_shutup,
- };
+ 	mcmd->unpacked_lun = abort_cmd->se_cmd.orig_fe_lun;
+ 
+ 	if (abort_cmd->qpair) {
 -- 
 2.35.1
 
