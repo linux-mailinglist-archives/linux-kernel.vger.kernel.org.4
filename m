@@ -2,134 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357685EAEB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0285EAEB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiIZRx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
+        id S231263AbiIZRzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiIZRxQ (ORCPT
+        with ESMTP id S231220AbiIZRy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:53:16 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5537D70FB;
-        Mon, 26 Sep 2022 10:28:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XFlAlWK2geja4gMNDcEfz8XwjJkKo2RwGQgl8ZFvITWl9/imV/y21tr3xhtBfZ0cPyaNj/MRAx0P3IeB9zt+YInLx1gzbAlYBLxq5on8coBLYD5mAB3RYmq12/45M+ddq/IZDLI69E4RjDOJ50JBFvSm7Nc3VE2opk03kkMpF8jKfIWUnBkNtxwbYTCqlPuFJmxma8NrS9LTbrO1Z5/iSJHExhalQyuCFIoHqo79zRkiU+53XiZLCc7W7wydntS+WySRfgel7rvBdUmUxmdyWIrbfytCddf6K9zaBQOH1sbfYrsHo22LV3riOLdtWo3kjOQLo1bVYl90x/mfGZ0dhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=27pKZWlTacxYWqmrX9GGxT1hRHdfGOf1Fg7HX+P38NI=;
- b=KNS9aSVX1lM8zNYXNo+5mLaHEkuOSSXFHHRXr+qbDuB+5aB45jm5JsMA72xdNPcnbSdNASGemDKHkvPNNkZrkeHU7IVausj3pohGhVBEymIPs7dbmiFYnfphLUpSBXiwxWxTDfgy/RDN0Mv1PEo2iHUXiyvLMMQTs8SdY6seVng0BjU1KuKhgd80ibDGyVJTu1l4xDQ8rH8wm2//Ozd0t/L8iMtfHY9b8LbNLPTMJ9SXlk2l6sXT9x4GytJee1GBAqxxLWUs+VjmzCF/NWU9pfCEuE5x1rTioMKleJP3+uk9liOl+ewAerO3bhutc21xGoA/qT7B4T8MR6uNzS1HcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=27pKZWlTacxYWqmrX9GGxT1hRHdfGOf1Fg7HX+P38NI=;
- b=fsJYJsF0ouH/pZnZJ0fY9elKybmUFdc5GeuTAZ5O3I0vyO9ZjpfPSioD6KhXqMAWE9c1ul0CQtJpCmOkBm7ejEd6vajqThZVaDIYqVq6kpsZlaB1Xb4SWV4ELA8MzfDsKTOhatXTxN2IrDKAo1ZUADgPMY4RXdioUhQ5Bo5zGbigwLGKch/QmVXtOMp7OyPMMVKnjJ4IXanlV7qVxCqRCBbTTTmd/1t9H0kzyOInkEMUf1T5BJ9OhqBs8e8ok2RrI8lWefcTSn7ib9Y7+O/Ncri3H0Dcd2KsYF3Ti5vfc39aZHiF0ofViwTYvBPsGu/D02XrmEY3/mcEQQGe18yVDg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MW4PR12MB7029.namprd12.prod.outlook.com (2603:10b6:303:1ef::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
- 2022 17:28:15 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 17:28:15 +0000
-Date:   Mon, 26 Sep 2022 14:28:13 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        yangx.jy@fujitsu.com, Bob Pearson <rpearsonhpe@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/RXE: Add send_common_ack() helper
-Message-ID: <YzHhLQgIK9AlYkcq@nvidia.com>
-References: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
-X-ClientProxiedBy: MN2PR11CA0012.namprd11.prod.outlook.com
- (2603:10b6:208:23b::17) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 26 Sep 2022 13:54:27 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6764DF91
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:30:09 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id p3so5785916iof.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3UDB+4Tbwce9pR58c0ZN5geJK+uyQ//9lahofej6FOQ=;
+        b=joF09ODOj2sn8V5OOw855GR4U83EMwZ+3twmgamSgjjg1BP6TBmzO7jNoFSOOCuNny
+         mKF7J2mhJyi+LzstukLDBD7ji7ZDJsj+9BEpzm9eRMGqbdujbVUkrilHP3/s+pfjui7g
+         66MRX6OBRQ9d5VOsTHeWfV/O7ItW75IsrudWxPPaAzLP8IkzQLzLCBYMtRoZx5A2OLgW
+         DAeWpXX0biRU+b9RnlKAVEHrIwn1u30an5E1Ytnj2Ef8TexD9n2y5Ix8fQuxxNuWku9Q
+         xg14DCuMx20sKfExJvEYEV4SpP5O4/jHmp1nCR0QB/GY3YML4xL5eiW/PNdyDKGxm1sD
+         6g2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3UDB+4Tbwce9pR58c0ZN5geJK+uyQ//9lahofej6FOQ=;
+        b=cRvmURjgblE522mDsGRjYNAtKeaNo7XuJCKEI8+eoiqfDbKJyS9icQQo1qUZexrUaW
+         rgmxTXGMGEsRKJV2Z3LCVQZqzXYrTporZZwBxyFNGoFc8RsgZ4d6PedXOnKLpNlPMNvW
+         hyvDaSkTMNbpeG7+HMYWUeWE9B9ZFg52kopj4vIKxwpyOIHwyz1e8Eummk58jeOOicAJ
+         BdZkW/+IYwBS7hZfd3oV9Cd4n4b9dgCFK7+ttIyR3aoOFclRmCkMTLssEW2Xd3LRZGF8
+         4NKbkx4GFxjkR/vOS1inY6fxP7V+7wKOU6oqYedw9iSPcSktUeoa0HwVc9+CshUNdUr+
+         ISHw==
+X-Gm-Message-State: ACrzQf0j8C54XBVzsPjSGaY3KGyrLHUXS0kAY3yJtmmlV8MFAcShmq2w
+        WThC7P80rkB3t+59pPtVXfV6Cs9L1AaGDg==
+X-Google-Smtp-Source: AMsMyM7gfz3r1GWzTF3o2F6a+B6rA4hC8+lR9eZOD80wLjz0jLnwU6GITfP6n9gcxvQz/ikKb+VgJQ==
+X-Received: by 2002:a02:900a:0:b0:35a:84e4:39aa with SMTP id w10-20020a02900a000000b0035a84e439aamr12597620jaf.191.1664213408836;
+        Mon, 26 Sep 2022 10:30:08 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id a11-20020a927f0b000000b002f5abff23aasm6611384ild.46.2022.09.26.10.30.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 10:30:08 -0700 (PDT)
+Message-ID: <2098a505-3668-30cb-e3b6-2111a703b27e@kernel.dk>
+Date:   Mon, 26 Sep 2022 11:30:07 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|MW4PR12MB7029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98005229-9b79-4953-5071-08da9fe47e77
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OioZj6SPn2z3UyvXJBzxf2cQ9b/XNy+DNKM6pnMXP9Smps9BZwC86GsGCH5UXW6u6+REalo1Ww4dibFtq/UD0CxI4snSdHlyRmIzDttqjbR+U5BRQ5204MZoftbDy0uhGVpC9senGR1MKTpwpRK1pkoRKwrdCKwZPzBXa3MjysYONGtDqTFMJ84erEeQfihncVYGZp0zbSEbykp4N6ZuWxvrCyn96nLtxh1tyUxIAY4h5AsVEsg2dL3cGGoxMQ+D1kk19GZg39dPKnycNihSJtK1Gwh1ANX6Wy8llZFcc2xnThZVR0JTOCNsjdUyjKgu79KHZrK+CpRY5yyUCGYhVjiRjbxTfq2boNYECEJ79vwdSzIgaUDICZRfJ/oM/CCKMq4YFkHJWUIwEoa+9iKaSZFqcWG4yk0m155hx0d8lfeH4BDRG7EzPcAQBk9agANW02vuPNYzM3BfP0PnXcETXa1eod5vWn2zgWmBeaH2ib8hRVy45UnyTB31+mQwf5uvapGSCGzbh6hkj7x6upp7DcI5PpN3EQTsxO4WfItBb//vBu2iarfC9VkNIvQsAw1xiZv86dlv5fLby/9dxmONx7vmEPUA3IbnlSCwiB/KtHr82aiVdeuiH3EQKEwFqGBMc+BV1dc0T0vnNYqw3mZWlamyeo9Rcqqhht1BB4+l0VsXnnwtItzyk3yfF3xvv0UmmDERf+8MACRv6OY1phSe7g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199015)(316002)(66476007)(66556008)(6486002)(66946007)(478600001)(4326008)(8676002)(6506007)(5660300002)(4744005)(8936002)(6512007)(26005)(86362001)(41300700001)(2906002)(186003)(6916009)(54906003)(83380400001)(38100700002)(2616005)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B25NJFdstihEk5Mmf24e5ESEeSAbafhvPvqgSIcIAgGsAJuVfChZuM53+TZt?=
- =?us-ascii?Q?6Ejblf3BLYBDnchJh0xDEZmpN4BNUhnz1hZkUC9wLqAUgXq830LI9HrR2esg?=
- =?us-ascii?Q?148Ywbo2IKTNkmdwBKPgbWsBuJAl0+XQx/7pcpwVOlLKdCnFI5F6a23GLTdw?=
- =?us-ascii?Q?z3oVFMGYBxT7ahYLcxc9MwqdgZs11/g0p+G0yN5vVz0aL2B6CpUlKGseDS6d?=
- =?us-ascii?Q?MZui5uTuAL19c0c53kXTm7s3WRHh+i8K16wqAKaMti34znWgpLWtgXjXb2lE?=
- =?us-ascii?Q?1SLO2PKMkrdx7tmo7EmDABiDN+7Mdd8FGk/haM1DfWS+hkZX53HiXi1/q78S?=
- =?us-ascii?Q?QT0ZH1CDtunAUUIhHnkOFBxYwSz8/N78v/E4CiCnYF/wOXIGJZskxLysUnDA?=
- =?us-ascii?Q?9XVC3ZCjQ5bkSujx/8jDyRiYIz5XlRcQQYWQ2sHWU6MB/RSJqRTTlxDVMPcQ?=
- =?us-ascii?Q?SVsma8WXysa9P2CS7zZkyHp1LIGBgCZk+c39br5abfyZt4KCz4KDerVaq7pl?=
- =?us-ascii?Q?2lQof+rMCKysFUKhmMGBj5l1UmtLUB8W2xqOI+aBAGKCEgPC6lK2AJn6e/Vi?=
- =?us-ascii?Q?+6Ti/HBozzGU2Ckje8gDKIw+ankgImay/e3qFrYL8U5jtT/h2K7tL8dlAr7h?=
- =?us-ascii?Q?p+o+WYq0tDRn9est0K6N9NvfbPl8n+vWQKGLuWxLHZ5f5iIFNatAI2l3i97X?=
- =?us-ascii?Q?CYqISwFaLim9CrbLNbrZ8PuX4YKARe91C8vvkDl8l4qfjrmTldMxUHf5yaum?=
- =?us-ascii?Q?V+elizZngL0q8J7nQcTso92SxVStgbP+0O7geTIRxbO7X4HnHkbj6YQXvn5V?=
- =?us-ascii?Q?JZKblC7M76/43grEbxULHeF+DthDa5wa9vg52uYuRELxQcy3mnzUqrDRO9PQ?=
- =?us-ascii?Q?Yywper/vUjxKd2R5q+kxlrPvYkgR56IHd8KrtFaCcGGoOdfJPIBtRUrdoAi6?=
- =?us-ascii?Q?ufO0LQNgueJKFL+ERxfTyjHLVnqsX0360JvHGKKqqVK+Ax3cnuTnrC5U6640?=
- =?us-ascii?Q?wP1VNb4Z7sERWJ250MBQN5fHEg1DMZeD6iP1Q8NW3QQwlcy9nXaSIvm1hKyB?=
- =?us-ascii?Q?Z1CmMp8KQWK5hIm3EWFMmT4S0+OdH50M5S7TJajbgVe7PPMEZRmspFvyu8mr?=
- =?us-ascii?Q?TyrITFPvc4crU2gzP+5UXmWdexS2JJ6AXEm86GtoMniJPMaFRVk8zszlJvGh?=
- =?us-ascii?Q?9xDt35u//aYRDwoTtIHpaRC2fbN8uEh6L92sTpnagIv+xSKnM5qteIrkg6JW?=
- =?us-ascii?Q?KTizp1iwFGbLA6l9OQFvM2fq+gThrkKP8bG3WDPS3So7hyU8Bi8reDRrBXiZ?=
- =?us-ascii?Q?/gNux/FFu4Df/hlo6h8/a0JHD/iQZNob3emhMqN5OyHd4fy5KncLND6LoYVv?=
- =?us-ascii?Q?tDMbk4M3t5dYr76f4HD1ndbpqk7sQbPvCVSkYvmP1+VVgCMCMFfuzs+gGOtC?=
- =?us-ascii?Q?TDyy+dJylblk4XjoqPMahuT7QVYjIJYQOYMU4k0kZ3YtcONPbL0SWPaecZJN?=
- =?us-ascii?Q?botgHIUCl1bzPcR1egxBVan/NGVx2i3Wf4jN7wWduD7JcH4olHzlKgABv/mI?=
- =?us-ascii?Q?SUpmSCWphNTbGpyVh20=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98005229-9b79-4953-5071-08da9fe47e77
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 17:28:15.3204
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /2OiMHqBKhQ++KfWiz4OL2TRcJC2qFFbIU5U24Q0lhQWdXbfy03cp6ALp5xg8Wap
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7029
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 0/3] io_uring: register single issuer task at creation
+Content-Language: en-US
+To:     Dylan Yudaken <dylany@fb.com>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+References: <20220926170927.3309091-1-dylany@fb.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220926170927.3309091-1-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 06:23:30AM +0000, Li Zhijian wrote:
-> Most code in send_ack() and send_atomic_ack() are duplicate, move them
-> to a new helper send_common_ack().
+On 9/26/22 11:09 AM, Dylan Yudaken wrote:
+> Registering the single issuer task from the first submit adds unnecesary
+> complications to the API as well as the implementation. Where simply
+> registering it at creation should not impose any barriers to getting the
+> same performance wins. The only catch is users that might want to move the
+> ring after creation but before submission. For these users allow them to
+> create the ring with IORING_SETUP_R_DISABLED and then enable it on the
+> submission task.
 > 
-> In newer IBA SPEC, some opcodes require acknowledge with a zero-length read
-> response, with this new helper, we can easily implement it later.
+> There is another problem in 6.1, with IORING_SETUP_DEFER_TASKRUN. That
+> would like to check the submitter_task from unlocked contexts, which would
+> be racy. If upfront the submitter_task is set at creation time it will
+> simplify the logic there and probably increase performance (though this is
+> unmeasured).
 > 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_resp.c | 43 ++++++++++++++----------------------
->  1 file changed, 17 insertions(+), 26 deletions(-)
+> Patch 1 registers the task at creation of the io_uring, this works
+> standalone in case you want to only merge this part for 6.0
+> 
+> Patch 2/3 cleans up the code from the old style
 
-Applied to for-next, thanks
+Thanks, I like 1/3 a lot better now. Will provide applications with an
+easy path to use SINGLE_ISSUER, even if they currently setup the ring
+from a different thread/task than they end up using it from.
 
-If someone wants to standardize on rxe_ prefixes in the driver please
-send that as a series
+I've updated the 6.0 and 6.1 repos to reflect this.
 
-Jason
+-- 
+Jens Axboe
+
+
