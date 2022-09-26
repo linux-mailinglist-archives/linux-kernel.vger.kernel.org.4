@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA605EA3A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0265E9F1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbiIZLaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S235086AbiIZKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238115AbiIZL3J (ORCPT
+        with ESMTP id S235133AbiIZKRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:29:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F09B6B8C2;
-        Mon, 26 Sep 2022 03:41:40 -0700 (PDT)
+        Mon, 26 Sep 2022 06:17:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCA53F31B;
+        Mon, 26 Sep 2022 03:15:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DCB9B8094C;
-        Mon, 26 Sep 2022 10:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98FFFC433C1;
-        Mon, 26 Sep 2022 10:30:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 043A4B80918;
+        Mon, 26 Sep 2022 10:14:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DFB0C433D7;
+        Mon, 26 Sep 2022 10:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188205;
-        bh=W42rv9TgKqFk/X1IRVLQNs5Abq9CxDCZM/dMSrCtGTs=;
+        s=korg; t=1664187296;
+        bh=lxvNlYhAytKwxZp4jMyRmt1FmbsAxMgDwEsNjVDEVwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ABhHkhvRlUB4RVfUMFjrnxZZ+BgQDaBETRxGVvFEKszWbJaw1QgyzMFjS5Enxcr3S
-         PvBcmYOMt7HwISDtC52w10Ik6E37TxKZ12m++dN3Q4vnvR81f3wzZ8ZiUdPKKGcKf0
-         ZhEXyblerQmeMktSWKGHreIUMZ9VqP2UaAjPQJ6Q=
+        b=gS5wrcZl/ITiqShZSMX0RdlS4mjelyqQPnuHmHTbQOGJOuH2B6k5XPrmjU4lqJb24
+         pIB9mZSPEQIeByYwyybUwn6bBlSIzNICRj4kQaeKj8m8ObyKhrTz+24WQoJXeCtj2j
+         4qyXmt7vZzKFONvkK7kcDNEvpviNkCNYxWM1SJ34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 074/141] net: core: fix flow symmetric hash
+Subject: [PATCH 4.9 09/30] mips: lantiq: xway: Fix refcount leak bug in sysctrl
 Date:   Mon, 26 Sep 2022 12:11:40 +0200
-Message-Id: <20220926100757.132118114@linuxfoundation.org>
+Message-Id: <20220926100736.491653664@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 64ae13ed478428135cddc2f1113dff162d8112d4 ]
+[ Upstream commit 76695592711ef1e215cc24ed3e1cd857d7fc3098 ]
 
-__flow_hash_consistentify() wrongly swaps ipv4 addresses in few cases.
-This function is indirectly used by __skb_get_hash_symmetric(), which is
-used to fanout packets in AF_PACKET.
-Intrusion detection systems may be impacted by this issue.
+In ltq_soc_init(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-__flow_hash_consistentify() computes the addresses difference then swaps
-them if the difference is negative. In few cases src - dst and dst - src
-are both negative.
-
-The following snippet mimics __flow_hash_consistentify():
-
-```
- #include <stdio.h>
- #include <stdint.h>
-
- int main(int argc, char** argv) {
-
-     int diffs_d, diffd_s;
-     uint32_t dst  = 0xb225a8c0; /* 178.37.168.192 --> 192.168.37.178 */
-     uint32_t src  = 0x3225a8c0; /*  50.37.168.192 --> 192.168.37.50  */
-     uint32_t dst2 = 0x3325a8c0; /*  51.37.168.192 --> 192.168.37.51  */
-
-     diffs_d = src - dst;
-     diffd_s = dst - src;
-
-     printf("src:%08x dst:%08x, diff(s-d)=%d(0x%x) diff(d-s)=%d(0x%x)\n",
-             src, dst, diffs_d, diffs_d, diffd_s, diffd_s);
-
-     diffs_d = src - dst2;
-     diffd_s = dst2 - src;
-
-     printf("src:%08x dst:%08x, diff(s-d)=%d(0x%x) diff(d-s)=%d(0x%x)\n",
-             src, dst2, diffs_d, diffs_d, diffd_s, diffd_s);
-
-     return 0;
- }
-```
-
-Results:
-
-src:3225a8c0 dst:b225a8c0, \
-    diff(s-d)=-2147483648(0x80000000) \
-    diff(d-s)=-2147483648(0x80000000)
-
-src:3225a8c0 dst:3325a8c0, \
-    diff(s-d)=-16777216(0xff000000) \
-    diff(d-s)=16777216(0x1000000)
-
-In the first case the addresses differences are always < 0, therefore
-__flow_hash_consistentify() always swaps, thus dst->src and src->dst
-packets have differents hashes.
-
-Fixes: c3f8324188fa8 ("net: Add full IPv6 addresses to flow_keys")
-Signed-off-by: Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/flow_dissector.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/mips/lantiq/xway/sysctrl.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index aad311c73810..ed120828c7e2 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -1494,9 +1494,8 @@ static inline void __flow_hash_consistentify(struct flow_keys *keys)
+diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
+index dd7c36a193e3..6891456a7603 100644
+--- a/arch/mips/lantiq/xway/sysctrl.c
++++ b/arch/mips/lantiq/xway/sysctrl.c
+@@ -457,6 +457,10 @@ void __init ltq_soc_init(void)
+ 			of_address_to_resource(np_ebu, 0, &res_ebu))
+ 		panic("Failed to get core resources");
  
- 	switch (keys->control.addr_type) {
- 	case FLOW_DISSECTOR_KEY_IPV4_ADDRS:
--		addr_diff = (__force u32)keys->addrs.v4addrs.dst -
--			    (__force u32)keys->addrs.v4addrs.src;
--		if (addr_diff < 0)
-+		if ((__force u32)keys->addrs.v4addrs.dst <
-+		    (__force u32)keys->addrs.v4addrs.src)
- 			swap(keys->addrs.v4addrs.src, keys->addrs.v4addrs.dst);
- 
- 		if ((__force u16)keys->ports.dst <
++	of_node_put(np_pmu);
++	of_node_put(np_cgu);
++	of_node_put(np_ebu);
++
+ 	if (!request_mem_region(res_pmu.start, resource_size(&res_pmu),
+ 				res_pmu.name) ||
+ 		!request_mem_region(res_cgu.start, resource_size(&res_cgu),
 -- 
 2.35.1
 
