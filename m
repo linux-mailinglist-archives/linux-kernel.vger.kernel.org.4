@@ -2,118 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898ED5E9C20
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF79E5E9C21
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbiIZIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S234426AbiIZIfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234176AbiIZIfV (ORCPT
+        with ESMTP id S234176AbiIZIf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:35:21 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7513DD8;
-        Mon, 26 Sep 2022 01:35:19 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28Q8YCkJ085089
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Mon, 26 Sep 2022 16:34:12 +0800 (CST)
-        (envelope-from Xuewen.Yan@unisoc.com)
-Received: from BJ10918PCW.spreadtrum.com (10.0.74.50) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 26 Sep 2022 16:34:12 +0800
-From:   Xuewen Yan <xuewen.yan@unisoc.com>
-To:     <viresh.kumar@linaro.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <rafael@kernel.org>, <di.shen@unisoc.com>
-Subject: [PATCH v2] cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
-Date:   Mon, 26 Sep 2022 16:34:05 +0800
-Message-ID: <20220926083405.7801-1-xuewen.yan@unisoc.com>
+        Mon, 26 Sep 2022 04:35:26 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90BF1F610
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:35:23 -0700 (PDT)
+X-UUID: 7c989252f1b84f3abc83e64f1216eebd-20220926
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9RTTGBKw/m3J4ZPg/V/vQYrAez3B1A8ypKk7tRv9tWo=;
+        b=uO84daE4Z07soC8kYHQd+gvery2NxMjKw+aUaxsQi3yAhUg32Zu39gRsRlAVkorqcFcTKNXa3rXrVoyUe3kNkQDnedRpweRdTZT8tF9pHhTwm+X7T0tVDviVcq2r0ohtEudCxxTu7hq7Ro/Y/hka8tV4+V2alA6RJqcWghls+uA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:a804792a-e548-4941-9486-49c5654653df,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:55723ae4-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7c989252f1b84f3abc83e64f1216eebd-20220926
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 270148117; Mon, 26 Sep 2022 16:35:16 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 26 Sep 2022 16:35:14 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 26 Sep 2022 16:35:14 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: [PATCH] mailbox: mtk-cmdq: fix gce timeout issue
+Date:   Mon, 26 Sep 2022 16:35:11 +0800
+Message-ID: <20220926083511.3382-1-yongqiang.niu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926055130.yr67653e52vyuutv@vireshk-i7>
-References: <20220926055130.yr67653e52vyuutv@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.74.50]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 28Q8YCkJ085089
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before update thermal pressure, the max cpufreq should be limited.
-Add QOS control for Lmh throttle cpufreq.
+1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
+and disable gce ddr enable when gce work job done
+2. split cmdq clk enable/disable api, and control gce ddr enable/disable
+in clk enable/disable function to make sure it could protect when cmdq
+is multiple used by display and mdp
 
-Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
----
-v1->v2:
-	reabse to cpufreq/arm/linux-next;
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+this is only for some SOC which has flag "control_by_sw".
+for this kind of gce, there is a handshake flow between gce and ddr
+hardware,
+if not set ddr enable flag of gce, ddr will fall into idle mode,
+then gce instructions will not process done.
+we need set this flag of gce to tell ddr when gce is idle or busy
+controlled by software flow.
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index bb32659820ce..833589bc95e4 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -13,6 +13,7 @@
- #include <linux/of_address.h>
- #include <linux/of_platform.h>
- #include <linux/pm_opp.h>
-+#include <linux/pm_qos.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/units.h>
-@@ -56,6 +57,8 @@ struct qcom_cpufreq_data {
- 	struct cpufreq_policy *policy;
+ddr problem is a special case.
+when test suspend/resume case, gce sometimes will pull ddr, and ddr can
+not go to suspend.
+if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
+as you have referred [1] and [2] (8192 and 8195)
+but for mt8186, the gce is more special, except setting of [1] and [2],
+we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
+when gce working to make sure gce could process all instructions ok.
+this case just need normal bootup, if we not set this, display cmdq
+task will timeout, and chrome homescreen will always black screen.
+
+and with this patch, we have done these test on mt8186:
+1.suspend/resume
+2.boot up to home screen
+3.playback video with youtube.
+
+suspend issue is special gce hardware issue, gce client  driver
+command already process done, but gce still pull ddr.
+
+Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 68 +++++++++++++++++++++++++++---
+ 1 file changed, 63 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 9465f9081515..bd63773b05fd 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -38,6 +38,8 @@
+ #define CMDQ_THR_PRIORITY		0x40
  
- 	bool per_core_dcvs;
-+
-+	struct freq_qos_request throttle_freq_req;
+ #define GCE_GCTL_VALUE			0x48
++#define GCE_CTRL_BY_SW				GENMASK(18, 16)
++#define GCE_DDR_EN				GENMASK(2, 0)
+ 
+ #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
+ #define CMDQ_THR_ENABLED		0x1
+@@ -80,16 +82,60 @@ struct cmdq {
+ 	bool			suspended;
+ 	u8			shift_pa;
+ 	bool			control_by_sw;
++	bool			sw_ddr_en;
+ 	u32			gce_num;
++	atomic_t		usage;
++	spinlock_t		lock;
  };
  
- static unsigned long cpu_hw_rate, xo_rate;
-@@ -321,6 +324,8 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ struct gce_plat {
+ 	u32 thread_nr;
+ 	u8 shift;
+ 	bool control_by_sw;
++	bool sw_ddr_en;
+ 	u32 gce_num;
+ };
  
- 	throttled_freq = freq_hz / HZ_PER_KHZ;
- 
-+	freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
++static s32 cmdq_clk_enable(struct cmdq *cmdq)
++{
++	s32 usage, ret;
++	unsigned long flags;
 +
- 	/* Update thermal pressure (the boost frequencies are accepted) */
- 	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
- 
-@@ -413,6 +418,14 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
- 	if (data->throttle_irq < 0)
- 		return data->throttle_irq;
- 
-+	ret = freq_qos_add_request(&policy->constraints,
-+				   &data->throttle_freq_req, FREQ_QOS_MAX,
-+				   FREQ_QOS_MAX_DEFAULT_VALUE);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
-+		return ret;
++	spin_lock_irqsave(&cmdq->lock, flags);
++
++	usage = atomic_inc_return(&cmdq->usage);
++
++	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
++	if (usage <= 0 || ret < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
++			usage, ret, cmdq->suspended);
++	} else if (usage == 1) {
++		if (cmdq->sw_ddr_en)
++			writel(GCE_DDR_EN + GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
 +	}
 +
- 	data->cancel_throttle = false;
- 	data->policy = policy;
++	spin_unlock_irqrestore(&cmdq->lock, flags);
++
++	return ret;
++}
++
++static void cmdq_clk_disable(struct cmdq *cmdq)
++{
++	s32 usage;
++
++	usage = atomic_dec_return(&cmdq->usage);
++
++	if (usage < 0) {
++		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
++			usage, cmdq->suspended);
++	} else if (usage == 0) {
++		if (cmdq->sw_ddr_en)
++			writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
++	}
++
++	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++}
++
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+@@ -266,7 +312,8 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
  
-@@ -479,6 +492,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
- 	if (data->throttle_irq <= 0)
- 		return;
- 
-+	freq_qos_remove_request(&data->throttle_freq_req);
- 	free_irq(data->throttle_irq, data);
+ 	if (list_empty(&thread->task_busy_list)) {
+ 		cmdq_thread_disable(cmdq, thread);
+-		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++		cmdq_clk_disable(cmdq);
+ 	}
  }
  
+@@ -355,8 +402,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 	task->pkt = pkt;
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+-		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
+-
++		WARN_ON(cmdq_clk_enable(cmdq) < 0);
+ 		/*
+ 		 * The thread reset will clear thread related register to 0,
+ 		 * including pc, end, priority, irq, suspend and enable. Thus
+@@ -428,7 +474,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
+ 	}
+ 
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	cmdq_clk_disable(cmdq);
+ 
+ done:
+ 	/*
+@@ -468,7 +514,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ 
+ 	cmdq_thread_resume(thread);
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++
++	cmdq_clk_disable(cmdq);
+ 
+ out:
+ 	spin_unlock_irqrestore(&thread->chan->lock, flags);
+@@ -543,6 +590,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	cmdq->thread_nr = plat_data->thread_nr;
+ 	cmdq->shift_pa = plat_data->shift;
+ 	cmdq->control_by_sw = plat_data->control_by_sw;
++	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
+ 	cmdq->gce_num = plat_data->gce_num;
+ 	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
+ 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+@@ -615,6 +663,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 
+ 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+ 
++	spin_lock_init(&cmdq->lock);
+ 	cmdq_init(cmdq);
+ 
+ 	return 0;
+@@ -660,9 +709,18 @@ static const struct gce_plat gce_plat_v6 = {
+ 	.gce_num = 2
+ };
+ 
++static const struct gce_plat gce_plat_v7 = {
++	.thread_nr = 24,
++	.shift = 3,
++	.control_by_sw = true,
++	.sw_ddr_en = true,
++	.gce_num = 1
++};
++
+ static const struct of_device_id cmdq_of_ids[] = {
+ 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
+ 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
++	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
+ 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
+ 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
+ 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
 -- 
 2.25.1
 
