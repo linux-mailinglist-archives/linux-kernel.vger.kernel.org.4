@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EDB5EA1A1
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEDF5EA1A2
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236855AbiIZKxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S236864AbiIZKxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbiIZKuh (ORCPT
+        with ESMTP id S236585AbiIZKux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:50:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB98D59247;
-        Mon, 26 Sep 2022 03:27:31 -0700 (PDT)
+        Mon, 26 Sep 2022 06:50:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918EA5925E;
+        Mon, 26 Sep 2022 03:27:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A535B80925;
-        Mon, 26 Sep 2022 10:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E64C43140;
-        Mon, 26 Sep 2022 10:27:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 447A0609FB;
+        Mon, 26 Sep 2022 10:27:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503F0C433C1;
+        Mon, 26 Sep 2022 10:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188047;
-        bh=jgs2rmYeQfS+qB9Xe0Qgv74qghQsrxHN7MKy+rPReOo=;
+        s=korg; t=1664188050;
+        bh=LdqUkDwiVByAfptd8Zpgf3tQs+tvoNgQfJBpzOXPdCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pxYVYi9Uvrv6YbpGOYZDnfWx0TP/nzRBmlGSS+xTiDO+Re3BPdXs+7wyQVOZss3Ag
-         adYV80LYkkxVZJK6HhC64gsn2WRPo7GlRRse3BotJV0jz3ucJDgYp0/AeZWtf/3Evb
-         jEKBSbCuXIqsjdscMTwoxT8iHZxPiJS4GpiU4u6g=
+        b=c1oi7HUxhHnbmwWCqJONiwb7KEqiXfDWFstk3Up2d3er0lwy3H9tXLLwQFkMWokwR
+         a8xSirOi7/vJiUPLi87oPvW96n4w/MVGvi7YmHNe7RMoo9oHCAL4+fmeZru+5/Ninh
+         fX8+ux/tCUMwtH5ECU+wCPeZLm0sNRwq+stPFTfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Utkarsh Patel <utkarsh.h.patel@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 006/141] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor Lake IOM device
-Date:   Mon, 26 Sep 2022 12:10:32 +0200
-Message-Id: <20220926100754.854707566@linuxfoundation.org>
+Subject: [PATCH 5.10 007/141] usb: dwc3: gadget: Avoid starting DWC3 gadget during UDC unbind
+Date:   Mon, 26 Sep 2022 12:10:33 +0200
+Message-Id: <20220926100754.882378786@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
 References: <20220926100754.639112000@linuxfoundation.org>
@@ -54,68 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Utkarsh Patel <utkarsh.h.patel@intel.com>
+From: Wesley Cheng <wcheng@codeaurora.org>
 
-[ Upstream commit 1b1b672cc1d4fb3065dac79efb8901bd6244ef69 ]
+[ Upstream commit 8217f07a50236779880f13e87f99224cd9117f83 ]
 
-This adds the necessary ACPI ID for Intel Meteor Lake
-IOM devices.
+There is a race present where the DWC3 runtime resume runs in parallel
+to the UDC unbind sequence.  This will eventually lead to a possible
+scenario where we are enabling the run/stop bit, without a valid
+composition defined.
 
-The callback function is_memory() is modified so that it
-also checks if the resource descriptor passed to it is a
-memory type "Address Space Resource Descriptor".
+Thread#1 (handling UDC unbind):
+usb_gadget_remove_driver()
+-->usb_gadget_disconnect()
+  -->dwc3_gadget_pullup(0)
+--> continue UDC unbind sequence
+-->Thread#2 is running in parallel here
 
-On Intel Meteor Lake the ACPI memory resource is not
-described using the "32-bit Memory Range Descriptor" because
-the memory is outside of the 32-bit address space. The
-memory resource is described using the "Address Space
-Resource Descriptor" instead.
+Thread#2 (handing next cable connect)
+__dwc3_set_mode()
+  -->pm_runtime_get_sync()
+    -->dwc3_gadget_resume()
+      -->dwc->gadget_driver is NOT NULL yet
+      -->dwc3_gadget_run_stop(1)
+      --> _dwc3gadget_start()
+...
 
-Intel Meteor Lake is the first platform to describe the
-memory resource for this device with Address Space Resource
-Descriptor, but it most likely will not be the last.
-Therefore the change to the is_memory() callback function
-is made generic.
+Fix this by tracking the pullup disable routine, and avoiding resuming
+of the DWC3 gadget.  Once the UDC is re-binded, that will trigger the
+pullup enable routine, which would handle enabling the DWC3 gadget.
 
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-Cc: stable@vger.kernel.org
-[ heikki: Rewrote the commit message. ]
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220816101629.69054-2-heikki.krogerus@linux.intel.com
+Acked-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+Link: https://lore.kernel.org/r/20210917021852.2037-1-wcheng@codeaurora.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/core.h   | 2 ++
+ drivers/usb/dwc3/gadget.c | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index ea1333ad4b2b..80daa70e288b 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -541,9 +541,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 79e1b82e5e05..1cb1601a6d98 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1010,6 +1010,7 @@ struct dwc3_scratchpad_array {
+  * @tx_max_burst_prd: max periodic ESS transmit burst size
+  * @hsphy_interface: "utmi" or "ulpi"
+  * @connected: true when we're connected to a host, false otherwise
++ * @softconnect: true when gadget connect is called, false when disconnect runs
+  * @delayed_status: true when gadget driver asks for delayed status
+  * @ep0_bounced: true when we used bounce buffer
+  * @ep0_expect_in: true when we expect a DATA IN transfer
+@@ -1218,6 +1219,7 @@ struct dwc3 {
+ 	const char		*hsphy_interface;
  
- static int is_memory(struct acpi_resource *res, void *data)
+ 	unsigned		connected:1;
++	unsigned		softconnect:1;
+ 	unsigned		delayed_status:1;
+ 	unsigned		ep0_bounced:1;
+ 	unsigned		ep0_expect_in:1;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a2a10c05ef3f..85a0159f12ec 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2127,7 +2127,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	int			ret;
+ 
+ 	is_on = !!is_on;
+-
++	dwc->softconnect = is_on;
+ 	/*
+ 	 * Per databook, when we want to stop the gadget, if a control transfer
+ 	 * is still in process, complete it and get the core into setup phase.
+@@ -4048,7 +4048,7 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
  {
--	struct resource r;
-+	struct resource_win win = {};
-+	struct resource *r = &win.res;
+ 	int			ret;
  
--	return !acpi_dev_resource_memory(res, &r);
-+	return !(acpi_dev_resource_memory(res, r) ||
-+		 acpi_dev_resource_address_space(res, &win));
- }
+-	if (!dwc->gadget_driver)
++	if (!dwc->gadget_driver || !dwc->softconnect)
+ 		return 0;
  
- /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
-@@ -553,6 +555,9 @@ static const struct acpi_device_id iom_acpi_ids[] = {
- 
- 	/* AlderLake */
- 	{ "INTC1079", 0x160, },
-+
-+	/* Meteor Lake */
-+	{ "INTC107A", 0x160, },
- 	{}
- };
- 
+ 	ret = __dwc3_gadget_start(dwc);
 -- 
 2.35.1
 
