@@ -2,83 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3E85EB278
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74405EB285
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiIZUm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S230456AbiIZUoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiIZUmR (ORCPT
+        with ESMTP id S229458AbiIZUnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:42:17 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5DCAB4EC;
-        Mon, 26 Sep 2022 13:42:05 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id e24-20020a05683013d800b0065be336b8feso5217499otq.8;
-        Mon, 26 Sep 2022 13:42:05 -0700 (PDT)
+        Mon, 26 Sep 2022 16:43:41 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082FBA99E7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:43:34 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id y10-20020a5d914a000000b00688fa7b2252so4604129ioq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:43:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4n0zzF8za7s/qhUkEAj/8fvq00/7FWulmYmfEXglZkU=;
-        b=DrTyUWwSLjZGM+YbKm2cKwF7uX1YiwETGyrX+Q3KSdpD9dVV7rVn9vxNHwvwc0luRP
-         FBbW79Sg6y8vQgY/SpR5g2YHp8iWA2kZPCcptEy7fWiBjxMJ2bY+yNhjTfU86zMC8vza
-         FY4iAsE9bJbal2k8hLmIpWqjo2QD4oZT5CxEl4SEfAvxWTQHH/kfxCyFJ/N/7fdntSol
-         Q/g2dQu3ogejOsP9c6UgeIsn0pj++TqXdCtx6+V5dDY2d4pRKx761yabmKIl85bSkxGF
-         O7Se3imnXM6ZUJeNws9A7tZvFtfIotOUF3ytctEwk8FY2usfLanO7oxGh9E+X+RzTB9u
-         02sQ==
-X-Gm-Message-State: ACrzQf29WDOoMSd9GPviOW4+GdlA9l+bb2Mr1nw9kTVmflavRjQmhukj
-        eXtrv/noeJpi5ZxhM21unw==
-X-Google-Smtp-Source: AMsMyM7UCa1J9doE98pQ4tKnf1kQISQgMn1NWxPT7w1h9o2BF9PhgS4q1DNLVv1GSX7rFWMl7G+NDA==
-X-Received: by 2002:a05:6830:6b0a:b0:655:f16d:fa4b with SMTP id db10-20020a0568306b0a00b00655f16dfa4bmr11098397otb.164.1664224878723;
-        Mon, 26 Sep 2022 13:41:18 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r65-20020acaf344000000b0034564365bf2sm7607479oih.17.2022.09.26.13.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 13:41:18 -0700 (PDT)
-Received: (nullmailer pid 2773928 invoked by uid 1000);
-        Mon, 26 Sep 2022 20:41:17 -0000
-Date:   Mon, 26 Sep 2022 15:41:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 08/12] dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: add
- bias-bus-hold and input-enable
-Message-ID: <20220926204117.GA2773872-robh@kernel.org>
-References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
- <20220922195651.345369-9-krzysztof.kozlowski@linaro.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=pLjmTXZHmewF4aPdCoGzZY9q6rFdZqeVZI5qsCfnZTI=;
+        b=NV6pptXMcMp1UpwbQ9kiU0pLy7U2rzoVdCO8Sf9uCbt4cSf9SYwo71iDMrFBmCJlW9
+         WxMuuOrBF325mU/cSjbkCIsWDBxD9zFq88QQnYPcJogEMlSvr84JjCu8nvVBPUzIWfpJ
+         A1iqSlkaY5eNba9NyK83SaMNINk99QbqhPpjEyhBoG9d9VoOUSjsJYjtHnfwzn29pGH4
+         rcyY2DltRfEdMaguuYOTehtmOPOShRi/lXHH2xYv6Ib0sXTMqrZmQKHPAv2AnmMVe6O7
+         9tio7Rw6XmQMfxdzw8Gboci+dZbRGUuhyiWVEly0t83VkZBf8AL/+cEwrx3BEXgc9xY3
+         hY7g==
+X-Gm-Message-State: ACrzQf00E060qAJJreaG1kMgOH7MyTwmLEExvedPAjnhARD7AEvOqqUA
+        UpqgJu3zFRahsEPCcP5HqonevSphJhA9zWOXshLpx7KldErn
+X-Google-Smtp-Source: AMsMyM79iVpPKKMbC3Wedw+4aVyC//cIM1fdu8F2pn6fe7d4eDJWdMFZKgAmmr7cRgn6ok9erEArQwRnUNMmClvKfGlsboHhqHQw
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922195651.345369-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:160c:b0:2f1:5fe8:9ab4 with SMTP id
+ t12-20020a056e02160c00b002f15fe89ab4mr11547071ilu.92.1664225013289; Mon, 26
+ Sep 2022 13:43:33 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 13:43:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000be60a305e99a94e0@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in nr_accept
+From:   syzbot <syzbot+831a35e4a5d7058173e2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022 21:56:47 +0200, Krzysztof Kozlowski wrote:
-> The existing SC7280 LPASS pin controller nodes use bias-bus-hold and
-> input-enable, so allow them.  Squash also blank lines for readability.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
+Hello,
 
-Acked-by: Rob Herring <robh@kernel.org>
+syzbot found the following issue on:
+
+HEAD commit:    16c9f284e746 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17555c40880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
+dashboard link: https://syzkaller.appspot.com/bug?extid=831a35e4a5d7058173e2
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fd8978a3a764/disk-16c9f284.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/73ab1c321ad6/vmlinux-16c9f284.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+831a35e4a5d7058173e2@syzkaller.appspotmail.com
+
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 10531 Comm: syz-executor.2 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:979
+ register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1292
+ __lock_acquire+0xa8/0x30a4 kernel/locking/lockdep.c:4932
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
+ lock_sock_nested+0x70/0xd8 net/core/sock.c:3393
+ lock_sock include/net/sock.h:1712 [inline]
+ nr_accept+0x1ac/0x250 net/netrom/af_netrom.c:805
+ do_accept+0x1d8/0x274 net/socket.c:1856
+ __sys_accept4_file net/socket.c:1897 [inline]
+ __sys_accept4+0xb4/0x12c net/socket.c:1927
+ __do_sys_accept net/socket.c:1944 [inline]
+ __se_sys_accept net/socket.c:1941 [inline]
+ __arm64_sys_accept+0x28/0x3c net/socket.c:1941
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190
+Unable to handle kernel paging request at virtual address ffff80000d282a70
+Mem abort info:
+  ESR = 0x0000000096000047
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x07: level 3 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000047
+  CM = 0, WnR = 1
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c567a000
+[ffff80000d282a70] pgd=100000023ffff003, p4d=100000023ffff003, pud=100000023fffe003, pmd=100000023fffa003, pte=0000000000000000
+Internal error: Oops: 0000000096000047 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 10531 Comm: syz-executor.2 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : queued_spin_lock_slowpath+0x198/0x380 kernel/locking/qspinlock.c:474
+lr : queued_spin_lock_slowpath+0x114/0x380 kernel/locking/qspinlock.c:405
+sp : ffff80001703bb80
+x29: ffff80001703bb80 x28: ffff0000d34eb500 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: ffff0001fefd0a40
+x23: 0000000000000000 x22: ffff80000d31cf28 x21: ffff80000d282a40
+x20: 0000000000000000 x19: ffff0000f2785898 x18: 0000000000000000
+x17: 6e69676e45206574 x16: 0000000000000001 x15: 0000000000000000
+x14: 0000000000000000 x13: 000000000000ffff x12: 0000000000000000
+x11: ffff80000d282a70 x10: 0000000000040000 x9 : ffff0001fefd0a48
+x8 : ffff0001fefd0a40 x7 : 545b5d3032343235 x6 : ffff80000b1d2b08
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : ffff80000ce367ff x0 : 0000000000000001
+Call trace:
+ decode_tail kernel/locking/qspinlock.c:131 [inline]
+ queued_spin_lock_slowpath+0x198/0x380 kernel/locking/qspinlock.c:471
+ queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
+ do_raw_spin_lock+0x10c/0x110 kernel/locking/spinlock_debug.c:115
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:127 [inline]
+ _raw_spin_lock_bh+0x5c/0x6c kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:354 [inline]
+ lock_sock_nested+0x88/0xd8 net/core/sock.c:3396
+ lock_sock include/net/sock.h:1712 [inline]
+ nr_accept+0x1ac/0x250 net/netrom/af_netrom.c:805
+ do_accept+0x1d8/0x274 net/socket.c:1856
+ __sys_accept4_file net/socket.c:1897 [inline]
+ __sys_accept4+0xb4/0x12c net/socket.c:1927
+ __do_sys_accept net/socket.c:1944 [inline]
+ __se_sys_accept net/socket.c:1941 [inline]
+ __arm64_sys_accept+0x28/0x3c net/socket.c:1941
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190
+Code: 8b2c4ecc f85f818c 1200056b 8b2b52ab (f82b6988) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	8b2c4ecc 	add	x12, x22, w12, uxtw #3
+   4:	f85f818c 	ldur	x12, [x12, #-8]
+   8:	1200056b 	and	w11, w11, #0x3
+   c:	8b2b52ab 	add	x11, x21, w11, uxtw #4
+* 10:	f82b6988 	str	x8, [x12, x11] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
