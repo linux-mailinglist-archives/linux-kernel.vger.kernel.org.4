@@ -2,206 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D26E5EA93B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4195EA941
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiIZOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S235431AbiIZO4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235260AbiIZOyd (ORCPT
+        with ESMTP id S235375AbiIZOyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:54:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5DD564F3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664198517;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i7qiiLpBZNt2KOcykqgJFQ/WQh3oxgQ6inHkaKhb85Y=;
-        b=Sib5IscLwkCJpCzcQaahJfuUkB+6APQqt7D9cK3QqMhKpRvl9R0sd2E7Vr32vnF54Y6Mqs
-        NRsh1h0qhngx7v85HvPJvlk78oWntcR9BUlf5JofTuS6g/6SPwhMztaV/z4rB94eNtXErY
-        w+xF1y9lcBIFY9wTR68yon9xlbaS+Yw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-274-LPiAXkqcNqKE_URClrdOLQ-1; Mon, 26 Sep 2022 09:21:56 -0400
-X-MC-Unique: LPiAXkqcNqKE_URClrdOLQ-1
-Received: by mail-qt1-f199.google.com with SMTP id i12-20020ac871cc000000b0035ba1b1ba9cso4750845qtp.22
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:21:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=i7qiiLpBZNt2KOcykqgJFQ/WQh3oxgQ6inHkaKhb85Y=;
-        b=cjAVugNP6obEdiKakxp3PChgDA7wx1KkOT2eBwTG3nd85ihJVDxjafjqezMmnDAS3l
-         A0ktWcj3H0RpEsLzg7zv7A+Zl3KZFlda6fuvTJwuuI3bL2dys0mqLCcnEeFZAh4MoE3i
-         lFkNhC+BJ8OpCeotmgBOrnfEus2bPBigFxdQGe8cA3IwDrDvjBB3g9gEp/LKM8zpyA5b
-         tkABGwjsOX8lzwHR6YiBaNl+vwdnhWvejOZzWGH9DW748oyTCCWE8Rj24zKuMPCqkqfa
-         KhzbGSMTmnobIr5baLu/0qRrXSMsJbkoYoEpu1Sy7c00+u3hIIWkWoR8s4M0Vwe/PAju
-         +lqg==
-X-Gm-Message-State: ACrzQf2S7y29xqF3p1nvie0Wk2vGmkW78GPqwD+b27UYRM7tk3gWkkPY
-        cQJ+4IBmdBdt4qXrIhODV5VOl/VJeDOrkolDEtkwx20IwLBb1hwFbGBxEZs/kKvFU9lzEKeSqDb
-        JVX4V67YkN6eQJRZLB9hfkrKw
-X-Received: by 2002:a05:620a:424c:b0:6be:78d5:ec73 with SMTP id w12-20020a05620a424c00b006be78d5ec73mr13912697qko.579.1664198516076;
-        Mon, 26 Sep 2022 06:21:56 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7NrkIGne8y/GZLW9JHXe3yOUbh+JzzdSUUNw9PrzRz4UIl+C1M5V42BCPhQxA5Z5E+K1+G3w==
-X-Received: by 2002:a05:620a:424c:b0:6be:78d5:ec73 with SMTP id w12-20020a05620a424c00b006be78d5ec73mr13912666qko.579.1664198515834;
-        Mon, 26 Sep 2022 06:21:55 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-222.retail.telecomitalia.it. [79.46.200.222])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05620a450e00b006cbcdc6efedsm11986040qkp.41.2022.09.26.06.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 06:21:55 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 15:21:45 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 2/6] vsock: return errors other than -ENOMEM to socket
-Message-ID: <20220926132145.utv2rzswhejhxrvb@sgarzare-redhat>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
+        Mon, 26 Sep 2022 10:54:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C991CF20;
+        Mon, 26 Sep 2022 06:23:42 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QBgH7H004482;
+        Mon, 26 Sep 2022 13:23:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BXQDktYrKtGUar6vOWXfdnJvBogoX7cJRj/tnhLfvcw=;
+ b=b3IwHkEBiMDLI+gPf351+sHVG4SypKBWuIW7+8YHh5M/sOAyO7/wQ1M91jXeVuFx+fpt
+ 4rZlTf+pP10bIIYOIqPMOBlB0Pjw50eg5oo5ED3RrcgOt5UD2c53z5RX8KaJN1oxAKZj
+ 0kA2KfMDOJkrg9G2JixwN95jVS3uVBYOtZ/5Dr/JF74tn4g3kSstlv2236dkyuFvqV4T
+ NYfWRSS1pkllpjsRD90qr15BrgC9PSshJqWlYLzmx2pQt5wmvGo0+cDR18GjsoBsh7Io
+ tG2P15kAsfx1k2jmAVQYI8Sd0LRqSzOkwA13sV0iN4M++ZqOqnX3njlPTwGqOH394kye xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8kh7ewf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:23:17 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28QBjHGC013938;
+        Mon, 26 Sep 2022 13:23:16 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8kh7evr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:23:16 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28QDKYiA019558;
+        Mon, 26 Sep 2022 13:23:14 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3jssh91uc2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:23:14 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28QDNB8n25166108
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 13:23:12 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2413A405B;
+        Mon, 26 Sep 2022 13:23:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E787CA4054;
+        Mon, 26 Sep 2022 13:23:10 +0000 (GMT)
+Received: from [9.171.20.172] (unknown [9.171.20.172])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Sep 2022 13:23:10 +0000 (GMT)
+Message-ID: <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
+Date:   Mon, 26 Sep 2022 15:23:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        Amit Shah <amit@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220822114649.055452969@infradead.org>
+ <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+ <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+ <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
+ <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1K4J_YHr25GzxsqQxq58fOoRuHTWZi-n
+X-Proofpoint-ORIG-GUID: FLDTSIzVXSiDPenHFBzP9F4C2NZkV-k1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209260083
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 10:56:05AM -0700, Bobby Eshleman wrote:
->This commit allows vsock implementations to return errors
->to the socket layer other than -ENOMEM. One immediate effect
->of this is that upon the sk_sndbuf threshold being reached -EAGAIN
->will be returned and userspace may throttle appropriately.
->
->Resultingly, a known issue with uperf is resolved[1].
->
->Additionally, to preserve legacy behavior for non-virtio
->implementations, hyperv/vmci force errors to be -ENOMEM so that behavior
->is unchanged.
->
->[1]: https://gitlab.com/vsock/vsock/-/issues/1
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> include/linux/virtio_vsock.h            | 3 +++
-> net/vmw_vsock/af_vsock.c                | 3 ++-
-> net/vmw_vsock/hyperv_transport.c        | 2 +-
-> net/vmw_vsock/virtio_transport_common.c | 3 ---
-> net/vmw_vsock/vmci_transport.c          | 9 ++++++++-
-> 5 files changed, 14 insertions(+), 6 deletions(-)
->
->diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
->index 17ed01466875..9a37eddbb87a 100644
->--- a/include/linux/virtio_vsock.h
->+++ b/include/linux/virtio_vsock.h
->@@ -8,6 +8,9 @@
-> #include <net/sock.h>
-> #include <net/af_vsock.h>
->
->+/* Threshold for detecting small packets to copy */
->+#define GOOD_COPY_LEN  128
->+
 
-This change seems unrelated.
 
-Please move it in the patch where you need this.
-Maybe it's better to add a prefix if we move it in an header file (e.g.  
-VIRTIO_VSOCK_...).
+Am 26.09.22 um 14:55 schrieb Peter Zijlstra:
 
-Thanks,
-Stefano
+> Could you please test with something like the below on? I can boot that
+> with KVM, but obviously I didn't suffer any weirdness to begin with :/
+> 
+> ---
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 4e6a6417211f..ef9ccfc3a8c0 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4051,6 +4051,8 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+>   	unsigned long flags;
+>   	int cpu, success = 0;
+>   
+> +	WARN_ON_ONCE(state & TASK_FREEZABLE);
+> +
+>   	preempt_disable();
+>   	if (p == current) {
+>   		/*
 
-> enum virtio_vsock_metadata_flags {
-> 	VIRTIO_VSOCK_METADATA_FLAGS_REPLY		= BIT(0),
-> 	VIRTIO_VSOCK_METADATA_FLAGS_TAP_DELIVERED	= BIT(1),
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index e348b2d09eac..1893f8aafa48 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1844,8 +1844,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
-> 			written = transport->stream_enqueue(vsk,
-> 					msg, len - total_written);
-> 		}
->+
-> 		if (written < 0) {
->-			err = -ENOMEM;
->+			err = written;
-> 			goto out_err;
-> 		}
->
->diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
->index fd98229e3db3..e99aea571f6f 100644
->--- a/net/vmw_vsock/hyperv_transport.c
->+++ b/net/vmw_vsock/hyperv_transport.c
->@@ -687,7 +687,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk, struct msghdr *msg,
-> 	if (bytes_written)
-> 		ret = bytes_written;
-> 	kfree(send_buf);
->-	return ret;
->+	return ret < 0 ? -ENOMEM : ret;
-> }
->
-> static s64 hvs_stream_has_data(struct vsock_sock *vsk)
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index 920578597bb9..d5780599fe93 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -23,9 +23,6 @@
-> /* How long to wait for graceful shutdown of a connection */
-> #define VSOCK_CLOSE_TIMEOUT (8 * HZ)
->
->-/* Threshold for detecting small packets to copy */
->-#define GOOD_COPY_LEN  128
->-
-> static const struct virtio_transport *
-> virtio_transport_get_ops(struct vsock_sock *vsk)
-> {
->diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
->index b14f0ed7427b..c927a90dc859 100644
->--- a/net/vmw_vsock/vmci_transport.c
->+++ b/net/vmw_vsock/vmci_transport.c
->@@ -1838,7 +1838,14 @@ static ssize_t vmci_transport_stream_enqueue(
-> 	struct msghdr *msg,
-> 	size_t len)
-> {
->-	return vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
->+	int err;
->+
->+	err = vmci_qpair_enquev(vmci_trans(vsk)->qpair, msg, len, 0);
->+
->+	if (err < 0)
->+		err = -ENOMEM;
->+
->+	return err;
-> }
->
-> static s64 vmci_transport_stream_has_data(struct vsock_sock *vsk)
->-- 
->2.35.1
->
-
+Does not seem to trigger.
