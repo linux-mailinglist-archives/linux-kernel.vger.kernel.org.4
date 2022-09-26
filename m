@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7CE5EB08E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995725EB091
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiIZSxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S231206AbiIZSyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiIZSxB (ORCPT
+        with ESMTP id S229922AbiIZSyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:53:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924AE5A3F2;
-        Mon, 26 Sep 2022 11:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45D95B80C75;
-        Mon, 26 Sep 2022 18:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88184C433D7;
-        Mon, 26 Sep 2022 18:52:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GHUYsDZj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664218372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDXoUOQlmNgJmVAlYuuj5yi+ly/HlT4KdcY9eEm5eBQ=;
-        b=GHUYsDZj+cm4D1n4dLRNKXHPhilooi8feGkJettGK5fiNcs+gvB/Bk72j7l0NqbSLBiqIE
-        WGz+iPEKKUu5kvVQwesBPBXD0LCeILsbUkn6NfW3zsrfC0kr6qVa9YOG68L1MR6iNls7lN
-        Sw9ikwYwNU+FwMx2Vt7HI62m0Cbm3SI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e118ec30 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 26 Sep 2022 18:52:51 +0000 (UTC)
-Received: by mail-vk1-f180.google.com with SMTP id h5so3871624vkc.5;
-        Mon, 26 Sep 2022 11:52:51 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1a8lLyEaWHqIZydOxPGjOAl2daulcUJbnJ9qZdn5xg1NCvzeIL
-        OaOsUl/srNo65rV7l2fl+1k+PixaW4qSD9fEOR4=
-X-Google-Smtp-Source: AMsMyM6MHWzeqHmsiYCOhngqPYdkAndT7nfSLKC6I8G4EtrXNPMgzKjp0w6ATQj2NfFo9A4t0o/eV9+hI7aFbrIf4rg=
-X-Received: by 2002:a1f:1b45:0:b0:3a7:ba13:11ce with SMTP id
- b66-20020a1f1b45000000b003a7ba1311cemr3104747vkb.3.1664218370625; Mon, 26 Sep
- 2022 11:52:50 -0700 (PDT)
+        Mon, 26 Sep 2022 14:54:04 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC4C93226
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:54:02 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bk15so3891614wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=pbuxDw9JDV+xC3TghxOFxO+xNF5PwKD6UdAUdUuq1tU=;
+        b=aFQO843m9k+KYokxy5z9m2T927KOh3X5sXSq8MPTTP+mA34udPnEUdn13LDju3Eca5
+         PYg9EjjHvu0F/eWAxclfahDTGmo6ajSQxTW5aKDGgofOE4BV2AtgVDDLAsxGh/jp8Mx2
+         8R0ZwR655hh/QL0VPhVSCB0jOy+lhwTY+HCYAnAaT1oHWjsBlfwQyp9o0rUl5O/k++Bm
+         9lIVljYOiTp038nnvW7Z+NXF0gYpldUQZXNVatXZVRY0OLsO88DIaieAQE/MX33Jlsb1
+         Bu4iPLhqAejuaUsyvVrAqovXjjdal2scdFNX4sS5uiSWMiyBKzU4CalniHUfS4I4yrdU
+         E9XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=pbuxDw9JDV+xC3TghxOFxO+xNF5PwKD6UdAUdUuq1tU=;
+        b=Bxf0mhgRecdR2AeqEXcfsIF18koogaCHf0mldmHUzC2XpraRjmjzUsjZFZMry/cbEK
+         EXY3/p88trikXFuquenN0mioiH5ylozj8P5xOlBl6bMfrZIXtwY0ed0L7+oUv/dZWvtr
+         F5LEmpewWyUyu+qJzKgN+zw61pP7SpxRNYA92pEnxId+tXOkhe+HAB6RFYyf3QYI9xfa
+         3d4WACoJlAqLeVa/LLSX1BsEw1eHqOMkXG8l8eLGRMXVXzMXUrNASaJCCZN8BCT/DljB
+         bBAYP872/FMFUikeXxY4cY6Z1+5sKZDknO/UqYrgivo2yIw+2GckRJph1Ak17NqHFcXx
+         JpLQ==
+X-Gm-Message-State: ACrzQf2cUa+NiySfRr/2rJazyHJ3PLz9ZH3rY6Q6z7lIICPIrGGs34Bo
+        AwJpoLnPT35T+rRQ4qCg+A==
+X-Google-Smtp-Source: AMsMyM7GjWK99kxe67TGQT3XudVch6STrzUY6P7ZLjqyvKQYWIaCu/JENp+bJheTAJ/uiMsnPHPjyg==
+X-Received: by 2002:a5d:6c62:0:b0:22a:2f59:cb7d with SMTP id r2-20020a5d6c62000000b0022a2f59cb7dmr14410116wrz.405.1664218441374;
+        Mon, 26 Sep 2022 11:54:01 -0700 (PDT)
+Received: from fedora (88-106-97-87.dynamic.dsl.as9105.com. [88.106.97.87])
+        by smtp.gmail.com with ESMTPSA id g16-20020adfe410000000b0022ac13aa98fsm14728910wrm.97.2022.09.26.11.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 11:54:01 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 19:53:59 +0100
+From:   Jules Irenge <jbi.octave@gmail.com>
+To:     jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 6/7] scsi: pm8001: Convert snprintf() to scnprintf()
+Message-ID: <YzH1R4XC3mk/XmUc@fedora>
 MIME-Version: 1.0
-References: <20220926160332.1473462-1-Jason@zx2c4.com> <202209261105.9C6AEEEE1@keescook>
-In-Reply-To: <202209261105.9C6AEEEE1@keescook>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 26 Sep 2022 20:52:39 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pFDzyKJd5ixyB9E05jkZvHShFimbiQsGTcdQO1E5R0QQ@mail.gmail.com>
-Message-ID: <CAHmME9pFDzyKJd5ixyB9E05jkZvHShFimbiQsGTcdQO1E5R0QQ@mail.gmail.com>
-Subject: Re: [PATCH] random: split initialization into early arch step and
- later non-arch step
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +68,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 8:22 PM Kees Cook <keescook@chromium.org> wrote:
-> Can find a way to get efi_get_random_bytes() in here too? (As a separate
-> patch.) I don't see where that actually happens anywhere currently,
-> and we should have it available at this point in the boot, yes?
+Coccinnelle reports a warning
+Warning: Use scnprintf or sprintf
+Adding to that, there has been a slow migration from snprintf to scnprintf.
+This LWN article explains the rationale for this change
+https: //lwn.net/Articles/69419/
+Ie. snprintf() returns what *would* be the resulting length,
+while scnprintf() returns the actual length.
 
-No, absolutely not. That is not how EFI works. EFI gets its seed to
-random.c much earlier by way of add_bootloader_randomness().
+Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+---
+ drivers/scsi/pm8001/pm8001_ctl.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-> > -             entropy[0] = random_get_entropy();
-> > -             _mix_pool_bytes(entropy, sizeof(*entropy));
-> >               arch_bits -= sizeof(*entropy) * 8;
-> >               ++i;
-> >       }
-> > -     _mix_pool_bytes(&now, sizeof(now));
-> > -     _mix_pool_bytes(utsname(), sizeof(*(utsname())));
->
-> Hm, can't we keep utsname in the early half by using init_utsname() ?
+diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+index 73f036bed128..6ebc962036c4 100644
+--- a/drivers/scsi/pm8001/pm8001_ctl.c
++++ b/drivers/scsi/pm8001/pm8001_ctl.c
+@@ -61,7 +61,7 @@ static ssize_t pm8001_ctl_mpi_interface_rev_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return scnprintf(buf, PAGE_SIZE, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm8001_tbl.interface_rev);
+ 	} else {
+ 		return snprintf(buf, PAGE_SIZE, "%d\n",
+@@ -86,7 +86,7 @@ static ssize_t controller_fatal_error_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return scnprintf(buf, PAGE_SIZE, "%d\n",
+ 			pm8001_ha->controller_fatal_error);
+ }
+ static DEVICE_ATTR_RO(controller_fatal_error);
+@@ -107,7 +107,7 @@ static ssize_t pm8001_ctl_fw_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return scnprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 8),
+@@ -138,7 +138,7 @@ static ssize_t pm8001_ctl_ila_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id != chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return scnprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 8),
+@@ -164,7 +164,7 @@ static ssize_t pm8001_ctl_inactive_fw_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id != chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return scnprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 8),
+@@ -191,7 +191,7 @@ static ssize_t pm8001_ctl_max_out_io_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return scnprintf(buf, PAGE_SIZE, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_out_io);
+ 	} else {
+ 		return snprintf(buf, PAGE_SIZE, "%d\n",
+@@ -215,7 +215,7 @@ static ssize_t pm8001_ctl_max_devices_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
++		return scnprintf(buf, PAGE_SIZE, "%04d\n",
+ 			(u16)(pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl >> 16)
+ 			);
+ 	} else {
+@@ -242,7 +242,7 @@ static ssize_t pm8001_ctl_max_sg_list_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
++		return scnprintf(buf, PAGE_SIZE, "%04d\n",
+ 			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl & 0x0000FFFF
+ 			);
+ 	} else {
+@@ -315,7 +315,7 @@ static ssize_t pm8001_ctl_host_sas_address_show(struct device *cdev,
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+-	return snprintf(buf, PAGE_SIZE, "0x%016llx\n",
++	return scnprintf(buf, PAGE_SIZE, "0x%016llx\n",
+ 			be64_to_cpu(*(__be64 *)pm8001_ha->sas_addr));
+ }
+ static DEVICE_ATTR(host_sas_address, S_IRUGO,
+@@ -336,7 +336,7 @@ static ssize_t pm8001_ctl_logging_level_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%08xh\n", pm8001_ha->logging_level);
++	return scnprintf(buf, PAGE_SIZE, "%08xh\n", pm8001_ha->logging_level);
+ }
+ 
+ static ssize_t pm8001_ctl_logging_level_store(struct device *cdev,
+@@ -517,7 +517,7 @@ static ssize_t event_log_size_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return scnprintf(buf, PAGE_SIZE, "%d\n",
+ 		pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size);
+ }
+ static DEVICE_ATTR_RO(event_log_size);
+@@ -604,7 +604,7 @@ static ssize_t non_fatal_count_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%08x",
++	return scnprintf(buf, PAGE_SIZE, "%08x",
+ 			pm8001_ha->non_fatal_count);
+ }
+ 
+@@ -884,7 +884,7 @@ static ssize_t pm8001_show_update_fw(struct device *cdev,
+ 	if (pm8001_ha->fw_status != FLASH_IN_PROGRESS)
+ 		pm8001_ha->fw_status = FLASH_OK;
+ 
+-	return snprintf(buf, PAGE_SIZE, "status=%x %s\n",
++	return scnprintf(buf, PAGE_SIZE, "status=%x %s\n",
+ 			flash_error_table[i].err_code,
+ 			flash_error_table[i].reason);
+ }
+-- 
+2.37.3
 
-Yes, we could maybe *change* to using init_utsname if we wanted. That
-seems kind of different though. So I'd prefer that to be a different
-patch, which would require looking at the interaction with early
-hostname setting and such. If you want to do that work, I'd certainly
-welcome the patch.
-
-> > @@ -976,6 +976,9 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
-> >               parse_args("Setting extra init args", extra_init_args,
-> >                          NULL, 0, -1, -1, NULL, set_init_arg);
-> >
-> > +     /* Call before any memory or allocators are initialized */
->
-> Maybe for greater clarity:
->
->         /* Pre-time-keeping entropy collection before allocator init. */
-
-Will do.
-
->
-> > +     random_init_early(command_line);
-> > +
-> >       /*
-> >        * These use large bootmem allocations and must precede
-> >        * kmem_cache_init()
-> > @@ -1035,17 +1038,13 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
-> >       hrtimers_init();
-> >       softirq_init();
-> >       timekeeping_init();
-> > -     kfence_init();
-> >       time_init();
->
-> Was there a reason kfence_init() was happening before time_init()?
-
-Historically there was, I think, because random_init() used to make
-weird allocations. But that's been gone for a while. At this point
-it's a mistake, and removing it allows me to do this:
-
-https://groups.google.com/g/kasan-dev/c/jhExcSv_Pj4
-
->
-> >
-> > -     /*
-> > -      * For best initial stack canary entropy, prepare it after:
-> > -      * - setup_arch() for any UEFI RNG entropy and boot cmdline access
-> > -      * - timekeeping_init() for ktime entropy used in random_init()
-> > -      * - time_init() for making random_get_entropy() work on some platforms
-> > -      * - random_init() to initialize the RNG from from early entropy sources
-> > -      */
-> > -     random_init(command_line);
-> > +     /* This must be after timekeeping is initialized */
-> > +     random_init();
-> > +
-> > +     /* These make use of the initialized randomness */
->
-> I'd clarify this more:
->
->         /* These make use of the fully initialized randomness entropy. */
-
-Okay will do.
-
-Jason
