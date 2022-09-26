@@ -2,89 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF415EB579
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F7D5EB586
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiIZXTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S230527AbiIZXUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiIZXSw (ORCPT
+        with ESMTP id S231205AbiIZXTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:18:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060CA8324;
-        Mon, 26 Sep 2022 16:18:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AD45ECE13E6;
-        Mon, 26 Sep 2022 23:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEB4C433C1;
-        Mon, 26 Sep 2022 23:18:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664234327;
-        bh=Ve1292BFbx4M8vgKxaCxSGexhyBekTzktp5oNYWPKb8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Nz6cDimDIowy15ehXN7S8a3ttyMPzFNiN/Trx+4htJdmpst2LKfRaOuZiOvoEfnyb
-         cptyIcVD6GrNIzuXUxowzxse3keIKNENcQ5fd64EzwRLHj41l45nuzTG6k+Yaqg/pf
-         szCn1dm5yfeEAowiX0ThMouuWEKoGioh/TG/KGTEUgfIGydYARzBDutyzdQCJ1v8SN
-         jWMyrbIy6tX03qaJYSEg2Ff3/huri6qMKVIe/V5AeZJW/Yd4M2cyyZyssN/HV4d4Py
-         n2tiozKXEuZTTbyx6k0j4/8WusKNYvSmX2QQwulMMmyTdKOqazAsI1AHKlivOIYuoE
-         xWRURrAPjchdQ==
-Date:   Mon, 26 Sep 2022 18:18:42 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] ASoC: uapi: Replace zero-length arrays with
- __DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIzUjUuJKf0mkKg@work>
+        Mon, 26 Sep 2022 19:19:08 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3290D98D0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:18:56 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r62so4051387pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Jo63jB5aNkOmZDxGlU8EM0gFxXH2llzd7sTVLu1lWkc=;
+        b=MIMLv+fnxX3/NujgpjMsljKROeTEsehckMHu/VtUXTQ6lmxDM+4W56RtENRiIpoOcD
+         T9yxqUa9KXPczd7Glb4rMT7AAWsa9huqQDk9pGaDIv4O7F1nDuM2FrxOlFx72i2r3b+4
+         AmI8YMthUGJkG+GKj3Kmtzyk/N+UoybrcC69BgcOfIfoLmrftAxhdEHoFAs/v/E4/oed
+         9yhHs663VNYfrkHDAOWT8Gz8xgkaC0BI76niXWQasZXP07OtqPIgll/tqiyIcCoZW3Af
+         APBufVCyll4LqSP4RQm2XfsaKfwf2afNIMBIvMZhrNISLDgwLBzSsdXJDulcyis1TsCc
+         Y28g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Jo63jB5aNkOmZDxGlU8EM0gFxXH2llzd7sTVLu1lWkc=;
+        b=B/WUPTMFgMRzvojIl/v7ssS9GiwpTkekdRCuBwizxhB/xBf57dLzUnXMxEgHqRMCjV
+         r9dijiK/zDnvB2lSsJNxtRmosQ2mq10clxzKl571nOVcfIMt5kXCcY/k1b3KrdOX0jcm
+         e7UD3CdxpE6bpJu2eM8Qu8esdbJVKoRiQtyl5MVSTf1rT4mxWNrScOEM172EP+4g5wX1
+         n0M0gYsloDobrKPxaIMFr+Zzk55M6A2/MJWrP4sYS6QzX+wsowUcWj4edb8rAYbeti5n
+         7a2gjCSmyxqSSCrcl/EW2OcCrCwhXRQZ4XNed6k9PAObakMFYIb1kOyf3yIcarRAq/lV
+         u6FQ==
+X-Gm-Message-State: ACrzQf2xwjZ01pDBEl9QKTGoQBrKw+wkh1KsiL9YqcK+UgYq05mOV2EE
+        Yl3yV/heFFQNcM974jTndCgld7sYkpq1LI4bU13DtQ==
+X-Google-Smtp-Source: AMsMyM4S/0VFRIw7ZIAOSmkH/RM0a/mtR2soWIHzWpFEX/5z9uplwlebgbwcSlX90m2tOtR4FyMLzIYefOcWWrlEd3g=
+X-Received: by 2002:a63:b4f:0:b0:439:cc64:50e6 with SMTP id
+ a15-20020a630b4f000000b00439cc6450e6mr21426874pgl.483.1664234336144; Mon, 26
+ Sep 2022 16:18:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-3-vannapurve@google.com> <Yyt5MHc1bwPfvBq/@google.com>
+In-Reply-To: <Yyt5MHc1bwPfvBq/@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 26 Sep 2022 16:18:45 -0700
+Message-ID: <CAGtprH_BMgeLX14f8J+rmKBtOFs12GY+egGBPW7Un41oDAfcoA@mail.gmail.com>
+Subject: Re: [V2 PATCH 2/8] KVM: selftests: Add arch specific initialization
+To:     David Matlack <dmatlack@google.com>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oupton@google.com>, peterx@redhat.com,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated and we are moving towards adopting
-C99 flexible-array members, instead. So, replace zero-length arrays
-declarations in anonymous union with the new __DECLARE_FLEX_ARRAY()
-helper macro.
+On Wed, Sep 21, 2022 at 1:51 PM David Matlack <dmatlack@google.com> wrote:
+>
+> On Thu, Sep 15, 2022 at 12:04:42AM +0000, Vishal Annapurve wrote:
+> > Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
+> > handle initialization before running any selftest logic.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
+> >  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
+> >  tools/testing/selftests/kvm/lib/kvm_util.c     |  2 ++
+> >  .../selftests/kvm/lib/riscv/processor.c        |  4 ++++
+> >  .../selftests/kvm/lib/s390x/processor.c        |  4 ++++
+> >  .../selftests/kvm/lib/x86_64/processor.c       |  4 ++++
+> >  6 files changed, 28 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index 24fde97f6121..98edbbda9f97 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -834,4 +834,9 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+> >       return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
+> >  }
+> >
+> > +/*
+> > + * API to execute architecture specific setup before executing selftest logic.
+>
+> nit: s/before executing selftest logic/before main()/
+>
 
-This helper allows for flexible-array members in unions.
+Ack, will fix this in the next series.
 
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/227
-Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- include/uapi/sound/asoc.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> ("selftest logic" is vague)
+>
+> > + */
+> > +void kvm_selftest_arch_init(void);
+> > +
+> >  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > index 6f5551368944..2281d6c5d02f 100644
+> > --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > @@ -495,15 +495,6 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
+> >       close(kvm_fd);
+> >  }
+> >
+> > -/*
+> > - * arm64 doesn't have a true default mode, so start by computing the
+> > - * available IPA space and page sizes early.
+> > - */
+> > -void __attribute__((constructor)) init_guest_modes(void)
+> > -{
+> > -       guest_modes_append_default();
+> > -}
+> > -
+> >  void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+> >              uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
+> >              uint64_t arg6, struct arm_smccc_res *res)
+> > @@ -528,3 +519,12 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+> >                      [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
+> >                    : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
+> >  }
+> > +
+> > +/*
+> > + * arm64 doesn't have a true default mode, so start by computing the
+> > + * available IPA space and page sizes early.
+> > + */
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +     guest_modes_append_default();
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index 3c83838999f5..dafe4471a6c7 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -1984,4 +1984,6 @@ void __attribute((constructor)) kvm_selftest_init(void)
+> >  {
+> >       /* Tell stdout not to buffer its content. */
+> >       setbuf(stdout, NULL);
+> > +
+> > +     kvm_selftest_arch_init();
+> >  }
+>
+> Suggest defining a default no-op implementation of
+> kvm_selftest_arch_init() using __weak since most architectures do not
+> actually need an implementation.
+>
 
-diff --git a/include/uapi/sound/asoc.h b/include/uapi/sound/asoc.h
-index 053949287ce8..dd8ad790fc15 100644
---- a/include/uapi/sound/asoc.h
-+++ b/include/uapi/sound/asoc.h
-@@ -226,9 +226,9 @@ struct snd_soc_tplg_vendor_array {
- 	__le32 type;	/* SND_SOC_TPLG_TUPLE_TYPE_ */
- 	__le32 num_elems;	/* number of elements in array */
- 	union {
--		struct snd_soc_tplg_vendor_uuid_elem uuid[0];
--		struct snd_soc_tplg_vendor_value_elem value[0];
--		struct snd_soc_tplg_vendor_string_elem string[0];
-+		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_uuid_elem, uuid);
-+		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_value_elem, value);
-+		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_string_elem, string);
- 	};
- } __attribute__((packed));
- 
--- 
-2.34.1
+Ack, will update this in the next series.
 
+> > ...
+> >
