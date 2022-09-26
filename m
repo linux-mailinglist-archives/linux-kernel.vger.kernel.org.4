@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536775EA0C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EA25E9F48
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbiIZKlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S235315AbiIZKWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236608AbiIZKjq (ORCPT
+        with ESMTP id S235087AbiIZKVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50E3543C7;
-        Mon, 26 Sep 2022 03:23:54 -0700 (PDT)
+        Mon, 26 Sep 2022 06:21:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7E24BD09;
+        Mon, 26 Sep 2022 03:16:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BBD6B80682;
-        Mon, 26 Sep 2022 10:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555E5C433D7;
-        Mon, 26 Sep 2022 10:23:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4982B80925;
+        Mon, 26 Sep 2022 10:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2FEC433C1;
+        Mon, 26 Sep 2022 10:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187782;
-        bh=rGqqQmKZ+hBQnAZKtXxSq6w/2dvaCU5FzgOVx500toY=;
+        s=korg; t=1664187367;
+        bh=wBpXxC/J+OZ9Wga4TEXzHz6P8hWN5+kZEONleeXmSTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1AYfWtvZYKPuurYDTvAGmTr36hyYLkV5rW/TTbHaU26iPteyCGuMM4DV/0ZUotKk
-         hSJYNVGGDqWqKUUl2VWmRgTgrDpfTUBf6fE6BewTfveObfnhdJ7EgdmMHtIKOfc7V5
-         ijwcmc0yr7R2iLuF7wmpTPBCd271iMGx9Tly3pGA=
+        b=XEW4a5gs1okg4r15PvinxHR8bRzp9vQ+g/vLF/Ym01W6F4qGqwzj1SAoKLiUSVXYE
+         +qyhvJ8QJ0PFNK+a10fA7+lIZx1ffWdSqnR9TQFzOXpLjD5VSRVySI9nnezPZseIfE
+         xx9mHFC9UaOoUQI6eDXQXCGfjNDROouj+LPPc0qU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 058/120] ALSA: hda/realtek: Add quirk for Huawei WRT-WX9
-Date:   Mon, 26 Sep 2022 12:11:31 +0200
-Message-Id: <20220926100752.937031071@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 04/40] parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+Date:   Mon, 26 Sep 2022 12:11:32 +0200
+Message-Id: <20220926100738.380351889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,30 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huangwenhui <huangwenhuia@uniontech.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit cbcdf8c4d35cd74aee8581eb2f0453e0ecab7b05 upstream.
+[ Upstream commit 38238be4e881a5d0abbe4872b4cd6ed790be06c8 ]
 
-Fixes headphone and headset microphone detection on Huawei WRT-WX9.
+Add missing iounmap() before return from ccio_probe(), if ccio_init_resources()
+fails.
 
-Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220913054622.15979-1-huangwenhuia@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d46c742f827f ("parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
+ drivers/parisc/ccio-dma.c | 1 +
  1 file changed, 1 insertion(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8425,6 +8425,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x511f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
- 	SND_PCI_QUIRK(0x17aa, 0x9e54, "LENOVO NB", ALC269_FIXUP_LENOVO_EAPD),
- 	SND_PCI_QUIRK(0x19e5, 0x3204, "Huawei MACH-WX9", ALC256_FIXUP_HUAWEI_MACH_WX9_PINS),
-+	SND_PCI_QUIRK(0x19e5, 0x320f, "Huawei WRT-WX9 ", ALC256_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1b35, 0x1235, "CZC B20", ALC269_FIXUP_CZC_B20),
- 	SND_PCI_QUIRK(0x1b35, 0x1236, "CZC TMI", ALC269_FIXUP_CZC_TMI),
- 	SND_PCI_QUIRK(0x1b35, 0x1237, "CZC L101", ALC269_FIXUP_CZC_L101),
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index cc23b30337c1..afae74a99df1 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -1581,6 +1581,7 @@ static int __init ccio_probe(struct parisc_device *dev)
+ 	}
+ 	ccio_ioc_init(ioc);
+ 	if (ccio_init_resources(ioc)) {
++		iounmap(ioc->ioc_regs);
+ 		kfree(ioc);
+ 		return -ENOMEM;
+ 	}
+-- 
+2.35.1
+
 
 
