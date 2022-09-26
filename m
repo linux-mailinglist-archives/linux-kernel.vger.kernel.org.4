@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F785EA040
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE1E5EA316
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiIZKff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S237640AbiIZLTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbiIZKdU (ORCPT
+        with ESMTP id S234376AbiIZLSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DBB24089;
-        Mon, 26 Sep 2022 03:20:21 -0700 (PDT)
+        Mon, 26 Sep 2022 07:18:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C766610D;
+        Mon, 26 Sep 2022 03:38:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AB4DB80930;
-        Mon, 26 Sep 2022 10:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95135C433C1;
-        Mon, 26 Sep 2022 10:20:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F325A60BB7;
+        Mon, 26 Sep 2022 10:31:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B105C433C1;
+        Mon, 26 Sep 2022 10:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187606;
-        bh=Xl9DQuwvvXNb/6SB5ZGg1HtsmmbR8/7Nu6p+aHx3wMs=;
+        s=korg; t=1664188304;
+        bh=gvkZWypXOh4rePqQv6nflT5PDiq3Lx826yWj1qul/5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZXRhdJlt3uqLuU90g0y4ZWkZc5xdl3FsHe/nRLKvUdJ+gROLh2Srhfl1CBxWTOyOL
-         6ConAUsfZE4ZsNIrdsd7BNbDN5u5g/6dw4eHehrBoJMszOBd5TJoAGgIfzI6mEb6s/
-         YyPMS4b+gvWhCvgjkaXpb5cjIm/u69i3PWLasOSI=
+        b=NnWgKIXD8NkX5xq6s4w4asWUT9JVDMC9zWUG08elYL/xKd5+U/T7ixAZh0kkA2LzK
+         RJu6d/T5985tKarYTlRY+tl1UO+YdJnHPhf1VCxe7bhEUJXQ6ddzm4LxqPWNwHDN1K
+         P46Bm7GDZMp+B4U1OCBR6Suzaw7841qK97kLd4OI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 53/58] Drivers: hv: Never allocate anything besides framebuffer from framebuffer memory region
+        stable@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 106/141] netfilter: nf_tables: fix percpu memory leak at nf_tables_addchain()
 Date:   Mon, 26 Sep 2022 12:12:12 +0200
-Message-Id: <20220926100743.414849782@linuxfoundation.org>
+Message-Id: <20220926100758.282294291@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,98 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit f0880e2cb7e1f8039a048fdd01ce45ab77247221 ]
+[ Upstream commit 9a4d6dd554b86e65581ef6b6638a39ae079b17ac ]
 
-Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
-DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
+It seems to me that percpu memory for chain stats started leaking since
+commit 3bc158f8d0330f0a ("netfilter: nf_tables: map basechain priority to
+hardware priority") when nft_chain_offload_priority() returned an error.
 
-$ cat /proc/iomem
-...
-f8000000-fffbffff : PCI Bus 0000:00
-  f8000000-fbffffff : 0000:00:08.0
-    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
-...
-fe0000000-fffffffff : PCI Bus 0000:00
-  fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
-    fe0000000-fe07fffff : 2ba2:00:02.0
-      fe0000000-fe07fffff : mlx4_core
-
-the interesting part is the 'f8000000' region as it is actually the
-VM's framebuffer:
-
-$ lspci -v
-...
-0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA (prog-if 00 [VGA controller])
-	Flags: bus master, fast devsel, latency 0, IRQ 11
-	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
-...
-
- hv_vmbus: registering driver hyperv_drm
- hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Synthvid Version major 3, minor 5
- hyperv_drm 0000:00:08.0: vgaarb: deactivate vga console
- hyperv_drm 0000:00:08.0: BAR 0: can't reserve [mem 0xf8000000-0xfbffffff]
- hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Cannot request framebuffer, boot fb still active?
-
-Note: "Cannot request framebuffer" is not a fatal error in
-hyperv_setup_gen1() as the code assumes there's some other framebuffer
-device there but we actually have some other PCI device (mlx4 in this
-case) config space there!
-
-The problem appears to be that vmbus_allocate_mmio() can use dedicated
-framebuffer region to serve any MMIO request from any device. The
-semantics one might assume of a parameter named "fb_overlap_ok"
-aren't implemented because !fb_overlap_ok essentially has no effect.
-The existing semantics are really "prefer_fb_overlap". This patch
-implements the expected and needed semantics, which is to not allocate
-from the frame buffer space when !fb_overlap_ok.
-
-Note, Gen2 VMs are usually unaffected by the issue because
-framebuffer region is already taken by EFI fb (in case kernel supports
-it) but Gen1 VMs may have this region unclaimed by the time Hyper-V PCI
-pass-through driver tries allocating MMIO space if Hyper-V DRM/FB drivers
-load after it. Devices can be brought up in any sequence so let's
-resolve the issue by always ignoring 'fb_mmio' region for non-FB
-requests, even if the region is unclaimed.
-
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Link: https://lore.kernel.org/r/20220827130345.1320254-4-vkuznets@redhat.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 3bc158f8d0330f0a ("netfilter: nf_tables: map basechain priority to hardware priority")
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/vmbus_drv.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ net/netfilter/nf_tables_api.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index fca092cfe200..9cbe0b00ebf7 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1846,7 +1846,7 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
- 			bool fb_overlap_ok)
- {
- 	struct resource *iter, *shadow;
--	resource_size_t range_min, range_max, start;
-+	resource_size_t range_min, range_max, start, end;
- 	const char *dev_n = dev_name(&device_obj->device);
- 	int retval;
- 
-@@ -1881,6 +1881,14 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
- 		range_max = iter->end;
- 		start = (range_min + align - 1) & ~(align - 1);
- 		for (; start + size - 1 <= range_max; start += align) {
-+			end = start + size - 1;
-+
-+			/* Skip the whole fb_mmio region if not fb_overlap_ok */
-+			if (!fb_overlap_ok && fb_mmio &&
-+			    (((start >= fb_mmio->start) && (start <= fb_mmio->end)) ||
-+			     ((end >= fb_mmio->start) && (end <= fb_mmio->end))))
-+				continue;
-+
- 			shadow = __request_region(iter, start, size, NULL,
- 						  IORESOURCE_BUSY);
- 			if (!shadow)
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index d65c47bcbfc9..810995d712ac 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2045,6 +2045,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+ 		if (err < 0) {
+ 			nft_chain_release_hook(&hook);
+ 			kfree(basechain);
++			free_percpu(stats);
+ 			return err;
+ 		}
+ 		if (stats)
 -- 
 2.35.1
 
