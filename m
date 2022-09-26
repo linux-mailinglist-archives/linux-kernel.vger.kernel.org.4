@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12035EA478
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA4C5EA069
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238622AbiIZLqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S236106AbiIZKhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238480AbiIZLn3 (ORCPT
+        with ESMTP id S236366AbiIZKe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:43:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D664672B79;
-        Mon, 26 Sep 2022 03:46:23 -0700 (PDT)
+        Mon, 26 Sep 2022 06:34:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33903474EB;
+        Mon, 26 Sep 2022 03:21:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AC8760B4A;
-        Mon, 26 Sep 2022 10:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE46EC433D6;
-        Mon, 26 Sep 2022 10:46:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EF3A5CE10E0;
+        Mon, 26 Sep 2022 10:21:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEAA4C433D6;
+        Mon, 26 Sep 2022 10:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189183;
-        bh=yoFcUTeYEhvPl4lSixwPxNGPlFeykb4pDJGSGYoKqQA=;
+        s=korg; t=1664187683;
+        bh=Kqi3E0HjV/M/rUHNNJDAxMFwMxUuQgRy5Fn4G8zuY/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t3KYgY1DFRmL4J35oz8NdKjrTiRhJEZiHiRNQHVuKI4+EZhdxHfNEy7aiov5hGXNN
-         hILYVWVQbflo5m4M+rtSIU8qaALG2H6l1QSwrxeFNVvs4LQDyZxyrMSrzgGm2kHNWv
-         xFT43pzW1fP/BlgGqr/yte9Wh9HprsjqF9C5rTi8=
+        b=g52UnrWO5RTbOxRs7aQDqttmgUcFWo/V7HuqY3upC2F0edqQt6xhPhhxGnq7tunln
+         YRv2cJu8JJMHxzWavtQwyydVkRdIBCznAv9zrYvCNRSofEuoKkDTMZLrm77EDxxPI1
+         L9sMzBELwsEXeXPPdyD0/jW/fmCHh84l8tTV3lw4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 5.19 069/207] vmlinux.lds.h: CFI: Reduce alignment of jump-table to function alignment
-Date:   Mon, 26 Sep 2022 12:10:58 +0200
-Message-Id: <20220926100809.691241282@linuxfoundation.org>
+        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 026/120] video: fbdev: pxa3xx-gcu: Fix integer overflow in pxa3xx_gcu_write
+Date:   Mon, 26 Sep 2022 12:10:59 +0200
+Message-Id: <20220926100751.596636025@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-commit 13b0566962914e167cb3238fbe29ced618f07a27 upstream.
+[ Upstream commit a09d2d00af53b43c6f11e6ab3cb58443c2cac8a7 ]
 
-Due to undocumented, hysterical raisins on x86, the CFI jump-table
-sections in .text are needlessly aligned to PMD_SIZE in the vmlinux
-linker script. When compiling a CFI-enabled arm64 kernel with a 64KiB
-page-size, a PMD maps 512MiB of virtual memory and so the .text section
-increases to a whopping 940MiB and blows the final Image up to 960MiB.
-Others report a link failure.
+In pxa3xx_gcu_write, a count parameter of type size_t is passed to words of
+type int.  Then, copy_from_user() may cause a heap overflow because it is used
+as the third argument of copy_from_user().
 
-Since the CFI jump-table requires only instruction alignment, reduce the
-alignment directives to function alignment for parity with other parts
-of the .text section. This reduces the size of the .text section for the
-aforementioned 64KiB page size arm64 kernel to 19MiB for a much more
-reasonable total Image size of 39MiB.
-
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/all/CAL_GTzigiNOMYkOPX1KDnagPhJtFNqSK=1USNbS0wUL4PW6-Uw@mail.gmail.com/
-Fixes: cf68fffb66d6 ("add support for Clang CFI")
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220922215715.13345-1-will@kernel.org
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/asm-generic/vmlinux.lds.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/video/fbdev/pxa3xx-gcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -543,10 +543,9 @@
-  */
- #ifdef CONFIG_CFI_CLANG
- #define TEXT_CFI_JT							\
--		. = ALIGN(PMD_SIZE);					\
-+		ALIGN_FUNCTION();					\
- 		__cfi_jt_start = .;					\
- 		*(.text..L.cfi.jumptable .text..L.cfi.jumptable.*)	\
--		. = ALIGN(PMD_SIZE);					\
- 		__cfi_jt_end = .;
- #else
- #define TEXT_CFI_JT
+diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
+index 7c4694d70dac..15162b37f302 100644
+--- a/drivers/video/fbdev/pxa3xx-gcu.c
++++ b/drivers/video/fbdev/pxa3xx-gcu.c
+@@ -382,7 +382,7 @@ pxa3xx_gcu_write(struct file *file, const char *buff,
+ 	struct pxa3xx_gcu_batch	*buffer;
+ 	struct pxa3xx_gcu_priv *priv = to_pxa3xx_gcu_priv(file);
+ 
+-	int words = count / 4;
++	size_t words = count / 4;
+ 
+ 	/* Does not need to be atomic. There's a lock in user space,
+ 	 * but anyhow, this is just for statistics. */
+-- 
+2.35.1
+
 
 
