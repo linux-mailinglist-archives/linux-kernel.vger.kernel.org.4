@@ -2,195 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED235EA78A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8F65EA794
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235850AbiIZNnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 09:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S234913AbiIZNqk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Sep 2022 09:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbiIZNms (ORCPT
+        with ESMTP id S235777AbiIZNqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:42:48 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407CE8D799;
-        Mon, 26 Sep 2022 05:00:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id e129so269941pgc.9;
-        Mon, 26 Sep 2022 05:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=yaZsqph06GntR+D15TzunhyhKnzThingfXRbQEEFIyk=;
-        b=mzX9UUgOmbpU7ze9RtcM0DK0bskvbK3KRziTIu+NV7Dzlj0f8hGKJwH+4xVUYSG4KX
-         XOdiv2CkJBDiufQ52T0ZuA/JDxn830giuYzdCIjSNu2iW6Dkr8kZ3H38MyO5CzkGdFMX
-         0eyeHrH2KD7BwthEJ7jni4DAp5JcZsEm8x43eC2vMznOWIyH9dX06D/fW60vlBK2Uqjx
-         SkuJkA3SUZJ6ady/0rFymiQMcbL3SvgK4dc958V5N0csNff2FGNVmrWfj9LMcU3EJpYw
-         hnlITCWEfHViJCmJiefwNdOvzAKo3q0XpiPci4rcDNux/85Bsl7z81SXNmD85qBXV2Nh
-         6c7A==
+        Mon, 26 Sep 2022 09:46:08 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26411F0CD4;
+        Mon, 26 Sep 2022 05:03:23 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id m9so4137712qvv.7;
+        Mon, 26 Sep 2022 05:03:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=yaZsqph06GntR+D15TzunhyhKnzThingfXRbQEEFIyk=;
-        b=wB3ZZFH7pA92L9SObkqrBXunUmH3mffvJfVMHNoDg+tWoJC0jzEZTc9V3bFwdrYP80
-         mUZLL4DyFkGiIzeWJsl+4u6e30CTq7pQ6KIOginwtsd6bTdRX2CvXErD3teNbJhTF6vC
-         eEtBdg4ZtcAddRA6jqe1qy1G/ZbWIJjLMXSJ3b25MN1CmPlNKJUFssuUPjf7SKr1iRLg
-         YCum7M8Q20X1Ccdev1mn90A46dNQKci3dsRMazwvo4Ljrj4DRaB43Ab22kOcFFpyRpuR
-         LU4fXte5z/5//rJvWK1mHYoe9hDx6EPG1ebrNitJvEm/tUZYYStPPNv0DjJyNUTsRnjX
-         urXA==
-X-Gm-Message-State: ACrzQf0H6z2LR5jzPf1w1YA41gle41MC3WRxkiNvTgi6hBmAmU93g14p
-        1w21qqtTpaqZlzipS91vENk=
-X-Google-Smtp-Source: AMsMyM4J7TNPJFef7B8KSkY+qFAjumwpawFZvba1r01PJGHpbX4eNGm/c/q31tzlNJHsZAvEQm2dGg==
-X-Received: by 2002:a63:154b:0:b0:42c:60ce:8bd3 with SMTP id 11-20020a63154b000000b0042c60ce8bd3mr19766143pgv.372.1664193582357;
-        Mon, 26 Sep 2022 04:59:42 -0700 (PDT)
-Received: from localhost ([223.104.44.30])
-        by smtp.gmail.com with ESMTPSA id c37-20020a631c65000000b0043949b480a8sm10447035pgm.29.2022.09.26.04.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 04:59:41 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
-Cc:     18801353760@163.com, davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, keescook@chromium.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [syzbot] WARNING in wireless_send_event
-Date:   Mon, 26 Sep 2022 19:59:02 +0800
-Message-Id: <20220926115901.4941-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <00000000000070db2005e95a5984@google.com>
-References: <00000000000070db2005e95a5984@google.com>
+        bh=SaeGFfTOoYPPNMnDMlSqLUlQsRoQlvLTy6YqET7HCeQ=;
+        b=tVZ+dHO+9vi/KXX/yMNb4hivLzik4c+Zdh+NgF3XV4PR8vtiMrya4u1A1SFhrnOm0P
+         rl0hzunKSTcp7yyfZeKEm50QfVlN66m5OMLpvQ9cDQv/WKvZ4iVkTV64FKXqULezmX5T
+         I2aY4h7579ZQ1nSFnMYvltHw/9wKHXao8TkLe87bfRlISk23b5NCgq+EZIiYv42ad5vE
+         /x3v2z3C/BAjmv1RtmTjeZFWJpg5ss4kH1ioc8UPCH0luuMB1WStrEKBREtTJVrXrSXx
+         FxXXwOF2gBhUX0z7TO6RzThF6I/wNDArRtcsiN87lIDn+NtcTaxTd4VeP65lbfBL6gAV
+         Hb8w==
+X-Gm-Message-State: ACrzQf1yJ3lnsdH0hni5i7cMOV0ZAVSPDsI5CgR8505eS2c9aJwpFk85
+        sXS7rCGlrfQdv1Syg9Z6REJSDoniumUZSVS32qerVwbT
+X-Google-Smtp-Source: AMsMyM7/fFwX9VyxYZBF5kTQMWkB4s/aTj3Dt6xogSwXwU4bik1xBNV8nUoQtyRHkI1PG6IPewSYERRcxTWdQvM04Y8=
+X-Received: by 2002:a05:6214:d8d:b0:4ad:5d9d:bda8 with SMTP id
+ e13-20020a0562140d8d00b004ad5d9dbda8mr16614066qve.85.1664193664353; Mon, 26
+ Sep 2022 05:01:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220808174107.38676-1-paul@crapouillou.net> <20220808174107.38676-2-paul@crapouillou.net>
+ <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
+ <HF07HR.3A0DTIDT17IF1@crapouillou.net> <20220925155239.7a37c19a@jic23-huawei>
+In-Reply-To: <20220925155239.7a37c19a@jic23-huawei>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 26 Sep 2022 14:00:52 +0200
+Message-ID: <CAJZ5v0igQL_766obp2csNCg7b0g3g2+gkuqZXjUNL7Jj9Da7zQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-aaa11ce2ffc84166d11c4d2ac88c3fcf75425fbd
+On Sun, Sep 25, 2022 at 4:52 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Thu, 25 Aug 2022 23:42:53 +0100
+> Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> > Hi Rafael,
+> >
+> > Le mar., août 23 2022 at 19:47:57 +0200, Rafael J. Wysocki
+> > <rafael@kernel.org> a écrit :
+> > > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil <paul@crapouillou.net>
+> > > wrote:
+> > >>
+> > >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It was not used
+> > >> anywhere
+> > >>  outside pm.h and pm_runtime.h, so it is safe to update it.
+> > >>
+> > >>  Before, this macro would take a few parameters to be used as sleep
+> > >> and
+> > >>  runtime callbacks. This made it unsuitable to use with different
+> > >>  callbacks, for instance the "noirq" ones.
+> > >>
+> > >>  It is now semantically different: instead of creating a
+> > >> conditionally
+> > >>  exported dev_pm_ops structure, it only contains part of the
+> > >> definition.
+> > >>
+> > >>  This macro should however never be used directly (hence the trailing
+> > >>  underscore). Instead, the following four macros are provided:
+> > >>  - EXPORT_DEV_PM_OPS(name)
+> > >>  - EXPORT_GPL_DEV_PM_OPS(name)
+> > >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
+> > >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
+> > >>
+> > >>  For instance, it is now possible to conditionally export noirq
+> > >>  suspend/resume PM functions like this:
+> > >>
+> > >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) = {
+> > >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> > >>  };
+> > >>
+> > >>  The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS() and
+> > >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use these new
+> > >> macros.
+> > >>
+> > >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > >
+> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > or please let me know if you need me to pick up this one.
+> >
+> > Could you pick this one up then, and make a branch for Jonathan?
+>
+> Hi Paul, Rafael,
+>
+> What happened to this in the end?  I can't immediately find it on
+> any of the pm git tree branches.
+>
+> At this stage in the cycle it would be great if this patch at least
+> makes the merge window, so we can make use of it next cycle.
 
-Syzkaller reports refcount bug as follows:
-------------[ cut here ]------------
-memcpy: detected field-spanning write (size 8) of single field "&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
-WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623 wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
-Modules linked in:
-CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-[...]
-Call Trace:
- <TASK>
- ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
- wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
- wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
- wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
- wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
- sock_ioctl+0x285/0x640 net/socket.c:1220
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
- [...]
- </TASK>
+I thought that this would go in along with the other patches in the series.
 
-Wireless events will be sent on the appropriate channels in
-wireless_send_event(). Different wireless events may have different
-payload structure and size, so kernel uses **len** and **cmd** field
-in struct __compat_iw_event as wireless event common LCP part, uses
-**pointer** as a label to mark the position of remaining different part.
+I can apply it directly, though, if needed.
 
-Yet the problem is that, **pointer** is a compat_caddr_t type, which may
-be smaller than the relative structure at the same position. So during
-wireless_send_event() tries to parse the wireless events payload, it may
-trigger the memcpy() run-time destination buffer bounds checking when the
-relative structure's data is copied to the position marked by **pointer**.
-
-This patch solves it by introducing flexible-array field **ptr_bytes**,
-to mark the position of the wireless events remaining part next to
-LCP part. What's more, this patch also adds **ptr_len** variable in
-wireless_send_event() to improve its maintainability.
-
-Link: https://lore.kernel.org/all/00000000000070db2005e95a5984@google.com/
-Suggested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
----
- include/linux/wireless.h | 10 +++++++++-
- net/wireless/wext-core.c | 13 ++++++++-----
- 2 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/wireless.h b/include/linux/wireless.h
-index 2d1b54556eff..e6e34d74dda0 100644
---- a/include/linux/wireless.h
-+++ b/include/linux/wireless.h
-@@ -26,7 +26,15 @@ struct compat_iw_point {
- struct __compat_iw_event {
- 	__u16		len;			/* Real length of this stuff */
- 	__u16		cmd;			/* Wireless IOCTL */
--	compat_caddr_t	pointer;
-+
-+	union {
-+		compat_caddr_t	pointer;
-+
-+		/* we need ptr_bytes to make memcpy() run-time destination
-+		 * buffer bounds checking happy, nothing special
-+		 */
-+		DECLARE_FLEX_ARRAY(__u8, ptr_bytes);
-+	};
- };
- #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
- #define IW_EV_COMPAT_POINT_OFF offsetof(struct compat_iw_point, length)
-diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
-index 76a80a41615b..2ca009aca865 100644
---- a/net/wireless/wext-core.c
-+++ b/net/wireless/wext-core.c
-@@ -468,6 +468,7 @@ void wireless_send_event(struct net_device *	dev,
- 	struct __compat_iw_event *compat_event;
- 	struct compat_iw_point compat_wrqu;
- 	struct sk_buff *compskb;
-+	int ptr_len;
- #endif
- 
- 	/*
-@@ -582,6 +583,9 @@ void wireless_send_event(struct net_device *	dev,
- 	nlmsg_end(skb, nlh);
- #ifdef CONFIG_COMPAT
- 	hdr_len = compat_event_type_size[descr->header_type];
-+
-+	/* ptr_len is remaining size in event header apart from LCP */
-+	ptr_len = hdr_len - IW_EV_COMPAT_LCP_LEN;
- 	event_len = hdr_len + extra_len;
- 
- 	compskb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
-@@ -612,16 +616,15 @@ void wireless_send_event(struct net_device *	dev,
- 	if (descr->header_type == IW_HEADER_TYPE_POINT) {
- 		compat_wrqu.length = wrqu->data.length;
- 		compat_wrqu.flags = wrqu->data.flags;
--		memcpy(&compat_event->pointer,
-+		memcpy(compat_event->ptr_bytes,
- 			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
--			hdr_len - IW_EV_COMPAT_LCP_LEN);
-+			ptr_len);
- 		if (extra_len)
--			memcpy(((char *) compat_event) + hdr_len,
-+			memcpy(&compat_event->ptr_bytes[ptr_len],
- 				extra, extra_len);
- 	} else {
- 		/* extra_len must be zero, so no if (extra) needed */
--		memcpy(&compat_event->pointer, wrqu,
--			hdr_len - IW_EV_COMPAT_LCP_LEN);
-+		memcpy(compat_event->ptr_bytes, wrqu, ptr_len);
- 	}
- 
- 	nlmsg_end(compskb, nlh);
--- 
-2.25.1
-
+Thanks!
