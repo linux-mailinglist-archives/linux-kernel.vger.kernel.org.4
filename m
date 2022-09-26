@@ -2,99 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A110C5E9BE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244975E9BE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiIZIVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
+        id S234063AbiIZIWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbiIZIVk (ORCPT
+        with ESMTP id S233511AbiIZIWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:21:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31641BE9E;
-        Mon, 26 Sep 2022 01:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HP+NBtK01Xvhurj9YwQq7BAK/FHuyCvTkrH6hj5jx/E=; b=JWLVW8/61gZmddQzT9cn8bfyY7
-        grCdQMS7/7KjdCvd28dtoU2eUymCvC2ldg+62KJ4HMXqf2CngSKPr5nttbTcAyEqi8kD4odTziWRd
-        k+77IdPoTTBXRtpajfsq+xdG2H9P9amQaqVHGBFAbVTd9IoMci33tlGQCxVH1vEfvcXRyNQ5XnjCr
-        CYR89HjdSyva8keWdlDYgJlpCmqVRipO5KZVs9HSMzOH9AfJC67HauG+x2/PF/kd1CO8h9hXMDOSk
-        h2CEw9A0cKcqztQyxNdcl1mtqU5+0bnfyZBrrNWpL5kCeo82LPqiOCo/QiSNC+rGECTWJTQ3ZOE7i
-        8Xe4w/2g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocjMI-00AGfg-DE; Mon, 26 Sep 2022 08:20:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 26 Sep 2022 04:22:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887E31B782
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:22:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 09DB3300023;
-        Mon, 26 Sep 2022 10:20:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D7BE820E5FD5C; Mon, 26 Sep 2022 10:20:52 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 10:20:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        tech-board@lists.linuxfoundation.org,
-        Song Liu <songliubraving@fb.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        Borislav Petkov <bp@alien8.de>, brijesh.singh@amd.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, jane.chu@oracle.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, seanjc@google.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>
-Subject: Re: [syzbot] WARNING in __change_page_attr_set_clr
-Message-ID: <YzFg5EGV35NxhHOo@hirez.programming.kicks-ass.net>
-References: <00000000000076f3a305e97e9229@google.com>
- <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
- <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 36EC522046;
+        Mon, 26 Sep 2022 08:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664180562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0ewHd4r4cN7IT1a+zjfxyxiaox5vNngvtrBQg4vrbI=;
+        b=DJb6uD0cL9aTL62ToDEEULlaHCiEqmnSm+W2MCWhpNHf80fXYTp51rw8vJ8vkJymtmD0T8
+        HQcvE14e/UpXDKEJrKNpE+3cC2iKsRsEqKEt1x4NySRbJu5zTSPGs/aoO9sUmwyWvmgf/8
+        hdLkxwVG29DQRH53TMBQifskDHg89OA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664180562;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0ewHd4r4cN7IT1a+zjfxyxiaox5vNngvtrBQg4vrbI=;
+        b=s4/b1hp8Zor2eBtcN1F5/t8pQO5yTQ5HwyG+KWDgNQjDjWgTzCgYlK40iSGYISQRsoqyoh
+        OHgaJAyUwWtRhUDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CFF9213486;
+        Mon, 26 Sep 2022 08:22:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bhdkMVFhMWPVVAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 26 Sep 2022 08:22:41 +0000
+Message-ID: <514669a4-3ce9-c3b7-b293-ab9514f161b3@suse.cz>
+Date:   Mon, 26 Sep 2022 10:22:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2] mm/slub: clean up create_unique_id()
+Content-Language: en-US
+To:     Chao Yu <chao@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hugh@veritas.com>
+Cc:     Chao Yu <chao.yu@oppo.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220925071207.13183-1-chao@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220925071207.13183-1-chao@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 02:55:46PM -0700, Alexei Starovoitov wrote:
+On 9/25/22 09:12, Chao Yu wrote:
+> From: Chao Yu <chao.yu@oppo.com>
+> 
+> As Christophe JAILLET suggested:
+> 
+> In create_unique_id(),
+> 
+> "looks that ID_STR_LENGTH could even be reduced to 32 or 16.
+> 
+> The 2nd BUG_ON at the end of the function could certainly be just
+> removed as well or remplaced by a:
+>          if (p > name + ID_STR_LENGTH - 1) {
+>                  kfree(name);
+>                  return -E<something>;
+>          }
+> "
+> 
+> According to above suggestion, let's do below cleanups:
+> 1. reduce ID_STR_LENGTH to 32, as the buffer size should be enough;
+> 2. use WARN_ON instead of BUG_ON() and return error if check condition
+> is true;
+> 3. use snprintf instead of sprintf to avoid overflow.
+> 
+> Link: https://lore.kernel.org/linux-mm/2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr/
+> Fixes: 81819f0fc828 ("SLUB core")
+> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+> ---
+> v2:
+> - add WARN_ON() instead of return error silently;
+> - use snprintf instead of sprintf to avoid overflow.
+>   mm/slub.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 4b98dff9be8e..3d37a8a7b965 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5890,7 +5890,7 @@ static inline struct kset *cache_kset(struct kmem_cache *s)
+>   	return slab_kset;
+>   }
+>   
+> -#define ID_STR_LENGTH 64
+> +#define ID_STR_LENGTH 32
+>   
+>   /* Create a unique string id for a slab cache:
+>    *
+> @@ -5924,9 +5924,13 @@ static char *create_unique_id(struct kmem_cache *s)
+>   		*p++ = 'A';
+>   	if (p != name + 1)
+>   		*p++ = '-';
+> -	p += sprintf(p, "%07u", s->size);
+> +	p += snprintf(p, ID_STR_LENGTH - 1 - (p - name), "%07u", s->size);
 
-> Steven Rostedt noticed that comment around the middle of August
-> and told you and Peter about it.
+I think we don't need "- 1" here as snprintf() says:
+@size: The size of the buffer, including the trailing null space
 
-He did indeed; and I was thinking he'd told you about it too so you
-could fix, what is a very juicy security issue, ASAP.
+>   
+> -	BUG_ON(p > name + ID_STR_LENGTH - 1);
+> +	if (p > name + ID_STR_LENGTH - 1) {
+> +		WARN_ON(1);
 
-> Then Peter added a WARN_ONCE in commit
-> https://lore.kernel.org/all/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net/
-> to explicitly trigger that known issue.
+This would be shorter: if (WARN_ON(p > name...))
 
-Well, I had sincerely hoped you'd fixed it by now. You just don't let
-things like that slide. Note how I didn't post that mostly trivial patch
-in mid August. Giving you ample time to fix up.
+> +		kfree(name);
+> +		return ERR_PTR(-EINVAL);
+> +	}
+>   	return name;
+>   }
+>   
 
-> Now we're trying to urgently address it with:
-> https://lore.kernel.org/bpf/20220923211837.3044723-1-song@kernel.org/
-
-Glad to see it being fixed. Thanks!
