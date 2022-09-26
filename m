@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AF95EA1E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0875EA2DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiIZK7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S237426AbiIZLPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237006AbiIZK55 (ORCPT
+        with ESMTP id S233413AbiIZLOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:57:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A0A1EAC7;
-        Mon, 26 Sep 2022 03:30:07 -0700 (PDT)
+        Mon, 26 Sep 2022 07:14:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67324647ED;
+        Mon, 26 Sep 2022 03:36:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05BF5B80925;
-        Mon, 26 Sep 2022 10:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66269C433D6;
-        Mon, 26 Sep 2022 10:28:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7F4560C62;
+        Mon, 26 Sep 2022 10:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F04DC433C1;
+        Mon, 26 Sep 2022 10:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188115;
-        bh=6xSNUn0HRtb1Ca3s4FbSQ4sQMc4zkrPGQ3R5LBRzxFw=;
+        s=korg; t=1664188528;
+        bh=h62gcAl4gT4CrilNk44RC8TlqH/0u0SPMz0hKFHNtUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EqxoUvQkOD4EjwmQWYdgaz4Cfr8+hpebDVjEW7fHeKn5xvnm/teqwOlyodcSxqsY0
-         hCNPvrz4DbGvlg0WBiSPfbwakajwTZO1z8G/Kshzjl1ZnTSUzfOtG+GYNFKuVWmLpJ
-         A7ygG87NH48dxi7YsZn8bs01eVzC5aFmf3q1qX84=
+        b=MFcxi6JArDbSKTL3QOpQqiNDamnFRtQCBe13SOKmGlhuGhhaTvMsqBmx3vjqu6Ab5
+         ScuhxMLPAWx5oPppqz4LvCJ96grmCsC26pyGOfQYCL8IaCYooCYwlGsNGEvmFgeftT
+         InDB+anB9WeNVvZV/3cwh/8pTfxpjtK5NB8moYSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 045/141] ALSA: hda/realtek: Add pincfg for ASUS G533Z HP jack
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.15 037/148] media: flexcop-usb: fix endpoint type check
 Date:   Mon, 26 Sep 2022 12:11:11 +0200
-Message-Id: <20220926100756.081796682@linuxfoundation.org>
+Message-Id: <20220926100757.419809140@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luke D. Jones <luke@ljones.dev>
+From: Johan Hovold <johan@kernel.org>
 
-commit bc2c23549ccd7105eb6ff0d4f0ac519285628673 upstream.
+commit 763679f0eeff0185fc431498849bbc1c24460875 upstream.
 
-Fixes up the pincfg for ASUS ROG Strix G15 (G533Z) headphone combo jack
+Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+type") tried to add an endpoint type sanity check for the single
+isochronous endpoint but instead broke the driver by checking the wrong
+descriptor or random data beyond the last endpoint descriptor.
 
-[ Fixed the position in the quirk table by tiwai ]
+Make sure to check the right endpoint descriptor.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220915080921.35563-3-luke@ljones.dev
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: stable@vger.kernel.org	# 5.9
+Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20220822151027.27026-1-johan@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/usb/b2c2/flexcop-usb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6825,6 +6825,7 @@ enum {
- 	ALC294_FIXUP_ASUS_GU502_PINS,
- 	ALC294_FIXUP_ASUS_GU502_VERBS,
- 	ALC294_FIXUP_ASUS_G513_PINS,
-+	ALC285_FIXUP_ASUS_G533Z_PINS,
- 	ALC285_FIXUP_HP_GPIO_LED,
- 	ALC285_FIXUP_HP_MUTE_LED,
- 	ALC236_FIXUP_HP_GPIO_LED,
-@@ -8160,6 +8161,15 @@ static const struct hda_fixup alc269_fix
- 				{ }
- 		},
- 	},
-+	[ALC285_FIXUP_ASUS_G533Z_PINS] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x14, 0x90170120 },
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_G513_PINS,
-+	},
- 	[ALC294_FIXUP_ASUS_COEF_1B] = {
- 		.type = HDA_FIXUP_VERBS,
- 		.v.verbs = (const struct hda_verb[]) {
-@@ -8942,6 +8952,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x1b13, "Asus U41SV", ALC269_FIXUP_INV_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x1bbd, "ASUS Z550MA", ALC255_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
-+	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
+--- a/drivers/media/usb/b2c2/flexcop-usb.c
++++ b/drivers/media/usb/b2c2/flexcop-usb.c
+@@ -511,7 +511,7 @@ static int flexcop_usb_init(struct flexc
+ 
+ 	if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 1)
+ 		return -ENODEV;
+-	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[1].desc))
++	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[0].desc))
+ 		return -ENODEV;
+ 
+ 	switch (fc_usb->udev->speed) {
 
 
