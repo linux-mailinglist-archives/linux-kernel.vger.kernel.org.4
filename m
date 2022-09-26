@@ -2,61 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19CB5EA955
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB7A5EA962
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiIZO5W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Sep 2022 10:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S235501AbiIZPAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235064AbiIZO4j (ORCPT
+        with ESMTP id S235483AbiIZO7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:56:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142857205;
-        Mon, 26 Sep 2022 06:27:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23BE4CE115A;
-        Mon, 26 Sep 2022 13:27:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A53C433D6;
-        Mon, 26 Sep 2022 13:27:35 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 09:28:43 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        tech-board@lists.linuxfoundation.org,
-        Song Liu <songliubraving@fb.com>,
-        Kernel Team <Kernel-team@fb.com>, jane.chu@oracle.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        X86 ML <x86@kernel.org>, brijesh.singh@amd.com,
-        "open list:BPF \(Safe dynamic programs and tools\)" 
-        <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>, seanjc@google.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [Tech-board] [syzbot] WARNING in __change_page_attr_set_clr
-Message-ID: <20220926092843.75a4b751@gandalf.local.home>
-In-Reply-To: <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-References: <00000000000076f3a305e97e9229@google.com>
-        <a68d118d-ee03-399c-df02-82848e2197a2@intel.com>
-        <CAADnVQ+SpNuUSRFte2Lm13QZiTXcWfn2eZw5Q+MP0SKwuJEXFg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        Mon, 26 Sep 2022 10:59:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733D65D0E5;
+        Mon, 26 Sep 2022 06:30:09 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QChv0h013211;
+        Mon, 26 Sep 2022 13:29:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=rgbfy+nZxnjpEYxv0t52YaUKJNuHCfDCkTrEBVsBgPw=;
+ b=f7n5Nyp1pCf2Lj4CFd2Rvf96M7FPqGdj8yEvoVw2zJ/icMD7tSxwqN8zW2BTXmj9ZjWV
+ u3fEYEdPjUelD+a5Bms/jvWy1TNRM/m6dk2bxYS4IpufNcsXAUfvvDBxQbQBbHOYsxOV
+ Io2NMAfXCOBV94HoGkwDHm0SPGHN0FU/Kj1VY9FGLCeuORsmtokGBEb+FAoB9YIEcMaL
+ 5f/Woic9dCR6pTZH2SRf3Q3+MBhSdazlTeusgcG2qLCkGsSHhgtO+xenkPnN1XGkdsUH
+ sOTHb3NTTJdWCqGA5KFBR1SrFlN7F4YQ3U7+oHp7hdm45/Hd3iE4E5zy22Gdco7XTn7A 7w== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jucbj9cm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:29:56 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28QDLPEx030127;
+        Mon, 26 Sep 2022 13:29:54 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3juapug5h3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:29:54 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28QDTp1530540216
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 13:29:51 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 112D3A4053;
+        Mon, 26 Sep 2022 13:29:51 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44D20A4040;
+        Mon, 26 Sep 2022 13:29:50 +0000 (GMT)
+Received: from sig-9-145-86-133.uk.ibm.com (unknown [9.145.86.133])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Sep 2022 13:29:50 +0000 (GMT)
+Message-ID: <b581d4f575b834831f8c17054f73b5b92a891d25.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/3] iommu/s390: Fix duplicate domain attachments
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, linux-kernel@vger.kernel.org
+Date:   Mon, 26 Sep 2022 15:29:49 +0200
+In-Reply-To: <YyxyMtKXyvgHt3Kp@nvidia.com>
+References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
+         <20220922095239.2115309-2-schnelle@linux.ibm.com>
+         <YyxyMtKXyvgHt3Kp@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RuCXoDObvouvgFlIW-yK9f-iI2DZ751n
+X-Proofpoint-GUID: RuCXoDObvouvgFlIW-yK9f-iI2DZ751n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ adultscore=0 suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209260083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +91,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Sep 2022 14:55:46 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> On Sun, Sep 25, 2022 at 9:44 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> >
-> > On 9/25/22 04:18, syzbot wrote:  
-> > > ------------[ cut here ]------------
-> > > CPA refuse W^X violation: 8000000000000163 -> 0000000000000163 range: 0xffffffffa0401000 - 0xffffffffa0401fff PFN 7d8d5
-> > > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 verify_rwx arch/x86/mm/pat/set_memory.c:600 [inline]
-> > > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr arch/x86/mm/pat/set_memory.c:1569 [inline]
-> > > WARNING: CPU: 0 PID: 3607 at arch/x86/mm/pat/set_memory.c:600 __change_page_attr_set_clr+0x1f40/0x2020 arch/x86/mm/pat/set_memory.c:1691
-> > > Modules linked in:  
-> >
-> > Yay, one of these that isn't due to wonky 32-bit kernels!
-> >
-> > This one looks to be naughty intentionally:
+On Thu, 2022-09-22 at 11:33 -0300, Jason Gunthorpe wrote:
+> On Thu, Sep 22, 2022 at 11:52:37AM +0200, Niklas Schnelle wrote:
+> > Since commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+> > calls") we can end up with duplicates in the list of devices attached to
+> > a domain. This is inefficient and confusing since only one domain can
+> > actually be in control of the IOMMU translations for a device. Fix this
+> > by detaching the device from the previous domain, if any, on attach.
+> > Add a WARN_ON() in case we still have attached devices on freeing the
+> > domain.
+> > 
+> > Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> > Changes since v1:
+> > - WARN_ON() non-empty list in s390_domain_free()
+> > - Drop the found flag and instead WARN_ON() if we're detaching
+> >   from a domain that isn't the active domain for the device
+> > 
+> >  drivers/iommu/s390-iommu.c | 81 ++++++++++++++++++++++----------------
+> >  1 file changed, 46 insertions(+), 35 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> > index c898bcbbce11..187d2c7ba9ff 100644
+> > --- a/drivers/iommu/s390-iommu.c
+> > +++ b/drivers/iommu/s390-iommu.c
+> > @@ -78,19 +78,48 @@ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
+> >  static void s390_domain_free(struct iommu_domain *domain)
+> >  {
+> >  	struct s390_domain *s390_domain = to_s390_domain(domain);
+> > +	unsigned long flags;
 > >  
-> > > void *bpf_jit_alloc_exec_page(void)
-> > > {  
-> > ...  
-> > >         /* Keep image as writeable. The alternative is to keep flipping ro/rw
-> > >          * every time new program is attached or detached.
-> > >          */
-> > >         set_memory_x((long)image, 1);
-> > >         return image;
-> > > }  
-> >
-> > For STRICT_KERNEL_RWX kernels, I think we would really rather that this
-> > code *did* flip ro/rw every time a new BPF program is attached or detached.  
+> > +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> > +	WARN_ON(!list_empty(&s390_domain->devices));
+> > +	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
 > 
-> Steven Rostedt noticed that comment around the middle of August
-> and told you and Peter about it.
-> Then Peter added a WARN_ONCE in commit
-> https://lore.kernel.org/all/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net/
-> to explicitly trigger that known issue.
-> Sure enough the fedora fails to boot on linux-next since then,
-> because systemd is loading bpf programs that use bpf trampoline.
-> The boot issue was was reported 3 days ago:
-> https://lore.kernel.org/bpf/c84cc27c1a5031a003039748c3c099732a718aec.camel@kernel.org/T/#u
-> Now we're trying to urgently address it with:
-> https://lore.kernel.org/bpf/20220923211837.3044723-1-song@kernel.org/
+> Minor, but, this is about to free the memory holding the lock, we
+> don't need to take it to do the WARN_ON.. list_empty() is already
+> lockless safe.
 > 
-> So instead of pinging us with your w^x concern you've decided
-> to fail hard in -next to force the issue and
-> now acting like this is something surprising to you?!
+> > static int __s390_iommu_detach_device(struct s390_domain *s390_domain,
+> >                                      struct zpci_dev *zdev)
+> > {
 > 
-> This is Code of Conduct "worthy" behavior demonstrated
-
-Here's the link to the Code of Conduct:
-
-https://www.kernel.org/doc/html/latest/process/code-of-conduct.html
-
-Which states:
-
-  Examples of behavior that contributes to creating a positive environment include:
-
-    - Using welcoming and inclusive language
-    - Being respectful of differing viewpoints and experiences
-    - Gracefully accepting constructive criticism
-    - Focusing on what is best for the community
-    - Showing empathy towards other community members
-
-  Examples of unacceptable behavior by participants include:
-
-    - The use of sexualized language or imagery and unwelcome sexual attention or advances
-    - Trolling, insulting/derogatory comments, and personal or political attacks
-    - Public or private harassment
-    - Publishing others’ private information, such as a physical or electronic address, without explicit permission
-    - Other conduct which could reasonably be considered inappropriate in a professional setting
-
-I do not see how Dave's response is a violation of any of the above.
-
-
-> by a newly elected member of the Technical Advisory Board.
-> Please consider resigning.
-
-Asking someone to resign is a personal attack, and that can be construed as
-a violation of the Code of Conduct.
-
-> A TAB member should be better than this.
+> This doesn't return a failure code anymore, make it void
 > 
+> >  static int s390_iommu_attach_device(struct iommu_domain *domain,
+> >  				    struct device *dev)
+> >  {
+> >  	struct s390_domain *s390_domain = to_s390_domain(domain);
+> >  	struct zpci_dev *zdev = to_zpci_dev(dev);
+> >  	struct s390_domain_device *domain_device;
+> > +	struct s390_domain *prev_domain = NULL;
+> >  	unsigned long flags;
+> > -	int cc, rc;
+> > +	int cc, rc = 0;
+> >  
+> >  	if (!zdev)
+> >  		return -ENODEV;
+> > @@ -99,16 +128,15 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+> >  	if (!domain_device)
+> >  		return -ENOMEM;
+> >  
+> > -	if (zdev->dma_table && !zdev->s390_domain) {
+> > -		cc = zpci_dma_exit_device(zdev);
+> > -		if (cc) {
+> > +	if (zdev->s390_domain) {
+> > +		prev_domain = zdev->s390_domain;
+> > +		rc = __s390_iommu_detach_device(zdev->s390_domain, zdev);
+> > +	} else if (zdev->dma_table) {
+> > +		if (zpci_dma_exit_device(zdev))
+> >  			rc = -EIO;
+> > -			goto out_free;
+> > -		}
+> >  	}
+> > -
+> > -	if (zdev->s390_domain)
+> > -		zpci_unregister_ioat(zdev, 0);
+> > +	if (rc)
+> > +		goto out_free;
+> >  
+> >  	zdev->dma_table = s390_domain->dma_table;
+> >  	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+> > @@ -129,7 +157,7 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+> >  		   domain->geometry.aperture_end != zdev->end_dma) {
+> >  		rc = -EINVAL;
+> >  		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> > -		goto out_restore;
+> > +		goto out_unregister_restore;
+> >  	}
+> >  	domain_device->zdev = zdev;
+> >  	zdev->s390_domain = s390_domain;
+> > @@ -138,14 +166,15 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+> >  
+> >  	return 0;
+> >  
+> > +out_unregister_restore:
+> > +	zpci_unregister_ioat(zdev, 0);
+> >  out_restore:
+> > -	if (!zdev->s390_domain) {
+> > +	zdev->dma_table = NULL;
+> > +	if (prev_domain)
+> > +		s390_iommu_attach_device(&prev_domain->domain,
+> > +					 dev);
+> 
+> Huh. That is a surprising thing
+> 
+> I think this function needs some re-ordering to avoid this condition
+> 
+> The checks for aperture should be earlier, and they are not quite
+> right. The aperture is only allowed to grow. If it starts out as 0 and
+> then is set to something valid on first attach, a later attach cannot
+> then shrink it. There could already be mappings in the domain under
+> the now invalidated aperture and no caller is prepared to deal with
+> this.
+> 
+> That leaves the only error case as zpci_register_ioat() - which seems
+> like it is the actual "attach" operation. Since
+> __s390_iommu_detach_device() is just internal accounting (and can't
+> fail) it should be moved after
 
-Let's please keep this on a technical level, as there appears to be a fix
-we all can agree on, and let's move forward on that.
+I did miss a problem in my initial answer. While zpci_register_ioat()
+is indeed the actual "attach" operation, it assumes that at that point
+no DMA address translations are registered. In that state DMA is
+blocked of course. With that zpci_register_ioat() needs to come after
+the zpci_unregister_ioat() that is part of __s390_iommu_detach_device()
+and zpci_dma_exit_device(). If we do call those though we fundamentally
+need to restore the previous domain / DMA API state on any subsequent
+failure. If we don't restore we would leave the device detached from
+any domain with DMA blocked. I wonder if this could be an acceptable
+failure state though? It's safe as no DMA is possible and we could get
+out of it with a successful attach.
 
-Thanks,
-
--- Steve
