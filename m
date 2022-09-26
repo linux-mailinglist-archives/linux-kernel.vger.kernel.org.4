@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6945EA301
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14195EA49B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbiIZLRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S238878AbiIZLsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbiIZLQX (ORCPT
+        with ESMTP id S239029AbiIZLpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:16:23 -0400
+        Mon, 26 Sep 2022 07:45:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E2865579;
-        Mon, 26 Sep 2022 03:37:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EA874CF4;
+        Mon, 26 Sep 2022 03:47:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3533D60A37;
-        Mon, 26 Sep 2022 10:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6B2C433D6;
-        Mon, 26 Sep 2022 10:37:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BA4660B6A;
+        Mon, 26 Sep 2022 10:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD4BC433C1;
+        Mon, 26 Sep 2022 10:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188648;
-        bh=e0I7OQIVqGQ6TSsjZvTXgRKRPKRk9al7618vUPaC2rI=;
+        s=korg; t=1664189245;
+        bh=5pzVapFewRf8dhts3wO4wAqPZZ8cp8qrxhoG9oAqP6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lEHsv+CzZ6o2SnBjarBy0KPmBtq+NgKVJVDjAaAne715EvhVvUQgh94olBIwVxSdH
-         kaog+dEvnzxpXkZB+IUTezsxpdOtVRki/D8bfJEFMkZUueESRww/I0os3uR84nuczS
-         Kbk136d20K0YhwN/ngi5e6kQ1eVlpR89zhOMeB7s=
+        b=Q/bA145+XMfKKB4f30s5M94WBJnKhmy4Z+rLBCP44LJgaxRnnbIRQ6gTNzsbLG4r9
+         CHd9U5+Czkz3eWk4HT13cmdLS+8LGAWYG319PFlkGj4IHmvY2yRO0WprptQzY0xH3i
+         IF6y1tgLMp+1A3QVM56xeEJgB2buknz0SwPJ1tMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        Andy Gospodarek <gospo@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/148] net: bonding: Share lacpdu_mcast_addr definition
+Subject: [PATCH 5.19 121/207] bnxt_en: fix flags to check for supported fw version
 Date:   Mon, 26 Sep 2022 12:11:50 +0200
-Message-Id: <20220926100758.892184405@linuxfoundation.org>
+Message-Id: <20220926100811.984660365@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,103 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: Vadim Fedorenko <vfedorenko@novek.ru>
 
-[ Upstream commit 1d9a143ee3408349700f44a9197b7ae0e4faae5d ]
+[ Upstream commit ae8ffba8baad651af706538e8c47d0a049d406c6 ]
 
-There are already a few definitions of arrays containing
-MULTICAST_LACPDU_ADDR and the next patch will add one more use. These all
-contain the same constant data so define one common instance for all
-bonding code.
+The warning message of unsupported FW appears every time RX timestamps
+are disabled on the interface. The patch fixes the flags to correct set
+for the check.
 
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Stable-dep-of: 86247aba599e ("net: bonding: Unsync device addresses on ndo_stop")
+Fixes: 66ed81dcedc6 ("bnxt_en: Enable packet timestamping for all RX packets")
+Cc: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Vadim Fedorenko <vfedorenko@novek.ru>
+Reviewed-by: Andy Gospodarek <gospo@broadcom.com>
+Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+Link: https://lore.kernel.org/r/20220915234932.25497-1-vfedorenko@novek.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_3ad.c  |  5 +++--
- drivers/net/bonding/bond_main.c | 16 ++++------------
- include/net/bond_3ad.h          |  2 --
- include/net/bonding.h           |  3 +++
- 4 files changed, 10 insertions(+), 16 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 1f0120cbe9e8..8ad095c19f27 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -87,8 +87,9 @@ static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
- static u16 ad_ticks_per_sec;
- static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+index 7f3c0875b6f5..8e316367f6ce 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+@@ -317,9 +317,9 @@ void bnxt_ptp_cfg_tstamp_filters(struct bnxt *bp)
  
--static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
--	MULTICAST_LACPDU_ADDR;
-+const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned = {
-+	0x01, 0x80, 0xC2, 0x00, 0x00, 0x02
-+};
- 
- /* ================= main 802.3ad protocol functions ================== */
- static int ad_lacpdu_send(struct port *port);
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index cd0d7b24f014..afeb213d02fc 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -862,12 +862,8 @@ static void bond_hw_addr_flush(struct net_device *bond_dev,
- 	dev_uc_unsync(slave_dev, bond_dev);
- 	dev_mc_unsync(slave_dev, bond_dev);
- 
--	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
--		/* del lacpdu mc addr from mc list */
--		u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
--
--		dev_mc_del(slave_dev, lacpdu_multicast);
--	}
-+	if (BOND_MODE(bond) == BOND_MODE_8023AD)
-+		dev_mc_del(slave_dev, lacpdu_mcast_addr);
- }
- 
- /*--------------------------- Active slave change ---------------------------*/
-@@ -2139,12 +2135,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
- 		dev_uc_sync_multiple(slave_dev, bond_dev);
- 		netif_addr_unlock_bh(bond_dev);
- 
--		if (BOND_MODE(bond) == BOND_MODE_8023AD) {
--			/* add lacpdu mc addr to mc list */
--			u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
--
--			dev_mc_add(slave_dev, lacpdu_multicast);
--		}
-+		if (BOND_MODE(bond) == BOND_MODE_8023AD)
-+			dev_mc_add(slave_dev, lacpdu_mcast_addr);
+ 	if (!(bp->fw_cap & BNXT_FW_CAP_RX_ALL_PKT_TS) && (ptp->tstamp_filters &
+ 	    (PORT_MAC_CFG_REQ_FLAGS_ALL_RX_TS_CAPTURE_ENABLE |
+-	     PORT_MAC_CFG_REQ_FLAGS_PTP_RX_TS_CAPTURE_DISABLE))) {
++	     PORT_MAC_CFG_REQ_FLAGS_ALL_RX_TS_CAPTURE_DISABLE))) {
+ 		ptp->tstamp_filters &= ~(PORT_MAC_CFG_REQ_FLAGS_ALL_RX_TS_CAPTURE_ENABLE |
+-					 PORT_MAC_CFG_REQ_FLAGS_PTP_RX_TS_CAPTURE_DISABLE);
++					 PORT_MAC_CFG_REQ_FLAGS_ALL_RX_TS_CAPTURE_DISABLE);
+ 		netdev_warn(bp->dev, "Unsupported FW for all RX pkts timestamp filter\n");
  	}
  
- 	bond->slave_cnt++;
-diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-index 184105d68294..f2273bd5a4c5 100644
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -15,8 +15,6 @@
- #define PKT_TYPE_LACPDU         cpu_to_be16(ETH_P_SLOW)
- #define AD_TIMER_INTERVAL       100 /*msec*/
- 
--#define MULTICAST_LACPDU_ADDR    {0x01, 0x80, 0xC2, 0x00, 0x00, 0x02}
--
- #define AD_LACP_SLOW 0
- #define AD_LACP_FAST 1
- 
-diff --git a/include/net/bonding.h b/include/net/bonding.h
-index 15e083e18f75..8c18c6b01634 100644
---- a/include/net/bonding.h
-+++ b/include/net/bonding.h
-@@ -757,6 +757,9 @@ extern struct rtnl_link_ops bond_link_ops;
- /* exported from bond_sysfs_slave.c */
- extern const struct sysfs_ops slave_sysfs_ops;
- 
-+/* exported from bond_3ad.c */
-+extern const u8 lacpdu_mcast_addr[];
-+
- static inline netdev_tx_t bond_tx_drop(struct net_device *dev, struct sk_buff *skb)
- {
- 	atomic_long_inc(&dev->tx_dropped);
 -- 
 2.35.1
 
