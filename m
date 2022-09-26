@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A36C5EA124
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8734A5E9FEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbiIZKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S235622AbiIZKbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbiIZKna (ORCPT
+        with ESMTP id S235668AbiIZK2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:43:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744E61CB;
-        Mon, 26 Sep 2022 03:24:33 -0700 (PDT)
+        Mon, 26 Sep 2022 06:28:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3864E635;
+        Mon, 26 Sep 2022 03:19:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 57B72CE10E7;
-        Mon, 26 Sep 2022 10:24:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4545EC433D6;
-        Mon, 26 Sep 2022 10:24:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AFE560B9A;
+        Mon, 26 Sep 2022 10:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B912C433D6;
+        Mon, 26 Sep 2022 10:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187869;
-        bh=zadlpnKD6sjdhTaeTlpUHuA+J3MSs8/PSaLg59JCzQo=;
+        s=korg; t=1664187543;
+        bh=YPPEjoCPjC9HlGhDQWssN0d3LCxUhreMTxZRurIUMl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XUkbKAWWp7L8GzZZV08rr5xAiJaRc7vlfXqnlmDxx53edJD9rksSsTKgA8iQNSEYJ
-         hta/I7yljzIvHb21hVXzfc5eZHVymJqUknJ+DWJT4VdGo9YHcC371+UCzPAaJBNlom
-         4ALfEznMyClDfsXwn7ieXtjgndWGPKHjcff1ESBs=
+        b=u+zuHRepmM/TGfyPZr6WRE5mVod6qUeb6Ndk7Vx4x6cN0aaLSI/e1ao6h96heJG36
+         LesoH+9WRukqhz/Tw+DibMDh9BjMRW4u+gi5xv/38bYL0mBUfbjHKohRqhMddjHRav
+         hCve4iYBHB0zWW42HiDztfWLNmvoy6V2FoG9SHo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 087/120] perf kcore_copy: Do not check /proc/modules is unchanged
+Subject: [PATCH 4.19 41/58] MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
 Date:   Mon, 26 Sep 2022 12:12:00 +0200
-Message-Id: <20220926100754.217398729@linuxfoundation.org>
+Message-Id: <20220926100742.963610389@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
+[ Upstream commit 502550123bee6a2ffa438409b5b9aad4d6db3a8c ]
 
-/proc/kallsyms and /proc/modules are compared before and after the copy
-in order to ensure no changes during the copy.
+The lantiq WDT driver uses clk_get_io(), which is not exported,
+so export it to fix a build error:
 
-However /proc/modules also might change due to reference counts changing
-even though that does not make any difference.
+ERROR: modpost: "clk_get_io" [drivers/watchdog/lantiq_wdt.ko] undefined!
 
-Any modules loaded or unloaded should be visible in changes to kallsyms,
-so it is not necessary to check /proc/modules also anyway.
-
-Remove the comparison checking that /proc/modules is unchanged.
-
-Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
-Reported-by: Daniel Dao <dqminh@cloudflare.com>
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Tested-by: Daniel Dao <dqminh@cloudflare.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 287e3f3f4e68 ("MIPS: lantiq: implement support for clkdev api")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: John Crispin <john@phrozen.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/symbol-elf.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/mips/lantiq/clk.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index a04a7dfb8ec0..f15258fbe9db 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1912,8 +1912,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
-  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
-  * is not the same for the kernel map and the modules map.  That happens because
-  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
-- * kallsyms and modules files are compared with their copies to check that
-- * modules have not been loaded or unloaded while the copies were taking place.
-+ * kallsyms file is compared with its copy to check that modules have not been
-+ * loaded or unloaded while the copies were taking place.
-  *
-  * Return: %0 on success, %-1 on failure.
-  */
-@@ -1976,9 +1976,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
- 			goto out_extract_close;
- 	}
+diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
+index f5fab99d1751..851f6bf925a6 100644
+--- a/arch/mips/lantiq/clk.c
++++ b/arch/mips/lantiq/clk.c
+@@ -52,6 +52,7 @@ struct clk *clk_get_io(void)
+ {
+ 	return &cpu_clk_generic[2];
+ }
++EXPORT_SYMBOL_GPL(clk_get_io);
  
--	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
--		goto out_extract_close;
--
- 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
- 		goto out_extract_close;
- 
+ struct clk *clk_get_ppe(void)
+ {
 -- 
 2.35.1
 
