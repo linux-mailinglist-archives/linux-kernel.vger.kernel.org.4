@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52995EA06C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB655EA1CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbiIZKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S237000AbiIZK5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236341AbiIZKez (ORCPT
+        with ESMTP id S233670AbiIZK4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:34:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA985280E;
-        Mon, 26 Sep 2022 03:21:44 -0700 (PDT)
+        Mon, 26 Sep 2022 06:56:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD252DCF;
+        Mon, 26 Sep 2022 03:29:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3CF060AD6;
-        Mon, 26 Sep 2022 10:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA674C433D6;
-        Mon, 26 Sep 2022 10:21:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A8D7B80920;
+        Mon, 26 Sep 2022 10:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84063C433C1;
+        Mon, 26 Sep 2022 10:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187702;
-        bh=Pa5i3GQRHsWpE8E+c1IYzrtig35n9v6kEKTYiDx+02o=;
+        s=korg; t=1664188094;
+        bh=KX6db09RMOyXQklYbQhqx0h7BEWGqSM5g5faz74uNvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QAWxXZsnY3yJV6PHMi9CS/vti0RSt30BG/QJPysCTyt2gFcNImVDJLXDMGCJrfc8w
-         DZJEyvv/fS+7N2da11hikydO1ePAg5mzT5G6eCvzrr+pbQvq8/7auuf1Ys8hcVfnta
-         EzYTRr5vRXEWCV36LwMTRzcSFx5HkXsUHrndj0YI=
+        b=v3zuc+3TMT/feSYlQHbXDUO4lcqTA7jfJZyThRkFPA9z3Dz0Rc7ZIegLVNtmhfgI7
+         QXtJF2+xq1TreHTnLl1vvVgxqEiby2rbg8ohbr8AWcAwL06qa0L1ykKn2NiOOOjMZr
+         S2/VlEpavp0fs3nonTqA6d/H0vFcV2c+OgxflIco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 031/120] usb: dwc3: gadget: Prevent repeat pullup()
-Date:   Mon, 26 Sep 2022 12:11:04 +0200
-Message-Id: <20220926100751.792836346@linuxfoundation.org>
+        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 039/141] ALSA: hda/tegra: set depop delay for tegra
+Date:   Mon, 26 Sep 2022 12:11:05 +0200
+Message-Id: <20220926100755.884216857@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,45 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Mohan Kumar <mkumard@nvidia.com>
 
-[ Upstream commit 69e131d1ac4e52a59ec181ab4f8aa8c48cd8fb64 ]
+commit 3c4d8c24fb6c44f426e447b04800b0ed61a7b5ae upstream.
 
-Don't do soft-disconnect if it's previously done. Likewise, don't do
-soft-connect if the device is currently connected and running. It would
-break normal operation.
+Reduce the suspend time by setting depop delay to 10ms for
+tegra.
 
-Currently the caller of pullup() (udc's sysfs soft_connect) only checks
-if it had initiated disconnect to prevent repeating soft-disconnect. It
-doesn't check for soft-connect. To be safe, let's keep the check here
-regardless whether the udc core is fixed.
-
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/1c1345bd66c97a9d32f77d63aaadd04b7b037143.1650593829.git.Thinh.Nguyen@synopsys.com
+Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220913053641.23299-1-mkumard@nvidia.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Stable-dep-of: 040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ sound/pci/hda/patch_hdmi.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index b95fc2ae8074..ea56f4fb234e 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2015,6 +2015,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	int			ret;
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -3839,6 +3839,7 @@ static int patch_tegra_hdmi(struct hda_c
+ 	if (err)
+ 		return err;
  
- 	is_on = !!is_on;
-+
-+	if (dwc->pullups_connected == is_on)
-+		return 0;
-+
- 	dwc->softconnect = is_on;
- 	/*
- 	 * Per databook, when we want to stop the gadget, if a control transfer
--- 
-2.35.1
-
++	codec->depop_delay = 10;
+ 	codec->patch_ops.build_pcms = tegra_hdmi_build_pcms;
+ 	spec = codec->spec;
+ 	spec->chmap.ops.chmap_cea_alloc_validate_get_type =
 
 
