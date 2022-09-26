@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956A95EA0E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4005D5EA43A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbiIZKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S238403AbiIZLm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235970AbiIZKl2 (ORCPT
+        with ESMTP id S238300AbiIZLln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:41:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C485464E;
-        Mon, 26 Sep 2022 03:24:11 -0700 (PDT)
+        Mon, 26 Sep 2022 07:41:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2748AD120;
+        Mon, 26 Sep 2022 03:45:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21A2560BAF;
-        Mon, 26 Sep 2022 10:24:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15263C433D6;
-        Mon, 26 Sep 2022 10:24:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1BF2B80835;
+        Mon, 26 Sep 2022 10:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BBAC433C1;
+        Mon, 26 Sep 2022 10:31:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187848;
-        bh=sOPw6XbT2N0LCEbXbITt8VhfEwSDqQKQhgoZUozTRw8=;
+        s=korg; t=1664188301;
+        bh=kBIv1RUAE7iafywmSkHA/glHpsAnUAC0de5OWQHNVRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HKSdvJAiMxGMKbXy1z2TIrb7iqp4Ns75aWeWUr3KpftxcoLtxzPXpEsdKSYv3S52f
-         k/iKGVereOtbxbsdIpRTpxWpAz35vlw3LJZNiS9WV6Q3d+HVgD4j3hVlcW6ZVTrqer
-         cOtal0S5t3ftHyo8CEGBpTMKRQ8874cL8taipbLs=
+        b=GyQ6vf8xKRUk8vahzAmUOaoWfmu/2kBDMpvEi8ON7csBKNYJJX3I1UT2NuP7yBNUw
+         tUzJgLuCNoyBJZPmz7UGtGRgOfiRO/3JosTi3k1A5f1TQyxRUet6GTOVBmze7Vy1Xj
+         9MxEMR44EsZT4wrEHwemfcInoz8wmP8H1mFJVjW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
-        Andrii Staikov <andrii.staikov@intel.com>,
-        Bharathi Sreenivas <bharathi.sreenivas@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 080/120] i40e: Fix set max_tx_rate when it is lower than 1 Mbps
-Date:   Mon, 26 Sep 2022 12:11:53 +0200
-Message-Id: <20220926100753.960804264@linuxfoundation.org>
+Subject: [PATCH 5.10 088/141] sfc: fix TX channel offset when using legacy interrupts
+Date:   Mon, 26 Sep 2022 12:11:54 +0200
+Message-Id: <20220926100757.626998433@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,98 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-[ Upstream commit 198eb7e1b81d8ba676d0f4f120c092032ae69a8e ]
+[ Upstream commit f232af4295653afa4ade3230462b3be15ad16419 ]
 
-While converting max_tx_rate from bytes to Mbps, this value was set to 0,
-if the original value was lower than 125000 bytes (1 Mbps). This would
-cause no transmission rate limiting to occur. This happened due to lack of
-check of max_tx_rate against the 1 Mbps value for max_tx_rate and the
-following division by 125000. Fix this issue by adding a helper
-i40e_bw_bytes_to_mbits() which sets max_tx_rate to minimum usable value of
-50 Mbps, if its value is less than 1 Mbps, otherwise do the required
-conversion by dividing by 125000.
+In legacy interrupt mode the tx_channel_offset was hardcoded to 1, but
+that's not correct if efx_sepparate_tx_channels is false. In that case,
+the offset is 0 because the tx queues are in the single existing channel
+at index 0, together with the rx queue.
 
-Fixes: 5ecae4120a6b ("i40e: Refactor VF BW rate limiting")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
-Signed-off-by: Andrii Staikov <andrii.staikov@intel.com>
-Tested-by: Bharathi Sreenivas <bharathi.sreenivas@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Without this fix, as soon as you try to send any traffic, it tries to
+get the tx queues from an uninitialized channel getting these errors:
+  WARNING: CPU: 1 PID: 0 at drivers/net/ethernet/sfc/tx.c:540 efx_hard_start_xmit+0x12e/0x170 [sfc]
+  [...]
+  RIP: 0010:efx_hard_start_xmit+0x12e/0x170 [sfc]
+  [...]
+  Call Trace:
+   <IRQ>
+   dev_hard_start_xmit+0xd7/0x230
+   sch_direct_xmit+0x9f/0x360
+   __dev_queue_xmit+0x890/0xa40
+  [...]
+  BUG: unable to handle kernel NULL pointer dereference at 0000000000000020
+  [...]
+  RIP: 0010:efx_hard_start_xmit+0x153/0x170 [sfc]
+  [...]
+  Call Trace:
+   <IRQ>
+   dev_hard_start_xmit+0xd7/0x230
+   sch_direct_xmit+0x9f/0x360
+   __dev_queue_xmit+0x890/0xa40
+  [...]
+
+Fixes: c308dfd1b43e ("sfc: fix wrong tx channel offset with efx_separate_tx_channels")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/20220914103648.16902-1-ihuguet@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 32 +++++++++++++++++----
- 1 file changed, 26 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/sfc/efx_channels.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 2d01eaeb703a..15f177185d71 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -5638,6 +5638,26 @@ static int i40e_get_link_speed(struct i40e_vsi *vsi)
- 	}
- }
- 
-+/**
-+ * i40e_bw_bytes_to_mbits - Convert max_tx_rate from bytes to mbits
-+ * @vsi: Pointer to vsi structure
-+ * @max_tx_rate: max TX rate in bytes to be converted into Mbits
-+ *
-+ * Helper function to convert units before send to set BW limit
-+ **/
-+static u64 i40e_bw_bytes_to_mbits(struct i40e_vsi *vsi, u64 max_tx_rate)
-+{
-+	if (max_tx_rate < I40E_BW_MBPS_DIVISOR) {
-+		dev_warn(&vsi->back->pdev->dev,
-+			 "Setting max tx rate to minimum usable value of 50Mbps.\n");
-+		max_tx_rate = I40E_BW_CREDIT_DIVISOR;
-+	} else {
-+		do_div(max_tx_rate, I40E_BW_MBPS_DIVISOR);
-+	}
-+
-+	return max_tx_rate;
-+}
-+
- /**
-  * i40e_set_bw_limit - setup BW limit for Tx traffic based on max_tx_rate
-  * @vsi: VSI to be configured
-@@ -5660,10 +5680,10 @@ int i40e_set_bw_limit(struct i40e_vsi *vsi, u16 seid, u64 max_tx_rate)
- 			max_tx_rate, seid);
- 		return -EINVAL;
- 	}
--	if (max_tx_rate && max_tx_rate < 50) {
-+	if (max_tx_rate && max_tx_rate < I40E_BW_CREDIT_DIVISOR) {
- 		dev_warn(&pf->pdev->dev,
- 			 "Setting max tx rate to minimum usable value of 50Mbps.\n");
--		max_tx_rate = 50;
-+		max_tx_rate = I40E_BW_CREDIT_DIVISOR;
- 	}
- 
- 	/* Tx rate credits are in values of 50Mbps, 0 is disabled */
-@@ -7591,9 +7611,9 @@ static int i40e_setup_tc(struct net_device *netdev, void *type_data)
- 
- 	if (pf->flags & I40E_FLAG_TC_MQPRIO) {
- 		if (vsi->mqprio_qopt.max_rate[0]) {
--			u64 max_tx_rate = vsi->mqprio_qopt.max_rate[0];
-+			u64 max_tx_rate = i40e_bw_bytes_to_mbits(vsi,
-+						  vsi->mqprio_qopt.max_rate[0]);
- 
--			do_div(max_tx_rate, I40E_BW_MBPS_DIVISOR);
- 			ret = i40e_set_bw_limit(vsi, vsi->seid, max_tx_rate);
- 			if (!ret) {
- 				u64 credits = max_tx_rate;
-@@ -10247,10 +10267,10 @@ static void i40e_rebuild(struct i40e_pf *pf, bool reinit, bool lock_acquired)
- 	}
- 
- 	if (vsi->mqprio_qopt.max_rate[0]) {
--		u64 max_tx_rate = vsi->mqprio_qopt.max_rate[0];
-+		u64 max_tx_rate = i40e_bw_bytes_to_mbits(vsi,
-+						  vsi->mqprio_qopt.max_rate[0]);
- 		u64 credits = 0;
- 
--		do_div(max_tx_rate, I40E_BW_MBPS_DIVISOR);
- 		ret = i40e_set_bw_limit(vsi, vsi->seid, max_tx_rate);
- 		if (ret)
- 			goto end_unlock;
+diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
+index d0f1b2dc7dff..c49168ba7a4d 100644
+--- a/drivers/net/ethernet/sfc/efx_channels.c
++++ b/drivers/net/ethernet/sfc/efx_channels.c
+@@ -308,7 +308,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
+ 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
+ 		efx->n_rx_channels = 1;
+ 		efx->n_tx_channels = 1;
+-		efx->tx_channel_offset = 1;
++		efx->tx_channel_offset = efx_separate_tx_channels ? 1 : 0;
+ 		efx->n_xdp_channels = 0;
+ 		efx->xdp_channel_offset = efx->n_channels;
+ 		efx->legacy_irq = efx->pci_dev->irq;
 -- 
 2.35.1
 
