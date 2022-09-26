@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF875EB14B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEEB5EB159
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiIZT2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S229535AbiIZTbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiIZT2M (ORCPT
+        with ESMTP id S229852AbiIZTbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:28:12 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5BC5AC47;
-        Mon, 26 Sep 2022 12:28:11 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id i17so1789257qkk.12;
-        Mon, 26 Sep 2022 12:28:11 -0700 (PDT)
+        Mon, 26 Sep 2022 15:31:03 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B05870A5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:31:02 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id k10-20020a4ad10a000000b004756ab911f8so1276325oor.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=rA5xeXD0TyjUhjvsrx6ejmOzOVqFLC9Uf1Of+5mK/os=;
+        b=q1Fcg2Hb4LvoKqu4pMmHkk9FWdIXq8k6TKvB/304rz7Ast8aN60MweBP0RiHUdXQdd
+         MPPE/eq0Ge3Wz+hnqHTukuZe+2LoQSeyzzrldU//jGGOh2jgNHGfxBSbgBtb1Qy3D7XS
+         5TR4RKdGDBkE92U7luJ8HQdfqbtCeeW7QKxr2sBWCmh3jsylmLwr8JGNZsY5C2TqVg69
+         OL9n7ZXgamLenPN5uaTXbxBsxUJW+8VRLvWTYEcyW5FiU0cbOP/ZQWNIAwEk/y1aIDAp
+         qsG6PZje1J8w4RA9DYhyfZbDyxhlsZsBpcmNnjzdHdGzX0YvbJNPNubcVsPWc672a/BI
+         dE+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5Y3qxibv8l/fmxXFEFy17abcwdGsCVgDmmM76oi7nSE=;
-        b=Taj7mhtuGddrPjZ57L+BWeKA9jh5eim15erKp3/PtsJC4cxVRvkF36ulI9igS9rlqs
-         CPm5R6wWqOCDNVgOqytkqH7ScYqkjSv479W5wcURCvc6ZrSQ2P+Q2DXyBFzjeeHPXK4z
-         TDI+HEc1oBnS1Eitmaw6k5X3KANYS4tOAh+Qg0UYGcbQboFsDy4W9pWc3l6qgSmz5ngB
-         Gg5wsa14h8g4A1Aq8YLcxM5/9hFqtjxJUI43qq3Ir8th9NYsAGqW6bPi/PO0xupCSvvz
-         jgATWzdoTb70wfShJHs7mMZWrVvSJGL95fnUT9tmNZBgCdQ+j8sEqjRSTjfgN61E2bJs
-         iKFQ==
-X-Gm-Message-State: ACrzQf23WkMPgX0Nx58jbfpxaNb+ubbtHevtXcyg0VEk8WgT+7gYxDBD
-        Jz0DWGJ+9CyEn1yGGNeBCZVFQh1zjAVH/RcT8ZQ=
-X-Google-Smtp-Source: AMsMyM7aJS+cDG8PTFrMvt/VueGDSzTBjRTPiJ5oZptGGfej3myZTddQZ91kU6alv5Ub85Dz95ct0JET4L9EjOxIhtU=
-X-Received: by 2002:a05:620a:290d:b0:6b6:1a92:d88a with SMTP id
- m13-20020a05620a290d00b006b61a92d88amr15599970qkp.58.1664220490587; Mon, 26
- Sep 2022 12:28:10 -0700 (PDT)
+        bh=rA5xeXD0TyjUhjvsrx6ejmOzOVqFLC9Uf1Of+5mK/os=;
+        b=LJyh6gQbhJ+Bg9/e4A7mUBEkYJafIVS7U3CxMC1Vf80uv8vD5qwIkm71MhJl27UaEn
+         fweT2R4uAnpLTKcTBo//j7NKG7r99sk7KWnGdeX8dVguXu6zA4fwNqZjtRjCvfuNRyXM
+         IDaYGmCz0B8WRTPa6upZQHintC5tIaATgivSdvmlwQKICxlScuxwLv4ZrRdkcbGHV4tv
+         m49jy2xIeRF2pq/yRg4SHKqZhowaYNhXUrv1Rs8y7Qy+FR7gt5R9Atf7M1ZnPs+8kZqo
+         hKazuXoLDSfR+RF7Ud1jT/kEffaD3MP4pjdgkp3aojNoMlelXF5U7pTihM8Xy97E3+CU
+         5nmw==
+X-Gm-Message-State: ACrzQf2SqJo2VjIch8OeOef+K8M+YpYiyvKkXDoQHj4vYfwAlg8vPIfg
+        00OelgFbpoxFpUCvFmgJnXLQhMDvaqpyHIo+RP4=
+X-Google-Smtp-Source: AMsMyM7V+UDdY/RC9U7Piet4qS2mnncGXcp0X61yySD1/a3D9TQeYEex4zDo2CQ8xzCu5YwzlyFTH7NC4jdtk8jAkFo=
+X-Received: by 2002:a4a:bc90:0:b0:475:67a4:2bb7 with SMTP id
+ m16-20020a4abc90000000b0047567a42bb7mr9233819oop.20.1664220661924; Mon, 26
+ Sep 2022 12:31:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220926140604.4173723-1-daniel.lezcano@linaro.org> <20220926140604.4173723-5-daniel.lezcano@linaro.org>
-In-Reply-To: <20220926140604.4173723-5-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Sep 2022 21:27:59 +0200
-Message-ID: <CAJZ5v0j_OcdN3ybT5-Y5G+bH=4COdNWQGD+L5KdLjC-cBPW6Jg@mail.gmail.com>
-Subject: Re: [PATCH v5 04/30] thermal/core: Add a generic thermal_zone_get_crit_temp()
- function
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
+Received: by 2002:a05:6358:7253:b0:c7:f373:780 with HTTP; Mon, 26 Sep 2022
+ 12:31:01 -0700 (PDT)
+Reply-To: pointerscott009@gmail.com
+From:   Aminuind Aabawa <aminuindabawa00@gmail.com>
+Date:   Mon, 26 Sep 2022 20:31:01 +0100
+Message-ID: <CAP_Jfyq1Ni=v=Zz=8r_Eaf_PghYr3c8VO14TeZJp6_CPKOcr7A@mail.gmail.com>
+Subject: =?UTF-8?Q?Bussines_offer_Gesch=C3=A4ftsangebot=2E?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [pointerscott009[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aminuindabawa00[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aminuindabawa00[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 4:06 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal zone ops defines a callback to retrieve the critical
-> temperature. As the trip handling is being reworked, all the trip
-> points will be the same whatever the driver and consequently finding
-> the critical trip temperature will be just a loop to search for a
-> critical trip point type.
->
-> Provide such a generic function, so we encapsulate the ops
-> get_crit_temp() which can be removed when all the backend drivers are
-> using the generic trip points handling.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  include/linux/thermal.h | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 5350a437f245..66373f872237 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -343,6 +343,8 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
->
->  int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
->
-> +int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
-> +
+--=20
+Hello, Do you have a projects that need urgent loan??
+Granting out loans today in 10,000 / 500 Million to Interested
+Investors, Companies & Private Individuals.
+Revert back if you interested.
 
-Well, this only adds a function header which by itself is not
-particularly useful (and the code change doesn't match the changelog
-even), so I would fold it into the patch that actually adds the
-function, including its body.
 
->  #ifdef CONFIG_THERMAL
->  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
->                 void *, struct thermal_zone_device_ops *,
-> --
-> 2.34.1
->
+Hallo, haben Sie Projekte, die dringend einen Kredit ben=C3=B6tigen?
+Vergeben Sie heute Kredite in H=C3=B6he von 10.000 / 500 Millionen an
+interessierte Investoren, Unternehmen und Privatpersonen. Kommen Sie
+zur=C3=BCck, wenn Sie interessiert sind.
