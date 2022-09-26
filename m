@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23BA5EA324
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1335E9F00
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237696AbiIZLTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S234864AbiIZKRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiIZLSS (ORCPT
+        with ESMTP id S234695AbiIZKQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:18:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA996581A;
-        Mon, 26 Sep 2022 03:38:17 -0700 (PDT)
+        Mon, 26 Sep 2022 06:16:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A2F15A18;
+        Mon, 26 Sep 2022 03:14:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5C8A60C79;
-        Mon, 26 Sep 2022 10:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB93DC433C1;
-        Mon, 26 Sep 2022 10:36:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 207A460AF0;
+        Mon, 26 Sep 2022 10:14:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331DAC433B5;
+        Mon, 26 Sep 2022 10:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188608;
-        bh=GRudqhS62ebZu1HuVQTI6YftybSnSIosMWL3xC4dD+M=;
+        s=korg; t=1664187290;
+        bh=L8RVp5OXmyoqFtSIWnGjdQGw8DF4M9iNlVUBWEbtTUc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=twfDRzv2rIDOrG0+AiewYR+Nu/iDtezLh28vCQ92HQ9mm6XQe/SVatUealpiQKVa6
-         rXBTQ4wENwAL0k4UzphpQFOzWgOTJlsLzBO+dcdbPqBFiSogYOUeCke1QHk4mlyoC8
-         5EnuUqQdjFMcbRpX2pK6viNR02S+NahYp+vN3Uy0=
+        b=ypnT/ljjJEaPObb3dsPZrBmsZ336uxuBTtXphZwoImg4NU22yuLPjq7h6OKyetXkL
+         jYngcsjrEZhMmTM1G0y4SNB86IVJekDhbvNZuJp2Jj8Mz2wwzTaBTkCsOPVN5pcINm
+         336dUl6r47J8eVe4DC2MRZJvCYDaU8rs0nAOFa84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 064/148] dmaengine: ti: k3-udma-private: Fix refcount leak bug in of_xudma_dev_get()
+        stable@vger.kernel.org, Yihao Han <hanyihao@vivo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 07/30] video: fbdev: simplefb: Check before clk_put() not needed
 Date:   Mon, 26 Sep 2022 12:11:38 +0200
-Message-Id: <20220926100758.446341127@linuxfoundation.org>
+Message-Id: <20220926100736.416842592@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Yihao Han <hanyihao@vivo.com>
 
-[ Upstream commit f9fdb0b86f087c2b7f6c6168dd0985a3c1eda87e ]
+[ Upstream commit 5491424d17bdeb7b7852a59367858251783f8398 ]
 
-We should call of_node_put() for the reference returned by
-of_parse_phandle() in fail path or when it is not used anymore.
-Here we only need to move the of_node_put() before the check.
+clk_put() already checks the clk ptr using !clk and IS_ERR()
+so there is no need to check it again before calling it.
 
-Fixes: d70241913413 ("dmaengine: ti: k3-udma: Add glue layer for non DMAengine users")
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Link: https://lore.kernel.org/r/20220720073234.1255474-1-windhl@126.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/ti/k3-udma-private.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/simplefb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/dma/ti/k3-udma-private.c b/drivers/dma/ti/k3-udma-private.c
-index aada84f40723..3257b2f5157c 100644
---- a/drivers/dma/ti/k3-udma-private.c
-+++ b/drivers/dma/ti/k3-udma-private.c
-@@ -31,14 +31,14 @@ struct udma_dev *of_xudma_dev_get(struct device_node *np, const char *property)
- 	}
- 
- 	pdev = of_find_device_by_node(udma_node);
-+	if (np != udma_node)
-+		of_node_put(udma_node);
-+
- 	if (!pdev) {
- 		pr_debug("UDMA device not found\n");
- 		return ERR_PTR(-EPROBE_DEFER);
- 	}
- 
--	if (np != udma_node)
--		of_node_put(udma_node);
--
- 	ud = platform_get_drvdata(pdev);
- 	if (!ud) {
- 		pr_debug("UDMA has not been probed\n");
+diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
+index 61f799a515dc..1efdbbc20f99 100644
+--- a/drivers/video/fbdev/simplefb.c
++++ b/drivers/video/fbdev/simplefb.c
+@@ -231,8 +231,7 @@ static int simplefb_clocks_init(struct simplefb_par *par,
+ 		if (IS_ERR(clock)) {
+ 			if (PTR_ERR(clock) == -EPROBE_DEFER) {
+ 				while (--i >= 0) {
+-					if (par->clks[i])
+-						clk_put(par->clks[i]);
++					clk_put(par->clks[i]);
+ 				}
+ 				kfree(par->clks);
+ 				return -EPROBE_DEFER;
 -- 
 2.35.1
 
