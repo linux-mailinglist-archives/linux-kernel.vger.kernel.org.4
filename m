@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF715EA547
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183E15EA064
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiIZL7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S236055AbiIZKgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbiIZL4F (ORCPT
+        with ESMTP id S236234AbiIZKe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:56:05 -0400
+        Mon, 26 Sep 2022 06:34:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195C879EE3;
-        Mon, 26 Sep 2022 03:51:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F964B0E5;
+        Mon, 26 Sep 2022 03:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B768AB80942;
-        Mon, 26 Sep 2022 10:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2D8C433D7;
-        Mon, 26 Sep 2022 10:44:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59432B80915;
+        Mon, 26 Sep 2022 10:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A300AC433C1;
+        Mon, 26 Sep 2022 10:21:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189097;
-        bh=2uQhA0qYWotVtBUvYwcPC6h3qGMu2lnXzqUK+uwfSxE=;
+        s=korg; t=1664187668;
+        bh=TdCfQyLqJOvLjXCjB0KIUoz/+y31ZtW2FxF/SkOgSh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6Vx4gZZlCMrzzzY2emeo7Yl6XK/gYGDGq3B62eoQPShMB1TihlmzDrHKGiuN6I8z
-         dkS2+169X5Ds/hFLCGo3x+GrIptJnIRXoqhvNIKuT1vh1mJnjL7URIG/78FrUuY57K
-         HtM79mFSw94FPS0seEvgFb5qNkkLLVVGE+WJf6qs=
+        b=vElVgBVxGBDbXUqEBoPG88SklFwWs64KU+PfqOYBFGY9iSsvBVbZTvuU6gCt9sHk6
+         IKfXJBoA+gkOz37aC/dxjyOHUFoM/idgOgxVL4Ai+a8NH6uWrLF/hymWh/BfZKyjKf
+         bwT+5gbiHssWlXRAH6ASQH5dvKmXLA/NrLPcdPOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.19 065/207] KVM: x86: Always enable legacy FP/SSE in allowed user XFEATURES
+        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 021/120] ALSA: hda/tegra: Align BDL entry to 4KB boundary
 Date:   Mon, 26 Sep 2022 12:10:54 +0200
-Message-Id: <20220926100809.511013321@linuxfoundation.org>
+Message-Id: <20220926100751.389781960@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dr. David Alan Gilbert <dgilbert@redhat.com>
+From: Mohan Kumar <mkumard@nvidia.com>
 
-commit a1020a25e69755a8a1a37735d674b91d6f02939f upstream.
+[ Upstream commit 8d44e6044a0e885acdd01813768a0b27906d64fd ]
 
-Allow FP and SSE state to be saved and restored via KVM_{G,SET}_XSAVE on
-XSAVE-capable hosts even if their bits are not exposed to the guest via
-XCR0.
+AZA HW may send a burst read/write request crossing 4K memory boundary.
+The 4KB boundary is not guaranteed by Tegra HDA HW. Make SW change to
+include the flag AZX_DCAPS_4K_BDLE_BOUNDARY to align BDLE to 4K
+boundary.
 
-Failing to allow FP+SSE first showed up as a QEMU live migration failure,
-where migrating a VM from a pre-XSAVE host, e.g. Nehalem, to an XSAVE
-host failed due to KVM rejecting KVM_SET_XSAVE.  However, the bug also
-causes problems even when migrating between XSAVE-capable hosts as
-KVM_GET_SAVE won't set any bits in user_xfeatures if XSAVE isn't exposed
-to the guest, i.e. KVM will fail to actually migrate FP+SSE.
-
-Because KVM_{G,S}ET_XSAVE are designed to allowing migrating between
-hosts with and without XSAVE, KVM_GET_XSAVE on a non-XSAVE (by way of
-fpu_copy_guest_fpstate_to_uabi()) always sets the FP+SSE bits in the
-header so that KVM_SET_XSAVE will work even if the new host supports
-XSAVE.
-
-Fixes: ad856280ddea ("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0")
-bz: https://bugzilla.redhat.com/show_bug.cgi?id=2079311
-Cc: stable@vger.kernel.org
-Cc: Leonardo Bras <leobras@redhat.com>
-Signed-off-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
-[sean: add comment, massage changelog]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220824033057.3576315-3-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+Link: https://lore.kernel.org/r/20220905172420.3801-1-mkumard@nvidia.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/cpuid.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ sound/pci/hda/hda_tegra.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -297,7 +297,13 @@ static void kvm_vcpu_after_set_cpuid(str
- 	vcpu->arch.guest_supported_xcr0 =
- 		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
- 
--	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
-+	/*
-+	 * FP+SSE can always be saved/restored via KVM_{G,S}ET_XSAVE, even if
-+	 * XSAVE/XCRO are not exposed to the guest, and even if XSAVE isn't
-+	 * supported by the host.
-+	 */
-+	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0 |
-+						       XFEATURE_MASK_FPSSE;
- 
- 	kvm_update_pv_runtime(vcpu);
- 
+diff --git a/sound/pci/hda/hda_tegra.c b/sound/pci/hda/hda_tegra.c
+index 2971b34c87c1..e235c3ec634d 100644
+--- a/sound/pci/hda/hda_tegra.c
++++ b/sound/pci/hda/hda_tegra.c
+@@ -428,7 +428,8 @@ MODULE_DEVICE_TABLE(of, hda_tegra_match);
+ static int hda_tegra_probe(struct platform_device *pdev)
+ {
+ 	const unsigned int driver_flags = AZX_DCAPS_CORBRP_SELF_CLEAR |
+-					  AZX_DCAPS_PM_RUNTIME;
++					  AZX_DCAPS_PM_RUNTIME |
++					  AZX_DCAPS_4K_BDLE_BOUNDARY;
+ 	struct snd_card *card;
+ 	struct azx *chip;
+ 	struct hda_tegra *hda;
+-- 
+2.35.1
+
 
 
