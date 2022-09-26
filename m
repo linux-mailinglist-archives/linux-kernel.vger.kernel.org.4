@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4805E9D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A785E9D7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbiIZJYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S234421AbiIZJYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiIZJXp (ORCPT
+        with ESMTP id S234874AbiIZJXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 05:23:45 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D091165BB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:22:16 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id k10so9857106lfm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:22:16 -0700 (PDT)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B022AC4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:22:21 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id jm5so5649881plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:22:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5Pax1quc7TkVCsZ5g50ISsP4krlqOVio/qYdLgmPV2A=;
-        b=ZlAjxTIbF9jWZb40Cys1vsy5WSEW4ArucWQMek5niQFZonsCRJ495ZTx8dCaaGV6O3
-         QjDkdeCwRoPFQ2/sLqHc8BjPLXuYz38QlBiomM/KXS5gzH17NZmEiYTbLVyiQAxEZpfP
-         vICWmo3ldGWvgvr17wg8mtjFib3PabC93VVNpDdjfhLOqgWOS2eufT3zUZdS9rcwvVPN
-         bKExKv+6ZGRzxpHWbPAjkJfa4yci81w118nwXzsJ9VacewuRI9zsnLkEgL7ecj0v5aEH
-         nKlek2qEkl17CRkUlwTDEsehzQkBmJ1VXviR39NZ7Qjt5GvMfCOuE+Zp7SJQj+FWx0ZP
-         ssyA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=z34IoLMo4N/tZbhNNm119rJSop1B4giR+c+9BX86tb4=;
+        b=aIsemP6PNKWhMgQ0ocIwr50VrKucycnzKZTNB3PWfsZ4Dm+HzlWD8IcTQGdFCsUSeZ
+         JC8uWl1FVSOJYhiIyPtTzXUxnKaKRLEO/FdMPFDOV/EZIQ3tQWU6mS2xDTM/y9qux2LH
+         CcgSkyVculAp1x90CmVCwqB0CBEcYtcpHojxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5Pax1quc7TkVCsZ5g50ISsP4krlqOVio/qYdLgmPV2A=;
-        b=dzdiHD39Y2A38tfQzWAHGO4XGh2WZp1GEyN5TB4lTtU9wNxjqJp5R+qRgFGLxVgZLf
-         Fkq+XJ2dvAK3TCvZcLtcKCnIstQwLLsePqh05kOAqSPQmbNhRJ1LZKxTZ7gp/qyMMjRJ
-         KtBTP1zgfzQMVX1cpG6Kd5tPONvaVSQpCVT6cMJiZWrhTVnxAsU9YgA+Q+sbV4/hvAnf
-         5Bpbp3W7SWkA2SNRKYNY+JA+jGkdO9sW7K0l4fYPqaUhVYXa8F8lmeDfHSDzZuT/KRrh
-         VLvma3/mA4f2PyfTSdcFkb12DSy/gC2mWhx6JyROQ3psKJtv2B7F9fQ23b1X+ysqkhPz
-         mktA==
-X-Gm-Message-State: ACrzQf3TMoaBa2lOnUUYzD4kW6ewTwolWOQ7YuibUivcFuYrA8dH4Gcb
-        sR2tuO4Ue3dsAoZ57+7nnKOaQg==
-X-Google-Smtp-Source: AMsMyM6Zb7SV+m0UEnPdXALbNrT0oxJ3wNweY1r7T3uKJxbT2ckDhfEi4NsqJhhhUcLcF7aPMaF/Dw==
-X-Received: by 2002:a05:6512:3055:b0:498:f7f5:53a3 with SMTP id b21-20020a056512305500b00498f7f553a3mr8185314lfb.367.1664184134878;
-        Mon, 26 Sep 2022 02:22:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q6-20020ac246e6000000b0048a757d1303sm2471959lfo.217.2022.09.26.02.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 02:22:14 -0700 (PDT)
-Message-ID: <ec8cc121-9814-cd52-fb49-c33ab1376f89@linaro.org>
-Date:   Mon, 26 Sep 2022 11:22:12 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=z34IoLMo4N/tZbhNNm119rJSop1B4giR+c+9BX86tb4=;
+        b=acrGjIQR9U53jxY5PKygfmrnx2NGMp+tw4uVUExZYzfv4KgFucepAq/ORuvetzrGdT
+         idO0kpAxk1cTujeZOP01RA531cUV4RBDhFrKY/nL/TF21obxg7bK/TB2DriQr4qYq8SZ
+         lcpIyh6W5+w9qcSH/RTJboJsCE/nWyBwAwDYHTUeZpJT90ToNqpjiRh90l+nfCmWQ3Qu
+         E9O6No3mHJosufIkqe6Tok40wj+/X7b3b3g6uDfCr/+3ZkjZgb47IIfdBaIR2pVawg7+
+         iEWT9KikG++tIQhCht+onAmgYu5xIFLVwYZJf7IcsaSYDTxIeQ12G9CP3YcGqjEP+38g
+         1a3A==
+X-Gm-Message-State: ACrzQf3MbpbX6SRCDzYRYMMOJvDMsAfrWwm4I2Ed3mr84/zeOyO8Kg6G
+        6n8fna4lygJw+CDm6LBEO+AWWQ==
+X-Google-Smtp-Source: AMsMyM4X8OnEq4IPKj8gch2ZFiDirdAUpYSJKvVvjdkpEZjWgnAuSjnznnA4jT5LOLoEux8VNCVGQw==
+X-Received: by 2002:a17:903:244a:b0:177:f32b:19ff with SMTP id l10-20020a170903244a00b00177f32b19ffmr21474690pls.103.1664184141443;
+        Mon, 26 Sep 2022 02:22:21 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:2a7d:69c:905d:1926])
+        by smtp.gmail.com with ESMTPSA id 201-20020a6215d2000000b00537daf64e8esm11742806pfv.188.2022.09.26.02.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 02:22:21 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 18:22:16 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
+Message-ID: <YzFvSC2Afizxm+eB@google.com>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-19-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 2/3] ARM: dts: qcom: pm8941: adjust node names to bindings
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220925210229.128462-1-luca@z3ntu.xyz>
- <20220925210229.128462-2-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220925210229.128462-2-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924000454.3319186-19-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 23:02, Luca Weiss wrote:
-> pm8941-misc should be called 'extcon' and pm8941-coincell 'charger'.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  arch/arm/boot/dts/qcom-pm8941.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
-> index 33517cccee01..01f14d5f314d 100644
-> --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-> @@ -27,7 +27,7 @@ pwrkey@800 {
->  			bias-pull-up;
->  		};
+On (22/09/24 02:10), John Ogness wrote:
+[..]
+> +/**
+> + * cons_print_dropped - Print 'dropped' message if required
+> + * @desc:	Pointer to the output descriptor
+> + *
+> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
+> + * not 0 and the regular format is requested. Extended format does not
+> + * need this message because it prints the sequence numbers.
+> + *
+> + * In regular format the extended message buffer is not in use.
+> + * So print into it at the beginning and move the resulting string
+> + * just in front of the regular text buffer so that the message can
+> + * be printed in one go.
+> + *
+> + * In case of a message this returns with @desc->outbuf and @desc->len
+> + * updated. If no message is required then @desc is not modified.
+> + */
+> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
+
+A silly nit: as far as I can tell printk API uses console_foo for
+naming, so my personal preference would be to spell console_ instead
+of cons_ (in this and in previous patches).
+
+> +{
+> +	struct cons_text_buf *txtbuf = desc->txtbuf;
+> +	size_t len;
+> +
+> +	if (!desc->dropped || desc->extmsg)
+> +		return;
+> +
+> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
+> +		return;
+> +
+> +	/* Print it into ext_text which is unused */
+> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
+> +		       "** %lu printk messages dropped **\n", desc->dropped);
+> +	desc->dropped = 0;
+> +
+> +	/* Copy it just below text so it goes out with one write */
+> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
+> +
+> +	/* Update the descriptor */
+> +	desc->len += len;
+> +	desc->outbuf -= len;
+> +}
+> +
 >  
-> -		usb_id: misc@900 {
-> +		usb_id: extcon@900 {
 
-Why? extcon is Linux specific name and should not be added to DTS.
-Anything requires it?
-
-
-Best regards,
-Krzysztof
-
+An even sillier nit: extra blank line /* can't help noticing it every time
+I read this function :) */
