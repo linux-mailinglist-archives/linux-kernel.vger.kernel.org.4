@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13C25EB3A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B3C5EB3A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiIZVyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S230499AbiIZV4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiIZVyn (ORCPT
+        with ESMTP id S230145AbiIZV4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:54:43 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16D74B0D4;
-        Mon, 26 Sep 2022 14:54:42 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso5298917otb.10;
-        Mon, 26 Sep 2022 14:54:42 -0700 (PDT)
+        Mon, 26 Sep 2022 17:56:44 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A91DA404F;
+        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id iw17so7493805plb.0;
+        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=572GorYLE019d559dVMv9AVnraHVnR09HbuFH0FA7is=;
+        b=lW2k7mj+KeJMygxuAHZ79TwuyVmHgVvXmK+7e1orn6Accoqgbku1I+UNcBH4LmKrw+
+         bFPYtmBdlUZYz1hI/ETOnLrutCSiHtyFxwna6zen0Dk0fmd9WLTnS+6XEbxMe40Dhr9g
+         AjD7C2dX60Zq1zoOo6vwDxQKgGalnx2+sgNSqVm8jA/1g5oUu2X8wMwuMrgYOrW196W7
+         PQkyboZyP0vFKG/fYeW7Fuk4gj26WtY4e6c0X8zoaOUK4k5hxNwL4AQsH5QUyI9M0rR5
+         uDeInSLPfyW3P3r9FTNoCYYw+6pZkXU5t4ofmQwHKZNmTUE4rp4sS83Xd8bSRpkBZKZ4
+         Nxrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=w2QQwnQgmCoCtfJGgTC/b/2B1KxxxneV73oIJQj+vXs=;
-        b=JY5L2qEb3tkXIEiWWz7HsEUvlHhLQVVL74D/ONXI9WL+PHKGU0oNDKVi4g73yK3fdg
-         KOTB7ZS2ygtErTBW72X2ErinJxmZBvyGBYm8BWjIff+jI5pLdnxuHHpPR328pcSTQdwV
-         7w2qNkvOpmSvXNZmynWhHLLjhDG9gKyXyiWepyps7UERA3YngQ6fRfslEW/63ySq5osH
-         AunvsDvQ9Nu/vct8Lw4rPG0j1+rgL503JkTTn2FKy8HvbduETkoU/bdsxqzZqhruEiKx
-         10BFI3Dn5jrI5azTmwU7g/1z9Ocm/QdoQC7wahZ0ewFW0NDGOzDnuoDTHscgiMm+mlHg
-         ZJGA==
-X-Gm-Message-State: ACrzQf2/zGNWMeQMGLSVdBGEnFlUsQSwqWE5+uAR5yhHb44fEpf1ySVR
-        qocDawkEVyTd1v6ldT0UgBMW7sG2Hw==
-X-Google-Smtp-Source: AMsMyM6bmE7R0bTAstFX4jVboHAVQz30IQaE1gTw1Ch1FS7J/e50TEWed28r2+CwdBjQaLYnUzf7RA==
-X-Received: by 2002:a9d:6e0f:0:b0:655:f372:f18b with SMTP id e15-20020a9d6e0f000000b00655f372f18bmr11294695otr.206.1664229281970;
-        Mon, 26 Sep 2022 14:54:41 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm43-20020a0568081aab00b0034d14c6ce3dsm7615607oib.16.2022.09.26.14.54.41
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=572GorYLE019d559dVMv9AVnraHVnR09HbuFH0FA7is=;
+        b=It3rKGWP8YInsvuk/O3aUEE1hZVVJsTPyyEGZzUrHS0TkAwQM/PIRRl44l8b5k+Xj2
+         8blrX48WmFApKew+7V5c8aYNhY8JcaJ8cEr0noo9QgNUkXRaDH7CDy53uIjIg6DqjNia
+         k/cimVu/X77x7euQS7mCQ4IZEhZmMtQ9bXcMmbQKmd1eQYj37c1x6rRQxCans9FzPR9V
+         HHXmCjRz//xvhhjMcy9sdiG/vxMesKr/DnnM9e+pZMKtTRuNEzO1dTN2iip/MfmDjNx6
+         nmtNeuHE4P9iu58rt7p6w23ps+23gBAM4pRvcJpEuQPs2w2ABMYK/d+pZXSFrHxUUI5t
+         2gHA==
+X-Gm-Message-State: ACrzQf2E/540zygzaQCeL49Iv25xFW+BDFLfA/TDhIGHkERX++Wj9a3z
+        JpcLnbEYUkRjwILXRYTCKXk=
+X-Google-Smtp-Source: AMsMyM5s8VcK1RLfXgmT7ORxvt7KP7GLXEXP1iHQiNIRR3L1gda1KOAav5WDXtxOLV74CBuhcuf2Pw==
+X-Received: by 2002:a17:903:4ca:b0:179:d21f:f04b with SMTP id jm10-20020a17090304ca00b00179d21ff04bmr11665598plb.7.1664229403022;
+        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:b4b9:6ef0:dfba:3f70])
+        by smtp.gmail.com with ESMTPSA id s21-20020aa78bd5000000b00540c24ba181sm12601509pfd.120.2022.09.26.14.56.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:54:41 -0700 (PDT)
-Received: (nullmailer pid 2894496 invoked by uid 1000);
-        Mon, 26 Sep 2022 21:54:40 -0000
-Date:   Mon, 26 Sep 2022 16:54:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "liangxu.xu" <liangxu.xu@mediatek.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, jitao.shi@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: display: mediatek: dp: Add compatible for
- MediaTek MT8188
-Message-ID: <20220926215440.GA2888681-robh@kernel.org>
-References: <20220923013953.5043-1-liangxu.xu@mediatek.com>
- <f6e669dd-f2cf-6e3f-18bb-25b21e5eab0c@linaro.org>
- <2afb5b7f761c7931eaf93f2f8a0fd268a39e1b02.camel@mediatek.com>
+        Mon, 26 Sep 2022 14:56:42 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH] perf lock contention: Fix a build error on 32-bit
+Date:   Mon, 26 Sep 2022 14:56:38 -0700
+Message-Id: <20220926215638.3931222-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2afb5b7f761c7931eaf93f2f8a0fd268a39e1b02.camel@mediatek.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:52:04AM +0800, liangxu.xu wrote:
-> On Fri, 2022-09-23 at 13:16 +0200, Krzysztof Kozlowski wrote:
-> > On 23/09/2022 03:39, liangxu.xu@mediatek.com wrote:
-> > > From: liangxu xu <liangxu.xu@mediatek.com>
-> > > 
-> > > Add dt-binding documentation of dp for MediaTek MT8188 SoC.
-> > > 
-> > > Signed-off-by: liangxu xu <liangxu.xu@mediatek.com>
-> > > ---
-> > 
-> > Where is the DTS? Where are driver changes?
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> 
-> Hi Krzysztof:
-> 
-> If you want to see the synchronous changes of dts and binding files,
-> then I will attach this binding file changes when sending dts later.
-> 
-> The driver change of mt8188 reuses that of mt8195. The driver link is
-> as follows:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/gpu/drm/mediatek/mtk_dp.c?id=48f4230642ee32a97ddf4be492838ce96089f040
+It was reported that it failed to build the BPF lock contention skeleton
+on 32 bit arch due to the size of long.  The lost count is used only for
+reporting errors due to lack of stackmap space through bad_hist which type
+is 'int'.  Let's use int type then.
 
-So the 8188 block is backwards compatible with the 8195 block? 
-That's good, but not what your schema says because you have not defined 
-a fallback compatible for the driver to use.
+Reported-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/bpf_skel/lock_contention.bpf.c | 2 +-
+ tools/perf/util/lock-contention.h              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Rob
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index e107d71f0f1a..1bb8628e7c9f 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -75,7 +75,7 @@ int has_task;
+ int stack_skip;
+ 
+ /* error stat */
+-unsigned long lost;
++int lost;
+ 
+ static inline int can_record(void)
+ {
+diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+index 67db311fc9df..b8cb8830b7bc 100644
+--- a/tools/perf/util/lock-contention.h
++++ b/tools/perf/util/lock-contention.h
+@@ -114,7 +114,7 @@ struct lock_contention {
+ 	struct machine *machine;
+ 	struct hlist_head *result;
+ 	unsigned long map_nr_entries;
+-	unsigned long lost;
++	int lost;
+ 	int max_stack;
+ 	int stack_skip;
+ };
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
