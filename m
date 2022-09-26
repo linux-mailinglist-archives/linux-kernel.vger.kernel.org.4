@@ -2,166 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5465E97C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F7E5E97C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiIZBkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S233274AbiIZBnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiIZBki (ORCPT
+        with ESMTP id S232377AbiIZBng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:40:38 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9F622BD4
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:40:37 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i13-20020a056e02152d00b002f58aea654fso4183796ilu.20
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:40:37 -0700 (PDT)
+        Sun, 25 Sep 2022 21:43:36 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE0C22286
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:43:34 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso6567134wmq.4
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=TXypzlgba8Zg3Bw+ufq5o3Y7uUVrGlJmf5mQqKp3w8E=;
+        b=AXPxiZpebfmDuNVIIpFcl61O6FMrbNWBmHwpS/s9kimT/KmoHFSK0xzsJsLQFOv5RO
+         zXQi332g+PC4JIz5hRD93r95j5P+w2jzfnqklen0MZ4WjkfA+g4Hv1AHvoxZ28DDPVwf
+         W5bbsiUP01wXZh+3P7JTvV7sGLT1hCdmjFViUOnOpxSBEBuGrXYMa7EzAJUgkdZ2qEts
+         BEbQ2EijoF7n4RbSUsok/5pwf+Q1uvPsmEAyVF8g9b7+7K94m1euEqo2jlxHJuQrm9UG
+         p8saAI0pHn5U7oxS2QHDmqG/lP6JINOmTS7J3autxovS/tY2gqDkcvVnQeeK5l8o01Lt
+         Brjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=7Vsk85d4fx8hDMyy+AtkvVcWOMFZLHp5yRJt4zLDoqY=;
-        b=mN4Ms72J/URwFmx5QZxFC+jp8cyg7KOhizvJpU+5sDQonxquQJ4K5Sx+FCkBNWRcrN
-         k/a81xl+ubZ+CCikQC27WvlHTvdlc4jw4mmdqYADKI0Q5nD6HjBCqGE+mZDEO3JwtMd1
-         azLfSgaEpDfGe3Q1vRfjVizBXFKhWXH4yXBodDRkukSjHw9F8C+5Wx9WLOtI5d4ac8zi
-         WoxpLdFQXQcNO8Kmc1RsLx2N2l/3t7V0vvFPaFPZB+kPrdu3cgaUwZpQxT136cx7pQqJ
-         0EgKZAxp4bTul4FUFnkmXt7TNuGHn5qnyeelFDILuyZbWQvXF7pAlSA5jxpIK5NhVP62
-         DZeA==
-X-Gm-Message-State: ACrzQf0ulsdvEMG8uzFxsYHzqfkTZNMoldNUfgqtD+y/Q36Qe3r8NvqZ
-        HlNNJ2/Fb5N1K6X8B+lGXgIvoxkI3J+SzYahnc/yEQ4cJjsN
-X-Google-Smtp-Source: AMsMyM416s1G+M0Rn4y09LGkDUJOW+kfbbv5BJcQYu7yXX2GGCcm/wD5H2Oqn59jqLJmO0TSll91713IMYvXTPV7fkrLCN7h7jBf
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=TXypzlgba8Zg3Bw+ufq5o3Y7uUVrGlJmf5mQqKp3w8E=;
+        b=SwuVnsiouFGtJddn1IeQcOflkUB2TeTloAXAtDZFIvGUk+Mtyku2xX5cw4Y5TlmFZA
+         RhYgeA91FPR6PzxjHy0QK1j1VJ/1yvGw4KG0VupVPtGSWqWjuNx0VPliuXqWa+0bHJAl
+         vJQkghXEEVrqjCmCQKdCytfPJEH00fbFMpZ/YFxlAL8EkBKy4aFLQwQjLszde/utwyxn
+         zAiixDhqWYL4BHaat0yQ6uycy4n4EieDLAgbnCxzxUl8DhigA8NgUNMX8xL/J9A5KIIX
+         BYPMIuMDCm5YG5QuJKNgjfIZd5W0svJi4mClGopQbBOaVh+P5CH+0Wi9foP1IqhP5DkX
+         VAFw==
+X-Gm-Message-State: ACrzQf360ge39tf0DPsHdPURAu6+rPfxp7tULVH2Vam2buBjxtjTdw2t
+        fzalakzSsbqYOSiLwAz+IZFGEbOyoGIAvhHHOTHk+NLOjr8=
+X-Google-Smtp-Source: AMsMyM4uXxdw8hSXJcrKU7D1Irudn2PDOysdVx3GKVPXMGmyCViP+I4gZVoaoykVuRFCp5DJxEMVLwTYBkpRthQLEN4=
+X-Received: by 2002:a1c:ed11:0:b0:3b4:d3e1:bec with SMTP id
+ l17-20020a1ced11000000b003b4d3e10becmr13251362wmh.196.1664156613212; Sun, 25
+ Sep 2022 18:43:33 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:bb0a:0:b0:35a:100f:74f3 with SMTP id
- y10-20020a02bb0a000000b0035a100f74f3mr10959326jan.237.1664156436975; Sun, 25
- Sep 2022 18:40:36 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 18:40:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046d33405e98a9daa@google.com>
-Subject: [syzbot] WARNING: Nested lock was not taken
-From:   syzbot <syzbot+7475732e7177a19317a1@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+References: <4f398e4c-973b-7843-2f75-27324d109277@linaro.org>
+ <CAOf5uwnfCCwHjSXTurMtyEpZc_tF8bH=fxfwBzOtHcfM_S4tYg@mail.gmail.com>
+ <CAOf5uw=_+WQO7qH_Bxs5qEBn2_nemzuLiXdYe8+W_+OnFZNYkw@mail.gmail.com>
+ <fb52982c-745e-ef9b-6258-0870d00a744b@linaro.org> <CAOf5uwnVZxYGDfph6wKKpF413obt3786WPMn8mnSdizKe=XkzQ@mail.gmail.com>
+ <ebca0c67-43f6-ce57-372b-f6ddaac69914@linaro.org>
+In-Reply-To: <ebca0c67-43f6-ce57-372b-f6ddaac69914@linaro.org>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sun, 25 Sep 2022 21:43:20 -0400
+Message-ID: <CAMdYzYrqVSNmOASDUXK0MaJVy56gmRkHweb9Bs7J76O4HZn2NQ@mail.gmail.com>
+Subject: Re: v6.0-rc6 - arm64 / rock960 : kernel panic
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Heiko St??bner" <heiko@sntech.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Vinod Koul <vinod.koul@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Sep 25, 2022 at 5:51 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi,
+>
+> after a painful git bisect, the kernel panic happens with:
+>
+> commit 8dc60f8da22fdbaa1fafcfb5ff6d24bc9eff56aa (refs/bisect/bad)
+> Author: Peter Geis <pgwipeout@gmail.com>
+> Date:   Tue Jun 21 20:31:40 2022 -0400
+>
+>      phy: rockchip-inno-usb2: Sync initial otg state
+>
+>      The initial otg state for the phy defaults to device mode. The actua=
+l
+>      state isn't detected until an ID IRQ fires. Fix this by syncing the =
+ID
+>      state during initialization.
+>
+>      Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
+>      Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+>      Reviewed-by: Samuel Holland <samuel@sholland.org>
+>      Link:
+> https://lore.kernel.org/r/20220622003140.30365-1-pgwipeout@gmail.com
+>      Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>
+> Reverting it fixes the issue
 
-syzbot found the following issue on:
+Good Evening,
 
-HEAD commit:    c194837ebb57 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16bb8574880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
-dashboard link: https://syzkaller.appspot.com/bug?extid=7475732e7177a19317a1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a45edf080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12e66470880000
+A fix has been submitted and accepted, it is currently sitting in -next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/patch/d=
+rivers/phy/rockchip/phy-rockchip-inno-usb2.c?id=3Df340ed8664a55a467850ec168=
+9996e63d9ee971a
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8d8ae425e7fa/disk-c194837e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c540d501ebe7/vmlinux-c194837e.xz
+Very Respectfully,
+Peter
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7475732e7177a19317a1@syzkaller.appspotmail.com
-
-loop4: detected capacity change from 0 to 264192
-==================================
-WARNING: Nested lock was not taken
-6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0 Not tainted
-----------------------------------
-syz-executor253/3315 is trying to lock:
-ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
-ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: inode_sb_list_del fs/inode.c:503 [inline]
-ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: evict+0x90/0x334 fs/inode.c:654
-
-but this task is not holding:
-Unable to handle kernel paging request at virtual address 0000000100000017
-Mem abort info:
-  ESR = 0x0000000096000005
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x05: level 1 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000005
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010a8da000
-[0000000100000017] pgd=0800000107ed2003, p4d=0800000107ed2003, pud=0000000000000000
-Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3315 Comm: syz-executor253 Not tainted 6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
-pc : __lock_acquire+0x7cc/0x30a4 kernel/locking/lockdep.c:5044
-lr : print_lock_nested_lock_not_held kernel/locking/lockdep.c:4884 [inline]
-lr : __lock_acquire+0x7c0/0x30a4 kernel/locking/lockdep.c:5044
-sp : ffff80001289b8b0
-x29: ffff80001289b990 x28: 0000000000000001 x27: ffff80000d30c000
-x26: ffff0000c68d24b8 x25: ffff0000c68d24d8 x24: 0000000000000002
-x23: ffff0000c68d24d0 x22: ffff80000d32a753 x21: ffff80000d32a712
-x20: 0000000000040067 x19: ffff0000c68d1a80 x18: 0000000000000156
-x17: 2b7463697665203a x16: 0000000000000002 x15: 0000000000000000
-x14: 0000000000000000 x13: 205d353133335420 x12: 5b5d303434313530
-x11: ff808000081c1630 x10: 0000000000000000 x9 : 30785d1575e13b00
-x8 : 00000000ffffffff x7 : 205b5d3034343135 x6 : ffff800008195d30
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : ffff80000cb555a1
-Call trace:
- print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
- __lock_acquire+0x7cc/0x30a4 kernel/locking/lockdep.c:5044
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- inode_sb_list_del fs/inode.c:503 [inline]
- evict+0x90/0x334 fs/inode.c:654
- iput_final fs/inode.c:1748 [inline]
- iput+0x2c4/0x324 fs/inode.c:1774
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs/super.c:188
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190
-Code: 94f84769 f94002e8 d0024dc0 91168400 (f9400d01) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	94f84769 	bl	0x3e11da4
-   4:	f94002e8 	ldr	x8, [x23]
-   8:	d0024dc0 	adrp	x0, 0x49ba000
-   c:	91168400 	add	x0, x0, #0x5a1
-* 10:	f9400d01 	ldr	x1, [x8, #24] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> @@@@`0` @`@@ @@@@@@@[    3.566365] Unable to handle kernel NULL pointer
+> dereference at virtual address 0000000000000000
+> [    3.567182] Mem abort info:
+> [    3.567440]   ESR =3D 0x0000000086000006
+> [    3.567783]   EC =3D 0x21: IABT (current EL), IL =3D 32 bits
+> [    3.568264]   SET =3D 0, FnV =3D 0
+> [    3.568544]   EA =3D 0, S1PTW =3D 0
+> [    3.568833]   FSC =3D 0x06: level 2 translation fault
+> [    3.569275] user pgtable: 4k pages, 48-bit VAs, pgdp=3D00000000024be00=
+0
+> [    3.569854] [0000000000000000] pgd=3D0800000001725003,
+> p4d=3D0800000001725003, pud=3D0800000000f11003, pmd=3D0000000000000000
+> [    3.570912] Internal error: Oops: 86000006 [#1] PREEMPT SMP
+> [    3.571421] Modules linked in:
+> [    3.571712] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.19.0-rc1+ #795
+> [    3.572303] Hardware name: 96boards Rock960 (DT)
+> [    3.572722] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS
+> BTYPE=3D--)
+> [    3.573354] pc : 0x0
+> [    3.573567] lr : call_timer_fn.constprop.0+0x24/0x80
+> [    3.574037] sp : ffff80000a703a50
+> [    3.574339] x29: ffff80000a703a50 x28: 0000000000000005 x27:
+> 0000000000000000
+> [    3.575002] x26: ffff80000a3379c0 x25: ffff0000f7798de8 x24:
+> ffff80000a703ae0
+> [    3.575664] x23: 0000000000000000 x22: dead000000000122 x21:
+> 0000000000000101
+> [    3.576325] x20: ffff0000006b6200 x19: 0000000000000000 x18:
+> 0000000000000000
+> [    3.576986] x17: ffff8000ed773000 x16: ffff80000801c000 x15:
+> 00003d0900007d00
+> [    3.577648] x14: 0000000000000000 x13: 0000000000000000 x12:
+> 0000000000000000
+> [    3.578308] x11: 0000000000000004 x10: ffff8000ed773000 x9 :
+> ffff0000f7798e30
+> [    3.578970] x8 : 0000000000000001 x7 : ffffffffffffffff x6 :
+> 0000000000000000
+> [    3.579630] x5 : 0000000000000000 x4 : 0000000000000000 x3 :
+> 0000000000000200
+> [    3.580290] x2 : 0000000000000200 x1 : 0000000000000000 x0 :
+> ffff000001025310
+> [    3.580951] Call trace:
+> [    3.581178]  0x0
+> [    3.581359]  __run_timers.part.0+0x1f0/0x234
+> [    3.581759]  run_timer_softirq+0x3c/0x7c
+> [    3.582130]  _stext+0x124/0x2a0
+> [    3.582430]  __irq_exit_rcu+0xe4/0x100
+> [    3.582790]  irq_exit_rcu+0x10/0x1c
+> [    3.583117]  el1_interrupt+0x38/0x70
+> [    3.583454]  el1h_64_irq_handler+0x18/0x24
+> [    3.583835]  el1h_64_irq+0x64/0x68
+> [    3.584156]  cpuidle_enter_state+0x130/0x2f0
+> [    3.584560]  cpuidle_enter+0x38/0x50
+> [    3.584901]  do_idle+0x214/0x29c
+> [    3.585210]  cpu_startup_entry+0x28/0x30
+> [    3.585578]  secondary_start_kernel+0x13c/0x150
+> [    3.586002]  __secondary_switched+0xa0/0xa4
+> [    3.586408] Code: bad PC value
+> [    3.586699] ---[ end trace 0000000000000000 ]---
+> [    3.587119] Kernel panic - not syncing: Oops: Fatal exception in
+> interrupt
+> [    3.587732] SMP: stopping secondary CPUs
+> [    3.588230] Kernel Offset: 0x80000 from 0xffff800008000000
+> [    3.588725] PHYS_OFFSET: 0x0
+> [    3.588991] CPU features: 0x800,00127811,00001082
+> [    3.589420] Memory Limit: none
+> [    3.589724] ---[ end Kernel panic - not syncing: Oops: Fatal
+> exception in interrupt ]---
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
