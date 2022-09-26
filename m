@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888575EACAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04005EACBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiIZQhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S229519AbiIZQkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiIZQgi (ORCPT
+        with ESMTP id S229617AbiIZQkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:36:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201446D56B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:24:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 26 Sep 2022 12:40:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D35613FB4A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664205985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YcUAoJPx/293KJLL46ZZ2kLyCO3l5xX7bQLDqEviC+8=;
+        b=VBqoNO2tEvHdXLmQ3ZYh0jgwdEfHXOTZo45s1qKNrx52/eM0gpOcg1KxN9OBnblIBVr8vD
+        ZsDJin3hL6CP1X8lbDyGFI5+cRB1SCo8utTNWDxyrFxz9D3kCbg3ZXvp9IycJ0q5zCU9NE
+        w+Cxis9KJizOqBM60zw0sNNz8BS1/WY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-vIy5ixN0PjmWNTQVGUCBmg-1; Mon, 26 Sep 2022 11:26:24 -0400
+X-MC-Unique: vIy5ixN0PjmWNTQVGUCBmg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5EE2B21EF4;
-        Mon, 26 Sep 2022 15:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664205816; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/QQNa5fjWpYSTINNZ8fkhajG7/HHXIdA5rA4AKSfwoc=;
-        b=XHZoyzENCRIiGgTd/+ssg8u8SLzggAtIrjmeJmHRRhZnuW7nbag5ljev7ZALJKePOpt4JG
-        ctbdLsvrk28VOBey7XZsYNI0eVyWmzlSah7hDNULEh6tffIGgLrdBkFJ1P7F6Ukol5flUB
-        xECfGvDcjnLEnuVoYDbU/VbHMq4bjts=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4348C13486;
-        Mon, 26 Sep 2022 15:23:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id m0CZDfjDMWPaIgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 26 Sep 2022 15:23:36 +0000
-Date:   Mon, 26 Sep 2022 17:23:35 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        urezki@gmail.com, linux-kernel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH v2 mm] mm: fix BUG splat with kvmalloc + GFP_ATOMIC
-Message-ID: <YzHD93asRMvNCq9B@dhcp22.suse.cz>
-References: <20220926151650.15293-1-fw@strlen.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8541858F13;
+        Mon, 26 Sep 2022 15:26:23 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.193.106])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EBAFDC15BA5;
+        Mon, 26 Sep 2022 15:26:19 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dave Chinner <david@fromorbit.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: [PATCH RFC 0/5] mm/autonuma: replace savedwrite infrastructure
+Date:   Mon, 26 Sep 2022 17:26:13 +0200
+Message-Id: <20220926152618.194810-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926151650.15293-1-fw@strlen.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-09-22 17:16:50, Florian Westphal wrote:
-> Martin Zaharinov reports BUG with 5.19.10 kernel:
->  kernel BUG at mm/vmalloc.c:2437!
->  invalid opcode: 0000 [#1] SMP
->  CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
->  [..]
->  RIP: 0010:__get_vm_area_node+0x120/0x130
->   __vmalloc_node_range+0x96/0x1e0
->   kvmalloc_node+0x92/0xb0
->   bucket_table_alloc.isra.0+0x47/0x140
->   rhashtable_try_insert+0x3a4/0x440
->   rhashtable_insert_slow+0x1b/0x30
->  [..]
-> 
-> bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, this now
-> falls through to vmalloc and hits code paths that assume GFP_KERNEL.
-> 
-> Reported-by: Martin Zaharinov <micron10@gmail.com>
-> Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
-> Signed-off-by: Florian Westphal <fw@strlen.de>
+As discussed in my talk at LPC, we can reuse the same mechanism for
+deciding whether to map a pte writable when upgrading permissions via
+mprotect() -- e.g., PROT_READ -> PROT_READ|PROT_WRITE -- to replace the
+savedwrite infrastructure used for NUMA hinting faults (e.g., PROT_NONE
+-> PROT_READ|PROT_WRITE). Instead of maintaining previous write permissions
+for a pte/pmd, we re-determine if the pte/pmd can be writable.
 
-Maybe we can extend this to GFP_NOWAIT capable vmalloc call but I am not
-sure this exists or whether this is something vmalloc maintainers want
-to commit to.
+The big benefit is that we have a common logic for deciding whether we can
+map a pte/pmd writable on protection changes.
 
-This is a clear and trivial fixup of the above commit. I would add this
-to the stable tree as well.
+For private mappings, there should be no difference -- from
+what I understand, that is what autonuma benchmarks care about.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+I ran autonumabench on a system with 2 NUMA nodes, 96 GiB each via:
+	perf stat --null --repeat 10
 
-Thanks!
+The numa1 benchmark is quite noisy in my environment. I suspect that there
+is no actual change in performance, even though the numbers indicate that
+this series might improve performance slightly.
 
-> ---
->  mm/util.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/util.c b/mm/util.c
-> index c9439c66d8cf..346e40177bc6 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -619,6 +619,10 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
->  	if (ret || size <= PAGE_SIZE)
->  		return ret;
->  
-> +	/* non-sleeping allocations are not supported by vmalloc */
-> +	if (!gfpflags_allow_blocking(flags))
-> +		return NULL;
-> +
->  	/* Don't even allow crazy sizes */
->  	if (unlikely(size > INT_MAX)) {
->  		WARN_ON_ONCE(!(flags & __GFP_NOWARN));
-> -- 
-> 2.35.1
+numa1:
+	mm-stable:   156.75 +- 11.67 seconds time elapsed  ( +-  7.44% )
+	mm-stable++: 147.50 +- 9.35 seconds time elapsed  ( +-  6.34% )
+
+numa2:
+	mm-stable:   15.9834 +- 0.0589 seconds time elapsed  ( +-  0.37% )
+	mm-stable++: 16.1467 +- 0.0946 seconds time elapsed  ( +-  0.59% )
+
+It is worth noting that for shared writable mappings that require
+writenotify, we will only avoid write faults if the pte/pmd is dirty
+(inherited from the older mprotect logic). If we ever care about optimizing
+that further, we'd need a different mechanism to identify whether the FS
+still needs to get notified on the next write access. In any case, such an
+optimiztion will then not be autonuma-specific, but mprotect() permission
+upgrades would similarly benefit from it.
+
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+
+David Hildenbrand (4):
+  mm/mprotect: minor can_change_pte_writable() cleanups
+  mm/huge_memory: try avoiding write faults when changing PMD protection
+  mm/autonuma: use can_change_(pte|pmd)_writable() to replace savedwrite
+  mm: remove unused savedwrite infrastructure
+
+Nadav Amit (1):
+  mm/mprotect: allow clean exclusive anon pages to be writable
+
+ arch/powerpc/include/asm/book3s/64/pgtable.h | 80 +-------------------
+ arch/powerpc/kvm/book3s_hv_rm_mmu.c          |  2 +-
+ include/linux/mm.h                           |  2 +
+ include/linux/pgtable.h                      | 24 ------
+ mm/debug_vm_pgtable.c                        | 32 --------
+ mm/huge_memory.c                             | 66 ++++++++++++----
+ mm/ksm.c                                     |  9 +--
+ mm/memory.c                                  | 19 ++++-
+ mm/mprotect.c                                | 23 +++---
+ 9 files changed, 93 insertions(+), 164 deletions(-)
 
 -- 
-Michal Hocko
-SUSE Labs
+2.37.3
+
