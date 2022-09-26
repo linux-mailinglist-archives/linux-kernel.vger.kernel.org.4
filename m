@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F195EA55A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF735EA3CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbiIZMBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S237969AbiIZLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbiIZL5V (ORCPT
+        with ESMTP id S237981AbiIZLcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:57:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E49179EF7;
-        Mon, 26 Sep 2022 03:51:47 -0700 (PDT)
+        Mon, 26 Sep 2022 07:32:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181106D9E3;
+        Mon, 26 Sep 2022 03:42:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F085B8094E;
-        Mon, 26 Sep 2022 10:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65411C433D6;
-        Mon, 26 Sep 2022 10:51:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75B7B60C56;
+        Mon, 26 Sep 2022 10:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7744DC433C1;
+        Mon, 26 Sep 2022 10:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189488;
-        bh=rPOYb/usdg3kKuCluI9ZiRDJ+/5EpnjMM/bZ0kffn6E=;
+        s=korg; t=1664188868;
+        bh=vOPXaVottFLXDjh23uGbUV0JWH7K6CBH8tJz+br+0xQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G+hejAsZDwj0SNvEyPqdgMedsoYl5cLUhnkkGgoDJzgc+OTEYvlhAFrvNWB/lOh6I
-         fHi3xE966VV0RcfsLWgyYafZYlMUaV6/V1Za/fdMkNAh02tlDUV2sDweUUw2Tmwekc
-         crLEYIODZQ9+3HH+Z2qg59umw8E5Ksjb0hJVtYqY=
+        b=ZSOn24NB9HEWfGLviwjupv5sTszcNJ/aRbLvkTzUe4NY62O9mTHLshs/Syx4AXLaD
+         UJOScs141G3IZZAOWjjGPGlPXzZ/Y2VxBQ0Nazc6kYSSQ+r86Q/v3Wrtl6qYAgHks1
+         DIs6gu0xxubMuu4uBs+6qUqTzrkrErcQOeCJQDEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.19 165/207] phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.15 120/148] serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
 Date:   Mon, 26 Sep 2022 12:12:34 +0200
-Message-Id: <20220926100814.051873209@linuxfoundation.org>
+Message-Id: <20220926100800.647242411@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,200 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 0a6fc70d76bddf98278af2ac000379c82aec8f11 upstream.
+commit 754f68044c7dd6c52534ba3e0f664830285c4b15 upstream.
 
-Reset support for SATA PHY is somehow broken and after calling it, kernel
-is not able to detect and initialize SATA disk Samsung SSD 850 EMT0 [1].
+DMA complete & stop paths did not correctly account Tx'ed characters
+into icount.tx. Using uart_xmit_advance() fixes the problem.
 
-Reset support was introduced in commit 934337080c6c ("phy: marvell:
-phy-mvebu-a3700-comphy: Add native kernel implementation") as part of
-complete rewrite of this driver. v1 patch series of that commit [2] did
-not contain reset support and was tested that is working fine with
-Ethernet, SATA and USB PHYs without issues too.
-
-So for now remove broken reset support and change implementation of
-power_off callback to power off all functions on specified lane (and not
-only selected function) because during startup kernel does not know which
-function was selected and configured by bootloader. Same logic was used
-also in v1 patch series of that commit.
-
-This change fixes issues with initialization of SATA disk Samsung SSD 850
-and disk is working again, like before mentioned commit.
-
-Once problem with PHY reset callback is solved its functionality could be
-re-introduced. But for now it is unknown why it does not work.
-
-[1] - https://lore.kernel.org/r/20220531124159.3e4lgn2v462irbtz@shindev/
-[2] - https://lore.kernel.org/r/20211028184242.22105-1-kabel@kernel.org/
-
-Reported-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Fixes: 934337080c6c ("phy: marvell: phy-mvebu-a3700-comphy: Add native kernel implementation")
-Cc: stable@vger.kernel.org # v5.18+
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Link: https://lore.kernel.org/r/20220829083046.15082-1-pali@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
+Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220901143934.8850-3-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/marvell/phy-mvebu-a3700-comphy.c | 87 ++++----------------
- 1 file changed, 17 insertions(+), 70 deletions(-)
+ drivers/tty/serial/serial-tegra.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
-index a4d7d9bd100d..67712c77d806 100644
---- a/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
-+++ b/drivers/phy/marvell/phy-mvebu-a3700-comphy.c
-@@ -274,7 +274,6 @@ struct mvebu_a3700_comphy_lane {
- 	int submode;
- 	bool invert_tx;
- 	bool invert_rx;
--	bool needs_reset;
- };
+--- a/drivers/tty/serial/serial-tegra.c
++++ b/drivers/tty/serial/serial-tegra.c
+@@ -525,7 +525,7 @@ static void tegra_uart_tx_dma_complete(v
+ 	count = tup->tx_bytes_requested - state.residue;
+ 	async_tx_ack(tup->tx_dma_desc);
+ 	spin_lock_irqsave(&tup->uport.lock, flags);
+-	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
++	uart_xmit_advance(&tup->uport, count);
+ 	tup->tx_in_progress = 0;
+ 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+ 		uart_write_wakeup(&tup->uport);
+@@ -613,7 +613,6 @@ static unsigned int tegra_uart_tx_empty(
+ static void tegra_uart_stop_tx(struct uart_port *u)
+ {
+ 	struct tegra_uart_port *tup = to_tegra_uport(u);
+-	struct circ_buf *xmit = &tup->uport.state->xmit;
+ 	struct dma_tx_state state;
+ 	unsigned int count;
  
- struct gbe_phy_init_data_fix {
-@@ -1097,40 +1096,12 @@ mvebu_a3700_comphy_pcie_power_off(struct mvebu_a3700_comphy_lane *lane)
- 			    0x0, PU_PLL_BIT | PU_RX_BIT | PU_TX_BIT);
+@@ -624,7 +623,7 @@ static void tegra_uart_stop_tx(struct ua
+ 	dmaengine_tx_status(tup->tx_dma_chan, tup->tx_cookie, &state);
+ 	count = tup->tx_bytes_requested - state.residue;
+ 	async_tx_ack(tup->tx_dma_desc);
+-	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
++	uart_xmit_advance(&tup->uport, count);
+ 	tup->tx_in_progress = 0;
  }
  
--static int mvebu_a3700_comphy_reset(struct phy *phy)
-+static void mvebu_a3700_comphy_usb3_power_off(struct mvebu_a3700_comphy_lane *lane)
- {
--	struct mvebu_a3700_comphy_lane *lane = phy_get_drvdata(phy);
--	u16 mask, data;
--
--	dev_dbg(lane->dev, "resetting lane %d\n", lane->id);
--
--	/* COMPHY reset for internal logic */
--	comphy_lane_reg_set(lane, COMPHY_SFT_RESET,
--			    SFT_RST_NO_REG, SFT_RST_NO_REG);
--
--	/* COMPHY register reset (cleared automatically) */
--	comphy_lane_reg_set(lane, COMPHY_SFT_RESET, SFT_RST, SFT_RST);
--
--	/* PIPE soft and register reset */
--	data = PIPE_SOFT_RESET | PIPE_REG_RESET;
--	mask = data;
--	comphy_lane_reg_set(lane, COMPHY_PIPE_RST_CLK_CTRL, data, mask);
--
--	/* Release PIPE register reset */
--	comphy_lane_reg_set(lane, COMPHY_PIPE_RST_CLK_CTRL,
--			    0x0, PIPE_REG_RESET);
--
--	/* Reset SB configuration register (only for lanes 0 and 1) */
--	if (lane->id == 0 || lane->id == 1) {
--		u32 mask, data;
--
--		data = PIN_RESET_CORE_BIT | PIN_RESET_COMPHY_BIT |
--		       PIN_PU_PLL_BIT | PIN_PU_RX_BIT | PIN_PU_TX_BIT;
--		mask = data | PIN_PU_IVREF_BIT | PIN_TX_IDLE_BIT;
--		comphy_periph_reg_set(lane, COMPHY_PHY_CFG1, data, mask);
--	}
--
--	return 0;
-+	/*
-+	 * The USB3 MAC sets the USB3 PHY to low state, so we do not
-+	 * need to power off USB3 PHY again.
-+	 */
- }
- 
- static bool mvebu_a3700_comphy_check_mode(int lane,
-@@ -1171,10 +1142,6 @@ static int mvebu_a3700_comphy_set_mode(struct phy *phy, enum phy_mode mode,
- 	    (lane->mode != mode || lane->submode != submode))
- 		return -EBUSY;
- 
--	/* If changing mode, ensure reset is called */
--	if (lane->mode != PHY_MODE_INVALID && lane->mode != mode)
--		lane->needs_reset = true;
--
- 	/* Just remember the mode, ->power_on() will do the real setup */
- 	lane->mode = mode;
- 	lane->submode = submode;
-@@ -1185,7 +1152,6 @@ static int mvebu_a3700_comphy_set_mode(struct phy *phy, enum phy_mode mode,
- static int mvebu_a3700_comphy_power_on(struct phy *phy)
- {
- 	struct mvebu_a3700_comphy_lane *lane = phy_get_drvdata(phy);
--	int ret;
- 
- 	if (!mvebu_a3700_comphy_check_mode(lane->id, lane->mode,
- 					   lane->submode)) {
-@@ -1193,14 +1159,6 @@ static int mvebu_a3700_comphy_power_on(struct phy *phy)
- 		return -EINVAL;
- 	}
- 
--	if (lane->needs_reset) {
--		ret = mvebu_a3700_comphy_reset(phy);
--		if (ret)
--			return ret;
--
--		lane->needs_reset = false;
--	}
--
- 	switch (lane->mode) {
- 	case PHY_MODE_USB_HOST_SS:
- 		dev_dbg(lane->dev, "set lane %d to USB3 host mode\n", lane->id);
-@@ -1224,38 +1182,28 @@ static int mvebu_a3700_comphy_power_off(struct phy *phy)
- {
- 	struct mvebu_a3700_comphy_lane *lane = phy_get_drvdata(phy);
- 
--	switch (lane->mode) {
--	case PHY_MODE_USB_HOST_SS:
--		/*
--		 * The USB3 MAC sets the USB3 PHY to low state, so we do not
--		 * need to power off USB3 PHY again.
--		 */
--		break;
--
--	case PHY_MODE_SATA:
--		mvebu_a3700_comphy_sata_power_off(lane);
--		break;
--
--	case PHY_MODE_ETHERNET:
-+	switch (lane->id) {
-+	case 0:
-+		mvebu_a3700_comphy_usb3_power_off(lane);
- 		mvebu_a3700_comphy_ethernet_power_off(lane);
--		break;
--
--	case PHY_MODE_PCIE:
-+		return 0;
-+	case 1:
- 		mvebu_a3700_comphy_pcie_power_off(lane);
--		break;
--
-+		mvebu_a3700_comphy_ethernet_power_off(lane);
-+		return 0;
-+	case 2:
-+		mvebu_a3700_comphy_usb3_power_off(lane);
-+		mvebu_a3700_comphy_sata_power_off(lane);
-+		return 0;
- 	default:
- 		dev_err(lane->dev, "invalid COMPHY mode\n");
- 		return -EINVAL;
- 	}
--
--	return 0;
- }
- 
- static const struct phy_ops mvebu_a3700_comphy_ops = {
- 	.power_on	= mvebu_a3700_comphy_power_on,
- 	.power_off	= mvebu_a3700_comphy_power_off,
--	.reset		= mvebu_a3700_comphy_reset,
- 	.set_mode	= mvebu_a3700_comphy_set_mode,
- 	.owner		= THIS_MODULE,
- };
-@@ -1393,8 +1341,7 @@ static int mvebu_a3700_comphy_probe(struct platform_device *pdev)
- 		 * To avoid relying on the bootloader/firmware configuration,
- 		 * power off all comphys.
- 		 */
--		mvebu_a3700_comphy_reset(phy);
--		lane->needs_reset = false;
-+		mvebu_a3700_comphy_power_off(phy);
- 	}
- 
- 	provider = devm_of_phy_provider_register(&pdev->dev,
--- 
-2.37.3
-
 
 
