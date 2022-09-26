@@ -2,102 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A075E98D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 07:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3F55E98D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 07:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiIZFfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 01:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S233163AbiIZFkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 01:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiIZFfU (ORCPT
+        with ESMTP id S232918AbiIZFkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 01:35:20 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A0F1F2E4
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:35:18 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a41so7471209edf.4
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:35:18 -0700 (PDT)
+        Mon, 26 Sep 2022 01:40:07 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B53A167F8;
+        Sun, 25 Sep 2022 22:40:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b75so5593630pfb.7;
+        Sun, 25 Sep 2022 22:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uQm/cyI6O2TECbE+cPd+sUKnp2FCGlHvQ4HWSuz+uSg=;
-        b=bvj4BJCXhuoY+XVd7CpW0wyJbpTiRkIRiYp5uuTDkAbcaXZe8AzQT/VxPZLxL3Yorg
-         xdtZuFe7/VqVVkB3XXhYGSa3RMXjHjZTOhD8G2nHvEN2zaQOYaHrsWWh0Jv3hyyoD3x2
-         E0Wcv+6JZdSQryG4iCkzVhAd3XiX3pnqGTDQA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=q5q/pcoR5gK1IIB9xUnqRycDl4QSWIGORl5qJdRKAlU=;
+        b=kilmXACPBwgGDUyCOTufSNuEpS5jGnEpSeJ5P0H++obXSnftsE968Z4jODHCWlVkfI
+         YWm3hxV3GrFKj2G5McycpTffYH3kTeUDVNRR3NThIGOxZAne5LoTuZorzX3soSIsXVe8
+         Q67S59ORA1wyGuI6rpdrvficI+aWLEGditR0c3OPADLyNROFOJYbPtl2Wvbv9yRT2Gm7
+         ywQMfHxCDDNir1XxhufVuok+WF5QACRFAdvtWagRKK2xB/wb9b/Ie4m65hJlXdsgwDQ5
+         0CKvWg/qIFWDddNn0lbprIiyeuQyu0JAlq8PGckuMiWiejrgmPJz/t15+eQDtOBvEEif
+         zjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uQm/cyI6O2TECbE+cPd+sUKnp2FCGlHvQ4HWSuz+uSg=;
-        b=Fogrh+xAInFCaO0tnIsNK4FKkMZ6nHJDUAVf6aDhqcqEHGrpEkIzP5N1Jvfm7b8StH
-         YPdz5t/WPAzLcOWAb6M1AgrcvG7dnt55P3ZKm4bQ60wmlMrD+zZJl/iSH4OWRdRjcwE0
-         /moD28rK3Grbac/83ROWOBPXCpXneOUFXfcGssFg/tjkZ7OCsbEkSfHSNPOSZUjPmfLk
-         7Wjg4WtKOYih2mXG2Ji0QG0K4+d27QGngPNMtZiFmZWwpiiD3RUVG6eux49NCkSgaSZY
-         6xDZDv4sUOcZcdxxKp5hoop3vaqoOH/ai0dQ8LofNQFTtmh+rcA7GsEPDnKI7VKaAlM5
-         kMWQ==
-X-Gm-Message-State: ACrzQf257NkyZZszOXxyDwmauaYzgZaJ1R+AQp6WKaLLbiEuQL4GdQ/5
-        l5BQeCmwcT5Y2uuh4yAHzJDxejp6XCwHS2seymbWew==
-X-Google-Smtp-Source: AMsMyM5sOF/np8p+lz3ZmwY9NsZIytiFDwGMSg6JHrTesURDkV9WMexbAV6SKC66ej7VC+axAK4njLND0s0MeZqSPD4=
-X-Received: by 2002:a05:6402:280f:b0:44e:ee5c:da6b with SMTP id
- h15-20020a056402280f00b0044eee5cda6bmr20607304ede.256.1664170517096; Sun, 25
- Sep 2022 22:35:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=q5q/pcoR5gK1IIB9xUnqRycDl4QSWIGORl5qJdRKAlU=;
+        b=rP94jJcEAixegrV1LctYGf0y3riaN6khO2cvDxz5//y1y4Z++GSP1T4UKlVhYBhAHA
+         KeSgUp3c/vlVRU2lzh81ox0Il6cIq7f4XMi96c68tmTFH6LGR87Z2Q5udXZ4gkWWVl/B
+         5VK4u0SxsJhs7bUz0Xk65bgWvm3Clqx/Yfe1TUDoiEHYATaY+ZUlLJtrGKzFsOqBatNj
+         XVIZ5AiTy7r/f8srgYxzXYNMBwXRFmL5t7YK/+bpUK0WmApfKrw0ei994yAlULABZ1ZD
+         ohhv7hUpqXFqcE2tnsNlsI4hflbGRyhNXTKUopWbKXcPxC1QcnuqbXPgZ2pkel0y2C9+
+         5Vzw==
+X-Gm-Message-State: ACrzQf2F2odD9jS2dsTOY3A9vgkeOsrh9tMhXfcWmmSVuUpmgiN/bl9M
+        PmQytuhTPo+k5zLOZs4KHp0=
+X-Google-Smtp-Source: AMsMyM78fghL+9zCc59H4edjUDWmgdkmu+TEpSQdhvWRz0P58xy4ODEN8U8p8KfxSovhuZpbz6Lvgg==
+X-Received: by 2002:a05:6a02:10e:b0:43b:e57d:2bfa with SMTP id bg14-20020a056a02010e00b0043be57d2bfamr18019941pgb.263.1664170801725;
+        Sun, 25 Sep 2022 22:40:01 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:7e1b:858c:19dc:934])
+        by smtp.gmail.com with ESMTPSA id h18-20020a170902f71200b00176b0dec886sm10120350plo.58.2022.09.25.22.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 22:40:01 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] tpm: st33zp24: drop support for platform data
+Date:   Sun, 25 Sep 2022 22:39:56 -0700
+Message-Id: <20220926053958.1541912-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-2-4844816c9808@baylibre.com>
- <CAGXv+5GJrjxG0pEGqseEacz_KFCRhWJSiLoiwuwwUTaSeO0RBg@mail.gmail.com>
-In-Reply-To: <CAGXv+5GJrjxG0pEGqseEacz_KFCRhWJSiLoiwuwwUTaSeO0RBg@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 26 Sep 2022 13:35:05 +0800
-Message-ID: <CAGXv+5Gw_fKHfhTEAOQi7R_GtD5OSiSTQ5wCvKjEckXBwjLLQA@mail.gmail.com>
-Subject: Re: [PATCH v1 02/17] clk: mediatek: add VDOSYS1 clock
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 1:09 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Tue, Sep 20, 2022 at 12:59 AM Guillaume Ranquet
-> <granquet@baylibre.com> wrote:
-> >
-> > From: Pablo Sun <pablo.sun@mediatek.com>
-> >
-> > Add the clock gate definition for the DPI1 hardware
-> > in VDOSYS1.
-> >
-> > The parent clock "hdmi_txpll" is already defined in
-> > `mt8195.dtsi`.
-> >
-> > Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+There are no users of st33zp24_platform_data in mainline, and new boards
+should be using device tree or ACPI to describe resources, so let's drop
+support for platform data from the driver.
 
-I've queued patches 1 & 2 up here [1] and will send a pull request to
-the clock maintainer later this week.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/char/tpm/st33zp24/i2c.c        | 41 ++----------------------
+ drivers/char/tpm/st33zp24/spi.c        | 44 +++-----------------------
+ drivers/char/tpm/st33zp24/st33zp24.h   |  3 ++
+ include/linux/platform_data/st33zp24.h | 16 ----------
+ 4 files changed, 10 insertions(+), 94 deletions(-)
+ delete mode 100644 include/linux/platform_data/st33zp24.h
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git/log/?h=clk-mtk-for-6.1
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index a3aa411389e7..c560532647c8 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_gpio.h>
+ #include <linux/acpi.h>
+ #include <linux/tpm.h>
+-#include <linux/platform_data/st33zp24.h>
+ 
+ #include "../tpm.h"
+ #include "st33zp24.h"
+@@ -178,36 +177,6 @@ static int st33zp24_i2c_of_request_resources(struct i2c_client *client)
+ 	return 0;
+ }
+ 
+-static int st33zp24_i2c_request_resources(struct i2c_client *client)
+-{
+-	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
+-	struct st33zp24_i2c_phy *phy = tpm_dev->phy_id;
+-	struct st33zp24_platform_data *pdata;
+-	int ret;
+-
+-	pdata = client->dev.platform_data;
+-	if (!pdata) {
+-		dev_err(&client->dev, "No platform data\n");
+-		return -ENODEV;
+-	}
+-
+-	/* store for late use */
+-	phy->io_lpcpd = pdata->io_lpcpd;
+-
+-	if (gpio_is_valid(pdata->io_lpcpd)) {
+-		ret = devm_gpio_request_one(&client->dev,
+-				pdata->io_lpcpd, GPIOF_OUT_INIT_HIGH,
+-				"TPM IO_LPCPD");
+-		if (ret) {
+-			dev_err(&client->dev, "Failed to request lpcpd pin\n");
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ /*
+  * st33zp24_i2c_probe initialize the TPM device
+  * @param: client, the i2c_client description (TPM I2C description).
+@@ -219,7 +188,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ 			      const struct i2c_device_id *id)
+ {
+ 	int ret;
+-	struct st33zp24_platform_data *pdata;
+ 	struct st33zp24_i2c_phy *phy;
+ 
+ 	if (!client) {
+@@ -240,19 +208,16 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ 
+ 	phy->client = client;
+ 
+-	pdata = client->dev.platform_data;
+-	if (!pdata && client->dev.of_node) {
++	if (client->dev.of_node) {
+ 		ret = st33zp24_i2c_of_request_resources(client);
+ 		if (ret)
+ 			return ret;
+-	} else if (pdata) {
+-		ret = st33zp24_i2c_request_resources(client);
+-		if (ret)
+-			return ret;
+ 	} else if (ACPI_HANDLE(&client->dev)) {
+ 		ret = st33zp24_i2c_acpi_request_resources(client);
+ 		if (ret)
+ 			return ret;
++	} else {
++		return -ENODEV;
+ 	}
+ 
+ 	return st33zp24_probe(phy, &i2c_phy_ops, &client->dev, client->irq,
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index 22d184884694..49630f2cb9b4 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_gpio.h>
+ #include <linux/acpi.h>
+ #include <linux/tpm.h>
+-#include <linux/platform_data/st33zp24.h>
+ 
+ #include "../tpm.h"
+ #include "st33zp24.h"
+@@ -296,37 +295,6 @@ static int st33zp24_spi_of_request_resources(struct spi_device *spi_dev)
+ 	return 0;
+ }
+ 
+-static int st33zp24_spi_request_resources(struct spi_device *dev)
+-{
+-	struct tpm_chip *chip = spi_get_drvdata(dev);
+-	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
+-	struct st33zp24_spi_phy *phy = tpm_dev->phy_id;
+-	struct st33zp24_platform_data *pdata;
+-	int ret;
+-
+-	pdata = dev->dev.platform_data;
+-	if (!pdata) {
+-		dev_err(&dev->dev, "No platform data\n");
+-		return -ENODEV;
+-	}
+-
+-	/* store for late use */
+-	phy->io_lpcpd = pdata->io_lpcpd;
+-
+-	if (gpio_is_valid(pdata->io_lpcpd)) {
+-		ret = devm_gpio_request_one(&dev->dev,
+-				pdata->io_lpcpd, GPIOF_OUT_INIT_HIGH,
+-				"TPM IO_LPCPD");
+-		if (ret) {
+-			dev_err(&dev->dev, "%s : reset gpio_request failed\n",
+-				__FILE__);
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ /*
+  * st33zp24_spi_probe initialize the TPM device
+  * @param: dev, the spi_device description (TPM SPI description).
+@@ -336,7 +304,6 @@ static int st33zp24_spi_request_resources(struct spi_device *dev)
+ static int st33zp24_spi_probe(struct spi_device *dev)
+ {
+ 	int ret;
+-	struct st33zp24_platform_data *pdata;
+ 	struct st33zp24_spi_phy *phy;
+ 
+ 	/* Check SPI platform functionnalities */
+@@ -353,19 +320,16 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ 
+ 	phy->spi_device = dev;
+ 
+-	pdata = dev->dev.platform_data;
+-	if (!pdata && dev->dev.of_node) {
++	if (dev->dev.of_node) {
+ 		ret = st33zp24_spi_of_request_resources(dev);
+ 		if (ret)
+ 			return ret;
+-	} else if (pdata) {
+-		ret = st33zp24_spi_request_resources(dev);
+-		if (ret)
+-			return ret;
+ 	} else if (ACPI_HANDLE(&dev->dev)) {
+ 		ret = st33zp24_spi_acpi_request_resources(dev);
+ 		if (ret)
+ 			return ret;
++	} else {
++		return -ENODEV;
+ 	}
+ 
+ 	phy->latency = st33zp24_spi_evaluate_latency(phy);
+@@ -411,7 +375,7 @@ static SIMPLE_DEV_PM_OPS(st33zp24_spi_ops, st33zp24_pm_suspend,
+ 
+ static struct spi_driver st33zp24_spi_driver = {
+ 	.driver = {
+-		.name = TPM_ST33_SPI,
++		.name = "st33zp24-spi",
+ 		.pm = &st33zp24_spi_ops,
+ 		.of_match_table = of_match_ptr(of_st33zp24_spi_match),
+ 		.acpi_match_table = ACPI_PTR(st33zp24_spi_acpi_match),
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index b387a476c555..6a26dbc3206b 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -7,6 +7,9 @@
+ #ifndef __LOCAL_ST33ZP24_H__
+ #define __LOCAL_ST33ZP24_H__
+ 
++#define TPM_ST33_I2C		"st33zp24-i2c"
++#define TPM_ST33_SPI		"st33zp24-spi"
++
+ #define TPM_WRITE_DIRECTION	0x80
+ #define ST33ZP24_BUFSIZE	2048
+ 
+diff --git a/include/linux/platform_data/st33zp24.h b/include/linux/platform_data/st33zp24.h
+deleted file mode 100644
+index 61db674f36cc..000000000000
+--- a/include/linux/platform_data/st33zp24.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * STMicroelectronics TPM Linux driver for TPM 1.2 ST33ZP24
+- * Copyright (C) 2009 - 2016  STMicroelectronics
+- */
+-#ifndef __ST33ZP24_H__
+-#define __ST33ZP24_H__
+-
+-#define TPM_ST33_I2C			"st33zp24-i2c"
+-#define TPM_ST33_SPI			"st33zp24-spi"
+-
+-struct st33zp24_platform_data {
+-	int io_lpcpd;
+-};
+-
+-#endif /* __ST33ZP24_H__ */
+-- 
+2.37.3.998.g577e59143f-goog
+
