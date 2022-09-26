@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6956E5EA054
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A17B5EA2D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbiIZKgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S234660AbiIZLPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235978AbiIZKdp (ORCPT
+        with ESMTP id S237673AbiIZLNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:45 -0400
+        Mon, 26 Sep 2022 07:13:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A664F6BC;
-        Mon, 26 Sep 2022 03:20:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DE6642CB;
+        Mon, 26 Sep 2022 03:36:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 947CAB80835;
-        Mon, 26 Sep 2022 10:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066B5C433C1;
-        Mon, 26 Sep 2022 10:20:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67455B80954;
+        Mon, 26 Sep 2022 10:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCE7C433C1;
+        Mon, 26 Sep 2022 10:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187643;
-        bh=/qy+wl376VZ2Qn1ipDOjXipIVOsRHSCbVcNW+nRvVyM=;
+        s=korg; t=1664188485;
+        bh=qqskinfIqSFhiOcRad+02oGNyNZWFUzlMULSkLljyMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KUWNpBeXVweOCgruM9wZuLLJXtZcErx7fl91quTFbHo+8RB6+qVlM0EQR6QL8Ycwz
-         n/jXZTrVnPGBFfGbhYgiCGgz2YbNOvQcHlu9ixuP7b108a0jqAVPtp3hEQsfT2Zk2t
-         KwOVUSdOwS67XLderFVYJcXiRbSxmhcwcDmllpLg=
+        b=Rk5paSmuOEfbm99z2VmTFz6CTEjDASZTwLYlshYzBOU9uf74xQmS1BrWlotqSOu+x
+         3hF3AcvSewCVY1oJ6zdcClniG9ojLwT5UF0vk8tlWyhKLOQr/KfeQj/JYc2+fZvWM8
+         WTO2K12DHQQvcfMtuApz8RZNa9lw176YhfiBGF0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandan.babu@oracle.com>
-Subject: [PATCH 5.4 015/120] iomap: iomap that extends beyond EOF should be marked dirty
-Date:   Mon, 26 Sep 2022 12:10:48 +0200
-Message-Id: <20220926100751.145723992@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 015/148] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Mon, 26 Sep 2022 12:10:49 +0200
+Message-Id: <20220926100756.624313412@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chandan Babu R <chandan.babu@oracle.com>
+From: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
 
-From: Dave Chinner <dchinner@redhat.com>
+[ Upstream commit 3d5f70949f1b1168fbb17d06eb5c57e984c56c58 ]
 
-commit 7684e2c4384d5d1f884b01ab8bff2369e4db0bff upstream.
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-When doing a direct IO that spans the current EOF, and there are
-written blocks beyond EOF that extend beyond the current write, the
-only metadata update that needs to be done is a file size extension.
+Those two controllers both have problems with some USB3.0 devices,
+particularly self-powered ones. Typical error messages include:
 
-However, we don't mark such iomaps as IOMAP_F_DIRTY to indicate that
-there is IO completion metadata updates required, and hence we may
-fail to correctly sync file size extensions made in IO completion
-when O_DSYNC writes are being used and the hardware supports FUA.
+  Timeout while waiting for setup device command
+  device not accepting address X, error -62
+  unable to enumerate USB device
 
-Hence when setting IOMAP_F_DIRTY, we need to also take into account
-whether the iomap spans the current EOF. If it does, then we need to
-mark it dirty so that IO completion will call generic_write_sync()
-to flush the inode size update to stable storage correctly.
+By process of elimination the controllers themselves were identified as
+the cause of the problem. Through trial and error the issue was solved
+by using USB_QUIRK_RESET_RESUME for both chips.
 
-Fixes: 3460cac1ca76 ("iomap: Use FUA for pure data O_DSYNC DIO writes")
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-[darrick: removed the ext4 part; they'll handle it separately]
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
+Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220824191320.17883-1-jflf_kernel@gmx.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_iomap.c    |    7 +++++++
- include/linux/iomap.h |    2 ++
- 2 files changed, 9 insertions(+)
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/xfs/xfs_iomap.c
-+++ b/fs/xfs/xfs_iomap.c
-@@ -1055,6 +1055,13 @@ xfs_file_iomap_begin(
- 	trace_xfs_iomap_alloc(ip, offset, length, XFS_DATA_FORK, &imap);
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64588..999b7c9697fc 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -437,6 +437,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- out_finish:
-+	/*
-+	 * Writes that span EOF might trigger an IO size update on completion,
-+	 * so consider them to be dirty for the purposes of O_DSYNC even if
-+	 * there is no other metadata changes pending or have been made here.
-+	 */
-+	if ((flags & IOMAP_WRITE) && offset + length > i_size_read(inode))
-+		iomap->flags |= IOMAP_F_DIRTY;
- 	return xfs_bmbt_to_iomap(ip, iomap, &imap, shared);
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) */
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info = USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info = USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
  
- out_found:
---- a/include/linux/iomap.h
-+++ b/include/linux/iomap.h
-@@ -32,6 +32,8 @@ struct vm_fault;
-  *
-  * IOMAP_F_DIRTY indicates the inode has uncommitted metadata needed to access
-  * written data and requires fdatasync to commit them to persistent storage.
-+ * This needs to take into account metadata changes that *may* be made at IO
-+ * completion, such as file size updates from direct IO.
-  */
- #define IOMAP_F_NEW		0x01	/* blocks have been newly allocated */
- #define IOMAP_F_DIRTY		0x02	/* uncommitted metadata */
+-- 
+2.35.1
+
 
 
