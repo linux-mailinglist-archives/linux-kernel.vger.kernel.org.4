@@ -2,140 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4D05E99AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8075E99AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiIZGia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S233322AbiIZGio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbiIZGi0 (ORCPT
+        with ESMTP id S233586AbiIZGik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:38:26 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58907DF5C
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:38:25 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id a10so6363296ljq.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=W3hxzdrBIum1j0xz9YZTHAUg/0XjqqL/D7mMmLIxdR4=;
-        b=ePexRndPURvdCW/6uFFqR/iEiqGsxFN63U0+E7Mw/SDz4ZwwNEHsmVHumFqZeMYCUP
-         w8s7D75BCLIzBKqYzi2ogsSYLQfENPA4YBlkAy7xmGIaZVpzOBLJOJBVmSgV8B9AxENp
-         4k9tn5vOQllbiqS/XTVubaMGN3+gj9u09UhLCVk0TYFk8T5lw7S/gkcV2EfEw/3L/JMQ
-         D1Pt/0hEH58mgxQwVwA1fUt8341UKEQFrik2uQZ70jnH8wajATyMJdZbd8uzdTiFw7/8
-         s4sXMk+6hYNL9CHWmFGnedd4ZzjP6bKJB+in83kJvdPYJbbwwdg5MwyBBVmi4j+WhIEb
-         IqSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=W3hxzdrBIum1j0xz9YZTHAUg/0XjqqL/D7mMmLIxdR4=;
-        b=hlaAloPOMsBUrPXdz22s4SiOq1HO0dsLWLLWeWwTz0oVhkntZ2EdJHMExsqSfy5kls
-         OYd1VcOrE1soV08unWVYbM6OM0A25t0GNLwyLLMEkl3b74LTh+/HyPg5z79po06lKkVJ
-         g3Jo++9/fgTpIXE8+6hj7thi57cUo078g1PYtA10WWRpik50SJQz6JBvC6Z/1z93IU9n
-         hg8nLxb6FYhQlXtxscGfjsrAhABEMcuifB/kLfHZYGD/35AAnLmeQOhAx981m8vPGGco
-         pLgR5WB9RMsM4efeh4VVfuVryXM778vZaX3yBBhUmOMo5DaisLxoY6v6Z9FLKHisgZND
-         VMyg==
-X-Gm-Message-State: ACrzQf3XiYfZx+HVdVGIyt6+ad7lsbr7WTs63aV1u9LCfJIFm7d7avbH
-        Jx1aJGYSv1Sq//vHOYh8hya1bQ==
-X-Google-Smtp-Source: AMsMyM7zYhJnhCTUeUDjnpPqlK+tH954E2LgxBK1i8gOU2GZVXuiyg0sE4TRiLJTrdd7ByA6IdiJnQ==
-X-Received: by 2002:a05:651c:a04:b0:26c:50df:75ad with SMTP id k4-20020a05651c0a0400b0026c50df75admr6942132ljq.416.1664174303703;
-        Sun, 25 Sep 2022 23:38:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b5-20020ac25625000000b004a050ddc4ecsm1321680lff.125.2022.09.25.23.38.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 23:38:23 -0700 (PDT)
-Message-ID: <bd99a454-8cee-edb9-bc34-ce0be280bd90@linaro.org>
-Date:   Mon, 26 Sep 2022 08:38:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 15/17] dt-bindings: display: mediatek: dpi: Add
- compatible for MediaTek MT8195
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, Pablo Sun <pablo.sun@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-15-4844816c9808@baylibre.com>
- <e993c25e-f334-e1ca-73f8-58cf141c521e@linaro.org>
- <CAGXv+5FYjj6=WHWBvNRDmpw2Ux8RJ4a2fT1gXk3+eXSqt9poeQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGXv+5FYjj6=WHWBvNRDmpw2Ux8RJ4a2fT1gXk3+eXSqt9poeQ@mail.gmail.com>
+        Mon, 26 Sep 2022 02:38:40 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F20F5AB
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:38:38 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Mon, 26 Sep 2022 14:38:28
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.162.98.155]
+Date:   Mon, 26 Sep 2022 14:38:28 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     johannes@sipsolutions.net, linux-kernel@vger.kernel.org,
+        rafael@kernel.org
+Subject: Re: [PATCH V9] devcoredump: add context check in dev_coredumpm
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <YzFGblnZdDPWAW7E@kroah.com>
+References: <20220926061609.44153-1-duoming@zju.edu.cn>
+ <YzFGblnZdDPWAW7E@kroah.com>
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Message-ID: <66a140d1.f7b7e.1837884be23.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgAn31rkSDFj1rJUBg--.16554W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg0FAVZdtbpalgABsC
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 07:24, Chen-Yu Tsai wrote:
-> On Thu, Sep 22, 2022 at 3:20 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 19/09/2022 18:56, Guillaume Ranquet wrote:
->>> Add dt-binding documentation of dpi for MediaTek MT8195 SoC.
->>>
->>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->>>
->>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
->>> index 5bb23e97cf33..2c7ecef54986 100644
->>> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
->>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
->>> @@ -24,6 +24,7 @@ properties:
->>>        - mediatek,mt8183-dpi
->>>        - mediatek,mt8186-dpi
->>>        - mediatek,mt8192-dpi
->>> +      - mediatek,mt8195-dpi
->>>        - mediatek,mt8195-dp-intf
->>
->> Aren't these the same?
-> 
-> *-dpi are MIPI DPI (as in parallel data with DDR modes) encoders.
-> *-dp-intf are Display Port encoder.
-> 
-> Totally distinguishable. :)
-> 
-> The hardware blocks seem similar upon cursory comparison of the register
-> tables, with the base layout being the same, and sharing registers for
-> basic settings such as the display timings.
-> 
-> The DPI ones have some extra registers, presumably to control the signals
-> or output width. The DP one has some registers of its own that only make
-> sense for Display Port.
-
-OK.
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+SGVsbG8sCgpPbiBNb24sIDI2IFNlcCAyMDIyIDA4OjI3OjU4ICswMjAwIEdyZWcgS0ggd3JvdGU6
+Cgo+IE9uIE1vbiwgU2VwIDI2LCAyMDIyIGF0IDAyOjE2OjA5UE0gKzA4MDAsIER1b21pbmcgWmhv
+dSB3cm90ZToKPiA+IFRoZSBkZXZfY29yZWR1bXBtKCksIGRldl9jb3JlZHVtcHYoKSBhbmQgZGV2
+X2NvcmVkdW1wc2coKSBjb3VsZCBub3QKPiA+IGJlIHVzZWQgaW4gYXRvbWljIGNvbnRleHQsIGJl
+Y2F1c2UgdGhleSBjYWxsIGt2YXNwcmludGZfY29uc3QoKSBhbmQKPiA+IGtzdHJkdXAoKSB3aXRo
+IEdGUF9LRVJORUwgcGFyYW1ldGVyLiBUaGUgcHJvY2VzcyBpcyBzaG93biBiZWxvdzoKPiA+IAo+
+ID4gZGV2X2NvcmVkdW1wdiguLiwgZ2ZwX3QgZ2ZwKQo+ID4gICBkZXZfY29yZWR1bXBtKC4uLCBn
+ZnBfdCBnZnApCj4gPiAgICAgZGV2X3NldF9uYW1lCj4gPiAgICAgICBrb2JqZWN0X3NldF9uYW1l
+X3ZhcmdzCj4gPiAgICAgICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgLi4uKTsgLy9t
+YXkgc2xlZXAKPiA+ICAgICAgICAgICBrc3RyZHVwKHMsIEdGUF9LRVJORUwpOyAvL21heSBzbGVl
+cAo+ID4gCj4gPiBUaGlzIHBhdGNoIGFkZHMgY29udGV4dCBjaGVjayBpbiBkZXZfY29yZWR1bXBt
+KCkgaW4gb3JkZXIgdG8gc2hvdwo+ID4gZGV2X2NvcmVkdW1wbSgpIGFuZCBpdHMgY2FsbGVycyBj
+b3VsZCBub3QgYmUgdXNlZCBpbiBhdG9taWMgY29udGV4dC4KPiA+IAo+ID4gV2hhdCdzIG1vcmUs
+IHRoaXMgY2hhbmdlIGNhbiBhbGxvdyB0aGUgYXBpIHRvIGV2b2x2ZSBhbmQgd2lsbCBub3QKPiA+
+IGluZmx1ZW5jZSB0aGUgdXNlcnMgdGhhdCBjYWxsIHRoaXMgYXBpLgo+ID4gCj4gPiBGaXhlczog
+ODMzYzk1NDU2YTcwICgiZGV2aWNlIGNvcmVkdW1wOiBhZGQgbmV3IGRldmljZSBjb3JlZHVtcCBj
+bGFzcyIpCj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5j
+bj4KPiA+IC0tLQo+ID4gQ2hhbmdlcyBpbiB2OToKPiA+ICAgLSBBZGQgY29udGV4dCBjaGVjayBp
+biBkZXZfY29yZWR1bXBtKCkuCj4gPiAKPiA+ICBkcml2ZXJzL2Jhc2UvZGV2Y29yZWR1bXAuYyB8
+IDMgKysrCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9iYXNlL2RldmNvcmVkdW1wLmMgYi9kcml2ZXJzL2Jhc2UvZGV2Y29y
+ZWR1bXAuYwo+ID4gaW5kZXggZjRkNzk0ZDZiYjguLjgwNmVlODcyZjVmIDEwMDY0NAo+ID4gLS0t
+IGEvZHJpdmVycy9iYXNlL2RldmNvcmVkdW1wLmMKPiA+ICsrKyBiL2RyaXZlcnMvYmFzZS9kZXZj
+b3JlZHVtcC5jCj4gPiBAQCAtMjU1LDYgKzI1NSw5IEBAIHZvaWQgZGV2X2NvcmVkdW1wbShzdHJ1
+Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBtb2R1bGUgKm93bmVyLAo+ID4gIAlzdHJ1Y3QgZGV2Y2Rf
+ZW50cnkgKmRldmNkOwo+ID4gIAlzdHJ1Y3QgZGV2aWNlICpleGlzdGluZzsKPiA+ICAKPiA+ICsJ
+aWYgKCFnZnBmbGFnc19ub3JtYWxfY29udGV4dChnZnApKQo+ID4gKwkJZ290byBmcmVlOwo+IAo+
+IFdhaXQsIHRoaXMganVzdCBicm9rZSB0aGluZ3MgZm9yIG5vIGdvb2QgcmVhc29uIGlmIGEgY2Fs
+bGVyIGhhcHBlbmVkIHRvCj4gaGF2ZSBzZXQgYSBHRlAgZmxhZyB0aGF0IHdlIGRvIG5vdCBsaWtl
+IGF0IHRoZSBtb21lbnQuCj4gCj4gV2hhdCBjb2RlIG5vdyBkb2VzIG5vdCB3b3JrIHRoYXQgcHJl
+dmlvdXNseSBkaWQgd29yayB3aXRoIHRoaXMgY2hhbmdlPwoKSSBmb3VuZCB0aGF0IGFsbCB1c2Vy
+cyBpbiB0aGUga2VybmVsIGNhbGwgdGhlIGRldl9jb3JlZHVtcHYoKSwgZGV2X2NvcmVkdW1wbSgp
+IGFuZApkZXZfY29yZWR1bXBzZygpIHdpdGggIkdGUF9LRVJORUwiLiBTbyB0aGlzIGNoYW5nZSB3
+aWxsIG5vdCBpbmZsdWVuY2UgdGhlIGV4aXN0aW5nIHVzZXJzLgoKQmVzdCByZWdhcmRzLApEdW9t
+aW5nIFpob3U=
