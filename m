@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E635B5EA8E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6315EA8E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiIZOqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S233434AbiIZOqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234900AbiIZOqP (ORCPT
+        with ESMTP id S234625AbiIZOqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:46:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E5615704;
-        Mon, 26 Sep 2022 06:09:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3364A60DBB;
-        Mon, 26 Sep 2022 13:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66F77C433C1;
-        Mon, 26 Sep 2022 13:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664197791;
-        bh=fUkQsM05ndYllEVHPF4gn/Cm7t6E7FR+wFCGj541yaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RBc1XjpWEq865feN6CsA5BAvN5mE064a7G63tCvqSJIL+1qnvWQSSTcRWrkqvhgFO
-         Sahb3ZdyaAXTgCXaq5YUvQ7QTlwieeK+15W896zM27QMRy7jxQdC+Bwc5KX0Hbejtv
-         CwKRzykmhIza2P+7sHNvpjRpICa7nVpTmjZda2SyDa1cnstyTg+m14Zy3UCwRSr5bA
-         qTYTceL6RBhnxYyRXpbl7C0kC0GkqkSJb939WRQ7jC82V/3dQw/G8rwfzswtYEi/kB
-         SUiIgfdf1/AmrXeJ3NQDXRayriWHaZTwG77zu8OiwluNRa+IsZy9IpSbMlKHnH56oq
-         GPNbCqFIxnYhg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 65A1F403B0; Mon, 26 Sep 2022 14:09:49 +0100 (IST)
-Date:   Mon, 26 Sep 2022 14:09:49 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/4] perf tools: Assorted random fixes and updates
-Message-ID: <YzGknQlI15jk4Mzq@kernel.org>
-References: <20220923173142.805896-1-namhyung@kernel.org>
+        Mon, 26 Sep 2022 10:46:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 401DA51405;
+        Mon, 26 Sep 2022 06:10:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 837E31042;
+        Mon, 26 Sep 2022 06:10:13 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 232453F66F;
+        Mon, 26 Sep 2022 06:10:04 -0700 (PDT)
+Message-ID: <e8a4d4b0-f8ee-2aa7-de23-9afe21cc9915@arm.com>
+Date:   Mon, 26 Sep 2022 14:09:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923173142.805896-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, willmcvicker@google.com
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
+ <YwzbARMkb/69+l2d@lpieralisi> <63a54a1b-66ba-9739-8217-13f75e602cd5@arm.com>
+ <98179709-1ece-61ab-d43a-fc38a4fd3f67@arm.com>
+ <20220912002522.arx4vypiv363qcni@mobilestation>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220912002522.arx4vypiv363qcni@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 23, 2022 at 10:31:38AM -0700, Namhyung Kim escreveu:
-> Hello,
+On 2022-09-12 01:25, Serge Semin wrote:
+> On Wed, Aug 31, 2022 at 09:54:14AM +0100, Robin Murphy wrote:
+>> On 2022-08-31 09:36, Robin Murphy wrote:
+>>> On 2022-08-29 16:28, Lorenzo Pieralisi wrote:
+>>> [...]
+>>>>> +static int bt1_pcie_add_port(struct bt1_pcie *btpci)
+>>>>> +{
+>>>>> +ï¿½ï¿½ï¿½ struct device *dev = &btpci->pdev->dev;
+>>>>> +ï¿½ï¿½ï¿½ int ret;
+>>>>> +
+>>>>> +ï¿½ï¿½ï¿½ /*
+>>>>> +ï¿½ï¿½ï¿½ï¿½ * DW PCIe Root Port controller is equipped with eDMA capable of
+>>>>> +ï¿½ï¿½ï¿½ï¿½ * working with the 64-bit memory addresses.
+>>>>> +ï¿½ï¿½ï¿½ï¿½ */
+>>>>> +ï¿½ï¿½ï¿½ ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+>>>>> +ï¿½ï¿½ï¿½ if (ret)
+>>>>> +ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ return ret;
+>>>>
+>>>> Is this the right place to set the DMA mask for the host controller
+>>>> embedded DMA controller (actually, the dev pointer is the _host_
+>>>> controller device) ?
+>>>>
+>>>> How this is going to play when combined with:
+>>>>
+>>>> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com
+>>>>
+>>>> It is getting a bit confusing. I believe the code in the link
+>>>> above sets the mask so that through the DMA API we are capable
+>>>> of getting an MSI doorbell virtual address whose physical address
+>>>> can be addressed by the endpoint; this through the DMA API.
+>>>>
+>>>> This patch is setting the DMA mask for a different reason, namely
+>>>> setting the host controller embedded DMA controller addressing
+>>>> capabilities.
+>>>>
+>>>> AFAICS - both approaches set the mask for the same device - now
+>>>> the question is about which one is legitimate and how to handle
+>>>> the other.
+>>>
+>>> Assuming the dw-edma-pcie driver is the relevant one, that already sets
+>>> its own masks on its own device, so I also don't see why this is here.
+>>
 > 
-> This is collection of random fixes and updates.
-> And I'm resending them as they seem to be lost in the list.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Thanks,
-> Namhyung
+>> Ah, I just found the patch at [1], which further implies that this is indeed
+>> completely bogus.
 > 
-> 
-> Namhyung Kim (4):
->   perf record: Fix a segfault in record__read_lost_samples()
->   perf inject: Clarify build-id options a little bit
->   perf tools: Add 'addr' sort key
->   perf annotate: Toggle full address <-> offset display
-> 
->  tools/perf/Documentation/perf-inject.txt |  6 ++--
->  tools/perf/Documentation/perf-report.txt |  3 +-
->  tools/perf/builtin-record.c              |  6 ++++
->  tools/perf/ui/browsers/annotate.c        |  6 +++-
->  tools/perf/util/annotate.c               | 19 +++++++++++-
->  tools/perf/util/annotate.h               |  4 ++-
->  tools/perf/util/hist.c                   |  1 +
->  tools/perf/util/hist.h                   |  1 +
->  tools/perf/util/sort.c                   | 38 ++++++++++++++++++++++++
->  tools/perf/util/sort.h                   |  1 +
->  10 files changed, 79 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.37.3.998.g577e59143f-goog
+> Really? Elaborate please. What you said in the comment to that patch
+> has nothing to do with the change you comment here.
 
--- 
+It has everything to do with it; if the other driver did the right 
+thing, this change wouldn't even be here. Everything you've said has 
+implied that the DMA engine driver cares about the AXI side of the 
+bridge, which is represented by the platform device. Thus it should set 
+the platform device's DMA mask, and use the platform device for DMA API 
+calls, and thus there should be no conflict with the host controller 
+driver's use of the PCI device's DMA mask to reserve a DMA address in 
+PCI memory space on the other side of the bridge, nor any translation 
+across the bridge itself.
 
-- Arnaldo
+Thanks,
+Robin.
