@@ -2,139 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC965EA5A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CB15EA616
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbiIZMKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S234659AbiIZM3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239569AbiIZMI7 (ORCPT
+        with ESMTP id S235841AbiIZM2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:08:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0858A7FE7F;
-        Mon, 26 Sep 2022 03:56:15 -0700 (PDT)
+        Mon, 26 Sep 2022 08:28:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628145FAFE;
+        Mon, 26 Sep 2022 04:08:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 358F3B8094D;
-        Mon, 26 Sep 2022 10:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65300C433C1;
-        Mon, 26 Sep 2022 10:39:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55AD760C6E;
+        Mon, 26 Sep 2022 10:32:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49350C433D6;
+        Mon, 26 Sep 2022 10:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188753;
-        bh=wyjmZCVcKEVSfKVNv8VJM84TEdaAO4pniYniRVVgyCI=;
+        s=korg; t=1664188373;
+        bh=14LOge9ZT3P4ZiqBhc7nTzeEF/5VcYCWhsD0HB6YN1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W4OG8kjrOm+zpEcsLlHML26FKYos1F8dyqa1ZfYcvGmMKOqKzF0uOH0Y6U1VPV948
-         pL4ZV8qBg3L720kuz64iVhbt9WV7lqigRKnfiePpoqSHDNvn3foshMrLTmpPp4KSGJ
-         ZC/p1G4hVhjU0AFvpiEE4Yephum2sdIiiMCAg3zg=
+        b=CLy1fZcHqwAi1BknEHaL3JNusRD4xCv/3um/b6iXriWAcRFBVyYlsq4XF6Xo8V0M2
+         BzCbeeXOpVC1WiHEmX6pW0UwQMOLX1MmDv8zmE0jm1kbqkNkuoV+h8Tixa0wsQP7FC
+         SqctbAzA96CykGHUQrCwF7OrIylpsLupCY7mS+wQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 110/148] drm/mediatek: dsi: Move mtk_dsi_stop() call back to mtk_dsi_poweroff()
-Date:   Mon, 26 Sep 2022 12:12:24 +0200
-Message-Id: <20220926100800.238110574@linuxfoundation.org>
+        stable@vger.kernel.org, Stan Lu <stan.lu@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH 5.10 121/141] usb: xhci-mtk: fix issue of out-of-bounds array access
+Date:   Mon, 26 Sep 2022 12:12:27 +0200
+Message-Id: <20220926100758.848138877@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 90144dd8b0d137d9e78ef34b3c418e51a49299ad ]
+commit de5107f473190538a65aac7edea85209cd5c1a8f upstream.
 
-As the comment right before the mtk_dsi_stop() call advises,
-mtk_dsi_stop() should only be called after
-mtk_drm_crtc_atomic_disable(). That's because that function calls
-drm_crtc_wait_one_vblank(), which requires the vblank irq to be enabled.
+Bus bandwidth array access is based on esit, increase one
+will cause out-of-bounds issue; for example, when esit is
+XHCI_MTK_MAX_ESIT, will overstep boundary.
 
-Previously mtk_dsi_stop(), being in mtk_dsi_poweroff() and guarded by a
-refcount, would only be called at the end of
-mtk_drm_crtc_atomic_disable(), through the call to mtk_crtc_ddp_hw_fini().
-Commit cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from
-enable/disable and define new funcs") moved the mtk_dsi_stop() call to
-mtk_output_dsi_disable(), causing it to be called before
-mtk_drm_crtc_atomic_disable(), and consequently generating vblank
-timeout warnings during suspend.
-
-Move the mtk_dsi_stop() call back to mtk_dsi_poweroff() so that we have
-a working vblank irq during mtk_drm_crtc_atomic_disable() and stop
-getting vblank timeout warnings.
-
-Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Link: http://lists.infradead.org/pipermail/linux-mediatek/2022-August/046713.html
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 7c986fbc16ae ("usb: xhci-mtk: get the microframe boundary for ESIT")
+Cc: <stable@vger.kernel.org>
+Reported-by: Stan Lu <stan.lu@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/1629189389-18779-5-git-send-email-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dsi.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index fc437d4d4e2d..a6d28533f1b1 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -673,6 +673,16 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
- 	if (--dsi->refcount != 0)
- 		return;
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -539,10 +539,12 @@ static u32 get_esit_boundary(struct mu3h
+ 	u32 boundary = sch_ep->esit;
  
-+	/*
-+	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-+	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
-+	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
-+	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
-+	 * after dsi is fully set.
-+	 */
-+	mtk_dsi_stop(dsi);
-+
-+	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
- 	mtk_dsi_reset_engine(dsi);
- 	mtk_dsi_lane0_ulp_mode_enter(dsi);
- 	mtk_dsi_clk_ulp_mode_enter(dsi);
-@@ -723,17 +733,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
- 	if (!dsi->enabled)
- 		return;
+ 	if (sch_ep->sch_tt) { /* LS/FS with TT */
+-		/* tune for CS */
+-		if (sch_ep->ep_type != ISOC_OUT_EP)
+-			boundary++;
+-		else if (boundary > 1) /* normally esit >= 8 for FS/LS */
++		/*
++		 * tune for CS, normally esit >= 8 for FS/LS,
++		 * not add one for other types to avoid access array
++		 * out of boundary
++		 */
++		if (sch_ep->ep_type == ISOC_OUT_EP && boundary > 1)
+ 			boundary--;
+ 	}
  
--	/*
--	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
--	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
--	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
--	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
--	 * after dsi is fully set.
--	 */
--	mtk_dsi_stop(dsi);
--
--	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
--
- 	dsi->enabled = false;
- }
- 
--- 
-2.35.1
-
 
 
