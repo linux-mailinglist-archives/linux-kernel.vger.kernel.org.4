@@ -2,180 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC915EAF38
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB375EAFA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiIZSIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S230018AbiIZSWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiIZSHf (ORCPT
+        with ESMTP id S229939AbiIZSWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:07:35 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F048B97D64;
-        Mon, 26 Sep 2022 10:52:07 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a14so8316187ljj.8;
-        Mon, 26 Sep 2022 10:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=6foHn0OkbFSLWkoYq5bKyci8WiZu5lPR0ZuEYBLeWZA=;
-        b=WQp1zat42FR9Lmaq49D/W2S/vHNXvX6xpk+IJ4/mFYVBVyYXCrmCpwqf19zu7u9aqG
-         qbGQS55wP+BC7PWmiB8yh5P5JQJvYCq01ZSxcofFJrZXMhFAH4ph2I+kpULJHOjy9mKG
-         ALkFf0ImycGVaEE1RwsDz91RPqK+UJaNOLoUCHRrnM9N+26o7r3YPZ8M7HEaned2MUKW
-         H0QNSoRllgIf6xn9QmzS01leqnUlOAmANbhGIkxHBA2lNH/cVNn8dY2p2HSxEIIhXGcO
-         p2VplAJx4C1nCFY0pYmrhaFFlzBLIy4I8UD22De242ZdmXbKpEW6OF0fcPGJsZ4hNCcT
-         FaEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6foHn0OkbFSLWkoYq5bKyci8WiZu5lPR0ZuEYBLeWZA=;
-        b=bgY3uHggvvPblDAZTLIpR4UFZ+y7WpYUX1LXL8fJEXiRXyf/gyeAqGN7ysfeob4LBA
-         Xj8poq3hFG9JQsb+lHDvnBlKDJc0jinmbGGUTh7hMoKe+qYwbNGOEvQgYshLu4KvOITT
-         0W5YDea8sbeg3MpnJ4tIBVuzaHqHOA/ebWiE2kyIMciTWU3UKavQanw1XWh5ZAqq6Aby
-         1Qqc8Uvs9Ai7uav0CHXPBDRQH6Pz9G4nFs5eD/MAAbjn+5WEuw7IdtX5wVq9+LDgnJx/
-         /pU1grtfcnEb2IqymrKsSEH0ANhbw5a+LGEdO0wnt/jcBghJ14C1wNxvbkKlWgmtE8FJ
-         gaCw==
-X-Gm-Message-State: ACrzQf28x9ABDfFqrx1e4vc/efySfUDxvz0GjWj9DnJ1iohKcCcx9jt0
-        qGPWWDXeoVG+o4uErNQVVPoGyJs1qMZYuA==
-X-Google-Smtp-Source: AMsMyM7WYXvosPG1AlgxWGO34do+BwAazgzmzm9X1JIwrEJlUGyXXEuHxSM6XZlNvPI2EDJMb52+sw==
-X-Received: by 2002:a05:651c:2205:b0:26c:622e:afef with SMTP id y5-20020a05651c220500b0026c622eafefmr8689591ljq.242.1664214724969;
-        Mon, 26 Sep 2022 10:52:04 -0700 (PDT)
-Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id t3-20020a056512208300b00492e16b7ab3sm2599999lfr.94.2022.09.26.10.52.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 10:52:03 -0700 (PDT)
-Message-ID: <68297aa6-5ca9-91d9-28de-71e439e3e1c7@gmail.com>
-Date:   Mon, 26 Sep 2022 21:00:54 +0300
+        Mon, 26 Sep 2022 14:22:16 -0400
+X-Greylist: delayed 603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 11:18:47 PDT
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F9EDEF3;
+        Mon, 26 Sep 2022 11:18:47 -0700 (PDT)
+Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.195])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 411F88000DC;
+        Tue, 27 Sep 2022 02:01:24 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     linux.amoon@gmail.com
+Cc:     heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        michael.riesch@wolfvision.net, robh+dt@kernel.org,
+        Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH-next v1] arm64: dts: rockchip: Enable NVM Express PCIe controller on rock3a
+Date:   Tue, 27 Sep 2022 02:00:59 +0800
+Message-Id: <20220926180102.37614-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220926061420.1248-1-linux.amoon@gmail.com>
+References: <20220926061420.1248-1-linux.amoon@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] dmaengine: ti: edma: Remove some unused functions
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220914101943.83929-1-jiapeng.chong@linux.alibaba.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20220914101943.83929-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSEgaVk1PHU8dTk0ZGh5JSlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJOWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6P006Qww*LD0YFAgsKilMSSIq
+        Qy9PCS1VSlVKTU1PSUpOSUNPQ0xIVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
+        Q1VDTlVKSkNVSkJOWVdZCAFZQUlOTEw3Bg++
+X-HM-Tid: 0a837af5fb0fb03akuuu411f88000dc
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 26-09-22, 06:14, Anand Moon wrote:
 
-On 9/14/22 13:19, Jiapeng Chong wrote:
-> These functions are defined in the edma.c file, but not called elsewhere,
-> so delete these unused functions.
-> 
-> drivers/dma/ti/edma.c:746:31: warning: unused function 'to_edma_cc'.
-> drivers/dma/ti/edma.c:420:20: warning: unused function 'edma_param_or'.
-> drivers/dma/ti/edma.c:414:20: warning: unused function 'edma_param_and'.
-> drivers/dma/ti/edma.c:402:20: warning: unused function 'edma_param_write'.
-> drivers/dma/ti/edma.c:373:28: warning: unused function 'edma_shadow0_read'.
-> drivers/dma/ti/edma.c:396:28: warning: unused function 'edma_param_read'.
-> drivers/dma/ti/edma.c:355:20: warning: unused function 'edma_or_array'.
+> +	pcie30_3v3: gpio-regulator {
+> +		compatible = "regulator-gpio";
+> +		regulator-name = "pcie30_3v3";
+> +		regulator-min-microvolt = <100000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+> +		gpios-states = <0x1>;
+> +		states = <100000 0x0>, <3300000 0x1>;
+> +	};
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+This is actually no different from vcc3v3-pcie regulator?
 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2152
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/dma/ti/edma.c | 40 ----------------------------------------
->  1 file changed, 40 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> index 4cbca80ee16e..fa06d7e6d8e3 100644
-> --- a/drivers/dma/ti/edma.c
-> +++ b/drivers/dma/ti/edma.c
-> @@ -352,12 +352,6 @@ static inline void edma_modify_array(struct edma_cc *ecc, int offset, int i,
->  	edma_modify(ecc, offset + (i << 2), and, or);
->  }
->  
-> -static inline void edma_or_array(struct edma_cc *ecc, int offset, int i,
-> -				 unsigned or)
-> -{
-> -	edma_or(ecc, offset + (i << 2), or);
-> -}
-> -
->  static inline void edma_or_array2(struct edma_cc *ecc, int offset, int i, int j,
->  				  unsigned or)
->  {
-> @@ -370,11 +364,6 @@ static inline void edma_write_array2(struct edma_cc *ecc, int offset, int i,
->  	edma_write(ecc, offset + ((i * 2 + j) << 2), val);
->  }
->  
-> -static inline unsigned int edma_shadow0_read(struct edma_cc *ecc, int offset)
-> -{
-> -	return edma_read(ecc, EDMA_SHADOW0 + offset);
-> -}
-> -
->  static inline unsigned int edma_shadow0_read_array(struct edma_cc *ecc,
->  						   int offset, int i)
->  {
-> @@ -393,36 +382,12 @@ static inline void edma_shadow0_write_array(struct edma_cc *ecc, int offset,
->  	edma_write(ecc, EDMA_SHADOW0 + offset + (i << 2), val);
->  }
->  
-> -static inline unsigned int edma_param_read(struct edma_cc *ecc, int offset,
-> -					   int param_no)
-> -{
-> -	return edma_read(ecc, EDMA_PARM + offset + (param_no << 5));
-> -}
-> -
-> -static inline void edma_param_write(struct edma_cc *ecc, int offset,
-> -				    int param_no, unsigned val)
-> -{
-> -	edma_write(ecc, EDMA_PARM + offset + (param_no << 5), val);
-> -}
-> -
->  static inline void edma_param_modify(struct edma_cc *ecc, int offset,
->  				     int param_no, unsigned and, unsigned or)
->  {
->  	edma_modify(ecc, EDMA_PARM + offset + (param_no << 5), and, or);
->  }
->  
-> -static inline void edma_param_and(struct edma_cc *ecc, int offset, int param_no,
-> -				  unsigned and)
-> -{
-> -	edma_and(ecc, EDMA_PARM + offset + (param_no << 5), and);
-> -}
-> -
-> -static inline void edma_param_or(struct edma_cc *ecc, int offset, int param_no,
-> -				 unsigned or)
-> -{
-> -	edma_or(ecc, EDMA_PARM + offset + (param_no << 5), or);
-> -}
-> -
->  static void edma_assign_priority_to_queue(struct edma_cc *ecc, int queue_no,
->  					  int priority)
->  {
-> @@ -743,11 +708,6 @@ static void edma_free_channel(struct edma_chan *echan)
->  	edma_setup_interrupt(echan, false);
->  }
->  
-> -static inline struct edma_cc *to_edma_cc(struct dma_device *d)
-> -{
-> -	return container_of(d, struct edma_cc, dma_slave);
-> -}
-> -
->  static inline struct edma_chan *to_edma_chan(struct dma_chan *c)
->  {
->  	return container_of(c, struct edma_chan, vchan.chan);
+> +&pcie30phy {
+> +	data-lanes = <0 1 2 3>;
+> +	phy-supply = <&vcc3v3_pi6c_03>;
+> +	status = "okay";
+> +};
+
+It seems that there is no need to define additional data-lanes when
+the pcie3x1 node is not enabled, and phy-supply seems unnecessary on
+this board.
+
+Excuse me, can you try the patches I posted? Lspci can recognize
+pcie3x2 normally, but I don't have a spare nvme hard drive right
+now to test if it works.
+
+Thanks, Chukun
+
+---
+Chukun Pan (3):
+  arm64: dts: rockchip: Add regulator suffix to ROCK3 Model A
+  arm64: dts: rockchip: Rename pinctrl label of pcie2x1 on rock-3a
+  arm64: dts: rockchip: Add PCIe v3 nodes to rock-3a
+
+ .../boot/dts/rockchip/rk3568-rock-3a.dts      | 36 ++++++++++++++-----
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
 -- 
-Péter
+2.25.1
+
