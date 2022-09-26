@@ -2,210 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258255EB0FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04FC5EB0FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiIZTLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S229757AbiIZTMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiIZTLi (ORCPT
+        with ESMTP id S229457AbiIZTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:11:38 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF456C76B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:11:36 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id j10so4742271qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:11:36 -0700 (PDT)
+        Mon, 26 Sep 2022 15:12:12 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9673A88DCB;
+        Mon, 26 Sep 2022 12:12:11 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c7so7390458pgt.11;
+        Mon, 26 Sep 2022 12:12:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3CHGQtxrUEIPS7Vs0U1v3kZ+VKfNuIhTmwS0yCWeTpg=;
-        b=lAXDle+Su5iIedDI7FHXawnjl90dFeb1jZZaEPLHvRqdvvLrpUFwWpTAVY25fmLQOo
-         4UqnDHubQ2DL2NHIOND/oVWuuaaSS+tciU+nOIxjS66briKaoAMQhA/JsKJviEKHvpxK
-         VoPhicVo4xeTSbj2FA6e/hcVCo+SjHlYV/1P+UnTM8YYfh8ghN2IF6fIWx03f5a9TxRv
-         6rkfg0ti3tFPPZL6UaFZo/oabotXj2vQiVmGBuR5HR6780yknHkNlCMI5gIPm1D5uq0m
-         +/1kW8l+XDPDs1nHJ3tGf4jjFOuSoexparptDEGwvXta01vU2fbTTkEJpO59bhDpHQ8t
-         BxIw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=Dyqc18f7tvm496eP3xU3ct8tqy6/7/TepuJUSfhcP1Y=;
+        b=pMeDGfIZ6SzFPBlN73M0ajQB/RGF4w2o+TyqK7pty1VyKbu13iZcGmLUl9Bi8c2hPZ
+         eKhAKnp3n2f08OHQVHBk0cq8xo4bA/d/+AWNzbMxyzInJS+HoYC1k7Akvf8aYWF6y/LW
+         wi5drJ1GstBDZBqr7IBiPDOXPWIee6npCJJtfvXUM1tAnalK/5YXC3k/HJB20y8gAufg
+         gOXNdlPoOhFdxQ42BdVqVm8eYolU6FyOpYZN/YR3iqp5eEfmcYK6nWnTM6xergGyXbOQ
+         +yOOkfw952go/oFjAV9ndq0eQKqhzSt7kVN5eWnT2Lv0KNiACRPbhJoopFAZY8RnRRAn
+         0gsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3CHGQtxrUEIPS7Vs0U1v3kZ+VKfNuIhTmwS0yCWeTpg=;
-        b=VJs/NnlWV4QvHnnVw/M1FpeygxxL3efoTpV79cLCLm8U67V0IBbVIJxGX7xF1sVc1J
-         cQOA/pc3N/cSmqIGQw9/w92i3dUIv89YnBm+Ys1n4yPdazGk3pxdMCBPR06sBTXnjPYq
-         pP2vZqtaHX9XOq1KSijW0EZab9P8X9yejhnFJ9KKHUywaTWF716pVMJgcyjZ8UJ92S6i
-         yahSdW3nPR450r23bus7YSymWinMuDJpkiWdDlAmj1B1QuH/r/83R8zSc3midwZHLAuJ
-         ntpHE31CFaIzOhjQGrzGWRoZ0VEaY5L1MPIDayLQ49b6AMMVwovedjdm99pxaOtwTrmG
-         UZwA==
-X-Gm-Message-State: ACrzQf1oyDLVZXLEsHQKo/BFBhdTNSOkKRoaiuhfKBxTudcEojSXpKpP
-        jI3r9JkDDEOqpF/2nA/rxrPXznBLdIZ3GA+V3Qg=
-X-Google-Smtp-Source: AMsMyM4DxEiz89ji3Lc5oRG5694dzQn/VGO0wux19LGYCQ/Ji2nrHLaaP4YOTlHUNfaV/dsBpicKj5oVEOjyRVFPt+8=
-X-Received: by 2002:a05:622a:11cf:b0:35b:a369:cc3 with SMTP id
- n15-20020a05622a11cf00b0035ba3690cc3mr19317849qtk.11.1664219495572; Mon, 26
- Sep 2022 12:11:35 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Dyqc18f7tvm496eP3xU3ct8tqy6/7/TepuJUSfhcP1Y=;
+        b=1xNzjPEOGKWclsN6NnNfd514BKC4hMkr/E3CHKEchUqkLQICWU3i8M3K5bQf6XuLDR
+         Rp9ZfFfmbnsPeS/BUKU+Ii6NZvnbLATksxbU2nZODZSaB+XgHqeVgeDEKq3YL1/61HVi
+         Pt9P76JZWlKGLR+dBiaVyTfG3atwv0HWTfoX85AdY4Yo7xhWvpbP5KVwnRGcC8i2duvQ
+         0aOl6/dZMj/4eYr7lM4Dl6cXooPkLQ4ijvejUWr9nyD5JtmP95hXwW7EdoQ29Ro0GXrS
+         g3OS92fXMa7OsXmrHatw1vJ1R61wMxdYDek0S/0j4lJvbk31Z4bSA/4XsZCyRbNc/1ut
+         4Dpw==
+X-Gm-Message-State: ACrzQf2QqbgdH1fbzADCiuqi7SX7UJuMI7Yxhou/UQ5VR/CIbhQvP7Or
+        QZjIa5+ETVL9MOBNKoga6vs=
+X-Google-Smtp-Source: AMsMyM6OoV1vjbpH9Fpg55ZVS2AbhR/iGQF6HZ6Sn1AcxtetxlTu2PFlMqy9JBQn5OW/bdcQwGWkig==
+X-Received: by 2002:a63:85c3:0:b0:43a:4c05:c313 with SMTP id u186-20020a6385c3000000b0043a4c05c313mr21577436pgd.418.1664219530946;
+        Mon, 26 Sep 2022 12:12:10 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902714d00b00178aaf6247bsm11647718plm.21.2022.09.26.12.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 12:12:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 26 Sep 2022 09:12:08 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "lujialin (A)" <lujialin4@huawei.com>
+Cc:     peterz@infradead.org, Zefan Li <lizefan.x@bytedance.com>,
+        cgroups@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [question] Is it possible for userspace program to control cpu
+ usage time of RT process through cgroup2 now?
+Message-ID: <YzH5iM0hy58f0tjd@slm.duckdns.org>
+References: <0a83dcd5-b7fd-811c-b8d2-062115fa8c94@huawei.com>
 MIME-Version: 1.0
-References: <20220913065423.520159-1-feng.tang@intel.com> <20220913065423.520159-3-feng.tang@intel.com>
-In-Reply-To: <20220913065423.520159-3-feng.tang@intel.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 26 Sep 2022 21:11:24 +0200
-Message-ID: <CA+fCnZfSv98uvxop7YN_L-F=WNVkb5rcwa6Nmf5yN-59p8Sr4Q@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] mm/slub: only zero the requested size of buffer
- for kzalloc
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a83dcd5-b7fd-811c-b8d2-062115fa8c94@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 8:54 AM Feng Tang <feng.tang@intel.com> wrote:
->
+Hello,
 
-Hi Feng,
+On Sat, Sep 24, 2022 at 05:26:20PM +0800, lujialin (A) wrote:
+> Cgroup2 dose not support controling real-time processes and the cpu
+> controller can only be enabled when all RT processes are in the root cgroup.
+> 
+> RT stuff was being overhauled when cpu controller interface for cgroup
+> unified hierarchy was being implemented in 2017. It was decided that we
+> would like to wait till the RT side settles down and proceed with an
+> interface that better matches RT.
+> 
+> Is it possible for userspace program to control cpu usage time of RT process
+> through cgroup2 now? If not, how is the current state looking and is there
+> any proposed solution?
 
-> kzalloc/kmalloc will round up the request size to a fixed size
-> (mostly power of 2), so the allocated memory could be more than
-> requested. Currently kzalloc family APIs will zero all the
-> allocated memory.
->
-> To detect out-of-bound usage of the extra allocated memory, only
-> zero the requested part, so that sanity check could be added to
-> the extra space later.
+Not right now. The hard allocation model is pretty challenging to work with
+on cgroup1 - they get enabled when cpu controller gets enabled and being
+hard allocations, not allocating any prevents the cgroups from using RT at
+all while allocating by default takes away from what others can use whether
+that allocation is used or not, so some distros turned them off last I
+checked. Overall, I'm not sure hard allocations done this way is all that
+useful to manage hierarchically given that the resource has to be hard
+partitioned anyway.
 
-I still don't like the idea of only zeroing the requested memory and
-not the whole object. Considering potential info-leak vulnerabilities.
+Can you describe your usecase?
 
-Can we only do this when SLAB_DEBUG is enabled?
+Thanks.
 
-> Performance wise, smaller zeroing length also brings shorter
-> execution time, as shown from test data on various server/desktop
-> platforms.
->
-> For kzalloc users who will call ksize() later and utilize this
-> extra space, please be aware that the space is not zeroed any
-> more.
-
-CC Kees
-
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
->  mm/slab.c |  7 ++++---
->  mm/slab.h |  5 +++--
->  mm/slub.c | 10 +++++++---
->  3 files changed, 14 insertions(+), 8 deletions(-)
->
-> diff --git a/mm/slab.c b/mm/slab.c
-> index a5486ff8362a..4594de0e3d6b 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3253,7 +3253,8 @@ slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
->         init = slab_want_init_on_alloc(flags, cachep);
->
->  out:
-> -       slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-> +       slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init,
-> +                               cachep->object_size);
->         return objp;
->  }
->
-> @@ -3506,13 +3507,13 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->          * Done outside of the IRQ disabled section.
->          */
->         slab_post_alloc_hook(s, objcg, flags, size, p,
-> -                               slab_want_init_on_alloc(flags, s));
-> +                       slab_want_init_on_alloc(flags, s), s->object_size);
->         /* FIXME: Trace call missing. Christoph would like a bulk variant */
->         return size;
->  error:
->         local_irq_enable();
->         cache_alloc_debugcheck_after_bulk(s, flags, i, p, _RET_IP_);
-> -       slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +       slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
->         kmem_cache_free_bulk(s, i, p);
->         return 0;
->  }
-> diff --git a/mm/slab.h b/mm/slab.h
-> index d0ef9dd44b71..3cf5adf63f48 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -730,7 +730,8 @@ static inline struct kmem_cache *slab_pre_alloc_hook(struct kmem_cache *s,
->
->  static inline void slab_post_alloc_hook(struct kmem_cache *s,
->                                         struct obj_cgroup *objcg, gfp_t flags,
-> -                                       size_t size, void **p, bool init)
-> +                                       size_t size, void **p, bool init,
-> +                                       unsigned int orig_size)
->  {
->         size_t i;
->
-> @@ -746,7 +747,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->         for (i = 0; i < size; i++) {
->                 p[i] = kasan_slab_alloc(s, p[i], flags, init);
->                 if (p[i] && init && !kasan_has_integrated_init())
-> -                       memset(p[i], 0, s->object_size);
-> +                       memset(p[i], 0, orig_size);
-
-Note that when KASAN is enabled and has integrated init, it will
-initialize the whole object, which leads to an inconsistency with this
-change.
-
->                 kmemleak_alloc_recursive(p[i], s->object_size, 1,
->                                          s->flags, flags);
->         }
-> diff --git a/mm/slub.c b/mm/slub.c
-> index c8ba16b3a4db..6f823e99d8b4 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3376,7 +3376,11 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
->         init = slab_want_init_on_alloc(gfpflags, s);
->
->  out:
-> -       slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init);
-> +       /*
-> +        * When init equals 'true', like for kzalloc() family, only
-> +        * @orig_size bytes will be zeroed instead of s->object_size
-> +        */
-> +       slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init, orig_size);
->
->         return object;
->  }
-> @@ -3833,11 +3837,11 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->          * Done outside of the IRQ disabled fastpath loop.
->          */
->         slab_post_alloc_hook(s, objcg, flags, size, p,
-> -                               slab_want_init_on_alloc(flags, s));
-> +                       slab_want_init_on_alloc(flags, s), s->object_size);
->         return i;
->  error:
->         slub_put_cpu_ptr(s->cpu_slab);
-> -       slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +       slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
->         kmem_cache_free_bulk(s, i, p);
->         return 0;
->  }
-> --
-> 2.34.1
->
+-- 
+tejun
