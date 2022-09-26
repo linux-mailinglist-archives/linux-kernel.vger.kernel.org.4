@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4AE5EA56B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFF35EA5A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbiIZMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S239429AbiIZMJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbiIZL6y (ORCPT
+        with ESMTP id S236839AbiIZMII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:58:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF07C1BC;
-        Mon, 26 Sep 2022 03:52:35 -0700 (PDT)
+        Mon, 26 Sep 2022 08:08:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C642B7FE44;
+        Mon, 26 Sep 2022 03:56:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7C960AF5;
-        Mon, 26 Sep 2022 10:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D03CC433D6;
-        Mon, 26 Sep 2022 10:51:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFD97B80989;
+        Mon, 26 Sep 2022 10:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABF4C433C1;
+        Mon, 26 Sep 2022 10:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189485;
-        bh=Jh04ZgCVJUOdoccO5CyvPwcmwvALBeyaIwi9Zen4+4k=;
+        s=korg; t=1664188828;
+        bh=fFOMB2uReGmPNAXPC5x2rZzCMMFTRM2a05rqBdR40jQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qggw+Yx0n6slXaV1AJs34t4Za0Uf7fhlnfdjKJ8ju7Wr/NdIRIPSIlN6v5gLeqrNe
-         S8cY+12e70c+W80BJVsX7N8/m3VwyLYoNPQGeI9yqStA69SI4yq6FncUzY/g+QthcQ
-         lHJphKWlY1z6zyQBIrmO1XI98p+e/0Av3lDA5ElI=
+        b=AcAhwn9Pny2g9VR0n8TWVIS5sxBw16arGwFyx4fAQYYY6snKesngC9qCTaxXmZNno
+         R9DA4RaWtQeN/rvPV+PGW2SpgL6khtIodF/Jhf3/CBxAqkoTi+cZIQQrSMn3YF835M
+         XQKw/TMxEbfZVeb07ribxT1safhFPtPr/0qTJW5Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 174/207] drm/gma500: Fix (vblank) IRQs not working after suspend/resume
-Date:   Mon, 26 Sep 2022 12:12:43 +0200
-Message-Id: <20220926100814.441600933@linuxfoundation.org>
+        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 135/148] workqueue: dont skip lockdep work dependency in cancel_work_sync()
+Date:   Mon, 26 Sep 2022 12:12:49 +0200
+Message-Id: <20220926100801.268717411@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,204 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 235fdbc32d559db21e580f85035c59372704f09e ]
+[ Upstream commit c0feea594e058223973db94c1c32a830c9807c86 ]
 
-Fix gnome-shell (and other page-flip users) hanging after suspend/resume
-because of the gma500's IRQs not working.
+Like Hillf Danton mentioned
 
-This fixes 2 problems with the IRQ handling:
+  syzbot should have been able to catch cancel_work_sync() in work context
+  by checking lockdep_map in __flush_work() for both flush and cancel.
 
-1. gma_power_off() calls gma_irq_uninstall() which does a free_irq(), but
-   gma_power_on() called gma_irq_preinstall() + gma_irq_postinstall() which
-   do not call request_irq. Replace the pre- + post-install calls with
-   gma_irq_install() which does prep + request + post.
+in [1], being unable to report an obvious deadlock scenario shown below is
+broken. From locking dependency perspective, sync version of cancel request
+should behave as if flush request, for it waits for completion of work if
+that work has already started execution.
 
-2. After fixing 1. IRQs still do not work on a Packard Bell Dot SC (Intel
-   Atom N2600, cedarview) netbook.
+  ----------
+  #include <linux/module.h>
+  #include <linux/sched.h>
+  static DEFINE_MUTEX(mutex);
+  static void work_fn(struct work_struct *work)
+  {
+    schedule_timeout_uninterruptible(HZ / 5);
+    mutex_lock(&mutex);
+    mutex_unlock(&mutex);
+  }
+  static DECLARE_WORK(work, work_fn);
+  static int __init test_init(void)
+  {
+    schedule_work(&work);
+    schedule_timeout_uninterruptible(HZ / 10);
+    mutex_lock(&mutex);
+    cancel_work_sync(&work);
+    mutex_unlock(&mutex);
+    return -EINVAL;
+  }
+  module_init(test_init);
+  MODULE_LICENSE("GPL");
+  ----------
 
-   Cederview uses MSI interrupts and it seems that the BIOS re-configures
-   things back to normal APIC based interrupts during S3 suspend. There is
-   some MSI PCI-config registers save/restore code which tries to deal with
-   this, but on the Packard Bell Dot SC this is not sufficient to restore
-   MSI IRQ functionality after a suspend/resume.
+The check this patch restores was added by commit 0976dfc1d0cd80a4
+("workqueue: Catch more locking problems with flush_work()").
 
-   Replace the PCI-config registers save/restore with pci_disable_msi() on
-   suspend + pci_enable_msi() on resume. Fixing e.g. gnome-shell hanging.
+Then, lockdep's crossrelease feature was added by commit b09be676e0ff25bd
+("locking/lockdep: Implement the 'crossrelease' feature"). As a result,
+this check was once removed by commit fd1a5b04dfb899f8 ("workqueue: Remove
+now redundant lock acquisitions wrt. workqueue flushes").
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220906203852.527663-4-hdegoede@redhat.com
+But lockdep's crossrelease feature was removed by commit e966eaeeb623f099
+("locking/lockdep: Remove the cross-release locking checks"). At this
+point, this check should have been restored.
+
+Then, commit d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in
+cancel_work_sync()") introduced a boolean flag in order to distinguish
+flush_work() and cancel_work_sync(), for checking "struct workqueue_struct"
+dependency when called from cancel_work_sync() was causing false positives.
+
+Then, commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
+flushing") tried to restore "struct work_struct" dependency check, but by
+error checked this boolean flag. Like an example shown above indicates,
+"struct work_struct" dependency needs to be checked for both flush_work()
+and cancel_work_sync().
+
+Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
+Reported-by: Hillf Danton <hdanton@sina.com>
+Suggested-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
+Cc: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/gma500/cdv_device.c      |  4 +---
- drivers/gpu/drm/gma500/oaktrail_device.c |  5 +----
- drivers/gpu/drm/gma500/power.c           |  8 +-------
- drivers/gpu/drm/gma500/psb_drv.c         |  2 +-
- drivers/gpu/drm/gma500/psb_drv.h         |  5 +----
- drivers/gpu/drm/gma500/psb_irq.c         | 15 ++++++++++++---
- drivers/gpu/drm/gma500/psb_irq.h         |  2 +-
- 7 files changed, 18 insertions(+), 23 deletions(-)
+ kernel/workqueue.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/gma500/cdv_device.c b/drivers/gpu/drm/gma500/cdv_device.c
-index dd32b484dd82..ce96234f3df2 100644
---- a/drivers/gpu/drm/gma500/cdv_device.c
-+++ b/drivers/gpu/drm/gma500/cdv_device.c
-@@ -581,11 +581,9 @@ static const struct psb_offset cdv_regmap[2] = {
- static int cdv_chip_setup(struct drm_device *dev)
- {
- 	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
--	struct pci_dev *pdev = to_pci_dev(dev->dev);
- 	INIT_WORK(&dev_priv->hotplug_work, cdv_hotplug_work_func);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 3f4d27668576..f5fa7be8d17e 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3083,10 +3083,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
  
--	if (pci_enable_msi(pdev))
--		dev_warn(dev->dev, "Enabling MSI failed!\n");
-+	dev_priv->use_msi = true;
- 	dev_priv->regmap = cdv_regmap;
- 	gma_get_core_freq(dev);
- 	psb_intel_opregion_init(dev);
-diff --git a/drivers/gpu/drm/gma500/oaktrail_device.c b/drivers/gpu/drm/gma500/oaktrail_device.c
-index 5923a9c89312..f90e628cb482 100644
---- a/drivers/gpu/drm/gma500/oaktrail_device.c
-+++ b/drivers/gpu/drm/gma500/oaktrail_device.c
-@@ -501,12 +501,9 @@ static const struct psb_offset oaktrail_regmap[2] = {
- static int oaktrail_chip_setup(struct drm_device *dev)
- {
- 	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
--	struct pci_dev *pdev = to_pci_dev(dev->dev);
- 	int ret;
+-	if (!from_cancel) {
+-		lock_map_acquire(&work->lockdep_map);
+-		lock_map_release(&work->lockdep_map);
+-	}
++	lock_map_acquire(&work->lockdep_map);
++	lock_map_release(&work->lockdep_map);
  
--	if (pci_enable_msi(pdev))
--		dev_warn(dev->dev, "Enabling MSI failed!\n");
--
-+	dev_priv->use_msi = true;
- 	dev_priv->regmap = oaktrail_regmap;
- 
- 	ret = mid_chip_setup(dev);
-diff --git a/drivers/gpu/drm/gma500/power.c b/drivers/gpu/drm/gma500/power.c
-index b91de6d36e41..66873085d450 100644
---- a/drivers/gpu/drm/gma500/power.c
-+++ b/drivers/gpu/drm/gma500/power.c
-@@ -139,8 +139,6 @@ static void gma_suspend_pci(struct pci_dev *pdev)
- 	dev_priv->regs.saveBSM = bsm;
- 	pci_read_config_dword(pdev, 0xFC, &vbt);
- 	dev_priv->regs.saveVBT = vbt;
--	pci_read_config_dword(pdev, PSB_PCIx_MSI_ADDR_LOC, &dev_priv->msi_addr);
--	pci_read_config_dword(pdev, PSB_PCIx_MSI_DATA_LOC, &dev_priv->msi_data);
- 
- 	pci_disable_device(pdev);
- 	pci_set_power_state(pdev, PCI_D3hot);
-@@ -168,9 +166,6 @@ static bool gma_resume_pci(struct pci_dev *pdev)
- 	pci_restore_state(pdev);
- 	pci_write_config_dword(pdev, 0x5c, dev_priv->regs.saveBSM);
- 	pci_write_config_dword(pdev, 0xFC, dev_priv->regs.saveVBT);
--	/* restoring MSI address and data in PCIx space */
--	pci_write_config_dword(pdev, PSB_PCIx_MSI_ADDR_LOC, dev_priv->msi_addr);
--	pci_write_config_dword(pdev, PSB_PCIx_MSI_DATA_LOC, dev_priv->msi_data);
- 	ret = pci_enable_device(pdev);
- 
- 	if (ret != 0)
-@@ -223,8 +218,7 @@ int gma_power_resume(struct device *_dev)
- 	mutex_lock(&power_mutex);
- 	gma_resume_pci(pdev);
- 	gma_resume_display(pdev);
--	gma_irq_preinstall(dev);
--	gma_irq_postinstall(dev);
-+	gma_irq_install(dev);
- 	mutex_unlock(&power_mutex);
- 	return 0;
- }
-diff --git a/drivers/gpu/drm/gma500/psb_drv.c b/drivers/gpu/drm/gma500/psb_drv.c
-index 1d8744f3e702..54e756b48606 100644
---- a/drivers/gpu/drm/gma500/psb_drv.c
-+++ b/drivers/gpu/drm/gma500/psb_drv.c
-@@ -383,7 +383,7 @@ static int psb_driver_load(struct drm_device *dev, unsigned long flags)
- 	PSB_WVDC32(0xFFFFFFFF, PSB_INT_MASK_R);
- 	spin_unlock_irqrestore(&dev_priv->irqmask_lock, irqflags);
- 
--	gma_irq_install(dev, pdev->irq);
-+	gma_irq_install(dev);
- 
- 	dev->max_vblank_count = 0xffffff; /* only 24 bits of frame count */
- 
-diff --git a/drivers/gpu/drm/gma500/psb_drv.h b/drivers/gpu/drm/gma500/psb_drv.h
-index 0ddfec1a0851..4c3fc5eaf6ad 100644
---- a/drivers/gpu/drm/gma500/psb_drv.h
-+++ b/drivers/gpu/drm/gma500/psb_drv.h
-@@ -490,6 +490,7 @@ struct drm_psb_private {
- 	int rpm_enabled;
- 
- 	/* MID specific */
-+	bool use_msi;
- 	bool has_gct;
- 	struct oaktrail_gct_data gct_data;
- 
-@@ -499,10 +500,6 @@ struct drm_psb_private {
- 	/* Register state */
- 	struct psb_save_area regs;
- 
--	/* MSI reg save */
--	uint32_t msi_addr;
--	uint32_t msi_data;
--
- 	/* Hotplug handling */
- 	struct work_struct hotplug_work;
- 
-diff --git a/drivers/gpu/drm/gma500/psb_irq.c b/drivers/gpu/drm/gma500/psb_irq.c
-index e6e6d61bbeab..038f18ed0a95 100644
---- a/drivers/gpu/drm/gma500/psb_irq.c
-+++ b/drivers/gpu/drm/gma500/psb_irq.c
-@@ -316,17 +316,24 @@ void gma_irq_postinstall(struct drm_device *dev)
- 	spin_unlock_irqrestore(&dev_priv->irqmask_lock, irqflags);
- }
- 
--int gma_irq_install(struct drm_device *dev, unsigned int irq)
-+int gma_irq_install(struct drm_device *dev)
- {
-+	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-+	struct pci_dev *pdev = to_pci_dev(dev->dev);
- 	int ret;
- 
--	if (irq == IRQ_NOTCONNECTED)
-+	if (dev_priv->use_msi && pci_enable_msi(pdev)) {
-+		dev_warn(dev->dev, "Enabling MSI failed!\n");
-+		dev_priv->use_msi = false;
-+	}
-+
-+	if (pdev->irq == IRQ_NOTCONNECTED)
- 		return -ENOTCONN;
- 
- 	gma_irq_preinstall(dev);
- 
- 	/* PCI devices require shared interrupts. */
--	ret = request_irq(irq, gma_irq_handler, IRQF_SHARED, dev->driver->name, dev);
-+	ret = request_irq(pdev->irq, gma_irq_handler, IRQF_SHARED, dev->driver->name, dev);
- 	if (ret)
- 		return ret;
- 
-@@ -369,6 +376,8 @@ void gma_irq_uninstall(struct drm_device *dev)
- 	spin_unlock_irqrestore(&dev_priv->irqmask_lock, irqflags);
- 
- 	free_irq(pdev->irq, dev);
-+	if (dev_priv->use_msi)
-+		pci_disable_msi(pdev);
- }
- 
- int gma_crtc_enable_vblank(struct drm_crtc *crtc)
-diff --git a/drivers/gpu/drm/gma500/psb_irq.h b/drivers/gpu/drm/gma500/psb_irq.h
-index b51e395194ff..7648f69824a5 100644
---- a/drivers/gpu/drm/gma500/psb_irq.h
-+++ b/drivers/gpu/drm/gma500/psb_irq.h
-@@ -17,7 +17,7 @@ struct drm_device;
- 
- void gma_irq_preinstall(struct drm_device *dev);
- void gma_irq_postinstall(struct drm_device *dev);
--int  gma_irq_install(struct drm_device *dev, unsigned int irq);
-+int  gma_irq_install(struct drm_device *dev);
- void gma_irq_uninstall(struct drm_device *dev);
- 
- int  gma_crtc_enable_vblank(struct drm_crtc *crtc);
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
 -- 
 2.35.1
 
