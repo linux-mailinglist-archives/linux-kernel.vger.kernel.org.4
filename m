@@ -2,174 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557CB5E9DBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42EA5E9DC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiIZJeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S234224AbiIZJfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiIZJdo (ORCPT
+        with ESMTP id S234112AbiIZJfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:33:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9F326C2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664184820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H9yo7nQ7X6csLZdzPbIjxBnehSyTfz7orjW0yNtRxTE=;
-        b=bKhWn1gWvhj7Bh7ttKpKwKlqOFN66DmQSbPvWvu0bsF545aV78flz5bDrHJDoi4BXwo8uP
-        ec27cMPuwWRK22Kdt+zjkofKZCGrPNVaDRdx7Akwcf9R/Gj2G3OaAME7WbZxbf8dCQRhOE
-        92QbhWn/feB3srhZJwuLNkKdaH3cnTg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-1-s3APgJMlNz24koPu5jpTqw-1; Mon, 26 Sep 2022 05:33:39 -0400
-X-MC-Unique: s3APgJMlNz24koPu5jpTqw-1
-Received: by mail-wr1-f71.google.com with SMTP id i27-20020adfaadb000000b0022a48b6436dso975300wrc.23
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:33:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H9yo7nQ7X6csLZdzPbIjxBnehSyTfz7orjW0yNtRxTE=;
-        b=kmnA7KLVEk55HLuUoRe3b3ErSZUgZ57k72rV7dFg3GZDgDbUuYFDg23B6+kApqGOmT
-         IVsbrcnaHoL186F5P+CW7NLvA7EHJ69kDvpnQQAlKnpt3NxVWsF+/VjDopODD7hFFV9r
-         vLHtzEMQcby2EiZtivy2Q5adV2QDnxJ0rLg/+9GHX+y+BOoqgz7/8Gly4LDwSNpYT+p9
-         5B5tstvXRfRNT1U7Yk+SVly5omhGTOaHFAT8i+MSDb1JLEe4jay7hzILIh0iOkE28eso
-         DdwkD0j5T6WaXO2qpOe8+es4czvftClo7St+H2OUCsqTSF4bCmL+WuX/o5Tn3CE8AuJi
-         Tz2w==
-X-Gm-Message-State: ACrzQf1SNXId/fdypwwosJVu5YIuBjR3b30bqHhmJyC9OFgD9gNXXeEa
-        clMyvSfkC04Y4985tbwVCRC+1rxLHGF9Xxi8MB5BnuVIWr4Gc/BzCWecOHPyHdRQWGMhixJam4B
-        vdpsxMHyk5hzh+gDJrZXQmAo=
-X-Received: by 2002:a05:600c:114f:b0:3b4:9a0a:6204 with SMTP id z15-20020a05600c114f00b003b49a0a6204mr14264178wmz.132.1664184818143;
-        Mon, 26 Sep 2022 02:33:38 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4pQqUHviODc3cofcz3alTrEOSQs7Ng28XfxFeTiv0/6sR/oQsIefxECuC6NG0anOiJGp5dpQ==
-X-Received: by 2002:a05:600c:114f:b0:3b4:9a0a:6204 with SMTP id z15-20020a05600c114f00b003b49a0a6204mr14264155wmz.132.1664184817894;
-        Mon, 26 Sep 2022 02:33:37 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id n32-20020a05600c502000b003a531c7aa66sm10720950wmr.1.2022.09.26.02.33.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 02:33:36 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 10:33:35 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk 10/18] kgbd: Pretend that console list walk is safe
-Message-ID: <20220926093335.exvrpwp5khlwqxhp@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-11-john.ogness@linutronix.de>
+        Mon, 26 Sep 2022 05:35:19 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7AC165A7;
+        Mon, 26 Sep 2022 02:35:11 -0700 (PDT)
+X-UUID: 052695737cbd4371aa3e9cb94c2c7ed1-20220926
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=H+SYdkbHp/cDLX4mENwizZnmtVaNtoheJG/XM3EMbdA=;
+        b=MOoMGwleQLlgYV4UGVrO8NZaZbcRQOamSRomDJeKJOvN6kqZccP/f6/ZAyNwwjDkvVrcnjqaWBEpoYEAtgcXYKoCkrr1hIz281LVfEGXGadaxAJuetrdtQZPcaqjXkMn3dIN/g+oVAVhp8jes65kd7/JWTQ2r8uFaDTkfpnUHsw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:72ed0038-030a-4d2a-8755-5903b5bcad91,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:eba60807-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 052695737cbd4371aa3e9cb94c2c7ed1-20220926
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 975954962; Mon, 26 Sep 2022 17:35:06 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 26 Sep 2022 17:35:04 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 26 Sep 2022 17:35:03 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>
+CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        "Irui Wang" <irui.wang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH] media: mediatek: vcodec: Skip unsupported h264 encoder profile
+Date:   Mon, 26 Sep 2022 17:35:01 +0800
+Message-ID: <20220926093501.26466-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-11-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-09-24 02:10 +0206, John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Provide a special list iterator macro for KGDB to allow unprotected list
-> walks and add a few comments to explain the hope based approach.
-> 
-> Preperatory change for changing the console list to hlist and adding
-> lockdep asserts to regular list walks.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  drivers/tty/serial/kgdboc.c |  5 ++++-
->  include/linux/console.h     | 10 ++++++++++
->  kernel/debug/kdb/kdb_io.c   |  7 ++++++-
->  3 files changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-> index af2aa76bae15..57a5fd27dffe 100644
-> --- a/drivers/tty/serial/kgdboc.c
-> +++ b/drivers/tty/serial/kgdboc.c
-> @@ -462,10 +462,13 @@ static void kgdboc_earlycon_pre_exp_handler(void)
->  	 * we have no other choice so we keep using it.  Since not all
->  	 * serial drivers might be OK with this, print a warning once per
->  	 * boot if we detect this case.
-> +	 *
-> +	 * Pretend that walking the console list is safe...
->  	 */
-> -	for_each_console(con)
-> +	for_each_console_kgdb(con) {
->  		if (con == kgdboc_earlycon_io_ops.cons)
->  			return;
-> +	}
->  
->  	already_warned = true;
->  	pr_warn("kgdboc_earlycon is still using bootconsole\n");
-> diff --git a/include/linux/console.h b/include/linux/console.h
-> index 24344f9b0bc1..86a6125512b9 100644
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -187,6 +187,16 @@ extern void console_list_unlock(void) __releases(console_mutex);
->  #define for_each_console(con)						\
->  	for (con = console_drivers; con != NULL; con = con->next)
->  
-> +/**
-> + * for_each_console_kgdb() - Iterator over registered consoles for KGDB
-> + * @con:	struct console pointer used as loop cursor
-> + *
-> + * Has no serialization requirements and KGDB pretends that this is safe.
-> + * Don't use outside of the KGDB fairy tale land!
-> + */
-> +#define for_each_console_kgdb(con)					\
-> +	for (con = console_drivers; con != NULL; con = con->next)
-> +
->  extern int console_set_on_cmdline;
->  extern struct console *early_console;
->  
-> diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
-> index 67d3c48a1522..fb3775e61a3b 100644
-> --- a/kernel/debug/kdb/kdb_io.c
-> +++ b/kernel/debug/kdb/kdb_io.c
-> @@ -558,7 +558,12 @@ static void kdb_msg_write(const char *msg, int msg_len)
->  		cp++;
->  	}
->  
-> -	for_each_console(c) {
-> +	/*
-> +	 * This is a completely unprotected list walk designed by the
-> +	 * wishful thinking department. See the oops_in_progress comment
-> +	 * below - especially the encourage section...
-> +	 */
-> +	for_each_console_kgdb(c) {
->  		if (!(c->flags & CON_ENABLED))
->  			continue;
->  		if (c == dbg_io_ops->cons)
-> -- 
-> 2.30.2
-> 
+The encoder driver support h264 baseline, main, high encoder
+profile, set mask for V4L2_CID_MPEG_VIDEO_H264_PROFILE to skip
+the unsupported profile.
 
-Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
+get supported h264_profile by command: v4l2-ctl -d /dev/videoX -L
+h264_profile 0x00990a6b (menu) : min=0 max=4 default=4 value=4
+        0: Baseline
+        2: Main
+        4: High
 
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+index d810a78dde51..d65800a3b89d 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+@@ -1397,7 +1397,10 @@ int mtk_vcodec_enc_ctrls_setup(struct mtk_vcodec_ctx *ctx)
+ 			0, V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
+ 	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+ 			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-			0, V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
++			~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
++			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
++			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
+ 	v4l2_ctrl_new_std_menu(handler, ops, V4L2_CID_MPEG_VIDEO_H264_LEVEL,
+ 			       h264_max_level,
+ 			       0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
 -- 
-Aaron Tomlin
+2.18.0
 
