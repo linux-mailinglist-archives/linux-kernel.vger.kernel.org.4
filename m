@@ -2,88 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3A15E9901
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 07:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F56B5E9905
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 07:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiIZFvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 01:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S233445AbiIZFy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 01:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiIZFvf (ORCPT
+        with ESMTP id S232086AbiIZFyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 01:51:35 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3481220E3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:51:33 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id e68so5641779pfe.1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:51:33 -0700 (PDT)
+        Mon, 26 Sep 2022 01:54:51 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8E214006
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:54:49 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d42so9235648lfv.0
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 22:54:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=JuhOks1hQfFo95ag4lKfeQ7gstLas2WjFXJVZ4xzLZI=;
-        b=R0BqlZxMW7iRaSdnB9Nub7ZXZ8vjjcREkB7ZSCZl6WoRHdygEqJ3PVhGo0HcDhM+VB
-         JBqf9BgM86J2nku8ZO9no1RIPMth1JhaoFQD3uz8x9wGvrte3dFK6l9he4mA+7hBMR4x
-         M8URu3CKkCm+yPJSF4/IQHBrP8baTw8tc9RAM0aa1U3Q3XYg0cA2GjLFxzOGW01n89lM
-         2nSrSIJ67eXNwBwt3ohM05Skwe5X+KatXZqcFv4NanNKu07gYnIytzyQWdkokSFMh7Uq
-         2NheVLPAO26G3C2m+p8qMWvbgX+oyjKMAH0cGVzBlvBfLtG8AvSdXawnoM/hTlccjOlr
-         gbPQ==
+        d=nabam-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=X+VWAsBrIwEfcisjAcclNatXU+W7hYzJIi619hVAYo4=;
+        b=5eAEQIvfh6PgVVrKOQDhrOJzQOEWut30eS5UsyvaikF2HxXHMsve8fRLWEzXxS8ZCB
+         wV1NrRt4+sTr+4V+mDcRMM3n9AWCwUMqjFzsyyUPauf7r5ZaFkm4XATT+pJNop4OrNN6
+         uAIUn1YfQjrG6guqfvBum2afvAxRSzMEKDCot/RKIZFPgJ0t+u0NgpOri+zbAyemAEr5
+         bd9eV2SnBaDQF7s9Jv6SFNpSS5B+BVvG5N/9zmlQjE0sjsXMuQIc8duf2j854dnAakAI
+         ZlI+x8N3CskA2+K3A67MOgsjU/xAthaRbFL8eWqY4oLqvGdBMC24IS+/6oydquK57vRn
+         00BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JuhOks1hQfFo95ag4lKfeQ7gstLas2WjFXJVZ4xzLZI=;
-        b=fzc6hdoA6aKrQltOJt2Tx8D6hg3p/0nJJFv6Tiix+DYh3UOq4NnO/dUMNlDoiIpjU4
-         h82/DlvgTJ5apfr9LaGOdqZ+l30uKk4+/oq4MSwnFwWuQCjhovy124LoL/Xa6E/lWDP0
-         ruPh7DHd66kweAYPYdYYn85QIJJ/XN/SLvovC/HzF/OZoJtBWwwoTXzIF5jqjAT0iJgF
-         +9G/WSVTr2XVA+F8hCsXQKcf3/bY4RICg1ojjNzy6KlYYnD6/pFZMLr31GpGrKCw7y90
-         3vjALIpU9qYYdky2KiYK/e7vSJRXiA8f3eNKvTnL6uc6MOBBAGYKgGfaK0tTQoCu5RNU
-         vuPQ==
-X-Gm-Message-State: ACrzQf3y+DGMKbAEjKqSbrgwhO74oVLKxHUDUR4iRbG+DgMpTRzPAnjV
-        G9sgmoXXBMvKJoqFJTPF3EW6LRkBjduOjQ==
-X-Google-Smtp-Source: AMsMyM40BIaeAR066YrerNnWIYd15Ig6FFvztVRrDOjy/bTtUKL3TKZNhPyD/XV2f7zEXDhr1RLhlg==
-X-Received: by 2002:a63:204a:0:b0:439:1802:dd99 with SMTP id r10-20020a63204a000000b004391802dd99mr18619064pgm.153.1664171493445;
-        Sun, 25 Sep 2022 22:51:33 -0700 (PDT)
-Received: from localhost ([122.172.85.153])
-        by smtp.gmail.com with ESMTPSA id g189-20020a6252c6000000b0053e47dcfa32sm10990429pfb.155.2022.09.25.22.51.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 22:51:32 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 11:21:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, rafael@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, di.shen@unisoc.com
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
-Message-ID: <20220926055130.yr67653e52vyuutv@vireshk-i7>
-References: <20220915090515.1660-1-xuewen.yan@unisoc.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=X+VWAsBrIwEfcisjAcclNatXU+W7hYzJIi619hVAYo4=;
+        b=eohK1F0ql0BJyC6QxspQyQzOyq43tTZv8KHt1l/JTTub88Y18NdXVSzECu3aTY6Imm
+         6+CC7SQFulyohtkiUpVS0PfbhBlTe4mH+Xk5y26memDid9IcBcqfSnxnO2LOkVixLKUm
+         SsHE3f3FBpkAiudapKx8hbsB47UXIaXKuGXgOXEqF4YgNnaA6TeHVzlSW7GBj68lFJaR
+         Z1elenO/dvppucJzRtibxx8id+LoQRbTVxkFGwsOwpu79oT4m3bmv4fh2nBeCzBXzWP9
+         F0QECUPOesWq6ys8lxyE+ccwCoHaozqEEiEqSF8jU9QctQvRPhvW9cVc7HKSzJR5MUQJ
+         zrng==
+X-Gm-Message-State: ACrzQf227oB94+5qzLj8YtcWxjDuuO7jx+oKPUNXZnjFdlzWROKjbQE3
+        sAUYe62ctnk5WGWYZQ1aMemOfg==
+X-Google-Smtp-Source: AMsMyM4cZ97MklJ5Y/TZMAOLJPoaymov4ootDnxdWi85A0d8+O+ucKqqpJBuyICClp8AYZbld8h0GA==
+X-Received: by 2002:a05:6512:33c6:b0:497:9df1:a25a with SMTP id d6-20020a05651233c600b004979df1a25amr7613701lfg.562.1664171687262;
+        Sun, 25 Sep 2022 22:54:47 -0700 (PDT)
+Received: from 16-inch.lan (c-7f0d225c.016-470-73746f7.bbcust.telenor.se. [92.34.13.127])
+        by smtp.googlemail.com with ESMTPSA id e27-20020a05651c039b00b0026c5ab1883dsm2271114ljp.16.2022.09.25.22.54.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 25 Sep 2022 22:54:46 -0700 (PDT)
+From:   Lev Popov <leo@nabam.net>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Dan Johansen <strit@manjaro.org>, Lev Popov <leo@nabam.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] arm64: dts: rockchip: fix quartz64-a bluetooth configuration
+Date:   Mon, 26 Sep 2022 07:54:33 +0200
+Message-Id: <20220926055435.31284-1-leo@nabam.net>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <CAMdYzYpdhJ-wWN9UAppQvaNqK8Y_RadYv2v67gD5S_u=1ZXw0Q@mail.gmail.com>
+References: <CAMdYzYpdhJ-wWN9UAppQvaNqK8Y_RadYv2v67gD5S_u=1ZXw0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915090515.1660-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-09-22, 17:05, Xuewen Yan wrote:
-> Before update thermal pressure, the max cpufreq should be limited.
-> Add QOS control for Lmh throttle cpufreq.
-> 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+For "Quartz64 Model A" add missing RTS line to the UART interface used by
+bluetooth and swap bluetooth host-wakeup and device-wakeup gpio pins to
+match the boards physical layout. This changes are necessary to make
+bluetooth provided by the wireless module work.
 
-This doesn't apply cleanly over my tree anymore, can you please rebase and
-resend ?
+Fixes: b33a22a1e7c4248608e533fc4fa524258b3fae84 (arm64: dts: rockchip: add basic dts for Pine64 Quartz64-A)
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+Signed-off-by: Lev Popov <leo@nabam.net>
+---
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+index a05460b92415..91908081c5ed 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+@@ -740,7 +740,7 @@ &uart0 {
+ 
+ &uart1 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
++	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn &uart1m0_rtsn>;
+ 	status = "okay";
+ 	uart-has-rtscts;
+ 
+@@ -748,8 +748,8 @@ bluetooth {
+ 		compatible = "brcm,bcm43438-bt";
+ 		clocks = <&rk817 1>;
+ 		clock-names = "lpo";
+-		device-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+-		host-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
++		host-wakeup-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
++		device-wakeup-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
+ 		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
 -- 
-viresh
+2.37.3
+
