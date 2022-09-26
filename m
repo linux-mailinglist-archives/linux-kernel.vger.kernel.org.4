@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F305E9F24
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FA15EA2F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbiIZKUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S234247AbiIZLQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiIZKSK (ORCPT
+        with ESMTP id S235319AbiIZLQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:18:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3503FA39;
-        Mon, 26 Sep 2022 03:15:15 -0700 (PDT)
+        Mon, 26 Sep 2022 07:16:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813B065275;
+        Mon, 26 Sep 2022 03:37:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7589BCE10E9;
-        Mon, 26 Sep 2022 10:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C465C433C1;
-        Mon, 26 Sep 2022 10:15:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA60760A37;
+        Mon, 26 Sep 2022 10:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F9EC433D6;
+        Mon, 26 Sep 2022 10:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187308;
-        bh=wpR2uPM5j62f5gxaMpy1qf7y9e1hJhxI6jbW71SU2yo=;
+        s=korg; t=1664188633;
+        bh=Vh0y7Imf/BcnzL8j/MEBXoGDwAxE2aIEI3RMLeAEr6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kuHhZHA5syHALewkg+YzIlh/s2sb/wdRFga2rP/TS9En/ZYn2E3Kt+74DJkYTAnw6
-         B6sZvhAeYGAuaAPZ+rmEmd2dvW+uQ5ODGMI6RYwH5Kz8N4t8lIm2ZqciHpAYUelihZ
-         Jcc+0muTEIt3N/emGwn5BcRQZSmdqd67tHMZqJCA=
+        b=cAQbLE1sWd7jk2vApHkbt9+sXJfk3r+W5tYXogXj24nMts43pUY+tJUSSUq5o5FKB
+         dip0qZCh0HwI4Eg/v+N6tDo9pFlcVj0ayTTCmN9q0Aa73bh8tbSq4pP+YVWew6sJez
+         Q9ZBl7B5NpAsfMyUNx3ctNaaNh+WYvSjguSMSy24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Siddh Raman Pant <code@siddh.me>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Lu Wei <luwei32@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 13/30] wifi: mac80211: Fix UAF in ieee80211_scan_rx()
-Date:   Mon, 26 Sep 2022 12:11:44 +0200
-Message-Id: <20220926100736.646872576@linuxfoundation.org>
+Subject: [PATCH 5.15 071/148] ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
+Date:   Mon, 26 Sep 2022 12:11:45 +0200
+Message-Id: <20220926100758.704792312@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddh Raman Pant <code@siddh.me>
+From: Lu Wei <luwei32@huawei.com>
 
-[ Upstream commit 60deb9f10eec5c6a20252ed36238b55d8b614a2c ]
+[ Upstream commit 81225b2ea161af48e093f58e8dfee6d705b16af4 ]
 
-ieee80211_scan_rx() tries to access scan_req->flags after a
-null check, but a UAF is observed when the scan is completed
-and __ieee80211_scan_completed() executes, which then calls
-cfg80211_scan_done() leading to the freeing of scan_req.
+If an AF_PACKET socket is used to send packets through ipvlan and the
+default xmit function of the AF_PACKET socket is changed from
+dev_queue_xmit() to packet_direct_xmit() via setsockopt() with the option
+name of PACKET_QDISC_BYPASS, the skb->mac_header may not be reset and
+remains as the initial value of 65535, this may trigger slab-out-of-bounds
+bugs as following:
 
-Since scan_req is rcu_dereference()'d, prevent the racing in
-__ieee80211_scan_completed() by ensuring that from mac80211's
-POV it is no longer accessed from an RCU read critical section
-before we call cfg80211_scan_done().
+=================================================================
+UG: KASAN: slab-out-of-bounds in ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
+PU: 2 PID: 1768 Comm: raw_send Kdump: loaded Not tainted 6.0.0-rc4+ #6
+ardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-1.fc33
+all Trace:
+print_address_description.constprop.0+0x1d/0x160
+print_report.cold+0x4f/0x112
+kasan_report+0xa3/0x130
+ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
+ipvlan_start_xmit+0x29/0xa0 [ipvlan]
+__dev_direct_xmit+0x2e2/0x380
+packet_direct_xmit+0x22/0x60
+packet_snd+0x7c9/0xc40
+sock_sendmsg+0x9a/0xa0
+__sys_sendto+0x18a/0x230
+__x64_sys_sendto+0x74/0x90
+do_syscall_64+0x3b/0x90
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Cc: stable@vger.kernel.org
-Link: https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
-Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
-Suggested-by: Johannes Berg <johannes@sipsolutions.net>
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Link: https://lore.kernel.org/r/20220819200340.34826-1-code@siddh.me
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+The root cause is:
+  1. packet_snd() only reset skb->mac_header when sock->type is SOCK_RAW
+     and skb->protocol is not specified as in packet_parse_headers()
+
+  2. packet_direct_xmit() doesn't reset skb->mac_header as dev_queue_xmit()
+
+In this case, skb->mac_header is 65535 when ipvlan_xmit_mode_l2() is
+called. So when ipvlan_xmit_mode_l2() gets mac header with eth_hdr() which
+use "skb->head + skb->mac_header", out-of-bound access occurs.
+
+This patch replaces eth_hdr() with skb_eth_hdr() in ipvlan_xmit_mode_l2()
+and reset mac header in multicast to solve this out-of-bound bug.
+
+Fixes: 2ad7bf363841 ("ipvlan: Initial check-in of the IPVLAN driver.")
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/scan.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/net/ipvlan/ipvlan_core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/mac80211/scan.c b/net/mac80211/scan.c
-index 701adcb9262e..a73c362a0182 100644
---- a/net/mac80211/scan.c
-+++ b/net/mac80211/scan.c
-@@ -385,10 +385,6 @@ static void __ieee80211_scan_completed(struct ieee80211_hw *hw, bool aborted)
- 	scan_req = rcu_dereference_protected(local->scan_req,
- 					     lockdep_is_held(&local->mtx));
+diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
+index 6cd50106e611..d7fb6302d699 100644
+--- a/drivers/net/ipvlan/ipvlan_core.c
++++ b/drivers/net/ipvlan/ipvlan_core.c
+@@ -496,7 +496,6 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
  
--	if (scan_req != local->int_scan_req) {
--		local->scan_info.aborted = aborted;
--		cfg80211_scan_done(scan_req, &local->scan_info);
--	}
- 	RCU_INIT_POINTER(local->scan_req, NULL);
+ static int ipvlan_process_outbound(struct sk_buff *skb)
+ {
+-	struct ethhdr *ethh = eth_hdr(skb);
+ 	int ret = NET_XMIT_DROP;
  
- 	scan_sdata = rcu_dereference_protected(local->scan_sdata,
-@@ -398,6 +394,13 @@ static void __ieee80211_scan_completed(struct ieee80211_hw *hw, bool aborted)
- 	local->scanning = 0;
- 	local->scan_chandef.chan = NULL;
- 
-+	synchronize_rcu();
+ 	/* The ipvlan is a pseudo-L2 device, so the packets that we receive
+@@ -506,6 +505,8 @@ static int ipvlan_process_outbound(struct sk_buff *skb)
+ 	if (skb_mac_header_was_set(skb)) {
+ 		/* In this mode we dont care about
+ 		 * multicast and broadcast traffic */
++		struct ethhdr *ethh = eth_hdr(skb);
 +
-+	if (scan_req != local->int_scan_req) {
-+		local->scan_info.aborted = aborted;
-+		cfg80211_scan_done(scan_req, &local->scan_info);
-+	}
-+
- 	/* Set power back to normal operating levels. */
- 	ieee80211_hw_config(local, 0);
+ 		if (is_multicast_ether_addr(ethh->h_dest)) {
+ 			pr_debug_ratelimited(
+ 				"Dropped {multi|broad}cast of type=[%x]\n",
+@@ -590,7 +591,7 @@ static int ipvlan_xmit_mode_l3(struct sk_buff *skb, struct net_device *dev)
+ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	const struct ipvl_dev *ipvlan = netdev_priv(dev);
+-	struct ethhdr *eth = eth_hdr(skb);
++	struct ethhdr *eth = skb_eth_hdr(skb);
+ 	struct ipvl_addr *addr;
+ 	void *lyr3h;
+ 	int addr_type;
+@@ -620,6 +621,7 @@ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
+ 		return dev_forward_skb(ipvlan->phy_dev, skb);
  
+ 	} else if (is_multicast_ether_addr(eth->h_dest)) {
++		skb_reset_mac_header(skb);
+ 		ipvlan_skb_crossing_ns(skb, NULL);
+ 		ipvlan_multicast_enqueue(ipvlan->port, skb, true);
+ 		return NET_XMIT_SUCCESS;
 -- 
 2.35.1
 
