@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0A65E9D63
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B935E9D67
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbiIZJVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:21:41 -0400
+        id S234036AbiIZJWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:22:38 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbiIZJVL (ORCPT
+        with ESMTP id S233529AbiIZJWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:21:11 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D152242AC1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:18:57 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 9so6033629pfz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=MPn6a20lGPjczB73AXADasqkPzFa5QqvxnfB30lgZnI=;
-        b=nXTHZo4VhcwYUndpnviY+WdPnUQHhydHnFwHNGsRUgPdFHA3f9I+VL/twlx0ysTtc4
-         1XA/3HdmejoO1gfByTU/ohK2Z/L9zIf61aVtVnjuQQ+ac1p8p3uE73f8JFlH04aNsyY8
-         MuoyfmaLRRK4SRqblHLfrnbC27P+QlWmfDBEI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=MPn6a20lGPjczB73AXADasqkPzFa5QqvxnfB30lgZnI=;
-        b=a/IGNPgG4PTybwgfC38no6X5lmbYbZlDKDvDaXg4qWEWQzSHOgAoOCJCRX9xwj6ogn
-         EZfa5lyWL7ueca2gAbG0H9vqL+bRnnWs2imFYK0q2Q5DGk3hMYfRfxpubQufA6VGOD79
-         p/45Aarrj9RCTN5oxfI82HezIDfNObRS+nbSl5mQE4p+v8pYicnxyBhm+gE/YVcs0tCY
-         WyZdBJxneXKDzFzVFrEKicb9CnJ1q6fLK1caJkKMIbeu0bY7GNELi+X2z3borUa9leCn
-         Rk91c5tTlVkD2Up0Ss1GIlE6+JLM9AhbSUIP54rtKdsOobCFzXt8kO0+oqp211BfQgNF
-         DtHg==
-X-Gm-Message-State: ACrzQf0OHMFNavXbzEtSTVJ+CuvEbuXk8y8bCzktRbad2M3ipSIIFIVu
-        gDX0lCBQu3suyVDYLljzpCoTDg==
-X-Google-Smtp-Source: AMsMyM6FSbgFItaI3cf+torU0kBg8x6gcHN0zvvUShnmw6Xu2zce5g4Rc5RylioMGCdZ76bOEeX5QQ==
-X-Received: by 2002:aa7:888d:0:b0:538:328b:2ffb with SMTP id z13-20020aa7888d000000b00538328b2ffbmr22809720pfe.82.1664183918481;
-        Mon, 26 Sep 2022 02:18:38 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:2a7d:69c:905d:1926])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0016ee3d7220esm10853134pln.24.2022.09.26.02.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 02:18:37 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 18:18:33 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
-Message-ID: <YzFuaUq352geBXcE@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-19-john.ogness@linutronix.de>
- <YzEoYPSC5Qf2aL92@google.com>
- <87leq6d0zn.fsf@jogness.linutronix.de>
+        Mon, 26 Sep 2022 05:22:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65566474C7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:19:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F69FB802C8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF7BC433D6;
+        Mon, 26 Sep 2022 09:19:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664183961;
+        bh=zokIZXIlwzWBqkPaQXmt40NpJQ0hgwAisoGjIS1cLtE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=onOnhZHPmnMEnhxjLoePqwKXpMITuZWqKeQNkgP1CajCp5fPjNwqdZxivdetEQL2C
+         MznLDa8bph60pvZS8/aG5JsFrSONfxCREO7wKTPgUaKPAIGSNuMTh6yRZBvfHNpsgA
+         Wlm6GCFrOfGjY5Y/RdDrXjxGPjXh3TO+qI228Cuff6LAEN8TPrs5rdXsY5kUCG3C2c
+         9z2QkcX422rsJVX4Se3WYQo/e68tVW8naNp4HmilrGj7Zdi8PI/RJMGnYH/7UDFINx
+         gxAoT0yumVmNdomiYiS68Gf377Lu5j+271I+lkGzKoEI2KlawYJLrbHP4DkCtPE9sn
+         g2DQhxS3nOgXg==
+Date:   Mon, 26 Sep 2022 11:19:16 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc:     David Airlie <airlied@linux.ie>, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v3 01/37] drm/i915: fix kernel-doc trivial
+ warnings on i915/*.[ch] files
+Message-ID: <20220926111916.65a9859e@coco.lan>
+In-Reply-To: <2aa5f49e-af83-6368-8db5-e9b33dd19f06@intel.com>
+References: <cover.1662708705.git.mchehab@kernel.org>
+        <752ce443ea141601cf59a1ad8a5130deed2feb4f.1662708705.git.mchehab@kernel.org>
+        <2aa5f49e-af83-6368-8db5-e9b33dd19f06@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87leq6d0zn.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/26 10:00), John Ogness wrote:
-> > Oh, hmm. This does not look to me as a simplification. Quite
-> > the opposite, moving cons_text_buf::text pointer to point to
-> > cons_text_buf::text - strlen("... dropped messages...") looks
-> > somewhat fragile.
+Em Fri, 16 Sep 2022 17:03:27 +0300
+Gwan-gyeong Mun <gwan-gyeong.mun@intel.com> escreveu:
+
+> >   /**
+> > - * Called when user space has done writes to this buffer
+> > + * i915_gem_sw_finish_ioctl - Called when user space has done writes to
+> > + *		this buffer  
+> As per this link[1], the brief description does not have a limitation to 
+> match the indentation when explained over multiple lines, unlike 
+> function parameters.
 > 
-> It relies on @ext_text and @text being packed together, which yes, may
-> be fragile.
-
-Right, and this assumption can be broken by both internal and external
-sources: new gcc/clang plugins, config options, etc.
-
-> As an alternative we could memcpy the message text (@text)
-> to the end of the dropped message text. There would be enough room.
+> [1] 
+> https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
 > 
-> Generally speaking, the dropped text will be less text to copy. But
-> since dropped messages are rare anyway, it might be worth copying more
-> data so that the code is not fragile. It would also allow us to remove
-> the __no_randomize_layout in "struct cons_text_buf".
-
-Agreed.
-
-> If the end of cons_print_dropped was changed to:
+> Therefore if you look at the function brief description over several 
+> lines in i915 and drm,
 > 
->         memcpy(txtbuf->ext_text + len, txtbuf->text, desc->len);
->         desc->len += len;
->         desc->outbuf = txtbuf->ext_text;
+> One of the drm apis, drm_gem_lock_reservations(), is used without 
+> indentation in the form below,
+> /**
+>   * drm_gem_lock_reservations - Sets up the ww context and acquires
+>   * the lock on an array of GEM objects.
 > 
-> Would that be OK for you?
+> In i915_perf.c, indentation is set as follows.
+> 
+> /**
+>   * gen8_append_oa_reports - Copies all buffered OA reports into
+>   *			    userspace read() buffer.
+> 
+> ...
+> 
+> /**
+>   * gen7_append_oa_reports - Copies all buffered OA reports into
+>   *			    userspace read() buffer.
+> 
+> If there is no problem when using the same form as 
+> gen8_append_oa_reports when generating kernel-doc, it seems to be 
+> indented to match the existing i915 style. However, if there is a 
+> problem, I think you need to remove the indented part of the i915 code 
+> like the drm apis.
+> 
+> except i915_gem_sw_finish_ioctl  i915_gem_gtt_pwrite_fast parts, the 
+> rest of the parts look good to me.
 
-Yes, this looks solid (nothing should be able to break it and cause
-mem corruptions).
+There's no rule about either indent or not. IMO, it makes easier for
+humans to read when indent is used.
+
+Yet, I'd say that, right now, 50% of multi-line comments within the
+kernel has indent. So, it is more like a matter of personal developer's
+preference at the moment.
+
+> 
+> Reviewed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+
+Thanks,
+Mauro
