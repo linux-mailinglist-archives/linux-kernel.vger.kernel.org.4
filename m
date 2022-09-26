@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4565E9A03
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606A55E99C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiIZHAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S233578AbiIZGoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiIZHAP (ORCPT
+        with ESMTP id S230169AbiIZGof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:00:15 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E6140A5;
-        Mon, 26 Sep 2022 00:00:09 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 152A81A24EF;
-        Mon, 26 Sep 2022 09:00:08 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B98BB1A24F0;
-        Mon, 26 Sep 2022 09:00:07 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id F33EA180222C;
-        Mon, 26 Sep 2022 15:00:05 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     vkoul@kernel.org, p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
-        marex@denx.de, richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH v9 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY support
-Date:   Mon, 26 Sep 2022 14:41:03 +0800
-Message-Id: <1664174463-13721-5-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1664174463-13721-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1664174463-13721-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 26 Sep 2022 02:44:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B562FB
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:44:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A99960ABA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:44:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D78C433D6;
+        Mon, 26 Sep 2022 06:44:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664174670;
+        bh=Qw/WUCw4zPmr8hfqOYYDyEiNaTMxoMtF2IxYIaV1Lqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X3+6kv4iRcMKlUWjgfsYVxrcJznUCrUlOOVCHNFI45hW/YjtgiFTJPnjgYjYDjbjJ
+         ojsK8E9kU2dyet5wlQFuW+M9l4EPzFkEKsPJV2OsaqHTvTG65Z8FzyG++udOUPINXz
+         qot2hednsLt8ywwauuEjvPLe5xfO0LtDsypTTuV4=
+Date:   Mon, 26 Sep 2022 08:44:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     duoming@zju.edu.cn
+Cc:     johannes@sipsolutions.net, linux-kernel@vger.kernel.org,
+        rafael@kernel.org
+Subject: Re: [PATCH V9] devcoredump: add context check in dev_coredumpm
+Message-ID: <YzFKTM7wI6NDkPiR@kroah.com>
+References: <20220926061609.44153-1-duoming@zju.edu.cn>
+ <YzFGblnZdDPWAW7E@kroah.com>
+ <66a140d1.f7b7e.1837884be23.Coremail.duoming@zju.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66a140d1.f7b7e.1837884be23.Coremail.duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,91 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe PHY support.
+On Mon, Sep 26, 2022 at 02:38:28PM +0800, duoming@zju.edu.cn wrote:
+> Hello,
+> 
+> On Mon, 26 Sep 2022 08:27:58 +0200 Greg KH wrote:
+> 
+> > On Mon, Sep 26, 2022 at 02:16:09PM +0800, Duoming Zhou wrote:
+> > > The dev_coredumpm(), dev_coredumpv() and dev_coredumpsg() could not
+> > > be used in atomic context, because they call kvasprintf_const() and
+> > > kstrdup() with GFP_KERNEL parameter. The process is shown below:
+> > > 
+> > > dev_coredumpv(.., gfp_t gfp)
+> > >   dev_coredumpm(.., gfp_t gfp)
+> > >     dev_set_name
+> > >       kobject_set_name_vargs
+> > >         kvasprintf_const(GFP_KERNEL, ...); //may sleep
+> > >           kstrdup(s, GFP_KERNEL); //may sleep
+> > > 
+> > > This patch adds context check in dev_coredumpm() in order to show
+> > > dev_coredumpm() and its callers could not be used in atomic context.
+> > > 
+> > > What's more, this change can allow the api to evolve and will not
+> > > influence the users that call this api.
+> > > 
+> > > Fixes: 833c95456a70 ("device coredump: add new device coredump class")
+> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> > > ---
+> > > Changes in v9:
+> > >   - Add context check in dev_coredumpm().
+> > > 
+> > >  drivers/base/devcoredump.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+> > > index f4d794d6bb8..806ee872f5f 100644
+> > > --- a/drivers/base/devcoredump.c
+> > > +++ b/drivers/base/devcoredump.c
+> > > @@ -255,6 +255,9 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+> > >  	struct devcd_entry *devcd;
+> > >  	struct device *existing;
+> > >  
+> > > +	if (!gfpflags_normal_context(gfp))
+> > > +		goto free;
+> > 
+> > Wait, this just broke things for no good reason if a caller happened to
+> > have set a GFP flag that we do not like at the moment.
+> > 
+> > What code now does not work that previously did work with this change?
+> 
+> I found that all users in the kernel call the dev_coredumpv(), dev_coredumpm() and
+> dev_coredumpsg() with "GFP_KERNEL". So this change will not influence the existing users.
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Great, so there is no need for this, and it does not "fix" any commit.
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index 9752818fe990..63636994d673 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -48,6 +48,7 @@
- 
- enum imx8_pcie_phy_type {
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- struct imx8_pcie_phy_drvdata {
-@@ -60,6 +61,7 @@ struct imx8_pcie_phy {
- 	struct clk		*clk;
- 	struct phy		*phy;
- 	struct regmap		*iomuxc_gpr;
-+	struct reset_control	*perst;
- 	struct reset_control	*reset;
- 	u32			refclk_pad_mode;
- 	u32			tx_deemph_gen1;
-@@ -87,6 +89,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 			writel(imx8_phy->tx_deemph_gen2,
- 			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
- 		break;
-+	case IMX8MP:
-+		reset_control_assert(imx8_phy->perst);
-+		break;
- 	}
- 
- 	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
-@@ -141,6 +146,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 			   IMX8MM_GPR_PCIE_CMN_RST);
- 
- 	switch (imx8_phy->drvdata->variant) {
-+	case IMX8MP:
-+		reset_control_deassert(imx8_phy->perst);
-+		fallthrough;
- 	case IMX8MM:
- 		reset_control_deassert(imx8_phy->reset);
- 		usleep_range(200, 500);
-@@ -181,10 +189,16 @@ static const struct imx8_pcie_phy_drvdata drvdata[] = {
- 		.variant = IMX8MM,
- 		.gpr = "fsl,imx8mm-iomuxc-gpr",
- 	},
-+
-+	[IMX8MP] = {
-+		.variant = IMX8MP,
-+		.gpr = "fsl,imx8mp-iomuxc-gpr",
-+	},
- };
- 
- static const struct of_device_id imx8_pcie_phy_of_match[] = {
- 	{.compatible = "fsl,imx8mm-pcie-phy", .data = &drvdata[IMX8MM], },
-+	{.compatible = "fsl,imx8mp-pcie-phy", .data = &drvdata[IMX8MP], },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-@@ -240,6 +254,15 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(imx8_phy->reset);
- 	}
- 
-+	if (imx8_phy->drvdata->variant == IMX8MP) {
-+		imx8_phy->perst =
-+			devm_reset_control_get_exclusive(dev, "perst");
-+		if (IS_ERR(imx8_phy->perst)) {
-+			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
-+			return PTR_ERR(imx8_phy->perst);
-+		}
-+	}
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	imx8_phy->base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(imx8_phy->base))
--- 
-2.25.1
+confused,
 
+greg k-h
