@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032805EA007
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6A45EA30D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235828AbiIZKch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S237698AbiIZLSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235773AbiIZKag (ORCPT
+        with ESMTP id S237696AbiIZLRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:30:36 -0400
+        Mon, 26 Sep 2022 07:17:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E364ADF61;
-        Mon, 26 Sep 2022 03:19:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDF1659E3;
+        Mon, 26 Sep 2022 03:38:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C2E60C07;
-        Mon, 26 Sep 2022 10:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B987FC43146;
-        Mon, 26 Sep 2022 10:19:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A873260C0B;
+        Mon, 26 Sep 2022 10:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E29BC433D6;
+        Mon, 26 Sep 2022 10:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187587;
-        bh=R5Bn477bVVRPSmJmF1aosESqHyeq1GQzzLkUmsLNKRQ=;
+        s=korg; t=1664188593;
+        bh=cAVjTlph+uYTY5nMF2GiWxeyu+HH3UT40wtrKGB0ylA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjYhi00TwuEObrIF2UdmoMdK2KiN2frKAw33gsBG95OH7c4LpmbWn+m8gcML7oNUO
-         HRe3g22FLrMriMVr8eY/FihJvmGUfSC1Dfhz+nzPied6KSqOgzNq1ZrZ/rHj9Ny/1H
-         aloTv9DJDbhY7N7aqAzWOO4kJweFx+aXcv0iwLp0=
+        b=pJmWtW16lQ/q+3fUJqW6zR7SnrIutucOE71GmTeniZSWu4Z4c+X4ITTryA8iKvavb
+         Vob8I+qI9G1JnrR706vYiEieRaYdFcNbmwlVd5qhmmTtCz9lz4w2Jnli5zBoWGJdIO
+         hb39ikURF3V13l6bKF8JVHY0rAZ6UmQ95SBPNlmk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 14/58] net: usb: qmi_wwan: add Quectel RM520N
+Subject: [PATCH 5.15 059/148] firmware: arm_scmi: Fix the asynchronous reset requests
 Date:   Mon, 26 Sep 2022 12:11:33 +0200
-Message-Id: <20220926100741.941262829@linuxfoundation.org>
+Message-Id: <20220926100758.240987476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jerry.meng <jerry-meng@foxmail.com>
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-[ Upstream commit e1091e226a2bab4ded1fe26efba2aee1aab06450 ]
+[ Upstream commit b75c83d9b961fd3abf7310f8d36d5e6e9f573efb ]
 
-add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+SCMI Reset protocol specification allows the asynchronous reset request
+only when an autonomous reset action is specified. Reset requests based
+on explicit assert/deassert of signals should not be served
+asynchronously.
 
-0x0801: DIAG + NMEA + AT + MODEM + RMNET
+Current implementation will instead issue an asynchronous request in any
+case, as long as the reset domain had advertised to support asynchronous
+resets.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=RM520N-GL
-S:  SerialNumber=384af524
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Avoid requesting the asynchronous resets when the reset action is not
+of the autonomous type, even if the target reset domain does, in general,
+support the asynchronous requests.
 
-Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/20220817172731.1185305-6-cristian.marussi@arm.com
+Fixes: 95a15d80aa0d ("firmware: arm_scmi: Add RESET protocol in SCMI v2.0")
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/firmware/arm_scmi/reset.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index fcf21a1ca776..8d10c29ba176 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1049,6 +1049,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
+diff --git a/drivers/firmware/arm_scmi/reset.c b/drivers/firmware/arm_scmi/reset.c
+index fc6237d6e926..e80a78205845 100644
+--- a/drivers/firmware/arm_scmi/reset.c
++++ b/drivers/firmware/arm_scmi/reset.c
+@@ -158,7 +158,7 @@ static int scmi_domain_reset(const struct scmi_protocol_handle *ph, u32 domain,
+ 		return -EINVAL;
  
- 	/* 3. Combined interface devices matching on interface number */
- 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
+ 	rdom = pi->dom_info + domain;
+-	if (rdom->async_reset)
++	if (rdom->async_reset && flags & AUTONOMOUS_RESET)
+ 		flags |= ASYNCHRONOUS_RESET;
+ 
+ 	ret = ph->xops->xfer_get_init(ph, RESET, sizeof(*dom), 0, &t);
+@@ -170,7 +170,7 @@ static int scmi_domain_reset(const struct scmi_protocol_handle *ph, u32 domain,
+ 	dom->flags = cpu_to_le32(flags);
+ 	dom->reset_state = cpu_to_le32(state);
+ 
+-	if (rdom->async_reset)
++	if (flags & ASYNCHRONOUS_RESET)
+ 		ret = ph->xops->do_xfer_with_response(ph, t);
+ 	else
+ 		ret = ph->xops->do_xfer(ph, t);
 -- 
 2.35.1
 
