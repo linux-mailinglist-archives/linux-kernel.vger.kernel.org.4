@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A376A5E9B6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7B85E9B66
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbiIZIBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S233827AbiIZIAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234410AbiIZH7u (ORCPT
+        with ESMTP id S234013AbiIZH7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:59:50 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9041B79D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b23so5858870pfp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
-        b=WiwqDYN3Ur2fO943ookpYkguhas9KY4wHopBmxa3ytfFMqfU7WjIRhDldMRfc9V4ZM
-         X8RNw5Nw3+30DEGNtv2uDZU05lJH/OghhZPQ5f3JbXR2OgbhG7oAyck9Fpu6s/DEm3fd
-         nS2WZ9WXk/lDEa6OaYXhhvnlxo/px7+z5jbwJoO416YLzkUicesp30SbWQxR/pE7dDHM
-         CO+DdHg3kgCcNvdi/KQd17Gj2BCSTexq86p3Qe5BPaTdKqeOKG4VFrtm4Aq+dFenBfQX
-         U5z95aRnkyUslN/brR/HUh6UMEOROlZOa+J9yVbD2r5c2X9fj/2wTayIO/UfxKyG/N71
-         bHPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
-        b=p/jktqJQ5bHZ3qPIlOuroFxOvweUJv9W4GwBfF3xFd1hX7q9U+PoollpRRklGt7kn8
-         lKbxxLKAHWzzWIxfyZdpyR7TQf2ZsrHe/RCDqMPtE9nRypzCnmlfK4aG3UZ1Or5H6GP2
-         NwaRLgaHi8r3HFmNWm/lkyVRsDKF8nL3z9z0AFq1826+Y937jvsN3R3jP1Ga6+eaLhSk
-         qwK5G+3G+M+iXmTPaBQ5x3CmXvthM+74k9pyMYpCGnO7gw3ZIGypXQ3MJp4IQviHQSEU
-         i9QccjeTPSTSGWXD6E1nJb5JoVvJLV8semVjyDpLemYEZFuG1pmfmmiRrGUXnLL8F5GO
-         58ow==
-X-Gm-Message-State: ACrzQf1r7o9ZZMYcKONsALbn25KfAR7m5zIy9D/TVOB9/bVeD6oYw/eO
-        sw8ga5B3178P/bwSkyVOu7Rx9tsUUzId96VU5hg=
-X-Google-Smtp-Source: AMsMyM6jxUyPK1BxNKQi/p/f9XWjIweva48ugzk3U5kBuC/CVoGqbMi7XVfIZGVZb9/NV7Fd6mcC9XBhib7IPr0mOKM=
-X-Received: by 2002:a62:8345:0:b0:53e:a1bf:8df9 with SMTP id
- h66-20020a628345000000b0053ea1bf8df9mr22414961pfe.68.1664179055692; Mon, 26
- Sep 2022 00:57:35 -0700 (PDT)
+        Mon, 26 Sep 2022 03:59:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D85DFF1;
+        Mon, 26 Sep 2022 00:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664179027; x=1695715027;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=91OQkbf/d555l82Oyt8s1+1wuCP9eUN+PBdU79ijhAY=;
+  b=MbhgQgAwHhaDgEq/t3EqDG+10ce337DhYneR0IjtafnBYKk/b4p6M62c
+   0mJs6pQVeYCE0CMQMAdJluy72SmNEfrSZS5sJuSqtZEAeyxkTgfUIE76C
+   DZXAHfMXe7nFCD2dO4YwWUeTST0ODbLyD2INDOdntJEhggnLUbeI38GAh
+   rnQ2RP/p558oF56tUGHgtiwXWlz9uWtg74p24niTXhFZaleP/D02zw6OV
+   LGDRQd3LAvdp6NeWN783jv5ts+MWlet1L+omJG3g1+8f5g9bQw9Hls37s
+   9pZI2ML6pW/q0ozh4uv4Pq4ch8dyft3/l9+NjahJybAIRQyNq3I+DcHNU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="288105572"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="288105572"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 00:57:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="683435575"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="683435575"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Sep 2022 00:56:54 -0700
+Message-ID: <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
+Date:   Mon, 26 Sep 2022 10:58:18 +0300
 MIME-Version: 1.0
-Received: by 2002:ac4:9ba2:0:b0:578:474:608e with HTTP; Mon, 26 Sep 2022
- 00:57:35 -0700 (PDT)
-Reply-To: izzatibrahim724@gmail.com
-From:   "Ibrahim I . Hassan" <doungotraore1234@gmail.com>
-Date:   Mon, 26 Sep 2022 07:57:35 +0000
-Message-ID: <CAJFraYwCRR8omz_C3k6hA9V8=YiNDJ6AayC165Y19Y4rRY8U5A@mail.gmail.com>
-Subject: Thanks
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:42f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5224]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [izzatibrahim724[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [doungotraore1234[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [doungotraore1234[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     liulongfang <liulongfang@huawei.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yisen.zhuang@huawei.com
+References: <20220915011134.58400-1-liulongfang@huawei.com>
+ <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
+ <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: print warning when HCE was set
+In-Reply-To: <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATTENTION:
+On 24.9.2022 5.35, liulongfang wrote:
+> On 2022/9/22 21:01, Mathias Nyman Wrote:
+>> Hi
+>>
+>> On 15.9.2022 4.11, Longfang Liu wrote:
+>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
+>>> controller has an error at this time, but the current xhci driver
+>>> software does not log this event.
+>>>
+>>> By adding an HCE event detection in the xhci interrupt processing
+>>> interface, a warning log is output to the system, which is convenient
+>>> for system device status tracking.
+>>>
+>>
+>> xHC should cease all activity when it sets HCE, and is probably not
+>> generating interrupts anymore.
+>>
+>> Would probably be more useful to check for HCE at timeouts than in the
+>> interrupt handler.
+>>
+> 
+> Which function of the driver code is this timeout in?
 
-Have you any viable business plan that needs funding? I am acting on
-behalf of a family who are cautious due to political and personal
-reasons. Be assured that more details will be revealed on showing
-interest.
+xhci_handle_command_timeout() will usually trigger at some point,
 
-For the safety of their funds the family will be willing to invest or
-fund in both short and long term projects. Should you be interested to
-engage us for a more detailed discussion on the aforementioned
-proposal, we would be glad to do so in whatever medium appropriate for
-this engagement.
+> 
+>> If this is something seen on actual hardware then it makes sense to add it.
+>>
+> 
+> This HCE error is sure to report an interrupt on the chip we are using.
 
-The funds will be released through bank to bank transfer upon proof of
-feasibility study conformable to be viable and demonstration of
-managerial skill to prove that the principal amount being invested
-will be secured,
+Ok, then makes sense to add this patch.
 
-Due to the above mentioned reasons (political and personal) we implore
-for confidentiality as we look forward to your response. Please
-contact me with the below alternative email Address (
-izzatibrahim724@gmail.com )
-We look forward towards receiving your proposal/feasibility study.
+Thanks
+-Mathias
 
-Regards :
-Ibrahim I . Hassan
