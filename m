@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9FB5EA0CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29975EA2E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236362AbiIZKl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S237579AbiIZLQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiIZKjy (ORCPT
+        with ESMTP id S236020AbiIZLPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA884D15D;
-        Mon, 26 Sep 2022 03:23:56 -0700 (PDT)
+        Mon, 26 Sep 2022 07:15:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CE265258;
+        Mon, 26 Sep 2022 03:36:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5A1BB80835;
-        Mon, 26 Sep 2022 10:23:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE072C433D6;
-        Mon, 26 Sep 2022 10:23:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A836609FE;
+        Mon, 26 Sep 2022 10:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E5DC433C1;
+        Mon, 26 Sep 2022 10:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187817;
-        bh=mNPj2K9Tjb0i7RWUu5ToPPmzi3eN3KxqFd3F+KVTu9Y=;
+        s=korg; t=1664188618;
+        bh=YzwZ+d+bD+1c7lCL2iXpE240iPwQJFVL3vUdyqCAnWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDhkSlbOiTYeYsf9ZyemRWPxUPWeUPYMf+HGosRNLuBpqCKZGaUtFf8G4Olzg70PM
-         LcGNrSz77QR1lXoKczkdkT7XGcPSfcGRh+CqyxnmwkqcEB+mji+zcE60u+uskBS2H0
-         wjS550FHkV6duCD9cUnXd94fHJPCDESb+H6xRM2Q=
+        b=xEqf9N0Vy0a1ohgriGzi/32Bee1R0yOSl7cuBr03ibl0ukjgTKb3yadUJ8pCNWuOP
+         jse447Z2etIcXtEk9c5VCuuQaLTWQ7u3e0kH0s6yyAtk+0OTE/jM9SvTwqfCwNyYrJ
+         pc3o6bymCkdlCjRTAZT029qNzJEoNi/P3CrHrViU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 068/120] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
+Subject: [PATCH 5.15 067/148] netfilter: nf_conntrack_irc: Tighten matching on DCC message
 Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100753.477996485@linuxfoundation.org>
+Message-Id: <20220926100758.557152913@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: David Leadbeater <dgl@dgl.cx>
 
-[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
+[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
 
-The 'enable-active-low' property is not a valid one.
+CTCP messages should only be at the start of an IRC message, not
+anywhere within it.
 
-Only 'enable-active-high' is valid, and when this property is absent
-the gpio regulator will act as active low by default.
+While the helper only decodes packes in the ORIGINAL direction, its
+possible to make a client send a CTCP message back by empedding one into
+a PING request.  As-is, thats enough to make the helper believe that it
+saw a CTCP message.
 
-Remove the invalid 'enable-active-low' property.
-
-Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
+Signed-off-by: David Leadbeater <dgl@dgl.cx>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-index 390b86ec6538..365fa9a3c5bf 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-@@ -102,7 +102,6 @@ vcc3v3_sys: vcc3v3-sys {
- 	vcc5v0_host: vcc5v0-host-regulator {
- 		compatible = "regulator-fixed";
- 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
--		enable-active-low;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&vcc5v0_host_en>;
- 		regulator-name = "vcc5v0_host";
+diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
+index 18b90e334b5b..159e1e4441a4 100644
+--- a/net/netfilter/nf_conntrack_irc.c
++++ b/net/netfilter/nf_conntrack_irc.c
+@@ -151,15 +151,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 	data = ib_ptr;
+ 	data_limit = ib_ptr + skb->len - dataoff;
+ 
+-	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
+-	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
+-	while (data < data_limit - (19 + MINMATCHLEN)) {
+-		if (memcmp(data, "\1DCC ", 5)) {
++	/* Skip any whitespace */
++	while (data < data_limit - 10) {
++		if (*data == ' ' || *data == '\r' || *data == '\n')
++			data++;
++		else
++			break;
++	}
++
++	/* strlen("PRIVMSG x ")=10 */
++	if (data < data_limit - 10) {
++		if (strncasecmp("PRIVMSG ", data, 8))
++			goto out;
++		data += 8;
++	}
++
++	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
++	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
++	 */
++	while (data < data_limit - (21 + MINMATCHLEN)) {
++		/* Find first " :", the start of message */
++		if (memcmp(data, " :", 2)) {
+ 			data++;
+ 			continue;
+ 		}
++		data += 2;
++
++		/* then check that place only for the DCC command */
++		if (memcmp(data, "\1DCC ", 5))
++			goto out;
+ 		data += 5;
+-		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
++		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
+ 
+ 		iph = ip_hdr(skb);
+ 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
+@@ -175,7 +197,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 			pr_debug("DCC %s detected\n", dccprotos[i]);
+ 
+ 			/* we have at least
+-			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
++			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
+ 			 * data left (== 14/13 bytes) */
+ 			if (parse_dcc(data, data_limit, &dcc_ip,
+ 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
 -- 
 2.35.1
 
