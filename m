@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A92A5EB5D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BF55EB5D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiIZXek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S229996AbiIZXfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiIZXeh (ORCPT
+        with ESMTP id S230102AbiIZXfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:34:37 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCEE632A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:34:35 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 135so10301442ybl.9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:34:35 -0700 (PDT)
+        Mon, 26 Sep 2022 19:35:13 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C28F58504;
+        Mon, 26 Sep 2022 16:35:11 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso8486897pjd.1;
+        Mon, 26 Sep 2022 16:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=l7SnbtLPEM732+/qIFc6jUHik8WmAvcTMIc2OL0ANLM=;
-        b=R/HBbSp8ZJdNsQ2bHMipIXtlmDXh/g7gTfzr+ZE4jgKVfrItATo6fTj+K5nI3jN0wv
-         dRBcjiDu2s96Qg1T1y79+dy1rfiuJMVZObK+Z4WhFDkuI6ZWno0ffVC46TyRsXZXvZNG
-         mbTXe1HZ0ZEF5uzn+d/Ud4tXACBJWQaRAkIWtQLgVMnS4vOukcOWC8KitL+uwEfuOvQF
-         5sy53EMF5HrhTVqQxim+ZeylqICZANm7/4rWDzOc0p2xoPpW0QzHZcSUUEVod955cQXt
-         xD7EIppmTgkUhAXCzs2L77dEEJ8h03X/WutMB5pMOKLXy/teP2ojpDqHawvanI7Y5Gkh
-         DoPA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=2ItO39U2OM4CL4ng+GyphEVXRyIIIkkmb1bTIMUwMtA=;
+        b=hoyiQKqy9fyXYjkkaHMxqK2P9WA27uDuciLJENvjxy/5LYNkNZhKC4A49ohSnYCJtd
+         Dj9WDqTOhgEbk031gogH5c/Tv8t8gWMCLtsCPIyPZFfO7sifW2U4HvvOy6y+VIsVtQXB
+         ajRm+CPz4nHsPACC99iZG3a2edyfalqvbyvriiBvNGtr7k/cqy262+qfc6vx6Zzvtu4E
+         ItVJ6zA/4CoRIwJhtJg0rHprZDHq4hn6DwzZ9k8hOK2F2UahuUhPrlE5bPWUm2iHWrdH
+         PyqlHj0e5kvIYXV169lJcovSRVt7PTtxnY30wpPhzxHaHy7stOgeiuJjp3L5BWGOiTJB
+         Py8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=l7SnbtLPEM732+/qIFc6jUHik8WmAvcTMIc2OL0ANLM=;
-        b=bYrwsDqOpDNBRFYg+RPX2m2aykgQU6vhz+iZragoAUloaLCAVvYtfMgosmk7j0RJ62
-         cbjMpf5pR/93b50oqZtCB/nKl88GrUaJfDvh3tTafrw5eqXgSgnVR7WKBrzOyQghtyry
-         Rhi/oKBlXtMEQtVu4waovTqmN0ecekZ3e/udnSbo0tWGMaayN9+joMSH0syEhMLscktA
-         FR+ghNXC26Yl8/d/lrgWzj1U6o3ibmVEe+aI2SIcVeGrEl5FjTVeMcIOhWwg75d3exAK
-         at2tIRgsA0npcJGT+vl1JRxGmLrVt++c9vrlAPKiO36jEejF8ZTqHwr3TqPTQt4JqCfj
-         lZjw==
-X-Gm-Message-State: ACrzQf1HhyQdqw/px7KPr+g0B7osgcvuA88jVGLXV9w11vicZ8pVjLS4
-        zUMvLb459dYsxjoc9N1Evs+4NMkeYjjkjqdNrWjMgw==
-X-Google-Smtp-Source: AMsMyM7Z9uPtPHRyKMi7tSAsgduZnZLsWG66mPrbstXnDaqJKv9A0z+k2PuYb6LVgVs4uFiCEcZwbNyRnUV/CWxX0qA=
-X-Received: by 2002:a25:4fc2:0:b0:680:f309:48e5 with SMTP id
- d185-20020a254fc2000000b00680f30948e5mr24198828ybb.0.1664235274918; Mon, 26
- Sep 2022 16:34:34 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=2ItO39U2OM4CL4ng+GyphEVXRyIIIkkmb1bTIMUwMtA=;
+        b=34TDk9eUOEtZyannkixvUs+Hl5GCHGhW0gVCHdMW54KGkLXpWGFYkBEohTD0yDvbwt
+         qPy1WIVyyXSNp47znC43MvcmENOlMsxCEcx1+CoTogiNr10D9F4dKIA9juNbdxYUh72t
+         5QGtayrXCSoxlbH5fD+xpMECSsLM/Gwtr7xfHE79FuwylhWfMgmkRTjRWNSDTxw5wDoV
+         R49eNQApF/T+95kV8ri/LyRQkSs2Alpmxe6+FJERaVfdOZ8BchPyv9FuFO2pvSdea/t9
+         C4LEhyeoyRz3EkbCMSGnCPmL/g1MWqScOQfjN/fPZiIvq+MW3ARno6tydm4dVLuvzFR3
+         XXJw==
+X-Gm-Message-State: ACrzQf00qG4z8kKnd3rO/VVMsR+DPc4GuYrRf9kcLZO/6Ts3UJogwETZ
+        8V3dRHtmWm6RQWzODLMW/FM=
+X-Google-Smtp-Source: AMsMyM4uwj6I45F3GF8fSK0RoR+3LPnbhqCeoKSvJBKpSfLyPdhVtpjT+ig2ebzmtAb4LkcPnb1kNg==
+X-Received: by 2002:a17:902:d2cc:b0:178:1742:c182 with SMTP id n12-20020a170902d2cc00b001781742c182mr24015123plc.98.1664235310798;
+        Mon, 26 Sep 2022 16:35:10 -0700 (PDT)
+Received: from localhost ([223.104.3.28])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1709026b8300b0016d773aae60sm18538plk.19.2022.09.26.16.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 16:35:10 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com,
+        edumazet@google.com, Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     18801353760@163.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yin31149@gmail.com
+Subject: [PATCH wireless-next v2] wext: use flex array destination for memcpy()
+Date:   Tue, 27 Sep 2022 07:34:59 +0800
+Message-Id: <20220926233458.5316-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <00000000000070db2005e95a5984@google.com>
+References: <00000000000070db2005e95a5984@google.com>
 MIME-Version: 1.0
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
- <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
-In-Reply-To: <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 26 Sep 2022 16:34:08 -0700
-Message-ID: <CALzav=fGpN0C1duR8ArnAUyko5bqytNS_V47eBa9JM89pehyAw@mail.gmail.com>
-Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oliver Upton <oupton@google.com>, Peter Xu <peterx@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +77,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 4:27 PM Vishal Annapurve <vannapurve@google.com> wrote:
->
-> On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
-> > > Cache the vendor CPU type in a global variable so that multiple calls
-> > > to is_intel_cpu() do not need to re-execute CPUID.
-> > >
-> > > Add cpu vendor check in kvm_hypercall() so that it executes correct
-> > > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
-> > > exit to KVM which anyway tries to patch the instruction according to
-> > > the cpu type.
-> >
-> > The commit shortlog makes no mention (nor even implies) that this commit
-> > adds AMD support to kvm_hypercall(). Please break this commit up into 2.
-> > One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
-> > support to kvm_hypercall().
-> >
-> > If you really want to keep this as one commit (I don't know what the
-> > benefit would be), please change the shortlog and commit message to
-> > focus on the kvm_hypercall() change, as that is the real goal of this
-> > commit. The precomputation is arguably and implementation detail. e.g.
-> >
->
-> is_amd_cpu is used by guest code within fix_hypercall_test.c, just
-> caching the result will break the guest code execution. I have clubbed
-> these two changes together in order to ensure that is_amd_cpu works
-> fine for both host userspace and guest vm logic.
+Syzkaller reports buffer overflow false positive as follows:
+------------[ cut here ]------------
+memcpy: detected field-spanning write (size 8) of single field
+	"&compat_event->pointer" at net/wireless/wext-core.c:623 (size 4)
+WARNING: CPU: 0 PID: 3607 at net/wireless/wext-core.c:623
+	wireless_send_event+0xab5/0xca0 net/wireless/wext-core.c:623
+Modules linked in:
+CPU: 1 PID: 3607 Comm: syz-executor659 Not tainted
+	6.0.0-rc6-next-20220921-syzkaller #0
+[...]
+Call Trace:
+ <TASK>
+ ioctl_standard_call+0x155/0x1f0 net/wireless/wext-core.c:1022
+ wireless_process_ioctl+0xc8/0x4c0 net/wireless/wext-core.c:955
+ wext_ioctl_dispatch net/wireless/wext-core.c:988 [inline]
+ wext_ioctl_dispatch net/wireless/wext-core.c:976 [inline]
+ wext_handle_ioctl+0x26b/0x280 net/wireless/wext-core.c:1049
+ sock_ioctl+0x285/0x640 net/socket.c:1220
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ [...]
+ </TASK>
 
-Ah, so the sync_global_to_guest() part needs to go in the patch that
-adds caching to is_amd_cpu().
+Wireless events will be sent on the appropriate channels in
+wireless_send_event(). Different wireless events may have different
+payload structure and size, so kernel uses **len** and **cmd** field
+in struct __compat_iw_event as wireless event common LCP part, uses
+**pointer** as a label to mark the position of remaining different part.
 
-But the point still stands that adding AMD support to kvm_hypercall()
-is a logically independent change.
+Yet the problem is that, **pointer** is a compat_caddr_t type, which may
+be smaller than the relative structure at the same position. So during
+wireless_send_event() tries to parse the wireless events payload, it may
+trigger the memcpy() run-time destination buffer bounds checking when the
+relative structure's data is copied to the position marked by **pointer**.
 
->
-> >   KVM: selftest: Add support for AMD to kvm_hypercall()
-> >
-> >   Make it possible to use kvm_hypercall() on AMD by checking if running
-> >   on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
-> >   avoid executing CPUID in the guest on every call t kvm_hypercall()
-> >   (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
-> >   as part of kvm_selftest_arch_init() and sync it into the guest
-> >   after loading the ELF image.
-> >
-> > But again, it'd be cleaner just to split it up. Caching the result of
-> > is_{intel,amd}_cpu() is useful in its own right, independent of the
-> > kvm_hypercall() change.
-> >
-> > >
-> > > ...
-> > >
-> > > @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
-> > >
-> > >  void kvm_selftest_arch_init(void)
-> > >  {
-> > > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
-> > >  }
-> > >
-> > >  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> > >  {
-> > > +     sync_global_to_guest(vm, is_cpu_amd);
-> > >  }
-> > > --
-> > > 2.37.2.789.g6183377224-goog
-> > >
+This patch solves it by introducing flexible-array field **ptr_bytes**,
+to mark the position of the wireless events remaining part next to
+LCP part. What's more, this patch also adds **ptr_len** variable in
+wireless_send_event() to improve its maintainability.
+
+Reported-and-tested-by: syzbot+473754e5af963cf014cf@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/00000000000070db2005e95a5984@google.com/
+Suggested-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+v2: correct the typo error pointed out by Eric Dumazet and
+    Kees Cook
+
+v1: https://lore.kernel.org/all/20220926150907.8551-1-yin31149@gmail.com/
+
+ include/linux/wireless.h | 10 +++++++++-
+ net/wireless/wext-core.c | 17 ++++++++++-------
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/wireless.h b/include/linux/wireless.h
+index 2d1b54556eff..e6e34d74dda0 100644
+--- a/include/linux/wireless.h
++++ b/include/linux/wireless.h
+@@ -26,7 +26,15 @@ struct compat_iw_point {
+ struct __compat_iw_event {
+ 	__u16		len;			/* Real length of this stuff */
+ 	__u16		cmd;			/* Wireless IOCTL */
+-	compat_caddr_t	pointer;
++
++	union {
++		compat_caddr_t	pointer;
++
++		/* we need ptr_bytes to make memcpy() run-time destination
++		 * buffer bounds checking happy, nothing special
++		 */
++		DECLARE_FLEX_ARRAY(__u8, ptr_bytes);
++	};
+ };
+ #define IW_EV_COMPAT_LCP_LEN offsetof(struct __compat_iw_event, pointer)
+ #define IW_EV_COMPAT_POINT_OFF offsetof(struct compat_iw_point, length)
+diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
+index 76a80a41615b..fe8765c4075d 100644
+--- a/net/wireless/wext-core.c
++++ b/net/wireless/wext-core.c
+@@ -468,6 +468,7 @@ void wireless_send_event(struct net_device *	dev,
+ 	struct __compat_iw_event *compat_event;
+ 	struct compat_iw_point compat_wrqu;
+ 	struct sk_buff *compskb;
++	int ptr_len;
+ #endif
+ 
+ 	/*
+@@ -582,6 +583,9 @@ void wireless_send_event(struct net_device *	dev,
+ 	nlmsg_end(skb, nlh);
+ #ifdef CONFIG_COMPAT
+ 	hdr_len = compat_event_type_size[descr->header_type];
++
++	/* ptr_len is remaining size in event header apart from LCP */
++	ptr_len = hdr_len - IW_EV_COMPAT_LCP_LEN;
+ 	event_len = hdr_len + extra_len;
+ 
+ 	compskb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
+@@ -612,16 +616,15 @@ void wireless_send_event(struct net_device *	dev,
+ 	if (descr->header_type == IW_HEADER_TYPE_POINT) {
+ 		compat_wrqu.length = wrqu->data.length;
+ 		compat_wrqu.flags = wrqu->data.flags;
+-		memcpy(&compat_event->pointer,
+-			((char *) &compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
+-			hdr_len - IW_EV_COMPAT_LCP_LEN);
++		memcpy(compat_event->ptr_bytes,
++		       ((char *)&compat_wrqu) + IW_EV_COMPAT_POINT_OFF,
++			ptr_len);
+ 		if (extra_len)
+-			memcpy(((char *) compat_event) + hdr_len,
+-				extra, extra_len);
++			memcpy(&compat_event->ptr_bytes[ptr_len],
++			       extra, extra_len);
+ 	} else {
+ 		/* extra_len must be zero, so no if (extra) needed */
+-		memcpy(&compat_event->pointer, wrqu,
+-			hdr_len - IW_EV_COMPAT_LCP_LEN);
++		memcpy(compat_event->ptr_bytes, wrqu, ptr_len);
+ 	}
+ 
+ 	nlmsg_end(compskb, nlh);
+-- 
+2.25.1
+
