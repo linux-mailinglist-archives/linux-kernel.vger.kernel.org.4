@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4415EA0B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0131C5EA4B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbiIZKlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S238696AbiIZLtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236389AbiIZKjK (ORCPT
+        with ESMTP id S238830AbiIZLrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD5753D15;
-        Mon, 26 Sep 2022 03:23:13 -0700 (PDT)
+        Mon, 26 Sep 2022 07:47:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB3974E0F;
+        Mon, 26 Sep 2022 03:47:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17CA4B8091F;
-        Mon, 26 Sep 2022 10:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5373FC433C1;
-        Mon, 26 Sep 2022 10:22:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0F9A60A52;
+        Mon, 26 Sep 2022 10:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D711EC433D7;
+        Mon, 26 Sep 2022 10:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187773;
-        bh=OnHJPjH4h6Nbsq01JGvqFhs1so7/TP+GxApbv3kVy+0=;
+        s=korg; t=1664189201;
+        bh=lwIyZVjOONZyJJFJ4pdVzDJFnzigEmBDRnrq+V3xZHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T+vLoVTcXna9hhbiw1F+i7xr5c3BRfeqhD6WzuPB6070Ade9BhGUfTEc4olWvQDDG
-         Tx/7ApJggyaG8dviG6ZqQQx13l+vvNMDNLx/cjSkQeM4q+OFb7vTlvgDtFV+4frv6D
-         dNXZKdCrop9vkd2zPZ+4aX02heC069diedpFr7OU=
+        b=W5gp80oRQzUS78LgNr4e+BNSjpVoBwXuEFNFYBC5Xp1GEnMG8EYSnHyHjYb/NdiBT
+         VQdWQLO91iSndY3gVSRdOMrSvaiyo5suxGBxQks5IXYVytIpp9fID4M20y+Kv6xYLH
+         Ax7yO1qSlnMZ99fR87gFDnArVfSmSY9vXmDp3MoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, jerry meng <jerry-meng@foxmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 055/120] USB: serial: option: add Quectel RM520N
+        stable@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 099/207] arm64: dts: imx8mp-venice-gw74xx: fix ksz9477 cpu port
 Date:   Mon, 26 Sep 2022 12:11:28 +0200
-Message-Id: <20220926100752.811157042@linuxfoundation.org>
+Message-Id: <20220926100811.019228816@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,68 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jerry meng <jerry-meng@foxmail.com>
+From: Tim Harvey <tharvey@gateworks.com>
 
-commit d640c4cb8f2f933c0ca896541f9de7fb1ae245f4 upstream.
+[ Upstream commit c3681de3b8f2e8aff0306e2d6c129ca15b70b79d ]
 
-add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+The CPU uplink port on the KSZ9477 is P5 not P6 - fix this.
 
-0x0801: DIAG + NMEA + AT + MODEM + RMNET
-
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=RM520N-GL
-S:  SerialNumber=384af524
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Signed-off-by: jerry meng <jerry-meng@foxmail.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts support")
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/option.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -256,6 +256,7 @@ static void option_instat_callback(struc
- #define QUECTEL_PRODUCT_EM060K			0x030b
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
-+#define QUECTEL_PRODUCT_RM520N			0x0801
- #define QUECTEL_PRODUCT_EC200S_CN		0x6002
- #define QUECTEL_PRODUCT_EC200T			0x6026
- #define QUECTEL_PRODUCT_RM500K			0x7001
-@@ -1161,6 +1162,9 @@ static const struct usb_device_id option
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
- 	  .driver_info = ZLP },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+index 4c729ac89625..3df7ee9a2fe1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+@@ -510,8 +510,8 @@ lan5: port@4 {
+ 				local-mac-address = [00 00 00 00 00 00];
+ 			};
+ 
+-			port@6 {
+-				reg = <6>;
++			port@5 {
++				reg = <5>;
+ 				label = "cpu";
+ 				ethernet = <&fec>;
+ 				phy-mode = "rgmii-id";
+-- 
+2.35.1
+
 
 
