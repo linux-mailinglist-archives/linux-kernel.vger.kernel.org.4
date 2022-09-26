@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0131C5EA4B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833925E9F96
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiIZLtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S235504AbiIZK11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238830AbiIZLrt (ORCPT
+        with ESMTP id S235675AbiIZKYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:47:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB3974E0F;
-        Mon, 26 Sep 2022 03:47:49 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C294D27E;
+        Mon, 26 Sep 2022 03:18:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0F9A60A52;
-        Mon, 26 Sep 2022 10:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D711EC433D7;
-        Mon, 26 Sep 2022 10:46:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8496EB80930;
+        Mon, 26 Sep 2022 10:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA212C433D7;
+        Mon, 26 Sep 2022 10:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189201;
-        bh=lwIyZVjOONZyJJFJ4pdVzDJFnzigEmBDRnrq+V3xZHE=;
+        s=korg; t=1664187479;
+        bh=0D4Q9fdkdNqRsgQXEkbD9sdW2pAZmHjPrqk4lVtgJjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W5gp80oRQzUS78LgNr4e+BNSjpVoBwXuEFNFYBC5Xp1GEnMG8EYSnHyHjYb/NdiBT
-         VQdWQLO91iSndY3gVSRdOMrSvaiyo5suxGBxQks5IXYVytIpp9fID4M20y+Kv6xYLH
-         Ax7yO1qSlnMZ99fR87gFDnArVfSmSY9vXmDp3MoM=
+        b=M1EK9UxRtX6jc8z3AGHBSe6U3/xnlnaQzFvUmbapWo8eWQ60DY7RF6xZr4HfSvCmf
+         zqlCdQpcSi1h3oq8LAfKrGvcrbXssH1ZnzKHetWZtYYK4KrbSov2wI7HwKq6Zw0W1S
+         QXjAeDvTwP74zfId+AX9nKvsce5LZc7YzzGPouyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 099/207] arm64: dts: imx8mp-venice-gw74xx: fix ksz9477 cpu port
+        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 4.19 09/58] cifs: dont send down the destination address to sendmsg for a SOCK_STREAM
 Date:   Mon, 26 Sep 2022 12:11:28 +0200
-Message-Id: <20220926100811.019228816@linuxfoundation.org>
+Message-Id: <20220926100741.748856850@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Harvey <tharvey@gateworks.com>
+From: Stefan Metzmacher <metze@samba.org>
 
-[ Upstream commit c3681de3b8f2e8aff0306e2d6c129ca15b70b79d ]
+commit 17d3df38dc5f4cec9b0ac6eb79c1859b6e2693a4 upstream.
 
-The CPU uplink port on the KSZ9477 is P5 not P6 - fix this.
+This is ignored anyway by the tcp layer.
 
-Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts support")
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 4 ++--
+ fs/cifs/transport.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-index 4c729ac89625..3df7ee9a2fe1 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-@@ -510,8 +510,8 @@ lan5: port@4 {
- 				local-mac-address = [00 00 00 00 00 00];
- 			};
+--- a/fs/cifs/transport.c
++++ b/fs/cifs/transport.c
+@@ -168,8 +168,8 @@ smb_send_kvec(struct TCP_Server_Info *se
  
--			port@6 {
--				reg = <6>;
-+			port@5 {
-+				reg = <5>;
- 				label = "cpu";
- 				ethernet = <&fec>;
- 				phy-mode = "rgmii-id";
--- 
-2.35.1
-
+ 	*sent = 0;
+ 
+-	smb_msg->msg_name = (struct sockaddr *) &server->dstaddr;
+-	smb_msg->msg_namelen = sizeof(struct sockaddr);
++	smb_msg->msg_name = NULL;
++	smb_msg->msg_namelen = 0;
+ 	smb_msg->msg_control = NULL;
+ 	smb_msg->msg_controllen = 0;
+ 	if (server->noblocksnd)
 
 
