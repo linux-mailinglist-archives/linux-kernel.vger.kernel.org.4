@@ -2,214 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062E15EAB78
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61825EAB63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236734AbiIZPpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S236546AbiIZPn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbiIZPoa (ORCPT
+        with ESMTP id S236237AbiIZPmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:44:30 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1541246DBB;
-        Mon, 26 Sep 2022 07:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664202499; x=1695738499;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=popbE19nKyEVwEGLpuPjkB9hubnGI4/mt3D2DsIdq20=;
-  b=VOmjQDpgUtNfhGsIapa2JrKADo8DGSf8o+87QWFZqxYIayeqKaSIjsdc
-   kwhZw9p77kN/eRTmUMe8r/5V3+87RR/hWYj3x/JNyaterjVfszFTb0ip3
-   1DGNoxUcd+Xyw7zgtecWlYLgtcaJOjsABAJY6VMBS/yZNUSjZzfh2ocVw
-   NmX7dr7XavoJLwazr/uuPlAXeb1f3+XXKdgwzEvKs/YFsBwmf5gKTD8qS
-   lbpkNubtbXU/Z4UQfwcx2uu7A4/dD/qDTSA92e2yVHEfEEpxK7N+c+yrD
-   5lxzwJCpnAsmKFoQMZN8QAWuc8+Zsi9v4t2mwbaRGrPy5cBKC+U0WLfsq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="301023549"
-X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="301023549"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 07:28:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="598755672"
-X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="598755672"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga006.jf.intel.com with ESMTP; 26 Sep 2022 07:28:07 -0700
-Date:   Mon, 26 Sep 2022 22:23:30 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <20220926142330.GC2658254@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <Yyi+l3+p9lbBAC4M@google.com>
- <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
+        Mon, 26 Sep 2022 11:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004DF71BC7;
+        Mon, 26 Sep 2022 07:25:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 883E060DCC;
+        Mon, 26 Sep 2022 14:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287B2C433C1;
+        Mon, 26 Sep 2022 14:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664202337;
+        bh=i0QpRzGRA2rDR7NbBJ5UC/fP24jdvmEaI0H/Ga7DsD4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YwuAYueMhTweZzn89xe2NbJV5TaqM+xvx6K+4UCMjbs+SqI7HTjuv5/RVWoBHsWFT
+         IGzBHEWI2hAWzxvLoVzdVC24G/GCINxYdlGORrcoCTBxrUspXJcCh7z+TyAfZOHwyt
+         0orykjGrk4Z34LhKVFZSuEzpcM1Zs0cgAcQxsQtm2LuPkQF9AB5lYAcF+jXPVVVF4T
+         1cQnGpmWfXLlTvj4TjDoLgDXmt6nKOy7BqH5XVnIs37EdrgtsdxkSRz/wb2uoKp0cR
+         b0w3iphYsHy3l6hGzyrNk1+z6tIhpQyPCTeblODvauRog2MZHZJSPLm3Ss/7DTn3yf
+         N/YGFXujiEk9Q==
+Message-ID: <59c1196d-7b0e-9f50-03e8-a741adc6d91c@kernel.org>
+Date:   Mon, 26 Sep 2022 09:25:28 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ARM: dts: socfpga: arria10: Increase NAND boot partition
+ size
+Content-Language: en-US
+To:     ji.sheng.teoh@intel.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220921024519.92827-1-ji.sheng.teoh@intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220921024519.92827-1-ji.sheng.teoh@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 04:19:46PM +0100, Fuad Tabba wrote:
-> > Regarding pKVM's use case, with the shim approach I believe this can be done by
-> > allowing userspace mmap() the "hidden" memfd, but with a ton of restrictions
-> > piled on top.
-> >
-> > My first thought was to make the uAPI a set of KVM ioctls so that KVM could tightly
-> > tightly control usage without taking on too much complexity in the kernel, but
-> > working through things, routing the behavior through the shim itself might not be
-> > all that horrific.
-> >
-> > IIRC, we discarded the idea of allowing userspace to map the "private" fd because
-> > things got too complex, but with the shim it doesn't seem _that_ bad.
-> >
-> > E.g. on the memfd side:
-> >
-> >   1. The entire memfd must be mapped, and at most one mapping is allowed, i.e.
-> >      mapping is all or nothing.
-> >
-> >   2. Acquiring a reference via get_pfn() is disallowed if there's a mapping for
-> >      the restricted memfd.
-> >
-> >   3. Add notifier hooks to allow downstream users to further restrict things.
-> >
-> >   4. Disallow splitting VMAs, e.g. to force userspace to munmap() everything in
-> >      one shot.
-> >
-> >   5. Require that there are no outstanding references at munmap().  Or if this
-> >      can't be guaranteed by userspace, maybe add some way for userspace to wait
-> >      until it's ok to convert to private?  E.g. so that get_pfn() doesn't need
-> >      to do an expensive check every time.
-> >
-> >   static int memfd_restricted_mmap(struct file *file, struct vm_area_struct *vma)
-> >   {
-> >         if (vma->vm_pgoff)
-> >                 return -EINVAL;
-> >
-> >         if ((vma->vm_end - vma->vm_start) != <file size>)
-> >                 return -EINVAL;
-> >
-> >         mutex_lock(&data->lock);
-> >
-> >         if (data->has_mapping) {
-> >                 r = -EINVAL;
-> >                 goto err;
-> >         }
-> >         list_for_each_entry(notifier, &data->notifiers, list) {
-> >                 r = notifier->ops->mmap_start(notifier, ...);
-> >                 if (r)
-> >                         goto abort;
-> >         }
-> >
-> >         notifier->ops->mmap_end(notifier, ...);
-> >         mutex_unlock(&data->lock);
-> >         return 0;
-> >
-> >   abort:
-> >         list_for_each_entry_continue_reverse(notifier &data->notifiers, list)
-> >                 notifier->ops->mmap_abort(notifier, ...);
-> >   err:
-> >         mutex_unlock(&data->lock);
-> >         return r;
-> >   }
-> >
-> >   static void memfd_restricted_close(struct vm_area_struct *vma)
-> >   {
-> >         mutex_lock(...);
-> >
-> >         /*
-> >          * Destroy the memfd and disable all future accesses if there are
-> >          * outstanding refcounts (or other unsatisfied restrictions?).
-> >          */
-> >         if (<outstanding references> || ???)
-> >                 memfd_restricted_destroy(...);
-> >         else
-> >                 data->has_mapping = false;
-> >
-> >         mutex_unlock(...);
-> >   }
-> >
-> >   static int memfd_restricted_may_split(struct vm_area_struct *area, unsigned long addr)
-> >   {
-> >         return -EINVAL;
-> >   }
-> >
-> >   static int memfd_restricted_mapping_mremap(struct vm_area_struct *new_vma)
-> >   {
-> >         return -EINVAL;
-> >   }
-> >
-> > Then on the KVM side, its mmap_start() + mmap_end() sequence would:
-> >
-> >   1. Not be supported for TDX or SEV-SNP because they don't allow adding non-zero
-> >      memory into the guest (after pre-boot phase).
-> >
-> >   2. Be mutually exclusive with shared<=>private conversions, and is allowed if
-> >      and only if the entire gfn range of the associated memslot is shared.
-> 
-> In general I think that this would work with pKVM. However, limiting
-> private<->shared conversions to the granularity of a whole memslot
-> might be difficult to handle in pKVM, since the guest doesn't have the
-> concept of memslots. For example, in pKVM right now, when a guest
-> shares back its restricted DMA pool with the host it does so at the
-> page-level. pKVM would also need a way to make an fd accessible again
-> when shared back, which I think isn't possible with this patch.
 
-But does pKVM really want to mmap/munmap a new region at the page-level,
-that can cause VMA fragmentation if the conversion is frequent as I see.
-Even with a KVM ioctl for mapping as mentioned below, I think there will
-be the same issue.
 
+On 9/20/22 21:45, ji.sheng.teoh@intel.com wrote:
+> From: Teoh Ji Sheng <ji.sheng.teoh@intel.com>
 > 
-> You were initially considering a KVM ioctl for mapping, which might be
-> better suited for this since KVM knows which pages are shared and
-> which ones are private. So routing things through KVM might simplify
-> things and allow it to enforce all the necessary restrictions (e.g.,
-> private memory cannot be mapped). What do you think?
+> Content in NAND boot partition have exceeded 32MB defined in device
+> tree node.
+> Increase boot partition size to 37MB to support larger kernel Image
+> and FPGA bitstream.
 > 
-> Thanks,
-> /fuad
+> Signed-off-by: Teoh Ji Sheng <ji.sheng.teoh@intel.com>
+> ---
+>   arch/arm/boot/dts/socfpga_arria10_socdk_nand.dts | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/socfpga_arria10_socdk_nand.dts b/arch/arm/boot/dts/socfpga_arria10_socdk_nand.dts
+> index 9aa897b79544..a662df319a84 100644
+> --- a/arch/arm/boot/dts/socfpga_arria10_socdk_nand.dts
+> +++ b/arch/arm/boot/dts/socfpga_arria10_socdk_nand.dts
+> @@ -16,11 +16,11 @@
+>   
+>   		partition@0 {
+>   			label = "Boot and fpga data";
+> -			reg = <0x0 0x02000000>;
+> +			reg = <0x0 0x02500000>;
+>   		};
+>   		partition@1c00000 {
+>   			label = "Root Filesystem - JFFS2";
+> -			reg = <0x02000000 0x06000000>;
+> +			reg = <0x02500000 0x05500000>;
+>   		};
+>   	};
+>   };
+
+
+Applied!
+
+Thanks,
+Dinh
