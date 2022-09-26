@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C39B5EA21E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D03A5E9FAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237163AbiIZLCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S235438AbiIZK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237391AbiIZK7k (ORCPT
+        with ESMTP id S235383AbiIZKZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64635D113;
-        Mon, 26 Sep 2022 03:31:22 -0700 (PDT)
+        Mon, 26 Sep 2022 06:25:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2E64DB7D;
+        Mon, 26 Sep 2022 03:18:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EC5160A5C;
-        Mon, 26 Sep 2022 10:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD17C433D6;
-        Mon, 26 Sep 2022 10:29:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7DDCCE10E9;
+        Mon, 26 Sep 2022 10:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFB8C433D7;
+        Mon, 26 Sep 2022 10:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188199;
-        bh=zRrMrRABLsN3WrZIDEo2465rJQHnOyEX8cPMpJTlbZg=;
+        s=korg; t=1664187457;
+        bh=pNuzhfCTMsehQcpcZilCt5LCr5AeCkq+WigML6tM5fg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tiTbE0AcM4NFeruLeG1+R98Cj7aPqucYwRWkL9oIq87t155cHFPRJjgpHEgqqSAQt
-         Hlwtie4mud9MKR5Mk0XveKbM6nsOofDgjmMgMIEOYr4GRsj9BTnUQqNPQ3Xz4RT0kp
-         l19JM/HfxaISU2qXjndf5tWUqQXH1hjv+/d6fskU=
+        b=sa/L2htgcBjpWL20kcDfO/qLiJ2k5f2O72o1DaSczH/knSmnyHLyyaAMYS1griCgd
+         UN16KMXwc5rsp+iAaC3zsAd7ujWqRXMJvPp6+Y9rVLSDqm/DuwWNcP/Ue/pvH+FJab
+         U0BxpB/4+bS0Tdb/KhSFynC5sB5EkCf/2RZdzU2Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.10 055/141] riscv: fix a nasty sigreturn bug...
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 02/58] gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
 Date:   Mon, 26 Sep 2022 12:11:21 +0200
-Message-Id: <20220926100756.441521697@linuxfoundation.org>
+Message-Id: <20220926100741.521976547@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Pali Rohár <pali@kernel.org>
 
-commit 762df359aa5849e010ef04c3ed79d57588ce17d9 upstream.
+[ Upstream commit 279c12df8d2efb28def9d037f288cbfb97c30fe2 ]
 
-riscv has an equivalent of arm bug fixed by 653d48b22166 ("arm: fix
-really nasty sigreturn bug"); if signal gets caught by an interrupt that
-hits when we have the right value in a0 (-513), *and* another signal
-gets delivered upon sigreturn() (e.g. included into the blocked mask for
-the first signal and posted while the handler had been running), the
-syscall restart logics will see regs->cause equal to EXC_SYSCALL (we are
-in a syscall, after all) and a0 already restored to its original value
-(-513, which happens to be -ERESTARTNOINTR) and assume that we need to
-apply the usual syscall restart logics.
+Commit e39d5ef67804 ("powerpc/5xxx: extend mpc8xxx_gpio driver to support
+mpc512x gpios") implemented support for IRQ_TYPE_LEVEL_LOW flow type in
+mpc512x via falling edge type. Do same for mpc85xx which support was added
+in commit 345e5c8a1cc3 ("powerpc: Add interrupt support to mpc8xxx_gpio").
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/YxJEiSq%2FCGaL6Gm9@ZenIV/
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes probing of lm90 hwmon driver on mpc85xx based board which use level
+interrupt. Without it kernel prints error and refuse lm90 to work:
+
+    [   15.258370] genirq: Setting trigger mode 8 for irq 49 failed (mpc8xxx_irq_set_type+0x0/0xf8)
+    [   15.267168] lm90 0-004c: cannot request IRQ 49
+    [   15.272708] lm90: probe of 0-004c failed with error -22
+
+Fixes: 345e5c8a1cc3 ("powerpc: Add interrupt support to mpc8xxx_gpio")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/kernel/signal.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpio/gpio-mpc8xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -121,6 +121,8 @@ SYSCALL_DEFINE0(rt_sigreturn)
- 	if (restore_altstack(&frame->uc.uc_stack))
- 		goto badframe;
+diff --git a/drivers/gpio/gpio-mpc8xxx.c b/drivers/gpio/gpio-mpc8xxx.c
+index 1899d172590b..546f8c453add 100644
+--- a/drivers/gpio/gpio-mpc8xxx.c
++++ b/drivers/gpio/gpio-mpc8xxx.c
+@@ -168,6 +168,7 @@ static int mpc8xxx_irq_set_type(struct irq_data *d, unsigned int flow_type)
  
-+	regs->cause = -1UL;
-+
- 	return regs->a0;
- 
- badframe:
+ 	switch (flow_type) {
+ 	case IRQ_TYPE_EDGE_FALLING:
++	case IRQ_TYPE_LEVEL_LOW:
+ 		raw_spin_lock_irqsave(&mpc8xxx_gc->lock, flags);
+ 		gc->write_reg(mpc8xxx_gc->regs + GPIO_ICR,
+ 			gc->read_reg(mpc8xxx_gc->regs + GPIO_ICR)
+-- 
+2.35.1
+
 
 
