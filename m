@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121F15EAB1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAEC5EAB1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiIZPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S236544AbiIZPcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237432AbiIZPaq (ORCPT
+        with ESMTP id S236543AbiIZPa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:30:46 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAFD80F4C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:16:32 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso6926885pjd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=f9x4Js9aJ8GGYBn29EvIVTQooQM7+4F6Gd+zw2Mc6M8=;
-        b=zbi+yH6owkuseZsPd8cID/9/WJR+WXOO72huZu1wJYjkboy+f0MsZabCpreRAfu0Sf
-         3BZmYRBcwpD7wi8A/IOpfuJVOl1A8rCJFaIcGSG0jKTrF8oCvuPQ+RBCTLvziQZNwC1g
-         Jd9oklGK6EvDETceCFaUoZePQcW8L05Zcov7bvOd0XZhHHpbvz9QNXl7DZPgxMgKI0QQ
-         vLCHPHYSGblBh6eb+LQZr1TrgBNIz+T+/FWuQZnJCYJQz7wXYaPUaM7LuExyVVf5TwXJ
-         ct7K8VAqw2t9I2n0tte3U2h0Rk0Ver57AT66B18Yzk80ZWyfj9mzyHlAE/JXkq2hSxLS
-         3r+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=f9x4Js9aJ8GGYBn29EvIVTQooQM7+4F6Gd+zw2Mc6M8=;
-        b=0OSoLSoAo+VZ1QVh9Gb7QMCEncbaMcLHldUAkQ9mZtMBTAKl9/xEC6eB/2ILBFL0yZ
-         qpsK2qyLorhxxv/iN+6OLxw6ShAVbbND/Eql0Aw5G137wgU0EZK1v/xrSAMGAGIa8sq6
-         6cwyTSmmxPn8rS8CyVLkuqRol1t5kr550LpvLos6TCHw0EuELsWZ4mqj9cdCDSeTue69
-         2bof9QmmH5/DE84FxUYi8gHIFjYqXXnjjwO2X7qjjw72WaPx8WjIHCWBvhcKKyFCs7Q+
-         ecZAlv+ZYRzSqTcwrtuGkW2HifWFMG+QEeSL9sL7D44k2bMcpxhcAjIvdh+CbGNQJD0R
-         E7Jg==
-X-Gm-Message-State: ACrzQf0UNKH/VIBXX6q6siJpyMubPog2Knzg5+RQluLD1RacF+iJh5Vn
-        njh4O3fdy2ApOGqx97jKrf5Y3A==
-X-Google-Smtp-Source: AMsMyM5TPoPvq12bpXj85IzcoD1FO5FB0fyyNhOKXktO0s3dtYc0w3EMmyW5x+a7mrmCCw2DD9kjgw==
-X-Received: by 2002:a17:902:6b0a:b0:178:9a17:5b89 with SMTP id o10-20020a1709026b0a00b001789a175b89mr21933535plk.113.1664201791912;
-        Mon, 26 Sep 2022 07:16:31 -0700 (PDT)
-Received: from [10.2.223.68] ([61.120.150.77])
-        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b001781cad59e3sm11362897plh.108.2022.09.26.07.16.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 07:16:31 -0700 (PDT)
-Message-ID: <3e025745-06af-c5c6-aa70-6ff1f9ad0962@bytedance.com>
-Date:   Mon, 26 Sep 2022 22:16:23 +0800
+        Mon, 26 Sep 2022 11:30:58 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD4C8C029
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:17:16 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 52E6C5C00C8;
+        Mon, 26 Sep 2022 10:17:14 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 26 Sep 2022 10:17:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1664201834; x=1664288234; bh=f5+FdqEZwx
+        8YdaGyA7IVf1i0jed+7nRL4Cs8BKtPAUM=; b=BdwApm28HnR9EIDAqOIHOSmAsR
+        MFGFrKkPtfF+/f6T/zhtmTDZ+yhzeGq5bfYoPJMlm+zuQ/nbbsHU1yMaEXQO/DNv
+        49dCAhHqqraVV++lrQQCJm4+aMaaysif9YfnmYpWEp3jQLWVT0ijCrlQUaU+u7KT
+        XLYBtMiDiAO5yqD9LfkDhCFLVbah6JH4z26CmgsMxD6Bg2U/KwzRK9fhC0QBSnwn
+        UuCr9aa8zTIX5N8Lm0mtcqXM0ak4TOioeMFsz2DgpCjTw6c0dh3JRcRnhbc/MCRA
+        cMjtaUKPwPfM4gMwIvcS5fas8FzTV8HBFu4L1M6E/RPBI0dHITqWj7NpAy3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664201834; x=1664288234; bh=f5+FdqEZwx8YdaGyA7IVf1i0jed+
+        7nRL4Cs8BKtPAUM=; b=gn5gWVjwYWM8oLKtBeXg+vbUUU1oRRj0AuoVwittNG17
+        eRYk6BXwWAPctjYluu5H+jSrIgsa8z/uJBPeiNaYPEO9BOnQ/glIYn6j5i69zJCZ
+        7T26J/xJ07aG1AXfx7y44ZUJUUghTPOUxGXBZW44FYL5EPFBA01HkFiyQJPSP1+Q
+        OBAKJpRODKu3Rd1BXhj7qlq1Ex8bczEgiJ6CgkWY5WodcnfGtAPOlnXuK3KbJyHK
+        VrnbM+SbhgeMLvzzD7M0Sp/PFZU0y7Cceq+p/nH6TvRpconOLmtJ8i8Mcn40a51B
+        yh5Kwo2oLdPAhl7V/cXr/KE+IXn+Bce/pR9/Eb6S3Q==
+X-ME-Sender: <xms:abQxYzrw0oZCOc4NLN1syL9Ir8UV2q778V_2nIYDi6d151oaeBAfDA>
+    <xme:abQxY9qAEvUdcJZLW96tHyHP3HwViPgdmnWBPghFsskaLdbMTbieT0RnfHxbjPfVD
+    xyygQiJRZ0HLmpMHxM>
+X-ME-Received: <xmr:abQxYwMR_cSRgBfvM-vFbyT2FMSPZdwpzdvGX47LgN5L3gPek9KowoMVNgLeXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:abQxY25csMp3SC8PuMdydQJrtngpfRdZ0ph58sEMXo_NbgDcFj_CvQ>
+    <xmx:abQxYy7zzZUblY9GeS-I_b1rdWFGCOZadH4V4Im1sodigx77MmZG5g>
+    <xmx:abQxY-h6emRQ2bRgTXJcVXk7Daq4DVuLSHN_HckKUxGda7fUrJf2zw>
+    <xmx:arQxY4lVUMdQ7B7phJDxnnIbasOt06Zt1UFnCJ5g6xlN5ta5gYah1w>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Sep 2022 10:17:12 -0400 (EDT)
+Date:   Mon, 26 Sep 2022 08:17:10 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH] fuse: In fuse_flush only wait if someone wants the
+ return code
+Message-ID: <YzG0ZpRuN5VPnKRM@tycho.pizza>
+References: <YvpRLJ79GRWYjLdf@tycho.pizza>
+ <20220901140647.1125079-1-tycho@tycho.pizza>
+ <YyiEzbTDZ+g9iAas@tycho.pizza>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH 3/3] PCI/AER: Use pci_aer_raw_clear_status() to clear root
- port's AER error status
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     fancer.lancer@gmail.com, jdmason@kudzu.us, dave.jiang@intel.com,
-        allenbh@gmail.com, bhelgaas@google.com, ruscur@russell.cc,
-        oohall@gmail.com, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntb@lists.linux.dev, linuxppc-dev@lists.ozlabs.org
-References: <20220922215030.GA1341314@bhelgaas>
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-In-Reply-To: <20220922215030.GA1341314@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyiEzbTDZ+g9iAas@tycho.pizza>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +87,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On Mon, Sep 19, 2022 at 09:03:47AM -0600, Tycho Andersen wrote:
+> Hi Miklos,
+> 
+> On Thu, Sep 01, 2022 at 08:06:47AM -0600, Tycho Andersen wrote:
+> > From: "Eric W. Biederman" <ebiederm@xmission.com>
+> > 
+> > In my very light testing this resolves a hang where a thread of the
+> > fuse server was accessing the fuse filesystem (the fuse server is
+> > serving up), when the fuse server is killed.
+> > 
+> > The practical problem is that the fuse server file descriptor was
+> > being closed after the file descriptor into the fuse filesystem so
+> > that the fuse filesystem operations were being blocked for instead of
+> > being aborted.  Simply skipping the unnecessary wait resolves this
+> > issue.
+> > 
+> > This is just a proof of concept and someone should look to see if the
+> > fuse max_background limit could cause a problem with this approach.
+> > 
+> > Additionally testing PF_EXITING is a very crude way to tell if someone
+> > wants the return code from the vfs flush operation.  As such in the
+> > long run it probably makes sense to get some direct vfs support for
+> > knowing if flush needs to block until all of the flushing is complete
+> > and a status/return code can be returned.
+> > 
+> > Unless I have missed something this is a generic optimization that can
+> > apply to many network filesystems.
+> > 
+> > Al, vfs folks? (igrab/iput sorted so as not to be distractions).
+> > 
+> > Perhaps a .flush_async method without a return code and a
+> > filp_close_async function without a return code to take advantage of
+> > this in the general sense.
+> > 
+> > Waiting potentially indefinitely for user space in do_exit seems like a
+> > bad idea.  Especially when all that the wait is for is to get a return
+> > code that will never be examined.
+> > 
+> > Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > [tycho: small fixups for releasing fuse file + nocred flag]
+> > Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
+> > Reported-by: Tycho Andersen <tycho@tycho.pizza>
+> > Tested-by: "Serge E. Hallyn" <serge@hallyn.com>
+> 
+> Any chance you're willing to take this patch? We're still seeing this
+> a lot and it would be great to get it fixed.
 
-On 9/23/22 5:50 AM, Bjorn Helgaas wrote:
-> On Fri, Sep 02, 2022 at 02:16:34AM +0800, Zhuo Chen wrote:
->> Statements clearing AER error status in aer_enable_rootport() has the
->> same function as pci_aer_raw_clear_status(). So we replace them, which
->> has no functional changes.
->>
->> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
->> ---
->>   drivers/pci/pcie/aer.c | 7 +------
->>   1 file changed, 1 insertion(+), 6 deletions(-)
->>
->> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
->> index d2996afa80f6..eb0193f279f2 100644
->> --- a/drivers/pci/pcie/aer.c
->> +++ b/drivers/pci/pcie/aer.c
->> @@ -1287,12 +1287,7 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
->>   				   SYSTEM_ERROR_INTR_ON_MESG_MASK);
->>   
->>   	/* Clear error status */
->> -	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, &reg32);
->> -	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, reg32);
->> -	pci_read_config_dword(pdev, aer + PCI_ERR_COR_STATUS, &reg32);
->> -	pci_write_config_dword(pdev, aer + PCI_ERR_COR_STATUS, reg32);
->> -	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
->> -	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
->> +	pci_aer_raw_clear_status(pdev);
-> 
-> It's true that this is functionally equivalent.
-> 
-> But 20e15e673b05 ("PCI/AER: Add pci_aer_raw_clear_status() to
-> unconditionally clear Error Status") says pci_aer_raw_clear_status()
-> is only for use in the EDR path (this should have been included in the
-> function comment), so I think we should preserve that property and use
-> pci_aer_clear_status() here.
-> 
-> pci_aer_raw_clear_status() is the same as pci_aer_clear_status()
-> except it doesn't check pcie_aer_is_native().  And I'm pretty sure we
-> can't get to aer_enable_rootport() *unless* pcie_aer_is_native(),
-> because get_port_device_capability() checks the same thing, so they
-> should be equivalent here.
-> 
-> Bjorn
-Thanks Bjorn, this very detailed correction is helpful. By the way, 
-'only for use in the EDR path' obviously written in the function 
-comments may be better. So far only commit log has included these.
+Another ping here, can someone take this? Miklos?
 
-I will change to use pci_aer_clear_status() in next patch.
-
--- 
 Thanks,
-Zhuo Chen
+
+Tycho
