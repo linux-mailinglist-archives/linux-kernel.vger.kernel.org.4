@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C7D5EB184
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8D15EB186
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiIZTqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S229997AbiIZTr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiIZTp4 (ORCPT
+        with ESMTP id S230106AbiIZTrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:45:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887311EC49;
-        Mon, 26 Sep 2022 12:45:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FAFFB80DFA;
-        Mon, 26 Sep 2022 19:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CA4C433D7;
-        Mon, 26 Sep 2022 19:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664221550;
-        bh=MNeBI45oFNpk0bJm4bTOEibWr854TsU8hMwcCFMgC1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SRkCt+/DiuV5u8aJnb4Lo/H8IqidTDwYQchwL+tSHijnMdpY4jmYpLxQCdpkQVT5l
-         DJZCG/7KbMsNVRteV6Egr3eVanJvSJxOeFxnVzBY62MnzeS0cj7hGeiWX8vUISlmnR
-         /6NeaswEvOy+SME52iPEyTgQPy9qUuopJYJwY9QzzWKBC1ZpSkORx63YvTlUZKi4TZ
-         vYFvCq7KhnQD/FTdjx+g7H4HxXl4OPfVORgW2UVf8DM/GGeZA/RRQn3oCLnELOxduC
-         lDDrhtMifJRVkjwBY6QlVSxa8lQKsMLX3mcWQzM1yiPwmJcwrOr/ktjvy3j1WVHp2D
-         EsXLBn7JJuyFw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0CA74403B0; Mon, 26 Sep 2022 20:45:48 +0100 (IST)
-Date:   Mon, 26 Sep 2022 20:45:48 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/3] perf lock: Add -E/--entries option
-Message-ID: <YzIBbErRhxzk5ppd@kernel.org>
-References: <20220924004221.841024-1-namhyung@kernel.org>
+        Mon, 26 Sep 2022 15:47:32 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFCEA030B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:47:16 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 3so7508331pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 12:47:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=ZlICVrogearv1SNrgNdDyrmevECXfWWv2T83Z8YgO/0=;
+        b=N72HnbW5sMb92Q4N/bHZzDTNdb4ybAcE8r9IeS1ZaUm4g+VCbclqW5dTR4hrxICF+U
+         XRIx7I6cBdy72OPPbY1ryHlJIyGz6jDtjoDGXSoUfO9xiC+yQvPw5QkzyfTYSil/J6BQ
+         arId7t6AQzxGSEyQQhF8/jC26EXyDtkCM1DD8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZlICVrogearv1SNrgNdDyrmevECXfWWv2T83Z8YgO/0=;
+        b=c3zXJgfaKpvnuFmIV4svlpH4RvQA1NnnUn3gq+wjl8LC34XBINMXacDPDKb/CPocfJ
+         H+gVtnYj6v68+SGFB2py/dqVNHNemWBaKF4JAhy9lgt/vbN0jHNeknnCtFNsXy7lzhkf
+         2/GVeJkYAr2q6Faf++SVKWgHxu/tt3NW1Qo6c7mEF3TAKTR5PmYxZo5bB34zA6WkBu8X
+         NDoTgTlLk7idofkN2vGYG3z5AeBNEb9EdGRDbfAHVjoDtOGL6BuOMmbEWl/3Q960j99x
+         w7Ysy5wmPbKvF2v/x7Z4uso29v1cTYBO6s1+1G8451jDmLdeTIegzTduJ4TFInVZ+my5
+         XhIA==
+X-Gm-Message-State: ACrzQf2VRQY/bE06Xvh73VBIizvZC9QgQb2fvupefDmjKU3M+kQxuPfq
+        c4Ktf1FxtAtYJNd254TgcEJOfg==
+X-Google-Smtp-Source: AMsMyM46ZKCBt4vnZ6cvNv2xFJ4zMtqYAExJV1tiwALAiTO2eAifiY9luw1EWNA5MhmGUBA0BtqajQ==
+X-Received: by 2002:a05:6a00:a05:b0:534:b1ad:cfac with SMTP id p5-20020a056a000a0500b00534b1adcfacmr25053072pfh.35.1664221635658;
+        Mon, 26 Sep 2022 12:47:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b0016ed8af2ec0sm11748282plg.29.2022.09.26.12.47.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 12:47:14 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Akira Yokosawa <akiyks@gmail.com>, linux-doc@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] overflow: Fix kern-doc markup for functions
+Date:   Mon, 26 Sep 2022 12:47:13 -0700
+Message-Id: <20220926194713.1806917-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924004221.841024-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6889; h=from:subject; bh=0PMShzQ6EtJF+kRUqPhXtNPnTNusvCqcZvTzeg25ZSg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjMgHAcuS1Ak0XX+ChZpczDofMNNUiFb6phvm+EPXJ vd1yFnWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzIBwAAKCRCJcvTf3G3AJsVAD/ wPqoGRtTA9mVe6LhiBA9MsJ2zOFjvc9MWJ7nqqm7gsu0vHwGZ/H0xL02y31F2dxCIwmIJUw0cpmQem 8/KwdDgvz9TWCO5xX6Uqv5Su/JrMmOAStgvqA63TfF+5YqWemyjZrM5y9HnaCAXN56gWbg28hWmGxo MqvJjxkrI2Ke0uQJC7M6SxAgQVSyqzilFwzSf70B3MVz3dKwDi7pMn3rdbnEy0KMNT5mHeRpFglOxd +mekH+Ch/3aNQhFX8xI7y3a3qjp3shLEF5kEDxX+zaDT7MaJIKGyxWNxhX4yRdzroZl1w1Qxl19+lt 9WlQX1zNjmpnhGaerzVIuRRtZl3cK3aOBQUeUsExG8jBSebGbv9fvsqAPesbFShQgLApITemZCYE4S FhkMLm/4XNK97w/VMGjHAtunZraG6O2wMTRjQgUocENw4mGodTNZV8BBDlvGc0RTL7bwumsL0UbZba yhsRI/01KZiPDYOAFYnA7XmiMeVUEuNQSQYC0cYxTcyKJA9SZaOr9g+hLn+eVsbV/nbG48EBW1EW0Y JQ2guS/fEZ5lOvw1zcGDDFRyNUJVSKd2+cqBH9C3w0msq0V6mlRcj9xiMEUnaQAvkHK2HywbK3YDJh 1BCC83tR43TGWjgeuYbNXUnZFpj+Q1Wc3lRBgx37rgIFiaDHP7nKuh1qs6nA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,152 +67,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 23, 2022 at 05:42:19PM -0700, Namhyung Kim escreveu:
-> Like perf top, the -E option can limit number of entries to print.
-> It can be useful when users want to see top N contended locks only.
+Fix the kern-doc markings for several of the overflow helpers and move
+their location into the core kernel API documentation, where it belongs
+(it's not driver-specific).
 
-Thanks, applied.
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ Documentation/core-api/kernel-api.rst |  6 ++++
+ Documentation/driver-api/basics.rst   |  3 --
+ include/linux/overflow.h              | 43 +++++++++++++++------------
+ 3 files changed, 30 insertions(+), 22 deletions(-)
 
-- Arnaldo
-
+diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+index 20569f26dde1..0d0c4f87057c 100644
+--- a/Documentation/core-api/kernel-api.rst
++++ b/Documentation/core-api/kernel-api.rst
+@@ -121,6 +121,12 @@ Text Searching
+ CRC and Math Functions in Linux
+ ===============================
  
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/Documentation/perf-lock.txt | 10 ++++++++++
->  tools/perf/builtin-lock.c              | 20 +++++++++++++++-----
->  2 files changed, 25 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-> index 5f2dc634258e..b23e76200ac2 100644
-> --- a/tools/perf/Documentation/perf-lock.txt
-> +++ b/tools/perf/Documentation/perf-lock.txt
-> @@ -94,6 +94,11 @@ REPORT OPTIONS
->           EventManager_De       1845          1             636
->           futex-default-S       1609          0               0
->  
-> +-E::
-> +--entries=<value>::
-> +	Display this many entries.
-> +
-> +
->  INFO OPTIONS
->  ------------
->  
-> @@ -105,6 +110,7 @@ INFO OPTIONS
->  --map::
->  	dump map of lock instances (address:name table)
->  
-> +
->  CONTENTION OPTIONS
->  --------------
->  
-> @@ -154,6 +160,10 @@ CONTENTION OPTIONS
->  --stack-skip
->  	Number of stack depth to skip when finding a lock caller (default: 3).
->  
-> +-E::
-> +--entries=<value>::
-> +	Display this many entries.
-> +
->  
->  SEE ALSO
->  --------
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index 25d75fa09b90..1c0d52384d9e 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -58,6 +58,7 @@ static bool use_bpf;
->  static unsigned long bpf_map_entries = 10240;
->  static int max_stack_depth = CONTENTION_STACK_DEPTH;
->  static int stack_skip = CONTENTION_STACK_SKIP;
-> +static int print_nr_entries = INT_MAX / 2;
->  
->  static enum {
->  	LOCK_AGGR_ADDR,
-> @@ -1266,14 +1267,14 @@ static void print_result(void)
->  	struct lock_stat *st;
->  	struct lock_key *key;
->  	char cut_name[20];
-> -	int bad, total;
-> +	int bad, total, printed;
->  
->  	pr_info("%20s ", "Name");
->  	list_for_each_entry(key, &lock_keys, list)
->  		pr_info("%*s ", key->len, key->header);
->  	pr_info("\n\n");
->  
-> -	bad = total = 0;
-> +	bad = total = printed = 0;
->  	while ((st = pop_from_result())) {
->  		total++;
->  		if (st->broken)
-> @@ -1311,6 +1312,9 @@ static void print_result(void)
->  			pr_info(" ");
->  		}
->  		pr_info("\n");
-> +
-> +		if (++printed >= print_nr_entries)
-> +			break;
->  	}
->  
->  	print_bad_events(bad, total);
-> @@ -1476,7 +1480,7 @@ static void print_contention_result(struct lock_contention *con)
->  {
->  	struct lock_stat *st;
->  	struct lock_key *key;
-> -	int bad, total;
-> +	int bad, total, printed;
->  
->  	list_for_each_entry(key, &lock_keys, list)
->  		pr_info("%*s ", key->len, key->header);
-> @@ -1486,7 +1490,7 @@ static void print_contention_result(struct lock_contention *con)
->  	else
->  		pr_info("  %10s   %s\n\n", "type", "caller");
->  
-> -	bad = total = 0;
-> +	bad = total = printed = 0;
->  	if (use_bpf)
->  		bad = bad_hist[BROKEN_CONTENDED];
->  
-> @@ -1507,7 +1511,7 @@ static void print_contention_result(struct lock_contention *con)
->  			/* st->addr contains tid of thread */
->  			t = perf_session__findnew(session, pid);
->  			pr_info("  %10d   %s\n", pid, thread__comm_str(t));
-> -			continue;
-> +			goto next;
->  		}
->  
->  		pr_info("  %10s   %s\n", get_type_str(st), st->name);
-> @@ -1527,6 +1531,10 @@ static void print_contention_result(struct lock_contention *con)
->  				pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
->  			}
->  		}
-> +
-> +next:
-> +		if (++printed >= print_nr_entries)
-> +			break;
->  	}
->  
->  	print_bad_events(bad, total);
-> @@ -1878,6 +1886,7 @@ int cmd_lock(int argc, const char **argv)
->  		    "combine locks in the same class"),
->  	OPT_BOOLEAN('t', "threads", &show_thread_stats,
->  		    "show per-thread lock stats"),
-> +	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
->  	OPT_PARENT(lock_options)
->  	};
->  
-> @@ -1905,6 +1914,7 @@ int cmd_lock(int argc, const char **argv)
->  	OPT_INTEGER(0, "stack-skip", &stack_skip,
->  		    "Set the number of stack depth to skip when finding a lock caller, "
->  		    "Default: " __stringify(CONTENTION_STACK_SKIP)),
-> +	OPT_INTEGER('E', "entries", &print_nr_entries, "display this many functions"),
->  	OPT_PARENT(lock_options)
->  	};
->  
-> -- 
-> 2.37.3.998.g577e59143f-goog
-
++Arithmetic Overflow Checking
++----------------------------
++
++.. kernel-doc:: include/linux/overflow.h
++   :internal:
++
+ CRC Functions
+ -------------
+ 
+diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
+index 3e2dae954898..4b4d8e28d3be 100644
+--- a/Documentation/driver-api/basics.rst
++++ b/Documentation/driver-api/basics.rst
+@@ -107,9 +107,6 @@ Kernel utility functions
+ .. kernel-doc:: kernel/panic.c
+    :export:
+ 
+-.. kernel-doc:: include/linux/overflow.h
+-   :internal:
+-
+ Device Resource Management
+ --------------------------
+ 
+diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+index 58eb34aa2af9..4b5b3ec91233 100644
+--- a/include/linux/overflow.h
++++ b/include/linux/overflow.h
+@@ -51,7 +51,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 	return unlikely(overflow);
+ }
+ 
+-/** check_add_overflow() - Calculate addition with overflow checking
++/**
++ * check_add_overflow - Calculate addition with overflow checking
+  *
+  * @a: first addend
+  * @b: second addend
+@@ -66,7 +67,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ #define check_add_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_add_overflow(a, b, d))
+ 
+-/** check_sub_overflow() - Calculate subtraction with overflow checking
++/**
++ * check_sub_overflow - Calculate subtraction with overflow checking
+  *
+  * @a: minuend; value to subtract from
+  * @b: subtrahend; value to subtract from @a
+@@ -81,7 +83,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ #define check_sub_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_sub_overflow(a, b, d))
+ 
+-/** check_mul_overflow() - Calculate multiplication with overflow checking
++/**
++ * check_mul_overflow - Calculate multiplication with overflow checking
+  *
+  * @a: first factor
+  * @b: second factor
+@@ -96,7 +99,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ #define check_mul_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_mul_overflow(a, b, d))
+ 
+-/** check_shl_overflow() - Calculate a left-shifted value and check overflow
++/**
++ * check_shl_overflow - Calculate a left-shifted value and check overflow
+  *
+  * @a: Value to be shifted
+  * @s: How many bits left to shift
+@@ -104,15 +108,16 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+  *
+  * Computes *@d = (@a << @s)
+  *
+- * Returns true if '*d' cannot hold the result or when 'a << s' doesn't
++ * Returns true if '*@d' cannot hold the result or when '@a << @s' doesn't
+  * make sense. Example conditions:
+- * - 'a << s' causes bits to be lost when stored in *d.
+- * - 's' is garbage (e.g. negative) or so large that the result of
+- *   'a << s' is guaranteed to be 0.
+- * - 'a' is negative.
+- * - 'a << s' sets the sign bit, if any, in '*d'.
+  *
+- * '*d' will hold the results of the attempted shift, but is not
++ * - '@a << @s' causes bits to be lost when stored in *@d.
++ * - '@s' is garbage (e.g. negative) or so large that the result of
++ *   '@a << @s' is guaranteed to be 0.
++ * - '@a' is negative.
++ * - '@a << @s' sets the sign bit, if any, in '*@d'.
++ *
++ * '*@d' will hold the results of the attempted shift, but is not
+  * considered "safe for use" if true is returned.
+  */
+ #define check_shl_overflow(a, s, d) __must_check_overflow(({		\
+@@ -176,7 +181,7 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 			      __same_type(n, T))
+ 
+ /**
+- * size_mul() - Calculate size_t multiplication with saturation at SIZE_MAX
++ * size_mul - Calculate size_t multiplication with saturation at SIZE_MAX
+  *
+  * @factor1: first factor
+  * @factor2: second factor
+@@ -196,7 +201,7 @@ static inline size_t __must_check size_mul(size_t factor1, size_t factor2)
+ }
+ 
+ /**
+- * size_add() - Calculate size_t addition with saturation at SIZE_MAX
++ * size_add - Calculate size_t addition with saturation at SIZE_MAX
+  *
+  * @addend1: first addend
+  * @addend2: second addend
+@@ -216,7 +221,7 @@ static inline size_t __must_check size_add(size_t addend1, size_t addend2)
+ }
+ 
+ /**
+- * size_sub() - Calculate size_t subtraction with saturation at SIZE_MAX
++ * size_sub - Calculate size_t subtraction with saturation at SIZE_MAX
+  *
+  * @minuend: value to subtract from
+  * @subtrahend: value to subtract from @minuend
+@@ -239,7 +244,7 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
+ }
+ 
+ /**
+- * array_size() - Calculate size of 2-dimensional array.
++ * array_size - Calculate size of 2-dimensional array.
+  *
+  * @a: dimension one
+  * @b: dimension two
+@@ -252,7 +257,7 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
+ #define array_size(a, b)	size_mul(a, b)
+ 
+ /**
+- * array3_size() - Calculate size of 3-dimensional array.
++ * array3_size - Calculate size of 3-dimensional array.
+  *
+  * @a: dimension one
+  * @b: dimension two
+@@ -266,8 +271,8 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
+ #define array3_size(a, b, c)	size_mul(size_mul(a, b), c)
+ 
+ /**
+- * flex_array_size() - Calculate size of a flexible array member
+- *                     within an enclosing structure.
++ * flex_array_size - Calculate size of a flexible array member
++ *                   within an enclosing structure.
+  *
+  * @p: Pointer to the structure.
+  * @member: Name of the flexible array member.
+@@ -284,7 +289,7 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
+ 		size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
+ 
+ /**
+- * struct_size() - Calculate size of structure with trailing flexible array.
++ * struct_size - Calculate size of structure with trailing flexible array.
+  *
+  * @p: Pointer to the structure.
+  * @member: Name of the array member.
 -- 
+2.34.1
 
-- Arnaldo
