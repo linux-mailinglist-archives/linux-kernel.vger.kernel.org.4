@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034915E9A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841C45E9A63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiIZHYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S233582AbiIZHYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiIZHYQ (ORCPT
+        with ESMTP id S234085AbiIZHYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:24:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF1B27B22;
-        Mon, 26 Sep 2022 00:24:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 26 Sep 2022 03:24:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994B7326D1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:24:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C53A617BB;
-        Mon, 26 Sep 2022 07:24:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B24CC433D6;
-        Mon, 26 Sep 2022 07:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664177054;
-        bh=iUARz4K4vsYG5ypEUw84VdL7hWCKORVwp5RyqMqkGY8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NIcJ1nIQkE/9a4YGaIQhNQpWpy728Ssj42mgZgODhQgtJbfhjTbSnPpFJp6okdhih
-         q+C4wlBXlGsOAm7g6/ZmDCdeN35T2CzhxQU+aFmEXYdW2/+47yXrZwGMMxB/JHlqM/
-         DXDgl/oIIBm19rqmd30+fowuXZLdjyWf42tI3KLQ=
-Date:   Mon, 26 Sep 2022 09:24:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragos-Marian Panait <dragos.panait@windriver.com>
-Cc:     stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Frank =?iso-8859-1?Q?Sch=E4fer?= <fschaefer.oss@googlemail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 0/1] media: em28xx: initialize refcount before
- kref_get
-Message-ID: <YzFTnKWtlPUehoU6@kroah.com>
-References: <20220926071128.140602-1-dragos.panait@windriver.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F9FB22074;
+        Mon, 26 Sep 2022 07:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664177067; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RGUC7pfUkCqmyz+z/f44Cmmv/jV1D6wIM8yzmShaiXg=;
+        b=0x9ETCbggBXBSY950xyTpVnALjJ0LpudiLj0RsYQ7pX4hH9HLguVnv1nNPPVaJTnKtAqEe
+        Y34n5JAf+l8EdSk1EYXYRVdC9crFKHKAL4WKvk8nZk/TkEJR7acwQnBGlrs7b0p0+t5WKf
+        ZwMD164VB4caKx9PXgfJl4j7npbzmhY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664177067;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RGUC7pfUkCqmyz+z/f44Cmmv/jV1D6wIM8yzmShaiXg=;
+        b=Zn79lRl/sLY+IEnm43amNTnMXQoNC/tq1Ggex/26wfuEDi3HRuIo+e9DK+dF292qFt7Ghe
+        jjntezo0TkOfbyDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 06562139BD;
+        Mon, 26 Sep 2022 07:24:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dRS8AKtTMWPANgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 26 Sep 2022 07:24:27 +0000
+Message-ID: <8a974e5a-949a-5eb8-4f01-64e6114dafa7@suse.de>
+Date:   Mon, 26 Sep 2022 09:24:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926071128.140602-1-dragos.panait@windriver.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/ssd130x: Use drm_atomic_get_new_plane_state()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220923083447.1679780-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220923083447.1679780-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------U8QkojnKz6JHsFlvXDJVqlbS"
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,22 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:11:27AM +0300, Dragos-Marian Panait wrote:
-> The following commit is needed to fix CVE-2022-3239:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c08eadca1bdfa099e20a32f8fa4b52b2f672236d
-> 
-> Dongliang Mu (1):
->   media: em28xx: initialize refcount before kref_get
-> 
->  drivers/media/usb/em28xx/em28xx-cards.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> 
-> base-commit: 4edbf74132a4c9b78dc2ee61d31abef15200a781
-> -- 
-> 2.37.3
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------U8QkojnKz6JHsFlvXDJVqlbS
+Content-Type: multipart/mixed; boundary="------------10FNfTQ1XwAI5W22XU7N5QaD";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <8a974e5a-949a-5eb8-4f01-64e6114dafa7@suse.de>
+Subject: Re: [PATCH] drm/ssd130x: Use drm_atomic_get_new_plane_state()
+References: <20220923083447.1679780-1-javierm@redhat.com>
+In-Reply-To: <20220923083447.1679780-1-javierm@redhat.com>
 
-Now queued up, thanks.
+--------------10FNfTQ1XwAI5W22XU7N5QaD
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-greg k-h
+DQoNCkFtIDIzLjA5LjIyIHVtIDEwOjM0IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBUaGUgc3RydWN0IGRybV9wbGFuZSAuc3RhdGUgc2hvdWxkbid0IGJlIGFjY2Vz
+c2VkIGRpcmVjdGx5IGJ1dCBpbnN0ZWFkIHRoZQ0KPiBkcm1fYXRvbWljX2dldF9uZXdfcGxh
+bmVfc3RhdGUoKSBoZWxwZXIgZnVuY3Rpb24gc2hvdWxkIGJlIHVzZWQuDQo+IA0KPiBUaGlz
+IGlzIGJhc2VkIG9uIGEgc2ltaWxhciBwYXRjaCBmcm9tIFRob21hcyBaaW1tZXJtYW5uIGZv
+ciB0aGUgc2ltcGxlZHJtDQo+IGRyaXZlci4gTm8gZnVuY3Rpb25hbCBjaGFuZ2VzLg0KPiAN
+Cj4gU3VnZ2VzdGVkLWJ5OiBWaWxsZSBTeXJqw6Rsw6QgPHZpbGxlLnN5cmphbGFAbGludXgu
+aW50ZWwuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMg
+PGphdmllcm1AcmVkaGF0LmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5u
+IDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiANCj4gICBkcml2ZXJzL2dwdS9k
+cm0vc29sb21vbi9zc2QxMzB4LmMgfCA4ICsrKystLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQs
+IDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgYi9kcml2ZXJzL2dwdS9kcm0vc29s
+b21vbi9zc2QxMzB4LmMNCj4gaW5kZXggN2ZhZTk0ODBhYTExLi5hNTM3NjkyMTAwZDEgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9zb2xvbW9uL3NzZDEzMHguYw0KPiArKysg
+Yi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gQEAgLTU2NiwxMCArNTY2
+LDEwIEBAIHN0YXRpYyBpbnQgc3NkMTMweF9mYl9ibGl0X3JlY3Qoc3RydWN0IGRybV9mcmFt
+ZWJ1ZmZlciAqZmIsIGNvbnN0IHN0cnVjdCBpb3N5c19tDQo+ICAgfQ0KPiAgIA0KPiAgIHN0
+YXRpYyB2b2lkIHNzZDEzMHhfcHJpbWFyeV9wbGFuZV9oZWxwZXJfYXRvbWljX3VwZGF0ZShz
+dHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4gLQkJCQkJCSAgICAgICBzdHJ1Y3QgZHJtX2F0
+b21pY19zdGF0ZSAqb2xkX3N0YXRlKQ0KPiArCQkJCQkJICAgICAgIHN0cnVjdCBkcm1fYXRv
+bWljX3N0YXRlICpzdGF0ZSkNCj4gICB7DQo+IC0Jc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAq
+cGxhbmVfc3RhdGUgPSBwbGFuZS0+c3RhdGU7DQo+IC0Jc3RydWN0IGRybV9wbGFuZV9zdGF0
+ZSAqb2xkX3BsYW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRlKG9s
+ZF9zdGF0ZSwgcGxhbmUpOw0KPiArCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKnBsYW5lX3N0
+YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFuZSk7DQo+
+ICsJc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqb2xkX3BsYW5lX3N0YXRlID0gZHJtX2F0b21p
+Y19nZXRfb2xkX3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFuZSk7DQo+ICAgCXN0cnVjdCBkcm1f
+c2hhZG93X3BsYW5lX3N0YXRlICpzaGFkb3dfcGxhbmVfc3RhdGUgPSB0b19kcm1fc2hhZG93
+X3BsYW5lX3N0YXRlKHBsYW5lX3N0YXRlKTsNCj4gICAJc3RydWN0IGRybV9kZXZpY2UgKmRy
+bSA9IHBsYW5lLT5kZXY7DQo+ICAgCXN0cnVjdCBkcm1fcmVjdCBzcmNfY2xpcCwgZHN0X2Ns
+aXA7DQo+IEBAIC01OTEsNyArNTkxLDcgQEAgc3RhdGljIHZvaWQgc3NkMTMweF9wcmltYXJ5
+X3BsYW5lX2hlbHBlcl9hdG9taWNfdXBkYXRlKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0K
+PiAgIH0NCj4gICANCj4gICBzdGF0aWMgdm9pZCBzc2QxMzB4X3ByaW1hcnlfcGxhbmVfaGVs
+cGVyX2F0b21pY19kaXNhYmxlKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0KPiAtCQkJCQkJ
+CXN0cnVjdCBkcm1fYXRvbWljX3N0YXRlICpvbGRfc3RhdGUpDQo+ICsJCQkJCQkJc3RydWN0
+IGRybV9hdG9taWNfc3RhdGUgKnN0YXRlKQ0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9kZXZp
+Y2UgKmRybSA9IHBsYW5lLT5kZXY7DQo+ICAgCXN0cnVjdCBzc2QxMzB4X2RldmljZSAqc3Nk
+MTMweCA9IGRybV90b19zc2QxMzB4KGRybSk7DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4N
+CkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdl
+cm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQoo
+SFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2
+DQo=
+
+--------------10FNfTQ1XwAI5W22XU7N5QaD--
+
+--------------U8QkojnKz6JHsFlvXDJVqlbS
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMxU6oFAwAAAAAACgkQlh/E3EQov+CC
+wBAAgrG6v5i4MK9srv2h5xsgNWBtYsYI6p/XJgCb4HnYAnlQXhMEf/DM+g0ZVaLWwQt3+qMVG2nT
+d8S+RmX2PZ4by3Rc13jIyyzUxCFaeZU0kw3lPO6qX+uRDs7UM3NzHdd62JqXxbxmQmkxRrCjM/Fq
+u6L2hzBj8rpZi5zAZte3BHjJjmqK9SrTKu68+esBqHmNvKM2e8Foj9H45Gde2op8KM1s359af369
+PFusQn2/85pkV751yVQzpo1QQhuPEZqy/G5Kyfjv8SmE0fDUuHEnE6A2ThQak5oQeKmgqVFkzaMF
+hAyqesRh2IDW9UJS1iMazPMYUuk+DUylajLkrXnLUEPnkdEv+nT1CK/T7vIyMpUGxBDSGWdgB/Ln
+VscMTHkJeK2ccow2Quo+1d8pbjZi/k9ized0EKlOGyinS0Bqe0ocLtORr0juJoWXA7sBKLhM5rvt
+W0tbDpXu0wxYAJn88e7ljl4+RjSHoZdC4juNc4vf9AWot06Q7cyij1OO1mn2RBD+ugSOgz/UXeBp
+h5kOodRioKxq2YOJ+fX+flWWZmjh8pZs5WlJSCvvwAvkCMaO8CAuMfSUYReuyjEaQkIPzRm1o1A7
+5984iT4NxOTfZjXj90yZUHE+/fS8L66s5MCVSskQPjGcusBuXnI2StmbQULzbyuxLb51NctH0/NL
+3O8=
+=q/kS
+-----END PGP SIGNATURE-----
+
+--------------U8QkojnKz6JHsFlvXDJVqlbS--
