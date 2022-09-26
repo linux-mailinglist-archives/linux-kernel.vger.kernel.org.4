@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFE25EAE5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E35EAE63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiIZRmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S231237AbiIZRmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiIZRmM (ORCPT
+        with ESMTP id S230327AbiIZRmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:42:12 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2D1DEE6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:33 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QGPTsj010762
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:33 -0700
+        Mon, 26 Sep 2022 13:42:15 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193AC17AA8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:40 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QApP6J006398
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:39 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=54Bgf2xY0Zg2e6Dq0/RfM1UcHe9yEbbljzjT/X/EXqE=;
- b=ffEf+dls6jlmcb3R2A+40lg0PP9TDCnRU7VdSHx8PQ0JZEwc+DOuJqPUfPeVssrZDpwP
- X1mThMw1FQd+WjPTLJWFE2ugT/IRgKVfbsqtnT91DUEYvJhZ3cCF5HMeczGfatcfosT7
- CoOuxokP0Sn0V67k6SF0l3pRSue5hMhQszU= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=vLUCidGyBbc0aglagMzLHklot9FF2ixj2NRn9pzX/t8=;
+ b=iImqhsF3FzWHg1MJQmaYM4F/Xu00lJY821fzOkSoEikc8tMsv0pPVIcKugCsQIw/gqg5
+ zmlOjIL2h/Bfb/qYtWL2RXMmp84XAN52i8qebqraB4UaOTespZH23La35V68MjnOovMe
+ K4Lp4FwD69YIuSW8LJRrUVrquWzWqu8V9GY= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jsydxved0-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jsyknmms3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:32 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub102.TheFacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 10:09:31 -0700
-Received: from twshared3888.09.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:39 -0700
+Received: from twshared8247.08.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 10:09:30 -0700
+ 15.1.2375.31; Mon, 26 Sep 2022 10:09:38 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id C41B76B0A929; Mon, 26 Sep 2022 10:09:27 -0700 (PDT)
+        id C66116B0A92B; Mon, 26 Sep 2022 10:09:27 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v2 0/3] io_uring: register single issuer task at creation
-Date:   Mon, 26 Sep 2022 10:09:24 -0700
-Message-ID: <20220926170927.3309091-1-dylany@fb.com>
+Subject: [PATCH v2 1/3] io_uring: register single issuer task at creation
+Date:   Mon, 26 Sep 2022 10:09:25 -0700
+Message-ID: <20220926170927.3309091-2-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220926170927.3309091-1-dylany@fb.com>
+References: <20220926170927.3309091-1-dylany@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 128FE4zZxkchUDrdjpZBCKPGumCtXvSy
-X-Proofpoint-GUID: 128FE4zZxkchUDrdjpZBCKPGumCtXvSy
+X-Proofpoint-GUID: sX_s_IQcl5FxPz2Fo9n8TSw3fwwn1zE6
+X-Proofpoint-ORIG-GUID: sX_s_IQcl5FxPz2Fo9n8TSw3fwwn1zE6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
@@ -66,43 +65,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Registering the single issuer task from the first submit adds unnecesary
-complications to the API as well as the implementation. Where simply
-registering it at creation should not impose any barriers to getting the
-same performance wins. The only catch is users that might want to move th=
-e
-ring after creation but before submission. For these users allow them to
-create the ring with IORING_SETUP_R_DISABLED and then enable it on the
-submission task.
+Instead of picking the task from the first submitter task, rather use the
+creator task or in the case of disabled (IORING_SETUP_R_DISABLED) the
+enabling task.
 
-There is another problem in 6.1, with IORING_SETUP_DEFER_TASKRUN. That
-would like to check the submitter_task from unlocked contexts, which woul=
-d
-be racy. If upfront the submitter_task is set at creation time it will
-simplify the logic there and probably increase performance (though this i=
-s
-unmeasured).
+This approach allows a lot of simplification of the logic here. This
+removes init logic from the submission path, which can always be a bit
+confusing, but also removes the need for locking to write (or read) the
+submitter_task.
 
-Patch 1 registers the task at creation of the io_uring, this works
-standalone in case you want to only merge this part for 6.0
+Users that want to move a ring before submitting can create the ring
+disabled and then enable it on the submitting task.
 
-Patch 2/3 cleans up the code from the old style
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ io_uring/io_uring.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-v2:
- - add the IORING_SETUP_R_DISABLED logic
-
-Dylan Yudaken (3):
-  io_uring: register single issuer task at creation
-  io_uring: simplify __io_uring_add_tctx_node
-  io_uring: remove io_register_submitter
-
- io_uring/io_uring.c |  9 ++++++++-
- io_uring/tctx.c     | 42 ++++++++++++++++++------------------------
- io_uring/tctx.h     |  6 ++++--
- 3 files changed, 30 insertions(+), 27 deletions(-)
-
-
-base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2965b354efc8..242d896c00f3 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3357,6 +3357,10 @@ static __cold int io_uring_create(unsigned entries=
+, struct io_uring_params *p,
+ 		goto err;
+ 	}
+=20
++	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER
++	    && !(ctx->flags & IORING_SETUP_R_DISABLED))
++		ctx->submitter_task =3D get_task_struct(current);
++
+ 	file =3D io_uring_get_file(ctx);
+ 	if (IS_ERR(file)) {
+ 		ret =3D PTR_ERR(file);
+@@ -3548,6 +3552,9 @@ static int io_register_enable_rings(struct io_ring_=
+ctx *ctx)
+ 	if (!(ctx->flags & IORING_SETUP_R_DISABLED))
+ 		return -EBADFD;
+=20
++	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER && !ctx->submitter_task)
++		ctx->submitter_task =3D get_task_struct(current);
++
+ 	if (ctx->restrictions.registered)
+ 		ctx->restricted =3D 1;
+=20
 --=20
 2.30.2
 
