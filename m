@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065EF5E9F49
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303265E9EC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbiIZKWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S234497AbiIZKOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbiIZKVj (ORCPT
+        with ESMTP id S235027AbiIZKNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:21:39 -0400
+        Mon, 26 Sep 2022 06:13:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C1A4BA68;
-        Mon, 26 Sep 2022 03:16:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40126E3B;
+        Mon, 26 Sep 2022 03:13:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F37EE60B7E;
-        Mon, 26 Sep 2022 10:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF965C433C1;
-        Mon, 26 Sep 2022 10:16:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCF0F60AF0;
+        Mon, 26 Sep 2022 10:13:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7064C433D6;
+        Mon, 26 Sep 2022 10:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187370;
-        bh=y7+eLYjbcVCNH/jVgiBmW+NgV5JOjwNfZtMYz35Va1M=;
+        s=korg; t=1664187223;
+        bh=wYYg+ZsRnP0jNGIZ0QVKY3zQv/ltH8dLHcgdLcIHnVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rwt5x/nZTzaMcy1Sa50UAUnFUcDz8k5JKd1rUKli+J/xsZur1wPS0ZNjdF803RaBO
-         TrwSr7lTntMH05aVOEwuh2kmawRBtV4MgXfFbdFdmJDucYJNIOPx2eey+Fp2VhE/lb
-         Dk7MjAXN2/1yH2sjY4azrwRVjLYcnMTbV5Bby4t8=
+        b=RPlzx+RSClNETtC1O3LMXyoRsmL4FHF9xTGZiMHTHKJusxWShCRHDxHTCtW9phOHS
+         ARN+j7WCKa9tcHj2wvl1f+hkaGzs5wigWU62ulmwj/6vJ9bvfE43kk0xszhc5qNjLf
+         ytK1ChkoefwwlMy0+r+3oqkRXFQmEgVElTQ3YLCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 05/40] efi/libstub: Disable Shadow Call Stack
+        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 4.9 02/30] cifs: dont send down the destination address to sendmsg for a SOCK_STREAM
 Date:   Mon, 26 Sep 2022 12:11:33 +0200
-Message-Id: <20220926100738.422260948@linuxfoundation.org>
+Message-Id: <20220926100736.249258635@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sami Tolvanen <samitolvanen@google.com>
+From: Stefan Metzmacher <metze@samba.org>
 
-[ Upstream commit cc49c71d2abe99c1c2c9bedf0693ad2d3ee4a067 ]
+commit 17d3df38dc5f4cec9b0ac6eb79c1859b6e2693a4 upstream.
 
-Shadow stacks are not available in the EFI stub, filter out SCS flags.
+This is ignored anyway by the tcp layer.
 
-Suggested-by: James Morse <james.morse@arm.com>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Will Deacon <will@kernel.org>
-Stable-dep-of: 1a3887924a7e ("efi: libstub: Disable struct randomization")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/libstub/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/cifs/transport.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 678bc910e080..54dbcec7e06f 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -23,6 +23,9 @@ KBUILD_CFLAGS			:= $(cflags-y) -DDISABLE_BRANCH_PROFILING \
- 				   $(call cc-option,-ffreestanding) \
- 				   $(call cc-option,-fno-stack-protector)
+--- a/fs/cifs/transport.c
++++ b/fs/cifs/transport.c
+@@ -140,8 +140,8 @@ smb_send_kvec(struct TCP_Server_Info *se
  
-+# remove SCS flags from all objects in this directory
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
-+
- GCOV_PROFILE			:= n
- KASAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
--- 
-2.35.1
-
+ 	*sent = 0;
+ 
+-	smb_msg->msg_name = (struct sockaddr *) &server->dstaddr;
+-	smb_msg->msg_namelen = sizeof(struct sockaddr);
++	smb_msg->msg_name = NULL;
++	smb_msg->msg_namelen = 0;
+ 	smb_msg->msg_control = NULL;
+ 	smb_msg->msg_controllen = 0;
+ 	if (server->noblocksnd)
 
 
