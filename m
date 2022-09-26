@@ -2,123 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C195E5E9816
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED34D5E981A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiIZCw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 22:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S233226AbiIZC5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 22:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbiIZCwZ (ORCPT
+        with ESMTP id S232664AbiIZC5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 22:52:25 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF950286C2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 19:52:24 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id iw17so5032818plb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 19:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ymDx1RK1IZPwG4FtzrCjNQCVValjUzUP4YDsHPOQBNw=;
-        b=NqQCR177uun7WuAmSlElKYS/S2MAwbvxqlraXbT3atsMNak+h1X5jIvRn9RvyWsTtI
-         /JsQCsZjLjbGNWflkWIX/2v/cqo0B0dvAoJxFI0rl8hjUPJ5tzO3rmdvCGVz6qBdjdUr
-         TMupY6qwk6T3DBFDCn7qzHXBAqywOTzpEioLk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ymDx1RK1IZPwG4FtzrCjNQCVValjUzUP4YDsHPOQBNw=;
-        b=uwbrEOb15TIIeSaqd3Msh31LR93+5WIeSbXI96M1S5jhF7iweTOigwbEDIHT8Jj+vP
-         uJhqGR/mVUfeYaAIPEFr0k73eMYJYKTuqferSwqXNJ4OOR9PvVHt5het+wVNfOy1pw3l
-         qPcNmUEgdk0QGGqdQa0tvzsaIw+nyELj5vYOGZDNDCh1byFqKRmpRaYQvkPXTP5FXlEg
-         U2zAJxdjoNPDS/T0msA2JRwsqCCUf3TZAt7Lpl6e5l+DBOtd6QoEUFZEbB6d9KvN5tdB
-         IgJbRlm7rwiuvdrUtO3bQbkmSxpaQK8zjBaH9Wjga+ZKYubMdPriTR43KdjZZBSiy+IK
-         lJ0Q==
-X-Gm-Message-State: ACrzQf0KzUaadHzFiomllE236uApS3LPJmTf2q9/Ws5FFk72bRBB3XKj
-        JTJT1ok8GVyRYmk/ENFuTT9zRA==
-X-Google-Smtp-Source: AMsMyM6me/0F0RPlksRz0s+JiR5OlMjXJ9ZiEetQNHnEHPZVgEKzVbCOzJspeqfbuLPUExLHsaNZfw==
-X-Received: by 2002:a17:903:4ca:b0:179:d21f:f04b with SMTP id jm10-20020a17090304ca00b00179d21ff04bmr7520625plb.7.1664160744246;
-        Sun, 25 Sep 2022 19:52:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm9984869plx.281.2022.09.25.19.52.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 19:52:23 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 19:52:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        syzbot <syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [syzbot] WARNING in u32_change
-Message-ID: <202209251949.D718072@keescook>
-References: <000000000000a96c0b05e97f0444@google.com>
- <CAM0EoMnJ=STtk5BnZ9oJtnkXY2Q+Px2cKa4gowFRGpp40UNKww@mail.gmail.com>
- <CAM0EoMm9uBQQepMb5bda1vR-Okw-tPp2nnf6TvfA0FzPu_D_2A@mail.gmail.com>
- <CANn89i+4pgJe8M1cjLF6SkqG1Yp6e+5J2xEkMdSChiVYKMC09g@mail.gmail.com>
- <CAM0EoMkLdOUQ3yrBuYsLdZvqniZ_r0VoACzOzKCo1VVzYeyPbw@mail.gmail.com>
- <CAM0EoMmr8trH0EOtOfvTpYiTq1tt7RUamf1u_R0+USOU_gYUVg@mail.gmail.com>
- <CANn89i+6NpmCyGdicmv+BiQqhUZ71TfN+P4=9NGpV4GxOba1Cw@mail.gmail.com>
- <202209251935.0469930C@keescook>
+        Sun, 25 Sep 2022 22:57:32 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B122B624
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 19:57:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQeYfWV_1664161035;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VQeYfWV_1664161035)
+          by smtp.aliyun-inc.com;
+          Mon, 26 Sep 2022 10:57:29 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     perex@perex.cz
+Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] ASoC: SOF: amd: Remove duplicate include
+Date:   Mon, 26 Sep 2022 10:57:13 +0800
+Message-Id: <20220926025713.39827-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209251935.0469930C@keescook>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 07:39:23PM -0700, Kees Cook wrote:
-> On Sun, Sep 25, 2022 at 10:34:37AM -0700, Eric Dumazet wrote:
-> > Sure, please look at:
-> > 
-> > commit 54d9469bc515dc5fcbc20eecbe19cea868b70d68
-> > Author: Kees Cook <keescook@chromium.org>
-> > Date:   Thu Jun 24 15:39:26 2021 -0700
-> > 
-> >     fortify: Add run-time WARN for cross-field memcpy()
-> > [...]
-> > Here, we might switch to unsafe_memcpy() instead of memcpy()
-> 
-> I would tend to agree. Something like:
-> 
-> diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-> index 4d27300c287c..21e0e6206ecc 100644
-> --- a/net/sched/cls_u32.c
-> +++ b/net/sched/cls_u32.c
-> @@ -1040,7 +1040,9 @@ static int u32_change(struct net *net, struct sk_buff *in_skb,
->  	}
->  #endif
->  
-> -	memcpy(&n->sel, s, sel_size);
-> +	unsafe_memcpy(&n->sel, s, sel_size,
-> +		      /* A composite flex-array structure destination,
-> +		       * which was correctly sized and allocated above. */);
->  	RCU_INIT_POINTER(n->ht_up, ht);
->  	n->handle = handle;
->  	n->fshift = s->hmask ? ffs(ntohl(s->hmask)) - 1 : 0;
+./sound/soc/sof/amd/acp-common.c: ../sof-audio.h is included more than once.
 
-Ah, there is another in the same source file, in u32_init_knode():
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2270
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ sound/soc/sof/amd/acp-common.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-        memcpy(&new->sel, s, struct_size(s, keys, s->nkeys));
-
-(I've been trying to convince Coccinelle to produce a list of all the
-composite structure targets, but I keep running into weird glitches.
-That it hadn't found this one let me track down the latest issue, so now
-I should be able to find more! Whew.)
-
+diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
+index 27b95187356e..348e70dfe2a5 100644
+--- a/sound/soc/sof/amd/acp-common.c
++++ b/sound/soc/sof/amd/acp-common.c
+@@ -13,7 +13,6 @@
+ #include "../sof-priv.h"
+ #include "../sof-audio.h"
+ #include "../ops.h"
+-#include "../sof-audio.h"
+ #include "acp.h"
+ #include "acp-dsp-offset.h"
+ 
 -- 
-Kees Cook
+2.20.1.7.g153144c
+
