@@ -2,132 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF30E5E9B57
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6495E9B5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbiIZH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S233137AbiIZIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbiIZH62 (ORCPT
+        with ESMTP id S234385AbiIZH7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:58:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396B63C0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:54:39 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664178876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NKhc8qFzuT7oDQPl2tzoXxQ/g8SoOYHWBX8Uw/Wsd50=;
-        b=v9FTBr3EuhPm2Jwmd5X3M0K/acEkHtVcDz1OBdSFY5EjKENEaH90IxjyHomZy22Qsps1nl
-        bzuXC3M0jlbGgarN/QCD8d1cfij3fnPCtRgsXS7i4+faexNWkI7n3yig1zioeJUSAnq+Yd
-        ks74rJVvZni/cZH6cL0Hh5H9OdLV+Iw3trgeJAeFpvvCMouFJmpp4LjViCRckR0csDDltS
-        FtJsYzJ5Z+M1ZKsC64tAdhThoH7o10/PQcbtRtCdcwux38CBjvunnHlLVbs4NXuUaNlFqa
-        sFZJF5P9fknPyXi+wjJHG1DghDd0WFqrVK+EuVXGYaDbLJncDLlFCr9N1aCHJg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664178876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NKhc8qFzuT7oDQPl2tzoXxQ/g8SoOYHWBX8Uw/Wsd50=;
-        b=upHGNdMZLwWXlLY4p6BkuV5IeciHUtWKnMnqr0DfpcMFbD3it4R3xHMF7Q0LOT0hW6CvH+
-        KtJ1O/piM2cK4ADw==
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
-In-Reply-To: <YzEoYPSC5Qf2aL92@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-19-john.ogness@linutronix.de>
- <YzEoYPSC5Qf2aL92@google.com>
-Date:   Mon, 26 Sep 2022 10:00:36 +0206
-Message-ID: <87leq6d0zn.fsf@jogness.linutronix.de>
+        Mon, 26 Sep 2022 03:59:36 -0400
+Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B9E2644
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1664178962;
+        bh=BLAzL3cBx/MYrBjV9n4BPhL0NhU2tBdsskwjNCqJgVs=;
+        h=From:To:Cc:Subject:Date;
+        b=SvFg+sduZouhYsWj5iePMsOyNUUYaz+DV3wF+48/bLWjXikFqCV0VJZOfFHcbZqOy
+         jgxWDbdSkV9lqxv/2fC/AiGU17WvZjODQIbTaPRNseMwQMEfzqxZQoYAUWis8rNWZT
+         eODxt0cu4E4NDzd4wBQtFk2wVvNvGz7MoJgddFOo=
+Received: from localhost.localdomain ([59.172.176.188])
+        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
+        id DFBB9610; Mon, 26 Sep 2022 15:55:59 +0800
+X-QQ-mid: xmsmtpt1664178959ty43hhfds
+Message-ID: <tencent_F8100CE69CDC080E218AEF7033A5CCFF2507@qq.com>
+X-QQ-XMAILINFO: NY7OhsirbEL36waAZPzGmqkpFKnnwmYIhOCQFF3TTTQuwa/dubz0TmyRkrIDXL
+         K3Y6MG3YHc3mXJrMJEIRyVXowqd/NWUtct9V5YTlA11sqmX90WmgjES9Gati82LBFCwi8DtDeBi/
+         8yTbbP34a7FyNl+xcfeVkT9fXi6Dht+u8b1KqflppxfNIcoTUXlLLq+8z/SKFJzQJ32FYAi2f9EG
+         fz9AGuEQ/88eZ5PmCXaSuBCE+/W0Rru58xagUaxpd540iIS33d1UGZsWahberkV5Z7pvxyYlH4oz
+         MjThxWmtZebAdLrp/jyL/XHhQc5fqcx+EML2D5GCFx/IaDlCNJnxEDVa4w7EMtIdPbso9rajF/8s
+         /49Yh7olZnAc6KZtei3JEDa3ArTn6I5NhZLjfpDL3k6g+TeSNnlWOBzqDcXXx3P8yi3l9YRS04PQ
+         fpfMZ+0zoH2j6I6wFL6j3Xoa8ngSKHZ7mDjs+nzMRCl/9CjOSkgd8llu9HhmMUU67YIAtOVkTEm8
+         ZLfkQEE0nlGWV17BoQ6BuNuUC0lbHm9zJxlDEszGawg60piV56UGJbF1j0W2TGVnsttn9U8IMNDq
+         +LtmzgQxw8z7mYPRBPz6jxkGwgbnx6pQRMEwz3dEy8H/DYTp2vVfQplyvrg13opSFc3TI/Sjl3HC
+         K0FpdB+22CpleTtD0MLewqflWYLlTtrRXhc1KYvZ5fdFUltWj/J7CvyAWYm6Qzg5G85zQHt7U3ee
+         dRubQFEnmOlF00PgOo2iQYeM/j4/MgWR1Yh9QGFC+obn7B+tN9C1vssBknFS5rdRmk4XIAtFomOR
+         bIZCDVrlXIbDnzYUozfMyZz28vVp1Ekxscs8h7nw4YPxTFmowtao77u0Xx8ZoLXE9mkwd3ZkJm/z
+         Md5e3CYVwZdf/uT2kg+QfWUxyi0SmAutv02n5f/TsPoaQWQcp6O8qm6d1m/Y80Tez3ydHLSeB+iy
+         +p4iEH1hIiJpteimfxw0RfAvmg7FeGVba1k+rfvKSTpCJZWv7b1kfEabLbQSlJqFTOM42JLzm0il
+         H5qXD7XQWIEOPvtyQxL4shlsjnv19kO0OKjbr7Pne0bnIN/r39Rq7elH/Zt8AXZg4yBIoLMw==
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v3] staging: rtl8723bs: fix potential memory leak in _rtw_init_xmit_priv()
+Date:   Mon, 26 Sep 2022 15:54:57 +0800
+X-OQ-MSGID: <20220926075457.3500-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-26, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> On (22/09/24 02:10), John Ogness wrote:
->> +/**
->> + * cons_print_dropped - Print 'dropped' message if required
->> + * @desc:	Pointer to the output descriptor
->> + *
->> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
->> + * not 0 and the regular format is requested. Extended format does not
->> + * need this message because it prints the sequence numbers.
->> + *
->> + * In regular format the extended message buffer is not in use.
->> + * So print into it at the beginning and move the resulting string
->> + * just in front of the regular text buffer so that the message can
->> + * be printed in one go.
->> + *
->> + * In case of a message this returns with @desc->outbuf and @desc->len
->> + * updated. If no message is required then @desc is not modified.
->> + */
->> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
->> +{
->> +	struct cons_text_buf *txtbuf = desc->txtbuf;
->> +	size_t len;
->> +
->> +	if (!desc->dropped || desc->extmsg)
->> +		return;
->> +
->> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
->> +		return;
->> +
->> +	/* Print it into ext_text which is unused */
->> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
->> +		       "** %lu printk messages dropped **\n", desc->dropped);
->> +	desc->dropped = 0;
->> +
->> +	/* Copy it just below text so it goes out with one write */
->> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
->> +
->> +	/* Update the descriptor */
->> +	desc->len += len;
->> +	desc->outbuf -= len;
->
-> Oh, hmm. This does not look to me as a simplification. Quite
-> the opposite, moving cons_text_buf::text pointer to point to
-> cons_text_buf::text - strlen("... dropped messages...") looks
-> somewhat fragile.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-It relies on @ext_text and @text being packed together, which yes, may
-be fragile. As an alternative we could memcpy the message text (@text)
-to the end of the dropped message text. There would be enough room.
+In _rtw_init_xmit_priv(), there are seven error paths for allocation
+failures without releasing the resources but directly goto `exit`, while
+the exit section only executes `return res;`, which can lead to various
+memory leaks.
 
-Generally speaking, the dropped text will be less text to copy. But
-since dropped messages are rare anyway, it might be worth copying more
-data so that the code is not fragile. It would also allow us to remove
-the __no_randomize_layout in "struct cons_text_buf".
+To properly release them, this patch unifies the error handlers of
+_rtw_init_xmit_priv() and several error handling paths are added.
+According to the allocation sequence, each error will jump to its
+corresponding error handling tag.
 
-If the end of cons_print_dropped was changed to:
+As there is no proper device to test with, no runtime testing was
+performed.
 
-        memcpy(txtbuf->ext_text + len, txtbuf->text, desc->len);
-        desc->len += len;
-        desc->outbuf = txtbuf->ext_text;
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ChangeLog:
+v1->v2 update the description.
+v2->v3 update the description.
+ drivers/staging/rtl8723bs/core/rtw_xmit.c | 50 +++++++++++++++++------
+ 1 file changed, 37 insertions(+), 13 deletions(-)
 
-Would that be OK for you?
-
-> Is printing 'dropped' and outbuf messages in one go such an
-> important feature?
-
-I think it is a nice simplification. With the cons_text_buf, it makes it
-quite easy to implement.
-
-John
+diff --git a/drivers/staging/rtl8723bs/core/rtw_xmit.c b/drivers/staging/rtl8723bs/core/rtw_xmit.c
+index 528f920..b288b04 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_xmit.c
++++ b/drivers/staging/rtl8723bs/core/rtw_xmit.c
+@@ -112,7 +112,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmitbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_frame_buf;
+ 	}
+ 
+ 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmitbuf), 4);
+@@ -132,7 +132,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 			msleep(10);
+ 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), true);
+ 			if (res == _FAIL)
+-				goto exit;
++				goto free_xmitbuf;
+ 		}
+ 
+ 		pxmitbuf->phead = pxmitbuf->pbuf;
+@@ -162,7 +162,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 	if (!pxmitpriv->xframe_ext_alloc_addr) {
+ 		pxmitpriv->xframe_ext = NULL;
+ 		res = _FAIL;
+-		goto exit;
++		goto free_xmitbuf;
+ 	}
+ 	pxmitpriv->xframe_ext = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->xframe_ext_alloc_addr), 4);
+ 	pxframe = (struct xmit_frame *)pxmitpriv->xframe_ext;
+@@ -195,7 +195,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmit_extbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_xframe_ext;
+ 	}
+ 
+ 	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmit_extbuf), 4);
+@@ -210,10 +210,8 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 		pxmitbuf->buf_tag = XMITBUF_MGNT;
+ 
+ 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ, true);
+-		if (res == _FAIL) {
+-			res = _FAIL;
+-			goto exit;
+-		}
++		if (res == _FAIL)
++			goto free_xmit_extbuf;
+ 
+ 		pxmitbuf->phead = pxmitbuf->pbuf;
+ 		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMIT_EXTBUF_SZ;
+@@ -240,10 +238,8 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 			pxmitbuf->buf_tag = XMITBUF_CMD;
+ 
+ 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, MAX_CMDBUF_SZ+XMITBUF_ALIGN_SZ, true);
+-			if (res == _FAIL) {
+-				res = _FAIL;
+-				goto exit;
+-			}
++			if (res == _FAIL)
++				goto free_cmd_xmitbuf;
+ 
+ 			pxmitbuf->phead = pxmitbuf->pbuf;
+ 			pxmitbuf->pend = pxmitbuf->pbuf + MAX_CMDBUF_SZ;
+@@ -255,7 +251,7 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	res = rtw_alloc_hwxmits(padapter);
+ 	if (res == _FAIL)
+-		goto exit;
++		goto free_cmd_xmitbuf;
+ 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+ 
+ 	for (i = 0; i < 4; i++)
+@@ -267,6 +263,34 @@ s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	rtw_hal_init_xmit_priv(padapter);
+ 
++	return res;
++
++free_cmd_xmitbuf:
++	while (i--) {
++		pxmitbuf = &pxmitpriv->pcmd_xmitbuf[i];
++		if (pxmitbuf)
++			rtw_os_xmit_resource_free(padapter, pxmitbuf, MAX_CMDBUF_SZ + XMITBUF_ALIGN_SZ, true);
++	}
++	i = NR_XMIT_EXTBUFF;
++free_xmit_extbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
++	while (i--) {
++		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMIT_EXTBUF_SZ + XMITBUF_ALIGN_SZ), true);
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmit_extbuf);
++free_xframe_ext:
++	vfree(pxmitpriv->xframe_ext_alloc_addr);
++	i = NR_XMITBUFF;
++free_xmitbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
++	while (i--) {
++		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), true);
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmitbuf);
++free_frame_buf:
++	vfree(pxmitpriv->pallocated_frame_buf);
+ exit:
+ 	return res;
+ }
+-- 
