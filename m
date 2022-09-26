@@ -2,134 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A808A5EB4E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096A95EB4E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiIZW5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S230205AbiIZW6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIZW5S (ORCPT
+        with ESMTP id S230182AbiIZW6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:57:18 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118587F95
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:57:16 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id l14so5243222qvq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=0oTmPF8OXz/CvwH1nuIdtQazTpalf2fsvzakYLiefMI=;
-        b=AAuidSESOdluh22iHoNdq1ialZQHJi8DlKeQnNqP8tWtqZ0iWgOxeNjSwkyHl3UQlo
-         EaRAzbnIRBWMdo4nhZwbRFS3a20sJ7mYxHKh7Vc0kXen7QbCUiBzmJEMG/gKmdGxQQt9
-         TcfjCa/9U+Ha5Bc3h5TKe+CKna/iYXcCMoCb91DUARCakDg6wnUiVm7MGAuLY0BDZYCN
-         J3kDV6FsQud562i1x9eaKHSC/ucw6t+++AJcg8A+pKvW/vp+3q1yUpu1sszuNx3oK8VA
-         mZZiklHsIKm1548z2J486iqmDSDhDgGH+oWZ8C1MmRSEkFMnzH98qm2RbCK7u9yUeYB7
-         6hrw==
+        Mon, 26 Sep 2022 18:58:07 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234877F262;
+        Mon, 26 Sep 2022 15:58:07 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-127ba06d03fso11212000fac.3;
+        Mon, 26 Sep 2022 15:58:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0oTmPF8OXz/CvwH1nuIdtQazTpalf2fsvzakYLiefMI=;
-        b=C94vkF94D2+d7H6rWEF6HBuEQre95zWcUXIDv2AyYP7aIu4jJM9djHISE6sCR++t6/
-         Q8ZQO2CcaiLQahRTV5TjEVbDTDUr/MeU3sILRSM91dey3chbS7duhgmyOKcwY/rzQIGv
-         gDYZ+VeEvre9o+vATEPQiFWmI3kWtsfVc+ena/PO4QxBDamVy5N5nmStzp7f55YlDMvf
-         fgEv0FkqxQRKxSddIMxSPkgti41BIAQd32Bd2P5qK8i5oequBYSf2C9odEbmOzG/bTB2
-         zkTH6CrDQgBOKy8f0r7soly9N/3je4KgFejeQLSjvmCTNxe7BOxqV4hvxF+EdN0y1+qq
-         lElA==
-X-Gm-Message-State: ACrzQf3ApjgVP4WnxQvk5OvimO4knN0Sc6HPQUY2UGWXmLvJuN+tCupD
-        Ep9hHeBImZUA+woCHwJtamfGDjfaI6DhtA==
-X-Google-Smtp-Source: AMsMyM7Fh0JEmgnwt37ZJHit80EZ1xpj8o5VJC2kJp3X5teg4vJeS+eiVLIo84JzglXvNOHGcfPCZQ==
-X-Received: by 2002:a05:6214:2686:b0:4af:630c:78f2 with SMTP id gm6-20020a056214268600b004af630c78f2mr9100014qvb.52.1664233035861;
-        Mon, 26 Sep 2022 15:57:15 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id az35-20020a05620a172300b0069fe1dfbeffsm12946809qkb.92.2022.09.26.15.57.14
+        bh=epyIDE9t3WUpMt89cRPv2cckD3O12ExvX3hn7aJqqwU=;
+        b=QljuZnAbuY+/kvTGf6K4BwJTPcR2DksdD7lLYOFbMti/0IQrCWE9nKxH514C+KTnJc
+         O2JNL9OLUT6jfwaVtpOxTJBmI/RpUE/qIg0lyJX188DcHdjxHaEPuIslpImyCnsnhF8v
+         a4AuhXRzL5F+efQPcOthkBxnXzFXRsKBUBbijYr0aYgysJu5VNAG+2nCg6sg3W5Vdftn
+         jcpfKTCLNrmZ54FaeZaryGj94RhhGuxtxywte5xoay7YwcWyZ+fxSKEBmO8bdehrg3wU
+         eHGUU4l035sQ23Np2w/92Y8iA4/cvp13erfhF2OYyv5jFvJu1ubXqnI69XvQl9xQNEO9
+         tswA==
+X-Gm-Message-State: ACrzQf0ric7UTULLBim2uTj9JmR1qjf6XG+7wZ4ULeS+Qy7+b8ByfmlM
+        3QQrmbxkTQIkk7g6erPgV19GmZVrhQ==
+X-Google-Smtp-Source: AMsMyM4Y3XzNfRebEVuyawLZnrgxtX+upc5Kkaue5quLOYpoJkfUPf0wfRF02DeA4T6MtSd44EbMXA==
+X-Received: by 2002:a05:6870:b684:b0:127:aefe:eaee with SMTP id cy4-20020a056870b68400b00127aefeeaeemr599766oab.53.1664233086342;
+        Mon, 26 Sep 2022 15:58:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x18-20020a056870b41200b0012d6f3d370bsm9829017oap.55.2022.09.26.15.58.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 15:57:14 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ocx2I-000O97-1t;
-        Mon, 26 Sep 2022 19:57:14 -0300
-Date:   Mon, 26 Sep 2022 19:57:14 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting
- PCI P2PDMA pages
-Message-ID: <YzIuSsFpOC+VN1/P@ziepe.ca>
-References: <Yy33LUqvDLSOqoKa@ziepe.ca>
- <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
- <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
- <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
- <Yy46KbD/PvhaHA6X@ziepe.ca>
- <3840c1c6-3a5c-2286-e577-949f0d4ea7a6@deltatee.com>
- <Yy48GPMdQS/pzNSa@ziepe.ca>
- <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
- <Yy4/f+s1jOCm7dFo@ziepe.ca>
- <980899e1-532a-772b-2f6d-6fb017def50b@deltatee.com>
+        Mon, 26 Sep 2022 15:58:05 -0700 (PDT)
+Received: (nullmailer pid 3120697 invoked by uid 1000);
+        Mon, 26 Sep 2022 22:58:05 -0000
+Date:   Mon, 26 Sep 2022 17:58:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 10/11] dt-bindings: slimbus: qcom,slim: convert to DT
+ schema
+Message-ID: <20220926225805.GA3120664-robh@kernel.org>
+References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
+ <20220923161453.469179-11-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <980899e1-532a-772b-2f6d-6fb017def50b@deltatee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220923161453.469179-11-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 05:51:49PM -0600, Logan Gunthorpe wrote:
-
-> And on further consideration I really think the correct error return is 
-> important here. This will be a user facing error that'll be easy enough
-> to hit: think code that might be run on any file and if the file is 
-> hosted on a block device that doesn't support P2PDMA then the user
-> will see the very uninformative "Cannot allocate memory" error.
+On Fri, 23 Sep 2022 18:14:52 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm SoC SLIMbus controller bindings to DT Schema.
 > 
-> Userspace code that's written for purpose can look at the EREMOTEIO error
-> and tell the user something useful, if we return the correct error.
-> If we return ENOMEM in this case, that is not possible because
-> lots of things might have caused that error.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/slimbus/qcom,slim.yaml           | 86 +++++++++++++++++++
+>  .../bindings/slimbus/slim-qcom-ctrl.txt       | 36 --------
+>  2 files changed, 86 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
+> 
 
-That is reasonable, but I'd still prefer to see it done more
-centrally.
-
->> If we know PIN/GET is not set then we don't even need to call the
->> function because it is a NOP.
-
-> That's not what the documentation for the function says:
-
-> "Either FOLL_PIN or FOLL_GET (or neither) may be set... Return: true for success,
->  or if no action was required (if neither FOLL_PIN nor FOLL_GET was set, nothing
->  is done)."
-
-I mean the way the code is structured is at the top of the call chain
-the PIN/GET/0 is decided and then the callchain is run. All the
-callsites of try_grab_page() must be safe to call under FOLL_PIN
-because their caller is making the decision what flag to use.
-
-Jason
+Reviewed-by: Rob Herring <robh@kernel.org>
