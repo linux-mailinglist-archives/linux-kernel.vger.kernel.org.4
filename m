@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8B45EB131
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E3E5EB13A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiIZTU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S229696AbiIZTY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiIZTUv (ORCPT
+        with ESMTP id S229509AbiIZTY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:20:51 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EA27A75F;
-        Mon, 26 Sep 2022 12:20:44 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id q10so1905571oib.5;
-        Mon, 26 Sep 2022 12:20:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ADvJyP56wHbSxc129KlmBq1wxQ11OvIcsy3rVQbt0AM=;
-        b=nqjRtNZqxGxiKH8/Xu17bmfWvVB1qS/y7iOcVZmO6A/mbfE3roDELudxzC53BWeDyf
-         6fEOxKyGx17CgPL2wIbCSufIWMvLRViyl0RQqkxAWsAVS20UxNxP+YOrojLrNSFLM444
-         BEWj+zeNBH/sIzx+/egPMqjRQHX9vl4i+6NJAAxK17TxiCoFGg/MGcjG+tooeWfWRYqt
-         7SHZavJ+PebWAEXZZ38c9rE74cQ73HUOKvrr6LJNTGSQk9T2rRPPR+G72X5lL7Hb+/ku
-         L5jJrzB2pyGjR4IhxkzS0JeKUD9+m50ptYP3TywX63fKuEHiOoe0schopIG6yy1WdQkd
-         GjrQ==
-X-Gm-Message-State: ACrzQf2aJKLdRtfBXfZIGX6TVT4c6Ay4XI17uhRb48wTxwd2IQxJit/B
-        Yh+YFb6I8eWZH9sZ+hn8/skoWC7NqA==
-X-Google-Smtp-Source: AMsMyM4ROdDjV6GTDIC7rGrPJZId6RQc+iAMicuKSsRckR/ihD7ZKbUwPWuDfXhBc1jE8xBvdfnQGQ==
-X-Received: by 2002:aca:aa97:0:b0:34d:83f5:4a5 with SMTP id t145-20020acaaa97000000b0034d83f504a5mr144441oie.146.1664220043920;
-        Mon, 26 Sep 2022 12:20:43 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05683022e900b0061c9f9c54e4sm8144004otc.80.2022.09.26.12.20.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 12:20:43 -0700 (PDT)
-Received: (nullmailer pid 2629975 invoked by uid 1000);
-        Mon, 26 Sep 2022 19:20:42 -0000
-Date:   Mon, 26 Sep 2022 14:20:42 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-bluetooth@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel@lists.infradead.org,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        netdev@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>,
-        asahi@lists.linux.dev,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 1/7] dt-bindings: net: Add generic Bluetooth controller
-Message-ID: <20220926192042.GA2629908-robh@kernel.org>
-References: <20220919164834.62739-1-sven@svenpeter.dev>
- <20220919164834.62739-2-sven@svenpeter.dev>
+        Mon, 26 Sep 2022 15:24:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2DF3A16D;
+        Mon, 26 Sep 2022 12:24:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECF56B80C75;
+        Mon, 26 Sep 2022 19:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74FB0C433D6;
+        Mon, 26 Sep 2022 19:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664220292;
+        bh=KGe/GdLiOyJuVfNEKfybS6bLyBJmzPyi8wQtB65+SAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mvyKo7rv5awsxlVfri8Z8FJxHXZTJWE1eTX9SY4sJG8o0zVQMMwMHlHvAHFWL/KYc
+         esHUzpqs0BHh6YzWVPqXc1zul4RsGSd91wPPoOqiHm0FnLG+H+bbOHV83hykoIN1V5
+         7C5GaX7vZ2s3cZWTWlXk86jKrjoPUHWiECibhI8Qw/WEsJk64M6CqlTLHm3YoOXTov
+         CoYnnu/ihI2/QM4kBTPAVIeApAWVXN6+rjkyhH63b0cA/SQvyZueNm2lPBzkcrTw1P
+         +tZ3PFMzQfbPIqSDF97s7E9mrBRFBhnxskaODSqZeeQ/j0oDGAWkc/99O41c0pMwrx
+         iwYpgkvg14Wjg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2329C403B0; Mon, 26 Sep 2022 20:24:50 +0100 (IST)
+Date:   Mon, 26 Sep 2022 20:24:50 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: Re: [PATCH 0/5] perf tools: Clean up cpu map handling for a
+ system-wide evsel (v1)
+Message-ID: <YzH8gkVo3wNwGZbu@kernel.org>
+References: <20220924165737.956428-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919164834.62739-2-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220924165737.956428-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 18:48:28 +0200, Sven Peter wrote:
-> Bluetooth controllers share the common local-bd-address property.
-> Add a generic YAML schema to replace bluetooth.txt for those.
+Em Sat, Sep 24, 2022 at 09:57:32AM -0700, Namhyung Kim escreveu:
+> Hello,
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
-> changes from v2:
->   - added new bluetooth subdirectory and moved files there
->   - removed minItems from local-bd-address
->   - dropped bjorn.andersson@linaro.org, bgodavar@codeaurora.org and
->     rjliao@codeaurora.org due to bouncing emails from the CC list
+> The system-wide evsel has a cpu map for all (online) cpus regardless
+> of user requested cpus.  But the cpu map handling code has some
+> special case for it and I think we can cleanup the code by making sure
+> that such a evsel has a proper cpu/thread maps from the beginning.
+> This patches should not cause any change in the behavior.
 > 
-> changes from v1:
->   - removed blueetooth.txt instead of just replacing it with a
->     deprecation note
->   - replaced references to bluetooth.txt
+> You can get the code from 'perf/cpumap-update-v1' branch in
 > 
->  .../devicetree/bindings/net/bluetooth.txt     |  5 ----
->  .../net/bluetooth/bluetooth-controller.yaml   | 29 +++++++++++++++++++
->  .../{ => bluetooth}/qualcomm-bluetooth.yaml   |  6 ++--
->  .../bindings/soc/qcom/qcom,wcnss.yaml         |  8 ++---
->  4 files changed, 35 insertions(+), 13 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/bluetooth.txt
->  create mode 100644 Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
->  rename Documentation/devicetree/bindings/net/{ => bluetooth}/qualcomm-bluetooth.yaml (96%)
-> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+>   
+> Thanks,
+> Namhyung
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Looks sane, applied locally for testing.
+
+- Arnaldo
+ 
+> 
+> Namhyung Kim (5):
+>   libperf: Populate system-wide evsel maps
+>   libperf: Propagate maps only if necessary
+>   perf tools: Get rid of evlist__add_on_all_cpus()
+>   perf tools: Add evlist__add_sched_switch()
+>   perf tools: Remove special handling of system-wide evsel
+> 
+>  tools/lib/perf/evlist.c             | 23 ++++++++-------
+>  tools/lib/perf/evsel.c              |  3 --
+>  tools/perf/arch/x86/util/intel-pt.c | 15 ++++------
+>  tools/perf/builtin-script.c         |  3 --
+>  tools/perf/tests/switch-tracking.c  | 15 ++++------
+>  tools/perf/util/evlist.c            | 46 ++++++++++++-----------------
+>  tools/perf/util/evlist.h            |  1 +
+>  tools/perf/util/evsel.c             | 12 ++------
+>  tools/perf/util/stat.c              |  3 --
+>  9 files changed, 44 insertions(+), 77 deletions(-)
+> 
+> -- 
+> 2.37.3.998.g577e59143f-goog
+
+-- 
+
+- Arnaldo
