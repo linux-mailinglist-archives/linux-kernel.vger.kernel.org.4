@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A8A5EAFEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8945EB008
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIZSbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S229827AbiIZSf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIZSbK (ORCPT
+        with ESMTP id S229817AbiIZSfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:31:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A764651A06
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:31:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44341611B6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 18:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411BFC433C1;
-        Mon, 26 Sep 2022 18:31:06 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 14:32:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com
-Subject: Re: [PATCH v1] kernel/trace/trace: check the return value of
- tracing_update_buffers()
-Message-ID: <20220926143214.0d6a9203@gandalf.local.home>
-In-Reply-To: <20220917020353.3836285-1-floridsleeves@gmail.com>
-References: <20220917020353.3836285-1-floridsleeves@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 26 Sep 2022 14:35:55 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D1C20F58;
+        Mon, 26 Sep 2022 11:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=GkVeS3Zk1J0hHqvSqxxRfJt58YzkCgCZ4A3BhN6JrU4=; b=uyfrzhLkkQ/vfdv0wE0XhNCvP2
+        9ee4002Jzqg2sW4OYSOMGtXOacGC5RsjewYs4RlmMwE+oKIyPIdglqeoNbkhopIQKWSlBUGzmhio0
+        hycAkmDKufj9WrAATBpx96XZL3sZu2a1vOSJ486zdjpNVD0S/QPbtSC6KJxbVeGUlNts0+odqKxBR
+        4BPG0ju3y5m8fphfDws69lXRjui65I40AShZKvDaTVTqtjgy13ZcRUCv544ThkhHdCA1A8XX2y0+5
+        CbkhQLMxvBfFUa10Lrpv0BnY7Y8CMDkjbeSTOnBEm2OsbIvt8SC6GZw5/dhSCgwHnrDoN6ZfhUXow
+        OXHIQyIA==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocsxH-00B9N6-0B; Mon, 26 Sep 2022 20:35:47 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocsxG-007wYd-1Y;
+        Mon, 26 Sep 2022 20:35:46 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aurelien Jarno <aurelien@aurel32.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
+        support),
+        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
+Subject: [PATCH] arm64: dts: rockchip: Add missing rockchip,pipe-grf to rk3568 PCIe v3 PHY
+Date:   Mon, 26 Sep 2022 20:35:32 +0200
+Message-Id: <20220926183533.1893371-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 19:03:53 -0700
-Li Zhong <floridsleeves@gmail.com> wrote:
+This commit fixes the error message
 
-> Check the return value of tracing_update_buffers() in case it fails.
+  rockchip-snps-pcie3-phy fe8c0000.phy: failed to find rockchip,pipe_grf regmap
 
-FYI, the subject should be:
+during boot by providing the missing rockchip,pipe-grf property.
 
-  tracing: Check the return value of tracing_update_buffers()
+Fixes: faedfa5b40f0 ("arm64: dts: rockchip: Add PCIe v3 nodes to rk3568")
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+---
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  kernel/trace/trace.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index d3005279165d..0e367e326147 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -3305,7 +3305,8 @@ void trace_printk_init_buffers(void)
->  	pr_warn("**********************************************************\n");
->  
->  	/* Expand the buffers to set size */
-> -	tracing_update_buffers();
-> +	if (tracing_update_buffers() < 0)
-> +		return;
-
-Even if the buffers are not expanded, tracing can still work. This should
-not return here. But instead we should have something like:
-
-	/* Allocation really should not fail here at boot up or module load */
-	if (tracing_update_buffers() < 0)
-		pr_err("Failed to expand tracing buffers for trace_printk() calls\n");
-	else
-		buffers_allocate = 1;
-
-As we still want the cmdline action done late in the code.
-
--- Steve
-
-
->  
->  	buffers_allocated = 1;
->  
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+index ba67b58f05b7..8818b283ba11 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+@@ -56,6 +56,7 @@ pcie30phy: phy@fe8c0000 {
+ 		clock-names = "refclk_m", "refclk_n", "pclk";
+ 		resets = <&cru SRST_PCIE30PHY>;
+ 		reset-names = "phy";
++		rockchip,pipe-grf = <&pipegrf>;
+ 		rockchip,phy-grf = <&pcie30_phy_grf>;
+ 		status = "disabled";
+ 	};
+-- 
+2.35.1
 
