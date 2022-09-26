@@ -2,371 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611FD5EA49D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FF85EA4BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238893AbiIZLsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S238513AbiIZLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238456AbiIZLpw (ORCPT
+        with ESMTP id S239124AbiIZLtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:45:52 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43674BB0;
-        Mon, 26 Sep 2022 03:47:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 38A425C00EE;
-        Mon, 26 Sep 2022 06:46:21 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Mon, 26 Sep 2022 06:46:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664189181; x=
-        1664275581; bh=xG1RrAvxILnVKM/HGf/WpAaQQFDiliy1vQfp8uerkes=; b=c
-        Krrc6XCOduvSe0NiILOQo9COvzVPKyqin8iJpRyJIDV21yXv6kwY3HBeMCQNKTR3
-        KtjAm21aiUOhlZnN0LJCISeujQ+aVHc8Dcx1y5eGRtEADkpArB31AYpy1MKGPeo6
-        xlF7rocMh/XhYUuTakNtx8v+htQup7S0R9t0MuGPT+nVE9YE075TkSMXNwVMbvqy
-        QMYNhpgXCsE0fz5YqoHWvT727AY3BfHZxyUKJzOo0fOdbumCpNEUQPJH1UKsWhVA
-        JuLaRIkZXe7b3HulTnd71+NFHVEZl+WF3/197sbE2gvvNqPFkTc0xwvPBgjL9Fdj
-        AWHYak4VkBOpWbjHxqtjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664189181; x=
-        1664275581; bh=xG1RrAvxILnVKM/HGf/WpAaQQFDiliy1vQfp8uerkes=; b=V
-        3q3SQht4hnlAaN/LjuD/7JawNMAMo9N2vs2JcJi3TDiWCVH7KnjlS/YePc0+NIyW
-        +2lBmp8wluqDNESNhzC/ldt0rWwTLgFsjupW+uIU+K8tC4vlKbl39agV26aNNF2v
-        QPTvJAXDkRNmfFTIiesZRzl9Rr2JNBU2h8NfriBevUKDS/OVh+Pkt2GSxA2nt+8v
-        KIc9vAWWlNvxSs3vQdd8hHFzt+cvML+IJDKQTG+Qd7Zax0AP7Utlo8S7J6/6qe9L
-        fh0OGLRKPDENE/Ati4+4AoSAlIDIcczUi5j3wPsTfySYSqjs1LqnvIGZGIYxgBZu
-        xFc1gqX56O7QOKzhlr5Sg==
-X-ME-Sender: <xms:_IIxYzj4aOxzqBw6kkIH2DIk0OrByu_KVNsaiv1vOw_HkSgaqc87-g>
-    <xme:_IIxYwAcSqOmIdId2ar3V4SCoNgu0_luHvDjO0mwvDelk8RWPQYePlU8WF2eBhNlk
-    ahX931q8Y8JStoYoLs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeegffdtgfdtlefhhfdujeevheekgfdujeegudevteevudefleefjeel
-    tefhjeehleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghr
-    rdguvghv
-X-ME-Proxy: <xmx:_IIxYzFEFuN2yfR_g_eQEyHPkA3Ty6FQXzbPwIbdX7pOlZBTEEKTWw>
-    <xmx:_IIxYwR7zlEa6WIez3km9eW4oR04jt4P7C85SWfPJG-1nitLDvebjA>
-    <xmx:_IIxYwy9Y3OB3czY4YN8dqYkexEEEumvZ8kK4U5Ar69MxIm4s3k9_A>
-    <xmx:_YIxY3nbZP1tD-vQhDffl9_BW31y3rZho0m9_4OUBq0z35mjb3td-Q>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B56A5A6007C; Mon, 26 Sep 2022 06:46:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <5748396a-fe0b-413c-b8ac-d24d959091bc@app.fastmail.com>
-In-Reply-To: <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
- <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
- <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
- <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
-Date:   Mon, 26 Sep 2022 12:45:17 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Ferry Toth" <fntoth@gmail.com>,
-        "Andrey Smirnov" <andrew.smirnov@gmail.com>,
-        "Andy Shevchenko" <andriy.shevchenko@intel.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Thinh Nguyen" <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 07:49:24 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E971F75CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:48:14 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id cc5so9561534wrb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=B9y43+TNPHZ/59uqH8nEbojremxQKTaJQoSInS8tVxC5USe5fb7hsS6Fmf7GLEGT9/
+         NyXf6VhkDRrA2UJtKiQhl8Ohykck1m3tVA1GPk/7225r4haIcXNCsqRsPo4aagC270aZ
+         dbxRA+/qHW9FQo6YhvNoVVYTjDwHIyKc3S5+p3tA5q1T57CpRhEmUiPEbUFnloMvqsVl
+         iB8o0kiYLyA006xg3KXZK1hg73bLmKKZXqbG/w7vFrFAn9Fjwvxz2K3EowWuxfISeh0x
+         LMYNZLRN11tRP0zy2n3Xt69VIHZCigxfqusfn+MUmdzreBZM5ZT81rNRcZY6w9typ4Rx
+         v2OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=XnkOP0A8a8O+/ci/uSfY8C2wa4zzom/X+LoGbJpogi7J+S2k+LPhym7v35IIS9t0RF
+         FnUHcRjoWlmnfg0dlisva5obBPJNz0y/HSwpJa2/9+t6pHnGyG8kfZECPF5jF2sJapVt
+         jAP5iH/QhC2UXrbtZWKPomhsKS+lZN6rQQAS6l3Dj80nl9lAOCqtZkiiNzmFHXm04cte
+         Wxq9+eyshds+k60WDMLNTsyGe6QjvxmdlUb2BGepZbEy6mLBA9VPdycyHHlFtpXXa3kj
+         /e3MAk5Q3ScCKsZmipifX81CD8fb1zCj/04P5XB5P0pqD0cXBQoszm+fQA8o8lAhUKg0
+         7Cqw==
+X-Gm-Message-State: ACrzQf3svlx6hpzEcMSYJ+tClP4HJ6rTr7HKFBot79aIfzU3lxABKh06
+        wjWkj1bN4U8eaVW8Wz5x/ZMHHQ==
+X-Google-Smtp-Source: AMsMyM4rI/LVbjbcwOi+ZBasDlj+u6afWRFcKSFN0LE8DC93MLu9289n4JIYLawB9nsOT0+CPltxSA==
+X-Received: by 2002:a05:6000:1887:b0:22a:3c3d:75ea with SMTP id a7-20020a056000188700b0022a3c3d75eamr12324657wri.669.1664189191814;
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id x8-20020adfdcc8000000b0022a2dbc80fdsm13971613wrm.10.2022.09.26.03.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Message-ID: <2f670f3f-4d91-9b74-4fbe-8ea1351444cb@isovalent.com>
+Date:   Mon, 26 Sep 2022 11:46:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [bpf-next v6 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To:     Wang Yufen <wangyufen@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Sun, Sep 25, 2022, at 21:21, Ferry Toth wrote:
-> Hi,
->
-> Promising results below.
->
-> Op 24-09-2022 om 23:29 schreef Ferry Toth:
->> Hi,
->>
->> One more test
->>
->> Op 23-09-2022 om 20:23 schreef Andrey Smirnov:
->>> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
->>> <andriy.shevchenko@intel.com> wrote:
->>>> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
->>>>> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrot=
-e:
->>>>>> On 22-09-2022 12:08, Andy Shevchenko wrote:
->>>>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->>>> FYI: For now I sent a revert, but if we got a solution quicker we=20
->>>> always
->>>> can choose the course of actions.
->>>>
->>> I think we have another problem. This patch happened in parallel to =
-mine
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/c=
-ommit/?h=3Dv6.0-rc6&id=3Dab7aa2866d295438dc60522f85c5421c6b4f1507=20
->>>
->>>
->>> so my changes didn't have that fix in mind and I think your revert
->>> will not preserve that fix. Can you update your revert to take care =
-of
->>> that too, please?
->>>
->>> I'm really confused how the above commit could be followed up by:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/c=
-ommit/drivers/usb/dwc3/drd.c?h=3Dv6.0-rc6&id=3D0f01017191384e3962fa31520=
-a9fd9846c3d352f=20
->>>
->>>
->>> the diffs in dwc3_drd_init seem contradictory
->>>
->>>>>> If the extcon device exists, get the mode from the extcon device.=
- If
->>>>>> the controller is DRD and the driver is unable to determine the m=
-ode,
->>>>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->>>>>>
->>>>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform.=20
->>>>>> Ferry, can you
->>>>>> share bisect log?
->>>>>>
->>>>>> I can but not right now. But what I did was bisect between 5.18.0=20
->>>>>> (good) and 5.19.0 (bad) then when I got near the culprit (~20=20
->>>>>> remaining) based on the commit message I tried=20
->>>>>> 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch=20
->>>>>> OTG -> peripheral if extcon is present" (bad) and commit before=20
->>>>>> that (good).
->>>>>>
->>>>>> The effect of the patch is that on Merrifield (I tested with Inte=
-l=20
->>>>>> Edison Arduino board which has a HW switch to select between host=20
->>>>>> and device mode) device mode works but in host mode USB is=20
->>>>>> completely not working.
->>>>>>
->>>>>> Currently on host mode - when working - superfluous error message=
-s=20
->>>>>> from tusb1210 appear. When host mode is not working there are no=20
->>>>>> tusb1210 messages in the logs / on the console at all. Seemingly=20
->>>>>> tusb1210 is not probed, which points in the direction of a=20
->>>>>> relation to extcon.
->>>>>>
->>>>>> Taking into account the late cycle, I would like to revert the=20
->>>>>> change. And
->>>>>> Ferry and I would help to test any other (non-regressive) approac=
-h).
->>>>>>
->>>>>> I have not yet tested if a simple revert fixes the problem but=20
->>>>>> will tonight.
->>>>>>
->>>>>>
->>>>>> I would be happy to test other approaches too.
->>>>>
->>>>> It's a bit hard for me to suggest an alternative approach without
->>>>> knowing how things are breaking in this case. I'd love to order on=
-e of
->>>>> those boards to repro and fix this on my end, but it looks like th=
-is
->>>>> HW is EOLed and out of stock in most places. If you guys know how =
-to
->>>>> get my hands on those boards I'm all ears.
->>>> There are still some second hand Intel Edison boards flying around
->>>> (but maybe cost a bit more than expected) and there are also
->>>> Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
->>>> option though requires more actions in order something to be boot
->>>> there.
->>>>
->>> OK, I'll check e-bay just in case.
->>>
->>>> In any case, it's probably quicker to ask Ferry or me for testing.
->>>> (Although currently I have no access to the board to test OTG, it's
->>>> =C2=A0 remote device which I can only power on and off and it has a=
-lways
->>>> =C2=A0 be in host mode.)
->>>>
->>>>> Barring that, Ferry can you dig more into this failure? E.g. is it=20
->>>>> this hunk
->>>>>
->>>>> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * mode. If the controller supports =
-DRD but the=20
->>>>> dr_mode is not
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * specified or set to OTG, then set=
- the mode to=20
->>>>> peripheral.
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 if (mode =3D=3D USB_DR_MODE_OTG &&
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (!IS_ENABLED(CONF=
-IG_USB_ROLE_SWITCH) ||
->>>>> !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !DWC3_VER_IS_PRIO=
-R(DWC3, 330A))
->>>>> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *=
-dwc)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> =C2=A0 }
->>>>>
->>>>> that's problematic or moving
->>>> I think you wanted to revert only this line and test?
->>> Yes.
->>>
->>>>> =C2=A0 static int dwc3_probe(struct platform_device *pdev)
->>>>> =C2=A0 {
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *dev =3D &pdev->d=
-ev;
->>>>> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_devic=
-e=20
->>>>> *pdev)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err2;
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extco=
-n(dwc);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "failed to get=20
->>>>> extcon\n");
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 goto err3;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> +
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_=
-dr_mode(dwc);
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err3;
->>>>>
->>>>> to happen earlier?
->>
->> I tried moving dwc3_get_extcon after dwc3_get_dr_mode like so::
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 8c8e32651473..3bf370def546 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1843,6 +1843,10 @@ static int dwc3_probe(struct platform_device=20
->> *pdev)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err2;
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->>
->> +=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->> +=C2=A0=C2=A0=C2=A0 if (ret)
->> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> +
->> =C2=A0=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev=
-);
->> @@ -1850,10 +1854,6 @@ static int dwc3_probe(struct platform_device=20
->> *pdev)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->>
->> -=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->> -=C2=A0=C2=A0=C2=A0 if (ret)
->> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> -
->> =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_alloc_scratch_buffers(dwc);
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->
-> After trying to understand the code a bit, I successfully tested the=20
-> following move:
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 8c8e32651473..4a38cff8cb16 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1843,13 +1843,6 @@ static int dwc3_probe(struct platform_device *p=
-dev)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err2;
->  =C2=A0=C2=A0=C2=A0=C2=A0 }
->
-> -=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
-> -=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "f=
-ailed to get extcon\n");
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
-> -=C2=A0=C2=A0=C2=A0 }
-> -
->  =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
-> @@ -1867,6 +1860,13 @@ static int dwc3_probe(struct platform_device *p=
-dev)
->  =C2=A0=C2=A0=C2=A0=C2=A0 dwc3_check_params(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 dwc3_debugfs_init(dwc);
->
-> +=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
-> +=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "f=
-ailed to get extcon\n");
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err5;
-> +=C2=A0=C2=A0=C2=A0 }
+Sat Sep 24 2022 11:13:48 GMT+0100 (British Summer Time) ~ Wang Yufen
+<wangyufen@huawei.com>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+> 
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+> 
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>    	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>    	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>    	btf_id 82
+> 
+>    $ bpftool link
+>    1: tracing  prog 26
+>    	prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+> 
+> The autoattach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+> v5 -> v6: skip the programs not supporting auto-attach,
+> 	  and change optional name from "auto_attach" to "autoattach"
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 76 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 74 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index c81362a001ba..b1cbd06dee19 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1453,6 +1453,67 @@ get_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+>  	return ret;
+>  }
+>  
+> +static int
+> +auto_attach_program(struct bpf_program *prog, const char *path)
+> +{
+> +	struct bpf_link *link;
+> +	int err;
 > +
->  =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_core_init_mode(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err5;
->
-> This moves dwc3_get_extcon() until after dwc3_core_init() but just=20
-> before dwc3_core_init_mode(). AFAIU initially dwc3_get_extcon() was=20
-> called from within dwc3_core_init_mode() but only for case=20
-> USB_DR_MODE_OTG. So with this change order of events is more or less=20
-> unchanged.
->
-> Due to move I modified goto to err5, not sure if that is correct.
+> +	link = bpf_program__attach(prog);
+> +	if (!link)
+> +		return -1;
+> +
+> +	err = bpf_link__pin(link, path);
+> +	if (err) {
+> +		bpf_link__destroy(link);
+> +		return err;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int pathname_concat(const char *path, const char *name, char *buf)
+> +{
+> +	int len;
+> +
+> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +	if (len < 0)
+> +		return -EINVAL;
+> +	if (len >= PATH_MAX)
+> +		return -ENAMETOOLONG;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +auto_attach_programs(struct bpf_object *obj, const char *path)
+> +{
+> +	struct bpf_program *prog;
+> +	char buf[PATH_MAX];
+> +	int err;
+> +
+> +	bpf_object__for_each_program(prog, obj) {
+> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+> +		if (err)
+> +			goto err_unpin_programs;
+> +
+> +		err = auto_attach_program(prog, buf);
+> +		if (err && errno != EOPNOTSUPP)
+> +			goto err_unpin_programs;
 
-err5 is correct there, that failure path starts to clean up what dwc3_co=
-re_init did.
+If I read the above correctly, we skip entirely programs that couldn't
+be auto-attached. I'm not sure what Andrii had in mind exactly, but it
+would make sense to me to fallback to regular program pinning if the
+program couldn't be attached/linked, so we still keep it loaded in the
+kernel after bpftool exits. Probably with a p_info() message to let
+users know?
 
->
-> Thoughts? Can we get something like this in quick or should we revert =
-first?
-
-I don't know anything about that platform and following this thread is a=
- bit hard
-for me since I lack context so this is a total guess: dwc3_core_init bri=
-ngs up the
-PHYs and also soft resets the core. Could any of these two things intera=
-ct with your
-extcon and somehow break it?
-
-
-Sven
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unpin_programs:
+> +	while ((prog = bpf_object__prev_program(obj, prog))) {
+> +		if (pathname_concat(path, bpf_program__name(prog), buf))
+> +			continue;
+> +
+> +		bpf_program__unpin(prog, buf);
+> +	}
+> +
+> +	return err;
+> +}
