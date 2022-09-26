@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5209E5EA58B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E745EA60C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239270AbiIZMGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        id S237238AbiIZM2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238995AbiIZMDC (ORCPT
+        with ESMTP id S235841AbiIZM13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:03:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD87D79E;
-        Mon, 26 Sep 2022 03:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6C9CB80906;
-        Mon, 26 Sep 2022 10:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE6BC433C1;
-        Mon, 26 Sep 2022 10:51:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189515;
-        bh=ozJJzteAivKTxCNtCjbQSEkkc2fO/BrN+rWsBuy/hbE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sHG/+NXw/4rfiXlOSVKjQcy3YaDJM/k/TceNUG7vtWcRFyuI+u9ihn6DkMwlVl2zC
-         wAL0iPfS/FCB1sKR+wS8/rtIvZgkqQ65rnoVI96Ax5nxrs2nXv/U2gMuKifUGECMR5
-         Qve/uL4ZSnADtYL3KwMe70q6C52jPqzZ8JamHswQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.19 207/207] Revert "block: freeze the queue earlier in del_gendisk"
-Date:   Mon, 26 Sep 2022 12:13:16 +0200
-Message-Id: <20220926100815.885168198@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 26 Sep 2022 08:27:29 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88050B07CE
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 04:07:32 -0700 (PDT)
+Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28QASd5K098275;
+        Mon, 26 Sep 2022 19:28:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
+ Mon, 26 Sep 2022 19:28:39 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28QAScvj098265
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 26 Sep 2022 19:28:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <d039cbbd-4aa7-58bf-b93d-be23443c52b6@I-love.SAKURA.ne.jp>
+Date:   Mon, 26 Sep 2022 19:28:37 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3] rapidio/tsi721: Replace flush_scheduled_work() with
+ flush_work().
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>, Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <0e8a2023-7526-f03a-f520-efafbb0ef45c@I-love.SAKURA.ne.jp>
+ <20220925102742.84ccc07ce1e8e591e4d5ce0f@linux-foundation.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220925102742.84ccc07ce1e8e591e4d5ce0f@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+On 2022/09/26 2:27, Andrew Morton wrote:
+> On Sat, 24 Sep 2022 14:11:25 +0900 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
+> 
+>> Like commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue() using a
+>> macro") says, flush_scheduled_work() is dangerous and will be forbidden.
+>> We are on the way for removing all flush_scheduled_work() callers from
+>> the kernel, and this patch is for removing flush_scheduled_work() call
+>>  from tsi721 driver.
+>>
+>> Since "struct tsi721_device" is per a device struct, I assume that
+>> tsi721_remove() needs to wait for only two works associated with that
+>> device. Therefore, wait for only these works using flush_work().
+>>
+>> --- a/drivers/rapidio/devices/tsi721.c
+>> +++ b/drivers/rapidio/devices/tsi721.c
+>> @@ -2941,7 +2941,8 @@ static void tsi721_remove(struct pci_dev *pdev)
+>>  
+>>  	tsi721_disable_ints(priv);
+>>  	tsi721_free_irq(priv);
+>> -	flush_scheduled_work();
+>> +	flush_work(&priv->idb_work);
+>> +	flush_work(&priv->pw_work);
+>>  	rio_unregister_mport(&priv->mport);
+> 
+> Why not use cancel_work[_sync](), as the flush_scheduled_work() comment
+> recommends?
+> 
 
-commit 4c66a326b5ab784cddd72de07ac5b6210e9e1b06 upstream.
+Alan Stern suggested to use cancel_work_sync() in
+commit eef6a7d5c2f38ada ("workqueue: warn about flush_scheduled_work()")
+and Tejun Heo suggested to use flush_work() in
+https://lkml.kernel.org/r/YjivtdkpY+reW0Gt@slm.duckdns.org .
 
-This reverts commit a09b314005f3a0956ebf56e01b3b80339df577cc.
-
-Dusty Mabe reported consistent hang during CoreOS shutdown with a MD
-RAID1 setup.  Although apparently similar hangs happened before,
-and this patch most likely is not the root cause it made it much
-more severe.  Revert it until we can figure out what is going on
-with the md driver.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220919144049.978907-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- block/genhd.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -625,7 +625,6 @@ void del_gendisk(struct gendisk *disk)
- 	 * Prevent new I/O from crossing bio_queue_enter().
- 	 */
- 	blk_queue_start_drain(q);
--	blk_mq_freeze_queue_wait(q);
- 
- 	if (!(disk->flags & GENHD_FL_HIDDEN)) {
- 		sysfs_remove_link(&disk_to_dev(disk)->kobj, "bdi");
-@@ -649,6 +648,8 @@ void del_gendisk(struct gendisk *disk)
- 	pm_runtime_set_memalloc_noio(disk_to_dev(disk), false);
- 	device_del(disk_to_dev(disk));
- 
-+	blk_mq_freeze_queue_wait(q);
-+
- 	blk_throtl_cancel_bios(disk->queue);
- 
- 	blk_sync_queue(q);
-
+Is there some reason to prefer one over the other?
+I think that user-visible results between flush_work() and cancel_work_sync()
+are the same because both wait until work completes.
 
