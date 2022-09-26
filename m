@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213C95EA77B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127745EA7A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbiIZNj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 09:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S235277AbiIZNux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 09:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiIZNim (ORCPT
+        with ESMTP id S235216AbiIZNtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:38:42 -0400
-Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [IPv6:2001:67c:1be8::25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C497EF34D9;
-        Mon, 26 Sep 2022 04:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:Content-Type:
-        Message-ID:References:In-Reply-To:Cc:To:From:Date:MIME-Version:Sender:
-        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-        :Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4mbOMHf/fk/JtjbGiWpqk8AGAG2riDe2iKjSk0qpj9Y=; b=y7MbOd5uzYaSxhjTlVkEUFqKQV
-        Y5V+1cNTFt/d4YmoOS/ADSV65JbVrfuMAAPA4rmYTnbJ+sGHzVYCjwkQRDeO87hsecA5tH7vNCLnc
-        VB/64n82952QVTOWCq1g6GCts9rxLm51Mygc7O2ER+ekIVLHEQnQcvWbR40OQqs/8ZQet4/IEHEs4
-        WVgQLBL0L47JdShLJ6NxZUODbLmQ/L66seZDP1Q7i7ikUfzUB7HHkRzXsuBXhuATj87Bb0EuoBLTM
-        jJZpqtxPr7vl/Akw3ZHhlRYeL8Ro8SxStOj1uD18Aq/otlWQLMJ6FKhtdfI2J0PySRzMtqKiUsCpS
-        +KNj4h3A==;
-Received: from [2001:67c:1be8::200] (port=58906 helo=roundcube.kapsi.fi)
-        by mailserv1.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maukka@ext.kapsi.fi>)
-        id 1ocmjA-001omW-G8; Mon, 26 Sep 2022 14:56:49 +0300
+        Mon, 26 Sep 2022 09:49:43 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF7B1F34BA;
+        Mon, 26 Sep 2022 05:06:40 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id f26so3869209qto.11;
+        Mon, 26 Sep 2022 05:06:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zwqQg/EA9NE7hz0+et8lHT66JUNAuO2pFuOCuX6k/yw=;
+        b=GCIfIQGiXmu/6cfWujCAOqJ/QLyH4WfVnAdCseU2ByKuvQFM6L43TyYWULJtbJ1qnD
+         eqWDO+g/0H5KaeRRfNHDMsRdUNgcQEN2Xs9cVCbAv53NID5UHteaJbW+wplS/KQ/MKLw
+         IBliSNcohxL0yFijJ1gYgVBJay7bctF7OeSiArVhEf8qqPZ7CB/A8T5h/CNy+Vrd052y
+         f2Ft1oN3X/XvS/aRLtG7i7BGIQxjY0+lzSkh4rE/3FIagzfLe3GoNusAY4AqatBb30RA
+         /YdCick7/ziJ3ddPpIPVPJF84eRmXMFkAjKe1nbAqkuVcRaQF0SdMr1AK6pBYACHxO0t
+         0DlA==
+X-Gm-Message-State: ACrzQf1MqQcLiL6/1iEj+tHFXPMWQ90K6UICG7jtNi7Md6VLQdbuRnTm
+        Rn77gVBlrFBFYnr+oGlFj0hTC0NEKtbxRw==
+X-Google-Smtp-Source: AMsMyM4f2USErY5Wp2DisWPjWgm1QD0z6baomR7VfxgKHkXKSd34kSylqlz42uKKNc9kkJ2bNl0i+Q==
+X-Received: by 2002:ac8:7d14:0:b0:35c:bdbe:5b97 with SMTP id g20-20020ac87d14000000b0035cbdbe5b97mr17568542qtb.272.1664193536555;
+        Mon, 26 Sep 2022 04:58:56 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id fv19-20020a05622a4a1300b0035d474fd797sm349916qtb.23.2022.09.26.04.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 04:58:56 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 126so7951281ybw.3;
+        Mon, 26 Sep 2022 04:58:55 -0700 (PDT)
+X-Received: by 2002:a05:6902:2c1:b0:6b2:8bb0:79a0 with SMTP id
+ w1-20020a05690202c100b006b28bb079a0mr20847868ybh.202.1664193535675; Mon, 26
+ Sep 2022 04:58:55 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 26 Sep 2022 14:56:48 +0300
-From:   maukka@ext.kapsi.fi
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de, olof@lixom.net,
-        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux@armlinux.org.uk, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220923180226.vmjcefxlujg2r6u3@pali>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-4-maukka@ext.kapsi.fi> <YyzPVMrfcOkvngxl@lunn.ch>
- <6dc27862f8460f875c31ad2de56baa9f@ext.kapsi.fi> <Yy2iqE8XgXe8qYd9@lunn.ch>
- <20220923180226.vmjcefxlujg2r6u3@pali>
-Message-ID: <74f2b413a617a4315cc34a0ef386dd8d@ext.kapsi.fi>
-X-Sender: maukka@ext.kapsi.fi
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:1be8::200
-X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
+References: <20220921082221.10599-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220921082221.10599-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Sep 2022 13:58:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVgwNMr-KgXTancXGJUqLEb92S0MR9rLM8fzn+Bc51U1w@mail.gmail.com>
+Message-ID: <CAMuHMdVgwNMr-KgXTancXGJUqLEb92S0MR9rLM8fzn+Bc51U1w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: rzg2ul-smarc: Move spi1 pinmux to
+ carrier board DTSI
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device
- Tree
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.9.2022 21:02, Pali Rohár wrote:
-> On Friday 23 September 2022 14:12:24 Andrew Lunn wrote:
->> > > > +	if (of_machine_is_compatible("dlink,dns323a1")) {
->> > > > +		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
->> > >
->> > > I spotted this in dns323-setup.c as well. Do you have any idea what it
->> > > does?
->> > >
->> >
->> > No idea. I have tried to replicate what was in dns323-setup.c as exactly as
->> > possible.
->> > I can try to leave it out and see if anything changes.
->> 
->> It is best to keep what we don't understand. It will be there for a
->> reason.
->> 
->> 	Andrew
-> 
-> Hello! I tried to index all publicly available Marvell SoC
-> documentations into kernel documentation subfolder:
-> https://docs.kernel.org/arm/marvell.html
-> 
-> For Orion there is linked Datasheet and User Manual, so you could try 
-> to
-> find in those documents that mentioned register and check what it is
-> doing.
+On Wed, Sep 21, 2022 at 10:22 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> spi1 is available on the RZ/G2UL SMARC EVK carrier board (PMOD0), hence
+> moving the spi1 pinmux from SoM to carrier board. This is to keep
+> consistency with the other SMARC EVKs.
+>
+> Also while moving the pinmux rename rspi1 to spi1 to be consistent with
+> other SMARC EVK DTSIs.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-MPP_DEV_CTRL refers to register at address 0x10008. According to the 
-88F5152 user manual it's
-'Device Multiplex Control Register' Offset: 0x10008.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
-Bits    Field     Type/InitVal     Description
-[31:0]  Reserved  RES 0x03FF0000   Reserved. NOTE: Must be 0x03FF0000'.
+Gr{oetje,eeting}s,
 
-DEV_D[31:16] receives no hits in the documentation, only to DEV_D[15:0] 
-are referred.
+                        Geert
 
-Maybe 88F5151 is different, hard to say.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
