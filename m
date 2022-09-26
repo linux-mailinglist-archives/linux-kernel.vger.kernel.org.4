@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8661A5EAA16
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8912B5EAA1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236078AbiIZPRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S234998AbiIZPRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiIZPQi (ORCPT
+        with ESMTP id S235926AbiIZPQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:16:38 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D5019298
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:02:27 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id o123so6662478vsc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=W2hJLXZEpV+2eqAKMNoZcDhofs3a0fuyhAGVXRo+6bw=;
-        b=J/uVON7XeKHt/uIk/3sGrIwVVB1drRcHOUIQzfTwNKusVKZ1zr6k8R71BUcQ1GFO0b
-         Tgsw/bSm4xD/cvML/KzYiu/hfCl8+12m7pJ7NFss23fwZZR4f4AJoYPpZoepetP5lprh
-         xMlG130zgiMLu7NLeXzdRxIZz8KPxNFrtsXfom8HOGsT8s8wP1ccAT5XTwp+l1fPVSJy
-         OLxT2eeg4d8pCctrlMpVN/3ha3vwv5YJBmo02rZHMXCV13IK5uOGWf9M8MQ4BJSPXraT
-         jHbLJvOdT1OJEBnYUc8uzA4g2CuoX+/RK10qJSaSN8AZQhvcNcAk6DGH9z3ZCJZRT9xN
-         rdnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=W2hJLXZEpV+2eqAKMNoZcDhofs3a0fuyhAGVXRo+6bw=;
-        b=ITiwlH/56ZsXaLpcuqmWLD4vRDCFut37U60c4LNEeASI6AlrjJFJPZkFuizkJvefPi
-         +TXru+LfJNR1vgv3RacqXY6U1eJm65LrJceps2PTj5s246BPwkDELcWALuV4+pBR3d7n
-         nMT6WHII5ze+4wzWINVfvyr/i8Utga2KACM/amkOmgls85et2rymLEAVRlBdDfo4sCb7
-         9gfm9Y6gdz4aF8mvoGwuS6bXZDkue2xkpLVPle16nGOnh56UKWTPnYyVmN4BqMq5elDV
-         MFjgzG9ZwYOsEiCyGfoZblvg8ROeSSL/q2ovNV6GzUzBlhT/s9lT178xqMK4TfkdoGZj
-         w9NQ==
-X-Gm-Message-State: ACrzQf185SlENtoMTI6k91YZWgkzJ/3KCqV2DieLreHVSw0cn7jEH+Ak
-        20uCje40+nfTczg4FYrlGLfesyLX+PgtL9jxZ8k=
-X-Google-Smtp-Source: AMsMyM6LDOv3tIluzEztat/U56qp8FhupfMkFVh7HZyCZQzMgrdEuBfyN0p8SOJme5sveTwhmTPdTm64LKjryUaNOg0=
-X-Received: by 2002:a05:6102:2f6:b0:398:5094:f748 with SMTP id
- j22-20020a05610202f600b003985094f748mr8008218vsj.50.1664200946884; Mon, 26
- Sep 2022 07:02:26 -0700 (PDT)
+        Mon, 26 Sep 2022 11:16:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80617E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:26 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q90n3t022669
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=trOb7zdgzaJYx7Ddm7fnVqCb5q4PP+7i5q9EzUcUcA8=;
+ b=GF8H3Zxofde8cZ5N4edwTAaNHCivCtSRFARz3JHHQpDBKbQrzesXgO8BEbY4DOp/ulME
+ SbQ9HWcPsLBnrgS/iWq6m4sDCv14QF9kNzEDsPNRpKS3zZ4fhNb9l6xAsG4aV6L//v23
+ HvoCLhq5TFagRG+3+7XBCqriFfEOqplbs14= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jswxjucug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:03:25 -0700
+Received: from twshared2996.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 07:03:23 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 749C56AEBEF3; Mon, 26 Sep 2022 07:03:17 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH 0/3] io_uring: register single issuer task at creation
+Date:   Mon, 26 Sep 2022 07:03:01 -0700
+Message-ID: <20220926140304.1973990-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a59:8199:0:b0:2f6:3de5:9c4a with HTTP; Mon, 26 Sep 2022
- 07:02:26 -0700 (PDT)
-Reply-To: stefanopessia8766@hotmail.com
-From:   Stefano Pessina <nasteexogeele@gmail.com>
-Date:   Mon, 26 Sep 2022 17:02:26 +0300
-Message-ID: <CAGiQzK6yx0+HUyG=J0gnzxE8L8Nbm5j0QdFKcMLMb0JaWzjXDg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: aKI93-mhAGY3VneUWBDA6dwX8AUlQCys
+X-Proofpoint-GUID: aKI93-mhAGY3VneUWBDA6dwX8AUlQCys
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Registering the single issuer task from the first submit adds unnecesary
+complications to the API as well as the implementation. Where simply
+registering it at creation should not impose any barriers to getting the
+same performance wins.
+
+There is another problem in 6.1, with IORING_SETUP_DEFER_TASKRUN. That
+would like to check the submitter_task from unlocked contexts, which woul=
+d
+be racy. If upfront the submitter_task is set at creation time it will
+simplify the logic there and probably increase performance (though this i=
+s
+unmeasured).
+
+Patch 1 registers the task at creation of the io_uring, this works
+standalone in case you want to only merge this part for 6.0
+
+Patch 2/3 cleans up the code from the old style
+
+Dylan Yudaken (3):
+  io_uring: register single issuer task at creation
+  io_uring: simplify __io_uring_add_tctx_node
+  io_uring: remove io_register_submitter
+
+ io_uring/io_uring.c |  5 ++++-
+ io_uring/tctx.c     | 42 ++++++++++++++++++------------------------
+ io_uring/tctx.h     |  6 ++++--
+ 3 files changed, 26 insertions(+), 27 deletions(-)
+
+
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
 --=20
-Kwot=C4=99 500 000 $ przekaza=C5=82 Pa=C5=84stwu STEFANO PESSINA. Uprzejmie=
- wr=C3=B3=C4=87 po
-wi=C4=99cej informacji przez stefanopessia8766@hotmail.com
+2.30.2
+
