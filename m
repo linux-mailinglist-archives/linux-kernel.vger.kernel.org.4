@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358885EB23B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4C45EB255
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiIZUht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S230492AbiIZUiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIZUhq (ORCPT
+        with ESMTP id S230484AbiIZUiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:37:46 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B2D8F96B;
-        Mon, 26 Sep 2022 13:37:45 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id u6-20020a056830118600b006595e8f9f3fso5226961otq.1;
-        Mon, 26 Sep 2022 13:37:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Tv0AY7MIM9gNxoh3YrRffewHQKSHuuCX0JjlbWw8kr0=;
-        b=vWlFcuVcwzABZHyuvh2PEOXoyZjGGcsm85lgukHHsAQiSr1a1z/DdreTs57IZBJzT2
-         mNyZb6kn8yPSN8zgI+rqYRml1dL8ozdduWzEKOoHQLvBs2A+277lR+CbADfufu1niUcE
-         cJvbZjkfG2uKwzwbdGwD5WrF2cqjYzTsyxDpsXfD5og9x7vmR9Haru22kwYlBChHeGQ0
-         ozqwWYB8PmFgpLUckUci+RJL4Q0mq5ujrWNKXvOu+fCFIagzN93TSwOgTPd0wfsJD3uW
-         T5+/gApC0S3dkUUpeCT1xlW5gGyZWXaAwrwPnA/QaidSuRMYUm/c+7BpR7fbM5P72aMZ
-         3lew==
-X-Gm-Message-State: ACrzQf0Q02olgtRLBqf/gEw6HVf0kGg2pVQ6cSQULuYdx4u8JUkmYTKm
-        1540/VBbYeHGhBs3VIlw9A==
-X-Google-Smtp-Source: AMsMyM52ZZz2Puys5ZO8CoKEuiRNlgaRErKzdYx0Jq+Dy/m0LX4BzagQYNLa90AfuLpzWv5XIWM6Cw==
-X-Received: by 2002:a05:6830:1351:b0:65b:e0a8:d0e8 with SMTP id r17-20020a056830135100b0065be0a8d0e8mr10676435otq.190.1664224665118;
-        Mon, 26 Sep 2022 13:37:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a056870a71400b0011e73536301sm9608693oam.52.2022.09.26.13.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 13:37:44 -0700 (PDT)
-Received: (nullmailer pid 2767526 invoked by uid 1000);
-        Mon, 26 Sep 2022 20:37:43 -0000
-Date:   Mon, 26 Sep 2022 15:37:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH 04/12] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix
- matching pin config
-Message-ID: <20220926203743.GA2767165-robh@kernel.org>
-References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
- <20220922195651.345369-5-krzysztof.kozlowski@linaro.org>
+        Mon, 26 Sep 2022 16:38:24 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E1FA7ABC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=6mMntl/NSx3pI8k7cwocEGZTr8TFwyTDRITg/BPF9cE=; b=jsOYLfELogFtxXpumU7TR84MXy
+        Eu1UFVHsGD3Cj6UmLrM/ZTUSNvZz/xc6ldsssTnH8FS6td7ee6m/LX31WwRxDiUukhQrcskxUWWkT
+        VoPG1wrRFuybvausa2AhjVXJF8dX6aOJ6YQ47vA1lpmZCMp/kUCCS4hSkeY3RDcYntCEbgalmkvXm
+        BGUZHDyOTnFsAsPuuxGwC8hDb+YB+3WDlK8eKaoECB53D6G2BeeeYOXlW/V7bdBM+laONV31EMmhv
+        9YuLdNrFUlYxWTL81SdBPAz6d/d/i058J3xiyHd5I6RgnRbx8vv/mehnwKmO6yBVImUXYrcJSHKC/
+        3ss+EE/Q==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocurd-00BDVl-KH; Mon, 26 Sep 2022 22:38:05 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocurd-0001Q2-0I;
+        Mon, 26 Sep 2022 22:38:05 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aurelien Jarno <aurelien@aurel32.net>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ROCKCHIP),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
+        support),
+        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
+Subject: [PATCH] drm/rockchip: dw_hdmi: filter regulator -EPROBE_DEFER error messages
+Date:   Mon, 26 Sep 2022 22:37:52 +0200
+Message-Id: <20220926203752.5430-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922195651.345369-5-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022 21:56:43 +0200, Krzysztof Kozlowski wrote:
-> The LPASS pin controller follows generic pin-controller bindings, so
-> just like TLMM, should have subnodes with '-state' and '-pins'.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../qcom,sc8280xp-lpass-lpi-pinctrl.yaml      | 29 +++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
+When the avdd-0v9 or avdd-1v8 supply are not yet available, EPROBE_DEFER
+is returned by rockchip_hdmi_parse_dt(). This causes the following error
+message to be printed multiple times:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+    dwhdmi-rockchip fe0a0000.hdmi: [drm:dw_hdmi_rockchip_bind [rockchipdrm]] *ERROR* Unable to parse OF data
+
+Fix that by not printing the message when rockchip_hdmi_parse_dt()
+returns -EPROBE_DEFER.
+
+Fixes: ca80c4eb4b01 ("drm/rockchip: dw_hdmi: add regulator support")
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+---
+ drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+index c14f88893868..2f4b8f64cbad 100644
+--- a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+@@ -565,7 +565,8 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
+ 
+ 	ret = rockchip_hdmi_parse_dt(hdmi);
+ 	if (ret) {
+-		DRM_DEV_ERROR(hdmi->dev, "Unable to parse OF data\n");
++		if (ret != -EPROBE_DEFER)
++			DRM_DEV_ERROR(hdmi->dev, "Unable to parse OF data\n");
+ 		return ret;
+ 	}
+ 
+-- 
+2.35.1
+
