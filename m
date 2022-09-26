@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512F65EA13B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED8E5EA033
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbiIZKqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S235833AbiIZKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbiIZKoV (ORCPT
+        with ESMTP id S235885AbiIZKdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863684D80A;
-        Mon, 26 Sep 2022 03:25:24 -0700 (PDT)
+        Mon, 26 Sep 2022 06:33:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C675E46DB7;
+        Mon, 26 Sep 2022 03:20:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F04FB80915;
-        Mon, 26 Sep 2022 10:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6336FC433C1;
-        Mon, 26 Sep 2022 10:25:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FC14B80942;
+        Mon, 26 Sep 2022 10:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF650C433D6;
+        Mon, 26 Sep 2022 10:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187921;
-        bh=O9sB5tz9UT6qWzcTVpnyeL3ASp4RGWCnaJKLnO0qlpc=;
+        s=korg; t=1664187615;
+        bh=/lA8fMFsNi5naxqFFBOpSbNzw7wEV7l9A2vxjowuVPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MB+qA6T/Sk6nfk9kl1qMG1RPE/vYUMvtVWCYoq38o41sGi+BIXbjwJDEow0Tx+ycj
-         TmzQ4Vv+Q4HgzFja6BtScbbF2UhxmEkfP9an5Kf9tshZ3GTs++ob7uUS/6TYHHEdlf
-         eWknGBuZsmKA3QKh2nAasC2hbpNkw3+LqMFGtOys=
+        b=1y7+/RpPNtajYwd1NuCXtM1XJxIKFLouzrZccnXpNpJs9d8swaWSzOoudRPZ0E9kq
+         trvb4EK3n9vF9yEagoWH0wwCyLzh3sWY1upioX2Qqf8s/9XYzIdSoiE0MUSNla8Zho
+         ftKQjzPpeSyO6YBDjCzzsIGd0Z1sxaulv43xkWL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        stable@kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 102/120] ext4: fix bug in extents parsing when eh_entries == 0 and eh_depth > 0
+        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 56/58] workqueue: dont skip lockdep work dependency in cancel_work_sync()
 Date:   Mon, 26 Sep 2022 12:12:15 +0200
-Message-Id: <20220926100754.724346376@linuxfoundation.org>
+Message-Id: <20220926100743.531837914@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +56,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luís Henriques <lhenriques@suse.de>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-commit 29a5b8a137ac8eb410cc823653a29ac0e7b7e1b0 upstream.
+[ Upstream commit c0feea594e058223973db94c1c32a830c9807c86 ]
 
-When walking through an inode extents, the ext4_ext_binsearch_idx() function
-assumes that the extent header has been previously validated.  However, there
-are no checks that verify that the number of entries (eh->eh_entries) is
-non-zero when depth is > 0.  And this will lead to problems because the
-EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+Like Hillf Danton mentioned
 
-[  135.245946] ------------[ cut here ]------------
-[  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-[  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-[  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-[  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-[  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-[  135.256475] Code:
-[  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-[  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-[  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-[  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-[  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-[  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-[  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-[  135.277952] Call Trace:
-[  135.278635]  <TASK>
-[  135.279247]  ? preempt_count_add+0x6d/0xa0
-[  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-[  135.281612]  ? _raw_read_unlock+0x18/0x30
-[  135.282704]  ext4_map_blocks+0x294/0x5a0
-[  135.283745]  ? xa_load+0x6f/0xa0
-[  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-[  135.285646]  read_pages+0x67/0x1d0
-[  135.286492]  ? folio_add_lru+0x51/0x80
-[  135.287441]  page_cache_ra_unbounded+0x124/0x170
-[  135.288510]  filemap_get_pages+0x23d/0x5a0
-[  135.289457]  ? path_openat+0xa72/0xdd0
-[  135.290332]  filemap_read+0xbf/0x300
-[  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-[  135.292192]  new_sync_read+0x103/0x170
-[  135.293014]  vfs_read+0x15d/0x180
-[  135.293745]  ksys_read+0xa1/0xe0
-[  135.294461]  do_syscall_64+0x3c/0x80
-[  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+  syzbot should have been able to catch cancel_work_sync() in work context
+  by checking lockdep_map in __flush_work() for both flush and cancel.
 
-This patch simply adds an extra check in __ext4_ext_check(), verifying that
-eh_entries is not 0 when eh_depth is > 0.
+in [1], being unable to report an obvious deadlock scenario shown below is
+broken. From locking dependency perspective, sync version of cancel request
+should behave as if flush request, for it waits for completion of work if
+that work has already started execution.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-Cc: Baokun Li <libaokun1@huawei.com>
-Cc: stable@kernel.org
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Baokun Li <libaokun1@huawei.com>
-Link: https://lore.kernel.org/r/20220822094235.2690-1-lhenriques@suse.de
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  ----------
+  #include <linux/module.h>
+  #include <linux/sched.h>
+  static DEFINE_MUTEX(mutex);
+  static void work_fn(struct work_struct *work)
+  {
+    schedule_timeout_uninterruptible(HZ / 5);
+    mutex_lock(&mutex);
+    mutex_unlock(&mutex);
+  }
+  static DECLARE_WORK(work, work_fn);
+  static int __init test_init(void)
+  {
+    schedule_work(&work);
+    schedule_timeout_uninterruptible(HZ / 10);
+    mutex_lock(&mutex);
+    cancel_work_sync(&work);
+    mutex_unlock(&mutex);
+    return -EINVAL;
+  }
+  module_init(test_init);
+  MODULE_LICENSE("GPL");
+  ----------
+
+The check this patch restores was added by commit 0976dfc1d0cd80a4
+("workqueue: Catch more locking problems with flush_work()").
+
+Then, lockdep's crossrelease feature was added by commit b09be676e0ff25bd
+("locking/lockdep: Implement the 'crossrelease' feature"). As a result,
+this check was once removed by commit fd1a5b04dfb899f8 ("workqueue: Remove
+now redundant lock acquisitions wrt. workqueue flushes").
+
+But lockdep's crossrelease feature was removed by commit e966eaeeb623f099
+("locking/lockdep: Remove the cross-release locking checks"). At this
+point, this check should have been restored.
+
+Then, commit d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in
+cancel_work_sync()") introduced a boolean flag in order to distinguish
+flush_work() and cancel_work_sync(), for checking "struct workqueue_struct"
+dependency when called from cancel_work_sync() was causing false positives.
+
+Then, commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
+flushing") tried to restore "struct work_struct" dependency check, but by
+error checked this boolean flag. Like an example shown above indicates,
+"struct work_struct" dependency needs to be checked for both flush_work()
+and cancel_work_sync().
+
+Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
+Reported-by: Hillf Danton <hdanton@sina.com>
+Suggested-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
+Cc: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/extents.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/workqueue.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -500,6 +500,10 @@ static int __ext4_ext_check(const char *
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
-+	if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
-+		error_msg = "eh_entries is 0 but eh_depth is > 0";
-+		goto corrupted;
-+	}
- 	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index b1bb6cb5802e..4ea2f7fd20ce 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2917,10 +2917,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
+ 
+-	if (!from_cancel) {
+-		lock_map_acquire(&work->lockdep_map);
+-		lock_map_release(&work->lockdep_map);
+-	}
++	lock_map_acquire(&work->lockdep_map);
++	lock_map_release(&work->lockdep_map);
+ 
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
+-- 
+2.35.1
+
 
 
