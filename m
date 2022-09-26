@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB3D5EA343
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D235EA0EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbiIZLWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S233993AbiIZKnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbiIZLUV (ORCPT
+        with ESMTP id S236389AbiIZKmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:20:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D784BD32;
-        Mon, 26 Sep 2022 03:39:15 -0700 (PDT)
+        Mon, 26 Sep 2022 06:42:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AA654C8C;
+        Mon, 26 Sep 2022 03:24:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D3A360AF0;
-        Mon, 26 Sep 2022 10:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0858C433D6;
-        Mon, 26 Sep 2022 10:37:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39BB5CE10EC;
+        Mon, 26 Sep 2022 10:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EC4C433D6;
+        Mon, 26 Sep 2022 10:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188667;
-        bh=kEcA/9wTN6peHSuhYVAET0L6NbfiIGmPkAVhetaQM1U=;
+        s=korg; t=1664187854;
+        bh=cFpZPh8BcsEBB286zNWTT/jV0sq4ra5xGMtyfOdaR2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iqCCLgL8uRfswm6CFn7E4mhvKbAhxor2EOER1/xRUElc8N0Q5SSsAn0xyZWehOOCS
-         XcmmfRlfEpdpC0GtdtKSbVegCxysmhxjffWdRA7x8iQlAoWdmI6Qyy7K25Dw7d6YhQ
-         WSt/erq8fxLZBrSkhBl1C7KxCxgRqQ7oXUonSfBE=
+        b=JebGy2RTCy1bWpAh/nnsbTaN3Xaq3gLqp3ioAsK6SHkXEpc7QvGHZqN2u8QZucS5g
+         Dj5HxbbXplIeWiA4IFJFNLQXKeWvRLuW0q4PptRatjp+H/bxXgtWvYzPfSw0JCufz6
+         S0j4k2CoAo3Fj+IxCHOpWGXADmJp6/7R4i5wAVfY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 081/148] MIPS: Loongson32: Fix PHY-mode being left unspecified
+Subject: [PATCH 5.4 082/120] net/sched: taprio: avoid disabling offload when it was never enabled
 Date:   Mon, 26 Sep 2022 12:11:55 +0200
-Message-Id: <20220926100759.072005124@linuxfoundation.org>
+Message-Id: <20220926100754.044822678@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,97 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit e9f3f8f488005f6da3cfb66070706770ecaef747 ]
+[ Upstream commit db46e3a88a09c5cf7e505664d01da7238cd56c92 ]
 
-commit 0060c8783330 ("net: stmmac: implement support for passive mode
-converters via dt") has changed the plat->interface field semantics from
-containing the PHY-mode to specifying the MAC-PCS interface mode. Due to
-that the loongson32 platform code will leave the phylink interface
-uninitialized with the PHY-mode intended by the means of the actual
-platform setup. The commit-author most likely has just missed the
-arch-specific code to fix. Let's mend the Loongson32 platform code then by
-assigning the PHY-mode to the phy_interface field of the STMMAC platform
-data.
+In an incredibly strange API design decision, qdisc->destroy() gets
+called even if qdisc->init() never succeeded, not exclusively since
+commit 87b60cfacf9f ("net_sched: fix error recovery at qdisc creation"),
+but apparently also earlier (in the case of qdisc_create_dflt()).
 
-Fixes: 0060c8783330 ("net: stmmac: implement support for passive mode converters via dt")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The taprio qdisc does not fully acknowledge this when it attempts full
+offload, because it starts off with q->flags = TAPRIO_FLAGS_INVALID in
+taprio_init(), then it replaces q->flags with TCA_TAPRIO_ATTR_FLAGS
+parsed from netlink (in taprio_change(), tail called from taprio_init()).
+
+But in taprio_destroy(), we call taprio_disable_offload(), and this
+determines what to do based on FULL_OFFLOAD_IS_ENABLED(q->flags).
+
+But looking at the implementation of FULL_OFFLOAD_IS_ENABLED()
+(a bitwise check of bit 1 in q->flags), it is invalid to call this macro
+on q->flags when it contains TAPRIO_FLAGS_INVALID, because that is set
+to U32_MAX, and therefore FULL_OFFLOAD_IS_ENABLED() will return true on
+an invalid set of flags.
+
+As a result, it is possible to crash the kernel if user space forces an
+error between setting q->flags = TAPRIO_FLAGS_INVALID, and the calling
+of taprio_enable_offload(). This is because drivers do not expect the
+offload to be disabled when it was never enabled.
+
+The error that we force here is to attach taprio as a non-root qdisc,
+but instead as child of an mqprio root qdisc:
+
+$ tc qdisc add dev swp0 root handle 1: \
+	mqprio num_tc 8 map 0 1 2 3 4 5 6 7 \
+	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0
+$ tc qdisc replace dev swp0 parent 1:1 \
+	taprio num_tc 8 map 0 1 2 3 4 5 6 7 \
+	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 base-time 0 \
+	sched-entry S 0x7f 990000 sched-entry S 0x80 100000 \
+	flags 0x0 clockid CLOCK_TAI
+Unable to handle kernel paging request at virtual address fffffffffffffff8
+[fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Call trace:
+ taprio_dump+0x27c/0x310
+ vsc9959_port_setup_tc+0x1f4/0x460
+ felix_port_setup_tc+0x24/0x3c
+ dsa_slave_setup_tc+0x54/0x27c
+ taprio_disable_offload.isra.0+0x58/0xe0
+ taprio_destroy+0x80/0x104
+ qdisc_create+0x240/0x470
+ tc_modify_qdisc+0x1fc/0x6b0
+ rtnetlink_rcv_msg+0x12c/0x390
+ netlink_rcv_skb+0x5c/0x130
+ rtnetlink_rcv+0x1c/0x2c
+
+Fix this by keeping track of the operations we made, and undo the
+offload only if we actually did it.
+
+I've added "bool offloaded" inside a 4 byte hole between "int clockid"
+and "atomic64_t picos_per_byte". Now the first cache line looks like
+below:
+
+$ pahole -C taprio_sched net/sched/sch_taprio.o
+struct taprio_sched {
+        struct Qdisc * *           qdiscs;               /*     0     8 */
+        struct Qdisc *             root;                 /*     8     8 */
+        u32                        flags;                /*    16     4 */
+        enum tk_offsets            tk_offset;            /*    20     4 */
+        int                        clockid;              /*    24     4 */
+        bool                       offloaded;            /*    28     1 */
+
+        /* XXX 3 bytes hole, try to pack */
+
+        atomic64_t                 picos_per_byte;       /*    32     0 */
+
+        /* XXX 8 bytes hole, try to pack */
+
+        spinlock_t                 current_entry_lock;   /*    40     0 */
+
+        /* XXX 8 bytes hole, try to pack */
+
+        struct sched_entry *       current_entry;        /*    48     8 */
+        struct sched_gate_list *   oper_sched;           /*    56     8 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+
+Fixes: 9c66d1564676 ("taprio: Add support for hardware offloading")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/loongson32/common/platform.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ net/sched/sch_taprio.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 794c96c2a4cd..311dc1580bbd 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -98,7 +98,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 	if (plat_dat->bus_id) {
- 		__raw_writel(__raw_readl(LS1X_MUX_CTRL0) | GMAC1_USE_UART1 |
- 			     GMAC1_USE_UART0, LS1X_MUX_CTRL0);
--		switch (plat_dat->interface) {
-+		switch (plat_dat->phy_interface) {
- 		case PHY_INTERFACE_MODE_RGMII:
- 			val &= ~(GMAC1_USE_TXCLK | GMAC1_USE_PWM23);
- 			break;
-@@ -107,12 +107,12 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 			break;
- 		default:
- 			pr_err("unsupported mii mode %d\n",
--			       plat_dat->interface);
-+			       plat_dat->phy_interface);
- 			return -ENOTSUPP;
- 		}
- 		val &= ~GMAC1_SHUT;
- 	} else {
--		switch (plat_dat->interface) {
-+		switch (plat_dat->phy_interface) {
- 		case PHY_INTERFACE_MODE_RGMII:
- 			val &= ~(GMAC0_USE_TXCLK | GMAC0_USE_PWM01);
- 			break;
-@@ -121,7 +121,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 			break;
- 		default:
- 			pr_err("unsupported mii mode %d\n",
--			       plat_dat->interface);
-+			       plat_dat->phy_interface);
- 			return -ENOTSUPP;
- 		}
- 		val &= ~GMAC0_SHUT;
-@@ -131,7 +131,7 @@ int ls1x_eth_mux_init(struct platform_device *pdev, void *priv)
- 	plat_dat = dev_get_platdata(&pdev->dev);
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index 4c26f7fb32b3..842ccdcc0db2 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -65,6 +65,7 @@ struct taprio_sched {
+ 	u32 flags;
+ 	enum tk_offsets tk_offset;
+ 	int clockid;
++	bool offloaded;
+ 	atomic64_t picos_per_byte; /* Using picoseconds because for 10Gbps+
+ 				    * speeds it's sub-nanoseconds per byte
+ 				    */
+@@ -1268,6 +1269,8 @@ static int taprio_enable_offload(struct net_device *dev,
+ 		goto done;
+ 	}
  
- 	val &= ~PHY_INTF_SELI;
--	if (plat_dat->interface == PHY_INTERFACE_MODE_RMII)
-+	if (plat_dat->phy_interface == PHY_INTERFACE_MODE_RMII)
- 		val |= 0x4 << PHY_INTF_SELI_SHIFT;
- 	__raw_writel(val, LS1X_MUX_CTRL1);
++	q->offloaded = true;
++
+ done:
+ 	taprio_offload_free(offload);
  
-@@ -146,9 +146,9 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
- 	.bus_id			= 0,
- 	.phy_addr		= -1,
- #if defined(CONFIG_LOONGSON1_LS1B)
--	.interface		= PHY_INTERFACE_MODE_MII,
-+	.phy_interface		= PHY_INTERFACE_MODE_MII,
- #elif defined(CONFIG_LOONGSON1_LS1C)
--	.interface		= PHY_INTERFACE_MODE_RMII,
-+	.phy_interface		= PHY_INTERFACE_MODE_RMII,
- #endif
- 	.mdio_bus_data		= &ls1x_mdio_bus_data,
- 	.dma_cfg		= &ls1x_eth_dma_cfg,
-@@ -186,7 +186,7 @@ struct platform_device ls1x_eth0_pdev = {
- static struct plat_stmmacenet_data ls1x_eth1_pdata = {
- 	.bus_id			= 1,
- 	.phy_addr		= -1,
--	.interface		= PHY_INTERFACE_MODE_MII,
-+	.phy_interface		= PHY_INTERFACE_MODE_MII,
- 	.mdio_bus_data		= &ls1x_mdio_bus_data,
- 	.dma_cfg		= &ls1x_eth_dma_cfg,
- 	.has_gmac		= 1,
+@@ -1282,12 +1285,9 @@ static int taprio_disable_offload(struct net_device *dev,
+ 	struct tc_taprio_qopt_offload *offload;
+ 	int err;
+ 
+-	if (!FULL_OFFLOAD_IS_ENABLED(q->flags))
++	if (!q->offloaded)
+ 		return 0;
+ 
+-	if (!ops->ndo_setup_tc)
+-		return -EOPNOTSUPP;
+-
+ 	offload = taprio_offload_alloc(0);
+ 	if (!offload) {
+ 		NL_SET_ERR_MSG(extack,
+@@ -1303,6 +1303,8 @@ static int taprio_disable_offload(struct net_device *dev,
+ 		goto out;
+ 	}
+ 
++	q->offloaded = false;
++
+ out:
+ 	taprio_offload_free(offload);
+ 
 -- 
 2.35.1
 
