@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399655E9F8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDFC5EA562
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbiIZK1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S239066AbiIZMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235548AbiIZKYI (ORCPT
+        with ESMTP id S238378AbiIZL5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:24:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D553A4D4DF;
-        Mon, 26 Sep 2022 03:17:37 -0700 (PDT)
+        Mon, 26 Sep 2022 07:57:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DF358DC7;
+        Mon, 26 Sep 2022 03:51:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0F02DCE10F0;
-        Mon, 26 Sep 2022 10:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3BCC433C1;
-        Mon, 26 Sep 2022 10:17:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3413AB80915;
+        Mon, 26 Sep 2022 10:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823BEC433D6;
+        Mon, 26 Sep 2022 10:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187426;
-        bh=Nsu7gSYPgePX728IKEM8gd/5QaXx6yEuMyZ/Sh9ZEuc=;
+        s=korg; t=1664188694;
+        bh=rc8xS3XGBAq54U9F+3K3kpNLWXF82CMelCAi9R0WAZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T8n+n8jK8d4XtSfqFrNy0LqaFb/aJrnO/0kT8Fpml6+2O1y/Pe7pwDzQ6GNlB8GyW
-         FSDaXuUW7we0a6T3o1svz2qKrMmu0iYL15PpWA1iluQQjinAh8RmYFRSmI55ROZSGS
-         NOqWxggTybjQcfx1zOZPHIw0WO/yTo5RZ1oA1FTE=
+        b=W3j6un3+L8yYNCnklmdbp13fOielbQRpPapaIksJxVOLTz07zfBq+9L/jKoemKEpQ
+         HblCW0IlJDctTzC/3WDlAplDLbSfNt+zHc9x9euTN3bDmU7tqe8E12GRtgke6aIxgC
+         euYmokOi/I8fW2d9GC8SrRuHo5CIP3SQ/Rssfpmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Liang He <windhl@126.com>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Asmaa Mnebhi <asmaa@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 30/40] of: mdio: Add of_node_put() when breaking out of for_each_xx
+Subject: [PATCH 5.15 084/148] mlxbf_gige: clear MDIO gateway lock after read
 Date:   Mon, 26 Sep 2022 12:11:58 +0200
-Message-Id: <20220926100739.447763281@linuxfoundation.org>
+Message-Id: <20220926100759.196718103@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: David Thompson <davthompson@nvidia.com>
 
-[ Upstream commit 1c48709e6d9d353acaaac1d8e33474756b121d78 ]
+[ Upstream commit 182447b12144b7be9b63a273d27c5a11bd54960a ]
 
-In of_mdiobus_register(), we should call of_node_put() for 'child'
-escaped out of for_each_available_child_of_node().
+The MDIO gateway (GW) lock in BlueField-2 GIGE logic is
+set after read.  This patch adds logic to make sure the
+lock is always cleared at the end of each MDIO transaction.
 
-Fixes: 66bdede495c7 ("of_mdio: Fix broken PHY IRQ in case of probe deferral")
-Co-developed-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220913125659.3331969-1-windhl@126.com
+Fixes: f92e1869d74e ("Add Mellanox BlueField Gigabit Ethernet driver")
+Reviewed-by: Asmaa Mnebhi <asmaa@nvidia.com>
+Signed-off-by: David Thompson <davthompson@nvidia.com>
+Link: https://lore.kernel.org/r/20220902164247.19862-1-davthompson@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/of_mdio.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/of/of_mdio.c b/drivers/of/of_mdio.c
-index 8b7d3e64b8ca..41a23db21392 100644
---- a/drivers/of/of_mdio.c
-+++ b/drivers/of/of_mdio.c
-@@ -272,6 +272,7 @@ int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
- 	return 0;
+diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
+index f979ba7e5eff..caa4380ada13 100644
+--- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
++++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
+@@ -178,6 +178,9 @@ static int mlxbf_gige_mdio_read(struct mii_bus *bus, int phy_add, int phy_reg)
+ 	/* Only return ad bits of the gw register */
+ 	ret &= MLXBF_GIGE_MDIO_GW_AD_MASK;
  
- unregister:
-+	of_node_put(child);
- 	mdiobus_unregister(mdio);
- 	return rc;
++	/* The MDIO lock is set on read. To release it, clear gw register */
++	writel(0, priv->mdio_io + MLXBF_GIGE_MDIO_GW_OFFSET);
++
+ 	return ret;
  }
+ 
+@@ -201,6 +204,9 @@ static int mlxbf_gige_mdio_write(struct mii_bus *bus, int phy_add,
+ 	ret = readl_poll_timeout_atomic(priv->mdio_io + MLXBF_GIGE_MDIO_GW_OFFSET,
+ 					temp, !(temp & MLXBF_GIGE_MDIO_GW_BUSY_MASK), 100, 1000000);
+ 
++	/* The MDIO lock is set on read. To release it, clear gw register */
++	writel(0, priv->mdio_io + MLXBF_GIGE_MDIO_GW_OFFSET);
++
+ 	return ret;
+ }
+ 
 -- 
 2.35.1
 
