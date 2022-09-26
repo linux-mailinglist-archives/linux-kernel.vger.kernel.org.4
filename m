@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052685E9B68
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3AB5E9B6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiIZIAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S233511AbiIZIAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiIZH7n (ORCPT
+        with ESMTP id S234241AbiIZH7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:59:43 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F1114091;
-        Mon, 26 Sep 2022 00:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664179022;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=2aIymE8raxhclQFqdfiAunlbp0ivgK4VjNPOxvkHMk4=;
-    b=a+4Qk+xEsdXr8d9TH27PtKoKWFIXUwlw95X/NLGKUCOnj3uciZem1gugMB+0aEndC/
-    5TCXYFBVGumqpsXuKSEa3+ORa2+MNKaaQZU95+KogezrdpHWOR0EFF2pAg9BXgppMxk9
-    CKC+juyEWP0+s1CfYQvxeshL2IQSAmsdxboCdrxFaArNPgdB2MC0lkuiU6EJ7fDVv1De
-    bEvUD8CFrH/y2YxvoQT0si+bLIiEFJsHOgep05CFnixRXY6VTiM1p0IBNlPBeK1yvtqt
-    tqI+Bfz6xwSkgNuFybDuH57N+0mNmD6j4ARQr1u8bo/irtEbrzaJkFvYYGDub/xlZ/v2
-    0MEQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QLpd5ylWvMDX2j/OiDv7LX1ITFkr8sRtLhQJY8wcRJ+GvY"
-X-RZG-CLASS-ID: mo00
-Received: from sender
-    by smtp.strato.de (RZmta 48.1.1 AUTH)
-    with ESMTPSA id 5c8007y8Q7v0Agb
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 26 Sep 2022 09:57:00 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 09:56:49 +0200
-From:   Olaf Hering <olaf@aepfle.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Li kunyu <kunyu@nfschina.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3] hyperv: simplify and rename generate_guest_id
-Message-ID: <20220926095649.1f963340.olaf@aepfle.de>
-In-Reply-To: <BYAPR21MB1688890F578A59F69DEB55C1D7509@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20220923114259.2945-1-kunyu@nfschina.com>
-        <20220923230917.1506b24c.olaf@aepfle.de>
-        <BYAPR21MB1688890F578A59F69DEB55C1D7509@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 20220819T065813.516423bc hat ein Softwareproblem, kann man nichts machen.
+        Mon, 26 Sep 2022 03:59:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD6AAE47;
+        Mon, 26 Sep 2022 00:57:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98C59B8191D;
+        Mon, 26 Sep 2022 07:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7912C433C1;
+        Mon, 26 Sep 2022 07:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664179053;
+        bh=QTLA3YF9AiEQybUyFdQhFkFoVISeKnQ7EdbSa++0Axs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RRmyuA3Q9PagzbLzSRoZTo+wXGCJ1DiipDin0Wnu1TOstTjft4Rz9a9Iz311J1WLg
+         9H9qaTXpS6vm6pWnDmsLP5r8KtGUcwtNt3OWUKDIPuf1pYLbkV1sc5ZPWLuCSNL3cz
+         y4V43NHxoWikICnqNazKmdHmqAKuPD4bTrvUT7dEqoRXkHD3PSWD+jmRF8FuwgMtP8
+         m7EOSg4h1JoCC8zaAulKtAFiXk+9A1y1fW2QmCHNZQE7F7sKPcUOaVPGWc5MoGRwq7
+         RlB0NWgjx6/o74BtmBTo+lK6MYKOvEPwQqXkiLo3XBaWgbDzQbtu+H8frDkOF0+7lt
+         Lo9giEsSGfGXg==
+Date:   Mon, 26 Sep 2022 08:57:26 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
+ compatible
+Message-ID: <YzFbZkN8gSjJm9nS@google.com>
+References: <20220919204826.215845-1-marijn.suijten@somainline.org>
+ <20220919204826.215845-2-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LnhPDSg==ZfryNf0WVxkG4t";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220919204826.215845-2-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LnhPDSg==ZfryNf0WVxkG4t
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 19 Sep 2022, Marijn Suijten wrote:
 
-Sat, 24 Sep 2022 05:31:34 +0000 "Michael Kelley (LINUX)" <mikelley@microsof=
-t.com>:
+> Document support for the pm6125, typically paired with the sm6125 SoC.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-> From: Olaf Hering <olaf@aepfle.de> Sent: Friday, September 23, 2022 2:09 =
-PM
+Doesn't apply cleanly.  Please rebase.
 
-> > A very long time ago I removed most usage of version.h AFAIR,
-> Could you elaborate?
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> index 65cbc6dee545..a6ee8c7f7738 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> @@ -35,6 +35,7 @@ properties:
+>        - enum:
+>            - qcom,pm660
+>            - qcom,pm660l
+> +          - qcom,pm6125
+>            - qcom,pm6150
+>            - qcom,pm6150l
+>            - qcom,pm6350
 
-It is the cost of 'make LOCALVERSION=3Dx' vs. 'make LOCALVERSION=3Dy'.
-
-Too many drivers will be recompiled for no good reason as of today.
-I claim no consumer below drivers/ and sound/ has a valid usecase for versi=
-on.h.
-But, someone else has to take the energy and argue them out of the tree.
-
-With the proposed change every consumer of asm-generic/mshyperv.h will be d=
-irty,
-see 'touch include/asm-generic/mshyperv.h' for the impact. Therefore I think
-only the two existing c files should include this header, in case the provi=
-ded
-information has a true value for the consumer.
-
-
-Olaf
-
---Sig_/LnhPDSg==ZfryNf0WVxkG4t
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE97o7Um30LT3B+5b/86SN7mm1DoAFAmMxW0EACgkQ86SN7mm1
-DoDG+A/+NdczrJbTrLhHY24iKyo+iEXnHP0XFl+2Wz0JDdS9TYhOp4qk8vIf7Gop
-7V3TtYytLyl8v0jdoFjmLhDTijp4l8TbY5AvSZ9C19xGnFb4wDqnGlK9A+7lAfnG
-Db3SMwatykAgj6aTVP9Ckrrg5pp7DwuUYHVYsjyB4DqM89ApeXmZvE0RwNcX24sz
-VYmtrtRDNT/spTwAVRH15sHt6gQV+p6OgplLURbop8vbpJl2aZNpIIboJTLa5X8p
-KN3rYHJ6AUnrIJRki/ffhBH2dxIc4iAzt5zTXNJLQ6yVcIMJD2bNMxzN2FNZIC5v
-/V1Bb9jftZzram3UtJ1qvFpGhPRVcfHnm1HPV9bSHRECa7TwGiDZWEZ6Js7ab03G
-ZRIU+cqrmyiFY6LjkHfxRReupYUJMU5Ykfon/j7eeZalW88QgPAtzjDAaaErcfGQ
-3yG9O2kl0idCguwSHZ97DDnfpRt87oICsgjOhwvEkPhTLpg5HOAcFjbCL3bKkauh
-lb1Q4lk3qcTjlwAXdJEvGrePJYL3jjhfBeQAjvCYSqBIZAnn/I/5Vdk5R/MOJGRU
-sDCVZQGMV7KsHurnBkGV+jgpoF7Mlced2d7h/4tZ+B/fL6TQ7cGEmRWly2pLQ9q7
-JCFWuiKkyijJxhek0s7Duzor29fTuKavonHEVPAEUeSRiU66GYQ=
-=rHAw
------END PGP SIGNATURE-----
-
---Sig_/LnhPDSg==ZfryNf0WVxkG4t--
+-- 
+Lee Jones [李琼斯]
