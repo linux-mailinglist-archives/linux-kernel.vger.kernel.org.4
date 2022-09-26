@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEC85EB4FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AC75EB505
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiIZXDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S229655AbiIZXDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiIZXDD (ORCPT
+        with ESMTP id S229512AbiIZXDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:03:03 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8906A721C;
-        Mon, 26 Sep 2022 16:03:02 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11e9a7135easo11217773fac.6;
-        Mon, 26 Sep 2022 16:03:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=LMtuy21foXTZtrHboQc8Vfajdu0Em6CTMANWzLi7V1Y=;
-        b=khhx/qLwdB9elio31+N1XsbQatR/liBD92cZslnhIj/nHloto0nTJqczC0YPnZ4E8o
-         B2biNS+sgi27bppFAJIhCujr5oo13IXfpi/PWXjz6+B+vfwTUMjMYoUfRYRw4Pd6NqcM
-         9J2jW1rnRvgObSJ+n0M9tahpwAX5+J7ERbE19NpuYPbb628D8CxfyY8lb21KGnlop30q
-         PyGa6NYPE9m6fQI1TcyAIsrvf0S6oZXZWcqsnWGT/M/sOlHky/t3HEvR01U9JNHAGwKO
-         BTXv+1EmlZfEBBytzAx2H3D8awqiBH0QP81Dxq8GOsxhcJ1oj+8qFcASqV7Rfd8jMZXG
-         ce0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=LMtuy21foXTZtrHboQc8Vfajdu0Em6CTMANWzLi7V1Y=;
-        b=riAb2P17EMtqbxXuPuzt0AUCkyW3xKgqo7ZVbHYknvpvm5/OXAAaQ3trSiVBhTNlrp
-         G2U1Ik3iiwvv/pl2UKojRYGbL/W4+QDQRXsrUCtvj6MaAs/f05O5ura4bvzNyDcJumkz
-         WcHsQjMhkW5pjU1h5eI8gPMGOh67MrHoo1nLsxFxf73fx2YGPbbGl7Mm7ndPtf5wepv5
-         rPlXYDZ/aggeFfAsMEahizD8h2sZXhlQr+a8V5EgukOoWpgSg0/n+qrFYe8BYayXswtY
-         Q70EDbNMkl/mRL8zdECdFBHW+D73wXHC56BOWk946SA32szrUSTwJ4YxjrPcjCuBx4FW
-         VSiQ==
-X-Gm-Message-State: ACrzQf3WbKpU646roWRqf9xlZNqzWD5PKEaWaVB6fXfy0s7I1/UPnqT1
-        3kTDpnr7+BxkZSwdxaMv4Hw=
-X-Google-Smtp-Source: AMsMyM5fcq1V6oKfm+xZVS+YMCyEF7d0mT/A3ABDGDBBFMhz8e8n6y2yfAA+12/AMEUNPLbvXmGusw==
-X-Received: by 2002:a05:6870:c184:b0:127:cd9:3e06 with SMTP id h4-20020a056870c18400b001270cd93e06mr577683oad.137.1664233381720;
-        Mon, 26 Sep 2022 16:03:01 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:3499:6191:8a21:21e2:19ef])
-        by smtp.gmail.com with ESMTPSA id by5-20020a056830608500b0063b2251a78asm8376068otb.12.2022.09.26.16.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 16:03:01 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Quinn Tran <quinn.tran@cavium.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: qla2xxx: Fix serialization of DCBX TLV data request
-Date:   Mon, 26 Sep 2022 20:02:44 -0300
-Message-Id: <20220926230245.790508-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Sep 2022 19:03:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FA1A6C7D;
+        Mon, 26 Sep 2022 16:03:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5807DB81598;
+        Mon, 26 Sep 2022 23:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECDDC433C1;
+        Mon, 26 Sep 2022 23:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664233427;
+        bh=LR3UfCiNXRP6GH1z7zVRQd1TAhuJoMYJwgNsk6+fF/c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fAm/m9gkSD2nN+h+7uUBDXchZl+l+t4u0c4r5IcnikgyLffJWVGH5KPnSDVw+vDMU
+         rf8IsJz0G/HBLCvHql3JF3SaK1gA6PFQ98bQOUGmSvLPnG5uUFPO0gEcOa+5QnvwHZ
+         MKyx7RIM/bkfGuzmlTT0hu8Fxd01FwG2A46zPkNBCh8q2SIdDgIBEDt3BIS/vBrQ3F
+         BS7aNuT32g5vGxOEyMnKehi99g+Uyh0jQhF0q5pguELIp5G8Kzg5B19XxZPvRF8fe0
+         q1JX0JFfeEqvlYFAV1Fx0bipJKdWIgUs73My5zGDLJUFZFnnNc8OJ1uI/9TulpXgVu
+         fke/XqTTkwBMw==
+Date:   Mon, 26 Sep 2022 18:03:41 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] iwlegacy: Replace zero-length arrays with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YzIvzc0jsYLigO8a@work>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b6faaaf796d7 ("scsi: qla2xxx: Serialize mailbox request") serialized
-mailbox requests from userspace using the 'optrom' mutex. However, in the
-case of DCBX TLV data, if the memory for it is already allocated, then the
-mailbox request ends up not being serialized because it is done without
-holding the 'optrom' mutex.
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length arrays
+declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
-Fixes: b6faaaf796d7 ("scsi: qla2xxx: Serialize mailbox request")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+This helper allows for flexible-array members in unions.
+
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://github.com/KSPP/linux/issues/223
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_attr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlegacy/commands.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index fa1fcbfb946f..c2bc7f9c728a 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -951,9 +951,9 @@ qla2x00_sysfs_read_dcbx_tlv(struct file *filp, struct kobject *kobj,
- 	if (!capable(CAP_SYS_ADMIN) || off != 0 || count > DCBX_TLV_DATA_SIZE)
- 		return 0;
+diff --git a/drivers/net/wireless/intel/iwlegacy/commands.h b/drivers/net/wireless/intel/iwlegacy/commands.h
+index 4a97310f8fee..28cf4e832152 100644
+--- a/drivers/net/wireless/intel/iwlegacy/commands.h
++++ b/drivers/net/wireless/intel/iwlegacy/commands.h
+@@ -1710,7 +1710,7 @@ struct il4965_tx_resp {
+ 	 */
+ 	union {
+ 		__le32 status;
+-		struct agg_tx_status agg_status[0];	/* for each agg frame */
++		DECLARE_FLEX_ARRAY(struct agg_tx_status, agg_status);	/* for each agg frame */
+ 	} u;
+ } __packed;
  
-+	mutex_lock(&vha->hw->optrom_mutex);
- 	if (ha->dcbx_tlv)
- 		goto do_read;
--	mutex_lock(&vha->hw->optrom_mutex);
- 	if (qla2x00_chip_is_down(vha)) {
- 		mutex_unlock(&vha->hw->optrom_mutex);
- 		return 0;
+@@ -3365,7 +3365,7 @@ struct il_rx_pkt {
+ 		struct il_compressed_ba_resp compressed_ba;
+ 		struct il_missed_beacon_notif missed_beacon;
+ 		__le32 status;
+-		u8 raw[0];
++		DECLARE_FLEX_ARRAY(u8, raw);
+ 	} u;
+ } __packed;
+ 
 -- 
 2.34.1
 
