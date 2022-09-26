@@ -2,126 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4EA5EAF6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF4D5EAF6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiIZSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S229599AbiIZSRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiIZSPt (ORCPT
+        with ESMTP id S231300AbiIZSQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:15:49 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365C214088;
-        Mon, 26 Sep 2022 11:05:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dsKRXh8nrzbExYTwri2VRc5twcUwJAoHKASIJqIfbBktJ3s9pPt7uUqZLQNe8x0R4zkIJu4lowTsmYACO9TaT1pxuNo31uSK8jSH4SPQyqkgfm4CEbRax9BOn3CQMR9/59UjQ/+KqVF8nBWd5g+dVrCgZihqj61Hpd5PBMzM+TGbESq6FWX0NY9SX8JcOftF9/ssou/mgACV5GAED6C008wPJic8+8ELJ4KQT/Qqq8aNKIBa/QfEZy2Tkizaa5oTU7xckL73ZKOxsOgt9rBQwRX9ATh8qxwynnsnkiUNt68487IMLQG/GloLLE+GNeGUYGRlOxOSu1UEGobT2F7fLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Urqqy8QarMKdi+DHIPdgLXSUkb9ZKE+qojIcjhG4yg=;
- b=VEvgGlRjB/ChBPm6WLqJ2WUUlxFH4o71t5j4PleJFh5pOlAL+9IJrXgSe7ptjL+SwNh+/Gzj3BvZK20x+LbFm/7u9GDUbT/iahQQBUZ0O4LYQKsOZ2/F9rgJFj07v026dEWeStqOAZb3+QkITlby2LSTc1cG2QF4A+NjG6t9jO8pNP6U6fL+NMUSP5E+QbAUUVnAqdb22KJxvojui3y9NRVpDxItBQLsWKTOZDSLvryBB11Paz2vtBSbnCcSnzB4Bexm/WsATWoTvN+12mrGn648OgpJ8vmmzYC6lYy1YKnTBML6ZiPqDJJlriGJmlcvCmfsZGMfJSyLRoJ+1kmbLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Urqqy8QarMKdi+DHIPdgLXSUkb9ZKE+qojIcjhG4yg=;
- b=fNC0ahdRU769fo1PTWToxLlwtuVRsa081XGhEh4Ozf4Xekouaf+r5yikchHNUTrE61A0iyo4UO3MBoLcMUuZr6mZ/sD/lK5zNTNu4ObYmw/UIJMfRK2yMvP4OhxktIRK1mVv6EuRSmni39Q+YEp37HtJPNu1uUG0T1YacE9FguzeJakPCXPg+tuVWMMdu6NlhTH7RWfzCSq9VWwlMOeu217/sEeBm9hZ+jKMuOkLWXBrqsWe7E4MYMS7BKKiMiHmHQ1PmgH9HIxdB3d6v1NbsRvgraEFzxRnv745pZAfKyLcr3vIGTuyguPO3C5m1buuXQmSjdaxa5exxm9/KI9GuA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CY5PR12MB6432.namprd12.prod.outlook.com (2603:10b6:930:38::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
- 2022 18:05:45 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 18:05:45 +0000
-Date:   Mon, 26 Sep 2022 15:05:43 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     dennis.dalessandro@cornelisnetworks.com, leon@kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IB/rdmavt: Add __init/__exit annotations to module
- init/exit funcs
-Message-ID: <YzHp98LRi5bwHMGM@nvidia.com>
-References: <20220924091457.52446-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924091457.52446-1-xiujianfeng@huawei.com>
-X-ClientProxiedBy: BL1PR13CA0066.namprd13.prod.outlook.com
- (2603:10b6:208:2b8::11) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 26 Sep 2022 14:16:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170BF3ED7C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:06:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso7676442pjm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=uKupFgjivPCVWYH7YpnPdpMxsUheL0Hiz5eQQ4/hkjA=;
+        b=c35pan48SDotyfrbvsIlNtjdZWZ7qLKSNIpOasMZwUDnsmINpbIzpuk9DguJWu30uw
+         FGWkZ3hOBslZc9JxxhYY543StabsnFaDe0BH87TdFh8rbob/cJ9+lp2LS1EqqIKWlgID
+         wAG6+jyb2dgQMDgEm+ggbpk1phX/M1G82j4e1Ggk4/NetOayNz6XfBGwJ8ao7j1OpaZE
+         8ccp3VwHakbLJHEuMQk+ZO0dNY0pkS//YARMEpfg4NgdEWEw7s11HMrKiuWxseJjfVpo
+         GaP6/USmHGWBGNsTuMd7825pPTc/ADYI3mmcirQUXB1eSLFhiXX7hX45xHztWFHELPb0
+         zQBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uKupFgjivPCVWYH7YpnPdpMxsUheL0Hiz5eQQ4/hkjA=;
+        b=FdRCYAh7A9SUw4Qj3sx5MYy/fiFMloFYq6/9QtAf3Hl0uFuRu2QlSKGuiIygL5c3qS
+         jVM0HwUwgALuN9+2CQ0wD3Zt/qONh1VaNU+4Tq9sO62RoToIb8+fg6SWTbs+TDoRPmVN
+         bFscE8xg2XWqYXys8TXXRileeSEOAXLwNtEBgLwxJnTwJPdjejMzRLXm0sVCggACamMi
+         uaPBfBOcbW+O/gmq7dt5KJAlfOHwWK1uoTloRjN0b4XELwwQnYPSBH3ww03zPCm4wJ3k
+         TukmN/mxakM7dz8xqZkrZ1xZnrRBLzpL9+/d0AGpSHvWKwlBDP0FKpYCNpLdV/cmvJhr
+         8WsA==
+X-Gm-Message-State: ACrzQf1V+shvoiHV/NLPX9aPVgtCGI4kQem9MftOatPBrfUVlKuv4gaG
+        JJVlccN3RaOlFRVmEv/B++GIUXzm/Hr2DU5KrFY=
+X-Google-Smtp-Source: AMsMyM51ScmXFvsbluB/k0FvYYHesp+KgMnMHzKA6R6rwPkiymnOPuzVdaWHCxM/Q7O9vPk84Scvi+Hyb9uMiBfownw=
+X-Received: by 2002:a17:902:d508:b0:178:b7b1:beb3 with SMTP id
+ b8-20020a170902d50800b00178b7b1beb3mr23611672plg.102.1664215613527; Mon, 26
+ Sep 2022 11:06:53 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|CY5PR12MB6432:EE_
-X-MS-Office365-Filtering-Correlation-Id: 797b695d-7e2d-4157-1733-08da9fe9bba7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zxi3eioE6XhPEdPBt2if+eRZvZG2FlOtF1wvT8l6Osb3jKYUbpDGPUh5Te14MlRRlnOq06hsETJo6PMzv8/QQRt9bnAeLS5RNlAI5ptj9mkgtwoOVl4Nt7PxnGwJXyfO1VGUMSXhjWCNODfPJnTYFfdBPLFTCh+ijprURAEdnGBOX2TDLlAvVcfYHPDhhfgiMAZnl/DMnKNbBFUliRV7KjmRcW9jymAjEFVoNlAxiKyg1B3PKshWS1QIKbvBC7lDy3A2Pt8pOWzkVoKI5nq7amwgqSP96ZlpGRJlD13ktu++naFDcVq9MCRoScsXry/gTOoQ0KBv32EX7y2/HYBN37qWO38zVuarmWIj4BhCvdiysUD9BBGcyg99W7lvnmTQ41lYKbquqIZiGbNgCIYemzgRCC2GHkXLpIXFKz0fiEOxXu8DNNhdiOc5ayct0anMbPYxarvejKPITtjGtfjuKas5eguAxyvGiVVvBxdIhkpvRA3ZGjTxc2uMDLk0gBrI5ClCDeU6vw4ngDP0UZErYlyT9OvhkBXwOjtj7XGgcwrssgdoTNZKVZrLzZN29wm1putv/I+/bhF37ffQesIHBekic1stCZPcime7xeC7PkRd2/80yEy5fOCLKfh4P10VMyWKeo2IZzUdGARQwcYgBO3TQjpFgYA0mZQ+eS3J5UBI2682Nk+g2AKo3V1MS5c2ThSXqNJsBgprMyQja8+dTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(451199015)(36756003)(5660300002)(4744005)(2906002)(8936002)(41300700001)(66556008)(38100700002)(66946007)(4326008)(8676002)(478600001)(6916009)(316002)(6486002)(66476007)(186003)(2616005)(86362001)(83380400001)(26005)(6512007)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xyPu20+WyUtEC+yTt/Li6ii4B7zWBDddsgVgrSlTjKqZaX97RqyPn3gOJKOx?=
- =?us-ascii?Q?mwm+tkeLNgDYZeBTcmnl95Ytu0p9OBzGFRIeVWPGX7SY73E8xjbmMgNi3oX0?=
- =?us-ascii?Q?3JpHei6I0ehPiSuzUYX8dWRLRh7MBH8/P6RdfV409WxoeFzlVrv+dzlhdsJC?=
- =?us-ascii?Q?MLaC4rxWcLlld7yVf8BR4nKjiu1LYVeZxw1tglt/UQS0X6AirxCDs5jKw3Fk?=
- =?us-ascii?Q?UE5t+Wrnr7DPSWcbdkla9OFiWEwDMiuR30DU2yKAwIm0eP51EaXBcZGSU2dA?=
- =?us-ascii?Q?bGZfB1Y01QGUJ7LsUXOfm6Z+qy6Jt17BDt4pWkI0ebmeXxovUo8z1HZ+WSRl?=
- =?us-ascii?Q?ascEA71qZmLopykqfQMyTmgb340a9waA7B0e/GX/+tgFji265RzM0sA1gTkM?=
- =?us-ascii?Q?j7kJFTuA9nIpKHUuq7WL4MzH3klSkJ9c9Sbpiwfjr34PpOsamEDf7jsobAia?=
- =?us-ascii?Q?ccP6kZ+uU0W7WaikeeJ/VQyTsNBAsukVU9SaPOMQv3JiYn6hmMEaYHFcacZ4?=
- =?us-ascii?Q?UFhSdxbHLwN+s3I7h+VBykhQyxe+K8ZPT3Jslua+HnfbBUtGtu9Rs0tlYLDr?=
- =?us-ascii?Q?n4zUQh5oI+riZqR3Npf0wVNwQuYIdU4JKoeXegMlfJP9HTIsVVdXq3uGM4Xl?=
- =?us-ascii?Q?8W+QeOMNo+Il69F2tjBLU4TOGBwzFixZMo9OV2RFIEuMAAE6ky4MH0t80lws?=
- =?us-ascii?Q?DRrbxDHdaY1NcDxFoZKkypmrh2FPRSKx0XCZk+5tUKku3WFLj2qLPIMZ9Ift?=
- =?us-ascii?Q?TsGsCHLmd4j//CKIoLWp6x9f9cDOGXF8Mg3gwh9afqCvWuDuKSz+jA3/DAhw?=
- =?us-ascii?Q?CycM26/FPeeQHKLbb3SijOyZyivZZXZKW7xdAHZ8QN56INgptWVAg6lw7JnL?=
- =?us-ascii?Q?X7csGr7ScamqAc+nP4yNlYLb0mJrg2R90la4tDgwa79un7eVgmTDrrQPS0AI?=
- =?us-ascii?Q?L97qvTPJgFa7O0A5J+tyQPD5CAXlavV/8NHsffwEK+XE48MC+TvKWL6s3Klu?=
- =?us-ascii?Q?AA5j28miUYf27dJwOccp+Fy1ISXpLc7E9RneeFWoxTEnekkaOiInlY/ZAxWR?=
- =?us-ascii?Q?AyERkvhHnIhJXgimiFnTxq5YFsmPtC1cYGHhr5tf01XphnJz8+LgI1Z03mNq?=
- =?us-ascii?Q?aYZbYWv6woQrY3n8cRxc9+BbDlZaD7qaob9im6p5pZjTBEb8Qd2irUfBOlZ/?=
- =?us-ascii?Q?qEp/S2Wrk55nH2sjwP8oIwdZeRfwdiOPe34Si2yuTLUdEgbwReggsZz9DAC+?=
- =?us-ascii?Q?EvDCa7VDV64L72MqeWwp4vdLas9et2hV8t/+Y+jW9g0LECag2v3rq0y8wy8A?=
- =?us-ascii?Q?hA5+/7IoketrD8M3Zh23Mh5UY/+E1BrSu8nVCDn6+2APaCVkvtMsVETVFo92?=
- =?us-ascii?Q?u5tBudQwP7qP/9aah6PlCPOhackaUr8vCHg2JwgL6kuGQMNTdFWYYz8u8ytw?=
- =?us-ascii?Q?JECgp8b3o8Gk5ERTo3U+e2i0SlOTVNmACkajJ5jPNun26G3HpkYplrbpaBTN?=
- =?us-ascii?Q?aMu9ODR9IpucOzdWZnifzMu96bXXaQkX0EIUz54RrPDEQaCY5x1lZ3avBHvI?=
- =?us-ascii?Q?fiYilFu3gcl7kqk/RyQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 797b695d-7e2d-4157-1733-08da9fe9bba7
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 18:05:45.6612
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J4ILMhFwY/TP8A0FFos+NiprjdSLmXmd9nlogiFHzjMlDvTP37soYWDZjb4sr+Kb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6432
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220921060616.73086-1-ying.huang@intel.com> <20220921060616.73086-3-ying.huang@intel.com>
+ <87o7v2lbn4.fsf@nvdebian.thelocal>
+In-Reply-To: <87o7v2lbn4.fsf@nvdebian.thelocal>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 26 Sep 2022 11:06:40 -0700
+Message-ID: <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
+Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
+ and _move()
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 05:14:57PM +0800, Xiu Jianfeng wrote:
-> Add missing __init/__exit annotations to module init/exit funcs.
-> 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  drivers/infiniband/sw/rdmavt/vt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, Sep 26, 2022 at 2:37 AM Alistair Popple <apopple@nvidia.com> wrote:
+>
+>
+> Huang Ying <ying.huang@intel.com> writes:
+>
+> > This is a preparation patch to batch the page unmapping and moving
+> > for the normal pages and THP.
+> >
+> > In this patch, unmap_and_move() is split to migrate_page_unmap() and
+> > migrate_page_move().  So, we can batch _unmap() and _move() in
+> > different loops later.  To pass some information between unmap and
+> > move, the original unused newpage->mapping and newpage->private are
+> > used.
+>
+> This looks like it could cause a deadlock between two threads migrating
+> the same pages if force == true && mode != MIGRATE_ASYNC as
+> migrate_page_unmap() will call lock_page() while holding the lock on
+> other pages in the list. Therefore the two threads could deadlock if the
+> pages are in a different order.
 
-Applied to for-next, thanks
+It seems unlikely to me since the page has to be isolated from lru
+before migration. The isolating from lru is atomic, so the two threads
+unlikely see the same pages on both lists.
 
-Jason
+But there might be other cases which may incur deadlock, for example,
+filesystem writeback IIUC. Some filesystems may lock a bunch of pages
+then write them back in a batch. The same pages may be on the
+migration list and they are also dirty and seen by writeback. I'm not
+sure whether I miss something that could prevent such a deadlock from
+happening.
+
+>
+> > Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> > Cc: Zi Yan <ziy@nvidia.com>
+> > Cc: Yang Shi <shy828301@gmail.com>
+> > Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> > Cc: Oscar Salvador <osalvador@suse.de>
+> > Cc: Matthew Wilcox <willy@infradead.org>
+> > ---
+> >  mm/migrate.c | 164 ++++++++++++++++++++++++++++++++++++++-------------
+> >  1 file changed, 122 insertions(+), 42 deletions(-)
+> >
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 117134f1c6dc..4a81e0bfdbcd 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -976,13 +976,32 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
+> >       return rc;
+> >  }
+> >
+> > -static int __unmap_and_move(struct page *page, struct page *newpage,
+> > +static void __migrate_page_record(struct page *newpage,
+> > +                               int page_was_mapped,
+> > +                               struct anon_vma *anon_vma)
+> > +{
+> > +     newpage->mapping = (struct address_space *)anon_vma;
+> > +     newpage->private = page_was_mapped;
+> > +}
+> > +
+> > +static void __migrate_page_extract(struct page *newpage,
+> > +                                int *page_was_mappedp,
+> > +                                struct anon_vma **anon_vmap)
+> > +{
+> > +     *anon_vmap = (struct anon_vma *)newpage->mapping;
+> > +     *page_was_mappedp = newpage->private;
+> > +     newpage->mapping = NULL;
+> > +     newpage->private = 0;
+> > +}
+> > +
+> > +#define MIGRATEPAGE_UNMAP            1
+> > +
+> > +static int __migrate_page_unmap(struct page *page, struct page *newpage,
+> >                               int force, enum migrate_mode mode)
+> >  {
+> >       struct folio *folio = page_folio(page);
+> > -     struct folio *dst = page_folio(newpage);
+> >       int rc = -EAGAIN;
+> > -     bool page_was_mapped = false;
+> > +     int page_was_mapped = 0;
+> >       struct anon_vma *anon_vma = NULL;
+> >       bool is_lru = !__PageMovable(page);
+> >
+> > @@ -1058,8 +1077,8 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+> >               goto out_unlock;
+> >
+> >       if (unlikely(!is_lru)) {
+> > -             rc = move_to_new_folio(dst, folio, mode);
+> > -             goto out_unlock_both;
+> > +             __migrate_page_record(newpage, page_was_mapped, anon_vma);
+> > +             return MIGRATEPAGE_UNMAP;
+> >       }
+> >
+> >       /*
+> > @@ -1085,11 +1104,41 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+> >               VM_BUG_ON_PAGE(PageAnon(page) && !PageKsm(page) && !anon_vma,
+> >                               page);
+> >               try_to_migrate(folio, 0);
+> > -             page_was_mapped = true;
+> > +             page_was_mapped = 1;
+> > +     }
+> > +
+> > +     if (!page_mapped(page)) {
+> > +             __migrate_page_record(newpage, page_was_mapped, anon_vma);
+> > +             return MIGRATEPAGE_UNMAP;
+> >       }
+> >
+> > -     if (!page_mapped(page))
+> > -             rc = move_to_new_folio(dst, folio, mode);
+> > +     if (page_was_mapped)
+> > +             remove_migration_ptes(folio, folio, false);
+> > +
+> > +out_unlock_both:
+> > +     unlock_page(newpage);
+> > +out_unlock:
+> > +     /* Drop an anon_vma reference if we took one */
+> > +     if (anon_vma)
+> > +             put_anon_vma(anon_vma);
+> > +     unlock_page(page);
+> > +out:
+> > +
+> > +     return rc;
+> > +}
+> > +
+> > +static int __migrate_page_move(struct page *page, struct page *newpage,
+> > +                            enum migrate_mode mode)
+> > +{
+> > +     struct folio *folio = page_folio(page);
+> > +     struct folio *dst = page_folio(newpage);
+> > +     int rc;
+> > +     int page_was_mapped = 0;
+> > +     struct anon_vma *anon_vma = NULL;
+> > +
+> > +     __migrate_page_extract(newpage, &page_was_mapped, &anon_vma);
+> > +
+> > +     rc = move_to_new_folio(dst, folio, mode);
+> >
+> >       /*
+> >        * When successful, push newpage to LRU immediately: so that if it
+> > @@ -1110,14 +1159,11 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+> >               remove_migration_ptes(folio,
+> >                       rc == MIGRATEPAGE_SUCCESS ? dst : folio, false);
+> >
+> > -out_unlock_both:
+> >       unlock_page(newpage);
+> > -out_unlock:
+> >       /* Drop an anon_vma reference if we took one */
+> >       if (anon_vma)
+> >               put_anon_vma(anon_vma);
+> >       unlock_page(page);
+> > -out:
+> >       /*
+> >        * If migration is successful, decrease refcount of the newpage,
+> >        * which will not free the page because new page owner increased
+> > @@ -1129,18 +1175,31 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+> >       return rc;
+> >  }
+> >
+> > -/*
+> > - * Obtain the lock on page, remove all ptes and migrate the page
+> > - * to the newly allocated page in newpage.
+> > - */
+> > -static int unmap_and_move(new_page_t get_new_page,
+> > -                                free_page_t put_new_page,
+> > -                                unsigned long private, struct page *page,
+> > -                                int force, enum migrate_mode mode,
+> > -                                enum migrate_reason reason,
+> > -                                struct list_head *ret)
+> > +static void migrate_page_done(struct page *page,
+> > +                           enum migrate_reason reason)
+> > +{
+> > +     /*
+> > +      * Compaction can migrate also non-LRU pages which are
+> > +      * not accounted to NR_ISOLATED_*. They can be recognized
+> > +      * as __PageMovable
+> > +      */
+> > +     if (likely(!__PageMovable(page)))
+> > +             mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
+> > +                                 page_is_file_lru(page), -thp_nr_pages(page));
+> > +
+> > +     if (reason != MR_MEMORY_FAILURE)
+> > +             /* We release the page in page_handle_poison. */
+> > +             put_page(page);
+> > +}
+> > +
+> > +/* Obtain the lock on page, remove all ptes. */
+> > +static int migrate_page_unmap(new_page_t get_new_page, free_page_t put_new_page,
+> > +                           unsigned long private, struct page *page,
+> > +                           struct page **newpagep, int force,
+> > +                           enum migrate_mode mode, enum migrate_reason reason,
+> > +                           struct list_head *ret)
+> >  {
+> > -     int rc = MIGRATEPAGE_SUCCESS;
+> > +     int rc = MIGRATEPAGE_UNMAP;
+> >       struct page *newpage = NULL;
+> >
+> >       if (!thp_migration_supported() && PageTransHuge(page))
+> > @@ -1151,19 +1210,48 @@ static int unmap_and_move(new_page_t get_new_page,
+> >               ClearPageActive(page);
+> >               ClearPageUnevictable(page);
+> >               /* free_pages_prepare() will clear PG_isolated. */
+> > -             goto out;
+> > +             list_del(&page->lru);
+> > +             migrate_page_done(page, reason);
+> > +             return MIGRATEPAGE_SUCCESS;
+> >       }
+> >
+> >       newpage = get_new_page(page, private);
+> >       if (!newpage)
+> >               return -ENOMEM;
+> > +     *newpagep = newpage;
+> >
+> > -     newpage->private = 0;
+> > -     rc = __unmap_and_move(page, newpage, force, mode);
+> > +     rc = __migrate_page_unmap(page, newpage, force, mode);
+> > +     if (rc == MIGRATEPAGE_UNMAP)
+> > +             return rc;
+> > +
+> > +     /*
+> > +      * A page that has not been migrated will have kept its
+> > +      * references and be restored.
+> > +      */
+> > +     /* restore the page to right list. */
+> > +     if (rc != -EAGAIN)
+> > +             list_move_tail(&page->lru, ret);
+> > +
+> > +     if (put_new_page)
+> > +             put_new_page(newpage, private);
+> > +     else
+> > +             put_page(newpage);
+> > +
+> > +     return rc;
+> > +}
+> > +
+> > +/* Migrate the page to the newly allocated page in newpage. */
+> > +static int migrate_page_move(free_page_t put_new_page, unsigned long private,
+> > +                          struct page *page, struct page *newpage,
+> > +                          enum migrate_mode mode, enum migrate_reason reason,
+> > +                          struct list_head *ret)
+> > +{
+> > +     int rc;
+> > +
+> > +     rc = __migrate_page_move(page, newpage, mode);
+> >       if (rc == MIGRATEPAGE_SUCCESS)
+> >               set_page_owner_migrate_reason(newpage, reason);
+> >
+> > -out:
+> >       if (rc != -EAGAIN) {
+> >               /*
+> >                * A page that has been migrated has all references
+> > @@ -1179,20 +1267,7 @@ static int unmap_and_move(new_page_t get_new_page,
+> >        * we want to retry.
+> >        */
+> >       if (rc == MIGRATEPAGE_SUCCESS) {
+> > -             /*
+> > -              * Compaction can migrate also non-LRU pages which are
+> > -              * not accounted to NR_ISOLATED_*. They can be recognized
+> > -              * as __PageMovable
+> > -              */
+> > -             if (likely(!__PageMovable(page)))
+> > -                     mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
+> > -                                     page_is_file_lru(page), -thp_nr_pages(page));
+> > -
+> > -             if (reason != MR_MEMORY_FAILURE)
+> > -                     /*
+> > -                      * We release the page in page_handle_poison.
+> > -                      */
+> > -                     put_page(page);
+> > +             migrate_page_done(page, reason);
+> >       } else {
+> >               if (rc != -EAGAIN)
+> >                       list_add_tail(&page->lru, ret);
+> > @@ -1405,6 +1480,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+> >       int pass = 0;
+> >       bool is_thp = false;
+> >       struct page *page;
+> > +     struct page *newpage = NULL;
+> >       struct page *page2;
+> >       int rc, nr_subpages;
+> >       LIST_HEAD(ret_pages);
+> > @@ -1493,9 +1569,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+> >                       if (PageHuge(page))
+> >                               continue;
+> >
+> > -                     rc = unmap_and_move(get_new_page, put_new_page,
+> > -                                             private, page, pass > 2, mode,
+> > +                     rc = migrate_page_unmap(get_new_page, put_new_page, private,
+> > +                                             page, &newpage, pass > 2, mode,
+> >                                               reason, &ret_pages);
+> > +                     if (rc == MIGRATEPAGE_UNMAP)
+> > +                             rc = migrate_page_move(put_new_page, private,
+> > +                                                    page, newpage, mode,
+> > +                                                    reason, &ret_pages);
+> >                       /*
+> >                        * The rules are:
+> >                        *      Success: page will be freed
