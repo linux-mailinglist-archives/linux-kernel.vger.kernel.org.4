@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631815EA18A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED245EA192
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236773AbiIZKwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S236785AbiIZKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbiIZKts (ORCPT
+        with ESMTP id S236927AbiIZKtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:49:48 -0400
+        Mon, 26 Sep 2022 06:49:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AFD5850A;
-        Mon, 26 Sep 2022 03:27:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D8D58516;
+        Mon, 26 Sep 2022 03:27:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A12FA60B7E;
-        Mon, 26 Sep 2022 10:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0CDC433D6;
-        Mon, 26 Sep 2022 10:26:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B110960C00;
+        Mon, 26 Sep 2022 10:27:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7FEC433D6;
+        Mon, 26 Sep 2022 10:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188020;
-        bh=ro6m7C/bg7snchqXrcsCCConBzeIdd6JQ1ZeDqS7cxY=;
+        s=korg; t=1664188023;
+        bh=/KzNBC/1o7m8B9RSy27+tliksvw2eqi39Mn6M3WBaDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fg6B2fHZ+gLOiNotQ8Scn89K6KcuQcQYjgK+TVNGpIedVbVDA7icZSLQ8cA1TeLgL
-         L8jcycZuhUJgLmWS9+smrXeEJrw5VX/ezeNmrOXRtzVBlKENc39R5EOElFs9vRt3Ed
-         27/p7FrOAcWd8TCbtUeJ0Dy6pS8+Mulca69QOdMQ=
+        b=Bus9W2VnWbOD4f8bjWW6XAD/n5FVxt7ba8DJ4Rcb4F/D2bAXDzT/YfPd68nY1SaHz
+         0Srafxwn+3CiIlpEmbNGsXT5YuhJ+VSigtEtnJM5krfwZUrSaAMvvfdwheoyHIUBVE
+         2zHmGtg2fQGsmxpLnFe6Jl88n7tfF5+n2gSRwwHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 015/141] usb: xhci-mtk: use @sch_tt to check whether need do TT schedule
-Date:   Mon, 26 Sep 2022 12:10:41 +0200
-Message-Id: <20220926100755.128563143@linuxfoundation.org>
+Subject: [PATCH 5.10 016/141] usb: xhci-mtk: add a function to (un)load bandwidth info
+Date:   Mon, 26 Sep 2022 12:10:42 +0200
+Message-Id: <20220926100755.161298713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
 References: <20220926100754.639112000@linuxfoundation.org>
@@ -55,42 +55,102 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 4a56adf4fafbc41ceffce0c3f385f59d4fc3c16a ]
+[ Upstream commit 338af695fffb12a9407c376ce0cebce896c15050 ]
 
-It's clearer to use @sch_tt to check whether need do TT schedule,
-no function is changed.
+Extract a function to load/unload bandwidth info, and remove
+a dummy check of TT offset.
 
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/324a76782ccaf857a8f01f67aee435e8ec7d0e28.1615170625.git.chunfeng.yun@mediatek.com
+Link: https://lore.kernel.org/r/6fbc000756a4a4a7efbce651b785fee7561becb6.1615170625.git.chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c | 37 ++++++++++++++-------------------
+ 1 file changed, 16 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index 59ba25ca018d..b1da3cb077c9 100644
+index b1da3cb077c9..9a9685f74940 100644
 --- a/drivers/usb/host/xhci-mtk-sch.c
 +++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -548,7 +548,7 @@ static int check_sch_bw(struct usb_device *udev,
- 	min_num_budget = sch_ep->num_budget_microframes;
- 	esit_boundary = get_esit_boundary(sch_ep);
- 	for (offset = 0; offset < sch_ep->esit; offset++) {
--		if (is_fs_or_ls(udev->speed)) {
-+		if (sch_ep->sch_tt) {
+@@ -375,7 +375,6 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
+ 					sch_ep->bw_budget_table[j];
+ 		}
+ 	}
+-	sch_ep->allocated = used;
+ }
+ 
+ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+@@ -509,6 +508,19 @@ static void update_sch_tt(struct usb_device *udev,
+ 		list_del(&sch_ep->tt_endpoint);
+ }
+ 
++static int load_ep_bw(struct usb_device *udev, struct mu3h_sch_bw_info *sch_bw,
++		      struct mu3h_sch_ep_info *sch_ep, bool loaded)
++{
++	if (sch_ep->sch_tt)
++		update_sch_tt(udev, sch_ep, loaded);
++
++	/* update bus bandwidth info */
++	update_bus_bw(sch_bw, sch_ep, loaded);
++	sch_ep->allocated = loaded;
++
++	return 0;
++}
++
+ static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	u32 boundary = sch_ep->esit;
+@@ -535,7 +547,6 @@ static int check_sch_bw(struct usb_device *udev,
+ 	u32 esit_boundary;
+ 	u32 min_num_budget;
+ 	u32 min_cs_count;
+-	bool tt_offset_ok = false;
+ 	int ret;
+ 
+ 	/*
+@@ -552,8 +563,6 @@ static int check_sch_bw(struct usb_device *udev,
  			ret = check_sch_tt(udev, sch_ep, offset);
  			if (ret)
  				continue;
-@@ -585,7 +585,7 @@ static int check_sch_bw(struct usb_device *udev,
+-			else
+-				tt_offset_ok = true;
+ 		}
+ 
+ 		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
+@@ -585,29 +594,15 @@ static int check_sch_bw(struct usb_device *udev,
  	sch_ep->cs_count = min_cs_count;
  	sch_ep->num_budget_microframes = min_num_budget;
  
--	if (is_fs_or_ls(udev->speed)) {
-+	if (sch_ep->sch_tt) {
- 		/* all offset for tt is not ok*/
- 		if (!tt_offset_ok)
- 			return -ERANGE;
+-	if (sch_ep->sch_tt) {
+-		/* all offset for tt is not ok*/
+-		if (!tt_offset_ok)
+-			return -ERANGE;
+-
+-		update_sch_tt(udev, sch_ep, 1);
+-	}
+-
+-	/* update bus bandwidth info */
+-	update_bus_bw(sch_bw, sch_ep, 1);
+-
+-	return 0;
++	return load_ep_bw(udev, sch_bw, sch_ep, true);
+ }
+ 
+ static void destroy_sch_ep(struct usb_device *udev,
+ 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	/* only release ep bw check passed by check_sch_bw() */
+-	if (sch_ep->allocated) {
+-		update_bus_bw(sch_bw, sch_ep, 0);
+-		if (sch_ep->sch_tt)
+-			update_sch_tt(udev, sch_ep, 0);
+-	}
++	if (sch_ep->allocated)
++		load_ep_bw(udev, sch_bw, sch_ep, false);
+ 
+ 	if (sch_ep->sch_tt)
+ 		drop_tt(udev);
 -- 
 2.35.1
 
