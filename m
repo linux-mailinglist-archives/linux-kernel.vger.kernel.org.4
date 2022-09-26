@@ -2,94 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A3F5EB465
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BEF5EB469
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiIZWQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S231229AbiIZWQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbiIZWPn (ORCPT
+        with ESMTP id S231469AbiIZWQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:15:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782BA43E58;
-        Mon, 26 Sep 2022 15:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 366D0B812A5;
-        Mon, 26 Sep 2022 22:13:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6D0C433D6;
-        Mon, 26 Sep 2022 22:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664230382;
-        bh=2Qt3W8FkIMIE55ctoj3YAHUay0CBFTZXAHMd7mn4hp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uSbK6VxMdhw8e8KNUVvQk9DkPang+WcxCaiI8iR6i0u49/s7tfeSlA1U3qzG3PP7E
-         0hLSTj7XSuBf+iaaSaVTCQnf/b8SWpXqgygr7nPZ1N0ZYsuyn5yozA0OaQ0owDr4U2
-         14DUv7Cwf7I12Z49AD/pWdzVKIaa4aDGRC9lnEfIGlPhAGsnOpqAdpdDBrRn0Zatl6
-         P8tbfFj01gpS7UaWt/nHhBio+KU3IwCbfigYZMlUw7B/T2VVO8ehrhwEjnfhdANoi5
-         o6cSjiEIgIntgdVhhDQs5AWedaOX4MtFDDHxHcMs4D6TcyuW3DlVxZWyv2AZKPTIop
-         Y8jWhLS7QmvAg==
-Date:   Mon, 26 Sep 2022 23:12:58 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] ASoC: SOF: control.h: Replace zero-length array
- with DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIj6tdtDe9YrX+I@sirena.org.uk>
-References: <YzIcZ11k8RiQtS2T@work>
+        Mon, 26 Sep 2022 18:16:24 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139781A22F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:16:05 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28QME1Pq063652;
+        Tue, 27 Sep 2022 07:14:01 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Tue, 27 Sep 2022 07:14:01 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28QME0k9063649
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 27 Sep 2022 07:14:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <14c0f611-3f21-01b0-88d6-05eb1a3d8bc4@I-love.SAKURA.ne.jp>
+Date:   Tue, 27 Sep 2022 07:13:59 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="34yM7OTcCN4YfrhM"
-Content-Disposition: inline
-In-Reply-To: <YzIcZ11k8RiQtS2T@work>
-X-Cookie: You may be recognized soon.  Hide.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3] rapidio/tsi721: Replace flush_scheduled_work() with
+ flush_work().
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <0e8a2023-7526-f03a-f520-efafbb0ef45c@I-love.SAKURA.ne.jp>
+ <20220925102742.84ccc07ce1e8e591e4d5ce0f@linux-foundation.org>
+ <d039cbbd-4aa7-58bf-b93d-be23443c52b6@I-love.SAKURA.ne.jp>
+ <YzG/664Z5XqLD/yM@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YzG/664Z5XqLD/yM@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/09/27 0:06, Alan Stern wrote:
+>> Alan Stern suggested to use cancel_work_sync() in
+>> commit eef6a7d5c2f38ada ("workqueue: warn about flush_scheduled_work()")
+>> and Tejun Heo suggested to use flush_work() in
+>> https://lkml.kernel.org/r/YjivtdkpY+reW0Gt@slm.duckdns.org .
+>>
+>> Is there some reason to prefer one over the other?
+>> I think that user-visible results between flush_work() and cancel_work_sync()
+>> are the same because both wait until work completes.
+> 
+> No, you haven't got it quite right.  flush_work() waits until the work 
+> completes, but cancel_work_sync() first tries to cancel the work item.  
+> It then waits until the work item is either cancelled or completed.
 
---34yM7OTcCN4YfrhM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I know there is a difference if the cancellation was successful.
+But unless cancel_work_sync() is called immediately after schedule_work(),
+that work likely (e.g. 99%+) already started running or already completed.
 
-On Mon, Sep 26, 2022 at 04:40:55PM -0500, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated and we are moving towards adopting
-> C99 flexible-array members, instead. So, replace zero-length arrays
-> declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
-> helper macro.
->=20
-> This helper allows for flexible-array members in unions.
+> 
+> If the cancellation is successful (i.e., it happens before the work item 
+> starts to run) then the call will return at that time and the work item 
+> will never run -- hence it will never complete.
 
-As documented in submitting-patches.rst please send patches to the=20
-maintainers for the code you would like to change.  The normal kernel
-workflow is that people apply patches from their inboxes, if they aren't
-copied they are likely to not see the patch at all and it is much more
-difficult to apply patches.
+A difficult to judge thing is whether the owner/maintainer of that code wants
+that work completed or cancelled.
+Unlike e.g. https://lkml.kernel.org/r/Yy3byxFrfAfQL9xK@intel.com ,
+tsi721_remove() does not say whether pending works should run.
 
---34yM7OTcCN4YfrhM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMyI+kACgkQJNaLcl1U
-h9Bl2Af/eq17arOKqHYbB+7ToUShw/rDWN00EYpGJ1L4MTJ0Hrt4JHoK/KoB0pVo
-D4zPrWxnFc/aIvlHvf5zkwHqQvhNMsL+FfB++tS8oLWXdskaSwdZAJOHqU2t5sfb
-6whvYoNoYUD/5acGyMfX2RLCQbIxIAz8q6J7bJY+QfqbXVUHxMHbNSKJ5rkHJTnN
-Bsx1DpzXc10p1PwhVhepbCuJXl+shGRXw6WgjyubQtHjmSWNACm9QF+Hm7w3z3DB
-2dIWI7LQ6x63u+i5vxsInZczO1qWLQmqWHlse4UKKekRIDrfBCVJdS0NEqT48Zpn
-f6yov8ZJ3+TQx64+wsjISFZriatSQw==
-=fi4G
------END PGP SIGNATURE-----
-
---34yM7OTcCN4YfrhM--
