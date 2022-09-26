@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41A75EA001
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A5F5E9F29
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbiIZKcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S235214AbiIZKUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235523AbiIZK3n (ORCPT
+        with ESMTP id S235173AbiIZKSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:29:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818CD1CFD3;
-        Mon, 26 Sep 2022 03:19:39 -0700 (PDT)
+        Mon, 26 Sep 2022 06:18:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A5649B40;
+        Mon, 26 Sep 2022 03:15:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91CA760B5E;
-        Mon, 26 Sep 2022 10:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5350FC433C1;
-        Mon, 26 Sep 2022 10:19:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E79C60B97;
+        Mon, 26 Sep 2022 10:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000AFC433D6;
+        Mon, 26 Sep 2022 10:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187578;
-        bh=YXoY+8Ekv8pDLCFBht7bLPBMrzFnxeNVRxc1tuAOeUQ=;
+        s=korg; t=1664187324;
+        bh=vN9yVk82ZFk4dEwgCx+4IuPIPCT6CZf5RbGU+zOwaSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yOGNyrO4m91mqAgtQk1nO5SVhc4NJzrp1XI5soSq3rRJ45XtZNavDejp2ne4fCiXr
-         QGN9e9mv8H4H++og200DsCCG+ScyWIetP9s2pQzYCBNt3/qZLsnMXVYyni645MmkkP
-         i/6JYCs0/TsDZuA/m1j4Vw+2tCWwf7GrpK5qL03E=
+        b=QVNk5Fs9XjqmVY5AB+uGrwmdcdGy7Im5GV2NvKBBSBNQQTuZOi0VOcxTGXJlGYITf
+         KcuG3ZQI/+D47UDCoa5XIXcVaZ2WCl7fCoWnU2Uoyg82RbryJqQ5rdqY2yIU8cah1Z
+         fnOxwP4R9YMuSj1IEb7h+KZqshl0RShQR1I3qyIk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 21/58] usb: dwc3: pci: add support for the Intel Tiger Lake PCH -H variant
+Subject: [PATCH 4.14 12/40] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
 Date:   Mon, 26 Sep 2022 12:11:40 +0200
-Message-Id: <20220926100742.209837549@linuxfoundation.org>
+Message-Id: <20220926100738.689498854@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-[ Upstream commit c3f595a8119207cc0f82b3dc6ec5bbf6f3e6b135 ]
+[ Upstream commit ba912afbd611d3a5f22af247721a071ad1d5b9e0 ]
 
-This patch adds the necessary PCI ID for TGP-H devices.
+For irq_domain_associate() to work the virq descriptor has to be
+pre-allocated in advance. Otherwise the following happens:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-Stable-dep-of: bad0d1d726ac ("usb: dwc3: pci: Add support for Intel Raptor Lake")
+WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
+error: virq128 is not allocated
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
+        ...
+Call Trace:
+[<ffffffff801344c4>] show_stack+0x9c/0x130
+[<ffffffff80769550>] dump_stack+0x90/0xd0
+[<ffffffff801576d0>] __warn+0x118/0x130
+[<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
+[<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
+[<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
+[<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
+[<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
+[<ffffffff80a3cc00>] start_kernel+0x404/0x698
+
+Use irq_alloc_desc_at() to avoid the above problem.
+
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 3ca582127f94..cddf02add6f1 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -38,6 +38,7 @@
- #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
- #define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
- #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
-+#define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
- 
- #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
- #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
-@@ -359,6 +360,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPH),
-+	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
+index a27b3d70393f..657e626cc41e 100644
+--- a/arch/mips/cavium-octeon/octeon-irq.c
++++ b/arch/mips/cavium-octeon/octeon-irq.c
+@@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
+ static int octeon_irq_force_ciu_mapping(struct irq_domain *domain,
+ 					int irq, int line, int bit)
+ {
++	struct device_node *of_node;
++	int ret;
 +
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
- 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
- 	{  }	/* Terminating Entry */
++	of_node = irq_domain_get_of_node(domain);
++	if (!of_node)
++		return -EINVAL;
++	ret = irq_alloc_desc_at(irq, of_node_to_nid(of_node));
++	if (ret < 0)
++		return ret;
++
+ 	return irq_domain_associate(domain, irq, line << 6 | bit);
+ }
+ 
 -- 
 2.35.1
 
