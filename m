@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C853B5EB230
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535B95EB234
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiIZUg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S229718AbiIZUhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiIZUg4 (ORCPT
+        with ESMTP id S229734AbiIZUhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:36:56 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7058F96B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:36:55 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-3487d84e477so80991297b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=jvyeoRUNnnznxOtsERsSsNArG/hVWTuiyo6yAYsariI=;
-        b=WsIpycyOpTqZNC0KXjOEqRpAon5DvI/6tYEa0DZfjjLdIa8KaRfj+lH7pqJRBF2e+N
-         KOGZgC6CWQ8BuWPNC0QEZZSKOzS/A+z5Yiv+r3uHHxbvqzDVUIc9ymTGniGH2EhDviSj
-         DlSZI4wdJIjJtMm8F7MHwH2Pffk21MxziH2GWygrmdKMLsYYvxF62VNVCoUQ+XU/8qBH
-         BDag8fFsMu2VU13dJjtHlEbwbZX5o7y2xdTzgdeiNqhUJ9tlFOHLkzS0oxzPheFNNgGC
-         o4kl/SvV6y3/5Pu2A05zWU59RxuFNOxxL2r8epZr4HbepG++nNakJdQzyVyAqMIiANjy
-         bvYw==
+        Mon, 26 Sep 2022 16:37:09 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE326CD2F;
+        Mon, 26 Sep 2022 13:37:08 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1279948d93dso10786349fac.10;
+        Mon, 26 Sep 2022 13:37:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jvyeoRUNnnznxOtsERsSsNArG/hVWTuiyo6yAYsariI=;
-        b=WSCrJeZAD/0phQ74tF9Tb3OnBOICo+yfUP+1Us/ADd7ZpOiOfJ0b7TAmgzwXQWP+mr
-         pvLRTE5G2V4N5oSLN1dDsJ9K9k3DLLC0iwS1W2b4ZKTOtyuAMqrOGXAUEmYndVlBbgyw
-         5a3OXS9i7Q+paTAnL7qFG60ffOVERgECnhnCW120m6RYXZajON8qUWHCQLIMnuGCDZLX
-         GvykN9PtaMKqqTSC6z2+XRoPjq7o07+N32AvBJ7tJUH+klf5YXTe1kEhPKq61sb3/HwS
-         lcyCCKKp/wgfzHHZy5jOKfkPsHf1G17bMUUo9fzC6FLttMi20Hbqf7hYXwT9YlQ0b5Yw
-         FelQ==
-X-Gm-Message-State: ACrzQf1DouHYa3iSCsoOl8wnAArJa+gRDFEKwOdjalja2/YfGYHdclUG
-        +dPYwDv6xU/sHVEQDveTW4sKGrkwiHe6OP5lFtI=
-X-Google-Smtp-Source: AMsMyM7arOUKMESubC2UF7TtFs5+t0vWyf+voiwGC6cB5EnyQcF+YMWk2/0mrMtnVPJN+p3ylzfEvIqJVqXmo9C4P2I=
-X-Received: by 2002:a0d:cdc2:0:b0:34d:101b:53c with SMTP id
- p185-20020a0dcdc2000000b0034d101b053cmr22837511ywd.444.1664224614378; Mon, 26
- Sep 2022 13:36:54 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Lf/L/7btd4/56IaLxS/+ylhU4Ie5TSh7uLYhF3NDTM0=;
+        b=qHA31eSIhMwQta2rjb/MKdMZMWrwQvDahEA0BnAqSWI6Soh4nQehD5+lXXfUxsWpqd
+         GILh0Y8XUbJOxTBFR34HVhI56D4ziHHLnR813NuQ0Px740AWGreTnDcrDfZebD9ZWn4N
+         x31MbKKuGJEUiiMZnA8ezuSDbr06NBaEy3yGhr0lbSn3cGzEK8TzrUj5WxhctHwtrqE+
+         Wi0CrXlofG+lhiFXbA9e1FaXAPEoNj7oqh9U3gbw0+ORS8/D3YyOQUSmHU4aSF+Udtiv
+         8172tof+xctlLVj4QnmsaRpJppHmwOWJ/y1PH/P7KLtfkAyno+Zj9/lW2aVEocg/xnM4
+         K88w==
+X-Gm-Message-State: ACrzQf1TToJhG3FgiaHXDlsNsaVQlKFzpI9bQguskgQU4HwCzEhk95Lj
+        gxDD+jpKHqOJ2jjF1x6qiQ==
+X-Google-Smtp-Source: AMsMyM6UBjBZTxPbS5L/71E/JSzuaY4J5yMIrEFWVNp7EobIm7sTaNtyYDwjt1ZgbJfmchTrPGSg5Q==
+X-Received: by 2002:a05:6871:154:b0:130:fa5d:1d39 with SMTP id z20-20020a056871015400b00130fa5d1d39mr283489oab.225.1664224627623;
+        Mon, 26 Sep 2022 13:37:07 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u27-20020a4a6c5b000000b004761ac650e1sm7045001oof.42.2022.09.26.13.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 13:37:07 -0700 (PDT)
+Received: (nullmailer pid 2766197 invoked by uid 1000);
+        Mon, 26 Sep 2022 20:37:06 -0000
+Date:   Mon, 26 Sep 2022 15:37:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 03/12] dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: fix
+ matching pin config
+Message-ID: <20220926203706.GA2766135-robh@kernel.org>
+References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
+ <20220922195651.345369-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a610:b0:306:28de:2ed2 with HTTP; Mon, 26 Sep 2022
- 13:36:54 -0700 (PDT)
-Reply-To: info.firstheritageloans@gmail.com
-From:   Mario Buffon <jamesacarey988764@gmail.com>
-Date:   Mon, 26 Sep 2022 22:36:54 +0200
-Message-ID: <CAA8t2MJR_9peC4ZoZXQwV2hOORG+Z1MQMb_L6i+S8XZp5+K9-A@mail.gmail.com>
-Subject: =?UTF-8?Q?Oferujemy_po=C5=BCyczki_z_oprocentowaniem_2=25?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FUZZY_CREDIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1142 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jamesacarey988764[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jamesacarey988764[at]gmail.com]
-        *  1.7 FUZZY_CREDIT BODY: Attempt to obfuscate words in spam
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922195651.345369-4-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Oferujemy po=C5=BCyczki z oprocentowaniem 2%.
-Potrzebujesz po=C5=BCyczki na cele biznesowe lub prywatne?
-Skontaktuj si=C4=99 z nami ju=C5=BC dzi=C5=9B, aby zapozna=C4=87 si=C4=99 z=
- naszym procesem
-kredytowym dla firm.
-info.firstheritageloans@gmail. com
-WhatsApp: +1 (205) 852-6811
+On Thu, 22 Sep 2022 21:56:42 +0200, Krzysztof Kozlowski wrote:
+> The LPASS pin controller follows generic pin-controller bindings, so
+> just like TLMM, should have subnodes with '-state' and '-pins'.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../qcom,sc7280-lpass-lpi-pinctrl.yaml        | 29 +++++++++++++++++--
+>  1 file changed, 27 insertions(+), 2 deletions(-)
+> 
 
-Jimmy Faltersack
+Reviewed-by: Rob Herring <robh@kernel.org>
