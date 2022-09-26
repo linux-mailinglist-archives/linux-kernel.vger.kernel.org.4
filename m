@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A5E5EA371
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B6D5EA35D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbiIZLZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S237757AbiIZLYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiIZLXp (ORCPT
+        with ESMTP id S234166AbiIZLXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:23:45 -0400
+        Mon, 26 Sep 2022 07:23:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938CC2980E;
-        Mon, 26 Sep 2022 03:40:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6658CB4B8;
+        Mon, 26 Sep 2022 03:39:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 520C3609FE;
-        Mon, 26 Sep 2022 10:38:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5559FC433D6;
-        Mon, 26 Sep 2022 10:38:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8413B60B6A;
+        Mon, 26 Sep 2022 10:38:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7240EC433D6;
+        Mon, 26 Sep 2022 10:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188731;
-        bh=a+AK/OSNEo4sC5t69e3uFhF99l4MJPwOAdRGtnxEFP4=;
+        s=korg; t=1664188734;
+        bh=OjoEGms6zCN1oskEwvhMEdh7Fy7whkyoItKoSltAJzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=av+O2YRwP2pCWjkzXCdwOwJomlMJZAKET+6tSR+TGrXC50NTBVI2z60vzaV3XwfW7
-         m0A5oVaBFfXpYHtG88b/uPUQ/+mcqeMfJwE6PkUZV6MwXNzsHYKR1WsLlpxI1s8J/x
-         qJ3O0GUU0y2SP1Y6aIn6iq/KPQrf69lBPDRPl/Iw=
+        b=RcMj5G3vPQurHGTwn6GiVb6ZHINnO0IDMZ0eHQcKHq+gIRM6PFC7bLR8+7yq6glPV
+         iuACvYVJHYAKhfq5pb+llBl0YTwA7QuzbhOAvoQg038kZH56+UVIYf89P5hi/uCu1t
+         2mmLDBvGyTy9jR70kIg9W+3WgcpaMeZpwncuyzIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,9 +38,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sergey Shtylyov <s.shtylyov@omp.ru>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 103/148] net: ravb: Fix PHY state warning splat during system resume
-Date:   Mon, 26 Sep 2022 12:12:17 +0200
-Message-Id: <20220926100759.966194866@linuxfoundation.org>
+Subject: [PATCH 5.15 104/148] net: sh_eth: Fix PHY state warning splat during system resume
+Date:   Mon, 26 Sep 2022 12:12:18 +0200
+Message-Id: <20220926100800.007268992@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
 References: <20220926100756.074519146@linuxfoundation.org>
@@ -59,36 +59,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit 4924c0cdce75575295f8fa682851fb8e5d619dd2 ]
+[ Upstream commit 6a1dbfefdae4f7809b3e277cc76785dac0ac1cd0 ]
 
 Since commit 744d23c71af39c7d ("net: phy: Warn about incorrect
 mdio_bus_phy_resume() state"), a warning splat is printed during system
 resume with Wake-on-LAN disabled:
 
-        WARNING: CPU: 0 PID: 1197 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xc8
+	WARNING: CPU: 0 PID: 626 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xe4
 
-As the Renesas Ethernet AVB driver already calls phy_{stop,start}() in
-its suspend/resume callbacks, it is sufficient to just mark the MAC
+As the Renesas SuperH Ethernet driver already calls phy_{stop,start}()
+in its suspend/resume callbacks, it is sufficient to just mark the MAC
 responsible for managing the power state of the PHY.
 
 Fixes: fba863b816049b03 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Link: https://lore.kernel.org/r/8ec796f47620980fdd0403e21bd8b7200b4fa1d4.1663598796.git.geert+renesas@glider.be
+Link: https://lore.kernel.org/r/c6e1331b9bef61225fa4c09db3ba3e2e7214ba2d.1663598886.git.geert+renesas@glider.be
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/renesas/ravb_main.c | 2 ++
+ drivers/net/ethernet/renesas/sh_eth.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
-index 4e08b7219403..12420239c8ca 100644
---- a/drivers/net/ethernet/renesas/ravb_main.c
-+++ b/drivers/net/ethernet/renesas/ravb_main.c
-@@ -1115,6 +1115,8 @@ static int ravb_phy_init(struct net_device *ndev)
- 	phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_1000baseT_Half_BIT);
- 	phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
+diff --git a/drivers/net/ethernet/renesas/sh_eth.c b/drivers/net/ethernet/renesas/sh_eth.c
+index 1374faa229a2..4e190f5e32c3 100644
+--- a/drivers/net/ethernet/renesas/sh_eth.c
++++ b/drivers/net/ethernet/renesas/sh_eth.c
+@@ -2033,6 +2033,8 @@ static int sh_eth_phy_init(struct net_device *ndev)
+ 		}
+ 	}
  
 +	/* Indicate that the MAC is responsible for managing PHY PM */
 +	phydev->mac_managed_pm = true;
