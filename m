@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717065EA11B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FA45E9EF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236409AbiIZKpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S234907AbiIZKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiIZKnJ (ORCPT
+        with ESMTP id S235093AbiIZKQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:43:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439C554CA5;
-        Mon, 26 Sep 2022 03:24:28 -0700 (PDT)
+        Mon, 26 Sep 2022 06:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE085D60;
+        Mon, 26 Sep 2022 03:14:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7AA2B80924;
-        Mon, 26 Sep 2022 10:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127FBC433D6;
-        Mon, 26 Sep 2022 10:24:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC3E360BFE;
+        Mon, 26 Sep 2022 10:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE96C433C1;
+        Mon, 26 Sep 2022 10:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187860;
-        bh=bXef8Yi4ySuplraDxkHpjW2Xg2NLEtw3Qen7N27uESY=;
+        s=korg; t=1664187275;
+        bh=xBg2Hq0C3rG0zEu7USGpFCsDrTdc0HhUCOa8/YfH7fE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yxrrS0c1ghxK1ZSktM5sj4DBmD1NYu0KCk9PcYyTHGb7l8sfafUgnsocA90FG3+eV
-         UvNvzmsR363WEBKM+5BwXUxw9B12NuQOOYXXTxqK9GSHUT3gKwPV+lqF/7jgscKFmg
-         5cplkYqfY/pZp5TNDY236XFQjjg+ylQWwj21WjKg=
+        b=DI2uMK7FPUv/TpNc5b/qk3KzQIyPH2C7sdGURC12s+RzGldYwaH41hZarKUGRRSsr
+         7k8KxUnasKMVxwFvY3m3VD2qUB1ffm/pY4GSPws7m/s4AsCPZiFY/Z5c+2oN7lTa5T
+         vDXTN5P3Uu8TLbg3xHFUi1icp+rQKUc1nlgYszkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 084/120] netfilter: ebtables: fix memory leak when blob is malformed
+        stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 4.9 26/30] serial: Create uart_xmit_advance()
 Date:   Mon, 26 Sep 2022 12:11:57 +0200
-Message-Id: <20220926100754.128211337@linuxfoundation.org>
+Message-Id: <20220926100737.078991410@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 62ce44c4fff947eebdf10bb582267e686e6835c9 ]
+commit e77cab77f2cb3a1ca2ba8df4af45bb35617ac16d upstream.
 
-The bug fix was incomplete, it "replaced" crash with a memory leak.
-The old code had an assignment to "ret" embedded into the conditional,
-restore this.
+A very common pattern in the drivers is to advance xmit tail
+index and do bookkeeping of Tx'ed characters. Create
+uart_xmit_advance() to handle it.
 
-Fixes: 7997eff82828 ("netfilter: ebtables: reject blobs that don't provide all entry points")
-Reported-and-tested-by: syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220901143934.8850-2-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bridge/netfilter/ebtables.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/serial_core.h |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
-index ddb988c339c1..f6853fc0fcc0 100644
---- a/net/bridge/netfilter/ebtables.c
-+++ b/net/bridge/netfilter/ebtables.c
-@@ -999,8 +999,10 @@ static int do_replace_finish(struct net *net, struct ebt_replace *repl,
- 		goto free_iterate;
- 	}
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -294,6 +294,23 @@ struct uart_state {
+ /* number of characters left in xmit buffer before we ask for more */
+ #define WAKEUP_CHARS		256
  
--	if (repl->valid_hooks != t->valid_hooks)
-+	if (repl->valid_hooks != t->valid_hooks) {
-+		ret = -EINVAL;
- 		goto free_unlock;
-+	}
++/**
++ * uart_xmit_advance - Advance xmit buffer and account Tx'ed chars
++ * @up: uart_port structure describing the port
++ * @chars: number of characters sent
++ *
++ * This function advances the tail of circular xmit buffer by the number of
++ * @chars transmitted and handles accounting of transmitted bytes (into
++ * @up's icount.tx).
++ */
++static inline void uart_xmit_advance(struct uart_port *up, unsigned int chars)
++{
++	struct circ_buf *xmit = &up->state->xmit;
++
++	xmit->tail = (xmit->tail + chars) & (UART_XMIT_SIZE - 1);
++	up->icount.tx += chars;
++}
++
+ struct module;
+ struct tty_driver;
  
- 	if (repl->num_counters && repl->num_counters != t->private->nentries) {
- 		ret = -EINVAL;
--- 
-2.35.1
-
 
 
