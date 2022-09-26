@@ -2,200 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927265E9EA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D537A5E9EAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiIZKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:09:01 -0400
+        id S235016AbiIZKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:09:32 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiIZKIa (ORCPT
+        with ESMTP id S235086AbiIZKIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:08:30 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on0614.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e18::614])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF8238A22
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RwXtgSpDHcEUYCUkpU2/KZ24SSnJnhPeccefvHGmekdJoQNMBLrBSolkRId39yw3IqsAHRFl5xHnHXFFWvOsUWJYEMASoGPml9LJgRmRASfKkWPYkFtr5H+jR7qYLyowOwHWHtYQBJY+282bgRwLkAXnXfeedfSXJ6UoP1nFPrEPmCITBkFvHSOypOo28CLFuaYkMB7PAgrAs0oJCrttBwUvBdOv5p4pyprpmGrG6NqdS5il5roq0mmJTw8/czHEch9ap9MYKtTy/lFNAH2qRLvbzXp4ye/d8WF2pHIndRKKaQxoPCVO2m20KkP18vhhfX1enUM8xU5ZPOcsow0Viw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R2bANFch3nr6g2Lz1/eydDU2dqy2FMZmkrJT0bIcSzE=;
- b=WMmHAK5kIHGzFSYNt2XvDOWWdMfPcjzqEMkNF3DnYcmIrbcxweCBh2F+nHn+iIKyAAskQWRltcqxq1VoEps8pyeWJeAz++ZtvfOrIpxnHi32cEZISSVexj7MXjMnfvgqvVFFsgbgOPDuHgjeGm5IvhOtTLgnKYQkPKI1vHekRZ3dBm/hrz9yRszcpz4257HAqVR14GlDz44v7XeP0oIIPh3GwBh4B1YACMOxF+Q7Jih2rw8cc3B2yLJbe1qIvPmVC+mtbm+hC65mSo4MqVeGIiZpfRXXRyUl3cmilIqFj/yvvkti8FqwaRVqutR4i7nZzBefWrUNYrQIfkmvVHp2vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R2bANFch3nr6g2Lz1/eydDU2dqy2FMZmkrJT0bIcSzE=;
- b=N8ecbvvpIvk+ooT0tgil0SPNHe6wF8FAqpVqfR7YiF/JPfAWuuC4aFatxvqeKKDpMrhOwtlqUEai1lcX161ZfdFdLxRiHgswekH2AVzI8bGMHoBWMNcYzXBby3jTsTBig+XpYIwIhQiHmqxJ2tLHZI5db7VzqCDtgKFdLer5m01OCsQQ44E4Swz2Mnrp+BU4fl/ZvgRW3RMFwHo+PZyUwiHJf6v7HcEQ3I1lr2sY/SDw7NnB9faAvj9kmQQDR9meUY8QU/+Xr9zdhCIRb5dcVhRBxJLhD5mo61LPaJv+n5B4Oj7DNrIqVwqWAObDesUq9lbVv7CZkJ3t79MtjPTg9Q==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1606.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:9::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.18; Mon, 26 Sep 2022 10:08:19 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f4ad:3944:a7f4:fcf3]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f4ad:3944:a7f4:fcf3%5]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 10:08:19 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/7] powerpc/85xx: p2020: Enable boards by new config
- option CONFIG_P2020
-Thread-Topic: [PATCH 6/7] powerpc/85xx: p2020: Enable boards by new config
- option CONFIG_P2020
-Thread-Index: AQHYtABFhnxYWDlpKE6w3rkHFRGr4q3xt8sA
-Date:   Mon, 26 Sep 2022 10:08:19 +0000
-Message-ID: <872fa228-1fbb-1723-4b28-c130368e99f7@csgroup.eu>
-References: <20220819191557.28116-1-pali@kernel.org>
- <20220819191557.28116-7-pali@kernel.org>
-In-Reply-To: <20220819191557.28116-7-pali@kernel.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB1606:EE_
-x-ms-office365-filtering-correlation-id: d36d7835-a712-4f82-5ab8-08da9fa7097e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h1b5kXL4f5p6PniVM+Ppfv5ve5OVrBCDJl6Wy/x29xBYKF5iS+j6n6NwHWe0FR323DKUGeI5b0kLbtal6ymnXJqsKarDTWoQASqumTDvRPvIAt4Ro4NC4d0gEIcuXNmH/UxFFL0jyM0O0RUKxOvtvM9fGWJrPoWIdZmipjdElszOxB8iMwLpjm6ojSldt1niQ39TtOc9xKFqQlI3MGHlciwQzSDLK7pnHDGTywfduDWMQz8rrgffG9pc9x5QcVkdNCdkPZphfC7nD1dUWpF76giQRyHJaYJsAszzgu9Sh3c2dd2R2g1EcXMwqLXBeOH/c9th8Z2ne7OFSGmpdw8ZYLdqYnrsgLSVpoj1FTvIj+TL35LVcFZluS+/ipJcyZRGLmz+cFKsLk8Rpm12ikmMTzvqU7RjJikeZJLpClV9n3xXlmqA5Jc/9kgyZ/2ZGWog/nmV/1oezkwj4zS+HY5TYqztCSINdrJM/t4JPwn46S4VXlX2+iCugixETXzYEdXtXrQApn3KZtwNCMbZz40w0ppSxQ4Uzfn5Crc07W2B8S414B7cwWMDjPZELHQYUQzghUHJlSevzInSxxhe4i3xQrLgZuQVz4LE23MbVnPMH/t+fm3MD4EFt8IhQflQJaeLhj+v+Pn7aH7w94gyx8fL9Tj0R6BmQ6nNJyaOQFrbGqXqNZw3kFg5cehlZxj/N1QMBQDkl0FZlNdYE+Tl/Y5mtstjXWyvl+0BXqhlsAC6n7kwlaIKa1Qf4ejt6dVTwFj2Wa5fRa5Bv4ZOIxsD+ZYUKePk99K24qlZBI6+l7M3DRWbYLBowl+uERxHxJl9uHKsuMXRJ+QmFrW6RxgsFnANiw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(366004)(136003)(346002)(376002)(451199015)(71200400001)(8676002)(83380400001)(186003)(31686004)(2616005)(66574015)(86362001)(38100700002)(316002)(8936002)(26005)(6512007)(6506007)(91956017)(5660300002)(478600001)(2906002)(38070700005)(76116006)(31696002)(66446008)(66556008)(64756008)(66476007)(110136005)(4326008)(66946007)(54906003)(6486002)(44832011)(36756003)(122000001)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NEZ0Vk8xVE1WQWRLWW9LTFMzeFR3RmZvQkVyL0dnOVo2REl1bHFYZFdHeCtH?=
- =?utf-8?B?QlJDWlNrZWNwYmV3aG1QNDZ2dmg5b2pwaUM5OG11NFg2K3prWkpTZlZobzVw?=
- =?utf-8?B?dWo2MXRDckFPekIvb1cxNDlCTHE1eVpXT1VJdXZQb2JjU3FxWVIrUmNxUlg3?=
- =?utf-8?B?YkRPenJneE9wTGljamNEazdyUGh0c3dZV09zTGV5eG1wSmNaaENoMDVmeUo2?=
- =?utf-8?B?TnpCRWpad3Rsdi9yVFMrZHVhNFRxTEJCUzRuT3NsY2dRelhqMjdRTWg0NThL?=
- =?utf-8?B?bnplOGlyenAyb0FadnpvZ0xxQURacXRtbEh2T1RhR090bWZjNUx5bnQ1VmRs?=
- =?utf-8?B?clRwNjZhVVU1dXVZbG1JSEt4VFYrb1N0MXpYOHdTbFNIOVQ0U3ZqOW9DdXZY?=
- =?utf-8?B?WldTYlhJaGhTK2xFNmZrell6dlZoQUNOQWFITXBEL250Ris1RzFrMlU1V3BO?=
- =?utf-8?B?amFYMURTcllRY1E5Y2lHMVZHSHBwWVo0MURmQWRMSHZOcnlHaGFxelhvVjBP?=
- =?utf-8?B?UGRPcW0rSFJCSks5Ly9TbjZXQmg2M1dPLzZjWW95NDBRNzRybUNsMG1YQnNl?=
- =?utf-8?B?NUs0NThBL1JSajdzQVNDSDQvSDk1OVRmSXJabnl2U3hBZktZNDhGY2FMcnp6?=
- =?utf-8?B?Z1lYZVFEK0V4TEF5ekdRdERwcmxrNDYrRkJnaGw3SytnUXFxdVdoOFVjMHAw?=
- =?utf-8?B?TUFLUHNBN0xIbGRVbVB1N3ZLK0J4L2s2VlpFcFQ3VkhVOFIySmVONmNES1Rl?=
- =?utf-8?B?Q3QwZEJSNjExdHBINmxBSndiUnkvNXhqaSs0K3U2OTZQQUhuUThjSHVJYThv?=
- =?utf-8?B?Ry9YSXFCVHNpTDl0cFhVZnlpSFc1cHBPZHBsUGFoTUh5TjVyTzM5WjZVKzBY?=
- =?utf-8?B?WUZRVzBEazdOdFpiK2phNXVvbWw5UTVGVDhmcTRyMXgxTkE0eGQ5MjlkQ3hl?=
- =?utf-8?B?QlRaTC9iVUFXK2pPczljYjJQeWNyWDMyKzU3SnFsbzd2OUkzelNnaEpxTnRs?=
- =?utf-8?B?eU9GQ0xjVzZKMklFZStMZG9vd0NHUUVCeWpmNGVrZGZFT2JuaFV1Y2g4TFpl?=
- =?utf-8?B?R2ZpU0dCQkc2enRaTWFzUFF1NHZnQzEvNmRNRDNsTGYySWFaQWdDOWhFekUr?=
- =?utf-8?B?QkNaSm5YTDRaZUpOa1FHdFVpTG5HdWdiYnVjSTRqb0Y0YVZCd1NGZFd6MG00?=
- =?utf-8?B?cElsOGtpYVFTdXh1bmowUXJtZkYyNWtQNms2djVkY2F3QzVpZU1YWmV0M1k3?=
- =?utf-8?B?cjNvVklpQzJBSXd2dm5lT0MrOHZkR01vanVwdFRwMnZsUVJSK3o3dENtSTl5?=
- =?utf-8?B?UjhkQkd6RUYvbnBZQm5uYjZDeCtZVnNIVHJGSHFwc0dTQTI5WmNYdnYrY2k0?=
- =?utf-8?B?TjkvQmxSYzJkZ1NMWTlRUVpCdk8rWU02VW00ZHBIMFk3UXB5cDZRdmNzbWo5?=
- =?utf-8?B?bWttU0NTWGZFSHdnRW0zYU9hYlM0S2tBaXFtRnlzemt1UGhxSFJacW5DNWJa?=
- =?utf-8?B?VERpWlFpNWlBclVpRDNMUzZJU3hMQWhnWHBHbkkwQitleEd1NTkvNG1HK2h5?=
- =?utf-8?B?aDQxVUZndXI0a3ZtZ2kwcy9aM0dOakhMNy9KWHVlUDhMellpYkVaU0tNQTBN?=
- =?utf-8?B?RGV3dm9NdkNLUnZYT1ppN29LeUtHelJNOGN6OFBKcEx2bDk4di9TemszM2V1?=
- =?utf-8?B?d2dWSmJKNGxTa09RczgvZzJyM1FNNUlnaE1jVkdaUHhRNlZNaGxCZXVENnJo?=
- =?utf-8?B?RXZUcWNVNCtFUUJCU0ZCQWFoRmNIMVNTckwwSjVwZUlFTy82T3ZoNmRIRWxi?=
- =?utf-8?B?ZzlBOExMaVp2NUd6WnpMT3FydEJKZk5Xc1dtVkhReHlsSHJ5a2VRUklvMWlL?=
- =?utf-8?B?enZpZkl1ak4vUjRNWHQrSENydUptbGdRWXN6VHpnbkJGTFM3dWh6OTVQNXd4?=
- =?utf-8?B?SGc1WDZ0QWd0VmtOT0hOSnJWdStZbUdNQWJURlVyKzNoN1l1SVVGQUpnWVVK?=
- =?utf-8?B?UmVpVHJGL1FkUmtEK1ZrTzlvTVdxVUdvZGJrSi9IbXVoZmFpdHZjSXhvNGJI?=
- =?utf-8?B?NDE0OVJOVGk0SDVXT0hBQ2FRVmZoUURuQW02akxzamIrRTY0a1VXQmJhZ3Zm?=
- =?utf-8?B?Wm55aUFmZzcyWWZRQ1E3OUJxRlVaWW9sUk9yM1Jjb01rZXd1Mjhoc1B1blpU?=
- =?utf-8?Q?Q3HhRcnsCxA2uhBt3RkKPDM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <77C85E12AC625747923C0F221DA2DBBE@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 26 Sep 2022 06:08:50 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59C38441
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:49 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id j8so3973324qvt.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wQTsHrE4DrjLcABGfj6LEXsJg7Ql+9uK2OtUgcnTbVA=;
+        b=fl3E7AiGR22uKfRRWJ4v0CUZ3TDHXkT61mOrtnF8twNCamygu3vfPoQHmZuDJk+elG
+         qdNQGFDJgI1xAVWDe5mT3h0Uf9IjaHYuYwAPzGbzl0erY4aQm4FGuGn5O+l3cqxLKlXN
+         Zv6rI2/483VEoM+SIflJsc5MrxurVguqdZ72QWk3SkZ7eOZ7U+wrEca2PSVffq8KKSgD
+         1TgVDljzXuw495iT9rvsU2crlErk/nsdDWB18UKD0Zi8hUCSGguiwboWhoX6EpZI975f
+         ro4Ydu0wzL2uVUdhDso3bBMreIbxxh8/L/IY9CL3bEb6t1Wj8EETh5ICVYyRXwwB9IrP
+         hgRA==
+X-Gm-Message-State: ACrzQf0FLt3EQCDb98/Lxy/TcwSR+O0YbLK9zy7zUu46yUvlRgS+bGWT
+        t9R7jgCwU3S/p9HLf+bllZZBeM86l44olQ==
+X-Google-Smtp-Source: AMsMyM67oP8g7ejQy7pboX8fB9P7zH6QiwxCpwKKKAvLlVD5HZ34jLsP/KyOCETWxdKnYENyWoIgsA==
+X-Received: by 2002:a05:6214:2589:b0:4af:7db6:2a4e with SMTP id fq9-20020a056214258900b004af7db62a4emr328057qvb.116.1664186928493;
+        Mon, 26 Sep 2022 03:08:48 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id f26-20020a05620a069a00b006cebda00630sm10747418qkh.60.2022.09.26.03.08.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 03:08:48 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-324ec5a9e97so63125437b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:48 -0700 (PDT)
+X-Received: by 2002:a0d:dd09:0:b0:344:fca5:9b44 with SMTP id
+ g9-20020a0ddd09000000b00344fca59b44mr19683884ywe.358.1664186928023; Mon, 26
+ Sep 2022 03:08:48 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d36d7835-a712-4f82-5ab8-08da9fa7097e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2022 10:08:19.3664
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ppurrjRAvWJJStuCNqP/3dx89WfHw3qLqA7GrI0gQn+o/utOPnRoIFz4fJ6Ka8/ti7QPWj6Kawxu7Bgeqh17EU7rAi2SQS56o2imFWRoDw4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1606
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923170340.4099226-1-Jason@zx2c4.com> <CAMuHMdVJoocGUugnhv=pbgu7z6MFexmRGH1JkQCjm9g-=HiowQ@mail.gmail.com>
+ <CAHmME9qnsaUq4PvXM-BW63B=gvgzR3gV6zszEy2VFgzCx=B=wQ@mail.gmail.com>
+In-Reply-To: <CAHmME9qnsaUq4PvXM-BW63B=gvgzR3gV6zszEy2VFgzCx=B=wQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Sep 2022 12:08:36 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVsFQC6RKbYO2x+9esf_j6H7ySJhQ6yPocf9feJRN4b2w@mail.gmail.com>
+Message-ID: <CAMuHMdVsFQC6RKbYO2x+9esf_j6H7ySJhQ6yPocf9feJRN4b2w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] m68k: process bootinfo records before saving them
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE5LzA4LzIwMjIgw6AgMjE6MTUsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IEdl
-bmVyaWMgdW5pZmllZCBQMjAyMCBtYWNoaW5lIGRlc2NyaXB0aW9uIHdoaWNoIHN1cHBvcnRzIGFs
-bCBQMjAyMC1iYXNlZA0KPiBib2FyZHMgaXMgbm93IGluIHNlcGFyYXRlIGZpbGUgcDIwMjAuYy4g
-U28gY3JlYXRlIGEgc2VwYXJhdGUgY29uZmlnIG9wdGlvbg0KPiBDT05GSUdfUDIwMjAgZm9yIGl0
-Lg0KDQpDb3VsZCBpdCBiZSBDT05GSUdfUFBDX1AyMDIwIGluc3RlYWQgPyBOb3dhZGF5cywgZHJp
-dmVycyBzZWVtcyB0byBzcHJlYWQgDQphbGwgb3ZlciBkcml2ZXIvIGRpcmVjdG9yeSwgc28gaXQn
-cyBtdWNoIGJldHRlciB0byBoYXZlIENPTkZJR19QUENfIA0KcHJlZml4IG9uIGFsbCBkZWRpY2F0
-ZWQgcG93ZXJwYyBjb25maWcgaXRlbXMuDQoNCj4gDQo+IFByZXZpb3VzbHkgbWFjaGluZSBkZXNj
-cmlwdGlvbnMgZm9yIFAyMDIwIGJvYXJkcyB3ZXJlIGVuYWJsZWQgYnkNCj4gQ09ORklHX01QQzg1
-eHhfRFMgb3IgQ09ORklHX01QQzg1eHhfUkRCIG9wdGlvbi4gU28gc2V0IENPTkZJR19QMjAyMCB0
-byBiZQ0KPiBlbmFibGVkIGJ5IGRlZmF1bHQgd2hlbiBvbmUgb2YgdGhvc2Ugb3B0aW9uIGlzIGVu
-YWJsZWQuDQo+IA0KPiBUaGlzIGFsbG93cyB0byBjb21waWxlIHN1cHBvcnQgZm9yIFAyMDIwIGJv
-YXJkcyB3aXRob3V0IG5lZWQgdG8gaGF2ZQ0KPiBlbmFibGVkIHN1cHBvcnQgZm9yIG9sZGVyIG1w
-Yzg1eHggYm9hcmRzLiBBbmQgdG8gY29tcGlsZSBrZXJuZWwgZm9yIG9sZA0KPiBtcGM4NXh4IGJv
-YXJkcyB3aXRob3V0IGhhdmluZyBlbmFibGVkIHN1cHBvcnQgZm9yIG5ldyBQMjAyMCBib2FyZHMu
-DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBQYWxpIFJvaMOhciA8cGFsaUBrZXJuZWwub3JnPg0KPiAt
-LS0NCj4gICBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvS2NvbmZpZyAgfCAyMiArKysrKysr
-KysrKysrKysrKystLS0tDQo+ICAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L01ha2VmaWxl
-IHwgIDMgKy0tDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAxOSBpbnNlcnRpb25zKCspLCA2IGRlbGV0
-aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9L
-Y29uZmlnIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L0tjb25maWcNCj4gaW5kZXggYmUx
-NmViYTBmNzA0Li4yY2I0ZTkyNDhiNDIgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0
-Zm9ybXMvODV4eC9LY29uZmlnDQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9L
-Y29uZmlnDQo+IEBAIC03OCwxNiArNzgsMTYgQEAgY29uZmlnIE1QQzg1MzZfRFMNCj4gICAJICBU
-aGlzIG9wdGlvbiBlbmFibGVzIHN1cHBvcnQgZm9yIHRoZSBNUEM4NTM2IERTIGJvYXJkDQo+ICAg
-DQo+ICAgY29uZmlnIE1QQzg1eHhfRFMNCj4gLQlib29sICJGcmVlc2NhbGUgTVBDODU0NCBEUyAv
-IE1QQzg1NzIgRFMgLyBQMjAyMCBEUyINCj4gKwlib29sICJGcmVlc2NhbGUgTVBDODU0NCBEUyAv
-IE1QQzg1NzIgRFMiDQo+ICAgCXNlbGVjdCBQUENfSTgyNTkNCj4gICAJc2VsZWN0IERFRkFVTFRf
-VUlNQUdFDQo+ICAgCXNlbGVjdCBGU0xfVUxJMTU3NSBpZiBQQ0kNCj4gICAJc2VsZWN0IFNXSU9U
-TEINCj4gICAJaGVscA0KPiAtCSAgVGhpcyBvcHRpb24gZW5hYmxlcyBzdXBwb3J0IGZvciB0aGUg
-TVBDODU0NCBEUywgTVBDODU3MiBEUyBhbmQgUDIwMjAgRFMgYm9hcmRzDQo+ICsJICBUaGlzIG9w
-dGlvbiBlbmFibGVzIHN1cHBvcnQgZm9yIHRoZSBNUEM4NTQ0IERTIGFuZCBNUEM4NTcyIERTIGJv
-YXJkcw0KPiAgIA0KPiAgIGNvbmZpZyBNUEM4NXh4X1JEQg0KPiAtCWJvb2wgIkZyZWVzY2FsZSBQ
-MTAyeCBNQkcvVVRNL1JEQiBhbmQgUDIwMjAgUkRCIg0KPiArCWJvb2wgIkZyZWVzY2FsZSBQMTAy
-eCBNQkcvVVRNL1JEQiINCj4gICAJc2VsZWN0IFBQQ19JODI1OQ0KPiAgIAlzZWxlY3QgREVGQVVM
-VF9VSU1BR0UNCj4gICAJc2VsZWN0IEZTTF9VTEkxNTc1IGlmIFBDSQ0KPiBAQCAtOTUsNyArOTUs
-MjEgQEAgY29uZmlnIE1QQzg1eHhfUkRCDQo+ICAgCWhlbHANCj4gICAJICBUaGlzIG9wdGlvbiBl
-bmFibGVzIHN1cHBvcnQgZm9yIHRoZSBQMTAyMCBNQkcgUEMsIFAxMDIwIFVUTSBQQywNCj4gICAJ
-ICBQMTAyMCBSREIgUEMsIFAxMDIwIFJEQiBQRCwgUDEwMjAgUkRCLCBQMTAyMSBSREIgUEMsIFAx
-MDI0IFJEQiwNCj4gLQkgIFAxMDI1IFJEQiwgUDIwMjAgUkRCIGFuZCBQMjAyMCBSREIgUEMgYm9h
-cmRzDQo+ICsJICBhbmQgUDEwMjUgUkRCIGJvYXJkcw0KPiArDQo+ICtjb25maWcgUDIwMjANCj4g
-Kwlib29sICJGcmVlc2NhbGUgUDIwMjAiDQo+ICsJZGVmYXVsdCB5IGlmIE1QQzg1eHhfRFMgfHwg
-TVBDODV4eF9SREINCg0KSXMgdGhhdCBuZWNlc3NhcnkgPw0KQ2FuIHlvdSBqdXN0IHVwZGF0ZSBk
-ZWZjb25maWdzID8NCg0KQnkgdGhlIHdheSwgZGlkIHlvdSBoYXZlIGEgbG9vayBhdCB0aGUgaW1w
-YWN0IG9uIGRlZmNvbmZpZ3MgPw0KDQo+ICsJc2VsZWN0IERFRkFVTFRfVUlNQUdFDQo+ICsJc2Vs
-ZWN0IFNXSU9UTEINCj4gKwlpbXBseSBQUENfSTgyNTkNCj4gKwlpbXBseSBGU0xfVUxJMTU3NSBp
-ZiBQQ0kNCg0KV2h5IGltcGx5IGFuZCBub3Qgc2VsZWN0ID8NCg0KPiArCWhlbHANCj4gKwkgIFRo
-aXMgb3B0aW9uIGVuYWJsZXMgZ2VuZXJpYyB1bmlmaWVkIHN1cHBvcnQgZm9yIGFueSBib2FyZCB3
-aXRoIHRoZQ0KPiArCSAgRnJlZXNjYWxlIFAyMDIwIHByb2Nlc3Nvci4NCj4gKw0KPiArCSAgRm9y
-IGV4YW1wbGU6IFAyMDIwIERTIGJvYXJkLCBQMjAyMCBSREIgYm9hcmQsIFAyMDIwIFJEQiBQQyBi
-b2FyZCBvcg0KPiArCSAgQ1ouTklDIFR1cnJpcyAxLnggYm9hcmRzLg0KPiAgIA0KPiAgIGNvbmZp
-ZyBQMTAxMF9SREINCj4gICAJYm9vbCAiRnJlZXNjYWxlIFAxMDEwIFJEQiINCj4gZGlmZiAtLWdp
-dCBhL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9NYWtlZmlsZSBiL2FyY2gvcG93ZXJwYy9w
-bGF0Zm9ybXMvODV4eC9NYWtlZmlsZQ0KPiBpbmRleCAxYWQyNjFiNGVlYjYuLjAyMWUxNjg0NDJk
-NyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L01ha2VmaWxlDQo+
-ICsrKyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9NYWtlZmlsZQ0KPiBAQCAtMjMsOCAr
-MjMsNyBAQCBvYmotJChDT05GSUdfUDEwMTBfUkRCKSAgICs9IHAxMDEwcmRiLm8NCj4gICBvYmot
-JChDT05GSUdfUDEwMjJfRFMpICAgICs9IHAxMDIyX2RzLm8NCj4gICBvYmotJChDT05GSUdfUDEw
-MjJfUkRLKSAgICs9IHAxMDIyX3Jkay5vDQo+ICAgb2JqLSQoQ09ORklHX1AxMDIzX1JEQikgICAr
-PSBwMTAyM19yZGIubw0KPiAtb2JqLSQoQ09ORklHX01QQzg1eHhfRFMpICArPSBwMjAyMC5vDQo+
-IC1vYmotJChDT05GSUdfTVBDODV4eF9SREIpICs9IHAyMDIwLm8NCj4gK29iai0kKENPTkZJR19Q
-MjAyMCkgICAgICAgKz0gcDIwMjAubw0KPiAgIG9iai0kKENPTkZJR19UV1JfUDEwMngpICAgKz0g
-dHdyX3AxMDJ4Lm8NCj4gICBvYmotJChDT05GSUdfQ09SRU5FVF9HRU5FUklDKSAgICs9IGNvcmVu
-ZXRfZ2VuZXJpYy5vDQo+ICAgb2JqLSQoQ09ORklHX0ZCX0ZTTF9ESVUpCSs9IHQxMDQycmRiX2Rp
-dS5v
+Hi Jason,
+
+On Mon, Sep 26, 2022 at 12:06 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On 9/26/22, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Fri, Sep 23, 2022 at 7:03 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >> The RNG seed boot record is memzeroed after processing, in order to
+> >> preserve forward secrecy. By saving the bootinfo for procfs prior to
+> >> that, forward secrecy is violated, since it becomes possible to recover
+> >> past states. So, save the bootinfo block only after first processing
+> >> them.
+> >>
+> >> Fixes: a1ee38ab1a75 ("m68k: virt: Use RNG seed from bootinfo block")
+> >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Thanks for the review.
+>
+> Did you intend to take these 3 patches through your m68k tree, or did
+> you want me to take them for some reason instead?
+
+This is all TBD, see the comments I'm writing on the other patches ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
