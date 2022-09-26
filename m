@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4005D5EA43A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2F65E9EEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238403AbiIZLm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S234829AbiIZKQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238300AbiIZLln (ORCPT
+        with ESMTP id S234662AbiIZKPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:41:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2748AD120;
-        Mon, 26 Sep 2022 03:45:39 -0700 (PDT)
+        Mon, 26 Sep 2022 06:15:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85DD48CA7;
+        Mon, 26 Sep 2022 03:14:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1BF2B80835;
-        Mon, 26 Sep 2022 10:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BBAC433C1;
-        Mon, 26 Sep 2022 10:31:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1E4660B5E;
+        Mon, 26 Sep 2022 10:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8686C433C1;
+        Mon, 26 Sep 2022 10:14:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188301;
-        bh=kBIv1RUAE7iafywmSkHA/glHpsAnUAC0de5OWQHNVRE=;
+        s=korg; t=1664187263;
+        bh=1VZDLEmKxZHmIaDJ8zA5q7zW2XYZQ6x8zemO9HJ0yNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GyQ6vf8xKRUk8vahzAmUOaoWfmu/2kBDMpvEi8ON7csBKNYJJX3I1UT2NuP7yBNUw
-         tUzJgLuCNoyBJZPmz7UGtGRgOfiRO/3JosTi3k1A5f1TQyxRUet6GTOVBmze7Vy1Xj
-         9MxEMR44EsZT4wrEHwemfcInoz8wmP8H1mFJVjW4=
+        b=lP8s6AEnYof2oWzr6FQJUwvqLNYWmqHtSpGu86Fw8sNPDZ9elBrDyCwuVv/7jy/6n
+         0fN7OR6hXjfj26VLi7LXjEY7CmYhI+a5alnT/CV2xAE1n3IQFewf5UL7nDgXW+R9tQ
+         EH9Q9GS5ROLjCxVBKnj7KDIBwjTwXReMH6wEQzy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 088/141] sfc: fix TX channel offset when using legacy interrupts
+Subject: [PATCH 4.9 23/30] can: gs_usb: gs_can_open(): fix race dev->can.state condition
 Date:   Mon, 26 Sep 2022 12:11:54 +0200
-Message-Id: <20220926100757.626998433@linuxfoundation.org>
+Message-Id: <20220926100736.971657503@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit f232af4295653afa4ade3230462b3be15ad16419 ]
+[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
 
-In legacy interrupt mode the tx_channel_offset was hardcoded to 1, but
-that's not correct if efx_sepparate_tx_channels is false. In that case,
-the offset is 0 because the tx queues are in the single existing channel
-at index 0, together with the rx queue.
+The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
+has been started. On busy networks the CAN controller might receive
+CAN frame between and go into an error state before the dev->can.state
+is assigned.
 
-Without this fix, as soon as you try to send any traffic, it tries to
-get the tx queues from an uninitialized channel getting these errors:
-  WARNING: CPU: 1 PID: 0 at drivers/net/ethernet/sfc/tx.c:540 efx_hard_start_xmit+0x12e/0x170 [sfc]
-  [...]
-  RIP: 0010:efx_hard_start_xmit+0x12e/0x170 [sfc]
-  [...]
-  Call Trace:
-   <IRQ>
-   dev_hard_start_xmit+0xd7/0x230
-   sch_direct_xmit+0x9f/0x360
-   __dev_queue_xmit+0x890/0xa40
-  [...]
-  BUG: unable to handle kernel NULL pointer dereference at 0000000000000020
-  [...]
-  RIP: 0010:efx_hard_start_xmit+0x153/0x170 [sfc]
-  [...]
-  Call Trace:
-   <IRQ>
-   dev_hard_start_xmit+0xd7/0x230
-   sch_direct_xmit+0x9f/0x360
-   __dev_queue_xmit+0x890/0xa40
-  [...]
+Assign dev->can.state before starting the controller to close the race
+window.
 
-Fixes: c308dfd1b43e ("sfc: fix wrong tx channel offset with efx_separate_tx_channels")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/20220914103648.16902-1-ihuguet@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index d0f1b2dc7dff..c49168ba7a4d 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -308,7 +308,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
- 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
- 		efx->n_rx_channels = 1;
- 		efx->n_tx_channels = 1;
--		efx->tx_channel_offset = 1;
-+		efx->tx_channel_offset = efx_separate_tx_channels ? 1 : 0;
- 		efx->n_xdp_channels = 0;
- 		efx->xdp_channel_offset = efx->n_channels;
- 		efx->legacy_irq = efx->pci_dev->irq;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index e3dc59fffdb7..8472667ffe71 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -687,6 +687,7 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
+ 
+ 	/* finally start device */
++	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
+ 	dm->flags = cpu_to_le32(flags);
+ 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
+@@ -703,13 +704,12 @@ static int gs_can_open(struct net_device *netdev)
+ 	if (rc < 0) {
+ 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
+ 		kfree(dm);
++		dev->can.state = CAN_STATE_STOPPED;
+ 		return rc;
+ 	}
+ 
+ 	kfree(dm);
+ 
+-	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+-
+ 	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
 -- 
 2.35.1
 
