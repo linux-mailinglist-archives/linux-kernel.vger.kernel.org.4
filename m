@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792DC5E9F14
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCA55EA344
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbiIZKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S237741AbiIZLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiIZKRh (ORCPT
+        with ESMTP id S237746AbiIZLUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:17:37 -0400
+        Mon, 26 Sep 2022 07:20:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE83F31C;
-        Mon, 26 Sep 2022 03:15:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D161153008;
+        Mon, 26 Sep 2022 03:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66CFD60BFE;
-        Mon, 26 Sep 2022 10:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BD5C433D6;
-        Mon, 26 Sep 2022 10:15:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B6B860C84;
+        Mon, 26 Sep 2022 10:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDEEC433D6;
+        Mon, 26 Sep 2022 10:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187305;
-        bh=KZ2/UYyi2UeRP/7S3TXv7BylaBfnuZkXyL4LhPepjYQ=;
+        s=korg; t=1664188217;
+        bh=kHrrLxHBxr1MY4q4fGaTvPa0Ti0kLXNmr0FvWvEvqnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EHk3iea5mR1aTRI3kIjTSG75Rx+/Un7FdOUtFRHAH6tW8RV5KjhFpnLthfi4bLFZh
-         CXZ2ZAI8PeInlqTEkNrpUMptYEoL2Ja1fu4DVuxOw6l3Y4BRc4oQ7BC20A78imknJ5
-         EZoYOjya5pcKK41gQ0i/e5CxRnalXEOqNsjdihwc=
+        b=mSzwgFu2sMLsx1xE639V4RhV2LheKB5c0UCZXi6KBgTPG+wwWSDgFMi7hnb0tnqjC
+         FRlnzpE89A4hJVwu57R/X88jAEQo9W3X7bF0oGOVSS7EB+1h9hKiZqqkzjA/QbDKLr
+         UKM61jFfYvuRsEZg05vgwtNZSdO363E7Ln6SaaYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 12/30] arm: mach-spear: Add missing of_node_put() in time.c
-Date:   Mon, 26 Sep 2022 12:11:43 +0200
-Message-Id: <20220926100736.617492501@linuxfoundation.org>
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 078/141] net: bonding: Share lacpdu_mcast_addr definition
+Date:   Mon, 26 Sep 2022 12:11:44 +0200
+Message-Id: <20220926100757.270979177@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +54,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 2c629dd2d14fd7f64a553f809eda6d0b3a4f615a ]
+[ Upstream commit 1d9a143ee3408349700f44a9197b7ae0e4faae5d ]
 
-In spear_setup_of_timer(), of_find_matching_node() will return a
-node pointer with refcount incrementd. We should use of_node_put()
-in each fail path or when it is not used anymore.
+There are already a few definitions of arrays containing
+MULTICAST_LACPDU_ADDR and the next patch will add one more use. These all
+contain the same constant data so define one common instance for all
+bonding code.
 
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220616093027.3984903-1-windhl@126.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Stable-dep-of: 86247aba599e ("net: bonding: Unsync device addresses on ndo_stop")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-spear/time.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_3ad.c  |  5 +++--
+ drivers/net/bonding/bond_main.c | 16 ++++------------
+ include/net/bond_3ad.h          |  2 --
+ include/net/bonding.h           |  3 +++
+ 4 files changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
-index aaaa6781b9fe..57b77c7effa9 100644
---- a/arch/arm/mach-spear/time.c
-+++ b/arch/arm/mach-spear/time.c
-@@ -223,13 +223,13 @@ void __init spear_setup_of_timer(void)
- 	irq = irq_of_parse_and_map(np, 0);
- 	if (!irq) {
- 		pr_err("%s: No irq passed for timer via DT\n", __func__);
--		return;
-+		goto err_put_np;
- 	}
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index b0f8d551b61d..acb6ff0be5ff 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -85,8 +85,9 @@ static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
+ static u16 ad_ticks_per_sec;
+ static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
  
- 	gpt_base = of_iomap(np, 0);
- 	if (!gpt_base) {
- 		pr_err("%s: of iomap failed\n", __func__);
--		return;
-+		goto err_put_np;
- 	}
+-static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
+-	MULTICAST_LACPDU_ADDR;
++const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned = {
++	0x01, 0x80, 0xC2, 0x00, 0x00, 0x02
++};
  
- 	gpt_clk = clk_get_sys("gpt0", NULL);
-@@ -244,6 +244,8 @@ void __init spear_setup_of_timer(void)
- 		goto err_prepare_enable_clk;
- 	}
+ /* ================= main 802.3ad protocol functions ================== */
+ static int ad_lacpdu_send(struct port *port);
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 9c4b45341fd2..be1fd4ef4531 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -827,12 +827,8 @@ static void bond_hw_addr_flush(struct net_device *bond_dev,
+ 	dev_uc_unsync(slave_dev, bond_dev);
+ 	dev_mc_unsync(slave_dev, bond_dev);
  
-+	of_node_put(np);
-+
- 	spear_clockevent_init(irq);
- 	spear_clocksource_init();
- 
-@@ -253,4 +255,6 @@ void __init spear_setup_of_timer(void)
- 	clk_put(gpt_clk);
- err_iomap:
- 	iounmap(gpt_base);
-+err_put_np:
-+	of_node_put(np);
+-	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+-		/* del lacpdu mc addr from mc list */
+-		u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
+-
+-		dev_mc_del(slave_dev, lacpdu_multicast);
+-	}
++	if (BOND_MODE(bond) == BOND_MODE_8023AD)
++		dev_mc_del(slave_dev, lacpdu_mcast_addr);
  }
+ 
+ /*--------------------------- Active slave change ---------------------------*/
+@@ -2078,12 +2074,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 		dev_uc_sync_multiple(slave_dev, bond_dev);
+ 		netif_addr_unlock_bh(bond_dev);
+ 
+-		if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+-			/* add lacpdu mc addr to mc list */
+-			u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
+-
+-			dev_mc_add(slave_dev, lacpdu_multicast);
+-		}
++		if (BOND_MODE(bond) == BOND_MODE_8023AD)
++			dev_mc_add(slave_dev, lacpdu_mcast_addr);
+ 	}
+ 
+ 	bond->slave_cnt++;
+diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
+index 1a28f299a4c6..895eae18271f 100644
+--- a/include/net/bond_3ad.h
++++ b/include/net/bond_3ad.h
+@@ -15,8 +15,6 @@
+ #define PKT_TYPE_LACPDU         cpu_to_be16(ETH_P_SLOW)
+ #define AD_TIMER_INTERVAL       100 /*msec*/
+ 
+-#define MULTICAST_LACPDU_ADDR    {0x01, 0x80, 0xC2, 0x00, 0x00, 0x02}
+-
+ #define AD_LACP_SLOW 0
+ #define AD_LACP_FAST 1
+ 
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index 67d676059aa0..d9cc3f5602fb 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -763,6 +763,9 @@ extern struct rtnl_link_ops bond_link_ops;
+ /* exported from bond_sysfs_slave.c */
+ extern const struct sysfs_ops slave_sysfs_ops;
+ 
++/* exported from bond_3ad.c */
++extern const u8 lacpdu_mcast_addr[];
++
+ static inline netdev_tx_t bond_tx_drop(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	atomic_long_inc(&dev->tx_dropped);
 -- 
 2.35.1
 
