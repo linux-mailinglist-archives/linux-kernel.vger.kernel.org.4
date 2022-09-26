@@ -2,93 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC2F5EA48E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BFA5EA09F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238799AbiIZLrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S236164AbiIZKkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiIZLpA (ORCPT
+        with ESMTP id S236045AbiIZKiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:45:00 -0400
+        Mon, 26 Sep 2022 06:38:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8FD7393F;
-        Mon, 26 Sep 2022 03:47:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840AF52E6C;
+        Mon, 26 Sep 2022 03:22:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E8A4B80185;
-        Mon, 26 Sep 2022 10:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66B6C43140;
-        Mon, 26 Sep 2022 10:45:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2232B80936;
+        Mon, 26 Sep 2022 10:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AC2C433D6;
+        Mon, 26 Sep 2022 10:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189116;
-        bh=XyojQ7fSLGv6sgp1IJlFNRcg0hwCTpYkavxuwJX689M=;
+        s=korg; t=1664187733;
+        bh=ElTOm2klxt85X0JKP/M2Yk+rb6HfPWLLC4D5yGfyYP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yxj+eVGe4Wy71YjtWrJbA2i/CMK0DBJUrcJLBK3yWt8YtjsgmUOyUp7Ojbb9fX01H
-         Mi43XJFraZk+X8KNtJAD+LoFcyfpe/f1cyuV9i+Uz/lDJpSOKXHjisa/MQjj+rXgFA
-         iEuZ/jCTV7aQi5MVRi2AbwT9gLaRNzU4ksPZ9Dy0=
+        b=Vbar4Uq/iRbJ/WgDZz/T/sSI/Sbv2LnOohjCdcaZBXtCHTIpzsqvPWDSV8eGVSOYk
+         JJ5+P4ZPC2lwTqA9u38tCi98a/iwy8KIh/B7q0BlAxdSCzOGQv2FO69lZK/fwbFvdt
+         AFez0BarBrArSSad/JlKjs9oJFiTqND3YA1VNA2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marco Felsch <m.felsch@pengutronix.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 079/207] arm64: dts: imx8mn: remove GPU power domain reset
+Subject: [PATCH 5.4 035/120] usb: xhci-mtk: get the microframe boundary for ESIT
 Date:   Mon, 26 Sep 2022 12:11:08 +0200
-Message-Id: <20220926100810.114790618@linuxfoundation.org>
+Message-Id: <20220926100751.960890388@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marco Felsch <m.felsch@pengutronix.de>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 347155d1fa85972ac19d1bf58ae3f3ce95e51a5d ]
+[ Upstream commit 7c986fbc16ae6b2f914a3ebf06a3a4a8d9bb0b7c ]
 
-The PGC (power gating controller) already handles the reset for the
-GPUMIX power domain. By specifying it within the device tree the reset
-it issued a 2nd time. This confuses the hardware during power up and
-sporadically hangs the SoC. Fix this by removing the reset property and
-let the hardware handle the reset.
+Tune the boundary for FS/LS ESIT due to CS:
+For ISOC out-ep, the controller starts transfer data after
+the first SS; for others, the data is already transferred
+before the last CS.
 
-Fixes: 9a0f3b157e22e ("arm64: dts: imx8mn: Enable GPU")
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Tested-by: Adam Ford <aford173@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/49e5a269a47984f3126a70c3fb471b0c2874b8c2.1615170625.git.chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/usb/host/xhci-mtk-sch.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index e41e1d56f980..7bd4eecd592e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -672,7 +672,6 @@ pgc_gpumix: power-domain@2 {
- 							 <&clk IMX8MN_CLK_GPU_SHADER>,
- 							 <&clk IMX8MN_CLK_GPU_BUS_ROOT>,
- 							 <&clk IMX8MN_CLK_GPU_AHB>;
--						resets = <&src IMX8MQ_RESET_GPU_RESET>;
- 					};
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 8950d1f10a7f..450fa22b7dc7 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -513,22 +513,35 @@ static void update_sch_tt(struct usb_device *udev,
+ 		list_del(&sch_ep->tt_endpoint);
+ }
  
- 					pgc_dispmix: power-domain@3 {
++static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
++{
++	u32 boundary = sch_ep->esit;
++
++	if (sch_ep->sch_tt) { /* LS/FS with TT */
++		/* tune for CS */
++		if (sch_ep->ep_type != ISOC_OUT_EP)
++			boundary++;
++		else if (boundary > 1) /* normally esit >= 8 for FS/LS */
++			boundary--;
++	}
++
++	return boundary;
++}
++
+ static int check_sch_bw(struct usb_device *udev,
+ 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	u32 offset;
+-	u32 esit;
+ 	u32 min_bw;
+ 	u32 min_index;
+ 	u32 worst_bw;
+ 	u32 bw_boundary;
++	u32 esit_boundary;
+ 	u32 min_num_budget;
+ 	u32 min_cs_count;
+ 	bool tt_offset_ok = false;
+ 	int ret;
+ 
+-	esit = sch_ep->esit;
+-
+ 	/*
+ 	 * Search through all possible schedule microframes.
+ 	 * and find a microframe where its worst bandwidth is minimum.
+@@ -537,7 +550,8 @@ static int check_sch_bw(struct usb_device *udev,
+ 	min_index = 0;
+ 	min_cs_count = sch_ep->cs_count;
+ 	min_num_budget = sch_ep->num_budget_microframes;
+-	for (offset = 0; offset < esit; offset++) {
++	esit_boundary = get_esit_boundary(sch_ep);
++	for (offset = 0; offset < sch_ep->esit; offset++) {
+ 		if (is_fs_or_ls(udev->speed)) {
+ 			ret = check_sch_tt(udev, sch_ep, offset);
+ 			if (ret)
+@@ -546,7 +560,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 				tt_offset_ok = true;
+ 		}
+ 
+-		if ((offset + sch_ep->num_budget_microframes) > sch_ep->esit)
++		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
+ 			break;
+ 
+ 		worst_bw = get_max_bw(sch_bw, sch_ep, offset);
 -- 
 2.35.1
 
