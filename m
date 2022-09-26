@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08A25EA291
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6D55EA4B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbiIZLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S238503AbiIZLtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237562AbiIZLIz (ORCPT
+        with ESMTP id S238823AbiIZLrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:08:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B1213E3B;
-        Mon, 26 Sep 2022 03:34:55 -0700 (PDT)
+        Mon, 26 Sep 2022 07:47:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D6374CED;
+        Mon, 26 Sep 2022 03:47:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C62B3B8055F;
-        Mon, 26 Sep 2022 10:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FB3C43470;
-        Mon, 26 Sep 2022 10:33:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0982B8091E;
+        Mon, 26 Sep 2022 10:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E7BC433D6;
+        Mon, 26 Sep 2022 10:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188385;
-        bh=pzMMc/rrr8/BIG2UvjVlrU5b7Zno70ul6tQWG10YCW8=;
+        s=korg; t=1664188893;
+        bh=QGczFgAHvbSQI3rwphu6DQAbiEnCcEoB8hmQoCSCrjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CoBKZJxlYd+dqM9IfCeo2iW/ul6SUWn26BKGkyCnnzYEaRpk21qrRmCF/AWUzP90A
-         mdFKAAj8loE4Pq8+sgAGElxSiBZp3KLC3atecwqFRVJn2gE6uQnNhcRE5ahQQBmwN9
-         4NflYhpWEuNZgBeR3jgOKZ8AB3ON2B+7lOoi5W7c=
+        b=0b6KoCyblT6eJuaYahFw3gWn6sQ6t7218Rzp/yzB0ZuKD3VNzIlYJSDSI8jN7cEsC
+         nGPDdQyui6XQG3KAw15roAakML7P6s+gaw2e5Xnm1BdEloxEOpEZczlSm1cwnxVAVw
+         Vj+WrdcswVuQKOoLcIjqGMWTxOMhdqfLVDrSoXrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 133/141] workqueue: dont skip lockdep work dependency in cancel_work_sync()
-Date:   Mon, 26 Sep 2022 12:12:39 +0200
-Message-Id: <20220926100759.271132854@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 126/148] gpio: ixp4xx: Make irqchip immutable
+Date:   Mon, 26 Sep 2022 12:12:40 +0200
+Message-Id: <20220926100800.896373858@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,96 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit c0feea594e058223973db94c1c32a830c9807c86 ]
+[ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
 
-Like Hillf Danton mentioned
+This turns the IXP4xx GPIO irqchip into an immutable
+irqchip, a bit different from the standard template due
+to being hierarchical.
 
-  syzbot should have been able to catch cancel_work_sync() in work context
-  by checking lockdep_map in __flush_work() for both flush and cancel.
+Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
+for a rootfs on compact flash with IRQs from this GPIO
+block to the CF ATA controller.
 
-in [1], being unable to report an obvious deadlock scenario shown below is
-broken. From locking dependency perspective, sync version of cancel request
-should behave as if flush request, for it waits for completion of work if
-that work has already started execution.
-
-  ----------
-  #include <linux/module.h>
-  #include <linux/sched.h>
-  static DEFINE_MUTEX(mutex);
-  static void work_fn(struct work_struct *work)
-  {
-    schedule_timeout_uninterruptible(HZ / 5);
-    mutex_lock(&mutex);
-    mutex_unlock(&mutex);
-  }
-  static DECLARE_WORK(work, work_fn);
-  static int __init test_init(void)
-  {
-    schedule_work(&work);
-    schedule_timeout_uninterruptible(HZ / 10);
-    mutex_lock(&mutex);
-    cancel_work_sync(&work);
-    mutex_unlock(&mutex);
-    return -EINVAL;
-  }
-  module_init(test_init);
-  MODULE_LICENSE("GPL");
-  ----------
-
-The check this patch restores was added by commit 0976dfc1d0cd80a4
-("workqueue: Catch more locking problems with flush_work()").
-
-Then, lockdep's crossrelease feature was added by commit b09be676e0ff25bd
-("locking/lockdep: Implement the 'crossrelease' feature"). As a result,
-this check was once removed by commit fd1a5b04dfb899f8 ("workqueue: Remove
-now redundant lock acquisitions wrt. workqueue flushes").
-
-But lockdep's crossrelease feature was removed by commit e966eaeeb623f099
-("locking/lockdep: Remove the cross-release locking checks"). At this
-point, this check should have been restored.
-
-Then, commit d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in
-cancel_work_sync()") introduced a boolean flag in order to distinguish
-flush_work() and cancel_work_sync(), for checking "struct workqueue_struct"
-dependency when called from cancel_work_sync() was causing false positives.
-
-Then, commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
-flushing") tried to restore "struct work_struct" dependency check, but by
-error checked this boolean flag. Like an example shown above indicates,
-"struct work_struct" dependency needs to be checked for both flush_work()
-and cancel_work_sync().
-
-Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
-Reported-by: Hillf Danton <hdanton@sina.com>
-Suggested-by: Lai Jiangshan <jiangshanlai@gmail.com>
-Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
-Cc: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/workqueue.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpio/gpio-ixp4xx.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index fdf5fa4bf444..0cc2a62e88f9 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -3047,10 +3047,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
- 	if (WARN_ON(!work->func))
- 		return false;
+diff --git a/drivers/gpio/gpio-ixp4xx.c b/drivers/gpio/gpio-ixp4xx.c
+index b3b050604e0b..6bd047e2ca46 100644
+--- a/drivers/gpio/gpio-ixp4xx.c
++++ b/drivers/gpio/gpio-ixp4xx.c
+@@ -67,6 +67,14 @@ static void ixp4xx_gpio_irq_ack(struct irq_data *d)
+ 	__raw_writel(BIT(d->hwirq), g->base + IXP4XX_REG_GPIS);
+ }
  
--	if (!from_cancel) {
--		lock_map_acquire(&work->lockdep_map);
--		lock_map_release(&work->lockdep_map);
--	}
-+	lock_map_acquire(&work->lockdep_map);
-+	lock_map_release(&work->lockdep_map);
++static void ixp4xx_gpio_mask_irq(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++
++	irq_chip_mask_parent(d);
++	gpiochip_disable_irq(gc, d->hwirq);
++}
++
+ static void ixp4xx_gpio_irq_unmask(struct irq_data *d)
+ {
+ 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+@@ -76,6 +84,7 @@ static void ixp4xx_gpio_irq_unmask(struct irq_data *d)
+ 	if (!(g->irq_edge & BIT(d->hwirq)))
+ 		ixp4xx_gpio_irq_ack(d);
  
- 	if (start_flush_work(work, &barr, from_cancel)) {
- 		wait_for_completion(&barr.done);
++	gpiochip_enable_irq(gc, d->hwirq);
+ 	irq_chip_unmask_parent(d);
+ }
+ 
+@@ -153,12 +162,14 @@ static int ixp4xx_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return irq_chip_set_type_parent(d, IRQ_TYPE_LEVEL_HIGH);
+ }
+ 
+-static struct irq_chip ixp4xx_gpio_irqchip = {
++static const struct irq_chip ixp4xx_gpio_irqchip = {
+ 	.name = "IXP4GPIO",
+ 	.irq_ack = ixp4xx_gpio_irq_ack,
+-	.irq_mask = irq_chip_mask_parent,
++	.irq_mask = ixp4xx_gpio_mask_irq,
+ 	.irq_unmask = ixp4xx_gpio_irq_unmask,
+ 	.irq_set_type = ixp4xx_gpio_irq_set_type,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static int ixp4xx_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+@@ -282,7 +293,7 @@ static int ixp4xx_gpio_probe(struct platform_device *pdev)
+ 	g->gc.owner = THIS_MODULE;
+ 
+ 	girq = &g->gc.irq;
+-	girq->chip = &ixp4xx_gpio_irqchip;
++	gpio_irq_chip_set_chip(girq, &ixp4xx_gpio_irqchip);
+ 	girq->fwnode = g->fwnode;
+ 	girq->parent_domain = parent;
+ 	girq->child_to_parent_hwirq = ixp4xx_gpio_child_to_parent_hwirq;
 -- 
 2.35.1
 
