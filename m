@@ -2,192 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887825E9DB0
+	by mail.lfdr.de (Postfix) with ESMTP id D494A5E9DB1
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234947AbiIZJbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S234983AbiIZJcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiIZJb2 (ORCPT
+        with ESMTP id S235022AbiIZJb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 05:31:28 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC62255AC;
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9B8DED8;
         Mon, 26 Sep 2022 02:30:17 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 85EE1240005;
-        Mon, 26 Sep 2022 09:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1664184615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4DIslgriYh/ETMrXcfHJGuJVgbSPAelyn/x0LZzTFuw=;
-        b=hZ5XaLg6Wt9nBt34WKi4TMYczvDeAu3+nimfXO7cj8VdOd5cFS4US/KXGRSzhxoDgfJjHQ
-        QsMwqfQatDBuYqhK8KfWLNkl5LPzR5/6WQITG/D71yIrrqGHuzoXjBUcuvs52qRG/kuoE7
-        XmS6Ig3DGmXKXnwUAjVWOANaqPFQhFlqfE+VQchDvNYcvV4RSJpJ9tWy3wZyuyay+lpTh6
-        8vnfHoU0lsEm1W4w1vxy6/LREPmniLDPXETky1/LnMzlF5t5djjH65g+KD/0EIoAhe/rNt
-        7yrHmDjvz3uH4oXu+2gVP0hhEc8nCyYFZS0kHM8R4CTDOTMTiNPeAnPBrYdBgg==
-Date:   Mon, 26 Sep 2022 11:30:13 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 5/8] phy: allwinner: phy-sun6i-mipi-dphy: Make RX support
- optional
-Message-ID: <YzFxJUhypKHkSGgy@aptenodytes>
-References: <20220812075603.59375-1-samuel@sholland.org>
- <20220812075603.59375-6-samuel@sholland.org>
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mbcpx50wVzpVWD;
+        Mon, 26 Sep 2022 17:27:21 +0800 (CST)
+Received: from [10.174.179.106] (10.174.179.106) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 17:30:15 +0800
+Subject: Re: [PATCH next v4 2/2] dt-bindings: i2c: add entry for
+ hisilicon,hisi-i2c
+To:     Rob Herring <robh@kernel.org>
+CC:     <yangyicong@hisilicon.com>, <xuwei5@huawei.com>, <wsa@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20220909074842.281232-1-chenweilong@huawei.com>
+ <20220909074842.281232-2-chenweilong@huawei.com>
+ <20220913122203.GA3413501-robh@kernel.org>
+From:   chenweilong <chenweilong@huawei.com>
+Message-ID: <e4f3011a-5577-aa0d-2f39-a3cb6d1d8142@huawei.com>
+Date:   Mon, 26 Sep 2022 17:30:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xoZ1kkt8jdbs2RvB"
-Content-Disposition: inline
-In-Reply-To: <20220812075603.59375-6-samuel@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220913122203.GA3413501-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.179.106]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/9/13 20:22, Rob Herring wrote:
+> On Fri, Sep 09, 2022 at 03:48:42PM +0800, Weilong Chen wrote:
+>> Add the new compatible for HiSilicon common i2c.
+>>
+>> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+>> ---
+>>  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 67 +++++++++++++++++++
+>>  1 file changed, 67 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>> new file mode 100644
+>> index 000000000000..f1cb6a4c70d1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
+>> @@ -0,0 +1,67 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: HiSilicon common IIC controller Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - yangyicong@huawei.com
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: hisilicon,hisi-i2c
+> You need SoC specific compatibles.
 
---xoZ1kkt8jdbs2RvB
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Rob,
 
-Hi Samuel,
+I add a description for specific compatibles in the next version:
 
-On Fri 12 Aug 22, 02:56, Samuel Holland wrote:
-> While all variants of the DPHY likely support RX mode, the new variant
-> in the A100 is not used in this direction by the BSP, and it has some
-> analog register changes, so its RX power-on sequence is unknown. To be
-> safe, limit RX support to variants where the power-on sequence is known.
+https://lore.kernel.org/lkml/20220920072215.161331-2-chenweilong@huawei.com/T/
 
-Coming back to this series, with some minor cosmetic suggestions.
+Please take a look, Do you think that's OK?
 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->=20
->  drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 25 +++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy/al=
-lwinner/phy-sun6i-mipi-dphy.c
-> index 3900f1650851..625c6e1e9990 100644
-> --- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-> +++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-> @@ -114,6 +114,10 @@ enum sun6i_dphy_direction {
->  	SUN6I_DPHY_DIRECTION_RX,
->  };
-> =20
-> +struct sun6i_dphy_variant {
-> +	bool	supports_rx;
+Thank you.
 
-Since you're introducing a "tx_power_on" field later on, it would be more
-consistent to call this one "rx_supported".
+>
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clk_rate:
+>> +    default: 0xEE6B280
+> What is this property for? Use the clock binding.
+>
+>> +
+>> +  clock-frequency:
+>> +    default: 400000
+>> +
+>> +  i2c-sda-falling-time-ns:
+>> +    default: 343
+>> +
+>> +  i2c-scl-falling-time-ns:
+>> +    default: 203
+>> +
+>> +  i2c-sda-hold-time-ns:
+>> +    default: 0x33E
+> The rest are in decimal. Be consistent.
+>
+>> +
+>> +  i2c-scl-rising-time-ns:
+>> +    default: 365
+>> +
+>> +  i2c-digital-filter-width-ns:
+>> +    default: 0
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c1: i2c@5038B0000{
+> Space needed              ^
+>
+> Use lowercase hex.
+>
+> Drop unused labels.
+>   
+>> +      compatible = "hisilicon,hisi-i2c";
+>> +      reg = <0x38B0000 0x10000>;
+>> +      interrupts = <0x0 120 0x4>;
+>> +      i2c-sda-falling-time-ns = <56>;
+>> +      i2c-scl-falling-time-ns = <56>;
+>> +      i2c-sda-hold-time-ns = <56>;
+>> +      i2c-scl-rising-time-ns = <56>;
+>> +      i2c-digital-filter;
+>> +      i2c-digital-filter-width-ns = <0x0>;
+>> +      clk_rate = <0x0 0xEE6B280>;
+>> +      clock-frequency = <400000>;
+>> +    };
+>> -- 
+>> 2.31.GIT
+>>
+>>
+> .
 
-> +};
-> +
->  struct sun6i_dphy {
->  	struct clk				*bus_clk;
->  	struct clk				*mod_clk;
-> @@ -123,6 +127,7 @@ struct sun6i_dphy {
->  	struct phy				*phy;
->  	struct phy_configure_opts_mipi_dphy	config;
-> =20
-> +	const struct sun6i_dphy_variant		*variant;
->  	enum sun6i_dphy_direction		direction;
->  };
-> =20
-> @@ -409,6 +414,10 @@ static int sun6i_dphy_probe(struct platform_device *=
-pdev)
->  	if (!dphy)
->  		return -ENOMEM;
-> =20
-> +	dphy->variant =3D device_get_match_data(&pdev->dev);
-> +	if (!dphy->variant)
-> +		return -EINVAL;
-> +
->  	regs =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(regs)) {
->  		dev_err(&pdev->dev, "Couldn't map the DPHY encoder registers\n");
-> @@ -445,8 +454,13 @@ static int sun6i_dphy_probe(struct platform_device *=
-pdev)
->  	ret =3D of_property_read_string(pdev->dev.of_node, "allwinner,direction=
-",
->  				      &direction);
-> =20
-> -	if (!ret && !strncmp(direction, "rx", 2))
-> +	if (!ret && !strncmp(direction, "rx", 2)) {
-> +		if (!dphy->variant->supports_rx) {
-> +			dev_err(&pdev->dev, "RX not supported on this variant\n");
-> +			return -EOPNOTSUPP;
-> +		}
 
-Maybe add a blank line here for readability.
-
-Looks good to me otherwise!
-
-Paul
-
->  		dphy->direction =3D SUN6I_DPHY_DIRECTION_RX;
-> +	}
-> =20
->  	phy_set_drvdata(dphy->phy, dphy);
->  	phy_provider =3D devm_of_phy_provider_register(&pdev->dev, of_phy_simpl=
-e_xlate);
-> @@ -454,8 +468,15 @@ static int sun6i_dphy_probe(struct platform_device *=
-pdev)
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
-> =20
-> +static const struct sun6i_dphy_variant sun6i_a31_mipi_dphy_variant =3D {
-> +	.supports_rx	=3D true,
-> +};
-> +
->  static const struct of_device_id sun6i_dphy_of_table[] =3D {
-> -	{ .compatible =3D "allwinner,sun6i-a31-mipi-dphy" },
-> +	{
-> +		.compatible	=3D "allwinner,sun6i-a31-mipi-dphy",
-> +		.data		=3D &sun6i_a31_mipi_dphy_variant,
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, sun6i_dphy_of_table);
-> --=20
-> 2.35.1
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---xoZ1kkt8jdbs2RvB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMxcSUACgkQ3cLmz3+f
-v9HgvggAgB23uIrZwveFcOqLL25MJcIrZoNcRPexfnFQcvz/nerHdLde83N+Q2uh
-IiksEqx3C3iRc3Tw1OGvzg9MDWMW+w/rFTo4Fwx6kO8QtfpQ15wL0pL/VX+CxCoB
-16cABES3igwy2adnVEWnWqEETdexJDgvKgXxVIalYB7pcoCKxnsyfQie6nMfiozz
-bkar91bBTlbbZ/tQcGWtYwF3HJhWxQDsTnrHRHolNTn8+2iGzldKjfNjjON8hTjI
-RIInNPKY64O2Qhep++QvfkERmjmfgewhQaHWOTWO9rEbgWhlTcULDX5idNGpJahn
-W1LA84xdKPzwLkQSXzqeZXZf3yRflw==
-=KS3e
------END PGP SIGNATURE-----
-
---xoZ1kkt8jdbs2RvB--
