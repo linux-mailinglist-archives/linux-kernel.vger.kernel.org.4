@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B675E9FCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964BB5EA3FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiIZK3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S238110AbiIZLh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiIZK1j (ORCPT
+        with ESMTP id S238045AbiIZLhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:27:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23283FA2A;
-        Mon, 26 Sep 2022 03:18:46 -0700 (PDT)
+        Mon, 26 Sep 2022 07:37:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF0B2ED46;
+        Mon, 26 Sep 2022 03:44:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FD95B8092B;
-        Mon, 26 Sep 2022 10:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45454C433C1;
-        Mon, 26 Sep 2022 10:18:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD3C60CD4;
+        Mon, 26 Sep 2022 10:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53A6C433C1;
+        Mon, 26 Sep 2022 10:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187485;
-        bh=cX9DpuILtcyvcTNfYjew5RcGHztZW3T8ELhg2m/JgvU=;
+        s=korg; t=1664188183;
+        bh=wYMWX1RdKzeoF4adCEB63kIZCJOyfUXgVp3rUBJ24FE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BXXHJx70afhgGTpeSPaCt4P6GlKme1ZzPn+1bDAtmmWAuyuAnFCwFV/9DL8BetyI3
-         wfNGSXxcH9RKNdQmvTd2BLscPIxhal+V8S2jVCcCCfEpo5ghdfZisyPFf3hxc7EwUx
-         wmuHXXg+Mbk2GQadfYkHCaHTcnowxMGtuUkHk3/o=
+        b=jrbRmU94wCa/Pg4T0ylJlruUmgLzKl39TDn0NzNK8xDx0AJKA5g9boPRD6C/BxUqX
+         VjeZ9yu2WcuWCTsGj1H7hIFXrmrZh5TrOHmkSvsKmAW2IBQQuLPKN6kYgx3fgxN7C2
+         wcsDt1CAauzEfKEu8CPz6LOkY16iwlNTRYEll4BM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Igor Ryzhov <iryzhov@nfware.com>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 15/58] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
+Subject: [PATCH 5.10 068/141] netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
 Date:   Mon, 26 Sep 2022 12:11:34 +0200
-Message-Id: <20220926100741.980555143@linuxfoundation.org>
+Message-Id: <20220926100756.896291466@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+From: Igor Ryzhov <iryzhov@nfware.com>
 
-[ Upstream commit ba912afbd611d3a5f22af247721a071ad1d5b9e0 ]
+[ Upstream commit 39aebedeaaa95757f5c1f2ddb5f43fdddbf478ca ]
 
-For irq_domain_associate() to work the virq descriptor has to be
-pre-allocated in advance. Otherwise the following happens:
+ct_sip_next_header and ct_sip_get_header return an absolute
+value of matchoff, not a shift from current dataoff.
+So dataoff should be assigned matchoff, not incremented by it.
 
-WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
-error: virq128 is not allocated
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
-        ...
-Call Trace:
-[<ffffffff801344c4>] show_stack+0x9c/0x130
-[<ffffffff80769550>] dump_stack+0x90/0xd0
-[<ffffffff801576d0>] __warn+0x118/0x130
-[<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
-[<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
-[<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
-[<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
-[<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
-[<ffffffff80a3cc00>] start_kernel+0x404/0x698
+This issue can be seen in the scenario when there are multiple
+Contact headers and the first one is using a hostname and other headers
+use IP addresses. In this case, ct_sip_walk_headers will work as follows:
 
-Use irq_alloc_desc_at() to avoid the above problem.
+The first ct_sip_get_header call to will find the first Contact header
+but will return -1 as the header uses a hostname. But matchoff will
+be changed to the offset of this header. After that, dataoff should be
+set to matchoff, so that the next ct_sip_get_header call find the next
+Contact header. But instead of assigning dataoff to matchoff, it is
+incremented by it, which is not correct, as matchoff is an absolute
+value of the offset. So on the next call to the ct_sip_get_header,
+dataoff will be incorrect, and the next Contact header may not be
+found at all.
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 05e3ced297fe ("[NETFILTER]: nf_conntrack_sip: introduce SIP-URI parsing helper")
+Signed-off-by: Igor Ryzhov <iryzhov@nfware.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ net/netfilter/nf_conntrack_sip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
-index 43e4fc1b373c..3e5cf5515c01 100644
---- a/arch/mips/cavium-octeon/octeon-irq.c
-+++ b/arch/mips/cavium-octeon/octeon-irq.c
-@@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
- static int octeon_irq_force_ciu_mapping(struct irq_domain *domain,
- 					int irq, int line, int bit)
- {
-+	struct device_node *of_node;
-+	int ret;
-+
-+	of_node = irq_domain_get_of_node(domain);
-+	if (!of_node)
-+		return -EINVAL;
-+	ret = irq_alloc_desc_at(irq, of_node_to_nid(of_node));
-+	if (ret < 0)
-+		return ret;
-+
- 	return irq_domain_associate(domain, irq, line << 6 | bit);
- }
+diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_sip.c
+index b83dc9bf0a5d..78fd9122b70c 100644
+--- a/net/netfilter/nf_conntrack_sip.c
++++ b/net/netfilter/nf_conntrack_sip.c
+@@ -477,7 +477,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
+ 				return ret;
+ 			if (ret == 0)
+ 				break;
+-			dataoff += *matchoff;
++			dataoff = *matchoff;
+ 		}
+ 		*in_header = 0;
+ 	}
+@@ -489,7 +489,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
+ 			break;
+ 		if (ret == 0)
+ 			return ret;
+-		dataoff += *matchoff;
++		dataoff = *matchoff;
+ 	}
  
+ 	if (in_header)
 -- 
 2.35.1
 
