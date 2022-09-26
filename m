@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59D25EA6C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671D75EA6C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiIZNCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 09:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S234324AbiIZNDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 09:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbiIZNCT (ORCPT
+        with ESMTP id S235074AbiIZNDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:02:19 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C17E1759A;
-        Mon, 26 Sep 2022 04:34:39 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mbgbc5PCdz688y7;
-        Mon, 26 Sep 2022 19:32:44 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Mon, 26 Sep 2022 13:33:55 +0200
-Received: from [10.48.156.245] (10.48.156.245) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 12:33:54 +0100
-Message-ID: <2f4335ff-133c-18e0-5c14-3fd29bf6503a@huawei.com>
-Date:   Mon, 26 Sep 2022 12:33:56 +0100
+        Mon, 26 Sep 2022 09:03:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C0D6D575;
+        Mon, 26 Sep 2022 04:35:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 734EC60B3E;
+        Mon, 26 Sep 2022 11:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D99C433C1;
+        Mon, 26 Sep 2022 11:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664192070;
+        bh=82aV2qPqY36TnHAg7AkDtAtRTa2uq3BR98lyZXCd7IU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ThwsgDAcAz6Q90uRwxjGIFNqd8lFoGjUokSe9GNMnw8pALNPfbdtoME9tMsLaFR8/
+         5wPOC5ukpYr8Qe74PnXuA2J4FJC4inrxNKmriM4vW2IAc+9T6xaUHaH0VXIg5Q4B9B
+         N+kDF3ANbInAsqsaD4Nhj/f+9NG/NrC1hQpNq//7uGgzH7UTBsGpimnhP8LGg8JqqF
+         M+NFcyj18h+8ByrpgQ78atj6tAQTYWigRH/WrD6sHYkra2GV39GzSTx7GD9HO0pzJH
+         H15FAJkmUQL2mUW7Z5nT4ayxkqyp5AUJRRhr4/96UYjrZu5IrJZR8LVLZMhsWuIW4Q
+         fJJDxG2I+wyag==
+Date:   Mon, 26 Sep 2022 17:04:22 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
+Message-ID: <20220926113422.GA101994@thinkpad>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
+ <20220715160933.GD12197@workstation>
+ <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
+ <20220801023756.76jswkbwivuntqof@vireshk-i7>
+ <20220830032456.z4olnogsyg32vhiz@builder.lan>
+ <20220830054042.akj7pf366inelvpo@vireshk-i7>
+ <20220830062050.GA7066@workstation>
+ <20220920102803.rqj44xrz2szj3tqi@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v13 1/3] perf tool: arm: Refactor event list iteration in
- auxtrace_record__init()
-To:     Yicong Yang <yangyicong@huawei.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>,
-        "james.clark@arm.com" <james.clark@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Zhangshaokun <zhangshaokun@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "liuqi6124@gmail.com" <liuqi6124@gmail.com>
-References: <20220919090045.6778-1-yangyicong@huawei.com>
- <20220919090045.6778-2-yangyicong@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220919090045.6778-2-yangyicong@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.156.245]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220920102803.rqj44xrz2szj3tqi@vireshk-i7>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 10:00, Yicong Yang wrote:
-> From: Qi Liu<liuqi115@huawei.com>
+On Tue, Sep 20, 2022 at 03:58:03PM +0530, Viresh Kumar wrote:
+> On 30-08-22, 11:50, Manivannan Sadhasivam wrote:
+> > On Tue, Aug 30, 2022 at 11:10:42AM +0530, Viresh Kumar wrote:
+> > > On 29-08-22, 22:24, Bjorn Andersson wrote:
+> > > > Conceptually, it sounds like a good idea to express the clock feeding
+> > > > the CPU clusters, which is controlled by the OSM/EPSS.  But do you
+> > > > expect the OPP framework to actually do something with the clock, or
+> > > > just to ensure that the relationship is properly described?
+> > > 
+> > > No, the OPP core will never try to set the clock rate in your case,
+> > > though it will do clk_get().
+> > > 
+> > 
+> > Okay. Then I think it is a fair argument to make qcom-cpufreq-hw as the
+> > clock provider for CPUs.
+> > 
+> > I will send the RFC soon.
 > 
-> Add find_pmu_for_event() and use to simplify logic in
-> auxtrace_record_init(). find_pmu_for_event() will be
-> reused in subsequent patches.
+> Ping.
 > 
-> Reviewed-by: Leo Yan<leo.yan@linaro.org>
-> Reviewed-by: Jonathan Cameron<Jonathan.Cameron@huawei.com>
-> Signed-off-by: Qi Liu<liuqi115@huawei.com>
-> Signed-off-by: Yicong Yang<yangyicong@hisilicon.com>
-> ---
 
+Didn't get time so far. Will get to this once I'm back from vacation.
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+Thanks,
+Mani
+
+> -- 
+> viresh
+
+-- 
+மணிவண்ணன் சதாசிவம்
