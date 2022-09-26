@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCD15E9EB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D345EA414
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiIZKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S238141AbiIZLjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiIZKLF (ORCPT
+        with ESMTP id S238166AbiIZLhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:11:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0713AE5A;
-        Mon, 26 Sep 2022 03:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664187014; x=1695723014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=incQH2Dto+dCjnAkW9zHBf/lKL8d+xXml11ziotBF6o=;
-  b=NnbbdZeS0wgw8SiRC+/JofX4POqGNfFYCSuZuo+bNygMG49/5zet0RSW
-   S+zGEl+0JShjDiu6sfb4FPU0JTlv/X9hsqWA9XzJOZPbdIBDCI1R3Qd9y
-   QP38e75iF2YJNEHHwWMTTB8LSDCMClzars1bXUXrPGMFpV/mFvLIHPvMz
-   ycWfdmyU4ldxiDsuHhNUmiw9eZH/7r3Sa2ntCLMdIMjzoAy38wE/ma+WC
-   kDOTSeO0YFMo6BXxSyWuTiAG3JONi/YHjmLWKF9tJK8GfhASTI3jUO8ar
-   zThhqR2SO/ckvWj8X84P/25aRY0iMwnaCmTmKu9nxQmNCkDZiZspWKnXG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="302458319"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="302458319"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:10:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="866068060"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="866068060"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Sep 2022 03:10:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ocl3z-007kCD-0c;
-        Mon, 26 Sep 2022 13:10:11 +0300
-Date:   Mon, 26 Sep 2022 13:10:10 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v2 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
- namespace
-Message-ID: <YzF6ggfpyZSMfkIN@smile.fi.intel.com>
-References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
- <20220908135658.64463-3-andriy.shevchenko@linux.intel.com>
- <20220924095945.pzyhc24jhjwlfdin@pengutronix.de>
- <YzF0U7q5Fl0UaogR@smile.fi.intel.com>
- <20220926095547.be5bbtyqqlm4ytgy@pengutronix.de>
+        Mon, 26 Sep 2022 07:37:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096476EF1E;
+        Mon, 26 Sep 2022 03:44:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A46DB60A36;
+        Mon, 26 Sep 2022 10:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D444C433D6;
+        Mon, 26 Sep 2022 10:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664188940;
+        bh=mXgQHzzbXk8scCA00EwPq4JkzV+JHFrkwHS/AwZf3bA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=voVb0GUgrFWRAaAZYimRjYLNyaLa4x3nJarP/VFWOG5wD1g0mnPNzL8QICKFWKclS
+         c26zGfPk3xTkAgkc5gUrAUjc1so/fxW2TeK77pkd2RmrIC5ZV8W7VSPFsw3u5f18Ul
+         8x25iLXGpI/8FORe1fZb4/LuhGmgp+mfNAnrtSkw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        feng xiangjun <fengxj325@gmail.com>,
+        Phil Auld <pauld@redhat.com>
+Subject: [PATCH 5.19 021/207] drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+Date:   Mon, 26 Sep 2022 12:10:10 +0200
+Message-Id: <20220926100807.421848068@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220926095547.be5bbtyqqlm4ytgy@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:55:47AM +0200, Uwe Kleine-König wrote:
-> On Mon, Sep 26, 2022 at 12:43:47PM +0300, Andy Shevchenko wrote:
-> > On Sat, Sep 24, 2022 at 11:59:45AM +0200, Uwe Kleine-König wrote:
-> > > On Thu, Sep 08, 2022 at 04:56:51PM +0300, Andy Shevchenko wrote:
+From: Phil Auld <pauld@redhat.com>
 
-...
+commit d7f06bdd6ee87fbefa05af5f57361d85e7715b11 upstream.
 
-> > > > +MODULE_IMPORT_NS(PWM_LPSS);
-> > > 
-> > > Each user of the lpss.h header needs that, right? Then the
-> > > MODULE_IMPORT_NS statement can go into the header, too.
-> > 
-> > With the same answer as for v1: any user that might include the header for
-> > the sake of data types will get the NS inclusion even if they don't need
-> > that (yes, I don't think it's practical, but slightly better to make sure
-> 
-> I'm not sure I understand you correctly here. For some headers you
-> cannot assume that a file including the header also needs the namespace
-> macro, but for pwm-lpss.h that should be a safe assumption.
+As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
+This leads to very large file sizes:
 
-Yes, it's a safe assumption for _this_ case (as I pointed out above that
-there is probably no practical to assume otherwise), in general it may be
-not the case.
+topology$ ls -l
+total 0
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
 
--- 
-With Best Regards,
-Andy Shevchenko
+Adjust the inequality to catch the case when NR_CPUS is configured
+to a small value.
+
+Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: stable@vger.kernel.org
+Cc: feng xiangjun <fengxj325@gmail.com>
+Reported-by: feng xiangjun <fengxj325@gmail.com>
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Link: https://lore.kernel.org/r/20220906203542.1796629-1-pauld@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/cpumask.h |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -1083,9 +1083,10 @@ cpumap_print_list_to_buf(char *buf, cons
+  * cover a worst-case of every other cpu being on one of two nodes for a
+  * very large NR_CPUS.
+  *
+- *  Use PAGE_SIZE as a minimum for smaller configurations.
++ *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
++ *  unsigned comparison to -1.
+  */
+-#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
++#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
+ 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
+ #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
+ 
 
 
