@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8135EA52F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8445B5EA337
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiIZL7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S237822AbiIZLVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238933AbiIZLyG (ORCPT
+        with ESMTP id S234997AbiIZLTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF851CFFC;
-        Mon, 26 Sep 2022 03:49:58 -0700 (PDT)
+        Mon, 26 Sep 2022 07:19:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEE052E76;
+        Mon, 26 Sep 2022 03:39:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 291C7B80171;
-        Mon, 26 Sep 2022 10:48:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8409FC433D6;
-        Mon, 26 Sep 2022 10:48:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC2660A55;
+        Mon, 26 Sep 2022 10:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182E1C433C1;
+        Mon, 26 Sep 2022 10:37:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189297;
-        bh=9oFRFRIYT/AScc+7IeOp9jcmRxFBv+WVHTU+h3hZUaM=;
+        s=korg; t=1664188676;
+        bh=iouAbAkI/ElJu2TX+ZZh0YDNRjgxZWNLSqzyyDzKLNc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wgGgdIxIm50jzphqYoI1dFB7IHoaPWw3DNGlq7O9nzRtLpwv0SstXOU28Z1hFXpLT
-         6bOeFdKEopMV1p84DUTS7wpOsqeFGtG0Bef0OttLnFs8DCeXLByCQMpScgGNnhb6KA
-         bvELjwhrX1jFhSrxaIVgBAMYKWlN9iYyL4pAdRTw=
+        b=IsRLTfQOQvB5O/3bXlc5Tqzysx8zr5NLYTikH1UbS0CGAfY5eC5oVVf4Sn4rnsZTW
+         yajbdZH04DZR3uH6F5R74eCt1FKqcUA01t0I2RFFlbzc0OVIZkFv7aAsOBlj/mHhq1
+         O+9yjTUz0h9rSk0Ez307eefIKa21jw2RZmedRAn0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 098/207] arm64: dts: imx8mp-venice-gw74xx: fix CAN STBY polarity
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 5.15 053/148] arm64: topology: fix possible overflow in amu_fie_setup()
 Date:   Mon, 26 Sep 2022 12:11:27 +0200
-Message-Id: <20220926100810.977543818@linuxfoundation.org>
+Message-Id: <20220926100758.007635136@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Harvey <tharvey@gateworks.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit e4ef0885632ed485961ac0962ad01be4ec9ec658 ]
+commit d4955c0ad77dbc684fc716387070ac24801b8bca upstream.
 
-The CAN STBY poarlity is active-low. Specify it as such by removing the
-'enable-active-high' property and updating the gpio property.
+cpufreq_get_hw_max_freq() returns max frequency in kHz as *unsigned int*,
+while freq_inv_set_max_ratio() gets passed this frequency in Hz as 'u64'.
+Multiplying max frequency by 1000 can potentially result in overflow --
+multiplying by 1000ULL instead should avoid that...
 
-Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts support")
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+analysis tool.
+
+Fixes: cd0ed03a8903 ("arm64: use activity monitors for frequency invariance")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Link: https://lore.kernel.org/r/01493d64-2bce-d968-86dc-11a122a9c07d@omp.ru
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/kernel/topology.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-index 6630ec561dc2..4c729ac89625 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-@@ -123,8 +123,7 @@ reg_can2_stby: regulator-can2-stby {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_reg_can>;
- 		regulator-name = "can2_stby";
--		gpio = <&gpio3 19 GPIO_ACTIVE_HIGH>;
--		enable-active-high;
-+		gpio = <&gpio3 19 GPIO_ACTIVE_LOW>;
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 	};
--- 
-2.35.1
-
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -249,7 +249,7 @@ static void amu_fie_setup(const struct c
+ 	for_each_cpu(cpu, cpus) {
+ 		if (!freq_counters_valid(cpu) ||
+ 		    freq_inv_set_max_ratio(cpu,
+-					   cpufreq_get_hw_max_freq(cpu) * 1000,
++					   cpufreq_get_hw_max_freq(cpu) * 1000ULL,
+ 					   arch_timer_get_rate()))
+ 			return;
+ 	}
 
 
