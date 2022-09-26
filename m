@@ -2,168 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AF35EAD04
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243615EAD25
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiIZQsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S230007AbiIZQt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIZQrm (ORCPT
+        with ESMTP id S229790AbiIZQsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:47:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363F113DFD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:40:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B637C60EB3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2279C433D7;
-        Mon, 26 Sep 2022 15:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664206801;
-        bh=jIcb5daet5kGSuxWvbwSe3MVMh+FF012cin0rfSzRQE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C92xsykG6Tpu3Vok/h7HInPhm1iJNg5+5HttGpEYss7rVBWZjqI7SabQDa/hQw1Hn
-         wz1e+I8euq2Zs3Qnd7Ng9I7w840CiRBhRzJBk+qjp5+VPaqfPnOk5EObdQ2rUM2SYw
-         vxuoZqSxxdltZfM8JZgZzysOQLK6OtMfmGn730kVYuwypeJJUM3xCnZTQ0NM9SQKVy
-         qPMZbw9D6niSPXB6uoGLFH7F2aLlsMsHD6st2BJ21GShzEUwvl5iYFX5rsHlPzU8Av
-         hVWxRdQkEgUevHGsJ3oBxOPkU9WcsMgIQCI0IQ4ndJc+VpgPAmZDBM127eoluhMnlp
-         8jpKytWt7HpXQ==
-Date:   Mon, 26 Sep 2022 08:39:59 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     ndesaulniers@google.com, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: mainline build failure for x86_64 and arm64 with clang
-Message-ID: <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
-References: <YzFo/+uF1jJ7gMIN@debian>
+        Mon, 26 Sep 2022 12:48:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2BC13F9A;
+        Mon, 26 Sep 2022 08:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664206935; x=1695742935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tM/bAWc4lIOzRDGri9usGwnWw/hVhQodCyKKUpoDK+8=;
+  b=jmNwy5DpPJXLlqBrxmv8a7UDyiLrrk+HKInodQ+cOUpBMD1+kIlfMsi+
+   VHXRj3I3IX+19gSMh1tlxfWnLQpfRcOX3HcL3rjEtSNQlbPGxwYNMp+9J
+   wZuOtc6orcd0ChOFUHpSAAgJ0o6huVmuIl0zmC2dhrKa77LKBxd6S6Nhz
+   tzN8XNXpw52NtQ5lrtk2gpJjC9gpm7xLlZFR+L3daN539+9cVh1E5ReC+
+   VR/gbLWxhemwbpmzMEhpcb14I+y3YyKDxy18v+YhIlQFJBMO9lBGZxqcn
+   3OFwr0nZm2tDxDZvTa3R9BOilrMswH9eA9oxDJsAtc9fR87K89lmNEwm1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="298661884"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="298661884"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 08:42:15 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="710164368"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="710164368"
+Received: from hluxenbu-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.32.142])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 08:42:08 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 64280104928; Mon, 26 Sep 2022 18:42:06 +0300 (+03)
+Date:   Mon, 26 Sep 2022 18:42:06 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Message-ID: <20220926154206.skzqxhw23wuaegtk@box.shutemov.name>
+References: <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
+ <984e07ed-914f-93ca-a141-3fc8677878e0@intel.com>
+ <CAAH4kHawguTEuDVyz1ysSbH0X_mT=SvxLi=UhwEzXM0abbWefg@mail.gmail.com>
+ <YxncAElGrPEGRYg1@linux.ibm.com>
+ <CAAH4kHaP8JUh0Z4rF83=2RZTGMATT5MHot6rAnAwt79PL64mVQ@mail.gmail.com>
+ <YxpCaQARczhZQmq2@linux.ibm.com>
+ <f72f7325-adc6-89d5-7cbc-647442308233@amd.com>
+ <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
+ <20220926121027.xc2cgzuiafcssmea@box.shutemov.name>
+ <6a38e382-b9d6-98a1-d2ca-cd92fdfd8ecd@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzFo/+uF1jJ7gMIN@debian>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6a38e382-b9d6-98a1-d2ca-cd92fdfd8ecd@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudip,
-
-On Mon, Sep 26, 2022 at 09:55:27AM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
+On Mon, Sep 26, 2022 at 08:38:34AM -0500, Tom Lendacky wrote:
+> On 9/26/22 07:10, Kirill A. Shutemov wrote:
+> > On Sat, Sep 24, 2022 at 04:03:02AM +0300, Kirill A. Shutemov wrote:
+> > > On Thu, Sep 22, 2022 at 09:31:12AM -0500, Tom Lendacky wrote:
+> > > > On 9/8/22 14:28, Mike Rapoport wrote:
+> > > > > On Thu, Sep 08, 2022 at 09:23:07AM -0700, Dionna Amalie Glaze wrote:
+> > > > > > > 
+> > > > > > > Looks like the first access to the memory map fails, although I think
+> > > > > > > it's not in INIT_LIST_HEAD() but rather in init_page_count().
+> > > > > > > 
+> > > > > > > I'd start with making sure that page_alloc::memmap_alloc() actually returns
+> > > > > > > accepted memory. If you build kernel with CONFIG_DEBUG_VM=y the memory map
+> > > > > > > will poisoned in this function, so my guess is it'd crash there.
+> > > > > > > 
+> > > > > > 
+> > > > > > That's a wonderful hint, thank you! I did not run this test
+> > > > > > CONFIG_DEBUG_VM set, but you think it's possible it could still be
+> > > > > > here?
+> > > > > 
+> > > > > It depends on how you configured your kernel. Say, defconfig does not set
+> > > > > it.
+> > > > > 
+> > > > 
+> > > > I also hit the issue at 256GB. My config is using CONFIG_SPARSEMEM_VMEMMAP
+> > > > and fails in memmap_init_range() when attempting to add the first PFN. It
+> > > > looks like the underlying page that is backing the vmemmap has not been
+> > > > accepted (I receive a #VC 0x404 => page not validated).
+> > > > 
+> > > > Kirill, is this a path that you've looked at? It would appear that somewhere
+> > > > in the vmemmap_populate_hugepages() path, some memory acceptance needs to be
+> > > > done for the pages that are used to back vmemmap. I'm not very familiar with
+> > > > this code, so I'm not sure why everything works for a guest with 255GB of
+> > > > memory, but then fails for a guest with 256GB of memory.
+> > > 
+> > > Hm. I don't have machine that large at hands at the moment. And I have not
+> > > looked at the codepath before.
+> > > 
+> > > I will try to look into the issue.
+> > 
+> > I'm not able to trigger the bug.
+> > 
+> > With help of vm.overcommit_memory=1, I was managed boot TDX guest to shell
+> > with 256G and 1T of guest memory just fine.
+> > 
+> > Any chance it is SEV-SNP specific?
 > 
-> Yesterday I updated my clang to:
-> clang version 16.0.0 (https://github.com/llvm/llvm-project.git bcb1397bda667e75200ae0be9a65fd17dd0763d4)
+> There's always a chance. I'll do some more tracing and see what I can find
+> to try and be certain.
 > 
-> And with that I see new build failures of mainline.
+> > 
+> > Or maybe there some difference in kernel config? Could you share yours?
 > 
-> I am not copying all the errors but others look similar to these.
-> From x86_64 almodconfig:
-> 
-> In file included from scripts/mod/devicetable-offsets.c:3:
-> In file included from ./include/linux/mod_devicetable.h:13:
-> In file included from ./include/linux/uuid.h:12:
-> In file included from ./include/linux/string.h:253:
-> ./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->         q_len = strlen(q);
->                 ^~~~~~~~~
-> 
-> From x86_64 defconfig:
-> 
-> In file included from arch/x86/kernel/asm-offsets.c:9:
-> In file included from ./include/linux/crypto.h:20:
-> In file included from ./include/linux/slab.h:15:
-> In file included from ./include/linux/gfp.h:7:
-> In file included from ./include/linux/mmzone.h:8:
-> In file included from ./include/linux/spinlock.h:55:
-> In file included from ./include/linux/preempt.h:78:
-> In file included from ./arch/x86/include/asm/preempt.h:7:
-> In file included from ./include/linux/thread_info.h:60:
-> In file included from ./arch/x86/include/asm/thread_info.h:53:
-> In file included from ./arch/x86/include/asm/cpufeature.h:5:
-> In file included from ./arch/x86/include/asm/processor.h:22:
-> In file included from ./arch/x86/include/asm/msr.h:11:
-> In file included from ./arch/x86/include/asm/cpumask.h:5:
-> In file included from ./include/linux/cpumask.h:12:
-> In file included from ./include/linux/bitmap.h:9:
-> ./include/linux/find.h:119:31: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->                 unsigned long val = *addr & GENMASK(size - 1, 0);
->                                             ^~~~~~~~~~~~~~~~~~~~
-> ./include/linux/bits.h:38:3: note: expanded from macro 'GENMASK'
->         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
->          ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/bits.h:25:3: note: expanded from macro 'GENMASK_INPUT_CHECK'
->                 __is_constexpr((l) > (h)), (l) > (h), 0)))
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
->         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
->                                ^
-> ./include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-> #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> 
-> 
-> From arm64 allmodconfig:
-> 
-> In file included from scripts/mod/devicetable-offsets.c:3:
-> In file included from ./include/linux/mod_devicetable.h:13:
-> In file included from ./include/linux/uuid.h:12:
-> In file included from ./include/linux/string.h:253:
-> ./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->         q_len = strlen(q);
->                 ^~~~~~~~~
-> ./include/linux/fortify-string.h:131:24: note: expanded from macro 'strlen'
->         __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
->         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
->                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> I dont know if its some regression introduced in clang, or really a kernel issue.
-> 
-> I will go back to my previous clang version (329b972d416a) for now untill I know more.
+> Yes, I'll send that to you off-list.
 
-Thanks for testing and the report! I noticed this over the weekend, it
-comes from a new warning in clang:
+Still nothing with your config :/
 
-https://github.com/llvm/llvm-project/commit/e07ead85a368173a56e96a21d6841aa497ad80f8
-
-It was brought up on GitHub as well:
-
-https://github.com/ClangBuiltLinux/linux/issues/1720
-
-I have reported this to the clang developers upstream to see if there is
-any way that the diagnostic could be improved:
-
-https://reviews.llvm.org/D134461#3815298
-
-Otherwise, we will just have to disable it, which I will send a patch
-for later if the warning is not going to be adjusted in any way.
-
-If you wanted to continue testing with upstream LLVM, you can either
-just revert that commit or explicitly disable -Wvoid-ptr-dereference in
-the main Makefile like so, which is ultimately what I will send if I
-need to.
-
-Cheers,
-Nathan
-
-diff --git a/Makefile b/Makefile
-index 647a42a1f800..0bf60134f13c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -967,6 +967,9 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
- # Another good warning that we'll want to enable eventually
- KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
- 
-+# New warning from clang that is quite noisy due to '__is_constexpr'
-+KBUILD_CFLAGS += $(call cc-disable-warning, void-ptr-dereference)
-+
- # Enabled with W=2, disabled by default as noisy
- ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += -Wno-maybe-uninitialized
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
