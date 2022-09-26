@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E665E9A2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6537D5E9A39
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234014AbiIZHJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S233079AbiIZHKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234004AbiIZHJE (ORCPT
+        with ESMTP id S234025AbiIZHKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:09:04 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3A936418
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:07:55 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id y8so7670635edc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JSGq+UJdZHZI7m7+R4s5lT3YI7bcQs6FVi/cIp+srik=;
-        b=hC8eV+FOx3YJcNNqaY+XiFeY+2Nqsm9G4oDCO/a+cex2r8/iNo8V94MyR+IcMynnfX
-         Kl5WUO8utF3U3B4raqaM6u/9W9STCcBj2oGetI6QL7LwGTNwDYIpSf+/KaT/aCrtkFSN
-         B29U+6SmA/saBUhyv552ASfMNEBcAX2n/OOz4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JSGq+UJdZHZI7m7+R4s5lT3YI7bcQs6FVi/cIp+srik=;
-        b=EMjREjWa2S8EPTTZLusqMtppJp1y/tbFGZdgrJs1ErXNTK/XGF+A3giX6x7PhpDRIm
-         hmK9NnWdQaXSdYnz0gq8Zzi+22jNs7CBSFn7r/lNlPhBFTRO/GQX+/kosJbTT8Y6OXOl
-         r5UTavGk61ZOzoHBGehIImP0u2DU+NwCQtwqtsZitdy8Pa8pOzz+1etpbwLUjtZfTaRc
-         7vXTaxYdaWgPplxCQugYK3ALOUI1xzxEfvfLEhcA/EL/FhpDADZa5933xxBZm7NoMfYq
-         J02p7DCf5UXYrxAap101MwcYB9ydxrzQD5p1wBersK+OQYt1i+YhkFwZqt46TjudSXob
-         UZxw==
-X-Gm-Message-State: ACrzQf1ioPqWeEt3GSvWQd6Mgy9Kewvdu1FPCjXBDciH8xN89ST8MdJT
-        /X/jOKkg3pcPSC+bY55AE6ClZL08HroU7Cj7mHHojw==
-X-Google-Smtp-Source: AMsMyM6jkTKiLKSqDZxJdnx4sI0Vk0Ohi0/4NFzL4mGK7QELlD/W4obOucDIKNq/Qv9RKu/hH0qBuRIpgRfNcgKh1sA=
-X-Received: by 2002:a05:6402:90e:b0:443:ec4b:2b03 with SMTP id
- g14-20020a056402090e00b00443ec4b2b03mr20572019edz.71.1664176073670; Mon, 26
- Sep 2022 00:07:53 -0700 (PDT)
+        Mon, 26 Sep 2022 03:10:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C610F3136D;
+        Mon, 26 Sep 2022 00:09:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DE2361785;
+        Mon, 26 Sep 2022 07:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF6EDC433C1;
+        Mon, 26 Sep 2022 07:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664176154;
+        bh=+wwySMrMtE5CQ6gKHpsT7ms5I9rHyoBUL87VEi0oDP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J1+NL5oeoW+aj/l9B3+3Sh9nqoAlC6A3JngBgscVBPS0e/Vu4dNrTNcVropQczx/Q
+         1O0L1R7HvLYovDo+zujHFZyS0OZ94oVCnahT6vgs3N8shPACeqX+NDWud7TJQBlCwQ
+         6pyQ9zpd9zuV44nlicUdPuMIXSf38Km8N+l4sTJ0=
+Date:   Mon, 26 Sep 2022 09:09:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Christoph Hellwig <hch@lst.de>,
+        Dusty Mabe <dusty@dustymabe.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: regression caused by block: freeze the queue earlier in
+ del_gendisk
+Message-ID: <YzFQF3cccwK1G2FS@kroah.com>
+References: <Yx/jLTknQm9VeHi4@T590>
+ <95cbd47d-46ed-850e-7d4f-851b35d03069@dustymabe.com>
+ <f2c28043-59e6-0aee-b8bf-df38525ee899@leemhuis.info>
+ <d39e9149-fcb6-1f7c-4c19-234e74f286f8@kernel.dk>
+ <20220920141217.GA12560@lst.de>
+ <9594af4b-eb16-0a51-9a4a-e21bbce3317d@kernel.dk>
+ <6a3660b2-fa7d-14a2-6977-f50926ad369c@leemhuis.info>
+ <c7c909aa-71d9-b43c-293e-d4801a00861e@kernel.dk>
+ <Yysj6AXQ44/el4pS@kroah.com>
+ <cecf4c71-14be-4ff8-df83-cfd1da102bcf@kernel.dk>
 MIME-Version: 1.0
-References: <20220813083319.45455-1-y.oudjana@protonmail.com>
-In-Reply-To: <20220813083319.45455-1-y.oudjana@protonmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 26 Sep 2022 15:07:42 +0800
-Message-ID: <CAGXv+5FZ2YKccJQQmALvu53y+z1X7REwY0MHm-WZ=A=gTCQ8CQ@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: mediatek: Use mtk_clk_register_gates_with_dev in
- simple probe
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cecf4c71-14be-4ff8-df83-cfd1da102bcf@kernel.dk>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 4:34 PM Yassine Oudjana
-<yassine.oudjana@gmail.com> wrote:
->
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
->
-> Register gates with dev in mtk_clk_simple_probe.
->
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Wed, Sep 21, 2022 at 08:56:53AM -0600, Jens Axboe wrote:
+> On Wed, Sep 21, 2022 at 8:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Sep 21, 2022 at 08:34:26AM -0600, Jens Axboe wrote:
+> > > On 9/21/22 3:25 AM, Thorsten Leemhuis wrote:
+> > > > On 20.09.22 16:14, Jens Axboe wrote:
+> > > >> On 9/20/22 8:12 AM, Christoph Hellwig wrote:
+> > > >>> On Tue, Sep 20, 2022 at 08:05:06AM -0600, Jens Axboe wrote:
+> > > >>>> Christoph and I discussed this one last week, and he has a plan to try
+> > > >>>> a flag approach. Christoph, did you get a chance to bang that out? Would
+> > > >>>> be nice to get this one wrapped up.
+> > > >>>
+> > > >>> I gave up on that as it will be far too much change so late in
+> > > >>> the cycle and sent you the revert yesterday.
+> > > >>
+> > > >> Gotcha, haven't made it all the way through the emails of the morning yet.
+> > > >> I'll queue it up.
+> > > >
+> > > > Thx to both of you for taking care of this.
+> > > >
+> > > > Nitpicking: that patch is missing a "CC: stable@..." tag to ensure
+> > > > automatic and quick backporting to 5.19.y. Or is the block layer among
+> > > > the subsystems that prefer to handle such things manually?
+> > > >
+> > > > Ohh, and a fixes tag might have been good as well; a "Link:" tag
+> > > > pointing to the report, too. If either would have been there, regzbot
+> > > > would have noticed Christoph's patch posting and I wouldn't have
+> > > > bothered you yesterday. :-) But whatever, not that important.
+> > >
+> > > We'll just have to ensure we ping stable on it when it goes in.
+> >
+> > If you have a git id that is not going to change, I can watch out for it
+> > to land in Linus's tree...
+> 
+> This is the one:
+> 
+> commit 4c66a326b5ab784cddd72de07ac5b6210e9e1b06 (origin/block-6.0, block-6.0)
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Mon Sep 19 16:40:49 2022 +0200
+> 
+>     Revert "block: freeze the queue earlier in del_gendisk"
+> 
+> Thanks Greg!
 
-I've queued this patch up here [1] and will send a pull request to
-the clock maintainer later this week.
+Now queued up, thanks.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git/log/?h=clk-mtk-for-6.1
+greg k-h
