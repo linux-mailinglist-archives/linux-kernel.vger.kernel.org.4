@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8AE5EA0E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7F05EA1BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiIZKml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S236891AbiIZK4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbiIZKlJ (ORCPT
+        with ESMTP id S237137AbiIZKyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:41:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968EF4D167;
-        Mon, 26 Sep 2022 03:24:06 -0700 (PDT)
+        Mon, 26 Sep 2022 06:54:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C6F4DF32;
+        Mon, 26 Sep 2022 03:28:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FACE60BB1;
-        Mon, 26 Sep 2022 10:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA862C433C1;
-        Mon, 26 Sep 2022 10:23:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B5E601D2;
+        Mon, 26 Sep 2022 10:28:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300D3C433C1;
+        Mon, 26 Sep 2022 10:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187836;
-        bh=2y0DE5yi0iANBQw/LVAuri6eExxqytDWJSrFqn2o49w=;
+        s=korg; t=1664188134;
+        bh=ZefyUdyjrZLLfgXROT+Cq73VQjC9GSiMHSF4lSNyBcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fo5YHEIz+ZaP3cYGli3Ac+v/7jg4YzD3T+jvZyi3z9piT5ZomXgck+p9ifnYMgUxd
-         me4iDwSDMKj+PxQQKMPGLVIKsr+r94e5by76G2x0Jsur0Lt++4/MUpPq4NibU2h5HV
-         2UQnaU8GUs0djuPRDU1tgNJgJF32l3PIUEK1JUmk=
+        b=wH/EuCgSgUtcMYAHtm7QK3aHKvQG7ohnUJDAOhIGW3qtwV/cKnGngXcBTpk5oXC+x
+         ys5fj99/UHwwVKh7SF4N82JMBlxGJzHv3sebNxj75eBlFmsICbV0kDarttgRkKTjMQ
+         FkY59LchtZ0jRx1fU+7RvVZNElVq3c6/I9jUqcs4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 043/120] iio: adc: mcp3911: correct "microchip,device-addr" property
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 050/141] efi: x86: Wipe setup_data on pure EFI boot
 Date:   Mon, 26 Sep 2022 12:11:16 +0200
-Message-Id: <20220926100752.301393843@linuxfoundation.org>
+Message-Id: <20220926100756.252548651@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit cfbd76d5c9c449739bb74288d982bccf9ff822f4 ]
+commit 63bf28ceb3ebbe76048c3fb2987996ca1ae64f83 upstream.
 
-Go for the right property name that is documented in the bindings.
+When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+services [as opposed to the deprecated EFI handover protocol], the setup
+header is taken from the image directly, and given that EFI's LoadImage
+has no Linux/x86 specific knowledge regarding struct bootparams or
+struct setup_header, any absolute addresses in the setup header must
+originate from the file and not from a prior loading stage.
 
-Fixes: 3a89b289df5d ("iio: adc: add support for mcp3911")
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220722130726.7627-3-marcus.folkesson@gmail.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Since we cannot generally predict where LoadImage() decides to load an
+image (*), such absolute addresses must be treated as suspect: even if a
+prior boot stage intended to make them point somewhere inside the
+[signed] image, there is no way to validate that, and if they point at
+an arbitrary location in memory, the setup_data nodes will not be
+covered by any signatures or TPM measurements either, and could be made
+to contain an arbitrary sequence of SETUP_xxx nodes, which could
+interfere quite badly with the early x86 boot sequence.
+
+(*) Note that, while LoadImage() does take a buffer/size tuple in
+addition to a device path, which can be used to provide the image
+contents directly, it will re-allocate such images, as the memory
+footprint of an image is generally larger than the PE/COFF file
+representation.
+
+Cc: <stable@vger.kernel.org> # v5.10+
+Link: https://lore.kernel.org/all/20220904165321.1140894-1-Jason@zx2c4.com/
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/mcp3911.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/firmware/efi/libstub/x86-stub.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index cd8b1bab9cf0..0299f9ea9692 100644
---- a/drivers/iio/adc/mcp3911.c
-+++ b/drivers/iio/adc/mcp3911.c
-@@ -217,7 +217,14 @@ static int mcp3911_config(struct mcp3911 *adc)
- 	u32 configreg;
- 	int ret;
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -414,6 +414,13 @@ efi_status_t __efiapi efi_pe_entry(efi_h
+ 	hdr->ramdisk_image = 0;
+ 	hdr->ramdisk_size = 0;
  
--	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
-+	ret = device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
-+
 +	/*
-+	 * Fallback to "device-addr" due to historical mismatch between
-+	 * dt-bindings and implementation
++	 * Disregard any setup data that was provided by the bootloader:
++	 * setup_data could be pointing anywhere, and we have no way of
++	 * authenticating or validating the payload.
 +	 */
-+	if (ret)
-+		device_property_read_u32(dev, "device-addr", &adc->dev_addr);
- 	if (adc->dev_addr > 3) {
- 		dev_err(&adc->spi->dev,
- 			"invalid device address (%i). Must be in range 0-3.\n",
--- 
-2.35.1
-
++	hdr->setup_data = 0;
++
+ 	efi_stub_entry(handle, sys_table_arg, boot_params);
+ 	/* not reached */
+ 
 
 
