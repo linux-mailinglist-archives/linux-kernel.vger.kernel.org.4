@@ -2,92 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3268D5EB4AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C945EB4BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiIZWli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S229965AbiIZWoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiIZWle (ORCPT
+        with ESMTP id S229605AbiIZWoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:41:34 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABB90806
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:41:33 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id m81so10075246oia.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tz2cEwqQBI5KOid9Ym3jdh1CtIss2mqT+yeVpI5D5SM=;
-        b=5WMM3Qo+EagYcdk/4XzPR7M1Nkp26RLOWPb1x61inBt4ynUprqDGH/n2uKScMC+AV0
-         EcFTOsJ5mdWcraZ1soCsfLi7zx5w0vD/VBx5UsNCU5hsv98jWYpXFxAnSq162zbHwfMx
-         iqLiAf99fvx4Bmp4Z2Bt3Tz4f+c4u0SJditYcS0saNoVVvvEDIiw4VAuTOXVoOpURqDs
-         l5S/Xz9djK88fduZ+aQgRsHpuZF3xxnJwOqhpcVPGQ3n7OUFOqtY0lcurwbzfVsrLbco
-         vxExn+Zqc/jBXo9VBrKMIPYnRCffnj/oBxm1X3GS0LIglmabtIgcE8YOTyR+w1dDwro1
-         YTLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tz2cEwqQBI5KOid9Ym3jdh1CtIss2mqT+yeVpI5D5SM=;
-        b=xRD3RLAacnn2tqFo1vFb5NMqPqXVj3Jc6XbGqXV1H3inqXORJhhi6rIIVkk+HV9+No
-         PJ/eQrhs8HkWLKUVwi8hH5yV2iIndWo1CqM+dTQPZvX00yWU5Qg4nls4EdsfRbFcEAsJ
-         ZkmomdB1VRr/Hc7mjnnG0LJrwPn3KMvG1SW9v2rLWbM/msfUuZ0Uver3qBHi6FtOOHpb
-         7R81u6vsqqs6jHfopTnJ6M+SAuMajQfPZK+a64MdI+nAG1tLSvFagJsE7ADeoIdK3ybB
-         7I4+WE0+o1N7Ou9cXwm1n/+3Z3RepUhhCmkUFknK3a13Vik2PCr28OmXX2fEg+4CzrX0
-         ZAeg==
-X-Gm-Message-State: ACrzQf1ItiGVh9hehUJpHHc7+cdpFHFg3bJmf61kHLXueSRlA1WtAHFE
-        W2db0Q7rFj210fDIfk75pjyhgLPWHVMp2zr1OBy3yTgXzQ==
-X-Google-Smtp-Source: AMsMyM4w8nRvJwif6MuQV1Y60DIJ5t08oIJfRG7hIO1WM7+Mw7vUvSGUBu9AGMzwflSnF4bjdKW2wOh01hwIbLeR7Ws=
-X-Received: by 2002:a05:6808:144b:b0:350:a06a:f8cb with SMTP id
- x11-20020a056808144b00b00350a06af8cbmr488080oiv.51.1664232092411; Mon, 26 Sep
- 2022 15:41:32 -0700 (PDT)
+        Mon, 26 Sep 2022 18:44:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A2D9E2E5;
+        Mon, 26 Sep 2022 15:44:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C24DA2199A;
+        Mon, 26 Sep 2022 22:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664232246; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3wqBvT1Pdp5nBIwk7f69QChWKcic6sFvlcDIXYHLhVw=;
+        b=bp3sjpaKgKxakHrVYbA6MiKdHvmDJOaK7Knl9ZekzxVGGvefEZtlBRay9JdXNdvtsI1FeT
+        BFiGJDTn7+nBrNUAcYcwtC/v/cFeQlQAXMryESS37gkkS89krmeCqqd4ZQnBlnku1Qj9nT
+        bHo5wmUgv+yvxmGT2ireKVPFG/FEpiA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664232246;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3wqBvT1Pdp5nBIwk7f69QChWKcic6sFvlcDIXYHLhVw=;
+        b=KNEYqmH80A7uU4gjB/CKhQ0gmEKPEUyR2v8DIyep3Ttnd3fg3CE5jdzAdX4shiTSaiECHR
+        w+8QIdUkTfKWlFCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B2E7213486;
+        Mon, 26 Sep 2022 22:43:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oE9qGi8rMmOyQwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 26 Sep 2022 22:43:59 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20220926131643.146502-1-nathanl@linux.ibm.com> <20220926131643.146502-3-nathanl@linux.ibm.com>
-In-Reply-To: <20220926131643.146502-3-nathanl@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 26 Sep 2022 18:41:21 -0400
-Message-ID: <CAHC9VhS9kJ4aEp_Y_imcsj_0JOn523Au=ct6uQEPjNDVVjYxVg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] powerpc/rtas: block error injection when locked down
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jmorris@namei.org,
-        mpe@ellerman.id.au, serge@hallyn.com, ajd@linux.ibm.com,
-        gcwilson@linux.ibm.com, nayna@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Trond Myklebust" <trondmy@hammerspace.com>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <baf852dfb57aaf5a670bc88236f8d62c99668fcc.camel@kernel.org>
+References: <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>,
+ <20220918235344.GH3600936@dread.disaster.area>,
+ <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>,
+ <20220920001645.GN3600936@dread.disaster.area>,
+ <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>,
+ <20220921000032.GR3600936@dread.disaster.area>,
+ <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>,
+ <20220921214124.GS3600936@dread.disaster.area>,
+ <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>,
+ <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>,
+ <20220923095653.5c63i2jgv52j3zqp@quack3>,
+ <2d41c08e1fd96d55c794c3b4cd43a51a0494bfcf.camel@hammerspace.com>,
+ <baf852dfb57aaf5a670bc88236f8d62c99668fcc.camel@kernel.org>
+Date:   Tue, 27 Sep 2022 08:43:56 +1000
+Message-id: <166423223623.17572.7229091435446226718@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 9:18 AM Nathan Lynch <nathanl@linux.ibm.com> wrote:
->
-> The error injection facility on pseries VMs allows corruption of
-> arbitrary guest memory, potentially enabling a sufficiently privileged
-> user to disable lockdown or perform other modifications of the running
-> kernel via the rtas syscall.
->
-> Block the PAPR error injection facility from being opened or called
-> when locked down.
->
-> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
-> ---
->  arch/powerpc/kernel/rtas.c | 25 ++++++++++++++++++++++++-
->  include/linux/security.h   |  1 +
->  security/security.c        |  1 +
->  3 files changed, 26 insertions(+), 1 deletion(-)
+On Fri, 23 Sep 2022, Jeff Layton wrote:
+> 
+> Absolutely. That is the downside of this approach, but the priority here
+> has always been to improve nfsd. If we don't get the ability to present
+> this info via statx, then so be it. Later on, I suppose we can move that
+> handling into the kernel in some fashion if we decide it's worthwhile.
+> 
+> That said, not having this in statx makes it more difficult to test
+> i_version behavior. Maybe we can add a generic ioctl for that in the
+> interim?
 
-The lockdown changes are trivial, but they look fine to me.
+I wonder if we are over-thinking this, trying too hard, making "perfect"
+the enemy of "good".
+While we agree that the current implementation of i_version is
+imperfect, it isn't causing major data corruption all around the world.
+I don't think there are even any known bug reports are there?
+So while we do want to fix it as best we can, we don't need to make that
+the first priority.
 
-Acked-by: Paul Moore <paul@paul-moore.com> (LSM)
+I think the first priority should be to document how we want it to work,
+which is what this thread is really all about.  The documentation can
+note that some (all) filesystems do not provide perfect semantics across
+unclean restarts, and can list any other anomalies that we are aware of.
+And on that basis we can export the current i_version to user-space via
+statx and start trying to write some test code.
 
--- 
-paul-moore.com
+We can then look at moving the i_version/ctime update from *before* the
+write to *after* the write, and any other improvements that can be
+achieved easily in common code.  We can then update the man page to say
+"since Linux 6.42, this list of anomalies is no longer present".
+
+Then we can explore some options for handling unclean restart - in a
+context where we can write tests and maybe even demonstrate a concrete
+problem before we start trying to fix it.
+
+NeilBrown
