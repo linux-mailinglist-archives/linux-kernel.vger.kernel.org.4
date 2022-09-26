@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E366E5EB229
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68AF5EB22D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiIZUdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S229518AbiIZUgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIZUdn (ORCPT
+        with ESMTP id S229458AbiIZUgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:33:43 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E36A61C3;
-        Mon, 26 Sep 2022 13:33:42 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127dca21a7dso10766423fac.12;
-        Mon, 26 Sep 2022 13:33:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GfIBGS2IdI4gzQSLH6IzC9uAsmoYqAP8zfJrjwFCCmc=;
-        b=pMG7E6yjOyfog3wpJAz6HV7ia+fFRJttGzX2ru+AeZGWUqB9hI89D80leAYNOFs8qb
-         Ug0ATdfZHtp1kGuWyaczh2ephF2KNqoQgbmJc+rRlzLLC5JQxT0UY/1b7uobofhFhR7e
-         eZO3HvDd1bdesCdYFeZ0wtzApoABxXUsl40Owwus6kZ4AZpR84cT5mj+pNwHLqvv5x/3
-         aZVAK2ZH3jTk7TaJ6nP0DBYeLLXqBxEsM8lKUMEO4laUVbOBXX9P6U/e7dZr/23iciu1
-         9tlqym1L+EkS7VTwww9LR5lyZA915KwZsHIGNAzWV7zu1SSjar5dzvIPUVj0LY0BuIWe
-         8Jgg==
-X-Gm-Message-State: ACrzQf32m5LJifNAO5pphGMKHc2g8rKZJ1Glf/9vv+vplmGW+QZfIaXj
-        7GnkgEH4SVokt0eb7agrTQ==
-X-Google-Smtp-Source: AMsMyM4heuuVKUh/XvTLz6/suWyuiiJA5u26m4jtlIgfrq6LbeLgcUfQSQHg+TuFlGIXO2vZ5gNlzg==
-X-Received: by 2002:a05:6870:a9a0:b0:12b:45b6:80e1 with SMTP id ep32-20020a056870a9a000b0012b45b680e1mr297124oab.209.1664224421295;
-        Mon, 26 Sep 2022 13:33:41 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d23-20020a056870961700b0010e73e252b8sm9495211oaq.6.2022.09.26.13.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 13:33:41 -0700 (PDT)
-Received: (nullmailer pid 2759993 invoked by uid 1000);
-        Mon, 26 Sep 2022 20:33:40 -0000
-Date:   Mon, 26 Sep 2022 15:33:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Mon, 26 Sep 2022 16:36:20 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD416CD2F;
+        Mon, 26 Sep 2022 13:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+        bh=JDRp4qDr97IzM04ueqqbM+oSnyDy0BzALtcY4EKIDWo=; b=CQ33+ur/wXAuMpk31a+d91z6f2
+        O+rH4wfoBJhnCU1w4k+ofQRQkELKhmDZQZmV9pU93nbHvcVnNmPErmEp5d56WNpFgucZ89a+RzWdV
+        zdFxRtR4OMryfGnQRMPPJDF7VVHWEDylxP2hel4zyrh7rgAdu5QCWbPX+LQKAqL9uGQxaWTSRDBJL
+        4ioVAutyajsmTNQN+S4ls7x++DCGOAOdYH0Rd/9pT9x6modnLw5M/ySApOc+kTXh/q+Erwjrd7x78
+        TYX5+lAWBY6fm9EzN4xYyEbqALZk0UpZ00lg7WYzc9upd5yIxIb0L+f9q/EWyvz83ZG/L3X3j4mYE
+        wCG7IJkQ==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocupq-00BDUk-Bw; Mon, 26 Sep 2022 22:36:14 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ocupp-0001J1-2k;
+        Mon, 26 Sep 2022 22:36:13 +0200
+Date:   Mon, 26 Sep 2022 22:36:13 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/12] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix
- gpio pattern
-Message-ID: <20220926203340.GA2752484-robh@kernel.org>
-References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
- <20220922195651.345369-2-krzysztof.kozlowski@linaro.org>
+        Heiko Stuebner <heiko@sntech.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH] arm64: dts: rockchip: Add missing rockchip,pipe-grf to
+ rk3568 PCIe v3 PHY
+Message-ID: <YzINPR0htauYppWQ@aurel32.net>
+Mail-Followup-To: Peter Geis <pgwipeout@gmail.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>
+References: <20220926183533.1893371-1-aurelien@aurel32.net>
+ <CAMdYzYoR2caD2ecN5vGTiHejoE5AhbyKxSgSeU1+SzU7nNVTwg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922195651.345369-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMdYzYoR2caD2ecN5vGTiHejoE5AhbyKxSgSeU1+SzU7nNVTwg@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:56:40PM +0200, Krzysztof Kozlowski wrote:
-> Fix double ']' in GPIO pattern to properly match "pins" property.
-> Otherwise schema for pins state is not applied.
+On 2022-09-26 14:58, Peter Geis wrote:
+> On Mon, Sep 26, 2022 at 2:35 PM Aurelien Jarno <aurelien@aurel32.net> wrote:
+> >
+> > This commit fixes the error message
+> >
+> >   rockchip-snps-pcie3-phy fe8c0000.phy: failed to find rockchip,pipe_grf regmap
+> 
+> The pipe grf only is used on the rk3588 device for this phy.
+ 
+Ok, looking at the code in details, I confirm that. Does it mean the
+change should be done at the phy driver level, to only look for
+rockchip,pipe-grf on the rk3588 device?
 
-Huh? The schema is applied, but would fail, right?
-
-Perhaps the example should have some child nodes to demonstrate this.
-
-> 
-> Fixes: 958bb025f5b3 ("dt-bindings: pinctrl: qcom: Add sc8280xp lpass lpi pinctrl bindings")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml       | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml
-> index 1f468303bb08..fb3ad6c0d80e 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml
-> @@ -58,7 +58,7 @@ patternProperties:
->            List of gpio pins affected by the properties specified in this
->            subnode.
->          items:
-> -          pattern: "^gpio([0-1]|1[0-8]])$"
-> +          pattern: "^gpio([0-1]|1[0-8])$"
->  
->        function:
->          enum: [ swr_tx_clk, swr_tx_data, swr_rx_clk, swr_rx_data,
-> -- 
-> 2.34.1
-> 
-> 
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
