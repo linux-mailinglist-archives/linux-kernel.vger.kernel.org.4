@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBF05EA01F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FF55EA34A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbiIZKdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S237860AbiIZLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbiIZKc7 (ORCPT
+        with ESMTP id S231727AbiIZLVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:32:59 -0400
+        Mon, 26 Sep 2022 07:21:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115AD1AF0F;
-        Mon, 26 Sep 2022 03:20:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0922C67164;
+        Mon, 26 Sep 2022 03:39:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DB660B7E;
-        Mon, 26 Sep 2022 10:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6F1C433D6;
-        Mon, 26 Sep 2022 10:19:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D734260BB7;
+        Mon, 26 Sep 2022 10:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E30C433D6;
+        Mon, 26 Sep 2022 10:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187599;
-        bh=UrYpoJkOcC+Z/4HedVZyNA5cwMtyJQfPL+QJGcXp3k0=;
+        s=korg; t=1664188707;
+        bh=NI1KVVdpCcaD/rkhIBvb6loFYvP+w155ya0gBH6kW10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KNbWDlr1TQJpJDk2DG2FdQ3fCkqT5gZJMxrcxE4sUnwEj8uMY1bm9DNah2jb5/Zu0
-         agDBPfyIdPudnVKg0dMYdRtgbIIIl3rwHu9ZQtNHhsy5Fngl/4JeC5fzMsOMvj/ZUg
-         5rKYLKwx5f96t+81l2d3bLhTcNVB9ED4EKZI2HJw=
+        b=L42KWepWKCu5QCscxMB4UZxmH2vmB9w1ZAUNiFfxWTs2djjC3gTSRzAbcoxj7u/cB
+         UKLubkCbNSlh2ssBq3eGXVPc7ran/z9tHQkWhACG+5E0Uita3w0Y+F/a29ncw15Ty1
+         r37lnZXb8he2uPLGlBj9o6KfQGRfOkHtuMawNbxU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4.19 51/58] serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 096/148] net: enetc: move enetc_set_psfp() out of the common enetc_set_features()
 Date:   Mon, 26 Sep 2022 12:12:10 +0200
-Message-Id: <20220926100743.320354793@linuxfoundation.org>
+Message-Id: <20220926100759.677969818@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 754f68044c7dd6c52534ba3e0f664830285c4b15 upstream.
+[ Upstream commit fed38e64d9b99d65a36c0dbadc3d3f8ddd9ea030 ]
 
-DMA complete & stop paths did not correctly account Tx'ed characters
-into icount.tx. Using uart_xmit_advance() fixes the problem.
+The VF netdev driver shouldn't respond to changes in the NETIF_F_HW_TC
+flag; only PFs should. Moreover, TSN-specific code should go to
+enetc_qos.c, which should not be included in the VF driver.
 
-Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
-Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220901143934.8850-3-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 79e499829f3f ("net: enetc: add hw tc hw offload features for PSPF capability")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220916133209.3351399-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial-tegra.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/freescale/enetc/enetc.c  | 32 +------------------
+ drivers/net/ethernet/freescale/enetc/enetc.h  |  9 ++++--
+ .../net/ethernet/freescale/enetc/enetc_pf.c   | 11 ++++++-
+ .../net/ethernet/freescale/enetc/enetc_qos.c  | 23 +++++++++++++
+ .../net/ethernet/freescale/enetc/enetc_vf.c   |  4 ++-
+ 5 files changed, 44 insertions(+), 35 deletions(-)
 
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -398,7 +398,7 @@ static void tegra_uart_tx_dma_complete(v
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
- 	spin_lock_irqsave(&tup->uport.lock, flags);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
- 		uart_write_wakeup(&tup->uport);
-@@ -482,7 +482,6 @@ static unsigned int tegra_uart_tx_empty(
- static void tegra_uart_stop_tx(struct uart_port *u)
- {
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
--	struct circ_buf *xmit = &tup->uport.state->xmit;
- 	struct dma_tx_state state;
- 	unsigned int count;
- 
-@@ -493,7 +492,7 @@ static void tegra_uart_stop_tx(struct ua
- 	dmaengine_tx_status(tup->tx_dma_chan, tup->tx_cookie, &state);
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
+index 042327b9981f..bd840061ba8f 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -2307,29 +2307,6 @@ static int enetc_set_rss(struct net_device *ndev, int en)
+ 	return 0;
  }
  
+-static int enetc_set_psfp(struct net_device *ndev, int en)
+-{
+-	struct enetc_ndev_priv *priv = netdev_priv(ndev);
+-	int err;
+-
+-	if (en) {
+-		err = enetc_psfp_enable(priv);
+-		if (err)
+-			return err;
+-
+-		priv->active_offloads |= ENETC_F_QCI;
+-		return 0;
+-	}
+-
+-	err = enetc_psfp_disable(priv);
+-	if (err)
+-		return err;
+-
+-	priv->active_offloads &= ~ENETC_F_QCI;
+-
+-	return 0;
+-}
+-
+ static void enetc_enable_rxvlan(struct net_device *ndev, bool en)
+ {
+ 	struct enetc_ndev_priv *priv = netdev_priv(ndev);
+@@ -2348,11 +2325,9 @@ static void enetc_enable_txvlan(struct net_device *ndev, bool en)
+ 		enetc_bdr_enable_txvlan(&priv->si->hw, i, en);
+ }
+ 
+-int enetc_set_features(struct net_device *ndev,
+-		       netdev_features_t features)
++void enetc_set_features(struct net_device *ndev, netdev_features_t features)
+ {
+ 	netdev_features_t changed = ndev->features ^ features;
+-	int err = 0;
+ 
+ 	if (changed & NETIF_F_RXHASH)
+ 		enetc_set_rss(ndev, !!(features & NETIF_F_RXHASH));
+@@ -2364,11 +2339,6 @@ int enetc_set_features(struct net_device *ndev,
+ 	if (changed & NETIF_F_HW_VLAN_CTAG_TX)
+ 		enetc_enable_txvlan(ndev,
+ 				    !!(features & NETIF_F_HW_VLAN_CTAG_TX));
+-
+-	if (changed & NETIF_F_HW_TC)
+-		err = enetc_set_psfp(ndev, !!(features & NETIF_F_HW_TC));
+-
+-	return err;
+ }
+ 
+ #ifdef CONFIG_FSL_ENETC_PTP_CLOCK
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
+index 08b283347d9c..5cacda8b4ef0 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.h
++++ b/drivers/net/ethernet/freescale/enetc/enetc.h
+@@ -385,8 +385,7 @@ void enetc_start(struct net_device *ndev);
+ void enetc_stop(struct net_device *ndev);
+ netdev_tx_t enetc_xmit(struct sk_buff *skb, struct net_device *ndev);
+ struct net_device_stats *enetc_get_stats(struct net_device *ndev);
+-int enetc_set_features(struct net_device *ndev,
+-		       netdev_features_t features);
++void enetc_set_features(struct net_device *ndev, netdev_features_t features);
+ int enetc_ioctl(struct net_device *ndev, struct ifreq *rq, int cmd);
+ int enetc_setup_tc(struct net_device *ndev, enum tc_setup_type type,
+ 		   void *type_data);
+@@ -421,6 +420,7 @@ int enetc_setup_tc_block_cb(enum tc_setup_type type, void *type_data,
+ int enetc_setup_tc_psfp(struct net_device *ndev, void *type_data);
+ int enetc_psfp_init(struct enetc_ndev_priv *priv);
+ int enetc_psfp_clean(struct enetc_ndev_priv *priv);
++int enetc_set_psfp(struct net_device *ndev, bool en);
+ 
+ static inline void enetc_get_max_cap(struct enetc_ndev_priv *priv)
+ {
+@@ -496,4 +496,9 @@ static inline int enetc_psfp_disable(struct enetc_ndev_priv *priv)
+ {
+ 	return 0;
+ }
++
++static inline int enetc_set_psfp(struct net_device *ndev, bool en)
++{
++	return 0;
++}
+ #endif
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_pf.c b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
+index d522bd5c90b4..36f5abd1c61b 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_pf.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
+@@ -708,6 +708,13 @@ static int enetc_pf_set_features(struct net_device *ndev,
+ {
+ 	netdev_features_t changed = ndev->features ^ features;
+ 	struct enetc_ndev_priv *priv = netdev_priv(ndev);
++	int err;
++
++	if (changed & NETIF_F_HW_TC) {
++		err = enetc_set_psfp(ndev, !!(features & NETIF_F_HW_TC));
++		if (err)
++			return err;
++	}
+ 
+ 	if (changed & NETIF_F_HW_VLAN_CTAG_FILTER) {
+ 		struct enetc_pf *pf = enetc_si_priv(priv->si);
+@@ -721,7 +728,9 @@ static int enetc_pf_set_features(struct net_device *ndev,
+ 	if (changed & NETIF_F_LOOPBACK)
+ 		enetc_set_loopback(ndev, !!(features & NETIF_F_LOOPBACK));
+ 
+-	return enetc_set_features(ndev, features);
++	enetc_set_features(ndev, features);
++
++	return 0;
+ }
+ 
+ static const struct net_device_ops enetc_ndev_ops = {
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+index d779dde522c8..6b236e0fd806 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+@@ -1529,6 +1529,29 @@ int enetc_setup_tc_block_cb(enum tc_setup_type type, void *type_data,
+ 	}
+ }
+ 
++int enetc_set_psfp(struct net_device *ndev, bool en)
++{
++	struct enetc_ndev_priv *priv = netdev_priv(ndev);
++	int err;
++
++	if (en) {
++		err = enetc_psfp_enable(priv);
++		if (err)
++			return err;
++
++		priv->active_offloads |= ENETC_F_QCI;
++		return 0;
++	}
++
++	err = enetc_psfp_disable(priv);
++	if (err)
++		return err;
++
++	priv->active_offloads &= ~ENETC_F_QCI;
++
++	return 0;
++}
++
+ int enetc_psfp_init(struct enetc_ndev_priv *priv)
+ {
+ 	if (epsfp.psfp_sfi_bitmap)
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_vf.c b/drivers/net/ethernet/freescale/enetc/enetc_vf.c
+index 1a9d1e8b772c..8daea3a776b5 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_vf.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_vf.c
+@@ -88,7 +88,9 @@ static int enetc_vf_set_mac_addr(struct net_device *ndev, void *addr)
+ static int enetc_vf_set_features(struct net_device *ndev,
+ 				 netdev_features_t features)
+ {
+-	return enetc_set_features(ndev, features);
++	enetc_set_features(ndev, features);
++
++	return 0;
+ }
+ 
+ /* Probing/ Init */
+-- 
+2.35.1
+
 
 
