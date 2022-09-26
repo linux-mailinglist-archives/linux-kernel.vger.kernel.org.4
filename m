@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C15EA26C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256B95EA14D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbiIZLHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S233587AbiIZKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbiIZLGU (ORCPT
+        with ESMTP id S236301AbiIZKpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:06:20 -0400
+        Mon, 26 Sep 2022 06:45:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923AF4F67A;
-        Mon, 26 Sep 2022 03:34:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8092D564FB;
+        Mon, 26 Sep 2022 03:25:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EC6160112;
-        Mon, 26 Sep 2022 10:33:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D1DC433C1;
-        Mon, 26 Sep 2022 10:33:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1F0E60B2F;
+        Mon, 26 Sep 2022 10:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E69C433C1;
+        Mon, 26 Sep 2022 10:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188436;
-        bh=75DfJ5Yqg1z2SFT3L+O7MKMIFpGoOqNpgcehWq6lixc=;
+        s=korg; t=1664187949;
+        bh=6CQzMC7L2OMYeY0hfewh1McdlzBx6HEsshVCI5I7lzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NhZwlRluCTNhM3Mx9Gw0QmsMDzGO5Cy+2w8qcxRMSKmo3RYtkvyAZTg/gf8gPB/pu
-         6M2TzkT2VkcaFbXaU2ZE1Si4+MiL/h2gV/MfrMNn3YmqW611fLohBVLPOK3pjKuhaQ
-         NYHg0T0OAbyhAwtfcvdlqEaWaQ5Mb/YwYQWGQW4A=
+        b=MsgbLL/fjNv9hvIDMUhKfFDrbvvjJg9+fIFGotzNI5t6VDvV7Medfy1uRA75LqNgs
+         fY/E6K/FU21s8/pcR/VLwkRTMBThwEievJnHTwSnQEBlgU0K2KPYHQr5SWBFUgQmsZ
+         HfhU4vkzVl/tvqf02lCJFSPP4CEiyuWDy7lINUo4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 120/141] s390/dasd: fix Oops in dasd_alias_get_start_dev due to missing pavgroup
+        stable@vger.kernel.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Brian Foster <bfoster@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Chandan Babu R <chandan.babu@oracle.com>
+Subject: [PATCH 5.4 113/120] xfs: fix some memory leaks in log recovery
 Date:   Mon, 26 Sep 2022 12:12:26 +0200
-Message-Id: <20220926100758.811434203@linuxfoundation.org>
+Message-Id: <20220926100755.058030217@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: "Darrick J. Wong" <darrick.wong@oracle.com>
 
-commit db7ba07108a48c0f95b74fabbfd5d63e924f992d upstream.
+commit 050552cbe06a3a9c3f977dcf11ff998ae1d5c2d5 upstream.
 
-Fix Oops in dasd_alias_get_start_dev() function caused by the pavgroup
-pointer being NULL.
+Fix a few places where we xlog_alloc_buffer a buffer, hit an error, and
+then bail out without freeing the buffer.
 
-The pavgroup pointer is checked on the entrance of the function but
-without the lcu->lock being held. Therefore there is a race window
-between dasd_alias_get_start_dev() and _lcu_update() which sets
-pavgroup to NULL with the lcu->lock held.
-
-Fix by checking the pavgroup pointer with lcu->lock held.
-
-Cc: <stable@vger.kernel.org> # 2.6.25+
-Fixes: 8e09f21574ea ("[S390] dasd: add hyper PAV support to DASD device driver, part 1")
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220919154931.4123002-2-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd_alias.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/xfs/xfs_log_recover.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/s390/block/dasd_alias.c
-+++ b/drivers/s390/block/dasd_alias.c
-@@ -675,12 +675,12 @@ int dasd_alias_remove_device(struct dasd
- struct dasd_device *dasd_alias_get_start_dev(struct dasd_device *base_device)
- {
- 	struct dasd_eckd_private *alias_priv, *private = base_device->private;
--	struct alias_pav_group *group = private->pavgroup;
- 	struct alias_lcu *lcu = private->lcu;
- 	struct dasd_device *alias_device;
-+	struct alias_pav_group *group;
- 	unsigned long flags;
- 
--	if (!group || !lcu)
-+	if (!lcu)
- 		return NULL;
- 	if (lcu->pav == NO_PAV ||
- 	    lcu->flags & (NEED_UAC_UPDATE | UPDATE_PENDING))
-@@ -697,6 +697,11 @@ struct dasd_device *dasd_alias_get_start
+--- a/fs/xfs/xfs_log_recover.c
++++ b/fs/xfs/xfs_log_recover.c
+@@ -1347,10 +1347,11 @@ xlog_find_tail(
+ 	error = xlog_rseek_logrec_hdr(log, *head_blk, *head_blk, 1, buffer,
+ 				      &rhead_blk, &rhead, &wrapped);
+ 	if (error < 0)
+-		return error;
++		goto done;
+ 	if (!error) {
+ 		xfs_warn(log->l_mp, "%s: couldn't find sync record", __func__);
+-		return -EFSCORRUPTED;
++		error = -EFSCORRUPTED;
++		goto done;
  	}
+ 	*tail_blk = BLOCK_LSN(be64_to_cpu(rhead->h_tail_lsn));
  
- 	spin_lock_irqsave(&lcu->lock, flags);
-+	group = private->pavgroup;
-+	if (!group) {
-+		spin_unlock_irqrestore(&lcu->lock, flags);
-+		return NULL;
-+	}
- 	alias_device = group->next;
- 	if (!alias_device) {
- 		if (list_empty(&group->aliaslist)) {
+@@ -5318,7 +5319,8 @@ xlog_do_recovery_pass(
+ 			} else {
+ 				XFS_ERROR_REPORT(__func__, XFS_ERRLEVEL_LOW,
+ 						log->l_mp);
+-				return -EFSCORRUPTED;
++				error = -EFSCORRUPTED;
++				goto bread_err1;
+ 			}
+ 		}
+ 
 
 
