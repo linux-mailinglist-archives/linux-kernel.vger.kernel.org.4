@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AC75EAF86
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F206A5EAF8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiIZSVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S230428AbiIZSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiIZSU5 (ORCPT
+        with ESMTP id S229706AbiIZSVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:20:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47CC14087;
-        Mon, 26 Sep 2022 11:16:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81EEBB80C72;
-        Mon, 26 Sep 2022 18:16:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CC1C433D6;
-        Mon, 26 Sep 2022 18:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664216171;
-        bh=DvgCiCK329fTQGj9gebY5EY55cLmgK8o5RPjgImGuwM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Sf95KlUwr0s3QhAzUP+UxZ7LchvJbvi8y14ND8Zw+M801b+p695Zct5qoOoOm49p2
-         kiGnHok2kLsm5U+azqJ5WsRkNLeZayKXl/8AOnEIBVhKmBSuPYRHA8oEVHqZWiExY9
-         6/Mie8DOdk0mSZskxsERxX5TR9KfNysR0AvoUxCU/o0B8390wf+XN10u5/gInHsW9p
-         IkS4vWLNPGVdjTaUfl4Tgi7OsaRffFL+mH4g7iiSshw5R3nK7yyKJHuaSsRiKxPFt3
-         TF3E9wYA3ChhQ3rRvT++MnlVMu6m5Qm6ryjbkHAW6c1s89zf38Sxaim9fQh4ol/JsG
-         uzD8G/QCdnOFQ==
-Date:   Mon, 26 Sep 2022 13:16:09 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, kishon@ti.com, vkoul@kernel.org,
-        mani@kernel.org, Sergey.Semin@baikalelectronics.ru,
-        ffclaire1224@gmail.com, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V2 6/9] PCI: tegra194: Refactor LTSSM state polling on
- surprise down
-Message-ID: <20220926181609.GA1612301@bhelgaas>
+        Mon, 26 Sep 2022 14:21:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A715E550
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:17:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso757248pjf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:17:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Il0vkOLUU8Wr/hKXeWfSAnVT8noJuQa95krgaKi1p4s=;
+        b=ndO8+/R02S9Z+MftcCPkoi50pEbp5cagm+Obh6sygHFMVdgUXeF5PNyfPJt6YEvCYt
+         7RdkC9KxTEQ1Fv/6bZMFZkGIr9/TUJh/Dn0IquOtJBsG2IK16fFoMTYGcZh2H8d8P2Lv
+         E0BL7I628eb7+l3xct+uiGuiEncpwJ/CGtXsOiVIS4zoIaaY54OEdOK3WFHmS14qRzp2
+         0Ty0K9rYGGS0QkRH54SSZ8pTvZ8nhEavH4e/sfuRnTYiClyswgBgufRD61NvhQumJNje
+         eV1nrk8nwKijMExrhQbqdT0tI2hk4ZcnTxN4TKSFoN6qylvUs4R0SxSojqwRZok22yWi
+         sWRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Il0vkOLUU8Wr/hKXeWfSAnVT8noJuQa95krgaKi1p4s=;
+        b=3EfmJVgPedl/j/o0P02W8LSTmVnf3fmR8Jwcdfe5710hecLjq1momicmVKGUtrekBv
+         jTeeG1ZxO3gKw09M4JJB2vOiLriQF979j0aHTpHVW5az7H7Q7qyO2RWrt2R0nt2+nq1I
+         0A1+mys4Rma20w3BI0LtjJ37RrGBzRiSsUYwZSuPh/HvH+RtcUvGsAZ6Gz6eR3kwkQb2
+         A4aUixQqUpuYYpUc9TghAEnDlX+pNKrXwbe2rPpIdxrYxuSk379pcifxzJ8schCL9sAh
+         mN/LDSa8ZU4s4U+YwZsQxJecqJa5/znfhldgvLST5J9rbF547QFFnUO2RieNACIio8p+
+         EU8w==
+X-Gm-Message-State: ACrzQf3gchOcOAzp6gsl1uSGtKeGBm65IrQYO1hhHb1l5towocHuykAi
+        o3vtxjgDmzzJGE8kBkITx9uJqrJExozvbCKqO6xKcQ==
+X-Google-Smtp-Source: AMsMyM7HLUfbdMpdW3guEO/IoUjYq2oQz+OyMDkq7nLclHX/EA7jhIcMm5L/Nfwp+rvUkCew0JIURYshd4k1BklGYCE=
+X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
+ on15-20020a17090b1d0f00b00202be3ea14amr49839pjb.102.1664216231609; Mon, 26
+ Sep 2022 11:17:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926115038.24727-7-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYvyD9OWF53ua2EZmyf+=YTx4f1mezDNkVLMxf3BKXW=_w@mail.gmail.com>
+ <YzHIwvzhM9DSW9cF@dev-arch.thelio-3990X> <YzHJRH9hO1lfjSPp@dev-arch.thelio-3990X>
+ <CAKwvOdkYr-Nv6PowyJ10DuP-uFLcvH1oGWSeQH3Dz_JM8vwp2w@mail.gmail.com> <YzHpT7t+9uSIYm0k@shell.armlinux.org.uk>
+In-Reply-To: <YzHpT7t+9uSIYm0k@shell.armlinux.org.uk>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 26 Sep 2022 11:17:00 -0700
+Message-ID: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+Subject: Re: arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must
+ precede .save or .vsave directives
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:20:35PM +0530, Vidya Sagar wrote:
-> On surprise down LTSSM state transisition from L0 -> Recovery.RcvrLock ->
-> Recovery.RcvrSpeed -> Gen1 Recovery.RcvrLock -> Detect.
-> Recovery.RcvrLock and Recovery.RcvrSpeed time is 24 msec and 48 msec
-> respectively. It takes ~96 msec to move from L0 to detect state, hence,
-> increase the poll time to 120 msec. Disable the LTSSM state after it moves
-> to detect to avoid LTSSM toggle between polling and detect.
+On Mon, Sep 26, 2022 at 11:02 AM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Mon, Sep 26, 2022 at 10:42:45AM -0700, Nick Desaulniers wrote:
+> > > On Mon, Sep 26, 2022 at 08:44:05AM -0700, Nathan Chancellor wrote:
+> > > > Thank you for the testing and report! I brought this up on GitHub on
+> > > > Friday as I noticed this as well:
+> > > >
+> > > > https://github.com/ClangBuiltLinux/linux/issues/1718
+> >
+> > Thanks for the reports. I'll take a look at filing additional bug
+> > reports against clang, then moving the definition of
+> > __kretprobe_trampoline to out of line assembler.
+>
+> Are you saying that .save should be accepted without a .fnstart?
 
-s/transisition/transition/
+No. It's just a bug in clang's inline assembler. But it does make
+sense to just move it to out of line assembler anyways; having it be
+inline provides little to no benefit.
 
->  		err = readl_poll_timeout_atomic(pcie->appl_base + APPL_DEBUG,
->  						data,
->  						((data &
-> -						APPL_DEBUG_LTSSM_STATE_MASK) >>
-> -						APPL_DEBUG_LTSSM_STATE_SHIFT) ==
-> -						LTSSM_STATE_PRE_DETECT,
-> -						1, LTSSM_TIMEOUT);
-> +						APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +						LTSSM_STATE_DETECT_QUIET) ||
-> +						((data &
-> +						APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +						LTSSM_STATE_DETECT_ACT) ||
-> +						((data &
-> +						APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +						LTSSM_STATE_PRE_DETECT_QUIET) ||
-> +						((data &
-> +						APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +						LTSSM_STATE_DETECT_WAIT),
-> +						LTSSM_DELAY, LTSSM_TIMEOUT);
-
-I know we usually line up the function parameters with that opening
-paren, but I think overall it would be nicer to drop a couple of the
-leading tabs so these don't wrap so awkwardly.
-
-> +	ret = readl_poll_timeout(pcie->appl_base + APPL_DEBUG, val,
-> +				 ((val & APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +				 LTSSM_STATE_DETECT_QUIET) ||
-> +				 ((val & APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +				 LTSSM_STATE_DETECT_ACT) ||
-> +				 ((val & APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +				 LTSSM_STATE_PRE_DETECT_QUIET) ||
-> +				 ((val & APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +				 LTSSM_STATE_DETECT_WAIT) ||
-> +				 ((val & APPL_DEBUG_LTSSM_STATE_MASK) ==
-> +				 LTSSM_STATE_L2_IDLE),
-> +				 LTSSM_DELAY, LTSSM_TIMEOUT);
-
-Ditto.
+Should I be using UNWIND from arch/arm/include/asm/unwind.h on these
+.fnstart/.save/.pad/.fnend directives?
+-- 
+Thanks,
+~Nick Desaulniers
