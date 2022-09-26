@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776845EB377
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13C25EB3A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiIZVrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S230348AbiIZVyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIZVr2 (ORCPT
+        with ESMTP id S229591AbiIZVyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:47:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFFBA61EF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664228846; x=1695764846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5KrsFws6/eg5uAv6hHy56hUAKlUZzPPOyHoOX3dB1cw=;
-  b=P9myxfqs0k0P+0Dh6hLSgsbm+2UciaIlxi5uyV+mhrleKs2BucHVnRTm
-   qh+/IU7rHKt3UDL+BGNOxGpGMHgcZc9aQqE+HQZXVjrAUwhAtTbKA2hNu
-   08EOj/VPAv/HAAjnM1cTJoUa1kzpbo2+A809xC/d4tFVNcCqObfYcMz3q
-   CGNFbpn3TlpE/oLd/H7RtP3Gu/qDK7TQEUjbX9ejm703h+/VIQbd8r1C7
-   X7QxxYjfNoDc0mqDchcw4OQCKiPnDMAv2DTEQwy4+jQsBcEuSnlT753pc
-   Gtqr8zDAxpJWQWwpxZR2DwDkCSS7yyUKwl2fp1mgdF9Z9nNcuA87nJ1N4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="299870844"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="299870844"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:47:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="616569817"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="616569817"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga007.jf.intel.com with ESMTP; 26 Sep 2022 14:47:24 -0700
-Date:   Mon, 26 Sep 2022 14:53:38 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 03/23] sched/core: Initialize the class of a new task
-Message-ID: <20220926215338.GA5529@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-4-ricardo.neri-calderon@linux.intel.com>
- <YzG92YDyBK/0W+5u@google.com>
+        Mon, 26 Sep 2022 17:54:43 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16D74B0D4;
+        Mon, 26 Sep 2022 14:54:42 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso5298917otb.10;
+        Mon, 26 Sep 2022 14:54:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=w2QQwnQgmCoCtfJGgTC/b/2B1KxxxneV73oIJQj+vXs=;
+        b=JY5L2qEb3tkXIEiWWz7HsEUvlHhLQVVL74D/ONXI9WL+PHKGU0oNDKVi4g73yK3fdg
+         KOTB7ZS2ygtErTBW72X2ErinJxmZBvyGBYm8BWjIff+jI5pLdnxuHHpPR328pcSTQdwV
+         7w2qNkvOpmSvXNZmynWhHLLjhDG9gKyXyiWepyps7UERA3YngQ6fRfslEW/63ySq5osH
+         AunvsDvQ9Nu/vct8Lw4rPG0j1+rgL503JkTTn2FKy8HvbduETkoU/bdsxqzZqhruEiKx
+         10BFI3Dn5jrI5azTmwU7g/1z9Ocm/QdoQC7wahZ0ewFW0NDGOzDnuoDTHscgiMm+mlHg
+         ZJGA==
+X-Gm-Message-State: ACrzQf2/zGNWMeQMGLSVdBGEnFlUsQSwqWE5+uAR5yhHb44fEpf1ySVR
+        qocDawkEVyTd1v6ldT0UgBMW7sG2Hw==
+X-Google-Smtp-Source: AMsMyM6bmE7R0bTAstFX4jVboHAVQz30IQaE1gTw1Ch1FS7J/e50TEWed28r2+CwdBjQaLYnUzf7RA==
+X-Received: by 2002:a9d:6e0f:0:b0:655:f372:f18b with SMTP id e15-20020a9d6e0f000000b00655f372f18bmr11294695otr.206.1664229281970;
+        Mon, 26 Sep 2022 14:54:41 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bm43-20020a0568081aab00b0034d14c6ce3dsm7615607oib.16.2022.09.26.14.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 14:54:41 -0700 (PDT)
+Received: (nullmailer pid 2894496 invoked by uid 1000);
+        Mon, 26 Sep 2022 21:54:40 -0000
+Date:   Mon, 26 Sep 2022 16:54:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "liangxu.xu" <liangxu.xu@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, jitao.shi@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: display: mediatek: dp: Add compatible for
+ MediaTek MT8188
+Message-ID: <20220926215440.GA2888681-robh@kernel.org>
+References: <20220923013953.5043-1-liangxu.xu@mediatek.com>
+ <f6e669dd-f2cf-6e3f-18bb-25b21e5eab0c@linaro.org>
+ <2afb5b7f761c7931eaf93f2f8a0fd268a39e1b02.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzG92YDyBK/0W+5u@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2afb5b7f761c7931eaf93f2f8a0fd268a39e1b02.camel@mediatek.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 02:57:29PM +0000, Joel Fernandes wrote:
-> Hi Ricardo,
-> 
-> On Fri, Sep 09, 2022 at 04:11:45PM -0700, Ricardo Neri wrote:
-> > New tasks shall start life as unclassified. They will be classified by
-> > hardware when they run.
+On Mon, Sep 26, 2022 at 10:52:04AM +0800, liangxu.xu wrote:
+> On Fri, 2022-09-23 at 13:16 +0200, Krzysztof Kozlowski wrote:
+> > On 23/09/2022 03:39, liangxu.xu@mediatek.com wrote:
+> > > From: liangxu xu <liangxu.xu@mediatek.com>
+> > > 
+> > > Add dt-binding documentation of dp for MediaTek MT8188 SoC.
+> > > 
+> > > Signed-off-by: liangxu xu <liangxu.xu@mediatek.com>
+> > > ---
 > > 
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Mel Gorman <mgorman@suse.de>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: x86@kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> >  kernel/sched/core.c | 3 +++
-> >  1 file changed, 3 insertions(+)
+> > Where is the DTS? Where are driver changes?
 > > 
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index ee28253c9ac0..db548c1a25ef 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -4336,6 +4336,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
-> >  	p->se.prev_sum_exec_runtime	= 0;
-> >  	p->se.nr_migrations		= 0;
-> >  	p->se.vruntime			= 0;
-> > +#ifdef CONFIG_SCHED_TASK_CLASSES
-> > +	p->class			= TASK_CLASS_UNCLASSIFIED;
-> > +#endif
+> > Best regards,
+> > Krzysztof
+> > 
 > 
-> I find the term 'class' very broad and unclear what kind of class (without
-> further reading). So I am worried about how this generic term usage plays
-> with Linux source code in the long-term (like what if someone else comes up
-> with a usage of term 'class' that is unrelated to IPC.)
-
-Thank you very much for your review Joel! Yes, class seems too generic. It is
-meant to read, for instance, task_struct::class or p->class, or rq->current->
-class. This should imply that we are referring to the class of a task. But yes,
-I agree that it is too generic.
-
+> Hi Krzysztof:
 > 
-> To that end, I was wondering if it could be renamed to p->ipc_class, and
-> CONFIG_SCHED_TASK_IPC_CLASSES, or something.
+> If you want to see the synchronous changes of dts and binding files,
+> then I will attach this binding file changes when sending dts later.
+> 
+> The driver change of mt8188 reuses that of mt8195. The driver link is
+> as follows:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/gpu/drm/mediatek/mtk_dp.c?id=48f4230642ee32a97ddf4be492838ce96089f040
 
-This is a good suggestion. I will take it, unless others disagree.
+So the 8188 block is backwards compatible with the 8195 block? 
+That's good, but not what your schema says because you have not defined 
+a fallback compatible for the driver to use.
 
-BR,
-Ricardo
+Rob
