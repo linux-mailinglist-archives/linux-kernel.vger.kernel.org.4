@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8735D5E9FFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F835EA056
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbiIZKcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S235918AbiIZKgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235863AbiIZK31 (ORCPT
+        with ESMTP id S235943AbiIZKdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:29:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754B34F1A6;
-        Mon, 26 Sep 2022 03:19:26 -0700 (PDT)
+        Mon, 26 Sep 2022 06:33:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691614F187;
+        Mon, 26 Sep 2022 03:20:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEE5460BB1;
-        Mon, 26 Sep 2022 10:19:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDE3C433D7;
-        Mon, 26 Sep 2022 10:19:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E018060C2C;
+        Mon, 26 Sep 2022 10:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F9DC433D6;
+        Mon, 26 Sep 2022 10:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187565;
-        bh=BeLwktw184kwrMLr9iq2nkZ4gwzXwvVuNsdWxpXBr+c=;
+        s=korg; t=1664187621;
+        bh=zoFwJNAV8OYE3aCPPkf1bJp38WO9tMqisyaY5w41r3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8VzaV0ycCBl0Sg6oySDUorbt+JyYAPT+H7WFKVQ5hVSznZZMMt0b++LOgu+COCSe
-         r5Xu9t0hLvc/EsNMsfbOYZsulGB7TT0QfW880xnTaGyLfdBtwRU56R4nYc/dPYLeTO
-         CVF9hyEhVXmtiveTjwEgTmnDWihqc9efCrpVMU1E=
+        b=lE94j3upy1GPbuTlt6sg4NzntwWfYHHXfmho3Jz6cDLdraBXtJFi/lnHmdpltpJfl
+         TpRrdwWwgVk8+MFTTVKF2a86csGZdTspha8eEH3pd+40GGea+CnTiBOSEiM+GuOItk
+         qhZbdrNuOxu//XB0qQJ0DeEG6lOiT42tB/IOSLww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Lieven Hey <lieven.hey@kdab.com>,
+        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 47/58] perf jit: Include program header in ELF files
-Date:   Mon, 26 Sep 2022 12:12:06 +0200
-Message-Id: <20220926100743.163390892@linuxfoundation.org>
+Subject: [PATCH 4.19 48/58] perf kcore_copy: Do not check /proc/modules is unchanged
+Date:   Mon, 26 Sep 2022 12:12:07 +0200
+Message-Id: <20220926100743.209738261@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
 References: <20220926100741.430882406@linuxfoundation.org>
@@ -55,84 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lieven Hey <lieven.hey@kdab.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit babd04386b1df8c364cdaa39ac0e54349502e1e5 ]
+[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
 
-The missing header makes it hard for programs like elfutils to open
-these files.
+/proc/kallsyms and /proc/modules are compared before and after the copy
+in order to ensure no changes during the copy.
 
-Fixes: 2d86612aacb7805f ("perf symbol: Correct address for bss symbols")
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: Lieven Hey <lieven.hey@kdab.com>
-Tested-by: Leo Yan <leo.yan@linaro.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Link: https://lore.kernel.org/r/20220915092910.711036-1-lieven.hey@kdab.com
+However /proc/modules also might change due to reference counts changing
+even though that does not make any difference.
+
+Any modules loaded or unloaded should be visible in changes to kallsyms,
+so it is not necessary to check /proc/modules also anyway.
+
+Remove the comparison checking that /proc/modules is unchanged.
+
+Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Tested-by: Daniel Dao <dqminh@cloudflare.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/genelf.c | 14 ++++++++++++++
- tools/perf/util/genelf.h |  4 ++++
- 2 files changed, 18 insertions(+)
+ tools/perf/util/symbol-elf.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
-index afb8fe3a8e35..65e41e259af8 100644
---- a/tools/perf/util/genelf.c
-+++ b/tools/perf/util/genelf.c
-@@ -256,6 +256,7 @@ jit_write_elf(int fd, uint64_t load_addr, const char *sym,
- 	Elf_Data *d;
- 	Elf_Scn *scn;
- 	Elf_Ehdr *ehdr;
-+	Elf_Phdr *phdr;
- 	Elf_Shdr *shdr;
- 	uint64_t eh_frame_base_offset;
- 	char *strsym = NULL;
-@@ -290,6 +291,19 @@ jit_write_elf(int fd, uint64_t load_addr, const char *sym,
- 	ehdr->e_version = EV_CURRENT;
- 	ehdr->e_shstrndx= unwinding ? 4 : 2; /* shdr index for section name */
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index bd33d6613929..5fba57c10edd 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -1871,8 +1871,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
+  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
+  * is not the same for the kernel map and the modules map.  That happens because
+  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
+- * kallsyms and modules files are compared with their copies to check that
+- * modules have not been loaded or unloaded while the copies were taking place.
++ * kallsyms file is compared with its copy to check that modules have not been
++ * loaded or unloaded while the copies were taking place.
+  *
+  * Return: %0 on success, %-1 on failure.
+  */
+@@ -1935,9 +1935,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
+ 			goto out_extract_close;
+ 	}
  
-+	/*
-+	 * setup program header
-+	 */
-+	phdr = elf_newphdr(e, 1);
-+	phdr[0].p_type = PT_LOAD;
-+	phdr[0].p_offset = 0;
-+	phdr[0].p_vaddr = 0;
-+	phdr[0].p_paddr = 0;
-+	phdr[0].p_filesz = csize;
-+	phdr[0].p_memsz = csize;
-+	phdr[0].p_flags = PF_X | PF_R;
-+	phdr[0].p_align = 8;
-+
- 	/*
- 	 * setup text section
- 	 */
-diff --git a/tools/perf/util/genelf.h b/tools/perf/util/genelf.h
-index de322d51c7fe..23a7401a63d0 100644
---- a/tools/perf/util/genelf.h
-+++ b/tools/perf/util/genelf.h
-@@ -41,8 +41,10 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
+-	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
+-		goto out_extract_close;
+-
+ 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
+ 		goto out_extract_close;
  
- #if GEN_ELF_CLASS == ELFCLASS64
- #define elf_newehdr	elf64_newehdr
-+#define elf_newphdr	elf64_newphdr
- #define elf_getshdr	elf64_getshdr
- #define Elf_Ehdr	Elf64_Ehdr
-+#define Elf_Phdr	Elf64_Phdr
- #define Elf_Shdr	Elf64_Shdr
- #define Elf_Sym		Elf64_Sym
- #define ELF_ST_TYPE(a)	ELF64_ST_TYPE(a)
-@@ -50,8 +52,10 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
- #define ELF_ST_VIS(a)	ELF64_ST_VISIBILITY(a)
- #else
- #define elf_newehdr	elf32_newehdr
-+#define elf_newphdr	elf32_newphdr
- #define elf_getshdr	elf32_getshdr
- #define Elf_Ehdr	Elf32_Ehdr
-+#define Elf_Phdr	Elf32_Phdr
- #define Elf_Shdr	Elf32_Shdr
- #define Elf_Sym		Elf32_Sym
- #define ELF_ST_TYPE(a)	ELF32_ST_TYPE(a)
 -- 
 2.35.1
 
