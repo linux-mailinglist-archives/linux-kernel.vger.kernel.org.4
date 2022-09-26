@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B4D5EA368
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0C35EA134
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237809AbiIZLYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S236561AbiIZKqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbiIZLXS (ORCPT
+        with ESMTP id S236643AbiIZKoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:23:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1315FD5;
-        Mon, 26 Sep 2022 03:39:52 -0700 (PDT)
+        Mon, 26 Sep 2022 06:44:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8BF4D4EC;
+        Mon, 26 Sep 2022 03:25:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C3B460A36;
-        Mon, 26 Sep 2022 10:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11DE1C433D6;
-        Mon, 26 Sep 2022 10:38:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 015BCB8091F;
+        Mon, 26 Sep 2022 10:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38501C433D6;
+        Mon, 26 Sep 2022 10:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188719;
-        bh=UQi9LSqABcy467axqnb3ehB0P6+Q+8c9a7f3kN/dJcU=;
+        s=korg; t=1664187918;
+        bh=wz9FGAFTMsjW7TZL1vBSY65m+pX1Yx7gQHp9WzMqvlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n61sD23qUUxlicppAmkWlAhAEMHpvFQAod2vvJgr/gidq8DG0K/oH4aROzWSX7G2q
-         ZFq4TG+Qrydfea+0dxfLKK9Ls8gIpb4j7RnVmIHZ9GRkYYpLPYEbFdkUMo+kzwm0zd
-         EdtCBkTvi8ipuwAY5D6Al3qpPTAiiDgK+m9JM5gg=
+        b=irsvDzxsNYlo2nAP7jnDWBREszSzccDFOUOAq1BTI+KsLgAsZAb+nSgJJX4/Wm+xD
+         V8Fo2iDyoi8VBFn1sczwGkhd1HnbuJZziGRhfKMupGL1vQ95vEI0THeB+xgJTicJNf
+         fJyu0+wIqVsVUTIjnEm8JVZjwJDEyBwtFowwy9VA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+b5d82a651b71cd8a75ab@syzkaller.appspotmail.com>,
+        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/148] netfilter: nf_tables: fix nft_counters_enabled underflow at nf_tables_addchain()
+        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 101/120] workqueue: dont skip lockdep work dependency in cancel_work_sync()
 Date:   Mon, 26 Sep 2022 12:12:14 +0200
-Message-Id: <20220926100759.826985157@linuxfoundation.org>
+Message-Id: <20220926100754.692014905@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,68 +58,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 921ebde3c0d22c8cba74ce8eb3cc4626abff1ccd ]
+[ Upstream commit c0feea594e058223973db94c1c32a830c9807c86 ]
 
-syzbot is reporting underflow of nft_counters_enabled counter at
-nf_tables_addchain() [1], for commit 43eb8949cfdffa76 ("netfilter:
-nf_tables: do not leave chain stats enabled on error") missed that
-nf_tables_chain_destroy() after nft_basechain_init() in the error path of
-nf_tables_addchain() decrements the counter because nft_basechain_init()
-makes nft_is_base_chain() return true by setting NFT_CHAIN_BASE flag.
+Like Hillf Danton mentioned
 
-Increment the counter immediately after returning from
-nft_basechain_init().
+  syzbot should have been able to catch cancel_work_sync() in work context
+  by checking lockdep_map in __flush_work() for both flush and cancel.
 
-Link:  https://syzkaller.appspot.com/bug?extid=b5d82a651b71cd8a75ab [1]
-Reported-by: syzbot <syzbot+b5d82a651b71cd8a75ab@syzkaller.appspotmail.com>
+in [1], being unable to report an obvious deadlock scenario shown below is
+broken. From locking dependency perspective, sync version of cancel request
+should behave as if flush request, for it waits for completion of work if
+that work has already started execution.
+
+  ----------
+  #include <linux/module.h>
+  #include <linux/sched.h>
+  static DEFINE_MUTEX(mutex);
+  static void work_fn(struct work_struct *work)
+  {
+    schedule_timeout_uninterruptible(HZ / 5);
+    mutex_lock(&mutex);
+    mutex_unlock(&mutex);
+  }
+  static DECLARE_WORK(work, work_fn);
+  static int __init test_init(void)
+  {
+    schedule_work(&work);
+    schedule_timeout_uninterruptible(HZ / 10);
+    mutex_lock(&mutex);
+    cancel_work_sync(&work);
+    mutex_unlock(&mutex);
+    return -EINVAL;
+  }
+  module_init(test_init);
+  MODULE_LICENSE("GPL");
+  ----------
+
+The check this patch restores was added by commit 0976dfc1d0cd80a4
+("workqueue: Catch more locking problems with flush_work()").
+
+Then, lockdep's crossrelease feature was added by commit b09be676e0ff25bd
+("locking/lockdep: Implement the 'crossrelease' feature"). As a result,
+this check was once removed by commit fd1a5b04dfb899f8 ("workqueue: Remove
+now redundant lock acquisitions wrt. workqueue flushes").
+
+But lockdep's crossrelease feature was removed by commit e966eaeeb623f099
+("locking/lockdep: Remove the cross-release locking checks"). At this
+point, this check should have been restored.
+
+Then, commit d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in
+cancel_work_sync()") introduced a boolean flag in order to distinguish
+flush_work() and cancel_work_sync(), for checking "struct workqueue_struct"
+dependency when called from cancel_work_sync() was causing false positives.
+
+Then, commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
+flushing") tried to restore "struct work_struct" dependency check, but by
+error checked this boolean flag. Like an example shown above indicates,
+"struct work_struct" dependency needs to be checked for both flush_work()
+and cancel_work_sync().
+
+Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
+Reported-by: Hillf Danton <hdanton@sina.com>
+Suggested-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
+Cc: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+b5d82a651b71cd8a75ab@syzkaller.appspotmail.com>
-Fixes: 43eb8949cfdffa76 ("netfilter: nf_tables: do not leave chain stats enabled on error")
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ kernel/workqueue.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index d35d09df83fe..d8e66467c06c 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -2103,7 +2103,6 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 			      struct netlink_ext_ack *extack)
- {
- 	const struct nlattr * const *nla = ctx->nla;
--	struct nft_stats __percpu *stats = NULL;
- 	struct nft_table *table = ctx->table;
- 	struct nft_base_chain *basechain;
- 	struct net *net = ctx->net;
-@@ -2117,6 +2116,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 		return -EOVERFLOW;
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index e90f37e22202..dd96391b44de 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3049,10 +3049,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
  
- 	if (nla[NFTA_CHAIN_HOOK]) {
-+		struct nft_stats __percpu *stats = NULL;
- 		struct nft_chain_hook hook;
+-	if (!from_cancel) {
+-		lock_map_acquire(&work->lockdep_map);
+-		lock_map_release(&work->lockdep_map);
+-	}
++	lock_map_acquire(&work->lockdep_map);
++	lock_map_release(&work->lockdep_map);
  
- 		if (flags & NFT_CHAIN_BINDING)
-@@ -2150,6 +2150,8 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 			kfree(basechain);
- 			return err;
- 		}
-+		if (stats)
-+			static_branch_inc(&nft_counters_enabled);
- 	} else {
- 		if (flags & NFT_CHAIN_BASE)
- 			return -EINVAL;
-@@ -2224,9 +2226,6 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
- 		goto err_unregister_hook;
- 	}
- 
--	if (stats)
--		static_branch_inc(&nft_counters_enabled);
--
- 	table->use++;
- 
- 	return 0;
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
 -- 
 2.35.1
 
