@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE94B5EA21B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E29B5EA330
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbiIZLCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S237730AbiIZLVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237389AbiIZK7k (ORCPT
+        with ESMTP id S237842AbiIZLTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05C15C9CA;
-        Mon, 26 Sep 2022 03:31:06 -0700 (PDT)
+        Mon, 26 Sep 2022 07:19:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05D252E45;
+        Mon, 26 Sep 2022 03:38:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9152060C79;
-        Mon, 26 Sep 2022 10:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98FD3C433C1;
-        Mon, 26 Sep 2022 10:29:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 878D2B802C7;
+        Mon, 26 Sep 2022 10:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FDFC433D6;
+        Mon, 26 Sep 2022 10:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188193;
-        bh=tQDvKdHglV3lGcAyaCA5FPn9n7w9PdqvimZODFmQzuI=;
+        s=korg; t=1664188605;
+        bh=6tasvJ3bw1ZpODK/m7Ahrqs+W9D5eONd94fDDdQIjt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tJYad4NS9+2FukKKKH3dnS2KYqG0EghbGuKaN8/cLdMrwz0rs8iG7fPRmjTHnJJ3W
-         zwCuWvnYKdv5ZfnWxx7O/K2YL375FdGXthfSIGQc094xiPl9+KxGKdLRgzQeHsHnXU
-         SujQbLF8563AP5sAu+BQgCY13rlU8IDjJ0AKx2lw=
+        b=N31Bkqb8nQkyylve3xCz+Ghzuk+Jpj/1dhT9qn4Gma8kqqXCDG+B4Mw0t6soQfI1R
+         n+TDd0iCYHki59eG8z9NJOggkfi27uaAkv45CGr6qWtS2i6rD5xvJGA8VETwCJRoKq
+         itAACaqadtdU4OF96sMO7qcR7+Vu8zHnqC3GEOoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        zain wang <wzz@rock-chips.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 071/141] iavf: Fix cached head and tail value for iavf_get_tx_pending
+Subject: [PATCH 5.15 063/148] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
 Date:   Mon, 26 Sep 2022 12:11:37 +0200
-Message-Id: <20220926100757.018223006@linuxfoundation.org>
+Message-Id: <20220926100758.399210028@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett.creeley@intel.com>
+From: zain wang <wzz@rock-chips.com>
 
-[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
+[ Upstream commit 8123437cf46ea5a0f6ca5cb3c528d8b6db97b9c2 ]
 
-The underlying hardware may or may not allow reading of the head or tail
-registers and it really makes no difference if we use the software
-cached values. So, always used the software cached values.
+We've found the AUX channel to be less reliable with PCLK_EDP at a
+higher rate (typically 25 MHz). This is especially important on systems
+with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
+use of AUX.
 
-Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
-Signed-off-by: Brett Creeley <brett.creeley@intel.com>
-Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+According to Rockchip, using any rate other than 24 MHz can cause
+"problems between syncing the PHY an PCLK", which leads to all sorts of
+unreliabilities around register operations.
+
+Fixes: d67a38c5a623 ("arm64: dts: rockchip: move core edp from rk3399-kevin to shared chromebook")
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: zain wang <wzz@rock-chips.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Link: https://lore.kernel.org/r/20220830131212.v2.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 99983f7a0ce0..8f6269e9f6a7 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
- {
- 	u32 head, tail;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 0d8458d55626..739937f70f8d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -237,6 +237,14 @@ &cdn_dp {
+ &edp {
+ 	status = "okay";
  
-+	/* underlying hardware might not allow access and/or always return
-+	 * 0 for the head/tail registers so just use the cached values
++	/*
++	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
++	 * set this here, because rk3399-gru.dtsi ensures we can generate this
++	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
 +	 */
- 	head = ring->next_to_clean;
--	tail = readl(ring->tail);
-+	tail = ring->next_to_use;
- 
- 	if (head != tail)
- 		return (head < tail) ?
++	assigned-clocks = <&cru PCLK_EDP>;
++	assigned-clock-rates = <24000000>;
++
+ 	ports {
+ 		edp_out: port@1 {
+ 			reg = <1>;
 -- 
 2.35.1
 
