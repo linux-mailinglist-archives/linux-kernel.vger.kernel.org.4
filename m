@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22375EA0A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5E95EA2E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbiIZKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S237642AbiIZLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236196AbiIZKig (ORCPT
+        with ESMTP id S237586AbiIZLPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:38:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CF352E69;
-        Mon, 26 Sep 2022 03:22:28 -0700 (PDT)
+        Mon, 26 Sep 2022 07:15:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CF36525C;
+        Mon, 26 Sep 2022 03:37:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EE0060B2F;
-        Mon, 26 Sep 2022 10:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E85CC433C1;
-        Mon, 26 Sep 2022 10:22:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8CFFB80691;
+        Mon, 26 Sep 2022 10:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C38C433C1;
+        Mon, 26 Sep 2022 10:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187736;
-        bh=Bk/Vfbwtqdi5kPieSRywcwawYnNgfIlk/03jO8f8Kq0=;
+        s=korg; t=1664188546;
+        bh=4jNDAPT6RbG2o3QkyUAz8HExfwylqHzvfN+G8bKnPuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UNuLm9Y3Yrbh94tHQSnGqSwsobv93evcZq+K0QitUm/0fJ22b2Mx6kMnYTNVZ3fOb
-         ntP6Je1yaU1MfkX6mkfODHVQv+EdYqsFDWAhAt4Sm7KDKeh33eNztxNJoH/CMHBCGs
-         wB0tgXLFdlbu18ZzZxpeLNf915xPag/B6NxXntkM=
+        b=XvHqq1E3gTDMEwEAcwIaNCxGkdoQTM6lpWYNOVO3arT3Kqs3QIz62504ycEfnOz3d
+         ThEX6/+qEXT8av6NdaMLynQPevALTQQqU5n+wXCfa5nOx7dmsvbLu5bN2Pnh0E8jsY
+         vvxPdf/LXm4vp9w2+qWlonGgZfowEsxQDqCMw9yc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Siddh Raman Pant <code@siddh.me>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 044/120] wifi: mac80211: Fix UAF in ieee80211_scan_rx()
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.15 043/148] gpio: mockup: fix NULL pointer dereference when removing debugfs
 Date:   Mon, 26 Sep 2022 12:11:17 +0200
-Message-Id: <20220926100752.340831202@linuxfoundation.org>
+Message-Id: <20220926100757.626042929@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddh Raman Pant <code@siddh.me>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
 
-[ Upstream commit 60deb9f10eec5c6a20252ed36238b55d8b614a2c ]
+commit b7df41a6f79dfb18ba2203f8c5f0e9c0b9b57f68 upstream.
 
-ieee80211_scan_rx() tries to access scan_req->flags after a
-null check, but a UAF is observed when the scan is completed
-and __ieee80211_scan_completed() executes, which then calls
-cfg80211_scan_done() leading to the freeing of scan_req.
+We now remove the device's debugfs entries when unbinding the driver.
+This now causes a NULL-pointer dereference on module exit because the
+platform devices are unregistered *after* the global debugfs directory
+has been recursively removed. Fix it by unregistering the devices first.
 
-Since scan_req is rcu_dereference()'d, prevent the racing in
-__ieee80211_scan_completed() by ensuring that from mac80211's
-POV it is no longer accessed from an RCU read critical section
-before we call cfg80211_scan_done().
-
+Fixes: 303e6da99429 ("gpio: mockup: remove gpio debugfs when remove device")
+Cc: Wei Yongjun <weiyongjun1@huawei.com>
 Cc: stable@vger.kernel.org
-Link: https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
-Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
-Suggested-by: Johannes Berg <johannes@sipsolutions.net>
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Link: https://lore.kernel.org/r/20220819200340.34826-1-code@siddh.me
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/scan.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/gpio/gpio-mockup.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mac80211/scan.c b/net/mac80211/scan.c
-index 344b2c22e75b..c353162e81ae 100644
---- a/net/mac80211/scan.c
-+++ b/net/mac80211/scan.c
-@@ -431,10 +431,6 @@ static void __ieee80211_scan_completed(struct ieee80211_hw *hw, bool aborted)
- 	scan_req = rcu_dereference_protected(local->scan_req,
- 					     lockdep_is_held(&local->mtx));
+--- a/drivers/gpio/gpio-mockup.c
++++ b/drivers/gpio/gpio-mockup.c
+@@ -618,9 +618,9 @@ static int __init gpio_mockup_init(void)
  
--	if (scan_req != local->int_scan_req) {
--		local->scan_info.aborted = aborted;
--		cfg80211_scan_done(scan_req, &local->scan_info);
--	}
- 	RCU_INIT_POINTER(local->scan_req, NULL);
+ static void __exit gpio_mockup_exit(void)
+ {
++	gpio_mockup_unregister_pdevs();
+ 	debugfs_remove_recursive(gpio_mockup_dbg_dir);
+ 	platform_driver_unregister(&gpio_mockup_driver);
+-	gpio_mockup_unregister_pdevs();
+ }
  
- 	scan_sdata = rcu_dereference_protected(local->scan_sdata,
-@@ -444,6 +440,13 @@ static void __ieee80211_scan_completed(struct ieee80211_hw *hw, bool aborted)
- 	local->scanning = 0;
- 	local->scan_chandef.chan = NULL;
- 
-+	synchronize_rcu();
-+
-+	if (scan_req != local->int_scan_req) {
-+		local->scan_info.aborted = aborted;
-+		cfg80211_scan_done(scan_req, &local->scan_info);
-+	}
-+
- 	/* Set power back to normal operating levels. */
- 	ieee80211_hw_config(local, 0);
- 
--- 
-2.35.1
-
+ module_init(gpio_mockup_init);
 
 
