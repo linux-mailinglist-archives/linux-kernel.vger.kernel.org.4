@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1635E9EDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B125EA2FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbiIZKPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S234264AbiIZLRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbiIZKOp (ORCPT
+        with ESMTP id S235020AbiIZLQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:14:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420DD474D7;
-        Mon, 26 Sep 2022 03:14:08 -0700 (PDT)
+        Mon, 26 Sep 2022 07:16:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F2A6524A;
+        Mon, 26 Sep 2022 03:37:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 501EBB80925;
-        Mon, 26 Sep 2022 10:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C66AC433D6;
-        Mon, 26 Sep 2022 10:14:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C59A60A55;
+        Mon, 26 Sep 2022 10:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32045C433C1;
+        Mon, 26 Sep 2022 10:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187245;
-        bh=LxUOv1BX67hgdtLI6gm3VnbJnfvixz22w9sx+VWQYrY=;
+        s=korg; t=1664188642;
+        bh=d0NGvshIdLgsFhFa/UwAVgqQUXbygA154sf3xuY/DGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hG3UYtLOrQvT2/l/rBGGgJ/XZpgsbSa6l2elg6zqlljFTBrFcLKIXxbEx/GdjInZE
-         exevv45UyvOSkVCn8BSg7ykuNZiUQFtqFgkb6fpbsLcytfxiJ1bcHMaqTWQuBJ3WeS
-         aKhVkKHFit9Y+HkA8kigK2z0TjvW4pi1w3EUHJCI=
+        b=KEHT+KCLuXGalUiUREMJxUjmcMr+9jGwkwaxoWuGgIo0OEwf/I+sM4iX4tbalXxS/
+         xIrxMTlQ8E1Xh2F0Cggyx0KcWKJSfBWA4JACdyMJotw3miJmAyOYS1c+NDnlJWDXFA
+         ZcLnx5Q8anWKKlA4a7hgG9S5UEe6QNvOIfpJArQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Chao Yu <chao.yu@oppo.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 4.9 17/30] mm/slub: fix to return errno if kmalloc() fails
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 074/148] scsi: qla2xxx: Fix memory leak in __qlt_24xx_handle_abts()
 Date:   Mon, 26 Sep 2022 12:11:48 +0200
-Message-Id: <20220926100736.769408253@linuxfoundation.org>
+Message-Id: <20220926100758.808496532@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,70 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao.yu@oppo.com>
+From: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-commit 7e9c323c52b379d261a72dc7bd38120a761a93cd upstream.
+[ Upstream commit 601be20fc6a1b762044d2398befffd6bf236cebf ]
 
-In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
-out-of-memory, if it fails, return errno correctly rather than
-triggering panic via BUG_ON();
+Commit 8f394da36a36 ("scsi: qla2xxx: Drop TARGET_SCF_LOOKUP_LUN_FROM_TAG")
+made the __qlt_24xx_handle_abts() function return early if
+tcm_qla2xxx_find_cmd_by_tag() didn't find a command, but it missed to clean
+up the allocated memory for the management command.
 
-kernel BUG at mm/slub.c:5893!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-
-Call trace:
- sysfs_slab_add+0x258/0x260 mm/slub.c:5973
- __kmem_cache_create+0x60/0x118 mm/slub.c:4899
- create_cache mm/slab_common.c:229 [inline]
- kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
- kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
- f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
- f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
- f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
- mount_bdev+0x1b8/0x210 fs/super.c:1400
- f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
-
-Cc: <stable@kernel.org>
-Fixes: 81819f0fc8285 ("SLUB core")
-Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220914024924.695604-1-rafaelmendsr@gmail.com
+Fixes: 8f394da36a36 ("scsi: qla2xxx: Drop TARGET_SCF_LOOKUP_LUN_FROM_TAG")
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/slub.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_target.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5601,7 +5601,8 @@ static char *create_unique_id(struct kme
- 	char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
- 	char *p = name;
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index b86f6e1f21b5..4b4ca2a9524d 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -2166,8 +2166,10 @@ static int __qlt_24xx_handle_abts(struct scsi_qla_host *vha,
  
--	BUG_ON(!name);
-+	if (!name)
-+		return ERR_PTR(-ENOMEM);
+ 	abort_cmd = ha->tgt.tgt_ops->find_cmd_by_tag(sess,
+ 				le32_to_cpu(abts->exchange_addr_to_abort));
+-	if (!abort_cmd)
++	if (!abort_cmd) {
++		mempool_free(mcmd, qla_tgt_mgmt_cmd_mempool);
+ 		return -EIO;
++	}
+ 	mcmd->unpacked_lun = abort_cmd->se_cmd.orig_fe_lun;
  
- 	*p++ = ':';
- 	/*
-@@ -5649,6 +5650,8 @@ static int sysfs_slab_add(struct kmem_ca
- 		 * for the symlinks.
- 		 */
- 		name = create_unique_id(s);
-+		if (IS_ERR(name))
-+			return PTR_ERR(name);
- 	}
- 
- 	s->kobj.kset = cache_kset(s);
+ 	if (abort_cmd->qpair) {
+-- 
+2.35.1
+
 
 
