@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C2C5EA38E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBA35EA158
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236125AbiIZL1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S234291AbiIZKui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234762AbiIZL0Y (ORCPT
+        with ESMTP id S236570AbiIZKqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:26:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12B84C608;
-        Mon, 26 Sep 2022 03:40:46 -0700 (PDT)
+        Mon, 26 Sep 2022 06:46:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38B957232;
+        Mon, 26 Sep 2022 03:25:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BF9CECE10F6;
-        Mon, 26 Sep 2022 10:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FECC433D6;
-        Mon, 26 Sep 2022 10:39:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB772B80915;
+        Mon, 26 Sep 2022 10:25:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2714FC433D7;
+        Mon, 26 Sep 2022 10:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188769;
-        bh=IesErMf5RkJTxLi72KRDWKUmi/VwQXqWyyX77S71ryk=;
+        s=korg; t=1664187955;
+        bh=e/6xeRdBd9WX29GIdGG1MC2Ct7nHdPDSrGxL1c8Rg5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vt0wzUg9Emt9sfVSriALNIZvjsTFqALPnBYzcKSa5y8U+h8m5VoVY0VYAAToLRvjw
-         NK8sZnKelcA1KhuZ3VeVZwr6KiMT20vHFxox1KEtJaALdZJJOKHp5vbPbKslmWHVo3
-         9MksV8AxeIjkXC6d844tT6C70JBdeMBf2iYZ13X8=
+        b=UnxVW89f4ggI4TP7VkB7ZnlMO+946TTChNENx7MbzA+vSPVTW2aX9o24JrD/Cd7Ij
+         ae7sLmrOx4/3Wx5DsmZAcXLfu87P8ZhjgC7lFGIqKEBgaF+1NX8nFBX5L8xlYsopkv
+         XSljZ5fPMAbDGie5BOmj30L0t89Hy74GNxkbCrdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 114/148] net: sched: fix possible refcount leak in tc_new_tfilter()
+        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Chandan Babu R <chandan.babu@oracle.com>
+Subject: [PATCH 5.4 115/120] xfs: use bitops interface for buf log item AIL flag check
 Date:   Mon, 26 Sep 2022 12:12:28 +0200
-Message-Id: <20220926100800.406510941@linuxfoundation.org>
+Message-Id: <20220926100755.121201939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Brian Foster <bfoster@redhat.com>
 
-[ Upstream commit c2e1cfefcac35e0eea229e148c8284088ce437b5 ]
+commit 826f7e34130a4ce756138540170cbe935c537a47 upstream.
 
-tfilter_put need to be called to put the refount got by tp->ops->get to
-avoid possible refcount leak when chain->tmplt_ops != NULL and
-chain->tmplt_ops != tp->ops.
+The xfs_log_item flags were converted to atomic bitops as of commit
+22525c17ed ("xfs: log item flags are racy"). The assert check for
+AIL presence in xfs_buf_item_relse() still uses the old value based
+check. This likely went unnoticed as XFS_LI_IN_AIL evaluates to 0
+and causes the assert to unconditionally pass. Fix up the check.
 
-Fixes: 7d5509fa0d3d ("net: sched: extend proto ops with 'put' callback")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-Link: https://lore.kernel.org/r/20220921092734.31700-1-hbh25y@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Brian Foster <bfoster@redhat.com>
+Fixes: 22525c17ed ("xfs: log item flags are racy")
+Reviewed-by: Eric Sandeen <sandeen@redhat.com>
+Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
+Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/xfs/xfs_buf_item.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 4b552c10e7b9..62ce6981942b 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -2117,6 +2117,7 @@ static int tc_new_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
- 	}
+--- a/fs/xfs/xfs_buf_item.c
++++ b/fs/xfs/xfs_buf_item.c
+@@ -956,7 +956,7 @@ xfs_buf_item_relse(
+ 	struct xfs_buf_log_item	*bip = bp->b_log_item;
  
- 	if (chain->tmplt_ops && chain->tmplt_ops != tp->ops) {
-+		tfilter_put(tp, fh);
- 		NL_SET_ERR_MSG(extack, "Chain template is set to a different filter kind");
- 		err = -EINVAL;
- 		goto errout;
--- 
-2.35.1
-
+ 	trace_xfs_buf_item_relse(bp, _RET_IP_);
+-	ASSERT(!(bip->bli_item.li_flags & XFS_LI_IN_AIL));
++	ASSERT(!test_bit(XFS_LI_IN_AIL, &bip->bli_item.li_flags));
+ 
+ 	bp->b_log_item = NULL;
+ 	if (list_empty(&bp->b_li_list))
 
 
