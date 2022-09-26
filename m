@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CEC5EA7F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9BA5EA815
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiIZOIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S234140AbiIZOMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbiIZOIH (ORCPT
+        with ESMTP id S229689AbiIZOLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:08:07 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506988C467;
-        Mon, 26 Sep 2022 05:19:05 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MbhWs67BBz1P74g;
-        Mon, 26 Sep 2022 20:14:33 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 20:18:46 +0800
-Subject: Re: [PATCH v2 6/8] scsi: libsas: use sas_phy_match_dev_addr() instead
- of open coded
-To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220924073455.2186805-1-yanaijie@huawei.com>
- <20220924073455.2186805-7-yanaijie@huawei.com>
- <88299002-3aa1-d208-0451-d5b8601c0edc@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <8b0f76b2-d65f-2faf-a6e0-3623a71c18f5@huawei.com>
-Date:   Mon, 26 Sep 2022 20:18:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 26 Sep 2022 10:11:53 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EAD597B12;
+        Mon, 26 Sep 2022 05:23:10 -0700 (PDT)
+Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id D942A40735;
+        Mon, 26 Sep 2022 14:23:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1664194987;
+        bh=DwscMU+GZ+AeXouVGc8h0vEjh2jlqGirwv9sMdq7tsM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=8STw8MnSA0vAVtkrtSmDF4+3u6QSLslcq6Xos5c6BmVi2sGIcexptmY1qBKF+PFU6
+         bwYuW4DOVStwI+tWdsF+XG2x4884iYGuP9q38l2CX1WX0M1+PVV+Rva59Cc0/A4l1F
+         WgDtM0LRo0FxDvtTvzrrG1djmPU5AzJ6SjwDfyP9vDSN7L04lUGovAjNEMnlEE1Hi4
+         lYfrTK7DMdVUzzJNas/Z4FvIiET7Cy0awBlNiQtpUlugi0haBDLBrU4hwevC2j6mDt
+         iI3i+WFV531V6RNsmJHgS2+MjucxbD8bTDHvjhL1ewAS0KBhGs0F4s9d9ID+AD4o8a
+         C1RtC8FyC38tw==
+Date:   Mon, 26 Sep 2022 14:23:05 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     will@kernel.org, robin.murphy@arm.com, jgg@nvidia.com,
+        kevin.tian@intel.com, quic_jjohnson@quicinc.com,
+        suravee.suthikulpanit@amd.com, robdclark@gmail.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        yong.wu@mediatek.com, matthias.bgg@gmail.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+        jean-philippe@linaro.org, shameerali.kolothum.thodi@huawei.com,
+        tglx@linutronix.de, christophe.jaillet@wanadoo.fr,
+        thunder.leizhen@huawei.com, yangyingliang@huawei.com,
+        quic_saipraka@quicinc.com, jon@solid-run.com,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v6 0/5] Define EINVAL as device/domain incompatibility
+Message-ID: <YzGZqXCuw6yoXBla@8bytes.org>
+References: <cover.1663899032.git.nicolinc@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <88299002-3aa1-d208-0451-d5b8601c0edc@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1663899032.git.nicolinc@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nicolin,
 
-On 2022/9/26 19:43, John Garry wrote:
-> On 24/09/2022 08:34, Jason Yan wrote:
->> @@ -2115,8 +2109,7 @@ int sas_find_attached_phy(struct expander_device 
->> *ex_dev,
->>       for (phy_id = 0; phy_id < ex_dev->num_phys; phy_id++) {
->>           phy = &ex_dev->ex_phy[phy_id];
->> -        if (SAS_ADDR(phy->attached_sas_addr)
->> -            == SAS_ADDR(dev->sas_addr))
->> +        if (sas_phy_match_dev_addr(dev, phy))
-> 
-> It would be nice if the series was arranged such that 
-> sas_phy_match_dev_addr() is available when you introduce 
-> sas_phy_match_dev_addr()
+On Fri, Sep 23, 2022 at 12:16:29AM -0700, Nicolin Chen wrote:
+> This series is to replace the previous EMEDIUMTYPE patch in a VFIO series:
+> https://lore.kernel.org/kvm/Yxnt9uQTmbqul5lf@8bytes.org/
 
+\o/
 
-I assume you mean sas_phy_match_dev_addr() should available before 
-introducing sas_find_attached_phy().
+> Nicolin Chen (5):
+>   iommu/amd: Drop unnecessary checks in amd_iommu_attach_device()
+>   iommu: Add return value rules to attach_dev op and APIs
+>   iommu: Regulate EINVAL in ->attach_dev callback functions
+>   iommu: Use EINVAL for incompatible device/domain in ->attach_dev
+>   iommu: Propagate return value in ->attach_dev callback functions
 
-Yes, I can make that change.
+This looks good to me, but I'd like to have the SMMU people have a look
+at patch 4. And I think it is too late for this to make it into 6.1, so
+please re-send after 6.1-rc1 is out.
 
 Thanks,
-Jason
 
-> 
->>               return phy_id;
->>       }
-> 
-> Thanks,
-> John
-> .
+	Joerg
