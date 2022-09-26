@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9E25E9A4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0FC5E9A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiIZHQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S233733AbiIZHQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbiIZHQj (ORCPT
+        with ESMTP id S234043AbiIZHQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:16:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11822F03F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:16:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6EE3D2207D;
-        Mon, 26 Sep 2022 07:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664176595; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aDaSeZOalg/TV75KOdP7/kRZIqJIknJQXrhiYBILmJQ=;
-        b=i9c4iozXofASG7biA+DE/aBYGzeHtoAmTD6bcZXLFz8xYW99BPaVyOMXVUvDr+bknia5Te
-        wHw36GzpW+o3xkTimvHAhHLtYmhJD8TDAJUnGrc9lqZTlMzaP7XCNQgeNVjkzBEfIswl0X
-        X+l8GYnkTo9quj1jIyRv989v51522C8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664176595;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aDaSeZOalg/TV75KOdP7/kRZIqJIknJQXrhiYBILmJQ=;
-        b=JP1YevKVOdgwri6oEETb8QTROF5aAUTNbp1+/qMFnSp+B/osbpDyQFXNo1pKpLnxsGjA8j
-        vxrtD0ERUZBH4rDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E7CE139BD;
-        Mon, 26 Sep 2022 07:16:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ItQ7EtNRMWOXMwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 26 Sep 2022 07:16:35 +0000
-Message-ID: <c6d0fb6f-6fc3-3123-ee7c-7edac211dbf3@suse.de>
-Date:   Mon, 26 Sep 2022 09:16:34 +0200
+        Mon, 26 Sep 2022 03:16:51 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E55532052;
+        Mon, 26 Sep 2022 00:16:46 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id bq9so8740469wrb.4;
+        Mon, 26 Sep 2022 00:16:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ioYGPRvwOzTPXX99j4J/86pZ+x1+n0p+8AnOz//0Jhc=;
+        b=oaXmMK7zWNr/X2XgflIbyeGIUvEvSyxF0uMyTxiCcDBXg4QqC2ZrgHKmtpYSgeDbOG
+         MRSySzK3ru2WA21EeskQfK5/ynq7a+ToEcJFd+iKMq7vtgXzp9ngH90DzJvZtmOgl4uZ
+         jQsw2knzf+NYdKPjQZMSuXROCbDVjSPzJVrNoYHxqep2EkYrVEINU/xMfHLm3sRBX13g
+         6BFbkdg+Jv9R1Dan5HyxXy3f9Ycd2VH7u4RUHxYBVsitpdbjvF77uOmO2/Az/JHbum0g
+         OWfnCSODOb1GAHYJMOgIFZrjqZDrBmBUa1xBfj/L2Fp19uRHmNLqAdKJGfzrS+oc0hA4
+         XmPQ==
+X-Gm-Message-State: ACrzQf1qOe8z7Y8DuBRTQEffeFYr2rGsI0ZJggtCcyz5T+XhG6crfxYn
+        pa7ng2CoTV/TjR5kcx1lPg++dMjaUME=
+X-Google-Smtp-Source: AMsMyM6PzY2abUiBbLPacTKWhY3Ho5enMulUINnroWZ+u5YNMzPvvIkUrzm3gGWeVYZ8yYDHKpt7/w==
+X-Received: by 2002:a5d:47cc:0:b0:22c:86fe:ad94 with SMTP id o12-20020a5d47cc000000b0022c86fead94mr9236407wrc.599.1664176604539;
+        Mon, 26 Sep 2022 00:16:44 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b003b4fe03c881sm10532225wmo.48.2022.09.26.00.16.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 00:16:44 -0700 (PDT)
+Message-ID: <f61a3a55-808e-01cc-287e-d840f7948d2f@kernel.org>
+Date:   Mon, 26 Sep 2022 09:16:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH -next] drm/ast: make ast_modeset static
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] serial: 8250: Fix restoring termios speed after suspend
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220924104324.4035-1-pali@kernel.org>
 Content-Language: en-US
-To:     ruanjinjie <ruanjinjie@huawei.com>, airlied@redhat.com,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220926023253.739699-1-ruanjinjie@huawei.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220926023253.739699-1-ruanjinjie@huawei.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------fNZSebB0BLXw1k7etBjVdJbv"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220924104324.4035-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------fNZSebB0BLXw1k7etBjVdJbv
-Content-Type: multipart/mixed; boundary="------------KIwDWSruBahZeHd0Gu0SzOlq";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: ruanjinjie <ruanjinjie@huawei.com>, airlied@redhat.com, airlied@linux.ie,
- daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-ID: <c6d0fb6f-6fc3-3123-ee7c-7edac211dbf3@suse.de>
-Subject: Re: [PATCH -next] drm/ast: make ast_modeset static
-References: <20220926023253.739699-1-ruanjinjie@huawei.com>
-In-Reply-To: <20220926023253.739699-1-ruanjinjie@huawei.com>
+On 24. 09. 22, 12:43, Pali Rohár wrote:
+> Since commit edc6afc54968 ("tty: switch to ktermios and new framework")
+> termios speed is no longer stored only in c_cflag member but also in new
+> additional c_ispeed and c_ospeed members. If BOTHER flag is set in c_cflag
+> then termios speed is stored only in these new members.
+> 
+> Since commit 027b57170bf8 ("serial: core: Fix initializing and restoring
+> termios speed") termios speed is available also in struct console.
+> 
+> So properly restore also c_ispeed and c_ospeed members after suspend to fix
+> restoring termios speed which is not represented by Bnnn constant.
+> 
+> Fixes: 4516d50aabed ("serial: 8250: Use canary to restart console after suspend")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>   drivers/tty/serial/8250/8250_port.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 39b35a61958c..441f317c55af 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -3314,8 +3314,13 @@ static void serial8250_console_restore(struct uart_8250_port *up)
+>   	unsigned int baud, quot, frac = 0;
+>   
+>   	termios.c_cflag = port->cons->cflag;
+> -	if (port->state->port.tty && termios.c_cflag == 0)
+> +	termios.c_ispeed = port->cons->ispeed;
+> +	termios.c_ospeed = port->cons->ospeed;
+> +	if (port->state->port.tty && termios.c_cflag == 0) {
 
---------------KIwDWSruBahZeHd0Gu0SzOlq
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I don't currently know how safe it is to assume port->state->port.tty 
+cannot change between the test above and the dereferences below.
 
-SGkNCg0KQW0gMjYuMDkuMjIgdW0gMDQ6MzIgc2NocmllYiBydWFuamluamllOg0KPiBUaGUg
-c3ltYm9sIGlzIG5vdCB1c2VkIG91dHNpZGUgb2YgdGhlIGZpbGUsIHNvIG1hcmsgaXQgc3Rh
-dGljLg0KPiANCj4gRml4ZXMgdGhlIGZvbGxvd2luZyB3YXJuaW5nOg0KPiANCj4gZHJpdmVy
-cy9ncHUvZHJtL2FzdC9hc3RfZHJ2LmM6NDI6NTogd2FybmluZzogc3ltYm9sICdhc3RfbW9k
-ZXNldCcNCj4gd2FzIG5vdCBkZWNsYXJlZC4gU2hvdWxkIGl0IGJlIHN0YXRpYz8NCj4gDQo+
-IFNpZ25lZC1vZmYtYnk6IHJ1YW5qaW5qaWUgPHJ1YW5qaW5qaWVAaHVhd2VpLmNvbT4NCg0K
-VGhhbmsgeW91LiBBZGRlZCB0byBkcm0tbWlzYy1uZXh0Lg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jIHwgMiAr
-LQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0K
-PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jIGIvZHJp
-dmVycy9ncHUvZHJtL2FzdC9hc3RfZHJ2LmMNCj4gaW5kZXggNzYwYjI3OTcxNTU3Li5iOTM5
-MmYzMWU2MjkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5j
-DQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jDQo+IEBAIC0zOSw3ICsz
-OSw3IEBADQo+ICAgDQo+ICAgI2luY2x1ZGUgImFzdF9kcnYuaCINCj4gICANCj4gLWludCBh
-c3RfbW9kZXNldCA9IC0xOw0KPiArc3RhdGljIGludCBhc3RfbW9kZXNldCA9IC0xOw0KPiAg
-IA0KPiAgIE1PRFVMRV9QQVJNX0RFU0MobW9kZXNldCwgIkRpc2FibGUvRW5hYmxlIG1vZGVz
-ZXR0aW5nIik7DQo+ICAgbW9kdWxlX3BhcmFtX25hbWVkKG1vZGVzZXQsIGFzdF9tb2Rlc2V0
-LCBpbnQsIDA0MDApOw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
-ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
-eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
-TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+In anyway, you should cache it as it is used 4 times now. It would make 
+the code definitely more readable.
 
---------------KIwDWSruBahZeHd0Gu0SzOlq--
+>   		termios.c_cflag = port->state->port.tty->termios.c_cflag;
+> +		termios.c_ispeed = port->state->port.tty->termios.c_ispeed;
+> +		termios.c_ospeed = port->state->port.tty->termios.c_ospeed;
+> +	}
+>   
+>   	baud = serial8250_get_baud_rate(port, &termios, NULL);
+>   	quot = serial8250_get_divisor(port, baud, &frac);
 
---------------fNZSebB0BLXw1k7etBjVdJbv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+-- 
+js
+suse labs
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMxUdIFAwAAAAAACgkQlh/E3EQov+CG
-7BAAg9CzSxw9ykvbHcJ+o8/xVv+Khyv5NwxaFcfxBBcBYunnqyHLu7FGO7v2D/6vQX6AgLlV1Jc8
-Q6OAw0hOlNYHqEdvQkFnEi39UkeeLXJj8WwJIjhOh+ZtDjOdxI/C6FeLlAwWBzFxlPemRTEpJGaw
-ADWn+R6Oh/Hb17EG7ij+/yl/mqUFvqb59WgbgbuizAj1HMeDrV2STVVxYRg1S+uxBRLgNUoKLIKJ
-Y2JnzNwa4P11TfaLohwR0R2MI+6GUgzJtUKnhGYaqldce0RriQRCHdVFAwEAUkQU3MSrDEqfzUNW
-Si7m2Px1VCDIYvTPQzn1frx9MecE6xLnooJnMMAAaatOP+kZ/aPrzXeAhtLr5dPUQmbcBwsEDl5u
-XNjHRoN54mZJwNL3Tjt9VA7fHn9nC7uQ1Hxbom4XPOZM/6wcgGzpCMmCdnrw6GWM5mM9wlO0qiWh
-Hidfx5jwFLxDkms0TdA/zUWVkHr8hsuVp7IIqUnLS8fmMFN3veWQBZ8/M45txD6eWNGst0IlXHtm
-pf4znJ/v8cPd6jKKGqDNKIWq0N2e+14JfQLSzRNqYJ4Jq7/wXl2cb2LZCheR42JoBLQSXuo8ISLG
-rBET5c/MXCUpFIdRIjqTtWm6ENFuX/EUDIA3jNxcb3ctYCKjrdQ+xMI2uL+oZwfMEfkRcoMR9ViU
-Sf0=
-=UDOc
------END PGP SIGNATURE-----
-
---------------fNZSebB0BLXw1k7etBjVdJbv--
