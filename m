@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED245EA192
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1726F5EA463
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236785AbiIZKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S238453AbiIZLpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236927AbiIZKtw (ORCPT
+        with ESMTP id S236270AbiIZLmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:49:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D8D58516;
-        Mon, 26 Sep 2022 03:27:04 -0700 (PDT)
+        Mon, 26 Sep 2022 07:42:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2CB72697;
+        Mon, 26 Sep 2022 03:46:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B110960C00;
-        Mon, 26 Sep 2022 10:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7FEC433D6;
-        Mon, 26 Sep 2022 10:27:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC9BEB80951;
+        Mon, 26 Sep 2022 10:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522A5C433D6;
+        Mon, 26 Sep 2022 10:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188023;
-        bh=/KzNBC/1o7m8B9RSy27+tliksvw2eqi39Mn6M3WBaDs=;
+        s=korg; t=1664188476;
+        bh=t6nRDC/Uw/8N57buXo2N9w/xMae71J7xZCw0KU/X5k4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bus9W2VnWbOD4f8bjWW6XAD/n5FVxt7ba8DJ4Rcb4F/D2bAXDzT/YfPd68nY1SaHz
-         0Srafxwn+3CiIlpEmbNGsXT5YuhJ+VSigtEtnJM5krfwZUrSaAMvvfdwheoyHIUBVE
-         2zHmGtg2fQGsmxpLnFe6Jl88n7tfF5+n2gSRwwHU=
+        b=okEE2NSqux5BEIw49A23KVqrrqxVS9DlBBS/oJcucUcyrA1xOTlUGjQ0fPUI5dbhY
+         nyncqA4zvUihDBW80wg8sWA6n6Out+LYCr7L/ySgjSgQ+7y3AKKnSho0nLBgPvTLLG
+         qNt3IC8+Qwi06tDFMXM4SnREkZPFc9TryKYly9vs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 016/141] usb: xhci-mtk: add a function to (un)load bandwidth info
+Subject: [PATCH 5.15 008/148] usb: dwc3: gadget: Refactor pullup()
 Date:   Mon, 26 Sep 2022 12:10:42 +0200
-Message-Id: <20220926100755.161298713@linuxfoundation.org>
+Message-Id: <20220926100756.353437549@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,104 +53,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-[ Upstream commit 338af695fffb12a9407c376ce0cebce896c15050 ]
+[ Upstream commit 861c010a2ee1bc4a66d23f0da4aa22e75d8eaa24 ]
 
-Extract a function to load/unload bandwidth info, and remove
-a dummy check of TT offset.
+Move soft-disconnect sequence out of dwc3_gadget_pullup(). No
+functional change here.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/6fbc000756a4a4a7efbce651b785fee7561becb6.1615170625.git.chunfeng.yun@mediatek.com
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/4c0f259b17d95acaaa931f90276683a48a32fe22.1650593829.git.Thinh.Nguyen@synopsys.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
+Stable-dep-of: 040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c | 37 ++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 21 deletions(-)
+ drivers/usb/dwc3/gadget.c | 65 ++++++++++++++++++++++-----------------
+ 1 file changed, 36 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index b1da3cb077c9..9a9685f74940 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -375,7 +375,6 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
- 					sch_ep->bw_budget_table[j];
- 		}
- 	}
--	sch_ep->allocated = used;
- }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 61499b657129..cdc03ee439f8 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2435,6 +2435,40 @@ static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
+ static void __dwc3_gadget_stop(struct dwc3 *dwc);
+ static int __dwc3_gadget_start(struct dwc3 *dwc);
  
- static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
-@@ -509,6 +508,19 @@ static void update_sch_tt(struct usb_device *udev,
- 		list_del(&sch_ep->tt_endpoint);
- }
- 
-+static int load_ep_bw(struct usb_device *udev, struct mu3h_sch_bw_info *sch_bw,
-+		      struct mu3h_sch_ep_info *sch_ep, bool loaded)
++static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
 +{
-+	if (sch_ep->sch_tt)
-+		update_sch_tt(udev, sch_ep, loaded);
++	u32 count;
 +
-+	/* update bus bandwidth info */
-+	update_bus_bw(sch_bw, sch_ep, loaded);
-+	sch_ep->allocated = loaded;
++	dwc->connected = false;
 +
-+	return 0;
++	/*
++	 * In the Synopsys DesignWare Cores USB3 Databook Rev. 3.30a
++	 * Section 4.1.8 Table 4-7, it states that for a device-initiated
++	 * disconnect, the SW needs to ensure that it sends "a DEPENDXFER
++	 * command for any active transfers" before clearing the RunStop
++	 * bit.
++	 */
++	dwc3_stop_active_transfers(dwc);
++	__dwc3_gadget_stop(dwc);
++
++	/*
++	 * In the Synopsys DesignWare Cores USB3 Databook Rev. 3.30a
++	 * Section 1.3.4, it mentions that for the DEVCTRLHLT bit, the
++	 * "software needs to acknowledge the events that are generated
++	 * (by writing to GEVNTCOUNTn) while it is waiting for this bit
++	 * to be set to '1'."
++	 */
++	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++	count &= DWC3_GEVNTCOUNT_MASK;
++	if (count > 0) {
++		dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
++		dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
++			dwc->ev_buf->length;
++	}
++
++	return dwc3_gadget_run_stop(dwc, false, false);
 +}
 +
- static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
  {
- 	u32 boundary = sch_ep->esit;
-@@ -535,7 +547,6 @@ static int check_sch_bw(struct usb_device *udev,
- 	u32 esit_boundary;
- 	u32 min_num_budget;
- 	u32 min_cs_count;
--	bool tt_offset_ok = false;
- 	int ret;
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+@@ -2491,33 +2525,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	spin_lock_irqsave(&dwc->lock, flags);
  
- 	/*
-@@ -552,8 +563,6 @@ static int check_sch_bw(struct usb_device *udev,
- 			ret = check_sch_tt(udev, sch_ep, offset);
- 			if (ret)
- 				continue;
--			else
--				tt_offset_ok = true;
- 		}
- 
- 		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
-@@ -585,29 +594,15 @@ static int check_sch_bw(struct usb_device *udev,
- 	sch_ep->cs_count = min_cs_count;
- 	sch_ep->num_budget_microframes = min_num_budget;
- 
--	if (sch_ep->sch_tt) {
--		/* all offset for tt is not ok*/
--		if (!tt_offset_ok)
--			return -ERANGE;
+ 	if (!is_on) {
+-		u32 count;
 -
--		update_sch_tt(udev, sch_ep, 1);
--	}
+-		dwc->connected = false;
+-		/*
+-		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
+-		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
+-		 * disconnect, the SW needs to ensure that it sends "a DEPENDXFER
+-		 * command for any active transfers" before clearing the RunStop
+-		 * bit.
+-		 */
+-		dwc3_stop_active_transfers(dwc);
+-		__dwc3_gadget_stop(dwc);
 -
--	/* update bus bandwidth info */
--	update_bus_bw(sch_bw, sch_ep, 1);
+-		/*
+-		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
+-		 * Section 1.3.4, it mentions that for the DEVCTRLHLT bit, the
+-		 * "software needs to acknowledge the events that are generated
+-		 * (by writing to GEVNTCOUNTn) while it is waiting for this bit
+-		 * to be set to '1'."
+-		 */
+-		count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+-		count &= DWC3_GEVNTCOUNT_MASK;
+-		if (count > 0) {
+-			dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
+-			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+-						dwc->ev_buf->length;
+-		}
++		ret = dwc3_gadget_soft_disconnect(dwc);
+ 	} else {
+ 		/*
+ 		 * In the Synopsys DWC_usb31 1.90a programming guide section
+@@ -2531,9 +2539,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 
+ 		dwc3_event_buffers_setup(dwc);
+ 		__dwc3_gadget_start(dwc);
++		ret = dwc3_gadget_run_stop(dwc, true, false);
+ 	}
 -
--	return 0;
-+	return load_ep_bw(udev, sch_bw, sch_ep, true);
- }
+-	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 	enable_irq(dwc->irq_gadget);
  
- static void destroy_sch_ep(struct usb_device *udev,
- 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
- {
- 	/* only release ep bw check passed by check_sch_bw() */
--	if (sch_ep->allocated) {
--		update_bus_bw(sch_bw, sch_ep, 0);
--		if (sch_ep->sch_tt)
--			update_sch_tt(udev, sch_ep, 0);
--	}
-+	if (sch_ep->allocated)
-+		load_ep_bw(udev, sch_bw, sch_ep, false);
- 
- 	if (sch_ep->sch_tt)
- 		drop_tt(udev);
 -- 
 2.35.1
 
