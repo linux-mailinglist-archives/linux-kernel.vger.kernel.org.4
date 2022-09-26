@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0335EADE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BCD5EADFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiIZRQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S230422AbiIZRTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiIZRQV (ORCPT
+        with ESMTP id S229584AbiIZRSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:16:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976879DB6F;
-        Mon, 26 Sep 2022 09:30:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A641B80B2E;
-        Mon, 26 Sep 2022 16:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E134C433D7;
-        Mon, 26 Sep 2022 16:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664209799;
-        bh=A0ybDQ51k9oJ4ReXs2ASvQDuahhVl27PCcQijNdbvAM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hjN/hB0zGhz3na2PG5iAkJqXXc5bQQNxUkkawQYUsXZjhFSP4t/FIrcSP9LMHgz4V
-         l5wlnfDuyqH2UsyztWNPqxQbBOrgFkbdoikNzpjwWyn/pfKRM+jcKvKXkJ4AE/Ejhs
-         ozNgEVsNmalsJJ90/1GVRB1e+LZIbwi6mGJrmPGW7aN3gNSVOGsx6zD6LkQIwMz1jI
-         68gSrZG9ecu46Kw+JnAu/9ePvJ0bVRKrNpC06UCcE0LkMAPHmCr0zof9lUtyNS1ctP
-         sw8SWj81H96sMcksfDcRI6ffD4jm60N0BZjyyGNsU7Jq0Nw/dMJYWp8ACtcZ7Lt3TG
-         +xMK5o0cmsMGw==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     ppbuk5246@gmail.com, damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH v5] damon/sysfs: fix possible memleak on damon_sysfs_add_target
-Date:   Mon, 26 Sep 2022 16:29:51 +0000
-Message-Id: <20220926162951.49496-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Sep 2022 13:18:51 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF85FE05D9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:32:44 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so3202766iop.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:32:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=CPZvLmvgmmIL31BbqFncbnTIzAtKgNpQNnol62z/2wA=;
+        b=0TVsbBg5E7I+MnuJ8Er+CGiUBUG2glcbG9ALh7xSSVsPXOhcApf0pWtW8dNSqxsuUc
+         EL7DKMBDPdyemZlJJJzPRZ/M2Z+uc06Vq1cuu+eS4CeCDnpKcQSIgBHwrOgakl+TukkL
+         5SAM/o7G8Ic1odjRmdYyWpVACXaUej9C52tlyEW8PFwvP0GOY2R3d+XYcfGdbQqOOaxk
+         Q/nP0pJsFF0zA4vXQWJPRq12gv3FkLCtTl+hCNXlrZG6fRqhRx8cYEBpSo7oES2NN9oy
+         F5zoyryCl4bJOE+R2usVbLmi3urZGW3d4BX0gNoV1n3FEewlWSIFppCsAvIqE+K9r4Ih
+         QaSQ==
+X-Gm-Message-State: ACrzQf1QlewBpqqUK2z/Dy0AvupY6pp3RE3eR5uORXr62HO1SOMby9z5
+        x0qkHh5gay9bw+9fnJ10YR2p2Z2xEq9d6gzipZyL+SzFZKFS
+X-Google-Smtp-Source: AMsMyM7Eq3HeZPdRP094BU2+h8q2AMKJycG3mryWGHmtb3xZMV3sNrkbc+39hteb1IZifHjAH6tu16igGpOpUcptJvMgTY5PwVNH
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:711b:0:b0:359:1955:9997 with SMTP id
+ n27-20020a02711b000000b0035919559997mr12655042jac.203.1664209956529; Mon, 26
+ Sep 2022 09:32:36 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 09:32:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004a6d9505e99713e0@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in dbAlloc
+From:   syzbot <syzbot+a41ec88f6b014e3da07b@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Levi Yun <ppbuk5246@gmail.com>
+Hello,
 
-When damon_sysfs_add_target couldn't find proper task, newly allocated
-damon_target structure isn't registered yet.  So, it's impossible to
-free the newly allocated one by damon_sysfs_destroy_targets.
+syzbot found the following issue on:
 
-By calling damon_add_target as soon as allocating new target, fix this
-possible memory leak.
+HEAD commit:    f76349cf4145 Linux 6.0-rc7
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f64288880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=a41ec88f6b014e3da07b
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16880b18880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157311df080000
 
-Fixes: a61ea561c871 ("mm/damon/sysfs: link DAMON for virtual address spaces monitoring")
-Cc: <stable@vger.kernel.org> # 5.17.x
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: SeongJae Park <sj@kernel.org>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a41ec88f6b014e3da07b@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 264192
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:776:12
+shift exponent 1834973817 is too large for 64-bit type 'long long'
+CPU: 0 PID: 3608 Comm: syz-executor347 Not tainted 6.0.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
+ dbAlloc+0xbdc/0xc90 fs/jfs/jfs_dmap.c:776
+ extBalloc fs/jfs/jfs_extent.c:321 [inline]
+ extAlloc+0x4b9/0xff0 fs/jfs/jfs_extent.c:122
+ jfs_get_block+0x342/0xce0 fs/jfs/inode.c:248
+ __block_write_begin_int+0x5f6/0x1ba0 fs/buffer.c:2006
+ __block_write_begin fs/buffer.c:2056 [inline]
+ block_write_begin+0x93/0x1e0 fs/buffer.c:2117
+ jfs_write_begin+0x2d/0x60 fs/jfs/inode.c:304
+ generic_perform_write+0x2a8/0x5b0 mm/filemap.c:3738
+ __generic_file_write_iter+0x176/0x400 mm/filemap.c:3866
+ generic_file_write_iter+0xab/0x310 mm/filemap.c:3898
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:855
+ vfs_writev fs/read_write.c:928 [inline]
+ do_writev+0x23e/0x430 fs/read_write.c:971
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f72b62b4f39
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe31a1b658 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f72b62b4f39
+RDX: 0000000000000001 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 00007f72b6274700 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000f8008000
+R13: 0000000000000000 R14: 00080000000000f8 R15: 0000000000000000
+ </TASK>
+================================================================================
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes from v4
-(https://lore.kernel.org/damon/20220926160611.48536-1-sj@kernel.org/_
-- Fix some typos
-
-Changes from v3
-(https://lore.kernel.org/damon/20220925234327.26345-1-ppbuk5246@gmail.com/)
-- Fix Fixes: tag
-- Add patch changelog
-
-Changes from v2
-(https://lore.kernel.org/damon/20220925234053.26090-1-ppbuk5246@gmail.com/)
-- Add Fixes: and Cc: stable
-
-Changes from v1
-(https://lore.kernel.org/damon/20220925140257.23431-1-ppbuk5246@gmail.com/)
-- Do damon_add_target() earlier instead of explicitly freeing the object
-
- mm/damon/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 455215a5c059..9f1219a67e3f 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -2172,12 +2172,12 @@ static int damon_sysfs_add_target(struct damon_sysfs_target *sys_target,
- 
- 	if (!t)
- 		return -ENOMEM;
-+	damon_add_target(ctx, t);
- 	if (damon_target_has_pid(ctx)) {
- 		t->pid = find_get_pid(sys_target->pid);
- 		if (!t->pid)
- 			goto destroy_targets_out;
- 	}
--	damon_add_target(ctx, t);
- 	err = damon_sysfs_set_regions(t, sys_target->regions);
- 	if (err)
- 		goto destroy_targets_out;
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
