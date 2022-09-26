@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F95EA4FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0985EA0BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238960AbiIZL5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S236172AbiIZKlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239038AbiIZLyU (ORCPT
+        with ESMTP id S236417AbiIZKjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:20 -0400
+        Mon, 26 Sep 2022 06:39:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867B157E2E;
-        Mon, 26 Sep 2022 03:50:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B96A4D148;
+        Mon, 26 Sep 2022 03:23:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FE0C60AF3;
-        Mon, 26 Sep 2022 10:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2835C433D6;
-        Mon, 26 Sep 2022 10:48:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D6360BAF;
+        Mon, 26 Sep 2022 10:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7424C433C1;
+        Mon, 26 Sep 2022 10:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189289;
-        bh=VyzeQ3A73WzZWuQ1QIIIEVGaB9CNiZoFtGOsM/3vM0U=;
+        s=korg; t=1664187792;
+        bh=X04OHgw+DxFh+oL/0lcLqlkZcBZ0P4XflcwcsMPbMzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=COipS0xnPhmXjucJSSVpRXpMMUyoSCH+OmoCKBFmdAR3BuZgq6nvpSgyxLMhakrBu
-         wSSLlFev6SY5GKAuxLLDro2A+cEkOl9K5YEEqSsr95Iw4NuGmfSKCy5R6NELQofrRI
-         Arkx3T3jiIn/6cQ6ufKxTGv0CJtVJQ2eZK/o37fE=
+        b=FD6cGMiMdymPe18QksTx3ACSwSQNmQVM3Uk44I+X/nmLA1yborAOZuSjlMGBeKZz6
+         muEznz9MEfXGl4m7+ARMME6+HJI8KlEiZWXBdMetRg/7uhDUbzJVBY7MyHdP3lEWo4
+         T2VUgvHETCYeq1nWUWZJr26RxuCD+JbkoJAM8+Ro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 105/207] net: bonding: Share lacpdu_mcast_addr definition
+        stable@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 061/120] ALSA: hda/realtek: Add pincfg for ASUS G533Z HP jack
 Date:   Mon, 26 Sep 2022 12:11:34 +0200
-Message-Id: <20220926100811.294285540@linuxfoundation.org>
+Message-Id: <20220926100753.184087346@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,105 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: Luke D. Jones <luke@ljones.dev>
 
-[ Upstream commit 1d9a143ee3408349700f44a9197b7ae0e4faae5d ]
+commit bc2c23549ccd7105eb6ff0d4f0ac519285628673 upstream.
 
-There are already a few definitions of arrays containing
-MULTICAST_LACPDU_ADDR and the next patch will add one more use. These all
-contain the same constant data so define one common instance for all
-bonding code.
+Fixes up the pincfg for ASUS ROG Strix G15 (G533Z) headphone combo jack
 
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Stable-dep-of: 86247aba599e ("net: bonding: Unsync device addresses on ndo_stop")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[ Fixed the position in the quirk table by tiwai ]
+
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220915080921.35563-3-luke@ljones.dev
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_3ad.c  |  5 +++--
- drivers/net/bonding/bond_main.c | 16 ++++------------
- include/net/bond_3ad.h          |  2 --
- include/net/bonding.h           |  3 +++
- 4 files changed, 10 insertions(+), 16 deletions(-)
+ sound/pci/hda/patch_realtek.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 1f0120cbe9e8..8ad095c19f27 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -87,8 +87,9 @@ static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
- static u16 ad_ticks_per_sec;
- static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
- 
--static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
--	MULTICAST_LACPDU_ADDR;
-+const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned = {
-+	0x01, 0x80, 0xC2, 0x00, 0x00, 0x02
-+};
- 
- /* ================= main 802.3ad protocol functions ================== */
- static int ad_lacpdu_send(struct port *port);
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index bff0bfd10e23..b159b73f2969 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -865,12 +865,8 @@ static void bond_hw_addr_flush(struct net_device *bond_dev,
- 	dev_uc_unsync(slave_dev, bond_dev);
- 	dev_mc_unsync(slave_dev, bond_dev);
- 
--	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
--		/* del lacpdu mc addr from mc list */
--		u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
--
--		dev_mc_del(slave_dev, lacpdu_multicast);
--	}
-+	if (BOND_MODE(bond) == BOND_MODE_8023AD)
-+		dev_mc_del(slave_dev, lacpdu_mcast_addr);
- }
- 
- /*--------------------------- Active slave change ---------------------------*/
-@@ -2144,12 +2140,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
- 		dev_uc_sync_multiple(slave_dev, bond_dev);
- 		netif_addr_unlock_bh(bond_dev);
- 
--		if (BOND_MODE(bond) == BOND_MODE_8023AD) {
--			/* add lacpdu mc addr to mc list */
--			u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
--
--			dev_mc_add(slave_dev, lacpdu_multicast);
--		}
-+		if (BOND_MODE(bond) == BOND_MODE_8023AD)
-+			dev_mc_add(slave_dev, lacpdu_mcast_addr);
- 	}
- 
- 	bond->slave_cnt++;
-diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-index 184105d68294..f2273bd5a4c5 100644
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -15,8 +15,6 @@
- #define PKT_TYPE_LACPDU         cpu_to_be16(ETH_P_SLOW)
- #define AD_TIMER_INTERVAL       100 /*msec*/
- 
--#define MULTICAST_LACPDU_ADDR    {0x01, 0x80, 0xC2, 0x00, 0x00, 0x02}
--
- #define AD_LACP_SLOW 0
- #define AD_LACP_FAST 1
- 
-diff --git a/include/net/bonding.h b/include/net/bonding.h
-index 3b816ae8b1f3..7ac1773b9922 100644
---- a/include/net/bonding.h
-+++ b/include/net/bonding.h
-@@ -785,6 +785,9 @@ extern struct rtnl_link_ops bond_link_ops;
- /* exported from bond_sysfs_slave.c */
- extern const struct sysfs_ops slave_sysfs_ops;
- 
-+/* exported from bond_3ad.c */
-+extern const u8 lacpdu_mcast_addr[];
-+
- static inline netdev_tx_t bond_tx_drop(struct net_device *dev, struct sk_buff *skb)
- {
- 	dev_core_stats_tx_dropped_inc(dev);
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6485,6 +6485,7 @@ enum {
+ 	ALC294_FIXUP_ASUS_GU502_PINS,
+ 	ALC294_FIXUP_ASUS_GU502_VERBS,
+ 	ALC294_FIXUP_ASUS_G513_PINS,
++	ALC285_FIXUP_ASUS_G533Z_PINS,
+ 	ALC285_FIXUP_HP_GPIO_LED,
+ 	ALC285_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_GPIO_LED,
+@@ -7771,6 +7772,15 @@ static const struct hda_fixup alc269_fix
+ 				{ }
+ 		},
+ 	},
++	[ALC285_FIXUP_ASUS_G533Z_PINS] = {
++		.type = HDA_FIXUP_PINS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x14, 0x90170120 },
++			{ }
++		},
++		.chained = true,
++		.chain_id = ALC294_FIXUP_ASUS_G513_PINS,
++	},
+ 	[ALC294_FIXUP_ASUS_COEF_1B] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -8258,6 +8268,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1043, 0x1b13, "Asus U41SV", ALC269_FIXUP_INV_DMIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1bbd, "ASUS Z550MA", ALC255_FIXUP_ASUS_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
++	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
 
 
