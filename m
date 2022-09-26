@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E1F5EB608
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C865EB60C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiIZX6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S230336AbiIZX7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIZX55 (ORCPT
+        with ESMTP id S229652AbiIZX7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:57:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076BD80BD5;
-        Mon, 26 Sep 2022 16:57:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 958FB6149E;
-        Mon, 26 Sep 2022 23:57:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5F6C433D6;
-        Mon, 26 Sep 2022 23:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664236676;
-        bh=ruhtHy1jX7W4cTqbjAtE4WdcljIrqUW0GHQx14am/Aw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ggJd2u66Y4NLmBs4IDbeXqlRRQLWwFEPD680zYBv5yCWB1x0RUABtmK7Y1QDjoIE2
-         V2nWdfJfmfRq34CB9F8annRiyTKsIgFAl2L4TMF9pL/lMp17XaAP5NrsFtGjgB92u7
-         zhpJZ/n2+RSMCN8AWpn3ALvc5fpjVacFTDbPJIeW2xd0Gz2DqBf/uc22Nn8PhrzKK6
-         R4vjdioSyuUDKl0miFN74Yht62X7M0ZsbMoSoPXtGaP3H+Al/6ziqtQFOP6M2NnWAE
-         y8uzC47q6ZopA/f/MC3ihKQOUw9wsoW51anJR2t0tSxt5hbYzFGGi2a+aZ69sdlJLK
-         kYSHVL9K9zG5Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9CE2F5C0BE3; Mon, 26 Sep 2022 16:57:55 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:57:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <20220926235755.GD4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220926223534.GY4196@paulmck-ThinkPad-P17-Gen-1>
- <BE2B629D-B5D2-4ED0-944E-2F13E846047E@joelfernandes.org>
+        Mon, 26 Sep 2022 19:59:41 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595AEDFD8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:59:37 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id h5so4204322vkc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=t5RrCdQ8BJBxCmjNqX5bp/pde40RZMgx6IAMJqmXFbw=;
+        b=UKoD9iTjq8ej2/Wdppb3Seec1gBn67meE0Cr/gzPsF3vRT5hzODOuSu82u78NvKODf
+         W9m1u8BtuapxnnvcLisWfE6lY4Tm3ELlEcaaFEmabnE7lZoh0wHEOkbsZTnujrritDpB
+         eofECpCP7Jej1wpHh0xsDRSpPXjdewzkOUZB0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=t5RrCdQ8BJBxCmjNqX5bp/pde40RZMgx6IAMJqmXFbw=;
+        b=SxE6wCa60m3KJ0ZP+k5KlUQagz3g9ZZd/LGTb83Z6tFmhjmO41MR2a84COdY5FSiri
+         w3NAkEOOQwyGIDKiFcUwK5htDsLE3YpUiuhRRgPSvEnQvHPisK84edaJu4hAeBiWVU4E
+         7Sq9ugbPc4JAEDKaO+PUjjsWibANWpXKtriAxGaRZREiRgfc8zsuohv/6okIbatBF3iV
+         5W6BS+n/ugpBddJN8iaTan6T1Buyu4ZM67TZTMcD9eOeCXY46+AjsDBv6wRk7hhLQrlj
+         7o09UAf79aEOyuYGQH/8Q6teODgVMNwSghAtaSFd3oG4XotnAPzqVsqG8R6QHL/FqZAf
+         pV1A==
+X-Gm-Message-State: ACrzQf0UO5cq0Fi80UjTp9gw5I9LDyNxXrVG4sqNFNr5tw60x1Ln+aVH
+        o2RqsmT66pDzPsT8g+8maoABUiwO6QpIlrIfMS3lzg==
+X-Google-Smtp-Source: AMsMyM4fHVTZj6Bs5Uv87RCxD8LHn0UqAhQMFg95Jv+t7YVwbKwFeZvURJRzgaSc3Y4OaS4ARlO28ZBYOeLsMGGT2mU=
+X-Received: by 2002:a05:6122:31a:b0:3a3:cb4d:d211 with SMTP id
+ c26-20020a056122031a00b003a3cb4dd211mr10656930vko.26.1664236776470; Mon, 26
+ Sep 2022 16:59:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BE2B629D-B5D2-4ED0-944E-2F13E846047E@joelfernandes.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220926163057.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
+ <CABBYNZJ1r-qiE6+8ZY1phgOJ3DJZRQFSNLugZARtBChUC7d2UQ@mail.gmail.com>
+In-Reply-To: <CABBYNZJ1r-qiE6+8ZY1phgOJ3DJZRQFSNLugZARtBChUC7d2UQ@mail.gmail.com>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Mon, 26 Sep 2022 16:59:25 -0700
+Message-ID: <CANFp7mWZzivR0gbr2upf8awy1x6JZ9DaAjVfT=HHM3NAi6sk=Q@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: Prevent double register of suspend
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        linux-bluetooth@vger.kernel.org,
+        syzbot <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,122 +71,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 07:44:19PM -0400, Joel Fernandes wrote:
-> 
-> 
-> > On Sep 26, 2022, at 6:35 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Mon, Sep 26, 2022 at 08:54:27PM +0000, Joel Fernandes wrote:
-> >> Hi Vlad,
-> >> 
-> >> On Mon, Sep 26, 2022 at 09:39:23PM +0200, Uladzislau Rezki wrote:
-> >> [...]
-> >>>>> On my KVM machine the boot time is affected:
-> >>>>> 
-> >>>>> <snip>
-> >>>>> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
-> >>>>> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
-> >>>>> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
-> >>>>> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
-> >>>>> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
-> >>>>> [  104.115418] process '/usr/bin/fstype' started with executable stack
-> >>>>> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
-> >>>>> [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
-> >>>>> [  104.340193] systemd[1]: Detected virtualization kvm.
-> >>>>> [  104.340196] systemd[1]: Detected architecture x86-64.
-> >>>>> [  104.359032] systemd[1]: Set hostname to <pc638>.
-> >>>>> [  105.740109] random: crng init done
-> >>>>> [  105.741267] systemd[1]: Reached target Remote File Systems.
-> >>>>> <snip>
-> >>>>> 
-> >>>>> 2 - 11 and second delay is between 32 - 104. So there are still users which must
-> >>>>> be waiting for "RCU" in a sync way.
-> >>>> 
-> >>>> I was wondering if you can compare boot logs and see which timestamp does the
-> >>>> slow down start from. That way, we can narrow down the callback. Also another
-> >>>> idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
-> >>>> ftrace_dump_on_oops" to the boot params, and then manually call
-> >>>> "tracing_off(); panic();" from the code at the first printk that seems off in
-> >>>> your comparison of good vs bad. For example, if "crng init done" timestamp is
-> >>>> off, put the "tracing_off(); panic();" there. Then grab the serial console
-> >>>> output to see what were the last callbacks that was queued/invoked.
-> >> 
-> >> Would you be willing to try these steps? Meanwhile I will try on my side as
-> >> well with the .config you sent me in another email.
-> >> 
-> >>>>>> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> >>>>>> index 08605ce7379d..40ae36904825 100644
-> >>>>>> --- a/include/linux/rcupdate.h
-> >>>>>> +++ b/include/linux/rcupdate.h
-> >>>>>> @@ -108,6 +108,13 @@ static inline int rcu_preempt_depth(void)
-> >>>>>> 
-> >>>>>> #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
-> >>>>>> 
-> >>>>>> +#ifdef CONFIG_RCU_LAZY
-> >>>>>> +void call_rcu_flush(struct rcu_head *head, rcu_callback_t func);
-> >>>>>> +#else
-> >>>>>> +static inline void call_rcu_flush(struct rcu_head *head,
-> >>>>>> +        rcu_callback_t func) {  call_rcu(head, func); }
-> >>>>>> +#endif
-> >>>>>> +
-> >>>>>> /* Internal to kernel */
-> >>>>>> void rcu_init(void);
-> >>>>>> extern int rcu_scheduler_active;
-> >>>>>> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> >>>>>> index f53ad63b2bc6..edd632e68497 100644
-> >>>>>> --- a/kernel/rcu/Kconfig
-> >>>>>> +++ b/kernel/rcu/Kconfig
-> >>>>>> @@ -314,4 +314,12 @@ config TASKS_TRACE_RCU_READ_MB
-> >>>>>>      Say N here if you hate read-side memory barriers.
-> >>>>>>      Take the default if you are unsure.
-> >>>>>> 
-> >>>>>> +config RCU_LAZY
-> >>>>>> +    bool "RCU callback lazy invocation functionality"
-> >>>>>> +    depends on RCU_NOCB_CPU
-> >>>>>> +    default n
-> >>>>>> +    help
-> >>>>>> +      To save power, batch RCU callbacks and flush after delay, memory
-> >>>>>> +      pressure or callback list growing too big.
-> >>>>>> +
-> >>>>>> 
-> >>>>> Do you think you need this kernel option? Can we just consider and make
-> >>>>> it a run-time configurable? For example much more users will give it a try,
-> >>>>> so it will increase a coverage. By default it can be off.
-> >>>>> 
-> >>>>> Also you do not need to do:
-> >>>>> 
-> >>>>> #ifdef LAZY
-> >>>> 
-> >>>> How does the "LAZY" macro end up being runtime-configurable? That's static /
-> >>>> compile time. Did I miss something?
-> >>>> 
-> >>> I am talking about removing if:
-> >>> 
-> >>> config RCU_LAZY
-> >>> 
-> >>> we might run into issues related to run-time switching though.
-> >> 
-> >> When we started off, Paul said he wanted it kernel CONFIGurable. I will defer
-> >> to Paul on a decision for that. I prefer kernel CONFIG so people don't forget
-> >> to pass a boot param.
-> > 
-> > I am fine with a kernel boot parameter for this one.  You guys were the
-> > ones preferring Kconfig options.  ;-)
-> 
-> Yes I still prefer that.. ;-)
-> 
-> > But in that case, the CONFIG_RCU_NOCB_CPU would come into play to handle
-> > the case where there is no bypass.
-> 
-> If you don’t mind, let’s do both like we did for NOCB_CPU_ALL. In which case, Vlad since this was your suggestion, would you be so kind to send a patch adding a boot parameter on top of the series? ;-). I’ll include it in the next version. I’d suggest keep the boot param default off and add a CONFIG option that forces the boot param to be turned on.
+Actually, yeah that's a much simpler change... Got a little
+tunnel-visioned trying to fix the error :)
+I'll send up a v2 tomorrow after testing.
 
-NOCB_CPU_ALL?  If you are thinking in terms of laziness/flushing being
-done on a per-CPU basis among the rcu_nocbs CPUs, that sounds like
-something for later.
-
-Are you thinking in terms of Kconfig options that allow: (1) No laziness.
-(2) Laziness on all rcu_nocbs CPUs, but only if specified by a boot
-parameter.  (3) Laziness on all rcu_nocbs CPUs regardless of boot
-parameter.  I could get behind that.
-
-							Thanx, Paul
+On Mon, Sep 26, 2022 at 4:55 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Abhishek,
+>
+> On Mon, Sep 26, 2022 at 4:31 PM Abhishek Pandit-Subedi
+> <abhishekpandit@google.com> wrote:
+> >
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > Suspend notifier should only be registered and unregistered once per
+> > hdev. Since hci_sock and hci_register_dev run in different work queues
+> > (sock vs driver), add hci_dev_lock to avoid double registering.
+> >
+> > Reported-by: syzbot <syzkaller@googlegroups.com>
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> > This is fixing a syzbot reported warning. Tested in the following ways:
+> > * Normal start-up of driver with bluez.
+> > * Start/stop loop using HCI_USER_CHANNEL (sock path).
+> > * USB reset triggering hci_dev_unregister (driver path).
+> >
+> > ------------[ cut here ]------------
+> > double register detected
+> > WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
+> > notifier_chain_register kernel/notifier.c:27 [inline]
+> > WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
+> > notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
+> > Modules linked in:
+> > CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
+> > 5.10.136-syzkaller-19376-g6f46a5fe0124 #0
+> >   8f0771607702f5ef7184d2ee33bd0acd70219fc4
+> >   Hardware name: Google Google Compute Engine/Google Compute Engine,
+> >   BIOS Google 07/22/2022
+> >   RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
+> >   RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
+> >   Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
+> >   39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
+> >      e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
+> >      RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
+> >      RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
+> >      RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
+> >      RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
+> >      R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
+> >      R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
+> >      FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
+> >      knlGS:0000000000000000
+> >      CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >      CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
+> >      DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >      DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >      Call Trace:
+> >      blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
+> >      hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
+> >      [inline]
+> >      hci_register_suspend_notifier+0x6b/0x7c
+> >      net/bluetooth/hci_core.c:2727
+> >      hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
+> >      __sock_release+0xcd/0x1de net/socket.c:597
+> >      sock_close+0x18/0x1c net/socket.c:1267
+> >      __fput+0x418/0x729 fs/file_table.c:281
+> >      task_work_run+0x12b/0x15b kernel/task_work.c:151
+> >      tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+> >      exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
+> >      exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
+> >      syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
+> >      entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> >      RIP: 0033:0x78e38575e1db
+> >      Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
+> >      7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
+> >      <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+> >      RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
+> >      0000000000000003
+> >      RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
+> >      RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
+> >      RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
+> >      R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
+> >      R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
+> >
+> >  include/net/bluetooth/hci.h |  1 +
+> >  net/bluetooth/hci_core.c    | 16 ++++++++++++++--
+> >  2 files changed, 15 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+> > index e004ba04a9ae..36304c217151 100644
+> > --- a/include/net/bluetooth/hci.h
+> > +++ b/include/net/bluetooth/hci.h
+> > @@ -353,6 +353,7 @@ enum {
+> >         HCI_OFFLOAD_CODECS_ENABLED,
+> >         HCI_LE_SIMULTANEOUS_ROLES,
+> >         HCI_CMD_DRAIN_WORKQUEUE,
+> > +       HCI_SUSPEND_REGISTERED,
+> >
+> >         HCI_MESH_EXPERIMENTAL,
+> >         HCI_MESH,
+> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > index 66c7cdba0d32..5a32d17c69b8 100644
+> > --- a/net/bluetooth/hci_core.c
+> > +++ b/net/bluetooth/hci_core.c
+> > @@ -2760,10 +2760,18 @@ int hci_register_suspend_notifier(struct hci_dev *hdev)
+> >  {
+> >         int ret = 0;
+> >
+> > -       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks)) {
+> > +       hci_dev_lock(hdev);
+> > +       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
+> > +           !hci_dev_test_and_set_flag(hdev, HCI_SUSPEND_REGISTERED)) {
+> > +               memset(&hdev->suspend_notifier, 0,
+> > +                      sizeof(hdev->suspend_notifier));
+> >                 hdev->suspend_notifier.notifier_call = hci_suspend_notifier;
+> >                 ret = register_pm_notifier(&hdev->suspend_notifier);
+> > +
+> > +               if (ret)
+> > +                       hci_dev_clear_flag(hdev, HCI_SUSPEND_REGISTERED);
+> >         }
+> > +       hci_dev_unlock(hdev);
+> >
+> >         return ret;
+> >  }
+> > @@ -2772,8 +2780,12 @@ int hci_unregister_suspend_notifier(struct hci_dev *hdev)
+> >  {
+> >         int ret = 0;
+> >
+> > -       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks))
+> > +       hci_dev_lock(hdev);
+> > +       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
+> > +           hci_dev_test_and_clear_flag(hdev, HCI_SUSPEND_REGISTERED)) {
+> >                 ret = unregister_pm_notifier(&hdev->suspend_notifier);
+> > +       }
+> > +       hci_dev_unlock(hdev);
+> >
+> >         return ret;
+> >  }
+>
+> Perhaps it would have been better to stop calling these on hci_sock.c
+> and just make the notifier callback check
+> hci_dev_test_and_set_flag(hdev, HCI_USER_CHANNEL) return NOTIFY_DONE.
+>
+> > --
+> > 2.37.3.998.g577e59143f-goog
+> >
+>
+>
+> --
+> Luiz Augusto von Dentz
