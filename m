@@ -2,177 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E765D5EA855
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11755EA859
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiIZOY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S234667AbiIZO0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbiIZOXz (ORCPT
+        with ESMTP id S234636AbiIZOZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:23:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FBB1145E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:34:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 20D151F38A;
-        Mon, 26 Sep 2022 12:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664195677; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pZfEVr0F+eDUbTKMwdgidKtFX7VuirmYGY1O7jfs79E=;
-        b=ZJt6LzVTk7uUgNb/3+RfQS4n9gNmyE/Ndw3OtVGcUh3bb79rZhzJBODRYZZZq2QquYCc6L
-        RGqHr/EYJ6i3xOcwjiqpcU2ER9d6O9MRZgcYPOxOy1WDZXKyxVglBUKF4Mb4Afa7xVLS+Y
-        cqOAvXYCKS7IIiST8MsIPbwyJBZwvu4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664195677;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pZfEVr0F+eDUbTKMwdgidKtFX7VuirmYGY1O7jfs79E=;
-        b=mJY48elw8wJdWrhw2pCkaIypPsM43sG83ftl2OiftxYeqqyzno2SX0o3lzuEzQ12eeEVcO
-        NDbVNGZjP0yMZ3DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA48A13486;
-        Mon, 26 Sep 2022 12:34:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E1ijKFycMWOWUwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 26 Sep 2022 12:34:36 +0000
-Message-ID: <d50ed519-ba89-70e2-0f0c-b58593a3c060@suse.de>
-Date:   Mon, 26 Sep 2022 14:34:36 +0200
+        Mon, 26 Sep 2022 10:25:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4765C7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664195863; x=1695731863;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F4O/JRQEvf1m5qaZZ+4zbYvSClMWjgA/AuhrksjfPdo=;
+  b=G/fAmgzvORcLqS8utt7elwF4Ag4jf6sNlMUdzr1QXhaKlGmrrg1tlE1D
+   g46oNcIFDlXkrf8ai7Kbmm/otpg+7cfa/C3dNvEvHOhH2iYe4Tsoi+0PK
+   MMFW0kS1NQwPoJb7UQ+FQ7M5ktY5lV7qANZDgOjCGCy0wuPzj33mjqJl3
+   /fCuiUhF1ehmD/pxuJ/9ZlX+Qyl5hIaSR/ZP/B14+PaYwLHtLkTorZ5WE
+   qBJYef1+6kyCtkSHKua6sDTm9w2n/NQb8K1z7bIScYtkEVJhEqz9sPLVe
+   QhKqmpNGzNjInITwaK3UPvZn86eUIkrq3ObKjg/GF5WOwp46Ipsver+t2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="281388433"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="281388433"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 05:37:42 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="683511207"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="683511207"
+Received: from fmirus-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.211.4])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 05:37:41 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH] serial: Convert serial_rs485 to kernel doc
+Date:   Mon, 26 Sep 2022 15:37:35 +0300
+Message-Id: <20220926123735.50804-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 06/33] drm/connector: Rename legacy TV property
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Karol Herbst <kherbst@redhat.com>, David Airlie <airlied@linux.ie>,
-        nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ben Skeggs <bskeggs@redhat.com>, linux-sunxi@lists.linux.dev,
-        intel-gfx@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
- <fa71ae1c-f9ca-167c-7993-b698ea3473a0@suse.de>
- <20220926095031.vlwsw7willi36yd4@houat>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220926095031.vlwsw7willi36yd4@houat>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mwjZHgn1Ll4ReHR00ksHLHNN"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mwjZHgn1Ll4ReHR00ksHLHNN
-Content-Type: multipart/mixed; boundary="------------4FsZ219AqM5Fd5bD304l2D0A";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Maxime Ripard <maxime@cerno.tech>
-Cc: Karol Herbst <kherbst@redhat.com>, David Airlie <airlied@linux.ie>,
- nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- Phil Elwell <phil@raspberrypi.com>, Emma Anholt <emma@anholt.net>,
- Samuel Holland <samuel@sholland.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Ben Skeggs <bskeggs@redhat.com>,
- linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
- Hans de Goede <hdegoede@redhat.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- linux-arm-kernel@lists.infradead.org,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Dom Cobley <dom@raspberrypi.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- linux-kernel@vger.kernel.org,
- Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <d50ed519-ba89-70e2-0f0c-b58593a3c060@suse.de>
-Subject: Re: [PATCH v2 06/33] drm/connector: Rename legacy TV property
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-6-f733a0ed9f90@cerno.tech>
- <fa71ae1c-f9ca-167c-7993-b698ea3473a0@suse.de>
- <20220926095031.vlwsw7willi36yd4@houat>
-In-Reply-To: <20220926095031.vlwsw7willi36yd4@houat>
+Convert struct serial_rs485 comments to kernel doc format.
 
---------------4FsZ219AqM5Fd5bD304l2D0A
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-SGkNCg0KQW0gMjYuMDkuMjIgdW0gMTE6NTAgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPiBI
-aSBUaG9tYXMsDQo+IA0KPiBPbiBGcmksIFNlcCAyMywgMjAyMiBhdCAxMDoxOTowOEFNICsw
-MjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMjIuMDku
-MjIgdW0gMTY6MjUgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPj4+IFRoZSBjdXJyZW50IHR2
-X21vZGUgaGFzIGRyaXZlci1zcGVjaWZpYyB2YWx1ZXMgdGhhdCBkb24ndCBhbGxvdyB0bw0K
-Pj4+IGVhc2lseSBzaGFyZSBjb2RlIHVzaW5nIGl0LCBlaXRoZXIgYXQgdGhlIHVzZXJzcGFj
-ZSBvciBrZXJuZWwgbGV2ZWwuDQo+Pj4NCj4+PiBTaW5jZSB3ZSdyZSBnb2luZyB0byBpbnRy
-b2R1Y2UgYSBuZXcsIGdlbmVyaWMsIHByb3BlcnR5IHRoYXQgZml0IHRoZQ0KPj4+IHNhbWUg
-cHVycG9zZSwgbGV0J3MgcmVuYW1lIHRoaXMgb25lIHRvIGxlZ2FjeV90dl9tb2RlIHRvIG1h
-a2UgaXQNCj4+PiBvYnZpb3VzIHdlIHNob3VsZCBtb3ZlIGF3YXkgZnJvbSBpdC4NCj4+Pg0K
-Pj4+IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNoPg0K
-Pj4NCj4+IEl0J3Mgbm90IHdyb25nLCBidXQgJ2xlZ2FjeScgaXMgYWxyZWFkeSBvdmVybG9h
-ZGVkIHdpdGggbWVhbmluZy4gSWYgeW91IGNhbiwNCj4+IG1heWJlIG5hbWUgaXQgJ2RyaXZl
-cl90dl9tb2RlX3Byb3BlcnR5JyBvciAnY3VzdG9tX3R2X21vZGVfcHJvcGVydHknDQo+PiBp
-bnN0ZWFkLg0KPj4NCj4+IEFja2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1h
-bm5Ac3VzZS5kZT4NCj4gDQo+IEknZCByZWFsbHkgbGlrZSB0byBwb2ludCBvdXQgdGhhdCBu
-ZXcgZHJpdmVycyBzaG91bGRuJ3QgYmUgdXNpbmcgdGhpcy4NCj4gSWYgd2UncmUgdXNpbmcg
-ZWl0aGVyIG9mIHlvdXIgcHJvcG9zYWxzIHRoZW4gd3JpdGVycyBtaWdodCBnZXQgdGhlDQo+
-IGltcHJlc3Npb24gdGhhdCB0aGlzIGlzIG9rIHRvIHVzLg0KPiANCj4gV291bGQgeW91IHBy
-ZWZlciBkZXByZWNhdGVkIHRvIGxlZ2FjeT8NCg0KSSdtIG1lcmVseSBzdWdnZXN0aW5nLiBD
-YWxsIGl0IGxlZ2FjeSB0aGVuLCBzbyB5b3UgZG9uJ3QgaGF2ZSB0byByZXdvcmsgDQphbGwg
-b2YgdGhlIHBhdGNoZXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IE1heGlt
-ZQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
-DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
-IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
-R2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+---
+ include/uapi/linux/serial.h | 61 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 40 insertions(+), 21 deletions(-)
 
---------------4FsZ219AqM5Fd5bD304l2D0A--
+diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+index cea06924b295..67d4bc663521 100644
+--- a/include/uapi/linux/serial.h
++++ b/include/uapi/linux/serial.h
+@@ -107,37 +107,56 @@ struct serial_icounter_struct {
+ 	int reserved[9];
+ };
+ 
+-/*
++/**
++ * struct serial_rs485 - serial interface for controlling RS485 settings.
++ * @flags:			RS485 feature flags.
++ * @delay_rts_before_send:	Delay before send (milliseconds).
++ * @delay_rts_after_send:	Delay after send (milliseconds).
++ * @addr_recv:			Receive filter for RS485 addressing mode
++ *				(used only when %SER_RS485_ADDR_RECV is set).
++ * @addr_dest:			Destination address for RS485 addressing mode
++ *				(used only when %SER_RS485_ADDR_DEST is set).
++ * @padding0:			Padding (set to zero).
++ * @padding1:			Padding (set to zero).
++ * @padding:			Deprecated, use @padding0 and @padding1 instead.
++ *				Do not use with @addr_recv and @addr_dest (due to
++ *				overlap).
++ *
+  * Serial interface for controlling RS485 settings on chips with suitable
+  * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
+  * platform. The set function returns the new state, with any unsupported bits
+  * reverted appropriately.
++ *
++ * serial_rs485::flags bits are:
++ * * %SER_RS485_ENABLED		- RS485 enabled.
++ * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
++ * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
++ * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
++ * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
++ * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
++ * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
++ *				  Requires %SER_RS485_ADDRB.
++ * * %SER_RS485_ADDR_DEST	- Destination address (enables @addr_dest).
++ *				  Requires %SER_RS485_ADDRB.
+  */
+-
+ struct serial_rs485 {
+-	__u32	flags;			/* RS485 feature flags */
+-#define SER_RS485_ENABLED		(1 << 0)	/* If enabled */
+-#define SER_RS485_RTS_ON_SEND		(1 << 1)	/* Logical level for
+-							   RTS pin when
+-							   sending */
+-#define SER_RS485_RTS_AFTER_SEND	(1 << 2)	/* Logical level for
+-							   RTS pin after sent*/
++	__u32	flags;
++#define SER_RS485_ENABLED		(1 << 0)
++#define SER_RS485_RTS_ON_SEND		(1 << 1)
++#define SER_RS485_RTS_AFTER_SEND	(1 << 2)
+ #define SER_RS485_RX_DURING_TX		(1 << 4)
+-#define SER_RS485_TERMINATE_BUS		(1 << 5)	/* Enable bus
+-							   termination
+-							   (if supported) */
+-
+-/* RS-485 addressing mode */
+-#define SER_RS485_ADDRB			(1 << 6)	/* Enable addressing mode */
+-#define SER_RS485_ADDR_RECV		(1 << 7)	/* Receive address filter */
+-#define SER_RS485_ADDR_DEST		(1 << 8)	/* Destination address */
++#define SER_RS485_TERMINATE_BUS		(1 << 5)
++#define SER_RS485_ADDRB			(1 << 6)
++#define SER_RS485_ADDR_RECV		(1 << 7)
++#define SER_RS485_ADDR_DEST		(1 << 8)
+ 
+-	__u32	delay_rts_before_send;	/* Delay before send (milliseconds) */
+-	__u32	delay_rts_after_send;	/* Delay after send (milliseconds) */
++	__u32	delay_rts_before_send;
++	__u32	delay_rts_after_send;
+ 
+-	/* The fields below are defined by flags */
++	/* private: The fields below are defined by flags */
+ 	union {
+-		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
++		/* private: Memory is cheap, new structs are a pain. */
++		__u32	padding[5];
+ 
+ 		struct {
+ 			__u8	addr_recv;
 
---------------mwjZHgn1Ll4ReHR00ksHLHNN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMxnFwFAwAAAAAACgkQlh/E3EQov+D5
-zxAApQncNTLl8QQvDR6j0KdUkawbSYKn0KSQRRJLEGBKoyje7U6mn4lVguZtodiDY7fz6EhuTR2S
-XPEbpcZaFmf1Y8hKEV8/zGry8ocN8Jy8cgF2frUr58KgkmDj0UUaD3m77Ee8NIs+r5oHtxSGbMI6
-8UoBjUIg+Q2gDNiBADBKQgo4D7pNXHLCT7KzKPs2tANKpUKegg4y6yUhBJ53G9LITKhHnkzlHiF8
-GjYfshimY0ockScV2lY3nFyPLLV3nrwGjgUM+B6owo76gHffD/qpMxZ+r3+Pd40hZAFwjlSypXe5
-XNtmKlDHbfXxlnR1td+sX3pqXAV42B8KHy3alsOji/DR2UGkXQrwWH/uXlr/K1iO+weuaK6ouX/5
-jXOnf1LCurNu/vLyt8fyWZqHmTcUwEGxXT6kQ7sNMoEMJk7v5rsjpa8Fvvyw9KHioil5bbj/wR4J
-MtiXhb/DRWMvUg0X95fYwgp55C++EGarVtwa7cPsFLYZLAdt2J8BmxFa8o3i1tvtpuVo44mMZ6EG
-7NiR1AQO7HA45dYWqlA/Z7PunFdaR0RfKrOyJFNTyG5EpZFCWWJDKMqBLP0mPWvfWr813jABNf+H
-RG4HrDn4MN3a9t5TZWt70qWeq7gGoIrJ0rKrPOf8hF00DPnWqN2UDGerPXOvHdSWqpbhULvcspRc
-amE=
-=qscO
------END PGP SIGNATURE-----
-
---------------mwjZHgn1Ll4ReHR00ksHLHNN--
+-- 
+tg: (2eb6f6da8b51..) rs485/kdoc (depends on: supported-fix/intro-kernel_serial_rs485_to_user_rs485)
