@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023D05EAE58
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D1E5EAE59
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiIZRkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
+        id S231163AbiIZRlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiIZRkL (ORCPT
+        with ESMTP id S231143AbiIZRkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:40:11 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83D58A7C6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so4177257ioa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
+        Mon, 26 Sep 2022 13:40:36 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2263433E22
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:06:37 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id g1-20020a92cda1000000b002f612391d5bso5537462ild.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:06:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=FgsGKmgnAiNMm0Kfl6ghAURyWLdkaZIxUE7N6+di98I=;
-        b=1MQNTRvFJw60DKikKg39xcUNhCq7Y5lGTjf2GcthevQ/oMnrragWvWHKzNJ5P6bur+
-         glVxOrrq2sdnL3wojPCoKE0u4aqWOrvENi3k8DjNRPMs/xX9EXT5meez2QmcvycE/k9w
-         OhySkz2JA76Tl41muLJ3hGWH2Q7JDJMyp/ahUoG5inOieNds2G6dsLFYbl8pj5Y8+LTP
-         RNDnTp9ZfaI5BQDmZhC+Uh/+Qb8GJFHXylk6G2IIm1A3VQPlarI9k/NJyTrembn3JQvV
-         BicZW+Rf2fywE26b9DHyzjeSjttPcS4LWVTsI0B0hNwk4dAY39wC7ycz/i/0Ift/DqL1
-         TqEw==
-X-Gm-Message-State: ACrzQf2YaFDz99f6huAR+PG8lWsfWB//r4HovizXxGLnmCajqIAOYpUq
-        +m5lpwMdG1cIp78lUjvIJsZyMmhCljcxPsk2gzAvGBVFLZX9
-X-Google-Smtp-Source: AMsMyM79ssbhgnRU1umH1MBFsMRKsVYHsHbcSz6KzN63rR7iErYQAlzZFSw84cJl/Yul5nyPLKpALak9XaLMay9duUPc9gbYffKk
+        bh=RXZoyMLrw91eDBbUfEfSdQlOyXaEU9f2n9v5+RhyspQ=;
+        b=Xf1M++v8bNa6PrLy5x0ae7qKQ/IptqstA1eu0woKDvs0IhKCaojfhEgbyfDql/LuRa
+         iSE/IflksXZaSQ8HujM8Il2WzeNJwNitNVh/hJDP0F5fFdGjtZ+EfU9qfZ/nhMmuLAQK
+         kkH4V+dE6vql0PixSvjiu8IKRcSOPIwJ/yoJfX2kfe1N0kRyIM7tpQNVS8Fez7shzl8i
+         pGrBF6FO6gmkxRppOhiCrhgN/o8TmLmqvDDWhk+VDXZAF6P4tSihklAeqFu0FYQ89kCw
+         DxRmVovYj33ybWMX7a80PgM4NXLNDLUfOattPYpn6O1va0HP5AKHGzjCm3QRfEbZL+Ei
+         epfw==
+X-Gm-Message-State: ACrzQf1PB+o6w0yej42fBogzaooeEatRzIWH/E+0vw4wWHt/8sD4SzNp
+        FM9m7oECbMXAaEIvcv3PzQk59usc8+WnP2GT8ycSf/AKqbaG
+X-Google-Smtp-Source: AMsMyM7kepRbJsY/yXdJvuXPzPDIjFvrRcUc6p4/5u4mDLorGoCEPEp+x2HdZtM5pYxsLYQ+XGrY0ZSQGlaHGP6CKWSykiqt8yZ0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2726:b0:35b:18bc:b6dc with SMTP id
- m38-20020a056638272600b0035b18bcb6dcmr11726609jav.284.1664211946066; Mon, 26
- Sep 2022 10:05:46 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 10:05:46 -0700
+X-Received: by 2002:a92:ccd0:0:b0:2f6:274c:f564 with SMTP id
+ u16-20020a92ccd0000000b002f6274cf564mr11177700ilq.116.1664211996329; Mon, 26
+ Sep 2022 10:06:36 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 10:06:36 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e05bc805e99789e1@google.com>
-Subject: [syzbot] kernel BUG in __ntfs_grab_cache_pages
-From:   syzbot <syzbot+01b3ade7c86f7dd584d7@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000df57ee05e9978cce@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in jfs_open
+From:   syzbot <syzbot+027aa1f5f8487ba60a97@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -58,70 +57,52 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    c194837ebb57 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=138cb7f8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
-dashboard link: https://syzkaller.appspot.com/bug?extid=01b3ade7c86f7dd584d7
+HEAD commit:    f76349cf4145 Linux 6.0-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17928d60880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=027aa1f5f8487ba60a97
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d1d188880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1472a6ef080000
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8d8ae425e7fa/disk-c194837e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c540d501ebe7/vmlinux-c194837e.xz
+Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+01b3ade7c86f7dd584d7@syzkaller.appspotmail.com
+Reported-by: syzbot+027aa1f5f8487ba60a97@syzkaller.appspotmail.com
 
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190
-------------[ cut here ]------------
-kernel BUG at fs/ntfs/file.c:493!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3045 Comm: syz-executor202 Not tainted 6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/file.c:65:20
+shift exponent 8205 is too large for 64-bit type '__u64' (aka 'unsigned long long')
+CPU: 0 PID: 9735 Comm: syz-executor.4 Not tainted 6.0.0-rc7-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __ntfs_grab_cache_pages+0x30c/0x328 fs/ntfs/file.c:493
-lr : __ntfs_grab_cache_pages+0x30c/0x328 fs/ntfs/file.c:493
-sp : ffff80000fb5baa0
-x29: ffff80000fb5baa0 x28: ffff0000caa2ec80 x27: ffff80000fb5bb70
-x26: 00000000ffffffff x25: ffff0000caa2f1c8 x24: 0000000000000000
-x23: 0000000000000000 x22: ffff80000fb5bb68 x21: ffff0000caa2ec80
-x20: 0000000000000000 x19: ffff80000fb5bb70 x18: 00000000000000c0
-x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000c47b1a80
-x14: 0000000000000030 x13: 00000000ffffffff x12: ffff0000c47b1a80
-x11: ff80800008b9dcb0 x10: 0000000000000000 x9 : ffff800008b9dcb0
-x8 : ffff0000c47b1a80 x7 : ffff80000846b9dc x6 : 0000000000000000
-x5 : 0000000000000000 x4 : ffff80000fb5bb68 x3 : ffff80000fb5bb70
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- __ntfs_grab_cache_pages+0x30c/0x328 fs/ntfs/file.c:493
- ntfs_perform_write+0x224/0xa98 fs/ntfs/file.c:1833
- ntfs_file_write_iter+0x2c4/0x4f0 fs/ntfs/file.c:1917
- call_write_iter include/linux/fs.h:2187 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x2dc/0x46c fs/read_write.c:578
- ksys_write+0xb4/0x160 fs/read_write.c:631
- __do_sys_write fs/read_write.c:643 [inline]
- __se_sys_write fs/read_write.c:640 [inline]
- __arm64_sys_write+0x24/0x34 fs/read_write.c:640
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190
-Code: 17ffff88 97dc0a06 17ffff86 97dc0a04 (d4210000) 
----[ end trace 0000000000000000 ]---
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
+ jfs_open+0x3a2/0x3d0 fs/jfs/file.c:65
+ do_dentry_open+0x777/0x1180 fs/open.c:880
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x25fc/0x2df0 fs/namei.c:3691
+ do_filp_open+0x264/0x4f0 fs/namei.c:3718
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_open fs/open.c:1337 [inline]
+ __se_sys_open fs/open.c:1333 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1333
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5cbf28a669
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5cc0365168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007f5cbf3ac120 RCX: 00007f5cbf28a669
+RDX: 00000000000003ec RSI: 0000000000004042 RDI: 00000000200058c0
+RBP: 00007f5cbf2e5560 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc1545e9af R14: 00007f5cc0365300 R15: 0000000000022000
+ </TASK>
+================================================================================
 
 
 ---
@@ -131,5 +112,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
