@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D275EB4F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72C25EB4F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiIZXBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S230319AbiIZXCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiIZXBQ (ORCPT
+        with ESMTP id S229779AbiIZXC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:01:16 -0400
+        Mon, 26 Sep 2022 19:02:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415EA5C6B;
-        Mon, 26 Sep 2022 16:01:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBD3A6C32;
+        Mon, 26 Sep 2022 16:02:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB01B815C6;
-        Mon, 26 Sep 2022 23:01:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7653C433D6;
-        Mon, 26 Sep 2022 23:01:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4848B815A2;
+        Mon, 26 Sep 2022 23:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD04C433C1;
+        Mon, 26 Sep 2022 23:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664233273;
-        bh=DP2/l6tR4P/DfoghYnDGEAWd4w5n5Txnre0toNJR3B4=;
+        s=k20201202; t=1664233345;
+        bh=5dChttAHV31mKU5I2NgaQQKiJXkhkhhDNgOij7T3c9Y=;
         h=Date:From:To:Cc:Subject:From;
-        b=boCq+yQ/8137uehBc9l2Vg8fH0UtZiV/BTfOw5Pliv/p3ReaZul1LbHdkZ+kETELP
-         JNMJXaw65cWY5KBy57F76JdC3PVvqn2eIjIkHrb9fwZu66N6hzDL43oFrkW7rs8Ky+
-         XFvTUKOsJ/xYtApAUBZwwy8czhvK7ZpUpRi1GMxzOGBM2OQnZqfMPvpeIfiRCmBSxI
-         Ss46Z0hBLn19YxHSK8RzCQzZv0aORaqH9vU3oF9ovqM+UbH+C26QcIyf8wh6hGS6Pc
-         w9q9ccZKPDVw6ohQhzAawjdDPWFItsVzVAjSue4yW7udf+9Fk9uOobqGkEK7FtFfcX
-         clIFfgYpsQdng==
-Date:   Mon, 26 Sep 2022 18:01:08 -0500
+        b=MR1D7pcp2gGikSxBXu28M3Ea1TFbxRqrIFnKiG843hTEk9Yy0ZGZ7KYMIaIz1U74V
+         Z+KgP2tppCHkHY3kq1FtEFQoMlBCPN7JJj5tVsma2AVhdi1qSZ33yodiwri+mSrBrg
+         RGD8w9NZ6e6MyN03WrII8BmS1wn2p+6TFP6jJYyCfrJRrIg2GAqpQBNkN05G3r6QxD
+         WpweY2+iRKuGnAG5pA69CbPlXnd/bD85uMBaH8lj/mhWrmQvtr+vY3ZKmyIysAh9VB
+         D4jBQm+eHUtSrJJD1kUuXi+J6Gek0E0vaZh10N7se7UvDRMDwyKPzecL6ZH34tTeXT
+         uRw97VLopjl6g==
+Date:   Mon, 26 Sep 2022 18:02:20 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH][next] soc: qcom: smd-rpm: Replace zero-length array with
+Subject: [PATCH][next] netns: Replace zero-length array with
  DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIvNIyPhWaG2DTr@work>
+Message-ID: <YzIvfGXxfjdXmIS3@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,22 +64,23 @@ helper macro.
 This helper allows for flexible-array members in unions.
 
 Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/224
+Link: https://github.com/KSPP/linux/issues/225
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/soc/qcom/smd-rpm.c | 2 +-
+ include/net/netns/generic.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
-index 413f9f4ae9cd..125cb456a5dc 100644
---- a/drivers/soc/qcom/smd-rpm.c
-+++ b/drivers/soc/qcom/smd-rpm.c
-@@ -75,7 +75,7 @@ struct qcom_rpm_message {
- 	__le32 length;
- 	union {
- 		__le32 msg_id;
--		u8 message[0];
-+		DECLARE_FLEX_ARRAY(u8, message);
+diff --git a/include/net/netns/generic.h b/include/net/netns/generic.h
+index 7ce68183f6e1..00c399edeed1 100644
+--- a/include/net/netns/generic.h
++++ b/include/net/netns/generic.h
+@@ -33,7 +33,7 @@ struct net_generic {
+ 			struct rcu_head rcu;
+ 		} s;
+ 
+-		void *ptr[0];
++		DECLARE_FLEX_ARRAY(void *, ptr);
  	};
  };
  
