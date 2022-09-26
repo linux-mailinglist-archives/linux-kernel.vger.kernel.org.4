@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8D55EA2D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF645E9FD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237525AbiIZLPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S235644AbiIZKaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbiIZLNy (ORCPT
+        with ESMTP id S235352AbiIZK1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:13:54 -0400
+        Mon, 26 Sep 2022 06:27:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5D26113F;
-        Mon, 26 Sep 2022 03:36:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529A24DF1F;
+        Mon, 26 Sep 2022 03:18:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33735B8091E;
-        Mon, 26 Sep 2022 10:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80CB3C433D6;
-        Mon, 26 Sep 2022 10:29:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52823B8093B;
+        Mon, 26 Sep 2022 10:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88813C433D6;
+        Mon, 26 Sep 2022 10:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188186;
-        bh=Sx/ZtVz5BhS6emHclKu+X9velFI4oMJK6XW2r9uSD8k=;
+        s=korg; t=1664187519;
+        bh=4rwkvD/DNcjNXfcsWGkTsOeqnSDE+8I7hUNF1BK6CT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gVWO9uISYTOd3bki2Am5HyN4itMxyGrWwtiSOkxgZBxMGKIGe7UaYsaOnr7mhSd1A
-         OfjYFDZIT1eqSMDJeG9faEaQqrwF22fpgJYVZq9TyoASgZcmre0YMb+16c+QAnzwhg
-         k/sgG6K3yif2nTesmj5xOoWSztWNwraEW4LUZnso=
+        b=utQ1AlSFcPw0HyY7HPmnQYcV1Q4ZHQRlGk5ZoQFFt8KK/Vj9zrMRij4ltMtpJ1jlm
+         sLei4jx2w16w7WHg5GHD3sjfmZBGDrfR81X+diIzk4JwJTbDh8TbCaidKPrJmLQKR9
+         w17hYyQCX+ezWohxCBL7cmebZCdIExU3DZV6Tf+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Youling Tang <tangyouling@loongson.cn>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 069/141] netfilter: nf_conntrack_irc: Tighten matching on DCC message
+Subject: [PATCH 4.19 16/58] mksysmap: Fix the mismatch of L0 symbols in System.map
 Date:   Mon, 26 Sep 2022 12:11:35 +0200
-Message-Id: <20220926100756.934344642@linuxfoundation.org>
+Message-Id: <20220926100742.028511893@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,82 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Leadbeater <dgl@dgl.cx>
+From: Youling Tang <tangyouling@loongson.cn>
 
-[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
+[ Upstream commit c17a2538704f926ee4d167ba625e09b1040d8439 ]
 
-CTCP messages should only be at the start of an IRC message, not
-anywhere within it.
+When System.map was generated, the kernel used mksysmap to filter the
+kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
 
-While the helper only decodes packes in the ORIGINAL direction, its
-possible to make a client send a CTCP message back by empedding one into
-a PING request.  As-is, thats enough to make the helper believe that it
-saw a CTCP message.
+$ cat System.map | grep L0
+9000000000221540 t L0
 
-Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
-Signed-off-by: David Leadbeater <dgl@dgl.cx>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+The L0 symbol exists in System.map, but not in .tmp_System.map. When
+"cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
+data" error message in link-vmlinux.sh script.
+
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ scripts/mksysmap | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
-index 26245419ef4a..65b5b05fe38d 100644
---- a/net/netfilter/nf_conntrack_irc.c
-+++ b/net/netfilter/nf_conntrack_irc.c
-@@ -148,15 +148,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 	data = ib_ptr;
- 	data_limit = ib_ptr + skb->len - dataoff;
+diff --git a/scripts/mksysmap b/scripts/mksysmap
+index 9aa23d15862a..ad8bbc52267d 100755
+--- a/scripts/mksysmap
++++ b/scripts/mksysmap
+@@ -41,4 +41,4 @@
+ # so we just ignore them to let readprofile continue to work.
+ # (At least sparc64 has __crc_ in the middle).
  
--	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
--	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
--	while (data < data_limit - (19 + MINMATCHLEN)) {
--		if (memcmp(data, "\1DCC ", 5)) {
-+	/* Skip any whitespace */
-+	while (data < data_limit - 10) {
-+		if (*data == ' ' || *data == '\r' || *data == '\n')
-+			data++;
-+		else
-+			break;
-+	}
-+
-+	/* strlen("PRIVMSG x ")=10 */
-+	if (data < data_limit - 10) {
-+		if (strncasecmp("PRIVMSG ", data, 8))
-+			goto out;
-+		data += 8;
-+	}
-+
-+	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
-+	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
-+	 */
-+	while (data < data_limit - (21 + MINMATCHLEN)) {
-+		/* Find first " :", the start of message */
-+		if (memcmp(data, " :", 2)) {
- 			data++;
- 			continue;
- 		}
-+		data += 2;
-+
-+		/* then check that place only for the DCC command */
-+		if (memcmp(data, "\1DCC ", 5))
-+			goto out;
- 		data += 5;
--		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
-+		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
- 
- 		iph = ip_hdr(skb);
- 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
-@@ -172,7 +194,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 			pr_debug("DCC %s detected\n", dccprotos[i]);
- 
- 			/* we have at least
--			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
-+			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
- 			 * data left (== 14/13 bytes) */
- 			if (parse_dcc(data, data_limit, &dcc_ip,
- 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
+-$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
++$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
 -- 
 2.35.1
 
