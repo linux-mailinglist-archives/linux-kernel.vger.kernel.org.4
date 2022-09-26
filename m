@@ -2,109 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E3E5EB13A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601725EB13D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIZTY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S229764AbiIZTZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiIZTY4 (ORCPT
+        with ESMTP id S229509AbiIZTZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:24:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2DF3A16D;
-        Mon, 26 Sep 2022 12:24:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECF56B80C75;
-        Mon, 26 Sep 2022 19:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74FB0C433D6;
-        Mon, 26 Sep 2022 19:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664220292;
-        bh=KGe/GdLiOyJuVfNEKfybS6bLyBJmzPyi8wQtB65+SAE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mvyKo7rv5awsxlVfri8Z8FJxHXZTJWE1eTX9SY4sJG8o0zVQMMwMHlHvAHFWL/KYc
-         esHUzpqs0BHh6YzWVPqXc1zul4RsGSd91wPPoOqiHm0FnLG+H+bbOHV83hykoIN1V5
-         7C5GaX7vZ2s3cZWTWlXk86jKrjoPUHWiECibhI8Qw/WEsJk64M6CqlTLHm3YoOXTov
-         CoYnnu/ihI2/QM4kBTPAVIeApAWVXN6+rjkyhH63b0cA/SQvyZueNm2lPBzkcrTw1P
-         +tZ3PFMzQfbPIqSDF97s7E9mrBRFBhnxskaODSqZeeQ/j0oDGAWkc/99O41c0pMwrx
-         iwYpgkvg14Wjg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2329C403B0; Mon, 26 Sep 2022 20:24:50 +0100 (IST)
-Date:   Mon, 26 Sep 2022 20:24:50 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Subject: Re: [PATCH 0/5] perf tools: Clean up cpu map handling for a
- system-wide evsel (v1)
-Message-ID: <YzH8gkVo3wNwGZbu@kernel.org>
-References: <20220924165737.956428-1-namhyung@kernel.org>
+        Mon, 26 Sep 2022 15:25:31 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8CD3ED41;
+        Mon, 26 Sep 2022 12:25:30 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id s9so4774245qkg.4;
+        Mon, 26 Sep 2022 12:25:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4He6dfSdCqknqBDU+G53ABWcMnjBOoVQFLt3P6ZFFX0=;
+        b=XInW/g1OBxiFD3yHGOzcjDnk8wXydiq/JSOgIgUGZBgr6gFTMFGtuhuu5WtTsHwFlL
+         u0nfW7spU+GRyByPOwC3ZJ1+D7rc1kRxwhV4ZQZJvUTmqQ261cp1p7/wfenQqMOUFozS
+         3qHSh7YZFXkTDx1Hug7UNcucFNmzZ1zIR7POiVvaiXJvYaQhngtM4o+U9P7bUI3Dtvhp
+         uDPwvxGImtjrbrLb9sQ5g6qOGicxbGoFXcftHqgJs63M5uhhJEoJIs3xI6H57dBOPunj
+         7wmUPz5Cw4SEPlrcDOcARJ5McGaSio/065r381Gi7+D9lOuHvtAhhjl+lS5etnI84Ioq
+         mJow==
+X-Gm-Message-State: ACrzQf2yY1mktyrQSe+VgPsq6ZkUKkUxu2lD8iOFSgc30k+dRdAKZm6U
+        4HfNPteYcfibb7GVDhBDY39HdWjXrL/Z2X0wSGs=
+X-Google-Smtp-Source: AMsMyM7YAL22JO7hSXglZT4P9VM4JRd0Qv+O7KzjeuP3b+Bja4P+dm+Y6SDP1r5Enq50NjoKJPgqA+ZWtKOx3WQ6Ods=
+X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id
+ h8-20020a05620a400800b006ce87250cb7mr15924460qko.480.1664220329581; Mon, 26
+ Sep 2022 12:25:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924165737.956428-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926140604.4173723-1-daniel.lezcano@linaro.org> <20220926140604.4173723-4-daniel.lezcano@linaro.org>
+In-Reply-To: <20220926140604.4173723-4-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 26 Sep 2022 21:25:18 +0200
+Message-ID: <CAJZ5v0hJ7Tq1pU1hSqswPF_+KZOt1jNKvmqTeF5=1npReqmA3A@mail.gmail.com>
+Subject: Re: [PATCH v5 03/30] thermal/core: Add a generic thermal_zone_set_trip()
+ function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Sep 24, 2022 at 09:57:32AM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> The system-wide evsel has a cpu map for all (online) cpus regardless
-> of user requested cpus.  But the cpu map handling code has some
-> special case for it and I think we can cleanup the code by making sure
-> that such a evsel has a proper cpu/thread maps from the beginning.
-> This patches should not cause any change in the behavior.
-> 
-> You can get the code from 'perf/cpumap-update-v1' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
->   
-> Thanks,
-> Namhyung
+On Mon, Sep 26, 2022 at 4:06 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The thermal zone ops defines a set_trip callback where we can invoke
+> the backend driver to set an interrupt for the next trip point
+> temperature being crossed the way up or down, or setting the low level
+> with the hysteresis.
+>
+> The ops is only called from the thermal sysfs code where the userspace
+> has the ability to modify a trip point characteristic.
+>
+> With the effort of encapsulating the thermal framework core code,
+> let's create a thermal_zone_set_trip() which is the writable side of
+> the thermal_zone_get_trip() and put there all the ops encapsulation.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/thermal_core.c  | 45 +++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_sysfs.c | 48 +++++++++++----------------------
+>  include/linux/thermal.h         |  3 +++
+>  3 files changed, 64 insertions(+), 32 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 903a858df35f..9f61b0ab57b7 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1212,6 +1212,51 @@ int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
+>
+> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> +                         const struct thermal_trip *trip)
+> +{
+> +       struct thermal_trip t;
+> +       int ret = -EINVAL;
+> +
+> +       mutex_lock(&tz->lock);
+> +
+> +       if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
+> +               goto out;
+> +
+> +       ret = __thermal_zone_get_trip(tz, trip_id, &t);
+> +       if (ret)
+> +               goto out;
+> +
+> +       if ((t.temperature != trip->temperature) && tz->ops->set_trip_temp) {
 
-Looks sane, applied locally for testing.
+The inner parens are not needed here and below.
 
-- Arnaldo
- 
-> 
-> Namhyung Kim (5):
->   libperf: Populate system-wide evsel maps
->   libperf: Propagate maps only if necessary
->   perf tools: Get rid of evlist__add_on_all_cpus()
->   perf tools: Add evlist__add_sched_switch()
->   perf tools: Remove special handling of system-wide evsel
-> 
->  tools/lib/perf/evlist.c             | 23 ++++++++-------
->  tools/lib/perf/evsel.c              |  3 --
->  tools/perf/arch/x86/util/intel-pt.c | 15 ++++------
->  tools/perf/builtin-script.c         |  3 --
->  tools/perf/tests/switch-tracking.c  | 15 ++++------
->  tools/perf/util/evlist.c            | 46 ++++++++++++-----------------
->  tools/perf/util/evlist.h            |  1 +
->  tools/perf/util/evsel.c             | 12 ++------
->  tools/perf/util/stat.c              |  3 --
->  9 files changed, 44 insertions(+), 77 deletions(-)
-> 
-> -- 
-> 2.37.3.998.g577e59143f-goog
+> +
 
--- 
+And the extra empty line is not needed here (and below) too IMO.
 
-- Arnaldo
+> +               ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
+> +               if (ret)
+> +                       goto out;
+> +       }
+> +
+> +       if ((t.hysteresis != trip->hysteresis) && tz->ops->set_trip_hyst) {
+> +
+> +               ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
+> +               if (ret)
+> +                       goto out;
+> +       }
+> +
+> +       if (((t.temperature != trip->temperature) ||
+> +            (t.hysteresis != trip->hysteresis)) && tz->trips)
+> +               tz->trips[trip_id] = *trip;
+
+I would write this as
+
+if (tz->trips && (t.temperature != trip->temperature || t.hysteresis
+!= trip->hysteresis))
+        tz->trips[trip_id] = *trip;
+
+But
+
+1. Do we want to copy the trip type here too?
+2. If tz->trips is set, do we still want to invoke ->set_trip_temp()
+or ->set_trip_hyst() if they are present?
+
+> +
+> +out:
+> +       mutex_unlock(&tz->lock);
+> +
+> +       if (!ret) {
+> +               thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+> +                                             trip->temperature, trip->hysteresis);
+> +               thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+>  /**
+>   * thermal_zone_device_register_with_trips() - register a new thermal zone device
+>   * @type:      the thermal zone device type
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 18cdd7cd0008..8d7b25ab67c2 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -115,31 +115,20 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+>         struct thermal_trip trip;
+>         int trip_id, ret;
+>
+> -       if (!tz->ops->set_trip_temp && !tz->trips)
+> -               return -EPERM;
+> -
+>         if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
+>                 return -EINVAL;
+>
+> -       if (kstrtoint(buf, 10, &trip.temperature))
+> -               return -EINVAL;
+> -
+> -       ret = tz->ops->set_trip_temp(tz, trip_id, trip.temperature);
+> +       ret = thermal_zone_get_trip(tz, trip_id, &trip);
+>         if (ret)
+>                 return ret;
+>
+> -       if (tz->trips)
+> -               tz->trips[trip_id].temperature = trip.temperature;
+> +       if (kstrtoint(buf, 10, &trip.temperature))
+> +               return -EINVAL;
+>
+> -       ret = thermal_zone_get_trip(tz, trip_id, &trip);
+> +       ret = thermal_zone_set_trip(tz, trip_id, &trip);
+>         if (ret)
+>                 return ret;
+>
+> -       thermal_notify_tz_trip_change(tz->id, trip_id, trip.type,
+> -                                     trip.temperature, trip.hysteresis);
+> -
+> -       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> -
+>         return count;
+>  }
+>
+> @@ -166,29 +155,24 @@ trip_point_hyst_store(struct device *dev, struct device_attribute *attr,
+>                       const char *buf, size_t count)
+>  {
+>         struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -       int trip, ret;
+> -       int temperature;
+> -
+> -       if (!tz->ops->set_trip_hyst)
+> -               return -EPERM;
+> +       struct thermal_trip trip;
+> +       int trip_id, ret;
+>
+> -       if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip) != 1)
+> +       if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
+>                 return -EINVAL;
+>
+> -       if (kstrtoint(buf, 10, &temperature))
+> -               return -EINVAL;
+> +       ret = thermal_zone_get_trip(tz, trip_id, &trip);
+> +       if (ret)
+> +               return ret;
+>
+> -       /*
+> -        * We are not doing any check on the 'temperature' value
+> -        * here. The driver implementing 'set_trip_hyst' has to
+> -        * take care of this.
+> -        */
+> -       ret = tz->ops->set_trip_hyst(tz, trip, temperature);
+> +       if (kstrtoint(buf, 10, &trip.hysteresis))
+> +               return -EINVAL;
+>
+> -       if (!ret)
+> -               thermal_zone_set_trips(tz);
+> +       ret = thermal_zone_set_trip(tz, trip_id, &trip);
+> +       if (ret)
+> +               return ret;
+>
+> -       return ret ? ret : count;
+> +       return count;
+>  }
+>
+>  static ssize_t
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 09dc09228717..5350a437f245 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -338,6 +338,9 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
+>  int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+>                           struct thermal_trip *trip);
+>
+> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> +                         const struct thermal_trip *trip);
+> +
+>  int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
+>
+>  #ifdef CONFIG_THERMAL
+> --
+> 2.34.1
+>
