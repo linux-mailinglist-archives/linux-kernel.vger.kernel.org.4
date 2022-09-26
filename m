@@ -2,136 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB005EA238
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A98F5EA304
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237131AbiIZLEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S234817AbiIZLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbiIZLDb (ORCPT
+        with ESMTP id S237664AbiIZLQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:03:31 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA265E305
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:32:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id k10so10114985lfm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Ppgskzcs0IRjENYynELJGMW2eRkYjwxFUGvz8QmabCI=;
-        b=xEHY9hKPN5+g0Up7Z5BW1HBukr47ui9VT78DO85ZNWGhMcdDMyDIE0WmywWPmNaT7+
-         pZBGM07yDZLikVxgxTkInBpmtdZcyyBUl5xVxVk6m7loWGeMBOMqSTcKlDdCFm6v2vSM
-         MYEVA7kmnPU+5XoUuIU6a0POrj6mSD5BxPiQzSeRFd8qi040ALxHvqwjy5f6Q5VA3BLl
-         wc0XkfFGRaio1x5DTDuMNNyhZH29mi4+cJoyn9ogl8ZOW41v+jUZg1vOFdtnNRDXW3em
-         3ieI5pJMlz7W9VOQadaWYl2708G/E7DqyrgLHYc7Bt8RorPYCjo7MQTlsHGdpUgNe/Zh
-         mV2Q==
+        Mon, 26 Sep 2022 07:16:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ADB65654
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664188539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L+ZbOYIFXSEJqplhVaiNThrZYYLuxY7C7urbtDbV/sM=;
+        b=VXk+ea4x2AkI54yEzrRWyJog0cgrLgys3fny4SF5CScQR4wJF6rbiJ0rOIUMB0Sv9YBaFE
+        23rA9Mw/gt79maz1ZzOz/tlxWS3XXlPYdoZ68oXpmhXxAyaAHWHZwFR55VLVJ55j6gSMO/
+        0DbOJk/GPgdiOtki40fxST6+YF6BpHM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-466--IySPEJ7PpOWmf9vv6GJ9Q-1; Mon, 26 Sep 2022 06:35:38 -0400
+X-MC-Unique: -IySPEJ7PpOWmf9vv6GJ9Q-1
+Received: by mail-wr1-f71.google.com with SMTP id d30-20020adfa41e000000b00228c0e80c49so1029421wra.21
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:35:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ppgskzcs0IRjENYynELJGMW2eRkYjwxFUGvz8QmabCI=;
-        b=ypCkIJjeALJWnBB/BEGKdt2pftKUq/bt+bLE7Fv4XpeiwEUPJ3zk0VtkXjCiTh4uac
-         izbzVa8c4MepbeoC1dc1oK9kjQAUT/TwrgOZ+7nZDmSpyVpU+3sNyd8dxLeNy19jxxbd
-         bucPnxFhJNcDeT2Y8b20G5nyZVbZyYHSYv46Kjt/W91Ad/PfKnU14oMT94NnrMz8gghB
-         XddeE2hGR0HKB90vPxzp0WrZ8D3RA91GWn0MFP3+bcD2Z7oOzRigQ0XMn51T/wTTOtNm
-         xMomcppj35cqy8R/mvjkzrp1TWpHhXOJfvSIWRx38U0EILM8kxo9d2FOyqroCddOiZfI
-         0nbw==
-X-Gm-Message-State: ACrzQf0Wcn3hyX5tUIBrRpAew2xGqJMbfwpwgEBWOKaIvSQuTuz3YCcF
-        Yj0WJxAFCrNyXugh8p9snjHrvA==
-X-Google-Smtp-Source: AMsMyM718lAHi/XQO9pRng3KyE8uJbsmjxvFCdTiup3iVL7kEiWEo2WeLb5ppkuAOSNb4uBtv0fp1Q==
-X-Received: by 2002:a05:6512:138e:b0:47f:77cc:327a with SMTP id p14-20020a056512138e00b0047f77cc327amr8872511lfa.277.1664188240965;
-        Mon, 26 Sep 2022 03:30:40 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v8-20020ac258e8000000b004947a12232bsm2486244lfo.275.2022.09.26.03.30.38
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=L+ZbOYIFXSEJqplhVaiNThrZYYLuxY7C7urbtDbV/sM=;
+        b=aKKejEnE2B4xBtnE0a67pvJxE1Q+WlS1jH4mytZ9kZ7mptluQrQAnkJDWdhw5v3qFC
+         FXk0lYdcN2ZqT0gnL+3hQQXvndcUU2FFPlW30DaB6SK5LdbdKM19optU9ffJURCmK3u2
+         E//myw4IZW/KGs/qQbCWPfA8IWYyrjV1DI4wPEUNDbCCWShwIX4nSd6IlnI6shYh+jMc
+         BEpla0osphUD/NdEkdWaF+35+VzDF/Pssj73woRle3shYOWvBrCxivjzQSKNkV+phSx+
+         s+r4vJqfgqzC82rXPxOUbY8wffphLLKkXMQllgnqRpJP9qp+iaBzfnUpa0uf6Z67PUI6
+         /BdA==
+X-Gm-Message-State: ACrzQf2tLpLL0ZyiZw+BlnCuoBcmT8rOdgYnAfjRwpKWwN7+rge7925k
+        vhwtex+I9ErleiU6moc81hhuHB4xhgbP/qyQRovnTUBXLWp/qbf2JxhioQvzKcXBCNx+TpEQ+I2
+        JflhK3aZSKYcrnes847IgqXJa
+X-Received: by 2002:a05:6000:1564:b0:226:dece:5630 with SMTP id 4-20020a056000156400b00226dece5630mr13540746wrz.294.1664188537469;
+        Mon, 26 Sep 2022 03:35:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5u1Q2JTjA/FqGvI24o/KaCkInpRVUGg48R8VAI4FAuWRKXHrHhWxqHaWiVkWoqmb7Fe69iUg==
+X-Received: by 2002:a05:6000:1564:b0:226:dece:5630 with SMTP id 4-20020a056000156400b00226dece5630mr13540729wrz.294.1664188537097;
+        Mon, 26 Sep 2022 03:35:37 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7? (p200300cbc7034b00e0907fa6b7d6d4a7.dip0.t-ipconnect.de. [2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7])
+        by smtp.gmail.com with ESMTPSA id r64-20020a1c4443000000b003b4935f04a4sm13132198wma.5.2022.09.26.03.35.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 03:30:39 -0700 (PDT)
-Message-ID: <fe747000-a650-ed2f-8581-92b044f86f2f@linaro.org>
-Date:   Mon, 26 Sep 2022 12:30:38 +0200
+        Mon, 26 Sep 2022 03:35:36 -0700 (PDT)
+Message-ID: <f703e615-3b75-96a2-fb48-2fefd8a2069b@redhat.com>
+Date:   Mon, 26 Sep 2022 12:35:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v7 1/3] dt-bindings: arm: qcom: document qcom,msm-id and
- qcom,board-id
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
 Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kumar Gala <galak@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>
-References: <20220830065744.161163-1-krzysztof.kozlowski@linaro.org>
- <20220830065744.161163-2-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830065744.161163-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
+ <20220923005808.vfltoecttoatgw5o@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220923005808.vfltoecttoatgw5o@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 08:57, Krzysztof Kozlowski wrote:
-> The top level qcom,msm-id and qcom,board-id properties are utilized by
-> bootloaders on Qualcomm MSM platforms to determine which device tree
-> should be used and passed to the kernel.
+On 23.09.22 02:58, Kirill A . Shutemov wrote:
+> On Mon, Sep 19, 2022 at 11:12:46AM +0200, David Hildenbrand wrote:
+>>> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+>>> index 6325d1d0e90f..9d066be3d7e8 100644
+>>> --- a/include/uapi/linux/magic.h
+>>> +++ b/include/uapi/linux/magic.h
+>>> @@ -101,5 +101,6 @@
+>>>    #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
+>>>    #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
+>>>    #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
+>>> +#define INACCESSIBLE_MAGIC	0x494e4143	/* "INAC" */
+>>
+>>
+>> [...]
+>>
+>>> +
+>>> +int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
+>>> +			 int *order)
+>>> +{
+>>> +	struct inaccessible_data *data = file->f_mapping->private_data;
+>>> +	struct file *memfd = data->memfd;
+>>> +	struct page *page;
+>>> +	int ret;
+>>> +
+>>> +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	*pfn = page_to_pfn_t(page);
+>>> +	*order = thp_order(compound_head(page));
+>>> +	SetPageUptodate(page);
+>>> +	unlock_page(page);
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(inaccessible_get_pfn);
+>>> +
+>>> +void inaccessible_put_pfn(struct file *file, pfn_t pfn)
+>>> +{
+>>> +	struct page *page = pfn_t_to_page(pfn);
+>>> +
+>>> +	if (WARN_ON_ONCE(!page))
+>>> +		return;
+>>> +
+>>> +	put_page(page);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(inaccessible_put_pfn);
+>>
+>> Sorry, I missed your reply regarding get/put interface.
+>>
+>> https://lore.kernel.org/linux-mm/20220810092532.GD862421@chaop.bj.intel.com/
+>>
+>> "We have a design assumption that somedays this can even support non-page
+>> based backing stores."
+>>
+>> As long as there is no such user in sight (especially how to get the memfd
+>> from even allocating such memory which will require bigger changes), I
+>> prefer to keep it simple here and work on pages/folios. No need to
+>> over-complicate it for now.
 > 
-> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
-> compatible format") from 2015 was a consensus during discussion about
-> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
-> problems with that consensus:
-> 1. It was reached 7 years ago but it turned out its implementation did
->    not reach all possible products.
-> 
-> 2. Initially additional tool (dtbTool) was needed for parsing these
->    fields to create a QCDT image consisting of multiple DTBs, later the
->    bootloaders were improved and they use these qcom,msm-id and
->    qcom,board-id properties directly.
-> 
-> 3. Extracting relevant information from the board compatible requires
->    this additional tool (dtbTool), which makes the build process more
->    complicated and not easily reproducible (DTBs are modified after the
->    kernel build).
-> 
-> 4. Some versions of Qualcomm bootloaders expect these properties even
->    when booting with a single DTB.  The community is stuck with these
->    bootloaders thus they require properties in the DTBs.
-> 
-> Since several upstreamed Qualcomm SoC-based boards require these
-> properties to properly boot and the properties are reportedly used by
-> bootloaders, document them along with the bindings header with constants
-> used by: bootloader, some DTS and socinfo driver.
-> 
-> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
-> Co-developed-by: Kumar Gala <galak@codeaurora.org>
-> Signed-off-by: Kumar Gala <galak@codeaurora.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> ---
-> 
-> Changes since v6:
-> 1. Update header with defines
-> 2. Add Rb tag
+> Sean, Paolo , what is your take on this? Do you have conrete use case of
+> pageless backend for the mechanism in sight? Maybe DAX?
 
-Hi Bjorn,
+The problem I'm having with this is how to actually get such memory into 
+the memory backend (that triggers notifiers) and what the semantics are 
+at all with memory that is not managed by the buddy.
 
-Any further comments on this? Can it be applied?
+memfd with fixed PFNs doesn't make too much sense.
 
-Best regards,
-Krzysztof
+When using DAX, what happens with the shared <->private conversion? 
+Which "type" is supposed to use dax, which not?
+
+In other word, I'm missing too many details on the bigger picture of how 
+this would work at all to see why it makes sense right now to prepare 
+for that.
+
+-- 
+Thanks,
+
+David / dhildenb
 
