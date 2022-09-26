@@ -2,150 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598905E9789
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 02:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8285E978D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 02:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiIZAlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 20:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S233010AbiIZAmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 20:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiIZAl3 (ORCPT
+        with ESMTP id S233133AbiIZAmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 20:41:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4782E685
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 17:41:27 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so5255024pjk.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 17:41:27 -0700 (PDT)
+        Sun, 25 Sep 2022 20:42:01 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271172C12F;
+        Sun, 25 Sep 2022 17:42:00 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fv3so4889216pjb.0;
+        Sun, 25 Sep 2022 17:42:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=Ee6jY7viFUfMjAsx1AOZFi9ykD0TZlKjDDVt7+BAWpA=;
-        b=Tymc3mQ6yYtKo/fUwb0pntTGEsuDmA3KGe5ZainSrzJcqfvTUXGD6g4AS/QDrdEz1m
-         IPp9Tld0kqL2gFrY1NTkahNxDsLTe8rCfVZ7Sf6Yy58l+LrHh3LtaZFzBUsKT5oECTI8
-         ASxk03BGu9JGtTcAH5Y41r1unU3COw5iwE/sg=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=O/gG7i1U+ZjLMbqINX8HTYswuyZSqHXOwjFzg71oSbc=;
+        b=gBsOuNAAAoAP4S+0LTxcEvnQxDsBOmg5v+zlSym7BYtLhxudi9IaC0MSZdC7sDxNkL
+         z/8JcLjpwsiOojNnhwUZE9QrYFnrX8GkMo4DySacVozlP/sk71wEZaemtQ07V3DHiAKF
+         l+4KhslVQOPnarmkF0azDoOHXREkgjsfvN5Q3XBXFcPfACVDhviT5bRisZQec2udEQqo
+         D0497TFdj7IwT4i3XxGOiI4gxyeoNxbNhT2hbF+j3gxWVkLJKXq4kbx0Rc/2DVsPmdKm
+         IHZP6wU8SZIpwwcmbOzZUZIju+EVUWrz2lJYml/JOONXgDM7F0eN38mlF6vW2rHw6wXn
+         Sn0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ee6jY7viFUfMjAsx1AOZFi9ykD0TZlKjDDVt7+BAWpA=;
-        b=oYr2usBu0HBqG4QqjZW+1YYnVVV8KuJIXpVMsl1wj29BVrn1aU/lI85D3Ph58bUbiL
-         khC4aju3Ge+hjDHp0eyY4gYlegRN/rBYKQYvXVY/RPEZth2eLl3prlB0l3D73d2JT5LG
-         3T1jGxm5dx2BaMjOtXYtSI2p5B1BmKb4i5Foyh9NvbvL/inqtOHe6Le2cx9Nh62WugYa
-         MbYupJkKncJjQz1eTFvG64L1qe1XQ5xQk9EAmr9Ns9NN6FQxZeUu9cUoDXrxNzZVJYv0
-         r5LidF0E1qe1E4+Truncm8Frp5YXo6IKadoWr7LyNSbHVRnBve5fU4IFxjj+XvfCRZJf
-         UXEA==
-X-Gm-Message-State: ACrzQf22HPfmOGzMbo3/icp2HYN4Lr4AM4z6HGJUjhcIxi+ENs4fnBe4
-        /fxa7u1CjR+BKGqcPbNpAu8E6w==
-X-Google-Smtp-Source: AMsMyM5VpMx54A01n2IxbeNYegjZcGYyyX6uNC/69UJfyYAh5+QLjokwGVSlu1kDsKsMHY6BwDZQuA==
-X-Received: by 2002:a17:902:ea0e:b0:178:3d49:45ad with SMTP id s14-20020a170902ea0e00b001783d4945admr19810833plg.103.1664152885590;
-        Sun, 25 Sep 2022 17:41:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l7-20020a622507000000b0053ebafa7c42sm10576331pfl.79.2022.09.25.17.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 17:41:24 -0700 (PDT)
-Date:   Sun, 25 Sep 2022 17:41:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 04/16] skbuff: Phase out ksize() fallback for frag_size
-Message-ID: <202209251738.2E6B9C29D@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-5-keescook@chromium.org>
- <e340d993bce8e1b2742fba52ac6383771cfaddae.camel@redhat.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=O/gG7i1U+ZjLMbqINX8HTYswuyZSqHXOwjFzg71oSbc=;
+        b=vKQDNI20Na3qWQgLeRycdFE/Cs7UO75+kDa2TFme96L4HyYIM+0OENfoYjAokGx3OS
+         hgPQjJzDO1y1zsH6mIQK4K6FRwhpRdfQ6OH1kzlAYj5Hmw6veHKOWEzGQOwszd59MWVt
+         F/VLMuPj7mTY9B9ah51HWLX8PjeBfW/+RnmZOIJ3V16bDyRmTVg/4VukH3+DaekgtSK9
+         X6oe+ppMIZwFgzD62IKhpIVw9AIlxGtLqpAbJLUjMfN+Uc671GgR/T1uU3Rw3OsUBHnr
+         bVBS4jG9c3+zj3UlVcdIb5AEE95+JkDyXmzE8PiEeJiUAPf6QbrXLDEEfrFRzlJHof1m
+         HfFg==
+X-Gm-Message-State: ACrzQf0f8UMmIML9/32twm+bXowllayoHqQSup3sz685yap6jmU0mam5
+        GWLaxBGZcSs+YublUYds34oFdr+UxfFfwRGRXqwHmLNoBbFQOvMt
+X-Google-Smtp-Source: AMsMyM4w9p1kQ5NDTbmVRdfYXhwtUeiQE64dQc4/xIjas0o+fcpA6tkmvto0+cV7tVWdva5ylUS32VWPwnslYreG1hc=
+X-Received: by 2002:a17:902:cecf:b0:178:3b53:ebf5 with SMTP id
+ d15-20020a170902cecf00b001783b53ebf5mr19921119plg.122.1664152919181; Sun, 25
+ Sep 2022 17:41:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e340d993bce8e1b2742fba52ac6383771cfaddae.camel@redhat.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Mon, 26 Sep 2022 05:41:47 +0500
+Message-ID: <CABXGCsP0znm9pS-MiKtyxTXR7XiyFVqen0qzNpicGHDZKCzbwg@mail.gmail.com>
+Subject: After commit 44fa75f207d8a106bc75e6230db61e961fdbf8a8 Wi-Fi (mt7921e)
+ speed significantly decreased
+To:     jelonek.jonas@gmail.com, johannes.berg@intel.com,
+        lorenzo.bianconi83@gmail.com, sean.wang@mediatek.com
+Cc:     Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 09:17:40AM +0200, Paolo Abeni wrote:
-> On Fri, 2022-09-23 at 13:28 -0700, Kees Cook wrote:
-> > All callers of APIs that allowed a 0-sized frag_size appear to be
-> > passing actual size information already
-> 
-> AFAICS, not yet:
-> 
-> drivers/net/ethernet/qlogic/qed/qed_ll2.c:
-> 	skb = build_skb(buffer->data, 0); // -> __build_skb(..., 0) 
-> 		// ->  __build_skb_around()
-> 
-> drivers/net/ethernet/broadcom/bnx2.c:
-> 	skb = build_skb(data, 0);
-> 
-> I guess some more drivers have calls leading to 
-> 
-> 	__build_skb_around(...,  0)
-> 
-> there are several call path to checks...
+Hi!
 
-Ah-ha! Thank you. I will try to hunt these down -- I think we can't
-remove the "secret resizing" effect of ksize() without fixing these.
+I bisected the issue and found the first bad commit.
 
-> > [...]
-> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> > index 0b30fbdbd0d0..84ca89c781cd 100644
-> > --- a/net/core/skbuff.c
-> > +++ b/net/core/skbuff.c
-> > @@ -195,7 +195,11 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
-> >  			       unsigned int frag_size)
-> >  {
-> >  	struct skb_shared_info *shinfo;
-> > -	unsigned int size = frag_size ? : ksize(data);
-> > +	unsigned int size = frag_size;
-> > +
-> > +	/* All callers should be setting frag size now? */
-> > +	if (WARN_ON_ONCE(size == 0))
-> > +		size = ksize(data);
-> 
-> At some point in the future, I guess we could even drop this check,
-> right?
+44fa75f207d8a106bc75e6230db61e961fdbf8a8 is the first bad commit
+commit 44fa75f207d8a106bc75e6230db61e961fdbf8a8
+Author: Jonas Jelonek <jelonek.jonas@gmail.com>
+Date:   Mon May 9 19:39:57 2022 +0200
 
-Alternatively, we might be able to ask the slab if "data" came from
-kmalloc or a kmem_cache, and if the former, do:
+    mac80211: extend current rate control tx status API
 
-	data = krealloc(kmalloc_size_roundup(ksize(data), ...)
+    This patch adds the new struct ieee80211_rate_status and replaces
+    'struct rate_info *rate' in ieee80211_tx_status with pointer and length
+    annotation.
 
-But that seems ugly...
+    The struct ieee80211_rate_status allows to:
+    (1)     receive tx power status feedback for transmit power control (TPC)
+            per packet or packet retry
+    (2)     dynamic mapping of wifi chip specific multi-rate retry (mrr)
+            chains with different lengths
+    (3)     increase the limit of annotatable rate indices to support
+            IEEE802.11ac rate sets and beyond
+
+    ieee80211_tx_info, control and status buffer, and ieee80211_tx_rate
+    cannot be used to achieve these goals due to fixed size limitations.
+
+    Our new struct contains a struct rate_info to annotate the rate that was
+    used, retry count of the rate and tx power. It is intended for all
+    information related to RC and TPC that needs to be passed from driver to
+    mac80211 and its RC/TPC algorithms like Minstrel_HT. It corresponds to
+    one stage in an mrr. Multiple subsequent instances of this struct can be
+    included in struct ieee80211_tx_status via a pointer and a length variable.
+    Those instances can be allocated on-stack. The former reference to a single
+    instance of struct rate_info is replaced with our new annotation.
+
+    An extension is introduced to struct ieee80211_hw. There are two new
+    members called 'tx_power_levels' and 'max_txpwr_levels_idx' acting as a
+    tx power level table. When a wifi device is registered, the driver shall
+    supply all supported power levels in this list. This allows to support
+    several quirks like differing power steps in power level ranges or
+    alike. TPC can use this for algorithm and thus be designed more abstract
+    instead of handling all possible step widths individually.
+
+    Further mandatory changes in status.c, mt76 and ath11k drivers due to the
+    removal of 'struct rate_info *rate' are also included.
+    status.c already uses the information in ieee80211_tx_status->rate in
+    radiotap, this is now changed to use ieee80211_rate_status->rate_idx.
+    mt76 driver already uses struct rate_info to pass the tx rate to status
+    path. The new members of the ieee80211_tx_status are set to NULL and 0
+    because the previously passed rate is not relevant to rate control and
+    accurate information is passed via tx_info->status.rates.
+    For ath11k, the txrate can be passed via this struct because ath11k uses
+    firmware RC and thus the information does not interfere with software RC.
+
+    Compile-Tested: current wireless-next tree with all flags on
+    Tested-on: Xiaomi 4A Gigabit (MediaTek MT7603E, MT7612E) with OpenWrt
+                    Linux 5.10.113
+
+    Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
+    Link: https://lore.kernel.org/r/20220509173958.1398201-2-jelonek.jonas@gmail.com
+    Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+
+ drivers/net/wireless/ath/ath11k/dp_tx.c |  8 ++-
+ drivers/net/wireless/mediatek/mt76/tx.c |  5 +-
+ include/net/mac80211.h                  | 33 +++++++++++-
+ net/mac80211/status.c                   | 91 +++++++++++++++++++--------------
+ 4 files changed, 92 insertions(+), 45 deletions(-)
+
+
+Before 44fa75f207d8a106bc75e6230db61e961fdbf8a8 speed was:
+Idle Latency:     1.86 ms   (jitter: 0.06ms, low: 1.79ms, high: 1.99ms)
+    Download:   834.57 Mbps (data used: 698.7 MB)
+                 25.53 ms   (jitter: 6.82ms, low: 4.79ms, high: 234.55ms)
+      Upload:   818.72 Mbps (data used: 881.9 MB)
+                 17.98 ms   (jitter: 5.49ms, low: 4.66ms, high: 53.61ms)
+
+After 44fa75f207d8a106bc75e6230db61e961fdbf8a8 speed became:
+Idle Latency:     1.86 ms   (jitter: 0.42ms, low: 1.63ms, high: 2.73ms)
+    Download:   546.18 Mbps (data used: 629.1 MB)
+                  5.89 ms   (jitter: 1.62ms, low: 2.64ms, high: 22.30ms)
+      Upload:   171.69 Mbps (data used: 141.0 MB)
+                  3.07 ms   (jitter: 1.06ms, low: 1.79ms, high: 7.98ms)
+
+All measures I made by cli speedtest utility.
+
+Thanks.
 
 -- 
-Kees Cook
+Best Regards,
+Mike Gavrilov.
