@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834995EA05C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7178B5EA417
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbiIZKgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S238183AbiIZLjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbiIZKeA (ORCPT
+        with ESMTP id S238126AbiIZLi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:34:00 -0400
+        Mon, 26 Sep 2022 07:38:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFE450536;
-        Mon, 26 Sep 2022 03:20:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF064E3;
+        Mon, 26 Sep 2022 03:44:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D46FF60BB1;
-        Mon, 26 Sep 2022 10:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3475C433D6;
-        Mon, 26 Sep 2022 10:20:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E736A609FE;
+        Mon, 26 Sep 2022 10:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC57C433D6;
+        Mon, 26 Sep 2022 10:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187658;
-        bh=YMMAuHVuBVlqkhj3tEarEB5q1p39iQOnWCjOJtKu+K4=;
+        s=korg; t=1664189073;
+        bh=p3yoFLi99e3+F/7o9uOqp564XMz3GKSsA4oWUGGl+S4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YgQR+mb56V8FvPhyfWbSyP078AiLAGlA/6FhR+pIaGO6heibpDWcria4SKpPeepiA
-         6YBjWHpLbNgSINd7wIklBuM2HjDA3z/ikdwmvGtYPcAlON4FEtozbaVx0Uw0pajfOX
-         U4httd+TuRGmn3tcirOt7GPCMOkI5z3hiCnQ8yz4=
+        b=PcixREsgg9YD4y/h2rerDR95JFTY1W02V36bgEsf7ZEZDZ8I/WMqvpJnDHwAMyWav
+         RZ/p2UONvyMIcfNhmdy0nTRHwcnIB3Rx/Uwj6IqA9V0AMxMw+GG1Ecn7QNveA4bMdm
+         3hMWuj5JCMVbfcTbPyqHCiXKqdx8hxNo1CJVxZ18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 019/120] rxrpc: Fix calc of resend age
+        stable@vger.kernel.org, Maurizio Lombardi <mlombard@redhat.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 5.19 063/207] mm: slub: fix flush_cpu_slab()/__free_slab() invocations in task context.
 Date:   Mon, 26 Sep 2022 12:10:52 +0200
-Message-Id: <20220926100751.304013914@linuxfoundation.org>
+Message-Id: <20220926100809.425679005@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Maurizio Lombardi <mlombard@redhat.com>
 
-[ Upstream commit 214a9dc7d852216e83acac7b75bc18f01ce184c2 ]
+commit e45cc288724f0cfd497bb5920bcfa60caa335729 upstream.
 
-Fix the calculation of the resend age to add a microsecond value as
-microseconds, not nanoseconds.
+Commit 5a836bf6b09f ("mm: slub: move flush_cpu_slab() invocations
+__free_slab() invocations out of IRQ context") moved all flush_cpu_slab()
+invocations to the global workqueue to avoid a problem related
+with deactivate_slab()/__free_slab() being called from an IRQ context
+on PREEMPT_RT kernels.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+When the flush_all_cpu_locked() function is called from a task context
+it may happen that a workqueue with WQ_MEM_RECLAIM bit set ends up
+flushing the global workqueue, this will cause a dependency issue.
+
+ workqueue: WQ_MEM_RECLAIM nvme-delete-wq:nvme_delete_ctrl_work [nvme_core]
+   is flushing !WQ_MEM_RECLAIM events:flush_cpu_slab
+ WARNING: CPU: 37 PID: 410 at kernel/workqueue.c:2637
+   check_flush_dependency+0x10a/0x120
+ Workqueue: nvme-delete-wq nvme_delete_ctrl_work [nvme_core]
+ RIP: 0010:check_flush_dependency+0x10a/0x120[  453.262125] Call Trace:
+ __flush_work.isra.0+0xbf/0x220
+ ? __queue_work+0x1dc/0x420
+ flush_all_cpus_locked+0xfb/0x120
+ __kmem_cache_shutdown+0x2b/0x320
+ kmem_cache_destroy+0x49/0x100
+ bioset_exit+0x143/0x190
+ blk_release_queue+0xb9/0x100
+ kobject_cleanup+0x37/0x130
+ nvme_fc_ctrl_free+0xc6/0x150 [nvme_fc]
+ nvme_free_ctrl+0x1ac/0x2b0 [nvme_core]
+
+Fix this bug by creating a workqueue for the flush operation with
+the WQ_MEM_RECLAIM bit set.
+
+Fixes: 5a836bf6b09f ("mm: slub: move flush_cpu_slab() invocations __free_slab() invocations out of IRQ context")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/rxrpc/call_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/slub.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 8574e7066d94..b5f173960725 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -166,7 +166,7 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
- 	_enter("{%d,%d}", call->tx_hard_ack, call->tx_top);
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -310,6 +310,11 @@ static inline void stat(const struct kme
+  */
+ static nodemask_t slab_nodes;
  
- 	now = ktime_get_real();
--	max_age = ktime_sub(now, jiffies_to_usecs(call->peer->rto_j));
-+	max_age = ktime_sub_us(now, jiffies_to_usecs(call->peer->rto_j));
++/*
++ * Workqueue used for flush_cpu_slab().
++ */
++static struct workqueue_struct *flushwq;
++
+ /********************************************************************
+  * 			Core slab cache functions
+  *******************************************************************/
+@@ -2730,7 +2735,7 @@ static void flush_all_cpus_locked(struct
+ 		INIT_WORK(&sfw->work, flush_cpu_slab);
+ 		sfw->skip = false;
+ 		sfw->s = s;
+-		schedule_work_on(cpu, &sfw->work);
++		queue_work_on(cpu, flushwq, &sfw->work);
+ 	}
  
- 	spin_lock_bh(&call->lock);
+ 	for_each_online_cpu(cpu) {
+@@ -4880,6 +4885,8 @@ void __init kmem_cache_init(void)
  
--- 
-2.35.1
-
+ void __init kmem_cache_init_late(void)
+ {
++	flushwq = alloc_workqueue("slub_flushwq", WQ_MEM_RECLAIM, 0);
++	WARN_ON(!flushwq);
+ }
+ 
+ struct kmem_cache *
 
 
