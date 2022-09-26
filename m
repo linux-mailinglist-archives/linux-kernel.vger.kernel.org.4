@@ -2,144 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063B15EA7B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AD15EA7BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 15:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbiIZNzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 09:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S233552AbiIZN5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 09:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiIZNyd (ORCPT
+        with ESMTP id S235081AbiIZN4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 09:54:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A580519;
-        Mon, 26 Sep 2022 05:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jOpbznQq1TexzS0cQB6vYt4+4yFj1cmjMb21VcAwnhk=; b=o/sYytLUDM+Vd1vccnhn2XqfHV
-        f6OSdgpiDrbeBWn8ZBEegKKdGzSsdwYXq/KS4EW87EJEVH6wuwN43+curv1WaQ0azzbam0Dr2VfVN
-        YhAtSfbpdw1CQ+SzSUULHaUQuwDS6IC3C/y5016A986PdHReO8D/CxioWTwqR0J+zBlHQOq+2YfNG
-        ck+0O9CPWYGxjYlABBytMWWeBPmD05YWVZsD4PtSA0be5/ZOwBQ4mtwpz6viZn/g8qM3vlUx6NN9y
-        2vG+hDLF/JkAntNvRO8SbIoPSZfGrysx+j61m5RbpTw1aNkY9W6K+5HfeovazTCiUrD8XZIu6Hivg
-        kAonF4JA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocmu1-00AQi8-8Q; Mon, 26 Sep 2022 12:08:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6FEE3015B5;
-        Mon, 26 Sep 2022 14:07:56 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8FC5429A13691; Mon, 26 Sep 2022 14:07:56 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 14:07:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        andi@lisas.de, puwen@hygon.cn, mario.limonciello@amd.com,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD
- and Intel processors
-Message-ID: <YzGWHMIsD7RBhEP+@hirez.programming.kicks-ass.net>
-References: <20220923153801.9167-1-kprateek.nayak@amd.com>
+        Mon, 26 Sep 2022 09:56:43 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0DB151DDE;
+        Mon, 26 Sep 2022 05:11:33 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 777CF5C0136;
+        Mon, 26 Sep 2022 08:10:32 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 26 Sep 2022 08:10:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1664194232; x=1664280632; bh=SX
+        ZXZRhuf9JevySNewTG6qOkVzPewIE+tsCRVShJcVU=; b=CeNTx2AJFtWG1toroK
+        mxZOBthTTsNUsUp2GTEyj5bTHXS0tByAQrhP3pF08Vd1O+llD7AmDcc4pTBta4F+
+        AnobgsRcte3ZQ+eWpfDNdcDi8GVxK7oXGq27whyXTEqebaahCuXjCd/uTbD5gunX
+        TqXJWOjG7BpLcSBS/rtqXGuLiSG01jZs8IjTLHXLOAClFaFjxWW53uI4MRl7PzOs
+        OuUq2nj2OyErm9YyLtjBQ9zlKLhPxzIFm2SxzN9RR6d0ixOWorbffBOpNaBrRLX4
+        OnT+Mbl0hZRuLob7Jpsn14DI1HmkQBin750+NondDQsz6KB3/YiD4Nda3ybVVyqC
+        2IXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664194232; x=1664280632; bh=SXZXZRhuf9JevySNewTG6qOkVzPe
+        wIE+tsCRVShJcVU=; b=HCUsALZL5QHHesHRLIK/3ubAYtM1sEqjZtwxqMiz9WYY
+        BBvC8gCTPor24gDICjNj29er09W8ivNCoZVqhrsIBDeH1ARPY2SCta25rIpThdoS
+        3ccBHFvHFMdAml/WfZHaonq3gWjM6Qgj39BTrnWpr/H+v1YXNqFP6zEh53Iq9J9B
+        z/4ablLBlW5BKuiIX0RS8Zt8gf2jIzEh3Yu727sBswCtlcG4IXL7OoOelCnyytPr
+        AeguqSA0H8W2I7qVNIaUmjDEWMsUFNkSigFniJnH/7KgA/Bl/07ZC3/g/yffSCbr
+        NGwSb/GhRxHNE+7CpezJPqFcW/0aaC6ALW0ytlLukg==
+X-ME-Sender: <xms:t5YxY0iVmb2QufbQg7CpLiJ9SU-SUOQGfa2qquV727juQvVJtAlCIQ>
+    <xme:t5YxY9Bb2QzSShIF_G4wjkz00dwuGUkXl08ahBFsUzHhy4Io2DmusDaqZWwGzII6d
+    gprM7GmFYUV3bOpoYk>
+X-ME-Received: <xmr:t5YxY8FPKbxrtSus8pO5XaSMpsHAmTeTN_GyrtzwJ3qeSRM6IaVb2C9BSklnqiaPddAb8Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:t5YxY1THDWS48myTelQbWRkO5tELFEQqwxFTmBRSkbT9yjFngkp9vQ>
+    <xmx:t5YxYxwbp9Cnd7HxGV9roLf_nfaVRIbbzAoAjgZvTjoQ-25oNgQoUw>
+    <xmx:t5YxYz5POMAsSOXp7R5mgxmbSsNowYtDkp0ld0cho3S8yoM0htuOhw>
+    <xmx:uJYxY6_XBBliy7KcDoLgUBgX0mymCQgynNhg_Towr2bVvy9Esxf7qg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Sep 2022 08:10:31 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id DE00E104928; Mon, 26 Sep 2022 15:10:27 +0300 (+03)
+Date:   Mon, 26 Sep 2022 15:10:27 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Message-ID: <20220926121027.xc2cgzuiafcssmea@box.shutemov.name>
+References: <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
+ <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com>
+ <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
+ <984e07ed-914f-93ca-a141-3fc8677878e0@intel.com>
+ <CAAH4kHawguTEuDVyz1ysSbH0X_mT=SvxLi=UhwEzXM0abbWefg@mail.gmail.com>
+ <YxncAElGrPEGRYg1@linux.ibm.com>
+ <CAAH4kHaP8JUh0Z4rF83=2RZTGMATT5MHot6rAnAwt79PL64mVQ@mail.gmail.com>
+ <YxpCaQARczhZQmq2@linux.ibm.com>
+ <f72f7325-adc6-89d5-7cbc-647442308233@amd.com>
+ <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923153801.9167-1-kprateek.nayak@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220924010302.bwas4zbro37rrxai@box.shutemov.name>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:08:01PM +0530, K Prateek Nayak wrote:
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index ef4775c6db01..fcd3617ed315 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -460,5 +460,6 @@
->  #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
->  #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
->  #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
-> +#define X86_BUG_STPCLK			X86_BUG(29) /* STPCLK# signal does not get asserted in time during IOPORT based C-state entry */
->  
->  #endif /* _ASM_X86_CPUFEATURES_H */
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index 48276c0e479d..8cb5887a53a3 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -988,6 +988,18 @@ static void init_amd(struct cpuinfo_x86 *c)
->  	if (!cpu_has(c, X86_FEATURE_XENPV))
->  		set_cpu_bug(c, X86_BUG_SYSRET_SS_ATTRS);
->  
-> +	/*
-> +	 * CPUs based on the Zen microarchitecture (Fam 17h onward) can
-> +	 * guarantee that STPCLK# signal is asserted in time after the
-> +	 * P_LVL2 read to freeze execution after an IOPORT based C-state
-> +	 * entry. Among the older AMD processors, there has been at least
-> +	 * one report of an AMD Athlon processor on a VIA chipset
-> +	 * (circa 2006) having this issue. Mark all these older AMD
-> +	 * processor families as being affected.
-> +	 */
-> +	if (c->x86 < 0x17)
-> +		set_cpu_bug(c, X86_BUG_STPCLK);
-> +
->  	/*
->  	 * Turn on the Instructions Retired free counter on machines not
->  	 * susceptible to erratum #1054 "Instructions Retired Performance
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index 2d7ea5480ec3..96fe1320c238 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -696,6 +696,18 @@ static void init_intel(struct cpuinfo_x86 *c)
->  		((c->x86_model == INTEL_FAM6_ATOM_GOLDMONT)))
->  		set_cpu_bug(c, X86_BUG_MONITOR);
->  
-> +	/*
-> +	 * Intel chipsets prior to Nehalem used the ACPI processor_idle
-> +	 * driver for C-state management. Some of these processors that
-> +	 * used IOPORT based C-states could not guarantee that STPCLK#
-> +	 * signal gets asserted in time after P_LVL2 read to freeze
-> +	 * execution properly. Since a clear cut-off point is not known
-> +	 * as to when this bug was solved, mark all the chipsets as
-> +	 * being affected. Only the ones that use IOPORT based C-state
-> +	 * transitions via the acpi_idle driver will be impacted.
-> +	 */
-> +	set_cpu_bug(c, X86_BUG_STPCLK);
-> +
->  #ifdef CONFIG_X86_64
->  	if (c->x86 == 15)
->  		c->x86_cache_alignment = c->x86_clflush_size * 2;
+On Sat, Sep 24, 2022 at 04:03:02AM +0300, Kirill A. Shutemov wrote:
+> On Thu, Sep 22, 2022 at 09:31:12AM -0500, Tom Lendacky wrote:
+> > On 9/8/22 14:28, Mike Rapoport wrote:
+> > > On Thu, Sep 08, 2022 at 09:23:07AM -0700, Dionna Amalie Glaze wrote:
+> > > > > 
+> > > > > Looks like the first access to the memory map fails, although I think
+> > > > > it's not in INIT_LIST_HEAD() but rather in init_page_count().
+> > > > > 
+> > > > > I'd start with making sure that page_alloc::memmap_alloc() actually returns
+> > > > > accepted memory. If you build kernel with CONFIG_DEBUG_VM=y the memory map
+> > > > > will poisoned in this function, so my guess is it'd crash there.
+> > > > > 
+> > > > 
+> > > > That's a wonderful hint, thank you! I did not run this test
+> > > > CONFIG_DEBUG_VM set, but you think it's possible it could still be
+> > > > here?
+> > > 
+> > > It depends on how you configured your kernel. Say, defconfig does not set
+> > > it.
+> > > 
+> > 
+> > I also hit the issue at 256GB. My config is using CONFIG_SPARSEMEM_VMEMMAP
+> > and fails in memmap_init_range() when attempting to add the first PFN. It
+> > looks like the underlying page that is backing the vmemmap has not been
+> > accepted (I receive a #VC 0x404 => page not validated).
+> > 
+> > Kirill, is this a path that you've looked at? It would appear that somewhere
+> > in the vmemmap_populate_hugepages() path, some memory acceptance needs to be
+> > done for the pages that are used to back vmemmap. I'm not very familiar with
+> > this code, so I'm not sure why everything works for a guest with 255GB of
+> > memory, but then fails for a guest with 256GB of memory.
+> 
+> Hm. I don't have machine that large at hands at the moment. And I have not
+> looked at the codepath before.
+> 
+> I will try to look into the issue.
 
-Quiz time:
+I'm not able to trigger the bug.
 
-  #define X86_VENDOR_INTEL       0
-  #define X86_VENDOR_CYRIX       1
-  #define X86_VENDOR_AMD         2
-  #define X86_VENDOR_UMC         3
-  #define X86_VENDOR_CENTAUR     5
-  #define X86_VENDOR_TRANSMETA   7
-  #define X86_VENDOR_NSC         8
-  #define X86_VENDOR_HYGON       9
-  #define X86_VENDOR_ZHAOXIN     10
-  #define X86_VENDOR_VORTEX      11
-  #define X86_VENDOR_NUM         12
-  #define X86_VENDOR_UNKNOWN     0xff
+With help of vm.overcommit_memory=1, I was managed boot TDX guest to shell
+with 256G and 1T of guest memory just fine.
 
-For how many of the above have you changed behaviour?
+Any chance it is SEV-SNP specific?
 
-Not to mention that this is the gazillion-th time AMD has failed to
-change HYGON in lock-step. That's Zen too -- deal with it.
+Or maybe there some difference in kernel config? Could you share yours?
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
