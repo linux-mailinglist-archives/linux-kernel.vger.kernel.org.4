@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6ED5EADDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F115EADE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiIZRPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S230366AbiIZRQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiIZRPB (ORCPT
+        with ESMTP id S230280AbiIZRQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:15:01 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA9B7AC34;
-        Mon, 26 Sep 2022 09:27:16 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id cj27so4412116qtb.7;
-        Mon, 26 Sep 2022 09:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Qa31KKQFJNsa7i1wAa/ohYe0PASU85gghiNNI322LQY=;
-        b=H0rg+7IB/kaadnXBs+xVU8Z81TFMY4Qnoi4KvoI6QzUumcd1HjMPOCXAxa341yVdit
-         4wtvMgcAufpesRi7SIhAVF6nrRvCpScIHqeHQAUl3zX1LPyZQC4XfSvP+XuJaL7pcBpW
-         qJfNLTXNces513U2PsF2MOy2DvCVgNUxhyOOCLJppaG2RhcmqI8ssCYhWtmq6MlJK+sP
-         u8M0Wj4g4vzXa0coF52QwFzfyca4wBaQoS/QX6mCChBLdwln1t/ssAJjUZ+8RpVTd9E9
-         yA51rk4UE1esJGoEslEbRwS5J7kJiDuJyRNYKwsUesZBVWexF+/RJWT/9FPKQ2n7BWjM
-         HdiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Qa31KKQFJNsa7i1wAa/ohYe0PASU85gghiNNI322LQY=;
-        b=F3m40g8Hu8r8A7XxTFXjhlruEm/nQ1YYkqiNtMhxbLy/vQqRfmYUQVYvi0qhqsbtf0
-         wcXDQIyUQtY5YbkSLX6GF1X5jJq4kRIYLRzOLTV7p8TXjbbwStk0+VdT5JJ+MDEGgSYp
-         MocSwEKEjSz1ymLUQ2zSf8ikkR//JBsx+Sz5w6NezqnuF0tMdfAuzKtOfDuLpaxAHJJp
-         87qLh3mAprFKNbIq+nPqxwiVImqxmhVpwqfp/fTiL3fX1nvc6d0X5/DNGRV4xDrFNRd1
-         ivXqAhhsXwwGPKtpg5UtKWPkaGx3ECHrheTrQlZfPMNtQ3nxLsCMcaIromCXiuNBK/mr
-         dZbg==
-X-Gm-Message-State: ACrzQf0LP25wCpSqfwYM+DV3N5K2sBbnQiYTlcxAFwujcf9r3+2LCwyR
-        vr8vGZkjCc7mZn5IlC8V6XU=
-X-Google-Smtp-Source: AMsMyM5rJFeFowIdSFi8NJ40V0CvR8Q3AXfswZUMLSsB/d9v6Ot5KJ/nJ7sK4Z0V5/J2VZq0folk5A==
-X-Received: by 2002:a05:622a:18a:b0:35c:ef69:1111 with SMTP id s10-20020a05622a018a00b0035cef691111mr18371452qtw.675.1664209635705;
-        Mon, 26 Sep 2022 09:27:15 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:155c:f237:bceb:6273])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05622a000b00b0035d43a27703sm1497974qtw.33.2022.09.26.09.27.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 09:27:15 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 09:27:14 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 0/7] cpumask: repair cpumask_check()
-Message-ID: <YzHS4sK5m0aDp0Sw@yury-laptop>
-References: <20220919210559.1509179-1-yury.norov@gmail.com>
- <CAAH8bW-TtZrvR5rZHVFXAHtfQySD85fqerxAAjUTN+eoh1bP2g@mail.gmail.com>
- <20220926080910.412408f9@kernel.org>
+        Mon, 26 Sep 2022 13:16:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5A9C7C3;
+        Mon, 26 Sep 2022 09:29:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69D74B80B2B;
+        Mon, 26 Sep 2022 16:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6091C433C1;
+        Mon, 26 Sep 2022 16:29:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="O/Tc88/d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664209785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d4DV9wTuEJjheBMG0Eg7FLwxhDuhB/eZPPw0FP4drwA=;
+        b=O/Tc88/dSjfhUHWSdcQWA1ThrISRbVofbHNARKY9w+DiJDNtvrjb/23D7kCoRchmCbZK+W
+        pLCnxuUjr7BoQbtxUPyvcLb4lVeALUh5yeGCuQ/OVQj9AItuvrVKXdjZoOSiuy6Y1UxppN
+        UP13V6Z3BDXOKlj6W/zC4mP9zsNyym8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bdac2e94 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 26 Sep 2022 16:29:45 +0000 (UTC)
+Received: by mail-vs1-f54.google.com with SMTP id o123so7137096vsc.3;
+        Mon, 26 Sep 2022 09:29:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2nqWMObSPLEmv1jH70piPMVDYFJ/2jg7NgYoXy34I+jOO/PbRP
+        RKTBD6PirvEM7TGX5W+DtZtAZCcycQJT+WUTct4=
+X-Google-Smtp-Source: AMsMyM418km+LhCnTSA5bmqTFR50Nvqd/ot69V5TGWYFAPax3DEPsVlaMRHbSzpzIboMdzfJ8dysAiUw2ovv5RhaJFw=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr8658192vsv.70.1664209784098; Mon, 26 Sep
+ 2022 09:29:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926080910.412408f9@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220926160332.1473462-1-Jason@zx2c4.com> <20220926092241.64f73e7420cea6b964f1f116@linux-foundation.org>
+In-Reply-To: <20220926092241.64f73e7420cea6b964f1f116@linux-foundation.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 26 Sep 2022 18:29:32 +0200
+X-Gmail-Original-Message-ID: <CAHmME9oJEMwO1NJ0m-J7yWwGrh8su51TB+pC8pGFYn2uE1xB5Q@mail.gmail.com>
+Message-ID: <CAHmME9oJEMwO1NJ0m-J7yWwGrh8su51TB+pC8pGFYn2uE1xB5Q@mail.gmail.com>
+Subject: Re: [PATCH] random: split initialization into early arch step and
+ later non-arch step
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,12 +66,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:09:10AM -0700, Jakub Kicinski wrote:
-> On Sun, 25 Sep 2022 08:47:24 -0700 Yury Norov wrote:
-> > Ping?
-> 
-> Sugar sweet, you really need to say more than ping. You put the entire
-> recipient list in the To:, I have no idea what kind of feedback you
-> expect and from whom.
+On Mon, Sep 26, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Mon, 26 Sep 2022 18:03:32 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+>
+> > The full RNG initialization relies on some timestamps, made possible
+> > with general functions like time_init() and timekeeping_init(). However,
+> > these are only available rather late in initialization. Meanwhile, other
+> > things, such as memory allocator functions, make use of the RNG much
+> > earlier.
+> >
+> > So split RNG initialization into two phases. We can give arch randomness
+> > very early on, and then later, after timekeeping and such are available,
+> > initialize the rest.
+> >
+> > This ensures that, for example, slabs are properly randomized if RDRAND
+> > is available. Another positive consequence is that on systems with
+> > RDRAND, running with CONFIG_WARN_ALL_UNSEEDED_RANDOM=y results in no
+> > warnings at all.
+>
+> Please give a full description of the user-visible runtime effects of
+> this shortcoming.
 
-From you I'd like to have a feedback on patch #2
+Sure. I'll expand that paragraph to read:
+
+This ensures that, for example, slabs are properly randomized if RDRAND
+is available. Without this, CONFIG_SLAB_FREELIST_RANDOM=y loses a degree
+of its security, because its random seed is potentially deterministic,
+since it hasn't yet incorporated RDRAND. It also makes it possible to
+use a better seed in kfence, which currently relies on only the cycle
+counter.
+Another positive consequence is that on systems with RDRAND, running
+with CONFIG_WARN_ALL_UNSEEDED_RANDOM=y results in no warnings at all.
