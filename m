@@ -2,231 +2,517 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35295EAD4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335115EAD4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIZQ5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S229975AbiIZQ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiIZQ4t (ORCPT
+        with ESMTP id S229626AbiIZQ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:56:49 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A591D6BD57
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:52:22 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id p5so7901505ljc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=x4NTypTBJW4b7REu+E6eGP25pHpiqubalYhFPom5anA=;
-        b=nyBYl3et3D/Hwg0PXcmhDbdFVdgPs3wT1T5m4FWqxqT5warTXHeLblDbQ/PO42CWGY
-         jbpOwM8f7b+hUVCjTVqEffZDcvNQvdlgXth8PswhOzbaHGeI6lrVsgAHqFlK93PKl3Ai
-         29wu0qn3ZcEfauxpueUyETsbUfSS3n0CXd8kORVyU3Uk9W+0ddF1wH325LwJztuinsWa
-         lNrIfEakQ6yL4BBqZDrJojilF7V7sSd37sQ8L03NWeQ320JAVL8LJpzI5X3t8KB5QrvI
-         KVgePx51bdk4JXI/uNiFSoF+7/stF86Grk0vLeOtU1pn4URzIXpZfxGdKpM0y4tu7MVO
-         9wDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=x4NTypTBJW4b7REu+E6eGP25pHpiqubalYhFPom5anA=;
-        b=syBLtDTBRa0++InYyW0y9eufb0Ce+2Xj6hZiefU5s6h6G4L65b2R0k0x4Pcas4NEQr
-         Iy4T3EduMTzIq0kwkkFQC0vMFv1Fy0jzb0IfEam3QvuYV4TwG78S3qfB7BcTNdj7SllK
-         Cw5JpIH/EsXTNenlROuA1ChIntIohfvNlEgqXzOtx6Eu1Qopodk+5TrsQx3wOYVQZu8u
-         Rf4bAxy8cqtkCeUCKQtayQdJ0lKC58mrb1FtkoDdCIIkWKTcEJrbnzqKr9ix/YukNn1k
-         YZS41+Nybjc3t1lJZcCYZfODqdQnMl2lMYlQ4/xxjFvYmSxCLMcHzkoDoHn1VbLEJhFT
-         aANg==
-X-Gm-Message-State: ACrzQf18r7GiuM02tslxz4fKZYf21twsEb8tvEDa9iFK1MtUFQ4zuALT
-        qNPJNW/+Kp9/5d9sfzOyBqt3WSWQ2MkBKPSa7N1H4g==
-X-Google-Smtp-Source: AMsMyM4TnPZUbURsP5BnRXq8d6hA/qshAGD43sNBUgtRFJmy1zG4ZPjO55nhnzDzvSMBCXJWhr1o64pz5goInSn46Ck=
-X-Received: by 2002:a05:651c:1508:b0:26c:622e:abe1 with SMTP id
- e8-20020a05651c150800b0026c622eabe1mr7742402ljf.228.1664207540822; Mon, 26
- Sep 2022 08:52:20 -0700 (PDT)
+        Mon, 26 Sep 2022 12:56:58 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16F3367AC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:52:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQoQrIW_1664207558;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VQoQrIW_1664207558)
+          by smtp.aliyun-inc.com;
+          Mon, 26 Sep 2022 23:52:40 +0800
+Date:   Mon, 26 Sep 2022 23:52:37 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: Re: [PATCH v6 2/2] erofs: support on-disk compressed fragments data
+Message-ID: <YzHKxcFTlHGgXeH9@B-P7TQMD6M-0146.local>
+References: <cover.1663898962.git.huyue2@coolpad.com>
+ <43059e8a573a424731e393442c7e06679b03cd78.1663898962.git.huyue2@coolpad.com>
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <Yyi+l3+p9lbBAC4M@google.com> <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
- <20220926142330.GC2658254@chaop.bj.intel.com>
-In-Reply-To: <20220926142330.GC2658254@chaop.bj.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 26 Sep 2022 16:51:44 +0100
-Message-ID: <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <43059e8a573a424731e393442c7e06679b03cd78.1663898962.git.huyue2@coolpad.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Sep 23, 2022 at 10:11:22AM +0800, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> Introduce on-disk compressed fragments data feature.
+> 
+> This approach adds a new field called `h_fragmentoff' in the per-file
+> compression header to indicate the fragment offset of each tail pcluster
+> or the whole file in the special packed inode.
+> 
+> Similar to ztailpacking, it will also find and record the 'headlcn'
+> of the tail pcluster when initializing per-inode zmap for making
+> follow-on requests more easy.
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
 
-On Mon, Sep 26, 2022 at 3:28 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> On Fri, Sep 23, 2022 at 04:19:46PM +0100, Fuad Tabba wrote:
-> > > Regarding pKVM's use case, with the shim approach I believe this can be done by
-> > > allowing userspace mmap() the "hidden" memfd, but with a ton of restrictions
-> > > piled on top.
-> > >
-> > > My first thought was to make the uAPI a set of KVM ioctls so that KVM could tightly
-> > > tightly control usage without taking on too much complexity in the kernel, but
-> > > working through things, routing the behavior through the shim itself might not be
-> > > all that horrific.
-> > >
-> > > IIRC, we discarded the idea of allowing userspace to map the "private" fd because
-> > > things got too complex, but with the shim it doesn't seem _that_ bad.
-> > >
-> > > E.g. on the memfd side:
-> > >
-> > >   1. The entire memfd must be mapped, and at most one mapping is allowed, i.e.
-> > >      mapping is all or nothing.
-> > >
-> > >   2. Acquiring a reference via get_pfn() is disallowed if there's a mapping for
-> > >      the restricted memfd.
-> > >
-> > >   3. Add notifier hooks to allow downstream users to further restrict things.
-> > >
-> > >   4. Disallow splitting VMAs, e.g. to force userspace to munmap() everything in
-> > >      one shot.
-> > >
-> > >   5. Require that there are no outstanding references at munmap().  Or if this
-> > >      can't be guaranteed by userspace, maybe add some way for userspace to wait
-> > >      until it's ok to convert to private?  E.g. so that get_pfn() doesn't need
-> > >      to do an expensive check every time.
-> > >
-> > >   static int memfd_restricted_mmap(struct file *file, struct vm_area_struct *vma)
-> > >   {
-> > >         if (vma->vm_pgoff)
-> > >                 return -EINVAL;
-> > >
-> > >         if ((vma->vm_end - vma->vm_start) != <file size>)
-> > >                 return -EINVAL;
-> > >
-> > >         mutex_lock(&data->lock);
-> > >
-> > >         if (data->has_mapping) {
-> > >                 r = -EINVAL;
-> > >                 goto err;
-> > >         }
-> > >         list_for_each_entry(notifier, &data->notifiers, list) {
-> > >                 r = notifier->ops->mmap_start(notifier, ...);
-> > >                 if (r)
-> > >                         goto abort;
-> > >         }
-> > >
-> > >         notifier->ops->mmap_end(notifier, ...);
-> > >         mutex_unlock(&data->lock);
-> > >         return 0;
-> > >
-> > >   abort:
-> > >         list_for_each_entry_continue_reverse(notifier &data->notifiers, list)
-> > >                 notifier->ops->mmap_abort(notifier, ...);
-> > >   err:
-> > >         mutex_unlock(&data->lock);
-> > >         return r;
-> > >   }
-> > >
-> > >   static void memfd_restricted_close(struct vm_area_struct *vma)
-> > >   {
-> > >         mutex_lock(...);
-> > >
-> > >         /*
-> > >          * Destroy the memfd and disable all future accesses if there are
-> > >          * outstanding refcounts (or other unsatisfied restrictions?).
-> > >          */
-> > >         if (<outstanding references> || ???)
-> > >                 memfd_restricted_destroy(...);
-> > >         else
-> > >                 data->has_mapping = false;
-> > >
-> > >         mutex_unlock(...);
-> > >   }
-> > >
-> > >   static int memfd_restricted_may_split(struct vm_area_struct *area, unsigned long addr)
-> > >   {
-> > >         return -EINVAL;
-> > >   }
-> > >
-> > >   static int memfd_restricted_mapping_mremap(struct vm_area_struct *new_vma)
-> > >   {
-> > >         return -EINVAL;
-> > >   }
-> > >
-> > > Then on the KVM side, its mmap_start() + mmap_end() sequence would:
-> > >
-> > >   1. Not be supported for TDX or SEV-SNP because they don't allow adding non-zero
-> > >      memory into the guest (after pre-boot phase).
-> > >
-> > >   2. Be mutually exclusive with shared<=>private conversions, and is allowed if
-> > >      and only if the entire gfn range of the associated memslot is shared.
-> >
-> > In general I think that this would work with pKVM. However, limiting
-> > private<->shared conversions to the granularity of a whole memslot
-> > might be difficult to handle in pKVM, since the guest doesn't have the
-> > concept of memslots. For example, in pKVM right now, when a guest
-> > shares back its restricted DMA pool with the host it does so at the
-> > page-level. pKVM would also need a way to make an fd accessible again
-> > when shared back, which I think isn't possible with this patch.
->
-> But does pKVM really want to mmap/munmap a new region at the page-level,
-> that can cause VMA fragmentation if the conversion is frequent as I see.
-> Even with a KVM ioctl for mapping as mentioned below, I think there will
-> be the same issue.
+The patchset overall looks good to me,
 
-pKVM doesn't really need to unmap the memory. What is really important
-is that the memory is not GUP'able. Having private memory mapped and
-then accessed by a misbehaving/malicious process will reinject a fault
-into the misbehaving process.
+However, there are some conflicts and userspace adaption with data dedupe
+feature, so I applied the following patch to -next.
 
-Cheers,
-/fuad
+If you have some update then, please help follow the following update
+as well.
 
-> >
-> > You were initially considering a KVM ioctl for mapping, which might be
-> > better suited for this since KVM knows which pages are shared and
-> > which ones are private. So routing things through KVM might simplify
-> > things and allow it to enforce all the necessary restrictions (e.g.,
-> > private memory cannot be mapped). What do you think?
-> >
-> > Thanks,
-> > /fuad
+Thanks,
+Gao Xiang
+
+From 08a0c9ef3e7e119c96de4a1b6fbdabdadb38b2f9 Mon Sep 17 00:00:00 2001
+From: Yue Hu <huyue2@coolpad.com>
+Date: Fri, 23 Sep 2022 10:11:22 +0800
+Subject: erofs: support on-disk compressed fragments data
+
+Introduce on-disk compressed fragments data feature.
+
+This approach adds a new field called `h_fragmentoff' in the per-file
+compression header to indicate the fragment offset of each tail pcluster
+or the whole file in the special packed inode.
+
+Similar to ztailpacking, it will also find and record the 'headlcn'
+of the tail pcluster when initializing per-inode zmap for making
+follow-on requests more easy.
+
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/erofs_fs.h | 33 +++++++++++++++++++++++++++------
+ fs/erofs/internal.h | 16 +++++++++++++---
+ fs/erofs/super.c    | 15 +++++++++++++++
+ fs/erofs/sysfs.c    |  2 ++
+ fs/erofs/zdata.c    | 50 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ fs/erofs/zmap.c     | 53 ++++++++++++++++++++++++++++++++++++++++++++++-------
+ 6 files changed, 152 insertions(+), 17 deletions(-)
+
+diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+index 5c1de6d7ad71f..b5d763aa8ff03 100644
+--- a/fs/erofs/erofs_fs.h
++++ b/fs/erofs/erofs_fs.h
+@@ -25,6 +25,7 @@
+ #define EROFS_FEATURE_INCOMPAT_DEVICE_TABLE	0x00000008
+ #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
+ #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
++#define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
+ #define EROFS_ALL_FEATURE_INCOMPAT		\
+ 	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
+@@ -32,7 +33,8 @@
+ 	 EROFS_FEATURE_INCOMPAT_CHUNKED_FILE | \
+ 	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
+-	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING)
++	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
++	 EROFS_FEATURE_INCOMPAT_FRAGMENTS)
+ 
+ #define EROFS_SB_EXTSLOT_SIZE	16
+ 
+@@ -71,7 +73,9 @@ struct erofs_super_block {
+ 	} __packed u1;
+ 	__le16 extra_devices;	/* # of devices besides the primary device */
+ 	__le16 devt_slotoff;	/* startoff = devt_slotoff * devt_slotsize */
+-	__u8 reserved2[38];
++	__u8 reserved[6];
++	__le64 packed_nid;	/* nid of the special packed inode */
++	__u8 reserved2[24];
+ };
+ 
+ /*
+@@ -296,17 +300,26 @@ struct z_erofs_lzma_cfgs {
+  * bit 2 : HEAD2 big pcluster (0 - off; 1 - on)
+  * bit 3 : tailpacking inline pcluster (0 - off; 1 - on)
+  * bit 4 : interlaced plain pcluster (0 - off; 1 - on)
++ * bit 5 : fragment pcluster (0 - off; 1 - on)
+  */
+ #define Z_EROFS_ADVISE_COMPACTED_2B		0x0001
+ #define Z_EROFS_ADVISE_BIG_PCLUSTER_1		0x0002
+ #define Z_EROFS_ADVISE_BIG_PCLUSTER_2		0x0004
+ #define Z_EROFS_ADVISE_INLINE_PCLUSTER		0x0008
+ #define Z_EROFS_ADVISE_INTERLACED_PCLUSTER	0x0010
++#define Z_EROFS_ADVISE_FRAGMENT_PCLUSTER	0x0020
+ 
++#define Z_EROFS_FRAGMENT_INODE_BIT              7
+ struct z_erofs_map_header {
+-	__le16	h_reserved1;
+-	/* indicates the encoded size of tailpacking data */
+-	__le16  h_idata_size;
++	union {
++		/* fragment data offset in the packed inode */
++		__le32  h_fragmentoff;
++		struct {
++			__le16  h_reserved1;
++			/* indicates the encoded size of tailpacking data */
++			__le16  h_idata_size;
++		};
++	};
+ 	__le16	h_advise;
+ 	/*
+ 	 * bit 0-3 : algorithm type of head 1 (logical cluster type 01);
+@@ -315,7 +328,8 @@ struct z_erofs_map_header {
+ 	__u8	h_algorithmtype;
+ 	/*
+ 	 * bit 0-2 : logical cluster bits - 12, e.g. 0 for 4096;
+-	 * bit 3-7 : reserved.
++	 * bit 3-6 : reserved;
++	 * bit 7   : move the whole file into packed inode or not.
+ 	 */
+ 	__u8	h_clusterbits;
+ };
+@@ -404,6 +418,10 @@ struct erofs_dirent {
+ /* check the EROFS on-disk layout strictly at compile time */
+ static inline void erofs_check_ondisk_layout_definitions(void)
+ {
++	const __le64 fmh = *(__le64 *)&(struct z_erofs_map_header) {
++		.h_clusterbits = 1 << Z_EROFS_FRAGMENT_INODE_BIT
++	};
++
+ 	BUILD_BUG_ON(sizeof(struct erofs_super_block) != 128);
+ 	BUILD_BUG_ON(sizeof(struct erofs_inode_compact) != 32);
+ 	BUILD_BUG_ON(sizeof(struct erofs_inode_extended) != 64);
+@@ -421,6 +439,9 @@ static inline void erofs_check_ondisk_layout_definitions(void)
+ 
+ 	BUILD_BUG_ON(BIT(Z_EROFS_VLE_DI_CLUSTER_TYPE_BITS) <
+ 		     Z_EROFS_VLE_CLUSTER_TYPE_MAX - 1);
++	/* exclude old compiler versions like gcc 7.5.0 */
++	BUILD_BUG_ON(__builtin_constant_p(fmh) ?
++		     fmh != cpu_to_le64(1ULL << 63) : 0);
+ }
+ 
+ #endif
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 8dbfeb5f4f844..9f89c1da6229a 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -131,6 +131,7 @@ struct erofs_sb_info {
+ 	struct inode *managed_cache;
+ 
+ 	struct erofs_sb_lz4_info lz4;
++	struct inode *packed_inode;
+ #endif	/* CONFIG_EROFS_FS_ZIP */
+ 	struct erofs_dev_context *devs;
+ 	struct dax_device *dax_dev;
+@@ -289,6 +290,7 @@ EROFS_FEATURE_FUNCS(chunked_file, incompat, INCOMPAT_CHUNKED_FILE)
+ EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
+ EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
+ EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
++EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
+ EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
+ 
+ /* atomic flag definitions */
+@@ -324,8 +326,13 @@ struct erofs_inode {
+ 			unsigned char  z_algorithmtype[2];
+ 			unsigned char  z_logical_clusterbits;
+ 			unsigned long  z_tailextent_headlcn;
+-			erofs_off_t    z_idataoff;
+-			unsigned short z_idata_size;
++			union {
++				struct {
++					erofs_off_t    z_idataoff;
++					unsigned short z_idata_size;
++				};
++				erofs_off_t z_fragmentoff;
++			};
+ 		};
+ #endif	/* CONFIG_EROFS_FS_ZIP */
+ 	};
+@@ -384,6 +391,7 @@ extern const struct address_space_operations z_erofs_aops;
+ enum {
+ 	BH_Encoded = BH_PrivateStart,
+ 	BH_FullMapped,
++	BH_Fragment,
+ };
+ 
+ /* Has a disk mapping */
+@@ -394,6 +402,8 @@ enum {
+ #define EROFS_MAP_ENCODED	(1 << BH_Encoded)
+ /* The length of extent is full */
+ #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
++/* Located in the special packed inode */
++#define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
+ 
+ struct erofs_map_blocks {
+ 	struct erofs_buf buf;
+@@ -415,7 +425,7 @@ struct erofs_map_blocks {
+ #define EROFS_GET_BLOCKS_FIEMAP	0x0002
+ /* Used to map the whole extent if non-negligible data is requested for LZMA */
+ #define EROFS_GET_BLOCKS_READMORE	0x0004
+-/* Used to map tail extent for tailpacking inline pcluster */
++/* Used to map tail extent for tailpacking inline or fragment pcluster */
+ #define EROFS_GET_BLOCKS_FINDTAIL	0x0008
+ 
+ enum {
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 9f7fe6c04e654..ce20562ca91f4 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -381,6 +381,17 @@ static int erofs_read_superblock(struct super_block *sb)
+ #endif
+ 	sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+ 	sbi->root_nid = le16_to_cpu(dsb->root_nid);
++#ifdef CONFIG_EROFS_FS_ZIP
++	sbi->packed_inode = NULL;
++	if (erofs_sb_has_fragments(sbi) && dsb->packed_nid) {
++		sbi->packed_inode =
++			erofs_iget(sb, le64_to_cpu(dsb->packed_nid), false);
++		if (IS_ERR(sbi->packed_inode)) {
++			ret = PTR_ERR(sbi->packed_inode);
++			goto out;
++		}
++	}
++#endif
+ 	sbi->inos = le64_to_cpu(dsb->inos);
+ 
+ 	sbi->build_time = le64_to_cpu(dsb->build_time);
+@@ -411,6 +422,8 @@ static int erofs_read_superblock(struct super_block *sb)
+ 		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+ 	if (erofs_is_fscache_mode(sb))
+ 		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
++	if (erofs_sb_has_fragments(sbi))
++		erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
+ out:
+ 	erofs_put_metabuf(&buf);
+ 	return ret;
+@@ -947,6 +960,8 @@ static void erofs_put_super(struct super_block *sb)
+ #ifdef CONFIG_EROFS_FS_ZIP
+ 	iput(sbi->managed_cache);
+ 	sbi->managed_cache = NULL;
++	iput(sbi->packed_inode);
++	sbi->packed_inode = NULL;
+ #endif
+ 	erofs_fscache_unregister_fs(sb);
+ }
+diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+index 341fb43ad5874..dd6eb7eccf9a2 100644
+--- a/fs/erofs/sysfs.c
++++ b/fs/erofs/sysfs.c
+@@ -76,6 +76,7 @@ EROFS_ATTR_FEATURE(device_table);
+ EROFS_ATTR_FEATURE(compr_head2);
+ EROFS_ATTR_FEATURE(sb_chksum);
+ EROFS_ATTR_FEATURE(ztailpacking);
++EROFS_ATTR_FEATURE(fragments);
+ 
+ static struct attribute *erofs_feat_attrs[] = {
+ 	ATTR_LIST(zero_padding),
+@@ -86,6 +87,7 @@ static struct attribute *erofs_feat_attrs[] = {
+ 	ATTR_LIST(compr_head2),
+ 	ATTR_LIST(sb_chksum),
+ 	ATTR_LIST(ztailpacking),
++	ATTR_LIST(fragments),
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(erofs_feat);
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 5792ca9e0d5ef..c92a72f5bca65 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -650,6 +650,35 @@ static bool should_alloc_managed_pages(struct z_erofs_decompress_frontend *fe,
+ 		la < fe->headoffset;
+ }
+ 
++static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
++				 struct page *page, unsigned int pageofs,
++				 unsigned int len)
++{
++	struct inode *packed_inode = EROFS_I_SB(inode)->packed_inode;
++	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
++	u8 *src, *dst;
++	unsigned int i, cnt;
++
++	pos += EROFS_I(inode)->z_fragmentoff;
++	for (i = 0; i < len; i += cnt) {
++		cnt = min_t(unsigned int, len - i,
++			    EROFS_BLKSIZ - erofs_blkoff(pos));
++		src = erofs_bread(&buf, packed_inode,
++				  erofs_blknr(pos), EROFS_KMAP);
++		if (IS_ERR(src)) {
++			erofs_put_metabuf(&buf);
++			return PTR_ERR(src);
++		}
++
++		dst = kmap_local_page(page);
++		memcpy(dst + pageofs + i, src + erofs_blkoff(pos), cnt);
++		kunmap_local(dst);
++		pos += cnt;
++	}
++	erofs_put_metabuf(&buf);
++	return 0;
++}
++
+ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 				struct page *page, struct page **pagepool)
+ {
+@@ -688,7 +717,8 @@ repeat:
+ 		/* didn't get a valid pcluster previously (very rare) */
+ 	}
+ 
+-	if (!(map->m_flags & EROFS_MAP_MAPPED))
++	if (!(map->m_flags & EROFS_MAP_MAPPED) ||
++	    map->m_flags & EROFS_MAP_FRAGMENT)
+ 		goto hitted;
+ 
+ 	err = z_erofs_collector_begin(fe);
+@@ -735,6 +765,24 @@ hitted:
+ 		zero_user_segment(page, cur, end);
+ 		goto next_part;
+ 	}
++	if (map->m_flags & EROFS_MAP_FRAGMENT) {
++		unsigned int pageofs, skip, len;
++
++		if (offset > map->m_la) {
++			pageofs = 0;
++			skip = offset - map->m_la;
++		} else {
++			pageofs = map->m_la & ~PAGE_MASK;
++			skip = 0;
++		}
++		len = min_t(unsigned int, map->m_llen - skip, end - cur);
++		err = z_erofs_read_fragment(inode, skip, page, pageofs, len);
++		if (err)
++			goto out;
++		++spiltted;
++		tight = false;
++		goto next_part;
++	}
+ 
+ 	exclusive = (!cur && (!spiltted || tight));
+ 	if (cur)
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 7196235a441c1..d1723910251cc 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -17,7 +17,7 @@ int z_erofs_fill_inode(struct inode *inode)
+ 	struct erofs_sb_info *sbi = EROFS_SB(inode->i_sb);
+ 
+ 	if (!erofs_sb_has_big_pcluster(sbi) &&
+-	    !erofs_sb_has_ztailpacking(sbi) &&
++	    !erofs_sb_has_ztailpacking(sbi) && !erofs_sb_has_fragments(sbi) &&
+ 	    vi->datalayout == EROFS_INODE_FLAT_COMPRESSION_LEGACY) {
+ 		vi->z_advise = 0;
+ 		vi->z_algorithmtype[0] = 0;
+@@ -55,10 +55,6 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+ 	if (test_bit(EROFS_I_Z_INITED_BIT, &vi->flags))
+ 		goto out_unlock;
+ 
+-	DBG_BUGON(!erofs_sb_has_big_pcluster(EROFS_SB(sb)) &&
+-		  !erofs_sb_has_ztailpacking(EROFS_SB(sb)) &&
+-		  vi->datalayout == EROFS_INODE_FLAT_COMPRESSION_LEGACY);
+-
+ 	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
+ 		    vi->xattr_isize, 8);
+ 	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
+@@ -69,6 +65,16 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+ 	}
+ 
+ 	h = kaddr + erofs_blkoff(pos);
++	/*
++	 * if the highest bit of the 8-byte map header is set, the whole file
++	 * is stored in the packed inode. The rest bits keeps z_fragmentoff.
++	 */
++	if (h->h_clusterbits >> Z_EROFS_FRAGMENT_INODE_BIT) {
++		vi->z_advise = Z_EROFS_ADVISE_FRAGMENT_PCLUSTER;
++		vi->z_fragmentoff = le64_to_cpu(*(__le64 *)h) ^ (1ULL << 63);
++		vi->z_tailextent_headlcn = 0;
++		goto unmap_done;
++	}
+ 	vi->z_advise = le16_to_cpu(h->h_advise);
+ 	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
+ 	vi->z_algorithmtype[1] = h->h_algorithmtype >> 4;
+@@ -123,6 +129,20 @@ unmap_done:
+ 		if (err < 0)
+ 			goto out_unlock;
+ 	}
++
++	if (vi->z_advise & Z_EROFS_ADVISE_FRAGMENT_PCLUSTER &&
++	    !(h->h_clusterbits >> Z_EROFS_FRAGMENT_INODE_BIT)) {
++		struct erofs_map_blocks map = {
++			.buf = __EROFS_BUF_INITIALIZER
++		};
++
++		vi->z_fragmentoff = le32_to_cpu(h->h_fragmentoff);
++		err = z_erofs_do_map_blocks(inode, &map,
++					    EROFS_GET_BLOCKS_FINDTAIL);
++		erofs_put_metabuf(&map.buf);
++		if (err < 0)
++			goto out_unlock;
++	}
+ 	/* paired with smp_mb() at the beginning of the function */
+ 	smp_mb();
+ 	set_bit(EROFS_I_Z_INITED_BIT, &vi->flags);
+@@ -598,6 +618,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ {
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+ 	bool ztailpacking = vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER;
++	bool fragment = vi->z_advise & Z_EROFS_ADVISE_FRAGMENT_PCLUSTER;
+ 	struct z_erofs_maprecorder m = {
+ 		.inode = inode,
+ 		.map = map,
+@@ -666,12 +687,19 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 
+ 	map->m_llen = end - map->m_la;
+ 
+-	if (flags & EROFS_GET_BLOCKS_FINDTAIL)
++	if (flags & EROFS_GET_BLOCKS_FINDTAIL) {
+ 		vi->z_tailextent_headlcn = m.lcn;
++		/* for non-compact indexes, fragmentoff is 64 bits */
++		if (fragment &&
++		    vi->datalayout == EROFS_INODE_FLAT_COMPRESSION_LEGACY)
++			vi->z_fragmentoff |= (u64)m.pblk << 32;
++	}
+ 	if (ztailpacking && m.lcn == vi->z_tailextent_headlcn) {
+ 		map->m_flags |= EROFS_MAP_META;
+ 		map->m_pa = vi->z_idataoff;
+ 		map->m_plen = vi->z_idata_size;
++	} else if (fragment && m.lcn == vi->z_tailextent_headlcn) {
++		map->m_flags |= EROFS_MAP_FRAGMENT;
+ 	} else {
+ 		map->m_pa = blknr_to_addr(m.pblk);
+ 		err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
+@@ -715,6 +743,7 @@ int z_erofs_map_blocks_iter(struct inode *inode,
+ 			    struct erofs_map_blocks *map,
+ 			    int flags)
+ {
++	struct erofs_inode *const vi = EROFS_I(inode);
+ 	int err = 0;
+ 
+ 	trace_z_erofs_map_blocks_iter_enter(inode, map, flags);
+@@ -731,6 +760,15 @@ int z_erofs_map_blocks_iter(struct inode *inode,
+ 	if (err)
+ 		goto out;
+ 
++	if ((vi->z_advise & Z_EROFS_ADVISE_FRAGMENT_PCLUSTER) &&
++	    !vi->z_tailextent_headlcn) {
++		map->m_la = 0;
++		map->m_llen = inode->i_size;
++		map->m_flags = EROFS_MAP_MAPPED | EROFS_MAP_FULL_MAPPED |
++				EROFS_MAP_FRAGMENT;
++		goto out;
++	}
++
+ 	err = z_erofs_do_map_blocks(inode, map, flags);
+ out:
+ 	trace_z_erofs_map_blocks_iter_exit(inode, map, flags, err);
+@@ -757,7 +795,8 @@ static int z_erofs_iomap_begin_report(struct inode *inode, loff_t offset,
+ 	iomap->length = map.m_llen;
+ 	if (map.m_flags & EROFS_MAP_MAPPED) {
+ 		iomap->type = IOMAP_MAPPED;
+-		iomap->addr = map.m_pa;
++		iomap->addr = map.m_flags & EROFS_MAP_FRAGMENT ?
++			      IOMAP_NULL_ADDR : map.m_pa;
+ 	} else {
+ 		iomap->type = IOMAP_HOLE;
+ 		iomap->addr = IOMAP_NULL_ADDR;
+-- 
+cgit 
+
+
