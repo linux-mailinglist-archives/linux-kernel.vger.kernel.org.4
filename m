@@ -2,118 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778AC5E9BCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1C85E9BD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiIZIRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S233189AbiIZIT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiIZIQt (ORCPT
+        with ESMTP id S233186AbiIZITu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:16:49 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180373340C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:16:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id iv17so3921267wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:16:36 -0700 (PDT)
+        Mon, 26 Sep 2022 04:19:50 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A650A475
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:19:47 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i6so1743129pfb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=hXgMAhBZ3je78rW+jzSF79si3Ei/05gOqISb2zwsqUg=;
-        b=fC1tPWHmIw2H58iwKgU5IEngD15tz3fcVkYf10e/5tjktnuvvNwgCoZ6rlEyCKDylh
-         sjhb73evCL2V4vbAMhlnG9tg34+xBHalQm288oDVy1azUNWdxEabAuNQMXn/xm1FlcNd
-         ThwVsOPVyNbh6BvcYOuMAy32lcPk1YW6VJh9oss84CrsAix7Ewy6ct8m9TNgyb3PGLr5
-         L7JbtQe7P+tNruGuq7uY57SSgOn/NbFzN8bH7ccmqjmcmSot8G1qmRS7uxEgAESfm0Hv
-         qV+p9y9Ecg7qPNRgKcf9lYgSFAIL9DS5EJkhRfn/r4w4zwnS1E1qpYpIFozYGP5JO6T2
-         kQhQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=NjIyqUpRVXy5DWN7PDhIdKjKlv7GlZJeHLPiKGqOEhQ=;
+        b=rNM0y2h9GhGDWPoW94JOco1DtMdA/YQ0uOsixP5x1nk90GYc6XQOLaYpzxOeGyx/YK
+         E+p5+74T20lYhYLcG4titCr5pmfP13DaCZEN81S32aJykcITUrlnw/LEfzCPcalWf27M
+         G88tBQH7KyT+MrHJSnbwOq4IjndhOxyE2RkxEBZW4ZhfOU7uJvqSUi2vPvadnPT4IjuT
+         1mekXJhL0mr2BMlpOFoFs43BRSZ3on+1TWNqu7CrnnXXPtNCFDgFoOBqxX1+hsnTXmF7
+         cKGZ9Xgk9J896y4+up0vZlhg/kCePxawaacBnQKKifrRgikF4D/i2Ns8PcAQV7eQL3eF
+         lzGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=hXgMAhBZ3je78rW+jzSF79si3Ei/05gOqISb2zwsqUg=;
-        b=RtJgMQOvMoRTZBCn3nSwWg3zldwfphjGc7h68wPCypyarnEm4bvN93/fzQQDz0Mq9j
-         OvxOZrvQVXB57oi/YrhwyHV56hJTNOFyqIhOum0eNZHHxpiymLr+FEfepNqsKb9pdz7l
-         78aBgJrucywFj/H9zWUOlRLjlgNV8aotQd3YmR3Ph2YgzGIZXI6rd9fSGrHxyhQYjf8J
-         fNdm34ctM1wYy/x3kcnhAh7S4SBhoLNGK1T1RhSKeteDCqidIX7Oap6UztRU5JlJXpoH
-         os3NEmBGJ29i6J7KsYpLdDx+caAtec/Js25h6fLa0jzuSjVGC6Kba9qoxXTw6n6bTyD2
-         9q9Q==
-X-Gm-Message-State: ACrzQf15G3kpaXAr2XRy/Ptlom99CjD9AL/713Ea6e+hi/djSC5ius2K
-        jZqAlPP3RQnBbS2QqhP/cFvqFQ==
-X-Google-Smtp-Source: AMsMyM6uzgMtfU4SLhYrmDdl546xzoIrz4OEcHyRsVRlrip6JtqHNWd+qC3oP3wXDx+gjPBTHCRLkQ==
-X-Received: by 2002:a7b:c048:0:b0:3b4:fb26:f0f3 with SMTP id u8-20020a7bc048000000b003b4fb26f0f3mr17434203wmc.115.1664180194884;
-        Mon, 26 Sep 2022 01:16:34 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id w21-20020a1cf615000000b003a604a29a34sm10123238wmc.35.2022.09.26.01.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:16:34 -0700 (PDT)
-Message-ID: <3ef8bbb0-078d-ff40-88b6-db043b274add@linaro.org>
-Date:   Mon, 26 Sep 2022 10:16:29 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=NjIyqUpRVXy5DWN7PDhIdKjKlv7GlZJeHLPiKGqOEhQ=;
+        b=7ISh3ZnNTO7y71u01msAuTSlmpVTbBvBSBTsVOasH3XyyFM0sGiv8G/B2hNNG8QWwB
+         B12WS2dxDEzJdN6qDb3ZvN1Su5/nRBPc3wYhRYS9yb25w/ycHHcWz+k8S9qW+lVXwrq3
+         tspZrigFC+jO1YpWgvyudxxBN5hK6ZD3HDz24+zHuagGvpVZr/ywGeTpLllCJTQmeo6F
+         kENsMBPNKc2TMXnwdT4TVBe2uDlLD2XOc2fr42xEMjDq9at1sa95S/4Yh6g0O/DxgXpm
+         B+4bZiYbvF1VpwuW1q+iEgXDyplHn2aJCNhMzw3gEkO8SVMj5jA69J4Uwk/xdOVAQ6uD
+         keag==
+X-Gm-Message-State: ACrzQf2e8u/bbNfoPbTs6VdgzduAx03h0IGr9+4+/e0daajxwjh8Mmli
+        BzGMIh+qPTmosqJ7gdyJKlfgSA==
+X-Google-Smtp-Source: AMsMyM4yjE1/qwe9dyCZt1bsvYoMHnFJ2NQU93iKeua2APjjQ5MiFTp6vNy9/p4E2TzGcXaJTvjxjw==
+X-Received: by 2002:a05:6a00:14d3:b0:546:e93c:4768 with SMTP id w19-20020a056a0014d300b00546e93c4768mr21956819pfu.36.1664180386967;
+        Mon, 26 Sep 2022 01:19:46 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902710300b001746f66244asm10739632pll.18.2022.09.26.01.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 01:19:46 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     hannes@cmpxchg.org, surenb@google.com, mingo@redhat.com,
+        peterz@infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] sched/psi: Use task->psi_flags to clear in CPU migration
+Date:   Mon, 26 Sep 2022 16:19:31 +0800
+Message-Id: <20220926081931.45420-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] arm64: defconfig: enable rest of Qualcomm ARMv8
- SoCs pinctrl drivers
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220925112123.148897-1-krzysztof.kozlowski@linaro.org>
- <20220925112123.148897-2-krzysztof.kozlowski@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220925112123.148897-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 13:21, Krzysztof Kozlowski wrote:
-> Enable rest of Qualcomm ARMv8 SoCs pin controller drivers (MSM8953,
-> MSM8976, QCM2290).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Enable MSM8976 (Stephan)
-> ---
->   arch/arm64/configs/defconfig | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 5a4ba141d15c..1138386952b5 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -529,9 +529,12 @@ CONFIG_PINCTRL_MSM=y
->   CONFIG_PINCTRL_IPQ8074=y
->   CONFIG_PINCTRL_IPQ6018=y
->   CONFIG_PINCTRL_MSM8916=y
-> +CONFIG_PINCTRL_MSM8953=y
-> +CONFIG_PINCTRL_MSM8976=y
->   CONFIG_PINCTRL_MSM8994=y
->   CONFIG_PINCTRL_MSM8996=y
->   CONFIG_PINCTRL_MSM8998=y
-> +CONFIG_PINCTRL_QCM2290=y
->   CONFIG_PINCTRL_QCS404=y
->   CONFIG_PINCTRL_QDF2XXX=y
->   CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
+The commit d583d360a620 ("psi: Fix psi state corruption when schedule()
+races with cgroup move") fixed a race problem by making cgroup_move_task()
+use task->psi_flags instead of looking at the scheduler state.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+We can extend task->psi_flags usage to CPU migration, which should be
+a minor optimization for performance and code simplicity.
+
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ include/linux/sched.h |  3 ---
+ kernel/sched/core.c   |  2 +-
+ kernel/sched/stats.h  | 22 ++++------------------
+ 3 files changed, 5 insertions(+), 22 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 5cdf746988a1..cffce0eaf640 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -890,9 +890,6 @@ struct task_struct {
+ 	unsigned			sched_reset_on_fork:1;
+ 	unsigned			sched_contributes_to_load:1;
+ 	unsigned			sched_migrated:1;
+-#ifdef CONFIG_PSI
+-	unsigned			sched_psi_wake_requeue:1;
+-#endif
+ 
+ 	/* Force alignment to the next boundary: */
+ 	unsigned			:0;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a7fa9802dfde..2d98b9b5185f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2056,7 +2056,7 @@ static inline void enqueue_task(struct rq *rq, struct task_struct *p, int flags)
+ 
+ 	if (!(flags & ENQUEUE_RESTORE)) {
+ 		sched_info_enqueue(rq, p);
+-		psi_enqueue(p, flags & ENQUEUE_WAKEUP);
++		psi_enqueue(p, (flags & ENQUEUE_WAKEUP) && !(flags & ENQUEUE_MIGRATED));
+ 	}
+ 
+ 	uclamp_rq_inc(rq, p);
+diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
+index 84a188913cc9..38f3698f5e5b 100644
+--- a/kernel/sched/stats.h
++++ b/kernel/sched/stats.h
+@@ -128,11 +128,9 @@ static inline void psi_enqueue(struct task_struct *p, bool wakeup)
+ 	if (p->in_memstall)
+ 		set |= TSK_MEMSTALL_RUNNING;
+ 
+-	if (!wakeup || p->sched_psi_wake_requeue) {
++	if (!wakeup) {
+ 		if (p->in_memstall)
+ 			set |= TSK_MEMSTALL;
+-		if (p->sched_psi_wake_requeue)
+-			p->sched_psi_wake_requeue = 0;
+ 	} else {
+ 		if (p->in_iowait)
+ 			clear |= TSK_IOWAIT;
+@@ -143,8 +141,6 @@ static inline void psi_enqueue(struct task_struct *p, bool wakeup)
+ 
+ static inline void psi_dequeue(struct task_struct *p, bool sleep)
+ {
+-	int clear = TSK_RUNNING;
+-
+ 	if (static_branch_likely(&psi_disabled))
+ 		return;
+ 
+@@ -157,10 +153,7 @@ static inline void psi_dequeue(struct task_struct *p, bool sleep)
+ 	if (sleep)
+ 		return;
+ 
+-	if (p->in_memstall)
+-		clear |= (TSK_MEMSTALL | TSK_MEMSTALL_RUNNING);
+-
+-	psi_task_change(p, clear, 0);
++	psi_task_change(p, p->psi_flags, 0);
+ }
+ 
+ static inline void psi_ttwu_dequeue(struct task_struct *p)
+@@ -172,19 +165,12 @@ static inline void psi_ttwu_dequeue(struct task_struct *p)
+ 	 * deregister its sleep-persistent psi states from the old
+ 	 * queue, and let psi_enqueue() know it has to requeue.
+ 	 */
+-	if (unlikely(p->in_iowait || p->in_memstall)) {
++	if (unlikely(p->psi_flags)) {
+ 		struct rq_flags rf;
+ 		struct rq *rq;
+-		int clear = 0;
+-
+-		if (p->in_iowait)
+-			clear |= TSK_IOWAIT;
+-		if (p->in_memstall)
+-			clear |= TSK_MEMSTALL;
+ 
+ 		rq = __task_rq_lock(p, &rf);
+-		psi_task_change(p, clear, 0);
+-		p->sched_psi_wake_requeue = 1;
++		psi_task_change(p, p->psi_flags, 0);
+ 		__task_rq_unlock(rq, &rf);
+ 	}
+ }
+-- 
+2.37.2
+
