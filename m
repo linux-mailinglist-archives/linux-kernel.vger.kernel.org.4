@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BCE5EA372
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A36C5EA124
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237899AbiIZLZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
+        id S236346AbiIZKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237997AbiIZLXv (ORCPT
+        with ESMTP id S233804AbiIZKna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:23:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB5A33A26;
-        Mon, 26 Sep 2022 03:40:05 -0700 (PDT)
+        Mon, 26 Sep 2022 06:43:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744E61CB;
+        Mon, 26 Sep 2022 03:24:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F20F860769;
-        Mon, 26 Sep 2022 10:39:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49B3C433C1;
-        Mon, 26 Sep 2022 10:39:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 57B72CE10E7;
+        Mon, 26 Sep 2022 10:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4545EC433D6;
+        Mon, 26 Sep 2022 10:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188763;
-        bh=+WB6Gfrw4ofFl7keBuMJYWkIaY3LMVfFmiVWGO4Gix0=;
+        s=korg; t=1664187869;
+        bh=zadlpnKD6sjdhTaeTlpUHuA+J3MSs8/PSaLg59JCzQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FWbZXpg3/pUIMFZR9SvY0V2y5KhvVvy3qrIQJrhZeDOGLUqPCfJRINtNv2R2384+u
-         OAZpLq6/+Y+pOvssUtlw3qRTdJaMgpCVYYnIdDpLRWuOJY9XpdsnSxSGmeDVI92Njb
-         graH6Am88P8JYO6WQUXQPIsOaFZesfP/AddEvmXU=
+        b=XUkbKAWWp7L8GzZZV08rr5xAiJaRc7vlfXqnlmDxx53edJD9rksSsTKgA8iQNSEYJ
+         hta/I7yljzIvHb21hVXzfc5eZHVymJqUknJ+DWJT4VdGo9YHcC371+UCzPAaJBNlom
+         4ALfEznMyClDfsXwn7ieXtjgndWGPKHjcff1ESBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 086/148] i40e: Fix VF set max MTU size
+Subject: [PATCH 5.4 087/120] perf kcore_copy: Do not check /proc/modules is unchanged
 Date:   Mon, 26 Sep 2022 12:12:00 +0200
-Message-Id: <20220926100759.274117745@linuxfoundation.org>
+Message-Id: <20220926100754.217398729@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 372539def2824c43b6afe2403045b140f65c5acc ]
+[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
 
-Max MTU sent to VF is set to 0 during memory allocation. It cause
-that max MTU on VF is changed to IAVF_MAX_RXBUFFER and does not
-depend on data from HW.
+/proc/kallsyms and /proc/modules are compared before and after the copy
+in order to ensure no changes during the copy.
 
-Set max_mtu field in virtchnl_vf_resource struct to inform
-VF in GET_VF_RESOURCES msg what size should be max frame.
+However /proc/modules also might change due to reference counts changing
+even though that does not make any difference.
 
-Fixes: dab86afdbbd1 ("i40e/i40evf: Change the way we limit the maximum frame size for Rx")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Any modules loaded or unloaded should be visible in changes to kallsyms,
+so it is not necessary to check /proc/modules also anyway.
+
+Remove the comparison checking that /proc/modules is unchanged.
+
+Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Tested-by: Daniel Dao <dqminh@cloudflare.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/intel/i40e/i40e_virtchnl_pf.c    | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ tools/perf/util/symbol-elf.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-index d78ac5e7f658..c078fbaf19fd 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-@@ -2038,6 +2038,25 @@ static void i40e_del_qch(struct i40e_vf *vf)
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index a04a7dfb8ec0..f15258fbe9db 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -1912,8 +1912,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
+  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
+  * is not the same for the kernel map and the modules map.  That happens because
+  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
+- * kallsyms and modules files are compared with their copies to check that
+- * modules have not been loaded or unloaded while the copies were taking place.
++ * kallsyms file is compared with its copy to check that modules have not been
++ * loaded or unloaded while the copies were taking place.
+  *
+  * Return: %0 on success, %-1 on failure.
+  */
+@@ -1976,9 +1976,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
+ 			goto out_extract_close;
  	}
- }
  
-+/**
-+ * i40e_vc_get_max_frame_size
-+ * @vf: pointer to the VF
-+ *
-+ * Max frame size is determined based on the current port's max frame size and
-+ * whether a port VLAN is configured on this VF. The VF is not aware whether
-+ * it's in a port VLAN so the PF needs to account for this in max frame size
-+ * checks and sending the max frame size to the VF.
-+ **/
-+static u16 i40e_vc_get_max_frame_size(struct i40e_vf *vf)
-+{
-+	u16 max_frame_size = vf->pf->hw.phy.link_info.max_frame_size;
-+
-+	if (vf->port_vlan_id)
-+		max_frame_size -= VLAN_HLEN;
-+
-+	return max_frame_size;
-+}
-+
- /**
-  * i40e_vc_get_vf_resources_msg
-  * @vf: pointer to the VF info
-@@ -2139,6 +2158,7 @@ static int i40e_vc_get_vf_resources_msg(struct i40e_vf *vf, u8 *msg)
- 	vfres->max_vectors = pf->hw.func_caps.num_msix_vectors_vf;
- 	vfres->rss_key_size = I40E_HKEY_ARRAY_SIZE;
- 	vfres->rss_lut_size = I40E_VF_HLUT_ARRAY_SIZE;
-+	vfres->max_mtu = i40e_vc_get_max_frame_size(vf);
+-	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
+-		goto out_extract_close;
+-
+ 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
+ 		goto out_extract_close;
  
- 	if (vf->lan_vsi_idx) {
- 		vfres->vsi_res[0].vsi_id = vf->lan_vsi_id;
 -- 
 2.35.1
 
