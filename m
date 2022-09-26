@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAC65EA48C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0835EA0D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238673AbiIZLrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S236371AbiIZKmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238725AbiIZLo0 (ORCPT
+        with ESMTP id S236027AbiIZKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:44:26 -0400
+        Mon, 26 Sep 2022 06:39:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE1B564FC;
-        Mon, 26 Sep 2022 03:46:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE53E77B;
+        Mon, 26 Sep 2022 03:23:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 940E5B80978;
-        Mon, 26 Sep 2022 10:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1772C433D6;
-        Mon, 26 Sep 2022 10:45:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0578FB80924;
+        Mon, 26 Sep 2022 10:23:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FCCC433C1;
+        Mon, 26 Sep 2022 10:23:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189125;
-        bh=qG/GrAL/KC/X3xbqMlKzeMjHeQKBh4vzIdmV29LdBNs=;
+        s=korg; t=1664187820;
+        bh=/KzNBC/1o7m8B9RSy27+tliksvw2eqi39Mn6M3WBaDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r9Yy9VWLRXeqkC06eYQGJItjYMEMRUGJvjIli3PPmVmxEI1tiVoLM6lEEjHP0bTKb
-         /A0v/HGp/p9qyom3F/JTXmF/3A5lZA/SFiuRFRHb506KCGBIsjyssXup6SPw9Tet73
-         oV5NcvPbNb8PnVdtif+2fkVWpO8O95kYMs1mSyPc=
+        b=zNr4jX+L5UVJf9zNzuXTdlHyTUUGBIoZ7RHb3Acba3IhtAIf7UsjCK727A/sacNSk
+         X8/Dk4ptiq/E+1bs2cGoqsQc3/KNmzC8zIqC6beVrbZBaxqRy6FAeeos1agyTE3Uua
+         +HaDEEzYEuxotOLHN4YMjPQuLKu7Pv+dY58DBjzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 082/207] arm64: dts: rockchip: fix property for usb2 phy supply on rock-3a
+Subject: [PATCH 5.4 038/120] usb: xhci-mtk: add a function to (un)load bandwidth info
 Date:   Mon, 26 Sep 2022 12:11:11 +0200
-Message-Id: <20220926100810.246666091@linuxfoundation.org>
+Message-Id: <20220926100752.083339049@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +53,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Riesch <michael.riesch@wolfvision.net>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 43e1d6d3b45c4e7e25171ec04a10d09969b0f889 ]
+[ Upstream commit 338af695fffb12a9407c376ce0cebce896c15050 ]
 
-The property "vbus-supply" was copied from the vendor kernel but is not
-available in mainstream. Use correct property "phy-supply".
+Extract a function to load/unload bandwidth info, and remove
+a dummy check of TT offset.
 
-Fixes: 254a1f6a29e7 ("arm64: dts: rockchip: add usb3 support to the radxa rock3 model a")
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-Link: https://lore.kernel.org/r/20220905064335.104650-1-michael.riesch@wolfvision.net
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/6fbc000756a4a4a7efbce651b785fee7561becb6.1615170625.git.chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mtk-sch.c | 37 ++++++++++++++-------------------
+ 1 file changed, 16 insertions(+), 21 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-index 0813c0c5abde..26912f02684c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-@@ -543,7 +543,7 @@ &usb2phy0_host {
- };
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index b1da3cb077c9..9a9685f74940 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -375,7 +375,6 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
+ 					sch_ep->bw_budget_table[j];
+ 		}
+ 	}
+-	sch_ep->allocated = used;
+ }
  
- &usb2phy0_otg {
--	vbus-supply = <&vcc5v0_usb_otg>;
-+	phy-supply = <&vcc5v0_usb_otg>;
- 	status = "okay";
- };
+ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+@@ -509,6 +508,19 @@ static void update_sch_tt(struct usb_device *udev,
+ 		list_del(&sch_ep->tt_endpoint);
+ }
  
++static int load_ep_bw(struct usb_device *udev, struct mu3h_sch_bw_info *sch_bw,
++		      struct mu3h_sch_ep_info *sch_ep, bool loaded)
++{
++	if (sch_ep->sch_tt)
++		update_sch_tt(udev, sch_ep, loaded);
++
++	/* update bus bandwidth info */
++	update_bus_bw(sch_bw, sch_ep, loaded);
++	sch_ep->allocated = loaded;
++
++	return 0;
++}
++
+ static u32 get_esit_boundary(struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	u32 boundary = sch_ep->esit;
+@@ -535,7 +547,6 @@ static int check_sch_bw(struct usb_device *udev,
+ 	u32 esit_boundary;
+ 	u32 min_num_budget;
+ 	u32 min_cs_count;
+-	bool tt_offset_ok = false;
+ 	int ret;
+ 
+ 	/*
+@@ -552,8 +563,6 @@ static int check_sch_bw(struct usb_device *udev,
+ 			ret = check_sch_tt(udev, sch_ep, offset);
+ 			if (ret)
+ 				continue;
+-			else
+-				tt_offset_ok = true;
+ 		}
+ 
+ 		if ((offset + sch_ep->num_budget_microframes) > esit_boundary)
+@@ -585,29 +594,15 @@ static int check_sch_bw(struct usb_device *udev,
+ 	sch_ep->cs_count = min_cs_count;
+ 	sch_ep->num_budget_microframes = min_num_budget;
+ 
+-	if (sch_ep->sch_tt) {
+-		/* all offset for tt is not ok*/
+-		if (!tt_offset_ok)
+-			return -ERANGE;
+-
+-		update_sch_tt(udev, sch_ep, 1);
+-	}
+-
+-	/* update bus bandwidth info */
+-	update_bus_bw(sch_bw, sch_ep, 1);
+-
+-	return 0;
++	return load_ep_bw(udev, sch_bw, sch_ep, true);
+ }
+ 
+ static void destroy_sch_ep(struct usb_device *udev,
+ 	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
+ {
+ 	/* only release ep bw check passed by check_sch_bw() */
+-	if (sch_ep->allocated) {
+-		update_bus_bw(sch_bw, sch_ep, 0);
+-		if (sch_ep->sch_tt)
+-			update_sch_tt(udev, sch_ep, 0);
+-	}
++	if (sch_ep->allocated)
++		load_ep_bw(udev, sch_bw, sch_ep, false);
+ 
+ 	if (sch_ep->sch_tt)
+ 		drop_tt(udev);
 -- 
 2.35.1
 
