@@ -2,120 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB0D5E9EA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3F95E9EA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiIZKIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S234602AbiIZKIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiIZKHk (ORCPT
+        with ESMTP id S233404AbiIZKIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:07:40 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36439B96;
-        Mon, 26 Sep 2022 03:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664186859; x=1695722859;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lhSJ6B97wE17BYE7duhPk1D95O/aSsVTRXqSPsbRYK0=;
-  b=Be8/pPkuGp4HgIoPynyR4ecg89ozXkYsweKh7a7Tv/kTNXMgXizDy7mY
-   qIBvIPISLLCO+OffplqLFQ1PmINqefEKgHD9+t92vJBBPl/OCm6lEa+s2
-   SoaoDLRlL3wgarGqsUecu3vYO/t25Y/RGABXd2tKZ0aNQVk6T1AY0E1sL
-   PFvtZVpeN2vgOZlIRAHcv5Qal/RWhB0NEmiOO8v9RU3JhlucDXSgslzlV
-   iLxi89mXXeawrobzDFXIQ2A4hXC3nSZHU586LFptcsuhjwEpyv/GGmL/O
-   4Y0891KalmmcuSFPZwu+6B5aePvW3+IoY1VXsd9Yf+o/OW2CzIBUMN2ge
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="327334603"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="327334603"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:07:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="710065907"
-X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
-   d="scan'208";a="710065907"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Sep 2022 03:07:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ocl1S-007k9e-00;
-        Mon, 26 Sep 2022 13:07:34 +0300
-Date:   Mon, 26 Sep 2022 13:07:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org, krzk@kernel.org, jarkko.nikula@linux.intel.com,
-        robh@kernel.org, semen.protsenko@linaro.org, sven@svenpeter.dev,
-        jsd@semihalf.com, rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v5 i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Message-ID: <YzF55ckrtsNaxZUq@smile.fi.intel.com>
-References: <20220926084654.2580827-1-tharunkumar.pasumarthi@microchip.com>
+        Mon, 26 Sep 2022 06:08:06 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD77C3846F;
+        Mon, 26 Sep 2022 03:08:04 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1ocl1s-0003cn-G3; Mon, 26 Sep 2022 12:08:00 +0200
+Date:   Mon, 26 Sep 2022 12:08:00 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Florian Westphal <fw@strlen.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, urezki@gmail.com,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Martin Zaharinov <micron10@gmail.com>
+Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
+Message-ID: <20220926100800.GB12777@breakpoint.cc>
+References: <20220923103858.26729-1-fw@strlen.de>
+ <Yy20toVrIktiMSvH@dhcp22.suse.cz>
+ <20220923133512.GE22541@breakpoint.cc>
+ <YzFZf0Onm6/UH7/I@dhcp22.suse.cz>
+ <20220926075639.GA908@breakpoint.cc>
+ <YzFplwSxwwsLpzzX@dhcp22.suse.cz>
+ <YzFxHlYoncuDl2fM@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926084654.2580827-1-tharunkumar.pasumarthi@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzFxHlYoncuDl2fM@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 02:16:54PM +0530, Tharun Kumar P wrote:
-> Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
-> Industrial and Automotive applications. This switch has multiple
-> downstream ports. In one of the Switch's Downstream port, there
-> is a multifunction endpoint for peripherals which includes an I2C
-> host controller. The I2C function in the endpoint operates at 100KHz,
-> 400KHz and 1 MHz and has buffer depth of 128 bytes.
-> This patch provides the I2C controller driver for the I2C function
-> of the switch.
+Michal Hocko <mhocko@suse.com> wrote:
+> +		old_tbl = rht_dereference_rcu(ht->tbl, ht);
+> +		size = tbl->size;
+> +
+> +		data = ERR_PTR(-EBUSY);
+> +
+> +		if (rht_grow_above_75(ht, tbl))
+> +			size *= 2;
+> +		/* Do not schedule more than one rehash */
+> +		else if (old_tbl != tbl)
+> +			return data;
+> +
+> +		data = ERR_PTR(-ENOMEM);
+> +
+> +		rcu_read_unlock();
+> +		new_tbl = bucket_table_alloc(ht, size, GFP_KERNEL);
+> +		rcu_read_lock();
 
-> ---
-> V4 -> V5:
-> 1. Removed autoprobe
-> ---
-> V3 -> V4:
-> 1. Removed typecasting for fields of min_t
-> 2. Replaced TRUE with true
-> ---
-> V2 -> V3:
-> 1. Replaced SIMPLE_DEV_PM_OPS with DEFINE_SIMPLE_DEV_PM_OPS
-> 2. Used devm_add_action API to avoid mixing devm and non-devm APIs
-> ---
-> RFC -> V2:
-> 1. Removed pci_free_irq_vectors API in code since pcim_enable_device
-> is used
-> 2. Added pci1xxxx_i2c_shutdown API in failure case of
-> pci_alloc_irq_vectors and devm_request_irq
-> 3. Used devm variant of i2c_add_adapter
-> 4. Resolved name collision and fixed styling issues in comments
-> ---
+I don't think this is going to work, there can be callers that
+rely on rcu protected data structures getting free'd.
 
-
-
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-
-There is no SoB tag in your message. Homework: to understand what went wrong
-and fix in v6. Without SoB tag this may not be considered at all.
-
-Also, if somebody gave you a tag (reviewers/maintainers) in the previous
-versions, it's your as a contributor responsibility to bear those tags with
-new versions in case there were no drastic functional changes. Otherwise
-there is no point to review your changes.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Also, network stack assumes synchronize_rcu() means that all
+inflight packets have completed processing.
