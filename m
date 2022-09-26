@@ -2,263 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C585EAE56
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2A45EAE55
 	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiIZRkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S231164AbiIZRkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbiIZRkL (ORCPT
+        with ESMTP id S230517AbiIZRkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 13:40:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9820F4F663;
-        Mon, 26 Sep 2022 10:05:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58128B80AD9;
-        Mon, 26 Sep 2022 17:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE9AC433D6;
-        Mon, 26 Sep 2022 17:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664211946;
-        bh=cTU+Ub2quW2nLdB1TbfvofLZX9mROxzv+OpPyAVBbeQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9IRbOWstGezTPR+md21/CWgL7xbBdGFuxCR0+YUJjO4t33th2wvDOT8yoquEMp5l
-         3IXK2trJE5vi6JaiL9zTccLcrDBYmhAC8Mda4G3LThP33h51QvJUEQddkP4FHH/Lic
-         heZYjuIkFgmSL5D4XGM8+a/YiGIL4muTJmNPlZaUwE+eSovR/zH5UcBw33wmRM4+T3
-         Vy2+vMLWkZKI51tq1JxSnUyx7GrGB88KRHRaVQdBQNVJnWO3G/YAy/D2ad43e2Q9F9
-         cDiOO/yJ12w24x4Te/o5i+7dX1FGpB5w5tf+vttB0zc9jZ0tQ8v+/DtVCNTwA5PeQ/
-         Zu9wipqNH4KZw==
-Date:   Mon, 26 Sep 2022 10:05:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH v5 29/30] thermal/intel/int340x: Replace parameter to
- simplify
-Message-ID: <YzHb50/4njPa1TR1@dev-arch.thelio-3990X>
-References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
- <20220926140604.4173723-30-daniel.lezcano@linaro.org>
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BEA8A7C0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id r12-20020a92cd8c000000b002f32d0d9fceso5652594ilb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=zP2Ks3+peJR4d+FzWakp72trx11nZT8Tmm3I3GDmu/A=;
+        b=zKoxN2GyQyCJCSElQp4EF8t0twrH5ZMki8wKWG900+BLTb+5HfXuqhpaBqDyZAVJsz
+         hm4NfvvmlDXggqVJTwBiE+hsYMWntQsbkAZ9qeInvEfyF9Or5VgYxKtNqcXSpp3vu5aQ
+         /PdovLgUQUTXi6cO0QVTVIXgKs6hAvVYutgKjGsI6hL1r99whK+FDpaTYSvDrgrIoAk7
+         EQsafQu6jO4MRf1QBdWZfBYl7DoZ5I1ebfJfSbIFtUQO5TW1PEcq2c3y2MZqqeu3K8YK
+         B4f4WwZ03TSEl+BQ/XMy2uDfr+K8tk4o/2zBEQ7CWJOQXOcQ2nibVX+taeYREE9agMrO
+         yAhg==
+X-Gm-Message-State: ACrzQf1FeHpX1uJLNQnNvX/c/eoqurj1pQ9DifgvlpWaNfZwwpJtEy/N
+        ZrrUepCAmOcfLO1blhXpGsnyBM1PpMZwIGNzrKXa+21R3vY3
+X-Google-Smtp-Source: AMsMyM6f6LJH4VuMNn/mHWq5BaFs4dxaeKRmmQ8VcUlH6vuwZ7Ea59IFErU6MNVKxRl/VyzUZfMhDVfeWujt3vH7OunQ8j4rHrue
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926140604.4173723-30-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1683:b0:35a:4772:edc2 with SMTP id
+ f3-20020a056638168300b0035a4772edc2mr12077302jat.128.1664211945824; Mon, 26
+ Sep 2022 10:05:45 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 10:05:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dca7e505e9978943@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Write in udf_write_fi
+From:   syzbot <syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hello,
 
-On Mon, Sep 26, 2022 at 04:06:03PM +0200, Daniel Lezcano wrote:
-> In the process of replacing the get_trip_* ops by the generic trip
-> points, the current code has an 'override' property to add another
-> indirection to a different ops.
-> 
-> Rework this approach to prevent this indirection and make the code
-> ready for the generic trip points conversion.
-> 
-> Actually the get_temp() is different regarding the platform, so it is
-> pointless to add a new set of ops but just create dynamically the ops
-> at init time.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../int340x_thermal/int340x_thermal_zone.c    | 31 ++++++++-----------
->  .../int340x_thermal/int340x_thermal_zone.h    |  4 +--
->  .../processor_thermal_device.c                | 10 ++----
->  3 files changed, 18 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> index 62c0aa5d0783..10731b9a140a 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> @@ -18,9 +18,6 @@ static int int340x_thermal_get_zone_temp(struct thermal_zone_device *zone,
->  	unsigned long long tmp;
->  	acpi_status status;
->  
-> -	if (d->override_ops && d->override_ops->get_temp)
-> -		return d->override_ops->get_temp(zone, temp);
-> -
->  	status = acpi_evaluate_integer(d->adev->handle, "_TMP", NULL, &tmp);
->  	if (ACPI_FAILURE(status))
->  		return -EIO;
-> @@ -46,9 +43,6 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
->  	struct int34x_thermal_zone *d = zone->devdata;
->  	int i;
->  
-> -	if (d->override_ops && d->override_ops->get_trip_temp)
-> -		return d->override_ops->get_trip_temp(zone, trip, temp);
-> -
->  	if (trip < d->aux_trip_nr)
->  		*temp = d->aux_trips[trip];
->  	else if (trip == d->crt_trip_id)
-> @@ -79,9 +73,6 @@ static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
->  	struct int34x_thermal_zone *d = zone->devdata;
->  	int i;
->  
-> -	if (d->override_ops && d->override_ops->get_trip_type)
-> -		return d->override_ops->get_trip_type(zone, trip, type);
-> -
->  	if (trip < d->aux_trip_nr)
->  		*type = THERMAL_TRIP_PASSIVE;
->  	else if (trip == d->crt_trip_id)
-> @@ -112,9 +103,6 @@ static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
->  	acpi_status status;
->  	char name[10];
->  
-> -	if (d->override_ops && d->override_ops->set_trip_temp)
-> -		return d->override_ops->set_trip_temp(zone, trip, temp);
-> -
->  	snprintf(name, sizeof(name), "PAT%d", trip);
->  	status = acpi_execute_simple_method(d->adev->handle, name,
->  			millicelsius_to_deci_kelvin(temp));
-> @@ -134,9 +122,6 @@ static int int340x_thermal_get_trip_hyst(struct thermal_zone_device *zone,
->  	acpi_status status;
->  	unsigned long long hyst;
->  
-> -	if (d->override_ops && d->override_ops->get_trip_hyst)
-> -		return d->override_ops->get_trip_hyst(zone, trip, temp);
-> -
->  	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL, &hyst);
->  	if (ACPI_FAILURE(status))
->  		*temp = 0;
-> @@ -217,7 +202,7 @@ static struct thermal_zone_params int340x_thermal_params = {
->  };
->  
->  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
-> -				struct thermal_zone_device_ops *override_ops)
-> +						     int (*get_temp) (struct thermal_zone_device *, int *))
->  {
->  	struct int34x_thermal_zone *int34x_thermal_zone;
->  	acpi_status status;
-> @@ -231,8 +216,15 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->  		return ERR_PTR(-ENOMEM);
->  
->  	int34x_thermal_zone->adev = adev;
-> -	int34x_thermal_zone->override_ops = override_ops;
->  
-> +	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
-> +					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
-> +	if (!int34x_thermal_zone->ops)
-> +		goto err_ops_alloc;
+syzbot found the following issue on:
 
-I assume I was cc'd on this change due to my fix up patch:
+HEAD commit:    1a61b828566f Merge tag 'char-misc-6.0-rc7' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=153836e4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=8a5a459f324d510ea15a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e7fb54880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14864288880000
 
-https://lore.kernel.org/20220923152009.1721739-1-nathan@kernel.org/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/367e34e7ff83/disk-1a61b828.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/91a2819fe451/vmlinux-1a61b828.xz
 
-However, I don't see that applied here. I don't mind it being squashed
-in to keep the build as clean as possible through bisects.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com
 
-Additionally, I did a diff of v4 to v5 to apply on top of next-20220923
-and I noticed there were a significant number of places where there was
-whitespace added where it probably should not have been. Other than
-that, v5 works on all the machines that had issues so thank you for the
-quick fix!
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/09/12 12:00 (1000)
+==================================================================
+BUG: KASAN: null-ptr-deref in udf_write_fi+0x380/0xff0 fs/udf/namei.c:91
+Write of size 18446744073709551572 at addr 0000000000000020 by task syz-executor377/3607
 
-Cheers,
-Nathan
+CPU: 0 PID: 3607 Comm: syz-executor377 Not tainted 6.0.0-rc6-syzkaller-00309-g1a61b828566f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memset+0x20/0x40 mm/kasan/shadow.c:44
+ udf_write_fi+0x380/0xff0 fs/udf/namei.c:91
+ udf_rename+0x45e/0x1250 fs/udf/namei.c:1173
+ vfs_rename+0x115e/0x1a90 fs/namei.c:4756
+ do_renameat2+0xb5e/0xc80 fs/namei.c:4907
+ __do_sys_rename fs/namei.c:4953 [inline]
+ __se_sys_rename fs/namei.c:4951 [inline]
+ __x64_sys_rename+0x7d/0xa0 fs/namei.c:4951
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7e9cef1b69
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe69a64f88 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f7e9cef1b69
+RDX: 0000000000000f90 RSI: 0000000020000880 RDI: 00000000200007c0
+RBP: 00007ffe69a64f90 R08: 0000000000000002 R09: 0000000000003731
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+R13: 00007ffe69a64ff8 R14: 00007ffe69a65030 R15: 0000000000000003
+ </TASK>
+==================================================================
 
-> +	if (get_temp)
-> +		int34x_thermal_zone->ops->get_temp = get_temp;
-> +	
->  	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
->  	if (ACPI_FAILURE(status))
->  		trip_cnt = 0;
-> @@ -262,7 +254,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->  						acpi_device_bid(adev),
->  						trip_cnt,
->  						trip_mask, int34x_thermal_zone,
-> -						&int340x_thermal_zone_ops,
-> +						int34x_thermal_zone->ops,
->  						&int340x_thermal_params,
->  						0, 0);
->  	if (IS_ERR(int34x_thermal_zone->zone)) {
-> @@ -281,6 +273,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->  	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
->  	kfree(int34x_thermal_zone->aux_trips);
->  err_trip_alloc:
-> +	kfree(int34x_thermal_zone->ops);
-> +err_ops_alloc:
->  	kfree(int34x_thermal_zone);
->  	return ERR_PTR(ret);
->  }
-> @@ -292,6 +286,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
->  	thermal_zone_device_unregister(int34x_thermal_zone->zone);
->  	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
->  	kfree(int34x_thermal_zone->aux_trips);
-> +	kfree(int34x_thermal_zone->ops);
->  	kfree(int34x_thermal_zone);
->  }
->  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> index 3b4971df1b33..e28ab1ba5e06 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> @@ -29,13 +29,13 @@ struct int34x_thermal_zone {
->  	int hot_temp;
->  	int hot_trip_id;
->  	struct thermal_zone_device *zone;
-> -	struct thermal_zone_device_ops *override_ops;
-> +	struct thermal_zone_device_ops *ops;
->  	void *priv_data;
->  	struct acpi_lpat_conversion_table *lpat_table;
->  };
->  
->  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
-> -				struct thermal_zone_device_ops *override_ops);
-> +				int (*get_temp) (struct thermal_zone_device *, int *));
->  void int340x_thermal_zone_remove(struct int34x_thermal_zone *);
->  int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone);
->  
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> index a8d98f1bd6c6..317703027ce9 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> @@ -207,10 +207,6 @@ static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
->  	return ret;
->  }
->  
-> -static struct thermal_zone_device_ops proc_thermal_local_ops = {
-> -	.get_temp       = proc_thermal_get_zone_temp,
-> -};
-> -
->  static int proc_thermal_read_ppcc(struct proc_thermal_device *proc_priv)
->  {
->  	int i;
-> @@ -285,7 +281,7 @@ int proc_thermal_add(struct device *dev, struct proc_thermal_device *proc_priv)
->  	struct acpi_device *adev;
->  	acpi_status status;
->  	unsigned long long tmp;
-> -	struct thermal_zone_device_ops *ops = NULL;
-> +	int (*get_temp) (struct thermal_zone_device *, int *) = NULL;
->  	int ret;
->  
->  	adev = ACPI_COMPANION(dev);
-> @@ -304,10 +300,10 @@ int proc_thermal_add(struct device *dev, struct proc_thermal_device *proc_priv)
->  		/* there is no _TMP method, add local method */
->  		stored_tjmax = get_tjmax();
->  		if (stored_tjmax > 0)
-> -			ops = &proc_thermal_local_ops;
-> +			get_temp = proc_thermal_get_zone_temp;
->  	}
->  
-> -	proc_priv->int340x_zone = int340x_thermal_zone_add(adev, ops);
-> +	proc_priv->int340x_zone = int340x_thermal_zone_add(adev, get_temp);
->  	if (IS_ERR(proc_priv->int340x_zone)) {
->  		return PTR_ERR(proc_priv->int340x_zone);
->  	} else
-> -- 
-> 2.34.1
-> 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
