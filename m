@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A4A5EB52F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F615EB533
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiIZXNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S230350AbiIZXNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiIZXM7 (ORCPT
+        with ESMTP id S230298AbiIZXN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:12:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3512DABF36;
-        Mon, 26 Sep 2022 16:12:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9BD614B9;
-        Mon, 26 Sep 2022 23:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8218C433D6;
-        Mon, 26 Sep 2022 23:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664233978;
-        bh=i+4cYWvvbX6eB0hVVJ0oMScoDAoRVCjurrZ2ldB88mI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EXll/xeeQCl+YhmYZ6UqxFaW/iha5aafiybSf8zR9XSfb+TYeKvsKHt0v35nZDvrf
-         pKzPxYe/iRJ299NKHCGS40Cj6wVGkQ/hq49Pu9X0MrSJTppWoE1hEYGU9CZ9HtBdMs
-         rGbjCMzhKZR+j/+0QeI+37zgIo3wgACx0tIS3fHTzZqJX9x22CxBJOVIq0EJzI+Fvr
-         Bzk5+cfJuBgZj6i/C84k4DSrMAdBqteleTWMWKWbUGRQjsGoDwkWDPsocH8Erqen1N
-         Q28/YGaWQaC6fJtTWEkHKGSjPgbM+QbHeHeKaidGwpJ6HIgw6WGeZl0ykOvQu3dzKe
-         eUDfBo7qwcB3Q==
-From:   broonie@kernel.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Date:   Tue, 27 Sep 2022 00:12:46 +0100
-Message-Id: <20220926231246.1140133-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 26 Sep 2022 19:13:27 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7FEAC393;
+        Mon, 26 Sep 2022 16:13:23 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13122bfaea6so6182105fac.11;
+        Mon, 26 Sep 2022 16:13:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/GOX4oLLOEAcOdQMFgtIV2BH6YmfCv4mZAsaXgTNcNk=;
+        b=PuRe6GYqOr8w4yHxoKQj/KN2CqJnrz4vnzMIeCiJdUnDWGzQfTFVSgGdH3XUMX6xBY
+         sK8n7EgwQsqzbxJbAq42/om6Ha7FcyxLJRqrGYV9u3FkEVvpXVl7eBajA7Yb9TpQlJTq
+         z/breZjn2FiqFxDDGF67lNAD5FCqytWSEK6Tf19gabwLujF0h9PScl/28bv5QEsf5Nc3
+         lWubFUZB4XUmf6P2ANn0Pen+i2yI7Tld5kUhe8U7xPx5FNQFTjciJ3ii85N4AAHE6krt
+         Ch6R+c9IXcEi1xRYUYk/GmGkaslUkV1/YWtRX4PLEcMj8r89pml2Ok3JSGmJAGdhnMp3
+         1rew==
+X-Gm-Message-State: ACrzQf3A98SdPFd4ET9dOCETQFPQ/131AQVV0S1eMpx+Zn3P35CcMxH3
+        O4ztiA+PLL6IhlsQ9fY9JtxIlmPMsg==
+X-Google-Smtp-Source: AMsMyM5VFcXp33QC3V21osLPSDzEkS3UB1QeDgP6rUP4dKnc6s5JIVG9nWg12Lk0H9YLzncqyUOjnw==
+X-Received: by 2002:a05:6870:1694:b0:127:8d30:5afc with SMTP id j20-20020a056870169400b001278d305afcmr656928oae.26.1664234003049;
+        Mon, 26 Sep 2022 16:13:23 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056808014600b003509cc4ad4esm7724560oie.39.2022.09.26.16.13.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 16:13:22 -0700 (PDT)
+Received: (nullmailer pid 3147399 invoked by uid 1000);
+        Mon, 26 Sep 2022 23:13:21 -0000
+Date:   Mon, 26 Sep 2022 18:13:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-gpio@vger.kernel.org,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH 10/32] dt-bindings: pinctrl: qcom,ipq6018: do not require
+ function on non-GPIOs
+Message-ID: <20220926231321.GA3147326-robh@kernel.org>
+References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
+ <20220924080459.13084-11-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924080459.13084-11-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Sat, 24 Sep 2022 10:04:37 +0200, Krzysztof Kozlowski wrote:
+> Certain pins, like SDcard related, do not have functions and such should
+> not be required.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,ipq6018-pinctrl.yaml       | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
-
-Today's linux-next merge of the rust tree got a conflict in:
-
-  Makefile
-
-between commit:
-
-  a6036a41bffba ("kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3")
-
-from the kbuild tree and commit:
-
-  4f6a738b5c348 ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc Makefile
-index 2dba99828e893,a105cb893b4ca..0000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -757,10 -819,20 +821,17 @@@ KBUILD_CFLAGS	+= $(call cc-disable-warn
-  
-  ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-  KBUILD_CFLAGS += -O2
-+ KBUILD_RUSTFLAGS += -Copt-level=2
- -else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
- -KBUILD_CFLAGS += -O3
- -KBUILD_RUSTFLAGS += -Copt-level=3
-  else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-  KBUILD_CFLAGS += -Os
-+ KBUILD_RUSTFLAGS += -Copt-level=s
-  endif
-  
+Reviewed-by: Rob Herring <robh@kernel.org>
