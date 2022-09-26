@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3BB5EB389
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5D85EB392
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiIZVtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S230130AbiIZVtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiIZVtO (ORCPT
+        with ESMTP id S229580AbiIZVtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:49:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14809AF4B3;
-        Mon, 26 Sep 2022 14:49:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 82F04CE13C2;
-        Mon, 26 Sep 2022 21:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863D0C433C1;
-        Mon, 26 Sep 2022 21:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664228949;
-        bh=c5mfyvzDdtpGvBZNQbXZ/taarYpntfkhxbA0y29pcg0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EqYLoFHjZB9GeNvg5n2j0bK9J6ES8kua1hp0Y4O/va9opVdpxZLsnlb6xsFdRCOZl
-         jCzZNlrxwtVRg0gUTsSjbs3TzszokzPt3iAF6xIkgxFJwgCeck8YnmuMExrUEvYFJD
-         rcDH7jGRj3ix9cf+F302oIGojrnthS6yPDftr8TlP27K88T6Uc2uk+5vVHyFgtAHNe
-         VrjA6BcCdvrs12+LHCjK4+304y2xHpxv91nEjnk33B1RZnmNSgf18AAz0GO8U8Nqxl
-         Cg+G3rGdiWBJQJ09RYvjL3hXJH5nqvPBuUlmrzq52Okm14PJgWh+PfnJeMgg3+cFcG
-         zWwa0/HHp+fmQ==
-Date:   Mon, 26 Sep 2022 16:49:04 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] ipw2x00: Replace zero-length array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIeULWc17XSIglv@work>
+        Mon, 26 Sep 2022 17:49:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA299792C4;
+        Mon, 26 Sep 2022 14:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664228989; x=1695764989;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7TT080Crbah1HOhPKORs2ZNGlgRDfHlqPppfwXjOuaw=;
+  b=WC3tPOJEDMDsF2094BX8hZxagInet2gwyRd6qMxv46VJILgnRvo3XjYv
+   zKXaurPI/mooTVTFrlhOMPqXn5aAWyVR1ceRRRuKY5LgRMY6ofUteuMWr
+   eR68jX0a8x7XliyoeTjTfhEkSQZiUSM9Z69L3yhE03P8Kg4rfnZhA4ppS
+   HcsbUUx0aM9saKbQIvmQvsyStuU4plxhwBALd2ycJpkdVRLL6o29DRrlo
+   BKo9ojGsmzPHtUeWPMjl8lkn3JQNr4akIk9sXhWMGzRqJL9rVLc01YlrI
+   7l9JZjaAnn3uN7rvkVkkmGJbHYsMB1btkAtTOFG+YrNcHA+bMcDqDp+tK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="362982005"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="362982005"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="763611668"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="763611668"
+Received: from yzhou16-mobl.amr.corp.intel.com (HELO [10.209.44.81]) ([10.209.44.81])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:47 -0700
+Message-ID: <faa01372-07b0-3438-9305-123a3de9cc47@intel.com>
+Date:   Mon, 26 Sep 2022 14:49:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ACPI: processor idle: Practically limit "Dummy wait"
+ workaround to old Intel systems
+Content-Language: en-US
+To:     Kim Phillips <kim.phillips@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-acpi@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        stable@vger.kernel.org
+References: <20220922184745.3252932-1-dave.hansen@intel.com>
+ <78d13a19-2806-c8af-573e-7f2625edfab8@intel.com>
+ <54572271-d5ca-820f-911e-19fd9d80ae2c@intel.com>
+ <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated and we are moving towards adopting
-C99 flexible-array members, instead. So, replace zero-length arrays
-declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
-helper macro.
+On 9/23/22 11:36, Kim Phillips wrote:
+> Can it be cc:stable@vger.kernel.org, since it applies cleanly as far
+> back as this v5.4 commit?:
 
-This helper allows for flexible-array members in unions.
+I just sent the pull request to Linus for this fix.  I realized that I
+didn't tag it for stable@.  If it gets applied, I'll send a request for
+it to be picked up for stable@, via "Option 2":
 
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/220
-Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/net/wireless/intel/ipw2x00/ipw2200.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Option 2
+> ********
+> 
+> After the patch has been merged to Linus' tree, send an email to
+> stable@vger.kernel.org containing the subject of the patch, the commit ID,
+> why you think it should be applied, and what kernel version you wish it to
+> be applied to.
 
-diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2200.h b/drivers/net/wireless/intel/ipw2x00/ipw2200.h
-index 55cac934f4ee..09ddd21608d4 100644
---- a/drivers/net/wireless/intel/ipw2x00/ipw2200.h
-+++ b/drivers/net/wireless/intel/ipw2x00/ipw2200.h
-@@ -651,7 +651,7 @@ struct ipw_rx_notification {
- 		struct notif_link_deterioration link_deterioration;
- 		struct notif_calibration calibration;
- 		struct notif_noise noise;
--		u8 raw[0];
-+		DECLARE_FLEX_ARRAY(u8, raw);
- 	} u;
- } __packed;
- 
--- 
-2.34.1
-
+Sorry about that.
