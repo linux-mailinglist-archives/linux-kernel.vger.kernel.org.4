@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5845E9BD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE94D5E9BDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiIZIUJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 26 Sep 2022 04:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S233792AbiIZIVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbiIZITy (ORCPT
+        with ESMTP id S234302AbiIZIUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:19:54 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7551208D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:19:49 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-405-Qb3Og9akNIqbdq-vx1UKdQ-1; Mon, 26 Sep 2022 09:19:46 +0100
-X-MC-Unique: Qb3Og9akNIqbdq-vx1UKdQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 26 Sep
- 2022 09:19:40 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Mon, 26 Sep 2022 09:19:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'K Prateek Nayak' <kprateek.nayak@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andi@lisas.de" <andi@lisas.de>, "puwen@hygon.cn" <puwen@hygon.cn>,
-        "mario.limonciello@amd.com" <mario.limonciello@amd.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
-        "gautham.shenoy@amd.com" <gautham.shenoy@amd.com>,
-        Calvin Ong <calvin.ong@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD
- and Intel processors
-Thread-Topic: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD
- and Intel processors
-Thread-Index: AQHYz2KQHQ0Aty345ECS39s1ZZ3yPa3xXk7w
-Date:   Mon, 26 Sep 2022 08:19:40 +0000
-Message-ID: <93705b7dab2f4d6db7f4631648daf16f@AcuMS.aculab.com>
-References: <20220923153801.9167-1-kprateek.nayak@amd.com>
-In-Reply-To: <20220923153801.9167-1-kprateek.nayak@amd.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 26 Sep 2022 04:20:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56777357FC;
+        Mon, 26 Sep 2022 01:20:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 199C3CE1079;
+        Mon, 26 Sep 2022 08:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F18C433C1;
+        Mon, 26 Sep 2022 08:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664180426;
+        bh=qE+sUkuGFoPDcFsp8tOmihQKG0t6W0MTW0AZE4mfjB4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=jTSGFn25/qVW5yI5AjsbHw3hxCyQW1eSdqbF8FamhZ+FO7QUTqYsunUQnfFaHqQsh
+         xU8rSvoK+bA67bFBlE5jLvcbZnbF5E70xl3FExoW0OG5hhPeMh0MCjVGZvHZ0g3EEZ
+         nvp8pN4WZgFLEueWXQIUTHML5xQjtgxOxhfZHL8p+/03D1Ja1qV4XryYi03CSRpWdt
+         U39icOTT/H1i94HqXT0A9JnwDWq8EYETVdkJn6GSWSDG35b8oWesjE3CqPTL4W7wqS
+         GrzGV7LQpshTuWsOxW47tZb8g37dVv2dXqwKsVZjFQZMDlOlaJv/WjJ59LFEvTrNuy
+         p/LP3ugRNmhrw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos\/upstreaming\@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka\@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno\@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten\@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen\@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao\, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King \(Oracle\)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl\@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list\@infineon.com" 
+        <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Stockholm syndrome with Linux wireless?
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+        <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+        <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+        <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+        <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+        <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+        <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk>
+        <CACRpkdYwJLO18t08zqu_Y1gaSpZJMc+3MFxRUtQzLkJF2MqmqQ@mail.gmail.com>
+Date:   Mon, 26 Sep 2022 11:20:18 +0300
+In-Reply-To: <CACRpkdYwJLO18t08zqu_Y1gaSpZJMc+3MFxRUtQzLkJF2MqmqQ@mail.gmail.com>
+        (Linus Walleij's message of "Thu, 22 Sep 2022 22:18:34 +0200")
+Message-ID: <87wn9q35tp.fsf_-_@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +87,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: K Prateek Nayak
-> Sent: 23 September 2022 16:38
-....
-> 
-> This workaround is very painful on modern systems with a large number of
-> cores. The "inl()" can take thousands of cycles. Sampling certain
-> workloads with IBS on AMD Zen3 system shows that a significant amount of
-> time is spent in the dummy op, which incorrectly gets accounted as
-> C-State residency. A large C-State residency value can prime the cpuidle
-> governor to recommend a deeper C-State during the subsequent idle
-> instances, starting a vicious cycle, leading to performance degradation
-> on workloads that rapidly switch between busy and idle phases.
-> (For the extent of the performance degradation refer link [2])
+(changing the subject as this has nothing to do with brcmfmac)
 
-Isn't that a horrid bug itself?
-Sounds like it affects any code that is doing pio reads of hardware buffers.
-While they are slow they are necessary.
-IIRC any PCIe read into an Altera fpga takes about 128 cycles of the 125MHz
-clock. The Intel cpu I've checked will only execute one concurrent PCIe read
-for each cpu core - so the cpu soon stalls for thousands of clocks.
+Linus Walleij <linus.walleij@linaro.org> writes:
 
-> The dummy wait is unnecessary on processors based on the Zen
-> microarchitecture (AMD family 17h+ and HYGON). Skip it to prevent
-> polluting the C-state residency information. Among the pre-family 17h
-> AMD processors, there has been at least one report of an AMD Athlon on a
-> VIA chipset (circa 2006) where this this problem was seen (see [3] for
-> report by Andreas Mohr).
-> 
-> Modern Intel processors use MWAIT based C-States in the intel_idle driver
-> and are not impacted by this code path. For older Intel processors that
-> use the acpi_idle driver, a workaround was suggested by Dave Hansen and
-> Rafael J. Wysocki to regard all Intel chipsets using the IOPORT based
-> C-state management as being affected by this problem (see [4] for
-> workaround proposed).
+> On Thu, Sep 22, 2022 at 3:31 PM Alvin =C5=A0ipraga <ALSI@bang-olufsen.dk>=
+ wrote:
+>
+>> I would also point out that the BCM4359 is equivalent to the
+>> CYW88359/CYW89359 chipset, which we are using in some of our
+>> products. Note that this is a Cypress chipset (identifiable by the
+>> Version: ... (... CY) tag in the version string). But the FW Konrad is
+>> linking appears to be for a Broadcom chipset.
+>
+> This just makes me think about Peter Robinsons seminar at
+> LPC last week...
+> "All types of wireless in Linux are terrible and why the vendors
+> should feel bad"
+> https://lpc.events/event/16/contributions/1278/attachments/1120/2153/wire=
+less-issues.pdf
 
-Can you use a surrogate (maybe AVX support?) to exclude large groups
-on modern cpu?
+Thanks, this was a good read! I'm always interested about user and
+downstream feedback, both good and bad :) But I didn't get the Stockholm
+syndrome comment in the end, what does he mean with that?
 
-Another possibility is that is the io address doesn't really matter
-are there any locations that have moved on-die and are now executed
-much faster than the ISA bus speed of older systems?
-Or do all the 'originally ISA' peripherals still run at ISA speeds?
+BTW we have a wireless workshop in netdevconf 0x16, it would be great to
+have there a this kind of session discussing user pain points:
 
-	David
+https://netdevconf.info/0x16/session.html?Wireless-Workshop
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
