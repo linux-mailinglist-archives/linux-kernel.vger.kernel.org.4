@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93915E99D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6795E99D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiIZGro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S233696AbiIZGsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiIZGrg (ORCPT
+        with ESMTP id S230060AbiIZGsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:47:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF6224BE0;
-        Sun, 25 Sep 2022 23:47:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FB5061503;
-        Mon, 26 Sep 2022 06:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D481C433D6;
-        Mon, 26 Sep 2022 06:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664174854;
-        bh=Y2sNyycpz3WfUGxxxwkrxUxDfizPmjY1zyzAphv6PIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R01HPFGgQkDQRVV6X/B85xXIWfuTBp4FYgiRlfvicfMadW+sS9Aa4uveH3JqL9r23
-         Ff6Sw3/AUKjIe4eR/Md3V2qY3UjWduTwexkEjHI2Udigby3+gkYfFqPtAt3lvzZ5yX
-         uFPWzkAzYRCDL1i9yqqNN14LCX5p+qNGKO1nNU1M=
-Date:   Mon, 26 Sep 2022 08:47:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KEXEC" <kexec@lists.infradead.org>,
-        Coiby Xu <coxu@redhat.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH 5.15 0/6] arm64: kexec_file: use more system keyrings to
- verify kernel image signature + dependencies
-Message-ID: <YzFLBJukjDy7uNVl@kroah.com>
-References: <cover.1663951201.git.msuchanek@suse.de>
- <Yy7Ll1QJ+u+nkic9@kroah.com>
- <20220924094521.GY28810@kitsune.suse.cz>
- <Yy7YTnJKkv1UtvWF@kroah.com>
- <20220924115523.GZ28810@kitsune.suse.cz>
+        Mon, 26 Sep 2022 02:48:13 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBC424BCC
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:48:12 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j16so9337258lfg.1
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=xnB45KVy0Jgmqvqqa4iP23q7Nu/qWxhqmCJpHgjco6w=;
+        b=tvjHBcsJmL2XPud8Uer4bOC9txkaora6eR8nrP5h+Vok2cqX4r5azTbIZDe8tapJ4n
+         8/aWk5uQJw2LMAN5WuRUNdYkwb+u9BWfYbVHjgedq6hZM0ff4cIBnawp4Y6+1bojlGJS
+         84ov4d8ycMORsBMKRzAwuBv2GeAXpbCANhIrbbns6YEx8w7SbCzCP2X1j6yVw3zwTmnL
+         LivK70YNqTbW0ZCdxY16ouQIDhpNdblenFrXTQcvtzNoqXUmEl8CMFCysAWCBwP1Mctb
+         uDEn3uoi7UMjI181R4AWhgzvE9jkuF+7C63B6556EHDmrx5Gtm/PWUJO4eJC1Sm3ivr1
+         uXiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=xnB45KVy0Jgmqvqqa4iP23q7Nu/qWxhqmCJpHgjco6w=;
+        b=SwkyHnPKyOqt4Xz9UumNEjD9EWidqHEBW7ABf53uYuJKwJnOukI1Lue2wA/C2e0AnJ
+         8IBH+UZxwhxeK7NtSPSCl3MfQgezkmHQ39NAGNPiLGlUZIn80F3gPO89VL9OTO7bVxTl
+         ZTol4X41vJmRKUGP84OLH9RswwUw5YcSpUtheuCzwC1zdYa9vhO4Ddx9/HRA+B0MShM9
+         7uA+W6AU303FqKQtqGafWpx2iOtW3I/RGC2nnrC978z71Te7wHCPG0WexWCAxpag57s+
+         hWE0RT8aYtLCQ93sDZSA1FErGTNpBQHsUe8MsKwn0fZ4UAt+iMO9U6hZif4lSgLD1bzx
+         MC9A==
+X-Gm-Message-State: ACrzQf0cT1jWhD/SmKuFHm2Pwkarz86SXrzZbYkyL/w8G9sh7sT8R339
+        E8G9ocae48aReBuk1Q2kf0WWaw==
+X-Google-Smtp-Source: AMsMyM5xQLsMt+mT+gwGq0IiKT0zS1FucufeCIblvlZU2Da5RRo5Ahailez9kxVVrHpY5PaOe+tZ0Q==
+X-Received: by 2002:a05:6512:1092:b0:4a1:de5f:1cc9 with SMTP id j18-20020a056512109200b004a1de5f1cc9mr258895lfg.219.1664174890794;
+        Sun, 25 Sep 2022 23:48:10 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w6-20020a05651234c600b0049f6484694bsm2440444lfr.161.2022.09.25.23.48.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 23:48:10 -0700 (PDT)
+Message-ID: <cdfe6f83-266a-de8b-d518-cc8b7fd45732@linaro.org>
+Date:   Mon, 26 Sep 2022 08:48:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924115523.GZ28810@kitsune.suse.cz>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 17/32] dt-bindings: pinctrl: qcom,msm8909-tlmm: do not
+ require function on non-GPIOs
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sricharan R <sricharan@codeaurora.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
+ <20220924080459.13084-18-krzysztof.kozlowski@linaro.org>
+ <YzBe5NdhGqR+2bxN@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YzBe5NdhGqR+2bxN@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 01:55:23PM +0200, Michal Suchánek wrote:
-> On Sat, Sep 24, 2022 at 12:13:34PM +0200, Greg Kroah-Hartman wrote:
-> > On Sat, Sep 24, 2022 at 11:45:21AM +0200, Michal Suchánek wrote:
-> > > On Sat, Sep 24, 2022 at 11:19:19AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Fri, Sep 23, 2022 at 07:10:28PM +0200, Michal Suchanek wrote:
-> > > > > Hello,
-> > > > > 
-> > > > > this is backport of commit 0d519cadf751
-> > > > > ("arm64: kexec_file: use more system keyrings to verify kernel image signature")
-> > > > > to table 5.15 tree including the preparatory patches.
-> > > > 
-> > > > This feels to me like a new feature for arm64, one that has never worked
-> > > > before and you are just making it feature-parity with x86, right?
-> > > > 
-> > > > Or is this a regression fix somewhere?  Why is this needed in 5.15.y and
-> > > > why can't people who need this new feature just use a newer kernel
-> > > > version (5.19?)
-> > > 
-> > > It's half-broken implementation of the kexec kernel verification. At the time
-> > > it was implemented for arm64 we had the platform and secondary keyrings
-> > > and x86 was using them but on arm64 the initial implementation ignores
-> > > them.
-> > 
-> > Ok, so it's something that never worked.  Adding support to get it to
-> > work doesn't really fall into the stable kernel rules, right?
+On 25/09/2022 16:00, Stephan Gerhold wrote:
+>> +    allOf:
+>> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
+>> +      - if:
+>> +          properties:
+>> +            pins:
+>> +              pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-7])$"
+>> +        then:
+>> +          required:
+>> +            - function
+>>  
 > 
-> Not sure. It was defective, not using the facilities available at the
-> time correctly. Which translates to kernels that can be kexec'd on x86
-> failing to kexec on arm64 without any explanation (signed with same key,
-> built for the appropriate arch).
+> Is it possible to place this into qcom,tlmm-common.yaml? If the pattern
+> is only used to make "function" required for GPIOs, then it should not
+> matter if it matches just the prefix ("^gpio") or the exact set of
+> allowed GPIO numbers. The definition of the "pins" property will already
+> take care of validating those.
 
-Feature parity across architectures is not a "regression", but rather a
-"this feature is not implemented for this architecture yet" type of
-thing.
+Hm, very good idea.
 
-> > Again, what's wrong with 5.19 for anyone who wants this?  Who does want
-> > this?
 > 
-> Not sure, really.
-> 
-> The final patch was repeatedly backported to stable and failed to build
-> because the prerequisites were missing.
+> Or are there some Qcom SoCs where a GPIO without "function" is valid?
 
-That's because it was tagged, but now that you show the full set of
-requirements, it's pretty obvious to me that this is not relevant for
-going this far back.
+Quick look at drivers says there is no such case. I can try adding it to
+common schema and look for errors.
 
-thanks,
 
-greg k-h
+Best regards,
+Krzysztof
+
