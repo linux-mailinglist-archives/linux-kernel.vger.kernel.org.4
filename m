@@ -2,389 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DDA5E9CFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6371D5E9D89
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbiIZJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S234965AbiIZJZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiIZJKo (ORCPT
+        with ESMTP id S234287AbiIZJYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:10:44 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6913A159
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:10:42 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso12178961pjq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=4c6rsA/nj+c23v2pL8EFuT0jFlHDAIqFaKKXHCIq3T0=;
-        b=VYqF48rXQrsaARUdMc7oQLC1cOOk8WAYwJtqdYenUUNGxHxOII7mbSGfI/5iP12/vB
-         gkPtW0roD9QYEUoeTpZKPJElv5gbdBl4Wymy94NY5vbQAhHaqWtmNmDj2FIO+eSkkTYv
-         5pSuzqhw1NuKJq0OODskkl3dL3iswXXxXSvZja6hiYJ/YzhQRBYVQXxiZAPy0++CEtZT
-         Vz/KmpnlwGZVqA/k8du1ZxK2kpVIh/Uv8JlAGr6g1bRbvEZfji9gFHd2dwtJQyT/UHSk
-         sYuj43DfsFqY0VtbgEvg39TjoI5nDMa+NSWQWsCQcV4yo1foy6wUdx0cvS1/xAA1V3N6
-         FZRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=4c6rsA/nj+c23v2pL8EFuT0jFlHDAIqFaKKXHCIq3T0=;
-        b=F18AeVmq9J+Z3wmUnC+EkdLsHdJIQYcEdfU5lT31J9eATcmsvYTWlobvfG+bzxe3gC
-         xN86fQPS37Ztse2vCBXco6zN2DoWrU3dSzeV6ZPy4mA3pAhWQECx5cz4tyCQG/H8X2Zx
-         DYJpxnPc7TPZOnza1JE9RCmJzFOzCwfqueCARKugopoB7zQ4qFNIXrUvihkm/fGscf90
-         qadu6XIUdUnGMvLZT3v6wIgVHyEOoCQwf2RaAWDDIzGYJr/CRjjB4wWeKkwg4EJoXkxv
-         mjJTBox44Za7baea2AmtNaAOqj550CASGE4w12VfhODfPZruoY4Byavqx06YL/BODu88
-         Tl0w==
-X-Gm-Message-State: ACrzQf19vd7ys9QAZ1EsLSjFy6Eq5zmMB1TNCHj5VqAMQU/rcPJo8+F9
-        ZvGI1WuuB5otBYNHcTIeZaq76A==
-X-Google-Smtp-Source: AMsMyM7E7EZRWTnSrzkr3k8Aigg7dre7T8cfu0oIbNgzQXLcoHg8AW+DjGUt0mEMLzGGmypeBdEAiw==
-X-Received: by 2002:a17:90b:4d8f:b0:202:6634:997e with SMTP id oj15-20020a17090b4d8f00b002026634997emr24167098pjb.237.1664183441624;
-        Mon, 26 Sep 2022 02:10:41 -0700 (PDT)
-Received: from R911R1VA-1UT.bytedance.net ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id om12-20020a17090b3a8c00b0020263b7177csm20826852pjb.3.2022.09.26.02.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 02:10:41 -0700 (PDT)
-From:   hezhongkun <hezhongkun.hzk@bytedance.com>
-To:     corbet@lwn.net, akpm@linux-foundation.org, mhocko@suse.com
+        Mon, 26 Sep 2022 05:24:38 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAAA101D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:24:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JzK+W7k4MJJyOrtLEDtijW1ns0iy1FW6bCWqqWEw1HMo9ToDeergh+/X9p/TxpRsJ48bU/Thv2LEW0QCM8V4cvTcYg1MZO967dUBgerXbQA0UHO2lL/h/Gt5f9KYqiib14Sj2jR9kCYSNuPH3FH7tLiNq/FVnPLvB4JxyKxveKhKEZQOQW3NL6n3bi0wfmFRiq0nymjhnIVWkDxBNuspeDV0SoK4J3fxC38yOjwv3aUD3YSsi+1MHlRoWZv8tSJGghHQSp8z87Esns9TABp8O5NAb8PxcvlbK/d/6BUtFyqHnSGZ9gZkSetOLYApOUvbwH37qul3Vq1unm/eUWuIFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J6ksDM2PowsFSwcBURstAZDQlIrTQTEUyFvatXFpk2k=;
+ b=JLSBF5e2/IPQc3In4139xuqx9asMaUchSKG6ZAbJME7Vs0E2m/yFu0V9spPwmfmMVK5GfB/U5NbmC9/o03Nv1vq3SKtdrE1J7Em8k3cU4gPZurNsVbPGqkICkaU1qle3yXB+udmL7dgASHUrfsH9YwSIEOb7BV/wXem1LWXeIqu7xWAV76MzueL59YV0FN/gmxQ+K8zrCTKV49NCjo9A1Ls/L4/Bqr6V7cZpbCTSXwSUj4C+DU5SfIC+XXOyUOpEIL/eTTVbVzQ3oHqsSWadrqIJVwyUKeb1VgWSCshnLhLYRYkReC+NCs/bNIGpW4OkPz8R6NwtFSrk5oJrWiigtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J6ksDM2PowsFSwcBURstAZDQlIrTQTEUyFvatXFpk2k=;
+ b=ok0RA0LMEsRiUoELl8gLn/ELtwf9X6d3KxMBzh53wY7ALKkW1jvsUAZmfMufdKjXxz5w1NXy9Hpol1TsOtcsV0EYG2QYsrQRnBHR6Oji2tF/qT0E59ZKl9BIhniV177oD94otVckq/29WQEPh24rOuvvhhuoI4awGy3bYfmxs30QUxkWBXmQRAeg6lC3+EyJRvIXZfCMLWfZuwswysmFiCcY3TitaDN/EoxymE/gjlgKtLEQB5zDaF+b/Ztaw7AFeS52YcTFpxAcVsHnyl5TOMd5Y9HL6sRsWG44QZV0lG+Fnpenx5RuDmSIBWj8ZhWqV2tRMAxFstOOZODNxlIhZw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BL1PR12MB5224.namprd12.prod.outlook.com (2603:10b6:208:319::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 09:24:33 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::ed0:a520:ac8e:9966]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::ed0:a520:ac8e:9966%6]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 09:24:33 +0000
+References: <20220921060616.73086-1-ying.huang@intel.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Huang Ying <ying.huang@intel.com>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>
-Subject: [RFC] proc: Add a new isolated /proc/pid/mempolicy type.
-Date:   Mon, 26 Sep 2022 17:10:33 +0800
-Message-Id: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
-X-Mailer: git-send-email 2.30.2
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
+Date:   Mon, 26 Sep 2022 19:11:19 +1000
+In-reply-to: <20220921060616.73086-1-ying.huang@intel.com>
+Message-ID: <87sfkelc8k.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: SYBPR01CA0156.ausprd01.prod.outlook.com
+ (2603:10c6:10:d::24) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|BL1PR12MB5224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 081bfcad-ce7e-4501-42e0-08da9fa0ec28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xRFOEn7Kgv8Zk1u/rpCcSgUBkNjd2KQ81sIDL1ktDtn32CsAyWP07LA4gQEeP8RTRlYok3y9R9jc+gxF4HgZW6sv680vP+ykaSeC28kmREkV90RvniviJtsbqF+kjqukdMglJWYsQlNcv05rMT6G3Egn8M+xpHbG1HnBz84lWRsi/msz4bZaytSCSamXiubL+kkEupdCxfeN+6YSc/9QnYcv3YL6bxcYLWiC4aWuk1IlL3Os9Y6hqb65+8wzeGz+UJZXNDJVzpm9CT67gABns7ACQZmQen9WC5fNjCUxnpuapBYERgvw30BYn4FAlJ5iyx4sqBM3cpk4mjBjkB3z1LFI/XjSp/G2VAWB/0O+kXcCHLusWJxmkxI29cujX9sC+cuToyVZNZJND790hxlWeknem/goRVmOqj6NS9mbTWB/ZkQI5+8JFoLG7vatQ/4hIJoczaiUaL7kJrhexhF3pPPBwR1hPvNczAq4BaKKBqGEArGq6Ev+6xg8IGOEiaG9MmaeiX16TlFcKixzhIxGCQCiVSsGWaadIO6t2DXoJGqU2VN09To6Y7N/Xu2dysfZHu+9ksMR8nwLjWWUIJdOOvdj9N+HJiDPV+ettr63ZcanmTMZgFHNr+y3NsmMRQrdLEsDvAh/Eq4TJWRiwHhrZ273m3EYmIYzAGQrBtc428Y1Z2Wo7EpW+3XXIzitlikF7ofsNuNGdZi/yrnhDiYfUWpCzwN6PpbeUMSIID+L/pvmv68b91gLBH+FBIm2VVL2beawtOUn/IAb3ZfxrOYUbQ4SDiJmDp/UcRM20diSKXQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199015)(66899012)(6916009)(54906003)(316002)(478600001)(966005)(6486002)(83380400001)(66946007)(66556008)(66476007)(8676002)(4326008)(41300700001)(6666004)(6506007)(5660300002)(26005)(6512007)(9686003)(2906002)(8936002)(186003)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u3G/pLoe6tSZU+eUNKXhMvu4VGSVFcFDPJixxtzhcFLHMoucXnep0P1Jaf0a?=
+ =?us-ascii?Q?q00xHfbdxRiRsE7DzeYCo7K0OmjtpRyC3a9xrB5Jnghvjb86juEG24kbCY9B?=
+ =?us-ascii?Q?YOiN/IFoS4UjdnxIN1Yp21+WJEh0Dq5MKrObVMffaUjphFNVIw9UflLT/cNu?=
+ =?us-ascii?Q?Xgvn1/rYVjH4DgN80I0jzBDbeEo/yIzWZ+ATCC1VppIPWXBEFCwfsqIez0+K?=
+ =?us-ascii?Q?Qae0H9P+EYO5GyARHB8XY6kCS0Euy/C1df+HiuD3xmy39VQl29nJGwT8u7n7?=
+ =?us-ascii?Q?tVwly5SB4SWc+xKSt10FbVtRUwo6TdXhw4w51qrnDtWcrIgGy1MgxTmA4jtI?=
+ =?us-ascii?Q?dOih1++rOFCXgy9V7dj4cI+sO8bTupdlpl0rOy7HaaCRWkFZ2uhl4dSgTVRq?=
+ =?us-ascii?Q?tJPwMj+pa2BEkSi+h96mY20JcZWfSo3Hp1Zkx1bGpZKsR8dD36e3udOy4XT6?=
+ =?us-ascii?Q?R34rsZhkfQ6BJIqmuGWdtdUsrQPmPxGyrtJ2vEbNq0Y+8eWjIGznb0wR+Duu?=
+ =?us-ascii?Q?CU5lp0YiRvEMBsMtSYzYLwwV6eJYMFbLn6pL216xpYs9BxAwmBfCrXzSFK8P?=
+ =?us-ascii?Q?NNiPdPwYrEz5q0Xq+tn29wVo7NjkKRUP1YjLvx9WO4OGJjunzlvTLm0T7F8s?=
+ =?us-ascii?Q?ud7J8wavzwQ3i9xrwKAxYE6ydgrUpo6qSG+1tE7K254LtiaKSg0oJch0Z056?=
+ =?us-ascii?Q?Ce3hznPI+PcSzC7V3vDHvJ9FcQhmtZIs62YjSdUoAG4xlKjyoHJWJL4jpTtn?=
+ =?us-ascii?Q?kPI8liXGWqBRb/bR0J9sDboJ0CmFQ7iO6h19Eoc7hiCfW0+DIEeC4D1BnVUK?=
+ =?us-ascii?Q?/6jjSu1fRR8Hxw9xok96MQi/tUT7AJ4M/Vfd/+qpm6OVcUiyqXslHKq/+6O8?=
+ =?us-ascii?Q?zGdVFjrQlot5dBGuT/WvUvFMyr2qYsp1tHbTTPvjmSX/ho8g49eSIayP95vj?=
+ =?us-ascii?Q?gY+p3RItHxan6opfWoLKtVwxDYOU6QKedlHem6IOVUBFDDnStMWuiV0zF9Sr?=
+ =?us-ascii?Q?J23jewVokvLGatx1G2Rcm5Dh7Md6Hc5OCQPytsMamo1vuPrIeBOzTwQbZ7LE?=
+ =?us-ascii?Q?LNcbo8pnZ9wGMcFe9Elz1UFWPU2u7TAp0OYPXpJEQmDvdNAwkqVCWS9+g7vq?=
+ =?us-ascii?Q?c0G9t13IeIW4+lHI1VE6AUnG0F+eutXhMoQT60sTZPwaVNZFcBNxro3CpyPA?=
+ =?us-ascii?Q?xnl7DN8oa7i9VBc7aEXl1ogKQwy2Jrxhwg+c7dJlypaYqpmU/3mWCrup3r4c?=
+ =?us-ascii?Q?/1rLDLWGoqYJh/wlg+iui9Wgw+TsGOUEqmeSM69UNjlHuDMgfHDiXWF3I2QU?=
+ =?us-ascii?Q?e7WVyGznd3siaoJsgJu+qbYYfen8UcZgQqMMR3ZV1Ovz/yRdfTAVt10bmVs4?=
+ =?us-ascii?Q?1Z0Irn1moM2E0GQTEDvM/GeqOTcr5NMB8yc9sFScU3wHehvPPluQpXHCUgjJ?=
+ =?us-ascii?Q?7+t7Eh2FlNJ7kI0kZicMGOroOsmTM4OkcRtRyAkEcdreAUqI+xBlJ2yH4VGK?=
+ =?us-ascii?Q?+HTXxpmgK3byRoBoJqQM8b2bsemcz/GK3F8G5/SOXXrWd8MbqlNjOuek1Lsw?=
+ =?us-ascii?Q?xNAtJSNQOx5Aqe/56uwoZEZymhwc3Z3mi8uaUjMO?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 081bfcad-ce7e-4501-42e0-08da9fa0ec28
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 09:24:33.2772
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N+Gs2jDjQeB2MiBzvYbcLBnErTPrU15pG2bWnx2XikuTUYESOuO9/0kQs8MZgNmaFsm8SbcvzJm3T2iIi4OdTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5224
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhongkun He <hezhongkun.hzk@bytedance.com>
 
-/proc/pid/mempolicy can be used to check and adjust the userspace task's
-mempolicy dynamically.In many case, the application and the control plane
-are two separate systems. When the application is created, it doesn't know
-how to use memory, and it doesn't care. The control plane will decide the
-memory usage policy based on different reasons.In that case, we can
-dynamically adjust the mempolicy using /proc/pid/mempolicy interface.
+Huang Ying <ying.huang@intel.com> writes:
 
-Format of input:
-----------------
-<mode>[=<flags>][:<nodelist>]
+> From: "Huang, Ying" <ying.huang@intel.com>
+>
+> Now, migrate_pages() migrate pages one by one, like the fake code as
+> follows,
+>
+>   for each page
+>     unmap
+>     flush TLB
+>     copy
+>     restore map
+>
+> If multiple pages are passed to migrate_pages(), there are
+> opportunities to batch the TLB flushing and copying.  That is, we can
+> change the code to something as follows,
+>
+>   for each page
+>     unmap
+>   for each page
+>     flush TLB
+>   for each page
+>     copy
+>   for each page
+>     restore map
 
-Example
--------
-set mempolicy:
- $ echo "interleave=static:0-3" > /proc/27036/mempolicy
- $ cat /proc/27036/mempolicy
- interleave=static:0-3
-remove mempolicy:
-+  $ echo "default" > /proc/27036/mempolicy
+We use a very similar sequence for the migrate_vma_*() set of calls. It
+would be good if we could one day consolidate the two. I believe the
+biggest hindrance to that is migrate_vma_*() operates on arrays of pfns
+rather than a list of pages. The reason for that is it needs to migrate
+non-lru pages and hence can't use page->lru to create a list of pages to
+migrate.
 
-The following 6 mempolicy mode types：
-"default" "prefer"  "bind" "interleave" "local" "prefer (many)"
+So from my perspective I think this direction is good as it would help
+with that. One thing to watch out for is deadlocking if locking multiple
+pages though.
 
-The supported mode flags are:
-"static" "relative"
-
-nodelist         For example：0-3 or 0,1,2,3
-
-Signed-off-by: Zhongkun He <hezhongkun.hzk@bytedance.com>
----
- Documentation/filesystems/proc.rst |  40 +++++++++
- fs/proc/base.c                     |   2 +
- fs/proc/internal.h                 |   1 +
- fs/proc/task_mmu.c                 | 129 +++++++++++++++++++++++++++++
- include/linux/mempolicy.h          |   5 --
- mm/mempolicy.c                     |   2 -
- 6 files changed, 172 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index e7aafc82be99..fa7bc24c6a91 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -47,6 +47,8 @@ fixes/update part 1.1  Stefani Seibold <stefani@seibold.net>    June 9 2009
-   3.10  /proc/<pid>/timerslack_ns - Task timerslack value
-   3.11	/proc/<pid>/patch_state - Livepatch patch operation state
-   3.12	/proc/<pid>/arch_status - Task architecture specific information
-+  3.13  /proc/<pid>/mempolicy & /proc/<pid>/task/<tid>/mempolicy- Adjust
-+                                                                the mempolicy
- 
-   4	Configuring procfs
-   4.1	Mount options
-@@ -2145,6 +2147,44 @@ AVX512_elapsed_ms
-   the task is unlikely an AVX512 user, but depends on the workload and the
-   scheduling scenario, it also could be a false negative mentioned above.
- 
-+3.13 /proc/<pid>/mempolicy & /proc/<pid>/task/<tid>/mempolicy- Adjust the mempolicy
-+-----------------------------------------------------------------------------------
-+When CONFIG_NUMA is enabled, these files can be used to check and adjust the current
-+mempolicy.Please note that the effectively <pid>,<tid> is from userspace programs.
-+
-+Format of input:
-+----------------
-+<mode>[=<flags>][:<nodelist>]
-+
-+Example
-+-------
-+set mempolicy:
-+ $ echo "interleave=static:0-3" > /proc/27036/mempolicy
-+ $ cat /proc/27036/mempolicy
-+ interleave=static:0-3
-+
-+remove mempolicy:
-+  $ echo "default" > /proc/27036/mempolicy
-+
-+The following 6 mempolicy mode types are supported:
-+"default"         Default is converted to the NULL memory policy, any existing non-default policy
-+                  will simply be removed when "default" is specified.
-+"prefer"          The allocation should be attempted from the single node specified in the policy.
-+"bind"            Memory must come from the set of nodes specified by the policy.
-+"interleave"      Page allocations be interleaved across the nodes specified in the policy.
-+"local"           The memory is allocated on the node of the CPU that triggered the allocation.
-+"prefer (many)"   The allocation should be preferrably satisfied from the nodemask specified in the policy.
-+
-+The supported mode flags are:
-+
-+"static"          A nonempty nodemask specifies physical node IDs.
-+"relative"        A nonempty nodemask specifies node IDs that are relative
-+                  to the set of node IDs allowed by the thread's current cpuset.
-+
-+nodelist         For example: 0-3 or 0,1,2,3
-+
-+Please see: Documentation/admin-guide/mm/numa_memory_policy.rst  for descriptions of memory policy.
-+
- Chapter 4: Configuring procfs
- =============================
- 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 93f7e3d971e4..4dbe714b4e61 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -3252,6 +3252,7 @@ static const struct pid_entry tgid_base_stuff[] = {
- 	REG("maps",       S_IRUGO, proc_pid_maps_operations),
- #ifdef CONFIG_NUMA
- 	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
-+	REG("mempolicy",  S_IRUGO|S_IWUSR, proc_mempolicy_operations),
- #endif
- 	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
- 	LNK("cwd",        proc_cwd_link),
-@@ -3600,6 +3601,7 @@ static const struct pid_entry tid_base_stuff[] = {
- #endif
- #ifdef CONFIG_NUMA
- 	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
-+	REG("mempolicy",  S_IRUGO|S_IWUSR, proc_mempolicy_operations),
- #endif
- 	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
- 	LNK("cwd",       proc_cwd_link),
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index 06a80f78433d..33ffbd79db58 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -300,6 +300,7 @@ extern const struct file_operations proc_pid_smaps_operations;
- extern const struct file_operations proc_pid_smaps_rollup_operations;
- extern const struct file_operations proc_clear_refs_operations;
- extern const struct file_operations proc_pagemap_operations;
-+extern const struct file_operations proc_mempolicy_operations;
- 
- extern unsigned long task_vsize(struct mm_struct *);
- extern unsigned long task_statm(struct mm_struct *,
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 4e0023643f8b..299276e19c52 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -2003,4 +2003,133 @@ const struct file_operations proc_pid_numa_maps_operations = {
- 	.release	= proc_map_release,
- };
- 
-+#define MPOLBUFLEN 64
-+/*
-+ *Display task's  memory policy via /proc./
-+ */
-+static ssize_t mempolicy_read(struct file *file, char __user *buf,
-+		size_t count, loff_t *ppos)
-+{
-+	struct task_struct *task = get_proc_task(file_inode(file));
-+	char buffer[MPOLBUFLEN];
-+	struct mempolicy *mpol;
-+	size_t len = 0;
-+
-+	if (!task)
-+		return -ESRCH;
-+
-+	task_lock(task);
-+	mpol = task->mempolicy;
-+	mpol_get(mpol);
-+	task_unlock(task);
-+
-+	if (!mpol || mpol->mode == MPOL_DEFAULT)
-+		goto out;
-+
-+	memset(buffer, 0, sizeof(buffer));
-+	mpol_to_str(buffer, sizeof(buffer), mpol);
-+	buffer[strlen(buffer)] = '\n';
-+	len = simple_read_from_buffer(buf, count, ppos, buffer, strlen(buffer));
-+
-+out:
-+	mpol_put(mpol);
-+	put_task_struct(task);
-+	return len;
-+}
-+
-+/*
-+ *Update nodemask of mempolicy according to task->mems_allowed.
-+ */
-+static int update_task_mpol(struct task_struct *task, struct mempolicy *mpol)
-+{
-+	nodemask_t tsk_allowed;
-+	struct mempolicy *old = NULL;
-+	int err = 0;
-+
-+	task_lock(task);
-+	local_irq_disable();
-+	old = task->mempolicy;
-+
-+	if (mpol)
-+		nodes_and(tsk_allowed, task->mems_allowed, mpol->w.user_nodemask);
-+	else
-+		nodes_clear(tsk_allowed);
-+
-+	if (!nodes_empty(tsk_allowed)) {
-+		task->mempolicy = mpol;
-+		mpol_rebind_task(task, &tsk_allowed);
-+	} else if (!mpol || mpol->mode == MPOL_LOCAL) {
-+		/*default (pol==NULL), clear the old mpol;
-+		 *local memory policies are not a subject of any remapping.
-+		 */
-+		task->mempolicy = mpol;
-+	} else {
-+		/*tsk_allowed is empty.*/
-+		err = -EINVAL;
-+	}
-+
-+	if (!err && mpol && mpol->mode == MPOL_INTERLEAVE)
-+		task->il_prev = MAX_NUMNODES-1;
-+
-+	local_irq_enable();
-+	task_unlock(task);
-+
-+	/*If successful, release old policy,
-+	 * otherwise keep old and release mpol.
-+	 */
-+	if (err)
-+		mpol_put(mpol);
-+	else
-+		mpol_put(old);
-+
-+	return err;
-+}
-+
-+/*
-+ *Modify task's memory policy via /proc.
-+ */
-+static ssize_t mempolicy_write(struct file *file, const char __user *buf,
-+		size_t count, loff_t *ppos)
-+{
-+	char buffer[MPOLBUFLEN];
-+	struct mempolicy *mpol = NULL;
-+	struct task_struct *task;
-+	int err = 0;
-+
-+	task = get_proc_task(file_inode(file));
-+
-+	if (!task)
-+		return -ESRCH;
-+
-+	/*we can only change the user's mempolicy*/
-+	if (task->flags & PF_KTHREAD || is_global_init(task)) {
-+		err = -EPERM;
-+		goto out;
-+	}
-+
-+	memset(buffer, 0, sizeof(buffer));
-+	if (count > sizeof(buffer) - 1)
-+		count = sizeof(buffer) - 1;
-+	if (copy_from_user(buffer, buf, count)) {
-+		err = -EFAULT;
-+		goto out;
-+	}
-+
-+	err = mpol_parse_str(strstrip(buffer), &mpol);
-+	if (err) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+	err = update_task_mpol(task, mpol);
-+out:
-+	put_task_struct(task);
-+	return err < 0 ? err : count;
-+}
-+
-+const struct file_operations proc_mempolicy_operations = {
-+	.read		= mempolicy_read,
-+	.write		= mempolicy_write,
-+	.llseek		= default_llseek,
-+};
-+
- #endif /* CONFIG_NUMA */
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 668389b4b53d..a08f66972e6b 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -172,10 +172,7 @@ int do_migrate_pages(struct mm_struct *mm, const nodemask_t *from,
- 		     const nodemask_t *to, int flags);
- 
- 
--#ifdef CONFIG_TMPFS
- extern int mpol_parse_str(char *str, struct mempolicy **mpol);
--#endif
--
- extern void mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol);
- 
- /* Check if a vma is migratable */
-@@ -277,12 +274,10 @@ static inline void check_highest_zone(int k)
- {
- }
- 
--#ifdef CONFIG_TMPFS
- static inline int mpol_parse_str(char *str, struct mempolicy **mpol)
- {
- 	return 1;	/* error */
- }
--#endif
- 
- static inline int mpol_misplaced(struct page *page, struct vm_area_struct *vma,
- 				 unsigned long address)
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index b73d3248d976..a1ae6412e3ae 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2958,7 +2958,6 @@ static const char * const policy_modes[] =
- };
- 
- 
--#ifdef CONFIG_TMPFS
- /**
-  * mpol_parse_str - parse string to mempolicy, for tmpfs mpol mount option.
-  * @str:  string containing mempolicy to parse
-@@ -3091,7 +3090,6 @@ int mpol_parse_str(char *str, struct mempolicy **mpol)
- 		*mpol = new;
- 	return err;
- }
--#endif /* CONFIG_TMPFS */
- 
- /**
-  * mpol_to_str - format a mempolicy structure for printing
--- 
-2.25.1
-
+> The total number of TLB flushing IPI can be reduced considerably.  And
+> we may use some hardware accelerator such as DSA to accelerate the
+> page copying.
+>
+> So in this patch, we refactor the migrate_pages() implementation and
+> implement the TLB flushing batching.  Base on this, hardware
+> accelerated page copying can be implemented.
+>
+> If too many pages are passed to migrate_pages(), in the naive batched
+> implementation, we may unmap too many pages at the same time.  The
+> possibility for a task to wait for the migrated pages to be mapped
+> again increases.  So the latency may be hurt.  To deal with this
+> issue, the max number of pages be unmapped in batch is restricted to
+> no more than HPAGE_PMD_NR.  That is, the influence is at the same
+> level of THP migration.
+>
+> We use the following test to measure the performance impact of the
+> patchset,
+>
+> On a 2-socket Intel server,
+>
+>  - Run pmbench memory accessing benchmark
+>
+>  - Run `migratepages` to migrate pages of pmbench between node 0 and
+>    node 1 back and forth.
+>
+> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+> the number of pages migrated successfully per second increases 291.7%.
+>
+> This patchset is based on v6.0-rc5 and the following patchset,
+>
+> [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
+> https://lore.kernel.org/lkml/20220817081408.513338-1-ying.huang@intel.com/
+>
+> The migrate_pages() related code is converting to folio now. So this
+> patchset cannot apply recent akpm/mm-unstable branch.  This patchset
+> is used to check the basic idea.  If it is OK, I will rebase the
+> patchset on top of folio changes.
+>
+> Best Regards,
+> Huang, Ying
