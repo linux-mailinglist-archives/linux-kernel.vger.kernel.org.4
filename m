@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAD45EA49C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E615E9FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238886AbiIZLsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S235544AbiIZK3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238253AbiIZLpi (ORCPT
+        with ESMTP id S235529AbiIZK1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:45:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2D474DC2;
-        Mon, 26 Sep 2022 03:47:37 -0700 (PDT)
+        Mon, 26 Sep 2022 06:27:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71D14DF30;
+        Mon, 26 Sep 2022 03:18:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 609CA6068C;
-        Mon, 26 Sep 2022 10:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75059C433C1;
-        Mon, 26 Sep 2022 10:47:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AF349CE10E7;
+        Mon, 26 Sep 2022 10:18:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D9FC433C1;
+        Mon, 26 Sep 2022 10:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189247;
-        bh=xXaYM+/QW243fqLUdMzgr5aSFHN50zkuiC7q6wscQzg=;
+        s=korg; t=1664187513;
+        bh=pbT2fg2QOVi6U/rK8F+6R/wuL+JzTs9OXgQB/IY9PK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ylln0ij+JAcJZzt0Xc7TNb5RcQ9apNtIPU+IWmwsyrnLG0sdSQS9aCzCDLEEOp7Eq
-         KQ1nLeSGq2kvgaUWW5Sm5wQuDcFhknfpBdTHAX8w8fyqoJRaXYFR1/xIbjlHdTOPHl
-         rhMF77T7LkVy0ck9igV7CqdO0wGhe1464gC3kgTM=
+        b=cB0izfC79FybZE3P4Ec3pU+Cg0bCwYKdDmqZWDkWe9FGtzFGW2xpqS7sai91vgyCA
+         Rs47hYdDwi9K+sY9VkLfS39Y2ka4nj0EQuua4eKCI5byGX5Gw2uY1OrTPtw6//0bDu
+         fIXkmmxY+JBUWlmy/EMrEL/KxDMr/bZ+bxZaCZ5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shailend Chand <shailend@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 122/207] gve: Fix GFP flags when allocing pages
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 4.19 32/58] riscv: fix a nasty sigreturn bug...
 Date:   Mon, 26 Sep 2022 12:11:51 +0200
-Message-Id: <20220926100812.032687082@linuxfoundation.org>
+Message-Id: <20220926100742.656986719@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shailend Chand <shailend@google.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-[ Upstream commit 8ccac4edc8da764389d4fc18b1df740892006557 ]
+commit 762df359aa5849e010ef04c3ed79d57588ce17d9 upstream.
 
-Use GFP_ATOMIC when allocating pages out of the hotpath,
-continue to use GFP_KERNEL when allocating pages during setup.
+riscv has an equivalent of arm bug fixed by 653d48b22166 ("arm: fix
+really nasty sigreturn bug"); if signal gets caught by an interrupt that
+hits when we have the right value in a0 (-513), *and* another signal
+gets delivered upon sigreturn() (e.g. included into the blocked mask for
+the first signal and posted while the handler had been running), the
+syscall restart logics will see regs->cause equal to EXC_SYSCALL (we are
+in a syscall, after all) and a0 already restored to its original value
+(-513, which happens to be -ERESTARTNOINTR) and assume that we need to
+apply the usual syscall restart logics.
 
-GFP_KERNEL will allow blocking which allows it to succeed
-more often in a low memory enviornment but in the hotpath we do
-not want to allow the allocation to block.
-
-Fixes: 9b8dd5e5ea48b ("gve: DQO: Add RX path")
-Signed-off-by: Shailend Chand <shailend@google.com>
-Signed-off-by: Jeroen de Borst <jeroendb@google.com>
-Link: https://lore.kernel.org/r/20220913000901.959546-1-jeroendb@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/YxJEiSq%2FCGaL6Gm9@ZenIV/
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kernel/signal.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index 8c939628e2d8..2e6461b0ea8b 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -157,7 +157,7 @@ static int gve_alloc_page_dqo(struct gve_priv *priv,
- 	int err;
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -105,6 +105,8 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ 	if (restore_altstack(&frame->uc.uc_stack))
+ 		goto badframe;
  
- 	err = gve_alloc_page(priv, &priv->pdev->dev, &buf_state->page_info.page,
--			     &buf_state->addr, DMA_FROM_DEVICE, GFP_KERNEL);
-+			     &buf_state->addr, DMA_FROM_DEVICE, GFP_ATOMIC);
- 	if (err)
- 		return err;
++	regs->cause = -1UL;
++
+ 	return regs->a0;
  
--- 
-2.35.1
-
+ badframe:
 
 
