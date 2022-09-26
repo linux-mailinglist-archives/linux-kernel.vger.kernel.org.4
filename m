@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D385E9B4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93E75E9B4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiIZH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S233731AbiIZH6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234195AbiIZH5b (ORCPT
+        with ESMTP id S234238AbiIZH5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:57:31 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F34E3B96C;
-        Mon, 26 Sep 2022 00:51:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id z13so12240997ejp.6;
-        Mon, 26 Sep 2022 00:51:32 -0700 (PDT)
+        Mon, 26 Sep 2022 03:57:34 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4E3B974
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:51:40 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w8so9473359lft.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=JTLxaDlZ0s+4KzzKxJ2iMAsNQ8edLuUfFix3kOf4hxE=;
-        b=IUYcYkeAKAq3Z9pkfcGCw7GFVb5ytx/L103zWixWaVGGHUW4qaqsi7qFcQb8U9ylb+
-         ZH86Rft2dsUKJJPRUWtJ5SbNWB4vsOoMJNFE+RdK2CQvW8sUrWj7ZCHcXFtyYAbTbzre
-         05ZZb0uTlCJrtnHgUYE3Xmren2i+EwAw2RU0lcC0cs3q9HG0Ad8Uv35WTJuvWm79HW5P
-         K9F9i3i+Ol/SXFaX85xP+/7swtxTbQVL4rKPAMc8iyX8adFMUbWloN1UPCTGZq2Il07D
-         +TiUZOOKWEghMgGbQMmJULxQ0z/4vUcpXar06SX6FjLR2L+k5eC9evSI2aDdcl09Dz7X
-         ZLQg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=jvYvVWLSf4e8Yu944Qnf0DCzJLFbXHx/b6AjfcFyxfg=;
+        b=Kl/ik9OP6N486uc3ipCE3PqQ2EnzmmRRIVsetjtVaSwuqxB3KcKxDYZsaVrrG7tocC
+         p+YmpNpCtt5hO0WTBfYSh1rZnOfK6argETuht+HyCDwGBgNWRaUSsG4l6hKH65HeDC5a
+         nITqMcklR5qVn/doCUCknHlKwh33wJqe5GXSC8FWxRVvRSEp2+oNSIAnGT1rlBEzRk/4
+         UdFj0X6Q6yMcqqXYm33FWhVlyaVURGpQATLNZqvHxPl2Avi0GkFfnhQuw5zmJ+jdR0bT
+         exzHy5eigO7oKeJ9ZdAVaOkVRuoyvDU6hlkJB6o1c5ivwpdMSO6USsUm7eT4om/W9VL+
+         FGwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=JTLxaDlZ0s+4KzzKxJ2iMAsNQ8edLuUfFix3kOf4hxE=;
-        b=KmgHMocMQ9Y6YJbWL5ftrssp3VgQoHZN2LND2utvLdy049Mg7UcrnNgu0sMK0kamD/
-         uyDfLCrDk3JbWyeUchI5irO1sB2GGWd8eglzOHjomg74TvTWHDtI4XRq9tG1MBLpSZmN
-         cOqz9QAse/FO6g5DQfDhFORiuiwccz4t2lbGoHpSBLut+FR+OysWnKjo3fDrgUwYflsG
-         FEmKXhSrfLg3HLSoY4Xsp/ct6dBTykil6ZEPnNzDrmOzf/8WkAHPU/qAZXN5rfsJUC3X
-         3OIKUzFLqGxuKv5tkCBP0ZJnn90rp8ZmmMNBzRsCvWvl8AgjmU5dDuHiFGAGwjj6C88N
-         wCUQ==
-X-Gm-Message-State: ACrzQf0sib6u/u7WsDnNp570DeSc9GQFHvH1Gmvt4Jb19kA6b55HKwsc
-        BsxsAljRsmyVNDpcCWWZmYHtcRa+EIN8TK+ApzM=
-X-Google-Smtp-Source: AMsMyM54PjI7r9RBNywo7Vr4XI825HD15QzPS4xTM54XWF4bEobGfMMFwon7099h/YE9taKhiPm8G8gbvIN0ntLE4AA=
-X-Received: by 2002:a17:906:9c83:b0:779:c14c:55e4 with SMTP id
- fj3-20020a1709069c8300b00779c14c55e4mr16698857ejc.619.1664178690895; Mon, 26
- Sep 2022 00:51:30 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=jvYvVWLSf4e8Yu944Qnf0DCzJLFbXHx/b6AjfcFyxfg=;
+        b=QlCJ9qGKSC6wJJaksGSugGVoXTeGkYo/+QWc7t3/C7mLNibWM6KoQTt2gNIv1bKm3b
+         TvLUgZiL6JfaLCvyzlngMF9S4epz4DN2phkoLNdzYP1Jlv3duBdIPw54lx269PkbfZPI
+         ZZ26iHrJ2HGLVv2nnS4SnaZt+SI0Px/O0fgzcZZUZPhtmjO7PAn6cP74s9sOCYQMvPtX
+         nHmbSTE7pxDgMloggcOZ5fnDOXWx+BQEdV/ZzzPmgGsQ2MhLjRPE6n1MW8BiFT2SgnDZ
+         YHVZ2zDUHBnz2I/mrJwh8KjCe6hewJvSrvQe18+otG9pHMc1kWXZ1j5Nvu8L18zq1JyB
+         vyfw==
+X-Gm-Message-State: ACrzQf2JkcqNbj1+ghiA6qLg5m6VIHZ2G6cOgLj2UngtIz0ARW3wi7li
+        pzoh45yk5x7ttg2d3Tnc1c9u5Q==
+X-Google-Smtp-Source: AMsMyM72gQh9BlSdHlb/fUZ1pBNnUC1vPovZqUS1FS9beAE/yju5eVqdX25l69BydVEZuU/PbcPKwA==
+X-Received: by 2002:a05:6512:1188:b0:499:6fbf:d751 with SMTP id g8-20020a056512118800b004996fbfd751mr8550642lfr.51.1664178698030;
+        Mon, 26 Sep 2022 00:51:38 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id i30-20020a198c5e000000b00485caa0f5dfsm2461378lfj.44.2022.09.26.00.51.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 00:51:37 -0700 (PDT)
+Message-ID: <aca7f1c2-488e-28b7-2ea5-ead507aa535c@linaro.org>
+Date:   Mon, 26 Sep 2022 09:51:35 +0200
 MIME-Version: 1.0
-From:   Nick Desaulniers <nick.desaulniers@gmail.com>
-Date:   Mon, 26 Sep 2022 00:51:19 -0700
-Message-ID: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
-Subject: Any interest in building the Linux kernel from a MacOS host?
-To:     torvalds@linux-foundation.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "marcan@marcan.st" <marcan@marcan.st>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next] ASoC: codecs: wcd934x: Fix Kconfig dependency
+Content-Language: en-US
+To:     Ren Zhijie <renzhijie2@huawei.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
+        james.schulman@cirrus.com, cy_huang@richtek.com,
+        flatmax@flatmax.com, pierre-louis.bossart@linux.intel.com,
+        lukas.bulwahn@gmail.com, srinivas.kandagatla@linaro.org
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220926074042.13297-1-renzhijie2@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220926074042.13297-1-renzhijie2@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not sure if this is potentially interesting to anyone but I was able
-to get the kernel building from MacOS my M2 Air with a small amount of
-effort (read: duct tape and bailing wire).  If this might seem helpful
-to anyone's workflow, I wouldn't mind pursuing this (with some
-cleanup, sending a more formal patch set).  Maybe this helps us
-bootstrap or get Linux up and running sooner on these machines?
+On 26/09/2022 09:40, Ren Zhijie wrote:
+> If CONFIG_REGMAP_SLIMBUS is not set,
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+> will be failed, like this:
+> 
+> sound/soc/codecs/wcd934x.o: In function `wcd934x_codec_probe':
+> wcd934x.c:(.text+0x3310): undefined reference to `__regmap_init_slimbus'
+> make: *** [vmlinux] Error 1
+> 
+> Add select REGMAP_SLIMBUS to config SND_SOC_WCD934X.
+> 
+> Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 
-Take a look at the commit message linked below for the trials & tribulations:
-https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
 
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
