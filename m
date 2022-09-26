@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEC85E9F28
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3B05EA0CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235198AbiIZKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S236345AbiIZKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbiIZKSk (ORCPT
+        with ESMTP id S236617AbiIZKjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:18:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216883F316;
-        Mon, 26 Sep 2022 03:15:22 -0700 (PDT)
+        Mon, 26 Sep 2022 06:39:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6614753D3D;
+        Mon, 26 Sep 2022 03:23:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84FE7B80918;
-        Mon, 26 Sep 2022 10:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF82C433C1;
-        Mon, 26 Sep 2022 10:15:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA62A60BAF;
+        Mon, 26 Sep 2022 10:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD89CC433C1;
+        Mon, 26 Sep 2022 10:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187321;
-        bh=0r18/rJ3cYFSKrfz5tNr4Zz5tbSSiStUeAvNmKrQpNI=;
+        s=korg; t=1664187811;
+        bh=eUck7UUqhWIihyDGGH5y1+ziQsswGYPBDFAwlecVRRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2zifXBdYV6ZFcM9syBK1NQ8oZgmNzszbel/lDyl5ZoF5LZ+j7TMTOYl1OPFd7Zm4
-         qtiyVrLoTx3NYpBIVd4EY6lb24IE6VPSfvtAaB6FMEUCPHQhZAP3Af59sJF2AYGYwg
-         VpviYpLWtSmH/e7PBA6H/eGBdPosDiHKzAFfLVYc=
+        b=SqGr+boaHl0bFTBfQxghYcLGIX9wmDFjcMVpDQq3MTJ2G64IDZ3Ddd1cajEWc6mci
+         XRdMRmJ5aN11lJ/pv1/lblblJ5wOgETGBnbxH/SVt45xGQg2RZE6vcgZmZqumR0tBW
+         vl3cOGwJ+0y7cZoj6WfxMnPAzt/ZterW1Vj9t+PI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 11/40] net: usb: qmi_wwan: add Quectel RM520N
+Subject: [PATCH 5.4 066/120] arm64: dts: rockchip: Pull up wlan wake# on Gru-Bob
 Date:   Mon, 26 Sep 2022 12:11:39 +0200
-Message-Id: <20220926100738.644961631@linuxfoundation.org>
+Message-Id: <20220926100753.400977347@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jerry.meng <jerry-meng@foxmail.com>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit e1091e226a2bab4ded1fe26efba2aee1aab06450 ]
+[ Upstream commit e5467359a725de90b6b8d0dd865500f6373828ca ]
 
-add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+The Gru-Bob board does not have a pull-up resistor on its
+WLAN_HOST_WAKE# pin, but Kevin does. The production/vendor kernel
+specified the pin configuration correctly as a pull-up, but this didn't
+get ported correctly to upstream.
 
-0x0801: DIAG + NMEA + AT + MODEM + RMNET
+This means Bob's WLAN_HOST_WAKE# pin is floating, causing inconsistent
+wakeup behavior.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=RM520N-GL
-S:  SerialNumber=384af524
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Note that bt_host_wake_l has a similar dynamic, but apparently the
+upstream choice was to redundantly configure both internal and external
+pull-up on Kevin (see the "Kevin has an external pull up" comment in
+rk3399-gru.dtsi). This doesn't cause any functional problem, although
+it's perhaps wasteful.
 
-Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 8559bbeeb849 ("arm64: dts: rockchip: add Google Bob")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20220822164453.1.I75c57b48b0873766ec993bdfb7bc1e63da5a1637@changeid
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts         | 5 +++++
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 0c3129c9ac08..75c09ba6a45f 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1049,6 +1049,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
+index a9f4d6d7d2b7..586351340da6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
+@@ -77,3 +77,8 @@ h1_int_od_l: h1-int-od-l {
+ 		};
+ 	};
+ };
++
++&wlan_host_wake_l {
++	/* Kevin has an external pull up, but Bob does not. */
++	rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>;
++};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 7cd6d470c1cb..53185404d3c8 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -397,6 +397,7 @@ wifi_perst_l: wifi-perst-l {
+ 	};
  
- 	/* 3. Combined interface devices matching on interface number */
- 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
+ 	wlan_host_wake_l: wlan-host-wake-l {
++		/* Kevin has an external pull up, but Bob does not */
+ 		rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
+ 	};
+ };
 -- 
 2.35.1
 
