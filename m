@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E8E5EA4C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8865EA136
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiIZLvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S236556AbiIZKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbiIZLts (ORCPT
+        with ESMTP id S236582AbiIZKoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB7E75FF7;
-        Mon, 26 Sep 2022 03:48:30 -0700 (PDT)
+        Mon, 26 Sep 2022 06:44:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C5243301;
+        Mon, 26 Sep 2022 03:25:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84D6FB802C7;
-        Mon, 26 Sep 2022 10:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73D3C433D6;
-        Mon, 26 Sep 2022 10:48:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3340260B5E;
+        Mon, 26 Sep 2022 10:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41EB2C433C1;
+        Mon, 26 Sep 2022 10:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189309;
-        bh=zluzXjF/oF3xR44I3+gJzSJtEsdyJheyxQR6K6shb3k=;
+        s=korg; t=1664187915;
+        bh=EHC/n7xhzmgYc8Q35mSJNr/a7I3lBZt9N0cpfuYwGaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mW+1mlja95+FNIsN1iXSU5BPzzpDw/xBc2P5vZTK6VhkjZ+4loNHqZa6A3PMlF9py
-         +AQP/eERv6kmOjDjyb05HoAyzyD+ed08AIV7imVGbNNrFdDwG2nxKsgNivQitJcjZ/
-         h2BsCWF7WpZBUzF94xaIYOisM5Zq4vldptTdcZ6s=
+        b=hhVAD+GHgmJW8wDH2o3nAcVgJKmm1+u7ydEgsxDrF/c/l7gMVIVfscpOZk6V8aRCA
+         cGl7WAAWadfPkXdYmBXVxjOP4ZwEoimyE57JOivhxmf6pT/LYtYLaH1GsGUeWfBrYs
+         JthWAsCaJUm6Ar3XpuDPrMsa10WSqChdvhJjQFtk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        llvm@lists.linux.dev, Nathan Huckleberry <nhuck@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 144/207] can: gs_usb: gs_can_open(): fix race dev->can.state condition
+Subject: [PATCH 5.4 100/120] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
 Date:   Mon, 26 Sep 2022 12:12:13 +0200
-Message-Id: <20220926100812.954667396@linuxfoundation.org>
+Message-Id: <20220926100754.663664789@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,53 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Nathan Huckleberry <nhuck@google.com>
 
-[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
+[ Upstream commit b0b9408f132623dc88e78adb5282f74e4b64bb57 ]
 
-The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
-has been started. On busy networks the CAN controller might receive
-CAN frame between and go into an error state before the dev->can.state
-is assigned.
+The mode_valid field in drm_connector_helper_funcs is expected to be of
+type:
+enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+				     struct drm_display_mode *mode);
 
-Assign dev->can.state before starting the controller to close the race
-window.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The return type of cdn_dp_connector_mode_valid should be changed from
+int to enum drm_mode_status.
+
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220913205555.155149-1-nhuck@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/gs_usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/rockchip/cdn-dp-core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index d3a658b444b5..092cd51b3926 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -824,6 +824,7 @@ static int gs_can_open(struct net_device *netdev)
- 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
+diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+index 8f299d76b69b..67dae1354aa6 100644
+--- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
++++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+@@ -275,8 +275,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
+ 	return ret;
+ }
  
- 	/* finally start device */
-+	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
- 	dm->flags = cpu_to_le32(flags);
- 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
-@@ -835,13 +836,12 @@ static int gs_can_open(struct net_device *netdev)
- 	if (rc < 0) {
- 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
- 		kfree(dm);
-+		dev->can.state = CAN_STATE_STOPPED;
- 		return rc;
- 	}
- 
- 	kfree(dm);
- 
--	dev->can.state = CAN_STATE_ERROR_ACTIVE;
--
- 	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
+-static int cdn_dp_connector_mode_valid(struct drm_connector *connector,
+-				       struct drm_display_mode *mode)
++static enum drm_mode_status
++cdn_dp_connector_mode_valid(struct drm_connector *connector,
++			    struct drm_display_mode *mode)
+ {
+ 	struct cdn_dp_device *dp = connector_to_dp(connector);
+ 	struct drm_display_info *display_info = &dp->connector.display_info;
 -- 
 2.35.1
 
