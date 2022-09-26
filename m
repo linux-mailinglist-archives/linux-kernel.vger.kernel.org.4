@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2875EA4A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD445E9FCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238915AbiIZLsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S235492AbiIZK3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238393AbiIZLqC (ORCPT
+        with ESMTP id S235524AbiIZK1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:46:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337C774346;
-        Mon, 26 Sep 2022 03:47:35 -0700 (PDT)
+        Mon, 26 Sep 2022 06:27:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AE33FA24;
+        Mon, 26 Sep 2022 03:18:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2E4E60BAA;
-        Mon, 26 Sep 2022 10:47:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A78C433C1;
-        Mon, 26 Sep 2022 10:47:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA50B80920;
+        Mon, 26 Sep 2022 10:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D834C433D7;
+        Mon, 26 Sep 2022 10:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189242;
-        bh=DsKjnZ4x2S6AWzYKSIX0+p/vijGEZh6XriUnf40hdao=;
+        s=korg; t=1664187506;
+        bh=SAVVjF0InU0cnF+duHjbPwXQwadgfhiTlKvZmvn6UOc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AohMUNLZACJ0kMQph38boMS0RApKkS1gAkSvATT7Q5M3w+Rlk6+nckPrD3pEdjxtf
-         HIhdOYbYZK7Sr78iAM7wsCZVdFVxBinouBO3C6exSwYs+EXMxivX9RtS8q2nyK6oP0
-         NI4iTdWppWLQLcYqFjr9UxwRcBroAE01KGEPMuIA=
+        b=XyOUXDyUtE7I9SpTxCd7beUzaNiNopNkI5yEFuDKQzOdOS5mO6gJFYz+DsmVm78N0
+         i4YDSy1ujuBvIKMjU74BzzrX430whVV51F1bXwvpySPOvRt28vOfY8KxYHb9t0bKh5
+         AWXjB8RPNFzc6nuIdPj4avQm1YtHTX6++ACXMiXg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 120/207] sfc: fix null pointer dereference in efx_hard_start_xmit
+        stable@vger.kernel.org,
+        Callum Osmotherly <callum.osmotherly@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 30/58] ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5530 laptop
 Date:   Mon, 26 Sep 2022 12:11:49 +0200
-Message-Id: <20220926100811.937789679@linuxfoundation.org>
+Message-Id: <20220926100742.569112860@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Callum Osmotherly <callum.osmotherly@gmail.com>
 
-[ Upstream commit 0a242eb2913a4aa3d6fbdb86559f27628e9466f3 ]
+commit 1885ff13d4c42910b37a0e3f7c2f182520f4eed1 upstream.
 
-Trying to get the channel from the tx_queue variable here is wrong
-because we can only be here if tx_queue is NULL, so we shouldn't
-dereference it. As the above comment in the code says, this is very
-unlikely to happen, but it's wrong anyway so let's fix it.
+Just as with the 5570 (and the other Dell laptops), this enables the two
+subwoofer speakers on the Dell Precision 5530 together with the main
+ones, significantly increasing the audio quality. I've tested this
+myself on a 5530 and can confirm it's working as expected.
 
-I hit this issue because of a different bug that caused tx_queue to be
-NULL. If that happens, this is the error message that we get here:
-  BUG: unable to handle kernel NULL pointer dereference at 0000000000000020
-  [...]
-  RIP: 0010:efx_hard_start_xmit+0x153/0x170 [sfc]
-
-Fixes: 12804793b17c ("sfc: decouple TXQ type from label")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/20220914111135.21038-1-ihuguet@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Callum Osmotherly <callum.osmotherly@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/YyMjQO3mhyXlMbCf@piranha
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/sfc/tx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/sfc/tx.c b/drivers/net/ethernet/sfc/tx.c
-index 138bca611341..80ed7f760bd3 100644
---- a/drivers/net/ethernet/sfc/tx.c
-+++ b/drivers/net/ethernet/sfc/tx.c
-@@ -549,7 +549,7 @@ netdev_tx_t efx_hard_start_xmit(struct sk_buff *skb,
- 		 * previous packets out.
- 		 */
- 		if (!netdev_xmit_more())
--			efx_tx_send_pending(tx_queue->channel);
-+			efx_tx_send_pending(efx_get_tx_channel(efx, index));
- 		return NETDEV_TX_OK;
- 	}
- 
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -7081,6 +7081,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1028, 0x0871, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1028, 0x0872, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1028, 0x0873, "Dell Precision 3930", ALC255_FIXUP_DUMMY_LINEOUT_VERB),
++	SND_PCI_QUIRK(0x1028, 0x087d, "Dell Precision 5530", ALC289_FIXUP_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1028, 0x08ad, "Dell WYSE AIO", ALC225_FIXUP_DELL_WYSE_AIO_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x08ae, "Dell WYSE NB", ALC225_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1028, 0x0935, "Dell", ALC274_FIXUP_DELL_AIO_LINEOUT_VERB),
 
 
