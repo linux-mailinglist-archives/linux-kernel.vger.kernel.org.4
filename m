@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335555EB5E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9E95EB5E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiIZXkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S229733AbiIZXlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiIZXkN (ORCPT
+        with ESMTP id S229597AbiIZXlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:40:13 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1894E850
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:40:11 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id bh13so7925406pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CV/mbcKH4qX6MXHBANtxht73WgG6wuL82GOFfkKV6Oo=;
-        b=cmO1i0bXpBONGQenXSWE8SHA6yaryyoYYkT4mkxsgUgf2jcvBRBzouBtr8+1SuVzDl
-         ZY47sAAs3gvxgKC1x32NpztbrLAT2LfGnkJO40OM3nZ37b7ae8o1e28YV0bc0F1boL1N
-         UqM3VvJv4OlPuyWDhqUqlNiZxKdqLbB0uMYUt8XEAkuMyOMfWCI4ppGRwbWK6lt0zAMq
-         Rrkoly+Y38TnboaGdX0KA+yEioPFhtTfPQhVPRHzgUkHptSX/LAGjx5w0BzqQrZ6vvpu
-         rlEyykxv5IaVtXCKdOynNY4KHOOE8mJzTOtYatR60tU+yvDqeZ1HBPokPqHlQPh13LpC
-         imng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CV/mbcKH4qX6MXHBANtxht73WgG6wuL82GOFfkKV6Oo=;
-        b=TD/XlULe5u8kHiB0/td+uQrwJotmP0HJITK7KfN14Hb/axDjts+4P+z952rsShmRel
-         bbQq0fWWVOakU4gUr/+QMEHmIILDkY5Dz6fAWWZduIVtUU6sEFUuSs3r/9jKVZYC6EB6
-         zOcpI3m5Fuv8rUxP8o+idHwUDQGJY5PmfkOjFt98Rn3no+z7aiLz5o1r/pXAL2SzluRb
-         M44PKzcXvGMxJrQlYbsoWfmDYP82s7H5c2TwTSvdx0/ejkfvrwleyyOk1Bk+bFbP/E71
-         1r9SyZnyDTuBlxIy9Xgp4wz24Yfge4YpE6uuRqx4ppz1F1YMh52/BQm6Q/zDQZz4C8HP
-         UFSw==
-X-Gm-Message-State: ACrzQf1pguE/apRbFjvRaTKOom3vQ1Q4FRpJmaHsUVYTYABCjI60S/V7
-        qTKj3UAenHf4Lz/fooOQYXtJSOmB8N2w7mKQPjyrWw==
-X-Google-Smtp-Source: AMsMyM5K4IdmzFXzkfAqdNpbKl06Dd2pgkXO6kCLJK4hGCT2BUNLtye6deOSLfkAlLcKX+PNq9ErzSN1ASvgTBzFENw=
-X-Received: by 2002:a63:1a51:0:b0:43b:e496:f2f4 with SMTP id
- a17-20020a631a51000000b0043be496f2f4mr22554894pgm.99.1664235610798; Mon, 26
- Sep 2022 16:40:10 -0700 (PDT)
+        Mon, 26 Sep 2022 19:41:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6E93AB30
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:41:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A13A6B816E9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47498C433D7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664235689;
+        bh=6wNqUX/iaj9uUsoDs1oH5DIKGHbHydMuzqQ6tFjrpzo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VRN5faFCTQRla4ho117TzoULktAE1emcXRD3+rTh9X8wHEA8ao+FkmkGcdhybEjab
+         o5KJoO4BaUKaWZE3QN9YH7rIG1ZTOz8pUonYvn7fCvB/EYcs2WEGJfb3eYJ3KedoY3
+         xdOJSFOnwCFz+dWbPrL/oFfm5e+mMU5DWRURd+48blW5hgG21mtRbRQIRAQ5/g2xWD
+         YQIgpOCKBQXVXKPeMDRUxTtSUBOPpFRjW3D33Ak+GVYnArCmXDrinUxitD664wMSNO
+         PBd0RdccXzbl1n9b1Ig05Tk2bklG5xdKEUOxh50q+MPG8+t0K/HQTsoDPpyWIiHhj2
+         74x6rOaUom2jw==
+Received: by mail-ot1-f42.google.com with SMTP id e24-20020a05683013d800b0065be336b8feso5436751otq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:41:29 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1SBvY3KBqeY9+F9VXEDJmfhIXaj9+QWC77o+vTsJqZWtW4HXir
+        zqhGRErC5+1OL/rz0fStzo7W3k+IiWmoaZXUxdc=
+X-Google-Smtp-Source: AMsMyM6zFzxM3eN6t+1iO53bYPjOeh6NQ+Kjjm6uWtTDyY/6Beq6d0f5Vr/fEwB0lAQL9VRbhWTpDdJZfmUed7ItXL8=
+X-Received: by 2002:a05:6830:34a4:b0:65a:b03:54cc with SMTP id
+ c36-20020a05683034a400b0065a0b0354ccmr10832187otu.140.1664235688429; Mon, 26
+ Sep 2022 16:41:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
- <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com> <CALzav=fGpN0C1duR8ArnAUyko5bqytNS_V47eBa9JM89pehyAw@mail.gmail.com>
-In-Reply-To: <CALzav=fGpN0C1duR8ArnAUyko5bqytNS_V47eBa9JM89pehyAw@mail.gmail.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 26 Sep 2022 16:40:00 -0700
-Message-ID: <CAGtprH_qCyBRVDN3rh88hVX4w0UvvXM=6ScciA_KA7jvRQiBNQ@mail.gmail.com>
-Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
-To:     David Matlack <dmatlack@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oliver Upton <oupton@google.com>, Peter Xu <peterx@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
+References: <20220926122727.2310118-1-yijun@loongson.cn>
+In-Reply-To: <20220926122727.2310118-1-yijun@loongson.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 27 Sep 2022 07:41:12 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQR804AwU0up2-FyTciQZJY2M9xQ7JbiqjwMbkD=aLhCQ@mail.gmail.com>
+Message-ID: <CAJF2gTQR804AwU0up2-FyTciQZJY2M9xQ7JbiqjwMbkD=aLhCQ@mail.gmail.com>
+Subject: Re: [PATCH v3] LoongArch: Fixup do_ri csr_era
+To:     Jun Yi <yijun@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Mao Bibo <maobibo@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 4:34 PM David Matlack <dmatlack@google.com> wrote:
+On Mon, Sep 26, 2022 at 8:27 PM Jun Yi <yijun@loongson.cn> wrote:
 >
-> On Mon, Sep 26, 2022 at 4:27 PM Vishal Annapurve <vannapurve@google.com> wrote:
-> >
-> > On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
-> > > ...
-> >
-> > is_amd_cpu is used by guest code within fix_hypercall_test.c, just
-> > caching the result will break the guest code execution. I have clubbed
-> > these two changes together in order to ensure that is_amd_cpu works
-> > fine for both host userspace and guest vm logic.
+> csr_era of pt_regs in do_ri should not add 4 to point to the
+> next instruction.
+The comment does not make sense. I think it wants to skip some
+instructions, but your patch broke that.
+
 >
-> Ah, so the sync_global_to_guest() part needs to go in the patch that
-> adds caching to is_amd_cpu().
+> Signed-off-by: Jun Yi <yijun@loongson.cn>
+> ---
+>  arch/loongarch/kernel/traps.c | 2 --
+>  1 file changed, 2 deletions(-)
 >
-> But the point still stands that adding AMD support to kvm_hypercall()
-> is a logically independent change.
+> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> index aa1c95aaf595..ec888eda3d45 100644
+> --- a/arch/loongarch/kernel/traps.c
+> +++ b/arch/loongarch/kernel/traps.c
+> @@ -477,8 +477,6 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
+>
+>         die_if_kernel("Reserved instruction in kernel code", regs);
+>
+> -       compute_return_era(regs);
+> -
+>         if (unlikely(get_user(opcode, era) < 0)) {
+>                 status = SIGSEGV;
+>                 current->thread.error_code = 1;
+> --
+> 2.31.1
 >
 
-I see what you mean. Will split this change into two in the next series.
 
-> > ...
-> > > > --
-> > > > 2.37.2.789.g6183377224-goog
-> > > >
+-- 
+Best Regards
+ Guo Ren
