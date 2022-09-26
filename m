@@ -2,128 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12AF5E9E91
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E2F5E9E94
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiIZKEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S234879AbiIZKGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbiIZKES (ORCPT
+        with ESMTP id S233902AbiIZKGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:04:18 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A45C32B82
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:04:16 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n12so9364599wrx.9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date;
-        bh=sTAPIVJNbp4iICt5sfzGH6YEb6tzSO6KPzd55XSaBdY=;
-        b=c4mAGGxhECtHjTjrRnn3HOx1EiKljfJ1NXJYEaKtgI2W3TMnIj5nbJDrkv0lDfDQTe
-         9FPk9F+P8sNDeHu7vqmwLL3jQwsv5ZDk5FjYHS0YQj6EJuBex7Zafz18ORwWbqt8dZtx
-         g/mScToh/dwCUDkcSGfsetgo1+AEjH2d/OjqBI6jUbGNBPCkeFa7eUDDGFmTf9Aiy0fb
-         XGFVmJh9BxNerYm+4FeOdDGQEDGh9llgwwRoAjWOhjd9A2DUifpkVz3LkKBj7sgNBv9q
-         pySYMYrvA7yM7PVrMv5sLTYK41F8G1u5tjR1jNWBm4a5fLWapJL9DXs2AJi5m2nwMUkv
-         yG2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=sTAPIVJNbp4iICt5sfzGH6YEb6tzSO6KPzd55XSaBdY=;
-        b=SoihD6EvjfSKFpTcZfsPRXvNr8Cv/P4vAmeUFAy7Tjz6kxUzBbU+awEpI43H6c/4vj
-         XI6R8j+xGXeGeqVC9i0Gsr/dj0MXmVuDGhaPsMpRV8RatHtSDEXTsKovieDlCoeHUSWh
-         qTEHWrsxrxVSDGbJEQNSbpm2tu9o1Z8QU4Mtl3AKUUy0X8Yc3L/WsVvq83KoE4z2rr9a
-         AsUzwC1iaTY3qU4SBux13GrO3a2YuaYIeqpM8M0oTGWHo0paL+n+LQaOQMbE4RvQbOOj
-         Yy0/e0f/91g8WwzEYkuDVrqKdUBsp91RsQiXejNMnH/VXGsHdB9leZLMJZWS5ysvcfC7
-         8N0Q==
-X-Gm-Message-State: ACrzQf3s5MQg4F4Bk/ybkwW0YLnrheYOtwgsfRfgyqLbcHYC1CydtNCR
-        NRAezHX2q/9YzZn0r7IklGS9jQ==
-X-Google-Smtp-Source: AMsMyM4ES3y+zy1qMG1o3vbqYnbjhuFHSDXFP/iGUf6v7wgMwvvhoB8/maq1VdkF1IcTpccGNUCYyg==
-X-Received: by 2002:a5d:6d07:0:b0:22a:3f21:3b56 with SMTP id e7-20020a5d6d07000000b0022a3f213b56mr12562644wrq.679.1664186654836;
-        Mon, 26 Sep 2022 03:04:14 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b003b492338f45sm12043677wmq.39.2022.09.26.03.04.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 03:04:14 -0700 (PDT)
-Message-ID: <3070538e-fa8d-4506-bbf8-c2770d092eb5@linaro.org>
-Date:   Mon, 26 Sep 2022 12:04:07 +0200
+        Mon, 26 Sep 2022 06:06:01 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5E6371BD;
+        Mon, 26 Sep 2022 03:06:00 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1ockzm-0003bT-DZ; Mon, 26 Sep 2022 12:05:50 +0200
+Date:   Mon, 26 Sep 2022 12:05:50 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, Martin Zaharinov <micron10@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
+Message-ID: <20220926100550.GA12777@breakpoint.cc>
+References: <20220926083139.48069-1-fw@strlen.de>
+ <YzFkt744uWI4y3Sv@gondor.apana.org.au>
+ <20220926085018.GA11304@breakpoint.cc>
+ <YzFyz5FWn50rhLsH@gondor.apana.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] ARM: dts: qcom: pm8941: adjust node names to bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220925210229.128462-1-luca@z3ntu.xyz>
- <20220925210229.128462-2-luca@z3ntu.xyz>
- <ec8cc121-9814-cd52-fb49-c33ab1376f89@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <ec8cc121-9814-cd52-fb49-c33ab1376f89@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzFyz5FWn50rhLsH@gondor.apana.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 11:22, Krzysztof Kozlowski wrote:
-> On 25/09/2022 23:02, Luca Weiss wrote:
->> pm8941-misc should be called 'extcon' and pm8941-coincell 'charger'.
->>
->> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->> ---
->>   arch/arm/boot/dts/qcom-pm8941.dtsi | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
->> index 33517cccee01..01f14d5f314d 100644
->> --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
->> +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
->> @@ -27,7 +27,7 @@ pwrkey@800 {
->>   			bias-pull-up;
->>   		};
->>   
->> -		usb_id: misc@900 {
->> +		usb_id: extcon@900 {
+Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> On Mon, Sep 26, 2022 at 10:50:18AM +0200, Florian Westphal wrote:
+> > Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> > > On Mon, Sep 26, 2022 at 10:31:39AM +0200, Florian Westphal wrote:
+> > > >
+> > > > This patch is partial revert of
+> > > > commit 93f976b5190d ("lib/rhashtable: simplify bucket_table_alloc()"),
+> > > > to avoid kvmalloc for ATOMIC case.
+> > > 
+> > > This patch should just be reverted.  If kvzalloc fails we should
+> > > definitely know about it.
+> > 
+> > No idea what you mean, I am no mind reader.  Please consider
+> > fixing this yourself, I am done with this crap.
 > 
-> Why? extcon is Linux specific name and should not be added to DTS.
-> Anything requires it?
+> I just meant that the patch quoted above should be completely
+> reverted instead of partially reverted.
 
-It matches the current dt bindings:
-
-Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml:
-<snip>
-    "extcon@[0-9a-f]+$":
-
-      type: object
-
-      $ref: /schemas/extcon/qcom,pm8941-misc.yaml#
-<snip>
-
-Neil
-
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
+I don't understand that at all, since this means removal of
+__GFP_NOWARN -- that makes no sense to me.
