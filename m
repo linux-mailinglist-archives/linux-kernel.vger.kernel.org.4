@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337825EA549
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D86F5EA396
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbiIZL77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S237976AbiIZL1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiIZL4I (ORCPT
+        with ESMTP id S237940AbiIZL0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:56:08 -0400
+        Mon, 26 Sep 2022 07:26:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D947A500;
-        Mon, 26 Sep 2022 03:51:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEBC6A489;
+        Mon, 26 Sep 2022 03:41:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7D9CB80925;
-        Mon, 26 Sep 2022 10:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF5CC433C1;
-        Mon, 26 Sep 2022 10:50:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8808B80688;
+        Mon, 26 Sep 2022 10:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBD8C433D6;
+        Mon, 26 Sep 2022 10:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189430;
-        bh=EOo8A0LNKB9v3Vdh0DEnHZtQ+go5c6JO/8RMY50XP14=;
+        s=korg; t=1664188850;
+        bh=3qMiBviQLJD7UsBBT4SvQ9/507KRJ/0h50pF7lkKJlA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpMXDidzgQwh39ZVU7ilHrmKEKOIZwQopsLywsS8Spg1bxqLyAuosyiGtrz7d/mV8
-         WMdnPgs35TDGh43OoLSW1qc6an5+p0I/BiE3/tijLdbNF74/Nqa19zTMyULElylWg+
-         o7lrooR4Q/6Q5bJRS+RDLkLV1BaSTTODPynuAEyc=
+        b=UBTowmvbx667AbIZDceFdPeEstaUW7k9IebI4PFLGvqnnk9el75jrPT9rAVDsajwf
+         IHd9LBpxqLCzY/E71AAr3Wf9ZPywihm4RHIbHrDGIsK9tj+zQgdktS3LtL1zkcZfzY
+         kXOVgRyorVccznvRHG2d87F76gH9vF6bxmSc9soE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        llvm@lists.linux.dev, Nathan Huckleberry <nhuck@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 185/207] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
-Date:   Mon, 26 Sep 2022 12:12:54 +0200
-Message-Id: <20220926100814.892864169@linuxfoundation.org>
+        stable@vger.kernel.org, David Wysochanski <dwysocha@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: [PATCH 5.15 141/148] NFSv4: Fixes for nfs4_inode_return_delegation()
+Date:   Mon, 26 Sep 2022 12:12:55 +0200
+Message-Id: <20220926100801.499600091@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Huckleberry <nhuck@google.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit b0b9408f132623dc88e78adb5282f74e4b64bb57 ]
+commit 6e176d47160cec8bcaa28d9aa06926d72d54237c upstream.
 
-The mode_valid field in drm_connector_helper_funcs is expected to be of
-type:
-enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
-				     struct drm_display_mode *mode);
+We mustn't call nfs_wb_all() on anything other than a regular file.
+Furthermore, we can exit early when we don't hold a delegation.
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
-
-The return type of cdn_dp_connector_mode_valid should be changed from
-int to enum drm_mode_status.
-
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220913205555.155149-1-nhuck@google.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: David Wysochanski <dwysocha@redhat.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/rockchip/cdn-dp-core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/nfs/delegation.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index c204e9b95c1f..518ee13b1d6f 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -283,8 +283,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
- 	return ret;
+--- a/fs/nfs/delegation.c
++++ b/fs/nfs/delegation.c
+@@ -755,11 +755,13 @@ int nfs4_inode_return_delegation(struct
+ 	struct nfs_delegation *delegation;
+ 
+ 	delegation = nfs_start_delegation_return(nfsi);
+-	/* Synchronous recall of any application leases */
+-	break_lease(inode, O_WRONLY | O_RDWR);
+-	nfs_wb_all(inode);
+-	if (delegation != NULL)
++	if (delegation != NULL) {
++		/* Synchronous recall of any application leases */
++		break_lease(inode, O_WRONLY | O_RDWR);
++		if (S_ISREG(inode->i_mode))
++			nfs_wb_all(inode);
+ 		return nfs_end_delegation_return(inode, delegation, 1);
++	}
+ 	return 0;
  }
  
--static int cdn_dp_connector_mode_valid(struct drm_connector *connector,
--				       struct drm_display_mode *mode)
-+static enum drm_mode_status
-+cdn_dp_connector_mode_valid(struct drm_connector *connector,
-+			    struct drm_display_mode *mode)
- {
- 	struct cdn_dp_device *dp = connector_to_dp(connector);
- 	struct drm_display_info *display_info = &dp->connector.display_info;
--- 
-2.35.1
-
 
 
