@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B7F5EB1B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9AC5EB1B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiIZTzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229762AbiIZT4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiIZTz1 (ORCPT
+        with ESMTP id S230247AbiIZTz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:55:27 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D5A2633;
-        Mon, 26 Sep 2022 12:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BCNxkn1cjjmSTz0F2QcnuWmtFkHDRw/dUVSXShbYPtk=; b=ofdS4CZ7qJGuelZ07G6x4wyeEq
-        o4+hP4T1gJZQnEOjyxGireIZZ1+MEg9aoxeDeG/R2AvDSx4S7qCp8P5aZVOnHfxeOFc8cMCjgbXXk
-        Z07GM4aucnTmj7FnuBlJNT9iTC861d2/5SW4rZtQ98JFH0QB7wuN5CKl7YicCNrwYElAn1ggLn9Ve
-        3hSS4/UMsj31cJRSiaLYOkcjjsgeIhghk7MnSbCwU+QqyAt2lz7kiBvCnwOP1+RtF0dnUSI/UdcwZ
-        jgaZXePZnUP3ebMoUoLAECO5gB01LB4t609jzxdzCKZe6oVVhGyVslpBCj8yWuLLW8GQi5ebLXOS9
-        /ef2RS2g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ocuC1-0048RF-0x;
-        Mon, 26 Sep 2022 19:55:05 +0000
-Date:   Mon, 26 Sep 2022 20:55:05 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Message-ID: <YzIDmUzPh3hikmP3@ZenIV>
-References: <YyFPtTtxYozCuXvu@ZenIV>
- <20220914145233.cyeljaku4egeu4x2@quack3>
- <YyIEgD8ksSZTsUdJ@ZenIV>
- <20220915081625.6a72nza6yq4l5etp@quack3>
- <YyvG+Oih2A37Grcf@ZenIV>
- <YyxzYTlyGhbb2MOu@infradead.org>
- <Yy00eSjyxvUIp7D5@ZenIV>
- <Yy1x8QE9YA4HHzbQ@infradead.org>
- <Yy3bNjaiUoGv/djG@ZenIV>
- <YzHLB4lGa2vktN7W@infradead.org>
+        Mon, 26 Sep 2022 15:55:58 -0400
+Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.de [129.143.116.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A75B20F43;
+        Mon, 26 Sep 2022 12:55:55 -0700 (PDT)
+Received: by rhlx01.hs-esslingen.de (Postfix, from userid 102)
+        id 5F0A6223A1A3; Mon, 26 Sep 2022 21:55:52 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 21:55:52 +0200
+From:   Andreas Mohr <andi@lisas.de>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
+        andi@lisas.de, puwen@hygon.cn, mario.limonciello@amd.com,
+        rui.zhang@intel.com, gpiccoli@igalia.com,
+        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
+        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD
+ and Intel processors
+Message-ID: <YzIDyLbGgzEv0wzP@rhlx01.hs-esslingen.de>
+References: <20220923153801.9167-1-kprateek.nayak@amd.com>
+ <YzGWHMIsD7RBhEP+@hirez.programming.kicks-ass.net>
+ <9875e20e-8363-74ef-349d-d339eddb3cc2@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YzHLB4lGa2vktN7W@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <9875e20e-8363-74ef-349d-d339eddb3cc2@amd.com>
+X-Priority: none
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:53:43AM -0700, Christoph Hellwig wrote:
-> On Fri, Sep 23, 2022 at 05:13:42PM +0100, Al Viro wrote:
-> > You are mixing two issues here - holding references to pages while using
-> > iov_iter instance is obvious; holding them until async IO is complete, even
-> > though struct iov_iter might be long gone by that point is a different
-> > story.
+Hi,
+
+Am Mon, Sep 26, 2022 at 10:02:44PM +0530 schrieb K Prateek Nayak:
+> Hello Peter,
 > 
-> But someone needs to hold a refernce until the I/O is completed, because
-> the I/O obviously needs the pages.  Yes, we could say the callers holds
-> them and can drop the references right after I/O submission, while
-> the method needs to grab another reference.  But that is more
-> complicated and is more costly than just holding the damn reference.
+> On 9/26/2022 5:37 PM, Peter Zijlstra wrote:
+> > For how many of the above have you changed behaviour?
+> 
+> The proposed logic does alter the behavior for x86 chipsets that depend
+> on acpi_idle driver and have IOPORT based C-state. Based on what
+> Rafael and Dave suggested, I have marked all Intel processors to be
+> affected by this bug. In light of Andreas' report, I've also marked
+> all the pre-family 17h AMD processors to be affected by this bug to avoid
+> causing any regression.
+> 
+> It is hard to tell if any other vendor had this bug in their chipsets.
+> Dave's patch does not make this consideration either and limits the
+> dummy operation to only Intel chipsets using acpi_idle driver.
+> (https://lore.kernel.org/all/78d13a19-2806-c8af-573e-7f2625edfab8@intel.com/)
+> If folks reported a regression, I would have been happy to fix it for
+> them.
 
-Take a look at __nfs_create_request().  And trace the call chains leading
-to nfs_clear_request() where the corresponding put_page() happens.
+Despite certain, umm, controversies, the discussion/patch activities
+appear to be heading into a good direction ;)
 
-What I'm afraid of is something similar in the bowels of some RDMA driver.
-With upper layers shoving page references into sglist using iov_iter_get_pages(),
-then passing sglist to some intermediate layer, then *that* getting passed down
-into a driver which grabs references for its own use and releases them from
-destructor of some private structure.  Done via kref_put().  Have that
-delayed by, hell - anything, up to and including debugfs shite somewhere
-in the same driver, iterating through those private structures, grabbing
-a reference to do some pretty-print into kmalloc'ed buffer, then drooping it.
-Voila - we have page refs duplicated from ITER_BVEC and occasionally staying
-around after the ->ki_complete() of async ->write_iter() that got that
-ITER_BVEC.
 
-It's really not a trivial rule change.
+
+This text somehow prompted me to think of
+whether STPCLK# [quirk] behaviour is
+a property of the CPU family, or the chipset, or actually a combination of it.
+
+Given that [from recollection] VIA 8233/8235 spec PDFs do mention STPCLK#,
+possibly a chipset does have a say in it? (which
+obviously would then mean that
+the kernel's quirk state decision-making would have to be refined)
+
+Minor reference (note 8237, not 8233):
+http://www.chipset-ic.com/datasheet/VT8237.pdf
+  "STPCLK# is asserted by the VT8237R to the CPU to throttle the processor."
+  (and many other STPCLK# mentions there)
+
+Greetings
+
+Andreas Mohr
