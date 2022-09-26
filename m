@@ -2,110 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A945EB337
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA175EB335
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiIZVeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S230449AbiIZVeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiIZVeo (ORCPT
+        with ESMTP id S230003AbiIZVeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:34:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B281183F;
-        Mon, 26 Sep 2022 14:34:43 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QLMLlw026751;
-        Mon, 26 Sep 2022 21:34:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=f2oVW5cv920HtluzlojR1Lmu74tSl8qrPKw3Uc0zNRA=;
- b=XtRrgQJiv2OAKKUVLos7UsrYBHpfrT+ifm4SLHdo/kqgMtD7NEAiK04ow7VbFtLjWaUX
- /SFaOFYKIVxlmTKfK8fF3ti7hcd8Ur/8fudeQO20duxa1LpEbQHqj3l++/DdS4BgsUzH
- 4XJAcWbUQyM/yiHg5k5PC+qu0wrYIs+uo+WSAIzWZQvFn0xri7MnHRgDZAj8bP1dk7K6
- 3a1D+OICEIiY0VXBYWfWTTsgIQ6u4k2aQ2jA11+HM1pzF7n9/G7Q9cJlV8LiZ/dnExBL
- MPYGx+2l9TVapbd5UiO7eExBUGo7YGVEmmcY9doq8ZxNUuld0s0kKK+Zb7oPi0rD1a1Y cg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jsq8vmufa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 21:34:14 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QLYD49032298
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 21:34:13 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 26 Sep 2022 14:34:13 -0700
-Date:   Mon, 26 Sep 2022 14:34:13 -0700
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Avri Altman <Avri.Altman@wdc.com>
-CC:     "mani@kernel.org" <mani@kernel.org>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "quic_nitirawa@quicinc.com" <quic_nitirawa@quicinc.com>,
-        "quic_rampraka@quicinc.com" <quic_rampraka@quicinc.com>,
-        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v1 02/16] ufs: core: Introduce Multi-circular queue
- capability
-Message-ID: <20220926213413.GD15228@asutoshd-linux1.qualcomm.com>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
- <fa3d70c1642c64ce75461f630eabe84b3b974d4e.1663894792.git.quic_asutoshd@quicinc.com>
- <DM6PR04MB6575F55C0A33C049E22C72B6FC509@DM6PR04MB6575.namprd04.prod.outlook.com>
+        Mon, 26 Sep 2022 17:34:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41698A2875;
+        Mon, 26 Sep 2022 14:34:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72D506145A;
+        Mon, 26 Sep 2022 21:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700B7C433C1;
+        Mon, 26 Sep 2022 21:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664228058;
+        bh=U8u7djBV3txbnmWy6HqwYkPNTKgcPkvVvL0ocRv+9oY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Og0BoFhOLtCc7FpuNe56c89Pinv3RokJ+zx7XFwXIah88uy2B6SMKiPbPn8vY/0z+
+         cHHpKqErqiZ6aZXf42EpW0qr2qkn/69QmGFoK+wVrVlCBlvoD/xP3nn5p0bP9Cbu7d
+         eCqaXnhSgTpyMdF4x4bXOcTMWE1fSpb4taque/7uJnxZl7sGgnB2/8QuI35bvP6VXn
+         M3BBBvZShnsn8PNgqbO2mFB1b7YHcftgHkDCr0wV5QGPQ5iGjI7My9wQHtcBa3YWO7
+         wbXddTS5jyA/VtFQjWuV3zRorXNtZ1yILpsPGgeTpQyPR/P/FyItQLMRU83p6LgOK8
+         sHPBTTKO+PG8g==
+From:   broonie@kernel.org
+To:     Greg KH <greg@kroah.com>
+Cc:     =?UTF-8?q?Ahelenia=20Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tty tree with the drivers-misc tree
+Date:   Mon, 26 Sep 2022 22:34:14 +0100
+Message-Id: <20220926213414.792065-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <DM6PR04MB6575F55C0A33C049E22C72B6FC509@DM6PR04MB6575.namprd04.prod.outlook.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5dXhM2cb4YyM6u6yv3C-R1bycUFppWH2
-X-Proofpoint-ORIG-GUID: 5dXhM2cb4YyM6u6yv3C-R1bycUFppWH2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209260132
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24 2022 at 01:14 -0700, Avri Altman wrote:
->>
->> +       hba->mcq_sup = (hba->capabilities & MASK_MCQ_SUPPORT) >>
->> MCQ_SUPP_SHIFT;
->Since you are just testing for bit30, MASK_MCQ_SUPPORT is not really needed.
->Maybe just:
->hba->mcq_sup = (hba->capabilities >> MCQ_SUPP_SHIFT) & 1;
->
-Thanks. Yeah, Mani suggested FIELD* macros as an option too.
-Let me check that as well and address this in the next version.
+Hi all,
 
--asd
+Today's linux-next merge of the tty tree got a conflict in:
+
+  Documentation/process/magic-number.rst
+
+between commits:
+
+  766c5a3ecb319 ("Documentation: remove nonexistent magic numbers")
+  53c2bd6790172 ("a.out: remove define-only CMAGIC, previously magic number")
+
+from the drivers-misc tree and commits:
+
+  7a4e0d2c7fb8e ("tty: remove TTY_MAGIC")
+  5052df99d3bc3 ("tty: remove TTY_DRIVER_MAGIC")
+  14f9ed6153705 ("tty: n_hdlc: remove HDLC_MAGIC")
+  0e6357c3b61d6 ("tty: synclink_gt: remove MGSL_MAGIC")
+
+from the tty tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc Documentation/process/magic-number.rst
+index 0387e8014074a,2326c3be94fc6..0000000000000
+--- a/Documentation/process/magic-number.rst
++++ b/Documentation/process/magic-number.rst
+@@@ -69,19 -69,69 +69,15 @@@ Changelog:
+  Magic Name            Number           Structure                File
+  ===================== ================ ======================== ==========================================
+  PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/linux/pg.h``
+- HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/char/n_hdlc.c``
+ -CMAGIC                0x0111           user                     ``include/linux/a.out.h``
+ -MKISS_DRIVER_MAGIC    0x04bf           mkiss_channel            ``drivers/net/mkiss.h``
+  APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86/kernel/apm_32.c``
+ -DB_MAGIC              0x4442           fc_info                  ``drivers/net/iph5526_novram.c``
+ -DL_MAGIC              0x444d           fc_info                  ``drivers/net/iph5526_novram.c``
+  FASYNC_MAGIC          0x4601           fasync_struct            ``include/linux/fs.h``
+ -FF_MAGIC              0x4646           fc_info                  ``drivers/net/iph5526_novram.c``
+ -PTY_MAGIC             0x5001                                    ``drivers/char/pty.c``
+ -PPP_MAGIC             0x5002           ppp                      ``include/linux/if_pppvar.h``
+ -SSTATE_MAGIC          0x5302           serial_state             ``include/linux/serial.h``
+  SLIP_MAGIC            0x5302           slip                     ``drivers/net/slip.h``
+- TTY_MAGIC             0x5401           tty_struct               ``include/linux/tty.h``
+- MGSL_MAGIC            0x5401           mgsl_info                ``drivers/char/synclink.c``
+- TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/linux/tty_driver.h``
+ -STRIP_MAGIC           0x5303           strip                    ``drivers/net/strip.c``
+ -SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/net/hamradio/6pack.h``
+ -AX25_MAGIC            0x5316           ax_disp                  ``drivers/net/mkiss.h``
+  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/char/pcmcia/synclink_cs.c``
+ -USB_SERIAL_MAGIC      0x6702           usb_serial               ``drivers/usb/serial/usb-serial.h``
+ -FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/net/ethernet/dec/tulip/de2104x.c``
+ -USB_BLUETOOTH_MAGIC   0x6d02           usb_bluetooth            ``drivers/usb/class/bluetty.c``
+ -RFCOMM_TTY_MAGIC      0x6d02                                    ``net/bluetooth/rfcomm/tty.c``
+ -USB_SERIAL_PORT_MAGIC 0x7301           usb_serial_port          ``drivers/usb/serial/usb-serial.h``
+ -CG_MAGIC              0x00090255       ufs_cylinder_group       ``include/linux/ufs_fs.h``
+ -LSEMAGIC              0x05091998       lse                      ``drivers/fc4/fc.c``
+ -RIEBL_MAGIC           0x09051990                                ``drivers/net/atarilance.c``
+ -NBD_REQUEST_MAGIC     0x12560953       nbd_request              ``include/linux/nbd.h``
+ -RED_MAGIC2            0x170fc2a5       (any)                    ``mm/slab.c``
+ +NBD_REQUEST_MAGIC     0x25609513       nbd_request              ``include/uapi/linux/nbd.h``
+  BAYCOM_MAGIC          0x19730510       baycom_state             ``drivers/net/baycom_epp.c``
+ -ISDN_X25IFACE_MAGIC   0x1e75a2b9       isdn_x25iface_proto_data ``drivers/isdn/isdn_x25iface.h``
+ -ECP_MAGIC             0x21504345       cdkecpsig                ``include/linux/cdk.h``
+ -LSOMAGIC              0x27091997       lso                      ``drivers/fc4/fc.c``
+ -LSMAGIC               0x2a3b4d2a       ls                       ``drivers/fc4/fc.c``
+ -WANPIPE_MAGIC         0x414C4453       sdla_{dump,exec}         ``include/linux/wanpipe.h``
+ -CS_CARD_MAGIC         0x43525553       cs_card                  ``sound/oss/cs46xx.c``
+ -LABELCL_MAGIC         0x4857434c       labelcl_info_s           ``include/asm/ia64/sn/labelcl.h``
+ -ISDN_ASYNC_MAGIC      0x49344C01       modem_info               ``include/linux/isdn.h``
+ -CTC_ASYNC_MAGIC       0x49344C01       ctc_tty_info             ``drivers/s390/net/ctctty.c``
+ -ISDN_NET_MAGIC        0x49344C02       isdn_net_local_s         ``drivers/isdn/i4l/isdn_net_lib.h``
+ -SAVEKMSG_MAGIC2       0x4B4D5347       savekmsg                 ``arch/*/amiga/config.c``
+ -CS_STATE_MAGIC        0x4c4f4749       cs_state                 ``sound/oss/cs46xx.c``
+ -SLAB_C_MAGIC          0x4f17a36d       kmem_cache               ``mm/slab.c``
+ -COW_MAGIC             0x4f4f4f4d       cow_header_v1            ``arch/um/drivers/ubd_user.c``
+ -I810_CARD_MAGIC       0x5072696E       i810_card                ``sound/oss/i810_audio.c``
+ -TRIDENT_CARD_MAGIC    0x5072696E       trident_card             ``sound/oss/trident.c``
+ -ROUTER_MAGIC          0x524d4157       wan_device               [in ``wanrouter.h`` pre 3.9]
+ -SAVEKMSG_MAGIC1       0x53415645       savekmsg                 ``arch/*/amiga/config.c``
+ -GDA_MAGIC             0x58464552       gda                      ``arch/mips/include/asm/sn/gda.h``
+ -RED_MAGIC1            0x5a2cf071       (any)                    ``mm/slab.c``
+ -EEPROM_MAGIC_VALUE    0x5ab478d2       lanai_dev                ``drivers/atm/lanai.c``
+  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/linux/hdlcdrv.h``
+ -PCXX_MAGIC            0x5c6df104       channel                  ``drivers/char/pcxx.h``
+  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mips/include/asm/sn/klkernvars.h``
+ -I810_STATE_MAGIC      0x63657373       i810_state               ``sound/oss/i810_audio.c``
+ -TRIDENT_STATE_MAGIC   0x63657373       trient_state             ``sound/oss/trident.c``
+ -M3_CARD_MAGIC         0x646e6f50       m3_card                  ``sound/oss/maestro3.c``
+ -FW_HEADER_MAGIC       0x65726F66       fw_header                ``drivers/atm/fore200e.h``
+ -SLOT_MAGIC            0x67267321       slot                     ``drivers/hotplug/cpqphp.h``
+ -SLOT_MAGIC            0x67267322       slot                     ``drivers/hotplug/acpiphp.h``
+ -LO_MAGIC              0x68797548       nbd_device               ``include/linux/nbd.h``
+ -M3_STATE_MAGIC        0x734d724d       m3_state                 ``sound/oss/maestro3.c``
+ -VMALLOC_MAGIC         0x87654320       snd_alloc_track          ``sound/core/memory.c``
+ -KMALLOC_MAGIC         0x87654321       snd_alloc_track          ``sound/core/memory.c``
+ -PWC_MAGIC             0x89DC10AB       pwc_device               ``drivers/usb/media/pwc.h``
+ -NBD_REPLY_MAGIC       0x96744668       nbd_reply                ``include/linux/nbd.h``
+ -ENI155_MAGIC          0xa54b872d       midway_eprom	        ``drivers/atm/eni.h``
+ +NBD_REPLY_MAGIC       0x67446698       nbd_reply                ``include/uapi/linux/nbd.h``
+  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/coda_fs_i.h``
+  YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/net/hamradio/yam.c``
+  CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/scsi/ncr53c8xx.c``
+diff --cc Documentation/translations/it_IT/process/magic-number.rst
+index cfb8d69768aae,1803497816f1e..0000000000000
+--- a/Documentation/translations/it_IT/process/magic-number.rst
++++ b/Documentation/translations/it_IT/process/magic-number.rst
+@@@ -75,15 -75,21 +75,26 @@@ Registro dei cambiamenti:
+  Nome magico           Numero           Struttura                File
+  ===================== ================ ======================== ==========================================
+  PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/linux/pg.h``
+++<<<<<<< HEAD
+ +HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/char/n_hdlc.c``
+++=======
++ CMAGIC                0x0111           user                     ``include/linux/a.out.h``
++ MKISS_DRIVER_MAGIC    0x04bf           mkiss_channel            ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86/kernel/apm_32.c``
+ -DB_MAGIC              0x4442           fc_info                  ``drivers/net/iph5526_novram.c``
+ -DL_MAGIC              0x444d           fc_info                  ``drivers/net/iph5526_novram.c``
+  FASYNC_MAGIC          0x4601           fasync_struct            ``include/linux/fs.h``
+ -FF_MAGIC              0x4646           fc_info                  ``drivers/net/iph5526_novram.c``
+ -PTY_MAGIC             0x5001                                    ``drivers/char/pty.c``
+ -PPP_MAGIC             0x5002           ppp                      ``include/linux/if_pppvar.h``
+ -SSTATE_MAGIC          0x5302           serial_state             ``include/linux/serial.h``
+  SLIP_MAGIC            0x5302           slip                     ``drivers/net/slip.h``
+++<<<<<<< HEAD
+ +TTY_MAGIC             0x5401           tty_struct               ``include/linux/tty.h``
+ +MGSL_MAGIC            0x5401           mgsl_info                ``drivers/char/synclink.c``
+ +TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/linux/tty_driver.h``
+++=======
++ STRIP_MAGIC           0x5303           strip                    ``drivers/net/strip.c``
++ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/net/hamradio/6pack.h``
++ AX25_MAGIC            0x5316           ax_disp                  ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/char/pcmcia/synclink_cs.c``
+ +<<<<<<< HEAD
+  USB_SERIAL_MAGIC      0x6702           usb_serial               ``drivers/usb/serial/usb-serial.h``
+  FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/net/ethernet/dec/tulip/de2104x.c``
+  USB_BLUETOOTH_MAGIC   0x6d02           usb_bluetooth            ``drivers/usb/class/bluetty.c``
+diff --cc Documentation/translations/zh_CN/process/magic-number.rst
+index 2df729592547f,9780bf710eebc..0000000000000
+--- a/Documentation/translations/zh_CN/process/magic-number.rst
++++ b/Documentation/translations/zh_CN/process/magic-number.rst
+@@@ -58,15 -58,21 +58,26 @@@ Linux é­æ¯æ
+  é­æ¯æ°å              æ°å­             ç»æ                     æä»¶
+  ===================== ================ ======================== ==========================================
+  PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/linux/pg.h``
+++<<<<<<< HEAD
+ +HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/char/n_hdlc.c``
+++=======
++ CMAGIC                0x0111           user                     ``include/linux/a.out.h``
++ MKISS_DRIVER_MAGIC    0x04bf           mkiss_channel            ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86/kernel/apm_32.c``
+ -DB_MAGIC              0x4442           fc_info                  ``drivers/net/iph5526_novram.c``
+ -DL_MAGIC              0x444d           fc_info                  ``drivers/net/iph5526_novram.c``
+  FASYNC_MAGIC          0x4601           fasync_struct            ``include/linux/fs.h``
+ -FF_MAGIC              0x4646           fc_info                  ``drivers/net/iph5526_novram.c``
+ -PTY_MAGIC             0x5001                                    ``drivers/char/pty.c``
+ -PPP_MAGIC             0x5002           ppp                      ``include/linux/if_pppvar.h``
+ -SSTATE_MAGIC          0x5302           serial_state             ``include/linux/serial.h``
+  SLIP_MAGIC            0x5302           slip                     ``drivers/net/slip.h``
+++<<<<<<< HEAD
+ +TTY_MAGIC             0x5401           tty_struct               ``include/linux/tty.h``
+ +MGSL_MAGIC            0x5401           mgsl_info                ``drivers/char/synclink.c``
+ +TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/linux/tty_driver.h``
+++=======
++ STRIP_MAGIC           0x5303           strip                    ``drivers/net/strip.c``
++ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/net/hamradio/6pack.h``
++ AX25_MAGIC            0x5316           ax_disp                  ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/char/pcmcia/synclink_cs.c``
+ +<<<<<<< HEAD
+  USB_SERIAL_MAGIC      0x6702           usb_serial               ``drivers/usb/serial/usb-serial.h``
+  FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/net/ethernet/dec/tulip/de2104x.c``
+  USB_BLUETOOTH_MAGIC   0x6d02           usb_bluetooth            ``drivers/usb/class/bluetty.c``
+diff --cc Documentation/translations/zh_TW/process/magic-number.rst
+index 4cbb93dadef78,933545e92137a..0000000000000
+--- a/Documentation/translations/zh_TW/process/magic-number.rst
++++ b/Documentation/translations/zh_TW/process/magic-number.rst
+@@@ -61,15 -61,21 +61,26 @@@ Linux é­è¡æ
+  é­è¡æ¸å              æ¸å­             çµæ§                     æä»¶
+  ===================== ================ ======================== ==========================================
+  PG_MAGIC              'P'              pg_{read,write}_hdr      ``include/linux/pg.h``
+++<<<<<<< HEAD
+ +HDLC_MAGIC            0x239e           n_hdlc                   ``drivers/char/n_hdlc.c``
+++=======
++ CMAGIC                0x0111           user                     ``include/linux/a.out.h``
++ MKISS_DRIVER_MAGIC    0x04bf           mkiss_channel            ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86/kernel/apm_32.c``
+ -DB_MAGIC              0x4442           fc_info                  ``drivers/net/iph5526_novram.c``
+ -DL_MAGIC              0x444d           fc_info                  ``drivers/net/iph5526_novram.c``
+  FASYNC_MAGIC          0x4601           fasync_struct            ``include/linux/fs.h``
+ -FF_MAGIC              0x4646           fc_info                  ``drivers/net/iph5526_novram.c``
+ -PTY_MAGIC             0x5001                                    ``drivers/char/pty.c``
+ -PPP_MAGIC             0x5002           ppp                      ``include/linux/if_pppvar.h``
+ -SSTATE_MAGIC          0x5302           serial_state             ``include/linux/serial.h``
+  SLIP_MAGIC            0x5302           slip                     ``drivers/net/slip.h``
+++<<<<<<< HEAD
+ +TTY_MAGIC             0x5401           tty_struct               ``include/linux/tty.h``
+ +MGSL_MAGIC            0x5401           mgsl_info                ``drivers/char/synclink.c``
+ +TTY_DRIVER_MAGIC      0x5402           tty_driver               ``include/linux/tty_driver.h``
+++=======
++ STRIP_MAGIC           0x5303           strip                    ``drivers/net/strip.c``
++ SIXPACK_MAGIC         0x5304           sixpack                  ``drivers/net/hamradio/6pack.h``
++ AX25_MAGIC            0x5316           ax_disp                  ``drivers/net/mkiss.h``
+++>>>>>>> tty/tty-next
+  MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/char/pcmcia/synclink_cs.c``
+ +<<<<<<< HEAD
+  USB_SERIAL_MAGIC      0x6702           usb_serial               ``drivers/usb/serial/usb-serial.h``
+  FULL_DUPLEX_MAGIC     0x6969                                    ``drivers/net/ethernet/dec/tulip/de2104x.c``
+  USB_BLUETOOTH_MAGIC   0x6d02           usb_bluetooth            ``drivers/usb/class/bluetty.c``
+diff --cc drivers/usb/serial/ftdi_sio.c
+index 31b9b36f3a1cb,0a1da579ead52..0000000000000
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@@ -1107,8 -1078,29 +1107,9 @@@ static const char *ftdi_chip_name[] = 
+  #define FTDI_STATUS_B1_MASK	(FTDI_RS_BI)
+  /* End TIOCMIWAIT */
+  
+ -/* function prototypes for a FTDI serial converter */
+ -static int  ftdi_sio_probe(struct usb_serial *serial,
+ -					const struct usb_device_id *id);
+ -static int  ftdi_sio_port_probe(struct usb_serial_port *port);
+ -static void ftdi_sio_port_remove(struct usb_serial_port *port);
+ -static int  ftdi_open(struct tty_struct *tty, struct usb_serial_port *port);
+ -static void ftdi_dtr_rts(struct usb_serial_port *port, int on);
+ -static void ftdi_process_read_urb(struct urb *urb);
+ -static int ftdi_prepare_write_buffer(struct usb_serial_port *port,
+ -						void *dest, size_t size);
+  static void ftdi_set_termios(struct tty_struct *tty,
+- 			struct usb_serial_port *port, struct ktermios *old);
++ 			     struct usb_serial_port *port,
++ 			     const struct ktermios *old_termios);
+ -static int  ftdi_tiocmget(struct tty_struct *tty);
+ -static int  ftdi_tiocmset(struct tty_struct *tty,
+ -			unsigned int set, unsigned int clear);
+ -static int  ftdi_ioctl(struct tty_struct *tty,
+ -			unsigned int cmd, unsigned long arg);
+ -static void get_serial_info(struct tty_struct *tty, struct serial_struct *ss);
+ -static int set_serial_info(struct tty_struct *tty,
+ -				struct serial_struct *ss);
+ -static void ftdi_break_ctl(struct tty_struct *tty, int break_state);
+ -static bool ftdi_tx_empty(struct usb_serial_port *port);
+  static int ftdi_get_modem_status(struct usb_serial_port *port,
+  						unsigned char status[2]);
+  
