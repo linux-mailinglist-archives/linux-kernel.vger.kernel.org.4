@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADED5E9F21
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF985E9FFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbiIZKUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
+        id S235787AbiIZKcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234855AbiIZKSL (ORCPT
+        with ESMTP id S235871AbiIZK31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:18:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CDA48C94;
-        Mon, 26 Sep 2022 03:15:22 -0700 (PDT)
+        Mon, 26 Sep 2022 06:29:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE1A4;
+        Mon, 26 Sep 2022 03:19:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8DFB2CE10E3;
-        Mon, 26 Sep 2022 10:15:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878BAC433D7;
-        Mon, 26 Sep 2022 10:15:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E39D9B80918;
+        Mon, 26 Sep 2022 10:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F93C433C1;
+        Mon, 26 Sep 2022 10:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187318;
-        bh=xokKu9snRjxxFHJhz8hYHhAd2PJFlqHZWJWOI+98vzM=;
+        s=korg; t=1664187571;
+        bh=cunuopUqk2Evaz2JERyZfUP05fYhKKKEXN2E3X1JHFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QtPlI7zF+YPIR9/j0ofOJ22QcNQ4fPiRJLrP9TnLWAQ+KXdyPlI2PzopaIa2R0WFk
-         dJzNTjU2rNvsxkiE7C519GPT/ioWWFOFueKJ2APdh6EvStJteTFSfxsiAxL7kemVjm
-         v9sM0B2fcOLULnf4WZMyJOfUfsgswd/4lwmLmq+M=
+        b=kr4Ns4v2SLnWI6Umz2tlWuV6NhxULkIuUHgmiSyHgdTsL/fjQfC8wLvUyD7rb6mtT
+         it+rVRFVzqcjloV125aS04jlpiYNnrWtf17hQ3aSIKvZ0hhXtv/7gDntkesstqjA77
+         kgT+B8pc91pwTjdB8Lv9rw9Y3IC3kegak+HkWbls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 10/40] ALSA: hda/sigmatel: Keep power up while beep is enabled
+Subject: [PATCH 4.19 19/58] usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices
 Date:   Mon, 26 Sep 2022 12:11:38 +0200
-Message-Id: <20220926100738.605261859@linuxfoundation.org>
+Message-Id: <20220926100742.142523645@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,69 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Felipe Balbi <felipe.balbi@linux.intel.com>
 
-[ Upstream commit 414d38ba871092aeac4ed097ac4ced89486646f7 ]
+[ Upstream commit dbb0569de852fb4576d6f62078d515f989a181ca ]
 
-It seems that the beep playback doesn't work well on IDT codec devices
-when the codec auto-pm is enabled.  Keep the power on while the beep
-switch is enabled.
+This patch simply adds a new PCI Device ID
 
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1200544
-Link: https://lore.kernel.org/r/20220904072750.26164-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Stable-dep-of: bad0d1d726ac ("usb: dwc3: pci: Add support for Intel Raptor Lake")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_sigmatel.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
-index f7896a9ae3d6..73ce5c83e7e3 100644
---- a/sound/pci/hda/patch_sigmatel.c
-+++ b/sound/pci/hda/patch_sigmatel.c
-@@ -222,6 +222,7 @@ struct sigmatel_spec {
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 527938eee846..5d5166373aa1 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -36,6 +36,7 @@
+ #define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
+ #define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
+ #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
++#define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
  
- 	/* beep widgets */
- 	hda_nid_t anabeep_nid;
-+	bool beep_power_on;
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -351,6 +352,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICLLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
  
- 	/* SPDIF-out mux */
- 	const char * const *spdif_labels;
-@@ -4481,6 +4482,26 @@ static int stac_suspend(struct hda_codec *codec)
- 	stac_shutup(codec);
- 	return 0;
- }
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
 +
-+static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
-+{
-+	struct sigmatel_spec *spec = codec->spec;
-+	int ret = snd_hda_gen_check_power_status(codec, nid);
-+
-+#ifdef CONFIG_SND_HDA_INPUT_BEEP
-+	if (nid == spec->gen.beep_nid && codec->beep) {
-+		if (codec->beep->enabled != spec->beep_power_on) {
-+			spec->beep_power_on = codec->beep->enabled;
-+			if (spec->beep_power_on)
-+				snd_hda_power_up_pm(codec);
-+			else
-+				snd_hda_power_down_pm(codec);
-+		}
-+		ret |= spec->beep_power_on;
-+	}
-+#endif
-+	return ret;
-+}
- #else
- #define stac_suspend		NULL
- #endif /* CONFIG_PM */
-@@ -4493,6 +4514,7 @@ static const struct hda_codec_ops stac_patch_ops = {
- 	.unsol_event = snd_hda_jack_unsol_event,
- #ifdef CONFIG_PM
- 	.suspend = stac_suspend,
-+	.check_power_status = stac_check_power_status,
- #endif
- 	.reboot_notify = stac_shutup,
- };
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
 -- 
 2.35.1
 
