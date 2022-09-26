@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE1D5EA04E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F575EA20A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiIZKfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S237236AbiIZLBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235611AbiIZKdX (ORCPT
+        with ESMTP id S237232AbiIZK7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56E44F3A1;
-        Mon, 26 Sep 2022 03:20:46 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110634E86A;
+        Mon, 26 Sep 2022 03:30:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D50160B9A;
-        Mon, 26 Sep 2022 10:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E62C433B5;
-        Mon, 26 Sep 2022 10:20:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6934BB80915;
+        Mon, 26 Sep 2022 10:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D6CC433C1;
+        Mon, 26 Sep 2022 10:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187636;
-        bh=AXLqAExynxexynN+a64WeqYqgR2F9VxCs+rGGpDCrxQ=;
+        s=korg; t=1664188162;
+        bh=cK8B3WkbVBAYTuDXLByTeBjLGGmC+KvA8KcRA9a+1JA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GalQYhq/PVRwmOdfiSe1ooeCq2HK8fx47MglQlFAvY9Wk8CQWB7HTfxi+1n5hR23e
-         HV1L/wRUMiF6bVryITS3+uddwndAbE8k+gqyrXRuqkzFwvOhX62Fq4RSEs9USbPgoH
-         4tC1U4kPWD5WF/COnh06D/1g2irJsVAXhNNqcey0=
+        b=pUyiUmyDtwWKg3Z723vcil/m5ZRnJz2VJ03w6XOR6OmAVHNjoCXy0n4Qjnc1Mqnmx
+         N4Raqna8jrHF4+iJ9gssNIygEF7uslENDVpMBH3Paw3r+0y+NS1LUnYv/mnkHUMAsP
+         8UKo2mbeECytF0PenmHCraJCjdUWurHO/zUZBw2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.4 013/120] cifs: dont send down the destination address to sendmsg for a SOCK_STREAM
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 020/141] iio:adc:mcp3911: Switch to generic firmware properties.
 Date:   Mon, 26 Sep 2022 12:10:46 +0200
-Message-Id: <20220926100751.074521978@linuxfoundation.org>
+Message-Id: <20220926100755.299003485@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Metzmacher <metze@samba.org>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-commit 17d3df38dc5f4cec9b0ac6eb79c1859b6e2693a4 upstream.
+[ Upstream commit 4efc1c614d334883cce09c38aa3fe74d3fb0bbf0 ]
 
-This is ignored anyway by the tcp layer.
+This allows use of the driver with other types of firmware such as ACPI
+PRP0001 based probing.
 
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Cc: stable@vger.kernel.org
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Also part of a general attempt to remove direct use of of_ specific
+accessors from IIO.
+
+Added an include for mod_devicetable.h whilst here to cover the
+struct of_device_id definition.
+
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Kent Gustavsson <kent@minoris.se>
+Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Stable-dep-of: cfbd76d5c9c4 ("iio: adc: mcp3911: correct "microchip,device-addr" property")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/transport.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/iio/adc/mcp3911.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -209,8 +209,8 @@ smb_send_kvec(struct TCP_Server_Info *se
+diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+index 65278270a75c..608842632925 100644
+--- a/drivers/iio/adc/mcp3911.c
++++ b/drivers/iio/adc/mcp3911.c
+@@ -10,6 +10,8 @@
+ #include <linux/err.h>
+ #include <linux/iio/iio.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/spi/spi.h>
  
- 	*sent = 0;
+@@ -209,12 +211,13 @@ static const struct iio_info mcp3911_info = {
+ 	.write_raw = mcp3911_write_raw,
+ };
  
--	smb_msg->msg_name = (struct sockaddr *) &server->dstaddr;
--	smb_msg->msg_namelen = sizeof(struct sockaddr);
-+	smb_msg->msg_name = NULL;
-+	smb_msg->msg_namelen = 0;
- 	smb_msg->msg_control = NULL;
- 	smb_msg->msg_controllen = 0;
- 	if (server->noblocksnd)
+-static int mcp3911_config(struct mcp3911 *adc, struct device_node *of_node)
++static int mcp3911_config(struct mcp3911 *adc)
+ {
++	struct device *dev = &adc->spi->dev;
+ 	u32 configreg;
+ 	int ret;
+ 
+-	of_property_read_u32(of_node, "device-addr", &adc->dev_addr);
++	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
+ 	if (adc->dev_addr > 3) {
+ 		dev_err(&adc->spi->dev,
+ 			"invalid device address (%i). Must be in range 0-3.\n",
+@@ -298,7 +301,7 @@ static int mcp3911_probe(struct spi_device *spi)
+ 		}
+ 	}
+ 
+-	ret = mcp3911_config(adc, spi->dev.of_node);
++	ret = mcp3911_config(adc);
+ 	if (ret)
+ 		goto clk_disable;
+ 
+-- 
+2.35.1
+
 
 
