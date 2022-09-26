@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49ED5EA140
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ED65E9F36
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiIZKrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S235135AbiIZKVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiIZKod (ORCPT
+        with ESMTP id S234322AbiIZKTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0499A4D829;
-        Mon, 26 Sep 2022 03:25:32 -0700 (PDT)
+        Mon, 26 Sep 2022 06:19:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5424B0E5;
+        Mon, 26 Sep 2022 03:15:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EAF8B80924;
-        Mon, 26 Sep 2022 10:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D752C433D6;
-        Mon, 26 Sep 2022 10:25:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48552B80918;
+        Mon, 26 Sep 2022 10:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC990C433C1;
+        Mon, 26 Sep 2022 10:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187927;
-        bh=s79junYM+monALAZy0o8fLLE37ZoO9S4i26Pjqp1b5Y=;
+        s=korg; t=1664187346;
+        bh=9/Te1h+f9HwdTAWoOS+yy6xfmbk64jeG94KIfI4vfW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vcJC1FTyZhpHfqsB+PAiLyEQktkchSIDUAZeqMEIKNoDagGKED0Rbne0pqwYk9ovd
-         dhl/CY4/WtACvEqGKPG28QFnWrI7oRMRbFcRGjyHk4N4yEbqH374+X+miKmbN9cBnI
-         fPO+GkfApsWhwJf994VDad1yHkqBtBxHmgJJCaNM=
+        b=hKwyG8A+4k9xGcmgKCSRrzNWEi/akbcnGLiyTtYYPAgJYxPRcfYsil3TGO5RMpg67
+         QyeRzoGkqlUk/Rh4OHreP3BlglgpZops9529BEYfSWYtoS/FmTAcMAVg4S5JYhrlf4
+         gqRv7QYD2/G5q7YqbISyyG+PKSnqZulAaouH0/fg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 074/120] net: team: Unsync device addresses on ndo_stop
+        stable@vger.kernel.org, jerry meng <jerry-meng@foxmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.14 19/40] USB: serial: option: add Quectel RM520N
 Date:   Mon, 26 Sep 2022 12:11:47 +0200
-Message-Id: <20220926100753.720692306@linuxfoundation.org>
+Message-Id: <20220926100738.965041341@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: jerry meng <jerry-meng@foxmail.com>
 
-[ Upstream commit bd60234222b2fd5573526da7bcd422801f271f5f ]
+commit d640c4cb8f2f933c0ca896541f9de7fb1ae245f4 upstream.
 
-Netdev drivers are expected to call dev_{uc,mc}_sync() in their
-ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
-This is mentioned in the kerneldoc for those dev_* functions.
+add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
 
-The team driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
-ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
-already been emptied in unregister_netdevice_many() before ndo_uninit is
-called. This mistake can result in addresses being leftover on former team
-ports after a team device has been deleted; see test_LAG_cleanup() in the
-last patch in this series.
+0x0801: DIAG + NMEA + AT + MODEM + RMNET
 
-Add unsync calls at their expected location, team_close().
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=RM520N-GL
+S:  SerialNumber=384af524
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-v3:
-* When adding or deleting a port, only sync/unsync addresses if the team
-  device is up. In other cases, it is taken care of at the right time by
-  ndo_open/ndo_set_rx_mode/ndo_stop.
-
-Fixes: 3d249d4ca7d0 ("net: introduce ethernet teaming device")
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: jerry meng <jerry-meng@foxmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/team/team.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/usb/serial/option.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
-index 0eb894b7c0bd..da74ec778b6e 100644
---- a/drivers/net/team/team.c
-+++ b/drivers/net/team/team.c
-@@ -1270,10 +1270,12 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
- 		}
- 	}
- 
--	netif_addr_lock_bh(dev);
--	dev_uc_sync_multiple(port_dev, dev);
--	dev_mc_sync_multiple(port_dev, dev);
--	netif_addr_unlock_bh(dev);
-+	if (dev->flags & IFF_UP) {
-+		netif_addr_lock_bh(dev);
-+		dev_uc_sync_multiple(port_dev, dev);
-+		dev_mc_sync_multiple(port_dev, dev);
-+		netif_addr_unlock_bh(dev);
-+	}
- 
- 	port->index = -1;
- 	list_add_tail_rcu(&port->list, &team->port_list);
-@@ -1344,8 +1346,10 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
- 	netdev_rx_handler_unregister(port_dev);
- 	team_port_disable_netpoll(port);
- 	vlan_vids_del_by_dev(port_dev, dev);
--	dev_uc_unsync(port_dev, dev);
--	dev_mc_unsync(port_dev, dev);
-+	if (dev->flags & IFF_UP) {
-+		dev_uc_unsync(port_dev, dev);
-+		dev_mc_unsync(port_dev, dev);
-+	}
- 	dev_close(port_dev);
- 	team_port_leave(team, port);
- 
-@@ -1694,6 +1698,14 @@ static int team_open(struct net_device *dev)
- 
- static int team_close(struct net_device *dev)
- {
-+	struct team *team = netdev_priv(dev);
-+	struct team_port *port;
-+
-+	list_for_each_entry(port, &team->port_list, list) {
-+		dev_uc_unsync(port->dev, dev);
-+		dev_mc_unsync(port->dev, dev);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -259,6 +259,7 @@ static void option_instat_callback(struc
+ #define QUECTEL_PRODUCT_EM060K			0x030b
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
++#define QUECTEL_PRODUCT_RM520N			0x0801
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+ #define QUECTEL_PRODUCT_RM500K			0x7001
+@@ -1164,6 +1165,9 @@ static const struct usb_device_id option
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
+ 	  .driver_info = ZLP },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
 
 
