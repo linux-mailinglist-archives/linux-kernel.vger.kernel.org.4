@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFC05EA843
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5845EA857
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiIZOUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S234242AbiIZOZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiIZOUb (ORCPT
+        with ESMTP id S233443AbiIZOYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:20:31 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE8B4EB9;
-        Mon, 26 Sep 2022 05:29:18 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id s9so3940732qkg.4;
-        Mon, 26 Sep 2022 05:29:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yQYUi9rtHxzjnq1LUMbIkH4itTobdLfxS8nJcmd6jKA=;
-        b=qY56S/x13w8hk8Jw8nrQomBdY78ZVUboxWvgMsuMX4qw8XZ9pcVlXc/ucz3VoluReW
-         yQJnt7ISl/Lex0mJl5EpMBwkMFHKA+Blbz7Mepe6ZscQU7pDzjwUFI/bBzBGtTbAV7gy
-         Dh2rQTTQ8l6uecXKlYcnWt2/tHpm2Zd7+VYoYDJg64D9lvnUWcDiGnl108KC0VGe0Dj1
-         68SUOI44kcHJXkbZY9pSLpx2ehIYXxp/ZKpsnHKJVzyrKdLvIJ9H/MOJAuE8jmav2dkU
-         Wz5m2L+ahpu4OrVruTsMO8005B4+c0XseS5qnSil37NNxeTv6czN4fIpRobCxeqHe+rJ
-         KPGQ==
-X-Gm-Message-State: ACrzQf2xxNY3NNEGWXMNo403Di0zqwiWhIHKx+e2jL54w7qmJy+3CYJe
-        PhpM9bP77uNrRE3z89lQbo3zzg0DZHa/IA==
-X-Google-Smtp-Source: AMsMyM5qP0Y3VA1L+xgbv2dgT8aK1Zwx1aKIeu0QLWlNXL1LC3cZA5tOjX2sEYr+lfVIEZNCF1Ml4Q==
-X-Received: by 2002:a05:620a:31a1:b0:6ce:d7be:496b with SMTP id bi33-20020a05620a31a100b006ced7be496bmr13996526qkb.192.1664195347395;
-        Mon, 26 Sep 2022 05:29:07 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id f19-20020a05620a409300b006ce3e4fb328sm11977818qko.42.2022.09.26.05.29.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 05:29:07 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id e81so8088508ybb.13;
-        Mon, 26 Sep 2022 05:29:07 -0700 (PDT)
-X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
- q4-20020a258e84000000b00696466c0baamr19598860ybl.604.1664195346868; Mon, 26
- Sep 2022 05:29:06 -0700 (PDT)
+        Mon, 26 Sep 2022 10:24:20 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3BA6069E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:35:27 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MbhvG1mFtzWh6M;
+        Mon, 26 Sep 2022 20:31:22 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
+ 2022 20:35:25 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <Roy.Pledge@nxp.com>, <leoyang.li@nxp.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] soc: fsl: dpio: Add __init/__exit annotations to module init/exit func
+Date:   Mon, 26 Sep 2022 20:31:36 +0800
+Message-ID: <20220926123136.1340026-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220919092130.93074-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220919092130.93074-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 26 Sep 2022 14:28:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWEdY5AdjbH-1FvtPQS+5H3LSAF_281k06Y0Bi9mfxQZw@mail.gmail.com>
-Message-ID: <CAMuHMdWEdY5AdjbH-1FvtPQS+5H3LSAF_281k06Y0Bi9mfxQZw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: rzg2lc-smarc: Include SoM DTSI into
- board DTS
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:22 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Move including the rzg2lc-smarc-som.dtsi from the carrier board
-> rzg2lc-smarc.dtsi to the actual RZ/G2LC SMARC EVK board dts
-> r9a07g044c2-smarc.dts. Also move the SW1 related macros along with
-> PMOD1_SER0 to board dts so that we have all the configuration options
-> in the same file.
->
-> This patch is to keep consistency with other SMARC EVKs (RZ/G2L, RZ/G2UL)
-> and it makes sense not include the SoM into the carrier board as we might
-> in future have a different carrier board with the same SoM.
->
-> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Add missing __init/__exit annotations to module init/exit funcs
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.2.
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+---
+ drivers/soc/fsl/dpio/dpio-driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/soc/fsl/dpio/dpio-driver.c b/drivers/soc/fsl/dpio/dpio-driver.c
+index 5a2edc48dd79..534e91dd929c 100644
+--- a/drivers/soc/fsl/dpio/dpio-driver.c
++++ b/drivers/soc/fsl/dpio/dpio-driver.c
+@@ -326,7 +326,7 @@ static struct fsl_mc_driver dpaa2_dpio_driver = {
+ 	.match_id_table = dpaa2_dpio_match_id_table
+ };
+ 
+-static int dpio_driver_init(void)
++static int __init dpio_driver_init(void)
+ {
+ 	if (!zalloc_cpumask_var(&cpus_unused_mask, GFP_KERNEL))
+ 		return -ENOMEM;
+@@ -335,7 +335,7 @@ static int dpio_driver_init(void)
+ 	return fsl_mc_driver_register(&dpaa2_dpio_driver);
+ }
+ 
+-static void dpio_driver_exit(void)
++static void __exit dpio_driver_exit(void)
+ {
+ 	free_cpumask_var(cpus_unused_mask);
+ 	fsl_mc_driver_unregister(&dpaa2_dpio_driver);
+-- 
+2.25.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
