@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42355EA130
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638095EA4ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbiIZKqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S238665AbiIZL4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236466AbiIZKnq (ORCPT
+        with ESMTP id S238374AbiIZLxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:43:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED2A1DF11;
-        Mon, 26 Sep 2022 03:25:01 -0700 (PDT)
+        Mon, 26 Sep 2022 07:53:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3841645F51;
+        Mon, 26 Sep 2022 03:49:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4003D60B5E;
-        Mon, 26 Sep 2022 10:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C575C433D6;
-        Mon, 26 Sep 2022 10:25:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0572960C0D;
+        Mon, 26 Sep 2022 10:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F09C433D6;
+        Mon, 26 Sep 2022 10:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187900;
-        bh=/YrSBpEiADO76hZpqaELx1LTekFkdTUQYgH7dEgZLkk=;
+        s=korg; t=1664189387;
+        bh=1Q+uX897ILffysQZbDfO0e/zl4cC96DqijuJesJwVPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wu8nDb3ksr+lNGtLj6ci/2hDlaUGR506igXi2sPe0x6BGSSILIAUhaF1HkjZtQwBc
-         ZcN6YC4rDFg38xf8FhRDxZUVU/AqCFUuQq10WE73r9FYRAEJx463UgtsU3tBJo0g2Q
-         z8tnMZHfTMPZCGYWTx44FfR4uQgi4vopOHyqx5+I=
+        b=0u9u+1nmnYYwroAHpe4obYYhA1M9PqXow2bG/CuvD8EFAzmyE7a6cERGo4GLrh+uR
+         w4kZOumGhHte5TZV+QXETzj5kRcrltguK7rIrW2DoeQhbBYMXWRQXAaptd5Ael1oCN
+         5G3nM4o4NuF3CLCIJD1Zy9NPV1lwCWact8TI5NoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 096/120] Drivers: hv: Never allocate anything besides framebuffer from framebuffer memory region
+        stable@vger.kernel.org,
+        Bruno de Paula Larini <bruno.larini@riosoft.com.br>,
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 140/207] netfilter: nf_ct_ftp: fix deadlock when nat rewrite is needed
 Date:   Mon, 26 Sep 2022 12:12:09 +0200
-Message-Id: <20220926100754.511642452@linuxfoundation.org>
+Message-Id: <20220926100812.783060195@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,98 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit f0880e2cb7e1f8039a048fdd01ce45ab77247221 ]
+[ Upstream commit d25088932227680988a6b794221e031a7232f137 ]
 
-Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
-DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
+We can't use ct->lock, this is already used by the seqadj internals.
+When using ftp helper + nat, seqadj will attempt to acquire ct->lock
+again.
 
-$ cat /proc/iomem
-...
-f8000000-fffbffff : PCI Bus 0000:00
-  f8000000-fbffffff : 0000:00:08.0
-    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
-...
-fe0000000-fffffffff : PCI Bus 0000:00
-  fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
-    fe0000000-fe07fffff : 2ba2:00:02.0
-      fe0000000-fe07fffff : mlx4_core
+Revert back to a global lock for now.
 
-the interesting part is the 'f8000000' region as it is actually the
-VM's framebuffer:
-
-$ lspci -v
-...
-0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA (prog-if 00 [VGA controller])
-	Flags: bus master, fast devsel, latency 0, IRQ 11
-	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
-...
-
- hv_vmbus: registering driver hyperv_drm
- hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Synthvid Version major 3, minor 5
- hyperv_drm 0000:00:08.0: vgaarb: deactivate vga console
- hyperv_drm 0000:00:08.0: BAR 0: can't reserve [mem 0xf8000000-0xfbffffff]
- hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Cannot request framebuffer, boot fb still active?
-
-Note: "Cannot request framebuffer" is not a fatal error in
-hyperv_setup_gen1() as the code assumes there's some other framebuffer
-device there but we actually have some other PCI device (mlx4 in this
-case) config space there!
-
-The problem appears to be that vmbus_allocate_mmio() can use dedicated
-framebuffer region to serve any MMIO request from any device. The
-semantics one might assume of a parameter named "fb_overlap_ok"
-aren't implemented because !fb_overlap_ok essentially has no effect.
-The existing semantics are really "prefer_fb_overlap". This patch
-implements the expected and needed semantics, which is to not allocate
-from the frame buffer space when !fb_overlap_ok.
-
-Note, Gen2 VMs are usually unaffected by the issue because
-framebuffer region is already taken by EFI fb (in case kernel supports
-it) but Gen1 VMs may have this region unclaimed by the time Hyper-V PCI
-pass-through driver tries allocating MMIO space if Hyper-V DRM/FB drivers
-load after it. Devices can be brought up in any sequence so let's
-resolve the issue by always ignoring 'fb_mmio' region for non-FB
-requests, even if the region is unclaimed.
-
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Link: https://lore.kernel.org/r/20220827130345.1320254-4-vkuznets@redhat.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Fixes: c783a29c7e59 ("netfilter: nf_ct_ftp: prefer skb_linearize")
+Reported-by: Bruno de Paula Larini <bruno.larini@riosoft.com.br>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/vmbus_drv.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ net/netfilter/nf_conntrack_ftp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 56918274c48c..d4c5efc6e157 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2075,7 +2075,7 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
- 			bool fb_overlap_ok)
- {
- 	struct resource *iter, *shadow;
--	resource_size_t range_min, range_max, start;
-+	resource_size_t range_min, range_max, start, end;
- 	const char *dev_n = dev_name(&device_obj->device);
- 	int retval;
+diff --git a/net/netfilter/nf_conntrack_ftp.c b/net/netfilter/nf_conntrack_ftp.c
+index 0d9332e9cf71..617f744a2e3a 100644
+--- a/net/netfilter/nf_conntrack_ftp.c
++++ b/net/netfilter/nf_conntrack_ftp.c
+@@ -33,6 +33,7 @@ MODULE_AUTHOR("Rusty Russell <rusty@rustcorp.com.au>");
+ MODULE_DESCRIPTION("ftp connection tracking helper");
+ MODULE_ALIAS("ip_conntrack_ftp");
+ MODULE_ALIAS_NFCT_HELPER(HELPER_NAME);
++static DEFINE_SPINLOCK(nf_ftp_lock);
  
-@@ -2110,6 +2110,14 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
- 		range_max = iter->end;
- 		start = (range_min + align - 1) & ~(align - 1);
- 		for (; start + size - 1 <= range_max; start += align) {
-+			end = start + size - 1;
-+
-+			/* Skip the whole fb_mmio region if not fb_overlap_ok */
-+			if (!fb_overlap_ok && fb_mmio &&
-+			    (((start >= fb_mmio->start) && (start <= fb_mmio->end)) ||
-+			     ((end >= fb_mmio->start) && (end <= fb_mmio->end))))
-+				continue;
-+
- 			shadow = __request_region(iter, start, size, NULL,
- 						  IORESOURCE_BUSY);
- 			if (!shadow)
+ #define MAX_PORTS 8
+ static u_int16_t ports[MAX_PORTS];
+@@ -409,7 +410,8 @@ static int help(struct sk_buff *skb,
+ 	}
+ 	datalen = skb->len - dataoff;
+ 
+-	spin_lock_bh(&ct->lock);
++	/* seqadj (nat) uses ct->lock internally, nf_nat_ftp would cause deadlock */
++	spin_lock_bh(&nf_ftp_lock);
+ 	fb_ptr = skb->data + dataoff;
+ 
+ 	ends_in_nl = (fb_ptr[datalen - 1] == '\n');
+@@ -538,7 +540,7 @@ static int help(struct sk_buff *skb,
+ 	if (ends_in_nl)
+ 		update_nl_seq(ct, seq, ct_ftp_info, dir, skb);
+  out:
+-	spin_unlock_bh(&ct->lock);
++	spin_unlock_bh(&nf_ftp_lock);
+ 	return ret;
+ }
+ 
 -- 
 2.35.1
 
