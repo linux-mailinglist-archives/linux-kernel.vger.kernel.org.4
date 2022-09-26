@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369E85EADB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3395EADBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIZRL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S229960AbiIZRMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiIZRLe (ORCPT
+        with ESMTP id S230257AbiIZRLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:11:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC0A5465D;
-        Mon, 26 Sep 2022 09:20:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6D36B80066;
-        Mon, 26 Sep 2022 16:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02565C433C1;
-        Mon, 26 Sep 2022 16:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664209234;
-        bh=yypSsraSsf0tgaRhvFqL+1XAUv+XvuX00wBiIndmoRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GYfPnzSPYjLCKm0TgwOa0t48I/18Rqvk/lp8oHX7DPe8RAqjUW4G7SBtHaU+daiHU
-         uZWTjgrsrKsnwE1kdB4tvEB5uIP4HPsZAxxWxcp0m77rfn839KE1/jdWcqdqazNcKc
-         o9eU3T23/uRPUkp9W9S83oI5V3euVhFoY4h2O3Og=
-Date:   Mon, 26 Sep 2022 18:20:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/58] 4.19.260-rc1 review
-Message-ID: <YzHRTx1QZ9F9vJcK@kroah.com>
-References: <20220926100741.430882406@linuxfoundation.org>
- <41bf6865-ed26-b1d0-f540-7c2d34a2522c@roeck-us.net>
+        Mon, 26 Sep 2022 13:11:38 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE5063F03;
+        Mon, 26 Sep 2022 09:20:55 -0700 (PDT)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ocqqT-0003m5-43; Mon, 26 Sep 2022 18:20:37 +0200
+Received: from [85.1.206.226] (helo=linux-4.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ocqqS-0002Aw-J8; Mon, 26 Sep 2022 18:20:36 +0200
+Subject: Re: [bpf-next v6 2/3] bpftool: Update doc (add autoattach to prog
+ load)
+To:     Wang Yufen <wangyufen@huawei.com>, quentin@isovalent.com,
+        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+ <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2b001fcb-4340-e1ba-4b84-a69c670cf09a@iogearbox.net>
+Date:   Mon, 26 Sep 2022 18:20:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41bf6865-ed26-b1d0-f540-7c2d34a2522c@roeck-us.net>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26670/Mon Sep 26 10:00:52 2022)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 06:40:27AM -0700, Guenter Roeck wrote:
-> On 9/26/22 03:11, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 4.19.260 release.
-> > There are 58 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> > Anything received after that time might be too late.
+On 9/24/22 12:13 PM, Wang Yufen wrote:
+> Add autoattach optional to prog load|loadall for supporting
+> one-step load-attach-pin_link.
 > 
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+>   tools/bpf/bpftool/Documentation/bpftool-prog.rst | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> Building riscv:defconfig ... failed
-> --------------
-> Error log:
-> arch/riscv/kernel/signal.c: In function 'sys_rt_sigreturn':
-> arch/riscv/kernel/signal.c:108:15: error: 'struct pt_regs' has no member named 'cause'; did you mean 'scause'?
->   108 |         regs->cause = -1UL;
->       |               ^~~~~
->       |               scause
-> make[2]: *** [scripts/Makefile.build:303: arch/riscv/kernel/signal.o] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [Makefile:1073: arch/riscv/kernel] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:146: sub-make] Error 2
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> index eb1b2a254eb1..2d9f27a0120f 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -31,7 +31,7 @@ PROG COMMANDS
+>   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
+>   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
+>   |	**bpftool** **prog pin** *PROG* *FILE*
+> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
+>   |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
+>   |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+>   |	**bpftool** **prog tracelog**
+> @@ -131,7 +131,7 @@ DESCRIPTION
+>   		  contain a dot character ('.'), which is reserved for future
+>   		  extensions of *bpffs*.
+>   
+> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
+>   		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
+>   		  **bpftool prog load** pins only the first program from the
+>   		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
+> @@ -150,6 +150,15 @@ DESCRIPTION
+>   		  Optional **pinmaps** argument can be provided to pin all
+>   		  maps under *MAP_DIR* directory.
+>   
+> +		  If **autoattach** is specified program will be attached
+> +		  before pin. In that case, only the link (representing the
+> +		  program attached to its hook) is pinned, not the program as
+> +		  such, so the path won't show in "**bpftool prog show -f**",
+> +		  only show in "**bpftool link show -f**". Also, this only works
+> +		  when bpftool (libbpf) is able to infer all necessary information
+> +		  from the objectfile, in particular, it's not supported for all
+> +		  program types.
 
-Will go drop the offending commit, thanks.
+Related to Quentin's comment, the documentation should also describe clear semantics
+on what happens in failure case. I presume the use case you have in mind is to use
+this facility for scripts e.g. to run/load some tests objs? Thus would be good to describe
+to users what they need to do/clean up when things only partially succeed etc..
 
-greg k-h
+>   		  Note: *PATH* must be located in *bpffs* mount. It must not
+>   		  contain a dot character ('.'), which is reserved for future
+>   		  extensions of *bpffs*.
+> 
+
