@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9FD5EA0BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B35F5E9F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbiIZKlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S235401AbiIZK1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiIZKjX (ORCPT
+        with ESMTP id S235598AbiIZKYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8D253D3B;
-        Mon, 26 Sep 2022 03:23:20 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785854D4F2;
+        Mon, 26 Sep 2022 03:17:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9126ACE10E0;
-        Mon, 26 Sep 2022 10:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8061DC433C1;
-        Mon, 26 Sep 2022 10:23:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 182EA60B7E;
+        Mon, 26 Sep 2022 10:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB43C433D6;
+        Mon, 26 Sep 2022 10:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187786;
-        bh=qY2fz8lgznewsjTnbsc1p+30NBeMG3/B2zvlnqTCHTo=;
+        s=korg; t=1664187454;
+        bh=6AUgvhBWZ4qO//g19Nt+ah5iKNNnDXtGxjr6VosGyaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLY9aqJ1fdKjweu9pwfzak+C/IJoG4GqlQsC2GNdxfu9xtMC5yhtKKCNHq8i87oPp
-         XqfyhkcwoPogRVTX4rwR+G1P0Sh+WLX55ePyH8L2c+Som53fWk/jy7gcmkvM2dtmae
-         SZCe2gdp8BqfiwHk/M18pCE6Dpx/yQYp/DE5iW/A=
+        b=yeNjtZn+0G48XGu/nvVto/1IQZFU8fGZSZduf9SxKw+qDdgSvgSaZj3UVC7kEJn14
+         3Gkhnm7wAuZMFjpqFLVHHG34diD5zgmVzMS0ZmyFYDXIsQRaS9gMYHE09z82/X6GFr
+         XTCr5/bpboHZmFXG0dd1rfdDCJaTHDLFcn07msD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 059/120] ALSA: hda/realtek: Re-arrange quirk table entries
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 13/58] ALSA: hda/sigmatel: Keep power up while beep is enabled
 Date:   Mon, 26 Sep 2022 12:11:32 +0200
-Message-Id: <20220926100752.984771278@linuxfoundation.org>
+Message-Id: <20220926100741.895021418@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Takashi Iwai <tiwai@suse.de>
 
-commit b16c8f229a58eaddfc58aab447253464abd3c85e upstream.
+[ Upstream commit 414d38ba871092aeac4ed097ac4ced89486646f7 ]
 
-A few entries have been mistakenly inserted in wrong positions without
-considering the SSID ordering.  Place them at right positions.
+It seems that the beep playback doesn't work well on IDT codec devices
+when the codec auto-pm is enabled.  Keep the power on while the beep
+switch is enabled.
 
-Fixes: b7557267c233 ("ALSA: hda/realtek: Add quirk for ASUS GA402")
-Fixes: 94db9cc8f8fa ("ALSA: hda/realtek: Add quirk for ASUS GU603")
-Fixes: 739d0959fbed ("ALSA: hda: Add quirk for ASUS Flow x13")
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220915154724.31634-1-tiwai@suse.de
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1200544
+Link: https://lore.kernel.org/r/20220904072750.26164-1-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/pci/hda/patch_sigmatel.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8229,10 +8229,11 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x13b0, "ASUS Z550SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
- 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
-+	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
-+	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
- 	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
--	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1043, 0x1881, "ASUS Zephyrus S/M", ALC294_FIXUP_ASUS_GX502_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x18b1, "Asus MJ401TA", ALC256_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x18f1, "Asus FX505DT", ALC256_FIXUP_ASUS_HEADSET_MIC),
-@@ -8248,13 +8249,12 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x1bbd, "ASUS Z550MA", ALC255_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
- 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
-+	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
- 	SND_PCI_QUIRK(0x1043, 0x1e11, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA502),
- 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
--	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
--	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
- 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x834a, "ASUS S101", ALC269_FIXUP_STEREO_DMIC),
+diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
+index 85c33f528d7b..2f6e4e3afd8f 100644
+--- a/sound/pci/hda/patch_sigmatel.c
++++ b/sound/pci/hda/patch_sigmatel.c
+@@ -222,6 +222,7 @@ struct sigmatel_spec {
+ 
+ 	/* beep widgets */
+ 	hda_nid_t anabeep_nid;
++	bool beep_power_on;
+ 
+ 	/* SPDIF-out mux */
+ 	const char * const *spdif_labels;
+@@ -4463,6 +4464,26 @@ static int stac_suspend(struct hda_codec *codec)
+ 	stac_shutup(codec);
+ 	return 0;
+ }
++
++static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
++{
++	struct sigmatel_spec *spec = codec->spec;
++	int ret = snd_hda_gen_check_power_status(codec, nid);
++
++#ifdef CONFIG_SND_HDA_INPUT_BEEP
++	if (nid == spec->gen.beep_nid && codec->beep) {
++		if (codec->beep->enabled != spec->beep_power_on) {
++			spec->beep_power_on = codec->beep->enabled;
++			if (spec->beep_power_on)
++				snd_hda_power_up_pm(codec);
++			else
++				snd_hda_power_down_pm(codec);
++		}
++		ret |= spec->beep_power_on;
++	}
++#endif
++	return ret;
++}
+ #else
+ #define stac_suspend		NULL
+ #endif /* CONFIG_PM */
+@@ -4475,6 +4496,7 @@ static const struct hda_codec_ops stac_patch_ops = {
+ 	.unsol_event = snd_hda_jack_unsol_event,
+ #ifdef CONFIG_PM
+ 	.suspend = stac_suspend,
++	.check_power_status = stac_check_power_status,
+ #endif
+ 	.reboot_notify = stac_shutup,
+ };
+-- 
+2.35.1
+
 
 
