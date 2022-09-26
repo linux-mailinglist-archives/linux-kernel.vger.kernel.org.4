@@ -2,101 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BBD5E97B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678EE5E97B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 03:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiIZB1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 21:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S233088AbiIZB0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 21:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbiIZB1j (ORCPT
+        with ESMTP id S232951AbiIZB0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 21:27:39 -0400
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2862870C;
-        Sun, 25 Sep 2022 18:27:37 -0700 (PDT)
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 28Q1QPJ3025665;
-        Mon, 26 Sep 2022 10:26:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 28Q1QPJ3025665
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664155585;
-        bh=fUzRAJ3xUhcdybtGiaG/LLCfLPKmRi+rkIOIMmXKiNE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Lq2RbSwSBw4LKwWHJN5jkgjwVO9JX7TbpynkoWh7ibJve6XlCiokBn9eHqu/JuE8p
-         f+fzaqOh79uCSO6O/ClkJkK3TTb0THOJhtjE+6bqs3Y1UubCZKXZEGPUrDw2+54W4j
-         KmgIR9hL5e6Nihc3S/WyYYBxIrUAKmy/YKK2QVj5CeazNfnOseAvcOAdffQM77nrVK
-         I6HkXocuJuiSQGSpiHCibRSsKS13AOy6JkMDkH1IRp2II98z4DVyTdi/IH6HCAVGgj
-         pRA+0Bdakdk3Fj44QiPFynT9+RvZzuO76kqxC/NOCmpQ3hErIJ5H8lDJLvR3jX5nz+
-         rRy6WBvASNclw==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] kbuild: suppress warnings for single builds of vmlinux.lds, *.a, etc.
-Date:   Mon, 26 Sep 2022 10:26:09 +0900
-Message-Id: <20220926012609.3976305-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 25 Sep 2022 21:26:45 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EFA28701
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 18:26:42 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id UAA00139;
+        Mon, 26 Sep 2022 09:26:39 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.12; Mon, 26 Sep 2022 09:26:38 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+        <dave.jiang@intel.com>
+CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] dax: Remove usage of the deprecated ida_simple_xxx API
+Date:   Sun, 25 Sep 2022 21:26:35 -0400
+Message-ID: <20220926012635.3205-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   20229260926398113c515f49a2a58b7974007982becac
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmlinux-deps is unneeded because the dependency can directly list
-$(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
+Use ida_alloc_xxx()/ida_free() instead of
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
 
-Do not cancel the rule; building an individual vmlinux.lds, built-in.a,
-or lib.a is working now, but the warning "overriding recipe for target"
-is shown.
-
-Without this patch:
-
-  $ make arch/x86/kernel/vmlinux.lds
-  Makefile:1798: warning: overriding recipe for target 'arch/x86/kernel/vmlinux.lds'
-  Makefile:1162: warning: ignoring old recipe for target 'arch/x86/kernel/vmlinux.lds'
-    [ snip ]
-    LDS     arch/x86/kernel/vmlinux.lds
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
+ drivers/dax/super.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- Makefile | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 244c07f1cc70..3e6974b4ebf2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1118,7 +1118,8 @@ endif
- export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
- export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
+diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+index 9b5e2a5eb0ae..da4438f3188c 100644
+--- a/drivers/dax/super.c
++++ b/drivers/dax/super.c
+@@ -363,7 +363,7 @@ static void dax_free_inode(struct inode *inode)
+ {
+ 	struct dax_device *dax_dev = to_dax_dev(inode);
+ 	if (inode->i_rdev)
+-		ida_simple_remove(&dax_minor_ida, iminor(inode));
++		ida_free(&dax_minor_ida, iminor(inode));
+ 	kmem_cache_free(dax_cache, dax_dev);
+ }
  
--vmlinux-deps := $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
-+# The actual objects are generated when descending.
-+$(sort $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)): .
+@@ -445,7 +445,7 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
+ 	if (WARN_ON_ONCE(ops && !ops->zero_page_range))
+ 		return ERR_PTR(-EINVAL);
  
- # Recurse until adjust_autoksyms.sh is satisfied
- PHONY += autoksyms_recursive
-@@ -1157,10 +1158,6 @@ vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
+-	minor = ida_simple_get(&dax_minor_ida, 0, MINORMASK+1, GFP_KERNEL);
++	minor = ida_alloc_max(&dax_minor_ida, MINORMASK, GFP_KERNEL);
+ 	if (minor < 0)
+ 		return ERR_PTR(-ENOMEM);
  
- targets := vmlinux
+@@ -459,7 +459,7 @@ struct dax_device *alloc_dax(void *private, const struct dax_operations *ops)
+ 	return dax_dev;
  
--# The actual objects are generated when descending,
--# make sure no implicit rule kicks in
--$(sort $(vmlinux-deps)): . ;
--
- filechk_kernel.release = \
- 	echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
- 
+  err_dev:
+-	ida_simple_remove(&dax_minor_ida, minor);
++	ida_free(&dax_minor_ida, minor);
+ 	return ERR_PTR(-ENOMEM);
+ }
+ EXPORT_SYMBOL_GPL(alloc_dax);
 -- 
-2.34.1
+2.27.0
 
