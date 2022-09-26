@@ -2,132 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95C75EB4F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D275EB4F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIZW76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S230312AbiIZXBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiIZW74 (ORCPT
+        with ESMTP id S229779AbiIZXBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:59:56 -0400
-Received: from alln-iport-6.cisco.com (alln-iport-6.cisco.com [173.37.142.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CCB6DADA;
-        Mon, 26 Sep 2022 15:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=772; q=dns/txt; s=iport;
-  t=1664233195; x=1665442795;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9lF1v7Ra0dl1OC5suIbwGZInJITE1VNb8U5AxddwgW8=;
-  b=a+HdEWKHytySx1AWvjPME0xI81s5VSYKqI19bf0A9/CEbpSqooIYcqyt
-   zWvnT97fWue8uPn2n9D2qb0dssFvYYyb5pIko/mvSv2qtJBpnnwh9wanh
-   FJ/FXiMBt/h/yBomFz3w7Nvo44VVPBtcbSKYYaw37VjLxlruT5VS+prTl
-   s=;
-X-IPAS-Result: =?us-ascii?q?A0AQAAAJLjJjmJldJa1aHAEBAQEBAQcBARIBAQQEAQFAg?=
- =?us-ascii?q?TsHAQELAYMkVT5FjG2GUIIokWiLKoF8CwEBAQ0BATkJBAEBgVODMgKEbAIlN?=
- =?us-ascii?q?AkOAQIEAQEBAQMCAwEBAQEBAQMBAQUBAQECAQcEFAEBAQEBAQEBHRkFEA4nh?=
- =?us-ascii?q?WgNhkMBAgM6PxALGC5XBhOCfQGDIAMQqXh4gTSBAYNQARgYhByBXwYkgRkBk?=
- =?us-ascii?q?CgnHIFJRIQ/PohSgi4EmSU4A0QdQQMLQjUYAxQDBSQHAxkPIw0NBBYHDAMDB?=
- =?us-ascii?q?SUDAgIbBwICAwIGEwUCAk02CAQIBCskDwUCBy8FBC8CHgQFBhEIAhYCBgQEB?=
- =?us-ascii?q?AQVAhAIAggmFwcTMxkBBVkQCSEcDhoNBQYTAyBvBUQPKDFrKx0bCoEMKigVA?=
- =?us-ascii?q?wQEAwIGEwMDIgIQKjEUBCkTEi0HK3MJAgMiZwUDAwQoLAMJIR8HKCY8B1g6A?=
- =?us-ascii?q?QQDAhAiPQYDCQMCJFuBLygFAw0ZJggFIxceBAg8AgUGVxMCChIDEw+YZYILg?=
- =?us-ascii?q?UF7gUKTC4JkjT+BMJ0vg2OBSYlylGJMEahzlwuNPJoEAgQGBQIWgWE6gVszG?=
- =?us-ascii?q?ggbFYMjEj4ZD445iG2FaiQzOQIGCwEBAwmKUAEB?=
-IronPort-Data: A9a23:QOxF9qLwIuFJr1KtFE+RIJIlxSXFcZb7ZxGr2PjKsXjdYENS1GEAn
- WAWUWGEOPbbYGv9LYpyYYjk9UMBuZPRzN5lTAUd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
- 63yUvGZcIZsCCW0Si6FatANl1EkvU2zbue6WbWs1hxZH1c+En9w00w7wYbVv6Yx6TSHK1LV0
- T/Ni5W31G+Ng1aY5UpNtspvADs21BjDkGtwUm4WPJinj3eC/5UhN6/zEInqR5fOria4KcbhL
- wrL5OnREmo0ZH7BAPv9+lrwWhVirrI/oWFih1IOM5VOjCSuqQRj9J48G6JAcHwUjm+xvdZ8l
- /NMksGvHFJB0q3kwIzxUjFCGC14eKZB4rKCez60sNeYyAvNdH6EL/dGVR5te9ZHvLcsRzgTr
- pT0KxhVBvyHr+6/xrO2TvZlrs8iN8LseogYvxmMyBmIU618EcmaH/2iCdlw7ilqnMxAHfzlQ
- JQIa2M0MR/kOBNiAwJCYH45tL742iagG9FCk3qRpKwq8y3ewg1ZzrfgKpzWd8aMSMETmVyXz
- krC/mLkElQZPsGezTat7H2hnKnMkDn9VYZUE6e3ntZmjUOSzWEPEhAbfUW0rOP/iUOkXd9bb
- UsO9UIGqak06VzuTdTnWRC8iGCLswRaWNdKFeA+rgaXxcL85wefG3hBRyRELd8rrsk7QRQu1
- 0SVhJXoAzJ1ubGYQH7b8a2bxRuyISE9P34eYjVCRgwAi/HnoYcungrXRZNvHbCditzuBSq2x
- CKOpSIlwbIJgqYj06S94ECChjO0vbDXQQMvoAbaRGSo6kV+foHNT5z4t3DY4OxGIYLfSUOO1
- FANmNCbxOQPC4yd0SKKXeMBFa2o4PDDNyfT6XZ1GJMh3zeg4XiuecZX+j4WDExpKMcfZTjxY
- EKVvQ5L4457N2Cld6hqe8S8FqwC0qnkEfzmW+rSY94IZYJ+HCec8ShoI0eW0233i08quboyM
- pDdesGpZV4WAKJmwT6eSOYYybIvyz4/zmOVXpn9ihq92LyVZWWeTvEOOR2TdYgEALisug7Z9
- ZNUMNGHjk8ZW+zlaS6R+okWRbwXEZQlLcHQk8t4LrKaGUljQlkDDfKO57IGJpMwysy5idz01
- n26X0ZZzn/2invGNRiGZxhfhFXHAMsXQZUTYHFEALq455QwSd31vftALfPbaZFipbI8laQrJ
- xUQU5/YasmjXAgr7Nj0gXPVlo1pdB2xiRmJOUJJixBgIsYwHmQlFjIYFzYDGQEUBSax8MA5u
- bDljEXQQIEIQEJpC8O+hBOTI7GZ4Cl1dAFaBhugzjxvlKPEq9ECx8vZ1aRfHi30AU+frgZ2L
- i7PafvimcHDopUu7P7Cjr2eooGiHoNWRxQEQzOCsu7qbHOHogJPJLOsts7VIlgxs0upqM2fi
- Rl9k5kQzdVexg8R6toge1qV5fJmv7MDWIO2Piw9TCmUMDxH+5trI2KN2oFUp7ZRy7pC0TZaq
- WrRkuS2zY6hYZu/eHZIfVJNRr3ahZk8xGKIhdxrexqS2cOC1OfdOamkF0PS2HU1wXocGN5N/
- NrNT+ZNu1bu0kpzb47c5s2WnkzVRkE9v2wcnslyKOfWZsADkDmuvbS05vfK3ayy
-IronPort-HdrOrdr: A9a23:XuwFpqoWy0RMTz0rP6Os0rEaV5oueYIsimQD101hICG9vPb2qy
- mLpoV/6faUskdyZJhOo7q90cW7LE80sKQFhbX5Xo3SPzUO2lHIEGgK1+KLqAEIWRefygc378
- ldmsZFZOEZyTNB/KDHCM7SKadG/OW6
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,347,1654560000"; 
-   d="scan'208";a="963281140"
-Received: from rcdn-core-2.cisco.com ([173.37.93.153])
-  by alln-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 26 Sep 2022 22:59:48 +0000
-Received: from zorba ([10.25.129.98])
-        by rcdn-core-2.cisco.com (8.15.2/8.15.2) with ESMTPS id 28QMxjxT030040
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 26 Sep 2022 22:59:46 GMT
-Date:   Mon, 26 Sep 2022 15:59:45 -0700
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH 0/8] generic command line v4
-Message-ID: <20220926225945.GC4320@zorba>
-References: <20210416040924.2882771-1-danielwa@cisco.com>
- <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
- <20220922205334.GV4320@zorba>
- <dcff9b0f-82c8-5aa7-0fff-b749a05fcb20@seco.com>
- <20220922211026.GW4320@zorba>
- <1663881344.25129.23.camel@chimera>
+        Mon, 26 Sep 2022 19:01:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415EA5C6B;
+        Mon, 26 Sep 2022 16:01:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB01B815C6;
+        Mon, 26 Sep 2022 23:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7653C433D6;
+        Mon, 26 Sep 2022 23:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664233273;
+        bh=DP2/l6tR4P/DfoghYnDGEAWd4w5n5Txnre0toNJR3B4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=boCq+yQ/8137uehBc9l2Vg8fH0UtZiV/BTfOw5Pliv/p3ReaZul1LbHdkZ+kETELP
+         JNMJXaw65cWY5KBy57F76JdC3PVvqn2eIjIkHrb9fwZu66N6hzDL43oFrkW7rs8Ky+
+         XFvTUKOsJ/xYtApAUBZwwy8czhvK7ZpUpRi1GMxzOGBM2OQnZqfMPvpeIfiRCmBSxI
+         Ss46Z0hBLn19YxHSK8RzCQzZv0aORaqH9vU3oF9ovqM+UbH+C26QcIyf8wh6hGS6Pc
+         w9q9ccZKPDVw6ohQhzAawjdDPWFItsVzVAjSue4yW7udf+9Fk9uOobqGkEK7FtFfcX
+         clIFfgYpsQdng==
+Date:   Mon, 26 Sep 2022 18:01:08 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] soc: qcom: smd-rpm: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YzIvNIyPhWaG2DTr@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1663881344.25129.23.camel@chimera>
-X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
-X-Outbound-Node: rcdn-core-2.cisco.com
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:15:44PM -0700, Daniel Gimpelevich wrote:
-> On Thu, 2022-09-22 at 14:10 -0700, Daniel Walker wrote:
-> > On Thu, Sep 22, 2022 at 05:03:46PM -0400, Sean Anderson wrote:
-> [snip]
-> > > As recently as last month, someone's patch to add such support was
-> > > rejected for this reason [1].
-> > > 
-> > > --Sean
-> > > 
-> > > [1] https://lore.kernel.org/linux-arm-kernel/20220812084613.GA3107@willie-the-truck/
-> > 
-> > 
-> > I had no idea.. Thanks for pointing that out. I guess I will re-submit in that
-> > case.
-> > 
-> > Daniel
-> 
-> This has been happening repeatedly since circa 2014, on multiple
-> architectures. It's quite frustrating, really.
- 
- I'm not sure I'm following your comments. What's frustrating exactly ?
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length arrays
+declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
-Daniel
+This helper allows for flexible-array members in unions.
+
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://github.com/KSPP/linux/issues/224
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/soc/qcom/smd-rpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+index 413f9f4ae9cd..125cb456a5dc 100644
+--- a/drivers/soc/qcom/smd-rpm.c
++++ b/drivers/soc/qcom/smd-rpm.c
+@@ -75,7 +75,7 @@ struct qcom_rpm_message {
+ 	__le32 length;
+ 	union {
+ 		__le32 msg_id;
+-		u8 message[0];
++		DECLARE_FLEX_ARRAY(u8, message);
+ 	};
+ };
+ 
+-- 
+2.34.1
+
