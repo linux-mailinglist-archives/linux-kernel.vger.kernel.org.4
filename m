@@ -2,167 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C025EB023
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B9F5EB031
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiIZSiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S230435AbiIZSin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiIZShp (ORCPT
+        with ESMTP id S230209AbiIZShx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:37:45 -0400
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2596969F4D;
-        Mon, 26 Sep 2022 11:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=tAMiyMHYmqcRKZ4q0pvNj3OkA4K0ziUgR23bk4hzW2E=; b=V1s0PGxmNrVvjc01X106nIEY/o
-        L/Y/0zT8Ea5qb+ckHtyh7ssuf2B8N1/jm7PWkRmgu9CgATg/JYy8dcubBKZu3JXZBSDbz/xmxuvMu
-        e3g6wa1RoWNi4vGsIATwjNtJtl3tYV0uHoEdT7yJ9KHToXoAoCURvBWx3zbi9SG2o0FuE62OMb9ZM
-        uBTmnCi75HJmk1uJP13DylH0pr+cSrFfzt8yMKGuToV4SOWL3ZUw+21rFnxS9w9M6/x84mYK9Hun+
-        9ZVhHyiNwybDs0Bz+Y2ZaB+cd7tq1Q+9eaUaPGZi5C2HCP5Nw+uq7o784eWjP1t1KgxyIluc1FWPW
-        PjQ9vjEA==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1ocsz4-00B9Pb-86; Mon, 26 Sep 2022 20:37:38 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1ocsz1-007wcP-23;
-        Mon, 26 Sep 2022 20:37:35 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
-        support),
-        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Dongjin Kim <tobetter@gmail.com>,
-        Aurelien Jarno <aurelien@aurel32.net>
-Subject: [PATCH v2 10/13] arm64: dts: rockchip: Enable the USB 3.0 ports on ODROID-M1
-Date:   Mon, 26 Sep 2022 20:37:24 +0200
-Message-Id: <20220926183727.1893566-11-aurelien@aurel32.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220926183727.1893566-1-aurelien@aurel32.net>
-References: <20220926183727.1893566-1-aurelien@aurel32.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 14:37:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919096DACB
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:37:50 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dc888dc62so69852967b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=d68/aWCLPiIhe6kggZL49/Bh7V4/p14HgIMbRCvVM2NXYFgGVn+Xq9brpRwfNhGn1c
+         bzJwZSeSD28a7Y9C2q6pU7Ns5YVEFTZe/NUDWalKdLmiDD2Ycu38MkayfNaqystb+Yqe
+         2uitdjgk1pKgDrhsqNj5Zi+us9bovm9f4gWEJiOjaim9mYiKX/XM3sYD5w/R4o2mb4mZ
+         CFQt2YiJ+JQ5f5ciYi+1HTq4fleAv03ZClh98oFN7wKat0tgF+afcbUELEguex2NqQsj
+         ebHSIrxp17+FxDtmN9isOGdXvSr28CY+GxWqR7nRTLSnzGkZucq1jvCcRo3Cov2rfSOI
+         8Xfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=HTl6CGs2whbwDxwtroLNSTwwhpYtAUVBag+SxPYC8EnyF1c0UMkLZOQEMdQhkai5Rr
+         0eTcPyhdwdGY9co+PttaU6uTlr+uqlprkNpitk8wnlAh+8xcsUU4zNswxFvF7fobRNll
+         KfnsoZp/FJW4wsIHJiyNP94cM3bKgs6jTKrGU4K8EO1XlnrHYFcUiEHw+q4k8Niffdi9
+         VAqUwRQto56rk1UQCmdPw3p7vj6DeZaEj4CumdZSQ8HTGZ2dsYI9Lhp0bQ/ZYSwY3xR9
+         E/reLmtdEVyqQs0oHAL/aX3DDLeVg+cTJf1iDis5ruIKqRF3mLWbPgr+Sq8eaZ7VoUJ3
+         aY3A==
+X-Gm-Message-State: ACrzQf1zlTdma9rIzT8Zam113QTiVLKDHEByCItTYQe0aXiyM5bAT3HV
+        1a1/sSjv3HVTUozJRqzQPYpcjCSSLDAHIVj5yio=
+X-Google-Smtp-Source: AMsMyM4bDMVt1tdnaBnUxux6UCle3vtahK9wHgCGdwWVS1dv1pQjCOyBISO8bmwfU2AlX2gfDPcGjZtYrAVWpRrRAUc=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:8fb4:fe0d:d74c:5bcb])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:f628:0:b0:6bc:bb6:aec5 with SMTP
+ id t40-20020a25f628000000b006bc0bb6aec5mr929868ybd.139.1664217469129; Mon, 26
+ Sep 2022 11:37:49 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 11:37:25 -0700
+In-Reply-To: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+Mime-Version: 1.0
+References: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664217445; l=7895;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=x0RwTwO74GUfeRgTrJP+F6BnwHVqyXRlkCvRcvW1NlM=;
+ b=aATOabxLSS9znVNtm6L5GIkLiNWqOo9CDSaqmGgfeElYHBzA7DRPuBx916vBrYh+uPU8ccbHNwUy
+ 5wYW/6BNB3vDlr9XOrgMb7SvlKfMG6oNcMPwlge2WJWmJuq1ioxM
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220926183725.1112298-1-ndesaulniers@google.com>
+Subject: [PATCH] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        sparkhuang <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Logan Chien <loganchien@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Rockchip RK3568 has two USB XHCI controllers. The USB 2.0 signals
-are connected to a PHY providing one host-only port and one OTG port.
-The USB 3.0 signals are connected to two USB3.0/PCIE/SATA combo PHY.
+commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+EABI stack unwinder")
+tickled a bug in clang's integrated assembler where the .save and .pad
+directives must have corresponding .fnstart directives. The integrated
+assembler is unaware that the compiler will be generating the .fnstart
+directive.
 
-The ODROID M1 has 2 type A USB 3.0 connectors, with the USB 3.0 signals
-connected to the two combo PHYs. For the USB 2.0 signals, one connector
-is connected to the host-only PHY and uses the same power switch as the
-USB 2.0 ports. The other connector has its own power switch and is
-connected to the OTG PHY, which is also connected to a device only
-micro-USB connector. The purpose of this micro-USB connector is for
-firmware update using the Rockusb vendor specific USB class. Therefore
-it does not make sense to enable this port on Linux, and the PHY is
-forced to host mode.
+  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+  .save or .vsave directives
+  <inline asm>:3:2: note: instantiated into assembly here
+  .save   {sp, lr, pc}
+  ^
+  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+  .pad directive
+  <inline asm>:6:2: note: instantiated into assembly here
+  .pad    #52
+  ^
 
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+__kretprobe_trampoline's definition is already entirely inline asm. Move
+it to out-of-line asm to avoid breaking the build.
+
+Link: https://github.com/llvm/llvm-project/issues/57993
+Link: https://github.com/ClangBuiltLinux/linux/issues/1718
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Suggested-by: Logan Chien <loganchien@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- .../boot/dts/rockchip/rk3568-odroid-m1.dts    | 49 ++++++++++++++++++-
- 1 file changed, 48 insertions(+), 1 deletion(-)
+Note: I wasn't quite sure if a Fixes tag against 1069c1dd20a3 was
+appropriate here? Either way, if 1069c1dd20a3 gets picked up for stable
+without this, it will break clang builds.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts b/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-index 595f56c41a15..8f7c9dd8c47c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-@@ -127,6 +127,30 @@ vcc5v0_usb_host: vcc5v0-usb-host-regulator {
- 		regulator-max-microvolt = <5000000>;
- 		vin-supply = <&vcc5v0_sys>;
- 	};
-+
-+	vcc5v0_usb_otg: vcc5v0-usb-otg-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_usb_otg";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_usb_otg_en_pin>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+};
-+
-+&combphy0 {
-+	/* Used for USB3 */
-+	phy-supply = <&vcc5v0_usb_host>;
-+	status = "okay";
-+};
-+
-+&combphy1 {
-+	/* Used for USB3 */
-+	phy-supply = <&vcc5v0_usb_otg>;
-+	status = "okay";
- };
+ arch/arm/probes/kprobes/Makefile              |  1 +
+ arch/arm/probes/kprobes/core.c                | 54 ++----------------
+ .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
+ include/asm-generic/kprobes.h                 | 13 +++--
+ 4 files changed, 69 insertions(+), 54 deletions(-)
+ create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
+
+diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
+index 6159010dac4a..cdbe9dd99e28 100644
+--- a/arch/arm/probes/kprobes/Makefile
++++ b/arch/arm/probes/kprobes/Makefile
+@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
+ KASAN_SANITIZE_actions-arm.o := n
+ KASAN_SANITIZE_actions-thumb.o := n
+ obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
++obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
+ obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
+ test-kprobes-objs		:= test-core.o
  
- &cpu0 {
-@@ -476,7 +500,7 @@ usb {
- 		vcc5v0_usb_host_en_pin: vcc5v0-usb-host-en-pin {
- 			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
--		vcc5v0_usb_otg_en_pin: vcc5v0-usb-otg-en-pin {
-+		vcc5v0_usb_otg_en_pin: vcc5v0-usb-dr-en-pin {
- 			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
- 	};
-@@ -585,6 +609,11 @@ &usb_host0_ohci {
- 	status = "okay";
- };
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 1435b508aa36..17d7e0259e63 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -375,58 +375,10 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ 	return NOTIFY_DONE;
+ }
  
-+&usb_host0_xhci {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usb_host1_ehci {
- 	status = "okay";
- };
-@@ -593,6 +622,24 @@ &usb_host1_ohci {
- 	status = "okay";
- };
+-/*
+- * When a retprobed function returns, trampoline_handler() is called,
+- * calling the kretprobe's handler. We construct a struct pt_regs to
+- * give a view of registers r0-r11, sp, lr, and pc to the user
+- * return-handler. This is not a complete pt_regs structure, but that
+- * should be enough for stacktrace from the return handler with or
+- * without pt_regs.
+- */
+-void __naked __kprobes __kretprobe_trampoline(void)
+-{
+-	__asm__ __volatile__ (
+-		"ldr	lr, =__kretprobe_trampoline	\n\t"
+-#ifdef CONFIG_FRAME_POINTER
+-	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+-#ifdef CONFIG_CC_IS_CLANG
+-		"stmdb	sp, {sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #12		\n\t"
+-		/* In clang case, pt_regs->ip = lr. */
+-		"stmdb	sp!, {r0 - r11, lr}	\n\t"
+-		/* fp points regs->r11 (fp) */
+-		"add	fp, sp,	#44		\n\t"
+-#else /* !CONFIG_CC_IS_CLANG */
+-		/* In gcc case, pt_regs->ip = fp. */
+-		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		/* fp points regs->r15 (pc) */
+-		"add	fp, sp, #60		\n\t"
+-#endif /* CONFIG_CC_IS_CLANG */
+-#else /* !CONFIG_FRAME_POINTER */
+-		/* store SP, LR on stack and add EABI unwind hint */
+-		"stmdb  sp, {sp, lr, pc}	\n\t"
+-		".save	{sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		".pad	#52				\n\t"
+-#endif /* CONFIG_FRAME_POINTER */
+-		"mov	r0, sp			\n\t"
+-		"bl	trampoline_handler	\n\t"
+-		"mov	lr, r0			\n\t"
+-		"ldmia	sp!, {r0 - r11}		\n\t"
+-		"add	sp, sp, #16		\n\t"
+-#ifdef CONFIG_THUMB2_KERNEL
+-		"bx	lr			\n\t"
+-#else
+-		"mov	pc, lr			\n\t"
+-#endif
+-		: : : "memory");
+-}
++/*void __kretprobe_trampoline(void);*/
  
-+&usb_host1_xhci {
-+	status = "okay";
-+};
+ /* Called from __kretprobe_trampoline */
+-static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
++__kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+ 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+@@ -434,6 +386,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
++	extern void __kretprobe_trampoline(void);
 +
-+&usb2phy0 {
-+	status = "okay";
-+};
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+ 	ri->fp = (void *)regs->TRAMP_FP;
+ 
+diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+new file mode 100644
+index 000000000000..261c99b8c17f
+--- /dev/null
++++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+&usb2phy0_host {
-+	phy-supply = <&vcc5v0_usb_host>;
-+	status = "okay";
-+};
++#include <linux/linkage.h>
++#include <asm/unwind.h>
++#include <asm-generic/kprobes.h>
 +
-+&usb2phy0_otg {
-+	phy-supply = <&vcc5v0_usb_otg>;
-+	status = "okay";
-+};
++/*
++ * When a retprobed function returns, trampoline_handler() is called,
++ * calling the kretprobe's handler. We construct a struct pt_regs to
++ * give a view of registers r0-r11, sp, lr, and pc to the user
++ * return-handler. This is not a complete pt_regs structure, but that
++ * should be enough for stacktrace from the return handler with or
++ * without pt_regs.
++ */
++__KPROBE
++SYM_FUNC_START(__kretprobe_trampoline)
++UNWIND(.fnstart)
++	ldr	lr, =__kretprobe_trampoline
++#ifdef CONFIG_FRAME_POINTER
++	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
++#ifdef CONFIG_CC_IS_CLANG
++	stmdb	sp, {sp, lr, pc}
++	sub	sp, sp, #12
++	/* In clang case, pt_regs->ip = lr. */
++	stmdb	sp!, {r0 - r11, lr}
++	/* fp points regs->r11 (fp) */
++	add	fp, sp, #44
++#else /* !CONFIG_CC_IS_CLANG */
++	/* In gcc case, pt_regs->ip = fp. */
++	stmdb	sp, {fp, sp, lr, pc}
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++	/* fp points regs->r15 (pc) */
++	add	fp, sp, #60
++#endif /* CONFIG_CC_IS_CLANG */
++#else /* !CONFIG_FRAME_POINTER */
++	/* store SP, LR on stack and add EABI unwind hint */
++	stmdb	sp, {sp, lr, pc}
++UNWIND(.save	{sp, lr, pc})
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++UNWIND(.pad	#52)
++#endif /* CONFIG_FRAME_POINTER */
++	mov	r0, sp
++	bl	trampoline_handler
++	mov	lr, r0
++	ldmia	sp!, {r0 - r11}
++	add	sp, sp, #16
++#ifdef CONFIG_THUMB2_KERNEL
++	bx	lr
++#else
++	mov	pc, lr
++#endif
++UNWIND(.fnend)
++SYM_FUNC_END(__kretprobe_trampoline)
+diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
+index 060eab094e5a..1509daa281b8 100644
+--- a/include/asm-generic/kprobes.h
++++ b/include/asm-generic/kprobes.h
+@@ -2,7 +2,11 @@
+ #ifndef _ASM_GENERIC_KPROBES_H
+ #define _ASM_GENERIC_KPROBES_H
+ 
+-#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
++#ifdef __KERNEL__
 +
- &usb2phy1 {
- 	status = "okay";
- };
++#ifdef __ASSEMBLY__
++# define __KPROBE .section ".kprobes.text", "ax"
++#else
+ #ifdef CONFIG_KPROBES
+ /*
+  * Blacklist ganerating macro. Specify functions which is not probed
+@@ -16,11 +20,12 @@ static unsigned long __used					\
+ /* Use this to forbid a kprobes attach on very low level functions */
+ # define __kprobes	__section(".kprobes.text")
+ # define nokprobe_inline	__always_inline
+-#else
++#else /* !defined(CONFIG_KPROBES) */
+ # define NOKPROBE_SYMBOL(fname)
+ # define __kprobes
+ # define nokprobe_inline	inline
+-#endif
+-#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
++#endif /* defined(CONFIG_KPROBES) */
++#endif /* defined(__ASSEMBLY__) */
++#endif /* defined(__KERNEL__) */
+ 
+ #endif /* _ASM_GENERIC_KPROBES_H */
 -- 
-2.35.1
+2.37.3.998.g577e59143f-goog
 
