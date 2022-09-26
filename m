@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B3C5EB3A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C9D5EB3AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiIZV4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S230320AbiIZV50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiIZV4o (ORCPT
+        with ESMTP id S229844AbiIZV5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:56:44 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A91DA404F;
-        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id iw17so7493805plb.0;
-        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=572GorYLE019d559dVMv9AVnraHVnR09HbuFH0FA7is=;
-        b=lW2k7mj+KeJMygxuAHZ79TwuyVmHgVvXmK+7e1orn6Accoqgbku1I+UNcBH4LmKrw+
-         bFPYtmBdlUZYz1hI/ETOnLrutCSiHtyFxwna6zen0Dk0fmd9WLTnS+6XEbxMe40Dhr9g
-         AjD7C2dX60Zq1zoOo6vwDxQKgGalnx2+sgNSqVm8jA/1g5oUu2X8wMwuMrgYOrW196W7
-         PQkyboZyP0vFKG/fYeW7Fuk4gj26WtY4e6c0X8zoaOUK4k5hxNwL4AQsH5QUyI9M0rR5
-         uDeInSLPfyW3P3r9FTNoCYYw+6pZkXU5t4ofmQwHKZNmTUE4rp4sS83Xd8bSRpkBZKZ4
-         Nxrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=572GorYLE019d559dVMv9AVnraHVnR09HbuFH0FA7is=;
-        b=It3rKGWP8YInsvuk/O3aUEE1hZVVJsTPyyEGZzUrHS0TkAwQM/PIRRl44l8b5k+Xj2
-         8blrX48WmFApKew+7V5c8aYNhY8JcaJ8cEr0noo9QgNUkXRaDH7CDy53uIjIg6DqjNia
-         k/cimVu/X77x7euQS7mCQ4IZEhZmMtQ9bXcMmbQKmd1eQYj37c1x6rRQxCans9FzPR9V
-         HHXmCjRz//xvhhjMcy9sdiG/vxMesKr/DnnM9e+pZMKtTRuNEzO1dTN2iip/MfmDjNx6
-         nmtNeuHE4P9iu58rt7p6w23ps+23gBAM4pRvcJpEuQPs2w2ABMYK/d+pZXSFrHxUUI5t
-         2gHA==
-X-Gm-Message-State: ACrzQf2E/540zygzaQCeL49Iv25xFW+BDFLfA/TDhIGHkERX++Wj9a3z
-        JpcLnbEYUkRjwILXRYTCKXk=
-X-Google-Smtp-Source: AMsMyM5s8VcK1RLfXgmT7ORxvt7KP7GLXEXP1iHQiNIRR3L1gda1KOAav5WDXtxOLV74CBuhcuf2Pw==
-X-Received: by 2002:a17:903:4ca:b0:179:d21f:f04b with SMTP id jm10-20020a17090304ca00b00179d21ff04bmr11665598plb.7.1664229403022;
-        Mon, 26 Sep 2022 14:56:43 -0700 (PDT)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:b4b9:6ef0:dfba:3f70])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa78bd5000000b00540c24ba181sm12601509pfd.120.2022.09.26.14.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 14:56:42 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH] perf lock contention: Fix a build error on 32-bit
-Date:   Mon, 26 Sep 2022 14:56:38 -0700
-Message-Id: <20220926215638.3931222-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        Mon, 26 Sep 2022 17:57:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC85D4327;
+        Mon, 26 Sep 2022 14:57:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664229440; x=1695765440;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zVMWunYPM2+IIkAGb+SLwB9+KCfT1/0NI6xHqBaLML8=;
+  b=N2xvYHCnYqxeIv2I0kDIj3t6MHcbCy8AldWsG9zdJjA/el2B4y//YIrz
+   IJ8J0BeJkvMzAmXwqko8MR1ythV7KlMl9mzGeFFwwUaR/Dt/a+cDaXysG
+   YEyPGxcUAI8fMnae889ftOx+20qaHYt9v/d7UpBQPx5ycDI7TpGxc9zEj
+   yossYGVCZp6cBofU4RkDfuMo6NOsd8vhYz1sicSzMvGRnJd9t2I3X18z7
+   79vZ6N8fcnoYnoQtwlwXMsCDxV87vPNz02F9QZx+gQm2lry95bXFvgSnj
+   E7IjxBHSYLotDuEdk6YA2dL22f6a7WnDksDHppPUcynqSEqbH/3nzkPYY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302057556"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="302057556"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:57:20 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="598911424"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="598911424"
+Received: from iweiny-desk3.amr.corp.intel.com (HELO localhost) ([10.209.75.159])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:57:19 -0700
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH V3 0/2] CXL: Taint user access to DOE mailbox config space
+Date:   Mon, 26 Sep 2022 14:57:09 -0700
+Message-Id: <20220926215711.2893286-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was reported that it failed to build the BPF lock contention skeleton
-on 32 bit arch due to the size of long.  The lost count is used only for
-reporting errors due to lack of stackmap space through bad_hist which type
-is 'int'.  Let's use int type then.
+From: Ira Weiny <ira.weiny@intel.com>
 
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/bpf_skel/lock_contention.bpf.c | 2 +-
- tools/perf/util/lock-contention.h              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes from V2
+	Incorporate feedback from Greg and Jonathan
 
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index e107d71f0f1a..1bb8628e7c9f 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -75,7 +75,7 @@ int has_task;
- int stack_skip;
- 
- /* error stat */
--unsigned long lost;
-+int lost;
- 
- static inline int can_record(void)
- {
-diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-index 67db311fc9df..b8cb8830b7bc 100644
---- a/tools/perf/util/lock-contention.h
-+++ b/tools/perf/util/lock-contention.h
-@@ -114,7 +114,7 @@ struct lock_contention {
- 	struct machine *machine;
- 	struct hlist_head *result;
- 	unsigned long map_nr_entries;
--	unsigned long lost;
-+	int lost;
- 	int max_stack;
- 	int stack_skip;
- };
+Changes from V1
+	Incorporate feedback from Dan and Greg.
+
+PCI config space access from user space has traditionally been unrestricted
+with writes being an understood risk for device operation.
+
+Unfortunately, device breakage or odd behavior from config writes lacks
+indicators that can leave driver writers confused when evaluating failures.
+This is especially true with the new PCIe Data Object Exchange (DOE) mailbox
+protocol where backdoor shenanigans from user space through things such as
+vendor defined protocols may affect device operation without complete breakage.
+
+Even though access should not be restricted it would be nice for driver writers
+to be able to flag critical parts of the config space such that interference
+from user space can be detected.
+
+Introduce pci_request_config_region_exclusive() and use it in the CXL driver
+for DOE config space.
+
+Ira Weiny (2):
+  PCI: Allow drivers to request exclusive config regions
+  cxl/doe: Request exclusive DOE access
+
+ drivers/cxl/pci.c             |  5 +++++
+ drivers/pci/pci-sysfs.c       |  7 +++++++
+ drivers/pci/probe.c           |  6 ++++++
+ include/linux/ioport.h        |  2 ++
+ include/linux/pci.h           | 17 +++++++++++++++++
+ include/uapi/linux/pci_regs.h |  1 +
+ kernel/resource.c             | 13 ++++++++-----
+ 7 files changed, 46 insertions(+), 5 deletions(-)
+
+
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.2
 
