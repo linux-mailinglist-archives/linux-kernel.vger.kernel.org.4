@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4385EAE82
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB81A5EAE84
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiIZRtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S231283AbiIZRtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiIZRtN (ORCPT
+        with ESMTP id S229573AbiIZRtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:49:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080EC97EC0;
-        Mon, 26 Sep 2022 10:21:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A5D60DB7;
-        Mon, 26 Sep 2022 17:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0298C433D6;
-        Mon, 26 Sep 2022 17:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664212868;
-        bh=nnJQPOkwFK1+jDHcMZbZ1ZPA6870WiPeyZQhh9AHeIE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KQi4m3MOueTduJHIuUVB/BBIBRH1auZz+TMGV1gbvyjaYWV97ukOucDbVgfLdDz/U
-         BLRGbznTu00jC/vLYn/JUYCFAM6/RuoYSBeAUXqKRtWJkOmXdxm1SqUYtouUdx3L0h
-         A/IljZ8TsvX08juVJInq1826FqCqt9ieEeciJ0OY+bGnt1DroOdDYZFnLo7PthBCW+
-         flWywRovRhg0gud+xBy2TDCxJekRihHtpx1innborvq6x9KZd5oY/YrLAL4I8lHLHE
-         nTZC9Ubh9EVPgRA5OLjFVWD/qHJYctHCFMMuskv0LCFow8VysVM6OqIxK3fAHARxtL
-         BTWyLp7o1KkoA==
-Date:   Mon, 26 Sep 2022 12:21:06 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>
-Cc:     allenbh@gmail.com, dave.jiang@intel.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-pci@vger.kernel.org, jejb@linux.ibm.com,
-        james.smart@broadcom.com, Serge Semin <fancer.lancer@gmail.com>,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        oohall@gmail.com, jdmason@kudzu.us, bhelgaas@google.com,
-        dick.kennedy@broadcom.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 1/3] PCI/AER: Use pci_aer_clear_uncorrect_error_status()
- to clear uncorrectable error status
-Message-ID: <20220926172106.GA1609382@bhelgaas>
+        Mon, 26 Sep 2022 13:49:15 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8371598CA1;
+        Mon, 26 Sep 2022 10:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664212872; x=1695748872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zspz2i0z+Z0imrLNWG4sSFVlLZv+LKuS0uB03RLTKYA=;
+  b=c8Ua2eiflTTaA2aK3JRp7Rc4Mgdig45f5kS1A6AIJKxgpz77AczBTk4c
+   L4Vljn0EThIBSzIb46MnTOFa4KRoS5qmmTuVSIgFHCBu2whT895hu1nLI
+   yQrnKGRvVN01cEhvmIJZQUQrO3IuiXA8pXqTwDsFZoUYdQ1hJQM6Pk7ED
+   BkleGbajbbycgfrq5auTiGS7hQse9Vei9El2cJtGWEWDQo+Nqkx0i4Thx
+   OsBQ77pZkuye11rJn5ADhZCHrITzluCCshZm3yi7gyu5CpJPGEYVDr2KU
+   +w2imPh+JuRZZYFl/im2IQAXOJdqHiCfq39HDYgsM/bO39PiQHjzg/Ye/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="299812096"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="299812096"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 10:21:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="796418075"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="796418075"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 26 Sep 2022 10:21:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id AE113F7; Mon, 26 Sep 2022 20:21:25 +0300 (EEST)
+Date:   Mon, 26 Sep 2022 20:21:25 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] thunderbolt: Explicitly enable lane adapter hotplug
+ events at startup
+Message-ID: <YzHflTAaNaeeDEkU@black.fi.intel.com>
+References: <20220926143351.11483-1-mario.limonciello@amd.com>
+ <YzG84WEuVdXxclJB@black.fi.intel.com>
+ <MN0PR12MB61015D287945A57D82910CE4E2529@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5e094839-c643-d2e7-698e-0fb6c0e50c4f@bytedance.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MN0PR12MB61015D287945A57D82910CE4E2529@MN0PR12MB6101.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 09:30:48PM +0800, Zhuo Chen wrote:
-> On 9/23/22 4:02 AM, Bjorn Helgaas wrote:
-> > On Mon, Sep 12, 2022 at 01:09:05AM +0800, Zhuo Chen wrote:
-> > > On 9/12/22 12:22 AM, Serge Semin wrote:
-> > > > On Fri, Sep 02, 2022 at 02:16:32AM +0800, Zhuo Chen wrote:
-
-> > > ‘pci_aer_clear_nonfatal_status()’ in drivers/crypto/hisilicon/qm.c will be
-> > > removed in the next kernel:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/crypto/hisilicon/qm.c?id=00278564a60e11df8bcca0ececd8b2f55434e406
-> > 
-> > This is a problem because 00278564a60e ("crypto: hisilicon - Remove
-> > pci_aer_clear_nonfatal_status() call") is in Herbert's cryptodev tree,
-> > and if I apply this series to the PCI tree and Linus merges it before
-> > Herbert's cryptodev changes, it will break the build.
-> > 
-> > I think we need to split this patch up like this:
-> > 
-> >    - Add pci_aer_clear_uncorrect_error_status() to PCI core
-> >    - Convert dpc to use pci_aer_clear_uncorrect_error_status()
-> >      (I might end up squashing with above)
-> >    - Convert lpfc to use pci_aer_clear_uncorrect_error_status()
-> >    - Convert ntb_hw_idt to use pci_aer_clear_uncorrect_error_status()
-> >    - Unexport pci_aer_clear_nonfatal_status()
-> > 
-> > Then I can apply all but the last patch safely.  If the crypto changes
-> > are merged first, we can add the last one; otherwise we can do it for
-> > the next cycle.
-> > 
-> Good proposal. I will implement these in the next version.
+On Mon, Sep 26, 2022 at 02:54:22PM +0000, Limonciello, Mario wrote:
+> [Public]
 > 
-> Do I need to put pci related modifications (include patch 2/3 and 3/3) in a
-> patch set or just single patches?
+> 
+> 
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Monday, September 26, 2022 09:53
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Andreas Noever <andreas.noever@gmail.com>; Michael Jamet
+> > <michael.jamet@intel.com>; Yehezkel Bernat <YehezkelShB@gmail.com>;
+> > Mehta, Sanju <Sanju.Mehta@amd.com>; stable@vger.kernel.org; linux-
+> > usb@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v4] thunderbolt: Explicitly enable lane adapter hotplug
+> > events at startup
+> > 
+> > Hi Mario,
+> > 
+> > On Mon, Sep 26, 2022 at 09:33:50AM -0500, Mario Limonciello wrote:
+> > > Software that has run before the USB4 CM in Linux runs may have disabled
+> > > hotplug events for a given lane adapter.
+> > >
+> > > Other CMs such as that one distributed with Windows 11 will enable
+> > hotplug
+> > > events. Do the same thing in the Linux CM which fixes hotplug events on
+> > > "AMD Pink Sardine".
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > 
+> > Looks good to me now. Since we are pretty late in the rc and this is not
+> > trivial fix anymore, would it be OK for you if I apply this to my next
+> > branch with stable tag? Then it gets slightly more exposure before it
+> > ends up in any of the stable trees.
+> 
+> Yeah that's fine by me, thanks!
 
-When in doubt, put them in separate patches.  It's trivial for me to
-squash them together if that makes more sense, but much more difficult
-for me to split them apart.
-
-Thanks for helping clean up this area!
-
-Bjorn
+Applied to thunderbolt.git/next, thanks!
