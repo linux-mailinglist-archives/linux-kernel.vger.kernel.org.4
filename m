@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C30A5EA3E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E810C5EA3F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiIZLgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S238151AbiIZLgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238259AbiIZLec (ORCPT
+        with ESMTP id S236179AbiIZLe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:34:32 -0400
+        Mon, 26 Sep 2022 07:34:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AB254CA1;
-        Mon, 26 Sep 2022 03:43:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861256E8B6;
+        Mon, 26 Sep 2022 03:43:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F92760B6A;
-        Mon, 26 Sep 2022 10:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4FFC433D7;
-        Mon, 26 Sep 2022 10:43:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9699E60A52;
+        Mon, 26 Sep 2022 10:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70195C433C1;
+        Mon, 26 Sep 2022 10:43:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189016;
-        bh=O9SJA4ghkAux3cvtpQ0yAtf9EdNN19N+uoX2sLICkTk=;
+        s=korg; t=1664189020;
+        bh=jrvdF3Rauso5cJYEO2kOLy1/uCOL4ml8bo9/7BiKQnk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GsX4KT+jMDdAjl3nT03djd0YVGdYZVY/G9am7DbzouXipsG7+oNHeulCs1suJI546
-         YnJ5dIkBlHAWsHa65bmuee+WRrVNjUZGcyHWuC7OZ2pYwa6LbxPIr626ylxHifqVv1
-         jwVZ9mCtXfUhCp+JI3FPlue+Fv+NEbzfEciU3ABc=
+        b=eKsVhY6Qj9uEnc3wgqAkeQbVYuK/5f0WETvkuF/njyHLh/Cn68js+PBq1EEdKMLIk
+         TZszqdBzqxEu47sPTXtWAFVnpx7pymTr2YbYBqD0JngcqUMqLpvQ2TAhigZpFY+EQ1
+         A/UE9jXJtbYQK2hwGHAB/ZHGS/HsDpM6c67jlkck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gil Fine <gil.fine@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 5.19 047/207] thunderbolt: Add support for Intel Maple Ridge single port controller
-Date:   Mon, 26 Sep 2022 12:10:36 +0200
-Message-Id: <20220926100808.724222167@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.19 048/207] efi: x86: Wipe setup_data on pure EFI boot
+Date:   Mon, 26 Sep 2022 12:10:37 +0200
+Message-Id: <20220926100808.760413331@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -53,42 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gil Fine <gil.fine@intel.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-commit 14c7d905283744809e6b82efae2f490660a11cda upstream.
+commit 63bf28ceb3ebbe76048c3fb2987996ca1ae64f83 upstream.
 
-Add support for Maple Ridge discrete USB4 host controller from Intel
-which has a single USB4 port (versus the already supported dual port
-Maple Ridge USB4 host controller).
+When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+services [as opposed to the deprecated EFI handover protocol], the setup
+header is taken from the image directly, and given that EFI's LoadImage
+has no Linux/x86 specific knowledge regarding struct bootparams or
+struct setup_header, any absolute addresses in the setup header must
+originate from the file and not from a prior loading stage.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Gil Fine <gil.fine@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Since we cannot generally predict where LoadImage() decides to load an
+image (*), such absolute addresses must be treated as suspect: even if a
+prior boot stage intended to make them point somewhere inside the
+[signed] image, there is no way to validate that, and if they point at
+an arbitrary location in memory, the setup_data nodes will not be
+covered by any signatures or TPM measurements either, and could be made
+to contain an arbitrary sequence of SETUP_xxx nodes, which could
+interfere quite badly with the early x86 boot sequence.
+
+(*) Note that, while LoadImage() does take a buffer/size tuple in
+addition to a device path, which can be used to provide the image
+contents directly, it will re-allocate such images, as the memory
+footprint of an image is generally larger than the PE/COFF file
+representation.
+
+Cc: <stable@vger.kernel.org> # v5.10+
+Link: https://lore.kernel.org/all/20220904165321.1140894-1-Jason@zx2c4.com/
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thunderbolt/icm.c |    1 +
- drivers/thunderbolt/nhi.h |    1 +
- 2 files changed, 2 insertions(+)
+ drivers/firmware/efi/libstub/x86-stub.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/thunderbolt/icm.c
-+++ b/drivers/thunderbolt/icm.c
-@@ -2527,6 +2527,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
- 		tb->cm_ops = &icm_icl_ops;
- 		break;
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_h
+ 	hdr->ramdisk_image = 0;
+ 	hdr->ramdisk_size = 0;
  
-+	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_NHI:
- 	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_NHI:
- 		icm->is_supported = icm_tgl_is_supported;
- 		icm->get_mode = icm_ar_get_mode;
---- a/drivers/thunderbolt/nhi.h
-+++ b/drivers/thunderbolt/nhi.h
-@@ -55,6 +55,7 @@ extern const struct tb_nhi_ops icl_nhi_o
-  * need for the PCI quirk anymore as we will use ICM also on Apple
-  * hardware.
-  */
-+#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_NHI		0x1134
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_NHI		0x1137
- #define PCI_DEVICE_ID_INTEL_WIN_RIDGE_2C_NHI            0x157d
- #define PCI_DEVICE_ID_INTEL_WIN_RIDGE_2C_BRIDGE         0x157e
++	/*
++	 * Disregard any setup data that was provided by the bootloader:
++	 * setup_data could be pointing anywhere, and we have no way of
++	 * authenticating or validating the payload.
++	 */
++	hdr->setup_data = 0;
++
+ 	efi_stub_entry(handle, sys_table_arg, boot_params);
+ 	/* not reached */
+ 
 
 
