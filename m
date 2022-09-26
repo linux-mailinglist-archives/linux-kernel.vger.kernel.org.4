@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4D5EA54D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D066A5EA3F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiIZMA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S236355AbiIZLgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238947AbiIZL46 (ORCPT
+        with ESMTP id S235336AbiIZLex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:56:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D17A767;
-        Mon, 26 Sep 2022 03:51:44 -0700 (PDT)
+        Mon, 26 Sep 2022 07:34:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0B18B0D;
+        Mon, 26 Sep 2022 03:43:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1AFFB80926;
-        Mon, 26 Sep 2022 10:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DF7C433C1;
-        Mon, 26 Sep 2022 10:51:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C2060AF0;
+        Mon, 26 Sep 2022 10:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6EAC433C1;
+        Mon, 26 Sep 2022 10:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189471;
-        bh=y7Mlu+4vaXSTwuWXF2lDCSOlXNwTXgB3fXmnlL3jX8g=;
+        s=korg; t=1664188890;
+        bh=BXd3fk2wzt9SIyr2yvllbbQe8fh4vJOwvdAwHCSN1d8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lNbCOFQ67SoPir/eh7Se0i6IzODxVCr2FdsrJOFQsifIgveCY7NafyQgbfv4nPlri
-         4Phetmpos4PvpRRJMM/zxrZxVyGEOmXZPwIPi/oHN0JCa5VHaN/aTJZJPNm4LWd1jg
-         IlfpIKGy18mBTEUCFasilww/WFbMI0p/USaUzVZE=
+        b=KF16Ea3UCr6KSjEeNdQ6TXqL9IQ6T8hcdyOcEu12tOWb40SvAkwUOTjEGydLofGqZ
+         FWa3bWr/45/EXbCGWwQACl9qXMHEkCB7sfPGZM+Mu4jBKG+LEr21Z8oIPejRLPB89W
+         /R2lU7I1UYPKHluPMorCHY+/PKehzoRZ7orgdg10=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.19 169/207] block: call blk_mq_exit_queue from disk_release for never added disks
-Date:   Mon, 26 Sep 2022 12:12:38 +0200
-Message-Id: <20220926100814.224159894@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 125/148] drm/gma500: Fix BUG: sleeping function called from invalid context errors
+Date:   Mon, 26 Sep 2022 12:12:39 +0200
+Message-Id: <20220926100800.847187813@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,63 +54,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit c5db2cfc6274692d821d33b59acb6ff615e350c1 upstream.
+[ Upstream commit 63e37a79f7bd939314997e29c2f5a9f0ef184281 ]
 
-To undo the all initialization from blk_mq_init_allocated_queue in case
-of a probe failure where add_disk is never called we have to call
-blk_mq_exit_queue from put_disk.
+gma_crtc_page_flip() was holding the event_lock spinlock while calling
+crtc_funcs->mode_set_base() which takes ww_mutex.
 
-This relies on the fact that drivers always call blk_mq_free_tag_set
-after calling put_disk in the probe error path if they have a gendisk
-at all.
+The only reason to hold event_lock is to clear gma_crtc->page_flip_event
+on mode_set_base() errors.
 
-We should be doing this in general, but can't do it for the normal
-teardown case (yet) as the tagset can be gone by the time the disk is
-released once it was added.  I hope to sort this out properly eventually
-but for now this isolated hack will do it.
+Instead unlock it after setting gma_crtc->page_flip_event and on
+errors re-take the lock and clear gma_crtc->page_flip_event it
+it is still set.
 
-Fixes: 6f8191fdf41d ("block: simplify disk shutdown")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20220720130541.1323531-2-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This fixes the following WARN/stacktrace:
+
+[  512.122953] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:870
+[  512.123004] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1253, name: gnome-shell
+[  512.123031] preempt_count: 1, expected: 0
+[  512.123048] RCU nest depth: 0, expected: 0
+[  512.123066] INFO: lockdep is turned off.
+[  512.123080] irq event stamp: 0
+[  512.123094] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[  512.123134] hardirqs last disabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123176] softirqs last  enabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123207] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[  512.123233] Preemption disabled at:
+[  512.123241] [<0000000000000000>] 0x0
+[  512.123275] CPU: 3 PID: 1253 Comm: gnome-shell Tainted: G        W         5.19.0+ #1
+[  512.123304] Hardware name: Packard Bell dot s/SJE01_CT, BIOS V1.10 07/23/2013
+[  512.123323] Call Trace:
+[  512.123346]  <TASK>
+[  512.123370]  dump_stack_lvl+0x5b/0x77
+[  512.123412]  __might_resched.cold+0xff/0x13a
+[  512.123458]  ww_mutex_lock+0x1e/0xa0
+[  512.123495]  psb_gem_pin+0x2c/0x150 [gma500_gfx]
+[  512.123601]  gma_pipe_set_base+0x76/0x240 [gma500_gfx]
+[  512.123708]  gma_crtc_page_flip+0x95/0x130 [gma500_gfx]
+[  512.123808]  drm_mode_page_flip_ioctl+0x57d/0x5d0
+[  512.123897]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.123936]  drm_ioctl_kernel+0xa1/0x150
+[  512.123984]  drm_ioctl+0x21f/0x420
+[  512.124025]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.124070]  ? rcu_read_lock_bh_held+0xb/0x60
+[  512.124104]  ? lock_release+0x1ef/0x2d0
+[  512.124161]  __x64_sys_ioctl+0x8d/0xd0
+[  512.124203]  do_syscall_64+0x58/0x80
+[  512.124239]  ? do_syscall_64+0x67/0x80
+[  512.124267]  ? trace_hardirqs_on_prepare+0x55/0xe0
+[  512.124300]  ? do_syscall_64+0x67/0x80
+[  512.124340]  ? rcu_read_lock_sched_held+0x10/0x80
+[  512.124377]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  512.124411] RIP: 0033:0x7fcc4a70740f
+[  512.124442] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+[  512.124470] RSP: 002b:00007ffda73f5390 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  512.124503] RAX: ffffffffffffffda RBX: 000055cc9e474500 RCX: 00007fcc4a70740f
+[  512.124524] RDX: 00007ffda73f5420 RSI: 00000000c01864b0 RDI: 0000000000000009
+[  512.124544] RBP: 00007ffda73f5420 R08: 000055cc9c0b0cb0 R09: 0000000000000034
+[  512.124564] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000c01864b0
+[  512.124584] R13: 0000000000000009 R14: 000055cc9df484d0 R15: 000055cc9af5d0c0
+[  512.124647]  </TASK>
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220906203852.527663-2-hdegoede@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/genhd.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/gpu/drm/gma500/gma_display.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -1158,6 +1158,18 @@ static void disk_release(struct device *
- 	might_sleep();
- 	WARN_ON_ONCE(disk_live(disk));
+diff --git a/drivers/gpu/drm/gma500/gma_display.c b/drivers/gpu/drm/gma500/gma_display.c
+index b03f7b8241f2..7162f4c946af 100644
+--- a/drivers/gpu/drm/gma500/gma_display.c
++++ b/drivers/gpu/drm/gma500/gma_display.c
+@@ -529,15 +529,18 @@ int gma_crtc_page_flip(struct drm_crtc *crtc,
+ 		WARN_ON(drm_crtc_vblank_get(crtc) != 0);
  
-+	/*
-+	 * To undo the all initialization from blk_mq_init_allocated_queue in
-+	 * case of a probe failure where add_disk is never called we have to
-+	 * call blk_mq_exit_queue here. We can't do this for the more common
-+	 * teardown case (yet) as the tagset can be gone by the time the disk
-+	 * is released once it was added.
-+	 */
-+	if (queue_is_mq(disk->queue) &&
-+	    test_bit(GD_OWNS_QUEUE, &disk->state) &&
-+	    !test_bit(GD_ADDED, &disk->state))
-+		blk_mq_exit_queue(disk->queue);
-+
- 	blkcg_exit_queue(disk->queue);
+ 		gma_crtc->page_flip_event = event;
++		spin_unlock_irqrestore(&dev->event_lock, flags);
  
- 	disk_release_events(disk);
-@@ -1422,6 +1434,9 @@ EXPORT_SYMBOL(__blk_alloc_disk);
-  * This decrements the refcount for the struct gendisk. When this reaches 0
-  * we'll have disk_release() called.
-  *
-+ * Note: for blk-mq disk put_disk must be called before freeing the tag_set
-+ * when handling probe errors (that is before add_disk() is called).
-+ *
-  * Context: Any context, but the last reference must not be dropped from
-  *          atomic context.
-  */
+ 		/* Call this locked if we want an event at vblank interrupt. */
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 		if (ret) {
+-			gma_crtc->page_flip_event = NULL;
+-			drm_crtc_vblank_put(crtc);
++			spin_lock_irqsave(&dev->event_lock, flags);
++			if (gma_crtc->page_flip_event) {
++				gma_crtc->page_flip_event = NULL;
++				drm_crtc_vblank_put(crtc);
++			}
++			spin_unlock_irqrestore(&dev->event_lock, flags);
+ 		}
+-
+-		spin_unlock_irqrestore(&dev->event_lock, flags);
+ 	} else {
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 	}
+-- 
+2.35.1
+
 
 
