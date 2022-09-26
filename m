@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D8F5EA0A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4EA5EA2EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbiIZKke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S237654AbiIZLQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236270AbiIZKis (ORCPT
+        with ESMTP id S233413AbiIZLPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:38:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB594BD0C;
-        Mon, 26 Sep 2022 03:22:41 -0700 (PDT)
+        Mon, 26 Sep 2022 07:15:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B5865272;
+        Mon, 26 Sep 2022 03:37:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 909EECE10E0;
-        Mon, 26 Sep 2022 10:22:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AC0C433D6;
-        Mon, 26 Sep 2022 10:22:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3B3A60AD6;
+        Mon, 26 Sep 2022 10:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E63C433C1;
+        Mon, 26 Sep 2022 10:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187742;
-        bh=UOm1MAgdfotlzWdQ47qmCdfr1ChvULKwhYKIK6aiRlU=;
+        s=korg; t=1664188263;
+        bh=Wz53GDp3LiDe5Ese3UeEQC6KNfIuFv1AJlJOKUOhKiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWeVufjxfpDkb6Sjv1lV0pWsq0vZ+tHEiOLIckQvzJICmoFbxt81+1BIahR68AoK6
-         NLHWMYIUoDoUN0jEkBEo2qHnyYWvwdsKG4bmwfWd4ORZCE6a/0Z+24dnHyvOhskS7c
-         qNeiqhUQUFzKZhKUs+SOso0v8vYdR/r8W4AYOR+k=
+        b=n1YxNBtKcyepUMWRGi2qlwDUVdYWPlB8TR7oOIQV7USAEemS+zaDIZiD3ryYgOWu+
+         QQcSyIQzu5A55OlBnGP/HCm/oG9JwMI9g0EflSy93z9JNPmMVDp3W9SvlPgpCYQnvE
+         j2uvdt0R9jBvA1/0StVOBZln5g9iKpA+UQ8nvZEY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 046/120] serial: atmel: remove redundant assignment in rs485_config
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.10 053/141] gpio: mockup: fix NULL pointer dereference when removing debugfs
 Date:   Mon, 26 Sep 2022 12:11:19 +0200
-Message-Id: <20220926100752.429939336@linuxfoundation.org>
+Message-Id: <20220926100756.374155441@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
 
-[ Upstream commit 60efd0513916f195dd85bfbf21653f74f9ab019c ]
+commit b7df41a6f79dfb18ba2203f8c5f0e9c0b9b57f68 upstream.
 
-In uart_set_rs485_config() the serial core already assigns the passed
-serial_rs485 struct to the uart port.
+We now remove the device's debugfs entries when unbinding the driver.
+This now causes a NULL-pointer dereference on module exit because the
+platform devices are unregistered *after* the global debugfs directory
+has been recursively removed. Fix it by unregistering the devices first.
 
-So remove the assignment from the drivers rs485_config() function to avoid
-redundancy.
-
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Acked-by: Richard Genoud <richard.genoud@gmail.com>
-Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Link: https://lore.kernel.org/r/20220410104642.32195-10-LinoSanfilippo@gmx.de
+Fixes: 303e6da99429 ("gpio: mockup: remove gpio debugfs when remove device")
+Cc: Wei Yongjun <weiyongjun1@huawei.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Stable-dep-of: 692a8ebcfc24 ("tty: serial: atmel: Preserve previous USART mode if RS485 disabled")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/gpio/gpio-mockup.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index e011f3d20224..44608a06bb2c 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -309,11 +309,9 @@ static int atmel_config_rs485(struct uart_port *port,
- 	/* Resetting serial mode to RS232 (0x0) */
- 	mode &= ~ATMEL_US_USMODE;
+--- a/drivers/gpio/gpio-mockup.c
++++ b/drivers/gpio/gpio-mockup.c
+@@ -604,9 +604,9 @@ static int __init gpio_mockup_init(void)
  
--	port->rs485 = *rs485conf;
--
- 	if (rs485conf->flags & SER_RS485_ENABLED) {
- 		dev_dbg(port->dev, "Setting UART to RS485\n");
--		if (port->rs485.flags & SER_RS485_RX_DURING_TX)
-+		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
- 			atmel_port->tx_done_mask = ATMEL_US_TXRDY;
- 		else
- 			atmel_port->tx_done_mask = ATMEL_US_TXEMPTY;
--- 
-2.35.1
-
+ static void __exit gpio_mockup_exit(void)
+ {
++	gpio_mockup_unregister_pdevs();
+ 	debugfs_remove_recursive(gpio_mockup_dbg_dir);
+ 	platform_driver_unregister(&gpio_mockup_driver);
+-	gpio_mockup_unregister_pdevs();
+ }
+ 
+ module_init(gpio_mockup_init);
 
 
