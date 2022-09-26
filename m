@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36E35EA328
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D175E9F20
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbiIZLUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S235154AbiIZKTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237780AbiIZLS6 (ORCPT
+        with ESMTP id S234070AbiIZKRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:18:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A9952DE9;
-        Mon, 26 Sep 2022 03:38:33 -0700 (PDT)
+        Mon, 26 Sep 2022 06:17:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40A8248F6;
+        Mon, 26 Sep 2022 03:15:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEA06B801BF;
-        Mon, 26 Sep 2022 10:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136D3C43147;
-        Mon, 26 Sep 2022 10:36:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C358CB80915;
+        Mon, 26 Sep 2022 10:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBE6C433C1;
+        Mon, 26 Sep 2022 10:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188611;
-        bh=8oRT6RvoMg7THuVshV6qhn0V2DoX726qshBoMBIeeRg=;
+        s=korg; t=1664187293;
+        bh=s9Ol33kpSrjmzFWdc4sW7eWoQqLfe0AJTiY9sp9s7jY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MSWUNwJNOb6az+MVXToO7AuOTSLypr5vmGlW5sBBXAmm9iLFiENRFq5a8k1Nni4D4
-         Ftj4lgBuIxZ+28EzBs7X7l++H660O+XarsVY4H39ElXvmx8cp5rx/sQtdxBjk6t3Xg
-         Fe7OVunIAgvolpmhAUIGuEZAYlc7+330yixMPxUM=
+        b=qfuqBeFVMZUATw87CLPFpdP8NWqYfmn68HD3OVurl4MIp24MQypeF+YDNmULEL3D7
+         zmecIo5Z1wp0eT9Ygep9KTH1THkjOTbUJ2NHx+lQtCHO2i/rFmB8xUVRSEzd1JV5fL
+         EkL095VdKZ7/7YeLFx05gVbQF8raptrfs0u8I9/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 065/148] arm64: dts: rockchip: Remove enable-active-low from rk3399-puma
+Subject: [PATCH 4.9 08/30] mips: lantiq: falcon: Fix refcount leak bug in sysctrl
 Date:   Mon, 26 Sep 2022 12:11:39 +0200
-Message-Id: <20220926100758.485374586@linuxfoundation.org>
+Message-Id: <20220926100736.453859021@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit a994b34b9abb9c08ee09e835b4027ff2147f9d94 ]
+[ Upstream commit 72a2af539fff975caadd9a4db3f99963569bd9c9 ]
 
-The 'enable-active-low' property is not a valid one.
+In ltq_soc_init(), of_find_compatible_node() will return a node pointer
+with refcount incremented. We should use of_node_put() when it is not
+used anymore.
 
-Only 'enable-active-high' is valid, and when this property is absent
-the gpio regulator will act as active low by default.
-
-Remove the invalid 'enable-active-low' property.
-
-Fixes: 2c66fc34e945 ("arm64: dts: rockchip: add RK3399-Q7 (Puma) SoM")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Link: https://lore.kernel.org/r/20220827175140.1696699-1-festevam@denx.de
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/mips/lantiq/falcon/sysctrl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-index 08fa00364b42..7b27079fd611 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-@@ -62,7 +62,6 @@ vcc3v3_sys: vcc3v3-sys {
- 	vcc5v0_host: vcc5v0-host-regulator {
- 		compatible = "regulator-fixed";
- 		gpio = <&gpio4 RK_PA3 GPIO_ACTIVE_LOW>;
--		enable-active-low;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&vcc5v0_host_en>;
- 		regulator-name = "vcc5v0_host";
+diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
+index 714d92659489..665739bd4190 100644
+--- a/arch/mips/lantiq/falcon/sysctrl.c
++++ b/arch/mips/lantiq/falcon/sysctrl.c
+@@ -210,6 +210,12 @@ void __init ltq_soc_init(void)
+ 			of_address_to_resource(np_sysgpe, 0, &res_sys[2]))
+ 		panic("Failed to get core resources");
+ 
++	of_node_put(np_status);
++	of_node_put(np_ebu);
++	of_node_put(np_sys1);
++	of_node_put(np_syseth);
++	of_node_put(np_sysgpe);
++
+ 	if ((request_mem_region(res_status.start, resource_size(&res_status),
+ 				res_status.name) < 0) ||
+ 		(request_mem_region(res_ebu.start, resource_size(&res_ebu),
 -- 
 2.35.1
 
