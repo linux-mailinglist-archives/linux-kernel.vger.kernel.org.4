@@ -2,104 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9B85E9CE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19565E9CE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiIZJEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S234667AbiIZJEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbiIZJDx (ORCPT
+        with ESMTP id S234732AbiIZJD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:03:53 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86CA3DF28;
-        Mon, 26 Sep 2022 02:03:49 -0700 (PDT)
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 28Q92Yo2010468;
-        Mon, 26 Sep 2022 18:02:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28Q92Yo2010468
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664182957;
-        bh=A9rjJTx/1HLx31R8GgAjlfENvJtf39g+fxcn+LvStLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GFBrPIGue3lq/+yk97SX0hd/1VanvBTKluhi+zk11JTgVnn8mbi9GDr4IkAlIcezO
-         G0pCLT13UDNceCJzOicyOBcmTqXMKoANTtyfD2vJaSk4IY3KV3oIiXc1SHm+iHBMkA
-         mLeuni+198HJ9I/6ijmdONog1/SzYJnpR2IDjQmfXbP8frLTmMnMlWjWg/foWnjkKK
-         hFZ+idGqgH+rI3myVYbpZzN/LLu3zhL/qWlkLbzMshFFs1KEDHhRKu6fbYhQ079Efc
-         /PAxD+PGrSAlgKaxYPa5jVfRR7HND7YqZN33H2uIpc/KpSzBALSLznvlQGA/mlcvra
-         oabTs/wYtgkJA==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5/5] kallsyms: ignore __kstrtab_* and __kstrtabns_* symbols
-Date:   Mon, 26 Sep 2022 18:02:29 +0900
-Message-Id: <20220926090229.643134-5-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926090229.643134-1-masahiroy@kernel.org>
-References: <20220926090229.643134-1-masahiroy@kernel.org>
+        Mon, 26 Sep 2022 05:03:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4F3F33D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664183003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EiRILOXIL9Cc1HhYfrtZucdPYwDfjfCh1nR/cVNCk6E=;
+        b=Kc2uy9FO7YRi1bW+VuiSpiCEHie0EaRm0xW+aJLPL2eawFpVQrZ4BQapD/j1R1j8kmzEg7
+        EjCkm8URvvJCHpbhRYVb3cVB861Cyf8ws/Mb7ZDLOpMisD6TCSP+bwf1a7nqGCKsWfy8iC
+        hQq+K/hHgzAFZUrZZb5iJTq/38XzIXo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-520-WyfK1JF3P4yxIw1oySjLlg-1; Mon, 26 Sep 2022 05:03:22 -0400
+X-MC-Unique: WyfK1JF3P4yxIw1oySjLlg-1
+Received: by mail-wm1-f72.google.com with SMTP id f25-20020a7bc8d9000000b003b4768dcd9cso1608549wml.9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:03:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=EiRILOXIL9Cc1HhYfrtZucdPYwDfjfCh1nR/cVNCk6E=;
+        b=A4raXdhojWJV/0a8588gh3MSoYzki4LdULCPxlVMdSzB6F/9TDfWjGfTd+YqJnbTWt
+         tJpWySYbQPS2Gv/u9XwbRE8a6J7b0I40HRHi5Qf8ZnqXCqrUG6Ls8S3efjA0PIZGd8jw
+         qVrxMsLJpo6nsnY2o2xsOB5H3vl+PYOZJXk3toKe+1lyyIBDno7kkDeJZEQExm4OlGLT
+         hwISdorz9yyaUnhRDrJUUnsdqjPIErRFYbD2MvHiMUigP3D9u/J6xIPB9jJb3/mFuhEV
+         fupejSXwYN3q7uTVm2I1HSpTXwe3WoMmD3i7tPqr4XoIHnPkPFMK6mNyQ2ttGj+N/xQr
+         Ms1A==
+X-Gm-Message-State: ACrzQf1hCRS5ArEEdw4bg+msrGOHvshhQiGMFEQWwvmhmQt/HsNHRmUz
+        DJIi0ga2MQ7lRsuuxJ03mqeo2+wLKV/55lN1gzk0wQyHVEk+Q3nvdQVEIhGIQiPjqM4iTTTF+k2
+        nzC1O4nZyDiAfldtU0Fq+UENY
+X-Received: by 2002:a5d:5847:0:b0:22b:377:6786 with SMTP id i7-20020a5d5847000000b0022b03776786mr12792788wrf.568.1664183001287;
+        Mon, 26 Sep 2022 02:03:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5ur8rzk7K6B14clro+Q+XG8+AsmvdgRy/j9ihfwytsbvFduuqzmuCbCZcTXjfSnXd4BFAxcw==
+X-Received: by 2002:a5d:5847:0:b0:22b:377:6786 with SMTP id i7-20020a5d5847000000b0022b03776786mr12792756wrf.568.1664183000907;
+        Mon, 26 Sep 2022 02:03:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7? (p200300cbc7034b00e0907fa6b7d6d4a7.dip0.t-ipconnect.de. [2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7])
+        by smtp.gmail.com with ESMTPSA id e11-20020adfef0b000000b0022ae0965a8asm14030288wro.24.2022.09.26.02.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 02:03:20 -0700 (PDT)
+Message-ID: <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+Date:   Mon, 26 Sep 2022 11:03:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <YxtOEgJhe4EcAJsE@google.com>
+ <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
+ <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+In-Reply-To: <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Every EXPORT_SYMBOL creates __kstrtab_* and __kstrtabns_*, which
-consumes 15-20% of the kallsyms entries.
+On 23.09.22 15:38, Emanuele Giuseppe Esposito wrote:
+> 
+> 
+> Am 23/09/2022 um 15:21 schrieb David Hildenbrand:
+>> On 23.09.22 15:10, Emanuele Giuseppe Esposito wrote:
+>>>
+>>>
+>>> Am 19/09/2022 um 19:30 schrieb David Hildenbrand:
+>>>> On 19.09.22 09:53, David Hildenbrand wrote:
+>>>>> On 18.09.22 18:13, Emanuele Giuseppe Esposito wrote:
+>>>>>>
+>>>>>>
+>>>>>> Am 09/09/2022 um 16:30 schrieb Sean Christopherson:
+>>>>>>> On Fri, Sep 09, 2022, Emanuele Giuseppe Esposito wrote:
+>>>>>>>> KVM is currently capable of receiving a single memslot update
+>>>>>>>> through
+>>>>>>>> the KVM_SET_USER_MEMORY_REGION ioctl.
+>>>>>>>> The problem arises when we want to atomically perform multiple
+>>>>>>>> updates,
+>>>>>>>> so that readers of memslot active list avoid seeing incomplete
+>>>>>>>> states.
+>>>>>>>>
+>>>>>>>> For example, in RHBZ
+>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1979276
+>>>>>>>
+>>>>>>> I don't have access.  Can you provide a TL;DR?
+>>>>>>
+>>>>>> You should be able to have access to it now.
+>>>>>>
+>>>>>>>
+>>>>>>>> we see how non atomic updates cause boot failure, because vcpus
+>>>>>>>> will se a partial update (old memslot delete, new one not yet
+>>>>>>>> created)
+>>>>>>>> and will crash.
+>>>>>>>
+>>>>>>> Why not simply pause vCPUs in this scenario?  This is an awful lot
+>>>>>>> of a complexity
+>>>>>>> to take on for something that appears to be solvable in userspace.
+>>>>>>>
+>>>>>>
+>>>>>> I think it is not that easy to solve in userspace: see
+>>>>>> https://lore.kernel.org/qemu-devel/20200312161217.3590-1-david@redhat.com/
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> "Using pause_all_vcpus()/resume_all_vcpus() is not possible, as it
+>>>>>> will
+>>>>>> temporarily drop the BQL - something most callers can't handle (esp.
+>>>>>> when called from vcpu context e.g., in virtio code)."
+>>>>>
+>>>>> Can you please comment on the bigger picture? The patch from me works
+>>>>> around *exactly that*, and for that reason, contains that comment.
+>>>>>
+>>>>
+>>>> FWIW, I hacked up my RFC to perform atomic updates on any memslot
+>>>> transactions (not just resizes) where ranges do add overlap with ranges
+>>>> to remove.
+>>>>
+>>>> https://github.com/davidhildenbrand/qemu/tree/memslot
+>>>>
+>>>>
+>>>> I only performed simple boot check under x86-64 (where I can see region
+>>>> resizes) and some make checks -- pretty sure it has some rough edges;
+>>>> but should indicate what's possible and what the possible price might
+>>>> be. [one could wire up a new KVM ioctl and call it conditionally on
+>>>> support if really required]
+>>>>
+>>>
+>>> A benefit of my ioctl implementation is that could be also used by other
+>>> hypervisors, which then do not need to share this kind of "hack".
+>>> However, after also talking with Maxim and Paolo, we all agreed that the
+>>> main disadvantage of your approach is that is not scalable with the
+>>> number of vcpus. It is also inferior to stop *all* vcpus just to allow a
+>>> memslot update (KVM only pauses vCPUs that access the modified memslots
+>>> instead).
+>>>
+>>> So I took some measurements, to see what is the performance difference
+>>> between my implementation and yours. I used a machine where I could
+>>> replicate the bug mentioned in bugzilla, an AMD EPYC 7413 24-Core
+>>> Processor with kernel 5.19.0 (+ my patches).
+>>>
+>>> Then I measured the time it takes that QEMU spends in kvm_commit (ie in
+>>> memslot updates) while booting a VM. In other words, if kvm_commit takes
+>>> 10 ms and QEMU calls it 20 times, "time to boot" is 200ms. kvm_commit is
+>>> not called anymore after boot, so this measurement is easy to compare
+>>> over multiple invocations of QEMU.
+>>>
+>>> I ran the tests with different amount of cores: 1,2,4,8,16,32. QEMU
+>>> command is the same to replicate the bug:
+>>> ./qemu-system-x86_64 --overcommit cpu-pm=on --smp $v --accel kvm
+>>> --display none >> ~/smp_$v;
+>>>
+>>> Each boot is reproduced 100 times, and then from results I measure
+>>> average and stddev (in milliseconds).
+>>>
+>>> ioctl:
+>>> -smp 1:        Average: 2.1ms        Stdev: 0.8ms
+>>> -smp 2:        Average: 2.5ms        Stdev: 1.5ms
+>>> -smp 4:        Average: 2.2ms        Stdev: 1.1ms
+>>> -smp 8:        Average: 2.4ms        Stdev: 0.7ms
+>>> -smp 16:       Average: 3.6ms        Stdev: 2.4ms  (1000 repetitions)
+>>> -smp 24:       Average: 12.5ms        Stdev: 0.9ms  (1000 repetitions)
+>>>
+>>>
+>>> pause/resume: (https://github.com/davidhildenbrand/qemu/tree/memslot)
+>>> -smp 1:        Average: 2.2ms        Stdev: 1.2ms
+>>> -smp 2:        Average: 3.0ms        Stdev: 1.4ms
+>>> -smp 4:        Average: 3.1ms        Stdev: 1.3m
+>>> -smp 8:        Average: 3.4ms        Stdev: 1.4ms
+>>> -smp 16:       Average: 12ms        Stdev: 7.0ms  (1000 repetitions)
+>>> -smp 24:       Average: 20ms        Stdev: 7.3ms  (1000 repetitions)
+>>>
+>>>
+>>> Above 24 vCPUs performance gets worse quickly but I think it's already
+>>> quite clear that the results for ioctl scale better as the number of
+>>> vcpus increases, while pausing the vCPUs becomes slower already with 16
+>>> vcpus.
+>>
+>> Right, the question is if it happens sufficiently enough that we even
+>> care and if there are not ways to mitigate.
+>>
+>> It doesn't necessarily have to scale with the #VCPUs I think. What
+>> should dominate the overall time in theory how long it takes for one
+>> VCPU (the slowest one) to leave the kernel.
+>>
+>> I wondered if
+>>
+>> 1) it might be easier to have a single KVM mechanism/call to kick all
+>> VCPUs out of KVM instead of doing it per VCPU. That might speed up
+>> things eventually heavily already.
+> 
+> So if I understand correclty, this implies creating a new ioctl in KVM
+> anyways? What would be then the difference with what I do? We are
+> affecting the kernel anyways.
+> 
 
-For x86_64 defconfig,
+If that turns out to be the actual bottleneck. I haven't analyzed what 
+exactly is causing the delay with increasing # VCPUs, so I'm just guessing.
 
-  $ cat /proc/kallsyms | wc
-     129527    388581   5685465
-  $ cat /proc/kallsyms | grep __kstrtab | wc
-      23489     70467   1187932
+Right now, we primarily use pthread_kill(SIG_IPI) to send a signal to 
+each VCPU thread.
 
-We already ignore __crc_* symbols populated by EXPORT_SYMBOL, so it
-should be fine to ignore __kstrtab_* and __kstrtabns_* as well.
+>>
+>> 2) One thing I wondered is whether the biggest overhead is actually
+>> taking the locks in QEMU and not actually waiting for the VCPUs. Maybe
+>> we could optimize that as well. (for now I use one lock per VCPU because
+>> it felt like it would reduce the ioctl overhead; maybe there is a better
+>> alternative to balance between both users)
+>>
+>> So treat my patch as a completely unoptimized version.
+>>
+> For what is worth, also my version performs #invalidate+1 swaps, which
+> is not optimized.
+> 
+> Honestly, I don't see how the above is easier or simpler than what is
+> being proposed here.
 
-This makes vmlinux a bit smaller.
+As Sean said "This is an awful lot of a complexity to take on for 
+something that appears to be solvable in userspace."
 
-  $ size vmlinux.before vmlinux.after
-     text    data     bss     dec     hex filename
-  22785374        8559694 1413328 32758396        1f3da7c vmlinux.before
-  22785374        8137806 1413328 32336508        1ed6a7c vmlinux.after
+I showed that it's possible. So from that point on, there has to be good 
+justification why that complexity has to exist in kernel space to 
+optimize this scenario.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Now, it's not my call to make. I'm just pointing out that it can be done 
+and that there might be room for improvement in my quick prototype.
 
- scripts/mksysmap | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/scripts/mksysmap b/scripts/mksysmap
-index 75f3dfd1c156..16a08b8ef2f8 100755
---- a/scripts/mksysmap
-+++ b/scripts/mksysmap
-@@ -43,6 +43,8 @@
- #  $                    - local symbols for ARM, MIPS, etc.
- #  .L                   - local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc.
- #  __crc_               - modversions
-+#  __kstrtab_           - EXPORT_SYMBOL (symbol name)
-+#  __kstrtabns_         - EXPORT_SYMBOL (namespace)
- #
- # Ignored symbols:
- #  L0                   - for LoongArch?
-@@ -52,5 +54,7 @@ $NM -n $1 | grep -v		\
- 	-e ' \$'		\
- 	-e ' \.L'		\
- 	-e ' __crc_'		\
-+	-e ' __kstrtab_'	\
-+	-e ' __kstrtabns_'	\
- 	-e ' L0$'		\
- > $2
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 
