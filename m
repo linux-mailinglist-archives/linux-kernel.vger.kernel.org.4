@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC455EAC97
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E34E5EAC98
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiIZQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S229758AbiIZQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIZQcc (ORCPT
+        with ESMTP id S229642AbiIZQch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:32:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20056118DF8;
-        Mon, 26 Sep 2022 08:21:19 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 15:21:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664205666;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/hhmGJNBhfqo9Hwk6td6VqtlutXUDzo9USjDd+979GU=;
-        b=Rb/4sTXmE1qGDzKwCZjYWdenU7ymuI09Gmvco7pVAsjlrVS05RpZSansfLl0YotxW2J4cc
-        dbfB4PAibuSxhOmp8kkBuIzwmXOx2J5F9vkCW+E/nD0whGsT/6KEnXuPZVgXCqCOe0kRxc
-        dxmH8eRKrZGobVEKUDCdVwOyAKOVyh8POSBBMKjuSKZNx66qt758fifduXiXwsA3dzo1TF
-        4FESthX93O90R1SjwEOmBHJnS0OGsmYDLC9SKDyZe0UbEp7UhQo4bxB7DvTX0sp8oHxRTA
-        BszxGjK+aJsKn+pMzt0DSqlFYc4+Uh1J6uvBLLZ7UFIKqGwlBzc26oIVsi7G0A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664205666;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/hhmGJNBhfqo9Hwk6td6VqtlutXUDzo9USjDd+979GU=;
-        b=HI+z+Koh7A9hraD4/Q47OfXwUiH0E2elhYL0jQOWt5ML8U6VSZrCLRm5x9SLZqN0cJtAEd
-        8bvKOIjHXypIW3AQ==
-From:   tip-bot2 for Luciano =?utf-8?q?Le=C3=A3o?= 
-        <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/cpu: Include the header of
- init_ia32_feat_ctl()'s prototype
-Cc:     lucianorsleao@gmail.com, Borislav Petkov <bp@suse.de>,
-        n@nfraprado.net, x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220922200053.1357470-1-lucianorsleao@gmail.com>
-References: <20220922200053.1357470-1-lucianorsleao@gmail.com>
+        Mon, 26 Sep 2022 12:32:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E1782D29
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 08:21:23 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C04086600371;
+        Mon, 26 Sep 2022 16:21:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664205671;
+        bh=CUjqHy4tnGfM2kkCAOfVdjkEold9qGI9EH5hPzPlOkI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ty75L7GMLlZIna8DWvtOYYFccyAcn3A/3yv52cjxgdoMwL7gnOa8VI7qfyKAhnlH0
+         CHQS/QvvIUCcQDjc2xdrCEsmDg5JrWRhQg2aZXEiSylUDdEFS2KNoZMOtfBCqz3JRX
+         Hm13kgdPk7j7t00VSaiwfFcZDPWK5SjQnr74H0jOcEjfx5BPnxgmhRJg8chX2NLB+y
+         x2pvUfqS70XkwwjwpvzKloLoT+G7YgEPCqqpNtvKhnNm3tq/VJZt5WpwFVSm4rKQIw
+         JFrZSeHUxWwMuAz9gzUT5XVfjA8vWybGIhEeL4Jr1fFZTlh3JqE6ZiKJHKu478sfiF
+         N5E72ZgF22d7w==
+Message-ID: <dcdc61d0-a979-b746-6259-48a67175c675@collabora.com>
+Date:   Mon, 26 Sep 2022 17:21:07 +0200
 MIME-Version: 1.0
-Message-ID: <166420566460.401.3267753468961488287.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [RESEND PATCH v3] mailbox: mtk-cmdq: fix gce timeout issue
+Content-Language: en-US
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220926090219.11871-1-yongqiang.niu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220926090219.11871-1-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,70 +63,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+Il 26/09/22 11:02, Yongqiang Niu ha scritto:
+> 1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
+> and disable gce ddr enable when gce work job done
+> 2. split cmdq clk enable/disable api, and control gce ddr enable/disable
+> in clk enable/disable function to make sure it could protect when cmdq
+> is multiple used by display and mdp
+> 
+> this is only for some SOC which has flag "control_by_sw".
+> for this kind of gce, there is a handshake flow between gce and ddr
+> hardware,
+> if not set ddr enable flag of gce, ddr will fall into idle mode,
+> then gce instructions will not process done.
+> we need set this flag of gce to tell ddr when gce is idle or busy
+> controlled by software flow.
+> 
+> ddr problem is a special case.
+> when test suspend/resume case, gce sometimes will pull ddr, and ddr can
+> not go to suspend.
+> if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
+> as you have referred [1] and [2] (8192 and 8195)
+> but for mt8186, the gce is more special, except setting of [1] and [2],
+> we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
+> when gce working to make sure gce could process all instructions ok.
+> this case just need normal bootup, if we not set this, display cmdq
+> task will timeout, and chrome homescreen will always black screen.
+> 
+> and with this patch, we have done these test on mt8186:
+> 1.suspend/resume
+> 2.boot up to home screen
+> 3.playback video with youtube.
+> 
+> suspend issue is special gce hardware issue, gce client  driver
+> command already process done, but gce still pull ddr.
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+> change sinc v2:
+> 1. add definition GCE_CTRL_BY_SW and GCE_DDR_EN instead of magic number
+> ---
+> 
+> ---
+>   drivers/mailbox/mtk-cmdq-mailbox.c | 68 +++++++++++++++++++++++++++---
+>   1 file changed, 63 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+> index 9465f9081515..bd63773b05fd 100644
+> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
+> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+> @@ -38,6 +38,8 @@
+>   #define CMDQ_THR_PRIORITY		0x40
+>   
+>   #define GCE_GCTL_VALUE			0x48
+> +#define GCE_CTRL_BY_SW				GENMASK(18, 16)
+> +#define GCE_DDR_EN				GENMASK(2, 0)
+>   
+>   #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
+>   #define CMDQ_THR_ENABLED		0x1
+> @@ -80,16 +82,60 @@ struct cmdq {
+>   	bool			suspended;
+>   	u8			shift_pa;
+>   	bool			control_by_sw;
+> +	bool			sw_ddr_en;
+>   	u32			gce_num;
+> +	atomic_t		usage;
+> +	spinlock_t		lock;
+>   };
+>   
+>   struct gce_plat {
+>   	u32 thread_nr;
+>   	u8 shift;
+>   	bool control_by_sw;
+> +	bool sw_ddr_en;
+>   	u32 gce_num;
+>   };
+>   
+> +static s32 cmdq_clk_enable(struct cmdq *cmdq)
+> +{
+> +	s32 usage, ret;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&cmdq->lock, flags);
 
-Commit-ID:     30ea703a38ef76ca119673cd8bdd05c6e068e2ac
-Gitweb:        https://git.kernel.org/tip/30ea703a38ef76ca119673cd8bdd05c6e06=
-8e2ac
-Author:        Luciano Le=C3=A3o <lucianorsleao@gmail.com>
-AuthorDate:    Thu, 22 Sep 2022 17:00:54 -03:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 26 Sep 2022 17:06:27 +02:00
+All this locking is avoidable on all SoCs where (sw_ddr_en == false), which means
+that this is needed only for one SoC (MT8186).
 
-x86/cpu: Include the header of init_ia32_feat_ctl()'s prototype
+You can solve that by adding a callback pointer on the gce_plat data, so that
+we get something like:
 
-Include the header containing the prototype of init_ia32_feat_ctl(),
-solving the following warning:
+static int cmdq_clk_swddr_enable(struct cmdq *cmdq)
+{
+	lock, atomic_inc, clk_bulk_enable, writel(....);
+}
 
-  $ make W=3D1 arch/x86/kernel/cpu/feat_ctl.o
-  arch/x86/kernel/cpu/feat_ctl.c:112:6: warning: no previous prototype for =
-=E2=80=98init_ia32_feat_ctl=E2=80=99 [-Wmissing-prototypes]
-    112 | void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+static int cmdq_clk_enable(struct cmdq *cmdq)
+{
+	return clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
+};
 
-This warning appeared after commit
+static const struct gce_plat gce_plat_v7 = {
+	...........
+	.clk_enable = cmdq_clk_swddr_enable,
+	.clk_disable = cmdq_clk_swddr_disable,
+	..........
+};
 
-  5d5103595e9e5 ("x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during wakeu=
-p")
+Please care about older SoCs' performance.
 
-had moved the function init_ia32_feat_ctl()'s prototype from
-arch/x86/kernel/cpu/cpu.h to arch/x86/include/asm/cpu.h.
+Regards,
+Angelo
 
-Note that, before the commit mentioned above, the header include "cpu.h"
-(arch/x86/kernel/cpu/cpu.h) was added by commit
 
-  0e79ad863df43 ("x86/cpu: Fix a -Wmissing-prototypes warning for init_ia32_f=
-eat_ctl()")
-
-solely to fix init_ia32_feat_ctl()'s missing prototype. So, the header
-include "cpu.h" is no longer necessary.
-
-  [ bp: Massage commit message. ]
-
-Fixes: 5d5103595e9e5 ("x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during =
-wakeup")
-Signed-off-by: Luciano Le=C3=A3o <lucianorsleao@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: N=C3=ADcolas F. R. A. Prado <n@nfraprado.net>
-Link: https://lore.kernel.org/r/20220922200053.1357470-1-lucianorsleao@gmail.=
-com
----
- arch/x86/kernel/cpu/feat_ctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
-index 993697e..0385124 100644
---- a/arch/x86/kernel/cpu/feat_ctl.c
-+++ b/arch/x86/kernel/cpu/feat_ctl.c
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/tboot.h>
-=20
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
- #include <asm/msr-index.h>
- #include <asm/processor.h>
- #include <asm/vmx.h>
--#include "cpu.h"
-=20
- #undef pr_fmt
- #define pr_fmt(fmt)	"x86/cpu: " fmt
