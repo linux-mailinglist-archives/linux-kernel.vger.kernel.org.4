@@ -2,96 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553CC5EAB8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2DD5EAB87
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiIZPsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S236298AbiIZPqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbiIZPrX (ORCPT
+        with ESMTP id S234827AbiIZPqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:47:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6A9BEA;
-        Mon, 26 Sep 2022 07:32:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 26 Sep 2022 11:46:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9E23BA
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:31:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E05B21B79;
-        Mon, 26 Sep 2022 14:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664202747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7tqk1/BNUZ/BZYPgkGc3UWgIJGHk0bekQA/PLeqWyLo=;
-        b=uAlO4EpqeS/6KqE8Y0DzGycnNBn2BYDfe2ZRaBGp1cNR4Yw2AeZcZAHr5RN7ohULLbwnst
-        jV8WnUMpSoL5x3BtLvOPmsHcFrWDXD7VMZr0b/Yjb+9uf250h6ze6taDsb1MkQHshRSHO1
-        u52CZftmxzcuCuEB8EUuZB4bd/Z+jeM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 008A913486;
-        Mon, 26 Sep 2022 14:32:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5uXKOPq3MWOZDAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 26 Sep 2022 14:32:26 +0000
-Date:   Mon, 26 Sep 2022 16:32:26 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, urezki@gmail.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Martin Zaharinov <micron10@gmail.com>
-Subject: Re: [PATCH mm] mm: fix BUG with kvzalloc+GFP_ATOMIC
-Message-ID: <YzG3+vCO23P/1YYp@dhcp22.suse.cz>
-References: <20220923133512.GE22541@breakpoint.cc>
- <YzFZf0Onm6/UH7/I@dhcp22.suse.cz>
- <20220926075639.GA908@breakpoint.cc>
- <YzFplwSxwwsLpzzX@dhcp22.suse.cz>
- <YzFxHlYoncuDl2fM@dhcp22.suse.cz>
- <20220926100800.GB12777@breakpoint.cc>
- <YzGUyWlYd15uLu7G@dhcp22.suse.cz>
- <20220926130808.GD12777@breakpoint.cc>
- <YzGxuZ8jQ2sO4ZML@dhcp22.suse.cz>
- <20220926142013.GF12777@breakpoint.cc>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD605B80AB8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EE9C433C1;
+        Mon, 26 Sep 2022 14:31:34 +0000 (UTC)
+Date:   Mon, 26 Sep 2022 10:32:42 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ftrace: Properly unset FTRACE_HASH_FL_MOD
+Message-ID: <20220926103242.6d0fc1ea@gandalf.local.home>
+In-Reply-To: <20220926152008.2239274-1-zhengyejian1@huawei.com>
+References: <20220926152008.2239274-1-zhengyejian1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926142013.GF12777@breakpoint.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 26-09-22 16:20:13, Florian Westphal wrote:
-> Michal Hocko <mhocko@suse.com> wrote:
-> > On Mon 26-09-22 15:08:08, Florian Westphal wrote:
-> > [...]
-> > > To the best of my knowledge there are users of this interface that
-> > > invoke it with rcu read lock held, and since those always nest, the
-> > > rcu_read_unlock() won't move us to GFP_KERNEL territory.
-> > 
-> > Fiar point. I can see a comment above rhashtable_insert_fast which is
-> > supposed to be used by drivers and explicitly documented to be
-> > compatible with an atomic context. So the above is clearly a no-go
-> > 
-> > In that case I would propose to go with the patch going
-> > http://lkml.kernel.org/r/YzFplwSxwwsLpzzX@dhcp22.suse.cz direction.
+On Mon, 26 Sep 2022 15:20:08 +0000
+Zheng Yejian <zhengyejian1@huawei.com> wrote:
+
+> When executing following commands like what document said, but the log
+> "#### all functions enabled ####" was not shown as expect:
+>   1. Set a 'mod' filter:
+>     $ echo 'write*:mod:ext3' > /sys/kernel/tracing/set_ftrace_filter
+>   2. Invert above filter:
+>     $ echo '!write*:mod:ext3' >> /sys/kernel/tracing/set_ftrace_filter
+>   3. Read the file:
+>     $ cat /sys/kernel/tracing/set_ftrace_filter
 > 
-> FWIW that patch works for me. Will you do a formal patch submission?
+> By some debugging, I found that flag FTRACE_HASH_FL_MOD was not unset
+> after inversion like above step 2 and then result of ftrace_hash_empty()
+> is incorrect.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 8c08f0d5c6fb ("ftrace: Have cached module filters be an active filter")
+> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 
-Feel free to use it and glue it to the actual bug report.
+Thanks, this definitely looks like a bug.
 
-Thanks!
+I'll be reviewing these patches later this week.
 
--- 
-Michal Hocko
-SUSE Labs
+-- Steve
