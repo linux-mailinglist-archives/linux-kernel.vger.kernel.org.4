@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160B25EA288
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6586A5EA077
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237166AbiIZLJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
+        id S236143AbiIZKht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237330AbiIZLHk (ORCPT
+        with ESMTP id S235951AbiIZKgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:07:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1E6501BB;
-        Mon, 26 Sep 2022 03:34:22 -0700 (PDT)
+        Mon, 26 Sep 2022 06:36:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D06352837;
+        Mon, 26 Sep 2022 03:21:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2CA60A36;
-        Mon, 26 Sep 2022 10:34:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270F4C433C1;
-        Mon, 26 Sep 2022 10:34:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8FFCB80926;
+        Mon, 26 Sep 2022 10:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E20C433D6;
+        Mon, 26 Sep 2022 10:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188461;
-        bh=eVgz4bZHN8/KVxEkyjxtbv1XswLwXeYlsnHRAdQIHuQ=;
+        s=korg; t=1664187711;
+        bh=gd9sLiAsyp+E07Clr2bvxOlWLzwYfJagHCJJB39w5Bs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CTELJo7hmABcpo05bRkvyeymVRvsyO39JpdpnS0zx9LMYGZMdejdzbXfxwUrXOVrv
-         RZIW5/xVQMFG5vmZnrsTzAWMTmqsskjq2ty4LDH+tMuvBC5SHZuh3DVZ48DVkfgxnK
-         mLcj2Sb9Iw/WoItlxfuVfc7CDjXMdC7tm6R+/9js=
+        b=M+noossukkTGTxGfsKJoqucjUXQDXc4SbtpXdrxRLrSaSMHUQMZsQpHL1LMC5GiR7
+         XtBtNtp3n2wZwJYZDFBPYbS1y35OcY6/V68oz18Vju9MedX3qGCZiM9v3q6uCQptYt
+         aF83U27LBA1Clxiskye5Q/KSfuGiNRZqEv1UDi9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Candy Febriyanto <cfebriyanto@gmail.com>,
+        stable@vger.kernel.org,
+        Stuart Menefy <stuart.menefy@mathembedded.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 003/148] staging: r8188eu: Remove support for devices with 8188FU chipset (0bda:f179)
+Subject: [PATCH 5.4 004/120] drm/meson: Correct OSD1 global alpha value
 Date:   Mon, 26 Sep 2022 12:10:37 +0200
-Message-Id: <20220926100756.195167614@linuxfoundation.org>
+Message-Id: <20220926100750.704908425@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Candy Febriyanto <cfebriyanto@gmail.com>
+From: Stuart Menefy <stuart.menefy@mathembedded.com>
 
-[ Upstream commit 6723b283c44a3fdf9f922ae9788aab38bd909211 ]
+[ Upstream commit 6836829c8ea453c9e3e518e61539e35881c8ed5f ]
 
-The new r8188eu driver doesn't actually support devices with vendor ID 0bda
-and product ID f179[0][1][2], remove the ID so owners of these devices
-don't have to blacklist the staging driver.
+VIU_OSD1_CTRL_STAT.GLOBAL_ALPHA is a 9 bit field, so the maximum
+value is 0x100 not 0xff.
 
-[0] https://github.com/lwfinger/rtl8188eu/issues/366#issuecomment-888511731
-[1] https://github.com/lwfinger/rtl8188eu/issues/385
-[2] https://github.com/lwfinger/rtl8188eu/issues/385#issuecomment-973013539
+This matches the vendor kernel.
 
-Cc: Larry Finger <Larry.Finger@lwfinger.net>
-CC: Phillip Potter <phil@philpotter.co.uk>
-Signed-off-by: Candy Febriyanto <cfebriyanto@gmail.com>
-Link: https://lore.kernel.org/r/YZaBTq9vlMaJDFz2@mainframe.localdomain
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Stable-dep-of: e01f5c8d6af2 ("staging: r8188eu: Add Rosewill USB-N150 Nano to device tables")
+Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
+Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220908155103.686904-1-stuart.menefy@mathembedded.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/os_dep/usb_intf.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/gpu/drm/meson/meson_plane.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index bb85ab77fd26..b6c6fa72de44 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -30,7 +30,6 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
- 	/*=== Realtek demoboard ===*/
- 	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8179)}, /* 8188EUS */
- 	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x0179)}, /* 8188ETV */
--	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0xf179)}, /* 8188FU */
- 	/*=== Customer ID ===*/
- 	/****** 8188EUS ********/
- 	{USB_DEVICE(0x07B8, 0x8179)}, /* Abocom - Abocom */
+diff --git a/drivers/gpu/drm/meson/meson_plane.c b/drivers/gpu/drm/meson/meson_plane.c
+index ed543227b00d..53f5d0581c35 100644
+--- a/drivers/gpu/drm/meson/meson_plane.c
++++ b/drivers/gpu/drm/meson/meson_plane.c
+@@ -128,7 +128,7 @@ static void meson_plane_atomic_update(struct drm_plane *plane,
+ 
+ 	/* Enable OSD and BLK0, set max global alpha */
+ 	priv->viu.osd1_ctrl_stat = OSD_ENABLE |
+-				   (0xFF << OSD_GLOBAL_ALPHA_SHIFT) |
++				   (0x100 << OSD_GLOBAL_ALPHA_SHIFT) |
+ 				   OSD_BLK0_ENABLE;
+ 
+ 	canvas_id_osd1 = priv->canvas_id_osd1;
 -- 
 2.35.1
 
