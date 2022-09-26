@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D1D5EAF3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5645EAF63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiIZSIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S231389AbiIZSOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiIZSIF (ORCPT
+        with ESMTP id S231477AbiIZSNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:08:05 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DCC286F2;
-        Mon, 26 Sep 2022 10:53:30 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j16so12110996lfg.1;
-        Mon, 26 Sep 2022 10:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rx6S5GyWtbkwCUObHi8ZQPV3HDLXobFD9FeixNTjARs=;
-        b=RP7MljUqd6fIy+V/RnOUO3fvJqC/3zA3HusG/tXyxZrcOkyHiD29FwhIf+sj/ACjqj
-         m+gZrYUtY94qH+qtWZCwxfloVWFS4Pm6NewC2VvM9HjW3+DSAt53PRzJXh7+M37fsM54
-         BJ+kDjLpBLUtt0Xk4byXuP3hFAg2G48PYFGlPOrWfO/tibkGldSghS/cDn8/3D/lj0sR
-         mASdUerplEAgtbur6Ki6WkrQp87tWp+2K9k0v2HXd7iSXQnu0JHg4xK335h8Oo4Zho2I
-         QgHqAFWh55DxI8GpmG6D0ETpzt7F1p5J2bN98yEOf0gw/pX9UMirzIJ4WLysIv8yPV6h
-         zlpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rx6S5GyWtbkwCUObHi8ZQPV3HDLXobFD9FeixNTjARs=;
-        b=Z5Vbbnk4kPQVc//dAkJIvH54q/rIJ5TC9wZrQkYxrN3hhSSV6l/1ZWZ2WbBz7AKb/X
-         M5r63e1OYWyuimPIy80Nhnb0hMNr8OTSyXP39wZkibIvka4FP7c8wRgDLKmwEHBIaTm6
-         UQfQ2qrFW7WdEKWD0oE5WxuuRlkVQqUbV7A7IAYQC3E4bOPTDTXQVi0qAOX/dRclVqbN
-         K7D+0LTUBE+lELMQDN+Xa6JTpAq7B64Iw/URLbAKeqnJlWYxSyaFtJVPV/fD/MlrMiLm
-         i1qPhJU6XNhHS2UK3bZjtiMzsl834Aiw10UUFHAjfxFIj3DFL/sc+W0vMvwUL3Hbg5y3
-         xOCA==
-X-Gm-Message-State: ACrzQf3imfU0+jht6Af2qVx7AEwYtOz4Ke8FlmPEs9lqruvH+dIbj9Am
-        NG8QyP3NOTTiFO3ycXl8pmUafpiXy7+HsQ==
-X-Google-Smtp-Source: AMsMyM5VUVQj2tG4gnCtQ4VVMjtILE21s2WA3/NIKBjH/aY4X02nRiyExJvXYCeaATSfZVMDufke/w==
-X-Received: by 2002:a05:6512:b86:b0:498:fe61:d2a8 with SMTP id b6-20020a0565120b8600b00498fe61d2a8mr9580909lfv.437.1664214808794;
-        Mon, 26 Sep 2022 10:53:28 -0700 (PDT)
-Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id 8-20020a2e0508000000b00268cfcf841asm2437609ljf.56.2022.09.26.10.53.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 10:53:28 -0700 (PDT)
-Message-ID: <d5acf81b-cdeb-2686-927b-4cae4b32cea9@gmail.com>
-Date:   Mon, 26 Sep 2022 21:02:18 +0300
+        Mon, 26 Sep 2022 14:13:44 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1499175AD
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 11:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Rv2UtBG5y0DEuGbKnbkoUprYaAGKufIBHk49ouUQfp8=; b=s1Kvm7Uctn+YZWVFofI9Lwwkh4
+        +rLoYJ89Rks2OYCiiYBBjAtu4BygPlMZmLyWQaYffbA3H7SWEv2cW8WvYQyq37AsGbeGaAmsUUhvY
+        MCbb0xuwX0WMXeTWBzreV1HNnqo3igsYptDYFi3+zgnrJS9DedkGgi0KT7yTvE8nx1e5xW03vIhTb
+        Pn3S9xocE1fNC5nmVo+DrL7YkkVZIao447/1Y9h5VhZQhZ/Zai+sSyL9yJx0LFvpBD6iFkIcWuNMh
+        jAVkOgwfOF4+2CpaDAINOeI0jNYXKjl1Fxv4F1yieSacjD/g6idLX/7gIjJIueqwy1YyMH465o4Kk
+        r26Rn+5Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34506)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ocsRV-0000n7-C5; Mon, 26 Sep 2022 19:02:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ocsRT-0005KR-Ju; Mon, 26 Sep 2022 19:02:55 +0100
+Date:   Mon, 26 Sep 2022 19:02:55 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        llvm@lists.linux.dev
+Subject: Re: arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must
+ precede .save or .vsave directives
+Message-ID: <YzHpT7t+9uSIYm0k@shell.armlinux.org.uk>
+References: <CA+G9fYvyD9OWF53ua2EZmyf+=YTx4f1mezDNkVLMxf3BKXW=_w@mail.gmail.com>
+ <YzHIwvzhM9DSW9cF@dev-arch.thelio-3990X>
+ <YzHJRH9hO1lfjSPp@dev-arch.thelio-3990X>
+ <CAKwvOdkYr-Nv6PowyJ10DuP-uFLcvH1oGWSeQH3Dz_JM8vwp2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] Documentation: devicetree: dma: update the comments
-Content-Language: en-US
-To:     Deming Wang <wangdeming@inspur.com>, vkoul@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220920020721.2190-1-wangdeming@inspur.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20220920020721.2190-1-wangdeming@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkYr-Nv6PowyJ10DuP-uFLcvH1oGWSeQH3Dz_JM8vwp2w@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/20/22 05:07, Deming Wang wrote:
-> remove the double word to.
-
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> ---
->  Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Sep 26, 2022 at 10:42:45AM -0700, Nick Desaulniers wrote:
+> On Mon, Sep 26, 2022 at 8:46 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > + our mailing list, I should have added it with that message.
+> >
+> > On Mon, Sep 26, 2022 at 08:44:05AM -0700, Nathan Chancellor wrote:
+> > > Hi Naresh,
+> > >
+> > > On Mon, Sep 26, 2022 at 06:57:00PM +0530, Naresh Kamboju wrote:
+> > > > Following build warnings / errors noticed on arm with clang-13 / 14
+> > > > on Linux next-20220923.
+> > > >
+> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > >
+> > > > Regressions found on arm:
+> > > >
+> > > >    - build-clang-13-bcm2835_defconfig
+> > > >    - build-clang-nightly-imx_v6_v7_defconfig
+> > > >    - build-clang-nightly-orion5x_defconfig
+> > > >    - build-clang-13-keystone_defconfig
+> > > >    - build-clang-13-omap2plus_defconfig
+> > > >    - build-clang-14-imx_v6_v7_defconfig
+> > > >    - build-clang-nightly-omap2plus_defconfig
+> > > >    - build-clang-nightly-multi_v5_defconfig
+> > > >    - build-clang-nightly-bcm2835_defconfig
+> > > >    - build-clang-13-imx_v6_v7_defconfig
+> > > >    - build-clang-13-imx_v4_v5_defconfig
+> > > >    - build-clang-14-imx_v4_v5_defconfig
+> > > >    - build-clang-13-orion5x_defconfig
+> > > >    - build-clang-14-multi_v5_defconfig-65236a87
+> > > >    - build-clang-14-lkftconfig
+> > > >    - build-clang-nightly-imx_v4_v5_defconfig
+> > > >    - build-clang-13-multi_v5_defconfig
+> > > >    - build-clang-13-lkftconfig
+> > > >    - build-clang-nightly-keystone_defconfig
+> > > >    - build-clang-14-multi_v5_defconfig
+> > > >    - build-clang-14-orion5x_defconfig
+> > > >    - build-clang-14-omap2plus_defconfig
+> > > >    - build-clang-nightly-multi_v5_defconfig-65236a87
+> > > >    - build-clang-14-bcm2835_defconfig
+> > > >    - build-clang-14-keystone_defconfig
+> > > >    - build-clang-nightly-lkftconfig
+> > > >
+> > > > arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+> > > > .save or .vsave directives
+> > > >                 "stmdb  sp, {sp, lr, pc}        \n\t"
+> > > >                                                   ^
+> > > > <inline asm>:3:2: note: instantiated into assembly here
+> > > >         .save   {sp, lr, pc}
+> > > >         ^
+> > > > /builds/linux/arch/arm/probes/kprobes/core.c:412:29: error: .fnstart
+> > > > must precede .pad directive
+> > > >                 "stmdb  sp!, {r0 - r11}         \n\t"
+> > > >                                                   ^
+> > > > <inline asm>:6:2: note: instantiated into assembly here
+> > > >         .pad    #52
+> > > >         ^
+> > > > 2 errors generated.
+> > > > make[5]: *** [/builds/linux/scripts/Makefile.build:250:
+> > > > arch/arm/probes/kprobes/core.o] Error 1
+> > > >
+> > > > build log:
+> > > > https://builds.tuxbuild.com/2FAyD1qcTlzjIYE7mjrugjCsxu1/
+> > >
+> > > Thank you for the testing and report! I brought this up on GitHub on
+> > > Friday as I noticed this as well:
+> > >
+> > > https://github.com/ClangBuiltLinux/linux/issues/1718
 > 
-> diff --git a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-> index b849a1ed389d..47e477cce6d2 100644
-> --- a/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-> +++ b/Documentation/devicetree/bindings/dma/ti-dma-crossbar.txt
-> @@ -4,7 +4,7 @@ Required properties:
->  - compatible:	"ti,dra7-dma-crossbar" for DRA7xx DMA crossbar
->  		"ti,am335x-edma-crossbar" for AM335x and AM437x
->  - reg:		Memory map for accessing module
-> -- #dma-cells:	Should be set to to match with the DMA controller's dma-cells
-> +- #dma-cells:	Should be set to match with the DMA controller's dma-cells
->  		for ti,dra7-dma-crossbar and <3> for ti,am335x-edma-crossbar.
->  - dma-requests:	Number of DMA requests the crossbar can receive
->  - dma-masters:	phandle pointing to the DMA controller
+> Thanks for the reports. I'll take a look at filing additional bug
+> reports against clang, then moving the definition of
+> __kretprobe_trampoline to out of line assembler.
+
+Are you saying that .save should be accepted without a .fnstart?
 
 -- 
-Péter
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
