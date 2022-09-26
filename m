@@ -2,169 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDCD5EAA0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD895EAA15
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235944AbiIZPQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S235778AbiIZPRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbiIZPQ0 (ORCPT
+        with ESMTP id S235601AbiIZPQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:16:26 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF3C1B79D
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:01:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id nb11so14301486ejc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:01:38 -0700 (PDT)
+        Mon, 26 Sep 2022 11:16:36 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F035412ABC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:02:04 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 78so6602693pgb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=WwbBPgpgSOhDsXzAEnUiTwCSqAmh6U+810HxaiUH3Zs=;
-        b=UrtVKnOix0Lho2BSMv2jSyYSA0LAxChjJSwfJ8qTj/5/DnGtjVLDNF2LzMibde/9P2
-         d3V5rEl2RYMIyanf52ejwgaNhpSmEPgYXM0GCAJmELQeM/1tcX1tZgYRH9uJU/Z5sFM4
-         zutpl2fJ/EdCTMLz9rqgeLdeTooH2JtCE4BRWEA+UJ0zAtBJdD231k04hqVSnXL2Kfgg
-         thRDnPf/nZI+TIqICwinTP+GmAhxGOTEtR1tof0/lk/DFyiV7ZEi4qvjev6xIQgJFRxl
-         V23ZAx/v4v6pHUor7HWaOVNbTOi2eKOGNxkZTZslHmxAwFlx4zvar+lsSY+t0U98mIlj
-         ioVA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1yGPnS7+tabIF9f3YGZrIJUzZlCgUowefj3Ak6tgbc8=;
+        b=Cml+idqKmgZLlpiIB8rfPG/ng2lFM3Uc9sHJGoyFG7EKF7hZNke7PI/XfWak9pHRFi
+         efod9Ah4zEqgORi+dMraA2Sbgo/pbkOsElfL2aD04OOna/C7XRrRxw0DfgIIfFkuQBtl
+         cmmg93A0HBEzFfB1+OSXJZfXPeyzl0IgyhatrNNxgm2ohJf5RdnnNFXZNdgo7YaW0/yv
+         LuuQM2kgG/3u1LhXdaEb1jXfGr5iRHnQ+eWfqiHMVUElxVxahOJVNf9IRTzA3BIZLfv3
+         zqpVrMthiVdLVBUkfIC5c7/0nUDogIn6jR/lCahdK1UXLrg6UQyGo+qF4+waB/51xAs+
+         2x6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=WwbBPgpgSOhDsXzAEnUiTwCSqAmh6U+810HxaiUH3Zs=;
-        b=qkoFogqAJGADCbN+KdTsfNzqRzgGRCq6MBkGwRulHt6pTMb+KYHSaSMcx1+wYpjKl/
-         L8rJevqcLvgZ5WCn23XAsshljN6IHwReFogHX8pitu4QduPLyNM2ZY/rYUinxECzsgBT
-         3lkpHNJ7w3RvS6ALSdyT3jJlhGhO34P8aR5/ctspLK0gQKzWFtNfNuptdh0E6aFwkZeS
-         uDBnnGBDxkP4f7zBqr1O9a2tn7RU1/ls2FscVFhlpW6YjCuQOeum+xyespc45KHF9mHK
-         HMMHJ6Rhq4QCQ2S4ZkDqDGQa0jax77KgqOjqzRy+n/ieYZw2xcdWn3cKmhLfMOO0icZa
-         LOjQ==
-X-Gm-Message-State: ACrzQf3BOfvkOup43lO80YdErFSFoHg8wu27+NKbI9BNEMBonkcmn8bx
-        0YNIh6sfioEMZe8VJKxt6mjF5ETQxYqV+uWuOlTl9Q==
-X-Google-Smtp-Source: AMsMyM5EGRHraqsTUxCdbMQ61QK0aJzGFGFVBi/7vZQSQr/VAFXheJhEouqn+2fNCDyvTRnY/g1MvwLGQu/Nd94MN44=
-X-Received: by 2002:a17:906:fe46:b0:73d:939a:ec99 with SMTP id
- wz6-20020a170906fe4600b0073d939aec99mr18595743ejb.169.1664200897188; Mon, 26
- Sep 2022 07:01:37 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1yGPnS7+tabIF9f3YGZrIJUzZlCgUowefj3Ak6tgbc8=;
+        b=s6AY1Xz+IrOukk8uX6W6lSsHtsaLbuLzJt6EaZi/eu+yTQOyYIJ8PBgFV/s6d9tHYO
+         tNzqs1G58+rDhAoBvBOPz1cW89ZfnccePVvKMwTe8gRzQmKVBt3BfprS7d4E+bwjGziu
+         bpskTSv7YG/RmqgjPdfnRii7vVHlCaYX902WXjbs8GymIYlIP0sovMLo6e1yqfnv78dl
+         /RfU1LS390CHpZXgtXD2eIsf7DiX2Tfwa64bhWp/+w80TAs+iK8KaD8q+GDjHZbBprAI
+         RkasIsXK/OX079TrO2gFa5nayCN4I+AtsvYtr+4GvIWr/pm3YJIFgyNVCzrS+afYCRmJ
+         Lqsg==
+X-Gm-Message-State: ACrzQf3/EpqOQ6AiziGFMX7y96d/SsV4u3Q1EexoftfqkGmaJI6+W8r7
+        sa00aMtz07SsuizUcz81Cf165A==
+X-Google-Smtp-Source: AMsMyM56mNVNCK934eTJEzhPKz0Kgne9owdo04+/JMJy5BNbxI/i4itBQ3mjMLHU+WUWOj1bBuUPqA==
+X-Received: by 2002:aa7:9f0c:0:b0:546:c556:ac86 with SMTP id g12-20020aa79f0c000000b00546c556ac86mr23732346pfr.55.1664200924322;
+        Mon, 26 Sep 2022 07:02:04 -0700 (PDT)
+Received: from [10.2.223.68] ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id b15-20020a63d30f000000b004393cb720afsm10769098pgg.38.2022.09.26.07.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 07:02:03 -0700 (PDT)
+Message-ID: <1de80c28-33ec-b1bd-a557-91e4166d2da7@bytedance.com>
+Date:   Mon, 26 Sep 2022 22:01:55 +0800
 MIME-Version: 1.0
-References: <20220926100756.074519146@linuxfoundation.org>
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 26 Sep 2022 19:31:25 +0530
-Message-ID: <CA+G9fYsiTk-nq98AaQF+BNmxtEH911m+SDhXGbLns5Nb91cMWA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/148] 5.15.71-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Linus Walleij <linusw@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Jordan Niethe <jniethe5@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [PATCH 2/3] PCI/ERR: Clear fatal status in pcie_do_recovery()
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     fancer.lancer@gmail.com, jdmason@kudzu.us, dave.jiang@intel.com,
+        allenbh@gmail.com, bhelgaas@google.com, ruscur@russell.cc,
+        oohall@gmail.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linuxppc-dev@lists.ozlabs.org
+References: <20220922210853.GA1335665@bhelgaas>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <20220922210853.GA1335665@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sept 2022 at 16:04, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.71 release.
-> There are 148 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.71-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Following build warnings / errors noticed on arm and powerpc on stable-rc 5.15.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Regressions found on arm:
-
-   - build-gcc-8-ixp4xx_defconfig
-   - build-gcc-11-ixp4xx_defconfig
-   - build-gcc-12-ixp4xx_defconfig
-   - build-gcc-9-ixp4xx_defconfig
-   - build-gcc-10-ixp4xx_defconfig
-
-Regressions found on powerpc:
-
-   - build-clang-nightly-defconfig
-   - build-gcc-8-maple_defconfig
-   - build-gcc-9-cell_defconfig
-   - build-gcc-12-cell_defconfig
-   - build-gcc-11-cell_defconfig
-   - build-gcc-8-cell_defconfig
-   - build-gcc-10-cell_defconfig
-   - build-clang-14-defconfig
-   - build-gcc-9-maple_defconfig
-   - build-gcc-10-maple_defconfig
-   - build-gcc-11-defconfig
-   - build-clang-13-defconfig
-   - build-gcc-8-defconfig
-   - build-gcc-12-maple_defconfig
-   - build-gcc-10-defconfig
-   - build-gcc-11-maple_defconfig
-   - build-gcc-9-defconfig
-   - build-gcc-12-defconfig
-
-arm build errors:
------------------
-drivers/gpio/gpio-ixp4xx.c:171:11: error: 'IRQCHIP_IMMUTABLE'
-undeclared here (not in a function); did you mean 'IS_IMMUTABLE'?
-  .flags = IRQCHIP_IMMUTABLE,
-           ^~~~~~~~~~~~~~~~~
-           IS_IMMUTABLE
-drivers/gpio/gpio-ixp4xx.c:172:2: error:
-'GPIOCHIP_IRQ_RESOURCE_HELPERS' undeclared here (not in a function)
-  GPIOCHIP_IRQ_RESOURCE_HELPERS,
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpio/gpio-ixp4xx.c:172:2: warning: excess elements in struct initializer
-drivers/gpio/gpio-ixp4xx.c:172:2: note: (near initialization for
-'ixp4xx_gpio_irqchip')
-drivers/gpio/gpio-ixp4xx.c: In function 'ixp4xx_gpio_probe':
-drivers/gpio/gpio-ixp4xx.c:296:2: error: implicit declaration of
-function 'gpio_irq_chip_set_chip'; did you mean 'gpiochip_get_data'?
-[-Werror=implicit-function-declaration]
-  gpio_irq_chip_set_chip(girq, &ixp4xx_gpio_irqchip);
-  ^~~~~~~~~~~~~~~~~~~~~~
-  gpiochip_get_data
-cc1: some warnings being treated as errors
-
-Build:
-https://builds.tuxbuild.com/2FInaOdiei4NQtTNOEIHoQiC7Lq/
-
-Powerpc build errors:
------------------
-powerpc64le-linux-gnu-ld: arch/powerpc/kernel/rtas_entry.o: in
-function `enter_rtas':
-(.text+0x92): undefined reference to `IRQS_ENABLED'
-
-build: https://builds.tuxbuild.com/2FInbucjJPAvqTvJc7358SVLh2O/
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+On 9/23/22 5:08 AM, Bjorn Helgaas wrote:
+> On Fri, Sep 02, 2022 at 02:16:33AM +0800, Zhuo Chen wrote:
+>> When state is pci_channel_io_frozen in pcie_do_recovery(),
+>> the severity is fatal and fatal status should be cleared.
+>> So we add pci_aer_clear_fatal_status().
+> 
+> Seems sensible to me.  Did you find this by code inspection or by
+> debugging a problem?  If the latter, it would be nice to mention the
+> symptoms of the problem in the commit log.
+
+I found this by code inspection so I may not enumerate what kind of 
+problems this code will cause.
+> 
+>> Since pcie_aer_is_native() in pci_aer_clear_fatal_status()
+>> and pci_aer_clear_nonfatal_status() contains the function of
+>> 'if (host->native_aer || pcie_ports_native)', so we move them
+>> out of it.
+> 
+> Wrap commit log to fill 75 columns.
+> 
+>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>> ---
+>>   drivers/pci/pcie/err.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+>> index 0c5a143025af..e0a8ade4c3fe 100644
+>> --- a/drivers/pci/pcie/err.c
+>> +++ b/drivers/pci/pcie/err.c
+>> @@ -243,10 +243,14 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>>   	 * it is responsible for clearing this status.  In that case, the
+>>   	 * signaling device may not even be visible to the OS.
+>>   	 */
+>> -	if (host->native_aer || pcie_ports_native) {
+>> +	if (host->native_aer || pcie_ports_native)
+>>   		pcie_clear_device_status(dev);
+> 
+> pcie_clear_device_status() doesn't check for pcie_aer_is_native()
+> internally, but after 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status
+> errors only if OS owns AER") and aa344bc8b727 ("PCI/ERR: Clear AER
+> status only when we control AER"), both callers check before calling
+> it.
+> 
+> I think we should move the check inside pcie_clear_device_status().
+> That could be a separate preliminary patch.
+> 
+> There are a couple other places (aer_root_reset() and
+> get_port_device_capability()) that do the same check and could be
+> changed to use pcie_aer_is_native() instead.  That could be another
+> preliminary patch.
+> 
+Good suggestion. But I have only one doubt. In aer_root_reset(), if we 
+use "if (pcie_aer_is_native(dev) && aer)", when dev->aer_cap
+is NULL and root->aer_cap is not NULL, pcie_aer_is_native() will return 
+false. It's different from just using "(host->native_aer ||
+pcie_ports_native)".
+Or if we can use "if (pcie_aer_is_native(root))", at this time a NULL 
+pointer check should be added in pcie_aer_is_native() because root may 
+be NULL.
+
+> 
+>> +	if (state == pci_channel_io_frozen)
+>> +		pci_aer_clear_fatal_status(dev);
+>> +	else
+>>   		pci_aer_clear_nonfatal_status(dev);
+>> -	}
+>> +
+>>   	pci_info(bridge, "device recovery successful\n");
+>>   	return status;
+>>   
+>> -- 
+>> 2.30.1 (Apple Git-130)
+>>
+
+-- 
+Thanks,
+Zhuo Chen
