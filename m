@@ -2,418 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB46B5EA9D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B825EA9D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiIZPLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S235753AbiIZPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235798AbiIZPK6 (ORCPT
+        with ESMTP id S231543AbiIZPK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:10:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A4BEA5B0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:46:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C97D4B80171
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:46:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701D2C433C1;
-        Mon, 26 Sep 2022 13:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664199980;
-        bh=tioJWFYkysGC8WIumPriS20WDTm/jOCQy81oCCbLu4M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mg2mt6MX4tNhi8sme+qIlr1DKI6mi8WgUhFkcgdSp7ffPDrc9MIQeUuey5TbfoQaT
-         P78bUCcYGjy6jC0UltmvQYkTqfjnRoexEwr5YgoivHLkfFuAdKpZhsn7BVu9Sevik2
-         CapT2i9Z7RAaJtJsaCdNxtO7jf2PZh/UFDCIUaz0OHhTdZzlfttiasaAlYOWs/rn+b
-         eEUHI57dTiMo1cBzH6Mq7wpvspt8SEdPeIkA6RihbWlF5sGYdppB5sQRUjKmiY7v5u
-         0FECip8fOlqU43HkPGuPfznpMuqdIXDyohzsYJxCWEN4K2GRtVqoXyiq9hGxsNNZWk
-         7Y55lHkHmn7Cw==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dani Liberman <dliberman@habana.ai>
-Subject: [PATCH 2/2] habanalabs: refactor razwi event notification
-Date:   Mon, 26 Sep 2022 16:46:14 +0300
-Message-Id: <20220926134614.592875-2-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926134614.592875-1-ogabbay@kernel.org>
-References: <20220926134614.592875-1-ogabbay@kernel.org>
+        Mon, 26 Sep 2022 11:10:59 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2059.outbound.protection.outlook.com [40.107.101.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB19EDD16;
+        Mon, 26 Sep 2022 06:46:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LIA+n0e6qg8XLMhGROgBqhNsp97o9Bdo2kVywI/x+PzVtxcm1tQdOIfnVEqejoBqRTfYeXoOzDRfztrVh9mbeRIOYY6Gt9rHmveumbvLu0SPu3CgCNxF9EpQpz371hL0HpweyLt9xg/2jH+jaNvRyYnf2EEdk08PCpI/SPW2wEQvXugJ5Sle9HV6BfdfDSGPZSrqBc4wTSeqzmud7FAkDnbw9CexMbNJ58w2gnPBwk8d3Kf3g8g6vCtyqLTTmuWre2Sn89IDW1QGfMTmkDU1l88S210uqc8lvTmWxhCQu9m76m/cHfYvLlOBJzFVn+VBplZIpurIAKcIRP709SwEKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k/L+/V+dz4K0dd+kIPz7ejksDOXbZSktCk+QwnWGLAs=;
+ b=ZRh1iA+G+rBMg6fVZ7wU7QNGEzzwYS2oW7Lkz7QLJOMANN6mjiH2BzxvkJE2HZcu51gNk8HGDK4G/nlBArhGX4j7Fw7YTR9rTIMfviZnmZF9IYJEEjSCNfAMfqqD31HQJYOba7nJiUaaAVI8izabY7Uf2b/Uo+FZu+DX3yETXq4CNe1sU351ZUdo8oz3iia+hRzDgeLCf3KkV0JYcTe2ClDi0QpQa5vQHIPYY21mJmDx2q9YimR3+JWgLzyGPxFNLvT8plOLn5ZljvjcbGBJQNokH0QOdYS9NWWnKzchCItUEGrhqaez/lzwcsktl/+tu8GaGydWVE/JzsZFAK9CtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k/L+/V+dz4K0dd+kIPz7ejksDOXbZSktCk+QwnWGLAs=;
+ b=mvl1dZxou1exrQPGjSNAVLEhI36T5WwkX9dceHjE4euGG1gOZ/ydTjLQOj68OGDZG/20wQ4z06SWc/NPYQEGVU9PYyGQkh9moc+hkhgz2HQHhDq3IAGDrXV6mZe8rfPo9cNZBjpliYJkDqOsf+lNnxk+jVGUbtP/QX6A9YlXJd9pf5uZN9YdeDAnji9h8Fo4oNGRMg04bg7ps7KsG/+b9e2E/Hg/vCX4mpUn4GUdhD7bMTq658fKi0ZwyjiAJRsWcvhRVmCeKnuwsMwk5ijcuTEyZoLI/55FRf3JJ9o6qkl7F3rC4Rly3XS+F5P6W1eMcPfXJ6lOFlGvU7Li2wS8aw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH0PR12MB5316.namprd12.prod.outlook.com (2603:10b6:610:d7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Mon, 26 Sep
+ 2022 13:46:42 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 13:46:42 +0000
+Date:   Mon, 26 Sep 2022 10:46:41 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] iommu/s390: Fix duplicate domain attachments
+Message-ID: <YzGtQY+uw4ZzZoSH@nvidia.com>
+References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
+ <20220922095239.2115309-2-schnelle@linux.ibm.com>
+ <YyxyMtKXyvgHt3Kp@nvidia.com>
+ <81463119aeadd55465cfac1f5bc6a8b79f0c9738.camel@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81463119aeadd55465cfac1f5bc6a8b79f0c9738.camel@linux.ibm.com>
+X-ClientProxiedBy: BL0PR02CA0140.namprd02.prod.outlook.com
+ (2603:10b6:208:35::45) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|CH0PR12MB5316:EE_
+X-MS-Office365-Filtering-Correlation-Id: 09551d74-046b-4230-dd40-08da9fc58b6d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ffGzGxZXgDDyf3iigZAJV79ysmvZliwIEbek3JruiQunWVQth+7UEO5JsHDAMV0eVwNOhGWCL2fzVqdcxfvnyMrFgOH8WZh44r4sIFpRwdoRccU1OF8QNgQtSBzH07j3L8J7pBMU5zWdEgUU0lVsye+oOwZrwqx6kHc46XDZP6aNPOhBfuBfHPU0f/8YrGLgJJd7roIaxu5f9GgyOFpqlSoXR9kG/2x91sMlW0AfxbeGgHAyC7ps1JrUziB0Frjyhl9IFWSEJXBOOYQl0hUg5QK0z9jdPuxZN1yfpnKKbA5vRAgFZnjM7iWTMmF7PMBMfx1tmX+RDF57ZdLxgeVLujBotzCtmbh+VHARpnyAllbrPz49RrFMC/2gIEbjJj0wOUxZ6aWEbeVHciWjtPpvoYl6okqbSxvxYkADTKexI2G/YP1cvNGwox5ufTKOAxP20fY1VYRHPQan8U9o//mGpMOWjdoIyI76Jje8HuGBU226G+sIT8HszS0Tk82yaZbRO6kZm8Xwz7zgerJyvYUuLGwPWpbzoluUvgeggKSR/aYa4mP82otLC5HtHUA9KHTdub8S2dh6kjfrB3OFJNxMMPjfZ+S1oqxuwCj8yfdOdb+LGZ98Q4nrF7iHI4KaybnpppPzOH4kwYNHRX5x0hAIVUbRDKaM9bEz76aXpiOt30/OkrDG/3gDecM41hHKeOBoWGyKe3bh8toQTSkZNwXDwtU+2hrCyia87BkFcLc2OaH3ox3ijnq1brTlxbqq7KdT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(451199015)(66899012)(2616005)(36756003)(2906002)(186003)(86362001)(5660300002)(8936002)(7416002)(6512007)(66476007)(66556008)(41300700001)(26005)(4326008)(8676002)(66946007)(83380400001)(316002)(6506007)(54906003)(6916009)(478600001)(6486002)(38100700002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MvFWBSJa+FN/V2qE5hUYXRe+gEdojn7kyAvb7psVJEJrqjmzWYQ4R4EDAfSY?=
+ =?us-ascii?Q?jbZyJ5Ji2PSmy8RtX0AeWy8PJ5AiszJ6PnnbzyL3SN+8iKR6x3LMW4jSVUYu?=
+ =?us-ascii?Q?P3G74tDhlT9VGJN+gX8UabHji9gRm8tGi6dj7ZfmmbbBj1vLmB5hheBMmQUE?=
+ =?us-ascii?Q?I31SEHdEkY9TWzTOJBisDe96ae3Bjnt8OT2azRmBP5iRhqmKuIRTGfRd7SR7?=
+ =?us-ascii?Q?Gjztnz+mHtMzoKwqsf9azUl86QRIpfhL2R93OisKDV3xw1ycXsUdn9x6R7Fj?=
+ =?us-ascii?Q?vXWLYa/2ghrYYk8gtbGHd85ZQpan52ZRO7wy6/oJCQcKS9fedCyAURn2zgbQ?=
+ =?us-ascii?Q?4BktROK77JQDJYBZhOIp6hwE5TnWZb+qW6RvOAiicw3etAO6Bkfm+44WM2Kf?=
+ =?us-ascii?Q?q3Ih48Q0IfdAksfZQjyeng0FYmUgBwlooOQ8DareuEL83sZqvba55eBhZLPd?=
+ =?us-ascii?Q?ElzJJY+sMdODxfVPU9+q0g0c7U36MAurTuxYGtFg/KwUGTV+q9mmzkScMxbP?=
+ =?us-ascii?Q?PUxJ/mjlUluBmiJH754qNAABZPQ/5uwMXwGMzH6p+hPCIvdUtqy8K/r+PLKT?=
+ =?us-ascii?Q?h5A6dfB1/lHD1i17q/9CxSvLtsIlyrQgrLNkaVuulPQBmpSTUJ3wKuasyhFq?=
+ =?us-ascii?Q?cLea8+156zRmeZ/h8uAPj4kHnAEiUgRBTbOaJmhocsAR2sW5gwi3Pu+2mubD?=
+ =?us-ascii?Q?fEq0rSeyZ30n94M2VgTqaYRYy2Ji/IJG7iC3Lv5JhaoK5e+vgsa7XxR+WaY0?=
+ =?us-ascii?Q?hgPO14b45fID9d0BuLfkllYQ1wrJunjd/J3CHyLZUudgrrwvutDzdcOxNKrx?=
+ =?us-ascii?Q?R0NmRl1hKBWTNe/75DCmrrncSDBveYxJ/5hfeLslLnlBi1kCwsg2z66+ToiX?=
+ =?us-ascii?Q?0Z6JKS0TEhEq18DSC93neecSfR2zH00beTxp7brEjKLGR3FWiWeABkv68/b9?=
+ =?us-ascii?Q?9yjXC2b9CXTubD7qRZYBzfqSVh7rl8KLNph1ry/ZBELb9OoYYUnEVAWkpsLF?=
+ =?us-ascii?Q?aQvUCfzzicApmr04mRYm0B1Kth665w30qVLpcq8vNjHjGovGsySYohw1BNIY?=
+ =?us-ascii?Q?/nMfbnpoB2tJz++LkzhDW/XxmcQQYpbe8pSMJgdXZY8QjMmWntQqK8UYDVwA?=
+ =?us-ascii?Q?zgn3pqosTCPczzbwBAa+5LXzmvRFxmRzV1+xXKSOOCNmyMuWVwBlEQjSZFzh?=
+ =?us-ascii?Q?dPhJ0qLiQCEwe49819j3FeT1+Y6ddX2Jo2vZOdnLTkmzHw+qfG4b4dH6YEiD?=
+ =?us-ascii?Q?f/qpzOVbnVbksXRgoj6oYQGGl0Io15+35demlxbDpxL9g8tdYYrkpXn5KXPy?=
+ =?us-ascii?Q?RyWy+kqgTLpwplRioFA/v0V9KLKKbPKvGpSjwSqOPVmpHPGyt92MOTK1XOdL?=
+ =?us-ascii?Q?0tQECFks7avRUhizUri7tUOJILM/1wKmDjOcQU17PbMyk0ktLdzta9ZN4jl1?=
+ =?us-ascii?Q?nsm2XFbVAsK1IVUD7KJ73gZTFVhJr9B7X+PmDK9czD76A002EcY+fDpGKsAh?=
+ =?us-ascii?Q?QJVdATaIssqT+meemOtOeH/nM5jq5zEa3HY2zkcs5+TL5gssE1IVo+cqITrB?=
+ =?us-ascii?Q?YQ8WFIznJcVkVPzaxYE=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09551d74-046b-4230-dd40-08da9fc58b6d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 13:46:42.6390
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kv7Jh55Fu6GxsCPkQX8kxyf6Hsl8i2SwqGkaV+SX53RjSxqdsuomgId7wdVq4YhJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5316
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dani Liberman <dliberman@habana.ai>
+On Mon, Sep 26, 2022 at 11:00:53AM +0200, Niklas Schnelle wrote:
 
-This event notification was compatible only with gaudi, where razwi
-and page fault happens together.
+> > > +out_unregister_restore:
+> > > +	zpci_unregister_ioat(zdev, 0);
+> > >  out_restore:
+> > > -	if (!zdev->s390_domain) {
+> > > +	zdev->dma_table = NULL;
+> > > +	if (prev_domain)
+> > > +		s390_iommu_attach_device(&prev_domain->domain,
+> > > +					 dev);
+> > 
+> > Huh. That is a surprising thing
+> > 
+> > I think this function needs some re-ordering to avoid this condition
+> > 
+> > The checks for aperture should be earlier, and they are not quite
+> > right. The aperture is only allowed to grow. If it starts out as 0 and
+> > then is set to something valid on first attach, a later attach cannot
+> > then shrink it. There could already be mappings in the domain under
+> > the now invalidated aperture and no caller is prepared to deal with
+> > this.
+> 
+> Ohh I think this is indeed broken. Let me rephrase to see if I
+> understand correctly. You're saying that while we only allow exactly
+> matching apertures on additional attaches, we do allow shrinking if
+> there is temporarily no device attached to the domain. That part is
+> then broken because there could still be mappings outside the new
+> aperture stored in the translation tables?
 
-To make it compatible with all ASICs, this refactor contains:
+Right, go from 0 -> sized apperture on first attach, and then once it
+is sized it doesn't change again.
+ 
+> > That leaves the only error case as zpci_register_ioat() - which seems
+> > like it is the actual "attach" operation. Since
+> > __s390_iommu_detach_device() is just internal accounting (and can't
+> > fail) it should be moved after
+> > 
+> > So the logic order should be
+> > 
+> > 1) Attempt to widen the aperture, if this fails the domain is
+> >    incompatible bail immediately
+> 
+> Question. If the widening succeeds but we fail later during the attach
+> e.g. in 2) then the aperture remains widend or would that be rolled
+> back? 
 
-1. Razwi notification will only notify about razwi info.
-   New notification will be added in future patch, to retrieve data
-   about page fault error.
+I'd leave it widened.
 
-2. Changed razwi info structure to support all ASICs.
+IMHO I don't like this trick of setting the aperture on attach. It is
+logically wrong. The aperture is part of the configuration of the page
+table itself. The domain should know what page table format and thus
+apterture it has the moment it is allocated. Usually this is the
+related to the number of levels in the radix tree.
 
-Signed-off-by: Dani Liberman <dliberman@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/common/device.c       | 22 +++++++
- drivers/misc/habanalabs/common/habanalabs.h   | 31 ++-------
- .../misc/habanalabs/common/habanalabs_drv.c   |  2 +-
- .../misc/habanalabs/common/habanalabs_ioctl.c | 12 +---
- drivers/misc/habanalabs/gaudi/gaudi.c         | 64 +++++++++----------
- include/uapi/misc/habanalabs.h                | 45 ++++++++-----
- 6 files changed, 90 insertions(+), 86 deletions(-)
+It seems to me that the issue here is trying to use the aperture when
+the reserved region is the appropriate tool.
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 1aaaa2004e34..30ddaaae67e5 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -2253,3 +2253,25 @@ inline void hl_wreg(struct hl_device *hdev, u32 reg, u32 val)
- {
- 	writel(val, hdev->rmmio + reg);
+eg I see that s390_domain_alloc calls dma_alloc_cpu_table() which just
+allocates a 3 level radix tree. This means it has a specific max
+address that can be passed to dma_walk_cpu_trans(). So the aperture
+should be fixed based on the radix tree parameters.
+
+The device specific start/end should be represented as a reserved
+regions per-device. See patch below..
+
+This is meaningful because it effects when VFIO can share the domains
+across devices. If devices have different reserved ranges we can still
+share domains, so long as no mapping is placed in the union of the
+reserved ranges. However if you vary the aperture, like is currently
+happening, then the domains become unsharable.
+
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index c898bcbbce118f..ba80325da76cd9 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -51,6 +51,12 @@ static bool s390_iommu_capable(enum iommu_cap cap)
+ 	}
  }
+ 
++/*
++ * dma_alloc_cpu_table() creates a 3 level table, rtx, sx, px, so the address
++ * that can be passed to dma_walk_cpu_trans() must be less than this.
++ */
++#define MAX_DMA_TABLE_ADDR (ZPCI_TABLE_SIZE * ZPCI_TABLE_SIZE * ZPCI_PT_SIZE)
 +
-+void hl_capture_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
-+			u8 flags)
+ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
+ {
+ 	struct s390_domain *s390_domain;
+@@ -68,6 +74,10 @@ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
+ 		return NULL;
+ 	}
+ 
++	s390_domain->domain.geometry.force_aperture = true;
++	s390_domain->domain.geometry.aperture_start = 0;
++	s390_domain->domain.geometry.aperture_end = MAX_DMA_TABLE_ADDR;
++
+ 	spin_lock_init(&s390_domain->dma_table_lock);
+ 	spin_lock_init(&s390_domain->list_lock);
+ 	INIT_LIST_HEAD(&s390_domain->devices);
+@@ -119,18 +129,6 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	}
+ 
+ 	spin_lock_irqsave(&s390_domain->list_lock, flags);
+-	/* First device defines the DMA range limits */
+-	if (list_empty(&s390_domain->devices)) {
+-		domain->geometry.aperture_start = zdev->start_dma;
+-		domain->geometry.aperture_end = zdev->end_dma;
+-		domain->geometry.force_aperture = true;
+-	/* Allow only devices with identical DMA range limits */
+-	} else if (domain->geometry.aperture_start != zdev->start_dma ||
+-		   domain->geometry.aperture_end != zdev->end_dma) {
+-		rc = -EINVAL;
+-		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+-		goto out_restore;
+-	}
+ 	domain_device->zdev = zdev;
+ 	zdev->s390_domain = s390_domain;
+ 	list_add(&domain_device->list, &s390_domain->devices);
+@@ -152,6 +150,30 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	return rc;
+ }
+ 
++static void s390_iommu_get_resv_regions(struct device *dev,
++					struct list_head *list)
 +{
-+	if (num_of_engines > HL_RAZWI_MAX_NUM_OF_ENGINES_PER_RTR) {
-+		dev_err(hdev->dev,
-+				"Number of possible razwi initiators (%u) exceeded limit (%u)\n",
-+				num_of_engines, HL_RAZWI_MAX_NUM_OF_ENGINES_PER_RTR);
-+		return;
++	struct zpci_dev *zdev = to_zpci_dev(dev);
++	struct iommu_resv_region *region;
++
++	if (zdev->start_dma) {
++		region = iommu_alloc_resv_region(0, zdev->start_dma, 0,
++						 IOMMU_RESV_RESERVED);
++		if (!region)
++			return;
++		list_add_tail(&region->list, list);
 +	}
 +
-+	/* In case it's the first razwi since the device was opened, capture its parameters */
-+	if (atomic_cmpxchg(&hdev->captured_err_info.razwi_info_recorded, 0, 1))
-+		return;
-+
-+	hdev->captured_err_info.razwi.timestamp = ktime_to_ns(ktime_get());
-+	hdev->captured_err_info.razwi.addr = addr;
-+	hdev->captured_err_info.razwi.num_of_possible_engines = num_of_engines;
-+	memcpy(&hdev->captured_err_info.razwi.engine_id[0], &engine_id[0],
-+			num_of_engines * sizeof(u16));
-+	hdev->captured_err_info.razwi.flags = flags;
++	if (zdev->end_dma < MAX_DMA_TABLE_ADDR) {
++		region = iommu_alloc_resv_region(
++			zdev->end_dma, MAX_DMA_TABLE_ADDR - zdev->end_dma, 0,
++			IOMMU_RESV_RESERVED);
++		if (!region)
++			return;
++		list_add_tail(&region->list, list);
++	}
 +}
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 2ffb8378f565..cdc50c2c4de8 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -2925,30 +2925,6 @@ struct cs_timeout_info {
- 	u64		seq;
- };
- 
--/**
-- * struct razwi_info - info about last razwi error occurred.
-- * @timestamp: razwi timestamp.
-- * @write_enable: if set writing to razwi parameters in the structure is enabled.
-- *                otherwise - disabled, so the first (root cause) razwi will not be overwritten.
-- * @addr: address that caused razwi.
-- * @engine_id_1: engine id of the razwi initiator, if it was initiated by engine that does
-- *               not have engine id it will be set to U16_MAX.
-- * @engine_id_2: second engine id of razwi initiator. Might happen that razwi have 2 possible
-- *               engines which one them caused the razwi. In that case, it will contain the
-- *               second possible engine id, otherwise it will be set to U16_MAX.
-- * @non_engine_initiator: in case the initiator of the razwi does not have engine id.
-- * @type: cause of razwi, page fault or access error, otherwise it will be set to U8_MAX.
-- */
--struct razwi_info {
--	ktime_t		timestamp;
--	atomic_t	write_enable;
--	u64		addr;
--	u16		engine_id_1;
--	u16		engine_id_2;
--	u8		non_engine_initiator;
--	u8		type;
--};
--
- #define MAX_QMAN_STREAMS_INFO		4
- #define OPCODE_INFO_MAX_ADDR_SIZE	8
- /**
-@@ -2985,11 +2961,14 @@ struct undefined_opcode_info {
-  * struct hl_error_info - holds information collected during an error.
-  * @cs_timeout: CS timeout error information.
-  * @razwi: razwi information.
-+ * @razwi_info_recorded: if set writing to razwi information is enabled.
-+ *                otherwise - disabled, so the first (root cause) razwi will not be overwritten.
-  * @undef_opcode: undefined opcode information
-  */
- struct hl_error_info {
- 	struct cs_timeout_info		cs_timeout;
--	struct razwi_info		razwi;
-+	struct hl_info_razwi_event	razwi;
-+	atomic_t			razwi_info_recorded;
- 	struct undefined_opcode_info	undef_opcode;
- };
- 
-@@ -3800,6 +3779,8 @@ hl_mmap_mem_buf_alloc(struct hl_mem_mgr *mmg,
- 		      struct hl_mmap_mem_buf_behavior *behavior, gfp_t gfp,
- 		      void *args);
- __printf(2, 3) void hl_engine_data_sprintf(struct engines_data *e, const char *fmt, ...);
-+void hl_capture_razwi(struct hl_device *hdev, u64 addr, u16 *engine_id, u16 num_of_engines,
-+			u8 flags);
- 
- #ifdef CONFIG_DEBUG_FS
- 
-diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
-index 3ee44ea58d5c..d87434b9bc16 100644
---- a/drivers/misc/habanalabs/common/habanalabs_drv.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
-@@ -212,7 +212,7 @@ int hl_device_open(struct inode *inode, struct file *filp)
- 	hl_debugfs_add_file(hpriv);
- 
- 	atomic_set(&hdev->captured_err_info.cs_timeout.write_enable, 1);
--	atomic_set(&hdev->captured_err_info.razwi.write_enable, 1);
-+	atomic_set(&hdev->captured_err_info.razwi_info_recorded, 0);
- 	hdev->captured_err_info.undef_opcode.write_enable = true;
- 
- 	hdev->open_counter++;
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 43afe40966e5..6aef4e24d122 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -603,20 +603,14 @@ static int razwi_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
- {
- 	struct hl_device *hdev = hpriv->hdev;
- 	u32 max_size = args->return_size;
--	struct hl_info_razwi_event info = {0};
-+	struct hl_info_razwi_event *info = &hdev->captured_err_info.razwi;
- 	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
- 
- 	if ((!max_size) || (!out))
- 		return -EINVAL;
- 
--	info.timestamp = ktime_to_ns(hdev->captured_err_info.razwi.timestamp);
--	info.addr = hdev->captured_err_info.razwi.addr;
--	info.engine_id_1 = hdev->captured_err_info.razwi.engine_id_1;
--	info.engine_id_2 = hdev->captured_err_info.razwi.engine_id_2;
--	info.no_engine_id = hdev->captured_err_info.razwi.non_engine_initiator;
--	info.error_type = hdev->captured_err_info.razwi.type;
--
--	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
-+	return copy_to_user(out, info, min_t(size_t, max_size, sizeof(struct hl_info_razwi_event)))
-+				? -EFAULT : 0;
- }
- 
- static int undefined_opcode_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 92560414e843..f856ac51fde1 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -6505,8 +6505,8 @@ static void gaudi_get_event_desc(u16 event_type, char *desc, size_t size)
- }
- 
- static const char *gaudi_get_razwi_initiator_dma_name(struct hl_device *hdev, u32 x_y,
--							bool is_write, s32 *engine_id_1,
--							s32 *engine_id_2)
-+							bool is_write, u16 *engine_id_1,
-+							u16 *engine_id_2)
- {
- 	u32 dma_id[2], dma_offset, err_cause[2], mask, i;
- 
-@@ -6603,7 +6603,7 @@ static const char *gaudi_get_razwi_initiator_dma_name(struct hl_device *hdev, u3
- }
- 
- static const char *gaudi_get_razwi_initiator_name(struct hl_device *hdev, bool is_write,
--							u32 *engine_id_1, u32 *engine_id_2)
-+							u16 *engine_id_1, u16 *engine_id_2)
- {
- 	u32 val, x_y, axi_id;
- 
-@@ -6719,8 +6719,8 @@ static const char *gaudi_get_razwi_initiator_name(struct hl_device *hdev, bool i
- 	return "unknown initiator";
- }
- 
--static void gaudi_print_and_get_razwi_info(struct hl_device *hdev, u32 *engine_id_1,
--						u32 *engine_id_2)
-+static void gaudi_print_and_get_razwi_info(struct hl_device *hdev, u16 *engine_id_1,
-+						u16 *engine_id_2, bool *is_read, bool *is_write)
- {
- 
- 	if (RREG32(mmMMU_UP_RAZWI_WRITE_VLD)) {
-@@ -6728,6 +6728,7 @@ static void gaudi_print_and_get_razwi_info(struct hl_device *hdev, u32 *engine_i
- 			"RAZWI event caused by illegal write of %s\n",
- 			gaudi_get_razwi_initiator_name(hdev, true, engine_id_1, engine_id_2));
- 		WREG32(mmMMU_UP_RAZWI_WRITE_VLD, 0);
-+		*is_write = true;
- 	}
- 
- 	if (RREG32(mmMMU_UP_RAZWI_READ_VLD)) {
-@@ -6735,10 +6736,11 @@ static void gaudi_print_and_get_razwi_info(struct hl_device *hdev, u32 *engine_i
- 			"RAZWI event caused by illegal read of %s\n",
- 			gaudi_get_razwi_initiator_name(hdev, false, engine_id_1, engine_id_2));
- 		WREG32(mmMMU_UP_RAZWI_READ_VLD, 0);
-+		*is_read = true;
- 	}
- }
- 
--static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr, u8 *type)
-+static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr)
- {
- 	struct gaudi_device *gaudi = hdev->asic_specific;
- 	u32 val;
-@@ -6753,8 +6755,6 @@ static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr
- 		*addr |= RREG32(mmMMU_UP_PAGE_ERROR_CAPTURE_VA);
- 
- 		dev_err_ratelimited(hdev->dev, "MMU page fault on va 0x%llx\n", *addr);
--		*type = HL_RAZWI_PAGE_FAULT;
--
- 		WREG32(mmMMU_UP_PAGE_ERROR_CAPTURE, 0);
- 	}
- 
-@@ -6765,7 +6765,6 @@ static void gaudi_print_and_get_mmu_error_info(struct hl_device *hdev, u64 *addr
- 		*addr |= RREG32(mmMMU_UP_ACCESS_ERROR_CAPTURE_VA);
- 
- 		dev_err_ratelimited(hdev->dev, "MMU access error on va 0x%llx\n", *addr);
--		*type = HL_RAZWI_MMU_ACCESS_ERROR;
- 
- 		WREG32(mmMMU_UP_ACCESS_ERROR_CAPTURE, 0);
- 	}
-@@ -7302,46 +7301,41 @@ static void gaudi_handle_qman_err(struct hl_device *hdev, u16 event_type, u64 *e
- static void gaudi_print_irq_info(struct hl_device *hdev, u16 event_type,
- 					bool razwi)
- {
--	u32 engine_id_1, engine_id_2;
-+	bool is_read = false, is_write = false;
-+	u16 engine_id[2], num_of_razwi_eng = 0;
- 	char desc[64] = "";
- 	u64 razwi_addr = 0;
--	u8 razwi_type;
--	int rc;
-+	u8 razwi_flags = 0;
- 
- 	/*
- 	 * Init engine id by default as not valid and only if razwi initiated from engine with
- 	 * engine id it will get valid value.
--	 * Init razwi type to default, will be changed only if razwi caused by page fault of
--	 * MMU access error
- 	 */
--	engine_id_1 = U16_MAX;
--	engine_id_2 = U16_MAX;
--	razwi_type = U8_MAX;
-+	engine_id[0] = HL_RAZWI_NA_ENG_ID;
-+	engine_id[1] = HL_RAZWI_NA_ENG_ID;
- 
- 	gaudi_get_event_desc(event_type, desc, sizeof(desc));
- 	dev_err_ratelimited(hdev->dev, "Received H/W interrupt %d [\"%s\"]\n",
- 		event_type, desc);
- 
- 	if (razwi) {
--		gaudi_print_and_get_razwi_info(hdev, &engine_id_1, &engine_id_2);
--		gaudi_print_and_get_mmu_error_info(hdev, &razwi_addr, &razwi_type);
--
--		/* In case it's the first razwi, save its parameters*/
--		rc = atomic_cmpxchg(&hdev->captured_err_info.razwi.write_enable, 1, 0);
--		if (rc) {
--			hdev->captured_err_info.razwi.timestamp = ktime_get();
--			hdev->captured_err_info.razwi.addr = razwi_addr;
--			hdev->captured_err_info.razwi.engine_id_1 = engine_id_1;
--			hdev->captured_err_info.razwi.engine_id_2 = engine_id_2;
--			/*
--			 * If first engine id holds non valid value the razwi initiator
--			 * does not have engine id
--			 */
--			hdev->captured_err_info.razwi.non_engine_initiator =
--									(engine_id_1 == U16_MAX);
--			hdev->captured_err_info.razwi.type = razwi_type;
--
-+		gaudi_print_and_get_razwi_info(hdev, &engine_id[0], &engine_id[1], &is_read,
-+						&is_write);
-+		gaudi_print_and_get_mmu_error_info(hdev, &razwi_addr);
 +
-+		if (is_read)
-+			razwi_flags |= HL_RAZWI_READ;
-+		if (is_write)
-+			razwi_flags |= HL_RAZWI_WRITE;
-+
-+		if (engine_id[0] != HL_RAZWI_NA_ENG_ID) {
-+			if (engine_id[1] != HL_RAZWI_NA_ENG_ID)
-+				num_of_razwi_eng = 2;
-+			else
-+				num_of_razwi_eng = 1;
- 		}
-+
-+		hl_capture_razwi(hdev, razwi_addr, engine_id, num_of_razwi_eng, razwi_flags);
- 	}
- }
- 
-diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
-index e00ebe05097d..d6f84cb35e3d 100644
---- a/include/uapi/misc/habanalabs.h
-+++ b/include/uapi/misc/habanalabs.h
-@@ -1071,31 +1071,44 @@ struct hl_info_cs_timeout_event {
- 	__u64 seq;
- };
- 
--#define HL_RAZWI_PAGE_FAULT 0
--#define HL_RAZWI_MMU_ACCESS_ERROR 1
-+#define HL_RAZWI_NA_ENG_ID U16_MAX
-+#define HL_RAZWI_MAX_NUM_OF_ENGINES_PER_RTR 128
-+#define HL_RAZWI_READ		BIT(0)
-+#define HL_RAZWI_WRITE		BIT(1)
-+#define HL_RAZWI_LBW		BIT(2)
-+#define HL_RAZWI_HBW		BIT(3)
-+#define HL_RAZWI_RR		BIT(4)
-+#define HL_RAZWI_ADDR_DEC	BIT(5)
- 
- /**
-  * struct hl_info_razwi_event - razwi information.
-  * @timestamp: timestamp of razwi.
-  * @addr: address which accessing it caused razwi.
-- * @engine_id_1: engine id of the razwi initiator, if it was initiated by engine that does not
-- *               have engine id it will be set to U16_MAX.
-- * @engine_id_2: second engine id of razwi initiator. Might happen that razwi have 2 possible
-- *               engines which one them caused the razwi. In that case, it will contain the
-- *               second possible engine id, otherwise it will be set to U16_MAX.
-- * @no_engine_id: if razwi initiator does not have engine id, this field will be set to 1,
-- *                otherwise 0.
-- * @error_type: cause of razwi, page fault or access error, otherwise it will be set to U8_MAX.
-- * @pad: padding to 64 bit.
-+ * @engine_id: engine id of the razwi initiator, if it was initiated by engine that does not
-+ *             have engine id it will be set to HL_RAZWI_NA_ENG_ID. If there are several possible
-+ *             engines which caused the razwi, it will hold all of them.
-+ * @num_of_possible_engines: contains number of possible engine ids. In some asics, razwi indication
-+ *                           might be common for several engines and there is no way to get the
-+ *                           exact engine. In this way, engine_id array will be filled with all
-+ *                           possible engines caused this razwi. Also, there might be possibility
-+ *                           in gaudi, where we don't indication on specific engine, in that case
-+ *                           the value of this parameter will be zero.
-+ * @flags: bitmask for additional data: HL_RAZWI_READ - razwi caused by read operation
-+ *                                      HL_RAZWI_WRITE - razwi caused by write operation
-+ *                                      HL_RAZWI_LBW - razwi caused by lbw fabric transaction
-+ *                                      HL_RAZWI_HBW - razwi caused by hbw fabric transaction
-+ *                                      HL_RAZWI_RR - razwi caused by range register
-+ *                                      HL_RAZWI_ADDR_DEC - razwi caused by address decode error
-+ *         Note: this data is not supported by all asics, in that case the relevant bits will not
-+ *               be set.
-  */
- struct hl_info_razwi_event {
- 	__s64 timestamp;
- 	__u64 addr;
--	__u16 engine_id_1;
--	__u16 engine_id_2;
--	__u8 no_engine_id;
--	__u8 error_type;
--	__u8 pad[2];
-+	__u16 engine_id[HL_RAZWI_MAX_NUM_OF_ENGINES_PER_RTR];
-+	__u16 num_of_possible_engines;
-+	__u8 flags;
-+	__u8 pad[5];
- };
- 
- #define MAX_QMAN_STREAMS_INFO		4
--- 
-2.25.1
-
+ static void s390_iommu_detach_device(struct iommu_domain *domain,
+ 				     struct device *dev)
+ {
+@@ -376,6 +398,7 @@ static const struct iommu_ops s390_iommu_ops = {
+ 	.release_device = s390_iommu_release_device,
+ 	.device_group = generic_device_group,
+ 	.pgsize_bitmap = S390_IOMMU_PGSIZES,
++	.get_resv_regions = s390_iommu_get_resv_regions,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= s390_iommu_attach_device,
+ 		.detach_dev	= s390_iommu_detach_device,
