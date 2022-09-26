@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1E45E9EAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4EA5E9EAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiIZKJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S234925AbiIZKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiIZKIs (ORCPT
+        with ESMTP id S234765AbiIZKJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:08:48 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F022288
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:46 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id w13so5805568plp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ehcMWTx3JCiw0KnWDLCX/Z/T6ECZCx/ojhdFf6ysh9U=;
-        b=bqv7qi85AS9b8Ieik64VT/vdGDUTL6h125N6FpgUoHN4thC/OwZDiZ7l+sD0HzAA9I
-         35rXcdgmVxtL3AqTK1HDCkRkq6ERYXnSFD4SJNEeKZDBjRUXs356sUhge+o2t+djvZvf
-         yS4gHDKv3iGeUhCTRi6Lip//NAmqQ3YzsQJboUDFew1abSUEkJLkvpdB+fO30JGV340P
-         82bHAU/pzCX+7g506QD4Zilt4+tpAqGwf/jt6c2XTof3xupxRg+wo8DjfVaGxCx7dXuy
-         Rp0f7iRjfq/bKPxVB8puSwRJ9Pp0WY5X/K5+HGG/Th/SXeQ3UntQBUvC5M3xhkP48Jvh
-         pOxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ehcMWTx3JCiw0KnWDLCX/Z/T6ECZCx/ojhdFf6ysh9U=;
-        b=NuHRoYJ+MgLo4K/80IioUlL83drHTpYxERThbBdeU8m8VscWfCIC/+T79RFTRZqIlT
-         HosVKQPo5J+FMCPKsWujNWZdNkiVfsWfxL4xNue6LY0u51yaWOe84BJP6GezVZIAqIvD
-         BcDZeWtsLK1dpossBKcyqs8MlT0YWmJoioMiftunUg/ds21aCc9FU6XTKPd8D95dqPMK
-         D+j1fO9oKy541W4i5/HYXw0Od2GdBthF4jEsNSgL5iWdZAEI+FA+og2HjI1xA64g83SK
-         v0diAj6C3tIUQvU06Gtw2faQV5Vq7/CERWcalmcdyRXMXy3oY9RhzGpPV16PdydN4c8q
-         Lz+w==
-X-Gm-Message-State: ACrzQf17Xn0ahFG48Be+RijGZJP0PeU8lfaU7CjrxK8qZhj2nxm+U9EJ
-        8tmCvS1cQuJPLSItEv7jTsiJucu3yo6RiQ==
-X-Google-Smtp-Source: AMsMyM6d30TDyOxHYeAf121l8qUL1+DdJtCt8j1JfJucbrBQRk6jFIUoRpEffxZDoEnIYfJNKHOOXA==
-X-Received: by 2002:a17:902:f550:b0:178:5b6a:3a1c with SMTP id h16-20020a170902f55000b001785b6a3a1cmr20626741plf.36.1664186925843;
-        Mon, 26 Sep 2022 03:08:45 -0700 (PDT)
-Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
-        by smtp.gmail.com with ESMTPSA id j29-20020a63551d000000b004390b40b4a1sm10304950pgb.23.2022.09.26.03.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 03:08:45 -0700 (PDT)
-From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
-To:     dianders@chromium.org, thierry.reding@gmail.com, sam@ravnborg.org,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sean Hong <sean.hong@quanta.corp-partner.google.com>
-Subject: [PATCH] drm/panel-edp: Add INX N116BCA-EA2
-Date:   Mon, 26 Sep 2022 18:08:39 +0800
-Message-Id: <20220926100839.482804-1-sean.hong@quanta.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Sep 2022 06:09:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AF44663D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:09:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2C2560B7B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:09:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF84DC433C1;
+        Mon, 26 Sep 2022 10:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664186940;
+        bh=gVXyyA5IAbFfV7vJ/QOv0MxnXnumH7DZXircDqF5Z70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NmQHGprzaXKvnrjt+vF3CfG0A6mz05d101IvDpP0S0KlWA/HxV02WBqm7aJ/85fKO
+         776eQFUJPgC7L8koUGoInyWAn2pq3tjO2Wuq1tJaAE3lYQNW1w0fnHhtUvXbulDefb
+         HXgalDIaN+/D6rCOCQ2fpGYC9oBSD55ApXAp20ZQhWiCbmquWs8KVP+pwjZ874O/Ku
+         eUR+d8MNkrIlEGjwBKad02tb2rHugUHFzpxGvXz6sxZBRE/XGdFqlGxB22WM2YuCMy
+         SBtGpekUg9s3HWGnMKKU0pfGald1AlS+OoImzYUVydBIrgF2Vviyt86f8+cK+lbcJ8
+         KLcwsluiqzqCQ==
+Received: by pali.im (Postfix)
+        id 00CE28A3; Mon, 26 Sep 2022 12:08:56 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 12:08:56 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/7] powerpc/85xx: p2020: Define just one machine
+ description
+Message-ID: <20220926100856.klwmxgujr7nv4qik@pali>
+References: <20220819191557.28116-1-pali@kernel.org>
+ <20220819191557.28116-6-pali@kernel.org>
+ <638a2f98-5c23-85ba-c835-bce276312182@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <638a2f98-5c23-85ba-c835-bce276312182@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the INX - N116BCA-EA2 (HW: C1) panel
+On Monday 26 September 2022 10:02:47 Christophe Leroy wrote:
+> > +static int __init p2020_probe(void)
+> >   {
+> > -	if (of_machine_is_compatible("fsl,P2020RDB-PC"))
+> > -		return 1;
+> > -	return 0;
+> > +	struct device_node *p2020_cpu;
+> > +
+> > +	/*
+> > +	 * There is no common compatible string for all P2020 boards.
+> > +	 * The only common thing is "PowerPC,P2020@0" cpu node.
+> > +	 * So check for P2020 board via this cpu node.
+> > +	 */
+> > +	p2020_cpu = of_find_node_by_path("/cpus/PowerPC,P2020@0");
+> > +	if (!p2020_cpu)
+> > +		return 0;
+> 
+> This looks odd. I though all probe were using the compatible, and in 
+> fact I have a series in preparation that drops all 
+> of_machine_is_compatible() checks in probe functions and do it in the 
+> caller instead, after adding a .compatible string in the machine 
+> description.
+> 
+> Is there really no compatible that can be used for all p2020 ?
 
-Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
----
- drivers/gpu/drm/panel/panel-edp.c | 1 +
- 1 file changed, 1 insertion(+)
+Really. There is none. I have looked into all available P2020 DTB files
+(either externals passed by bootloader or kernel in-tree) and there is
+no common compatible string. The only "common" thing is cpu node, how I
+implemented it int this patch series.
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 060f4f98bc04..ba75fae7d376 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1889,6 +1889,7 @@ static const struct edp_panel_entry edp_panels[] = {
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0a5d, &delay_200_500_e50, "NV116WHM-N45"),
- 
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
-+	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1154, &delay_200_500_p2e80, "N116BCA-EA2"),
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
- 
- 	EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
--- 
-2.25.1
-
+And same issue is with boards with P101x and P102x DTB files.
