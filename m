@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2A45EAE55
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0785EAE57
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiIZRkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
+        id S231171AbiIZRkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiIZRkL (ORCPT
+        with ESMTP id S230510AbiIZRkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 13:40:11 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BEA8A7C0
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854E8A1D7
         for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id r12-20020a92cd8c000000b002f32d0d9fceso5652594ilb.11
+Received: by mail-io1-f72.google.com with SMTP id f25-20020a5d8799000000b006a44e33ddb6so4179844ion.1
         for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=zP2Ks3+peJR4d+FzWakp72trx11nZT8Tmm3I3GDmu/A=;
-        b=zKoxN2GyQyCJCSElQp4EF8t0twrH5ZMki8wKWG900+BLTb+5HfXuqhpaBqDyZAVJsz
-         hm4NfvvmlDXggqVJTwBiE+hsYMWntQsbkAZ9qeInvEfyF9Or5VgYxKtNqcXSpp3vu5aQ
-         /PdovLgUQUTXi6cO0QVTVIXgKs6hAvVYutgKjGsI6hL1r99whK+FDpaTYSvDrgrIoAk7
-         EQsafQu6jO4MRf1QBdWZfBYl7DoZ5I1ebfJfSbIFtUQO5TW1PEcq2c3y2MZqqeu3K8YK
-         B4f4WwZ03TSEl+BQ/XMy2uDfr+K8tk4o/2zBEQ7CWJOQXOcQ2nibVX+taeYREE9agMrO
-         yAhg==
-X-Gm-Message-State: ACrzQf1FeHpX1uJLNQnNvX/c/eoqurj1pQ9DifgvlpWaNfZwwpJtEy/N
-        ZrrUepCAmOcfLO1blhXpGsnyBM1PpMZwIGNzrKXa+21R3vY3
-X-Google-Smtp-Source: AMsMyM6f6LJH4VuMNn/mHWq5BaFs4dxaeKRmmQ8VcUlH6vuwZ7Ea59IFErU6MNVKxRl/VyzUZfMhDVfeWujt3vH7OunQ8j4rHrue
+        bh=y28CCcBuJ1ylNWh8a512gzTxThjJ7xoc0njafP1n4Lk=;
+        b=r1q96kYj+P4WxfbTz9WA3Ti6MVWL3rFsc1guBJcCY3QaHoc6Rqc35WQwnMg87833ap
+         OJ5/St43wgl4FYTRCwYQG0webGkU5ntLuq3gllEiAbHddNtcBQ7t0DSm1r+BhOcwmYd4
+         J3ZHkQodf+XYZT61HL4EJfRlx2kq7rh1i3k9ODxDM4/1sA7Ea2AywuvMDwFGW+fAmNU+
+         ymAXwM8OzHdJue5qK4yGBDUzzewX+7uZFjgYTDCggpXfuYzt706n3fDMNOpuvj27Wa/E
+         9UDtalzyYaL4AUY0xOj29xTI50FI5imPAGrI5l723bzb5Ajje41Y6h87669SD0VpOeI1
+         U7qQ==
+X-Gm-Message-State: ACrzQf2GfBJFa/u7HUT/KZw17Th3XQS5DAFlD+Cgyf0VPzzFLVPRDOKc
+        gdfvE2cAfYuQZ9nCaitXW/dl0F+0IfVOu6kvpo2IH22mmgL+
+X-Google-Smtp-Source: AMsMyM5a/dR1igz98v9x/QuvU++r0t3bOtDiGDqubbY/vXledqC4nj+kfqJEoJWSr5sLzgvxZExw/wcqju6Xt5+ffLIslvzgIFl+
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1683:b0:35a:4772:edc2 with SMTP id
- f3-20020a056638168300b0035a4772edc2mr12077302jat.128.1664211945824; Mon, 26
+X-Received: by 2002:a05:6e02:1d92:b0:2f6:a470:cb4f with SMTP id
+ h18-20020a056e021d9200b002f6a470cb4fmr10448434ila.221.1664211945555; Mon, 26
  Sep 2022 10:05:45 -0700 (PDT)
 Date:   Mon, 26 Sep 2022 10:05:45 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dca7e505e9978943@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Write in udf_write_fi
-From:   syzbot <syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000d890a405e997896e@google.com>
+Subject: [syzbot] kernel BUG in jfs_evict_inode
+From:   syzbot <syzbot+9c0c58ea2e4887ab502e@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -57,57 +57,73 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    1a61b828566f Merge tag 'char-misc-6.0-rc7' of git://git.ke..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=153836e4880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
-dashboard link: https://syzkaller.appspot.com/bug?extid=8a5a459f324d510ea15a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e7fb54880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14864288880000
+HEAD commit:    c194837ebb57 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=117dbdc4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
+dashboard link: https://syzkaller.appspot.com/bug?extid=9c0c58ea2e4887ab502e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f2e288880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127d1ae4880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/367e34e7ff83/disk-1a61b828.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/91a2819fe451/vmlinux-1a61b828.xz
+disk image: https://storage.googleapis.com/syzbot-assets/8d8ae425e7fa/disk-c194837e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c540d501ebe7/vmlinux-c194837e.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com
+Reported-by: syzbot+9c0c58ea2e4887ab502e@syzkaller.appspotmail.com
 
-UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/09/12 12:00 (1000)
-==================================================================
-BUG: KASAN: null-ptr-deref in udf_write_fi+0x380/0xff0 fs/udf/namei.c:91
-Write of size 18446744073709551572 at addr 0000000000000020 by task syz-executor377/3607
-
-CPU: 0 PID: 3607 Comm: syz-executor377 Not tainted 6.0.0-rc6-syzkaller-00309-g1a61b828566f #0
+loop0: detected capacity change from 0 to 264192
+ERROR: (device loop0): xtTruncate: XT_GETPAGE: xtree page corrupt
+ERROR: (device loop0): remounting filesystem as read-only
+------------[ cut here ]------------
+kernel BUG at fs/jfs/inode.c:169!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3065 Comm: syz-executor105 Not tainted 6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- memset+0x20/0x40 mm/kasan/shadow.c:44
- udf_write_fi+0x380/0xff0 fs/udf/namei.c:91
- udf_rename+0x45e/0x1250 fs/udf/namei.c:1173
- vfs_rename+0x115e/0x1a90 fs/namei.c:4756
- do_renameat2+0xb5e/0xc80 fs/namei.c:4907
- __do_sys_rename fs/namei.c:4953 [inline]
- __se_sys_rename fs/namei.c:4951 [inline]
- __x64_sys_rename+0x7d/0xa0 fs/namei.c:4951
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7e9cef1b69
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe69a64f88 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f7e9cef1b69
-RDX: 0000000000000f90 RSI: 0000000020000880 RDI: 00000000200007c0
-RBP: 00007ffe69a64f90 R08: 0000000000000002 R09: 0000000000003731
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 00007ffe69a64ff8 R14: 00007ffe69a65030 R15: 0000000000000003
- </TASK>
-==================================================================
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : jfs_evict_inode+0x1c0/0x1e8 fs/jfs/inode.c:169
+lr : jfs_evict_inode+0x1c0/0x1e8 fs/jfs/inode.c:169
+sp : ffff8000126f3ac0
+x29: ffff8000126f3ac0 x28: ffff0000cb292a00 x27: ffff0000ca9e85f8
+x26: ffff0000c759b500 x25: ffff0000cb292a00 x24: ffff8000126f3b38
+x23: ffff0000ca9eba98 x22: ffff0000ca9eb4b0 x21: ffff800008d32a0c
+x20: 0000000000000001 x19: ffff0000ca9eb8e0 x18: 00000000000000c0
+x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000c759b500
+x14: 0000000000000050 x13: 00000000ffffffff x12: ffff0000c759b500
+x11: ff80800008d32bcc x10: 0000000000000000 x9 : ffff800008d32bcc
+x8 : ffff0000c759b500 x7 : ffff8000085e852c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000006 x1 : 0000000000000000 x0 : ffff0000ca9eb8c0
+Call trace:
+ jfs_evict_inode+0x1c0/0x1e8 fs/jfs/inode.c:169
+ evict+0xec/0x334 fs/inode.c:665
+ dispose_list fs/inode.c:698 [inline]
+ evict_inodes+0x2e0/0x354 fs/inode.c:748
+ generic_shutdown_super+0x50/0x190 fs/super.c:480
+ kill_block_super+0x30/0x78 fs/super.c:1427
+ deactivate_locked_super+0x70/0xe8 fs/super.c:332
+ deactivate_super+0xd0/0xd4 fs/super.c:363
+ cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x26c/0xbe0 kernel/exit.c:795
+ do_group_exit+0x60/0xe8 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __wake_up_parent+0x0/0x40 kernel/exit.c:934
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190
+Code: aa1303e0 97e62ca1 17ffffaf 97d5b63d (d4210000) 
+---[ end trace 0000000000000000 ]---
 
 
 ---
