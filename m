@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37795E9F94
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F105EA219
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiIZK1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S236963AbiIZLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiIZKYc (ORCPT
+        with ESMTP id S237347AbiIZK71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:24:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186914D24D;
-        Mon, 26 Sep 2022 03:17:57 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952775C9EB;
+        Mon, 26 Sep 2022 03:31:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8427F60BEF;
-        Mon, 26 Sep 2022 10:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DBEDC433C1;
-        Mon, 26 Sep 2022 10:17:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 966B9B80952;
+        Mon, 26 Sep 2022 10:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D207FC433D6;
+        Mon, 26 Sep 2022 10:30:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187469;
-        bh=wuZN+QtA4rf6Hs9xjlQ4uC96UOzN/ztHw+3mXvo/XEE=;
+        s=korg; t=1664188251;
+        bh=3tdsAQP+V8e9ZD4BWk3zNjB2XQAPdWt1dSbmitw3cNI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ufri+XmHZKkitq4GBDa6GcYrG33scQr3tNNwjLS95TSE872+Y9SeTTOao93vijS5S
-         GV+JHU3ycUe9MQ6BJs+Vkb/KlmrbI1kPsMrvjcWCO90sXafsw0bTqJvzN5CC4ZcA/X
-         n57juBrGGEdTSI6SKI3uxgrDiCaBcrKVTtBEVgb8=
+        b=OXKZmQoWOKG0UvpAS3uViv15WrO4CbmijQzg+SP1enzhb2Ej6DMb522eqQnTLlrXl
+         2BduczK+nI9Zwc4wdSYk1IuxS952GSp9KBj67Sk3wK+MeNPQsvR4DHEBVbpvpOdwUf
+         jtT+JCWrmQDJnaZURBxTvr57OyUByuEBhCxHOkOU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Daniel Marth <daniel.marth@inso.tuwien.ac.at>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 06/58] efi: libstub: Disable struct randomization
+        stable@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alex Elder <elder@linaro.org>
+Subject: [PATCH 5.10 059/141] interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
 Date:   Mon, 26 Sep 2022 12:11:25 +0200
-Message-Id: <20220926100741.658952661@linuxfoundation.org>
+Message-Id: <20220926100756.596263294@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Mike Tipton <mdtipton@codeaurora.org>
 
-[ Upstream commit 1a3887924a7e6edd331be76da7bf4c1e8eab4b1e ]
+commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
 
-The EFI stub is a wrapper around the core kernel that makes it look like
-a EFI compatible PE/COFF application to the EFI firmware. EFI
-applications run on top of the EFI runtime, which is heavily based on
-so-called protocols, which are struct types consisting [mostly] of
-function pointer members that are instantiated and recorded in a
-protocol database.
+We're only adding BCMs to the commit list in aggregate(), but there are
+cases where pre_aggregate() is called without subsequently calling
+aggregate(). In particular, in icc_sync_state() when a node with initial
+BW has zero requests. Since BCMs aren't added to the commit list in
+these cases, we don't actually send the zero BW request to HW. So the
+resources remain on unnecessarily.
 
-These structs look like the ideal randomization candidates to the
-randstruct plugin (as they only carry function pointers), but of course,
-these protocols are contracts between the firmware that exposes them,
-and the EFI applications (including our stubbed kernel) that invoke
-them. This means that struct randomization for EFI protocols is not a
-great idea, and given that the stub shares very little data with the
-core kernel that is represented as a randomizable struct, we're better
-off just disabling it completely here.
+Add BCMs to the commit list in pre_aggregate() instead, which is always
+called even when there are no requests.
 
-Cc: <stable@vger.kernel.org> # v4.14+
-Reported-by: Daniel Marth <daniel.marth@inso.tuwien.ac.at>
-Tested-by: Daniel Marth <daniel.marth@inso.tuwien.ac.at>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+[georgi: remove icc_sync_state for platforms with incomplete support]
+Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+[dianders: dropped sm8350.c which isn't present in 5.10]
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Acked-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/libstub/Makefile | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/interconnect/qcom/icc-rpmh.c |   10 +++++-----
+ drivers/interconnect/qcom/sm8150.c   |    1 -
+ drivers/interconnect/qcom/sm8250.c   |    1 -
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index e0cff3b942ac..7fad5d90898b 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -31,6 +31,13 @@ KBUILD_CFLAGS			:= $(cflags-y) -DDISABLE_BRANCH_PROFILING \
- 				   $(call cc-option,-fno-addrsig) \
- 				   -D__DISABLE_EXPORTS
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_n
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
++	struct qcom_icc_provider *qp;
  
-+#
-+# struct randomization only makes sense for Linux internal types, which the EFI
-+# stub code never touches, so let's turn off struct randomization for the stub
-+# altogether
-+#
-+KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS), $(KBUILD_CFLAGS))
+ 	qn = node->data;
++	qp = to_qcom_provider(node->provider);
+ 
+ 	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+ 		qn->sum_avg[i] = 0;
+ 		qn->max_peak[i] = 0;
+ 	}
 +
- # remove SCS flags from all objects in this directory
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
++	for (i = 0; i < qn->num_bcms; i++)
++		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
  
--- 
-2.35.1
-
+@@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
+-	struct qcom_icc_provider *qp;
+ 
+ 	qn = node->data;
+-	qp = to_qcom_provider(node->provider);
+ 
+ 	if (!tag)
+ 		tag = QCOM_ICC_TAG_ALWAYS;
+@@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *
+ 	*agg_avg += avg_bw;
+ 	*agg_peak = max_t(u32, *agg_peak, peak_bw);
+ 
+-	for (i = 0; i < qn->num_bcms; i++)
+-		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+-
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -627,7 +627,6 @@ static struct platform_driver qnoc_drive
+ 	.driver = {
+ 		.name = "qnoc-sm8150",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -643,7 +643,6 @@ static struct platform_driver qnoc_drive
+ 	.driver = {
+ 		.name = "qnoc-sm8250",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
 
 
