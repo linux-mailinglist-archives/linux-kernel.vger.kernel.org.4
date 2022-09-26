@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEB45EA506
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F102D5EA3B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238867AbiIZL4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S235012AbiIZLbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238941AbiIZLyI (ORCPT
+        with ESMTP id S234851AbiIZLaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:08 -0400
+        Mon, 26 Sep 2022 07:30:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8305357E21;
-        Mon, 26 Sep 2022 03:50:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFDB6BCF9;
+        Mon, 26 Sep 2022 03:41:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7A3EB80782;
-        Mon, 26 Sep 2022 10:48:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B707C433C1;
-        Mon, 26 Sep 2022 10:48:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EA49B80920;
+        Mon, 26 Sep 2022 10:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB41C433D7;
+        Mon, 26 Sep 2022 10:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189329;
-        bh=lvpX7YPeNPwuSs6jKx97XhMPdwGu8NHyaJz9o3M1oV8=;
+        s=korg; t=1664188329;
+        bh=mveKo5nAQBKgWfRiaBTpsLS+shiq4LILIKnjrBq+yJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IJD5MNFhFvqGe0+jB66e63TJMA6b1d+Sy5HcaZcUkPyI3lVqoteah4Zgupdxv8P+h
-         Yy/g6VDByaiyU4Oh7dX27Irs6hmhUtG9V042YGQNHTGe4IEzr0XDi2rWDY7ppmkqWt
-         7w9/ZvQ8s9P6ZH4ngkodwcNEl3W+gsnn6KGGXM38=
+        b=wUEZAMy7IeQr0VcCnRxSeUbQRMYww9IWS95ihTrNEAY9cAX6sxmCGiOA2oixtP5V3
+         7tDoUhaVgicgQTXxAlAQhasufcEs/0j4wdLgJ0cOXNJmTFPTsJBpfUULMnxaTZ7Mu7
+         aYPdR+uCl+Jtw9Q80Nj0YL+uVnPRX74X0yOUDyTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Larysa Zaremba <larysa.zaremba@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 151/207] ice: Fix ice_xdp_xmit() when XDP TX queue number is not sufficient
+Subject: [PATCH 5.10 114/141] net: sched: fix possible refcount leak in tc_new_tfilter()
 Date:   Mon, 26 Sep 2022 12:12:20 +0200
-Message-Id: <20220926100813.412342615@linuxfoundation.org>
+Message-Id: <20220926100758.576827702@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Larysa Zaremba <larysa.zaremba@intel.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 114f398d48c571bb628187a7b2dd42695156781f ]
+[ Upstream commit c2e1cfefcac35e0eea229e148c8284088ce437b5 ]
 
-The original patch added the static branch to handle the situation,
-when assigning an XDP TX queue to every CPU is not possible,
-so they have to be shared.
+tfilter_put need to be called to put the refount got by tp->ops->get to
+avoid possible refcount leak when chain->tmplt_ops != NULL and
+chain->tmplt_ops != tp->ops.
 
-However, in the XDP transmit handler ice_xdp_xmit(), an error was
-returned in such cases even before static condition was checked,
-thus making queue sharing still impossible.
-
-Fixes: 22bf877e528f ("ice: introduce XDP_TX fallback path")
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Link: https://lore.kernel.org/r/20220919134346.25030-1-larysa.zaremba@intel.com
+Fixes: 7d5509fa0d3d ("net: sched: extend proto ops with 'put' callback")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
+Link: https://lore.kernel.org/r/20220921092734.31700-1-hbh25y@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/sched/cls_api.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 836dce840712..97453d1dfafe 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -610,7 +610,7 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 	if (test_bit(ICE_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
- 
--	if (!ice_is_xdp_ena_vsi(vsi) || queue_index >= vsi->num_xdp_txq)
-+	if (!ice_is_xdp_ena_vsi(vsi))
- 		return -ENXIO;
- 
- 	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
-@@ -621,6 +621,9 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 		xdp_ring = vsi->xdp_rings[queue_index];
- 		spin_lock(&xdp_ring->tx_lock);
- 	} else {
-+		/* Generally, should not happen */
-+		if (unlikely(queue_index >= vsi->num_xdp_txq))
-+			return -ENXIO;
- 		xdp_ring = vsi->xdp_rings[queue_index];
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index b8ffb7e4f696..c410a736301b 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -2124,6 +2124,7 @@ static int tc_new_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
  	}
  
+ 	if (chain->tmplt_ops && chain->tmplt_ops != tp->ops) {
++		tfilter_put(tp, fh);
+ 		NL_SET_ERR_MSG(extack, "Chain template is set to a different filter kind");
+ 		err = -EINVAL;
+ 		goto errout;
 -- 
 2.35.1
 
