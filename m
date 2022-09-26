@@ -2,64 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03025EA8A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551AC5EA8B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiIZOkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
+        id S235142AbiIZOlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235075AbiIZOjX (ORCPT
+        with ESMTP id S234914AbiIZOko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:39:23 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A54C684E62
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:01:10 -0700 (PDT)
-Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 26 Sep 2022 10:40:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2BDF186E;
+        Mon, 26 Sep 2022 06:01:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id C514B222722;
-        Mon, 26 Sep 2022 15:01:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1664197268;
-        bh=1Q4KS+kJWmn8dojcJlNBkaBQbp7UKdMZq2hj4C2yZbQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A3P6ejM47UAW0veZN2gqdNKTFtYqiN8SN+WESnMKU1PxO/j1PnokK0mdSPa1IJHPU
-         NyzwJrqaK9dHRJj9nTNOPyQ4JICPDNXuAIzGW8xm9VSqCnZWA7JvkQTjlfmXYS7SGW
-         zFVZSF7snXjvmiUB+DeKFQEJVErPBlFzAsgOOgWK1ILB4uUOo5uYod/XA70amKrCCY
-         FAV7jCd2Rv9w9bQo9VjoVMSpPYS50QoJUCk7K55hU9A4Tq9njgQhSGOvDiA0KOaNEc
-         nJSrou6SzSPG3b0NFmatrr9Ww4Lt5YbAEBtkG7gqS8ywzQivawgBnIczQfXCrzxK0r
-         ORPoPbudNwamg==
-Date:   Mon, 26 Sep 2022 15:01:07 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] [PULL REQUEST] Intel IOMMU updates for Linux v6.1
-Message-ID: <YzGik3y4J0Fkc9fd@8bytes.org>
-References: <20220923004206.3630441-1-baolu.lu@linux.intel.com>
- <YzGX7ri+CYTpKfeP@8bytes.org>
- <64405aee-0701-5b1f-084a-f0750372a563@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 817D56068C;
+        Mon, 26 Sep 2022 13:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F00C433D6;
+        Mon, 26 Sep 2022 13:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664197301;
+        bh=Cn6NBU74rUDa6kJ/DEloWl+kpXHAM3ZSRRMJ12LdkuU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DUYNg1rjx00K7VTRnD+WrtW9FXv8xIZOIP+aswOECf7q4iShxvwTQxeG/WqDPHf2/
+         XBX4fXsRywKxcKAqWaV099YI886FI0Y0mhX+jv9Y9JozkTFlaJMAR5rVebPbgujCgc
+         BuOVaPHdwIbefGa8lmwtLHNoJAtz7bNgiX+TYpcBg7PJ8Dq0qy+g4wMpPctma3i9Yp
+         G2oxyfHbfIy3JYEsYHUklvZBhfLCqtCqVmtchmfDgn9vJlOTvHh0iQ/LpB9s0YbCbv
+         QLd9k7ZvHm9cnC6afroqPX2an6wlNwH3sxUcj4pYxGgCNT4ismKHY+RvuLkpOG0Pbr
+         Tl1+fe7yBSnXg==
+From:   broonie@kernel.org
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs tree with the ext3 tree
+Date:   Mon, 26 Sep 2022 14:01:37 +0100
+Message-Id: <20220926130137.105900-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64405aee-0701-5b1f-084a-f0750372a563@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:38:09PM +0800, Baolu Lu wrote:
-> Do you prefer applying de9f8a91eb32 to vt-d branch, or let me send a new
-> v6.0-rc7 based pull request?
+Hi all,
 
-Yes, please send a v6.0-rc7 pull-request. I'd like to carry the conflict
-resolution in the merge commit for next.
+Today's linux-next merge of the vfs tree got a conflict in:
 
-Regards,
+  fs/notify/fanotify/fanotify.h
 
-	Joerg
+between commit:
+
+  7a80bf902d2bc ("fanotify: Remove obsoleted fanotify_event_has_path()")
+
+from the ext3 tree and commit:
+
+  d5bf88895f246 ("fs/notify: constify path")
+
+from the vfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/notify/fanotify/fanotify.h
+index b34246c6ec87e,bf6d4d38afa04..0000000000000
+--- a/fs/notify/fanotify/fanotify.h
++++ b/fs/notify/fanotify/fanotify.h
+@@@ -452,7 -452,13 +452,7 @@@ static inline bool fanotify_is_error_ev
+  	return mask & FAN_FS_ERROR;
+  }
+  
+- static inline struct path *fanotify_event_path(struct fanotify_event *event)
+ -static inline bool fanotify_event_has_path(struct fanotify_event *event)
+ -{
+ -	return event->type == FANOTIFY_EVENT_TYPE_PATH ||
+ -		event->type == FANOTIFY_EVENT_TYPE_PATH_PERM;
+ -}
+ -
++ static inline const struct path *fanotify_event_path(struct fanotify_event *event)
+  {
+  	if (event->type == FANOTIFY_EVENT_TYPE_PATH)
+  		return &FANOTIFY_PE(event)->path;
