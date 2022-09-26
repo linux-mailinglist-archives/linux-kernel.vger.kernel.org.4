@@ -2,119 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE4F5E9869
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143F95E9874
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiIZEUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 00:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S232425AbiIZEcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 00:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiIZETv (ORCPT
+        with ESMTP id S230379AbiIZEcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 00:19:51 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799A2BF76
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:19:49 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id jm5so5083729plb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Iz1cLT0Dw3NL/z+eOG9Yepj9a6YSjoGJCO36ZR0E7Nc=;
-        b=QDzXG2EVRBnMekEOoO23EeOjQ8zWexlHGQr4Pz7FexEplASG+GjmpU6zJDeBdnv6aR
-         Ah4IbHTxVJ7T1SLF8QHkMIXQJrQiDl8tt5cDunYBm1lqlagwo0ANvhqEjkArFY5u9PJ9
-         9hNccroGue6sdlkkeWDfP7XTuf9RWvmfOd60E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Iz1cLT0Dw3NL/z+eOG9Yepj9a6YSjoGJCO36ZR0E7Nc=;
-        b=UtJ5yjo0M5rhG/XVLKlcFUNyvQd/FrNYTpeitG/5CJQNUxG0DDXjybL8ZcKU8A+x4c
-         uCwU5OqIUa/09I5lQGNpm6m2749FSNnObbnuJSnvj0Fu9Znacsx345viwEDspwCaYl2l
-         bk6+fJdGF9GuloMWxrgNM13KqD76++udvWaV/dU8UT8+WJv+yAIRxmLHVNDIBcfhXM7W
-         6zRiUGu+hlHaxDF11QBOv55yUgs3QF2rJtgNZNGsX5z7pQvM4NpjVUxXKuvABGnyG3OP
-         eIrKz7Yvq1U89kFrYykOzViXP2XcmkXum3yyr4bkR1I6jpFL26m3lgogKzLz4o34iGyA
-         KG6Q==
-X-Gm-Message-State: ACrzQf0v5HM/PXDyv4MByrkkTQh9ID0bOSspTPXYWtqB8r4x0wdlHBRk
-        cVDzoz8MkzP4yvK9IdeV3pnUjw==
-X-Google-Smtp-Source: AMsMyM6KLQAgcO3l+E3+9GojcyLsebexsjYZquwGShD12eahwVaPSmIQaeSPiNJs3ORy7tPnb390iA==
-X-Received: by 2002:a17:902:b085:b0:178:3af4:31b2 with SMTP id p5-20020a170902b08500b001783af431b2mr20508421plr.122.1664165988970;
-        Sun, 25 Sep 2022 21:19:48 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:2a7d:69c:905d:1926])
-        by smtp.gmail.com with ESMTPSA id k1-20020aa79981000000b0053e72ed5252sm10877944pfh.42.2022.09.25.21.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 21:19:48 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 13:19:44 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
-Message-ID: <YzEoYPSC5Qf2aL92@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-19-john.ogness@linutronix.de>
+        Mon, 26 Sep 2022 00:32:06 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5BE29C93
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EOXSU
+        nUQ5k5lxHEHYK8vHC6q/lIWKm+EaDrJEcZCf7M=; b=Eljd88f09e/TnSE/8+9Lw
+        cnFwwrqi3H3z2IvggfuCb+VwrQq2Db/HBZfSDi0Dy9U48Fgq2Dj0jmsxppnsDtSC
+        Z40CRKLZyrNGHdKM5anwdw2hT+XmL7p6oAVH6oMRVLX/+StRrwHecPfZ4B4jzXe6
+        WCbojYTVQqTmdeYPHpALjU=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp2 (Coremail) with SMTP id GtxpCgDnI9oUKzFjd0b9gQ--.51165S2;
+        Mon, 26 Sep 2022 12:31:17 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     dimitri.sivanich@hpe.com
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Mon, 26 Sep 2022 12:31:15 +0800
+Message-Id: <20220926043115.560612-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-19-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgDnI9oUKzFjd0b9gQ--.51165S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKw1fZr4DuFyfWFg_yoWrCw1fpa
+        12g348ArW3XF4rursrta1kWFW3Ca48JFWUGr9rt3sY9w4FyFs8GryDJas0qr4DurW0qr4a
+        yF45tFnI9an0gaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBWIU1Xl4SnH-gAAsT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/24 02:10), John Ogness wrote:
-> +/**
-> + * cons_print_dropped - Print 'dropped' message if required
-> + * @desc:	Pointer to the output descriptor
-> + *
-> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
-> + * not 0 and the regular format is requested. Extended format does not
-> + * need this message because it prints the sequence numbers.
-> + *
-> + * In regular format the extended message buffer is not in use.
-> + * So print into it at the beginning and move the resulting string
-> + * just in front of the regular text buffer so that the message can
-> + * be printed in one go.
-> + *
-> + * In case of a message this returns with @desc->outbuf and @desc->len
-> + * updated. If no message is required then @desc is not modified.
-> + */
-> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
-> +{
-> +	struct cons_text_buf *txtbuf = desc->txtbuf;
-> +	size_t len;
-> +
-> +	if (!desc->dropped || desc->extmsg)
-> +		return;
-> +
-> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
-> +		return;
-> +
-> +	/* Print it into ext_text which is unused */
-> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
-> +		       "** %lu printk messages dropped **\n", desc->dropped);
-> +	desc->dropped = 0;
-> +
-> +	/* Copy it just below text so it goes out with one write */
-> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
-> +
-> +	/* Update the descriptor */
-> +	desc->len += len;
-> +	desc->outbuf -= len;
+Gts may be freed in gru_check_chiplet_assignment.
+The caller still use it after that, UAF happens.
 
-Oh, hmm. This does not look to me as a simplification. Quite
-the opposite, moving cons_text_buf::text pointer to point to
-cons_text_buf::text - strlen("... dropped messages...") looks
-somewhat fragile.
+Fix it by introducing a return value to see if it's in error path or not. 
+Free the gts in caller if gru_check_chiplet_assignment check failed.
 
-Is printing 'dropped' and outbuf messages in one go such an
-important feature?
+Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+             Zhuorao Yang <alex000young@gmail.com>
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..2b5b049fbd38 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			ret = gru_check_context_placement(gts);
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
+ 		ret = -EINVAL;
+ 	}
+ 	gru_unlock_gts(gts);
++	if (ret) {
++		gru_unload_context(gts, 1);
++		ret = -EINVAL;
++	}
+ 
+ 	return ret;
+ }
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..79903cf7e706 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	struct gru_thread_state *gts;
+ 	unsigned long paddr, vaddr;
+ 	unsigned long expires;
++	int ret;
+ 
+ 	vaddr = vmf->address;
+ 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret) {
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return ret;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
+-- 
+2.25.1
+
+
