@@ -2,125 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455BC5EAE3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BA05EAE53
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiIZRdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
+        id S230470AbiIZRkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiIZRdF (ORCPT
+        with ESMTP id S230490AbiIZRkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:33:05 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EE71BBEEE
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:50:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so13034245pjq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 09:50:57 -0700 (PDT)
+        Mon, 26 Sep 2022 13:40:06 -0400
+X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 10:05:24 PDT
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B547AD77
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Bl87DRbRfnOrhkUE5L4BbxEL4c2GAjYQ7M0EHLwAVuA=;
-        b=k/Pf0oq2RVLH59XKlNnE8OZcXuU2wB6wDhvFwqWSj3y9rA+jlLYk4QbMK/tPTWbvO1
-         0d5A4HA9wdnUH5Ev0SEIYfZkGYq/BljVAO8dkLzDDNsKZGUVLO3lviV0bNiMy0LJMLd1
-         veNpu+I4hph+ffxou0iC4hyD0ERsBh+zhJNw4FGd+pX+k+X0d/xV3ivVgZpCfjX1r032
-         +uHPc8WH/6FSve1xuIUM08I6J5yNtwJh6aHAFjaBVmR04nmf2/HUmWgA17QOJlnNA4Qe
-         dQTic43Y6j4XcePNeZcE+8JeOm4B3Gi80vSVMdQ5nOYDXbmejsOOUh8lrrwvwI1apwnG
-         QB+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Bl87DRbRfnOrhkUE5L4BbxEL4c2GAjYQ7M0EHLwAVuA=;
-        b=4XCgE/tZ6JaeMS9tO5h8GPNECxor7z4Pwd9ZfBwId4j0ikbagUREgoSpwRcF+JwyF6
-         kFPiwtGdDE5O6Y4uQhh4MM7WWPivQXR8ow86+ybIyMQSUc7aq4SO2T3Bif1d2kHJz1UO
-         SKh6otUJgnBqXIOodGCcPoDAgZAB0GlfER8wmIRCZVoZO/S4wBqOF+QLilRkFUZry/iT
-         HdgRaKwXb/9id1K2gW2cJ5OlY5Mx65DgzwYtSGh+0VFjNGaCRl//ZAVHy+LAiSj7Uplp
-         AmtpDWc6Z00oJjSzN15wseIGdc2JZYlhZTwzwPwQoDuI5nratWQLswLqKI4gFUiUDuEr
-         gdAQ==
-X-Gm-Message-State: ACrzQf1IiS0ZWbb3+EyDLHmSLz9NEZDlzqPJTTtcCjnku1umbQC9VhF2
-        pmBxv5wwVZFRbxuAP1DDLaW+m8+TAO2Hhcm58XtbuQ==
-X-Google-Smtp-Source: AMsMyM6UtWDkGZCZhsx0tR8KOdU6VH24mPotdsbYjkmgnCJx3SgsEdxYwV7yH+J2PwjnOeIoSN/qmkoCqhJi30Jpci0=
-X-Received: by 2002:a17:902:a411:b0:178:9e4c:2ef8 with SMTP id
- p17-20020a170902a41100b001789e4c2ef8mr22896380plq.95.1664211056559; Mon, 26
- Sep 2022 09:50:56 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1664211924; x=1695747924;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3VMcO93PozK+g8jLLMrs6D7u1SFekdD0LmnHxmEpbPI=;
+  b=yeUfXzPBhLNv2aRphxRwcPlr/6g2asfqYKLE0VVZA75y+uytgyx8TyhX
+   3ZHCWVkYOx4pfMa91Z61Xbzi7Yl9XwjoqYpFZ8gzdFLcKDugPsrPXG+uM
+   efvqsYXtOmLbsY42Cdi4wwErcNPqAlf9iqKNBPGNLCesdk+DNToCdAaAR
+   0=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Sep 2022 09:51:12 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 09:51:12 -0700
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 26 Sep
+ 2022 09:51:11 -0700
+Date:   Mon, 26 Sep 2022 09:51:10 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bindings: Update maintainer's email address
+Message-ID: <20220926165110.GA1297@quicinc.com>
+References: <1663979817-1078-1-git-send-email-quic_gurus@quicinc.com>
+ <dc0ef30b-0c99-7086-7b49-755f51fe9668@linaro.org>
 MIME-Version: 1.0
-References: <YzFo/+uF1jJ7gMIN@debian> <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
-In-Reply-To: <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 26 Sep 2022 09:50:44 -0700
-Message-ID: <CAKwvOd=rLna-=3eR=6WMTnVHaBiBR4+Gc99oHOHUEvY34e0hhg@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 and arm64 with clang
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dc0ef30b-0c99-7086-7b49-755f51fe9668@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 8:40 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Thanks for testing and the report! I noticed this over the weekend, it
-> comes from a new warning in clang:
->
-> https://github.com/llvm/llvm-project/commit/e07ead85a368173a56e96a21d6841aa497ad80f8
->
-> It was brought up on GitHub as well:
->
-> https://github.com/ClangBuiltLinux/linux/issues/1720
->
-> I have reported this to the clang developers upstream to see if there is
-> any way that the diagnostic could be improved:
->
-> https://reviews.llvm.org/D134461#3815298
->
-> Otherwise, we will just have to disable it, which I will send a patch
-> for later if the warning is not going to be adjusted in any way.
->
-> If you wanted to continue testing with upstream LLVM, you can either
-> just revert that commit or explicitly disable -Wvoid-ptr-dereference in
-> the main Makefile like so, which is ultimately what I will send if I
-> need to.
->
-> Cheers,
-> Nathan
+On Sep 24 2022 10:21, Krzysztof Kozlowski wrote:
+> On 24/09/2022 02:36, Guru Das Srinagesh wrote:
+> > Update Guru Das Srinagesh's email address.
+> > 
+> > Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 2 +-
+> >  Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml         | 2 +-
+> 
+> Use subject prefixes matching the subsystem (git log --oneline -- ...).
+> Here it should be "dt-bindings". Also describe who's address you are
+> updating:
+> dt-bindings: Update Guru Das Srinagesh's email address
+> 
+> With the subject fixed:
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks for the reports.  It sounds like the Clang developers will pare
-back the warning for unevaluated contexts (sizeof, typeof).  If it
-takes longer than a few days for that to land, let's send your below
-patch to help keep CI systems green.
+Sorry, I'm aware of these rules and had made these fixes locally but
+accidentally sent out this wrong patchset.
 
-Consider putting the below into
-scripts/Makefile.extrawarn
+Thank you.
 
->
-> diff --git a/Makefile b/Makefile
-> index 647a42a1f800..0bf60134f13c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -967,6 +967,9 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
->  # Another good warning that we'll want to enable eventually
->  KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
->
-> +# New warning from clang that is quite noisy due to '__is_constexpr'
-> +KBUILD_CFLAGS += $(call cc-disable-warning, void-ptr-dereference)
-> +
->  # Enabled with W=2, disabled by default as noisy
->  ifdef CONFIG_CC_IS_GCC
->  KBUILD_CFLAGS += -Wno-maybe-uninitialized
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Guru Das.
