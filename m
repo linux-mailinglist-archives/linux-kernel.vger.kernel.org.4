@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18C95EA2B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444D35EA1F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237628AbiIZLNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S237054AbiIZLAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237442AbiIZLLx (ORCPT
+        with ESMTP id S236941AbiIZK6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:11:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6425051A;
-        Mon, 26 Sep 2022 03:35:42 -0700 (PDT)
+        Mon, 26 Sep 2022 06:58:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E754DF20;
+        Mon, 26 Sep 2022 03:30:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90A5EB802C7;
-        Mon, 26 Sep 2022 10:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4623C433D6;
-        Mon, 26 Sep 2022 10:35:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16BB860B5E;
+        Mon, 26 Sep 2022 10:28:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C390C433C1;
+        Mon, 26 Sep 2022 10:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188540;
-        bh=Qts+mTwxPMEZO9kijhoy/64pFEzmYfB6q0q5Kwgo2VU=;
+        s=korg; t=1664188128;
+        bh=Uxwm54e8RpQZ7VZdhu2ZIac0OER8M/TjZNPKE6rmbcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lq4aNg5pOTY4/gOKg5VsiCvgzXo21toqPOLeWH8741kY11JHnQGE+uzn/Iep1rTYE
-         Z2UVXgxcxv7n/68XeALxIIOy1rRSN87QJcWH2heC4HILn1I+qtAoAHWz0G0EcgtcbR
-         kYmuKc6y1VxQstXS+YpSazqO+A5E/iQ5XLrJDZDs=
+        b=tL5FNZYBcPyHvihnSECA5d8ERXGMIa1f4LSpy71amkbYDIBqU9d9klLi/U+FehpGT
+         i75x/SS/nxQGswPusw81lW3IS/SQJiiqZUcdEJlAbyNlN5EwgS/55MH+9xZrcmNoGD
+         gppLQ8/OeS0maKqlr2Zexs7EQRKae8XbbxM8wZxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Peter Jones <pjones@redhat.com>
-Subject: [PATCH 5.15 041/148] efi: libstub: check Shim mode using MokSBStateRT
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 049/141] media: flexcop-usb: fix endpoint type check
 Date:   Mon, 26 Sep 2022 12:11:15 +0200
-Message-Id: <20220926100757.566743144@linuxfoundation.org>
+Message-Id: <20220926100756.220221889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Johan Hovold <johan@kernel.org>
 
-commit 5f56a74cc0a6d9b9f8ba89cea29cd7c4774cb2b1 upstream.
+commit 763679f0eeff0185fc431498849bbc1c24460875 upstream.
 
-We currently check the MokSBState variable to decide whether we should
-treat UEFI secure boot as being disabled, even if the firmware thinks
-otherwise. This is used by shim to indicate that it is not checking
-signatures on boot images. In the kernel, we use this to relax lockdown
-policies.
+Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+type") tried to add an endpoint type sanity check for the single
+isochronous endpoint but instead broke the driver by checking the wrong
+descriptor or random data beyond the last endpoint descriptor.
 
-However, in cases where shim is not even being used, we don't want this
-variable to interfere with lockdown, given that the variable may be
-non-volatile and therefore persist across a reboot. This means setting
-it once will persistently disable lockdown checks on a given system.
+Make sure to check the right endpoint descriptor.
 
-So switch to the mirrored version of this variable, called MokSBStateRT,
-which is supposed to be volatile, and this is something we can check.
-
-Cc: <stable@vger.kernel.org> # v4.19+
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Reviewed-by: Peter Jones <pjones@redhat.com>
+Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: stable@vger.kernel.org	# 5.9
+Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20220822151027.27026-1-johan@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/libstub/secureboot.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/b2c2/flexcop-usb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/firmware/efi/libstub/secureboot.c
-+++ b/drivers/firmware/efi/libstub/secureboot.c
-@@ -14,7 +14,7 @@
+--- a/drivers/media/usb/b2c2/flexcop-usb.c
++++ b/drivers/media/usb/b2c2/flexcop-usb.c
+@@ -512,7 +512,7 @@ static int flexcop_usb_init(struct flexc
  
- /* SHIM variables */
- static const efi_guid_t shim_guid = EFI_SHIM_LOCK_GUID;
--static const efi_char16_t shim_MokSBState_name[] = L"MokSBState";
-+static const efi_char16_t shim_MokSBState_name[] = L"MokSBStateRT";
+ 	if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 1)
+ 		return -ENODEV;
+-	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[1].desc))
++	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[0].desc))
+ 		return -ENODEV;
  
- static efi_status_t get_var(efi_char16_t *name, efi_guid_t *vendor, u32 *attr,
- 			    unsigned long *data_size, void *data)
-@@ -43,8 +43,8 @@ enum efi_secureboot_mode efi_get_secureb
- 
- 	/*
- 	 * See if a user has put the shim into insecure mode. If so, and if the
--	 * variable doesn't have the runtime attribute set, we might as well
--	 * honor that.
-+	 * variable doesn't have the non-volatile attribute set, we might as
-+	 * well honor that.
- 	 */
- 	size = sizeof(moksbstate);
- 	status = get_efi_var(shim_MokSBState_name, &shim_guid,
-@@ -53,7 +53,7 @@ enum efi_secureboot_mode efi_get_secureb
- 	/* If it fails, we don't care why. Default to secure */
- 	if (status != EFI_SUCCESS)
- 		goto secure_boot_enabled;
--	if (!(attr & EFI_VARIABLE_RUNTIME_ACCESS) && moksbstate == 1)
-+	if (!(attr & EFI_VARIABLE_NON_VOLATILE) && moksbstate == 1)
- 		return efi_secureboot_mode_disabled;
- 
- secure_boot_enabled:
+ 	switch (fc_usb->udev->speed) {
 
 
