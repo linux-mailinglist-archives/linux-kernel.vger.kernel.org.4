@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4149B5EB40E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D422F5EB411
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiIZWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S231252AbiIZWCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiIZWB4 (ORCPT
+        with ESMTP id S231374AbiIZWCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:01:56 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C999E62F2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:01:54 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id bh13so7764889pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:01:54 -0700 (PDT)
+        Mon, 26 Sep 2022 18:02:12 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581DCE720D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:02:05 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 9so7988315pfz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NT8F/Sj0Q9yRmFZyi3XfPWnAIOXfMEUrjgewG27HyFQ=;
-        b=fG1qXK+12aDUGiqFjjOVulomtauZVkrqe3h5VvQdj+htLs5ndcJc0MdCDW+x5UcrKn
-         +lcSzfixuuBRg6TR4H06W6f12YdqwR6ooH1yFU/iPC/F1VPkCdt3wyLOsZZwuGLjvFd1
-         VzTQPpWPTGPrSs8uJT3B0igrvLR7gppRnrVAY=
+        bh=UWb8wOcddtfIJyUFHBW5IFK0MRMvmDGvIdsfGhwq6fs=;
+        b=dC8LNQiZOc8Y9cleQx7I90Ilxgksx1StItiDqfDAw5kcu+wbT6Svs4BKe6de3VBEa8
+         2Vz0EVtEAeXZQrz5wyhwgRc1V1hk3ZBnZN5xcRPZGY/PEC3WDGhqxxwUHRJQdJVtRYP3
+         f+4j6TzqwFY0fyt3pnKplYB3IrwAqWudnuM18=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NT8F/Sj0Q9yRmFZyi3XfPWnAIOXfMEUrjgewG27HyFQ=;
-        b=mwK+tSa3uYGzZelVAEQ3tneojIyS5HJfbTe5mkCfGeWHzXtzXzjT4Ul84Xs78YdB5e
-         T3v5s+ca3dVMDpTVvpTQ7Z70YAJskitt0oUmYIU29/ZtVzYMLroU1irAl27tMoF//E0n
-         HqmfJpi8sbAM72oYEmC2THlq7Cp+++1kSjT3oEqgywid8mEpGDT/r70ajf19Te0aTuzk
-         U4ibkb8khbyISguApNtFndVQiQF6nZgKne/vE1zMiTiPUpA0Gzy/h2j7HuVeFb66IzTe
-         +yAMTjL152Cd+/HPJDF/URmc2mKqjNRHzD5biRNdfEvqvUcuFecMzCuJJMfqRM5+pmfv
-         hX9w==
-X-Gm-Message-State: ACrzQf0DFvzhtbK8g3EOsyaEEgSp5zBfbnvBist1nISQkH41aIP1+gTl
-        RN8XAXRdQWVrVtgfw5KksErPxA==
-X-Google-Smtp-Source: AMsMyM4y9lezo0/S2wIwtV3prmWvVTnyikbgsWsF5HtyKR42X3AVNNebI3RAI2KsxQVWW4FtvnHm9A==
-X-Received: by 2002:a63:6a03:0:b0:43a:18ce:7473 with SMTP id f3-20020a636a03000000b0043a18ce7473mr22561085pgc.616.1664229713937;
-        Mon, 26 Sep 2022 15:01:53 -0700 (PDT)
+        bh=UWb8wOcddtfIJyUFHBW5IFK0MRMvmDGvIdsfGhwq6fs=;
+        b=SFE7yflFlXYqmnJ1EYMxKx39kOf+ve0RZOlJh+fu1TzsVrnmLATKnJSNu3Hpn2FMgR
+         fbAj/Xe/fZqi26fg3zRmqH2v/0Qu47XmiBs7N7mDJUrtMxK2dTw2y2ku/MQZF1fetJ+g
+         UdeQ1AS4tSn2/CH5UXOpKyC7NuPY1Mv2I8whkza9r5vbKCjSGCKGBOLksjAs81Hf3+nG
+         fQ58OY46LfK4+XWbR0kOhr/L5tEEqG+nHt38Ub1yE/bEJ3etN2jOFRSpxVQTzJaNi0jU
+         e6nvaSFA1F2Ch0Bra/QgHEmx9VOCMFVjxmqas866UIg2L0kpgJPeqY/8jbmelvpmRG+L
+         UDnA==
+X-Gm-Message-State: ACrzQf1zeKI6w/0Ec9y1U0jQWpbNOWv3SAAOVeeYvdpaeGVT4Er9hdSu
+        YTFnki/qirWjHlfWLlFncnMCNw==
+X-Google-Smtp-Source: AMsMyM7++pwLxo9jbIU4Zan+KiWB3G+z82cHwCpvQIpOj2QII3T8ZRtHBoCOWvcGBn2icNismTMwTA==
+X-Received: by 2002:a63:3348:0:b0:439:db24:8b02 with SMTP id z69-20020a633348000000b00439db248b02mr21383347pgz.425.1664229724728;
+        Mon, 26 Sep 2022 15:02:04 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t7-20020a63eb07000000b0043a0de69c94sm11034189pgh.14.2022.09.26.15.01.53
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090340cf00b001754a3c5404sm11444207pld.212.2022.09.26.15.02.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 15:01:53 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 15:01:52 -0700
+        Mon, 26 Sep 2022 15:02:04 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:02:03 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] dmaengine: sh: rcar-dmac: Replace zero-length
- arrays with DECLARE_FLEX_ARRAY() helper
-Message-ID: <202209261501.E08CDA4@keescook>
-References: <YzIdsJqsR3LH2qEK@work>
+Subject: Re: [PATCH][next] i2c: acpi: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <202209261502.AA269D2@keescook>
+References: <YzId7dQGWxMyXHEU@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzIdsJqsR3LH2qEK@work>
+In-Reply-To: <YzId7dQGWxMyXHEU@work>
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -68,7 +70,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 04:46:24PM -0500, Gustavo A. R. Silva wrote:
+On Mon, Sep 26, 2022 at 04:47:25PM -0500, Gustavo A. R. Silva wrote:
 > Zero-length arrays are deprecated and we are moving towards adopting
 > C99 flexible-array members, instead. So, replace zero-length arrays
 > declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
@@ -77,7 +79,7 @@ On Mon, Sep 26, 2022 at 04:46:24PM -0500, Gustavo A. R. Silva wrote:
 > This helper allows for flexible-array members in unions.
 > 
 > Link: https://github.com/KSPP/linux/issues/193
-> Link: https://github.com/KSPP/linux/issues/217
+> Link: https://github.com/KSPP/linux/issues/218
 > Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
 > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
