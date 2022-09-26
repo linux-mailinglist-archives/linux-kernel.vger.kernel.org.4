@@ -2,73 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A1D5EB314
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368765EB317
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiIZV2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S229864AbiIZV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiIZV2M (ORCPT
+        with ESMTP id S229853AbiIZV2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:28:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D8EA2231;
-        Mon, 26 Sep 2022 14:28:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2F9B811CE;
-        Mon, 26 Sep 2022 21:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D0ABBC433C1;
-        Mon, 26 Sep 2022 21:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664227686;
-        bh=YniGDJvhgWvXx0tSXMolKeJckrcNppbLd/3jlGQpUVg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mkmzBaKMq+QfzYjMNSV9EAbUoFPa4JwS/wqybxLK+E7QtzHwAaVnh9sRCecnGyT0e
-         MhcyT4wURl3xGMtDJ0S1sauOHh1zHAYhI92eywpxC/ntjQur/gBknuj/p4TYtux80i
-         IRfj7VtYY4OYgPHvwC6tmmp8kmRBxZuxEOXuvITAPblEoGPZHTQfcbQsULtqexkhPM
-         7pbwOxFL2HhlXxcqxwmQIhj9NyU6Y+ISJbqhCRoxGsnEbHsriJbaeLjFlL/31et2LX
-         a3eFJoIUZvdzUOmnXZ7Q3/kMb8Fz7lVzMNoordVG7Ck9v1G6bJ/8+xHf39wg+H7kH8
-         KXaYRN14k5OaQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC134C070C8;
-        Mon, 26 Sep 2022 21:28:06 +0000 (UTC)
-Subject: Re: [GIT PULL] ext4 last-minute fixup
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YzHqqg46Y34PX0Yq@mit.edu>
-References: <YzHqqg46Y34PX0Yq@mit.edu>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YzHqqg46Y34PX0Yq@mit.edu>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_fixes2
-X-PR-Tracked-Commit-Id: a078dff870136090b5779ca2831870a6c5539d36
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3a710532cfe586710738670fb7e1ee44fc3c9b5c
-Message-Id: <166422768676.13634.1452641480416843872.pr-tracker-bot@kernel.org>
-Date:   Mon, 26 Sep 2022 21:28:06 +0000
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 17:28:43 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E82DA261B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:28:42 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so8279051pjl.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=BSxwN1blbO9o4mvvlVqSk+QYYJi/P+H+Gku7okdIw6w=;
+        b=oaiJ7NuxPxGbqm96aXsHRKz8mmI5aVzOWF52Lk+sYBMF1vQTjYGzPYC/Syo7aVaKsP
+         tBc9PDB1wev9DSE95fHpNcRmKnX1bUCR9+qasbTyo8uFfy/rVBDrYGlTRsI4J7/73fID
+         C47bD1+Gy94sDGiocZXnqmPbEfPSVoom3tWEGO1HnUFwnPWK6wxO1JokLHHtVhKUeRya
+         gaLXpXOdKezvzq0VnV8w+alHU78xBA3Z2PmJo4RpSM7j87KROqyKY5x9jCXDDd0Rsb1f
+         Xao7EUKLGoxfX2S6A85ZNKFea3Gkh0UZbTeONNnU/+hU/8VB4R0Jb7DL4OpDWMl0bN0u
+         0T1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=BSxwN1blbO9o4mvvlVqSk+QYYJi/P+H+Gku7okdIw6w=;
+        b=zs0CMIpXwvoHdtBZvcMtNtZCNrGJq5iIkk1LqcsTCfi635wbBKD051NNs57G3YNvrv
+         cS8Hoeefpp74GxtBYwVTmd/py44Il6855mpwu8oDFXo9OPKOcXSLFL37xB6L+C5aErSn
+         jPzKIQGT0qEZvRDtE8O+oGRGfcgCLMfUY/eHaSir0FBevAGWxrXSnJ9E9lUx5u6NBdL5
+         4XvlJ31+EMWOBfar9N2TNA9ckPqvlw3yT8goK+G8RYKEJ2jvhkOAuPWtgROVaVypymZM
+         Di1eJmIUq1WT7UPc0hjNBdsuB7fHT6f9fyJ31ga+6pYqsQWVtoqRgy7799E+eQH94Wdo
+         bMlw==
+X-Gm-Message-State: ACrzQf2aADuF4HypWnmE2QgqG8LV8jd/k5Y/ASdAhBItbThcGvaOaMp9
+        7Uf+xCdiXgqYuO90i9k0eLv81w==
+X-Google-Smtp-Source: AMsMyM6AOj3zqMG+GPdSN4AwTCkSWbU4QaG3nIR3j2iJMEGcwr7j7Ai63K2UpbYbdsGNWB39bnhmlQ==
+X-Received: by 2002:a17:90a:c711:b0:202:5cda:765c with SMTP id o17-20020a17090ac71100b002025cda765cmr800921pjt.35.1664227721973;
+        Mon, 26 Sep 2022 14:28:41 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k11-20020aa7998b000000b00537d60286c9sm12707916pfh.113.2022.09.26.14.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 14:28:41 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:28:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+Message-ID: <YzIZhn47brWBfQah@google.com>
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <YxtOEgJhe4EcAJsE@google.com>
+ <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
+ <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 26 Sep 2022 14:08:42 -0400:
+On Mon, Sep 26, 2022, David Hildenbrand wrote:
+> On 23.09.22 15:38, Emanuele Giuseppe Esposito wrote:
+> > 
+> > 
+> > Am 23/09/2022 um 15:21 schrieb David Hildenbrand:
+> > > On 23.09.22 15:10, Emanuele Giuseppe Esposito wrote:
+> > > > 
+> > > > 
+> > > > Am 19/09/2022 um 19:30 schrieb David Hildenbrand:
+> > > > > On 19.09.22 09:53, David Hildenbrand wrote:
+> > > > > > On 18.09.22 18:13, Emanuele Giuseppe Esposito wrote:
+> > > > > > > 
+> > > > > > > 
+> > > > > > > Am 09/09/2022 um 16:30 schrieb Sean Christopherson:
+> > > > > > > > On Fri, Sep 09, 2022, Emanuele Giuseppe Esposito wrote:
+> > > > > > > > > KVM is currently capable of receiving a single memslot update
+> > > > > > > > > through
+> > > > > > > > > the KVM_SET_USER_MEMORY_REGION ioctl.
+> > > > > > > > > The problem arises when we want to atomically perform multiple
+> > > > > > > > > updates,
+> > > > > > > > > so that readers of memslot active list avoid seeing incomplete
+> > > > > > > > > states.
+> > > > > > > > > 
+> > > > > > > > > For example, in RHBZ
+> > > > > > > > > https://bugzilla.redhat.com/show_bug.cgi?id=1979276
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_fixes2
+...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3a710532cfe586710738670fb7e1ee44fc3c9b5c
+> As Sean said "This is an awful lot of a complexity to take on for something
+> that appears to be solvable in userspace."
 
-Thank you!
+And if the userspace solution is unpalatable for whatever reason, I'd like to
+understand exactly what KVM behavior is problematic for userspace.  E.g. the
+above RHBZ bug should no longer be an issue as the buggy commit has since been
+reverted.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If the issue is KVM doing something nonsensical on a code fetch to MMIO, then I'd
+much rather fix _that_ bug and improve KVM's user exit ABI to let userspace handle
+the race _if_ userspace chooses not to pause vCPUs.
