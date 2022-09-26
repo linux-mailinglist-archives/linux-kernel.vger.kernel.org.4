@@ -2,170 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072D55EA86A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2865EA86C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbiIZObD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S234617AbiIZObN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbiIZOaW (ORCPT
+        with ESMTP id S234561AbiIZOaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:30:22 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E5F66125
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:43:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E376F58AE2F;
-        Mon, 26 Sep 2022 08:43:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 26 Sep 2022 08:43:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664196182; x=1664203382; bh=i4gXX7cMD1
-        +PjoZvTs+9A2oUnU38ddYmRKsQkQVxiMs=; b=utTKiHScIMKiv0MpVyZ4lYRSxq
-        IdIfp7iVLBBmx2S2eOAO53gfMKyfiFzEuir61MIGPNtwTE7wHXJHK7BGuOXHrQ+C
-        6X4WAl58F/xpl6BNrq0gnmF1iHRRK/dZjj6RZarM+rsvG+kwaBM11YzBKwU2fK+J
-        aYMxKD/57VEDUbQAprlFh6MyepwhDcYUwbQ2YQpPw2K0aafj9t8XvbE4bATWnjnG
-        9zsJZcovK2yYprsEajU1fQdq98AwZ1JXxZJxIQKfQR6JVyM9iGlnbc33dbmnjjBh
-        Jq564dxEOi7Rhb74/fPZNrDBmsyqdjHxdfYtEO3M+Nvo2uClDa6pcwPXODtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664196182; x=1664203382; bh=i4gXX7cMD1+PjoZvTs+9A2oUnU38
-        ddYmRKsQkQVxiMs=; b=Exp0lmhEFcQQlHZBqhBkTbZV5eb7+Y9htD6qSb+s/hgK
-        oVFKHN8HJq9Urzj4VJy3PyLbWdJ9n1dKgyqxCE+05OCGD885OoKYLqQi+Ud55+zy
-        RnwkhD9xF274QiLfb+kMpRK/hXxkE9RLFRllQKr3UShCwH4VfQDIuL3LsgnoaHQA
-        aVYCrQFwMjwEmcbRluRGExOFwQ8sOeZZH/cEMPHNks5Vb6dhw8s6eQ1AuRig0GOV
-        eAD6u45d6IWsbNVjU7bRobP+NZQt8a1kQwa+/rGROqgNf2+R5zIPDdLfDHmTtRPc
-        SbQXmxra9Viq7gcGHn5blSVPsVIwNbMy7sQ3vGMMeA==
-X-ME-Sender: <xms:Vp4xY35t1RrPNaALSMHuh1B7j94uji_FDc0WF_zgf44oMTSpfpclbA>
-    <xme:Vp4xY87uXKmLp9ZsVPzW4LKLiBZi2Qtf7Id_KCsiNFUVqwiERIq89SKC8Z9K9VD1X
-    pSqU4vHHxKHDrsaiwQ>
-X-ME-Received: <xmr:Vp4xY-cZZ1wFeWgO57h01Q7WFAblva8uy_54RuhC02BABgmJvfEOFmnQw5n9NjuVU-XBPrQKB16mWXK-lHGIiEg4NBmioW1bYckL>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:Vp4xY4L9AnEzzujabPzhsNgmzGczwxE5aCo-hgxyNFIM0zd-bd6AJQ>
-    <xmx:Vp4xY7KAJHokA38AoKvWik_cMIoXMQP0yZRl6yvN-iMXL7wV1b-Y-Q>
-    <xmx:Vp4xYxxUKU4-qvMnxN_ooEXC7nxV7xQuaa8m_z0yvZwsa4OkyikzBg>
-    <xmx:Vp4xY5ksBfiDGqIvX384MVdKlM8qOdvR5mmTsN5k9EWbuVI4_0PHdA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Sep 2022 08:43:01 -0400 (EDT)
-Date:   Mon, 26 Sep 2022 14:42:59 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Ben Skeggs <bskeggs@redhat.com>,
-        linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mon, 26 Sep 2022 10:30:46 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAEB10BB30;
+        Mon, 26 Sep 2022 05:43:19 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso6603992pjm.5;
+        Mon, 26 Sep 2022 05:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date;
+        bh=2AabGUL0Br5YICw1JFuVvftFuTUQ/EAqwxrV1oNwEpg=;
+        b=gV0TgiLvVN18Z7oqqL+K30h6ukAQLF3fLgo6VpUwIXswPgKS/dC1zLTpG4w+1dybyP
+         5g+EUy4DNPdTupoLPMba/dadlLg6qHQ3JF0WQ0725/3miUrdENZxx8PKQJbMCauPYJHb
+         KIyon3s24MK0fciq3al2cC10UM0OcRAEJ3U6Xlzq20V4vQdwOSXzQEd2LEB4dknmScs1
+         WPjEZ2PBucah670hSc2FDMcnMWw5/FuZgi6FrBBL+FANhXsegYJO0XrAMsfpWMJNZEYD
+         SsiaBhPDC22FGXxc8d2Bcs3GrLfLlEERPVMDfdadu4hOavk0zWe7S/+zZQAEd0z0SJL6
+         TwoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2AabGUL0Br5YICw1JFuVvftFuTUQ/EAqwxrV1oNwEpg=;
+        b=TCwXgyMegx3xcM7RE6COJ8oPmTu99UIQudCiYG8bytC8LSNtWC+C79F2jVaeynd91b
+         uzFSuDbv65HfW9VSZx2SmNc2ahbvPa21wtALlu4LnPz7f4W0lOaSBZK4nVSpT4TZ8uTc
+         QpbHc78BHxZAgiAIVjBFrjxhfjhVOheTLImrbnpFlEO1PJplPOsc3CZ8s0qFNvSz2jQG
+         5CXD8QgCtnedZJnKHCOke1z+dBejgFLTSO/8wuFw9fs3to0fyNvIgBwrdvCRfs36cnGg
+         jhH4zzUzFh5l5wyoF+dMFjnZf6zn4WvWaXLGu/ZOhYGW+5JSPHV+TaSD3AjmWiKrasvW
+         QJmw==
+X-Gm-Message-State: ACrzQf2c+RgU+s8TQsj7xU8ePWfhb+iqYPnhDG6YrfTOTVnRDHlfhPtS
+        w9AB4qLVWjUHkw6rhlNwZXk=
+X-Google-Smtp-Source: AMsMyM5RdeRGaIsVQucKXp8iHx60CYMSRbrZ3Y8OAN1jkEZLfeiKEvivTVNUW4YV7JdtqiHMDZMggg==
+X-Received: by 2002:a17:903:240b:b0:178:a475:6644 with SMTP id e11-20020a170903240b00b00178a4756644mr22150458plo.96.1664196198668;
+        Mon, 26 Sep 2022 05:43:18 -0700 (PDT)
+Received: from hcl-ThinkPad-T495 ([2401:4900:1ce2:8789:cdbd:fcea:ad98:effa])
+        by smtp.gmail.com with ESMTPSA id g8-20020a170902934800b00177f8f234cesm11021877plp.258.2022.09.26.05.43.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 26 Sep 2022 05:43:17 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 18:13:13 +0530
+From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
- display modes
-Message-ID: <20220926124259.o6fcfnxjy7gyzqz2@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
- <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
- <20220926101716.urehomr2lzv5pqln@houat>
- <CAMuHMdXonxXiw4x2PvnQ=xedOQO1y=K0O8g1+ixeSvXmzcOOVw@mail.gmail.com>
- <c714b53d-8e18-9105-9e27-8b783f246082@suse.de>
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v5] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
+Message-ID: <20220926124313.GA8400@hcl-ThinkPad-T495>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zlfwclqmvthsubza"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c714b53d-8e18-9105-9e27-8b783f246082@suse.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Added IPMB-13 channel for Debug Card communication.
+which improves the readability of the machine and makes
+it easier to debug the server and it will display some
+pieces of information about the server like "system info",
+"Critical sensors" and "critical sel".
 
---zlfwclqmvthsubza
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+--- v5- Updated commit message
+--- v4- Resolved syntax error
+--- v3- Updated the title and commit
+--- v2- Updated the title
+--- v1- Initial draft
+---
 
-On Mon, Sep 26, 2022 at 01:17:52PM +0200, Thomas Zimmermann wrote:
-> Hi
->=20
-> Am 26.09.22 um 12:34 schrieb Geert Uytterhoeven:
-> > Hi Maxime,
-> >=20
-> > On Mon, Sep 26, 2022 at 12:17 PM Maxime Ripard <maxime@cerno.tech> wrot=
-e:
-> > > On Fri, Sep 23, 2022 at 11:05:48AM +0200, Thomas Zimmermann wrote:
-> > > > > +   /* 63.556us * 13.5MHz =3D 858 pixels */
-> > > >=20
-> > > > I kind of get what the comment wants to tell me, but the units don'=
-t add up.
-> > >=20
-> > > I'm not sure how it doesn't add up?
-> > >=20
-> > > We have a frequency in Hz (equivalent to s^-1) and a duration in s, so
-> > > the result ends up with no dimension, which is to be expected for a
-> > > number of periods?
-> >=20
-> > To make the units add up, it should be 13.5 Mpixel/s
-> > (which is what a pixel clock of 13.5 MHz really means ;-)
->=20
-> Sort of. It leaves the time value as a magic number, which obfuscates wha=
-t's
-> happening.
->=20
-> The unit for htotal is pixels/scanline because if you multiply it with the
-> number of scanlines per frame (which is in vtotal), you get pixels/frame.
-> Multiplying with the frames per second results in the pixel clock in
-> pixels/second.
+Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-That's true, but both are true?
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+index 8864e9c312a8..84236df522dc 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+@@ -215,6 +215,17 @@
+ 	};
+ };
+ 
++&i2c13 {
++	status = "okay";
++	// Debug Card
++	multi-master;
++	ipmb13@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
+ &pwm_tacho {
+ 	status = "okay";
+ 	//FSC
+-- 
+2.17.1
 
-> That's a bit much for this comment. Hence, I suggested to remove these
-> comments entirely and document the relation among the numbers in a more
-> prominent location. The documentation for drm_display_mode would be a good
-> place, I guess.
-
-I'm not sure I understand what it's about. It's an explicit requirement
-of PAL and NTSC, why would something so specific be in the generic
-definition of drm_display_mode?
-
-Maxime
-
---zlfwclqmvthsubza
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYzGeUwAKCRDj7w1vZxhR
-xY5tAP9KJjA2OGdWz1GFAUwsCyA+v6gay+4c8P+X8ZcLHAES9QEAx6aTDtrTd2Yz
-yzAZ6N+Br4689AWFKhh40XQtNNC5JQE=
-=nm5h
------END PGP SIGNATURE-----
-
---zlfwclqmvthsubza--
