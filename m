@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF32D5EA527
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6397B5EA28C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239197AbiIZL6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S237352AbiIZLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239294AbiIZLzF (ORCPT
+        with ESMTP id S237031AbiIZLHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:55:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C346B7674C;
-        Mon, 26 Sep 2022 03:50:45 -0700 (PDT)
+        Mon, 26 Sep 2022 07:07:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8475FAFB;
+        Mon, 26 Sep 2022 03:34:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9994760A1E;
-        Mon, 26 Sep 2022 10:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7942C433D6;
-        Mon, 26 Sep 2022 10:49:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF49560B4A;
+        Mon, 26 Sep 2022 10:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00607C433C1;
+        Mon, 26 Sep 2022 10:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189341;
-        bh=DB6JJ0OuAQG/wy+oVUXwoV1NXhvvQF13oov5s/pVZwI=;
+        s=korg; t=1664188341;
+        bh=yPR+aSuoNrFsZhZZCkn3ZC1acLKJnWnud/6ONVX08PM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t9zbYKz2BW/iYuMFQIh99nm16rlKyMw7vJ6algIQVT496NnCZS53wUIAu4AqNIdjB
-         NNAN05R/U+LqvUQYboxoD9FSbe4QomG36zMWew4IOP5DOTzH4Axn/Qw2QO4OXOo51T
-         S8vTm2QR9288kLxEeU1AVXR1ggDClcr8ZU9cBZn4=
+        b=ndoXNgMJlnOP8+DWx29JWnoowME3ermyJPn4LZfY5dkT1+nmh3ZQaXpO51bkdvP0w
+         0NDfXA/uV9wHrl0oflxjCPOU8MBPJg+m0sFrawpA6IC2kSdSmrfdqNgWHyJ/2OXvoJ
+         m5ZY9Bk5WOoSeWTQLC55vcZJj0N2R6qHMfKHTULY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jussi Maki <joamaki@gmail.com>,
-        Jonathan Toppins <jtoppins@redhat.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 154/207] bonding: fix NULL deref in bond_rr_gen_slave_id
+        stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.10 117/141] serial: Create uart_xmit_advance()
 Date:   Mon, 26 Sep 2022 12:12:23 +0200
-Message-Id: <20220926100813.544905260@linuxfoundation.org>
+Message-Id: <20220926100758.688236534@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,135 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Toppins <jtoppins@redhat.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 0e400d602f46360752e4b32ce842dba3808e15e6 ]
+commit e77cab77f2cb3a1ca2ba8df4af45bb35617ac16d upstream.
 
-Fix a NULL dereference of the struct bonding.rr_tx_counter member because
-if a bond is initially created with an initial mode != zero (Round Robin)
-the memory required for the counter is never created and when the mode is
-changed there is never any attempt to verify the memory is allocated upon
-switching modes.
+A very common pattern in the drivers is to advance xmit tail
+index and do bookkeeping of Tx'ed characters. Create
+uart_xmit_advance() to handle it.
 
-This causes the following Oops on an aarch64 machine:
-    [  334.686773] Unable to handle kernel paging request at virtual address ffff2c91ac905000
-    [  334.694703] Mem abort info:
-    [  334.697486]   ESR = 0x0000000096000004
-    [  334.701234]   EC = 0x25: DABT (current EL), IL = 32 bits
-    [  334.706536]   SET = 0, FnV = 0
-    [  334.709579]   EA = 0, S1PTW = 0
-    [  334.712719]   FSC = 0x04: level 0 translation fault
-    [  334.717586] Data abort info:
-    [  334.720454]   ISV = 0, ISS = 0x00000004
-    [  334.724288]   CM = 0, WnR = 0
-    [  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000008044d662000
-    [  334.733944] [ffff2c91ac905000] pgd=0000000000000000, p4d=0000000000000000
-    [  334.740734] Internal error: Oops: 96000004 [#1] SMP
-    [  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xgene_hwmon
-    [  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g64ae13ed4784 #4
-    [  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v (SCP: 1.08.20211002) 12/01/2021
-    [  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-    [  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
-    [  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
-    [  334.807962] sp : ffff8000221733e0
-    [  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002217357c
-    [  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff980fa000
-    [  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff981029c0
-    [  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 0000000000000014
-    [  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaabe2f5a62
-    [  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 0000000000000000
-    [  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac857178ec
-    [  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007c2b3742
-    [  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9f554400
-    [  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff981029c0
-    [  334.882532] Call trace:
-    [  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
-    [  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
-    [  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
-    [  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
-    [  334.905622]  dev_hard_start_xmit+0xb4/0x220
-    [  334.909798]  __dev_queue_xmit+0x1a0/0x720
-    [  334.913799]  arp_xmit+0x3c/0xbc
-    [  334.916932]  arp_send_dst+0x98/0xd0
-    [  334.920410]  arp_solicit+0xe8/0x230
-    [  334.923888]  neigh_probe+0x60/0xb0
-    [  334.927279]  __neigh_event_send+0x3b0/0x470
-    [  334.931453]  neigh_resolve_output+0x70/0x90
-    [  334.935626]  ip_finish_output2+0x158/0x514
-    [  334.939714]  __ip_finish_output+0xac/0x1a4
-    [  334.943800]  ip_finish_output+0x40/0xfc
-    [  334.947626]  ip_output+0xf8/0x1a4
-    [  334.950931]  ip_send_skb+0x5c/0x100
-    [  334.954410]  ip_push_pending_frames+0x3c/0x60
-    [  334.958758]  raw_sendmsg+0x458/0x6d0
-    [  334.962325]  inet_sendmsg+0x50/0x80
-    [  334.965805]  sock_sendmsg+0x60/0x6c
-    [  334.969286]  __sys_sendto+0xc8/0x134
-    [  334.972853]  __arm64_sys_sendto+0x34/0x4c
-    [  334.976854]  invoke_syscall+0x78/0x100
-    [  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
-    [  334.985287]  do_el0_svc+0x38/0x4c
-    [  334.988591]  el0_svc+0x34/0x10c
-    [  334.991724]  el0t_64_sync_handler+0x11c/0x150
-    [  334.996072]  el0t_64_sync+0x190/0x194
-    [  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
-    [  335.005810] ---[ end trace 0000000000000000 ]---
-    [  335.010416] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-    [  335.017279] SMP: stopping secondary CPUs
-    [  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
-    [  335.027456] PHYS_OFFSET: 0x80000000
-    [  335.030932] CPU features: 0x0000,0085c029,19805c82
-    [  335.035713] Memory Limit: none
-    [  335.038756] Rebooting in 180 seconds..
-
-The fix is to allocate the memory in bond_open() which is guaranteed
-to be called before any packets are processed.
-
-Fixes: 848ca9182a7d ("net: bonding: Use per-cpu rr_tx_counter")
-CC: Jussi Maki <joamaki@gmail.com>
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220901143934.8850-2-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_main.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ include/linux/serial_core.h |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 83852e6719e2..ab7cb48f8dfd 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4155,6 +4155,12 @@ static int bond_open(struct net_device *bond_dev)
- 	struct list_head *iter;
- 	struct slave *slave;
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -300,6 +300,23 @@ struct uart_state {
+ /* number of characters left in xmit buffer before we ask for more */
+ #define WAKEUP_CHARS		256
  
-+	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
-+		bond->rr_tx_counter = alloc_percpu(u32);
-+		if (!bond->rr_tx_counter)
-+			return -ENOMEM;
-+	}
++/**
++ * uart_xmit_advance - Advance xmit buffer and account Tx'ed chars
++ * @up: uart_port structure describing the port
++ * @chars: number of characters sent
++ *
++ * This function advances the tail of circular xmit buffer by the number of
++ * @chars transmitted and handles accounting of transmitted bytes (into
++ * @up's icount.tx).
++ */
++static inline void uart_xmit_advance(struct uart_port *up, unsigned int chars)
++{
++	struct circ_buf *xmit = &up->state->xmit;
 +
- 	/* reset slave->backup and slave->inactive */
- 	if (bond_has_slaves(bond)) {
- 		bond_for_each_slave(bond, slave, iter) {
-@@ -6210,15 +6216,6 @@ static int bond_init(struct net_device *bond_dev)
- 	if (!bond->wq)
- 		return -ENOMEM;
++	xmit->tail = (xmit->tail + chars) & (UART_XMIT_SIZE - 1);
++	up->icount.tx += chars;
++}
++
+ struct module;
+ struct tty_driver;
  
--	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN) {
--		bond->rr_tx_counter = alloc_percpu(u32);
--		if (!bond->rr_tx_counter) {
--			destroy_workqueue(bond->wq);
--			bond->wq = NULL;
--			return -ENOMEM;
--		}
--	}
--
- 	spin_lock_init(&bond->stats_lock);
- 	netdev_lockdep_set_classes(bond_dev);
- 
--- 
-2.35.1
-
 
 
