@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAF75E9B9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8B85E9B9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiIZIGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S233898AbiIZIHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiIZIGZ (ORCPT
+        with ESMTP id S234174AbiIZIGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:06:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CCC237D0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:04:02 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id e18so3898759wmq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=fjd/wwBnMeI0DV/PUi7MEDTvbPZrf3Ei8JLKkheRfIc=;
-        b=jdPA8sqVYFN4kapZ9XAcbntn/UOQmmtt9Q+Ix4InstCcrd4Lo87awspNPQkUHuJ/aX
-         z1TSZ6WOb7VGZF9iakxf4oJl2DCKpaLioonfOom/v1F+GqnT/Xvr8oGnT2eneJH7Rwy+
-         yPpZMy7tv038H5QLCSibzBGjfCp/y9jrNb9kmGkz94lPFFzmveUkUfcvjlyGEQqIQFsn
-         Nscxve0/nxRCFw0IXojHwqPLtzpPKMTN5OY+POdd8ejQVdaeWkISLa4UU+/X0o2rZUFN
-         HlajCjmCUOz3Ut6HJVm0C6w27z+E634TsovhL3zt524BU6G3SqSKGQLOqI3w04XekjX/
-         ZluA==
+        Mon, 26 Sep 2022 04:06:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D7A1A83D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664179510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HEaIpM2M16xMJopiwVq/id6X3ZOhbK3867/FHXeVBbY=;
+        b=g8Ql32CBaEFqzxDSgFkf/ygDHegyN981+ENzyAYqLSggUTXTHQ3Sfalt7SJK6GRkOVKu19
+        cZ3FUzYBUNgXiRmDBR4xQXOvs6/8j0BTR8d1olbwYLU3te0assPPSTZqrjNfc+GGwTVnzO
+        QksyOGDgbLZgwKS2rQXmqxSyhvidSl4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-428-BuQ2S2eTPN-JMv4jq4WNVA-1; Mon, 26 Sep 2022 04:05:08 -0400
+X-MC-Unique: BuQ2S2eTPN-JMv4jq4WNVA-1
+Received: by mail-wm1-f71.google.com with SMTP id c3-20020a7bc843000000b003b486fc6a40so1558300wml.7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:05:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=fjd/wwBnMeI0DV/PUi7MEDTvbPZrf3Ei8JLKkheRfIc=;
-        b=QcSjkaBGXVFp7N9ND5+0KGTPLJ8NnA29aiJGpEaZhZ+OpG/ipe9UpjKSAo+rJHaAwv
-         iMbPMZfenLxk+MUhEOcBJ/OwLc+/mI9K9l1pc/DhPgyqgY75coGQ+aj9RlrSvlUESMRo
-         u8MwL9rwacyFHcJ66H/Zs+VqJSnbti0BwKQ2fBio+MzRDvwqVy2RFPKWq3cb9ZRijJF6
-         +z4YYo5GLoP1cyY/Af9heEghlK9W6hLkRq2/lPIm5iFXc4e/8vYte2mahPZLYmtTuJuB
-         pCt171w47a6tQ0LAS/HmgdUK3Xiy0X/HKR8QFdFlhuzSEv+WgkRlRgbCmIcWDhRCinTD
-         tIdg==
-X-Gm-Message-State: ACrzQf30PW9m+pvuDltju/2RydjdTfAqO8yWYufJAFbd6mm9iXq4mgAY
-        6HMn7RgZukMh/qeLqS5dQpwLqEJIovauf1nU
-X-Google-Smtp-Source: AMsMyM70DMzNhDNFCtPndNtPp8Oq+HakIQwZKWmT0Z9fs2emPxZu2QV/cd/U3yk671w8cSR15AQB0g==
-X-Received: by 2002:a05:600c:a49:b0:3a6:673a:2a9b with SMTP id c9-20020a05600c0a4900b003a6673a2a9bmr20581222wmq.3.1664179440497;
-        Mon, 26 Sep 2022 01:04:00 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d5281000000b002287d99b455sm13421183wrv.15.2022.09.26.01.03.57
+        bh=HEaIpM2M16xMJopiwVq/id6X3ZOhbK3867/FHXeVBbY=;
+        b=cwEQmHz31Dpm4q3M9j5L2lLtZMM/VH8JyLGymGb7plHBOUOE4eNgmWz9iZF6WH5ZV3
+         A7r4DJthkkB2bv/jWqSfomxKvN+NvJpSy0AqgfctN8rihbp5LpAg156CszTnrnCO03zu
+         tOGhjKA0bQbCZ02QRmaBpuc6RXz7hYS1OfF/2CydAPyj2jzQqlJv8vHKolRLKMt0bpbu
+         bi1I6wt2bLMtXS3+ybmDJ0zpORR7wEvs8stUOVYSVWxEsXRbqDjd60hTyJMIAJfS4neV
+         LMFln7gjMUlRyU3i2HRj61/l6dqT2at0CUsin2LK22XVafhzCi9TqHdUxyse+zVuyD9d
+         hBXQ==
+X-Gm-Message-State: ACrzQf24fm6yE7VzOzhA7Au1ofFA7YA0t1TZ2oBjpP9daol/GxS2TLsB
+        aJ53M+fNVAxl0iEhC47EKaoP5+B2gvv8aj53OmKbfu3oMN8tMLriwqLoRJ8wsPvY1ZYSu3G/fFV
+        NYq0mMaKXPOwIdwHDduCYm2Y6
+X-Received: by 2002:a5d:628e:0:b0:228:6961:aa6f with SMTP id k14-20020a5d628e000000b002286961aa6fmr13182648wru.36.1664179507813;
+        Mon, 26 Sep 2022 01:05:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4J7x73T6JSoN1RTPwEm4yUUW3MfoxwZ/vG03LyK4X5HKwl6uK5ImJt70EFv1g7qMgngcw8gg==
+X-Received: by 2002:a5d:628e:0:b0:228:6961:aa6f with SMTP id k14-20020a5d628e000000b002286961aa6fmr13182625wru.36.1664179507566;
+        Mon, 26 Sep 2022 01:05:07 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7? (p200300cbc7034b00e0907fa6b7d6d4a7.dip0.t-ipconnect.de. [2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7])
+        by smtp.gmail.com with ESMTPSA id g17-20020a5d4891000000b0022a2bacabbasm13989707wrq.31.2022.09.26.01.05.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:04:00 -0700 (PDT)
-Message-ID: <a79e942e-64be-1584-41aa-17fe6275c562@linaro.org>
-Date:   Mon, 26 Sep 2022 10:03:54 +0200
+        Mon, 26 Sep 2022 01:05:07 -0700 (PDT)
+Message-ID: <a99f0684-b075-7fc5-082a-2c0cc706574b@redhat.com>
+Date:   Mon, 26 Sep 2022 10:05:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/5] slimbus: qcom-ngd-ctrl: use
- devm_platform_get_and_ioremap_resource()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 4/4] mm/hwpoison: introduce per-memory_block hwpoison
+ counter counter
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-References: <20220923155740.422411-1-krzysztof.kozlowski@linaro.org>
- <20220923155740.422411-4-krzysztof.kozlowski@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220923155740.422411-4-krzysztof.kozlowski@linaro.org>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-5-naoya.horiguchi@linux.dev>
+ <20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp>
+ <20220923141204.GA1484969@ik1-406-35019.vs.sakura.ne.jp>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220923141204.GA1484969@ik1-406-35019.vs.sakura.ne.jp>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 17:57, Krzysztof Kozlowski wrote:
-> Simplify the code with devm_platform_get_and_ioremap_resource().
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/slimbus/qcom-ngd-ctrl.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-> index cec11aa106bf..548dd7661334 100644
-> --- a/drivers/slimbus/qcom-ngd-ctrl.c
-> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
-> @@ -1522,7 +1522,6 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
->   	struct qcom_slim_ngd_ctrl *ctrl;
-> -	struct resource *res;
->   	int ret;
->   	struct pdr_service *pds;
->   
-> @@ -1532,8 +1531,7 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
->   
->   	dev_set_drvdata(dev, ctrl);
->   
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	ctrl->base = devm_ioremap_resource(dev, res);
-> +	ctrl->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->   	if (IS_ERR(ctrl->base))
->   		return PTR_ERR(ctrl->base);
->   
+>   /*
+> @@ -2414,6 +2417,10 @@ int unpoison_memory(unsigned long pfn)
+>   unlock_mutex:
+>   	mutex_unlock(&mf_mutex);
+>   	if (!ret || freeit) {
+> +		/*
+> +		 * TODO: per-memory_block counter might break when the page
+> +		 * size to be unpoisoned is larger than a memory_block.
+> +		 */
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Hmm, but that happens easily e.g., with 1 GiB hugetlb page and 128 MiB 
+memory section/block size. What would be the right thing to do here? The 
+TODO should rather spell that out instead of just stating the problem.
+
+-- 
+Thanks,
+
+David / dhildenb
+
