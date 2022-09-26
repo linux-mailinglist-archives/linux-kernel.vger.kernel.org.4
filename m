@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3183A5EA0BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386DF5E9F95
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236303AbiIZKlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S235215AbiIZK1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbiIZKjS (ORCPT
+        with ESMTP id S235665AbiIZKYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF2653D0E;
-        Mon, 26 Sep 2022 03:23:08 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B59C4DB46;
+        Mon, 26 Sep 2022 03:18:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E5A560B2F;
-        Mon, 26 Sep 2022 10:22:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52627C433D7;
-        Mon, 26 Sep 2022 10:22:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 748D7B80936;
+        Mon, 26 Sep 2022 10:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B943AC4314B;
+        Mon, 26 Sep 2022 10:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187770;
-        bh=4dbwDwZ0eBnfjVz2XPlQVhmi10ewahaSZNSGTnSir1w=;
+        s=korg; t=1664187476;
+        bh=aPkn8qEGPPOgAxRGlG5ronfsQ/tTwSJPOGcRU1zvwQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zuO90YR1bmBpJWWR7W3jgxj+B/uKmiOfRnJGR3i3kQQB3YwMzULOgE9Ryfsa/DmFW
-         2NrKba1YEuiL67sG8/N+cVMxoGF7CLdvs2pvQr5+ExLztEDFoRUz1hgePP0KuV2o2g
-         jUs2BdyIWyHdiihsJdxgtfYggimQVxpjSHVfPT/c=
+        b=CQdPAcywrsGTfWUAMNjGjchsHWhdlBssYxMCKsHIgSMu4vb87kiAj0sdG5RMDVONz
+         MD34U5NlxB+DG3lNXKnGTiJv8RFZmUsSOE1D4r0byRKKLe4jMwZjwCUj+8O1lSWfmL
+         WelIuI0/m4mHYFSlvlbdAkfO9pPPlc7Kyl6r6IN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Carl Yin <carl.yin@quectel.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 054/120] USB: serial: option: add Quectel BG95 0x0203 composition
+        stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Huckleberry <nhuck@google.com>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 08/58] mvpp2: no need to check return value of debugfs_create functions
 Date:   Mon, 26 Sep 2022 12:11:27 +0200
-Message-Id: <20220926100752.771935112@linuxfoundation.org>
+Message-Id: <20220926100741.719639256@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,58 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carl Yin(殷张成) <carl.yin@quectel.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit f8f67eff6847f9b8d753fa029723bcc54296055a upstream.
+[ Upstream commit e6882aa623f6fe0d80fa82ebf3ee78c353bffbe1 ]
 
-Add support for the following Quectel BG95 composition:
+When calling debugfs functions, there is no need to ever check the
+return value.  The function can work or not, but the code logic should
+never do something different based on this.
 
-0x0203: Diag + GNSS + Modem + ECM
-
-usb-devices output:
-T:  Bus=01 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0203 Rev= 0.00
-S:  Manufacturer=Quectel, Incorporated
-S:  Product=Quectel LPWA Module
-S:  SerialNumber=71d3a21b
-C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Signed-off-by: Carl Yin <carl.yin@quectel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Huckleberry <nhuck@google.com>
+Cc: netdev@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Stable-dep-of: fe2c9c61f668 ("net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/option.c |    2 ++
- 1 file changed, 2 insertions(+)
+ .../ethernet/marvell/mvpp2/mvpp2_debugfs.c    | 19 +------------------
+ 1 file changed, 1 insertion(+), 18 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1138,6 +1138,8 @@ static const struct usb_device_id option
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0xff, 0xff),
- 	  .driver_info = NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95, 0xff, 0, 0) },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x0203, 0xff), /* BG95-M3 */
-+	  .driver_info = ZLP },
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
+diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+index f9744a61e5dd..87d9cbe10cec 100644
+--- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
++++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+@@ -484,8 +484,6 @@ static int mvpp2_dbgfs_flow_port_init(struct dentry *parent,
+ 	struct dentry *port_dir;
+ 
+ 	port_dir = debugfs_create_dir(port->dev->name, parent);
+-	if (IS_ERR(port_dir))
+-		return PTR_ERR(port_dir);
+ 
+ 	/* This will be freed by 'hash_opts' release op */
+ 	port_entry = kmalloc(sizeof(*port_entry), GFP_KERNEL);
+@@ -515,8 +513,6 @@ static int mvpp2_dbgfs_flow_entry_init(struct dentry *parent,
+ 	sprintf(flow_entry_name, "%02d", flow);
+ 
+ 	flow_entry_dir = debugfs_create_dir(flow_entry_name, parent);
+-	if (!flow_entry_dir)
+-		return -ENOMEM;
+ 
+ 	/* This will be freed by 'type' release op */
+ 	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
+@@ -554,8 +550,6 @@ static int mvpp2_dbgfs_flow_init(struct dentry *parent, struct mvpp2 *priv)
+ 	int i, ret;
+ 
+ 	flow_dir = debugfs_create_dir("flows", parent);
+-	if (!flow_dir)
+-		return -ENOMEM;
+ 
+ 	for (i = 0; i < MVPP2_N_FLOWS; i++) {
+ 		ret = mvpp2_dbgfs_flow_entry_init(flow_dir, priv, i);
+@@ -579,8 +573,6 @@ static int mvpp2_dbgfs_prs_entry_init(struct dentry *parent,
+ 	sprintf(prs_entry_name, "%03d", tid);
+ 
+ 	prs_entry_dir = debugfs_create_dir(prs_entry_name, parent);
+-	if (!prs_entry_dir)
+-		return -ENOMEM;
+ 
+ 	/* The 'valid' entry's ops will free that */
+ 	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
+@@ -618,8 +610,6 @@ static int mvpp2_dbgfs_prs_init(struct dentry *parent, struct mvpp2 *priv)
+ 	int i, ret;
+ 
+ 	prs_dir = debugfs_create_dir("parser", parent);
+-	if (!prs_dir)
+-		return -ENOMEM;
+ 
+ 	for (i = 0; i < MVPP2_PRS_TCAM_SRAM_SIZE; i++) {
+ 		ret = mvpp2_dbgfs_prs_entry_init(prs_dir, priv, i);
+@@ -636,8 +626,6 @@ static int mvpp2_dbgfs_port_init(struct dentry *parent,
+ 	struct dentry *port_dir;
+ 
+ 	port_dir = debugfs_create_dir(port->dev->name, parent);
+-	if (IS_ERR(port_dir))
+-		return PTR_ERR(port_dir);
+ 
+ 	debugfs_create_file("parser_entries", 0444, port_dir, port,
+ 			    &mvpp2_dbgfs_port_parser_fops);
+@@ -671,15 +659,10 @@ void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name)
+ 	int ret, i;
+ 
+ 	mvpp2_root = debugfs_lookup(MVPP2_DRIVER_NAME, NULL);
+-	if (!mvpp2_root) {
++	if (!mvpp2_root)
+ 		mvpp2_root = debugfs_create_dir(MVPP2_DRIVER_NAME, NULL);
+-		if (IS_ERR(mvpp2_root))
+-			return;
+-	}
+ 
+ 	mvpp2_dir = debugfs_create_dir(name, mvpp2_root);
+-	if (IS_ERR(mvpp2_dir))
+-		return;
+ 
+ 	priv->dbgfs_dir = mvpp2_dir;
+ 
+-- 
+2.35.1
+
 
 
