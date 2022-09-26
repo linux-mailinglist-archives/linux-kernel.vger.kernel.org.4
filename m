@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87D05EA504
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B567A5EA3EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238848AbiIZL4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S238123AbiIZLgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238849AbiIZLx6 (ORCPT
+        with ESMTP id S238267AbiIZLef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:53:58 -0400
+        Mon, 26 Sep 2022 07:34:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA82F101D3;
-        Mon, 26 Sep 2022 03:49:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BCE6DFA1;
+        Mon, 26 Sep 2022 03:43:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D290B8095B;
-        Mon, 26 Sep 2022 10:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA39C433C1;
-        Mon, 26 Sep 2022 10:49:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 853AEB801BF;
+        Mon, 26 Sep 2022 10:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF88DC433C1;
+        Mon, 26 Sep 2022 10:41:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189367;
-        bh=vOPXaVottFLXDjh23uGbUV0JWH7K6CBH8tJz+br+0xQ=;
+        s=korg; t=1664188896;
+        bh=QlSD194E8UHIoxw/b4CWEX4R9SntIHtgTWnYrvSgo8A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bjrh8jiETcnXiLhJw1t/jEWZya9YApJXy8sHPIOtahtSZ0iHH7iUUapSKE6KviKto
-         CFcv+svloLt8E/QwFDQ852dRgYVBOEI1wuLZ9v1SA0wmhAxM2lFACX/Ipi4oeUYG+1
-         nVrP82hAc87VKQ6ES9rhvH8fvvim7cpUlCDQ/c5Q=
+        b=Eoap5wtvuNb81myh0EnLJ1a/mVWQkDlJ893Ae5sKSe4Lme5C3JUbP3QLe790ve78U
+         +uaXTyK9dCfI+LIYAhUM6KW4yqI93p9T8UMFBspxgtlY3DL9ZfCiqJV448FFLf+nXx
+         lEwXOFNV2n7hJT/GXMdCfQm6mqL9Bpk/q+Xj39W8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5.19 162/207] serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 117/148] KVM: x86/mmu: Fold rmap_recycle into rmap_add
 Date:   Mon, 26 Sep 2022 12:12:31 +0200
-Message-Id: <20220926100813.921698308@linuxfoundation.org>
+Message-Id: <20220926100800.523753916@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: David Matlack <dmatlack@google.com>
 
-commit 754f68044c7dd6c52534ba3e0f664830285c4b15 upstream.
+[ Upstream commit 68be1306caea8948738cab04014ca4506b590d38 ]
 
-DMA complete & stop paths did not correctly account Tx'ed characters
-into icount.tx. Using uart_xmit_advance() fixes the problem.
+Consolidate rmap_recycle and rmap_add into a single function since they
+are only ever called together (and only from one place). This has a nice
+side effect of eliminating an extra kvm_vcpu_gfn_to_memslot(). In
+addition it makes mmu_set_spte(), which is a very long function, a
+little shorter.
 
-Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
-Cc: <stable@vger.kernel.org> # serial: Create uart_xmit_advance()
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220901143934.8850-3-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+No functional change intended.
+
+Signed-off-by: David Matlack <dmatlack@google.com>
+Message-Id: <20210813203504.2742757-3-dmatlack@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Stable-dep-of: 604f533262ae ("KVM: x86/mmu: add missing update to max_mmu_rmap_size")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial-tegra.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 40 ++++++++++++++--------------------------
+ 1 file changed, 14 insertions(+), 26 deletions(-)
 
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -525,7 +525,7 @@ static void tegra_uart_tx_dma_complete(v
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
- 	spin_lock_irqsave(&tup->uport.lock, flags);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
- 		uart_write_wakeup(&tup->uport);
-@@ -613,7 +613,6 @@ static unsigned int tegra_uart_tx_empty(
- static void tegra_uart_stop_tx(struct uart_port *u)
- {
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
--	struct circ_buf *xmit = &tup->uport.state->xmit;
- 	struct dma_tx_state state;
- 	unsigned int count;
- 
-@@ -624,7 +623,7 @@ static void tegra_uart_stop_tx(struct ua
- 	dmaengine_tx_status(tup->tx_dma_chan, tup->tx_cookie, &state);
- 	count = tup->tx_bytes_requested - state.residue;
- 	async_tx_ack(tup->tx_dma_desc);
--	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
-+	uart_xmit_advance(&tup->uport, count);
- 	tup->tx_in_progress = 0;
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index f267cca9fe09..ba1749a770eb 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1071,20 +1071,6 @@ static bool rmap_can_add(struct kvm_vcpu *vcpu)
+ 	return kvm_mmu_memory_cache_nr_free_objects(mc);
  }
  
+-static int rmap_add(struct kvm_vcpu *vcpu, u64 *spte, gfn_t gfn)
+-{
+-	struct kvm_memory_slot *slot;
+-	struct kvm_mmu_page *sp;
+-	struct kvm_rmap_head *rmap_head;
+-
+-	sp = sptep_to_sp(spte);
+-	kvm_mmu_page_set_gfn(sp, spte - sp->spt, gfn);
+-	slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
+-	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
+-	return pte_list_add(vcpu, spte, rmap_head);
+-}
+-
+-
+ static void rmap_remove(struct kvm *kvm, u64 *spte)
+ {
+ 	struct kvm_memslots *slots;
+@@ -1097,9 +1083,9 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
+ 	gfn = kvm_mmu_page_get_gfn(sp, spte - sp->spt);
+ 
+ 	/*
+-	 * Unlike rmap_add and rmap_recycle, rmap_remove does not run in the
+-	 * context of a vCPU so have to determine which memslots to use based
+-	 * on context information in sp->role.
++	 * Unlike rmap_add, rmap_remove does not run in the context of a vCPU
++	 * so we have to determine which memslots to use based on context
++	 * information in sp->role.
+ 	 */
+ 	slots = kvm_memslots_for_spte_role(kvm, sp->role);
+ 
+@@ -1639,19 +1625,24 @@ static bool kvm_test_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 
+ #define RMAP_RECYCLE_THRESHOLD 1000
+ 
+-static void rmap_recycle(struct kvm_vcpu *vcpu, u64 *spte, gfn_t gfn)
++static void rmap_add(struct kvm_vcpu *vcpu, u64 *spte, gfn_t gfn)
+ {
+ 	struct kvm_memory_slot *slot;
+-	struct kvm_rmap_head *rmap_head;
+ 	struct kvm_mmu_page *sp;
++	struct kvm_rmap_head *rmap_head;
++	int rmap_count;
+ 
+ 	sp = sptep_to_sp(spte);
++	kvm_mmu_page_set_gfn(sp, spte - sp->spt, gfn);
+ 	slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
+ 	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
++	rmap_count = pte_list_add(vcpu, spte, rmap_head);
+ 
+-	kvm_unmap_rmapp(vcpu->kvm, rmap_head, NULL, gfn, sp->role.level, __pte(0));
+-	kvm_flush_remote_tlbs_with_address(vcpu->kvm, sp->gfn,
+-			KVM_PAGES_PER_HPAGE(sp->role.level));
++	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
++		kvm_unmap_rmapp(vcpu->kvm, rmap_head, NULL, gfn, sp->role.level, __pte(0));
++		kvm_flush_remote_tlbs_with_address(
++				vcpu->kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
++	}
+ }
+ 
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+@@ -2718,7 +2709,6 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+ 			bool host_writable)
+ {
+ 	int was_rmapped = 0;
+-	int rmap_count;
+ 	int set_spte_ret;
+ 	int ret = RET_PF_FIXED;
+ 	bool flush = false;
+@@ -2778,9 +2768,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+ 
+ 	if (!was_rmapped) {
+ 		kvm_update_page_stats(vcpu->kvm, level, 1);
+-		rmap_count = rmap_add(vcpu, sptep, gfn);
+-		if (rmap_count > RMAP_RECYCLE_THRESHOLD)
+-			rmap_recycle(vcpu, sptep, gfn);
++		rmap_add(vcpu, sptep, gfn);
+ 	}
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 
