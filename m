@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4615EA225
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEC85E9F28
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237254AbiIZLCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S235198AbiIZKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiIZLAb (ORCPT
+        with ESMTP id S235167AbiIZKSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:00:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C1F5E306;
-        Mon, 26 Sep 2022 03:31:34 -0700 (PDT)
+        Mon, 26 Sep 2022 06:18:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216883F316;
+        Mon, 26 Sep 2022 03:15:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39CB6B80920;
-        Mon, 26 Sep 2022 10:30:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A67C433D6;
-        Mon, 26 Sep 2022 10:30:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84FE7B80918;
+        Mon, 26 Sep 2022 10:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF82C433C1;
+        Mon, 26 Sep 2022 10:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188201;
-        bh=FI7rEFrMOyPLbRt3cV65JHtUQoUe/HdoklP+CaTR/68=;
+        s=korg; t=1664187321;
+        bh=0r18/rJ3cYFSKrfz5tNr4Zz5tbSSiStUeAvNmKrQpNI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=McBw2FW1NsH81rD8heYbykkcTGZu22HK2QmibVIsL4Kku7CzuyxQ7QDkCzFvTeUzl
-         /b/+q/sJ19tjJ7mxFIspuHJhEIvB7qwsWg2Ghrt2H7nosdMYuGF+HxLOy8bY1GkSvQ
-         b0gK7xcyYZ44higu8bRbYcSj7CZZ7PQeQIIfr+V0=
+        b=g2zifXBdYV6ZFcM9syBK1NQ8oZgmNzszbel/lDyl5ZoF5LZ+j7TMTOYl1OPFd7Zm4
+         qtiyVrLoTx3NYpBIVd4EY6lb24IE6VPSfvtAaB6FMEUCPHQhZAP3Af59sJF2AYGYwg
+         VpviYpLWtSmH/e7PBA6H/eGBdPosDiHKzAFfLVYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, zhang kai <zhangkaiheb@126.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 073/141] net: let flow have same hash in two directions
+Subject: [PATCH 4.14 11/40] net: usb: qmi_wwan: add Quectel RM520N
 Date:   Mon, 26 Sep 2022 12:11:39 +0200
-Message-Id: <20220926100757.094339606@linuxfoundation.org>
+Message-Id: <20220926100738.644961631@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang kai <zhangkaiheb@126.com>
+From: jerry.meng <jerry-meng@foxmail.com>
 
-[ Upstream commit 1e60cebf82948cfdc9497ea4553bab125587593c ]
+[ Upstream commit e1091e226a2bab4ded1fe26efba2aee1aab06450 ]
 
-using same source and destination ip/port for flow hash calculation
-within the two directions.
+add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
 
-Signed-off-by: zhang kai <zhangkaiheb@126.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Stable-dep-of: 64ae13ed4784 ("net: core: fix flow symmetric hash")
+0x0801: DIAG + NMEA + AT + MODEM + RMNET
+
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=RM520N-GL
+S:  SerialNumber=384af524
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/flow_dissector.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index f9baa9b1c77f..aad311c73810 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -1485,7 +1485,7 @@ __be32 flow_get_u32_dst(const struct flow_keys *flow)
- }
- EXPORT_SYMBOL(flow_get_u32_dst);
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 0c3129c9ac08..75c09ba6a45f 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1049,6 +1049,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
++	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
  
--/* Sort the source and destination IP (and the ports if the IP are the same),
-+/* Sort the source and destination IP and the ports,
-  * to have consistent hash within the two directions
-  */
- static inline void __flow_hash_consistentify(struct flow_keys *keys)
-@@ -1496,11 +1496,11 @@ static inline void __flow_hash_consistentify(struct flow_keys *keys)
- 	case FLOW_DISSECTOR_KEY_IPV4_ADDRS:
- 		addr_diff = (__force u32)keys->addrs.v4addrs.dst -
- 			    (__force u32)keys->addrs.v4addrs.src;
--		if ((addr_diff < 0) ||
--		    (addr_diff == 0 &&
--		     ((__force u16)keys->ports.dst <
--		      (__force u16)keys->ports.src))) {
-+		if (addr_diff < 0)
- 			swap(keys->addrs.v4addrs.src, keys->addrs.v4addrs.dst);
-+
-+		if ((__force u16)keys->ports.dst <
-+		    (__force u16)keys->ports.src) {
- 			swap(keys->ports.src, keys->ports.dst);
- 		}
- 		break;
-@@ -1508,13 +1508,13 @@ static inline void __flow_hash_consistentify(struct flow_keys *keys)
- 		addr_diff = memcmp(&keys->addrs.v6addrs.dst,
- 				   &keys->addrs.v6addrs.src,
- 				   sizeof(keys->addrs.v6addrs.dst));
--		if ((addr_diff < 0) ||
--		    (addr_diff == 0 &&
--		     ((__force u16)keys->ports.dst <
--		      (__force u16)keys->ports.src))) {
-+		if (addr_diff < 0) {
- 			for (i = 0; i < 4; i++)
- 				swap(keys->addrs.v6addrs.src.s6_addr32[i],
- 				     keys->addrs.v6addrs.dst.s6_addr32[i]);
-+		}
-+		if ((__force u16)keys->ports.dst <
-+		    (__force u16)keys->ports.src) {
- 			swap(keys->ports.src, keys->ports.dst);
- 		}
- 		break;
+ 	/* 3. Combined interface devices matching on interface number */
+ 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 -- 
 2.35.1
 
