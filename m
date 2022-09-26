@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE9F5EA4A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10805E9FE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238951AbiIZLsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S235745AbiIZKa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbiIZLqo (ORCPT
+        with ESMTP id S235619AbiIZK2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B468974CDC;
-        Mon, 26 Sep 2022 03:47:30 -0700 (PDT)
+        Mon, 26 Sep 2022 06:28:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108DC3FA15;
+        Mon, 26 Sep 2022 03:18:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9AE960C41;
-        Mon, 26 Sep 2022 10:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD373C433D6;
-        Mon, 26 Sep 2022 10:45:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A1F560B7E;
+        Mon, 26 Sep 2022 10:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC70DC433C1;
+        Mon, 26 Sep 2022 10:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189153;
-        bh=AxCMt/ANClaQoCG6b0NU/yzunWIxmxLfOMnEhAJ6OZk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xr/t66AJ67pzv/x6g8V7zo5PNQ6CZV2/0r3CyJtmS9XFkKsU7oQjbQoi2EML4oi3J
-         rrJ0gCavXvgxHzUmCxKVE0UJlCnOxicUVAx2fZd9cIAT0oiHBghAJSwNi9Y9lkmg/3
-         16FBtKOGpU2cqLrn3nJq7QBXrjA46D8zdoNoFKfM=
+        s=korg; t=1664187482;
+        bh=VyhYppQtrr4DB8VWN/ppBVtWxV4FQNM3ki0NnKrdbl4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KSASUJJWEXwxD8bk6e3PrLq26OMkJVoBEILm8xtKhmQenVioJfQG47tzj4yv/eczD
+         Ps5Pv2IYy8uRogpmw7EPQApdqr/OD8XMgjR+jTjqpL7CTuSPQCwR6vthmqYvlxiORr
+         +izqTtXIyhrZ6EnHHJr2vullImGyEVKH1/9zu2OI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Ertman <david.m.ertman@intel.com>,
-        Helena Anna Dubel <helena.anna.dubel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 090/207] ice: Dont double unplug aux on peer initiated reset
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.19 00/58] 4.19.260-rc1 review
 Date:   Mon, 26 Sep 2022 12:11:19 +0200
-Message-Id: <20220926100810.617881253@linuxfoundation.org>
+Message-Id: <20220926100741.430882406@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.260-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.260-rc1
+X-KernelTest-Deadline: 2022-09-28T10:07+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -55,147 +62,261 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Ertman <david.m.ertman@intel.com>
+This is the start of the stable review cycle for the 4.19.260 release.
+There are 58 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit 23c619190318376769ad7b61504c2ea0703fb783 ]
+Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+Anything received after that time might be too late.
 
-In the IDC callback that is accessed when the aux drivers request a reset,
-the function to unplug the aux devices is called.  This function is also
-called in the ice_prepare_for_reset function. This double call is causing
-a "scheduling while atomic" BUG.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.260-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-[  662.676430] ice 0000:4c:00.0 rocep76s0: cqp opcode = 0x1 maj_err_code = 0xffff min_err_code = 0x8003
+thanks,
 
-[  662.676609] ice 0000:4c:00.0 rocep76s0: [Modify QP Cmd Error][op_code=8] status=-29 waiting=1 completion_err=1 maj=0xffff min=0x8003
+greg k-h
 
-[  662.815006] ice 0000:4c:00.0 rocep76s0: ICE OICR event notification: oicr = 0x10000003
+-------------
+Pseudo-Shortlog of commits:
 
-[  662.815014] ice 0000:4c:00.0 rocep76s0: critical PE Error, GLPE_CRITERR=0x00011424
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.260-rc1
 
-[  662.815017] ice 0000:4c:00.0 rocep76s0: Requesting a reset
+Raymond Tan <raymond.tan@intel.com>
+    usb: dwc3: pci: Allow Elkhart Lake to utilize DSM method for PM functionality
 
-[  662.815475] BUG: scheduling while atomic: swapper/37/0/0x00010002
+Jan Kara <jack@suse.cz>
+    ext4: make directory inode spreading reflect flexbg size
 
-[  662.815475] BUG: scheduling while atomic: swapper/37/0/0x00010002
-[  662.815477] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs rfkill 8021q garp mrp stp llc vfat fat rpcrdma intel_rapl_msr intel_rapl_common sunrpc i10nm_edac rdma_ucm nfit ib_srpt libnvdimm ib_isert iscsi_target_mod x86_pkg_temp_thermal intel_powerclamp coretemp target_core_mod snd_hda_intel ib_iser snd_intel_dspcfg libiscsi snd_intel_sdw_acpi scsi_transport_iscsi kvm_intel iTCO_wdt rdma_cm snd_hda_codec kvm iw_cm ipmi_ssif iTCO_vendor_support snd_hda_core irqbypass crct10dif_pclmul crc32_pclmul ghash_clmulni_intel snd_hwdep snd_seq snd_seq_device rapl snd_pcm snd_timer isst_if_mbox_pci pcspkr isst_if_mmio irdma intel_uncore idxd acpi_ipmi joydev isst_if_common snd mei_me idxd_bus ipmi_si soundcore i2c_i801 mei ipmi_devintf i2c_smbus i2c_ismt ipmi_msghandler acpi_power_meter acpi_pad rv(OE) ib_uverbs ib_cm ib_core xfs libcrc32c ast i2c_algo_bit drm_vram_helper drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops drm_ttm_helpe
- r ttm
-[  662.815546]  nvme nvme_core ice drm crc32c_intel i40e t10_pi wmi pinctrl_emmitsburg dm_mirror dm_region_hash dm_log dm_mod fuse
-[  662.815557] Preemption disabled at:
-[  662.815558] [<0000000000000000>] 0x0
-[  662.815563] CPU: 37 PID: 0 Comm: swapper/37 Kdump: loaded Tainted: G S         OE     5.17.1 #2
-[  662.815566] Hardware name: Intel Corporation D50DNP/D50DNP, BIOS SE5C6301.86B.6624.D18.2111021741 11/02/2021
-[  662.815568] Call Trace:
-[  662.815572]  <IRQ>
-[  662.815574]  dump_stack_lvl+0x33/0x42
-[  662.815581]  __schedule_bug.cold.147+0x7d/0x8a
-[  662.815588]  __schedule+0x798/0x990
-[  662.815595]  schedule+0x44/0xc0
-[  662.815597]  schedule_preempt_disabled+0x14/0x20
-[  662.815600]  __mutex_lock.isra.11+0x46c/0x490
-[  662.815603]  ? __ibdev_printk+0x76/0xc0 [ib_core]
-[  662.815633]  device_del+0x37/0x3d0
-[  662.815639]  ice_unplug_aux_dev+0x1a/0x40 [ice]
-[  662.815674]  ice_schedule_reset+0x3c/0xd0 [ice]
-[  662.815693]  irdma_iidc_event_handler.cold.7+0xb6/0xd3 [irdma]
-[  662.815712]  ? bitmap_find_next_zero_area_off+0x45/0xa0
-[  662.815719]  ice_send_event_to_aux+0x54/0x70 [ice]
-[  662.815741]  ice_misc_intr+0x21d/0x2d0 [ice]
-[  662.815756]  __handle_irq_event_percpu+0x4c/0x180
-[  662.815762]  handle_irq_event_percpu+0xf/0x40
-[  662.815764]  handle_irq_event+0x34/0x60
-[  662.815766]  handle_edge_irq+0x9a/0x1c0
-[  662.815770]  __common_interrupt+0x62/0x100
-[  662.815774]  common_interrupt+0xb4/0xd0
-[  662.815779]  </IRQ>
-[  662.815780]  <TASK>
-[  662.815780]  asm_common_interrupt+0x1e/0x40
-[  662.815785] RIP: 0010:cpuidle_enter_state+0xd6/0x380
-[  662.815789] Code: 49 89 c4 0f 1f 44 00 00 31 ff e8 65 d7 95 ff 45 84 ff 74 12 9c 58 f6 c4 02 0f 85 64 02 00 00 31 ff e8 ae c5 9c ff fb 45 85 f6 <0f> 88 12 01 00 00 49 63 d6 4c 2b 24 24 48 8d 04 52 48 8d 04 82 49
-[  662.815791] RSP: 0018:ff2c2c4f18edbe80 EFLAGS: 00000202
-[  662.815793] RAX: ff280805df140000 RBX: 0000000000000002 RCX: 000000000000001f
-[  662.815795] RDX: 0000009a52da2d08 RSI: ffffffff93f8240b RDI: ffffffff93f53ee7
-[  662.815796] RBP: ff5e2bd11ff41928 R08: 0000000000000000 R09: 000000000002f8c0
-[  662.815797] R10: 0000010c3f18e2cf R11: 000000000000000f R12: 0000009a52da2d08
-[  662.815798] R13: ffffffff94ad7e20 R14: 0000000000000002 R15: 0000000000000000
-[  662.815801]  cpuidle_enter+0x29/0x40
-[  662.815803]  do_idle+0x261/0x2b0
-[  662.815807]  cpu_startup_entry+0x19/0x20
-[  662.815809]  start_secondary+0x114/0x150
-[  662.815813]  secondary_startup_64_no_verify+0xd5/0xdb
-[  662.815818]  </TASK>
-[  662.815846] bad: scheduling from the idle thread!
-[  662.815849] CPU: 37 PID: 0 Comm: swapper/37 Kdump: loaded Tainted: G S      W  OE     5.17.1 #2
-[  662.815852] Hardware name: Intel Corporation D50DNP/D50DNP, BIOS SE5C6301.86B.6624.D18.2111021741 11/02/2021
-[  662.815853] Call Trace:
-[  662.815855]  <IRQ>
-[  662.815856]  dump_stack_lvl+0x33/0x42
-[  662.815860]  dequeue_task_idle+0x20/0x30
-[  662.815863]  __schedule+0x1c3/0x990
-[  662.815868]  schedule+0x44/0xc0
-[  662.815871]  schedule_preempt_disabled+0x14/0x20
-[  662.815873]  __mutex_lock.isra.11+0x3a8/0x490
-[  662.815876]  ? __ibdev_printk+0x76/0xc0 [ib_core]
-[  662.815904]  device_del+0x37/0x3d0
-[  662.815909]  ice_unplug_aux_dev+0x1a/0x40 [ice]
-[  662.815937]  ice_schedule_reset+0x3c/0xd0 [ice]
-[  662.815961]  irdma_iidc_event_handler.cold.7+0xb6/0xd3 [irdma]
-[  662.815979]  ? bitmap_find_next_zero_area_off+0x45/0xa0
-[  662.815985]  ice_send_event_to_aux+0x54/0x70 [ice]
-[  662.816011]  ice_misc_intr+0x21d/0x2d0 [ice]
-[  662.816033]  __handle_irq_event_percpu+0x4c/0x180
-[  662.816037]  handle_irq_event_percpu+0xf/0x40
-[  662.816039]  handle_irq_event+0x34/0x60
-[  662.816042]  handle_edge_irq+0x9a/0x1c0
-[  662.816045]  __common_interrupt+0x62/0x100
-[  662.816048]  common_interrupt+0xb4/0xd0
-[  662.816052]  </IRQ>
-[  662.816053]  <TASK>
-[  662.816054]  asm_common_interrupt+0x1e/0x40
-[  662.816057] RIP: 0010:cpuidle_enter_state+0xd6/0x380
-[  662.816060] Code: 49 89 c4 0f 1f 44 00 00 31 ff e8 65 d7 95 ff 45 84 ff 74 12 9c 58 f6 c4 02 0f 85 64 02 00 00 31 ff e8 ae c5 9c ff fb 45 85 f6 <0f> 88 12 01 00 00 49 63 d6 4c 2b 24 24 48 8d 04 52 48 8d 04 82 49
-[  662.816063] RSP: 0018:ff2c2c4f18edbe80 EFLAGS: 00000202
-[  662.816065] RAX: ff280805df140000 RBX: 0000000000000002 RCX: 000000000000001f
-[  662.816067] RDX: 0000009a52da2d08 RSI: ffffffff93f8240b RDI: ffffffff93f53ee7
-[  662.816068] RBP: ff5e2bd11ff41928 R08: 0000000000000000 R09: 000000000002f8c0
-[  662.816070] R10: 0000010c3f18e2cf R11: 000000000000000f R12: 0000009a52da2d08
-[  662.816071] R13: ffffffff94ad7e20 R14: 0000000000000002 R15: 0000000000000000
-[  662.816075]  cpuidle_enter+0x29/0x40
-[  662.816077]  do_idle+0x261/0x2b0
-[  662.816080]  cpu_startup_entry+0x19/0x20
-[  662.816083]  start_secondary+0x114/0x150
-[  662.816087]  secondary_startup_64_no_verify+0xd5/0xdb
-[  662.816091]  </TASK>
-[  662.816169] bad: scheduling from the idle thread!
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+    workqueue: don't skip lockdep work dependency in cancel_work_sync()
 
-The correct place to unplug the aux devices for a reset is in the
-prepare_for_reset function, as this is a common place for all reset flows.
-It also has built in protection from being called twice in a single reset
-instance before the aux devices are replugged.
+Nathan Huckleberry <nhuck@google.com>
+    drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
 
-Fixes: f9f5301e7e2d4 ("ice: Register auxiliary device to provide RDMA")
-Signed-off-by: Dave Ertman <david.m.ertman@intel.com>
-Tested-by: Helena Anna Dubel <helena.anna.dubel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 2 --
- 1 file changed, 2 deletions(-)
+Yao Wang1 <Yao.Wang1@amd.com>
+    drm/amd/display: Limit user regamma to a valid value
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 4c6bb7482b36..0b567e8e3674 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2399,8 +2399,6 @@ int ice_schedule_reset(struct ice_pf *pf, enum ice_reset_req reset)
- 		return -EBUSY;
- 	}
- 
--	ice_unplug_aux_dev(pf);
--
- 	switch (reset) {
- 	case ICE_RESET_PFR:
- 		set_bit(ICE_PFR_REQ, pf->state);
--- 
-2.35.1
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    Drivers: hv: Never allocate anything besides framebuffer from framebuffer memory region
 
+Stefan Haberland <sth@linux.ibm.com>
+    s390/dasd: fix Oops in dasd_alias_get_start_dev due to missing pavgroup
+
+Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+    serial: tegra: Use uart_xmit_advance(), fixes icount.tx accounting
+
+Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+    serial: Create uart_xmit_advance()
+
+Sean Anderson <seanga2@gmail.com>
+    net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
+
+Adrian Hunter <adrian.hunter@intel.com>
+    perf kcore_copy: Do not check /proc/modules is unchanged
+
+Lieven Hey <lieven.hey@kdab.com>
+    perf jit: Include program header in ELF files
+
+Marc Kleine-Budde <mkl@pengutronix.de>
+    can: gs_usb: gs_can_open(): fix race dev->can.state condition
+
+Florian Westphal <fw@strlen.de>
+    netfilter: ebtables: fix memory leak when blob is malformed
+
+Liang He <windhl@126.com>
+    of: mdio: Add of_node_put() when breaking out of for_each_xx
+
+Michal Jaron <michalx.jaron@intel.com>
+    i40e: Fix set max_tx_rate when it is lower than 1 Mbps
+
+Michal Jaron <michalx.jaron@intel.com>
+    i40e: Fix VF set max MTU size
+
+Randy Dunlap <rdunlap@infradead.org>
+    MIPS: lantiq: export clk_get_io() for lantiq_wdt.ko
+
+Benjamin Poirier <bpoirier@nvidia.com>
+    net: team: Unsync device addresses on ndo_stop
+
+Lu Wei <luwei32@huawei.com>
+    ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
+
+Brett Creeley <brett.creeley@intel.com>
+    iavf: Fix cached head and tail value for iavf_get_tx_pending
+
+David Leadbeater <dgl@dgl.cx>
+    netfilter: nf_conntrack_irc: Tighten matching on DCC message
+
+Igor Ryzhov <iryzhov@nfware.com>
+    netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
+
+Fabio Estevam <festevam@denx.de>
+    arm64: dts: rockchip: Remove 'enable-active-low' from rk3399-puma
+
+zain wang <wzz@rock-chips.com>
+    arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+
+Chao Yu <chao.yu@oppo.com>
+    mm/slub: fix to return errno if kmalloc() fails
+
+Al Viro <viro@zeniv.linux.org.uk>
+    riscv: fix a nasty sigreturn bug...
+
+Ard Biesheuvel <ardb@kernel.org>
+    efi: libstub: check Shim mode using MokSBStateRT
+
+Callum Osmotherly <callum.osmotherly@gmail.com>
+    ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5530 laptop
+
+Kai Vehmanen <kai.vehmanen@linux.intel.com>
+    ALSA: hda: add Intel 5 Series / 3400 PCI DID
+
+Mohan Kumar <mkumard@nvidia.com>
+    ALSA: hda/tegra: set depop delay for tegra
+
+jerry meng <jerry-meng@foxmail.com>
+    USB: serial: option: add Quectel RM520N
+
+Carl Yin(殷张成) <carl.yin@quectel.com>
+    USB: serial: option: add Quectel BG95 0x0203 composition
+
+Alan Stern <stern@rowland.harvard.edu>
+    USB: core: Fix RST error in hub.c
+
+Siddh Raman Pant <code@siddh.me>
+    wifi: mac80211: Fix UAF in ieee80211_scan_rx()
+
+Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    usb: dwc3: pci: add support for the Intel Alder Lake-S
+
+Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    usb: dwc3: pci: add support for the Intel Jasper Lake
+
+Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    usb: dwc3: pci: add support for the Intel Tiger Lake PCH -H variant
+
+Felipe Balbi <felipe.balbi@linux.intel.com>
+    usb: dwc3: pci: add support for TigerLake Devices
+
+Felipe Balbi <felipe.balbi@linux.intel.com>
+    usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+
+Hyunwoo Kim <imv4bel@gmail.com>
+    video: fbdev: pxa3xx-gcu: Fix integer overflow in pxa3xx_gcu_write
+
+Youling Tang <tangyouling@loongson.cn>
+    mksysmap: Fix the mismatch of 'L0' symbols in System.map
+
+Alexander Sverdlin <alexander.sverdlin@nokia.com>
+    MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
+
+jerry.meng <jerry-meng@foxmail.com>
+    net: usb: qmi_wwan: add Quectel RM520N
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Keep power up while beep is enabled
+
+David Howells <dhowells@redhat.com>
+    rxrpc: Fix local destruction being repeated
+
+Xiaolei Wang <xiaolei.wang@windriver.com>
+    regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
+
+Takashi Iwai <tiwai@suse.de>
+    ASoC: nau8824: Fix semaphore unbalance at error paths
+
+Stefan Metzmacher <metze@samba.org>
+    cifs: don't send down the destination address to sendmsg for a SOCK_STREAM
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    mvpp2: no need to check return value of debugfs_create functions
+
+Bart Van Assche <bvanassche@acm.org>
+    nvmet: fix a use-after-free
+
+Ard Biesheuvel <ardb@kernel.org>
+    efi: libstub: Disable struct randomization
+
+Sami Tolvanen <samitolvanen@google.com>
+    efi/libstub: Disable Shadow Call Stack
+
+Yang Yingliang <yangyingliang@huawei.com>
+    parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+
+Stuart Menefy <stuart.menefy@mathembedded.com>
+    drm/meson: Correct OSD1 global alpha value
+
+Pali Rohár <pali@kernel.org>
+    gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
+
+Sergey Shtylyov <s.shtylyov@omp.ru>
+    of: fdt: fix off-by-one error in unflatten_dt_nodes()
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +--
+ .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  8 +++++
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  1 -
+ arch/mips/cavium-octeon/octeon-irq.c               | 10 +++++++
+ arch/mips/lantiq/clk.c                             |  1 +
+ arch/riscv/kernel/signal.c                         |  2 ++
+ drivers/firmware/efi/libstub/Makefile              | 10 +++++++
+ drivers/firmware/efi/libstub/secureboot.c          |  8 ++---
+ drivers/gpio/gpio-mpc8xxx.c                        |  1 +
+ .../drm/amd/display/modules/color/color_gamma.c    |  4 +++
+ drivers/gpu/drm/meson/meson_plane.c                |  2 +-
+ drivers/gpu/drm/rockchip/cdn-dp-core.c             |  5 ++--
+ drivers/hv/vmbus_drv.c                             | 10 ++++++-
+ drivers/net/can/usb/gs_usb.c                       |  4 +--
+ drivers/net/ethernet/intel/i40e/i40e_main.c        | 32 ++++++++++++++++----
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c | 20 +++++++++++++
+ drivers/net/ethernet/intel/i40evf/i40e_txrx.c      |  5 +++-
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c | 19 +-----------
+ drivers/net/ethernet/sun/sunhme.c                  |  4 +--
+ drivers/net/ipvlan/ipvlan_core.c                   |  6 ++--
+ drivers/net/team/team.c                            | 24 +++++++++++----
+ drivers/net/usb/qmi_wwan.c                         |  1 +
+ drivers/nvme/target/core.c                         |  5 ++--
+ drivers/of/fdt.c                                   |  2 +-
+ drivers/of/of_mdio.c                               |  1 +
+ drivers/parisc/ccio-dma.c                          |  1 +
+ drivers/regulator/pfuze100-regulator.c             |  2 +-
+ drivers/s390/block/dasd_alias.c                    |  9 ++++--
+ drivers/tty/serial/serial-tegra.c                  |  5 ++--
+ drivers/usb/core/hub.c                             |  2 +-
+ drivers/usb/dwc3/dwc3-pci.c                        | 23 ++++++++++++++-
+ drivers/usb/serial/option.c                        |  6 ++++
+ drivers/video/fbdev/pxa3xx-gcu.c                   |  2 +-
+ fs/cifs/transport.c                                |  4 +--
+ fs/ext4/ialloc.c                                   |  2 +-
+ include/linux/serial_core.h                        | 17 +++++++++++
+ kernel/workqueue.c                                 |  6 ++--
+ mm/slub.c                                          |  5 +++-
+ net/bridge/netfilter/ebtables.c                    |  4 ++-
+ net/mac80211/scan.c                                | 11 ++++---
+ net/netfilter/nf_conntrack_irc.c                   | 34 ++++++++++++++++++----
+ net/netfilter/nf_conntrack_sip.c                   |  4 +--
+ net/rxrpc/local_object.c                           |  3 ++
+ scripts/mksysmap                                   |  2 +-
+ sound/pci/hda/hda_intel.c                          |  2 ++
+ sound/pci/hda/patch_hdmi.c                         |  1 +
+ sound/pci/hda/patch_realtek.c                      |  1 +
+ sound/pci/hda/patch_sigmatel.c                     | 24 +++++++++++++++
+ sound/soc/codecs/nau8824.c                         | 17 ++++++-----
+ tools/perf/util/genelf.c                           | 14 +++++++++
+ tools/perf/util/genelf.h                           |  4 +++
+ tools/perf/util/symbol-elf.c                       |  7 ++---
+ 52 files changed, 307 insertions(+), 94 deletions(-)
 
 
