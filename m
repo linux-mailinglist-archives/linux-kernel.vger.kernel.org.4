@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2358A5EA33C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1835E9EEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbiIZLV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S235114AbiIZKQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237664AbiIZLTm (ORCPT
+        with ESMTP id S234260AbiIZKQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:19:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E29852454;
-        Mon, 26 Sep 2022 03:39:07 -0700 (PDT)
+        Mon, 26 Sep 2022 06:16:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7E6384;
+        Mon, 26 Sep 2022 03:14:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD1FBB8095C;
-        Mon, 26 Sep 2022 10:37:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F182C433C1;
-        Mon, 26 Sep 2022 10:37:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D216360BD4;
+        Mon, 26 Sep 2022 10:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E51C433C1;
+        Mon, 26 Sep 2022 10:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188670;
-        bh=6Z96eXjVRRr1HvpDRdgPDwRE1VX2O2GqrBUwuYg3+Dk=;
+        s=korg; t=1664187272;
+        bh=FLvbxrPRqfb/etA3zSORKbB/2pyI4K2lAxYbyH6gJNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQQrc1z3kuxF9+05VSiaSRCe+bdiCC251tBASoOQbA0AmaupGzHhEm+2nP9dAXFDq
-         qfwp/0vF4uz1BWjUi9+/yUir3tFsVwR9KVGHhEzdVDfrRZnGaXOwNROmkWQHqmdnuT
-         JGEcTRq+uK7peegjLa1AFk+XHCFNTKdPFpM8j9GQ=
+        b=i1QUx1IUGWyWMwsYQJioM04I8fhzyXdXRQhoC66VEqTLkEFQlQnBK0enhwBWK0lwz
+         YuAq63ZKbUj894plEYP/yGLhNOpMzihnnASiDSqMS4s5XCodEWycIjvibeBYaW94p1
+         lD6S09kI9XZ4ZDS8a17KY/hzvk93UKIEm/AXNt3A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Meyer <thomas@m3y3r.de>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 082/148] um: fix default console kernel parameter
+Subject: [PATCH 4.9 25/30] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
 Date:   Mon, 26 Sep 2022 12:11:56 +0200
-Message-Id: <20220926100759.119720109@linuxfoundation.org>
+Message-Id: <20220926100737.050115343@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lamparter <chunkeey@gmail.com>
+From: Sean Anderson <seanga2@gmail.com>
 
-[ Upstream commit 782b1f70f8a8b28571949d2ba43fe88b96d75ec3 ]
+[ Upstream commit 878e2405710aacfeeb19364c300f38b7a9abfe8f ]
 
-OpenWrt's UML with 5.15 was producing odd errors/warnings during preinit
-part of the early userspace portion:
+There is a separate receive path for small packets (under 256 bytes).
+Instead of allocating a new dma-capable skb to be used for the next packet,
+this path allocates a skb and copies the data into it (reusing the existing
+sbk for the next packet). There are two bytes of junk data at the beginning
+of every packet. I believe these are inserted in order to allow aligned DMA
+and IP headers. We skip over them using skb_reserve. Before copying over
+the data, we must use a barrier to ensure we see the whole packet. The
+current code only synchronizes len bytes, starting from the beginning of
+the packet, including the junk bytes. However, this leaves off the final
+two bytes in the packet. Synchronize the whole packet.
 
-|[    0.000000] Kernel command line: ubd0=root.img root=98:0 console=tty
-|[...]
-|[    0.440000] random: jshn: uninitialized urandom read (4 bytes read)
-|[    0.460000] random: jshn: uninitialized urandom read (4 bytes read)
-|/etc/preinit: line 47: can't create /dev/tty: No such device or address
-|/etc/preinit: line 48: can't create /dev/tty: No such device or address
-|/etc/preinit: line 58: can't open /dev/tty: No such device or address
-|[...] repeated many times
+To reproduce this problem, ping a HME with a payload size between 17 and
+214
 
-That "/dev/tty" came from the command line (which is automatically
-added if no console= parameter was specified for the uml binary).
+	$ ping -s 17 <hme_address>
 
-The TLDP project tells the following about the /dev/tty:
-<https://tldp.org/HOWTO/Text-Terminal-HOWTO-7.html#ss7.3>
-| /dev/tty stands for the controlling terminal (if any) for the current
-| process.[...]
-| /dev/tty is something like a link to the actually terminal device[..]
+which will complain rather loudly about the data mismatch. Small packets
+(below 60 bytes on the wire) do not have this issue. I suspect this is
+related to the padding added to increase the minimum packet size.
 
-The "(if any)" is important here, since it's possible for processes to
-not have a controlling terminal.
-
-I think this was a simple typo and the author wanted tty0 there.
-
-CC: Thomas Meyer <thomas@m3y3r.de>
-Fixes: d7ffac33631b ("um: stdio_console: Make preferred console")
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220920235018.1675956-1-seanga2@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/kernel/um_arch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/sun/sunhme.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index 960f5c35ad1b..8dc7ab1f3cd4 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -31,7 +31,7 @@
- #include <os.h>
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index b38106a7cb5d..b421a1d44783 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2064,9 +2064,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
  
- #define DEFAULT_COMMAND_LINE_ROOT "root=98:0"
--#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty"
-+#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty0"
- 
- /* Changed in add_arg and setup_arch, which run before SMP is started */
- static char __initdata command_line[COMMAND_LINE_SIZE] = { 0 };
+ 			skb_reserve(copy_skb, 2);
+ 			skb_put(copy_skb, len);
+-			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			skb_copy_from_linear_data(skb, copy_skb->data, len);
+-			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
++			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
+ 			/* Reuse original ring buffer. */
+ 			hme_write_rxd(hp, this,
+ 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
 -- 
 2.35.1
 
