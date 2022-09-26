@@ -2,515 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1060B5EB5B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335745EB5BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiIZXY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S229615AbiIZX1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiIZXXv (ORCPT
+        with ESMTP id S229436AbiIZX1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:23:51 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6486A74DED
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:22:10 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o2so13179219lfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:22:10 -0700 (PDT)
+        Mon, 26 Sep 2022 19:27:44 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16666EF2B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 3so7921178pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=t56urIscvFJHkMdgK8GyeLx8hCpBBiz1juQj5RJ6tas=;
-        b=nZqeKyQKJk0RkNuDQP3jEIrt94JeErwhPfz1ODisyVi2yWI3M44lKGfSpY2Uo6RRPp
-         Q5cKkWF0AoOHCtzu7XiNjFaPx83dSwIk+oK97VsmcMTRxcGSehcNg9qa192nd6appINF
-         EWiukKNev5GLXZzNHa4h6I/AczVyRb2TMnG0sbaOHSeYEwMPgaW8y5ihBmiCYn7Q+3aw
-         G6e6K2QZCoEpAwCRIBjpqTRs9x3aQJY41Ywy1iCZV+rP9nADE0mWTvJCWiig0NEW8Bc4
-         w3KD8yM54j2wzR1e6xJiMiMLmqBpIYsj4pV/9vr6kNxHBbl2qgX++fylw6psXxgFU83O
-         95qA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
+        b=GgFgwZi+ddAl59t5WyglkquklNhracaGBrF6jU0NtDfgG0IgyUN+puhncM4Se+w3hN
+         3ew+w2WAJPxrfTMHOqMoH5NrrG6IkW5+egKVHdTceHhmZygy1KIcyJjeClsgKVlkj5ex
+         oneWUpdx17BO4/PyBE6g+cJ8tE6d/72orSPDJT/z2Dn5cNhJcTxeiz73K/6cipRmQmPg
+         5WSDE+Crbf2mdPFXkZYYQykqzOJxfF2M7gXPNUdqAk6rST36q6aTR2pVw3SdsdUcI5Zd
+         7j5360faOwyI019TWu9zwCPdBHpnL9pJ3m2PtS+Z9jLoDEfpk2kTstRnVY5XOIb1KKxO
+         K6qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=t56urIscvFJHkMdgK8GyeLx8hCpBBiz1juQj5RJ6tas=;
-        b=U2Dtqqgoxr2Q9lXegoPIxDBum6WV7lxI3iKODz3GTj0dJ08jWbGhR1I7Y5Ryp4IoPY
-         NkTQS4VRf+b2uWGsZEBUd07JjOMQEsfN3DQEyLlpJV8bgCkZWWHV7Vl+ysmwBTwaeS5o
-         ezaGAgvrQyl9KF5xQP7qYRU0RpNc8SrM5d8Yx16dWpHeB4YSLhmieEOBPn8wbiNABDdT
-         uQ0So+ADTg4K6ovqy+wK9opnQYNLkn1zUTeLv4QX1nfKBX/sGf95mO3a7w1Wg/UbM0Mf
-         PDT1EY30wu9vVwz/qJrOal8fJkIhOgD3pdYjThBytxl6nzq6umVvFaUpEVyKDfuxvTQq
-         MWOA==
-X-Gm-Message-State: ACrzQf3n1aPXyBEsVhO8sKXMgND3StCm5O1GN1r1lkE+J/6BV3isW4HM
-        zEYc5ZVoZby7tLeFQYKBE5nGBg==
-X-Google-Smtp-Source: AMsMyM5kM7tn1Vzl5tVNmXzKN0gpESg7IKXrqsj8aMrFBZtLB/qdPO2pT02eMgBsSgfLvo85dfXRFQ==
-X-Received: by 2002:a05:6512:3d17:b0:497:9e34:94f2 with SMTP id d23-20020a0565123d1700b004979e3494f2mr9377721lfv.285.1664234528583;
-        Mon, 26 Sep 2022 16:22:08 -0700 (PDT)
-Received: from michal-H370M-DS3H.office.semihalf.net ([83.142.187.84])
-        by smtp.googlemail.com with ESMTPSA id g6-20020a19e046000000b004978e51b691sm2661320lfj.266.2022.09.26.16.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 16:22:08 -0700 (PDT)
-From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
-To:     devicetree@vger.kernel.org
-Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        upstream@semihalf.com,
-        =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
-Subject: [PATCH v2] dt-bindings: net: marvell,pp2: convert to json-schema
-Date:   Tue, 27 Sep 2022 01:21:36 +0200
-Message-Id: <20220926232136.38567-1-mig@semihalf.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
+        b=xIny8FlRuuD+sAhdSZFqnXukuynp975T9PSuxoPt2S6il2flOWNluh67w6tMg98/TY
+         WmlHJR8R1QkswWGoDr1LCPciHvVcCjddsi40nwqGLmMqwe9VzNLo8Yk5drmN6mBIHzRm
+         fmUg6NPkwKXYpMjuuoX0ld9ZiVbZ8gIRdnW/mVvhQgHfCUB+R06hxHAfOQGI8qG34xtd
+         sh46NamzsKZVT21iiB+5pv7/JeP4PROdbyph1wuROaaBdmpfI5hGg4eaQBUDj06uNkvS
+         H7xkxLm8N78sYSED7zxNgnt+SCVmpy7QzG9jO4ip5MOTxAK4zp5f/Rz5Ar767NfpejWK
+         z7tg==
+X-Gm-Message-State: ACrzQf1vyvEJoks74S8jpQLFtAiCv9tIUs1bh7hr/xvsG0zkGzjCrUOJ
+        /1ArmQlL9v9lZjeDOAnhaVyq/ELOyYWixyiRWB8tKQ==
+X-Google-Smtp-Source: AMsMyM4Y0+nAEAfTHn3/Q+IPC10tZSPdNyafhAmVC2i9miBgZKk8ZEBtq5Y706fIgaHIfrIlYaLC0/EtPvVCFzYpGnY=
+X-Received: by 2002:a63:1a51:0:b0:43b:e496:f2f4 with SMTP id
+ a17-20020a631a51000000b0043be496f2f4mr22517497pgm.99.1664234861996; Mon, 26
+ Sep 2022 16:27:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
+In-Reply-To: <Yyt/xgPkHfbOE3vH@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 26 Sep 2022 16:27:31 -0700
+Message-ID: <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
+Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
+To:     David Matlack <dmatlack@google.com>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oupton@google.com>, peterx@redhat.com,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts the marvell,pp2 bindings from text to proper schema.
+On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
+>
+> On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
+> > Cache the vendor CPU type in a global variable so that multiple calls
+> > to is_intel_cpu() do not need to re-execute CPUID.
+> >
+> > Add cpu vendor check in kvm_hypercall() so that it executes correct
+> > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
+> > exit to KVM which anyway tries to patch the instruction according to
+> > the cpu type.
+>
+> The commit shortlog makes no mention (nor even implies) that this commit
+> adds AMD support to kvm_hypercall(). Please break this commit up into 2.
+> One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
+> support to kvm_hypercall().
+>
+> If you really want to keep this as one commit (I don't know what the
+> benefit would be), please change the shortlog and commit message to
+> focus on the kvm_hypercall() change, as that is the real goal of this
+> commit. The precomputation is arguably and implementation detail. e.g.
+>
 
-Move 'marvell,system-controller' and 'dma-coherent' properties from
-port up to the controller node, to match what is actually done in DT.
+is_amd_cpu is used by guest code within fix_hypercall_test.c, just
+caching the result will break the guest code execution. I have clubbed
+these two changes together in order to ensure that is_amd_cpu works
+fine for both host userspace and guest vm logic.
 
-Signed-off-by: Michał Grzelak <mig@semihalf.com>
----
- .../devicetree/bindings/net/marvell,pp2.yaml  | 241 ++++++++++++++++++
- .../devicetree/bindings/net/marvell-pp2.txt   | 141 ----------
- MAINTAINERS                                   |   2 +-
- 3 files changed, 242 insertions(+), 142 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2.txt
-
-diff --git a/Documentation/devicetree/bindings/net/marvell,pp2.yaml b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-new file mode 100644
-index 000000000000..6faa4c87dfc6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-@@ -0,0 +1,241 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/marvell,pp2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell CN913X / Marvell Armada 375, 7K, 8K Ethernet Controller
-+
-+maintainers:
-+  - Marcin Wojtas <mw@semihalf.com>
-+  - Russell King <linux@armlinux.org>
-+
-+description: |
-+  Marvell Armada 375 Ethernet Controller (PPv2.1)
-+  Marvell Armada 7K/8K Ethernet Controller (PPv2.2)
-+  Marvell CN913X Ethernet Controller (PPv2.3)
-+
-+properties:
-+  compatible:
-+    enum:
-+      - marvell,armada-375-pp2
-+      - marvell,armada-7k-pp22
-+
-+  reg:
-+    minItems: 3
-+    maxItems: 4
-+    description: |
-+      For "marvell,armada-375-pp2", must contain the following register sets:
-+        - common controller registers
-+        - LMS registers
-+        - one register area per Ethernet port
-+      For "marvell,armada-7k-pp22" used by 7K/8K and CN913X, must contain the following register sets:
-+        - packet processor registers
-+        - networking interfaces registers
-+        - CM3 address space used for TX Flow Control
-+
-+  clocks:
-+    minItems: 2
-+    items:
-+      - description: main controller clock
-+      - description: GOP clock
-+      - description: MG clock
-+      - description: MG Core clock
-+      - description: AXI clock
-+
-+  clock-names:
-+    minItems: 2
-+    items:
-+      - const: pp_clk
-+      - const: gop_clk
-+      - const: mg_clk
-+      - const: mg_core_clk
-+      - const: axi_clk
-+
-+  dma-coherent: true
-+  '#size-cells': true
-+  '#address-cells': true
-+
-+  marvell,system-controller:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: a phandle to the system controller.
-+
-+patternProperties:
-+  '^eth[0-9a-f]*(@.*)?$':
-+    type: object
-+    properties:
-+      interrupts:
-+        minItems: 1
-+        maxItems: 10
-+        description: interrupt(s) for the port
-+
-+      interrupt-names:
-+        items:
-+          - const: hif0
-+          - const: hif1
-+          - const: hif2
-+          - const: hif3
-+          - const: hif4
-+          - const: hif5
-+          - const: hif6
-+          - const: hif7
-+          - const: hif8
-+          - const: link
-+
-+        description: >
-+          if more than a single interrupt for is given, must be the
-+          name associated to the interrupts listed. Valid names are:
-+          "hifX", with X in [0..8], and "link". The names "tx-cpu0",
-+          "tx-cpu1", "tx-cpu2", "tx-cpu3" and "rx-shared" are supported
-+          for backward compatibility but shouldn't be used for new
-+          additions.
-+
-+      port-id:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: ID of the port from the MAC point of view.
-+
-+      phy:
-+        $ref: /schemas/types.yaml#/definitions/phandle
-+        description: >
-+          a phandle to a phy node defining the PHY address
-+          (as the reg property, a single integer).
-+
-+      phy-mode:
-+        $ref: "ethernet-controller.yaml#/properties/phy-mode"
-+
-+      marvell,loopback:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description: port is loopback mode.
-+
-+      gop-port-id:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: >
-+          only for marvell,armada-7k-pp22, ID of the port from the
-+          GOP (Group Of Ports) point of view. This ID is used to index the
-+          per-port registers in the second register area.
-+
-+    required:
-+      - interrupts
-+      - port-id
-+      - phy-mode
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+
-+allOf:
-+  - $ref: ethernet-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          const: marvell,armada-7k-pp22
-+    then:
-+      patternProperties:
-+        '^eth[0-9a-f]*(@.*)?$':
-+          required:
-+            - gop-port-id
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    // For Armada 375 variant
-+    #include <dt-bindings/interrupt-controller/mvebu-icu.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    ethernet@f0000 {
-+      compatible = "marvell,armada-375-pp2";
-+      reg = <0xf0000 0xa000>,
-+            <0xc0000 0x3060>,
-+            <0xc4000 0x100>,
-+            <0xc5000 0x100>;
-+      clocks = <&gateclk 3>, <&gateclk 19>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      clock-names = "pp_clk", "gop_clk";
-+
-+      eth0: eth0@c4000 {
-+        reg = <0xc4000>;
-+        interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-+        port-id = <0>;
-+        phy = <&phy0>;
-+        phy-mode = "gmii";
-+      };
-+
-+      eth1: eth1@c5000 {
-+        reg = <0xc5000>;
-+        interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-+        port-id = <1>;
-+        phy = <&phy3>;
-+        phy-mode = "gmii";
-+      };
-+    };
-+
-+  - |
-+    // For Armada 7k/8k and Cn913x variants
-+    #include <dt-bindings/interrupt-controller/mvebu-icu.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    cpm_ethernet: ethernet@0 {
-+      compatible = "marvell,armada-7k-pp22";
-+      reg = <0x0 0x100000>, <0x129000 0xb000>, <0x220000 0x800>;
-+      clocks = <&cpm_syscon0 1 3>, <&cpm_syscon0 1 9>,
-+               <&cpm_syscon0 1 5>, <&cpm_syscon0 1 6>, <&cpm_syscon0 1 18>;
-+      clock-names = "pp_clk", "gop_clk", "mg_clk", "mg_core_clk", "axi_clk";
-+
-+      eth00: eth0 {
-+        interrupts = <ICU_GRP_NSR 39 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 43 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 47 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 51 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 55 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 59 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 63 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 67 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 71 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 129 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
-+                          "hif5", "hif6", "hif7", "hif8", "link";
-+        phy-mode = "10gbase-r";
-+        port-id = <0>;
-+        gop-port-id = <0>;
-+      };
-+
-+      eth01: eth1 {
-+        interrupts = <ICU_GRP_NSR 40 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 44 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 48 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 52 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 56 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 60 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 64 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 68 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 72 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 128 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
-+                          "hif5", "hif6", "hif7", "hif8", "link";
-+        phy-mode = "rgmii-id";
-+        port-id = <1>;
-+        gop-port-id = <2>;
-+      };
-+
-+      eth02: eth2 {
-+        interrupts = <ICU_GRP_NSR 41 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 45 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 49 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 53 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 57 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 61 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 65 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 69 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 73 IRQ_TYPE_LEVEL_HIGH>,
-+                     <ICU_GRP_NSR 127 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
-+                          "hif5", "hif6", "hif7", "hif8", "link";
-+        phy-mode = "gmii";
-+        port-id = <2>;
-+        gop-port-id = <3>;
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/net/marvell-pp2.txt b/Documentation/devicetree/bindings/net/marvell-pp2.txt
-deleted file mode 100644
-index ce15c173f43f..000000000000
---- a/Documentation/devicetree/bindings/net/marvell-pp2.txt
-+++ /dev/null
-@@ -1,141 +0,0 @@
--* Marvell Armada 375 Ethernet Controller (PPv2.1)
--  Marvell Armada 7K/8K Ethernet Controller (PPv2.2)
--  Marvell CN913X Ethernet Controller (PPv2.3)
--
--Required properties:
--
--- compatible: should be one of:
--    "marvell,armada-375-pp2"
--    "marvell,armada-7k-pp2"
--- reg: addresses and length of the register sets for the device.
--  For "marvell,armada-375-pp2", must contain the following register
--  sets:
--	- common controller registers
--	- LMS registers
--	- one register area per Ethernet port
--  For "marvell,armada-7k-pp2" used by 7K/8K and CN913X, must contain the following register
--  sets:
--	- packet processor registers
--	- networking interfaces registers
--	- CM3 address space used for TX Flow Control
--
--- clocks: pointers to the reference clocks for this device, consequently:
--	- main controller clock (for both armada-375-pp2 and armada-7k-pp2)
--	- GOP clock (for both armada-375-pp2 and armada-7k-pp2)
--	- MG clock (only for armada-7k-pp2)
--	- MG Core clock (only for armada-7k-pp2)
--	- AXI clock (only for armada-7k-pp2)
--- clock-names: names of used clocks, must be "pp_clk", "gop_clk", "mg_clk",
--  "mg_core_clk" and "axi_clk" (the 3 latter only for armada-7k-pp2).
--
--The ethernet ports are represented by subnodes. At least one port is
--required.
--
--Required properties (port):
--
--- interrupts: interrupt(s) for the port
--- port-id: ID of the port from the MAC point of view
--- gop-port-id: only for marvell,armada-7k-pp2, ID of the port from the
--  GOP (Group Of Ports) point of view. This ID is used to index the
--  per-port registers in the second register area.
--- phy-mode: See ethernet.txt file in the same directory
--
--Optional properties (port):
--
--- marvell,loopback: port is loopback mode
--- phy: a phandle to a phy node defining the PHY address (as the reg
--  property, a single integer).
--- interrupt-names: if more than a single interrupt for is given, must be the
--                   name associated to the interrupts listed. Valid names are:
--                   "hifX", with X in [0..8], and "link". The names "tx-cpu0",
--                   "tx-cpu1", "tx-cpu2", "tx-cpu3" and "rx-shared" are supported
--                   for backward compatibility but shouldn't be used for new
--                   additions.
--- marvell,system-controller: a phandle to the system controller.
--
--Example for marvell,armada-375-pp2:
--
--ethernet@f0000 {
--	compatible = "marvell,armada-375-pp2";
--	reg = <0xf0000 0xa000>,
--	      <0xc0000 0x3060>,
--	      <0xc4000 0x100>,
--	      <0xc5000 0x100>;
--	clocks = <&gateclk 3>, <&gateclk 19>;
--	clock-names = "pp_clk", "gop_clk";
--
--	eth0: eth0@c4000 {
--		interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
--		port-id = <0>;
--		phy = <&phy0>;
--		phy-mode = "gmii";
--	};
--
--	eth1: eth1@c5000 {
--		interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
--		port-id = <1>;
--		phy = <&phy3>;
--		phy-mode = "gmii";
--	};
--};
--
--Example for marvell,armada-7k-pp2:
--
--cpm_ethernet: ethernet@0 {
--	compatible = "marvell,armada-7k-pp22";
--	reg = <0x0 0x100000>, <0x129000 0xb000>, <0x220000 0x800>;
--	clocks = <&cpm_syscon0 1 3>, <&cpm_syscon0 1 9>,
--		 <&cpm_syscon0 1 5>, <&cpm_syscon0 1 6>, <&cpm_syscon0 1 18>;
--	clock-names = "pp_clk", "gop_clk", "mg_clk", "mg_core_clk", "axi_clk";
--
--	eth0: eth0 {
--		interrupts = <ICU_GRP_NSR 39 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 43 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 47 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 51 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 55 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 59 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 63 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 67 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 71 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 129 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
--				  "hif5", "hif6", "hif7", "hif8", "link";
--		port-id = <0>;
--		gop-port-id = <0>;
--	};
--
--	eth1: eth1 {
--		interrupts = <ICU_GRP_NSR 40 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 44 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 48 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 52 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 56 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 60 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 64 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 68 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 72 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 128 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
--				  "hif5", "hif6", "hif7", "hif8", "link";
--		port-id = <1>;
--		gop-port-id = <2>;
--	};
--
--	eth2: eth2 {
--		interrupts = <ICU_GRP_NSR 41 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 45 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 49 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 53 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 57 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 61 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 65 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 69 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 73 IRQ_TYPE_LEVEL_HIGH>,
--			     <ICU_GRP_NSR 127 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-names = "hif0", "hif1", "hif2", "hif3", "hif4",
--				  "hif5", "hif6", "hif7", "hif8", "link";
--		port-id = <2>;
--		gop-port-id = <3>;
--	};
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9ae989b32ebb..3d8e64bf7ae6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12191,7 +12191,7 @@ M:	Marcin Wojtas <mw@semihalf.com>
- M:	Russell King <linux@armlinux.org.uk>
- L:	netdev@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/net/marvell-pp2.txt
-+F:	Documentation/devicetree/bindings/net/marvell,pp2.yaml
- F:	drivers/net/ethernet/marvell/mvpp2/
- 
- MARVELL MWIFIEX WIRELESS DRIVER
--- 
-Changelog:
-v1->v2:
-* move 'properties' to the front of the file
-* remove blank line after 'properties'
-* move 'compatible' to the front of 'properties'
-* move 'clocks', 'clock-names' and 'reg' definitions to 'properties' 
-* substitute all occurences of 'marvell,armada-7k-pp2' with
-  'marvell,armada-7k-pp22'
-* add properties:#size-cells and properties:#address-cells 
-* specify list in 'interrupt-names'
-* remove blank lines after 'patternProperties'
-* remove '^interrupt' and '^#.*-cells$' patterns
-* remove blank line after 'allOf'
-* remove first 'if-then-else' block from 'allOf'
-* negate the condition in allOf:if schema
-* delete 'interrupt-controller' from section 'examples'
-* delete '#interrupt-cells' from section 'examples'
-2.34.1
-
+>   KVM: selftest: Add support for AMD to kvm_hypercall()
+>
+>   Make it possible to use kvm_hypercall() on AMD by checking if running
+>   on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
+>   avoid executing CPUID in the guest on every call t kvm_hypercall()
+>   (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
+>   as part of kvm_selftest_arch_init() and sync it into the guest
+>   after loading the ELF image.
+>
+> But again, it'd be cleaner just to split it up. Caching the result of
+> is_{intel,amd}_cpu() is useful in its own right, independent of the
+> kvm_hypercall() change.
+>
+> >
+> > ...
+> >
+> > @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+> >
+> >  void kvm_selftest_arch_init(void)
+> >  {
+> > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+> >  }
+> >
+> >  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> >  {
+> > +     sync_global_to_guest(vm, is_cpu_amd);
+> >  }
+> > --
+> > 2.37.2.789.g6183377224-goog
+> >
