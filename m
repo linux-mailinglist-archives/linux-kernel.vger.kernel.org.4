@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE535EA4B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E935EA003
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238599AbiIZLuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S235721AbiIZKcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239084AbiIZLtS (ORCPT
+        with ESMTP id S235682AbiIZKaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0212B75CE8;
-        Mon, 26 Sep 2022 03:48:18 -0700 (PDT)
+        Mon, 26 Sep 2022 06:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AB695BC;
+        Mon, 26 Sep 2022 03:19:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FE47B80835;
-        Mon, 26 Sep 2022 10:46:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66600C433C1;
-        Mon, 26 Sep 2022 10:46:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 874C360B60;
+        Mon, 26 Sep 2022 10:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D70DC433D7;
+        Mon, 26 Sep 2022 10:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189215;
-        bh=qYDUVPcIKSYGJQ6zNzCwrkC/y4sC7sO2DLHi4sBmVCU=;
+        s=korg; t=1664187581;
+        bh=g+vMcxNmAy28LBGEzMAhjU8n7hjEgxGZ9DO/fXUrtSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rr5qnVl64QG/VF27vdF/pKdvHpQveei0z6843s9JjE17m6yCM/eXm2IuhTAxNAYM5
-         PwbQqf1OMLcAQwRRaVvUxBC9F+BwIRA/LCANEVJgDDAI3VGfVJnUBIlvlpY0CV7wZ5
-         h/BkK1vFFy3UIOWAYWA1fU3JLbOLgz9nh9Pg7Tg0=
+        b=k2ix0zKxYZ0SS8KamVm503e0siyxkBIivPGdeSgIf4XfsU7ZoYFBX5RLk4AnsIzdE
+         AasZIVEDdE9AH65VHrjwl2PIFxPMA6dPh9iv9HLwORrkmUmfcsVLbv1fOrpfGTXUGD
+         NWMeUeJsl48m4YHwADQfRuH1kpq4nB+DzcBGVqOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Meyer <thomas@m3y3r.de>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 112/207] um: fix default console kernel parameter
+Subject: [PATCH 4.19 22/58] usb: dwc3: pci: add support for the Intel Jasper Lake
 Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100811.621399975@linuxfoundation.org>
+Message-Id: <20220926100742.249054602@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lamparter <chunkeey@gmail.com>
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[ Upstream commit 782b1f70f8a8b28571949d2ba43fe88b96d75ec3 ]
+[ Upstream commit e25d1e8532c3d84f075deca1580a7d61e0f43ce6 ]
 
-OpenWrt's UML with 5.15 was producing odd errors/warnings during preinit
-part of the early userspace portion:
+This patch adds the necessary PCI ID for Intel Jasper Lake
+devices.
 
-|[    0.000000] Kernel command line: ubd0=root.img root=98:0 console=tty
-|[...]
-|[    0.440000] random: jshn: uninitialized urandom read (4 bytes read)
-|[    0.460000] random: jshn: uninitialized urandom read (4 bytes read)
-|/etc/preinit: line 47: can't create /dev/tty: No such device or address
-|/etc/preinit: line 48: can't create /dev/tty: No such device or address
-|/etc/preinit: line 58: can't open /dev/tty: No such device or address
-|[...] repeated many times
-
-That "/dev/tty" came from the command line (which is automatically
-added if no console= parameter was specified for the uml binary).
-
-The TLDP project tells the following about the /dev/tty:
-<https://tldp.org/HOWTO/Text-Terminal-HOWTO-7.html#ss7.3>
-| /dev/tty stands for the controlling terminal (if any) for the current
-| process.[...]
-| /dev/tty is something like a link to the actually terminal device[..]
-
-The "(if any)" is important here, since it's possible for processes to
-not have a controlling terminal.
-
-I think this was a simple typo and the author wanted tty0 there.
-
-CC: Thomas Meyer <thomas@m3y3r.de>
-Fixes: d7ffac33631b ("um: stdio_console: Make preferred console")
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Stable-dep-of: bad0d1d726ac ("usb: dwc3: pci: Add support for Intel Raptor Lake")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/kernel/um_arch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index e0de60e503b9..d9e023c78f56 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -33,7 +33,7 @@
- #include "um_arch.h"
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index cddf02add6f1..125cecb1bc99 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -39,6 +39,7 @@
+ #define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
++#define PCI_DEVICE_ID_INTEL_JSP			0x4dee
  
- #define DEFAULT_COMMAND_LINE_ROOT "root=98:0"
--#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty"
-+#define DEFAULT_COMMAND_LINE_CONSOLE "console=tty0"
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -363,6 +364,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPH),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
  
- /* Changed in add_arg and setup_arch, which run before SMP is started */
- static char __initdata command_line[COMMAND_LINE_SIZE] = { 0 };
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
++
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
 -- 
 2.35.1
 
