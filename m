@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146D95E9EDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2635E9F3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbiIZKPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S235224AbiIZKWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbiIZKPC (ORCPT
+        with ESMTP id S235206AbiIZKUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:15:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D7476D9;
-        Mon, 26 Sep 2022 03:14:12 -0700 (PDT)
+        Mon, 26 Sep 2022 06:20:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CF34B4B9;
+        Mon, 26 Sep 2022 03:16:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BCF160BFE;
-        Mon, 26 Sep 2022 10:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD64C433D7;
-        Mon, 26 Sep 2022 10:14:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4464BB8091F;
+        Mon, 26 Sep 2022 10:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F77FC433D6;
+        Mon, 26 Sep 2022 10:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187250;
-        bh=bbnmpylZreDUTDme6h0ibI/W2LjDmiXSyGclQyVmXck=;
+        s=korg; t=1664187358;
+        bh=iv6Br8aOpZw1sdYh11xxYyForii0pgne9trYy3gudzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SHqDqZw4g8cNQIMprKGVU/96P6YIDEfMbmx/9f28ZYY+o/dZ+yZgNSu0qbXCyMuGQ
-         UGTZOufmt/FX1taF4XcVNI6InvCYmgxL6uGiHh0dhBbQ67f1gB7ytoHpm6+3GnlA6i
-         B03Y62XSzt4r6TDfulyh46qvP17qe7ES/3yQgJc0=
+        b=K8sK++5h/XXGqGCkQM88ZDRI2t37k9YCu/3KqKGdNhTWtJtUeZPrJMPLS5fsm8Pok
+         o+yflb6Lt1LMIMGbqyfOwL0IKntQV7/OHKRi3TbCYFfy50W3QIwjcx6eTHJekE6pIW
+         JkniBSg/Pq6TyQMbsS2/I8xnEOYfYKFU5gHzPQec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 19/30] netfilter: nf_conntrack_irc: Tighten matching on DCC message
+        stable@vger.kernel.org, stable@kernel.org,
+        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Chao Yu <chao.yu@oppo.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 4.14 22/40] mm/slub: fix to return errno if kmalloc() fails
 Date:   Mon, 26 Sep 2022 12:11:50 +0200
-Message-Id: <20220926100736.846278933@linuxfoundation.org>
+Message-Id: <20220926100739.110840495@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Leadbeater <dgl@dgl.cx>
+From: Chao Yu <chao.yu@oppo.com>
 
-[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
+commit 7e9c323c52b379d261a72dc7bd38120a761a93cd upstream.
 
-CTCP messages should only be at the start of an IRC message, not
-anywhere within it.
+In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
+out-of-memory, if it fails, return errno correctly rather than
+triggering panic via BUG_ON();
 
-While the helper only decodes packes in the ORIGINAL direction, its
-possible to make a client send a CTCP message back by empedding one into
-a PING request.  As-is, thats enough to make the helper believe that it
-saw a CTCP message.
+kernel BUG at mm/slub.c:5893!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
 
-Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
-Signed-off-by: David Leadbeater <dgl@dgl.cx>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Call trace:
+ sysfs_slab_add+0x258/0x260 mm/slub.c:5973
+ __kmem_cache_create+0x60/0x118 mm/slub.c:4899
+ create_cache mm/slab_common.c:229 [inline]
+ kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
+ kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
+ f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
+ f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
+ f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
+ mount_bdev+0x1b8/0x210 fs/super.c:1400
+ f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
+ legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+
+Cc: <stable@kernel.org>
+Fixes: 81819f0fc8285 ("SLUB core")
+Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ mm/slub.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
-index c6a8bdc3a226..5d630288f86c 100644
---- a/net/netfilter/nf_conntrack_irc.c
-+++ b/net/netfilter/nf_conntrack_irc.c
-@@ -150,15 +150,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 	data = ib_ptr;
- 	data_limit = ib_ptr + skb->len - dataoff;
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5672,7 +5672,8 @@ static char *create_unique_id(struct kme
+ 	char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
+ 	char *p = name;
  
--	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
--	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
--	while (data < data_limit - (19 + MINMATCHLEN)) {
--		if (memcmp(data, "\1DCC ", 5)) {
-+	/* Skip any whitespace */
-+	while (data < data_limit - 10) {
-+		if (*data == ' ' || *data == '\r' || *data == '\n')
-+			data++;
-+		else
-+			break;
-+	}
-+
-+	/* strlen("PRIVMSG x ")=10 */
-+	if (data < data_limit - 10) {
-+		if (strncasecmp("PRIVMSG ", data, 8))
-+			goto out;
-+		data += 8;
-+	}
-+
-+	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
-+	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
-+	 */
-+	while (data < data_limit - (21 + MINMATCHLEN)) {
-+		/* Find first " :", the start of message */
-+		if (memcmp(data, " :", 2)) {
- 			data++;
- 			continue;
- 		}
-+		data += 2;
-+
-+		/* then check that place only for the DCC command */
-+		if (memcmp(data, "\1DCC ", 5))
-+			goto out;
- 		data += 5;
--		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
-+		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
+-	BUG_ON(!name);
++	if (!name)
++		return ERR_PTR(-ENOMEM);
  
- 		iph = ip_hdr(skb);
- 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
-@@ -174,7 +196,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
- 			pr_debug("DCC %s detected\n", dccprotos[i]);
+ 	*p++ = ':';
+ 	/*
+@@ -5752,6 +5753,8 @@ static int sysfs_slab_add(struct kmem_ca
+ 		 * for the symlinks.
+ 		 */
+ 		name = create_unique_id(s);
++		if (IS_ERR(name))
++			return PTR_ERR(name);
+ 	}
  
- 			/* we have at least
--			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
-+			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
- 			 * data left (== 14/13 bytes) */
- 			if (parse_dcc(data, data_limit, &dcc_ip,
- 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
--- 
-2.35.1
-
+ 	s->kobj.kset = kset;
 
 
