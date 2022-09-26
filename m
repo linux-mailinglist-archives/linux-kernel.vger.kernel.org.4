@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1F25E9868
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE4F5E9869
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 06:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiIZETa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 00:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S230128AbiIZEUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 00:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIZET2 (ORCPT
+        with ESMTP id S231218AbiIZETv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 00:19:28 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0905826ACE;
-        Sun, 25 Sep 2022 21:19:26 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q4FxYn022942;
-        Mon, 26 Sep 2022 04:19:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jGIsZwaNfBcfeiotnezyR7XItoRe/odxVPptgwyxJio=;
- b=pbQXB42OoCBCCKzpuUeBVbguNcTuY4ceGb7Gf/P/luAU2VGA4kAD7HLxBkfBCWvry7xw
- l/SUqZM4GMi9YAlehh16WIcg/XeAYhvfyysExt6Htf7kqelmS/LPMmKmJfRvU2ulQI2f
- +zAYbXkWvbjncadZ7cCwXpt2rJH9pQOeqNd0I0zh72z+rn3DzjeHx5GKfmYyuoFaKjaE
- b+ey4nJrEuyCoT0NuIccJ7NK8jvuUFKU61yhRo6dJiz+et7beURf/gNrFmZD+ImQMSnC
- 7J/HE+ZcPnvAK2icvVU5TZkaSzXQ0guUmoei3z0WgEOSaawD9PMRFFp8Ifawf9wPiKvs 3w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jss7sak2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 04:19:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28Q4E7no006922
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 04:14:07 GMT
-Received: from [10.216.15.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 25 Sep
- 2022 21:14:00 -0700
-Message-ID: <d2631b22-0dd3-0510-abc1-8e3b7bf65359@quicinc.com>
-Date:   Mon, 26 Sep 2022 09:43:44 +0530
+        Mon, 26 Sep 2022 00:19:51 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799A2BF76
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:19:49 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id jm5so5083729plb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 21:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Iz1cLT0Dw3NL/z+eOG9Yepj9a6YSjoGJCO36ZR0E7Nc=;
+        b=QDzXG2EVRBnMekEOoO23EeOjQ8zWexlHGQr4Pz7FexEplASG+GjmpU6zJDeBdnv6aR
+         Ah4IbHTxVJ7T1SLF8QHkMIXQJrQiDl8tt5cDunYBm1lqlagwo0ANvhqEjkArFY5u9PJ9
+         9hNccroGue6sdlkkeWDfP7XTuf9RWvmfOd60E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Iz1cLT0Dw3NL/z+eOG9Yepj9a6YSjoGJCO36ZR0E7Nc=;
+        b=UtJ5yjo0M5rhG/XVLKlcFUNyvQd/FrNYTpeitG/5CJQNUxG0DDXjybL8ZcKU8A+x4c
+         uCwU5OqIUa/09I5lQGNpm6m2749FSNnObbnuJSnvj0Fu9Znacsx345viwEDspwCaYl2l
+         bk6+fJdGF9GuloMWxrgNM13KqD76++udvWaV/dU8UT8+WJv+yAIRxmLHVNDIBcfhXM7W
+         6zRiUGu+hlHaxDF11QBOv55yUgs3QF2rJtgNZNGsX5z7pQvM4NpjVUxXKuvABGnyG3OP
+         eIrKz7Yvq1U89kFrYykOzViXP2XcmkXum3yyr4bkR1I6jpFL26m3lgogKzLz4o34iGyA
+         KG6Q==
+X-Gm-Message-State: ACrzQf0v5HM/PXDyv4MByrkkTQh9ID0bOSspTPXYWtqB8r4x0wdlHBRk
+        cVDzoz8MkzP4yvK9IdeV3pnUjw==
+X-Google-Smtp-Source: AMsMyM6KLQAgcO3l+E3+9GojcyLsebexsjYZquwGShD12eahwVaPSmIQaeSPiNJs3ORy7tPnb390iA==
+X-Received: by 2002:a17:902:b085:b0:178:3af4:31b2 with SMTP id p5-20020a170902b08500b001783af431b2mr20508421plr.122.1664165988970;
+        Sun, 25 Sep 2022 21:19:48 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:2a7d:69c:905d:1926])
+        by smtp.gmail.com with ESMTPSA id k1-20020aa79981000000b0053e72ed5252sm10877944pfh.42.2022.09.25.21.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 21:19:48 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 13:19:44 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
+Message-ID: <YzEoYPSC5Qf2aL92@google.com>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-19-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported max
- latencies
-Content-Language: en-US
-To:     <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: o9wLo7hOrfou5W7E40euN1RuWHp-BkwM
-X-Proofpoint-GUID: o9wLo7hOrfou5W7E40euN1RuWHp-BkwM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_02,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- impostorscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209260027
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924000454.3319186-19-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,101 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/16/2022 1:38 PM, Krishna chaitanya chundru wrote:
-> In ASPM driver, LTR threshold scale and value are updated based on
-> tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> LTR threshold scale and value are greater values than max snoop/non-snoop
-> value.
->
-> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> reported snoop/no-snoop values is greater than or equal to
-> LTR_L1.2_THRESHOLD value.
->
-> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Ping for updates.
-
-There are no outstanding comments for this patch and also it is not 
-being picked
-
-up in upstream.
-
-> ---
->
-> I am taking this patch forward as prasad is no more working with our org.
-> changes since v6:
-> 	- Rebasing with pci/next.
-> changes since v5:
-> 	- no changes, just reposting as standalone patch instead of reply to
-> 	  previous patch.
-> Changes since v4:
-> 	- Replaced conditional statements with min and max.
-> changes since v3:
-> 	- Changed the logic to include this condition "snoop/nosnoop
-> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> Changes since v2:
-> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> Changes since v1:
-> 	- Added missing variable declaration in v1 patch
-> ---
->   drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
->   1 file changed, 30 insertions(+)
->
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 928bf64..2bb8470 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->   {
->   	struct pci_dev *child = link->downstream, *parent = link->pdev;
->   	u32 val1, val2, scale1, scale2;
-> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
->   	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->   	u32 ctl1 = 0, ctl2 = 0;
->   	u32 pctl1, pctl2, cctl1, cctl2;
-> +	u16 ltr;
-> +	u16 max_snoop_lat, max_nosnoop_lat;
->   
->   	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->   		return;
->   
-> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> +	if (!ltr)
+On (22/09/24 02:10), John Ogness wrote:
+> +/**
+> + * cons_print_dropped - Print 'dropped' message if required
+> + * @desc:	Pointer to the output descriptor
+> + *
+> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
+> + * not 0 and the regular format is requested. Extended format does not
+> + * need this message because it prints the sequence numbers.
+> + *
+> + * In regular format the extended message buffer is not in use.
+> + * So print into it at the beginning and move the resulting string
+> + * just in front of the regular text buffer so that the message can
+> + * be printed in one go.
+> + *
+> + * In case of a message this returns with @desc->outbuf and @desc->len
+> + * updated. If no message is required then @desc is not modified.
+> + */
+> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
+> +{
+> +	struct cons_text_buf *txtbuf = desc->txtbuf;
+> +	size_t len;
+> +
+> +	if (!desc->dropped || desc->extmsg)
 > +		return;
 > +
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
+> +		return;
 > +
-> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> +	/* Print it into ext_text which is unused */
+> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
+> +		       "** %lu printk messages dropped **\n", desc->dropped);
+> +	desc->dropped = 0;
 > +
-> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> +	/* Copy it just below text so it goes out with one write */
+> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
 > +
-> +	/* choose the greater max scale value between snoop and no snoop value*/
-> +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> +
-> +	/* choose the greater max value between snoop and no snoop scales */
-> +	max_val = max(max_snp_val, max_nsnp_val);
-> +
->   	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->   	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->   	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->   	 */
->   	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->   	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> +
-> +	/*
-> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
-> +	 */
-> +	scale = min(scale, max_scale);
-> +	value = min(value, max_val);
-> +
->   	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->   
->   	/* Some broken devices only support dword access to L1 SS */
+> +	/* Update the descriptor */
+> +	desc->len += len;
+> +	desc->outbuf -= len;
+
+Oh, hmm. This does not look to me as a simplification. Quite
+the opposite, moving cons_text_buf::text pointer to point to
+cons_text_buf::text - strlen("... dropped messages...") looks
+somewhat fragile.
+
+Is printing 'dropped' and outbuf messages in one go such an
+important feature?
