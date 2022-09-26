@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEA85E9F4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD345EA2DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiIZKXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S237611AbiIZLPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiIZKWA (ORCPT
+        with ESMTP id S237804AbiIZLOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:22:00 -0400
+        Mon, 26 Sep 2022 07:14:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81AE4BD33;
-        Mon, 26 Sep 2022 03:16:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2014B647C9;
+        Mon, 26 Sep 2022 03:36:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0132D60BB7;
-        Mon, 26 Sep 2022 10:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12036C433C1;
-        Mon, 26 Sep 2022 10:16:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9E5360CFB;
+        Mon, 26 Sep 2022 10:36:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F86C433C1;
+        Mon, 26 Sep 2022 10:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187376;
-        bh=cD0sbFTQDeo1jT6GI36tjR3KsKTPaLQCsg0MQ2t0iyo=;
+        s=korg; t=1664188599;
+        bh=Bd4NT7bbB8cLbIQEupGQ5VfJHKOTc2fkz7gqkI6Rt4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t0n8Im9GbeYbTSvwfbM4/LSU5+SypF/QHVkrJ4GzMQaCLNQxrZtNFWePMSWjALJzO
-         azzzlWunfMMPZhNJAc5ZwzhcwMWQceg8TDOOR3EQHyy516A/G9IcLAyfmgkJL3EOs/
-         z/xTa8yMojODvPUIAo4yH+05afhZzClCfqcZu04I=
+        b=mJZU4A4eMPMAPmF2ZM7GB6rGiJfVFdGiLxleZgqqjDbSpq+HVri+2kxcUjugyg21P
+         6Eh3giNcbme0B+0IuTTyhE7prBpvtPtk8i4O6eezr81YRrZYJcRc3ntqw22exSY9Ck
+         /JEulO+WMCIpb8YjUuUQ+rz4VD/+t/NoMADxrfxU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Metzmacher <metze@samba.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 4.14 07/40] cifs: dont send down the destination address to sendmsg for a SOCK_STREAM
+        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 061/148] arm64: dts: rockchip: Fix typo in lisense text for PX30.Core
 Date:   Mon, 26 Sep 2022 12:11:35 +0200
-Message-Id: <20220926100738.494165197@linuxfoundation.org>
+Message-Id: <20220926100758.327775420@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
-References: <20220926100738.148626940@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Metzmacher <metze@samba.org>
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-commit 17d3df38dc5f4cec9b0ac6eb79c1859b6e2693a4 upstream.
+[ Upstream commit 4a00c43818dcc19be97250d4c3c4a1e2f1ed4f9d ]
 
-This is ignored anyway by the tcp layer.
+Fix the Amarula Solutions typo mistake in lisense text added
+in Engicam PX30.Core SoM dtsi.
 
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
-Cc: stable@vger.kernel.org
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d92a7c331f53c ("arm64: dts: rockchip: Add Engicam PX30.Core SOM")
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Link: https://lore.kernel.org/r/20220822103524.266731-1-jagan@amarulasolutions.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/transport.c |    4 ++--
+ arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -153,8 +153,8 @@ smb_send_kvec(struct TCP_Server_Info *se
+diff --git a/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi b/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi
+index 7249871530ab..5eecbefa8a33 100644
+--- a/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi
+@@ -2,8 +2,8 @@
+ /*
+  * Copyright (c) 2020 Fuzhou Rockchip Electronics Co., Ltd
+  * Copyright (c) 2020 Engicam srl
+- * Copyright (c) 2020 Amarula Solutons
+- * Copyright (c) 2020 Amarula Solutons(India)
++ * Copyright (c) 2020 Amarula Solutions
++ * Copyright (c) 2020 Amarula Solutions(India)
+  */
  
- 	*sent = 0;
- 
--	smb_msg->msg_name = (struct sockaddr *) &server->dstaddr;
--	smb_msg->msg_namelen = sizeof(struct sockaddr);
-+	smb_msg->msg_name = NULL;
-+	smb_msg->msg_namelen = 0;
- 	smb_msg->msg_control = NULL;
- 	smb_msg->msg_controllen = 0;
- 	if (server->noblocksnd)
+ #include <dt-bindings/gpio/gpio.h>
+-- 
+2.35.1
+
 
 
