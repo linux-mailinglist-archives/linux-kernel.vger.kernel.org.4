@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2A25EA3B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB935EA296
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbiIZLbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S237481AbiIZLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbiIZLaf (ORCPT
+        with ESMTP id S237792AbiIZLJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:30:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FCA6BD44;
-        Mon, 26 Sep 2022 03:42:03 -0700 (PDT)
+        Mon, 26 Sep 2022 07:09:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3355856BBF;
+        Mon, 26 Sep 2022 03:35:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED13560C0B;
-        Mon, 26 Sep 2022 10:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0484AC433C1;
-        Mon, 26 Sep 2022 10:40:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03926B80915;
+        Mon, 26 Sep 2022 10:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349B3C433D7;
+        Mon, 26 Sep 2022 10:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188822;
-        bh=ayO3WIFiJihs2MM+opQbImdBIj0AnX09GvLi7XT6pkk=;
+        s=korg; t=1664188412;
+        bh=YU5ZVW+vaaa0D5a/Gtln8E0+5y95LhWnRWKcQDa7Mfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=scEmFJqAcLIYWsS2SCHfhUVuH8Z+ct9Ip+VRYhr2XB4aaLWrXIk7CQrAhFlGJkVtj
-         os6EQtah027ZAvpyTer3EKwdv18kxViPJCbS4pJytcc0Argr/sL8+C4EuYBqpQbQSk
-         VV+/vwYfMzw7lo90RhFLghJokJBb6Ouxj79EkunA=
+        b=lmsY6lA4zcgyJ0scuuiwY05KoN8+ZGz4biCqx02YeAAAz6soCdgO4gpCXD3xhQDFj
+         wZPG4IeyPc9Qn8xpLTTlGfmtGua+GQ85lVlrO/WpRdMQs4z5ZMzXKUTWk5v3nXh1bL
+         3lrD7r60CeVRWiMtmNd6UPhTHuo5ipdsvdQVK4rU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        llvm@lists.linux.dev, Nathan Huckleberry <nhuck@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 133/148] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.10 141/141] ext4: make directory inode spreading reflect flexbg size
 Date:   Mon, 26 Sep 2022 12:12:47 +0200
-Message-Id: <20220926100801.201481338@linuxfoundation.org>
+Message-Id: <20220926100759.579489997@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Huckleberry <nhuck@google.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit b0b9408f132623dc88e78adb5282f74e4b64bb57 ]
+commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
 
-The mode_valid field in drm_connector_helper_funcs is expected to be of
-type:
-enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
-				     struct drm_display_mode *mode);
+Currently the Orlov inode allocator searches for free inodes for a
+directory only in flex block groups with at most inodes_per_group/16
+more directory inodes than average per flex block group. However with
+growing size of flex block group this becomes unnecessarily strict.
+Scale allowed difference from average directory count per flex block
+group with flex block group size as we do with other metrics.
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
-
-The return type of cdn_dp_connector_mode_valid should be changed from
-int to enum drm_mode_status.
-
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220913205555.155149-1-nhuck@google.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/rockchip/cdn-dp-core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/ext4/ialloc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index 13c6b857158f..6b5d0722afa6 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -277,8 +277,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
- 	return ret;
- }
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -508,7 +508,7 @@ static int find_group_orlov(struct super
+ 		goto fallback;
+ 	}
  
--static int cdn_dp_connector_mode_valid(struct drm_connector *connector,
--				       struct drm_display_mode *mode)
-+static enum drm_mode_status
-+cdn_dp_connector_mode_valid(struct drm_connector *connector,
-+			    struct drm_display_mode *mode)
- {
- 	struct cdn_dp_device *dp = connector_to_dp(connector);
- 	struct drm_display_info *display_info = &dp->connector.display_info;
--- 
-2.35.1
-
+-	max_dirs = ndirs / ngroups + inodes_per_group / 16;
++	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
+ 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
+ 	if (min_inodes < 1)
+ 		min_inodes = 1;
 
 
