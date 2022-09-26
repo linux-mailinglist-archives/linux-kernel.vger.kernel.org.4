@@ -2,217 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E9F5EB605
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D626B5EB606
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiIZXzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S230518AbiIZXz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIZXzj (ORCPT
+        with ESMTP id S231136AbiIZXzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:55:39 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883D86C11E;
-        Mon, 26 Sep 2022 16:55:37 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id i26so13273529lfp.11;
-        Mon, 26 Sep 2022 16:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9vi6+zq0DAT69ke/lJn3j++9PpemG38FROkXShLYoO0=;
-        b=J2EWoAC9SOC9dmx1KGyfmRfDsxFWdoC16/QNR2BJw3nGaEko/IP5N2Rj8w14ydnFVo
-         Vrl8YJBmm7o/0tiGWCvW+p53PQfS/FXzDlXVpsR6fRmlI3Xa08wNoU1fGF4buYg4hwl3
-         NYKVPAP8UuXAWbq+5Kj9FP58zP8GTBDVdjclwQpJgOhj4u/+CK4BAoQqryFDHFn64TAQ
-         qbL4nn1hhj2wnPjsbboGn31Z8ffpzVhyBb1DVlVcCXCdJm5fzzjm5bxcNWCbbkepWvsA
-         uVgsZndG7YFDLSYY0nINeHTKIspehUSP1hoX0IywClk3GxNae1Gxenzrc1GxA7W17dFr
-         tjWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9vi6+zq0DAT69ke/lJn3j++9PpemG38FROkXShLYoO0=;
-        b=avIHLRLANDUPypQQUpDxNF0vT7lWunh/iuAUEQkc1IMItQOb4ed5jGOcV4AarP/zpF
-         oiGNeVr6SKFBR9q7zbDxzuH7Y8RvnpsgWKI+iTd6PytqZ52Iwa5jRBl4woe7SDlBXFpc
-         x9lm8fw92b4/i+NN66I+xZIKBXBOArGdGlpjFqYLvBDoS9FGQsfbSAgF74in3TUj+jb6
-         zjy+NqlfeF2ofSqxDXQiG/Mg0RY0J35xQgyg/pAOilVSNyhp6Yiwl1rH/NOuKLeilGwQ
-         ZYuvRirNXVVn7JNC1KoJfjTRAduCzxrbIb1kIcSDMcOI4HjAqFl74XhTNAivc9MKYiow
-         128g==
-X-Gm-Message-State: ACrzQf2uMu1GpDbXCBn2owsX0gdd5wO92mDzff/bHhk/BTrtcNKzQ3qo
-        AuYSLT9dGcpUg32XFre5E2cXsOdiUzWl2fet6tY=
-X-Google-Smtp-Source: AMsMyM5eHdP3IIpoUZq09/6FVsJgBOqH8PnrjiqJEq3slsfrHnfO2afIKNJ2tbfIr4YbFU7mrQPD0k5XSFuPRCk/Its=
-X-Received: by 2002:a19:6555:0:b0:49e:7d52:a4ca with SMTP id
- c21-20020a196555000000b0049e7d52a4camr10562306lfj.198.1664236535586; Mon, 26
- Sep 2022 16:55:35 -0700 (PDT)
+        Mon, 26 Sep 2022 19:55:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AF679680
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:55:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE1C6B816E9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44F2C43143
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664236543;
+        bh=3oWBp5OuNgMk4osp9P8nypPw1Pry43XjuA12xTaf6Ak=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q+3y1fZVt2CGEGfpERpVE/yGjAX+Q/+EktIKab/h9I7bSZeiCveYzq7/QHfIz4yj8
+         QyOTxGJ4Ba82eaie2j8xzJ1PiuWq8KGDThO+Eb//aB3WEjyI91j+ex2vLRvmv4qliI
+         gYabKf4lS2MBZgyQXs8ezO0CuByHzfI9RAUL3LVq/boVIyRb047Jo1mb1FgORoN4fI
+         TYuLq9Bjj46lY0THdKqEOfOaktRRlbGo1azMhjy0Fwo1BgdKqKHZU3z5NcB3n79uL9
+         L4BzLoH+GthPQ//1qCbKnfxXjYn4ASrzDZvJzj3aMgiW1YpIrt4W/lxICeFtP/Bm82
+         8jlqimysawzaw==
+Received: by mail-ot1-f48.google.com with SMTP id r34-20020a05683044a200b0065a12392fd7so5450034otv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:55:43 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2ALDFsOmBjGNXxafWqMtzHy6oFP+5Hcv6DsoJp78RUwKAdzu2o
+        YnrCWbCa4T5xmQLsr2qw+Vyk/7MDMJLzFLVGQbc=
+X-Google-Smtp-Source: AMsMyM4f+D6DvJ/+x2of0iu+4OrOFy9HHMiCsEQmpdrH1/bZ+CR9gVfL7hSG/foSTOwrT+0d+IevqmOtrzL8lQnAWdc=
+X-Received: by 2002:a9d:37b6:0:b0:65c:abc:c1d7 with SMTP id
+ x51-20020a9d37b6000000b0065c0abcc1d7mr5909560otb.308.1664236542750; Mon, 26
+ Sep 2022 16:55:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220926163057.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
-In-Reply-To: <20220926163057.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 26 Sep 2022 16:55:23 -0700
-Message-ID: <CABBYNZJ1r-qiE6+8ZY1phgOJ3DJZRQFSNLugZARtBChUC7d2UQ@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: Prevent double register of suspend
-To:     Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc:     linux-bluetooth@vger.kernel.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20220925175356.681-1-jszhang@kernel.org> <20220925175356.681-3-jszhang@kernel.org>
+ <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com> <YzHNr13U+SdwJHo1@xhacker>
+In-Reply-To: <YzHNr13U+SdwJHo1@xhacker>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 27 Sep 2022 07:55:27 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+Message-ID: <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] riscv: consolidate ret_from_kernel_thread into ret_from_fork
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abhishek,
+On Tue, Sep 27, 2022 at 12:14 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Mon, Sep 26, 2022 at 07:25:30AM +0800, Guo Ren wrote:
+> > On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> wrot=
+e:
+> > >
+> > > The ret_from_kernel_thread() behaves similarly with ret_from_fork(),
+> > > the only difference is whether call the fn(arg) or not, this can be
+> > > acchieved by testing fn is NULL or not, I.E s0 is 0 or not.
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > ---
+> > >  arch/riscv/kernel/entry.S   | 11 +++--------
+> > >  arch/riscv/kernel/process.c |  5 ++---
+> > >  2 files changed, 5 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > index 2207cf44a3bc..a3e1ed2fa2ac 100644
+> > > --- a/arch/riscv/kernel/entry.S
+> > > +++ b/arch/riscv/kernel/entry.S
+> > > @@ -323,20 +323,15 @@ END(handle_kernel_stack_overflow)
+> > >
+> > >  ENTRY(ret_from_fork)
+> > >         call schedule_tail
+> > > -       move a0, sp /* pt_regs */
+> > > -       la ra, ret_from_exception
+> > > -       tail syscall_exit_to_user_mode
+> > > -ENDPROC(ret_from_fork)
+> > > -
+> > > -ENTRY(ret_from_kernel_thread)
+> > > -       call schedule_tail
+> > > +       beqz s0, 1f     /* not from kernel thread */
+>
+> Hi Guo,
+>
+> > We can't use s0 as condition for ret_from_fork/ret_from_kernel_thread.
+> > The s0=3D0 is also okay for ret_from_fork.
+>
+> IIUC, in ret_from_fork, the s0 comes p->thread.s[0] rather than s0 in
+> pt_regs.
+Yes, you are correct.
 
-On Mon, Sep 26, 2022 at 4:31 PM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
 >
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Suspend notifier should only be registered and unregistered once per
-> hdev. Since hci_sock and hci_register_dev run in different work queues
-> (sock vs driver), add hci_dev_lock to avoid double registering.
->
-> Reported-by: syzbot <syzkaller@googlegroups.com>
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
-> This is fixing a syzbot reported warning. Tested in the following ways:
-> * Normal start-up of driver with bluez.
-> * Start/stop loop using HCI_USER_CHANNEL (sock path).
-> * USB reset triggering hci_dev_unregister (driver path).
->
-> ------------[ cut here ]------------
-> double register detected
-> WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-> notifier_chain_register kernel/notifier.c:27 [inline]
-> WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-> notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-> Modules linked in:
-> CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
-> 5.10.136-syzkaller-19376-g6f46a5fe0124 #0
->   8f0771607702f5ef7184d2ee33bd0acd70219fc4
->   Hardware name: Google Google Compute Engine/Google Compute Engine,
->   BIOS Google 07/22/2022
->   RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
->   RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
->   Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
->   39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
->      e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
->      RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
->      RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
->      RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
->      RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
->      R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
->      R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
->      FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
->      knlGS:0000000000000000
->      CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->      CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
->      DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->      DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->      Call Trace:
->      blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
->      hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
->      [inline]
->      hci_register_suspend_notifier+0x6b/0x7c
->      net/bluetooth/hci_core.c:2727
->      hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
->      __sock_release+0xcd/0x1de net/socket.c:597
->      sock_close+0x18/0x1c net/socket.c:1267
->      __fput+0x418/0x729 fs/file_table.c:281
->      task_work_run+0x12b/0x15b kernel/task_work.c:151
->      tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->      exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
->      exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
->      syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
->      entry_SYSCALL_64_after_hwframe+0x61/0xc6
->      RIP: 0033:0x78e38575e1db
->      Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
->      7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
->      <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
->      RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
->      0000000000000003
->      RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
->      RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
->      RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
->      R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
->      R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
->
->  include/net/bluetooth/hci.h |  1 +
->  net/bluetooth/hci_core.c    | 16 ++++++++++++++--
->  2 files changed, 15 insertions(+), 2 deletions(-)
->
-> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-> index e004ba04a9ae..36304c217151 100644
-> --- a/include/net/bluetooth/hci.h
-> +++ b/include/net/bluetooth/hci.h
-> @@ -353,6 +353,7 @@ enum {
->         HCI_OFFLOAD_CODECS_ENABLED,
->         HCI_LE_SIMULTANEOUS_ROLES,
->         HCI_CMD_DRAIN_WORKQUEUE,
-> +       HCI_SUSPEND_REGISTERED,
->
->         HCI_MESH_EXPERIMENTAL,
->         HCI_MESH,
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 66c7cdba0d32..5a32d17c69b8 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -2760,10 +2760,18 @@ int hci_register_suspend_notifier(struct hci_dev *hdev)
->  {
->         int ret = 0;
->
-> -       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks)) {
-> +       hci_dev_lock(hdev);
-> +       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
-> +           !hci_dev_test_and_set_flag(hdev, HCI_SUSPEND_REGISTERED)) {
-> +               memset(&hdev->suspend_notifier, 0,
-> +                      sizeof(hdev->suspend_notifier));
->                 hdev->suspend_notifier.notifier_call = hci_suspend_notifier;
->                 ret = register_pm_notifier(&hdev->suspend_notifier);
-> +
-> +               if (ret)
-> +                       hci_dev_clear_flag(hdev, HCI_SUSPEND_REGISTERED);
->         }
-> +       hci_dev_unlock(hdev);
->
->         return ret;
->  }
-> @@ -2772,8 +2780,12 @@ int hci_unregister_suspend_notifier(struct hci_dev *hdev)
->  {
->         int ret = 0;
->
-> -       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks))
-> +       hci_dev_lock(hdev);
-> +       if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
-> +           hci_dev_test_and_clear_flag(hdev, HCI_SUSPEND_REGISTERED)) {
->                 ret = unregister_pm_notifier(&hdev->suspend_notifier);
-> +       }
-> +       hci_dev_unlock(hdev);
->
->         return ret;
->  }
+> >
+> >         /* p->thread holds context to be restored by __switch_to() */
+> >         if (unlikely(args->fn)) {
+> >                 /* Kernel thread */
+> >                 memset(childregs, 0, sizeof(struct pt_regs));
+> >                 childregs->gp =3D gp_in_global;
+> >                 /* Supervisor/Machine, irqs on: */
+> >                 childregs->status =3D SR_PP | SR_PIE;
+> >
+> >                 p->thread.ra =3D (unsigned long)ret_from_kernel_thread;
+> >                 p->thread.s[0] =3D (unsigned long)args->fn;
+> >                 p->thread.s[1] =3D (unsigned long)args->fn_arg;
+> >         } else {
+> >                 *childregs =3D *(current_pt_regs());
+> >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Oh, I'm wrong, It's switch_to_restore -> exception_restore.
 
-Perhaps it would have been better to stop calling these on hci_sock.c
-and just make the notifier callback check
-hci_dev_test_and_set_flag(hdev, HCI_USER_CHANNEL) return NOTIFY_DONE.
-
-> --
-> 2.37.3.998.g577e59143f-goog
+> >                 if (usp) /* User fork */
+> >                         childregs->sp =3D usp;
+> >                 if (clone_flags & CLONE_SETTLS)
+> >                         childregs->tp =3D tls;
+> >                 childregs->a0 =3D 0; /* Return value of fork() */
+> >                 p->thread.ra =3D (unsigned long)ret_from_fork;
+> >         }
+> >         p->thread.sp =3D (unsigned long)childregs; /* kernel sp */
+> >
 >
+> <snip>
+>
+> > > @@ -182,8 +180,9 @@ int copy_thread(struct task_struct *p, const stru=
+ct kernel_clone_args *args)
+> > >                 if (clone_flags & CLONE_SETTLS)
+> > >                         childregs->tp =3D tls;
+> > >                 childregs->a0 =3D 0; /* Return value of fork() */
+> > > -               p->thread.ra =3D (unsigned long)ret_from_fork;
+> > > +               p->thread.s[0] =3D 0;
+>
+> Here we assign 0 to p->thread.s[0]
+I missed that.
+
+Merge thread & fork is not a good idea, and using fp as the flag is so impl=
+icit.
+
+=E2=9E=9C  linux git:(rv64sv32) grep ret_from_fork arch -r | grep entry.S
+arch/arc/kernel/entry.S:ENTRY(ret_from_fork)
+arch/arc/kernel/entry.S:END(ret_from_fork)
+arch/csky/kernel/entry.S:ENTRY(ret_from_fork)
+arch/x86/kernel/process_32.c: * the task-switch, and shows up in
+ret_from_fork in entry.S,
+arch/alpha/kernel/entry.S:      .globl  ret_from_fork
+arch/alpha/kernel/entry.S:      .ent    ret_from_fork
+arch/alpha/kernel/entry.S:ret_from_fork:
+arch/alpha/kernel/entry.S:.end ret_from_fork
+arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_fork)
+arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_fork)
+arch/hexagon/kernel/vm_entry.S: .globl ret_from_fork
+arch/hexagon/kernel/vm_entry.S:ret_from_fork:
+arch/microblaze/kernel/entry.S:   (copy_thread makes ret_from_fork the
+return address in each new thread's
+arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_fork):
+arch/m68k/kernel/entry.S:ENTRY(ret_from_fork)
+arch/arm64/kernel/entry.S:SYM_CODE_START(ret_from_fork)
+arch/arm64/kernel/entry.S:SYM_CODE_END(ret_from_fork)
+arch/arm64/kernel/entry.S:NOKPROBE(ret_from_fork)
+arch/riscv/kernel/entry.S:ENTRY(ret_from_fork)
+arch/riscv/kernel/entry.S:ENDPROC(ret_from_fork)
+arch/s390/kernel/entry.S:# a new process exits the kernel with ret_from_for=
+k
+arch/s390/kernel/entry.S:ENTRY(ret_from_fork)
+arch/s390/kernel/entry.S:       brasl   %r14,__ret_from_fork
+arch/s390/kernel/entry.S:ENDPROC(ret_from_fork)
+arch/mips/kernel/entry.S:FEXPORT(ret_from_fork)
+arch/openrisc/kernel/entry.S:   /* All syscalls return here... just
+pay attention to ret_from_fork
+arch/openrisc/kernel/entry.S:ENTRY(ret_from_fork)
+arch/openrisc/kernel/entry.S:    * that may be either schedule(),
+ret_from_fork(), or
+arch/nios2/kernel/entry.S:ENTRY(ret_from_fork)
+arch/xtensa/kernel/entry.S:ENTRY(ret_from_fork)
+arch/xtensa/kernel/entry.S:ENDPROC(ret_from_fork)
+arch/sparc/kernel/entry.S:      .globl  ret_from_fork
+arch/sparc/kernel/entry.S:ret_from_fork:
+=E2=9E=9C  linux git:(rv64sv32) grep ret_from_kernel_thread arch -r | grep =
+entry.S
+arch/csky/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/alpha/kernel/entry.S:      .globl  ret_from_kernel_thread
+arch/alpha/kernel/entry.S:      .ent    ret_from_kernel_thread
+arch/alpha/kernel/entry.S:ret_from_kernel_thread:
+arch/alpha/kernel/entry.S:.end ret_from_kernel_thread
+arch/parisc/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/parisc/kernel/entry.S:END(ret_from_kernel_thread)
+arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_kernel_thread)
+arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_kernel_thread)
+arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_kernel_thread):
+arch/m68k/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/riscv/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/riscv/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
+arch/mips/kernel/entry.S:FEXPORT(ret_from_kernel_thread)
+arch/openrisc/kernel/entry.S:    * ret_from_kernel_thread().  If we
+are returning to a new thread,
+arch/nios2/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/xtensa/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+arch/xtensa/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
+arch/sparc/kernel/entry.S:      .globl  ret_from_kernel_thread
+arch/sparc/kernel/entry.S:ret_from_kernel_thread:
+
+Many architectures use a similar style. If you want to continue the
+patch, I think you should first rename ret_from_fork properly, and
+give an explicit flag definition, not just setting fp =3D 0.
+
+>
+> Thanks
 
 
--- 
-Luiz Augusto von Dentz
+
+--=20
+Best Regards
+ Guo Ren
