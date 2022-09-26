@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EE85EA202
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2335EA0E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbiIZLAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
+        id S236299AbiIZKmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237061AbiIZK6l (ORCPT
+        with ESMTP id S236290AbiIZKlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:58:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3F1520A3;
-        Mon, 26 Sep 2022 03:30:19 -0700 (PDT)
+        Mon, 26 Sep 2022 06:41:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7654660;
+        Mon, 26 Sep 2022 03:24:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12A04B80926;
-        Mon, 26 Sep 2022 10:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659C3C433D7;
-        Mon, 26 Sep 2022 10:28:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD0D60B7E;
+        Mon, 26 Sep 2022 10:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB98C433C1;
+        Mon, 26 Sep 2022 10:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188109;
-        bh=RN3mXpCF+cTfUKv/S5/Vx/KxrCSQbyfROw4yOYMoEAg=;
+        s=korg; t=1664187801;
+        bh=ro6m7C/bg7snchqXrcsCCConBzeIdd6JQ1ZeDqS7cxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QfuXCo+WPZwqccXvX63eGykBQPlNmejBpR1hK4ZsHdHojTsOc9uWhTeTh7GvMZQD0
-         nnzkndmoxxukSa8+/R8F7qBmIvJPPcr18tcNJjQt783/WOJCVd23JnYuxQnOB1DFZi
-         n4pVoE0dI8UdyTYXTkmbFXIomHo4viMONkzCUtls=
+        b=pj/sLBPeNUuzoNbHl5oq/W8WtRtIaHnDLuixSDMRW6bkJ4xlevHKboVu3X5It5aHU
+         0BCe0bzOuG+iC+QfzKMA52yPY6v+EKr16y7EbbE2wZesmKH+EMlm608YjOco/DgWbi
+         tZ4ikuANIlJxBC008k3tiuyP/NUG7bBs6cZEJUYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 043/141] ALSA: hda/realtek: Re-arrange quirk table entries
-Date:   Mon, 26 Sep 2022 12:11:09 +0200
-Message-Id: <20220926100756.006125478@linuxfoundation.org>
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 037/120] usb: xhci-mtk: use @sch_tt to check whether need do TT schedule
+Date:   Mon, 26 Sep 2022 12:11:10 +0200
+Message-Id: <20220926100752.048483753@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,53 +53,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit b16c8f229a58eaddfc58aab447253464abd3c85e upstream.
+[ Upstream commit 4a56adf4fafbc41ceffce0c3f385f59d4fc3c16a ]
 
-A few entries have been mistakenly inserted in wrong positions without
-considering the SSID ordering.  Place them at right positions.
+It's clearer to use @sch_tt to check whether need do TT schedule,
+no function is changed.
 
-Fixes: b7557267c233 ("ALSA: hda/realtek: Add quirk for ASUS GA402")
-Fixes: 94db9cc8f8fa ("ALSA: hda/realtek: Add quirk for ASUS GU603")
-Fixes: 739d0959fbed ("ALSA: hda: Add quirk for ASUS Flow x13")
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220915154724.31634-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/324a76782ccaf857a8f01f67aee435e8ec7d0e28.1615170625.git.chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Stable-dep-of: 548011957d1d ("usb: xhci-mtk: relax TT periodic bandwidth allocation")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8913,10 +8913,11 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x13b0, "ASUS Z550SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
- 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
-+	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
-+	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
- 	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
--	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1043, 0x1881, "ASUS Zephyrus S/M", ALC294_FIXUP_ASUS_GX502_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x18b1, "Asus MJ401TA", ALC256_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x18f1, "Asus FX505DT", ALC256_FIXUP_ASUS_HEADSET_MIC),
-@@ -8932,13 +8933,12 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x1bbd, "ASUS Z550MA", ALC255_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
- 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
-+	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
- 	SND_PCI_QUIRK(0x1043, 0x1e11, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA502),
- 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
--	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
--	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
- 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x834a, "ASUS S101", ALC269_FIXUP_STEREO_DMIC),
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 59ba25ca018d..b1da3cb077c9 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -548,7 +548,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 	min_num_budget = sch_ep->num_budget_microframes;
+ 	esit_boundary = get_esit_boundary(sch_ep);
+ 	for (offset = 0; offset < sch_ep->esit; offset++) {
+-		if (is_fs_or_ls(udev->speed)) {
++		if (sch_ep->sch_tt) {
+ 			ret = check_sch_tt(udev, sch_ep, offset);
+ 			if (ret)
+ 				continue;
+@@ -585,7 +585,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 	sch_ep->cs_count = min_cs_count;
+ 	sch_ep->num_budget_microframes = min_num_budget;
+ 
+-	if (is_fs_or_ls(udev->speed)) {
++	if (sch_ep->sch_tt) {
+ 		/* all offset for tt is not ok*/
+ 		if (!tt_offset_ok)
+ 			return -ERANGE;
+-- 
+2.35.1
+
 
 
