@@ -2,178 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9EC5E9E26
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0456B5E9E29
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbiIZJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S234352AbiIZJqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiIZJpU (ORCPT
+        with ESMTP id S232973AbiIZJpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:45:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F18102C;
-        Mon, 26 Sep 2022 02:44:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6438422087;
-        Mon, 26 Sep 2022 09:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664185475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aYfBxVLDKXRyCiZQ7+UvH4mxxp4XXerCm1q4/cpIXHU=;
-        b=2p+BTxx+HjqmIk5/4mNduRmMMDjaKzg0la9AUsCspEoEPjVP1ZySGgkcgzv5kxdj8aYCdi
-        GbFMFk7huSG9pQgeJoDVbVTeRECMPNa6saRsHNcse4REWEQcXea24FeBCkGXwO6cZgxzQ+
-        OVzVKWnj1U+Wnznf4CQTCvNGE9aDfWM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664185475;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aYfBxVLDKXRyCiZQ7+UvH4mxxp4XXerCm1q4/cpIXHU=;
-        b=iI4pLzcIHbiJOieLr/8DhQlpa13oAZeoiB2NObDSNXDrNC7x56vqgFDsioIQAwkqnikFal
-        /h7fAxTr9V7JAcCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56060139BD;
-        Mon, 26 Sep 2022 09:44:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id U9LxFIN0MWMMfwAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 26 Sep 2022 09:44:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D2977A0685; Mon, 26 Sep 2022 11:44:34 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 11:44:34 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v3 1/5] wbt: don't show valid wbt_lat_usec in sysfs while
- wbt is disabled
-Message-ID: <20220926094434.jrl6gnlbjqkex3wa@quack3>
-References: <20220922113558.1085314-1-yukuai3@huawei.com>
- <20220922113558.1085314-2-yukuai3@huawei.com>
+        Mon, 26 Sep 2022 05:45:22 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42622640D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:44:45 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id u9-20020a5edd49000000b006a0f03934e9so3533995iop.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:44:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=OVmYGThiIbVFpu7Nh3FHoj779XXZev1QQuPFm5XI3do=;
+        b=3yaBdXImytYcgIP757I36nAh+3vsGIOz0FHXVS/fKC+NEUjMAAgewi9mmiu7gRAZ9Y
+         qMKIiTZEZTE9u+6iEg8nxtxK1Of8ZiRYanDEfwrNBm4yOpYF1vwZ9eX+OYmEv4fC6Hey
+         JkmH6i+mjkq3mjrpBaMTFzdazdFgM+SEf7PvRUe4oE8iOzv04hG6szZmXl5xdrQf9Kbb
+         Ydmr+x8VKauMgEE8jjkrUOEuXSJkfWbbWgbY4Vq/B++JcFKn3lKGpzYCxToyfO1PbbCY
+         CFSnqq53HuMSamT1NaU+V89EJlexLFVUO0NnJCVMsaAef9ShgbNSJWrwyb338gssqBcs
+         GofA==
+X-Gm-Message-State: ACrzQf1eKWQVHgEh+WfhCWxBhyzusgnDDKXLjthy2UnINZSKW211R1nh
+        ksKG4dEcBdF8lLgGPNHr6LXEo3JdZwSEl2rSmAOXm/ZpU+KO
+X-Google-Smtp-Source: AMsMyM5h9FonT8qcmfDa/rlhcFdoztwBORF9ht1QN1RhErfaf3lWCtwHJpjNbvF/Xa4tWM7FHmrXF2zLYD9vX9FI6rkaFOfXS3tQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220922113558.1085314-2-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:ad11:0:b0:2f6:47ac:4dcc with SMTP id
+ w17-20020a92ad11000000b002f647ac4dccmr9577522ilh.250.1664185484592; Mon, 26
+ Sep 2022 02:44:44 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 02:44:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a6505105e9916037@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in extAlloc
+From:   syzbot <syzbot+5f088f29593e6b4c8db8@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 22-09-22 19:35:54, Yu Kuai wrote:
-> Currently, if wbt is initialized and then disabled by
-> wbt_disable_default(), sysfs will still show valid wbt_lat_usec, which
-> will confuse users that wbt is still enabled.
-> 
-> This patch shows wbt_lat_usec as zero and forbid to set it while wbt
-> is disabled.
+Hello,
 
-So I agree we should show 0 in wbt_lat_usec if wbt is disabled by
-wbt_disable_default(). But why do you forbid setting of wbt_lat_usec?
-IMHO if wbt_lat_usec is set, admin wants to turn on wbt so we should just
-update rwb->enable_state to WBT_STATE_ON_MANUAL.
+syzbot found the following issue on:
 
-								Honza
+HEAD commit:    105a36f3694e Merge tag 'kbuild-fixes-v6.0-3' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14b56188880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=5f088f29593e6b4c8db8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14735cdf080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15dfcdc4880000
 
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Reported-and-tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-> ---
->  block/blk-sysfs.c | 9 ++++++++-
->  block/blk-wbt.c   | 7 +++++++
->  block/blk-wbt.h   | 5 +++++
->  3 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-> index e1f009aba6fd..1955bb6a284d 100644
-> --- a/block/blk-sysfs.c
-> +++ b/block/blk-sysfs.c
-> @@ -467,10 +467,14 @@ static ssize_t queue_io_timeout_store(struct request_queue *q, const char *page,
->  
->  static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
->  {
-> +	u64 lat;
-> +
->  	if (!wbt_rq_qos(q))
->  		return -EINVAL;
->  
-> -	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
-> +	lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
-> +
-> +	return sprintf(page, "%llu\n", lat);
->  }
->  
->  static ssize_t queue_wb_lat_store(struct request_queue *q, const char *page,
-> @@ -493,6 +497,9 @@ static ssize_t queue_wb_lat_store(struct request_queue *q, const char *page,
->  			return ret;
->  	}
->  
-> +	if (wbt_disabled(q))
-> +		return -EINVAL;
-> +
->  	if (val == -1)
->  		val = wbt_default_latency_nsec(q);
->  	else if (val >= 0)
-> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-> index a9982000b667..68851c2c02d2 100644
-> --- a/block/blk-wbt.c
-> +++ b/block/blk-wbt.c
-> @@ -422,6 +422,13 @@ static void wbt_update_limits(struct rq_wb *rwb)
->  	rwb_wake_all(rwb);
->  }
->  
-> +bool wbt_disabled(struct request_queue *q)
-> +{
-> +	struct rq_qos *rqos = wbt_rq_qos(q);
-> +
-> +	return !rqos || RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT;
-> +}
-> +
->  u64 wbt_get_min_lat(struct request_queue *q)
->  {
->  	struct rq_qos *rqos = wbt_rq_qos(q);
-> diff --git a/block/blk-wbt.h b/block/blk-wbt.h
-> index 7e44eccc676d..e42465ddcbb6 100644
-> --- a/block/blk-wbt.h
-> +++ b/block/blk-wbt.h
-> @@ -94,6 +94,7 @@ void wbt_enable_default(struct request_queue *);
->  
->  u64 wbt_get_min_lat(struct request_queue *q);
->  void wbt_set_min_lat(struct request_queue *q, u64 val);
-> +bool wbt_disabled(struct request_queue *);
->  
->  void wbt_set_write_cache(struct request_queue *, bool);
->  
-> @@ -125,6 +126,10 @@ static inline u64 wbt_default_latency_nsec(struct request_queue *q)
->  {
->  	return 0;
->  }
-> +static inline bool wbt_disabled(struct request_queue *q)
-> +{
-> +	return true;
-> +}
->  
->  #endif /* CONFIG_BLK_WBT */
->  
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d3172aeebe38/disk-105a36f3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/75046f57bda3/vmlinux-105a36f3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5f088f29593e6b4c8db8@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_extent.c:314:16
+shift exponent -1 is negative
+CPU: 0 PID: 3605 Comm: syz-executor226 Not tainted 6.0.0-rc6-syzkaller-00321-g105a36f3694e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ extBalloc fs/jfs/jfs_extent.c:314 [inline]
+ extAlloc.cold+0x8d/0x92 fs/jfs/jfs_extent.c:122
+ jfs_get_block+0x661/0xa90 fs/jfs/inode.c:248
+ __block_write_begin_int+0x3ca/0x1520 fs/buffer.c:2006
+ __block_write_begin fs/buffer.c:2056 [inline]
+ block_write_begin+0xb5/0x4d0 fs/buffer.c:2117
+ jfs_write_begin+0x2d/0xd0 fs/jfs/inode.c:304
+ generic_perform_write+0x246/0x560 mm/filemap.c:3738
+ __generic_file_write_iter+0x2aa/0x4d0 mm/filemap.c:3866
+ generic_file_write_iter+0xdf/0x350 mm/filemap.c:3898
+ call_write_iter include/linux/fs.h:2187 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:729
+ do_iter_write+0x182/0x700 fs/read_write.c:855
+ vfs_writev+0x1aa/0x630 fs/read_write.c:928
+ do_writev+0x133/0x2f0 fs/read_write.c:971
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f61f4034f29
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1287f7a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 0000000000000016 RCX: 00007f61f4034f29
+RDX: 0000000000000001 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 00007f61f3ff46f0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000f8008000
+R13: 0000000000000000 R14: 00080000000000f8 R15: 0000000000000000
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
