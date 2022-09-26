@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFC25E9F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385605EA23C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbiIZKSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S237113AbiIZLEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiIZKRY (ORCPT
+        with ESMTP id S237059AbiIZLDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:17:24 -0400
+        Mon, 26 Sep 2022 07:03:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B7836DF8;
-        Mon, 26 Sep 2022 03:15:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1E35EDF4;
+        Mon, 26 Sep 2022 03:32:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 101D5B80925;
-        Mon, 26 Sep 2022 10:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6797FC433C1;
-        Mon, 26 Sep 2022 10:14:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9224DB8094D;
+        Mon, 26 Sep 2022 10:30:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1923C433D6;
+        Mon, 26 Sep 2022 10:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187299;
-        bh=qKqAQRD6cxz9W/PwVbpSTLflZheubG7vtgJbTS+PnZM=;
+        s=korg; t=1664188208;
+        bh=Jf6oRZhil1xoJGyJp8jVwLBg4X5qkPjZTxNA897XdmM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vjOCGC/lTtLhVZJDmT6mN1hB4fEIFt+qPy/lkXkaRYtBP9kJXI2yisDR6BqkvxIj0
-         07V8opfoY3NEfltmWK9eM4H4F+J1G93M7uvmhZ/54JBkRy+uprv0d99UzlAlQvWf9R
-         4s56HroC5aGTCNTTfm2zOb7zqLnWFwRHzmnO/540=
+        b=MkozwcIZ4SL/z69reul6oToo5FyOZKkzzHJysMnlCw7h+l2kGEkmoUFFi3/mFCr/C
+         ivp06lRGYoMSClsYPj9U/LXc7r/X+4cf4tsgRkSXg5nG3GBAWzSP1VrkjYXVA+kt3a
+         2nRRTvlIgwGedKIUaMoK3OteS85MgDSOGUcPRjYI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 10/30] mips/pic32/pic32mzda: Fix refcount leak bugs
+Subject: [PATCH 5.10 075/141] net: phy: aquantia: wait for the suspend/resume operations to finish
 Date:   Mon, 26 Sep 2022 12:11:41 +0200
-Message-Id: <20220926100736.537955607@linuxfoundation.org>
+Message-Id: <20220926100757.166693051@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +54,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-[ Upstream commit eb9e9bc4fa5fb489c92ec588b3fb35f042ba6d86 ]
+[ Upstream commit ca2dccdeeb49a7e408112d681bf447984c845292 ]
 
-of_find_matching_node(), of_find_compatible_node() and
-of_find_node_by_path() will return node pointers with refcout
-incremented. We should call of_node_put() when they are not
-used anymore.
+The Aquantia datasheet notes that after issuing a Processor-Intensive
+MDIO operation, like changing the low-power state of the device, the
+driver should wait for the operation to finish before issuing a new MDIO
+command.
 
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The new aqr107_wait_processor_intensive_op() function is added which can
+be used after these kind of MDIO operations. At the moment, we are only
+adding it at the end of the suspend/resume calls.
+
+The issue was identified on a board featuring the AQR113C PHY, on
+which commands like 'ip link (..) up / down' issued without any delays
+between them would render the link on the PHY to remain down.
+The issue was easy to reproduce with a one-liner:
+ $ ip link set dev ethX down; ip link set dev ethX up; \
+ ip link set dev ethX down; ip link set dev ethX up;
+
+Fixes: ac9e81c230eb ("net: phy: aquantia: add suspend / resume callbacks for AQR107 family")
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220906130451.1483448-1-ioana.ciornei@nxp.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/pic32/pic32mzda/init.c | 7 ++++++-
- arch/mips/pic32/pic32mzda/time.c | 3 +++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/net/phy/aquantia_main.c | 53 ++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
-index 406c6c5cec29..f8985d4573e6 100644
---- a/arch/mips/pic32/pic32mzda/init.c
-+++ b/arch/mips/pic32/pic32mzda/init.c
-@@ -131,13 +131,18 @@ static int __init pic32_of_prepare_platform_data(struct of_dev_auxdata *lookup)
- 		np = of_find_compatible_node(NULL, NULL, lookup->compatible);
- 		if (np) {
- 			lookup->name = (char *)np->name;
--			if (lookup->phys_addr)
-+			if (lookup->phys_addr) {
-+				of_node_put(np);
- 				continue;
-+			}
- 			if (!of_address_to_resource(np, 0, &res))
- 				lookup->phys_addr = res.start;
-+			of_node_put(np);
- 		}
- 	}
+diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
+index 75a62d1cc737..7045595f8d7d 100644
+--- a/drivers/net/phy/aquantia_main.c
++++ b/drivers/net/phy/aquantia_main.c
+@@ -89,6 +89,9 @@
+ #define VEND1_GLOBAL_FW_ID_MAJOR		GENMASK(15, 8)
+ #define VEND1_GLOBAL_FW_ID_MINOR		GENMASK(7, 0)
  
-+	of_node_put(root);
++#define VEND1_GLOBAL_GEN_STAT2			0xc831
++#define VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG	BIT(15)
 +
- 	return 0;
+ #define VEND1_GLOBAL_RSVD_STAT1			0xc885
+ #define VEND1_GLOBAL_RSVD_STAT1_FW_BUILD_ID	GENMASK(7, 4)
+ #define VEND1_GLOBAL_RSVD_STAT1_PROV_ID		GENMASK(3, 0)
+@@ -123,6 +126,12 @@
+ #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL2	BIT(1)
+ #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL3	BIT(0)
+ 
++/* Sleep and timeout for checking if the Processor-Intensive
++ * MDIO operation is finished
++ */
++#define AQR107_OP_IN_PROG_SLEEP		1000
++#define AQR107_OP_IN_PROG_TIMEOUT	100000
++
+ struct aqr107_hw_stat {
+ 	const char *name;
+ 	int reg;
+@@ -569,16 +578,52 @@ static void aqr107_link_change_notify(struct phy_device *phydev)
+ 		phydev_info(phydev, "Aquantia 1000Base-T2 mode active\n");
  }
  
-diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
-index 62a0a78b6c64..bfafe241c1b5 100644
---- a/arch/mips/pic32/pic32mzda/time.c
-+++ b/arch/mips/pic32/pic32mzda/time.c
-@@ -40,6 +40,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
- 		goto default_map;
- 
- 	irq = irq_of_parse_and_map(node, 0);
++static int aqr107_wait_processor_intensive_op(struct phy_device *phydev)
++{
++	int val, err;
 +
-+	of_node_put(node);
++	/* The datasheet notes to wait at least 1ms after issuing a
++	 * processor intensive operation before checking.
++	 * We cannot use the 'sleep_before_read' parameter of read_poll_timeout
++	 * because that just determines the maximum time slept, not the minimum.
++	 */
++	usleep_range(1000, 5000);
 +
- 	if (!irq)
- 		goto default_map;
++	err = phy_read_mmd_poll_timeout(phydev, MDIO_MMD_VEND1,
++					VEND1_GLOBAL_GEN_STAT2, val,
++					!(val & VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG),
++					AQR107_OP_IN_PROG_SLEEP,
++					AQR107_OP_IN_PROG_TIMEOUT, false);
++	if (err) {
++		phydev_err(phydev, "timeout: processor-intensive MDIO operation\n");
++		return err;
++	}
++
++	return 0;
++}
++
+ static int aqr107_suspend(struct phy_device *phydev)
+ {
+-	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
+-				MDIO_CTRL1_LPOWER);
++	int err;
++
++	err = phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
++			       MDIO_CTRL1_LPOWER);
++	if (err)
++		return err;
++
++	return aqr107_wait_processor_intensive_op(phydev);
+ }
  
+ static int aqr107_resume(struct phy_device *phydev)
+ {
+-	return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
+-				  MDIO_CTRL1_LPOWER);
++	int err;
++
++	err = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
++				 MDIO_CTRL1_LPOWER);
++	if (err)
++		return err;
++
++	return aqr107_wait_processor_intensive_op(phydev);
+ }
+ 
+ static int aqr107_probe(struct phy_device *phydev)
 -- 
 2.35.1
 
