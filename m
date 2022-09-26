@@ -2,90 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8765EAB1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F15EAB1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbiIZPbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S236673AbiIZPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237367AbiIZPah (ORCPT
+        with ESMTP id S237432AbiIZPaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:30:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A174F38F;
-        Mon, 26 Sep 2022 07:16:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85292B80AB3;
-        Mon, 26 Sep 2022 14:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431D9C433C1;
-        Mon, 26 Sep 2022 14:16:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664201776;
-        bh=TUYJYqSd4jor/lxJEt262VgRMafpQ9dsUBKaWm7idrI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nb2Ky3/q5mbHR+N52o5cXYMMAuMbt9/GsKrdxhHJF6rI23h19460jHISA14ah/wDe
-         E/flHbDCVDH2veA1DNmrqsmvnAu4Id6P0ELhY1XumCfI+8AQh8RDaWuiJyTY5Iu3MJ
-         te8RUQ9L7RFRNUMliLdCZYQE08CrxW9iYMe4/q/F8/7ERw4SaV2ExoVHgNAcUEYATX
-         waUXRc1tsQC10RiVP12glpHdcT8H4twilZ3hCp/rnF6keg1xEOQxQM6ERWDQ5Rws3N
-         iK0vw/fdftHElavp2jE+O59RVoq1M/fbVnZnZUuQEAWZV/0CHyp1CsFNPAoYTJcE07
-         2dGOLZtd9LhfQ==
-Received: by mail-lj1-f182.google.com with SMTP id b6so7579545ljr.10;
-        Mon, 26 Sep 2022 07:16:16 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2mJkttg/yBbSViPLhNH1fdHJn31j1/XXC0FOSrtEcgjtYwc2IH
-        WfEsICKqIulQd41oN5YPHJp1cWj9Dza0tbVMsUE=
-X-Google-Smtp-Source: AMsMyM5c8d1a2UhMc5k9AjXdsbaX+2CDsE/jo+VPh5QX+kWSUXCkxCIKYhHEUsPtBoQ/aXwnkIANy39qqzI0OfykCrE=
-X-Received: by 2002:a2e:8349:0:b0:26c:4311:9b84 with SMTP id
- l9-20020a2e8349000000b0026c43119b84mr8218226ljh.152.1664201774254; Mon, 26
- Sep 2022 07:16:14 -0700 (PDT)
+        Mon, 26 Sep 2022 11:30:46 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAFD80F4C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:16:32 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso6926885pjd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=f9x4Js9aJ8GGYBn29EvIVTQooQM7+4F6Gd+zw2Mc6M8=;
+        b=zbi+yH6owkuseZsPd8cID/9/WJR+WXOO72huZu1wJYjkboy+f0MsZabCpreRAfu0Sf
+         3BZmYRBcwpD7wi8A/IOpfuJVOl1A8rCJFaIcGSG0jKTrF8oCvuPQ+RBCTLvziQZNwC1g
+         Jd9oklGK6EvDETceCFaUoZePQcW8L05Zcov7bvOd0XZhHHpbvz9QNXl7DZPgxMgKI0QQ
+         vLCHPHYSGblBh6eb+LQZr1TrgBNIz+T+/FWuQZnJCYJQz7wXYaPUaM7LuExyVVf5TwXJ
+         ct7K8VAqw2t9I2n0tte3U2h0Rk0Ver57AT66B18Yzk80ZWyfj9mzyHlAE/JXkq2hSxLS
+         3r+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=f9x4Js9aJ8GGYBn29EvIVTQooQM7+4F6Gd+zw2Mc6M8=;
+        b=0OSoLSoAo+VZ1QVh9Gb7QMCEncbaMcLHldUAkQ9mZtMBTAKl9/xEC6eB/2ILBFL0yZ
+         qpsK2qyLorhxxv/iN+6OLxw6ShAVbbND/Eql0Aw5G137wgU0EZK1v/xrSAMGAGIa8sq6
+         6cwyTSmmxPn8rS8CyVLkuqRol1t5kr550LpvLos6TCHw0EuELsWZ4mqj9cdCDSeTue69
+         2bof9QmmH5/DE84FxUYi8gHIFjYqXXnjjwO2X7qjjw72WaPx8WjIHCWBvhcKKyFCs7Q+
+         ecZAlv+ZYRzSqTcwrtuGkW2HifWFMG+QEeSL9sL7D44k2bMcpxhcAjIvdh+CbGNQJD0R
+         E7Jg==
+X-Gm-Message-State: ACrzQf0UNKH/VIBXX6q6siJpyMubPog2Knzg5+RQluLD1RacF+iJh5Vn
+        njh4O3fdy2ApOGqx97jKrf5Y3A==
+X-Google-Smtp-Source: AMsMyM5TPoPvq12bpXj85IzcoD1FO5FB0fyyNhOKXktO0s3dtYc0w3EMmyW5x+a7mrmCCw2DD9kjgw==
+X-Received: by 2002:a17:902:6b0a:b0:178:9a17:5b89 with SMTP id o10-20020a1709026b0a00b001789a175b89mr21933535plk.113.1664201791912;
+        Mon, 26 Sep 2022 07:16:31 -0700 (PDT)
+Received: from [10.2.223.68] ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b001781cad59e3sm11362897plh.108.2022.09.26.07.16.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 07:16:31 -0700 (PDT)
+Message-ID: <3e025745-06af-c5c6-aa70-6ff1f9ad0962@bytedance.com>
+Date:   Mon, 26 Sep 2022 22:16:23 +0800
 MIME-Version: 1.0
-References: <20220926100738.148626940@linuxfoundation.org> <20220926100738.463310701@linuxfoundation.org>
- <20220926110826.GE8978@amd>
-In-Reply-To: <20220926110826.GE8978@amd>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 26 Sep 2022 16:16:02 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHOMuaBeR_LqVBKVtmGaJQg5hznSxow5bosQ9+NzhZ72A@mail.gmail.com>
-Message-ID: <CAMj1kXHOMuaBeR_LqVBKVtmGaJQg5hznSxow5bosQ9+NzhZ72A@mail.gmail.com>
-Subject: Re: [PATCH 4.14 06/40] efi: libstub: Disable struct randomization
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Daniel Marth <daniel.marth@inso.tuwien.ac.at>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [PATCH 3/3] PCI/AER: Use pci_aer_raw_clear_status() to clear root
+ port's AER error status
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     fancer.lancer@gmail.com, jdmason@kudzu.us, dave.jiang@intel.com,
+        allenbh@gmail.com, bhelgaas@google.com, ruscur@russell.cc,
+        oohall@gmail.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linuxppc-dev@lists.ozlabs.org
+References: <20220922215030.GA1341314@bhelgaas>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <20220922215030.GA1341314@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sept 2022 at 13:08, Pavel Machek <pavel@denx.de> wrote:
->
-> Hi!
->
-> > These structs look like the ideal randomization candidates to the
-> > randstruct plugin (as they only carry function pointers), but of course,
-> > these protocols are contracts between the firmware that exposes them,
-> > and the EFI applications (including our stubbed kernel) that invoke
-> > them. This means that struct randomization for EFI protocols is not a
-> > great idea, and given that the stub shares very little data with the
-> > core kernel that is represented as a randomizable struct, we're better
-> > off just disabling it completely here.
->
-> > Cc: <stable@vger.kernel.org> # v4.14+
->
-> AFAICT RANDSTRUCT_CFLAGS is not available in v4.19, so we should not
-> take this patch.
->
 
-Ugh, as it turns out, this macro doesn't exist before v5.19 so it
-should not be backported beyond that version at all.
 
-Greg, can you please drop this patch from all the -stable trees except
-v5.19? Thanks, and apologies for creating confusion.
+On 9/23/22 5:50 AM, Bjorn Helgaas wrote:
+> On Fri, Sep 02, 2022 at 02:16:34AM +0800, Zhuo Chen wrote:
+>> Statements clearing AER error status in aer_enable_rootport() has the
+>> same function as pci_aer_raw_clear_status(). So we replace them, which
+>> has no functional changes.
+>>
+>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>> ---
+>>   drivers/pci/pcie/aer.c | 7 +------
+>>   1 file changed, 1 insertion(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+>> index d2996afa80f6..eb0193f279f2 100644
+>> --- a/drivers/pci/pcie/aer.c
+>> +++ b/drivers/pci/pcie/aer.c
+>> @@ -1287,12 +1287,7 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
+>>   				   SYSTEM_ERROR_INTR_ON_MESG_MASK);
+>>   
+>>   	/* Clear error status */
+>> -	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, &reg32);
+>> -	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, reg32);
+>> -	pci_read_config_dword(pdev, aer + PCI_ERR_COR_STATUS, &reg32);
+>> -	pci_write_config_dword(pdev, aer + PCI_ERR_COR_STATUS, reg32);
+>> -	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
+>> -	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
+>> +	pci_aer_raw_clear_status(pdev);
+> 
+> It's true that this is functionally equivalent.
+> 
+> But 20e15e673b05 ("PCI/AER: Add pci_aer_raw_clear_status() to
+> unconditionally clear Error Status") says pci_aer_raw_clear_status()
+> is only for use in the EDR path (this should have been included in the
+> function comment), so I think we should preserve that property and use
+> pci_aer_clear_status() here.
+> 
+> pci_aer_raw_clear_status() is the same as pci_aer_clear_status()
+> except it doesn't check pcie_aer_is_native().  And I'm pretty sure we
+> can't get to aer_enable_rootport() *unless* pcie_aer_is_native(),
+> because get_port_device_capability() checks the same thing, so they
+> should be equivalent here.
+> 
+> Bjorn
+Thanks Bjorn, this very detailed correction is helpful. By the way, 
+'only for use in the EDR path' obviously written in the function 
+comments may be better. So far only commit log has included these.
+
+I will change to use pci_aer_clear_status() in next patch.
+
+-- 
+Thanks,
+Zhuo Chen
