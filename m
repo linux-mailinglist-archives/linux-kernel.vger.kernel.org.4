@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB1F5EA441
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271745EA241
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbiIZLmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S237265AbiIZLFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238213AbiIZLmQ (ORCPT
+        with ESMTP id S237344AbiIZLDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:42:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB2671BC9;
-        Mon, 26 Sep 2022 03:45:54 -0700 (PDT)
+        Mon, 26 Sep 2022 07:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F125F204;
+        Mon, 26 Sep 2022 03:32:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77335B80955;
-        Mon, 26 Sep 2022 10:39:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C50C433C1;
-        Mon, 26 Sep 2022 10:39:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7096660C2C;
+        Mon, 26 Sep 2022 10:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63942C433C1;
+        Mon, 26 Sep 2022 10:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188788;
-        bh=AVRsrIsgiC9iOeuJ9kYUi3jx3bvONckuSF+If+EI2rM=;
+        s=korg; t=1664188275;
+        bh=uiNVxANrD1px9uRLMITN04/L5b26Kq2FCL0lkdjhElg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KCR5c5aHS0QPoXMVs+XN97ZXJIgdBwoXlTnxWIgEAl4UQ0Wod9wJTDwbovs1jWkQd
-         wr93A0fajGfHE81Nuz2AVOzZbXaH07QX5ARJ3yIjUSjGXK7CSj35ao+Knj8bOgKWml
-         XhXs+WDXJR9EI17jcPLU+5O8ZvrKXYf+jFcClUKw=
+        b=Ba1Hu415Z1r3w0ajhLCH2jMwWBF77UX6nuiIABMYAi1/G5DcRHob9KK0kMYDtVGfn
+         T+anzx5K0377svYg/iEn5O5ncMv0Kcs3BbeUgQMu7XH0HyJZ6hUilIykpV5vjCygQ7
+         3Yawy9FCBc/lNOWbl321PAnaRu6x9juG6Nr6xWF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 090/148] drm/hisilicon/hibmc: Allow to be built if COMPILE_TEST is enabled
+Subject: [PATCH 5.10 098/141] net: ipa: properly limit modem routing table use
 Date:   Mon, 26 Sep 2022 12:12:04 +0200
-Message-Id: <20220926100759.444647281@linuxfoundation.org>
+Message-Id: <20220926100757.988872121@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +54,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Alex Elder <elder@linaro.org>
 
-[ Upstream commit a0f25a6bb319aa05e04dcf51707c97c2881b4f47 ]
+[ Upstream commit cf412ec333250cb82bafe57169204e14a9f1c2ac ]
 
-The commit feeb07d0ca5a ("drm/hisilicon/hibmc: Make CONFIG_DRM_HISI_HIBMC
-depend on ARM64") made the driver Kconfig symbol to depend on ARM64 since
-it only supports that architecture and loading the module on others would
-lead to incorrect video modes being used.
+IPA can route packets between IPA-connected entities.  The AP and
+modem are currently the only such entities supported, and no routing
+is required to transfer packets between them.
 
-But it also prevented the driver to be built on other architectures which
-is useful to have compile test coverage when doing subsystem wide changes.
+The number of entries in each routing table is fixed, and defined at
+initialization time.  Some of these entries are designated for use
+by the modem, and the rest are available for the AP to use.  The AP
+sends a QMI message to the modem which describes (among other
+things) information about routing table memory available for the
+modem to use.
 
-Make the dependency instead to be (ARM64 || COMPILE_TEST), so the driver
-is buildable when the CONFIG_COMPILE_TEST option is enabled.
+Currently the QMI initialization packet gives wrong information in
+its description of routing tables.  What *should* be supplied is the
+maximum index that the modem can use for the routing table memory
+located at a given location.  The current code instead supplies the
+total *number* of routing table entries.  Furthermore, the modem is
+granted the entire table, not just the subset it's supposed to use.
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211216210936.3329977-1-javierm@redhat.com
-Stable-dep-of: d8a79c030549 ("drm/hisilicon: Add depends on MMU")
+This patch fixes this.  First, the ipa_mem_bounds structure is
+generalized so its "end" field can be interpreted either as a final
+byte offset, or a final array index.  Second, the IPv4 and IPv6
+(non-hashed and hashed) table information fields in the QMI
+ipa_init_modem_driver_req structure are changed to be ipa_mem_bounds
+rather than ipa_mem_array structures.  Third, we set the "end" value
+for each routing table to be the last index, rather than setting the
+"count" to be the number of indices.  Finally, instead of allowing
+the modem to use all of a routing table's memory, it is limited to
+just the portion meant to be used by the modem.  In all versions of
+IPA currently supported, that is IPA_ROUTE_MODEM_COUNT (8) entries.
+
+Update a few comments for clarity.
+
+Fixes: 530f9216a9537 ("soc: qcom: ipa: AP/modem communications")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Link: https://lore.kernel.org/r/20220913204602.1803004-1-elder@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/hisilicon/hibmc/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ipa/ipa_qmi.c     |  8 ++++----
+ drivers/net/ipa/ipa_qmi_msg.c |  8 ++++----
+ drivers/net/ipa/ipa_qmi_msg.h | 37 ++++++++++++++++++++---------------
+ drivers/net/ipa/ipa_table.c   |  2 --
+ drivers/net/ipa/ipa_table.h   |  3 +++
+ 5 files changed, 32 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/gpu/drm/hisilicon/hibmc/Kconfig b/drivers/gpu/drm/hisilicon/hibmc/Kconfig
-index 43943e980203..073adfe438dd 100644
---- a/drivers/gpu/drm/hisilicon/hibmc/Kconfig
-+++ b/drivers/gpu/drm/hisilicon/hibmc/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config DRM_HISI_HIBMC
- 	tristate "DRM Support for Hisilicon Hibmc"
--	depends on DRM && PCI && ARM64
-+	depends on DRM && PCI && (ARM64 || COMPILE_TEST)
- 	select DRM_KMS_HELPER
- 	select DRM_VRAM_HELPER
- 	select DRM_TTM
+diff --git a/drivers/net/ipa/ipa_qmi.c b/drivers/net/ipa/ipa_qmi.c
+index fea61657867e..880ec353f958 100644
+--- a/drivers/net/ipa/ipa_qmi.c
++++ b/drivers/net/ipa/ipa_qmi.c
+@@ -308,12 +308,12 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
+ 	mem = &ipa->mem[IPA_MEM_V4_ROUTE];
+ 	req.v4_route_tbl_info_valid = 1;
+ 	req.v4_route_tbl_info.start = ipa->mem_offset + mem->offset;
+-	req.v4_route_tbl_info.count = mem->size / sizeof(__le64);
++	req.v4_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
+ 
+ 	mem = &ipa->mem[IPA_MEM_V6_ROUTE];
+ 	req.v6_route_tbl_info_valid = 1;
+ 	req.v6_route_tbl_info.start = ipa->mem_offset + mem->offset;
+-	req.v6_route_tbl_info.count = mem->size / sizeof(__le64);
++	req.v6_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
+ 
+ 	mem = &ipa->mem[IPA_MEM_V4_FILTER];
+ 	req.v4_filter_tbl_start_valid = 1;
+@@ -352,7 +352,7 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
+ 		req.v4_hash_route_tbl_info_valid = 1;
+ 		req.v4_hash_route_tbl_info.start =
+ 				ipa->mem_offset + mem->offset;
+-		req.v4_hash_route_tbl_info.count = mem->size / sizeof(__le64);
++		req.v4_hash_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
+ 	}
+ 
+ 	mem = &ipa->mem[IPA_MEM_V6_ROUTE_HASHED];
+@@ -360,7 +360,7 @@ init_modem_driver_req(struct ipa_qmi *ipa_qmi)
+ 		req.v6_hash_route_tbl_info_valid = 1;
+ 		req.v6_hash_route_tbl_info.start =
+ 			ipa->mem_offset + mem->offset;
+-		req.v6_hash_route_tbl_info.count = mem->size / sizeof(__le64);
++		req.v6_hash_route_tbl_info.end = IPA_ROUTE_MODEM_COUNT - 1;
+ 	}
+ 
+ 	mem = &ipa->mem[IPA_MEM_V4_FILTER_HASHED];
+diff --git a/drivers/net/ipa/ipa_qmi_msg.c b/drivers/net/ipa/ipa_qmi_msg.c
+index 73413371e3d3..ecf9f863c842 100644
+--- a/drivers/net/ipa/ipa_qmi_msg.c
++++ b/drivers/net/ipa/ipa_qmi_msg.c
+@@ -271,7 +271,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+ 		.tlv_type	= 0x12,
+ 		.offset		= offsetof(struct ipa_init_modem_driver_req,
+ 					   v4_route_tbl_info),
+-		.ei_array	= ipa_mem_array_ei,
++		.ei_array	= ipa_mem_bounds_ei,
+ 	},
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+@@ -292,7 +292,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+ 		.tlv_type	= 0x13,
+ 		.offset		= offsetof(struct ipa_init_modem_driver_req,
+ 					   v6_route_tbl_info),
+-		.ei_array	= ipa_mem_array_ei,
++		.ei_array	= ipa_mem_bounds_ei,
+ 	},
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+@@ -456,7 +456,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+ 		.tlv_type	= 0x1b,
+ 		.offset		= offsetof(struct ipa_init_modem_driver_req,
+ 					   v4_hash_route_tbl_info),
+-		.ei_array	= ipa_mem_array_ei,
++		.ei_array	= ipa_mem_bounds_ei,
+ 	},
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+@@ -477,7 +477,7 @@ struct qmi_elem_info ipa_init_modem_driver_req_ei[] = {
+ 		.tlv_type	= 0x1c,
+ 		.offset		= offsetof(struct ipa_init_modem_driver_req,
+ 					   v6_hash_route_tbl_info),
+-		.ei_array	= ipa_mem_array_ei,
++		.ei_array	= ipa_mem_bounds_ei,
+ 	},
+ 	{
+ 		.data_type	= QMI_OPT_FLAG,
+diff --git a/drivers/net/ipa/ipa_qmi_msg.h b/drivers/net/ipa/ipa_qmi_msg.h
+index cfac456cea0c..58de425bb8e6 100644
+--- a/drivers/net/ipa/ipa_qmi_msg.h
++++ b/drivers/net/ipa/ipa_qmi_msg.h
+@@ -82,9 +82,11 @@ enum ipa_platform_type {
+ 	IPA_QMI_PLATFORM_TYPE_MSM_QNX_V01	= 5,	/* QNX MSM */
+ };
+ 
+-/* This defines the start and end offset of a range of memory.  Both
+- * fields are offsets relative to the start of IPA shared memory.
+- * The end value is the last addressable byte *within* the range.
++/* This defines the start and end offset of a range of memory.  The start
++ * value is a byte offset relative to the start of IPA shared memory.  The
++ * end value is the last addressable unit *within* the range.  Typically
++ * the end value is in units of bytes, however it can also be a maximum
++ * array index value.
+  */
+ struct ipa_mem_bounds {
+ 	u32 start;
+@@ -125,18 +127,19 @@ struct ipa_init_modem_driver_req {
+ 	u8			hdr_tbl_info_valid;
+ 	struct ipa_mem_bounds	hdr_tbl_info;
+ 
+-	/* Routing table information.  These define the location and size of
+-	 * non-hashable IPv4 and IPv6 filter tables.  The start values are
+-	 * offsets relative to the start of IPA shared memory.
++	/* Routing table information.  These define the location and maximum
++	 * *index* (not byte) for the modem portion of non-hashable IPv4 and
++	 * IPv6 routing tables.  The start values are byte offsets relative
++	 * to the start of IPA shared memory.
+ 	 */
+ 	u8			v4_route_tbl_info_valid;
+-	struct ipa_mem_array	v4_route_tbl_info;
++	struct ipa_mem_bounds	v4_route_tbl_info;
+ 	u8			v6_route_tbl_info_valid;
+-	struct ipa_mem_array	v6_route_tbl_info;
++	struct ipa_mem_bounds	v6_route_tbl_info;
+ 
+ 	/* Filter table information.  These define the location of the
+ 	 * non-hashable IPv4 and IPv6 filter tables.  The start values are
+-	 * offsets relative to the start of IPA shared memory.
++	 * byte offsets relative to the start of IPA shared memory.
+ 	 */
+ 	u8			v4_filter_tbl_start_valid;
+ 	u32			v4_filter_tbl_start;
+@@ -177,18 +180,20 @@ struct ipa_init_modem_driver_req {
+ 	u8			zip_tbl_info_valid;
+ 	struct ipa_mem_bounds	zip_tbl_info;
+ 
+-	/* Routing table information.  These define the location and size
+-	 * of hashable IPv4 and IPv6 filter tables.  The start values are
+-	 * offsets relative to the start of IPA shared memory.
++	/* Routing table information.  These define the location and maximum
++	 * *index* (not byte) for the modem portion of hashable IPv4 and IPv6
++	 * routing tables (if supported by hardware).  The start values are
++	 * byte offsets relative to the start of IPA shared memory.
+ 	 */
+ 	u8			v4_hash_route_tbl_info_valid;
+-	struct ipa_mem_array	v4_hash_route_tbl_info;
++	struct ipa_mem_bounds	v4_hash_route_tbl_info;
+ 	u8			v6_hash_route_tbl_info_valid;
+-	struct ipa_mem_array	v6_hash_route_tbl_info;
++	struct ipa_mem_bounds	v6_hash_route_tbl_info;
+ 
+ 	/* Filter table information.  These define the location and size
+-	 * of hashable IPv4 and IPv6 filter tables.  The start values are
+-	 * offsets relative to the start of IPA shared memory.
++	 * of hashable IPv4 and IPv6 filter tables (if supported by hardware).
++	 * The start values are byte offsets relative to the start of IPA
++	 * shared memory.
+ 	 */
+ 	u8			v4_hash_filter_tbl_start_valid;
+ 	u32			v4_hash_filter_tbl_start;
+diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
+index bada98d7360c..02c192837414 100644
+--- a/drivers/net/ipa/ipa_table.c
++++ b/drivers/net/ipa/ipa_table.c
+@@ -108,8 +108,6 @@
+ 
+ /* Assignment of route table entries to the modem and AP */
+ #define IPA_ROUTE_MODEM_MIN		0
+-#define IPA_ROUTE_MODEM_COUNT		8
+-
+ #define IPA_ROUTE_AP_MIN		IPA_ROUTE_MODEM_COUNT
+ #define IPA_ROUTE_AP_COUNT \
+ 		(IPA_ROUTE_COUNT_MAX - IPA_ROUTE_MODEM_COUNT)
+diff --git a/drivers/net/ipa/ipa_table.h b/drivers/net/ipa/ipa_table.h
+index dc9ff21dbdfb..35e519cef25d 100644
+--- a/drivers/net/ipa/ipa_table.h
++++ b/drivers/net/ipa/ipa_table.h
+@@ -13,6 +13,9 @@ struct ipa;
+ /* The maximum number of filter table entries (IPv4, IPv6; hashed or not) */
+ #define IPA_FILTER_COUNT_MAX	14
+ 
++/* The number of route table entries allotted to the modem */
++#define IPA_ROUTE_MODEM_COUNT	8
++
+ /* The maximum number of route table entries (IPv4, IPv6; hashed or not) */
+ #define IPA_ROUTE_COUNT_MAX	15
+ 
 -- 
 2.35.1
 
