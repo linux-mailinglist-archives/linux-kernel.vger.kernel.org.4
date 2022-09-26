@@ -2,179 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A045EAB6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CD45EAB6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiIZPoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S234376AbiIZPoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236707AbiIZPnd (ORCPT
+        with ESMTP id S236556AbiIZPn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:43:33 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64B11C116
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:26:40 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l14so14449246eja.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kviW/kfGTdCum1FUfpznjlr9QAFsmNGG3WHj4fGpdC4=;
-        b=NrC/5DqsHkAZ1V5Hx+CHDeXFUw6qXFGEZ/Xl2S8xOKBTXXR6XaghMdqZeZk7eHdZVe
-         xqI+asdBqXsrQtk1goFqo1cHtneKXnRX3WsEYAyytZQxT3PO6kf9CEl2SEeA62px1b7H
-         z3vys96W2s5h6GAuI/D1+beFxgpps+277addi1Mgc0RxhjfoeTfwuvBck75uIei01wsk
-         6ICpRKXwd0psJ6GxfYJooqksmVR1ZHjJL/PPXyU1JjOZQXdYRLrgv5J1nGAqtQAnUoYl
-         Z1mdEzqzrcF+CjDLgwTM26tJ71/9SvDzIC+B5ugoY02nbtxN+WuPilYSsRIGR6+R18lv
-         GFJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kviW/kfGTdCum1FUfpznjlr9QAFsmNGG3WHj4fGpdC4=;
-        b=eZJFvTdZW8KvdDkCNv5Mp7r4BxGvy0RfunOl0WU511YUeZgtMeXakHrAHPilYRDMDj
-         fAf8Tc/Nyp6qX2WNXy4erT2M+ciO/2cH1qtIaW8x7sa+WVzJIRuA2Ugtbrbyw8AQqgzC
-         IeIAs0taUExZ+0G317H+oxohz1xfWxKMbHAosKrI3bE93nzf5E887/amuEuhzm+P79+g
-         +K9q0Nh5dR/aPCd7vCXyw4WLND9sGXMWrVlJZ43OfCvo02kHAklGBrvQeC5qHBEdH7WB
-         JgBkfWHpBMJDPZ0/OEOhTwS6stOPlZ9T+n7NIXdElrYbC2nUoEPIcOmsT8uy79hd2tln
-         bMQA==
-X-Gm-Message-State: ACrzQf2OsqCYRYYhyFJ6nCr0/Mrv9hV1Z3/AODLRiOqULxIdXRmNh1zj
-        nSU042mP4Ws8C8GXlF4utZBnCcuv1r5f0DOp62XS/8z+Vu70jw==
-X-Google-Smtp-Source: AMsMyM5PBP2ckmAZkrP18VOs8XaCn0cRlaz3thTNfuitZxPBgSIqYNVy7fODnA8+B6mGxWgAT0NXv93bg7Jfn4W8aGE=
-X-Received: by 2002:a17:907:948e:b0:783:91cf:c35a with SMTP id
- dm14-20020a170907948e00b0078391cfc35amr4200187ejc.366.1664202398315; Mon, 26
- Sep 2022 07:26:38 -0700 (PDT)
+        Mon, 26 Sep 2022 11:43:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253F1120A9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:26:34 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3911221E20;
+        Mon, 26 Sep 2022 14:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664202392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=28dzqTXxYQpa6kD7NDAhGSmLiVsbA+Dj9znGt9Uwqfc=;
+        b=u+lyFV+p81WdW4fSJ92EX1N1scRb8CRSjy6id1rciyeG6K0I5s56ASM5kzKnPhul8nwgX3
+        7MIV8fXhJK2DRWyF1cSFy8TS/9ndanWsXMd/QuOCa2p/H+/BXBetMTyL2NNfno3inikITY
+        tPVSupZ28722b7hOkzZTzz0akT2nC+U=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 196702C17E;
+        Mon, 26 Sep 2022 14:26:32 +0000 (UTC)
+Date:   Mon, 26 Sep 2022 16:26:31 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk 04/18] printk: Remove bogus comment vs. boot
+ consoles
+Message-ID: <YzG2l/eHMxaa9JW7@alley>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-5-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20220926100754.639112000@linuxfoundation.org>
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 26 Sep 2022 19:56:26 +0530
-Message-ID: <CA+G9fYtCSiceE2kbx2HeCqwhag5wx4PAm4WbiU0g89pr68Wsgg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/141] 5.10.146-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924000454.3319186-5-john.ogness@linutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sept 2022 at 15:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.146 release.
-> There are 141 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.146-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On Sat 2022-09-24 02:10:40, John Ogness wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The comment about unregistering boot consoles is just not matching the
+> reality. Remove it.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-Following build warnings / errors noticed on arm and powerpc on stable-rc 5.10
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Regressions found on arm:
-
-   - build-gcc-12-ixp4xx_defconfig
-   - build-gcc-8-ixp4xx_defconfig
-   - build-gcc-11-ixp4xx_defconfig
-   - build-gcc-9-ixp4xx_defconfig
-   - build-gcc-10-ixp4xx_defconfig
-
-
-arm build errors:
------------------
-
-drivers/gpio/gpio-ixp4xx.c:171:18: error: 'IRQCHIP_IMMUTABLE'
-undeclared here (not in a function); did you mean 'IS_IMMUTABLE'?
-  171 |         .flags = IRQCHIP_IMMUTABLE,
-      |                  ^~~~~~~~~~~~~~~~~
-      |                  IS_IMMUTABLE
-drivers/gpio/gpio-ixp4xx.c:172:9: error:
-'GPIOCHIP_IRQ_RESOURCE_HELPERS' undeclared here (not in a function)
-  172 |         GPIOCHIP_IRQ_RESOURCE_HELPERS,
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpio/gpio-ixp4xx.c:172:9: warning: excess elements in struct initializer
-drivers/gpio/gpio-ixp4xx.c:172:9: note: (near initialization for
-'ixp4xx_gpio_irqchip')
-drivers/gpio/gpio-ixp4xx.c: In function 'ixp4xx_gpio_probe':
-drivers/gpio/gpio-ixp4xx.c:296:9: error: implicit declaration of
-function 'gpio_irq_chip_set_chip'
-[-Werror=implicit-function-declaration]
-  296 |         gpio_irq_chip_set_chip(girq, &ixp4xx_gpio_irqchip);
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
-
-Error was caused by below patch
-
-gpio: ixp4xx: Make irqchip immutable
-[ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
-
-This turns the IXP4xx GPIO irqchip into an immutable
-irqchip, a bit different from the standard template due
-to being hierarchical.
-
-Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
-for a rootfs on compact flash with IRQs from this GPIO
-block to the CF ATA controller.
-
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-net/core/dev_ioctl.c: In function 'dev_ifconf':
-net/core/dev_ioctl.c:41:13: warning: unused variable 'i' [-Wunused-variable]
-   41 |         int i;
-      |             ^
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [Makefile:1832: drivers] Error 2
-
-warning is caused by:
-net: socket: remove register_gifconf
-[ Upstream commit b0e99d03778b2418aec20db99d97d19d25d198b6 ]
-
-Since dynamic registration of the gifconf() helper is only used for
-IPv4, and this can not be in a loadable module, this can be simplified
-noticeably by turning it into a direct function call as a preparation
-for cleaning up the compat handling.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Stable-dep-of: 5641c751fe2f ("net: enetc: deny offload of tc-based TSN
-features on VF interfaces")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best Regards,
+Petr
