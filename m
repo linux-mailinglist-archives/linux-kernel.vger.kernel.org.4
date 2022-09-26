@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C2E5E99B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A385E99FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiIZGlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S233807AbiIZHAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiIZGk6 (ORCPT
+        with ESMTP id S233731AbiIZHAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:40:58 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567CC192A0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:40:56 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z25so9313443lfr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 23:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=eEvomUPAbiilR0mKyM+WIzCcrPikO0w/LFnRQciIxbU=;
-        b=w60uglZUbrcD3QCNC0WDlhn4fApibMa2aQsWpBwYCibhs1DBWo5EBY/PjL8wxVv26g
-         477bVsR22foGesJpe6cgXjXh3fmpoaFaCgZ1soGWKo3GW7FIWSdYRRLPNEVssFg8HB0O
-         Lx4oaqIjEOJtNMl4DW/U/RVPRI+ZlWAFgkgLa88o3DJROB0BAgtHDHQgxfO7jyUqh20o
-         ciCfTypVKX4vkHxCT+GXFL34RM1AtsrJKCDNvZLPckBvqe7EigRrfkMElWkFCwUoJWzC
-         R4yKjVlIBL64SBieqoLefbjdN3LN3bI//9/y+1cGUojltg70VhenDoplBx1L6UJjur42
-         4IgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=eEvomUPAbiilR0mKyM+WIzCcrPikO0w/LFnRQciIxbU=;
-        b=E7XPyPKU7FVd4UcdcN7Ip2wTLEi/5QgO5GKdjYNbS9s3YFU1JXcK1W0TgfKW//hwA5
-         melVK6yWSZTwlNlBSCeRG+3pKBwR2WUJKYfpCr2h3mMSHi1LlGxDSV9DyRUaULJj+l7b
-         RqpdRBFWUnksX4/tB1+NxkNnfInJbk370n4YAWzgBqezirA4gzhgYLQvYiTWYYyDbqpP
-         bNSpGcPQ5a8sbTPJPcElFayX9QTs8ZlE/vVXmxQDLfUA9sClyuF38GOYOEg6e7+zbDNO
-         wBiqinA+nN75psUfdPBYjNOjMTqh6nW7q0EcXFlT8IXiKFlsFR771Tv40PevVtMaQU/T
-         KV4w==
-X-Gm-Message-State: ACrzQf32W9/OMWWxumrajeDGs3kRVh34f/9wiS3dPRip48AN6kzFteex
-        P2/BEbRBiiFUUJKLg8OTWgoyWQ==
-X-Google-Smtp-Source: AMsMyM4ziGPYUJOsSHyxIGY8wGTAbXEUpXp6IRhzzGaBwqcucwGeDucnhnk4DeXgU7z0ZsmqNB8jAQ==
-X-Received: by 2002:a19:6b05:0:b0:49f:53b9:abb0 with SMTP id d5-20020a196b05000000b0049f53b9abb0mr8630989lfa.166.1664174454735;
-        Sun, 25 Sep 2022 23:40:54 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a14-20020a195f4e000000b0048ae316caf0sm2440905lfj.18.2022.09.25.23.40.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 23:40:54 -0700 (PDT)
-Message-ID: <7b5b9f3a-129a-b6b5-4348-cca7381c2d1f@linaro.org>
-Date:   Mon, 26 Sep 2022 08:40:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 07/11] arm64: dts: qcom: sdm8458: align node names with DT
- schema
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220923161453.469179-1-krzysztof.kozlowski@linaro.org>
- <20220923161453.469179-8-krzysztof.kozlowski@linaro.org>
- <d3218018-45c4-4777-77a7-91947ad48666@kali.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d3218018-45c4-4777-77a7-91947ad48666@kali.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 26 Sep 2022 03:00:05 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A401AF3F;
+        Mon, 26 Sep 2022 00:00:03 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DE99420268D;
+        Mon, 26 Sep 2022 09:00:01 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8CB3F202683;
+        Mon, 26 Sep 2022 09:00:01 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D3534181D0CB;
+        Mon, 26 Sep 2022 14:59:59 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     vkoul@kernel.org, p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
+        marex@denx.de, richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v9 0/4] Add the iMX8MP PCIe support
+Date:   Mon, 26 Sep 2022 14:40:59 +0800
+Message-Id: <1664174463-13721-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/2022 20:58, Steev Klimaszewski wrote:
->>   				#address-cells = <2>;
->>   				#size-cells = <0>;
-> 
-> Subject has a typo - sdm8458 -> sdm845
+Based on the 6.0-rc1 of the pci/next branch. 
+This series adds the i.MX8MP PCIe support and tested on i.MX8MP
+EVK board when one PCIe NVME device is used.
 
-Indeed.
+- i.MX8MP PCIe has reversed initial PERST bit value refer to i.MX8MQ/i.MX8MM.
+  Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
+- Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+  And share as much as possible codes with i.MX8MM PCIe PHY.
+- Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+  driver.
 
-> 
-> Tested on Lenovo Yoga C630
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org>
+Main changes v8-->v9:
+- Split the PHY driver changes into three patches.
+  - To keep the format consistent, re-define the PHY_CMN_REG75, and remove
+    two useless BIT definitions.
+  - Refine the i.MX8MM PCIe PHY driver, let it more reviewable, flexible,
+    and easy to expand.
+  - Add the i.MX8MP PCIe PHY support.
+- Only PHY related patches in v9, Since the others patches had been merged
+  by Phillipp/Shawn/Lorenzo, thanks.
 
-Thanks!
+Main changes v7-->v8:
+- Add the Reviewed-by tag, no other changes.
+  Only two patches in v8, Since the others patches had been merged by
+  Phillipp/Shawn/Lorenzo.
 
-Best regards,
-Krzysztof
+Main changes v6-->v7:
+- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" into first three
+  patches.
+- Use "const *char" to replace the static allocation.
 
+Main changes v5-->v6:
+- To avoid code duplication when find the gpr syscon regmap, add the
+  gpr compatible into the drvdata.
+- Add one missing space before one curly brace in 3/7 of v5 series.
+- 4/7 of v5 had been applied by Phillipp, thanks. For ease of tests, still
+  keep it in v6.
+
+Main changes v4-->v5:
+- Use Lucas' approach, let blk-ctrl driver do the hsio-mix resets.
+- Fetch the iomuxc-gpr regmap by the different phandles.
+
+Main changes v3-->v4:
+- Regarding Phillipp's suggestions, add fix tag into the first commit.
+- Add Reviewed and Tested tags.
+
+Main changes v2-->v3:
+- Fix the schema checking error in the PHY dt-binding patch.
+- Inspired by Lucas, the PLL configurations might not required when
+  external OSC is used as PCIe referrence clock. It's true. Remove all
+  the HSIO PLL bit manipulations, and PCIe works fine on i.MX8MP EVK board
+  with one NVME device is used.
+- Drop the #4 patch of v2, since it had been applied by Rob.
+
+Main changes v1-->v2:
+- It's my fault forget including Vinod, re-send v2 after include Vinod
+  and linux-phy@lists.infradead.org.
+- List the basements of this patch-set. The branch, codes changes and so on.
+- Clean up some useless register and bit definitions in #3 patch.
+
+Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |  16 ++++++++--
+drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 142 +++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------
+2 files changed, 108 insertions(+), 50 deletions(-)
+
+[PATCH v9 1/4] dt-binding: phy: Add i.MX8MP PCIe PHY binding
+[PATCH v9 2/4] phy: freescale: imx8m-pcie: Refine register
+[PATCH v9 3/4] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe PHY
+[PATCH v9 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
