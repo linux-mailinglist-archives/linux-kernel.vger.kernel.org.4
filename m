@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EFA5EB5F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48DF5EB5FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiIZXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        id S230113AbiIZXyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIZXsO (ORCPT
+        with ESMTP id S230051AbiIZXyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:48:14 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69391956A9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:48:13 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s90-20020a17090a2f6300b00203a685a1aaso8507630pjd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:48:13 -0700 (PDT)
+        Mon, 26 Sep 2022 19:54:06 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A321F96FD6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:54:05 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id e81so10307966ybb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=1s21+lS83pLYX71MT6ciy21wLuhZLK05BQsfQd+BxjU=;
-        b=rWDAcDvSW0v+juJ3nm6pam7AooYCMCOCr67yEk9YcFrj+sWW9936Gf94fSBBowmuvY
-         BCSvQrh1dqZh+FoalwAE+3Q4IYrhHt8vHYgVbgC4qX8BeLMQJHQ9t+0DYhO+mV2jUqjr
-         nz6YfTGuq2pXFQXgpbZVzGovkAus7n06jK/QxBBkk46z3ZODVL5BgaIcVt9JO+n2HLLh
-         dAlKRqS/NrNl4k8iPGxTirTxFTpib2w1AsF6umgMjWlVz50HTusVnwIiIXK3G/d3kcVm
-         xLyMVsc2DQhqJWlj7S/BJx6/Q39FsoSC32XgxxbWn5xo54upnrIG5VuV3no6JPpQ/91H
-         yqYQ==
+        bh=HwKLS+p+kzaLysWHkGSka85DTvLRdK+675PcR0q9v3w=;
+        b=pm0ElfRJfwGKSuhNjHi2Hrm6ChvnLcu8n9EQR2swES7EBtcz6U72fX3JbsrJXY9g6Y
+         eqNib96zQ9YIvlGADNXevxAeyvbZ7zZncUvNb5gHxAmFwpC4+UK3a5/WkWNJ+SzZ4947
+         FuQ4zyIG8xJ7t3NkEWR3gI6EygLJVRCKL4NonduFnmLPEu66SSPcwShT2tMmhOV24CJp
+         etvD8mJ7Lh8NZbOhd/w7VUECgt46pLy7mLS2h+TXGHGgftLAyWrv50Gwc80LCwhV0byJ
+         cDCbcJHqr+aFEyRfOMQA9xCYVaTXoCSXL2zwfJ0usep3SFk+IvKeStX9PaeEKRSp7s7G
+         2jxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1s21+lS83pLYX71MT6ciy21wLuhZLK05BQsfQd+BxjU=;
-        b=iKuZMri2p3rZyYFci+3DKHDUkID7sKWwLyryDjjXoDgUGpTPweH9jyQYrzsQQv+Yvz
-         ivxrrhpEahlbDvJx6KWKULFG2oUy+agCfzUYZyVz88XE4cIB+xKzCvY8n89wM67+I+EC
-         CXtozn0pWp8CEsFlpN0K0DAwIfCS9aePQoiZspgESctZBjMS35GGtywy4rexsNj81YuK
-         r4aVg4ZMym1ARmZZ9hKkfYLpR9cIla30KFuaxgrs7qlYOdIBOd2MH6uzldgy0CEGSBCo
-         eBidxtEyShKLWZ/lOXTw2exaiyXqWgQ5DJKgPhp8JM4ZVWwRRaow3upBYcxxFxGYE9Zc
-         Kscw==
-X-Gm-Message-State: ACrzQf3uWnU/NTinWLHXxDBLksonQ7lsrb5rpB+fHJxFPcWI0uPVhUak
-        x3aT3siflcQd8n6WJFA9iSaQiP/FeEEHhS10OI+/aw==
-X-Google-Smtp-Source: AMsMyM74skeRHgwTvpDtJqFStX8ZUG+H1vsGA7vXJ6ng3obEtom59E5zhyYrPrFGPrg18+9oa9lCONeI/VFTj6i2m5Y=
-X-Received: by 2002:a17:902:d143:b0:178:456b:8444 with SMTP id
- t3-20020a170902d14300b00178456b8444mr24550422plt.137.1664236092737; Mon, 26
- Sep 2022 16:48:12 -0700 (PDT)
+        bh=HwKLS+p+kzaLysWHkGSka85DTvLRdK+675PcR0q9v3w=;
+        b=sJH1kxQPkIkxMiWSCvxDnaYVfAcJEuAnQAx4T5wlf46ya99cpS9m/paGFI5Zwt6u0W
+         HioMnPGWETA4u3R1vl9yKFzViY5gn9OPpwX9Aily3pyqKnifnGhfuZ7exZdPKOrs8kGV
+         sJpzwMSzxOtvi0bry9DTKX7caj1VnkwypolkBz3tzN23GBZDApwh+QGnARUTqGDE3wfC
+         GPmcxPSMZ+YIz1AMa4+37P85xXz3VzvBoa018jid4ljRryRY+iqxCV3uPmxlpUNpd2/f
+         7mGHTnB5n7KsFHzcaWPBcTW1HWZTulWeKss8I3rLqdsGaFVue80M8E6735VkU9xGUn9D
+         IyHA==
+X-Gm-Message-State: ACrzQf2X/TocvdVbEIniXhiRojU6lAvVvrlaMdFJIpI6Oc4/bFotJZWP
+        sn2kdq3pbQ/1LfjlogfwG+5GOahipeBet8fr9oe8LA==
+X-Google-Smtp-Source: AMsMyM5d1u3qvJiaXnCTboC2C1dkUPnHl5oQjUdRN08V2TQJKfzcOVQuGaTUUx0kZUjMHA4xDwlyeKtWBVza49Aqisg=
+X-Received: by 2002:a25:4fc2:0:b0:680:f309:48e5 with SMTP id
+ d185-20020a254fc2000000b00680f30948e5mr24258349ybb.0.1664236444719; Mon, 26
+ Sep 2022 16:54:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220915000448.1674802-1-vannapurve@google.com>
  <20220915000448.1674802-5-vannapurve@google.com> <YyuEhxW4URWVvHyW@google.com>
-In-Reply-To: <YyuEhxW4URWVvHyW@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 26 Sep 2022 16:48:01 -0700
-Message-ID: <CAGtprH-YsgkeD2qpY4kRvhX=goRC20wzLPrEKHBVX73urhqh4g@mail.gmail.com>
+ <CAGtprH-YsgkeD2qpY4kRvhX=goRC20wzLPrEKHBVX73urhqh4g@mail.gmail.com>
+In-Reply-To: <CAGtprH-YsgkeD2qpY4kRvhX=goRC20wzLPrEKHBVX73urhqh4g@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 26 Sep 2022 16:53:38 -0700
+Message-ID: <CALzav=eyYN=EX0mJGc5p+jybJygxtXyXSwUb0UEsVt0YzSng5A@mail.gmail.com>
 Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
-To:     David Matlack <dmatlack@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
 Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
@@ -74,27 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 2:39 PM David Matlack <dmatlack@google.com> wrote:
+On Mon, Sep 26, 2022 at 4:48 PM Vishal Annapurve <vannapurve@google.com> wrote:
 >
-> On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
-> > Cache the vendor CPU type in a global variable so that multiple calls
-> > to is_intel_cpu() do not need to re-execute CPUID.
+> On Wed, Sep 21, 2022 at 2:39 PM David Matlack <dmatlack@google.com> wrote:
 > >
-> > Add cpu vendor check in kvm_hypercall() so that it executes correct
-> > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
-> > exit to KVM which anyway tries to patch the instruction according to
-> > the cpu type.
+> > On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
+> > > Cache the vendor CPU type in a global variable so that multiple calls
+> > > to is_intel_cpu() do not need to re-execute CPUID.
+> > >
+> > > Add cpu vendor check in kvm_hypercall() so that it executes correct
+> > > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
+> > > exit to KVM which anyway tries to patch the instruction according to
+> > > the cpu type.
+> >
+> > Out of curiousity, why do we want to avoid this exit?
 >
-> Out of curiousity, why do we want to avoid this exit?
+> Referring to the patch set posted for UPM selftests with
+> non-confidential VMs [1], vmcall patching will not work for selftests
+> executed with UPM feature enabled since guest memory can not be
+> modified by KVM. So I tried to add a kvm_hypercall implementation that
+> will execute the hypercall according to the cpu type.
+>
+> Hypercall updates in this series are done to ensure that such a change
+> is done for all callers to allow consistency and avoid relying on KVM
+> behavior to patch the vmmcall/vmcall instruction.
+>
+> [1] https://lore.kernel.org/lkml/20220819174659.2427983-5-vannapurve@google.com/
 
-Referring to the patch set posted for UPM selftests with
-non-confidential VMs [1], vmcall patching will not work for selftests
-executed with UPM feature enabled since guest memory can not be
-modified by KVM. So I tried to add a kvm_hypercall implementation that
-will execute the hypercall according to the cpu type.
-
-Hypercall updates in this series are done to ensure that such a change
-is done for all callers to allow consistency and avoid relying on KVM
-behavior to patch the vmmcall/vmcall instruction.
-
-[1] https://lore.kernel.org/lkml/20220819174659.2427983-5-vannapurve@google.com/
+Thanks! That makes a ton of sense. Please include that in the cover
+letter and any of the commit messages that avoid hypercall patching.
+That will help reviewers understand the context of why the changes are
+being made, and help anyone reviewing the git history in the future
+understand the same.
