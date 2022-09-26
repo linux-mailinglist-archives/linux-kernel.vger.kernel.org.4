@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C755EA52A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F18B5E9FFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239337AbiIZL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S235634AbiIZKb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbiIZLzS (ORCPT
+        with ESMTP id S235853AbiIZK3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:55:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B7792CF;
-        Mon, 26 Sep 2022 03:50:48 -0700 (PDT)
+        Mon, 26 Sep 2022 06:29:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B024F1A3;
+        Mon, 26 Sep 2022 03:19:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4D360C09;
-        Mon, 26 Sep 2022 10:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70AF9C433D6;
-        Mon, 26 Sep 2022 10:49:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53395B8092B;
+        Mon, 26 Sep 2022 10:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4ABAC433D7;
+        Mon, 26 Sep 2022 10:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189375;
-        bh=5S56Dw+R7IJ9FhFrxtaBdZdRBb0t4edjr+D8FgpjfQE=;
+        s=korg; t=1664187562;
+        bh=ymJG0BjZD0x8Z2sX6CSifbF+Ybf81aI2fY5y2fBtQcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmmPnQ95IgLSrrAFNIaRRn/i6qPqz4NfIvewyq0J93xxzhjDuh0jMOxHFYVnHxUoG
-         DOzz5FuW0uiHNKeyL369H/08w13CjY0Hua0qI1gKdGusc2s4tvdaFT6q8LWCfrgzsn
-         vj+WM33K9MNb2vU7nO7yBlIQn35r8N5Fdx/NAhJM=
+        b=C3NN1oQhxYNeth8wX20CknnydicgyZtLpk+8G+81blmb9bfZhuByjs7XyomNaA9il
+         FghQWaInmj52mWGBlRhFeehI+OCMNwhuGgnsjCFxMrjda3KbFxbJSuaPZ2MAvacTR7
+         c/Z5fxcABAsCydkFe8sd4HUamj1G383zfM72uRew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Petr Oros <poros@redhat.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.19 136/207] ice: Fix interface being down after reset with link-down-on-close flag on
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 46/58] can: gs_usb: gs_can_open(): fix race dev->can.state condition
 Date:   Mon, 26 Sep 2022 12:12:05 +0200
-Message-Id: <20220926100812.611517103@linuxfoundation.org>
+Message-Id: <20220926100743.135293511@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,77 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Palczewski <mateusz.palczewski@intel.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 8ac7132704f3fbd2095abb9459e5303ce8c9e559 ]
+[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
 
-When performing a reset on ice driver with link-down-on-close flag on
-interface would always stay down. Fix this by moving a check of this
-flag to ice_stop() that is called only when user wants to bring
-interface down.
+The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
+has been started. On busy networks the CAN controller might receive
+CAN frame between and go into an error state before the dev->can.state
+is assigned.
 
-Fixes: ab4ab73fc1ec ("ice: Add ethtool private flag to make forcing link down optional")
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Petr Oros <poros@redhat.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Assign dev->can.state before starting the controller to close the race
+window.
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index f963036571e0..48befe1e2872 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -6627,7 +6627,7 @@ static void ice_napi_disable_all(struct ice_vsi *vsi)
-  */
- int ice_down(struct ice_vsi *vsi)
- {
--	int i, tx_err, rx_err, link_err = 0, vlan_err = 0;
-+	int i, tx_err, rx_err, vlan_err = 0;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index 2101b2fab7df..62ca4964a863 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -686,6 +686,7 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
  
- 	WARN_ON(!test_bit(ICE_VSI_DOWN, vsi->state));
- 
-@@ -6661,20 +6661,13 @@ int ice_down(struct ice_vsi *vsi)
- 
- 	ice_napi_disable_all(vsi);
- 
--	if (test_bit(ICE_FLAG_LINK_DOWN_ON_CLOSE_ENA, vsi->back->flags)) {
--		link_err = ice_force_phys_link_state(vsi, false);
--		if (link_err)
--			netdev_err(vsi->netdev, "Failed to set physical link down, VSI %d error %d\n",
--				   vsi->vsi_num, link_err);
--	}
--
- 	ice_for_each_txq(vsi, i)
- 		ice_clean_tx_ring(vsi->tx_rings[i]);
- 
- 	ice_for_each_rxq(vsi, i)
- 		ice_clean_rx_ring(vsi->rx_rings[i]);
- 
--	if (tx_err || rx_err || link_err || vlan_err) {
-+	if (tx_err || rx_err || vlan_err) {
- 		netdev_err(vsi->netdev, "Failed to close VSI 0x%04X on switch 0x%04X\n",
- 			   vsi->vsi_num, vsi->vsw->sw_id);
- 		return -EIO;
-@@ -8876,6 +8869,16 @@ int ice_stop(struct net_device *netdev)
- 		return -EBUSY;
+ 	/* finally start device */
++	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
+ 	dm->flags = cpu_to_le32(flags);
+ 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
+@@ -702,13 +703,12 @@ static int gs_can_open(struct net_device *netdev)
+ 	if (rc < 0) {
+ 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
+ 		kfree(dm);
++		dev->can.state = CAN_STATE_STOPPED;
+ 		return rc;
  	}
  
-+	if (test_bit(ICE_FLAG_LINK_DOWN_ON_CLOSE_ENA, vsi->back->flags)) {
-+		int link_err = ice_force_phys_link_state(vsi, false);
-+
-+		if (link_err) {
-+			netdev_err(vsi->netdev, "Failed to set physical link down, VSI %d error %d\n",
-+				   vsi->vsi_num, link_err);
-+			return -EIO;
-+		}
-+	}
-+
- 	ice_vsi_close(vsi);
+ 	kfree(dm);
  
- 	return 0;
+-	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+-
+ 	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
 -- 
 2.35.1
 
