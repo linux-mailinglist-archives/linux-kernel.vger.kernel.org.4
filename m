@@ -2,73 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416145E9807
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290B65E9810
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbiIZClT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 22:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S233097AbiIZCr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 22:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiIZClB (ORCPT
+        with ESMTP id S229850AbiIZCry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 22:41:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694B926AF4
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 19:40:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF63616D0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B094AC433C1;
-        Mon, 26 Sep 2022 02:40:57 +0000 (UTC)
-Date:   Sun, 25 Sep 2022 22:42:04 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kassey Li <quic_yingangl@quicinc.com>
-Cc:     <mingo@redhat.com>, <tj@kernel.org>,
-        <william.kucharski@oracle.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] cgroup: align the comm length with TASK_COMM_LEN
-Message-ID: <20220925224204.4e5d341e@gandalf.local.home>
-In-Reply-To: <fee4b5ec-0e0d-8158-7e60-90f0918cab51@quicinc.com>
-References: <20220923075105.28251-1-quic_yingangl@quicinc.com>
-        <20220923110044.7261afa0@gandalf.local.home>
-        <fee4b5ec-0e0d-8158-7e60-90f0918cab51@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 25 Sep 2022 22:47:54 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E4226577;
+        Sun, 25 Sep 2022 19:47:52 -0700 (PDT)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28Q2lTeD025985;
+        Mon, 26 Sep 2022 11:47:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28Q2lTeD025985
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664160450;
+        bh=xf9YyPqS/WeTd7w3lQS4SQg40kn5xkUipLRnEdNHX9E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pa329+GvZ6PTFniS+s1A9lPZ7Tafb3t8mjHWTDJYPc4zUllFvmfATK3K14IHao9WJ
+         qfPS9uJDsbCjZjJM9D57BfM78+C+iDhQDgOJ85i8PSvLtYTAkVIWnF+EK6Pjd1SAmZ
+         jKfKTLtDYgn+/dcXWsALLE6qcFBbqTMPiF+3pepi3yJhzpBSc6lm4StMmfu04TEwct
+         4BGG8nTaAWjieFyYUjWFqj0EDhudMWICGQHHOM4O1eF7dBHUZgsV0xP4VvH72YGEme
+         ULw++hBv5smUngiSEOWyG5KmI2Bh4VGh9eI0KgcfvomlPJ8k7K2Q+yrgsW9ALFPHeq
+         /JN9Vsd/xjN5A==
+X-Nifty-SrcIP: [209.85.210.47]
+Received: by mail-ot1-f47.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so3635681oti.9;
+        Sun, 25 Sep 2022 19:47:29 -0700 (PDT)
+X-Gm-Message-State: ACrzQf03jEdr5+o5B/AQwnr8EgfyXYO6DbL//dQpx9QEzBVgmos1cklM
+        miBdjOpy9grRYqKtWr7WElzytzC1wL6vqWdMhIM=
+X-Google-Smtp-Source: AMsMyM6PRyp3qwcTl3epvzqjVqNAjZo6u3sYmN+OOEaTnRflQ/FOXUYuC6xmWBlI5Q/EdWDzXjXIBYqqDR1vlqLqtxk=
+X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
+ b21-20020a056830311500b00658ea61249cmr9172929ots.225.1664160448984; Sun, 25
+ Sep 2022 19:47:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220916124112.1175522-1-scgl@linux.ibm.com>
+In-Reply-To: <20220916124112.1175522-1-scgl@linux.ibm.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 26 Sep 2022 11:46:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQQmcz96rxpUmnctZidOTTvcSo51Z=iBme_Q9bvA5Fasw@mail.gmail.com>
+Message-ID: <CAK7LNAQQmcz96rxpUmnctZidOTTvcSo51Z=iBme_Q9bvA5Fasw@mail.gmail.com>
+Subject: Re: [RFC PATCH] kbuild: rpm-pkg: fix breakage when V=1 is used
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 10:18:55 +0800
-Kassey Li <quic_yingangl@quicinc.com> wrote:
+On Fri, Sep 16, 2022 at 9:41 PM Janis Schoetterl-Glausch
+<scgl@linux.ibm.com> wrote:
+>
+> Doing make V=3D1 binrpm-pkg results in:
+>
+>  Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.EgV6qJ
+>  + umask 022
+>  + cd .
+>  + /bin/rm -rf /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+>  + /bin/mkdir -p /home/scgl/rpmbuild/BUILDROOT
+>  + /bin/mkdir /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+>  + mkdir -p /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot
+>  + make -f ./Makefile image_name
+>  + cp test -e include/generated/autoconf.h -a -e include/config/auto.conf=
+ || ( \ echo >&2; \ echo >&2 " ERROR: Kernel configuration is invalid."; \ =
+echo >&2 " include/generated/autoconf.h or include/config/auto.conf are mis=
+sing.";\ echo >&2 " Run 'make oldconfig && make prepare' on kernel src to f=
+ix it."; \ echo >&2 ; \ /bin/false) arch/s390/boot/bzImage /home/scgl/rpmbu=
+ild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot/vmlinuz-6.0.0-rc5+
+>  cp: invalid option -- 'e'
+>  Try 'cp --help' for more information.
+>  error: Bad exit status from /var/tmp/rpm-tmp.EgV6qJ (%install)
+>
+> Because the make call to get the image name is verbose and prints
+> additional information.
+>
+> Fixes: 21b42eb46834 ("kbuild: rpm-pkg: fix binrpm-pkg breakage when O=3D =
+is used")
 
-> >> @@ -139,12 +139,12 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
-> >>   		__entry->dst_level = dst_cgrp->level;
-> >>   		__assign_str(dst_path, path);
-> >>   		__entry->pid = task->pid;
-> >> -		__assign_str(comm, task->comm);
-> >> +		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);  
-> 	I think the problem is here, __assign_str using strcpy
-> 	the task->comm here tail is not '\0'
-> 	that's why it out of bounds access.
-> 
 
-If this is the case, then there's a lot more than just tracing that will
-break. There are other places in the kernel has used strcpy() on task->comm,
-and many more that do "%s" on task->comm, which would also crash on this.
+This Fixes tag is wrong.
 
-> 	do you want to this version or just modify the memcpy or strncpy to do 
-> with a known length ?  please give suggest so I can modify .
 
-I'm guessing a problem exists elsewhere that makes it look like this is the
-issue. I suggest finding where the '\0' is dropped (if that is indeed the
-case).
 
--- Steve
+I replaced it with:
+
+  Fixes: 993bdde94547 ("kbuild: add image_name to no-sync-config-targets")
+
+
+
+Applied to linux-kbuild. Thanks.
+
+
+
+
+
+
+
+
+
+
+
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>
+>
+> I don't know much about Kbuild so there may be better ways to fix this.
+>
+>
+>  scripts/package/mkspec | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> index 8fa7c5b8a1a1..c920c1b18e7a 100755
+> --- a/scripts/package/mkspec
+> +++ b/scripts/package/mkspec
+> @@ -88,10 +88,10 @@ $S
+>         mkdir -p %{buildroot}/boot
+>         %ifarch ia64
+>         mkdir -p %{buildroot}/boot/efi
+> -       cp \$($MAKE image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELRELE=
+ASE
+> +       cp \$($MAKE -s image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELR=
+ELEASE
+>         ln -s efi/vmlinuz-$KERNELRELEASE %{buildroot}/boot/
+>         %else
+> -       cp \$($MAKE image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
+> +       cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEA=
+SE
+>         %endif
+>  $M     $MAKE %{?_smp_mflags} INSTALL_MOD_PATH=3D%{buildroot} modules_ins=
+tall
+>         $MAKE %{?_smp_mflags} INSTALL_HDR_PATH=3D%{buildroot}/usr headers=
+_install
+> --
+> 2.34.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
