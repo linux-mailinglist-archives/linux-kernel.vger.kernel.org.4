@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462BB5EA0AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516BD5E9F98
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbiIZKkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S235511AbiIZK1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiIZKiw (ORCPT
+        with ESMTP id S235698AbiIZKYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:38:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893953034;
-        Mon, 26 Sep 2022 03:22:44 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2334D829;
+        Mon, 26 Sep 2022 03:18:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E5260AD6;
-        Mon, 26 Sep 2022 10:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFCAC433D6;
-        Mon, 26 Sep 2022 10:22:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D616B80926;
+        Mon, 26 Sep 2022 10:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC904C433D6;
+        Mon, 26 Sep 2022 10:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187746;
-        bh=u/QO94tfwEdDsCQx8IWsPMwtpNvAXeSMZ1eabfWH5WM=;
+        s=korg; t=1664187442;
+        bh=lhoE/cFx/P8/ivf4LvyubzIl1QwD9KbA+ytQn9KVuEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eI378aZxilxDxUGOWLc4qqr8YmmSbtGG8MXY6mN6TRvsyrGC0KViotAUANAf2hFWi
-         ktcjE5XjzPei6pz9KWFF/7L2gI7OG3Quo0VlnwZS7XPeftvuLrf79jAiCweG8wDoU9
-         s6ILv38rPr0BNNB6Okp7hEthvbv7vJMpUaolB4qo=
+        b=Tn2UlCQL0SL5oiQkihb9WyBlZJnBT8TpW6ClWt7K+3sKXHLb2vbWHNtihlOR4zJEX
+         EXLh4k3usQfkPf1JcUUK5+uCyiwfqvguTwQwZavQDUQXMublJd0niVMhoMwMfkrYGT
+         uerpEfDyz41hnpFe9Y5mWYQBKhhfyaYuOTdd5ECc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sergiu Moga <sergiu.moga@microchip.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 047/120] tty: serial: atmel: Preserve previous USART mode if RS485 disabled
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 01/58] of: fdt: fix off-by-one error in unflatten_dt_nodes()
 Date:   Mon, 26 Sep 2022 12:11:20 +0200
-Message-Id: <20220926100752.470728066@linuxfoundation.org>
+Message-Id: <20220926100741.483470129@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,69 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergiu Moga <sergiu.moga@microchip.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit 692a8ebcfc24f4a5bea0eb2967e450f584193da6 ]
+[ Upstream commit 2f945a792f67815abca26fa8a5e863ccf3fa1181 ]
 
-Whenever the atmel_rs485_config() driver method would be called,
-the USART mode is reset to normal mode before even checking if
-RS485 flag is set, thus resulting in losing the previous USART
-mode in the case where the checking fails.
+Commit 78c44d910d3e ("drivers/of: Fix depth when unflattening devicetree")
+forgot to fix up the depth check in the loop body in unflatten_dt_nodes()
+which makes it possible to overflow the nps[] buffer...
 
-Some tools, such as `linux-serial-test`, lead to the driver calling
-this method when doing the setup of the serial port: after setting the
-port mode (Hardware Flow Control, Normal Mode, RS485 Mode, etc.),
-`linux-serial-test` tries to enable/disable RS485 depending on
-the commandline arguments that were passed.
+Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+analysis tool.
 
-Example of how this issue could reveal itself:
-When doing a serial communication with Hardware Flow Control through
-`linux-serial-test`, the tool would lead to the driver roughly doing
-the following:
-- set the corresponding bit to 1 (ATMEL_US_USMODE_HWHS bit in the
-ATMEL_US_MR register) through the atmel_set_termios() to enable
-Hardware Flow Control
-- disable RS485 through the atmel_config_rs485() method
-Thus, when the latter is called, the mode will be reset and the
-previously set bit is unset, leaving USART in normal mode instead of
-the expected Hardware Flow Control mode.
-
-This fix ensures that this reset is only done if the checking for
-RS485 succeeds and that the previous mode is preserved otherwise.
-
-Fixes: e8faff7330a35 ("ARM: 6092/1: atmel_serial: support for RS485 communications")
-Cc: stable <stable@kernel.org>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-Link: https://lore.kernel.org/r/20220824142902.502596-1-sergiu.moga@microchip.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 78c44d910d3e ("drivers/of: Fix depth when unflattening devicetree")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/7c354554-006f-6b31-c195-cdfe4caee392@omp.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/of/fdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 44608a06bb2c..3bd93558b443 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -306,9 +306,6 @@ static int atmel_config_rs485(struct uart_port *port,
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 9fecac72c358..7c284ca0212c 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -392,7 +392,7 @@ static int unflatten_dt_nodes(const void *blob,
+ 	for (offset = 0;
+ 	     offset >= 0 && depth >= initial_depth;
+ 	     offset = fdt_next_node(blob, offset, &depth)) {
+-		if (WARN_ON_ONCE(depth >= FDT_MAX_DEPTH))
++		if (WARN_ON_ONCE(depth >= FDT_MAX_DEPTH - 1))
+ 			continue;
  
- 	mode = atmel_uart_readl(port, ATMEL_US_MR);
- 
--	/* Resetting serial mode to RS232 (0x0) */
--	mode &= ~ATMEL_US_USMODE;
--
- 	if (rs485conf->flags & SER_RS485_ENABLED) {
- 		dev_dbg(port->dev, "Setting UART to RS485\n");
- 		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
-@@ -318,6 +315,7 @@ static int atmel_config_rs485(struct uart_port *port,
- 
- 		atmel_uart_writel(port, ATMEL_US_TTGR,
- 				  rs485conf->delay_rts_after_send);
-+		mode &= ~ATMEL_US_USMODE;
- 		mode |= ATMEL_US_USMODE_RS485;
- 	} else {
- 		dev_dbg(port->dev, "Setting UART to RS232\n");
+ 		if (!IS_ENABLED(CONFIG_OF_KOBJ) &&
 -- 
 2.35.1
 
