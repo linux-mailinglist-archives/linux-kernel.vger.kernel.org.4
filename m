@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D855EA106
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE005EA467
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiIZKpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S238477AbiIZLp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236407AbiIZKmh (ORCPT
+        with ESMTP id S238371AbiIZLnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:42:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EC44D17B;
-        Mon, 26 Sep 2022 03:24:22 -0700 (PDT)
+        Mon, 26 Sep 2022 07:43:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A66F57F;
+        Mon, 26 Sep 2022 03:46:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76044B80930;
-        Mon, 26 Sep 2022 10:24:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B54C433D6;
-        Mon, 26 Sep 2022 10:23:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B99AB8095D;
+        Mon, 26 Sep 2022 10:45:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4111C433D6;
+        Mon, 26 Sep 2022 10:45:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187839;
-        bh=ZSskpJgtA2NwzEZp0o6DuEFoB4QGd2uRPJqxfCClm+k=;
+        s=korg; t=1664189113;
+        bh=5vhpMlxTnDNWWgoNyMjjqdMNjJme4PLpALZjigsOd5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zbEPrAMmF1AIYMZ+8UfYk9gt3GtI+90FIkZs/hOlQkP4eGePOpoG1IlwrmqaJHsLh
-         4+NngPnsQLyUJYAiDD9t0w0C/fQkEVTTWLGeDGtQ8zuf6GDFZL2n1qNeqQ5hideT9v
-         6VKP1AvFcNr5hCrbDjn28qsHGEsrv9BHSMK8Bm5g=
+        b=Bnv3NlPuelfcy6mo4K0inuyalQUfRSSZcrx7DPpNylXfAHRZPO/9RpuekMIGAan/k
+         Na33KIKDf6iYQujcBSgm7tz8or+gTLaMjx5mWzd0QiSMt/NjknwG+rQflfkoDR8Ib5
+         at3WTxmz9B4ItBfp5Zim1PbsTJuFXM542bt4xxnQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        zain wang <wzz@rock-chips.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 034/120] usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop
+Subject: [PATCH 5.19 078/207] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
 Date:   Mon, 26 Sep 2022 12:11:07 +0200
-Message-Id: <20220926100751.912849422@linuxfoundation.org>
+Message-Id: <20220926100810.068830966@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wesley Cheng <quic_wcheng@quicinc.com>
+From: zain wang <wzz@rock-chips.com>
 
-[ Upstream commit 040f2dbd2010c43f33ad27249e6dac48456f4d99 ]
+[ Upstream commit 8123437cf46ea5a0f6ca5cb3c528d8b6db97b9c2 ]
 
-Relocate the pullups_connected check until after it is ensured that there
-are no runtime PM transitions.  If another context triggered the DWC3
-core's runtime resume, it may have already enabled the Run/Stop.  Do not
-re-run the entire pullup sequence again, as it may issue a core soft
-reset while Run/Stop is already set.
+We've found the AUX channel to be less reliable with PCLK_EDP at a
+higher rate (typically 25 MHz). This is especially important on systems
+with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
+use of AUX.
 
-This patch depends on
-  commit 69e131d1ac4e ("usb: dwc3: gadget: Prevent repeat pullup()")
+According to Rockchip, using any rate other than 24 MHz can cause
+"problems between syncing the PHY an PCLK", which leads to all sorts of
+unreliabilities around register operations.
 
-Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-Link: https://lore.kernel.org/r/20220728020647.9377-1-quic_wcheng@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d67a38c5a623 ("arm64: dts: rockchip: move core edp from rk3399-kevin to shared chromebook")
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: zain wang <wzz@rock-chips.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Link: https://lore.kernel.org/r/20220830131212.v2.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4f3548c682ec..a40935f3592b 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2043,9 +2043,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index eed15fd61d62..af5810e5f5b7 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -244,6 +244,14 @@ &dmc {
+ &edp {
+ 	status = "okay";
  
- 	is_on = !!is_on;
- 
--	if (dwc->pullups_connected == is_on)
--		return 0;
--
- 	dwc->softconnect = is_on;
- 	/*
- 	 * Per databook, when we want to stop the gadget, if a control transfer
-@@ -2082,6 +2079,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 		return 0;
- 	}
- 
-+	if (dwc->pullups_connected == is_on) {
-+		pm_runtime_put(dwc->dev);
-+		return 0;
-+	}
++	/*
++	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
++	 * set this here, because rk3399-gru.dtsi ensures we can generate this
++	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
++	 */
++	assigned-clocks = <&cru PCLK_EDP>;
++	assigned-clock-rates = <24000000>;
 +
- 	if (!is_on) {
- 		ret = dwc3_gadget_soft_disconnect(dwc);
- 	} else {
+ 	ports {
+ 		edp_out: port@1 {
+ 			reg = <1>;
 -- 
 2.35.1
 
