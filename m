@@ -2,259 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB235EA415
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCD15E9EB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238168AbiIZLj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S235058AbiIZKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbiIZLiK (ORCPT
+        with ESMTP id S234920AbiIZKLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:38:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EFB2FFED;
-        Mon, 26 Sep 2022 03:44:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29436B80942;
-        Mon, 26 Sep 2022 10:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF77C433C1;
-        Mon, 26 Sep 2022 10:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188936;
-        bh=8qGXLMvWUTjEVTmM/cfRPaf8rj4RUemQlqnquuptqzU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h5pfV6HDbRSs6ep937s8gDN51yh0kxBUS0Bf9/RKI4e8CgbTxF5QKoHEq/F/SwTuu
-         xA+GHfrQw2VPr1d9FzkM3NaH3x4f692q+nVGrfPV0Ug2ybmZ42veYCILZanHFPJtvo
-         lKSNvYm2/soJcKMfuKQ8jdwZDxEUDL8X3/mRcKRI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Christie <michael.christie@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Li Zhijian <lizhijian@fujitsu.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 020/207] scsi: core: Fix a use-after-free
-Date:   Mon, 26 Sep 2022 12:10:09 +0200
-Message-Id: <20220926100807.381304572@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 26 Sep 2022 06:11:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0713AE5A;
+        Mon, 26 Sep 2022 03:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664187014; x=1695723014;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=incQH2Dto+dCjnAkW9zHBf/lKL8d+xXml11ziotBF6o=;
+  b=NnbbdZeS0wgw8SiRC+/JofX4POqGNfFYCSuZuo+bNygMG49/5zet0RSW
+   S+zGEl+0JShjDiu6sfb4FPU0JTlv/X9hsqWA9XzJOZPbdIBDCI1R3Qd9y
+   QP38e75iF2YJNEHHwWMTTB8LSDCMClzars1bXUXrPGMFpV/mFvLIHPvMz
+   ycWfdmyU4ldxiDsuHhNUmiw9eZH/7r3Sa2ntCLMdIMjzoAy38wE/ma+WC
+   kDOTSeO0YFMo6BXxSyWuTiAG3JONi/YHjmLWKF9tJK8GfhASTI3jUO8ar
+   zThhqR2SO/ckvWj8X84P/25aRY0iMwnaCmTmKu9nxQmNCkDZiZspWKnXG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="302458319"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="302458319"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:10:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="866068060"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="866068060"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Sep 2022 03:10:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ocl3z-007kCD-0c;
+        Mon, 26 Sep 2022 13:10:11 +0300
+Date:   Mon, 26 Sep 2022 13:10:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v2 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
+ namespace
+Message-ID: <YzF6ggfpyZSMfkIN@smile.fi.intel.com>
+References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
+ <20220908135658.64463-3-andriy.shevchenko@linux.intel.com>
+ <20220924095945.pzyhc24jhjwlfdin@pengutronix.de>
+ <YzF0U7q5Fl0UaogR@smile.fi.intel.com>
+ <20220926095547.be5bbtyqqlm4ytgy@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220926095547.be5bbtyqqlm4ytgy@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+On Mon, Sep 26, 2022 at 11:55:47AM +0200, Uwe Kleine-König wrote:
+> On Mon, Sep 26, 2022 at 12:43:47PM +0300, Andy Shevchenko wrote:
+> > On Sat, Sep 24, 2022 at 11:59:45AM +0200, Uwe Kleine-König wrote:
+> > > On Thu, Sep 08, 2022 at 04:56:51PM +0300, Andy Shevchenko wrote:
 
-[ Upstream commit 8fe4ce5836e932f5766317cb651c1ff2a4cd0506 ]
+...
 
-There are two .exit_cmd_priv implementations. Both implementations use
-resources associated with the SCSI host. Make sure that these resources are
-still available when .exit_cmd_priv is called by waiting inside
-scsi_remove_host() until the tag set has been freed.
+> > > > +MODULE_IMPORT_NS(PWM_LPSS);
+> > > 
+> > > Each user of the lpss.h header needs that, right? Then the
+> > > MODULE_IMPORT_NS statement can go into the header, too.
+> > 
+> > With the same answer as for v1: any user that might include the header for
+> > the sake of data types will get the NS inclusion even if they don't need
+> > that (yes, I don't think it's practical, but slightly better to make sure
+> 
+> I'm not sure I understand you correctly here. For some headers you
+> cannot assume that a file including the header also needs the namespace
+> macro, but for pwm-lpss.h that should be a safe assumption.
 
-This commit fixes the following use-after-free:
+Yes, it's a safe assumption for _this_ case (as I pointed out above that
+there is probably no practical to assume otherwise), in general it may be
+not the case.
 
-==================================================================
-BUG: KASAN: use-after-free in srp_exit_cmd_priv+0x27/0xd0 [ib_srp]
-Read of size 8 at addr ffff888100337000 by task multipathd/16727
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0x5e/0x5db
- kasan_report+0xab/0x120
- srp_exit_cmd_priv+0x27/0xd0 [ib_srp]
- scsi_mq_exit_request+0x4d/0x70
- blk_mq_free_rqs+0x143/0x410
- __blk_mq_free_map_and_rqs+0x6e/0x100
- blk_mq_free_tag_set+0x2b/0x160
- scsi_host_dev_release+0xf3/0x1a0
- device_release+0x54/0xe0
- kobject_put+0xa5/0x120
- device_release+0x54/0xe0
- kobject_put+0xa5/0x120
- scsi_device_dev_release_usercontext+0x4c1/0x4e0
- execute_in_process_context+0x23/0x90
- device_release+0x54/0xe0
- kobject_put+0xa5/0x120
- scsi_disk_release+0x3f/0x50
- device_release+0x54/0xe0
- kobject_put+0xa5/0x120
- disk_release+0x17f/0x1b0
- device_release+0x54/0xe0
- kobject_put+0xa5/0x120
- dm_put_table_device+0xa3/0x160 [dm_mod]
- dm_put_device+0xd0/0x140 [dm_mod]
- free_priority_group+0xd8/0x110 [dm_multipath]
- free_multipath+0x94/0xe0 [dm_multipath]
- dm_table_destroy+0xa2/0x1e0 [dm_mod]
- __dm_destroy+0x196/0x350 [dm_mod]
- dev_remove+0x10c/0x160 [dm_mod]
- ctl_ioctl+0x2c2/0x590 [dm_mod]
- dm_ctl_ioctl+0x5/0x10 [dm_mod]
- __x64_sys_ioctl+0xb4/0xf0
- dm_ctl_ioctl+0x5/0x10 [dm_mod]
- __x64_sys_ioctl+0xb4/0xf0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Link: https://lore.kernel.org/r/20220826002635.919423-1-bvanassche@acm.org
-Fixes: 65ca846a5314 ("scsi: core: Introduce {init,exit}_cmd_priv()")
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Mike Christie <michael.christie@oracle.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Li Zhijian <lizhijian@fujitsu.com>
-Reported-by: Li Zhijian <lizhijian@fujitsu.com>
-Tested-by: Li Zhijian <lizhijian@fujitsu.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/hosts.c      | 16 +++++++++++++---
- drivers/scsi/scsi_lib.c   |  6 +++++-
- drivers/scsi/scsi_priv.h  |  2 +-
- drivers/scsi/scsi_scan.c  |  1 +
- drivers/scsi/scsi_sysfs.c |  1 +
- include/scsi/scsi_host.h  |  2 ++
- 6 files changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 8352f90d997d..ae9a107c520d 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -182,6 +182,15 @@ void scsi_remove_host(struct Scsi_Host *shost)
- 	mutex_unlock(&shost->scan_mutex);
- 	scsi_proc_host_rm(shost);
- 
-+	/*
-+	 * New SCSI devices cannot be attached anymore because of the SCSI host
-+	 * state so drop the tag set refcnt. Wait until the tag set refcnt drops
-+	 * to zero because .exit_cmd_priv implementations may need the host
-+	 * pointer.
-+	 */
-+	kref_put(&shost->tagset_refcnt, scsi_mq_free_tags);
-+	wait_for_completion(&shost->tagset_freed);
-+
- 	spin_lock_irqsave(shost->host_lock, flags);
- 	if (scsi_host_set_state(shost, SHOST_DEL))
- 		BUG_ON(scsi_host_set_state(shost, SHOST_DEL_RECOVERY));
-@@ -240,6 +249,9 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	if (error)
- 		goto fail;
- 
-+	kref_init(&shost->tagset_refcnt);
-+	init_completion(&shost->tagset_freed);
-+
- 	/*
- 	 * Increase usage count temporarily here so that calling
- 	 * scsi_autopm_put_host() will trigger runtime idle if there is
-@@ -312,6 +324,7 @@ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
- 	pm_runtime_disable(&shost->shost_gendev);
- 	pm_runtime_set_suspended(&shost->shost_gendev);
- 	pm_runtime_put_noidle(&shost->shost_gendev);
-+	kref_put(&shost->tagset_refcnt, scsi_mq_free_tags);
-  fail:
- 	return error;
- }
-@@ -345,9 +358,6 @@ static void scsi_host_dev_release(struct device *dev)
- 		kfree(dev_name(&shost->shost_dev));
- 	}
- 
--	if (shost->tag_set.tags)
--		scsi_mq_destroy_tags(shost);
--
- 	kfree(shost->shost_data);
- 
- 	ida_simple_remove(&host_index_ida, shost->host_no);
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 0a267d6e2f7c..7e990f7a9f16 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1995,9 +1995,13 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
- 	return blk_mq_alloc_tag_set(tag_set);
- }
- 
--void scsi_mq_destroy_tags(struct Scsi_Host *shost)
-+void scsi_mq_free_tags(struct kref *kref)
- {
-+	struct Scsi_Host *shost = container_of(kref, typeof(*shost),
-+					       tagset_refcnt);
-+
- 	blk_mq_free_tag_set(&shost->tag_set);
-+	complete(&shost->tagset_freed);
- }
- 
- /**
-diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
-index 5c4786310a31..a0ee31d55f5f 100644
---- a/drivers/scsi/scsi_priv.h
-+++ b/drivers/scsi/scsi_priv.h
-@@ -94,7 +94,7 @@ extern void scsi_run_host_queues(struct Scsi_Host *shost);
- extern void scsi_requeue_run_queue(struct work_struct *work);
- extern void scsi_start_queue(struct scsi_device *sdev);
- extern int scsi_mq_setup_tags(struct Scsi_Host *shost);
--extern void scsi_mq_destroy_tags(struct Scsi_Host *shost);
-+extern void scsi_mq_free_tags(struct kref *kref);
- extern void scsi_exit_queue(void);
- extern void scsi_evt_thread(struct work_struct *work);
- 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 91ac901a6682..5d27f5196de6 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -340,6 +340,7 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 		kfree(sdev);
- 		goto out;
- 	}
-+	kref_get(&sdev->host->tagset_refcnt);
- 	sdev->request_queue = q;
- 	q->queuedata = sdev;
- 	__scsi_init_queue(sdev->host, q);
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index aa70d9282161..5d61f58399dc 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -1476,6 +1476,7 @@ void __scsi_remove_device(struct scsi_device *sdev)
- 	mutex_unlock(&sdev->state_mutex);
- 
- 	blk_mq_destroy_queue(sdev->request_queue);
-+	kref_put(&sdev->host->tagset_refcnt, scsi_mq_free_tags);
- 	cancel_work_sync(&sdev->requeue_work);
- 
- 	if (sdev->host->hostt->slave_destroy)
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 667d889b92b5..3e1cea155049 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -557,6 +557,8 @@ struct Scsi_Host {
- 	struct scsi_host_template *hostt;
- 	struct scsi_transport_template *transportt;
- 
-+	struct kref		tagset_refcnt;
-+	struct completion	tagset_freed;
- 	/* Area to keep a shared tag map */
- 	struct blk_mq_tag_set	tag_set;
- 
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko
 
 
