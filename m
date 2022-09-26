@@ -2,111 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06845E9C37
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582425E9C39
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiIZIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S234316AbiIZIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiIZIl2 (ORCPT
+        with ESMTP id S234475AbiIZIlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:41:28 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A9BC1B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:41:27 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a80so5982402pfa.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:41:27 -0700 (PDT)
+        Mon, 26 Sep 2022 04:41:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A83B357E1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:41:42 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so11697965pjo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Z6Fq3OQCzJNYUdQqn+SR/VBV1Co8BIFxEWqJxINS4/M=;
-        b=bDq3IyrPTsWd9r6LS5HxCwPJQneldvZPVfwMB/Dn8FmtJsn1I4s14dFuM9I0j2gVLF
-         3str0e1Xfdbb5ZY9OP//q4v/wv6rrYAuHCzm5sfFf0TG8wCbS1V4yso7uPj7bDWxLmwo
-         mekcXiEuMUM6BNNFwEiVpyVAgNr4Vln6AWDHLBaqV9HUETk4UPogZKHRyhKqQwBIDi40
-         ngAIbGOvnc8x8pm8xyr8LHTYhyM0NPycNBiW8LWdlnknTWGsbCGdqEw8RVpdy0+rYlQ3
-         ZX7AsaowB9FTgR8y8ajnBBr7+io7CnToQPSQSATPdp3Golp9LKIPL6iXJxhhujahMkiz
-         OyEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FYzdZmUmmMUqXz0qE+VCSL03kM7vgqb2W0v35eWjsyY=;
+        b=W6lmNljPFemZSjHB5ju4/ZAQxb22Ii1tf9xc+LeOKfM78GZ4vXJ3Xt0arw+DAlXJYH
+         Rhpg4tdhuoDytK/Qa71Jzr0q4pdZkUl0mdOA89EW0gsh993eZBPmwgbWu3MAQEROKqgO
+         wb+9s5NhFarnq7o87+0O0q/SgVmJ7tKqdQ8B806s00PbYZ7OZtat0eWcszf4CAjy7l6T
+         kfzeCRwyg++1xIxQNCvGQhzhPQ3Y6eGgakR09oGc/XJqSD0lQr2vR0eKIvQakFFX0Gg1
+         3tJLdI45eAVo7MPray38nKbt96nKAZbA0zEWMIyi9Wj0JgNLc9zWDw+2WqMoTPCAIrB9
+         l59g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Z6Fq3OQCzJNYUdQqn+SR/VBV1Co8BIFxEWqJxINS4/M=;
-        b=MrvHCK+k9nw9h1VB1GMnKNXkuxDiag5pwev3lUVM5PYhBi6zwXaRNk0xq0MoxfAWru
-         U90HXSLhCgL5PLGChPUqIxvytXT+92EvAv6SXn2UyH+Q0znneeG/yGnMxcXfiJ2jfGQT
-         1JR99CwpqBBcUxl/xNjrpsXoTZ6ntG7mHRiFCHJCaaYVmEOtbE05g5tU4JMt5pjNxRtA
-         QWzGONwPPXn6NZ935XFB86t5Dbgw2KxMkqQ+w0Gp9w1+mLfN3xZrjagfY62EawmFzsM8
-         PxnFrp6yRTGbuEuUCkEcJodLNHy2n6tsoztrU4DWU1OOd+d0i1yIb7QeS3q1Fj1xcx5J
-         GbfA==
-X-Gm-Message-State: ACrzQf1kIVV9E2aa4MfJHtJKINQ6N2Jzy4Ejbg9bhZSHx6GPpMzQM8qr
-        JeIQUeWjAMo8HnmMs8OQno7zamNqGAoiXQ==
-X-Google-Smtp-Source: AMsMyM6BiW8KXOMc7a39E2aNr7acYfpjT5DKBwiJ8WaZ6unGoXNteQX640BwRTnho0Ze0V8iXOd8Xw==
-X-Received: by 2002:a63:50e:0:b0:438:d16d:e8c1 with SMTP id 14-20020a63050e000000b00438d16de8c1mr17853167pgf.505.1664181687415;
-        Mon, 26 Sep 2022 01:41:27 -0700 (PDT)
-Received: from [10.255.6.155] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b0016b81679c1fsm10594020plb.216.2022.09.26.01.41.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 01:41:26 -0700 (PDT)
-Message-ID: <e1a6007d-24f2-5153-5382-f66391cbd0cb@bytedance.com>
-Date:   Mon, 26 Sep 2022 16:41:19 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FYzdZmUmmMUqXz0qE+VCSL03kM7vgqb2W0v35eWjsyY=;
+        b=muOzeJbhZDVA2sXO+H/dwoWZUsusZXRyTs1FTt/3BfmKFjGeyKML+eyJb6CEYLQ8UD
+         uwmgAPcH8C78sWlG968TwVqTgenpT5x9Z6/+RmYArBkKfTRPJhXVp6saIA6ggRfAGx5B
+         0sRc1W0l84TlcgAc3xwhVSofPBbEba91pAKi/EYAyVWBpbUPQcParyCyuCgS7wLNOFNS
+         0rfKfJiCNJp+/IUXP2477+3dyq5Q2tbWQPzkktrVFsQMP7vjeu7HWErE7htJxdnWMfJ3
+         1tBN1uJ5SVqi63KWDjEFw8uFIFceh874jSzFu+KftDsSQ3zeIiweZVaCv+BpLhLMt4Xs
+         DuSQ==
+X-Gm-Message-State: ACrzQf2AfJ53GVmoakyw7FCVBp3TTnX5wgG6vjEXezwYqY2CESE70Rmg
+        9Y58xmDbdBrme3OhwqbLang=
+X-Google-Smtp-Source: AMsMyM5lqqjLNQNGCmO/6r2mRk5p6L8uXj56iFcijF7GCfK26oh/SQJN25yD/cu1oyzyG7D9tgR4mA==
+X-Received: by 2002:a17:90b:3a84:b0:203:6911:52c with SMTP id om4-20020a17090b3a8400b002036911052cmr36350771pjb.73.1664181701936;
+        Mon, 26 Sep 2022 01:41:41 -0700 (PDT)
+Received: from localhost.localdomain (l3b2w1.cn. [159.138.1.25])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090a284e00b001fd9c63e56bsm5925550pjf.32.2022.09.26.01.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 01:41:41 -0700 (PDT)
+From:   Binglei Wang <l3b2w1@gmail.com>
+X-Google-Original-From: Binglei Wang
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Binglei Wang <l3b2w1@gmail.com>
+Subject: [PATCH v6] rethook: add riscv rethook implementation.
+Date:   Mon, 26 Sep 2022 16:41:36 +0800
+Message-Id: <20220926084136.629638-1-l3b2w1@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH] mm: fix misuse of update_mmu_cache() in
- do_anonymous_page()
-To:     David Hildenbrand <david@redhat.com>,
-        Muchun Song <muchun.song@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-        chris@zankel.net, jcmvbkbc@gmail.com, maobibo@loongson.cn
-References: <20220924053239.91661-1-zhengqi.arch@bytedance.com>
- <3A09E40A-E2C5-4C6F-8550-DD0E17B7DAB9@linux.dev>
- <48590f80-fc58-bf67-5acf-082880a607b2@redhat.com>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <48590f80-fc58-bf67-5acf-082880a607b2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Binglei Wang <l3b2w1@gmail.com>
 
+Implement the kretprobes on riscv arch by using rethook mechanism
+which abstracts general kretprobe info into a struct rethook_node
+to be embedded in the struct kretprobe_instance.
 
-On 2022/9/26 16:32, David Hildenbrand wrote:
-> On 25.09.22 03:43, Muchun Song wrote:
->>
->>
->>> On Sep 24, 2022, at 13:32, Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->>>
->>> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
->>> if PTE entry exists") said, we should update local TLB only on the
->>> second thread. So fix the misuse of update_mmu_cache() by using
->>> update_mmu_tlb() in the do_anonymous_page().
->>>
->>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>
->> The change looks good to me. However, I am not sure what is the 
->> user-visible
->> effect to xtensa users. So Cc xtensa’s maintainer and the author of 
->> 7df676974359
->> to double check this.
-> 
-> And if there is one, do we have a fixes tag?
+1. remove arch dependent kretprobe implementation
+2. replace __kretprobe_trampoline with arch_hook_trampoline
 
-IIUC, there's only a performance difference here, so maybe there's no
-need to add the fixes tag?
+Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
+---
+ arch/riscv/Kconfig                            |  1 +
+ arch/riscv/kernel/probes/Makefile             |  2 +-
+ arch/riscv/kernel/probes/kprobes.c            | 13 ----------
+ arch/riscv/kernel/probes/rethook.c            | 26 +++++++++++++++++++
+ arch/riscv/kernel/probes/rethook.h            |  8 ++++++
+ ...obes_trampoline.S => rethook_trampoline.S} |  0
+ 6 files changed, 36 insertions(+), 14 deletions(-)
+ create mode 100644 arch/riscv/kernel/probes/rethook.c
+ create mode 100644 arch/riscv/kernel/probes/rethook.h
+ rename arch/riscv/kernel/probes/{kprobes_trampoline.S => rethook_trampoline.S} (100%)
 
-> 
-
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index ed66c31e4..c5cae0825 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -97,6 +97,7 @@ config RISCV
+ 	select HAVE_KPROBES if !XIP_KERNEL
+ 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+ 	select HAVE_KRETPROBES if !XIP_KERNEL
++	select HAVE_RETHOOK if !XIP_KERNEL
+ 	select HAVE_MOVE_PMD
+ 	select HAVE_MOVE_PUD
+ 	select HAVE_PCI
+diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
+index 7f0840dcc..9a96a7038 100644
+--- a/arch/riscv/kernel/probes/Makefile
++++ b/arch/riscv/kernel/probes/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_KPROBES)		+= kprobes.o decode-insn.o simulate-insn.o
+-obj-$(CONFIG_KPROBES)		+= kprobes_trampoline.o
+ obj-$(CONFIG_KPROBES_ON_FTRACE)	+= ftrace.o
+ obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o simulate-insn.o
++obj-$(CONFIG_KPROBES)		+= rethook.o rethook_trampoline.o
+ CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+index e6e950b7c..f21592d20 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -345,19 +345,6 @@ int __init arch_populate_kprobe_blacklist(void)
+ 	return ret;
+ }
+ 
+-void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
+-{
+-	return (void *)kretprobe_trampoline_handler(regs, NULL);
+-}
+-
+-void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+-				      struct pt_regs *regs)
+-{
+-	ri->ret_addr = (kprobe_opcode_t *)regs->ra;
+-	ri->fp = NULL;
+-	regs->ra = (unsigned long) &__kretprobe_trampoline;
+-}
+-
+ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+ {
+ 	return 0;
+diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
+new file mode 100644
+index 000000000..edfeaa256
+--- /dev/null
++++ b/arch/riscv/kernel/probes/rethook.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Generic return hook for riscv.
++ */
++
++#include <linux/kprobes.h>
++#include <linux/rethook.h>
++#include "rethook.h"
++
++/* This is called from arch_rethook_trampoline() */
++unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
++{
++	return rethook_trampoline_handler(regs, regs->s0);
++}
++NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
++
++
++void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
++{
++	rhn->ret_addr = regs->ra;
++	rhn->frame = regs->s0;
++
++	/* replace return addr with trampoline */
++	regs->ra = (u64)arch_rethook_trampoline;
++}
++NOKPROBE_SYMBOL(arch_rethook_prepare);
+diff --git a/arch/riscv/kernel/probes/rethook.h b/arch/riscv/kernel/probes/rethook.h
+new file mode 100644
+index 000000000..cc573d701
+--- /dev/null
++++ b/arch/riscv/kernel/probes/rethook.h
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#ifndef __RISCV_RETHOOK_H
++#define __RISCV_RETHOOK_H
++
++unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs);
++void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
++
++#endif
+diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/rethook_trampoline.S
+similarity index 100%
+rename from arch/riscv/kernel/probes/kprobes_trampoline.S
+rename to arch/riscv/kernel/probes/rethook_trampoline.S
 -- 
-Thanks,
-Qi
+2.27.0
+
