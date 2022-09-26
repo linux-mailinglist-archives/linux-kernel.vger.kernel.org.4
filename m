@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48355EAB9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7655EABA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbiIZPts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S233627AbiIZPvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbiIZPtU (ORCPT
+        with ESMTP id S234257AbiIZPuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:49:20 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2055.outbound.protection.outlook.com [40.107.212.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A976F551
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:36:14 -0700 (PDT)
+        Mon, 26 Sep 2022 11:50:35 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DD7DF8D;
+        Mon, 26 Sep 2022 07:37:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UTeOR7XaHuClWpgW35y78LNOnYC3VOkdlebOo0qAV+uJHk6mBAxWKy+vMY31WAUD/f7ST9+mz2MGTqtrddpQpz/tR8x2YOybaD2C039DpHkor5wtRWvCe7TsKvg1HirTfAfSoI1QvZ9hDLxHLFp6E9t5tmMB7xRkpfCfSD/p0zJcQ3mXtSr0LPcBVaz57Fq27mUb2x4u8FcuV2MZqv5hXUmXO9nt64skEwXIc1D4+YfZxLdbpq+ynmfiCjKMj5jzxk55rK0zRq9wYblg7FmKWT9HFKe0BqevKJs7mo1XJQxc4RDYYnG1HFaW/VOH4I1KbFlzwovFYALYW7w3wrbBWA==
+ b=K098K+8AAq5fkaSuSJF5xAK0IVKgmqauCehQmQtibBiNj9K+Fux+x/5mrI9OqCf0g9pLQwuFKcMhBj3u27h3I3zPlqXbMqJo5Lxn+I6XOW6xIwKh0MJh7RcxSwqJHT74ot5GS5MyJMaJZOtNMp6/hGqSTfrgod5vWI1NGxafHkmf6zub57xxr9PNdhqV8OHaOnbg1suzAq3YSu+eFV7qfPvBFBH3GwjR0tAxxm9fmXJ9MvtodX8NhgKvDbAInup6gMxGLTPQSl1XXeKSo9HNpPi2Lw24VUIK5tSuD3OKkwwaP+wQ0F8KtMSoeh4wuPz82SSxUyXnmf9BETYv1vzujQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uMmBKbfeNs1hw9UZQVm/pUxCUYFzVOLZ4v7rOEjbTbA=;
- b=Irbu91I+PJn13l5552pOlSIq53VnyvVnmdbPo1Yin6+SCMX+ZWQV+6nnDYr84ndNnZ840owyJ0Db7mYFEjoPqTgShculJmprPNH2+310lyxozdpgO2azpZT4fZra5SYxntRdFv2jD40Hz4qilK4re3HokwGF/k6adKijBggWIeDuxRTlm1uWulU+9wgvPwRVB+kK7EsNpio+IaZG+InEUozCNZmlxrJNxGSBzIo2JnBgmXRjrd08+DEklHJjyzBNWwMxjcCGbH0aZCgLkEHhUsEvGJfmyVJ+TTByeSGQXYT85ab9pZTnKIBpPPJ5KTQDOu8gdtJhtOCs3JHMdWq5uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=oQCaz4lnZpdHQHT2AMgN7hvPAahdH+Z++2FKH3F5jx4=;
+ b=TcPTYEiK15LHPbQ6vrkvFywCW6y3GEzU1UhI6pdFrlBIOSeD8l98mrK36/ktoQKgyAAqU6Bvd6cpoMPbgsRdbWzumGEfUyrdY4+aXf1t5vSUIAZB3ruYo47z9isPho6KXxLEpL3eUowX8R3Oiyy2UhrmpEVovq30MBuNPAniYAB0ID6fmNxph5inC3TPbrdQVdwCgsmdZXBsTER1VoV2oxwBqGYtyJRFEXEPgpbLpm9evvYuyHxnvyRe3aCZoRk8DpWZcMdcryzclIIuyXumvMhnA3DBn4MWoCSaYQSXcbOBVK2TQQZk5aWB/HxGoTnGDYvcb3tH57zjn6IiH5rkYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uMmBKbfeNs1hw9UZQVm/pUxCUYFzVOLZ4v7rOEjbTbA=;
- b=SkpdPRNPl1tE+kFJsFGZUE62vfXCdpfIiEVK2Qsp1MHsCw+ch3y/M7k1MvIxUIS1hG/aVHcd3E8cr8qeqlEzfvVZEvmA5pUii8x4hYublFui3yUFtCmQpzfVNdeTlsCw+BLPF3rHKlmn4LoRoiOCBOlAGGdW+hT8LHG5URIZajuX4lbdO6rx3PkAd/enbJaODPraiYC+y/wZfXE4d12StF9jrEfZfGXXTx+rz+jlexsLtCRZXh7kbLcA6zyZhA6oFvudkcdsS36uaH1uFtDqncSdgU2CiCX4iQLIVNjDRyuaXIMU6rq2RXYp/HkgGkom6/ptdQ8IxcJNXe9+4jjwvw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SJ0PR12MB6735.namprd12.prod.outlook.com (2603:10b6:a03:479::8) with
+ bh=oQCaz4lnZpdHQHT2AMgN7hvPAahdH+Z++2FKH3F5jx4=;
+ b=rbzBH7i5gVSqsHwPYRx0bNigEp0F8FZYFPSTMxFamUUyIULy51tRsWUd3G+rmEcdJbXZOYuyKqtGdot+ULb/8McTcgFNA4250zeiK4g+ybb1Ykl1XtpcHd9NjwKWxHqsU32yLnuYxe6e1KUxIoikXNstt4sNkHNXY0IGprfVK6VMWT07C7cOy4/KnRJFgaPEfZB9O5qj2w+UQHN+u3aGUIGYGYdnWsMH9n7ec/p2SnIUOjbipMQiFLxF041E7A78iQC0h6U1q2UClRCcgfiOQtD+sAQ9EozauZeQZekLb7JY83uIUrjv6LIGftom8oWqBh9QhzyRwjFKgbjEU/S7+g==
+Received: from MW4PR03CA0261.namprd03.prod.outlook.com (2603:10b6:303:b4::26)
+ by BY5PR12MB4275.namprd12.prod.outlook.com (2603:10b6:a03:20a::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19; Mon, 26 Sep
- 2022 14:36:12 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 14:36:12 +0000
-Date:   Mon, 26 Sep 2022 11:36:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alex Sierra <alex.sierra@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 2/7] mm: Free device private pages have zero refcount
-Message-ID: <YzG42766BJSxro0R@nvidia.com>
-References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
- <3d74bb439723c7e46cbe47d1711795308aee4ae3.1664171943.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d74bb439723c7e46cbe47d1711795308aee4ae3.1664171943.git-series.apopple@nvidia.com>
-X-ClientProxiedBy: MN2PR02CA0011.namprd02.prod.outlook.com
- (2603:10b6:208:fc::24) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Mon, 26 Sep
+ 2022 14:37:56 +0000
+Received: from CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b4:cafe::4e) by MW4PR03CA0261.outlook.office365.com
+ (2603:10b6:303:b4::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
+ Transport; Mon, 26 Sep 2022 14:37:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT111.mail.protection.outlook.com (10.13.174.61) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 14:37:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 26 Sep
+ 2022 07:37:38 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 26 Sep 2022 07:37:37 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 26 Sep 2022 07:37:37 -0700
+Received: from kkartik-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 26 Sep 2022 07:37:34 -0700
+From:   Kartik <kkartik@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <digetx@gmail.com>, <nathan@kernel.org>, <windhl@126.com>,
+        <bbiswas@nvidia.com>, <skamble@nvidia.com>,
+        <ulf.hansson@linaro.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] soc/tegra: fuse: use soc specific nvmem cells
+Date:   Mon, 26 Sep 2022 20:07:33 +0530
+Message-ID: <1664203053-20716-1-git-send-email-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|SJ0PR12MB6735:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43ed8a99-ce9b-4a18-8b18-08da9fcc758f
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT111:EE_|BY5PR12MB4275:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48371039-5084-4108-99a7-08da9fccb389
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +4aaWTLp/K4X8/bI5mRxDcgM05Ut3ixbT8NtsngRDPL0x31c4JnWqcrHY1xm3PFKC3syAVeJzd+hEOOjubjKe+Sf3FO1AAJqUkxqzchPng7fWgzyZsyPg6iqJFvkFXjGTfFBvHuMOuY+nKUZshuw+iQgkByK1SQ3oifLZZJVvn8Q+Og+9EO96lSuXINOvB2xJEO1yy09jLu4NuCURPtN5vnKgIEV4iryJfXKEHZ8jcSMhVRALmjT8r8LEwVUNQ93weYN19NapEfuw0Rn2p/TFQ5bC69pbdhAeGp3IkK9DJp45oueU2t39mtiRgPFkiMDCV+3wg00CJSeFEvoP+zs3I+Zx+MDRzXDtkGr7M/fEQOtwzSUIjvNhyDD6OusFrInScL4T7hdVSODWofne5RztJBdX9JGvPRQV/amxiaPlkK9OCg54kROgX/lSl/iv4BP0IMv8z9myi7cXBEm1iDcuXJgyndosuzGDW1Mvx66HdAiZASLuJiGH9/z8PInO07zQ9/SQMWo6tM/X1V//gEzAlrEBY3rOWCyzyT9GeF00Q9Bfybww+Av3eYbwKukqh9S3Pizti0nkn0nUaH1Bg23UWnkiJCVFj9EeX23JF9LP913dsWLGiMdTWn/7VSsBuPI8iBAIgQaUxK/ISdoXw+ZOSBbWeSBgZp+Ojs9eNissJKANcFTi4YOQY1/3MH7U2eFXeIbDSqLOb2BFprDQ8+nVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199015)(41300700001)(6862004)(478600001)(6486002)(8676002)(26005)(66556008)(66476007)(6506007)(4326008)(6512007)(66946007)(2616005)(36756003)(7416002)(37006003)(5660300002)(8936002)(186003)(2906002)(6636002)(54906003)(86362001)(38100700002)(316002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IAJYxzUDh7DbemX32432fEqn4dU79g2DXhTItTTZTv7dAbzsOFPP90H2ul7R?=
- =?us-ascii?Q?bMj0AluIoeasduIl48eCwPqgp6JIZlNhL06lfWaoRVJi1OIB6sM9NeF5REbD?=
- =?us-ascii?Q?SXiSyVQS9iVuzPoCTo3AXQVdqO1NkU5XLQiNItbh0AE4sQzVAH2JfMGjqt11?=
- =?us-ascii?Q?lrWy0tukTfGF3BFCLEf4kRSpX9MZfeLhP/CFUdYG4/IK//dn4kA2JJCVkyoP?=
- =?us-ascii?Q?p6JPuRsNBvOvKNCoJq9iIvMlsowwj0pXYQ80lMnctFmATp0nolaG49rDkcit?=
- =?us-ascii?Q?o38U0VRjxHHwWupooVf3XlXy8zj12mutn7DHkJr3KrgarzxS0iT2C137LyKt?=
- =?us-ascii?Q?wwi2tjERg9OYDkiiWA91E4ug9Ppq8iZsv9fIHsM48v25Q+AhhJprQY5VvF03?=
- =?us-ascii?Q?LCG93QGDCm/AI/+RxDe7thUbjCHzQJN48OxJ1MH+OD8KqmJpInsMs52q0ztE?=
- =?us-ascii?Q?J3PxHti42ZihVwzBl2tJ7P4x9aA4IbQq9i+S4tsLQB7n2OqOzwxwJ34/zoqc?=
- =?us-ascii?Q?GLpTLlR3ZnWF3obrGRbB2jWbrmn4DS3bR7NeTR6cOzxKxgDMzvIlq3GhR7mW?=
- =?us-ascii?Q?uaTCFJcQ5USBOFuQ3om1ohM23YE50ICRJHGm4FjOxVJUR/Ncq+PZAKIKQbq5?=
- =?us-ascii?Q?UmRizvXTRTkvSYQAokwymIAHcd8ufpUVI7S2X4u/Yqe011MfaooagG5Imgiz?=
- =?us-ascii?Q?ULe0pvYuMFquv2I2Q+dQcCrlK/eOCvw176w60FsEuVNuXRJL/q6tO48/9bMa?=
- =?us-ascii?Q?tjqs+CdZNVLNIkuyDIpFlstBasFS5Zn8S0q3LuziFJbsswDrN3nniZLJAJqz?=
- =?us-ascii?Q?/IALsswOej/ShcrlOJGdWjln5euUS9tZG+Hukj9WutPl7WsCaLIfOQj6gdVo?=
- =?us-ascii?Q?FOcxFBJyN92ac0pTuZjBm0YnyyVIPV//1CpR4+T7AtJuW5o05Lnep5Ogfgq5?=
- =?us-ascii?Q?UkiOhwpFrzoLS8SjDGsCb9iEj5f6p1aWenLIqW4kQ+/joy8+lZRtpASuFIO2?=
- =?us-ascii?Q?g6WPIyNc1YZflFhkmj7talbrH/ZZ2yOG9KE/NBhh/z9QqaUaSn1zIaXJoDQu?=
- =?us-ascii?Q?EbJasYXcJQ5hk5XGq/dodGFwIiF0xFNx7KyHNmU00NDCJxPhzJmP18AOqGF4?=
- =?us-ascii?Q?vAGAd6b0hvJRsNCCz4E/GGq6bJX9wr+mrPocJ5T6yr2598Z3JVncOq2R+4W9?=
- =?us-ascii?Q?aehRe1GmAo0yPz+wWiOTHsLKX1XcWrSehZuS0/kQWCdisM4cKZ+K3c/u9UYz?=
- =?us-ascii?Q?gVC0SLInVfuNtlpS/FXSkW1UWgOKsVp2IX1D3Wymw9JHmZvyQRHad0KzvTTH?=
- =?us-ascii?Q?Nde+IoBaQE+oij/7ZMDRdbVFxI8+xNemL3eL1bosyUIRBlBcBpciQCE4V6TO?=
- =?us-ascii?Q?egAheHkUkeywZduPKr9JBz7fa1tMcnpcO5/2HBs1a85c+WZkRTJDW7sYHGtk?=
- =?us-ascii?Q?7uYJIgNcUnhLl3i2ZDb18ExmLstqcIDaA0y2EvW4X/N5Z2D71D/r+zuLQAwo?=
- =?us-ascii?Q?qTncLVM/B1jy5JaiSoIb5cDztEMNkY/KoO7n6UAHrmr0mFdAXCgZFAeCjlKu?=
- =?us-ascii?Q?aFbDvxSpbHN/Up7Cn6Q=3D?=
+X-Microsoft-Antispam-Message-Info: IFx42VAmSUgYv+vBWeFM1sfW73BZKCQE0C5TS8gIA4kDngpNJ1y4IMYVjASf4M8Ge5MNDOwbRcQe/x4pvWP2mvEj+hxPFzwcM9F7yqvKxAQEGIY8vxrL4CA3QFjtXBM/W+YcsXNCri+RrriKsca6b57K20bw27fyXDF1B3WyJmkkk/4Te2Dof/ryo0C5koGV0qwdDCxPsVwFhroU//s1ZJMM/nxY5A0Hi1fRP+w8oDaD98mNiw5Yiwofa5B+CCAfMboe5P/JePI9L1Oe3Onl+n3H/Wx6Q2bdETfHGXDgLwX1xT5sZey5ASOOeaGToM8ICCuKd6e5fwbmgOMZUJHXFz+DVw0x9fSPpwdrU3MnOl42HeNIoPo13DPegGynPlrAf1QmPTIDTKJZ8Lk14QS0Az9ct2LttqB8ZFedWEwDMw5JRzcbPzoQi11IER7Dcp2I1A1dtVhh8BgbAN0h3YXhzxAKR4PApQ/UcTImSq1g2mLQPlk7xcfF3Yv2wzoYhuQD3gBcR9cndKmLbOFNlt9DPhHqafnrF7g5V/fmwhKxCB/UG3g9V4gE+loTgouHoOzZ7zb822sjcV6UPA6AirVuVp8lGZf6bMloZr8GPlVikaSZisCAoBfQHtgUaHcR+21PRgZQnhP5K+WLQ/qNNBfU40ZxhjiLmtkfsCjzSiyMV2mBaaAOnnEIljj/9/r9VvaDJ+TPYoUYxhPvLW7FIOYPcs0g3/+vXC4I+XzJVsU61DyqlZR5s4VS18eke68+PVcQhxHLHUEt1Z8t/mft6HqpgEl9ynCAckxesJiviLLSlBw=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199015)(36840700001)(46966006)(40470700004)(110136005)(2616005)(36756003)(2906002)(186003)(86362001)(30864003)(5660300002)(8936002)(7636003)(336012)(426003)(47076005)(41300700001)(921005)(26005)(40480700001)(8676002)(356005)(70206006)(70586007)(82740400003)(40460700003)(83380400001)(82310400005)(36860700001)(316002)(7696005)(478600001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ed8a99-ce9b-4a18-8b18-08da9fcc758f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 14:36:12.2395
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 14:37:55.8912
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48371039-5084-4108-99a7-08da9fccb389
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cCC/PDeNxAXtrHoF+y1GcJJpfmsjfQz8q1qAz8WsBg74f9SPoCYsuerBN10Vmvj2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6735
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4275
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -132,30 +108,472 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 04:03:06PM +1000, Alistair Popple wrote:
-> Since 27674ef6c73f ("mm: remove the extra ZONE_DEVICE struct page
-> refcount") device private pages have no longer had an extra reference
-> count when the page is in use. However before handing them back to the
-> owning device driver we add an extra reference count such that free
-> pages have a reference count of one.
-> 
-> This makes it difficult to tell if a page is free or not because both
-> free and in use pages will have a non-zero refcount. Instead we should
-> return pages to the drivers page allocator with a zero reference count.
-> Kernel code can then safely use kernel functions such as
-> get_page_unless_zero().
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> ---
->  arch/powerpc/kvm/book3s_hv_uvmem.c       | 1 +
->  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
->  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
->  lib/test_hmm.c                           | 1 +
->  mm/memremap.c                            | 5 -----
->  mm/page_alloc.c                          | 6 ++++++
->  6 files changed, 10 insertions(+), 5 deletions(-)
+Tegra fuse availability and offsets can vary from one SOC to another.
 
-I think this is a great idea, but I'm surprised no dax stuff is
-touched here?
+Make Tegra fuse nvmem cells SOC specific.
 
-Jason
+Signed-off-by: Kartik <kkartik@nvidia.com>
+---
+ drivers/soc/tegra/fuse/fuse-tegra.c   | 110 +-----------
+ drivers/soc/tegra/fuse/fuse-tegra30.c | 236 +++++++++++++++++++++++++-
+ drivers/soc/tegra/fuse/fuse.h         |   2 +
+ 3 files changed, 239 insertions(+), 109 deletions(-)
+
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
+index 8ee6092753b1..ce0b45beb22d 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+@@ -94,112 +94,6 @@ static int tegra_fuse_read(void *priv, unsigned int offset, void *value,
+ 	return 0;
+ }
+ 
+-static const struct nvmem_cell_info tegra_fuse_cells[] = {
+-	{
+-		.name = "tsensor-cpu1",
+-		.offset = 0x084,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-cpu2",
+-		.offset = 0x088,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-cpu0",
+-		.offset = 0x098,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "xusb-pad-calibration",
+-		.offset = 0x0f0,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-cpu3",
+-		.offset = 0x12c,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "sata-calibration",
+-		.offset = 0x124,
+-		.bytes = 1,
+-		.bit_offset = 0,
+-		.nbits = 2,
+-	}, {
+-		.name = "tsensor-gpu",
+-		.offset = 0x154,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-mem0",
+-		.offset = 0x158,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-mem1",
+-		.offset = 0x15c,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-pllx",
+-		.offset = 0x160,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-common",
+-		.offset = 0x180,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "gpu-gcplex-config-fuse",
+-		.offset = 0x1c8,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "tsensor-realignment",
+-		.offset = 0x1fc,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "gpu-calibration",
+-		.offset = 0x204,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "xusb-pad-calibration-ext",
+-		.offset = 0x250,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "gpu-pdi0",
+-		.offset = 0x300,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	}, {
+-		.name = "gpu-pdi1",
+-		.offset = 0x304,
+-		.bytes = 4,
+-		.bit_offset = 0,
+-		.nbits = 32,
+-	},
+-};
+-
+ static void tegra_fuse_restore(void *base)
+ {
+ 	fuse->base = (void __iomem *)base;
+@@ -253,8 +147,8 @@ static int tegra_fuse_probe(struct platform_device *pdev)
+ 	nvmem.name = "fuse";
+ 	nvmem.id = -1;
+ 	nvmem.owner = THIS_MODULE;
+-	nvmem.cells = tegra_fuse_cells;
+-	nvmem.ncells = ARRAY_SIZE(tegra_fuse_cells);
++	nvmem.cells = fuse->soc->cells;
++	nvmem.ncells = fuse->soc->num_cells;
+ 	nvmem.type = NVMEM_TYPE_OTP;
+ 	nvmem.read_only = true;
+ 	nvmem.root_only = true;
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra30.c b/drivers/soc/tegra/fuse/fuse-tegra30.c
+index f01d8a2547b6..2db1cbc012cb 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra30.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra30.c
+@@ -133,6 +133,82 @@ const struct tegra_fuse_soc tegra114_fuse_soc = {
+ #endif
+ 
+ #if defined(CONFIG_ARCH_TEGRA_124_SOC) || defined(CONFIG_ARCH_TEGRA_132_SOC)
++static const struct nvmem_cell_info tegra124_fuse_cells[] = {
++	{
++		.name = "tsensor-cpu1",
++		.offset = 0x084,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu2",
++		.offset = 0x088,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu0",
++		.offset = 0x098,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu3",
++		.offset = 0x12c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "sata-calibration",
++		.offset = 0x124,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-gpu",
++		.offset = 0x154,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem0",
++		.offset = 0x158,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem1",
++		.offset = 0x15c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-pllx",
++		.offset = 0x160,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-common",
++		.offset = 0x180,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-realignment",
++		.offset = 0x1fc,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
+ static const struct nvmem_cell_lookup tegra124_fuse_lookups[] = {
+ 	{
+ 		.nvmem_name = "fuse",
+@@ -209,12 +285,96 @@ const struct tegra_fuse_soc tegra124_fuse_soc = {
+ 	.info = &tegra124_fuse_info,
+ 	.lookups = tegra124_fuse_lookups,
+ 	.num_lookups = ARRAY_SIZE(tegra124_fuse_lookups),
++	.cells = tegra124_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra124_fuse_cells),
+ 	.soc_attr_group = &tegra_soc_attr_group,
+ 	.clk_suspend_on = true,
+ };
+ #endif
+ 
+ #if defined(CONFIG_ARCH_TEGRA_210_SOC)
++static const struct nvmem_cell_info tegra210_fuse_cells[] = {
++	{
++		.name = "tsensor-cpu1",
++		.offset = 0x084,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu2",
++		.offset = 0x088,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu0",
++		.offset = 0x098,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-cpu3",
++		.offset = 0x12c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "sata-calibration",
++		.offset = 0x124,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-gpu",
++		.offset = 0x154,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem0",
++		.offset = 0x158,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-mem1",
++		.offset = 0x15c,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-pllx",
++		.offset = 0x160,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "tsensor-common",
++		.offset = 0x180,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "gpu-calibration",
++		.offset = 0x204,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration-ext",
++		.offset = 0x250,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
+ static const struct nvmem_cell_lookup tegra210_fuse_lookups[] = {
+ 	{
+ 		.nvmem_name = "fuse",
+@@ -295,6 +455,8 @@ const struct tegra_fuse_soc tegra210_fuse_soc = {
+ 	.speedo_init = tegra210_init_speedo_data,
+ 	.info = &tegra210_fuse_info,
+ 	.lookups = tegra210_fuse_lookups,
++	.cells = tegra210_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra210_fuse_cells),
+ 	.num_lookups = ARRAY_SIZE(tegra210_fuse_lookups),
+ 	.soc_attr_group = &tegra_soc_attr_group,
+ 	.clk_suspend_on = false,
+@@ -302,6 +464,22 @@ const struct tegra_fuse_soc tegra210_fuse_soc = {
+ #endif
+ 
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
++static const struct nvmem_cell_info tegra186_fuse_cells[] = {
++	{
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration-ext",
++		.offset = 0x250,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
+ static const struct nvmem_cell_lookup tegra186_fuse_lookups[] = {
+ 	{
+ 		.nvmem_name = "fuse",
+@@ -327,12 +505,48 @@ const struct tegra_fuse_soc tegra186_fuse_soc = {
+ 	.info = &tegra186_fuse_info,
+ 	.lookups = tegra186_fuse_lookups,
+ 	.num_lookups = ARRAY_SIZE(tegra186_fuse_lookups),
++	.cells = tegra186_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra186_fuse_cells),
+ 	.soc_attr_group = &tegra_soc_attr_group,
+ 	.clk_suspend_on = false,
+ };
+ #endif
+ 
+ #if defined(CONFIG_ARCH_TEGRA_194_SOC)
++static const struct nvmem_cell_info tegra194_fuse_cells[] = {
++	{
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "gpu-gcplex-config-fuse",
++		.offset = 0x1c8,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration-ext",
++		.offset = 0x250,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "gpu-pdi0",
++		.offset = 0x300,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "gpu-pdi1",
++		.offset = 0x304,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
+ static const struct nvmem_cell_lookup tegra194_fuse_lookups[] = {
+ 	{
+ 		.nvmem_name = "fuse",
+@@ -373,12 +587,30 @@ const struct tegra_fuse_soc tegra194_fuse_soc = {
+ 	.info = &tegra194_fuse_info,
+ 	.lookups = tegra194_fuse_lookups,
+ 	.num_lookups = ARRAY_SIZE(tegra194_fuse_lookups),
++	.cells = tegra194_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra194_fuse_cells),
+ 	.soc_attr_group = &tegra194_soc_attr_group,
+ 	.clk_suspend_on = false,
+ };
+ #endif
+ 
+ #if defined(CONFIG_ARCH_TEGRA_234_SOC)
++static const struct nvmem_cell_info tegra234_fuse_cells[] = {
++	{
++		.name = "xusb-pad-calibration",
++		.offset = 0x0f0,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	}, {
++		.name = "xusb-pad-calibration-ext",
++		.offset = 0x250,
++		.bytes = 4,
++		.bit_offset = 0,
++		.nbits = 32,
++	},
++};
++
+ static const struct nvmem_cell_lookup tegra234_fuse_lookups[] = {
+ 	{
+ 		.nvmem_name = "fuse",
+@@ -395,7 +627,7 @@ static const struct nvmem_cell_lookup tegra234_fuse_lookups[] = {
+ 
+ static const struct tegra_fuse_info tegra234_fuse_info = {
+ 	.read = tegra30_fuse_read,
+-	.size = 0x300,
++	.size = 0x98c,
+ 	.spare = 0x280,
+ };
+ 
+@@ -404,6 +636,8 @@ const struct tegra_fuse_soc tegra234_fuse_soc = {
+ 	.info = &tegra234_fuse_info,
+ 	.lookups = tegra234_fuse_lookups,
+ 	.num_lookups = ARRAY_SIZE(tegra234_fuse_lookups),
++	.cells = tegra234_fuse_cells,
++	.num_cells = ARRAY_SIZE(tegra234_fuse_cells),
+ 	.soc_attr_group = &tegra194_soc_attr_group,
+ 	.clk_suspend_on = false,
+ };
+diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
+index 2bb1f9d6a6e6..02442157b231 100644
+--- a/drivers/soc/tegra/fuse/fuse.h
++++ b/drivers/soc/tegra/fuse/fuse.h
+@@ -32,6 +32,8 @@ struct tegra_fuse_soc {
+ 
+ 	const struct nvmem_cell_lookup *lookups;
+ 	unsigned int num_lookups;
++	const struct nvmem_cell_info *cells;
++	unsigned int num_cells;
+ 
+ 	const struct attribute_group *soc_attr_group;
+ 
+-- 
+2.17.1
+
