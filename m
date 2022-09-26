@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CA65E9E6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85BD5E9E6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiIZJzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S234725AbiIZJ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiIZJzk (ORCPT
+        with ESMTP id S234712AbiIZJz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:55:40 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB881903E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:55:38 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id y187-20020a6bc8c4000000b006a4014e192fso3538622iof.21
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:55:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=kmcmmaivHbaIHJR042367FsPPBjxGQAP3lEauQGzqw0=;
-        b=78hTnBeyF4xg2QcS72zATyLjg93HWlTsazBMJ+c1uw3gtnn/m+J/Faw7A6eexhDDN8
-         ir6ImhiMQ3bXwhVC9fv8BLvuik27ecVzT0/kg49RmkLR7IWbi6XA/s91aB0qkyRFiRVm
-         FRy9p+zPffBJqwCvoFwoyau1k6zlf+TZPEIdr8uk+LAj3LhIr64BKv87oD2eHtzG1efp
-         N9Nx9Mim6heFoozntslDDndHzh8GFr7yBM0q/6dDw+ATYogeYJ/Gu0YB38yRYtD0qqeF
-         GzqVznh+pd+i9L8w8g6NmKof3+1aR/Gy+/wtQmXDQ1xW6DDYAKXXUjXbMOCk+2M5/bnS
-         A1Gg==
-X-Gm-Message-State: ACrzQf2MVaaT1Aw/GKuru2AA+necD4AwauLiT/JyAdKv/HhfjPR1HIhB
-        WWLhCuiIr9gLmtpX5NMFuVgw/XMjJ2eYz/EUO4bN3ioCJLaw
-X-Google-Smtp-Source: AMsMyM4AJPhEIgkVAlWkhFNIMTYULZyOuAi1bWBWKXmi9JwKRwcp2NvqSkWWfow2KLFc09/D/1NUdQqYVn/oY3dGqC0356It7tMA
+        Mon, 26 Sep 2022 05:55:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279AB20350
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:55:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ockq9-0000xP-Vj; Mon, 26 Sep 2022 11:55:54 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ockqA-0030M6-N4; Mon, 26 Sep 2022 11:55:53 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ockq8-003dB7-68; Mon, 26 Sep 2022 11:55:52 +0200
+Date:   Mon, 26 Sep 2022 11:55:47 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v2 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
+ namespace
+Message-ID: <20220926095547.be5bbtyqqlm4ytgy@pengutronix.de>
+References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
+ <20220908135658.64463-3-andriy.shevchenko@linux.intel.com>
+ <20220924095945.pzyhc24jhjwlfdin@pengutronix.de>
+ <YzF0U7q5Fl0UaogR@smile.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:48e:b0:6a4:1d07:bb18 with SMTP id
- y14-20020a056602048e00b006a41d07bb18mr7178789iov.115.1664186137717; Mon, 26
- Sep 2022 02:55:37 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 02:55:37 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000094338805e9918792@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in dbNextAG
-From:   syzbot <syzbot+38e876a8aa44b7115c76@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hfdadlkz3bl7lpkl"
+Content-Disposition: inline
+In-Reply-To: <YzF0U7q5Fl0UaogR@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--hfdadlkz3bl7lpkl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    105a36f3694e Merge tag 'kbuild-fixes-v6.0-3' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=105311df080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e876a8aa44b7115c76
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100105c4880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a5fcdf080000
+On Mon, Sep 26, 2022 at 12:43:47PM +0300, Andy Shevchenko wrote:
+> On Sat, Sep 24, 2022 at 11:59:45AM +0200, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Thu, Sep 08, 2022 at 04:56:51PM +0300, Andy Shevchenko wrote:
+> > > Avoid unnecessary pollution of the global symbol namespace by
+> > > moving library functions in to a specific namespace and import
+> > > that into the drivers that make use of the functions.
+> > >=20
+> > > For more info: https://lwn.net/Articles/760045/
+> > >=20
+> > > Suggested-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > ---
+> > >  drivers/pwm/pwm-lpss-pci.c      | 1 +
+> > >  drivers/pwm/pwm-lpss-platform.c | 1 +
+> > >  drivers/pwm/pwm-lpss.c          | 2 ++
+> > >  3 files changed, 4 insertions(+)
+> > >=20
+> > > diff --git a/drivers/pwm/pwm-lpss-pci.c b/drivers/pwm/pwm-lpss-pci.c
+> > > index 75b778e839b3..9f2c666b95ec 100644
+> > > --- a/drivers/pwm/pwm-lpss-pci.c
+> > > +++ b/drivers/pwm/pwm-lpss-pci.c
+> > > @@ -92,3 +92,4 @@ module_pci_driver(pwm_lpss_driver_pci);
+> > > =20
+> > >  MODULE_DESCRIPTION("PWM PCI driver for Intel LPSS");
+> > >  MODULE_LICENSE("GPL v2");
+> > > +MODULE_IMPORT_NS(PWM_LPSS);
+> >=20
+> > Each user of the lpss.h header needs that, right? Then the
+> > MODULE_IMPORT_NS statement can go into the header, too.
+>=20
+> With the same answer as for v1: any user that might include the header for
+> the sake of data types will get the NS inclusion even if they don't need
+> that (yes, I don't think it's practical, but slightly better to make sure
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/858ea4fd6806/disk-105a36f3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/76c66678f029/vmlinux-105a36f3.xz
+I'm not sure I understand you correctly here. For some headers you
+cannot assume that a file including the header also needs the namespace
+macro, but for pwm-lpss.h that should be a safe assumption.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+38e876a8aa44b7115c76@syzkaller.appspotmail.com
+> that if one uses an API, one adds necessary NS inclusions; also note that
+> in case of stale header inclusion this again might bring unnecessary NS,
+> while the header should be removed -- with that being said, I think we
+> might need some kind of extended includecheck to see if the APIs and data
+> structures are actually used when a certain header is included).
 
-loop0: detected capacity change from 0 to 264192
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_dmap.c:617:20
-index 1128417612 is out of range for type 'atomic_t [128]'
-CPU: 0 PID: 3606 Comm: syz-executor376 Not tainted 6.0.0-rc6-syzkaller-00321-g105a36f3694e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
- dbNextAG+0x602/0x630 fs/jfs/jfs_dmap.c:617
- diAlloc+0x17a/0x1700 fs/jfs/jfs_imap.c:1342
- ialloc+0x8c/0xa80 fs/jfs/jfs_inode.c:56
- jfs_mkdir+0x141/0xb00 fs/jfs/namei.c:225
- vfs_mkdir+0x3b3/0x590 fs/namei.c:4013
- do_mkdirat+0x279/0x550 fs/namei.c:4038
- __do_sys_mkdir fs/namei.c:4058 [inline]
- __se_sys_mkdir fs/namei.c:4056 [inline]
- __x64_sys_mkdir+0x6a/0x80 fs/namei.c:4056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fca2c28c2c7
-Code: ff ff ff ff c3 66 0f 1f 44 00 00 48 c7 c0 c0 ff ff ff 64 c7 00 16 00 00 00 b8 ff ff ff ff c3 0f 1f 40 00 b8 53 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff8fb1d868 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 00007fff8fb1d910 RCX: 00007fca2c28c2c7
-RDX: 0000000000000000 RSI: 00000000000001ff RDI: 00000000200001c0
-RBP: 00000000ffffffff R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00000000ffffffff R14: 00000000200001c0 R15: 0000000000000000
- </TASK>
-================================================================================
++1 for a check about unused headers.
 
+Best regards
+Uwe
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--hfdadlkz3bl7lpkl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMxdyAACgkQwfwUeK3K
+7AmNVggAk1GEZzKksLpjEm+h7HIHh/JThWp30glOmmKTCU7NsNkq1QZ8Yzak2oOj
+oBppa/VVzvKnihoLHYVNG1cypEnuH4UuI27hFiGPpWO6JS/L5MrEKLShUyE/Sy04
+dOzM4w+FC8vFtWXLaaBwF1tzJM+fKC+JP2ev2RxlLFe1EKJ8ARcrfIVYPuEygoD+
+BgXHhR7WYsPrg88NPFCA4mSAC1aoE/S5d0O4Mx/YXA3mq/wccapMdOIQSdPsaj8M
+UkRAmTv0G5fZYsdMTTjjfKhVdou2FZdSxfaxtzZLGxXgMnwjOt41n/NOnSnDTtHX
+Zs0/c52v5gX6ERaPVWBT0TheEn+aGw==
+=IBMc
+-----END PGP SIGNATURE-----
+
+--hfdadlkz3bl7lpkl--
