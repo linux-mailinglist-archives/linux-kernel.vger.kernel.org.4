@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D974E5EA89E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218B45EA8A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiIZOjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S235101AbiIZOjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbiIZOii (ORCPT
+        with ESMTP id S235160AbiIZOim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:38:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D2EF40;
-        Mon, 26 Sep 2022 05:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70DD060CF1;
-        Mon, 26 Sep 2022 12:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B02C433D7;
-        Mon, 26 Sep 2022 12:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664197171;
-        bh=0u/qbW2hLR7DVa/4gbQr3gEGIsyeCeSemlVqVEFdBLE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gZ/sPMcgE2WDB7LY/xOkBVGsCB6PyKRNsMrimkz8ueHOncYThSIQPBZ6LpKwZog6h
-         3fUR3O3yYvQsbohPEDDprtotHbdzaNyIF2VH4TXYRUa8YCAFV9C8NMmO4O1uBM9gRq
-         zS5AFiX2Ly5BJbX2Hw8LfpB7Lp7M35YbWAcuf2dCfrX6WoYcD7KAnruyPpoadvZu7H
-         dNwcJW6Z9fXHCasmjLddQ5Vi3+qSOF0mvvNUhoGJHFq34uG/EplJLuKIflKt43/xXG
-         JrP4AQ5kgeWDB486p36qpfqinZrJeRi/+kdH6UINUcNEYZmuZjGyd1Lzowm0A02iMz
-         Kd5OCxU8KbKKA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4C46A403B0; Mon, 26 Sep 2022 13:59:29 +0100 (IST)
-Date:   Mon, 26 Sep 2022 13:59:29 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Leo Yan <leo.yan@linaro.org>, Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] perf record: Fix segmentation fault in
- record__read_lost_samples()
-Message-ID: <YzGiMdIRRE8ibCiD@kernel.org>
-References: <20220924113346.1110909-1-leo.yan@linaro.org>
- <CAM9d7ci2RJOTz08eGRgLMVpS0TmwN=q=UNA_Z3wbSHCC2pMygQ@mail.gmail.com>
+        Mon, 26 Sep 2022 10:38:42 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CE46243
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=paSIeytrKVUKIdWtCr2iVXrX78NgEHAeJ/ebnvP/I5A=; b=DNnQx2i1Fsgi46OxyGTNlnrluZ
+        1bcdQl6hc35k8Si8qWu33BIneSuLs7M/2RISFtmx55NX/kGpS+H/myA76uZC3ai7O6GP1Abwgu7g6
+        Gm3wXS81BrRu2HPClJrAFG60fgL/cJCxyaosoT9G0711kDeWDv1DB3c1/kwhfguCyqwP6XAh1In2X
+        k6kbTFaMQkJ3DqWc+jPhaBM/r2ncL+O1PkijQcCDCG1R1zCDlzJqtH7p11Y56Vn64OI32dv17x4id
+        Ed9N5rdZ5of/7KpiKBR2U3XKzFXE7wZrH9zS+RYdOOl5s/NJNVqfBJOyug6R1j6QImo7z5oynyuS0
+        K3IDPZLA==;
+Received: from [2a01:799:961:d200:3946:6b45:3eef:d112] (port=51628)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1ocnhy-0004vD-H1; Mon, 26 Sep 2022 14:59:38 +0200
+Message-ID: <9e76a508-f469-a54d-ecd7-b5868ca99af4@tronnes.org>
+Date:   Mon, 26 Sep 2022 14:59:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7ci2RJOTz08eGRgLMVpS0TmwN=q=UNA_Z3wbSHCC2pMygQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 09/33] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-9-f733a0ed9f90@cerno.tech>
+ <80138f62-faec-5f7e-a8bd-235318a4e4c2@tronnes.org>
+ <20220926100131.o5xtslzcmez5z2r3@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220926100131.o5xtslzcmez5z2r3@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,99 +81,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Sep 24, 2022 at 09:52:09AM -0700, Namhyung Kim escreveu:
-> Hi Leo,
-> 
-> On Sat, Sep 24, 2022 at 4:34 AM Leo Yan <leo.yan@linaro.org> wrote:
-> >
-> > Commit a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
-> > causes segmentation fault when run the "perf mem record" command in
-> > unprivileged mode, the output log is:
-> >
-> >   $ ./perf mem record --all-user -o perf_test.data -- ./test_program
-> >   Error:
-> >   Access to performance monitoring and observability operations is limited.
-> >   Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
-> >   access to performance monitoring and observability operations for processes
-> >   without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
-> >   More information can be found at 'Perf events and tool security' document:
-> >   https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
-> >   perf_event_paranoid setting is 4:
-> >     -1: Allow use of (almost) all events by all users
-> >         Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
-> >   >= 0: Disallow raw and ftrace function tracepoint access
-> >   >= 1: Disallow CPU event access
-> >   >= 2: Disallow kernel profiling
-> >   To make the adjusted perf_event_paranoid setting permanent preserve it
-> >   in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
-> >   perf: Segmentation fault
-> >   Obtained 16 stack frames.
-> >   ./perf(dump_stack+0x31) [0x55b7aa1e8070]
-> >   ./perf(sighandler_dump_stack+0x36) [0x55b7aa1e815e]
-> >   ./perf(+0xc9120) [0x55b7aa0a9120]
-> >   /lib/x86_64-linux-gnu/libc.so.6(+0x4251f) [0x7fd03ef8151f]
-> >   ./perf(+0xccaca) [0x55b7aa0acaca]
-> >   ./perf(+0xcf4ab) [0x55b7aa0af4ab]
-> >   ./perf(cmd_record+0xd50) [0x55b7aa0b28df]
-> >   ./perf(+0x112f77) [0x55b7aa0f2f77]
-> >   ./perf(cmd_mem+0x53b) [0x55b7aa0f406c]
-> >   ./perf(+0x19979c) [0x55b7aa17979c]
-> >   ./perf(+0x199a37) [0x55b7aa179a37]
-> >   ./perf(+0x199b95) [0x55b7aa179b95]
-> >   ./perf(main+0x2c7) [0x55b7aa179fbd]
-> >   /lib/x86_64-linux-gnu/libc.so.6(+0x29d8f) [0x7fd03ef68d8f]
-> >   /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x7f) [0x7fd03ef68e3f]
-> >   ./perf(_start+0x24) [0x55b7aa089974]
-> >   Segmentation fault (core dumped)
-> >
-> > In the unprivileged mode perf fails to open PMU event, the function
-> > record__open() returns error and "session->evlist" is NULL; this leads
-> > to segmentation fault when iterates "session->evlist" in the function
-> > record__read_lost_samples().
-> >
-> > This patch checks "session->evlist" in record__read_lost_samples(), if
-> > "session->evlist" is NULL then the function directly bails out to avoid
-> > segmentation fault.
-> >
-> > Fixes: a49aa8a54e86 ("perf record: Read and inject LOST_SAMPLES events")
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> 
-> Thanks for the fix and sorry for the inconvenience.
-> Actually I sent the same fix a few weeks ago.
-> 
-> https://lore.kernel.org/r/20220909235024.278281-1-namhyung@kernel.org
 
-collecting it now, and adding that Fixes from Leo's patch, ok?
 
-- Arnaldo
- 
-> Thanks,
-> Namhyung
+Den 26.09.2022 12.01, skrev Maxime Ripard:
+> On Sat, Sep 24, 2022 at 05:52:29PM +0200, Noralf Trønnes wrote:
+>> Den 22.09.2022 16.25, skrev Maxime Ripard:
+>>> The TV mode property has been around for a while now to select and get the
+>>> current TV mode output on an analog TV connector.
+>>>
+>>> Despite that property name being generic, its content isn't and has been
+>>> driver-specific which makes it hard to build any generic behaviour on top
+>>> of it, both in kernel and user-space.
+>>>
+>>> Let's create a new enum tv norm property, that can contain any of the
+>>> analog TV standards currently supported by kernel drivers. Each driver can
+>>> then pass in a bitmask of the modes it supports, and the property
+>>> creation function will filter out the modes not supported.
+>>>
+>>> We'll then be able to phase out the older tv mode property.
+>>>
+>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>
+>> Please can you add per patch changelogs, it's hard to review when I have
+>> to recall what might have happened with each patch. If you do it drm
+>> style and put in the commit message it should be easy enough to do.
 > 
+> I certainly don't want to start that discussion, but I'm really not a
+> fan of that format either. I'll do it for that series if you prefer.
 > 
-> > ---
-> >  tools/perf/builtin-record.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 02e38f50a138..012b46dd4999 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -1888,6 +1888,10 @@ static void record__read_lost_samples(struct record *rec)
-> >         struct perf_record_lost_samples *lost;
-> >         struct evsel *evsel;
-> >
-> > +       /* No any event is opened, directly bail out */
-> > +       if (!session->evlist)
-> > +               return;
-> > +
-> >         lost = zalloc(PERF_SAMPLE_MAX_SIZE);
-> >         if (lost == NULL) {
-> >                 pr_debug("Memory allocation failed\n");
-> > --
-> > 2.34.1
-> >
 
--- 
+The format isn't important, but especially a big series like this and
+being weeks between each iteration it's difficult to follow and see
+which review comments that you have chosen to implement and how. It's
+almost a full review each time. Even if I see that I have acked/rewieved
+a patch, if I don't remember, I have to go back to the previous version
+and see if I had any comments and if you followed up on that.
 
-- Arnaldo
+>>> +/**
+>>> + * enum drm_connector_tv_mode - Analog TV output mode
+>>> + *
+>>> + * This enum is used to indicate the TV output mode used on an analog TV
+>>> + * connector.
+>>> + *
+>>> + * WARNING: The values of this enum is uABI since they're exposed in the
+>>> + * "TV mode" connector property.
+>>> + */
+>>> +enum drm_connector_tv_mode {
+>>> +	/**
+>>> +	 * @DRM_MODE_TV_MODE_NONE: Placeholder to not default on one
+>>> +	 * variant or the other when nothing is set.
+>>> +	 */
+>>> +	DRM_MODE_TV_MODE_NONE = 0,
+>>
+>> How is this supposed to be used?
+> 
+> It's not supposed to be used. It was a suggestion from Mateusz to avoid
+> to default to any standard when we don't initialize something. I don't
+> have any strong feeling about it, so I can drop it if you prefer.
+> 
+
+The confusing thing to me is that "None" is part of the property enum
+list, so the idea is that it can end up in userspace if there's a driver
+error? Hmm, that won't work since TV_MODE_NONE won't be part of the
+bitmask that the driver sets. So userspace reading the property ends up
+with a value for which there's no enum name to match.
+
+So usespace should be trained to know that zero for this property is a
+driver error? No, not a good idea.
+
+I think to catch a bug like this drm_atomic_connector_get_property()
+should check the tv.mode value and see if it's a legal enum value and if
+not it has to just pick a legal one and print an error. But I'm not sure
+it's worth it to catch a bug like this. And I don't see any other enum
+properties being checked for validity either before being returned to
+userspace.
+
+Based on this reasoning I think you should drop the NONE value.
+
+Noralf.
