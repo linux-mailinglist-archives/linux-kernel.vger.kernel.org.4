@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0804D5E9EF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32395E9F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiIZKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S235442AbiIZK0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiIZKQS (ORCPT
+        with ESMTP id S235474AbiIZKXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:16:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD9B10043;
-        Mon, 26 Sep 2022 03:14:42 -0700 (PDT)
+        Mon, 26 Sep 2022 06:23:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322424D25C;
+        Mon, 26 Sep 2022 03:17:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3919F60B4A;
-        Mon, 26 Sep 2022 10:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30150C43470;
-        Mon, 26 Sep 2022 10:14:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE74B8091F;
+        Mon, 26 Sep 2022 10:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF84CC433C1;
+        Mon, 26 Sep 2022 10:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187281;
-        bh=dgTzuXvWpBNqEIEFup/8PQSrW0v3ksBIqp3m5roA2og=;
+        s=korg; t=1664187432;
+        bh=fAlZJ9xWNacVjByCeDTu4Kvh49DJCQi1wFo4hseHhVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N5Usqd5MU31VYDwWVLCggktKSBb5GlkxcvYJLToSq3EXynsv/2trBFBygA9FZP3SV
-         E5wmXB2ajlJ2YCfn0D1Ja/czFFg0UyMPZRcxqWtRKWfmMiWQLI9DbrVRm3hpxi7ss1
-         IuRdeuYc4Fs0bgWvydS83XH4GJpZAtTiwqlwqsWA=
+        b=r1TAwnJDzojEiU9wMBRy9dsMAXgIaODI5lH15bnCW6lTpVczTXEUYU83UR+mM1hYn
+         WPmjOIy+kun54BrFcAp8t0MJ8ghuhNmBdm4FA8/z8/hMriRUR5/8qIy9hRLI9FydNq
+         46k6KIMVhTJCSO0ypgNEO/PZJ0B1xDHgqCqVZcPE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.9 28/30] s390/dasd: fix Oops in dasd_alias_get_start_dev due to missing pavgroup
-Date:   Mon, 26 Sep 2022 12:11:59 +0200
-Message-Id: <20220926100737.151359246@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 32/40] can: gs_usb: gs_can_open(): fix race dev->can.state condition
+Date:   Mon, 26 Sep 2022 12:12:00 +0200
+Message-Id: <20220926100739.533466515@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100738.148626940@linuxfoundation.org>
+References: <20220926100738.148626940@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit db7ba07108a48c0f95b74fabbfd5d63e924f992d upstream.
+[ Upstream commit 5440428b3da65408dba0241985acb7a05258b85e ]
 
-Fix Oops in dasd_alias_get_start_dev() function caused by the pavgroup
-pointer being NULL.
+The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
+has been started. On busy networks the CAN controller might receive
+CAN frame between and go into an error state before the dev->can.state
+is assigned.
 
-The pavgroup pointer is checked on the entrance of the function but
-without the lcu->lock being held. Therefore there is a race window
-between dasd_alias_get_start_dev() and _lcu_update() which sets
-pavgroup to NULL with the lcu->lock held.
+Assign dev->can.state before starting the controller to close the race
+window.
 
-Fix by checking the pavgroup pointer with lcu->lock held.
-
-Cc: <stable@vger.kernel.org> # 2.6.25+
-Fixes: 8e09f21574ea ("[S390] dasd: add hyper PAV support to DASD device driver, part 1")
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220919154931.4123002-2-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/block/dasd_alias.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/s390/block/dasd_alias.c
-+++ b/drivers/s390/block/dasd_alias.c
-@@ -674,12 +674,12 @@ int dasd_alias_remove_device(struct dasd
- struct dasd_device *dasd_alias_get_start_dev(struct dasd_device *base_device)
- {
- 	struct dasd_eckd_private *alias_priv, *private = base_device->private;
--	struct alias_pav_group *group = private->pavgroup;
- 	struct alias_lcu *lcu = private->lcu;
- 	struct dasd_device *alias_device;
-+	struct alias_pav_group *group;
- 	unsigned long flags;
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index 31c1dc0aa5cf..5e21486baa22 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -686,6 +686,7 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
  
--	if (!group || !lcu)
-+	if (!lcu)
- 		return NULL;
- 	if (lcu->pav == NO_PAV ||
- 	    lcu->flags & (NEED_UAC_UPDATE | UPDATE_PENDING))
-@@ -696,6 +696,11 @@ struct dasd_device *dasd_alias_get_start
+ 	/* finally start device */
++	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
+ 	dm->flags = cpu_to_le32(flags);
+ 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
+@@ -702,13 +703,12 @@ static int gs_can_open(struct net_device *netdev)
+ 	if (rc < 0) {
+ 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
+ 		kfree(dm);
++		dev->can.state = CAN_STATE_STOPPED;
+ 		return rc;
  	}
  
- 	spin_lock_irqsave(&lcu->lock, flags);
-+	group = private->pavgroup;
-+	if (!group) {
-+		spin_unlock_irqrestore(&lcu->lock, flags);
-+		return NULL;
-+	}
- 	alias_device = group->next;
- 	if (!alias_device) {
- 		if (list_empty(&group->aliaslist)) {
+ 	kfree(dm);
+ 
+-	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+-
+ 	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
+-- 
+2.35.1
+
 
 
