@@ -2,118 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F4A5EA50A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2CD5EA183
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238992AbiIZL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S236657AbiIZKvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiIZLyj (ORCPT
+        with ESMTP id S236774AbiIZKtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:54:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5CD4D835;
-        Mon, 26 Sep 2022 03:50:16 -0700 (PDT)
+        Mon, 26 Sep 2022 06:49:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98FC57E2B;
+        Mon, 26 Sep 2022 03:26:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 451D9B802C7;
-        Mon, 26 Sep 2022 10:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77956C433D6;
-        Mon, 26 Sep 2022 10:48:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A40DB8055F;
+        Mon, 26 Sep 2022 10:26:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3E5C433C1;
+        Mon, 26 Sep 2022 10:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189315;
-        bh=iaB1KodNW2681CtVUDHZXZv/QS5f3KAqBTUzxLWxXwM=;
+        s=korg; t=1664187998;
+        bh=PO5Rmq/GPp6MyTXqGurVuNZqX+1cSG0VYjpuri+lVPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/aKFhIurr/fX+Wx7+hNjUI9E/YHDx9qyCXkO2KdSdVYJgCQrrybWkOidPNZzZpbU
-         eiwuHYgJTnsSp4xgQXmcxNLVNBik+mk6/2xudsV+oe9YOqE5AJKCxOqECuki7aHovl
-         cAqqhOmhLJ+5aUbjD+n88NxiX7f+GTzI6UdD9UHA=
+        b=qLoNKR9tRt02gb2rsu7FWOUQoNS3bElpWP35c6NTIbRV8AM7yF+FlEaDOvKpgyWIm
+         DvrQZsOqkc/S8eqFq1YLl94r/oj0nB22Fu+5HTNxa7KkR/3cxjWA/I77Xd8d6dA6Hp
+         whAG6Kv0VHAaUXMktsKPEbn3O0La8hmvkUKjTgCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>, bpf@vger.kernel.org,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 146/207] perf stat: Fix cpu map index in bperf cgroup code
-Date:   Mon, 26 Sep 2022 12:12:15 +0200
-Message-Id: <20220926100813.049490680@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.4 103/120] ext4: make directory inode spreading reflect flexbg size
+Date:   Mon, 26 Sep 2022 12:12:16 +0200
+Message-Id: <20220926100754.757833170@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namhyung Kim <namhyung@kernel.org>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 3da35231d9e4949c4ae40e3ce653e7c468455d55 ]
+commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
 
-The previous cpu map introduced a bug in the bperf cgroup counter.  This
-results in a failure when user gives a partial cpu map starting from
-non-zero.
+Currently the Orlov inode allocator searches for free inodes for a
+directory only in flex block groups with at most inodes_per_group/16
+more directory inodes than average per flex block group. However with
+growing size of flex block group this becomes unnecessarily strict.
+Scale allowed difference from average directory count per flex block
+group with flex block group size as we do with other metrics.
 
-  $ sudo ./perf stat -C 1-2 --bpf-counters --for-each-cgroup ^. sleep 1
-  libbpf: prog 'on_cgrp_switch': failed to create BPF link for perf_event FD 0:
-                                 -9 (Bad file descriptor)
-  Failed to attach cgroup program
-
-To get the FD of an evsel, it should use a map index not the CPU number.
-
-Fixes: 0255571a16059c8e ("perf cpumap: Switch to using perf_cpu_map API")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: bpf@vger.kernel.org
-Cc: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/r/20220916184132.1161506-3-namhyung@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/bpf_counter_cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ext4/ialloc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index 63b9db657442..97c69a249c6e 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -95,7 +95,7 @@ static int bperf_load_program(struct evlist *evlist)
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -500,7 +500,7 @@ static int find_group_orlov(struct super
+ 		goto fallback;
+ 	}
  
- 	perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpus) {
- 		link = bpf_program__attach_perf_event(skel->progs.on_cgrp_switch,
--						      FD(cgrp_switch, cpu.cpu));
-+						      FD(cgrp_switch, i));
- 		if (IS_ERR(link)) {
- 			pr_err("Failed to attach cgroup program\n");
- 			err = PTR_ERR(link);
-@@ -123,7 +123,7 @@ static int bperf_load_program(struct evlist *evlist)
- 
- 			map_fd = bpf_map__fd(skel->maps.events);
- 			perf_cpu_map__for_each_cpu(cpu, j, evlist->core.all_cpus) {
--				int fd = FD(evsel, cpu.cpu);
-+				int fd = FD(evsel, j);
- 				__u32 idx = evsel->core.idx * total_cpus + cpu.cpu;
- 
- 				err = bpf_map_update_elem(map_fd, &idx, &fd,
--- 
-2.35.1
-
+-	max_dirs = ndirs / ngroups + inodes_per_group / 16;
++	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
+ 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
+ 	if (min_inodes < 1)
+ 		min_inodes = 1;
 
 
