@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A075E9FA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EFC5EA11F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbiIZK2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S236440AbiIZKpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiIZKY6 (ORCPT
+        with ESMTP id S234357AbiIZKn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:24:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92DA4DB27;
-        Mon, 26 Sep 2022 03:18:22 -0700 (PDT)
+        Mon, 26 Sep 2022 06:43:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C210D8E;
+        Mon, 26 Sep 2022 03:24:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF2FFB80835;
-        Mon, 26 Sep 2022 10:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499D3C433D6;
-        Mon, 26 Sep 2022 10:18:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22764B80835;
+        Mon, 26 Sep 2022 10:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 684AEC433D6;
+        Mon, 26 Sep 2022 10:24:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187491;
-        bh=QkgGLY6ojXfsFX8zbq5zAU0p6m3ZpG+WK/cJf+TUKpU=;
+        s=korg; t=1664187875;
+        bh=ER3mexkbJMYny8HTxGhK3/B5gxon5l23I0zwMGyFQzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTGXNT68s2LngR/fovuY5qCcuMlWsjteZlPjefytu4oxxJR+pHSuEyOsZh4dcfbWL
-         GwCRy7JXyQK89TvJkIwZqZjgtCnRjtptmXnVC2h6H/TWctpj6a9mJagh1uZEcTobZe
-         XkniqoDIjg8OQNiqppRG9UoDBCOtEQxZ3G3axcPY=
+        b=fwjkmjRD2hSTqqy1W7vy2F4i61L3hIpCl9AmHaoKo0oxJQvQZG4+F0j3dP6XFQAGg
+         jnafUrhL7QtBbT03h8FyoXwuvnRHHotoIBa2O+v1NmaDW8qsrF8jX9mc//oAdzHSWL
+         TBmwy/hARCGg9zKdmSQWBx/jZPovX5cWEFfc387I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 4.19 25/58] USB: core: Fix RST error in hub.c
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 071/120] netfilter: nfnetlink_osf: fix possible bogus match in nf_osf_find()
 Date:   Mon, 26 Sep 2022 12:11:44 +0200
-Message-Id: <20220926100742.369703644@linuxfoundation.org>
+Message-Id: <20220926100753.585915713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 766a96dc558385be735a370db867e302c8f22153 upstream.
+[ Upstream commit 559c36c5a8d730c49ef805a72b213d3bba155cc8 ]
 
-A recent commit added an invalid RST expression to a kerneldoc comment
-in hub.c.  The fix is trivial.
+nf_osf_find() incorrectly returns true on mismatch, this leads to
+copying uninitialized memory area in nft_osf which can be used to leak
+stale kernel stack data to userspace.
 
-Fixes: 9c6d778800b9 ("USB: core: Prevent nested device-reset calls")
-Cc: <stable@vger.kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YxDDcsLtRZ7c20pq@rowland.harvard.edu
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 22c7652cdaa8 ("netfilter: nft_osf: Add version option support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hub.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nfnetlink_osf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -5852,7 +5852,7 @@ re_enumerate_no_bos:
-  *
-  * Return: The same as for usb_reset_and_verify_device().
-  * However, if a reset is already in progress (for instance, if a
-- * driver doesn't have pre_ or post_reset() callbacks, and while
-+ * driver doesn't have pre_reset() or post_reset() callbacks, and while
-  * being unbound or re-bound during the ongoing reset its disconnect()
-  * or probe() routine tries to perform a second, nested reset), the
-  * routine returns -EINPROGRESS.
+diff --git a/net/netfilter/nfnetlink_osf.c b/net/netfilter/nfnetlink_osf.c
+index 79fbf37291f3..51e3953b414c 100644
+--- a/net/netfilter/nfnetlink_osf.c
++++ b/net/netfilter/nfnetlink_osf.c
+@@ -269,6 +269,7 @@ bool nf_osf_find(const struct sk_buff *skb,
+ 	struct nf_osf_hdr_ctx ctx;
+ 	const struct tcphdr *tcp;
+ 	struct tcphdr _tcph;
++	bool found = false;
+ 
+ 	memset(&ctx, 0, sizeof(ctx));
+ 
+@@ -283,10 +284,11 @@ bool nf_osf_find(const struct sk_buff *skb,
+ 
+ 		data->genre = f->genre;
+ 		data->version = f->version;
++		found = true;
+ 		break;
+ 	}
+ 
+-	return true;
++	return found;
+ }
+ EXPORT_SYMBOL_GPL(nf_osf_find);
+ 
+-- 
+2.35.1
+
 
 
