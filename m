@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D284A5E9C19
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B600B5E9C1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234356AbiIZIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S234384AbiIZIdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234353AbiIZIcn (ORCPT
+        with ESMTP id S234416AbiIZIcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:32:43 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCA736862;
-        Mon, 26 Sep 2022 01:32:41 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@breakpoint.cc>)
-        id 1ocjXL-00030q-0S; Mon, 26 Sep 2022 10:32:23 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     <netdev@vger.kernel.org>
-Cc:     tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        Florian Westphal <fw@strlen.de>,
-        Martin Zaharinov <micron10@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: [PATCH net] rhashtable: fix crash due to mm api change
-Date:   Mon, 26 Sep 2022 10:31:39 +0200
-Message-Id: <20220926083139.48069-1-fw@strlen.de>
-X-Mailer: git-send-email 2.37.3
+        Mon, 26 Sep 2022 04:32:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D99A3AE6C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664181170;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ZGYtOLY3FItcJklTsztDmIawuiBAYb+rnQ59of1z3Y=;
+        b=NLNSCarC+/bPrBR9pFoylnsGsZv4XN49oEZbjR0+iVvbPiUqTTigQaGr6qq990VIpd3Y6N
+        4/Ss5QECl8S+qpyIIe7Gf445Pz0rP7fNRpILgR0Q5GMFl+Z/MMJ+e8flQ1acSF16QcxY6j
+        1kTmPN2wAGQB5hBQlUUuLOhNvJm127w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-170-bTN0ClZ-NXuaY6cmexAVyg-1; Mon, 26 Sep 2022 04:32:48 -0400
+X-MC-Unique: bTN0ClZ-NXuaY6cmexAVyg-1
+Received: by mail-wm1-f69.google.com with SMTP id fc12-20020a05600c524c00b003b5054c70d3so3831096wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:32:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=2ZGYtOLY3FItcJklTsztDmIawuiBAYb+rnQ59of1z3Y=;
+        b=t/RdInqe2X+AJHluUMzpnIKlsZPNpp7MDMiK9q5Wd5WwjXRmDb29FLT0mdgl4/bLB3
+         SMfULF3iH+AcPmstLXY4KcISqZbI7pqGvJmOo1rsigJ27FktklnWn2bmZ5zYmdm16iff
+         I/6unvMof1F++id1QVnY99Z4Lk6FCefdPs6lVenpDEQPYiX01Qzsfn7dWd4Joh4rlmWc
+         pV3KgRfzhGohP3aVPsvn8TX0sRCd3nXwqQBsn15M79Bo8N892he096QfDS+9bc/PAw0y
+         JD4r/hVP20aPkquXmV8Oy19it29CqFw6HXmcFfRgHhbXvcPvu827SoPM1yoIzUl77lZe
+         58mw==
+X-Gm-Message-State: ACrzQf1w567x7fq5GMVnk56n/r8zacvagu6l0+EnCh3XAEyu/eLrqdSz
+        p1LKVgaCbVy5mOoMHraVO+jkBvgvlb6NL16z49+Mnzl5DdStiqTpcJqYybxvU4VTgxTlXyYfN6Y
+        I5s7AuS34izR6hhZe95FbABeK
+X-Received: by 2002:a7b:ce97:0:b0:3b3:4136:59fe with SMTP id q23-20020a7bce97000000b003b3413659femr14230793wmj.24.1664181167079;
+        Mon, 26 Sep 2022 01:32:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5r+QgKNI1zWUxSeUKHpaNiNk/Wrai0XDoRmaIxA2kk5MN5p5JzGTH0lcnJ0escKeEkpByYlQ==
+X-Received: by 2002:a7b:ce97:0:b0:3b3:4136:59fe with SMTP id q23-20020a7bce97000000b003b3413659femr14230772wmj.24.1664181166762;
+        Mon, 26 Sep 2022 01:32:46 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7? (p200300cbc7034b00e0907fa6b7d6d4a7.dip0.t-ipconnect.de. [2003:cb:c703:4b00:e090:7fa6:b7d6:d4a7])
+        by smtp.gmail.com with ESMTPSA id m13-20020a05600c3b0d00b003a2e92edeccsm11212861wms.46.2022.09.26.01.32.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 01:32:46 -0700 (PDT)
+Message-ID: <48590f80-fc58-bf67-5acf-082880a607b2@redhat.com>
+Date:   Mon, 26 Sep 2022 10:32:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] mm: fix misuse of update_mmu_cache() in
+ do_anonymous_page()
+Content-Language: en-US
+To:     Muchun Song <muchun.song@linux.dev>,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
+        chris@zankel.net, jcmvbkbc@gmail.com, maobibo@loongson.cn
+References: <20220924053239.91661-1-zhengqi.arch@bytedance.com>
+ <3A09E40A-E2C5-4C6F-8550-DD0E17B7DAB9@linux.dev>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <3A09E40A-E2C5-4C6F-8550-DD0E17B7DAB9@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
- kernel BUG at mm/vmalloc.c:2437!
- invalid opcode: 0000 [#1] SMP
- CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 #1
- [..]
- RIP: 0010:__get_vm_area_node+0x120/0x130
-  __vmalloc_node_range+0x96/0x1e0
-  kvmalloc_node+0x92/0xb0
-  bucket_table_alloc.isra.0+0x47/0x140
-  rhashtable_try_insert+0x3a4/0x440
-  rhashtable_insert_slow+0x1b/0x30
- [..]
+On 25.09.22 03:43, Muchun Song wrote:
+> 
+> 
+>> On Sep 24, 2022, at 13:32, Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>
+>> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
+>> if PTE entry exists") said, we should update local TLB only on the
+>> second thread. So fix the misuse of update_mmu_cache() by using
+>> update_mmu_tlb() in the do_anonymous_page().
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> 
+> The change looks good to me. However, I am not sure what is the user-visible
+> effect to xtensa users. So Cc xtensa’s maintainer and the author of 7df676974359
+> to double check this.
 
-bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, this now
-falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+And if there is one, do we have a fixes tag?
 
-I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
-maintainers rejected it.
-
-This patch is partial revert of
-commit 93f976b5190d ("lib/rhashtable: simplify bucket_table_alloc()"),
-to avoid kvmalloc for ATOMIC case.
-
-As kvmalloc doesn't warn when used with ATOMIC, kernel will only crash
-once vmalloc fallback occurs, so we may see more crashes in other areas
-in the future.
-
-Most other callers seem ok but kvm_mmu_topup_memory_cache looks like it
-might be affected by the same breakage, so Cc kvm@.
-
-Reported-by: Martin Zaharinov <micron10@gmail.com>
-Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for kvmalloc")
-Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
-Signed-off-by: Florian Westphal <fw@strlen.de>
----
- lib/rhashtable.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index e12bbfb240b8..9451f411bc71 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -181,7 +181,13 @@ static struct bucket_table *bucket_table_alloc(struct rhashtable *ht,
- 	int i;
- 	static struct lock_class_key __key;
- 
--	tbl = kvzalloc(struct_size(tbl, buckets, nbuckets), gfp);
-+	size = struct_size(tbl, buckets, nbuckets);
-+
-+	/* kvmalloc API does not support GFP_KERNEL anymore */
-+	if ((gfp & GFP_KERNEL) != GFP_KERNEL)
-+		tbl = kzalloc(size, gfp | __GFP_NOWARN | __GFP_NORETRY);
-+	else
-+		tbl = kvzalloc(size, gfp);
- 
- 	size = nbuckets;
- 
 -- 
-2.37.3
+Thanks,
+
+David / dhildenb
 
