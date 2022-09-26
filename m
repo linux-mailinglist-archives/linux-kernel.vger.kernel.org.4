@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B469F5EA055
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09125EA1FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbiIZKgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
+        id S237067AbiIZLAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiIZKds (ORCPT
+        with ESMTP id S236939AbiIZK6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06081402D2;
-        Mon, 26 Sep 2022 03:20:50 -0700 (PDT)
+        Mon, 26 Sep 2022 06:58:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD9849B7F;
+        Mon, 26 Sep 2022 03:30:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D5260BB7;
-        Mon, 26 Sep 2022 10:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4DBC433C1;
-        Mon, 26 Sep 2022 10:20:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8500160A55;
+        Mon, 26 Sep 2022 10:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D7DC433C1;
+        Mon, 26 Sep 2022 10:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187650;
-        bh=ej2tE7gZWV9cHhIiuMetz5wTyN3WfyfLSQZWx7J+Hu0=;
+        s=korg; t=1664188146;
+        bh=7IkwgSY4ueYu2L9fhFnLnHUNzfHy2KWycaZiRDnLj6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvD4tf7F+n298aNBzeZ9lT+CY0AyUb//dBtODZox38RJc9aWY+XNH81BpRGDlDyi2
-         R9/5izKLnblN2BJ81Bz9tLEbJHmY3nLIEmR0LKomOGTaheNRpNcdkBrfN5gG1BWsa+
-         0HpT/kfNQJMm1v8gE70eco9+64BzVbo88CXQn+UQ=
+        b=m+9coGT6t27Rf8xFrptI8SgZO4CMgCkbbo3kxHhhDagqj6GXFVYTkukLDwSlBl4r3
+         Fpx/8A0NGvhfBlu7TVQ4zEXS7y6KLdGB1OCoWll72jLkKbLbMRuahTauHt9a/Eodwm
+         /FpIWKjHukolF+GQSXarGAI2TxlV9E84KTdyofxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaolei Wang <xiaolei.wang@windriver.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 017/120] regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
-Date:   Mon, 26 Sep 2022 12:10:50 +0200
-Message-Id: <20220926100751.233965623@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 025/141] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Mon, 26 Sep 2022 12:10:51 +0200
+Message-Id: <20220926100755.455644852@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaolei Wang <xiaolei.wang@windriver.com>
+From: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
 
-[ Upstream commit 78e1e867f44e6bdc72c0e6a2609a3407642fb30b ]
+[ Upstream commit 3d5f70949f1b1168fbb17d06eb5c57e984c56c58 ]
 
-The pfuze_chip::regulator_descs is an array of size
-PFUZE100_MAX_REGULATOR, the pfuze_chip::pfuze_regulators
-is the pointer to the real regulators of a specific device.
-The number of real regulator is supposed to be less than
-the PFUZE100_MAX_REGULATOR, so we should use the size of
-'regulator_num * sizeof(struct pfuze_regulator)' in memcpy().
-This fixes the out of bounds access bug reported by KASAN.
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
-Link: https://lore.kernel.org/r/20220825111922.1368055-1-xiaolei.wang@windriver.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Those two controllers both have problems with some USB3.0 devices,
+particularly self-powered ones. Typical error messages include:
+
+  Timeout while waiting for setup device command
+  device not accepting address X, error -62
+  unable to enumerate USB device
+
+By process of elimination the controllers themselves were identified as
+the cause of the problem. Through trial and error the issue was solved
+by using USB_QUIRK_RESET_RESUME for both chips.
+
+Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220824191320.17883-1-jflf_kernel@gmx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/pfuze100-regulator.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
-index f873d97100e2..13609942d45c 100644
---- a/drivers/regulator/pfuze100-regulator.c
-+++ b/drivers/regulator/pfuze100-regulator.c
-@@ -788,7 +788,7 @@ static int pfuze100_regulator_probe(struct i2c_client *client,
- 		((pfuze_chip->chip_id == PFUZE3000) ? "3000" : "3001"))));
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f03ee889ecc7..03473e20e218 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -438,6 +438,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	memcpy(pfuze_chip->regulator_descs, pfuze_chip->pfuze_regulators,
--		sizeof(pfuze_chip->regulator_descs));
-+		regulator_num * sizeof(struct pfuze_regulator));
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) */
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info = USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info = USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
  
- 	ret = pfuze_parse_regulators_dt(pfuze_chip);
- 	if (ret)
 -- 
 2.35.1
 
