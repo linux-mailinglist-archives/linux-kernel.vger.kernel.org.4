@@ -2,306 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403535EA90A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37DF5EA914
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbiIZOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S235088AbiIZOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234427AbiIZOvm (ORCPT
+        with ESMTP id S234864AbiIZOvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:51:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17B4638A;
-        Mon, 26 Sep 2022 06:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D3A960DCC;
-        Mon, 26 Sep 2022 13:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F4CCC433D7;
-        Mon, 26 Sep 2022 13:17:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664198252;
-        bh=KE0hr079Pu9ardUE9mNDBDb3/8sGoVsVRLWDM9p2HXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XRiBtLXeT/cKTlV1Hn+qeCp+Wk0MbjdITVKS7P9vqkcXs5F5NLXxj/xpQGS6tU391
-         WjwO8POpt10OOev71cLrpObUi9MupVNS4j7fBpCe3xoJgCS3je/G0ARC9TZMAIX9wL
-         7i17FlFoUQr2+oGk12HGUpAniPJn/Wu7T7RwkAxl4+cSM64rQJZB89ucHaVtH/YbDj
-         yZLCczS7Nptby6FYJhuQKXHQo54H0TufNQPmwLVDkw8hHJvagebYHQoz2cf8Y5AQaA
-         mIGwOM9gqxrQGAXNbcaeYe4SZJuGAYuT/KObQjlQTBItHsldqiVCHybkNqly1M4qHU
-         ihS7mmvl9Oc6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5DC12403B0; Mon, 26 Sep 2022 14:17:30 +0100 (IST)
-Date:   Mon, 26 Sep 2022 14:17:30 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     zhengjun.xing@linux.intel.com, peterz@infradead.org,
-        mingo@redhat.com, alexander.shishkin@intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
-        kan.liang@linux.intel.com, Yi Ammy <ammy.yi@intel.com>
-Subject: Re: [PATCH v2 2/2] perf parse-events: Remove "not supported" hybrid
- cache events
-Message-ID: <YzGmapYkYcpQvV/n@kernel.org>
-References: <20220923030013.3726410-1-zhengjun.xing@linux.intel.com>
- <20220923030013.3726410-2-zhengjun.xing@linux.intel.com>
- <CAP-5=fX1VY0EqmfBJ_kVJDPy3__GDVxCOOBD5r0=ifAvJjHBPQ@mail.gmail.com>
+        Mon, 26 Sep 2022 10:51:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22792BC31
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664198283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LtpLVF78yaQ8akL0eEAs7+Z0svwvAfFmddP3iRQwkjc=;
+        b=bfAofHbQn9pOaAefG1DJxnTqxuPKTeraNDC2ZWVQsRiCROA7pygeF2QdKMw5TbfgjJs7se
+        qlXjOOXr/V2Bffpe36bwP+HN53Uv8J48CykC8h0Zc8fmc9xMYKYBY5JUxIYwZEIdeNgZzN
+        dFr2q5mHMLlFD3VEQ+oTPlsum8j28z0=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-251-6qCkj__SM_S8e4-qY0kc_Q-1; Mon, 26 Sep 2022 09:18:02 -0400
+X-MC-Unique: 6qCkj__SM_S8e4-qY0kc_Q-1
+Received: by mail-qv1-f70.google.com with SMTP id lq8-20020a0562145b8800b004ad7229e4e9so3770521qvb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:18:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LtpLVF78yaQ8akL0eEAs7+Z0svwvAfFmddP3iRQwkjc=;
+        b=LK0C/qGesXiY/pH+3YemKfhZ4VCJ4uyA1IHFkG2iC0GRksLO7Zqz4a8Yq3YkJrTRrV
+         cKoBTnEIomXHf3QgTvr5UR0Ny644IcQTWFX/LtDW4t2KFJnZFBJb7PgmeiUXxZTpZQJw
+         z8AsQxxhKYKTndnN+mPn4JHKW9MYsHzX/1QYufqq40zHzm0lDXE1DWWIZh6aqySNm4ql
+         9VfinPQ3jysZitI4RH83SGeG8vTT83/ZrrnA3dqzM/X5zU3H4ZT/UdSE9cHyLD/8nlOw
+         HX29BLumVUT1HsIrgcE8eQ/TNu4c1Z0i+cGsJNDnppedk5T3E2/vHv29j5lMwe+JxAbM
+         9qSQ==
+X-Gm-Message-State: ACrzQf1fCZgmvFTsnHaPs0bKJP88FwPhQoMiT9YEgrBhNXLRRCAhMNID
+        /qlrCJHhNT1qtbL3ppi6Av/kHBpNxyuC0feRhLB/WOaug909ZVADbN32rCp7E/WJVGX/Cuha4g/
+        SiuvpzCvy5r7w7/NEh67zrT7O
+X-Received: by 2002:a05:622a:654:b0:35c:f6e6:76b7 with SMTP id a20-20020a05622a065400b0035cf6e676b7mr17820462qtb.365.1664198278779;
+        Mon, 26 Sep 2022 06:17:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4X2VsELTxq8A6XavJEjjHhj8YKH3iZ07B183UX0OdOkc1HRRewWyFvSFtXrHzQS3LMX97ORg==
+X-Received: by 2002:a05:622a:654:b0:35c:f6e6:76b7 with SMTP id a20-20020a05622a065400b0035cf6e676b7mr17820441qtb.365.1664198278498;
+        Mon, 26 Sep 2022 06:17:58 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-222.retail.telecomitalia.it. [79.46.200.222])
+        by smtp.gmail.com with ESMTPSA id bm17-20020a05620a199100b006c73c3d288esm11765046qkb.131.2022.09.26.06.17.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 06:17:57 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:17:51 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@gmail.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
+Message-ID: <20220926131751.pdlc5mbx6gxqlmkx@sgarzare-redhat>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+ <3d1f32c4da81f8a0870e126369ba12bc8c4ad048.1660362668.git.bobby.eshleman@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fX1VY0EqmfBJ_kVJDPy3__GDVxCOOBD5r0=ifAvJjHBPQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3d1f32c4da81f8a0870e126369ba12bc8c4ad048.1660362668.git.bobby.eshleman@bytedance.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 23, 2022 at 09:55:16AM -0700, Ian Rogers escreveu:
-> On Thu, Sep 22, 2022 at 7:58 PM <zhengjun.xing@linux.intel.com> wrote:
-> >
-> > From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> >
-> > By default, we create two hybrid cache events, one is for cpu_core, and
-> > another is for cpu_atom. But Some hybrid hardware cache events are only
-> > available on one CPU PMU. For example, the 'L1-dcache-load-misses' is only
-> > available on cpu_core, while the 'L1-icache-loads' is only available on
-> > cpu_atom. We need to remove "not supported" hybrid cache events. By
-> > extending is_event_supported() to global API and using it to check if the
-> > hybrid cache events are supported before being created, we can remove the
-> > "not supported" hybrid cache events.
-> >
-> > Before:
-> >
-> >  # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
-> >
-> >  Performance counter stats for 'system wide':
-> >
-> >             52,570      cpu_core/L1-dcache-load-misses/
-> >    <not supported>      cpu_atom/L1-dcache-load-misses/
-> >    <not supported>      cpu_core/L1-icache-loads/
-> >          1,471,817      cpu_atom/L1-icache-loads/
-> >
-> >        1.004915229 seconds time elapsed
-> >
-> > After:
-> >
-> >  # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
-> >
-> >  Performance counter stats for 'system wide':
-> >
-> >             54,510      cpu_core/L1-dcache-load-misses/
-> >          1,441,286      cpu_atom/L1-icache-loads/
-> >
-> >        1.005114281 seconds time elapsed
-> >
-> > Fixes: 30def61f64ba ("perf parse-events: Create two hybrid cache events")
-> > Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> > Reported-by: Yi Ammy <ammy.yi@intel.com>
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
+On Mon, Aug 15, 2022 at 10:56:07AM -0700, Bobby Eshleman wrote:
+>This commit adds a feature bit for virtio vsock to support datagrams.
+>
+>Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>---
+> drivers/vhost/vsock.c             | 3 ++-
+> include/uapi/linux/virtio_vsock.h | 1 +
+> net/vmw_vsock/virtio_transport.c  | 8 ++++++--
+> 3 files changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>index b20ddec2664b..a5d1bdb786fe 100644
+>--- a/drivers/vhost/vsock.c
+>+++ b/drivers/vhost/vsock.c
+>@@ -32,7 +32,8 @@
+> enum {
+> 	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
+> 			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
+>-			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
+>+			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
+>+			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
+> };
+>
+> enum {
+>diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
+>index 64738838bee5..857df3a3a70d 100644
+>--- a/include/uapi/linux/virtio_vsock.h
+>+++ b/include/uapi/linux/virtio_vsock.h
+>@@ -40,6 +40,7 @@
+>
+> /* The feature bitmap for virtio vsock */
+> #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
+>+#define VIRTIO_VSOCK_F_DGRAM		2	/* Host support dgram vsock */
 
-Thanks, applied.
+We already allocated bit 2 for F_NO_IMPLIED_STREAM , so we should use 3:
+https://github.com/oasis-tcs/virtio-spec/blob/26ed30ccb049fd51d6e20aad3de2807d678edb3a/virtio-vsock.tex#L22
+(I'll send patches to implement F_STREAM and F_NO_IMPLIED_STREAM 
+negotiation soon).
 
-- Arnaldo
+As long as it's RFC it's fine to introduce F_DGRAM, but we should first 
+change virtio-spec before merging this series.
 
- 
-> Thanks,
-> Ian
-> 
-> > ---
-> > Change log:
-> >   v2:
-> >     * Adds a comment for removing "not supported" hybrid cache events.
-> >     * Remove goto and add a strdup check
-> >     * "is_event_supported" move to parse-events.c per Ian's suggestion.
-> >     * Adds Reported-by from Yi Ammy <ammy.yi@intel.com>
-> >
-> >  tools/perf/util/parse-events-hybrid.c | 21 ++++++++++++---
-> >  tools/perf/util/parse-events.c        | 39 +++++++++++++++++++++++++++
-> >  tools/perf/util/parse-events.h        |  1 +
-> >  tools/perf/util/print-events.c        | 39 ---------------------------
-> >  4 files changed, 57 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/tools/perf/util/parse-events-hybrid.c b/tools/perf/util/parse-events-hybrid.c
-> > index 284f8eabd3b9..7c9f9150bad5 100644
-> > --- a/tools/perf/util/parse-events-hybrid.c
-> > +++ b/tools/perf/util/parse-events-hybrid.c
-> > @@ -33,7 +33,8 @@ static void config_hybrid_attr(struct perf_event_attr *attr,
-> >          * If the PMU type ID is 0, the PERF_TYPE_RAW will be applied.
-> >          */
-> >         attr->type = type;
-> > -       attr->config = attr->config | ((__u64)pmu_type << PERF_PMU_TYPE_SHIFT);
-> > +       attr->config = (attr->config & PERF_HW_EVENT_MASK) |
-> > +                       ((__u64)pmu_type << PERF_PMU_TYPE_SHIFT);
-> >  }
-> >
-> >  static int create_event_hybrid(__u32 config_type, int *idx,
-> > @@ -48,13 +49,25 @@ static int create_event_hybrid(__u32 config_type, int *idx,
-> >         __u64 config = attr->config;
-> >
-> >         config_hybrid_attr(attr, config_type, pmu->type);
-> > +
-> > +       /*
-> > +        * Some hybrid hardware cache events are only available on one CPU
-> > +        * PMU. For example, the 'L1-dcache-load-misses' is only available
-> > +        * on cpu_core, while the 'L1-icache-loads' is only available on
-> > +        * cpu_atom. We need to remove "not supported" hybrid cache events.
-> > +        */
-> > +       if (attr->type == PERF_TYPE_HW_CACHE
-> > +           && !is_event_supported(attr->type, attr->config))
-> > +               return 0;
-> > +
-> >         evsel = parse_events__add_event_hybrid(list, idx, attr, name, metric_id,
-> >                                                pmu, config_terms);
-> > -       if (evsel)
-> > +       if (evsel) {
-> >                 evsel->pmu_name = strdup(pmu->name);
-> > -       else
-> > +               if (!evsel->pmu_name)
-> > +                       return -ENOMEM;
-> > +       } else
-> >                 return -ENOMEM;
-> > -
-> >         attr->type = type;
-> >         attr->config = config;
-> >         return 0;
-> > diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> > index f05e15acd33f..f3b2c2a87456 100644
-> > --- a/tools/perf/util/parse-events.c
-> > +++ b/tools/perf/util/parse-events.c
-> > @@ -28,6 +28,7 @@
-> >  #include "util/parse-events-hybrid.h"
-> >  #include "util/pmu-hybrid.h"
-> >  #include "tracepoint.h"
-> > +#include "thread_map.h"
-> >
-> >  #define MAX_NAME_LEN 100
-> >
-> > @@ -157,6 +158,44 @@ struct event_symbol event_symbols_sw[PERF_COUNT_SW_MAX] = {
-> >  #define PERF_EVENT_TYPE(config)                __PERF_EVENT_FIELD(config, TYPE)
-> >  #define PERF_EVENT_ID(config)          __PERF_EVENT_FIELD(config, EVENT)
-> >
-> > +bool is_event_supported(u8 type, u64 config)
-> > +{
-> > +       bool ret = true;
-> > +       int open_return;
-> > +       struct evsel *evsel;
-> > +       struct perf_event_attr attr = {
-> > +               .type = type,
-> > +               .config = config,
-> > +               .disabled = 1,
-> > +       };
-> > +       struct perf_thread_map *tmap = thread_map__new_by_tid(0);
-> > +
-> > +       if (tmap == NULL)
-> > +               return false;
-> > +
-> > +       evsel = evsel__new(&attr);
-> > +       if (evsel) {
-> > +               open_return = evsel__open(evsel, NULL, tmap);
-> > +               ret = open_return >= 0;
-> > +
-> > +               if (open_return == -EACCES) {
-> > +                       /*
-> > +                        * This happens if the paranoid value
-> > +                        * /proc/sys/kernel/perf_event_paranoid is set to 2
-> > +                        * Re-run with exclude_kernel set; we don't do that
-> > +                        * by default as some ARM machines do not support it.
-> > +                        *
-> > +                        */
-> > +                       evsel->core.attr.exclude_kernel = 1;
-> > +                       ret = evsel__open(evsel, NULL, tmap) >= 0;
-> > +               }
-> > +               evsel__delete(evsel);
-> > +       }
-> > +
-> > +       perf_thread_map__put(tmap);
-> > +       return ret;
-> > +}
-> > +
-> >  const char *event_type(int type)
-> >  {
-> >         switch (type) {
-> > diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-> > index 7e6a601d9cd0..07df7bb7b042 100644
-> > --- a/tools/perf/util/parse-events.h
-> > +++ b/tools/perf/util/parse-events.h
-> > @@ -19,6 +19,7 @@ struct option;
-> >  struct perf_pmu;
-> >
-> >  bool have_tracepoints(struct list_head *evlist);
-> > +bool is_event_supported(u8 type, u64 config);
-> >
-> >  const char *event_type(int type);
-> >
-> > diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-> > index 04050d4f6db8..c4d5d87fae2f 100644
-> > --- a/tools/perf/util/print-events.c
-> > +++ b/tools/perf/util/print-events.c
-> > @@ -22,7 +22,6 @@
-> >  #include "probe-file.h"
-> >  #include "string2.h"
-> >  #include "strlist.h"
-> > -#include "thread_map.h"
-> >  #include "tracepoint.h"
-> >  #include "pfm.h"
-> >  #include "pmu-hybrid.h"
-> > @@ -239,44 +238,6 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
-> >         strlist__delete(sdtlist);
-> >  }
-> >
-> > -static bool is_event_supported(u8 type, u64 config)
-> > -{
-> > -       bool ret = true;
-> > -       int open_return;
-> > -       struct evsel *evsel;
-> > -       struct perf_event_attr attr = {
-> > -               .type = type,
-> > -               .config = config,
-> > -               .disabled = 1,
-> > -       };
-> > -       struct perf_thread_map *tmap = thread_map__new_by_tid(0);
-> > -
-> > -       if (tmap == NULL)
-> > -               return false;
-> > -
-> > -       evsel = evsel__new(&attr);
-> > -       if (evsel) {
-> > -               open_return = evsel__open(evsel, NULL, tmap);
-> > -               ret = open_return >= 0;
-> > -
-> > -               if (open_return == -EACCES) {
-> > -                       /*
-> > -                        * This happens if the paranoid value
-> > -                        * /proc/sys/kernel/perf_event_paranoid is set to 2
-> > -                        * Re-run with exclude_kernel set; we don't do that
-> > -                        * by default as some ARM machines do not support it.
-> > -                        *
-> > -                        */
-> > -                       evsel->core.attr.exclude_kernel = 1;
-> > -                       ret = evsel__open(evsel, NULL, tmap) >= 0;
-> > -               }
-> > -               evsel__delete(evsel);
-> > -       }
-> > -
-> > -       perf_thread_map__put(tmap);
-> > -       return ret;
-> > -}
-> > -
-> >  int print_hwcache_events(const char *event_glob, bool name_only)
-> >  {
-> >         unsigned int type, op, i, evt_i = 0, evt_num = 0, npmus = 0;
-> > --
-> > 2.25.1
-> >
+About the patch, we should only negotiate the new feature when we really 
+have DGRAM support. So, it's better to move this patch after adding 
+support for datagram.
 
--- 
+Thanks,
+Stefano
 
-- Arnaldo
+>
+> struct virtio_vsock_config {
+> 	__le64 guest_cid;
+>diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>index c6212eb38d3c..073314312683 100644
+>--- a/net/vmw_vsock/virtio_transport.c
+>+++ b/net/vmw_vsock/virtio_transport.c
+>@@ -35,6 +35,7 @@ static struct virtio_transport virtio_transport; /* 
+>forward declaration */
+> struct virtio_vsock {
+> 	struct virtio_device *vdev;
+> 	struct virtqueue *vqs[VSOCK_VQ_MAX];
+>+	bool has_dgram;
+>
+> 	/* Virtqueue processing is deferred to a workqueue */
+> 	struct work_struct tx_work;
+>@@ -709,7 +710,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+> 	}
+>
+> 	vsock->vdev = vdev;
+>-
+> 	vsock->rx_buf_nr = 0;
+> 	vsock->rx_buf_max_nr = 0;
+> 	atomic_set(&vsock->queued_replies, 0);
+>@@ -726,6 +726,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+> 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
+> 		vsock->seqpacket_allow = true;
+>
+>+	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
+>+		vsock->has_dgram = true;
+>+
+> 	vdev->priv = vsock;
+>
+> 	ret = virtio_vsock_vqs_init(vsock);
+>@@ -820,7 +823,8 @@ static struct virtio_device_id id_table[] = {
+> };
+>
+> static unsigned int features[] = {
+>-	VIRTIO_VSOCK_F_SEQPACKET
+>+	VIRTIO_VSOCK_F_SEQPACKET,
+>+	VIRTIO_VSOCK_F_DGRAM
+> };
+>
+> static struct virtio_driver virtio_vsock_driver = {
+>-- 
+>2.35.1
+>
+
