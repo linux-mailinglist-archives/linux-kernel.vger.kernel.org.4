@@ -2,70 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A6D5E99A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653135E99A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiIZGgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S232569AbiIZGhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiIZGgV (ORCPT
+        with ESMTP id S229684AbiIZGhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:36:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4798F1EAE8;
-        Sun, 25 Sep 2022 23:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9710661757;
-        Mon, 26 Sep 2022 06:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06A2C433C1;
-        Mon, 26 Sep 2022 06:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664174168;
-        bh=RZWqL6mqGtYB3W7YZL1NmlDx5eOD8rP55uoSBbEQ7zk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=te8u1O9i9c9mofZaPXRCXAhTN2NGWJE0QLtKRMautYWAj4BKsMYlDcwDNSJiIQLwh
-         JIg85KBLn3FjJYRHIPXql9VB7qDYM3AMCqf3Dr6KHXbAqONeIn3W2pj9b07hvWbpH7
-         4RrOyk/iCFNL/SYLxOsFLwBKi8Gm5tF5+7jpWrJVlepS2ZD7mE3kzwFSmAml2rQ4Ln
-         50G0Euw0BFTla11EagWXsrBNV6K1koFxRhLdKviLEaaHFkeLdnnBiwEOHnd4rY9v5o
-         N99LbczJfUs0dNMnzC5gOLvbhx6zLp38gf0CqduV/ShpJlD5l0KfAE2KDxo2a+xbMn
-         a9b+fhgOw7Kfg==
-Message-ID: <eb8883bc-1328-acd8-2c41-af877cecbfa4@kernel.org>
-Date:   Mon, 26 Sep 2022 08:36:01 +0200
+        Mon, 26 Sep 2022 02:37:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE04101C8;
+        Sun, 25 Sep 2022 23:37:31 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MbXxS00xZzHthl;
+        Mon, 26 Sep 2022 14:32:43 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 14:37:29 +0800
+Subject: Re: [PATCH v2 0/8] scsi: libsas: sas address comparation refactor
+To:     Jinpu Wang <jinpu.wang@ionos.com>
+CC:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <john.garry@huawei.com>
+References: <20220924073455.2186805-1-yanaijie@huawei.com>
+ <CAMGffE=6BGVLqTbO3SGFZhCYDjo0U=Ay+JO4h+pNi10Hcb0w9g@mail.gmail.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <b1cd66fa-411c-2d68-45d7-89aa6219c3cf@huawei.com>
+Date:   Mon, 26 Sep 2022 14:37:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [V14,08/15] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
- compatible
+In-Reply-To: <CAMGffE=6BGVLqTbO3SGFZhCYDjo0U=Ay+JO4h+pNi10Hcb0w9g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
-References: <20220915064337.2686-1-irui.wang@mediatek.com>
- <20220915064337.2686-9-irui.wang@mediatek.com>
- <3bbdfb31-2ba2-7345-54c7-82a67d95e30f@kernel.org>
- <f0b80a0d60172e9c286c0cd3b599875a345ae4f0.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <f0b80a0d60172e9c286c0cd3b599875a345ae4f0.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,77 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 03:56, kyrie.wu wrote:
-> On Fri, 2022-09-23 at 13:28 +0200, Krzysztof Kozlowski wrote:
->> On 15/09/2022 08:43, Irui Wang wrote:
->>> From: kyrie wu <kyrie.wu@mediatek.com>
->>>
->>> Add mediatek,mt8195-jpgdec compatible to binding document.
+
+On 2022/9/26 14:09, Jinpu Wang wrote:
+> On Sat, Sep 24, 2022 at 9:24 AM Jason Yan <yanaijie@huawei.com> wrote:
 >>
->> Use scripts/get_maintainers.pl to CC all maintainers and relevant
->> mailing lists.
+>> Sas address conversion and comparation is widely used in libsas and
+>> drivers. However they are all opencoded and to avoid the line spill over
+>> 80 columns, are mostly split into multi-lines.
 >>
->>>
->>> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
->>> Signed-off-by: irui wang <irui.wang@mediatek.com>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> ---
->>>  .../media/mediatek,mt8195-jpegdec.yaml        | 169
->>> ++++++++++++++++++
->>>  1 file changed, 169 insertions(+)
->>>  create mode 100644
->>> Documentation/devicetree/bindings/media/mediatek,mt8195-
->>> jpegdec.yaml
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/media/mediatek,mt8195-
->>> jpegdec.yaml
->>> b/Documentation/devicetree/bindings/media/mediatek,mt8195-
->>> jpegdec.yaml
->>> new file mode 100644
->>> index 000000000000..9135cf889d1e
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-
->>> jpegdec.yaml
->>> @@ -0,0 +1,169 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: 
->>> https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml*__;Iw!!CTRNKA9wMg0ARbw!yu00-_vltBz3bkDyzkeH2PENGyfi_megjPx815JiqrNVa28ZU7kcFYidMEos_id7$
->>>  
->>> +$schema: 
->>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!yu00-_vltBz3bkDyzkeH2PENGyfi_megjPx815JiqrNVa28ZU7kcFYidMAikt6uh$
->>>  
->>> +
->>> +title: MediaTek JPEG Encoder Device Tree Bindings
->>> +
->>> +maintainers:
->>> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
->>> +
->>> +description:
->>> +  MediaTek JPEG Decoder is the JPEG decode hardware present in
->>> MediaTek SoCs
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
+>> To make the code easier to read, introduce some helpers with clearer
+>> semantics and replace the opencoded segments with them.
 >>
->> You do not have more than one item. Skip items.
+>> v1->v2:
+>>    First factor out sas_find_attached_phy() and replace LLDDs's code
+>>          with it.
+>>    Remove three too simple helpers.
+>>    Rename the helpers with 'sas_' prefix.
+>>
+> Hi Jason,
 > 
-> Hello Krzysztof,
+> Thx for doing this.
+>> Jason Yan (8):
+>>    scsi: libsas: introduce sas_find_attached_phy() helper
+>>    scsi: pm8001: use sas_find_attached_phy() instead of open coded
+>>    scsi: mvsas: use sas_find_attached_phy() instead of open coded
+>>    scsi: hisi_sas: use sas_find_attathed_phy() instead of open coded
+> These 4 look good to me.
+> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+
+Hi Jack,
+Thank you very much for the review.
+
+>>    scsi: libsas: introduce sas address comparation helpers
+>>    scsi: libsas: use sas_phy_match_dev_addr() instead of open coded
+>>    scsi: libsas: use sas_phy_addr_same() instead of open coded
+>>    scsi: libsas: use sas_phy_match_port_addr() instead of open coded
+> These helpers are too simple to replace, we add more loc in the end.
+
+The initial purpose to introduce these helpers is to stop cutting 
+compare expressions into two lines and to make the code looks clean. We 
+add more loc in the end because of function declaration and more blank 
+lines between them.
+
+Thanks,
+Jason
+
+>>
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c | 12 ++------
+>>   drivers/scsi/libsas/sas_expander.c    | 40 ++++++++++++++++-----------
+>>   drivers/scsi/libsas/sas_internal.h    | 17 ++++++++++++
+>>   drivers/scsi/mvsas/mv_sas.c           | 15 +++-------
+>>   drivers/scsi/pm8001/pm8001_sas.c      | 16 ++++-------
+>>   include/scsi/libsas.h                 |  2 ++
+>>   6 files changed, 54 insertions(+), 48 deletions(-)
+>>
+>> --
+>> 2.31.1
+>>
+> .
 > 
-> The device node has the compatible of "mediatek,mt8195-jpgdec",
-> if skip this item, it may case dt-binding checking error.
-
-No, this won't happen if you use correct syntax.
-
-> For another, we may extend this items in the future.
-
-Not really, that would be change of ABI. If you have already list of
-devices, include them now.
-
-
-Best regards,
-Krzysztof
-
