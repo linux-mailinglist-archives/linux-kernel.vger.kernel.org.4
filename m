@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B695EA205
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD585EA474
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiIZLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S238576AbiIZLqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbiIZK6q (ORCPT
+        with ESMTP id S238379AbiIZLnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:58:46 -0400
+        Mon, 26 Sep 2022 07:43:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81444F198;
-        Mon, 26 Sep 2022 03:30:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370015508B;
+        Mon, 26 Sep 2022 03:46:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F63C60B4A;
-        Mon, 26 Sep 2022 10:28:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7D8C433D7;
-        Mon, 26 Sep 2022 10:28:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAC260B55;
+        Mon, 26 Sep 2022 10:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2B4C433C1;
+        Mon, 26 Sep 2022 10:45:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188112;
-        bh=bY2UouzFqxQp6GrAvCScehk7425rJlbeRY2YMt1AZzw=;
+        s=korg; t=1664189122;
+        bh=df8/eRBlP1PeK6BKFY7uxt1LSUL6QU9ec6A+wvlYhMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0BUBaJBEseYl88Qn8E2Bu8CNYxa8W/JoPFWgrhXjl4eYWpGb0+9HP2MqHIsuA4iQn
-         On+5EPf4pDZOMvaZeRWreClCVRoxBT0zcQG05j/TqrW3iFbXjHubzZG/rmGmS9TlF9
-         KwR9vP4ItAU6KHUvVEQNKb6ooitoz3GSxf6i2MxM=
+        b=KbcXclnajl1aLjA/iPFYuHFqPs96nRZ0TaxXvwM4NVDTpxYxuellkUGZSb06FEDL8
+         g9VUYK7PIVFNYD3m78nHmq9lAEOcqk2g7gIaVJj/pBNZlmZXhanOua7lW/Tc5abAc5
+         7538RfoZdqR71SJ5MbYlVxFUurPvHkHuFizMsJ2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 044/141] ALSA: hda/realtek: Add pincfg for ASUS G513 HP jack
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 081/207] dmaengine: ti: k3-udma-private: Fix refcount leak bug in of_xudma_dev_get()
 Date:   Mon, 26 Sep 2022 12:11:10 +0200
-Message-Id: <20220926100756.034384813@linuxfoundation.org>
+Message-Id: <20220926100810.203362643@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luke D. Jones <luke@ljones.dev>
+From: Liang He <windhl@126.com>
 
-commit c611e659044168e7abcbae8ba1ea833521498fbb upstream.
+[ Upstream commit f9fdb0b86f087c2b7f6c6168dd0985a3c1eda87e ]
 
-Fixes up the pincfg for ASUS ROG Strix G513 headphone and mic combo jack
+We should call of_node_put() for the reference returned by
+of_parse_phandle() in fail path or when it is not used anymore.
+Here we only need to move the of_node_put() before the check.
 
-[ Fixed the position in the quirk table by tiwai ]
-
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220915080921.35563-2-luke@ljones.dev
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d70241913413 ("dmaengine: ti: k3-udma: Add glue layer for non DMAengine users")
+Signed-off-by: Liang He <windhl@126.com>
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Link: https://lore.kernel.org/r/20220720073234.1255474-1-windhl@126.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/dma/ti/k3-udma-private.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6824,6 +6824,7 @@ enum {
- 	ALC294_FIXUP_ASUS_GU502_HP,
- 	ALC294_FIXUP_ASUS_GU502_PINS,
- 	ALC294_FIXUP_ASUS_GU502_VERBS,
-+	ALC294_FIXUP_ASUS_G513_PINS,
- 	ALC285_FIXUP_HP_GPIO_LED,
- 	ALC285_FIXUP_HP_MUTE_LED,
- 	ALC236_FIXUP_HP_GPIO_LED,
-@@ -8150,6 +8151,15 @@ static const struct hda_fixup alc269_fix
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = alc294_fixup_gu502_hp,
- 	},
-+	 [ALC294_FIXUP_ASUS_G513_PINS] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+				{ 0x19, 0x03a11050 }, /* front HP mic */
-+				{ 0x1a, 0x03a11c30 }, /* rear external mic */
-+				{ 0x21, 0x03211420 }, /* front HP out */
-+				{ }
-+		},
-+	},
- 	[ALC294_FIXUP_ASUS_COEF_1B] = {
- 		.type = HDA_FIXUP_VERBS,
- 		.v.verbs = (const struct hda_verb[]) {
-@@ -8937,6 +8947,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
- 	SND_PCI_QUIRK(0x1043, 0x1e11, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA502),
- 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
-+	SND_PCI_QUIRK(0x1043, 0x1e5e, "ASUS ROG Strix G513", ALC294_FIXUP_ASUS_G513_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+diff --git a/drivers/dma/ti/k3-udma-private.c b/drivers/dma/ti/k3-udma-private.c
+index d4f1e4e9603a..85e00701473c 100644
+--- a/drivers/dma/ti/k3-udma-private.c
++++ b/drivers/dma/ti/k3-udma-private.c
+@@ -31,14 +31,14 @@ struct udma_dev *of_xudma_dev_get(struct device_node *np, const char *property)
+ 	}
+ 
+ 	pdev = of_find_device_by_node(udma_node);
++	if (np != udma_node)
++		of_node_put(udma_node);
++
+ 	if (!pdev) {
+ 		pr_debug("UDMA device not found\n");
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 	}
+ 
+-	if (np != udma_node)
+-		of_node_put(udma_node);
+-
+ 	ud = platform_get_drvdata(pdev);
+ 	if (!ud) {
+ 		pr_debug("UDMA has not been probed\n");
+-- 
+2.35.1
+
 
 
