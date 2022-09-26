@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998E35EA4BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB77C5EA131
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238669AbiIZLvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S236524AbiIZKqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbiIZLt3 (ORCPT
+        with ESMTP id S236552AbiIZKoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AE2753BE;
-        Mon, 26 Sep 2022 03:48:18 -0700 (PDT)
+        Mon, 26 Sep 2022 06:44:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E8A32DA4;
+        Mon, 26 Sep 2022 03:25:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6FD1B80782;
-        Mon, 26 Sep 2022 10:47:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8E6C433C1;
-        Mon, 26 Sep 2022 10:47:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E81C6B80920;
+        Mon, 26 Sep 2022 10:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9F7C433D7;
+        Mon, 26 Sep 2022 10:25:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189227;
-        bh=JPaDt2jOgKHg1AcO/GhZXdMVpJycjDBqY17J3Th7bP4=;
+        s=korg; t=1664187909;
+        bh=/WlxciwnRNUCW5MjxiZJbw8YecLX/8f6sOAW4c0RYOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MidLz36vArzNXgGvDWQYtO77Ty/ZpmXQBcpDMy0i/j/jYgbGxef6mS0igWe6k5V8v
-         Pa6bjDkSt2lu8+VwPXtpjnL75A0SEyzMRFXpQNWjmj1bMmu1vyaOf+kqxSXLiWuj4+
-         KffQzquTL672oSUyzUMoA5waXTON4PIhMkUMEKcA=
+        b=FYr4XsXebiKTEra9k7bKHVKG+hGGVEQXJ8nkuahIB4nM9VSMq1V73PCX7WVGgIaUE
+         5exx8XadPZzk/uxuFULo08MsrP43nxjEsQFZpl3hPi8vBe4lyYHgKnCV/KdKMvuASn
+         SB5Lcb35YBqz2QuOrkJvuuXyP2poX3jjTLpaHVpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Jaron <michalx.jaron@intel.com>,
+        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
+        Norbert Zulinski <norbertx.zulinski@intel.com>,
         Mateusz Palczewski <mateusz.palczewski@intel.com>,
         Konrad Jankowski <konrad0.jankowski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 116/207] i40e: Fix VF set max MTU size
+Subject: [PATCH 5.4 072/120] iavf: Fix cached head and tail value for iavf_get_tx_pending
 Date:   Mon, 26 Sep 2022 12:11:45 +0200
-Message-Id: <20220926100811.759453439@linuxfoundation.org>
+Message-Id: <20220926100753.624095049@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Jaron <michalx.jaron@intel.com>
+From: Brett Creeley <brett.creeley@intel.com>
 
-[ Upstream commit 372539def2824c43b6afe2403045b140f65c5acc ]
+[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
 
-Max MTU sent to VF is set to 0 during memory allocation. It cause
-that max MTU on VF is changed to IAVF_MAX_RXBUFFER and does not
-depend on data from HW.
+The underlying hardware may or may not allow reading of the head or tail
+registers and it really makes no difference if we use the software
+cached values. So, always used the software cached values.
 
-Set max_mtu field in virtchnl_vf_resource struct to inform
-VF in GET_VF_RESOURCES msg what size should be max frame.
-
-Fixes: dab86afdbbd1 ("i40e/i40evf: Change the way we limit the maximum frame size for Rx")
-Signed-off-by: Michal Jaron <michalx.jaron@intel.com>
+Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
+Signed-off-by: Brett Creeley <brett.creeley@intel.com>
+Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
 Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
 Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/intel/i40e/i40e_virtchnl_pf.c    | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-index 86b0f21287dc..67fbaaad3985 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-@@ -2038,6 +2038,25 @@ static void i40e_del_qch(struct i40e_vf *vf)
- 	}
- }
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+index c6905d1b6182..ce2f6d1ca79f 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
+@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
+ {
+ 	u32 head, tail;
  
-+/**
-+ * i40e_vc_get_max_frame_size
-+ * @vf: pointer to the VF
-+ *
-+ * Max frame size is determined based on the current port's max frame size and
-+ * whether a port VLAN is configured on this VF. The VF is not aware whether
-+ * it's in a port VLAN so the PF needs to account for this in max frame size
-+ * checks and sending the max frame size to the VF.
-+ **/
-+static u16 i40e_vc_get_max_frame_size(struct i40e_vf *vf)
-+{
-+	u16 max_frame_size = vf->pf->hw.phy.link_info.max_frame_size;
-+
-+	if (vf->port_vlan_id)
-+		max_frame_size -= VLAN_HLEN;
-+
-+	return max_frame_size;
-+}
-+
- /**
-  * i40e_vc_get_vf_resources_msg
-  * @vf: pointer to the VF info
-@@ -2139,6 +2158,7 @@ static int i40e_vc_get_vf_resources_msg(struct i40e_vf *vf, u8 *msg)
- 	vfres->max_vectors = pf->hw.func_caps.num_msix_vectors_vf;
- 	vfres->rss_key_size = I40E_HKEY_ARRAY_SIZE;
- 	vfres->rss_lut_size = I40E_VF_HLUT_ARRAY_SIZE;
-+	vfres->max_mtu = i40e_vc_get_max_frame_size(vf);
++	/* underlying hardware might not allow access and/or always return
++	 * 0 for the head/tail registers so just use the cached values
++	 */
+ 	head = ring->next_to_clean;
+-	tail = readl(ring->tail);
++	tail = ring->next_to_use;
  
- 	if (vf->lan_vsi_idx) {
- 		vfres->vsi_res[0].vsi_id = vf->lan_vsi_id;
+ 	if (head != tail)
+ 		return (head < tail) ?
 -- 
 2.35.1
 
