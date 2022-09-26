@@ -2,262 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A2C5E9CD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52CA5E9CD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbiIZJDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S234696AbiIZJDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiIZJCm (ORCPT
+        with ESMTP id S234694AbiIZJCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:02:42 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7E13E756
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:02:29 -0700 (PDT)
-X-UUID: fd25d2fac6784af3adc582bfd9911417-20220926
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=equfxVsm7D4QQ1nC+cKfEiQH2XI2tNSBMw0rpy/ds8M=;
-        b=nfEtH6hu3yf2aE/2Wuc9SX67sgdPRJtYjTYaC0odIylAEFp2JIJs99m09sFRHGZf2HTxVlk1ZktFISA8IqKxm4cDOtmt0M/L5hQykYaEn89eFpP91zmG5edZxXO/Wc6E/VNhV3KQXoKquiLdjk5jW/edtmuUaBSQHsmqykhKnqc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:82f5fa8b-bed4-4a91-bb42-8fbf217314c2,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:800415a3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fd25d2fac6784af3adc582bfd9911417-20220926
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1938237962; Mon, 26 Sep 2022 17:02:23 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 26 Sep 2022 17:02:21 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 26 Sep 2022 17:02:21 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>
-Subject: [RESEND PATCH v3] mailbox: mtk-cmdq: fix gce timeout issue
-Date:   Mon, 26 Sep 2022 17:02:19 +0800
-Message-ID: <20220926090219.11871-1-yongqiang.niu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Sep 2022 05:02:38 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B8293ED45;
+        Mon, 26 Sep 2022 02:02:30 -0700 (PDT)
+Received: from zhuyinbo$loongson.cn ( [10.180.13.64] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Mon, 26 Sep 2022 17:02:24
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.180.13.64]
+Date:   Mon, 26 Sep 2022 17:02:24 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Yinbo Zhu" <zhuyinbo@loongson.cn>
+To:     "Joe Perches" <joe@perches.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>,
+        "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>
+Subject: Re: Re: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal
+ driver for loongson2 SoCs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
+In-Reply-To: <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
+References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+ <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: aczo4GZvb3Rlcl90eHQ9MTk1NTo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <58fd6600.c0e4.1837908822e.Coremail.zhuyinbo@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8BxP+CgajFjqSMiAA--.7158W
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/1tbiAQABDGMwRN0PLgAAsn
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
-and disable gce ddr enable when gce work job done
-2. split cmdq clk enable/disable api, and control gce ddr enable/disable
-in clk enable/disable function to make sure it could protect when cmdq
-is multiple used by display and mdp
-
-this is only for some SOC which has flag "control_by_sw".
-for this kind of gce, there is a handshake flow between gce and ddr
-hardware,
-if not set ddr enable flag of gce, ddr will fall into idle mode,
-then gce instructions will not process done.
-we need set this flag of gce to tell ddr when gce is idle or busy
-controlled by software flow.
-
-ddr problem is a special case.
-when test suspend/resume case, gce sometimes will pull ddr, and ddr can
-not go to suspend.
-if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
-as you have referred [1] and [2] (8192 and 8195)
-but for mt8186, the gce is more special, except setting of [1] and [2],
-we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
-when gce working to make sure gce could process all instructions ok.
-this case just need normal bootup, if we not set this, display cmdq
-task will timeout, and chrome homescreen will always black screen.
-
-and with this patch, we have done these test on mt8186:
-1.suspend/resume
-2.boot up to home screen
-3.playback video with youtube.
-
-suspend issue is special gce hardware issue, gce client  driver
-command already process done, but gce still pull ddr.
-
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-
----
-change sinc v2:
-1. add definition GCE_CTRL_BY_SW and GCE_DDR_EN instead of magic number
----
-
----
- drivers/mailbox/mtk-cmdq-mailbox.c | 68 +++++++++++++++++++++++++++---
- 1 file changed, 63 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 9465f9081515..bd63773b05fd 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -38,6 +38,8 @@
- #define CMDQ_THR_PRIORITY		0x40
- 
- #define GCE_GCTL_VALUE			0x48
-+#define GCE_CTRL_BY_SW				GENMASK(18, 16)
-+#define GCE_DDR_EN				GENMASK(2, 0)
- 
- #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
- #define CMDQ_THR_ENABLED		0x1
-@@ -80,16 +82,60 @@ struct cmdq {
- 	bool			suspended;
- 	u8			shift_pa;
- 	bool			control_by_sw;
-+	bool			sw_ddr_en;
- 	u32			gce_num;
-+	atomic_t		usage;
-+	spinlock_t		lock;
- };
- 
- struct gce_plat {
- 	u32 thread_nr;
- 	u8 shift;
- 	bool control_by_sw;
-+	bool sw_ddr_en;
- 	u32 gce_num;
- };
- 
-+static s32 cmdq_clk_enable(struct cmdq *cmdq)
-+{
-+	s32 usage, ret;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&cmdq->lock, flags);
-+
-+	usage = atomic_inc_return(&cmdq->usage);
-+
-+	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
-+	if (usage <= 0 || ret < 0) {
-+		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
-+			usage, ret, cmdq->suspended);
-+	} else if (usage == 1) {
-+		if (cmdq->sw_ddr_en)
-+			writel(GCE_DDR_EN + GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
-+	}
-+
-+	spin_unlock_irqrestore(&cmdq->lock, flags);
-+
-+	return ret;
-+}
-+
-+static void cmdq_clk_disable(struct cmdq *cmdq)
-+{
-+	s32 usage;
-+
-+	usage = atomic_dec_return(&cmdq->usage);
-+
-+	if (usage < 0) {
-+		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
-+			usage, cmdq->suspended);
-+	} else if (usage == 0) {
-+		if (cmdq->sw_ddr_en)
-+			writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
-+	}
-+
-+	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+}
-+
- u8 cmdq_get_shift_pa(struct mbox_chan *chan)
- {
- 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
-@@ -266,7 +312,8 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
- 
- 	if (list_empty(&thread->task_busy_list)) {
- 		cmdq_thread_disable(cmdq, thread);
--		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+
-+		cmdq_clk_disable(cmdq);
- 	}
- }
- 
-@@ -355,8 +402,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 	task->pkt = pkt;
- 
- 	if (list_empty(&thread->task_busy_list)) {
--		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
--
-+		WARN_ON(cmdq_clk_enable(cmdq) < 0);
- 		/*
- 		 * The thread reset will clear thread related register to 0,
- 		 * including pc, end, priority, irq, suspend and enable. Thus
-@@ -428,7 +474,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
- 	}
- 
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	cmdq_clk_disable(cmdq);
- 
- done:
- 	/*
-@@ -468,7 +514,8 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
- 
- 	cmdq_thread_resume(thread);
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+
-+	cmdq_clk_disable(cmdq);
- 
- out:
- 	spin_unlock_irqrestore(&thread->chan->lock, flags);
-@@ -543,6 +590,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 	cmdq->thread_nr = plat_data->thread_nr;
- 	cmdq->shift_pa = plat_data->shift;
- 	cmdq->control_by_sw = plat_data->control_by_sw;
-+	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
- 	cmdq->gce_num = plat_data->gce_num;
- 	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
- 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
-@@ -615,6 +663,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 
- 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
- 
-+	spin_lock_init(&cmdq->lock);
- 	cmdq_init(cmdq);
- 
- 	return 0;
-@@ -660,9 +709,18 @@ static const struct gce_plat gce_plat_v6 = {
- 	.gce_num = 2
- };
- 
-+static const struct gce_plat gce_plat_v7 = {
-+	.thread_nr = 24,
-+	.shift = 3,
-+	.control_by_sw = true,
-+	.sw_ddr_en = true,
-+	.gce_num = 1
-+};
-+
- static const struct of_device_id cmdq_of_ids[] = {
- 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
- 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
-+	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
- 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
- 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
- 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
--- 
-2.25.1
-
+CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiSm9lIFBlcmNoZXMiIDxq
+b2VAcGVyY2hlcy5jb20+Cj4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMjEgMTA6MDY6NTUgKOaYn+ac
+n+S4iSkKPiDmlLbku7bkuro6ICJZaW5ibyBaaHUiIDx6aHV5aW5ib0Bsb29uZ3Nvbi5jbj4sICJS
+YWZhZWwgSiAuIFd5c29ja2kiIDxyYWZhZWxAa2VybmVsLm9yZz4sICJEYW5pZWwgTGV6Y2FubyIg
+PGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+LCAiQW1pdAo+ICBLdWNoZXJpYSIgPGFtaXRrQGtl
+cm5lbC5vcmc+LCAiWmhhbmcgUnVpIiA8cnVpLnpoYW5nQGludGVsLmNvbT4sICJSb2IgSGVycmlu
+ZyIgPHJvYmgrZHRAa2VybmVsLm9yZz4sICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6eXN6dG9m
+Lmtvemxvd3NraStkdEBsaW5hcm8ub3JnPiwgbGludXgtcG1Admdlci5rZXJuZWwub3JnLCBkZXZp
+Y2V0cmVlQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IOaK
+hOmAgTogemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nvbi5jbj4KPiDkuLvpopg6
+IFJlOiBbUEFUQ0ggdjIgMS8zXSBNQUlOVEFJTkVSUzogYWRkIG1haW50YWluZXIgZm9yIHRoZXJt
+YWwgZHJpdmVyIGZvciBsb29uZ3NvbjIgU29Dcwo+IAo+IE9uIFdlZCwgMjAyMi0wOS0yMSBhdCAw
+OTo1NiArMDgwMCwgWWluYm8gWmh1IHdyb3RlOgo+ID4gQWRkIHpoYW5naG9uZ2NoZW4gYW5kIG15
+c2VsZiBhcyBtYWludGFpbmVyIG9mIHRoZSBsb29uZ3NvbjIgU29DCj4gPiBzZXJpZXMgdGhlcm1h
+bCBkcml2ZXIuCj4gW10KPiA+IGRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJT
+Cj4gW10KPiA+IEBAIC0xMTg5OSw2ICsxMTg5OSwxNCBAQCBGOglkcml2ZXJzLyovKmxvb25nYXJj
+aCoKPiA+ICBGOglEb2N1bWVudGF0aW9uL2xvb25nYXJjaC8KPiA+ICBGOglEb2N1bWVudGF0aW9u
+L3RyYW5zbGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvCj4gPiAgCj4gPiArTE9PTkdTT04yIFNPQyBT
+RVJJRVMgVEhFUk1BTCBEUklWRVIKPiA+ICtNOgl6aGFuZ2hvbmdjaGVuIDx6aGFuZ2hvbmdjaGVu
+QGxvb25nc29uLmNuPgo+ID4gK006CVlpbmJvIFpodSA8emh1eWluYm9AbG9vbmdzb24uY24+Cj4g
+PiArTDoJbGludXgtcG1Admdlci5rZXJuZWwub3JnCj4gPiArUzoJTWFpbnRhaW5lZAo+ID4gK0Y6
+CURvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVy
+bWFsLnlhbWwKPiA+ICtGOglkcml2ZXJzL3RoZXJtYWwvbG9vbmdzb24yX3RoZXJtYWwuYwo+ID4g
+Kwo+ID4gIExTSUxPR0lDIE1QVCBGVVNJT04gRFJJVkVSUyAoRkMvU0FTL1NQSSkKPiA+ICBNOglT
+YXRoeWEgUHJha2FzaCA8c2F0aHlhLnByYWthc2hAYnJvYWRjb20uY29tPgo+ID4gIE06CVNyZWVr
+YW50aCBSZWRkeSA8c3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbT4KPiAKPiBGcm9tIHRoZSBN
+QUlOVEFJTkVSUyBoZWFkZXJzOgo+IAo+IAlTOiAqU3RhdHVzKiwgb25lIG9mIHRoZSBmb2xsb3dp
+bmc6Cj4gCSAgIFN1cHBvcnRlZDoJU29tZW9uZSBpcyBhY3R1YWxseSBwYWlkIHRvIGxvb2sgYWZ0
+ZXIgdGhpcy4KPiAJICAgTWFpbnRhaW5lZDoJU29tZW9uZSBhY3R1YWxseSBsb29rcyBhZnRlciBp
+dC4KPiAKPiBJZiB5b3UgYm90aCBhcmUgYmVpbmcgcGFpZCB0byBtYWludGFpbiB0aGlzIGRyaXZl
+ciwKPiB0aGlzIFM6IGVudHJ5IHNob3VsZCBiZSBTdXBwb3J0ZWQuClNvcnJ5IGZvciByZXBseWlu
+ZyB0byB5b3Ugc28gbGF0ZSwgYmVjYXVzZSB0aGlzIGVtYWlsIGhhcyBlbnRlcmVkIHRoZSBzcGFt
+IGxpc3QuCkkgd2l0aCB6aGFuZ2hvbmdjaGVuIHdpbGwgZm9jdXMgb24gdGhlcm1hbCBkcml2ZXIg
+YW5kIGxvb2tzIGFmdGVyIGl0IGFjdHVhbGx5LgpzbyBhZGQgemhhbmdob25nY2hlbiB3aXRoIG1l
+IGFzIGxvb25nc29uMiB0aGVybWFsIG1haW50YWluZXIuCgpUS3MsCkJScywKWWluYm8gWmh1Lgo+
+IAoNCg0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY
+5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq
+5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So
+77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW
+5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ
+5pS25pys6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq6
+5bm25Yig6Zmk5pys6YKu5Lu244CCIA0KVGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNv
+bnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAs
+IHdoaWNoIGlzIGludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFk
+ZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWlu
+ZWQgaGVyZWluIGluIGFueSB3YXkgKGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3Rh
+bCBvciBwYXJ0aWFsIGRpc2Nsb3N1cmUsIHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBi
+eSBwZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJp
+dGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRo
+ZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
