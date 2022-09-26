@@ -2,98 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0033C5EB4DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A808A5EB4E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiIZWyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S230173AbiIZW5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIZWyt (ORCPT
+        with ESMTP id S229607AbiIZW5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:54:49 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF96288A03;
-        Mon, 26 Sep 2022 15:54:47 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 4F2316D9;
-        Mon, 26 Sep 2022 22:54:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4F2316D9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1664232886; bh=FwR2WYpE54nS6Bi8rW58E9/X3cSfe6Q+6dBH71Kd4Q4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=R+yIk9EgkhvUSV2cwqn/6+ueJ4nLyDC/34FqBLXS429BG3babwjXeadLuDqiyDtqK
-         Z4vlD05GHdaO1Mz806SZZ2x4bS8ofCJq060Lwi3IBW1Yax6cEPR8mShf6SXajPBTPc
-         0nU8feV91O4hCfvgAsWKOlNmmLk0WsIG4lgfZ9anN2kn2dl3DM5Du2h8Dt05MwhgVU
-         TCTLKdoA62/ZEd51iEhS/Sp590Spr9iEJTF3ip6+9rgzQrm0VXrxL8YhOYCnXXX8Q6
-         gRLrt3MqHsDb3fxPtI/XR1OfXkx5OAP/+pIgZTiU4fVW0+2YNKN9Y68H+GwPPS5ar9
-         O77LCGwCFWGRQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
-        broonie@kernel.org
-Cc:     Greg KH <greg@kroah.com>,
+        Mon, 26 Sep 2022 18:57:18 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118587F95
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:57:16 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id l14so5243222qvq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 15:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=0oTmPF8OXz/CvwH1nuIdtQazTpalf2fsvzakYLiefMI=;
+        b=AAuidSESOdluh22iHoNdq1ialZQHJi8DlKeQnNqP8tWtqZ0iWgOxeNjSwkyHl3UQlo
+         EaRAzbnIRBWMdo4nhZwbRFS3a20sJ7mYxHKh7Vc0kXen7QbCUiBzmJEMG/gKmdGxQQt9
+         TcfjCa/9U+Ha5Bc3h5TKe+CKna/iYXcCMoCb91DUARCakDg6wnUiVm7MGAuLY0BDZYCN
+         J3kDV6FsQud562i1x9eaKHSC/ucw6t+++AJcg8A+pKvW/vp+3q1yUpu1sszuNx3oK8VA
+         mZZiklHsIKm1548z2J486iqmDSDhDgGH+oWZ8C1MmRSEkFMnzH98qm2RbCK7u9yUeYB7
+         6hrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=0oTmPF8OXz/CvwH1nuIdtQazTpalf2fsvzakYLiefMI=;
+        b=C94vkF94D2+d7H6rWEF6HBuEQre95zWcUXIDv2AyYP7aIu4jJM9djHISE6sCR++t6/
+         Q8ZQO2CcaiLQahRTV5TjEVbDTDUr/MeU3sILRSM91dey3chbS7duhgmyOKcwY/rzQIGv
+         gDYZ+VeEvre9o+vATEPQiFWmI3kWtsfVc+ena/PO4QxBDamVy5N5nmStzp7f55YlDMvf
+         fgEv0FkqxQRKxSddIMxSPkgti41BIAQd32Bd2P5qK8i5oequBYSf2C9odEbmOzG/bTB2
+         zkTH6CrDQgBOKy8f0r7soly9N/3je4KgFejeQLSjvmCTNxe7BOxqV4hvxF+EdN0y1+qq
+         lElA==
+X-Gm-Message-State: ACrzQf3ApjgVP4WnxQvk5OvimO4knN0Sc6HPQUY2UGWXmLvJuN+tCupD
+        Ep9hHeBImZUA+woCHwJtamfGDjfaI6DhtA==
+X-Google-Smtp-Source: AMsMyM7Fh0JEmgnwt37ZJHit80EZ1xpj8o5VJC2kJp3X5teg4vJeS+eiVLIo84JzglXvNOHGcfPCZQ==
+X-Received: by 2002:a05:6214:2686:b0:4af:630c:78f2 with SMTP id gm6-20020a056214268600b004af630c78f2mr9100014qvb.52.1664233035861;
+        Mon, 26 Sep 2022 15:57:15 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id az35-20020a05620a172300b0069fe1dfbeffsm12946809qkb.92.2022.09.26.15.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 15:57:14 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ocx2I-000O97-1t;
+        Mon, 26 Sep 2022 19:57:14 -0300
+Date:   Mon, 26 Sep 2022 19:57:14 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Manfred Spraul <manfred.spraul@de.bosch.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- jc_docs tree
-In-Reply-To: <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
-References: <20220926210631.657728-1-broonie@kernel.org>
- <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
-Date:   Mon, 26 Sep 2022 16:54:45 -0600
-Message-ID: <878rm5rbka.fsf@meer.lwn.net>
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting
+ PCI P2PDMA pages
+Message-ID: <YzIuSsFpOC+VN1/P@ziepe.ca>
+References: <Yy33LUqvDLSOqoKa@ziepe.ca>
+ <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
+ <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
+ <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
+ <Yy46KbD/PvhaHA6X@ziepe.ca>
+ <3840c1c6-3a5c-2286-e577-949f0d4ea7a6@deltatee.com>
+ <Yy48GPMdQS/pzNSa@ziepe.ca>
+ <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
+ <Yy4/f+s1jOCm7dFo@ziepe.ca>
+ <980899e1-532a-772b-2f6d-6fb017def50b@deltatee.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <980899e1-532a-772b-2f6d-6fb017def50b@deltatee.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczleweli.xyz> writes:
+On Fri, Sep 23, 2022 at 05:51:49PM -0600, Logan Gunthorpe wrote:
 
-> Hi!
->
-> On Mon, Sep 26, 2022 at 10:06:31PM +0100, broonie@kernel.org wrote:
->> Today's linux-next merge of the driver-core tree got a conflict in:
->>=20
->>   Documentation/process/magic-number.rst
->>=20
->> between commit:
->>=20
->>   32ba63d4b2e1a ("Doc update: Correct magic values from nbd protocol, V2=
-")
->>=20
->> from the jc_docs tree and commits:
->>=20
->>   82805818898dd ("Documentation: NBD_REPLY_MAGIC isn't a magic number")
->>   bd5926220ffe0 ("nbd: remove define-only NBD_MAGIC, previously magic nu=
-mber")
->>=20
->> from the driver-core tree (and probably more for context).
->
-> If I'm reading the merge right (very much not a given!),
-> it seems that the NBD_REPLY_MAGIC (and LO_MAGIC?) constant(s) survived:
-> they both need to go for reasons listed in
->   bd5926220ffe0: LO_MAGIC doesn't exist
->   82805818898dd: NBD_REPLY_MAGIC is part of the line protocol,
->                  not a magic number=20
->
-> This also reveals that I missed NBD_REQUEST_MAGIC
-> (needs to go, same reason as NBD_REPLY_MAGIC)
-> in the first pass, but that's unrelated here.
+> And on further consideration I really think the correct error return is 
+> important here. This will be a user facing error that'll be easy enough
+> to hit: think code that might be run on any file and if the file is 
+> hosted on a block device that doesn't support P2PDMA then the user
+> will see the very uninformative "Cannot allocate memory" error.
+> 
+> Userspace code that's written for purpose can look at the EREMOTEIO error
+> and tell the user something useful, if we return the correct error.
+> If we return ENOMEM in this case, that is not possible because
+> lots of things might have caused that error.
 
-I've been trying to make sense of that merge myself.  Is the right
-solution that I should just drop 32ba63d4b2e1a ?  Manfred, thoughts on
-that?
+That is reasonable, but I'd still prefer to see it done more
+centrally.
 
-Thanks,
+>> If we know PIN/GET is not set then we don't even need to call the
+>> function because it is a NOP.
 
-jon
+> That's not what the documentation for the function says:
+
+> "Either FOLL_PIN or FOLL_GET (or neither) may be set... Return: true for success,
+>  or if no action was required (if neither FOLL_PIN nor FOLL_GET was set, nothing
+>  is done)."
+
+I mean the way the code is structured is at the top of the call chain
+the PIN/GET/0 is decided and then the callchain is run. All the
+callsites of try_grab_page() must be safe to call under FOLL_PIN
+because their caller is making the decision what flag to use.
+
+Jason
