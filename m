@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6235EA85D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437865EA860
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbiIZO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S234174AbiIZO1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234150AbiIZO0R (ORCPT
+        with ESMTP id S234543AbiIZO1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:26:17 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F074328726
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664195927; x=1695731927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FbTGbCNs121ZGo7Dpzt5/DPqhFbOJ0ZmE5LfYMNH8EA=;
-  b=GEQczkSG5C26jP8LSmIfgXjlj2K+0lflpEQUSmTgnIhaAbrg0UtXNo9G
-   +fwcuy7ZyNFXW47L0nE0K7RVkXydEXWJ0PBqJ4Ew6LNaIkuhAzPk6KYON
-   Pmr/9HraXmSRhkhJkGclsXyqipgRtXnPxVPL+MZSzP1o6KKdOE41GuTxu
-   wzbFWo8YQdZjOU9+Y+xVYevrlx2K63N0OcF24ahNO7t4kUi+XFCqHlEML
-   8vJCwdPKhjcIBKLBEgHaWNgCzur57xl5IuwjLEt6Y2BQMRcwLvOXyv59b
-   Htykdf9QN2sHeGmQ7yizEJBlb38HxYXepn5+hXd1sWNFyBDcpSfsWBnMl
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="280740667"
-X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="280740667"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 05:38:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="651808560"
-X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="651808560"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga008.jf.intel.com with SMTP; 26 Sep 2022 05:38:44 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 26 Sep 2022 15:38:43 +0300
-Date:   Mon, 26 Sep 2022 15:38:43 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH RESEND] drm/display: Don't assume dual mode adaptors
- support i2c sub-addressing
-Message-ID: <YzGdU50ttykco1QV@intel.com>
-References: <20220926124017.529806df@computer>
+        Mon, 26 Sep 2022 10:27:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EF714091;
+        Mon, 26 Sep 2022 05:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FIHRxSY6V+zzl15F4vvObYqxHLfDtkzR9cwonipMTy4=; b=gvrdtGfYanGL5Zv0aDMToZN85f
+        +xqWVNEQnFt5COC6g8v2Vtsw900/hQjSCEAAArEl6LemRrxzyUmGTygvB3+ujY6oKmZ/odrLtahEP
+        eaadMPRHDyYAxjCQTSbwEy9sx3Pc63jDaDiW7hyaauMFMqP2ESXJ/gIpdKDUgSqzsDhwAK4n2VayX
+        Bv+UrTWjnmSk4cGEo8bv3xtK4yWhx2vqhtQkLAUV5ia8PlWKA90afqen7TRND7r436u/quR21gItg
+        bN2orRDwoMTEjyFEI7brjAbFTHf5TalCLcTC1skSRts4y7bThtfeyIEGT2haZaPPAQbwxqk+IskVd
+        UdQAQmRg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ocnOQ-00ASmC-3H; Mon, 26 Sep 2022 12:39:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81D9D3002F1;
+        Mon, 26 Sep 2022 14:39:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 41A152B123E2B; Mon, 26 Sep 2022 14:39:21 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 14:39:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        hjl.tools@gmail.com
+Subject: Re: [PATCH v5 00/22] KCFI support
+Message-ID: <YzGdeYzoZ1uC1CO/@hirez.programming.kicks-ass.net>
+References: <20220908215504.3686827-1-samitolvanen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220926124017.529806df@computer>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,171 +68,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 12:40:17PM +0200, Simon Rettberg wrote:
-> Current dual mode adaptor ("DP++") detection code assumes that all adaptors
-> support i2c sub-addressing for read operations from the DP-HDMI adaptor ID
-> buffer.  It has been observed that multiple adaptors do not in fact
-> support this, and always return data starting at register 0.  On
-> affected adaptors, the code failed to read the proper registers that
-> would identify the device as a type 2 adaptor, and handled those as
-> type 1, limiting the TMDS clock to 165MHz.
-> Fix this by always reading the ID buffer starting from offset 0, and
-> discarding any bytes before the actual offset of interest.
+On Thu, Sep 08, 2022 at 02:54:42PM -0700, Sami Tolvanen wrote:
+> KCFI is a forward-edge control-flow integrity scheme in the upcoming
+> Clang 16 release, which is more suitable for kernel use than the
+> existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
+> LTO, doesn't alter function references to point to a jump table, and
+> won't break function address equality.
 > 
-> Signed-off-by: Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
-> Reviewed-by: Rafael Gieschke <rafael.gieschke@rz.uni-freiburg.de>
-> ---
-> (Resend because of no response, probably my fault since I ran
-> get_maintainers on a shallow clone and missed a bunch of people)
+> This series replaces the current arm64 CFI implementation with KCFI
+> and adds support for x86_64.
 > 
-> We had problems with multiple different "4k ready" DP++ adaptors only
-> resulting in 1080p resolution on Linux. While one of them turned out to
-> actually just be a type1 adaptor, the others, according to the data
-> retreived via i2cdump, were in fact proper type2 adaptors, advertising a
-> TMDS clock of 300MHz. As it turned out, none of them supported
-> sub-addressing when reading from the DP-HDMI adaptor ID buffer via i2c.
-> The existing code suggested that this is known to happen with "broken"
-> type1 adaptors, but evidently, type2 adaptors are also affected.
-> We tried finding authoritative documentation on whether or not this is
-> allowed behavior, but since all the official VESA docs are paywalled,
-> the best we could come up with was the spec sheet for Texas Instruments'
-> SNx5DP149 chip family.[1] It explicitly mentions that sub-adressing is
-> supported for register writes, but *not* for reads (See NOTE in
-> section 8.5.3). Unless TI blatantly and openly decided to violate the
-> VESA spec, one could take that as a strong hint that sub-addressing is
-> in fact not mandated by VESA.
-
-I don't think that would pass the dual mode CTS for type2 adaptors
-since it explicitly calls for reading individual bytes from various
-offsets.
-
-The actual dual mode spec specifies things rather poorly. Technically
-it doesn't even specify the write protocol, and the read protocol is
-only specified in the form of an example read of the HDMI ID buffer.
-There it says the offset write is optional for the master, but
-mandatory for the slave to ack. It neither explicitly allows nor
-disallows the ack+ignore behaviour, but IIRC there is some
-text in there that suggests that type1 adaptors might ignore it.
-
+> KCFI requires assembly functions that are indirectly called from C
+> code to be annotated with type identifiers. As type information is
+> only available in C, the compiler emits expected type identifiers
+> into the symbol table, so they can be referenced from assembly
+> without having to hardcode type hashes. Patch 6 adds helper macros
+> for annotating functions, and patches 9 and 20 add annotations.
 > 
-> [1] https://www.ti.com/lit/ds/symlink/sn75dp149.pdf
+> In case of a type mismatch, KCFI always traps. To support error
+> handling, the compiler generates a .kcfi_traps section for x86_64,
+> which contains the locations of each trap, and for arm64, encodes
+> the necessary register information to the ESR. Patches 10 and 22 add
+> arch-specific error handlers.
 > 
->  .../gpu/drm/display/drm_dp_dual_mode_helper.c | 52 ++++++++++---------
->  1 file changed, 28 insertions(+), 24 deletions(-)
+> To test this series, you'll need a ToT Clang toolchain. The series
+> is also available pn GitHub:
 > 
-> diff --git a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
-> index 3ea53bb67..6147da983 100644
-> --- a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
-> +++ b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
-> @@ -63,23 +63,42 @@
->  ssize_t drm_dp_dual_mode_read(struct i2c_adapter *adapter,
->  			      u8 offset, void *buffer, size_t size)
->  {
-> +	int ret;
-> +	u8 zero = 0;
-> +	char *tmpbuf;
-> +	/*
-> +	 * As sub-addressing is not supported by all adaptors,
-> +	 * always explicitly read from the start and discard
-> +	 * any bytes that come before the requested offset.
-> +	 * This way, no matter whether the adaptor supports it
-> +	 * or not, we'll end up reading the proper data.
-> +	 */
->  	struct i2c_msg msgs[] = {
->  		{
->  			.addr = DP_DUAL_MODE_SLAVE_ADDRESS,
->  			.flags = 0,
->  			.len = 1,
-> -			.buf = &offset,
-> +			.buf = &zero,
->  		},
->  		{
->  			.addr = DP_DUAL_MODE_SLAVE_ADDRESS,
->  			.flags = I2C_M_RD,
-> -			.len = size,
-> -			.buf = buffer,
-> +			.len = size + offset,
-> +			.buf = NULL,
->  		},
->  	};
-> -	int ret;
->  
-> +	tmpbuf = kmalloc(size + offset, GFP_KERNEL);
-> +	if (!tmpbuf)
-> +		return -ENOMEM;
-> +
-> +	msgs[1].buf = tmpbuf;
->  	ret = i2c_transfer(adapter, msgs, ARRAY_SIZE(msgs));
-> +	if (ret == ARRAY_SIZE(msgs))
-> +		memcpy(buffer, tmpbuf + offset, size);
-> +
-> +	kfree(tmpbuf);
+>   https://github.com/samitolvanen/linux/commits/kcfi-v5
 
-Could optimize a bit here and avoid the temp buffer when
-the original offset is 0.
+As mentioned at plumbers, my only concern is somewhat excessive use of
+CFI_CLANG as oposed to something more compiler neutral. But I suppose
+that's something we can cleanup/fix when GCC grows support for this.
 
-> +
->  	if (ret < 0)
->  		return ret;
->  	if (ret != ARRAY_SIZE(msgs))
-> @@ -208,18 +227,6 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_detect(const struct drm_device *dev,
->  	if (ret)
->  		return DRM_DP_DUAL_MODE_UNKNOWN;
->  
-> -	/*
-> -	 * Sigh. Some (maybe all?) type 1 adaptors are broken and ack
-> -	 * the offset but ignore it, and instead they just always return
-> -	 * data from the start of the HDMI ID buffer. So for a broken
-> -	 * type 1 HDMI adaptor a single byte read will always give us
-> -	 * 0x44, and for a type 1 DVI adaptor it should give 0x00
-> -	 * (assuming it implements any registers). Fortunately neither
-> -	 * of those values will match the type 2 signature of the
-> -	 * DP_DUAL_MODE_ADAPTOR_ID register so we can proceed with
-> -	 * the type 2 adaptor detection safely even in the presence
-> -	 * of broken type 1 adaptors.
-> -	 */
->  	ret = drm_dp_dual_mode_read(adapter, DP_DUAL_MODE_ADAPTOR_ID,
->  				    &adaptor_id, sizeof(adaptor_id));
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Another optimization opportunity here to maybe combine the HDMI ID
-buffer read with this one. Could perhaps just read the full 32 bytes
-static capabilities section. But this one should probably be left for
-a separate patch. Ideally I guess we'd also combine the max TMDS clock
-read with this one. But for that we'd need to return more than the
-single enum drm_dp_dual_mode_type from this function.
+(as in I ran kCFI + call-depth-tracking + FineIBT on a bunch of
+hardware)
 
->  	drm_dbg_kms(dev, "DP dual mode adaptor ID: %02x (err %zd)\n", adaptor_id, ret);
-> @@ -233,11 +240,10 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_detect(const struct drm_device *dev,
->  				return DRM_DP_DUAL_MODE_TYPE2_DVI;
->  		}
->  		/*
-> -		 * If neither a proper type 1 ID nor a broken type 1 adaptor
-> -		 * as described above, assume type 1, but let the user know
-> -		 * that we may have misdetected the type.
-> +		 * If not a proper type 1 ID, still assume type 1, but let
-> +		 * the user know that we may have misdetected the type.
->  		 */
-> -		if (!is_type1_adaptor(adaptor_id) && adaptor_id != hdmi_id[0])
-> +		if (!is_type1_adaptor(adaptor_id))
->  			drm_err(dev, "Unexpected DP dual mode adaptor ID %02x\n", adaptor_id);
->  
->  	}
-> @@ -343,10 +349,8 @@ EXPORT_SYMBOL(drm_dp_dual_mode_get_tmds_output);
->   * @enable: enable (as opposed to disable) the TMDS output buffers
->   *
->   * Set the state of the TMDS output buffers in the adaptor. For
-> - * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register. As
-> - * some type 1 adaptors have problems with registers (see comments
-> - * in drm_dp_dual_mode_detect()) we avoid touching the register,
-> - * making this function a no-op on type 1 adaptors.
-> + * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register.
-> + * Type1 adaptors do not support any register writes.
->   *
->   * Returns:
->   * 0 on success, negative error code on failure
-> -- 
-> 2.35.1
-
--- 
-Ville Syrjälä
-Intel
+HJL, can you look at adding kCFI support to GCC ?
