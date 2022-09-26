@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDBF5EA00C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31075EA4F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbiIZKdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S238754AbiIZL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235712AbiIZKb1 (ORCPT
+        with ESMTP id S238822AbiIZLxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:31:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D280311834;
-        Mon, 26 Sep 2022 03:20:03 -0700 (PDT)
+        Mon, 26 Sep 2022 07:53:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660D481CA;
+        Mon, 26 Sep 2022 03:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFCF3B80918;
-        Mon, 26 Sep 2022 10:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E2AC433D6;
-        Mon, 26 Sep 2022 10:19:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7214A60AF5;
+        Mon, 26 Sep 2022 10:48:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C860C433D7;
+        Mon, 26 Sep 2022 10:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187593;
-        bh=tlvUgMkU11HBDwNbeCOwRwnKt9TSsz61+tOrT9iIo/E=;
+        s=korg; t=1664189320;
+        bh=wT1N8772zsUcNnX7ubuZGvmkTyerDfEJhFIeWhkXEkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XFcl2wG3oak5DYqEM0eHSaSt03/QuvgonV5AMapjnRalRDsY0KMkETXidvoG7C8Ye
-         p2y6acdxzVfi7IjUVlqgSQlDcRhRPLXgCew/bmI+Rfvtim44PqnXJrCsLUSMdofFXi
-         T8nBXd51tXShDCmoqJhtIBLFfsl6ldtSr7ndzpdI=
+        b=MRK1+tei042ndLWveJA5culRB4is6cowRgdXi1E+BqN5PqNYdP7sr9ZK1exo7pLgQ
+         itO7r9NIBQhlF1HzWVQJSizytBHtTiPunu7DY8wXkpLeZK/Il0iQJw7tQ8O7Bl+Cd0
+         daP7eGvYhMjLrkGWA5+cLjHNMCykgOJyp75r9IVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Raymond Tan <raymond.tan@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH 4.19 58/58] usb: dwc3: pci: Allow Elkhart Lake to utilize DSM method for PM functionality
+        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 148/207] perf kcore_copy: Do not check /proc/modules is unchanged
 Date:   Mon, 26 Sep 2022 12:12:17 +0200
-Message-Id: <20220926100743.599371856@linuxfoundation.org>
+Message-Id: <20220926100813.276649930@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raymond Tan <raymond.tan@intel.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit a609ce2a13360d639b384b6ca783b38c1247f2db upstream.
+[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
 
-Similar to some other IA platforms, Elkhart Lake too depends on the
-PMU register write to request transition of Dx power state.
+/proc/kallsyms and /proc/modules are compared before and after the copy
+in order to ensure no changes during the copy.
 
-Thus, we add the PCI_DEVICE_ID_INTEL_EHLLP to the list of devices that
-shall execute the ACPI _DSM method during D0/D3 sequence.
+However /proc/modules also might change due to reference counts changing
+even though that does not make any difference.
 
-[heikki.krogerus@linux.intel.com: included Fixes tag]
+Any modules loaded or unloaded should be visible in changes to kallsyms,
+so it is not necessary to check /proc/modules also anyway.
 
-Fixes: dbb0569de852 ("usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices")
-Cc: stable@vger.kernel.org
-Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Remove the comparison checking that /proc/modules is unchanged.
+
+Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Tested-by: Daniel Dao <dqminh@cloudflare.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/perf/util/symbol-elf.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -149,7 +149,8 @@ static int dwc3_pci_quirks(struct dwc3_p
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index 75bec32d4f57..647b7dff8ef3 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -2102,8 +2102,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
+  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
+  * is not the same for the kernel map and the modules map.  That happens because
+  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
+- * kallsyms and modules files are compared with their copies to check that
+- * modules have not been loaded or unloaded while the copies were taking place.
++ * kallsyms file is compared with its copy to check that modules have not been
++ * loaded or unloaded while the copies were taking place.
+  *
+  * Return: %0 on success, %-1 on failure.
+  */
+@@ -2166,9 +2166,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
+ 			goto out_extract_close;
+ 	}
  
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
- 		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
--				pdev->device == PCI_DEVICE_ID_INTEL_BXT_M) {
-+		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
-+		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
- 			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
- 			dwc->has_dsm_for_pm = true;
- 		}
+-	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
+-		goto out_extract_close;
+-
+ 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
+ 		goto out_extract_close;
+ 
+-- 
+2.35.1
+
 
 
