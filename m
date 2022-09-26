@@ -2,41 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAA55EAB64
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CC35EAB68
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbiIZPnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S233449AbiIZPnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236293AbiIZPmM (ORCPT
+        with ESMTP id S233630AbiIZPmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:42:12 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218F74BB3;
-        Mon, 26 Sep 2022 07:25:49 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ocp3M-0004wE-02; Mon, 26 Sep 2022 16:25:48 +0200
-Message-ID: <ead18940-4e8b-f5c1-f1ac-16040b4bcddc@leemhuis.info>
-Date:   Mon, 26 Sep 2022 16:25:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [regression] Bug 216426 - USB-C port is incorrectly reporting
- that it's powered when Dell XPS 15-9500 is unplugged
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <f28e3bdf-2add-574a-cf0a-5d0253ea708a@leemhuis.info>
-In-Reply-To: <f28e3bdf-2add-574a-cf0a-5d0253ea708a@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664202349;d39cb28d;
-X-HE-SMSGID: 1ocp3M-0004wE-02
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Mon, 26 Sep 2022 11:42:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AD7BCA0;
+        Mon, 26 Sep 2022 07:26:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F3E460DFB;
+        Mon, 26 Sep 2022 14:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB5DC433C1;
+        Mon, 26 Sep 2022 14:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664202363;
+        bh=X4xEYQiSvmysaYuXeO17P0IpMlzWHLaU1dBHoIa/E40=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QDFTKkJPkWSfs6Ico+7BRZ2i4BAocNPT54fLpAXerOe+nODe6YDcMvKaepQtYzVSz
+         LY8AWoiHhzQ8U9cQ+g8e6mQBIA0Sq467Jl4Me4leQAsORfudW3Kj8qNUpGW7caOGMv
+         DkUEZkhcPMcktwqWVxD3p08Gsh6clBqw3OqEBbIh9eG1BVfKRn1AKDQinMjr8Xf1tM
+         m0IQcXsDCc6MpSfJcdZVHElcaYoeJVFMCPqkHTpD3v1IGLC8z/0PbFrhe6kLkVk+Pw
+         YwiO1PtcvW4fb+iQ87WsAgAe4SEqYNJ92XFVYazYQA8c3h02PmSg0J47YUUSSrNq9J
+         i2kk4rMG3zBtw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ocp3Z-00CiQY-AQ;
+        Mon, 26 Sep 2022 15:26:01 +0100
+Date:   Mon, 26 Sep 2022 10:25:59 -0400
+Message-ID: <8635ce8b60.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH 5.4 000/120] 5.4.215-rc1 review
+In-Reply-To: <CA+G9fYsaviCxmAqWzOxgkU7HcmzU=e0LKci2_+5uPUOc+8xb3A@mail.gmail.com>
+References: <20220926100750.519221159@linuxfoundation.org>
+        <CA+G9fYsaviCxmAqWzOxgkU7HcmzU=e0LKci2_+5uPUOc+8xb3A@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, torvalds@linux-foundation.org, akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, slade@sladewatkins.com, linus.walleij@linaro.org, brgl@bgdev.pl
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,42 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.09.22 11:07, Thorsten Leemhuis wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=216426
+On Mon, 26 Sep 2022 10:13:31 -0400,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > 
->>  Mattia Orlandi 2022-08-29 17:04:21 UTC
->>
->> System
->> ------
->> - Dell XPS 15 9500
->> - 5.19.4 kernel
->>
->> Problem description
->> -------------------
->> Whenever I plug and then unplug my laptop from AC power using the USB-C port, the system thinks it is still plugged in (i.e., the KDE applet reports "Plugged in but still discharging").
->> If I check in Dell's BIOS, it correctly reports when the power supply is plugged/unplugged; `acpi -V` also correctly shows `Adapter 0: off-line`.
->>
->> On the other hand, `upower -d` incorrectly reports `/org/freedesktop/UPower/devices/line_power_ucsi_source_psy_USBC000o002` as `online: yes`.
->> Moreover, `journalctl` reports `ucsi_acpi USBC000:00: ucsi_handle_connector_change: GET_CONNECTOR_STATUS failed (-110)`.
->>
->> I'm testing the LTS kernel (5.15.63) and the issue does not occur, so I assume it's a regression bug, possibly introduced in kernel 5.18 (I tried downgrading the kernel to version 5.18.16 and the issue was already present).
+> On Mon, 26 Sept 2022 at 16:00, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.4.215 release.
+> > There are 120 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.215-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> See the ticket for more details. Apologies if I forwarded it to the
-> wrong folks, I cover a lot of ground and thus sometimes get things
-> wrong. :-/
+> Following build warnings / errors noticed on arm on stable-rc 5.4.
 > 
-> BTW, I'd also like to add the report to the list of tracked regressions
-> to ensure it's doesn't fall through the cracks in the end:
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> #regzbot introduced: v5.15..v5.18
-> https://bugzilla.kernel.org/show_bug.cgi?id=216426
-> #regzbot ignore-activity
+> Regressions found on arm:
+> 
+>    - build-gcc-8-ixp4xx_defconfig
+>    - build-gcc-11-ixp4xx_defconfig
+>    - build-gcc-12-ixp4xx_defconfig
+>    - build-gcc-9-ixp4xx_defconfig
+>    - build-gcc-10-ixp4xx_defconfig
 
-#regzbot introduced: f7090e0ef360d674f0
+Colour me surprised. [1] explained why this was a bad idea...
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+	M.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+[1] https://lore.kernel.org/all/CAMRc=Md9JKdW8wmbun_0_1y2RQbck7q=vzOkdw6n+FBgpf0h8w@mail.gmail.com/
+
+-- 
+Without deviation from the norm, progress is not possible.
