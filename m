@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0458A5EB602
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24325EB5FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiIZXzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S230196AbiIZXyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIZXz3 (ORCPT
+        with ESMTP id S229544AbiIZXx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:55:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29B563F08;
-        Mon, 26 Sep 2022 16:55:27 -0700 (PDT)
+        Mon, 26 Sep 2022 19:53:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBE99413F;
+        Mon, 26 Sep 2022 16:53:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34F7AB8076B;
-        Mon, 26 Sep 2022 23:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9E0C433C1;
-        Mon, 26 Sep 2022 23:55:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB2986116E;
+        Mon, 26 Sep 2022 23:53:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55594C433C1;
+        Mon, 26 Sep 2022 23:53:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664236524;
-        bh=M5vKo2AC5OEfW8y5bXyxUWVSJ8AMqKMYxEBQGX7Ly64=;
-        h=From:To:Cc:Subject:Date:From;
-        b=D4OQzVjhB74gEU/NdxBLaW8mY1XXDXeu6Gr9LJaVPy63RPWq+qeZV8r1sJdTVoZ2d
-         JLGnkn9njHg3Tp9KmlTlVnUr+O00TMj34Id1LZN4WBRTaJ8p4mj/nnfJsVkTxrnBJf
-         tYmAGSQTTYVNFOFIH4HwK8bUi6tDoZ4xPa1o6kEsMjz9kRYYRPZkFFo+U/cMOdppYW
-         ZO4q24D3/QgmR/m/8xfg/UaAHj9NZU3UxVcXHaAw9D4o16aFe1rk4hgoO20qsi/HS6
-         +r42wT5JCHKlSIO+6lHUsWNfNJuDkXNuN8kh8aMkAmL2twHrAQsqIdgpkJXgiFQXlG
-         NheNiw/iLt4sg==
-From:   broonie@kernel.org
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bitmap tree
-Date:   Tue, 27 Sep 2022 00:53:48 +0100
-Message-Id: <20220926235348.1269963-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1664236432;
+        bh=ss+RqrDvxS78Z81A4zz/FrOgTm3pJNYbCSgCQe3jqMQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HJtmuFa5U1ojMu53aKK7Qqg4UNfWqfRDr9q/Lsiwle74FCdTJKk8ysoF8JKAD0HhO
+         EuM/wBt1WOYJnbRwzGQbKOOS3HOQuWYtRAuAWv6ECwZFE6EgwNRTV+zQJr4cy6L8yp
+         kZFWb4/nwTCxnrUc/fsbVT5EqFR0rZCrlXlb7YJe749meCkCfFFfSel2tQAAWMSnCy
+         F3B9HcrJZvGGM4KKfH/W0nnSOtEhL2nzPyN117T/sSeSfQCEmPTLmYut7/m/DW3rfL
+         1i0Ca2YoIEobg0qCY0ih7t3t9oCr208U7TlHtvkUN6tdh6NbyPOWhbd6tNjDlSXGaj
+         P/H4iuPx9J+yw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 02B6F5C0BE3; Mon, 26 Sep 2022 16:53:52 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 16:53:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220926235351.GC4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220926223751.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+ <A78761F4-5922-418A-AFA3-01101C399778@joelfernandes.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <A78761F4-5922-418A-AFA3-01101C399778@joelfernandes.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,133 +59,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, Sep 26, 2022 at 07:33:17PM -0400, Joel Fernandes wrote:
+> 
+> 
+> > On Sep 26, 2022, at 6:37 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > ﻿On Mon, Sep 26, 2022 at 09:07:12PM +0000, Joel Fernandes wrote:
+> >> Hi Paul,
+> >> 
+> >> On Mon, Sep 26, 2022 at 10:42:40AM -0700, Paul E. McKenney wrote:
+> >> [..]
+> >>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
+> >>>>>>>> +    } else {
+> >>>>>>>> +        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> >>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
+> >>>>>>> 
+> >>>>>>> This WRITE_ONCE() can be dropped out of the "if" statement, correct?
+> >>>>>> 
+> >>>>>> Yes will update.
+> >>>>> 
+> >>>>> Thank you!
+> >>>>> 
+> >>>>>>> If so, this could be an "if" statement with two statements in its "then"
+> >>>>>>> clause, no "else" clause, and two statements following the "if" statement.
+> >>>>>> 
+> >>>>>> I don’t think we can get rid of the else part but I’ll see what it looks like.
+> >>>>> 
+> >>>>> In the function header, s/rhp/rhp_in/, then:
+> >>>>> 
+> >>>>>    struct rcu_head *rhp = rhp_in;
+> >>>>> 
+> >>>>> And then:
+> >>>>> 
+> >>>>>    if (lazy && rhp) {
+> >>>>>        rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
+> >>>>>        rhp = NULL;
+> >>>> 
+> >>>> This enqueues on to the bypass list, where as if lazy && rhp, I want to queue
+> >>>> the new rhp on to the main cblist. So the pseudo code in my patch is:
+> >>>> 
+> >>>> if (lazy and rhp) then
+> >>>>    1. flush bypass CBs on to main list.
+> >>>>    2. queue new CB on to main list.
+> >>> 
+> >>> And the difference is here, correct?  I enqueue to the bypass list,
+> >>> which is then flushed (in order) to the main list.  In contrast, you
+> >>> flush the bypass list, then enqueue to the main list.  Either way,
+> >>> the callback referenced by rhp ends up at the end of ->cblist.
+> >>> 
+> >>> Or am I on the wrong branch of this "if" statement?
+> >> 
+> >> But we have to flush first, and then queue the new one. Otherwise wouldn't
+> >> the callbacks be invoked out of order? Or did I miss something?
+> > 
+> > I don't think so...
+> > 
+> > We want the new callback to be last, right?  One way to do that is to
+> > flush the bypass, then queue the new callback onto ->cblist.  Another way
+> > to do that is to enqueue the new callback onto the end of the bypass,
+> > then flush the bypass.  Why wouldn't these result in the same order?
+> 
+> Yes you are right, sorry. I was fixated on the main list. Both your snippet and my patch will be equivalent then. However I find your snippet a bit confusing, as in it is not immediately obvious - why would we queue something on to a list, if we were about to flush it. But any way, it does make it a clever piece of code in some sense and I am ok with doing it this way ;-)
 
-After merging the bitmap tree, today's linux-next build (x86
-allmodconfig) failed like this:
+As long as the ->cblist.len comes out with the right value.  ;-)
 
-In file included from /tmp/next/build/include/linux/printk.h:573,
-                 from /tmp/next/build/include/linux/kernel.h:29,
-                 from /tmp/next/build/arch/x86/include/asm/percpu.h:27,
-                 from /tmp/next/build/arch/x86/include/asm/nospec-branch.h:14,
-                 from /tmp/next/build/arch/x86/include/asm/paravirt_types.h:40,
-                 from /tmp/next/build/arch/x86/include/asm/ptrace.h:97,
-                 from /tmp/next/build/arch/x86/include/asm/math_emu.h:5,
-                 from /tmp/next/build/arch/x86/include/asm/processor.h:13,
-                 from /tmp/next/build/arch/x86/include/asm/timex.h:5,
-                 from /tmp/next/build/include/linux/timex.h:67,
-                 from /tmp/next/build/include/linux/time32.h:13,
-                 from /tmp/next/build/include/linux/time.h:60,
-                 from /tmp/next/build/include/linux/stat.h:19,
-                 from /tmp/next/build/include/linux/module.h:13,
-                 from /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:9:
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: In function 'rvu_npc_exact_alloc_mem_table_entry':
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:454:20: error: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Werror=format=]
-  454 |  dev_dbg(rvu->dev, "%s: No space in 4 way exact way, weight=%lu\n", __func__,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dynamic_debug.h:223:15: note: in definition of macro '__dynamic_func_call_cls'
-  223 |   func(&id, ##__VA_ARGS__);   \
-      |               ^~~~~~~~~~~
-/tmp/next/build/include/linux/dynamic_debug.h:249:2: note: in expansion of macro '_dynamic_func_call_cls'
-  249 |  _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dynamic_debug.h:272:2: note: in expansion of macro '_dynamic_func_call'
-  272 |  _dynamic_func_call(fmt, __dynamic_dev_dbg,   \
-      |  ^~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dev_printk.h:155:2: note: in expansion of macro 'dynamic_dev_dbg'
-  155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dev_printk.h:155:23: note: in expansion of macro 'dev_fmt'
-  155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-      |                       ^~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:454:2: note: in expansion of macro 'dev_dbg'
-  454 |  dev_dbg(rvu->dev, "%s: No space in 4 way exact way, weight=%lu\n", __func__,
-      |  ^~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:454:63: note: format string is defined here
-  454 |  dev_dbg(rvu->dev, "%s: No space in 4 way exact way, weight=%lu\n", __func__,
-      |                                                             ~~^
-      |                                                               |
-      |                                                               long unsigned int
-      |                                                             %u
-In file included from /tmp/next/build/include/linux/device.h:15,
-                 from /tmp/next/build/include/linux/pci.h:37,
-                 from /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:10:
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: In function 'rvu_npc_exact_alloc_id':
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:21: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
-  492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
-      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
-  110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
-      |                ^~~
-/tmp/next/build/include/linux/dev_printk.h:144:49: note: in expansion of macro 'dev_fmt'
-  144 |  dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-      |                                                 ^~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:3: note: in expansion of macro 'dev_err'
-  492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
-      |   ^~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:51: note: format string is defined here
-  492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
-      |                                                 ~~^
-      |                                                   |
-      |                                                   long unsigned int
-      |                                                 %u
-In file included from /tmp/next/build/include/linux/device.h:15,
-                 from /tmp/next/build/include/linux/pci.h:37,
-                 from /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:10:
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c: In function 'rvu_npc_exact_alloc_cam_table_entry':
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:525:22: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
-  525 |   dev_info(rvu->dev, "%s: No space in exact cam table, weight=%lu\n", __func__,
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
-  110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
-      |                ^~~
-/tmp/next/build/include/linux/dev_printk.h:150:51: note: in expansion of macro 'dev_fmt'
-  150 |  dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-      |                                                   ^~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:525:3: note: in expansion of macro 'dev_info'
-  525 |   dev_info(rvu->dev, "%s: No space in exact cam table, weight=%lu\n", __func__,
-      |   ^~~~~~~~
-/tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:525:65: note: format string is defined here
-  525 |   dev_info(rvu->dev, "%s: No space in exact cam table, weight=%lu\n", __func__,
-      |                                                               ~~^
-      |                                                                 |
-      |                                                                 long unsigned int
-      |                                                               %u
-cc1: all warnings being treated as errors
-make[8]: *** [/tmp/next/build/scripts/Makefile.build:249: drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.o] Error 1
-make[7]: *** [/tmp/next/build/scripts/Makefile.build:440: drivers/net/ethernet/marvell/octeontx2/af] Error 2
-make[6]: *** [/tmp/next/build/scripts/Makefile.build:440: drivers/net/ethernet/marvell/octeontx2] Error 2
-make[5]: *** [/tmp/next/build/scripts/Makefile.build:440: drivers/net/ethernet/marvell] Error 2
-make[5]: *** Waiting for unfinished jobs....
-/tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c: In function 'intel_sseu_print_ss_info':
-/tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:867:39: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
-  867 |   seq_printf(m, "  %s Geometry DSS: %lu\n", type,
-      |                                     ~~^
-      |                                       |
-      |                                       long unsigned int
-      |                                     %u
-  868 |       bitmap_weight(sseu->geometry_subslice_mask.xehp,
-      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |       |
-      |       unsigned int
-  869 |       XEHP_BITMAP_BITS(sseu->geometry_subslice_mask)));
-      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:870:38: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
-  870 |   seq_printf(m, "  %s Compute DSS: %lu\n", type,
-      |                                    ~~^
-      |                                      |
-      |                                      long unsigned int
-      |                                    %u
-  871 |       bitmap_weight(sseu->compute_subslice_mask.xehp,
-      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |       |
-      |       unsigned int
-  872 |       XEHP_BITMAP_BITS(sseu->compute_subslice_mask)));
-      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+							Thanx, Paul
 
-These look like they have probably been there for a while but I've used
-a slightly different compiler version to Stephen so they're showing up
-now once the bitmap tree is merged.  I will have a proper look tomorrow
-hopefully but for now I've dropped the bitmap tree as it's getting very
-late and it is likely I'll not finish the -next run today at all.
+> Thanks,
+> 
+>   - Joel
+> 
+> 
+> > 
+> >>>> else
+> >>>>    1. flush bypass CBs on to main list
+> >>>>    2. queue new CB on to bypass list.
+> >>>> 
+> >>>>>    }
+> >>>>>    rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> >>>>>    WRITE_ONCE(rdp->lazy_len, 0);
+> >>>>> 
+> >>>>> Or did I mess something up?
+> >>>> 
+> >>>> So the rcu_cblist_flush_enqueue() has to happen before the
+> >>>> rcu_cblist_enqueue() to preserve the ordering of flushing into the main list,
+> >>>> and queuing on to the main list for the "if". Where as in your snip, the
+> >>>> order is reversed.
+> >>> 
+> >>> Did I pick the correct branch of the "if" statement above?  Or were you
+> >>> instead talking about the "else" clause?
+> >>> 
+> >>> I would have been more worried about getting cblist->len right.
+> >> 
+> >> Hmm, I think my concern was more the ordering of callbacks, and moving the
+> >> write to length should be Ok.
+> > 
+> > OK, sounds good to me!  ;-)
+> > 
+> >>>> If I consolidate it then, it looks like the following. However, it is a bit
+> >>>> more unreadable. I could instead just take the WRITE_ONCE out of both if/else
+> >>>> and move it to after the if/else, that would be cleanest. Does that sound
+> >>>> good to you? Thanks!
+> >>> 
+> >>> Let's first figure out whether or not we are talking past one another.  ;-)
+> >> 
+> >> Haha yeah :-)
+> > 
+> > So were we?  ;-)
+> > 
+> >                            Thanx, Paul
