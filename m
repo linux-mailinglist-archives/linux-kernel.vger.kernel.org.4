@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AA65EA4B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9C95EA538
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbiIZLus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S239038AbiIZL72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239107AbiIZLtW (ORCPT
+        with ESMTP id S238275AbiIZL4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:49:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B85C75CC5;
-        Mon, 26 Sep 2022 03:48:15 -0700 (PDT)
+        Mon, 26 Sep 2022 07:56:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1EC79EF1;
+        Mon, 26 Sep 2022 03:51:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD6960AF5;
-        Mon, 26 Sep 2022 10:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E282C433D6;
-        Mon, 26 Sep 2022 10:40:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA25BB801BF;
+        Mon, 26 Sep 2022 10:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07438C433D6;
+        Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188853;
-        bh=sgHXT3LlirVMkqBoHOPqiiag2KMBYEjerSrFk8IJX/A=;
+        s=korg; t=1664189436;
+        bh=ta6WOsgekpI1LcjSNwrf+fIaiHq0dPDmyVFgINRy+pA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bL5tqcw/prjVFrkBGRqaKgwLWgvyYbhCImDazM+TziHe05IRSMbfPTXD9lftCC/Sh
-         TbYpjK7x0QGllP2dByG/46fVLZvnWlWaatYsJEZc2RWRGx/iQbOFx/DwwXrbjVLVdH
-         sI/F2INtbei8wxXA1zIDUUVVlnY6mRLe4dcmJguk=
+        b=uLZnjgQFzM4Dhht1dVVt6pCh4ojF/QQ7svuTkqAa/vAoxUfkQsQrM7z0+Z1mXcZRG
+         LnlAfh9QiwqVZ6dF1L6uvkmyiArCRa2bBtP3L0pY7hlY8KO//VRG5PGa7Ybwtv+09J
+         A9LEFKpvJFKxLoSCDZdLVSfh7f8hmpUeP1LbBn3A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Omar Avelar <omar.avelar@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH 5.15 142/148] devdax: Fix soft-reservation memory description
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 187/207] pmem: fix a name collision
 Date:   Mon, 26 Sep 2022 12:12:56 +0200
-Message-Id: <20220926100801.537407906@linuxfoundation.org>
+Message-Id: <20220926100814.986280270@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,58 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Jane Chu <jane.chu@oracle.com>
 
-commit 67feaba413ec68daf4124e9870878899b4ed9a0e upstream.
+[ Upstream commit 149d17140bcedc906082c4f874dec98b1ffc5a90 ]
 
-The "hmem" platform-devices that are created to represent the
-platform-advertised "Soft Reserved" memory ranges end up inserting a
-resource that causes the iomem_resource tree to look like this:
+Kernel test robot detected name collision when compiled on 'um'
+architecture.  Rename "to_phys()"  to "pmem_to_phys()".
 
-340000000-43fffffff : hmem.0
-  340000000-43fffffff : Soft Reserved
-    340000000-43fffffff : dax0.0
+>> drivers/nvdimm/pmem.c:48:20: error: conflicting types for 'to_phys'; have 'phys_addr_t(struct pmem_device *, phys_addr_t)' {aka 'long long unsigned int(struct pmem_device *, long long unsigned int)'}
+      48 | static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
+         |                    ^~~~~~~
+   In file included from arch/um/include/asm/page.h:98,
+                    from arch/um/include/asm/thread_info.h:15,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/um/include/generated/asm/preempt.h:1,
 
-This is because insert_resource() reparents ranges when they completely
-intersect an existing range.
+   arch/um/include/shared/mem.h:12:29: note: previous definition of 'to_phys' with type 'long unsigned int(void *)'
+      12 | static inline unsigned long to_phys(void *virt)
+         |                             ^~~~~~~
 
-This matters because code that uses region_intersects() to scan for a
-given IORES_DESC will only check that top-level 'hmem.0' resource and
-not the 'Soft Reserved' descendant.
+vim +48 drivers/nvdimm/pmem.c
+    47
+  > 48	static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
+    49	{
+    50		return pmem->phys_addr + offset;
+    51	}
+    52
 
-So, to support EINJ (via einj_error_inject()) to inject errors into
-memory hosted by a dax-device, be sure to describe the memory as
-IORES_DESC_SOFT_RESERVED. This is a follow-on to:
-
-commit b13a3e5fd40b ("ACPI: APEI: Fix _EINJ vs EFI_MEMORY_SP")
-
-...that fixed EINJ support for "Soft Reserved" ranges in the first
-instance.
-
-Fixes: 262b45ae3ab4 ("x86/efi: EFI soft reservation to E820 enumeration")
-Reported-by: Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>
-Tested-by: Ricardo Sandoval Torres <ricardo.sandoval.torres@intel.com>
-Cc: <stable@vger.kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Omar Avelar <omar.avelar@intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Mark Gross <markgross@kernel.org>
-Link: https://lore.kernel.org/r/166397075670.389916.7435722208896316387.stgit@dwillia2-xfh.jf.intel.com
+Fixes: 9409c9b6709e (pmem: refactor pmem_clear_poison())
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jane Chu <jane.chu@oracle.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220630182802.3250449-1-jane.chu@oracle.com
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dax/hmem/device.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/nvdimm/pmem.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/dax/hmem/device.c
-+++ b/drivers/dax/hmem/device.c
-@@ -15,6 +15,7 @@ void hmem_register_device(int target_nid
- 		.start = r->start,
- 		.end = r->end,
- 		.flags = IORESOURCE_MEM,
-+		.desc = IORES_DESC_SOFT_RESERVED,
- 	};
- 	struct platform_device *pdev;
- 	struct memregion_info info;
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 629d10fcf53b..b9f1a8e9f88c 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -45,7 +45,7 @@ static struct nd_region *to_region(struct pmem_device *pmem)
+ 	return to_nd_region(to_dev(pmem)->parent);
+ }
+ 
+-static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
++static phys_addr_t pmem_to_phys(struct pmem_device *pmem, phys_addr_t offset)
+ {
+ 	return pmem->phys_addr + offset;
+ }
+@@ -63,7 +63,7 @@ static phys_addr_t to_offset(struct pmem_device *pmem, sector_t sector)
+ static void pmem_mkpage_present(struct pmem_device *pmem, phys_addr_t offset,
+ 		unsigned int len)
+ {
+-	phys_addr_t phys = to_phys(pmem, offset);
++	phys_addr_t phys = pmem_to_phys(pmem, offset);
+ 	unsigned long pfn_start, pfn_end, pfn;
+ 
+ 	/* only pmem in the linear map supports HWPoison */
+@@ -97,7 +97,7 @@ static void pmem_clear_bb(struct pmem_device *pmem, sector_t sector, long blks)
+ static long __pmem_clear_poison(struct pmem_device *pmem,
+ 		phys_addr_t offset, unsigned int len)
+ {
+-	phys_addr_t phys = to_phys(pmem, offset);
++	phys_addr_t phys = pmem_to_phys(pmem, offset);
+ 	long cleared = nvdimm_clear_poison(to_dev(pmem), phys, len);
+ 
+ 	if (cleared > 0) {
+-- 
+2.35.1
+
 
 
