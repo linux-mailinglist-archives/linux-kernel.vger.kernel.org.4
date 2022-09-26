@@ -2,80 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A895EB2F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0079D5EB2F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiIZVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S231384AbiIZVSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiIZVRb (ORCPT
+        with ESMTP id S229505AbiIZVSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:17:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6A2796A7;
-        Mon, 26 Sep 2022 14:17:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D2196144B;
-        Mon, 26 Sep 2022 21:17:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E15C433D7;
-        Mon, 26 Sep 2022 21:17:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664227046;
-        bh=6GSn94Blq3J790kWs2lNqt3NgwBFtoPMQx4tbDun8ZE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MCEmjgVe9iLcMmSWH6gZxsW71KKhS5j6Z112TuWs/so7f8Sqt0P5WJXl3SDFzUcYr
-         PB7fSm717V70sS0jDVtBuBcwvmxrV5ByTbaBtVM8UYcw5inJ6Aayn6oFjK7YmToK1s
-         0TnqJsVAiz97k13QORTEENy+nJKd8FhNqgqcAsDxvxrCWm/eZEixH+xGI0R9R814ru
-         P0ReoT5JyjgkF6rL7jEez4uR3O6w82WyA50AMxRmdTBuFjGzqJFJ+IkuxImU98vaVQ
-         UpjNpFYxFI8ZmQCk6QO+gzYD09/w4loNIcqennjUYPFwC7wwkHUUdwJ42H59YutdnD
-         nyjMsCzrdxxrA==
-Date:   Mon, 26 Sep 2022 16:17:24 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Grzegorz Halat <ghalat@redhat.com>
-Cc:     stefan.buehler@tik.uni-stuttgart.de, sean.v.kelley@linux.intel.com,
-        bhelgaas@google.com, bp@alien8.de, corbet@lwn.net,
-        gregkh@linuxfoundation.org, kar.hin.ong@ni.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, mingo@redhat.com, sassmann@kpanic.de,
-        tglx@linutronix.de, x86@kernel.org
-Subject: Re: boot interrupt quirk (also in 4.19.y) breaks serial ports (was:
- [PATCH v2 0/2] pci: Add boot interrupt quirk mechanism for Xeon chipsets)
-Message-ID: <20220926211724.GA1625628@bhelgaas>
+        Mon, 26 Sep 2022 17:18:05 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BCB7E80D;
+        Mon, 26 Sep 2022 14:18:04 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 980AB1C0017; Mon, 26 Sep 2022 23:18:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1664227082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uHN29aw8Ael4kXC3mFMWHH6lL2txDyW+9yNOhYFHFyU=;
+        b=GKROv+ztxHRiKx38LumNvHDMBLABxrJWb1GMVS0/b5OkTG5TK3TMsTw805H0d6e6dV5xPR
+        Z1NCgXXb8TL8ZYDSRLa1iy2R1iE0qC9/iwJtmJG0VuULxhA9F/JWdRwkr+c+b4qE9jGtRX
+        7yqarXZzkx08S/dw8NXIfirjfCV0/0U=
+Date:   Mon, 26 Sep 2022 23:18:01 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     broonie@kernel.org
+Cc:     Bernardo Rodrigues <bernardocrodrigues@live.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the leds tree
+Message-ID: <20220926211801.GA18066@duo.ucw.cz>
+References: <20220926205301.614077-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220923192030.162412-1-ghalat@redhat.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220926205301.614077-1-broonie@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:20:30PM +0200, Grzegorz Halat wrote:
-> On Wed, Sep 16 2020 at 12:12, Stefan Bühler wrote:
-> > this quirk breaks our serial ports PCIe card (i.e. we don't see any
-> > output from the connected devices; no idea whether anything we send
-> > reaches them):
-> 
-> I have the same problem, also with a PCI serial adapter from Oxford
-> Semiconductor.  I've bisected the kernel and it was introduced in
-> b88bf6c3b6ff.  When the system is booted with "pci=noioapicquirk"
-> then the PCI card works fine.  The CPU is Intel Xeon E5-2680 v3 @
-> 2.50GHz.
-> 
-> Sean, do you have any news about this issue?
 
-I think Sean has moved on and isn't available to work this issue.
+--/04w6evG8XlLl3ft
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-To help whoever *can* work on it, would you mind attaching the
-complete dmesg log and "sudo lspci -vv" output for your system?  Then
-we can potentially tweak the quirk to not break your system.
+Hi!
 
-Bjorn
+> After merging the leds tree, today's linux-next build (x86 allmodconfig)
+> failed like this:
+>=20
+> /tmp/next/build/drivers/leds/leds-pca963x.c: In function 'pca963x_registe=
+r_leds':
+> /tmp/next/build/drivers/leds/leds-pca963x.c:355:3: error: this 'if' claus=
+e does not guard... [-Werror=3Dmisleading-indentation]
+>   355 |   if (hw_blink)
+>       |   ^~
+> /tmp/next/build/drivers/leds/leds-pca963x.c:357:4: note: ...this statemen=
+t, but the latter is misleadingly indented as if it were guarded by the 'if'
+>   357 |    led->blinking =3D false;
+>       |    ^~~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>    fd6dd9584ed3ee6deb ("leds: pca963x: fix blink with hw acceleration")
+
+Thanks, fixed and pushed out. Someone please check my fix is right.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--/04w6evG8XlLl3ft
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzIXCQAKCRAw5/Bqldv6
+8rr2AJsHxmPgkAUb+LSbYmMfBR0Jp2zJeQCfZCZjcyPCk3g4N7RQU8B7QfwIrSU=
+=8SPO
+-----END PGP SIGNATURE-----
+
+--/04w6evG8XlLl3ft--
