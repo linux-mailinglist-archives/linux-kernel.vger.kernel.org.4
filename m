@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBD75EAEC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5B45EAEC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiIZR4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S229783AbiIZR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiIZRzg (ORCPT
+        with ESMTP id S229739AbiIZRzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:55:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE39061D44
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:32:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id z13so15654514ejp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:32:52 -0700 (PDT)
+        Mon, 26 Sep 2022 13:55:39 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56FF642F9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:33:01 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id p69so9383273yba.0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:33:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xi2G+BsPgSScnEoa84XoZM1sbuZ3s1TxWbx1fy5OnFQ=;
-        b=dB9ShWeAoemK8HvsNrZeb0wa+SP+dM2SqTIjA1wcBvy2YebMogV0sfju5Fdw1/NqwR
-         ov4mqnS5uJcJugeRKiCITxHiBzVmmWNcfTp2elc3aR/J/iuzTcefzBDTdsGlhaCX/Nk5
-         9COMZLPtGjHXlfTdFgOI/c8O43In1fTC+1l8wOnSuWcZwDl7pg1jcL3bkl32vEjyICKq
-         GIhC1RzUcdGiUk/USdXP6RF5kyh+fCyGJTf1iE/Uv58KFVD92HA0w8/SN6+9y0e7Og1C
-         jcZTSZe5G1c/5cBPemgoMoRFEIk5GM5DqtbPfgIW/zlygkH+LiAY+YzmdC3Fb8olYBzO
-         gUHQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=TOL7/M5VC7IyaSB3mrG/Ev31pWD9V/lWqppYMcTBfKM=;
+        b=p6wexZ/Y0XqAhWAhWQ77q6u0CZ18nCzFEAe4bvVo7S0nEW6WuU84QbuIrXyLDHCaTI
+         3KVY8/kPjnuU77CzmlnP2RX4B3VTuD+DX8rWAEp9ezkmsub624war7PTzocq0HhayQIP
+         GMxA2Fj0qaw1SQGShM7S0FWzngjRfNeVBrilh6JsDYrekTU3j+x+9dO9Jg8FhujrX5gZ
+         /TgpCO0SU+Id76XQMhc88uxX0Gxua10lmdNBqa+I4rCCzSzqO6kIbK1MKmXUlUBcdR1P
+         LOKdsKRMbjEv0YfhCObzK+sUJ9DWdA8R5U5Pli/Q77cTZRdgCOChdjHXdIV50NkngFID
+         P8Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=xi2G+BsPgSScnEoa84XoZM1sbuZ3s1TxWbx1fy5OnFQ=;
-        b=zdaU6wO1A9FzTQsAcl9Td16xCf8K2lJRAfzSxOcC6SGMQEAsKJjDoQwodbJ58+z8zx
-         UM/wuD0PPKatcxLjjVBWsVad0kqyKYNy54S9ATa9dqIj7mxl1jOT2UlL9E6j2v/4NgnP
-         VBpRIW9eVbLnqDGptjPrvbfQl+zGuEM59fzfpQc5ELTNQjsJ9VMtuoMh0jI0cuTizfTb
-         vfrS4tUQfcxoeK8xVpLohnm64PRtmcUvnmDJH9NvmeIubhTLImT+Xjezd6UStcjptmxJ
-         SkN1voNnhpmHUhjd9/9S7KTLL1m7DoH/Y9d2M2ZpfZAnalSyRO/SlaYKlMbNJskAp52W
-         q9fQ==
-X-Gm-Message-State: ACrzQf1mU/NqUGoKfDMH/xEvNsRwpTT4AUqlNuqXC3SrG2gU2SEBAl4a
-        X8FqwNhfvNCPAp8XaeSgdUA=
-X-Google-Smtp-Source: AMsMyM5xgm78mRRMZIhRXfbbuWI2UfC8uHaO4bxogWFeRF8kouBkDSMfIrMwz4EFp0GZkub8DSS5tQ==
-X-Received: by 2002:a17:907:a049:b0:77c:1f27:1b28 with SMTP id gz9-20020a170907a04900b0077c1f271b28mr20641845ejc.20.1664213571368;
-        Mon, 26 Sep 2022 10:32:51 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb59.dynamic.kabel-deutschland.de. [95.90.187.89])
-        by smtp.gmail.com with ESMTPSA id y4-20020a1709060a8400b00782667df018sm6554617ejf.54.2022.09.26.10.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 10:32:51 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 3/3] staging: r8188eu: remove hal/odm_RegConfig8188E.c
-Date:   Mon, 26 Sep 2022 19:32:43 +0200
-Message-Id: <20220926173243.8767-4-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926173243.8767-1-straube.linux@gmail.com>
-References: <20220926173243.8767-1-straube.linux@gmail.com>
+        bh=TOL7/M5VC7IyaSB3mrG/Ev31pWD9V/lWqppYMcTBfKM=;
+        b=mFg/M6efY959xHIazyTfaHojo3Pe5tD04/rRVoUSm/4La6e79GlOo1ayK2GdxJwKtr
+         OWiGd7I77l9IIuCvMLhZ7+zpxhWKROqr4O8Sw+VQcylaXMAQ+MqjD/TnYk4KhEgbp3cS
+         Aqz2nueIzO7qBnAqACMzRL2hpQFUCOLoFHdQ7eKWjMzhRzAl6FNNCm9NSosg1G6jLlUH
+         xz79inIezmmPllmtUisi2o8cjzJUc0bKUBAC3lCvnTGfrGErA8uek/MskdkMcgviuyNa
+         Js8PaMpCmuY3OLytZ3vDaXos391B4AERz4DYDMOEL9maOcaq1o77QeQes6U3stKZmigG
+         wydQ==
+X-Gm-Message-State: ACrzQf00WGxgM9e+mZ7pC2mzQXA31ULtwdhjsHGkt7PIHLax05kHnbqm
+        vVhK2w+soqDNQ8daNu1crjPVSpnBqPdcd+ZFovyvxw==
+X-Google-Smtp-Source: AMsMyM72814D3Zid3Z4+5u+XXaRlAxLN2FtAB0S1kLY4fcWKgXglodA5Dypmeb7prlduUu0gUuE2/e2P2QvoFQP/RfA=
+X-Received: by 2002:a05:6902:102c:b0:6b4:86ac:1436 with SMTP id
+ x12-20020a056902102c00b006b486ac1436mr21059512ybt.368.1664213580392; Mon, 26
+ Sep 2022 10:33:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
+ <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org> <20220918092849.GA10314@u164.east.ru>
+ <CADxRZqyyHAtzaaPjcKi8AichGew2yi-_vQcKoLoxPanLvXZL0g@mail.gmail.com>
+ <20220921170259.GI8331@blackbody.suse.cz> <CADxRZqyAG5Co9hLEp6p8vPC9WyGERR6un-3Rqapyv14G4vPXJw@mail.gmail.com>
+ <20220926102812.2b0696a7@kernel.org>
+In-Reply-To: <20220926102812.2b0696a7@kernel.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 26 Sep 2022 10:32:49 -0700
+Message-ID: <CALvZod5QProaWZgT9ykb-vrrRHBpLfqVGgW2jd-Td8aX5MBZFw@mail.gmail.com>
+Subject: Re: [sparc64] fails to boot, (was: Re: [PATCH memcg v6] net: set
+ proper memcg for net_init hooks allocations)
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Vasily Averin <vvs@openvz.org>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Sparc kernel list <sparclinux@vger.kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,202 +89,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All remaining functions in hal/odm_RegConfig8188E.c are only used
-in hal/HalHWImg8188E_BB.c. Make them static and remove the now empty
-file hal/odm_RegConfig8188E.c and the header odm_RegConfig8188E.h.
+On Mon, Sep 26, 2022 at 10:28 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon, 26 Sep 2022 16:06:08 +0300 Anatoly Pugachev wrote:
+> > On Wed, Sep 21, 2022 at 8:03 PM Michal Koutn=C3=BD <mkoutny@suse.com> w=
+rote:
+> > > On Wed, Sep 21, 2022 at 05:44:56PM +0300, Anatoly Pugachev <matorola@=
+gmail.com> wrote:
+> > > > reverting this patch makes my sparc64 box boot successfully.
+> > >
+> > > The failed address falls into vmmemmap region (per your boot log
+> > > output). It looks like the respective page/folio (of init_net struct)=
+ is
+> > > unbacked there (and likely folio_test_slab fails dereferencing ->flag=
+s).
+> > >
+> > > Would you mind sharing your kernel's config?
+> > > (I'm most curious about CONFIG_SPARSMEM_VMEMMAP, I'm not familiar wit=
+h
+> > > your arch at all though.)
+> >
+> > mator@ttip:~/dmesg$ zcat config-6.0.0-rc6-00010-gb7f0f527dc3c.gz | grep=
+ VMEMMAP
+> > CONFIG_SPARSEMEM_VMEMMAP_ENABLE=3Dy
+> > CONFIG_SPARSEMEM_VMEMMAP=3Dy
+> >
+> > I do upload config and boot logs to
+> > https://github.com/mator/sparc64-dmesg
+> >
+> > building a new kernel version/releases as 'make olddefconfig && make -j=
+'
+> > current version of booted 6.0.0-rc6 is available as
+> > https://github.com/mator/sparc64-dmesg/blob/master/config-6.0.0-rc6-000=
+10-gb7f0f527dc3c.gz
+>
+> Forgive my uniformed chime-in but Linus seemed happy with the size of
+> -rc7 and now I'm worried there won't be an -rc8. AFAICT this is a 6.0
+> regression. Vasily, Shakeel, do we have a plan to fix this?
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/Makefile              |  1 -
- .../staging/r8188eu/hal/HalHWImg8188E_BB.c    | 50 +++++++++++++++++
- .../staging/r8188eu/hal/odm_RegConfig8188E.c  | 54 -------------------
- .../r8188eu/include/odm_RegConfig8188E.h      | 16 ------
- .../staging/r8188eu/include/rtl8188e_hal.h    |  1 -
- 5 files changed, 50 insertions(+), 72 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
- delete mode 100644 drivers/staging/r8188eu/include/odm_RegConfig8188E.h
-
-diff --git a/drivers/staging/r8188eu/Makefile b/drivers/staging/r8188eu/Makefile
-index f5091a3ed4d2..fd494c2299e6 100644
---- a/drivers/staging/r8188eu/Makefile
-+++ b/drivers/staging/r8188eu/Makefile
-@@ -10,7 +10,6 @@ r8188eu-y = \
- 		hal/hal_com.o \
- 		hal/odm.o \
- 		hal/odm_HWConfig.o \
--		hal/odm_RegConfig8188E.o \
- 		hal/odm_RTL8188E.o \
- 		hal/rtl8188e_cmd.o \
- 		hal/rtl8188e_dm.o \
-diff --git a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-index 7901d0afa2e7..a4eb2879b77e 100644
---- a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-+++ b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-@@ -166,6 +166,13 @@ static u32 array_agc_tab_1t_8188e[] = {
- 		0xC78, 0x407F0001,
- };
- 
-+static void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
-+{
-+	rtl8188e_PHY_SetBBReg(pDM_Odm->Adapter, Addr, Bitmask, Data);
-+	/*  Add 1us delay between BB/RF register setting. */
-+	udelay(1);
-+}
-+
- enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
- {
- 	u32     hex         = 0;
-@@ -442,6 +449,30 @@ static u32 array_phy_reg_1t_8188e[] = {
- 		0xF00, 0x00000300,
- };
- 
-+static void odm_ConfigBB_PHY_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
-+{
-+	if (Addr == 0xfe) {
-+		msleep(50);
-+	} else if (Addr == 0xfd) {
-+		mdelay(5);
-+	} else if (Addr == 0xfc) {
-+		mdelay(1);
-+	} else if (Addr == 0xfb) {
-+		udelay(50);
-+	} else if (Addr == 0xfa) {
-+		udelay(5);
-+	} else if (Addr == 0xf9) {
-+		udelay(1);
-+	} else {
-+		if (Addr == 0xa24)
-+			pDM_Odm->RFCalibrateInfo.RegA24 = Data;
-+		rtl8188e_PHY_SetBBReg(pDM_Odm->Adapter, Addr, Bitmask, Data);
-+
-+		/*  Add 1us delay between BB/RF register setting. */
-+		udelay(1);
-+	}
-+}
-+
- enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
- {
- 	u32     hex         = 0;
-@@ -647,6 +678,25 @@ static u32 array_phy_reg_pg_8188e[] = {
- 
- };
- 
-+static void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask,
-+					  u32 Data)
-+{
-+	if (Addr == 0xfe)
-+		msleep(50);
-+	else if (Addr == 0xfd)
-+		mdelay(5);
-+	else if (Addr == 0xfc)
-+		mdelay(1);
-+	else if (Addr == 0xfb)
-+		udelay(50);
-+	else if (Addr == 0xfa)
-+		udelay(5);
-+	else if (Addr == 0xf9)
-+		udelay(1);
-+	else
-+		storePwrIndexDiffRateOffset(pDM_Odm->Adapter, Addr, Bitmask, Data);
-+}
-+
- void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
- {
- 	u32  hex;
-diff --git a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
-deleted file mode 100644
-index 963697574e9e..000000000000
---- a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
-+++ /dev/null
-@@ -1,54 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#include "../include/drv_types.h"
--
--void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
--{
--	rtl8188e_PHY_SetBBReg(pDM_Odm->Adapter, Addr, Bitmask, Data);
--	/*  Add 1us delay between BB/RF register setting. */
--	udelay(1);
--}
--
--void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
--				   u32 Bitmask, u32 Data)
--{
--	if (Addr == 0xfe)
--		msleep(50);
--	else if (Addr == 0xfd)
--		mdelay(5);
--	else if (Addr == 0xfc)
--		mdelay(1);
--	else if (Addr == 0xfb)
--		udelay(50);
--	else if (Addr == 0xfa)
--		udelay(5);
--	else if (Addr == 0xf9)
--		udelay(1);
--	else
--		storePwrIndexDiffRateOffset(pDM_Odm->Adapter, Addr, Bitmask, Data);
--}
--
--void odm_ConfigBB_PHY_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
--{
--	if (Addr == 0xfe) {
--		msleep(50);
--	} else if (Addr == 0xfd) {
--		mdelay(5);
--	} else if (Addr == 0xfc) {
--		mdelay(1);
--	} else if (Addr == 0xfb) {
--		udelay(50);
--	} else if (Addr == 0xfa) {
--		udelay(5);
--	} else if (Addr == 0xf9) {
--		udelay(1);
--	} else {
--		if (Addr == 0xa24)
--			pDM_Odm->RFCalibrateInfo.RegA24 = Data;
--		rtl8188e_PHY_SetBBReg(pDM_Odm->Adapter, Addr, Bitmask, Data);
--
--		/*  Add 1us delay between BB/RF register setting. */
--		udelay(1);
--	}
--}
-diff --git a/drivers/staging/r8188eu/include/odm_RegConfig8188E.h b/drivers/staging/r8188eu/include/odm_RegConfig8188E.h
-deleted file mode 100644
-index ce8af50d13bb..000000000000
---- a/drivers/staging/r8188eu/include/odm_RegConfig8188E.h
-+++ /dev/null
-@@ -1,16 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#ifndef __INC_ODM_REGCONFIG_H_8188E
--#define __INC_ODM_REGCONFIG_H_8188E
--
--void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
--			    u32 Bitmask, u32 Data);
--
--void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
--				   u32 Bitmask, u32 Data);
--
--void odm_ConfigBB_PHY_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
--			    u32 Bitmask, u32 Data);
--
--#endif
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-index 64cdc2fad20e..ed4091e7cc7e 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-@@ -23,7 +23,6 @@
- #include "HalHWImg8188E_MAC.h"
- #include "HalHWImg8188E_RF.h"
- #include "HalHWImg8188E_BB.h"
--#include "odm_RegConfig8188E.h"
- #include "odm_RTL8188E.h"
- 
- #define DRVINFO_SZ	4 /*  unit is 8bytes */
--- 
-2.37.3
-
+I was actually waiting for Vasily to respond. Anyways, I think the
+easiest way to proceed is to revert the commit 1d0403d20f6c ("net: set
+proper memcg for net_init hooks allocations"). We can debug the issue
+in the next cycle.
