@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624BB5EA27B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218C65EA06A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbiIZLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S236089AbiIZKhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237305AbiIZLHZ (ORCPT
+        with ESMTP id S236313AbiIZKeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:07:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DE751402;
-        Mon, 26 Sep 2022 03:34:26 -0700 (PDT)
+        Mon, 26 Sep 2022 06:34:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00285245D;
+        Mon, 26 Sep 2022 03:21:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6CFCB80942;
-        Mon, 26 Sep 2022 10:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60649C433D6;
-        Mon, 26 Sep 2022 10:34:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B565960BB7;
+        Mon, 26 Sep 2022 10:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4F8C43148;
+        Mon, 26 Sep 2022 10:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188458;
-        bh=h62uxua1+0TpFbufiuCzOyC10k0JkQvNcXqCkOcpJsM=;
+        s=korg; t=1664187696;
+        bh=2eD7QGliI3wXPdxG3FW/UmNFLlJHY7urDvH1z6VQP54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xd34K33r6Af4uK5CxIC0C6ULgEY28qtxL+Hk5ENdUcLWZkwQMc99Ss+I4OsQMsqyi
-         3hQuIhFKBexZ1ghkJTIkNk7tk9D7WAI1yOvJR7vwhrzE58VKdmUhxQ6GOBmhieR2Zw
-         KGPpsSmrHUE2C88LpfDnOcGAEwFN8AUMwJ/a99cM=
+        b=RgkcZ7RC8EVztKZ7tV0bbJNLUb3M1jQCWtjNbA6oVtGsxFl2WcCuelcl5a0lri+Yl
+         3EzWe0tCGfsBPXD86G6XOG2be/z55Ky+FRJ0voUudq/QWmcu9+PhbtrsdfppYtEsib
+         7/eTx+4SAY5yHZYsL3TOgfZcT3NzTexJ1VsrqJyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 002/148] drm/amdgpu: make sure to init common IP before gmc
+Subject: [PATCH 5.4 003/120] gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
 Date:   Mon, 26 Sep 2022 12:10:36 +0200
-Message-Id: <20220926100756.158888817@linuxfoundation.org>
+Message-Id: <20220926100750.666778118@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit a8671493d2074950553da3cf07d1be43185ef6c6 ]
+[ Upstream commit 279c12df8d2efb28def9d037f288cbfb97c30fe2 ]
 
-Move common IP init before GMC init so that HDP gets
-remapped before GMC init which uses it.
+Commit e39d5ef67804 ("powerpc/5xxx: extend mpc8xxx_gpio driver to support
+mpc512x gpios") implemented support for IRQ_TYPE_LEVEL_LOW flow type in
+mpc512x via falling edge type. Do same for mpc85xx which support was added
+in commit 345e5c8a1cc3 ("powerpc: Add interrupt support to mpc8xxx_gpio").
 
-This fixes the Unsupported Request error reported through
-AER during driver load. The error happens as a write happens
-to the remap offset before real remapping is done.
+Fixes probing of lm90 hwmon driver on mpc85xx based board which use level
+interrupt. Without it kernel prints error and refuse lm90 to work:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216373
+    [   15.258370] genirq: Setting trigger mode 8 for irq 49 failed (mpc8xxx_irq_set_type+0x0/0xf8)
+    [   15.267168] lm90 0-004c: cannot request IRQ 49
+    [   15.272708] lm90: probe of 0-004c failed with error -22
 
-The error was unnoticed before and got visible because of the commit
-referenced below. This doesn't fix anything in the commit below, rather
-fixes the issue in amdgpu exposed by the commit. The reference is only
-to associate this commit with below one so that both go together.
-
-Fixes: 8795e182b02d ("PCI/portdrv: Don't disable AER reporting in get_port_device_capability()")
-
-Acked-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 345e5c8a1cc3 ("powerpc: Add interrupt support to mpc8xxx_gpio")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/gpio/gpio-mpc8xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index f443b4630f9d..7450773821f4 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2388,8 +2388,16 @@ static int amdgpu_device_ip_init(struct amdgpu_device *adev)
- 		}
- 		adev->ip_blocks[i].status.sw = true;
+diff --git a/drivers/gpio/gpio-mpc8xxx.c b/drivers/gpio/gpio-mpc8xxx.c
+index d72a3a5507b0..f3bf82efea8e 100644
+--- a/drivers/gpio/gpio-mpc8xxx.c
++++ b/drivers/gpio/gpio-mpc8xxx.c
+@@ -190,6 +190,7 @@ static int mpc8xxx_irq_set_type(struct irq_data *d, unsigned int flow_type)
  
--		/* need to do gmc hw init early so we can allocate gpu mem */
--		if (adev->ip_blocks[i].version->type == AMD_IP_BLOCK_TYPE_GMC) {
-+		if (adev->ip_blocks[i].version->type == AMD_IP_BLOCK_TYPE_COMMON) {
-+			/* need to do common hw init early so everything is set up for gmc */
-+			r = adev->ip_blocks[i].version->funcs->hw_init((void *)adev);
-+			if (r) {
-+				DRM_ERROR("hw_init %d failed %d\n", i, r);
-+				goto init_failed;
-+			}
-+			adev->ip_blocks[i].status.hw = true;
-+		} else if (adev->ip_blocks[i].version->type == AMD_IP_BLOCK_TYPE_GMC) {
-+			/* need to do gmc hw init early so we can allocate gpu mem */
- 			/* Try to reserve bad pages early */
- 			if (amdgpu_sriov_vf(adev))
- 				amdgpu_virt_exchange_data(adev);
-@@ -3037,8 +3045,8 @@ static int amdgpu_device_ip_reinit_early_sriov(struct amdgpu_device *adev)
- 	int i, r;
- 
- 	static enum amd_ip_block_type ip_order[] = {
--		AMD_IP_BLOCK_TYPE_GMC,
- 		AMD_IP_BLOCK_TYPE_COMMON,
-+		AMD_IP_BLOCK_TYPE_GMC,
- 		AMD_IP_BLOCK_TYPE_PSP,
- 		AMD_IP_BLOCK_TYPE_IH,
- 	};
+ 	switch (flow_type) {
+ 	case IRQ_TYPE_EDGE_FALLING:
++	case IRQ_TYPE_LEVEL_LOW:
+ 		raw_spin_lock_irqsave(&mpc8xxx_gc->lock, flags);
+ 		gc->write_reg(mpc8xxx_gc->regs + GPIO_ICR,
+ 			gc->read_reg(mpc8xxx_gc->regs + GPIO_ICR)
 -- 
 2.35.1
 
