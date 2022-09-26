@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98D45EA120
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E7E5E9F01
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236441AbiIZKpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S235130AbiIZKRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234419AbiIZKnb (ORCPT
+        with ESMTP id S235113AbiIZKQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:43:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEA41108;
-        Mon, 26 Sep 2022 03:24:35 -0700 (PDT)
+        Mon, 26 Sep 2022 06:16:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5A15A28;
+        Mon, 26 Sep 2022 03:14:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12854B80926;
-        Mon, 26 Sep 2022 10:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56AF7C433D6;
-        Mon, 26 Sep 2022 10:24:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9A09B8091E;
+        Mon, 26 Sep 2022 10:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30ED4C433C1;
+        Mon, 26 Sep 2022 10:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187872;
-        bh=+482eHK9KpYB34u8MBklS4BG1HDGc5smUSJunOxLLrs=;
+        s=korg; t=1664187287;
+        bh=2FBLOR6h3UCh5GKhSE+UT/LyXePGcm5basdWGeNhV3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s/UY64MWt96QwRVMud+F59eKMYgDfMBf07oXCDZvLkKALnQHlnWeS61DGa76CJ2Hs
-         ylznxOVpvNjr8IS7Fo7z27fzls98qKmQmL1eFJOGC7VtxRHd0fy4No/uyq3fd5AmjN
-         stDxMnUZqzp2jhkpngxf62WwaxakD2tQ23UxDB1A=
+        b=2rBvgogenrDYg7P9vhE4oJ62kwQATJmc4MBjMK8Eu5+qvcYCXOzYVI3+TtU63l44v
+         BMUAT6WSHzhVvZpNwsKuJYvoDHIOu23r0o8vSjASrsGO8AAgpp6sXFFWYY03HzCVQL
+         zUTfRZHBIN/x2fAq8LpZ8aNdF7joFqREBo4ddQkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Anderson <seanga2@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 088/120] net: sunhme: Fix packet reception for len < RX_COPY_THRESHOLD
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.9 30/30] ext4: make directory inode spreading reflect flexbg size
 Date:   Mon, 26 Sep 2022 12:12:01 +0200
-Message-Id: <20220926100754.250068308@linuxfoundation.org>
+Message-Id: <20220926100737.224531328@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <seanga2@gmail.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 878e2405710aacfeeb19364c300f38b7a9abfe8f ]
+commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
 
-There is a separate receive path for small packets (under 256 bytes).
-Instead of allocating a new dma-capable skb to be used for the next packet,
-this path allocates a skb and copies the data into it (reusing the existing
-sbk for the next packet). There are two bytes of junk data at the beginning
-of every packet. I believe these are inserted in order to allow aligned DMA
-and IP headers. We skip over them using skb_reserve. Before copying over
-the data, we must use a barrier to ensure we see the whole packet. The
-current code only synchronizes len bytes, starting from the beginning of
-the packet, including the junk bytes. However, this leaves off the final
-two bytes in the packet. Synchronize the whole packet.
+Currently the Orlov inode allocator searches for free inodes for a
+directory only in flex block groups with at most inodes_per_group/16
+more directory inodes than average per flex block group. However with
+growing size of flex block group this becomes unnecessarily strict.
+Scale allowed difference from average directory count per flex block
+group with flex block group size as we do with other metrics.
 
-To reproduce this problem, ping a HME with a payload size between 17 and
-214
-
-	$ ping -s 17 <hme_address>
-
-which will complain rather loudly about the data mismatch. Small packets
-(below 60 bytes on the wire) do not have this issue. I suspect this is
-related to the padding added to increase the minimum packet size.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220920235018.1675956-1-seanga2@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/sun/sunhme.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ext4/ialloc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index 3133f903279c..dbbbb6ea9f2b 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2064,9 +2064,9 @@ static void happy_meal_rx(struct happy_meal *hp, struct net_device *dev)
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -511,7 +511,7 @@ static int find_group_orlov(struct super
+ 		goto fallback;
+ 	}
  
- 			skb_reserve(copy_skb, 2);
- 			skb_put(copy_skb, len);
--			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_cpu(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			skb_copy_from_linear_data(skb, copy_skb->data, len);
--			dma_sync_single_for_device(hp->dma_dev, dma_addr, len, DMA_FROM_DEVICE);
-+			dma_sync_single_for_device(hp->dma_dev, dma_addr, len + 2, DMA_FROM_DEVICE);
- 			/* Reuse original ring buffer. */
- 			hme_write_rxd(hp, this,
- 				      (RXFLAG_OWN|((RX_BUF_ALLOC_SIZE-RX_OFFSET)<<16)),
--- 
-2.35.1
-
+-	max_dirs = ndirs / ngroups + inodes_per_group / 16;
++	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
+ 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
+ 	if (min_inodes < 1)
+ 		min_inodes = 1;
 
 
