@@ -2,105 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D655EB141
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA13C5EB144
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 21:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiIZT0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 15:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S229893AbiIZT0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 15:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiIZT0I (ORCPT
+        with ESMTP id S229597AbiIZT01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:26:08 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92425A146;
-        Mon, 26 Sep 2022 12:26:04 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id a20so4745263qtw.10;
-        Mon, 26 Sep 2022 12:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=l+Ylk9b//7nM5mTF/JCsuVNj5uiO0MLoAvHLsDMzYN4=;
-        b=cI2ST1Qax8qktOIHjeYgTuoX4TzEN/mewsTIMufWIXGP+FntEEYpIOkgYvn8bQmuQj
-         4B2qdr7KHg3LPJH/g93/9G46uch8bXMKMoj/X/gwKlnH5+lHhkblOHeyEU6OKm0T9DSQ
-         Jq+1APPi0Vyp1ElmK7nKzW4eHOXrwaxnwvadiw6wxstOO+nhTIiuvqZsw9YwejckGBfb
-         AAH7aXyatPmXAzwC49CJ6J20zPndpRvV3DEBdlrZWTx5c9Wo7jwXgpGPlxYt7aDme5mz
-         Ynyg9eyA+RGaah++8Xha8Yjnk8Bar2nlysLYWYXTi1mnv1U5XYC6PbcaPaHjP6yfqg8L
-         4tbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=l+Ylk9b//7nM5mTF/JCsuVNj5uiO0MLoAvHLsDMzYN4=;
-        b=Xugal5Oj0AnR2/tcZ5ZjyVRYsWkZCY5fV6HesSkjnZyg9QFb54Ec/XCSYXSWX0KJiZ
-         h+Hn4b5evssHUjbjCqfGKw0DelfAgPbr31/y6LxRPe+gw6QnOjkR49GFXbXtnB63HjFj
-         v6JB1c43V4O5Q3ecnMRNo8pNSc1VbN7ReFZajYz3BxrBmk577WGQnYAvfpoOmLxVIexn
-         PAMopQxjl+Ji0FVzvUXhYjYj8/FrgqEOUSY2mPlpxx2HQOrlspQYP1U+dtDuc+fkJiaD
-         C65+79PFUx7DYX4Vm+AukvzSJQ415vK+3BRq+dIPQRmKVNNuV+oNLWPbQvXuv8hOZSxb
-         ZVuA==
-X-Gm-Message-State: ACrzQf3YoPNo8992ekMZqx2EFIgpR6zEszcbni1Be0Au/GK5uttqA7PS
-        TgsW9TWALl84CpbyYi9KGVTfisjvK+Q=
-X-Google-Smtp-Source: AMsMyM4ednUq3Wrdb4DnYp8vSxPsaz8T4EIMmDveQ/qAZnfYxXb2BI3+bXTgiQiJU7CNJAortNdQ1Q==
-X-Received: by 2002:ac8:754c:0:b0:35c:caea:3e73 with SMTP id b12-20020ac8754c000000b0035ccaea3e73mr19696321qtr.504.1664220363879;
-        Mon, 26 Sep 2022 12:26:03 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id s9-20020a05622a018900b0035d43c82da8sm1613547qtw.80.2022.09.26.12.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 12:26:03 -0700 (PDT)
-Message-ID: <36397608-ae17-5359-d3e2-4676aa9ecf97@gmail.com>
-Date:   Mon, 26 Sep 2022 12:25:58 -0700
+        Mon, 26 Sep 2022 15:26:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E958C5A146;
+        Mon, 26 Sep 2022 12:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664220386; x=1695756386;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AZVPuZo3Qc/Eaz29CT/RaRCe8emvF7DALAGUFRZb1JM=;
+  b=TcwD/ukEO5BCSK38tnrE5sWSUfY0Dm1TTjE67LXKuOOc5xmPtufYXx9Z
+   wxVjyrTAbE6H6wFb/kfkgeUN/Z/jjh5XFjuwIqRKsTRDEzyjbp9ttQ6pF
+   z8AI/W5sybEerB+/CC6kzSxPTZ3TSoJ6z6T5F6CdF8S5EvOC2+FtRrsyb
+   nhA6An0S4iRvg4RiDpi4GjZSXSFPCgIm3JTM0Xzlyz6POHIBeTNrehcfP
+   nJteSMFrSu4vIQ+Bd+Cxqz+16TbLcUBn6pDMfR2ulg3ukqw/sFWQO7sDs
+   5ApmGkMM+nIMhz1XVX9MdiLmYN4MQIOP91GBMjJ/pmyNcabvWqFWlGZTf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="327474590"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="327474590"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 12:26:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="796457561"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="796457561"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.59.121])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 12:26:22 -0700
+Message-ID: <91f09a39-57fa-06a9-6e9e-b3e768d9e26a@intel.com>
+Date:   Mon, 26 Sep 2022 22:26:19 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4.9 00/21] 4.9.330-rc2 review
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 3/4] mmc: sdhci-tegra: Issue CMD and DAT resets
+ together
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220926163533.310693334@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220926163533.310693334@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
+References: <20220926094906.14537-1-pshete@nvidia.com>
+ <20220926094906.14537-3-pshete@nvidia.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220926094906.14537-3-pshete@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/22 09:36, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.330 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 26/09/22 12:49, Prathamesh Shete wrote:
+> In case of error condition to avoid system crash
+> Tegra SDMMC controller requires CMD and DAT resets
+> issued together. SDHCI controller FSM goes into
+> bad state due to rapid SD card hot-plug event.
+> Issuing reset on the CMD FSM before DATA FSM results
+> in kernel panic, hence add support to issue CMD and
+> DAT resets together.
+> This is applicable to Tegra186 and later chips.
 > 
-> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> ---
+>  drivers/mmc/host/sdhci-tegra.c |  3 ++-
+>  drivers/mmc/host/sdhci.c       | 20 +++++++++++++++-----
+>  drivers/mmc/host/sdhci.h       |  2 ++
+>  3 files changed, 19 insertions(+), 6 deletions(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.330-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 4d32b5bfc424..58449e010a9b 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1532,7 +1532,8 @@ static const struct sdhci_pltfm_data sdhci_tegra186_pdata = {
+>  		  SDHCI_QUIRK_NO_HISPD_BIT |
+>  		  SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC |
+>  		  SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
+> -	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> +	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> +		   SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER,
+>  	.ops  = &tegra186_sdhci_ops,
+>  };
+>  
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index 7689ffec5ad1..2f4a0e84fee8 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -3060,12 +3060,22 @@ static bool sdhci_request_done(struct sdhci_host *host)
+>  			host->ops->set_clock(host, host->clock);
+>  
+>  		/*
+> -		 * Spec says we should do both at the same time, but Ricoh
+> -		 * controllers do not like that.
+> +		 * While the specification says we should do both at the
+> +		 * same time, Ricoh controllers (and potentially others) do not
+> +		 * like that. On the other hand, some controllers (such as those
+> +		 * found on Tegra186 and later) rely on both being reset at the
+> +		 * same time. Use a quirk for the latter category since most
+> +		 * controllers seem to work fine with DAT and CMD getting reset
+> +		 * at the same time.
+>  		 */
+> -		sdhci_do_reset(host, SDHCI_RESET_CMD);
+> -		sdhci_do_reset(host, SDHCI_RESET_DATA);
+> -
+> +		if (host->quirks2 &
+> +			SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER) {
+> +			sdhci_do_reset(host, SDHCI_RESET_CMD |
+> +					SDHCI_RESET_DATA);
+> +		} else {
+> +			sdhci_do_reset(host, SDHCI_RESET_CMD);
+> +			sdhci_do_reset(host, SDHCI_RESET_DATA);
+> +		}
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+There is a bit a tidy up of SDHCI resets here:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+https://lore.kernel.org/linux-mmc/20220926192022.85660-1-adrian.hunter@intel.com/
+
+Would you mind implementing the quirk on top of that patch set.
+The quirk should go somewhere in the new sdhci_reset_for_reason()
+function, which should make it's use more consistent.
