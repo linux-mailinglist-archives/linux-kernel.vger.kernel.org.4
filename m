@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713D75EB493
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F0F5EB495
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiIZWaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S229514AbiIZWc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiIZWaI (ORCPT
+        with ESMTP id S229453AbiIZWc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD293B4;
-        Mon, 26 Sep 2022 15:30:03 -0700 (PDT)
+        Mon, 26 Sep 2022 18:32:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD07DF40;
+        Mon, 26 Sep 2022 15:32:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCEBF61474;
-        Mon, 26 Sep 2022 22:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38709C433C1;
-        Mon, 26 Sep 2022 22:30:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47F92B815D7;
+        Mon, 26 Sep 2022 22:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21ECC433D6;
+        Mon, 26 Sep 2022 22:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664231402;
-        bh=daJUsJdpezSteh4PXZTQzO/Wj8zE/TGbRLm95dLUJTM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DHO/eYpw22NjkkzgLcbAIgXyvcbjYSZJ8Gj3T05jFCFyi0aO7GG8UKoBFxcxuvhqP
-         o95RRqSvAA7W3zfxKvp3vPZhfHADu07j1dDXhUo6VWv433BqZqsqZtHL8Qqvf1J/+Z
-         5pbO2KtQBgPPNlOAgZuVToOxwUcoOrU0N98hB+6uGkEqr2lCVTHQ7Fce9t4s13holb
-         StpwMxy/maF6OCUGNtfIMUX+wFRWRoECXX3l0xwiQTTa8PfrcLlc2zOMvPVKpVBo4R
-         JHaxrrZucjkoygTeLBERXzdneJho4ubHZKqqNv/X042I3VbRDmvmznMXD/j4RwRRSB
-         UcahDe+qKfMKQ==
-Received: by mail-vk1-f171.google.com with SMTP id r193so1354072vke.13;
-        Mon, 26 Sep 2022 15:30:02 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ZB+TV6xKU9z3ZEDAyi+kFg+yURrL5xVOlbzmG5r6jX7CO41H3
-        pJsl+vbvTFoMudS/92iF6Vx0m+Qpnc13GvHQVw==
-X-Google-Smtp-Source: AMsMyM5KqIX5xQrSAflubc/OxKMjhvK4ygSQNRjUCGNoqKizrhSfwSJv1m6fk3LqrOdrMBCWPGUO0DHobIE+SXEwLq8=
-X-Received: by 2002:a1f:9fc5:0:b0:3a3:44f1:be23 with SMTP id
- i188-20020a1f9fc5000000b003a344f1be23mr10054334vke.35.1664231401156; Mon, 26
- Sep 2022 15:30:01 -0700 (PDT)
+        s=k20201202; t=1664231542;
+        bh=T7SLRWDmmnzpwpUteyKe8Ct1GteIsuCvbcSj2qel69w=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=RBOwr+GY4AK6wWifiaD8Wso3iQLG1AnOgy+iz3gnIWY+BVGCU44wt17W66mZKMYZS
+         jSaVqF3gXPSFJJUISqe3iLMxdn65ZOFn0TndQ+bsn/Rc3g9qS0dsoq4mzQ8b/kT5c6
+         2dDikpt+6hnSfXpQ+Jwo4aDuB9+sKp/15DPZCfdttZ+t146yj+5Zh95k6UxpiaTMzN
+         Pvhmbi4ZotH2J/ROyFgKISjc4RsuxJznBoahRnTW1ox7Vn4RtD6fVBTewNQM61L/b6
+         3TBcpF+JLG8cvs0ErAWFtDL44Rg2znkePOCdXzkusuZqTAGP1+1psaLf8UL7I29kGi
+         wtFsD25ONaaGA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 717FF5C05B1; Mon, 26 Sep 2022 15:32:22 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:32:22 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220922220104.2446868-1-joel@joelfernandes.org>
+ <20220922220104.2446868-2-joel@joelfernandes.org>
+ <YzAX5kOwjrZzoed6@pc636>
+ <YzCUDXn3htWbqM4f@google.com>
+ <20220926174846.GQ4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzH+XAVSlHpuWYoD@pc636>
+ <YzITXYGIqfRIebIH@google.com>
 MIME-Version: 1.0
-References: <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
- <20220908003510.GE4320@zorba> <c0c66918-f55e-83e4-edea-b2d32fdb27a7@gmail.com>
- <3fcea82c-f5cf-f066-67b9-08669c44a9c6@gmail.com> <20220912170524.GX4320@zorba>
- <75e803f8-2b25-22c8-0831-e90d0c889da1@gmail.com> <20220913005153.GZ4320@zorba>
- <00850627-7ada-3a02-158c-30f3b8334d51@gmail.com> <20220916225646.GK4320@zorba>
- <b6a43df4-e5d8-06d2-a6b9-3626f2677161@gmail.com> <20220917032610.GM4320@zorba>
-In-Reply-To: <20220917032610.GM4320@zorba>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 26 Sep 2022 17:29:49 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+MmkOP=LWi7GwpsWBVUepfHMRh1hvegCoGOTM+ZsvZjw@mail.gmail.com>
-Message-ID: <CAL_Jsq+MmkOP=LWi7GwpsWBVUepfHMRh1hvegCoGOTM+ZsvZjw@mail.gmail.com>
-Subject: Re: [PATCH] driver: of: overlay: demote message to warning
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        xe-linux-external@cisco.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzITXYGIqfRIebIH@google.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,57 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 10:26 PM Daniel Walker <danielwa@cisco.com> wrote:
->
-> On Fri, Sep 16, 2022 at 09:47:19PM -0500, Frank Rowand wrote:
-> > On 9/16/22 17:56, Daniel Walker wrote:
-> > > On Fri, Sep 16, 2022 at 05:47:54PM -0500, Frank Rowand wrote:
-> > >>>
-> > >>> Maybe you could add a flag or other indicator which would indicate the overlay will never be
-> > >>> removed. Then your code could rely on this property to inform on if the author
-> > >>> has consider the removal issues related to overlays.
-> > >>
-> > >> No.  I guess I wasn't clear enough above, where I said:
-> > >>
-> > >>    "And I will not accept a
-> > >>     change that suppresses the message if there is no expectation to remove the
-> > >>     overlay."
-> > >>
-> > >> There are multiple reasons for this, but the most fundamental is that if a
-> > >> new overlay is not removable, then any overlay already applied can not be
-> > >> removed (because overlays must be removed in the reverse order that they
-> > >> are applied).  It would be incredibly bad architecture to allow an overlay
-> > >> to block another overlay from being removed.
+On Mon, Sep 26, 2022 at 09:02:21PM +0000, Joel Fernandes wrote:
+> On Mon, Sep 26, 2022 at 09:32:44PM +0200, Uladzislau Rezki wrote:
+> [...]
+> > > > > On my KVM machine the boot time is affected:
+> > > > > 
+> > > > > <snip>
+> > > > > [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+> > > > > [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
+> > > > > [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+> > > > > [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
+> > > > > [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
+> > > > > [  104.115418] process '/usr/bin/fstype' started with executable stack
+> > > > > [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
+> > > > > [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
+> > > > > [  104.340193] systemd[1]: Detected virtualization kvm.
+> > > > > [  104.340196] systemd[1]: Detected architecture x86-64.
+> > > > > [  104.359032] systemd[1]: Set hostname to <pc638>.
+> > > > > [  105.740109] random: crng init done
+> > > > > [  105.741267] systemd[1]: Reached target Remote File Systems.
+> > > > > <snip>
+> > > > > 
+> > > > > 2 - 11 and second delay is between 32 - 104. So there are still users which must
+> > > > > be waiting for "RCU" in a sync way.
+> > > > 
+> > > > I was wondering if you can compare boot logs and see which timestamp does the
+> > > > slow down start from. That way, we can narrow down the callback. Also another
+> > > > idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
+> > > > ftrace_dump_on_oops" to the boot params, and then manually call
+> > > > "tracing_off(); panic();" from the code at the first printk that seems off in
+> > > > your comparison of good vs bad. For example, if "crng init done" timestamp is
+> > > > off, put the "tracing_off(); panic();" there. Then grab the serial console
+> > > > output to see what were the last callbacks that was queued/invoked.
+> > > 
+> > > We do seem to be in need of some way to quickly and easily locate the
+> > > callback that needed to be _flush() due to a wakeup.
 > > >
-> > > So how about an option to turn off removable overlays entirely? As far as I can
-> > > tell it's not used currently by the tiny number of implementation I've seen.
-> > >
-> > > Cisco doesn't need it, and we could have a smaller kernel without it.
-> > >
-> > > The issue is that the error log on blast is log level abuse in my opinion. If
-> > > there's no way to fix it, it should not be an error.
-> >
-> > The way to fix it is to not have a construct in the overlay that triggers the
-> > message.  In other words, do not add a property to a pre-existing node.  (At
-> > least I think that is what is the underlying cause, if I recall correctly.)
-> >
-> > -Frank
->
-> Here's the check,
->
->  if (!of_node_check_flag(target->np, OF_OVERLAY))
->
-> If the print shows when the modifications is made to a non-overlay, I'm not
-> sure how you could construct a device tree where you only modify other overlays.
->
-> It seems like this should print on the vast majority of overlays.
+> > <snip>
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index aeea9731ef80..fe1146d97f1a 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+> >  
+> >         if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+> >                 rwork->wq = wq;
+> > -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> > +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+> >                 return true;
+> >         }
+> >  
+> > <snip>
+> > 
+> > ?
+> > 
+> > But it does not fully solve my boot-up issue. Will debug tomorrow further.
+> 
+> Ah, but at least its progress, thanks. Could you send me a patch to include
+> in the next revision with details of this?
+> 
+> > > Might one more proactive approach be to use Coccinelle to locate such
+> > > callback functions?  We might not want -all- callbacks that do wakeups
+> > > to use call_rcu_flush(), but knowing which are which should speed up
+> > > slow-boot debugging by quite a bit.
+> > > 
+> > > Or is there a better way to do this?
+> > > 
+> > I am not sure what Coccinelle is. If we had something automated that measures
+> > a boot time and if needed does some profiling it would be good. Otherwise it
+> > is a manual debugging mainly, IMHO.
+> 
+> Paul, What about using a default-off kernel CONFIG that splats on all lazy
+> call_rcu() callbacks that do a wake up. We could use the trace hooks to do it
+> in kernel I think. I can talk to Steve to get ideas on how to do that but I
+> think it can be done purely from trace events (we might need a new
+> trace_end_invoke_callback to fire after the callback is invoked). Thoughts?
 
-There is essentially zero support in the kernel for nodes to change
-once they are in use (typ. bound to a driver), and I don't see us ever
-supporting that use case. Unless shown otherwise, I don't think that
-is a good split between a base DT and overlay either.
+Could you look for wakeups invoked between trace_rcu_batch_start() and
+trace_rcu_batch_end() that are not from interrupt context?  This would
+of course need to be associated with a task rather than a CPU.
 
-What I've said multiple times for supporting runtime overlays, is that
-it needs to be restricted to adding/removing whole nodes/subtrees.
+Note that you would need to check for wakeups from interrupt handlers
+even with the extra trace_end_invoke_callback().  The window where an
+interrupt handler could do a wakeup would be reduced, but not eliminated.
 
-Rob
+							Thanx, Paul
