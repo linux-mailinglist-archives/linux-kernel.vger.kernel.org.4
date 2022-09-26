@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9C95EA538
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2785EA561
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239038AbiIZL72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S238242AbiIZMB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238275AbiIZL4F (ORCPT
+        with ESMTP id S238929AbiIZL6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:56:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1EC79EF1;
-        Mon, 26 Sep 2022 03:51:27 -0700 (PDT)
+        Mon, 26 Sep 2022 07:58:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C380D7B2A3;
+        Mon, 26 Sep 2022 03:52:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA25BB801BF;
-        Mon, 26 Sep 2022 10:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07438C433D6;
-        Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC4D60AF3;
+        Mon, 26 Sep 2022 10:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4F1C433D7;
+        Mon, 26 Sep 2022 10:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189436;
-        bh=ta6WOsgekpI1LcjSNwrf+fIaiHq0dPDmyVFgINRy+pA=;
+        s=korg; t=1664189439;
+        bh=Ut33842hwx4a/yaziEGJ5m5FGmvxrtCCOxpdvH3Jrog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uLZnjgQFzM4Dhht1dVVt6pCh4ojF/QQ7svuTkqAa/vAoxUfkQsQrM7z0+Z1mXcZRG
-         LnlAfh9QiwqVZ6dF1L6uvkmyiArCRa2bBtP3L0pY7hlY8KO//VRG5PGa7Ybwtv+09J
-         A9LEFKpvJFKxLoSCDZdLVSfh7f8hmpUeP1LbBn3A=
+        b=DIBZC7YSGQRxeUG4D2QGCezfb8uXQH62YZsLoPyKEaUfI7dE2ffXYl45LYJxHOmFi
+         h4pMwqzq3htNaHbmoApoZtYzCb8o00erHvv6qSWaHO8H88uSclrGCiIp/PSz+iP2wG
+         Oi6CNJsyoIsWLqgok59Crcl0BAa3mzsf8YvUmkVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>,
+        stable@vger.kernel.org, Li Jinlin <lijinlin3@huawei.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 187/207] pmem: fix a name collision
-Date:   Mon, 26 Sep 2022 12:12:56 +0200
-Message-Id: <20220926100814.986280270@linuxfoundation.org>
+Subject: [PATCH 5.19 188/207] fsdax: Fix infinite loop in dax_iomap_rw()
+Date:   Mon, 26 Sep 2022 12:12:57 +0200
+Message-Id: <20220926100815.032294339@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -55,76 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jane Chu <jane.chu@oracle.com>
+From: Li Jinlin <lijinlin3@huawei.com>
 
-[ Upstream commit 149d17140bcedc906082c4f874dec98b1ffc5a90 ]
+[ Upstream commit 17d9c15c9b9e7fb285f7ac5367dfb5f00ff575e3 ]
 
-Kernel test robot detected name collision when compiled on 'um'
-architecture.  Rename "to_phys()"  to "pmem_to_phys()".
+I got an infinite loop and a WARNING report when executing a tail command
+in virtiofs.
 
->> drivers/nvdimm/pmem.c:48:20: error: conflicting types for 'to_phys'; have 'phys_addr_t(struct pmem_device *, phys_addr_t)' {aka 'long long unsigned int(struct pmem_device *, long long unsigned int)'}
-      48 | static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
-         |                    ^~~~~~~
-   In file included from arch/um/include/asm/page.h:98,
-                    from arch/um/include/asm/thread_info.h:15,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/um/include/generated/asm/preempt.h:1,
+  WARNING: CPU: 10 PID: 964 at fs/iomap/iter.c:34 iomap_iter+0x3a2/0x3d0
+  Modules linked in:
+  CPU: 10 PID: 964 Comm: tail Not tainted 5.19.0-rc7
+  Call Trace:
+  <TASK>
+  dax_iomap_rw+0xea/0x620
+  ? __this_cpu_preempt_check+0x13/0x20
+  fuse_dax_read_iter+0x47/0x80
+  fuse_file_read_iter+0xae/0xd0
+  new_sync_read+0xfe/0x180
+  ? 0xffffffff81000000
+  vfs_read+0x14d/0x1a0
+  ksys_read+0x6d/0xf0
+  __x64_sys_read+0x1a/0x20
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-   arch/um/include/shared/mem.h:12:29: note: previous definition of 'to_phys' with type 'long unsigned int(void *)'
-      12 | static inline unsigned long to_phys(void *virt)
-         |                             ^~~~~~~
+The tail command will call read() with a count of 0. In this case,
+iomap_iter() will report this WARNING, and always return 1 which casuing
+the infinite loop in dax_iomap_rw().
 
-vim +48 drivers/nvdimm/pmem.c
-    47
-  > 48	static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
-    49	{
-    50		return pmem->phys_addr + offset;
-    51	}
-    52
+Fixing by checking count whether is 0 in dax_iomap_rw().
 
-Fixes: 9409c9b6709e (pmem: refactor pmem_clear_poison())
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220630182802.3250449-1-jane.chu@oracle.com
+Fixes: ca289e0b95af ("fsdax: switch dax_iomap_rw to use iomap_iter")
+Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Link: https://lore.kernel.org/r/20220725032050.3873372-1-lijinlin3@huawei.com
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvdimm/pmem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/dax.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 629d10fcf53b..b9f1a8e9f88c 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -45,7 +45,7 @@ static struct nd_region *to_region(struct pmem_device *pmem)
- 	return to_nd_region(to_dev(pmem)->parent);
- }
+diff --git a/fs/dax.c b/fs/dax.c
+index 4155a6107fa1..7ab248ed21aa 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -1241,6 +1241,9 @@ dax_iomap_rw(struct kiocb *iocb, struct iov_iter *iter,
+ 	loff_t done = 0;
+ 	int ret;
  
--static phys_addr_t to_phys(struct pmem_device *pmem, phys_addr_t offset)
-+static phys_addr_t pmem_to_phys(struct pmem_device *pmem, phys_addr_t offset)
- {
- 	return pmem->phys_addr + offset;
- }
-@@ -63,7 +63,7 @@ static phys_addr_t to_offset(struct pmem_device *pmem, sector_t sector)
- static void pmem_mkpage_present(struct pmem_device *pmem, phys_addr_t offset,
- 		unsigned int len)
- {
--	phys_addr_t phys = to_phys(pmem, offset);
-+	phys_addr_t phys = pmem_to_phys(pmem, offset);
- 	unsigned long pfn_start, pfn_end, pfn;
- 
- 	/* only pmem in the linear map supports HWPoison */
-@@ -97,7 +97,7 @@ static void pmem_clear_bb(struct pmem_device *pmem, sector_t sector, long blks)
- static long __pmem_clear_poison(struct pmem_device *pmem,
- 		phys_addr_t offset, unsigned int len)
- {
--	phys_addr_t phys = to_phys(pmem, offset);
-+	phys_addr_t phys = pmem_to_phys(pmem, offset);
- 	long cleared = nvdimm_clear_poison(to_dev(pmem), phys, len);
- 
- 	if (cleared > 0) {
++	if (!iomi.len)
++		return 0;
++
+ 	if (iov_iter_rw(iter) == WRITE) {
+ 		lockdep_assert_held_write(&iomi.inode->i_rwsem);
+ 		iomi.flags |= IOMAP_WRITE;
 -- 
 2.35.1
 
