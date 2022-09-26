@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4B5EA342
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05555E9F9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiIZLWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S235343AbiIZK1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbiIZLUU (ORCPT
+        with ESMTP id S235714AbiIZKYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:20:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8AD67152;
-        Mon, 26 Sep 2022 03:39:10 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AC0371B3;
+        Mon, 26 Sep 2022 03:18:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E97ABB80972;
-        Mon, 26 Sep 2022 10:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C74C433D6;
-        Mon, 26 Sep 2022 10:38:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C309D60B60;
+        Mon, 26 Sep 2022 10:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A18C433C1;
+        Mon, 26 Sep 2022 10:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188682;
-        bh=RqrU5MsNEEi2OoDcJbOsUurapZKJ0LPU68LapHF6ga4=;
+        s=korg; t=1664187445;
+        bh=oswuXUCnFjHVcKw+wxwzOiR+vkx4YuqAA2bEkEOiIso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eYRQruPCP+oQOKMX3q/5vxdGXvMXhCgZZm/2YLsm7GlG9aPLmfSbM4ObiRg4CFPC3
-         YCqlggqOhCMtlLK+noGgEv9HQ0LsvZ+oMSpVOJXmkGQJR9fstE48OeDkeYIkTlq+to
-         vmpY4mRlX5k6hBlAev6awzM4JnF73o6oXlzhdqq8=
+        b=UnzICSo6/5GH3PQ6HYlVmDAJMg7dz5YBajqE3t03bRMofgbH3fOgS+qi1jBhQvOFr
+         pBpM9b2aNFAkV9eFvXkQTtBijN+z1hOJm9Xaz0YOLiF4Q8t0hd3W+cR21JCk6gdRuK
+         rrobLepVvofFneXUsSZp008EPSCAmDBwjkc8ltdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Hofmann <fhofmann@cloudflare.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Leah Rumancik <leah.rumancik@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: [PATCH 5.15 055/148] xfs: reorder iunlink remove operation in xfs_ifree
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 10/58] ASoC: nau8824: Fix semaphore unbalance at error paths
 Date:   Mon, 26 Sep 2022 12:11:29 +0200
-Message-Id: <20220926100758.096465787@linuxfoundation.org>
+Message-Id: <20220926100741.777723995@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,88 +54,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Chinner <dchinner@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 9a5280b312e2e7898b6397b2ca3cfd03f67d7be1 ]
+[ Upstream commit 5628560e90395d3812800a8e44a01c32ffa429ec ]
 
-The O_TMPFILE creation implementation creates a specific order of
-operations for inode allocation/freeing and unlinked list
-modification. Currently both are serialised by the AGI, so the order
-doesn't strictly matter as long as the are both in the same
-transaction.
+The semaphore of nau8824 wasn't properly unlocked at some error
+handling code paths, hence this may result in the unbalance (and
+potential lock-up).  Fix them to handle the semaphore up properly.
 
-However, if we want to move the unlinked list insertions largely out
-from under the AGI lock, then we have to be concerned about the
-order in which we do unlinked list modification operations.
-O_TMPFILE creation tells us this order is inode allocation/free,
-then unlinked list modification.
-
-Change xfs_ifree() to use this same ordering on unlinked list
-removal. This way we always guarantee that when we enter the
-iunlinked list removal code from this path, we already have the AGI
-locked and we don't have to worry about lock nesting AGI reads
-inside unlink list locks because it's already locked and attached to
-the transaction.
-
-We can do this safely as the inode freeing and unlinked list removal
-are done in the same transaction and hence are atomic operations
-with respect to log recovery.
-
-Reported-by: Frank Hofmann <fhofmann@cloudflare.com>
-Fixes: 298f7bec503f ("xfs: pin inode backing buffer to the inode log item")
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-Signed-off-by: Dave Chinner <david@fromorbit.com>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220823081000.2965-3-tiwai@suse.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_inode.c |   24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ sound/soc/codecs/nau8824.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -2599,14 +2599,13 @@ xfs_ifree_cluster(
+diff --git a/sound/soc/codecs/nau8824.c b/sound/soc/codecs/nau8824.c
+index 4af87340b165..4f18bb272e92 100644
+--- a/sound/soc/codecs/nau8824.c
++++ b/sound/soc/codecs/nau8824.c
+@@ -1075,6 +1075,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 	struct snd_soc_component *component = dai->component;
+ 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
+ 	unsigned int val_len = 0, osr, ctrl_val, bclk_fs, bclk_div;
++	int err = -EINVAL;
+ 
+ 	nau8824_sema_acquire(nau8824, HZ);
+ 
+@@ -1091,7 +1092,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		osr &= NAU8824_DAC_OVERSAMPLE_MASK;
+ 		if (nau8824_clock_check(nau8824, substream->stream,
+ 			nau8824->fs, osr))
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
+ 			NAU8824_CLK_DAC_SRC_MASK,
+ 			osr_dac_sel[osr].clk_src << NAU8824_CLK_DAC_SRC_SFT);
+@@ -1101,7 +1102,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		osr &= NAU8824_ADC_SYNC_DOWN_MASK;
+ 		if (nau8824_clock_check(nau8824, substream->stream,
+ 			nau8824->fs, osr))
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap, NAU8824_REG_CLK_DIVIDER,
+ 			NAU8824_CLK_ADC_SRC_MASK,
+ 			osr_adc_sel[osr].clk_src << NAU8824_CLK_ADC_SRC_SFT);
+@@ -1122,7 +1123,7 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		else if (bclk_fs <= 256)
+ 			bclk_div = 0;
+ 		else
+-			return -EINVAL;
++			goto error;
+ 		regmap_update_bits(nau8824->regmap,
+ 			NAU8824_REG_PORT0_I2S_PCM_CTRL_2,
+ 			NAU8824_I2S_LRC_DIV_MASK | NAU8824_I2S_BLK_DIV_MASK,
+@@ -1143,15 +1144,17 @@ static int nau8824_hw_params(struct snd_pcm_substream *substream,
+ 		val_len |= NAU8824_I2S_DL_32;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		goto error;
+ 	}
+ 
+ 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
+ 		NAU8824_I2S_DL_MASK, val_len);
++	err = 0;
+ 
++ error:
+ 	nau8824_sema_release(nau8824);
+ 
+-	return 0;
++	return err;
  }
  
- /*
-- * This is called to return an inode to the inode free list.
-- * The inode should already be truncated to 0 length and have
-- * no pages associated with it.  This routine also assumes that
-- * the inode is already a part of the transaction.
-+ * This is called to return an inode to the inode free list.  The inode should
-+ * already be truncated to 0 length and have no pages associated with it.  This
-+ * routine also assumes that the inode is already a part of the transaction.
-  *
-- * The on-disk copy of the inode will have been added to the list
-- * of unlinked inodes in the AGI. We need to remove the inode from
-- * that list atomically with respect to freeing it here.
-+ * The on-disk copy of the inode will have been added to the list of unlinked
-+ * inodes in the AGI. We need to remove the inode from that list atomically with
-+ * respect to freeing it here.
-  */
- int
- xfs_ifree(
-@@ -2628,13 +2627,16 @@ xfs_ifree(
- 	pag = xfs_perag_get(mp, XFS_INO_TO_AGNO(mp, ip->i_ino));
+ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+@@ -1160,8 +1163,6 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ 	struct nau8824 *nau8824 = snd_soc_component_get_drvdata(component);
+ 	unsigned int ctrl1_val = 0, ctrl2_val = 0;
  
- 	/*
--	 * Pull the on-disk inode from the AGI unlinked list.
-+	 * Free the inode first so that we guarantee that the AGI lock is going
-+	 * to be taken before we remove the inode from the unlinked list. This
-+	 * makes the AGI lock -> unlinked list modification order the same as
-+	 * used in O_TMPFILE creation.
- 	 */
--	error = xfs_iunlink_remove(tp, pag, ip);
-+	error = xfs_difree(tp, pag, ip->i_ino, &xic);
- 	if (error)
--		goto out;
-+		return error;
+-	nau8824_sema_acquire(nau8824, HZ);
+-
+ 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+ 	case SND_SOC_DAIFMT_CBM_CFM:
+ 		ctrl2_val |= NAU8824_I2S_MS_MASTER;
+@@ -1203,6 +1204,8 @@ static int nau8824_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ 		return -EINVAL;
+ 	}
  
--	error = xfs_difree(tp, pag, ip->i_ino, &xic);
-+	error = xfs_iunlink_remove(tp, pag, ip);
- 	if (error)
- 		goto out;
- 
++	nau8824_sema_acquire(nau8824, HZ);
++
+ 	regmap_update_bits(nau8824->regmap, NAU8824_REG_PORT0_I2S_PCM_CTRL_1,
+ 		NAU8824_I2S_DF_MASK | NAU8824_I2S_BP_MASK |
+ 		NAU8824_I2S_PCMB_EN, ctrl1_val);
+-- 
+2.35.1
+
 
 
