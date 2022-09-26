@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FF15EA9EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414435EA9EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbiIZPO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S235804AbiIZPOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbiIZPNI (ORCPT
+        with ESMTP id S235692AbiIZPNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:13:08 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C844F7C767
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:53:28 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-130bd20fae6so9266531fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 06:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date;
-        bh=rvST2aDVGvDCU3HMgHNHnrp8ARz+qwXlplbLfK2nA2M=;
-        b=C9+GdXBaUSTz77sQKqG5qr8H3XJj/G+OE3Bhtu22E2hTlfwZREw7xw9dSk9wk7wUQ7
-         PC3rVuJwatLhhpjrnx0Y3AvxLmzIO28fFLzq/sWb2Mh24OLgclIBbGGhRPHXdzFaG8Nh
-         XXM2J2GRS2pUaQHOFahzvy0Gi+dq1ADzXIiz+x5bzSnFUlZL3GSRq6cPTFXz6qfutVal
-         nEJ/51SJM+bn+/AKGeRr2hV4/vzuTZu+v5A8qVvvH164oHO256IkpR4koG1hdWFYu6LA
-         BBCF2iD2icZB5CXmc+V8k8hvpPJ6QKhGB5aBOt2pv+uEasc51jkOwSPz6jt4SsUW6AeY
-         uRSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=rvST2aDVGvDCU3HMgHNHnrp8ARz+qwXlplbLfK2nA2M=;
-        b=pm1qHwqMGk1kqkp4mMznqbPw5x8p2v5bN6U/k9m5ML2TNljKskuPOvHnZq+hMs2kJK
-         441bZiN6bl7p6WGrKjBoEBxNloqaL4E1S5NVxS6Ba1YzSXVRQAQgW0R0KJm4fwk0UoHo
-         /iRabbekK5X2PWYCQaQwRLQ2K9jbmQyAbU1UFoKA3xvL2nV/MVaY7qvV1exzIs/6Cv/z
-         AieUDrOIIo6PeK8csMh6PTDx/vqjYzvubPgZSXDV/R/U5o9vrAL7G0f033y+KQfg/Esh
-         RDNsKRXlvzy0ffRtsHKuwFrBmPg1aHjR/Yx+SUpj5BeeXis7gDa7udSCxJ4U7d4j+f4A
-         jppw==
-X-Gm-Message-State: ACrzQf2wMa5jUwDazdxmxB9S1Lb2sGCv1GcDV0hXpdwC+2IRSJ29qlFg
-        aDAAZENucp8BW4JDzd+Lcb/nYm2ZBreZdyH4hGjZjUzszFhFHA==
-X-Google-Smtp-Source: AMsMyM7ckq0iV1tViqx93t+NotM3Q26YFdC7NpEZIwdljX88t6+h5oAmqstkp2CUzmt6JWq/fIAYzObBVpMlm9KqadI=
-X-Received: by 2002:a05:6870:46a8:b0:128:b162:621a with SMTP id
- a40-20020a05687046a800b00128b162621amr18641033oap.90.1664200397622; Mon, 26
- Sep 2022 06:53:17 -0700 (PDT)
+        Mon, 26 Sep 2022 11:13:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D50F2723;
+        Mon, 26 Sep 2022 06:54:38 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QChuhh013126;
+        Mon, 26 Sep 2022 13:54:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OCw7jzKs12GN3xRrrfrWHP/zG+JFJWyzzk3kZopw8ZU=;
+ b=HO1gl2hgakzHeBnPzoApclnwZGbebtWy7coSKyp9MB+ZnUogLsmmPuTxDdcGmS8eJ2uc
+ Q+mO80eAg7IjttyrFrCVqWr5tFRcHZaZ48xqJvbWfJowUeVe8Tz50p4bDetV53MjqQvR
+ NYONikmsOV/OMWcg2abWquP1CQmnNIM67X0eC0gKMkwFsaZUicZI/fwrmHGvPtiYxvkc
+ F/UFszezwvcEhOYK6owwU5l7TgOf9PuVgcKhkEi+AoWceMFJqXAtU1Ys2ntohzEypXyA
+ XqdNibyAaTFrlwQCQZfs7k+d8MLPgKJfSnAxTokhxeAHhInea/n9P0l+to4MZ8kREQWe qA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jucbja7rv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:54:17 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28QCi29P013972;
+        Mon, 26 Sep 2022 13:54:17 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jucbja7qw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:54:16 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28QDplN1008481;
+        Mon, 26 Sep 2022 13:54:14 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j2hax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:54:14 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28QDo0Kp30015872
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 13:50:00 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D81B8A405B;
+        Mon, 26 Sep 2022 13:54:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25731A4054;
+        Mon, 26 Sep 2022 13:54:11 +0000 (GMT)
+Received: from [9.171.20.172] (unknown [9.171.20.172])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Sep 2022 13:54:11 +0000 (GMT)
+Message-ID: <8b0e1945-d4ef-2aef-fb5d-1b6b8397b169@linux.ibm.com>
+Date:   Mon, 26 Sep 2022 15:54:10 +0200
 MIME-Version: 1.0
-Sender: huganbrooks811@gmail.com
-Received: by 2002:a4a:b141:0:0:0:0:0 with HTTP; Mon, 26 Sep 2022 06:53:16
- -0700 (PDT)
-From:   "Mrs.Maya" <mayaouedrago22@gmail.com>
-Date:   Mon, 26 Sep 2022 13:53:17 +0000
-X-Google-Sender-Auth: xUn_FAHji0uExJUd9pIEK8t-PsI
-Message-ID: <CAFUf7Zm3gzgn+x-682+xxQpUg29R2BN=8zOR96mnjgnNv580gQ@mail.gmail.com>
-Subject: Re: hola
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        Amit Shah <amit@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220822114649.055452969@infradead.org>
+ <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+ <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+ <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
+ <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
+ <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
+ <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1pJZGhh4CPicVW_aZfklCFcnxaDxcZgT
+X-Proofpoint-GUID: XtSpdpA3wcpKEGVzhcTkkfWfWQSghnSy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ adultscore=0 suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209260086
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re: hola
 
-Te escribo este correo con muchas l=C3=A1grimas en los ojos y gran
-dolor en mi coraz=C3=B3n, Mi Nombre es Sra. Maya ouedrago, soy de T=C3=BAne=
-z y
-me comunico con usted desde un Hospital en Burkina Faso, quiero
-decirle esto porque no tengo otra opci=C3=B3n que decirle como era.
-Conmovido por abrirme a usted, me cas=C3=A9 con el Sr. Ouedrago Brown,
-quien trabaj=C3=B3 con el Embajador de T=C3=BAnez en Burkina Faso durante n=
-ueve
-a=C3=B1os antes de morir en el a=C3=B1o 2010. Estuvimos casados =E2=80=8B=
-=E2=80=8Bdurante once
-a=C3=B1os sin un hijo.
 
-Muri=C3=B3 despu=C3=A9s de una breve enfermedad que dur=C3=B3 solo cinco d=
-=C3=ADas. Ya que
-Despu=C3=A9s de su muerte, decid=C3=AD no volver a casarme. Cuando mi difun=
-to
-esposo estaba vivo, deposit=C3=B3 la suma de US$ 8,5 millones (ocho
-millones quinientos mil d=C3=B3lares) en un banco en Uagadug=C3=BA, la capi=
-tal
-de Burkina Faso, en el oeste de =C3=81frica. Actualmente, este dinero
-todav=C3=ADa est=C3=A1 en el Banco. Puso este dinero a disposici=C3=B3n par=
-a la
-exportaci=C3=B3n de oro de la miner=C3=ADa de Burkina Faso.
+Am 26.09.22 um 15:37 schrieb Peter Zijlstra:
+> On Mon, Sep 26, 2022 at 03:23:10PM +0200, Christian Borntraeger wrote:
+>> Am 26.09.22 um 14:55 schrieb Peter Zijlstra:
+>>
+>>> Could you please test with something like the below on? I can boot that
+>>> with KVM, but obviously I didn't suffer any weirdness to begin with :/
+>>>
+>>> ---
+>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>> index 4e6a6417211f..ef9ccfc3a8c0 100644
+>>> --- a/kernel/sched/core.c
+>>> +++ b/kernel/sched/core.c
+>>> @@ -4051,6 +4051,8 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+>>>    	unsigned long flags;
+>>>    	int cpu, success = 0;
+>>> +	WARN_ON_ONCE(state & TASK_FREEZABLE);
+>>> +
+>>>    	preempt_disable();
+>>>    	if (p == current) {
+>>>    		/*
+>>
+>> Does not seem to trigger.
+> 
+> Moo -- quite the puzzle this :/ I'll go stare at it more then.
 
-Recientemente, mi m=C3=A9dico me dijo que no durar=C3=ADa el per=C3=ADodo d=
-e
-siete meses debido a un problema de c=C3=A1ncer. El que m=C3=A1s me inquiet=
-a es
-mi enfermedad del accidente cerebrovascular. Habiendo conocido mi
-condici=C3=B3n, decid=C3=AD entregarle este dinero para que se ocupe de las
-personas menos privilegiadas, utilizar=C3=A1 este dinero de la manera que
-le instruir=C3=A9 en este documento. Quiero que tome el 30 por ciento del
-dinero total para su uso personal Mientras que el 70% del dinero se
-destinar=C3=A1 a personas de caridad en la calle y ayudando al orfanato.
-Crec=C3=AD como hu=C3=A9rfano y no tengo a nadie como mi familia. miembro, =
-s=C3=B3lo
-para esforzarse en que la casa de Dios se mantenga.
-
-Hago esto para que Dios perdone mis pecados y acepte mi alma en
-su para=C3=ADso porque esta enfermedad me ha hecho sufrir tanto.
-
-Tan pronto como reciba su respuesta le dar=C3=A9 el contacto del
-banco en Burkina Faso y tambi=C3=A9n instruir=C3=A9 al Gerente del Banco pa=
-ra
-emitirle una carta de autoridad que le probar=C3=A1 el presente
-beneficiario del dinero en el banco, es decir, si me aseguras que
-actuar=C3=A1s en consecuencia como he dicho aqu=C3=AD.
-
-De la Sra. Maya ouedrago
+In the end this is about the end of the sshd process (shutting it down).
+I can also trigger the problem by sending a SIGTERM so its not about
+the shutdown itself.
+Pofiling the guest I see scheduler functions like sched_clock, pick_next_entity,
+update_min_vruntime and so on with 100% system time.
