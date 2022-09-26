@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341625EB375
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F795EB37A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiIZVqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S229727AbiIZVrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiIZVqc (ORCPT
+        with ESMTP id S230055AbiIZVri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:46:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2F09AFCA;
-        Mon, 26 Sep 2022 14:46:31 -0700 (PDT)
+        Mon, 26 Sep 2022 17:47:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A21AE9DE;
+        Mon, 26 Sep 2022 14:47:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B372DB811FC;
-        Mon, 26 Sep 2022 21:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF63C433D6;
-        Mon, 26 Sep 2022 21:46:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0824E6147F;
+        Mon, 26 Sep 2022 21:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43234C433D7;
+        Mon, 26 Sep 2022 21:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664228789;
-        bh=2+SloBY+jDAlwq01BM/YlVe4LL61s2uwBV+FOoix9Hg=;
+        s=k20201202; t=1664228856;
+        bh=ctLhJppD55XlU1Ayb1sGbBYR3KPeJbjfX6+6mVLpJxQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=IUyQJKZKMNvQMVDa5pwPltIpqA9vuoitPz668khCwUFllBwBepH54hwNV+BS+W1E6
-         oWThT0EdHf3ZkFsgGTyrL1V0/eZ15rXQtHVow6MsfzOnPgHAQ0jMmQ4As5u45YL6NJ
-         kCpjaTtOeAqcbkKeSSP1rGibGnmkDGF4m9BS5RPZGurEp4fmfyo1z34DrqTUMIf97h
-         HKzTHK9oxxhOqwy36kmkJQdscWjdgpdjxit7pU/6Whp5hjZJgmSDwHhkdAn9jlJ/kM
-         hYoMNoySNjzdU8CKZYO5smb2IfwBCjJtFa1dPvRIjGVRdJbROWw4c1pJBk5ZdeQLYs
-         JizPRgkQg2Ggw==
-Date:   Mon, 26 Sep 2022 16:46:24 -0500
+        b=aF/iIgO7J82RcvVzbgUbO0FpQSzhrLOg/7udOApBEKaNNWwwzx9bswLeVpFfNxMYv
+         +AQ7B/md82Yl27QCLLB5WtkToCPhIjbLBkRoohXNfRjIi+7ZspXouIU6rXD1XblOOk
+         wTG8E3HKa3wNDeP1sXBMEGvD6CV4Ik5wfAzGZqNOD+cltJaJwJ1KoosievRFzB94S/
+         /d9SOpFaIb9C9TAjSz8iYrppLnXUwHGlEdqWniZYZiPQMhvrtDfImLwFEd3nMeijFS
+         1UluPBtf9ExYtcj610paZk/68Cl4sOZ+nzGIaagGJtkEktug3QwV45oBPeNOoVNyeV
+         TI/9/F8YS0hHw==
+Date:   Mon, 26 Sep 2022 16:47:25 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH][next] dmaengine: sh: rcar-dmac: Replace zero-length arrays
- with DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzIdsJqsR3LH2qEK@work>
+Subject: [PATCH][next] i2c: acpi: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YzId7dQGWxMyXHEU@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,27 +63,25 @@ helper macro.
 This helper allows for flexible-array members in unions.
 
 Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/217
+Link: https://github.com/KSPP/linux/issues/218
 Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/dma/sh/rcar-dmac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/i2c-core-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/sh/rcar-dmac.c b/drivers/dma/sh/rcar-dmac.c
-index 13d12d660cc2..641d689d17ff 100644
---- a/drivers/dma/sh/rcar-dmac.c
-+++ b/drivers/dma/sh/rcar-dmac.c
-@@ -103,8 +103,8 @@ struct rcar_dmac_desc_page {
- 	struct list_head node;
- 
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 08b561f0709d..da6568a20177 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -26,7 +26,7 @@ struct gsb_buffer {
  	union {
--		struct rcar_dmac_desc descs[0];
--		struct rcar_dmac_xfer_chunk chunks[0];
-+		DECLARE_FLEX_ARRAY(struct rcar_dmac_desc, descs);
-+		DECLARE_FLEX_ARRAY(struct rcar_dmac_xfer_chunk, chunks);
+ 		u16	wdata;
+ 		u8	bdata;
+-		u8	data[0];
++		DECLARE_FLEX_ARRAY(u8, data);
  	};
- };
+ } __packed;
  
 -- 
 2.34.1
