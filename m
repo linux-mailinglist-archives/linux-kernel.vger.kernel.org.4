@@ -2,154 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508035EA646
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BF95EA5B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbiIZMhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        id S239310AbiIZMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235749AbiIZMhL (ORCPT
+        with ESMTP id S235272AbiIZMNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:37:11 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94610766F;
-        Mon, 26 Sep 2022 04:14:34 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so10256890lfo.7;
-        Mon, 26 Sep 2022 04:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Jl6cjv+drkaJXciTp9WRqX81dzsBqWQTjT/Pmz2Ud+k=;
-        b=BzAkBsi7CtYIjezHbmpZx5ZGxpGRZyB9yGeQMV6lVe9HR2svwaxddtPLmOelpPor8G
-         V9Gt2sV7WJYTNEA95h0/cpXwsH9RmVrgtO11FoXn4RiEwSfof9xyrbaYbDf/j9OsU7+d
-         XP0E8SSOuSFSyXBKiUAt/FcFHBku1KEA+iWzUTagsE8o0yUBR8PQll90FWQHeuNUZQLo
-         AD8qZpt4GITl1bT/HX4++H8SVgN6qRlMYCtf/bt5RtMaz8GU2oA4CCekd3Ccd7YDH+xp
-         EHU9+aApQrPakiDLVjGV+8uo7Do92pUUN5PlLXainiGbWu5/EVkCuL1sMl+5MxXg38LS
-         Qlvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Jl6cjv+drkaJXciTp9WRqX81dzsBqWQTjT/Pmz2Ud+k=;
-        b=pthB71/JOtJttEo9dUd8Qewe9tyDuLi/f9z13ilkbbG+44cFqXtTBbdzxC2eBE9IFD
-         N1vGK0nP0V9pTZCd69pJdjz4qTToJcZe8Nu81s94ffIhmhIzlb2Gv586LEUKAh7ZJgDg
-         AGr4ksmW3znx4xUIjBf+wb701qonMx/S3Z5c3TieUI64nLcyZ7Am6IzdA+BVtBz8QvLz
-         bsbqIuGCjbwobluuEU4d4EtF0/BKhYq65f53QPb8pl17Z0OeG8aqefdfPp+W+bUICH7H
-         8GEZ73xBTyWwMLNl7Y6+iEkpzFd2+BJj/tqUeYh5MFlI4WJmGrdb02ONRLg/cpnMuC5s
-         n/mg==
-X-Gm-Message-State: ACrzQf06Yox+/smVqICE7bjMZKAy8ULryKDvL2oW6efGuQGTevvU54uo
-        J2/ICvS9s5ahpS4Fe98QczBtnZ+r0Lssag==
-X-Google-Smtp-Source: AMsMyM7FUus+1W/kisiRcKm/uEjq7jN214VSWYzTOL/eGPntWFSEYsMYvV9p54z041a08kyfsUw7Sg==
-X-Received: by 2002:a05:651c:1591:b0:261:c388:aa58 with SMTP id h17-20020a05651c159100b00261c388aa58mr7587463ljq.277.1664189775575;
-        Mon, 26 Sep 2022 03:56:15 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id p26-20020a056512313a00b00490b5f09973sm2505226lfd.92.2022.09.26.03.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 03:56:15 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 13:56:11 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v2 03/15] dt-bindings: memory: snps: Convert the schema
- to being generic
-Message-ID: <20220926105611.32od2rjlvybmzmut@mobilestation>
-References: <20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru>
- <20220910195659.11843-4-Sergey.Semin@baikalelectronics.ru>
- <20220912143219.GC1170702-robh@kernel.org>
+        Mon, 26 Sep 2022 08:13:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F71926AE9;
+        Mon, 26 Sep 2022 03:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664189920; x=1695725920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1yrpJYkku/0zqJqzokRG75N3kP7OfV/uBx48KxXJJOg=;
+  b=BucTH/EXknyMQXmJJimqQH3h51l7xR6ZCo1KiwgsLAfqlqxJzC4BVofe
+   zXLcNpQlBMh/2+Z3oNVIOuIua5Gz5IMQSoMqk+C4VHqoNmWozxwT1jT0E
+   kIAdjT6adKR909KIKnhP49+c1+RKZkNivTSnKru/Y1sp2mS9qRgeGIS10
+   Ah6PtaavtEkvy3CdGA/HntYFiRCcRx5PaEm9DU5O2ypk1QP6AnfnFiIW5
+   QMWdvb1w/25dcZSM+hp30X8AyrZCc4D2F1FtUF1kdhgH5ZWmx9lpHFSC2
+   rUn7F5oTZ6CUmdM8QlZ8/cBFm7UwOJUEuJ2rWOXvg7LXxX+0eRb4fJCd/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="299719867"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="299719867"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:56:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="710077501"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="710077501"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Sep 2022 03:56:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oclml-007lcY-0g;
+        Mon, 26 Sep 2022 13:56:27 +0300
+Date:   Mon, 26 Sep 2022 13:56:26 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions
+ by forward declarations
+Message-ID: <YzGFWt40IhkASq4j@smile.fi.intel.com>
+References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
+ <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
+ <Yy4C5HH3yxssLMPh@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912143219.GC1170702-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yy4C5HH3yxssLMPh@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 09:32:19AM -0500, Rob Herring wrote:
-> On Sat, Sep 10, 2022 at 10:56:47PM +0300, Serge Semin wrote:
-> > At the current state the DW uMCTL2 DDRC DT-schema can't be used as the
-> > common one for all the IP-core-based devices due to the compatible string
-> > property constraining the list of the supported device names. In order to
-> > fix that we suggest to update the compatible property constraints so one
-> > would permit having any value aside with the generic device names. At the
-> > same time the generic DT-schema selection must be restricted to the
-> > denoted generic devices only so not to permit the generic fallback
-> > compatibles. Finally since the generic schema will be referenced from the
-> > vendor-specific DT-bindings with possibly non-standard properties defined
-> > it must permit having additional properties specified.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Note alternatively we could drop the "additionalProperties" keyword
-> > modification since currently there is no actual device available with the
-> > properties not listed in the generic DT-schema.
+On Fri, Sep 23, 2022 at 12:03:00PM -0700, Dmitry Torokhov wrote:
+> On Fri, Sep 23, 2022 at 09:46:32PM +0300, Andy Shevchenko wrote:
+> > When the data structure is only referred by pointer, compiler may not need
+> > to see the contents of the data type. Thus, we may replace header inclusions
+> > by respective forward declarations.
+
+...
+
+> > +struct device;
+> > +struct input_dev;
 > 
+> This results in a ton of compile errors. While I believe this change is
+> a good one, we need to fix users of this include first.
 
-> Normally, this has required 2 schema files. However, I think you can 
-> do something like this:
-> 
-> if:
->   compatible:
->     enum:
->       - snps,ddrc-3.80a
->       - snps,dw-umctl2-ddrc
->       - xlnx,zynqmp-ddrc-2.40a
-> then:
->   unevaluatedProperties: false
-> 
-> 
-> But please make sure that actually catches undocumented properties 
-> because unevaluateProperties under 'then' is not something I've tried.
+Indeed, sorry for breaking things (I compile-tested with limited drivers
+enabled). I will look into LKP reports and will fix the users.
 
-Oh, I wish this would work! Alas it doesn't. AFAIU the schemas under
-the "then" and "else" keywords are considered as separate schemas
-and are independently applied to the DT node. As soon as I added the
-construction suggested by you the schema evaluation started failing
-with error as none of the DT-node properties in the examples are valid:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-< ... /snps,dw-umctl2-ddrc.example.dtb: memory-controller@fd070000:
-<     Unevaluated properties are not allowed ('compatible', 'reg', interrupts', 'interrupt-names', '$nodename' were unexpected)
 
-< ... /snps,dw-umctl2-ddrc.example.dtb: memory-controller@3d400000:
-<     Unevaluated properties are not allowed ('compatible', 'reg', 'interrupts', 'interrupt-names', 'clocks', 'clock-names', '$nodename' were unexpected)
-
-Any suggestion of how this could be fixed? Perhaps updating the
-dtschema tool anyhow? (I failed to find a quick-fix for it) Creating
-an additional separate schema with the common properties seems a bit
-overkill in this case. On the other hand is there a decent
-alternative?
-
-What about accepting what I suggested in this patch? It does permit
-additional properties, but we won't need to have a separate schema
-with just several common properties.
-
--Sergey
-
-> 
-> Rob
