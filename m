@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423485EA20E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F43D5EA110
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiIZLB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S236170AbiIZKpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbiIZK7O (ORCPT
+        with ESMTP id S234090AbiIZKmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498CE5C965;
-        Mon, 26 Sep 2022 03:30:55 -0700 (PDT)
+        Mon, 26 Sep 2022 06:42:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69D54655;
+        Mon, 26 Sep 2022 03:24:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11BBAB80921;
-        Mon, 26 Sep 2022 10:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4776AC433D7;
-        Mon, 26 Sep 2022 10:30:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 23E2ACE10E0;
+        Mon, 26 Sep 2022 10:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECE7C433D6;
+        Mon, 26 Sep 2022 10:24:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188214;
-        bh=b5ug6492769tmpi3/aDreioFX6K/kXA2CQBR07psTOA=;
+        s=korg; t=1664187842;
+        bh=Sx/ZtVz5BhS6emHclKu+X9velFI4oMJK6XW2r9uSD8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mahp1dSEzjZVv+50us10Uk10fI98yjQ0vZrIdSTsB45M2UoSAffW49ylE8BoNXqLb
-         tOrGDDxClXG+ylgQs8wEItUfkIF3/DRs2SNF5fffx+JOviZs78tWlAdzd3YCggBimX
-         5tVFpfzqtg0kkaPk7P2fMbCoLhaIlyRZH3llavYM=
+        b=c8HPBeHgmfRGdlrz5eYy/dFXj121WhJHQplF0qioKd9bTnvdXNfrcTeGZK9dZe41J
+         oEMqPMfc9u8/ajdqrLp2sxHTR/xS259QctGj8nVy/YXhpv9O3Kc5tXejOfXi7mejnx
+         5HxCZaVkVhOlJeqjQblm3vN8b+AImNWU7+hgfF98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, David Leadbeater <dgl@dgl.cx>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 077/141] scsi: mpt3sas: Fix return value check of dma_get_required_mask()
+Subject: [PATCH 5.4 070/120] netfilter: nf_conntrack_irc: Tighten matching on DCC message
 Date:   Mon, 26 Sep 2022 12:11:43 +0200
-Message-Id: <20220926100757.236635449@linuxfoundation.org>
+Message-Id: <20220926100753.557377568@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: David Leadbeater <dgl@dgl.cx>
 
-[ Upstream commit e0e0747de0ea3dd87cdbb0393311e17471a9baf1 ]
+[ Upstream commit e8d5dfd1d8747b56077d02664a8838c71ced948e ]
 
-Fix the incorrect return value check of dma_get_required_mask().  Due to
-this incorrect check, the driver was always setting the DMA mask to 63 bit.
+CTCP messages should only be at the start of an IRC message, not
+anywhere within it.
 
-Link: https://lore.kernel.org/r/20220913120538.18759-2-sreekanth.reddy@broadcom.com
-Fixes: ba27c5cf286d ("scsi: mpt3sas: Don't change the DMA coherent mask after allocations")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+While the helper only decodes packes in the ORIGINAL direction, its
+possible to make a client send a CTCP message back by empedding one into
+a PING request.  As-is, thats enough to make the helper believe that it
+saw a CTCP message.
+
+Fixes: 869f37d8e48f ("[NETFILTER]: nf_conntrack/nf_nat: add IRC helper port")
+Signed-off-by: David Leadbeater <dgl@dgl.cx>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_conntrack_irc.c | 34 ++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 18f85c963944..c1b76cda60db 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2825,7 +2825,7 @@ _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
+diff --git a/net/netfilter/nf_conntrack_irc.c b/net/netfilter/nf_conntrack_irc.c
+index 26245419ef4a..65b5b05fe38d 100644
+--- a/net/netfilter/nf_conntrack_irc.c
++++ b/net/netfilter/nf_conntrack_irc.c
+@@ -148,15 +148,37 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 	data = ib_ptr;
+ 	data_limit = ib_ptr + skb->len - dataoff;
  
- 	if (ioc->is_mcpu_endpoint ||
- 	    sizeof(dma_addr_t) == 4 || ioc->use_32bit_dma ||
--	    dma_get_required_mask(&pdev->dev) <= 32)
-+	    dma_get_required_mask(&pdev->dev) <= DMA_BIT_MASK(32))
- 		ioc->dma_mask = 32;
- 	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
- 	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
+-	/* strlen("\1DCC SENT t AAAAAAAA P\1\n")=24
+-	 * 5+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=14 */
+-	while (data < data_limit - (19 + MINMATCHLEN)) {
+-		if (memcmp(data, "\1DCC ", 5)) {
++	/* Skip any whitespace */
++	while (data < data_limit - 10) {
++		if (*data == ' ' || *data == '\r' || *data == '\n')
++			data++;
++		else
++			break;
++	}
++
++	/* strlen("PRIVMSG x ")=10 */
++	if (data < data_limit - 10) {
++		if (strncasecmp("PRIVMSG ", data, 8))
++			goto out;
++		data += 8;
++	}
++
++	/* strlen(" :\1DCC SENT t AAAAAAAA P\1\n")=26
++	 * 7+MINMATCHLEN+strlen("t AAAAAAAA P\1\n")=26
++	 */
++	while (data < data_limit - (21 + MINMATCHLEN)) {
++		/* Find first " :", the start of message */
++		if (memcmp(data, " :", 2)) {
+ 			data++;
+ 			continue;
+ 		}
++		data += 2;
++
++		/* then check that place only for the DCC command */
++		if (memcmp(data, "\1DCC ", 5))
++			goto out;
+ 		data += 5;
+-		/* we have at least (19+MINMATCHLEN)-5 bytes valid data left */
++		/* we have at least (21+MINMATCHLEN)-(2+5) bytes valid data left */
+ 
+ 		iph = ip_hdr(skb);
+ 		pr_debug("DCC found in master %pI4:%u %pI4:%u\n",
+@@ -172,7 +194,7 @@ static int help(struct sk_buff *skb, unsigned int protoff,
+ 			pr_debug("DCC %s detected\n", dccprotos[i]);
+ 
+ 			/* we have at least
+-			 * (19+MINMATCHLEN)-5-dccprotos[i].matchlen bytes valid
++			 * (21+MINMATCHLEN)-7-dccprotos[i].matchlen bytes valid
+ 			 * data left (== 14/13 bytes) */
+ 			if (parse_dcc(data, data_limit, &dcc_ip,
+ 				       &dcc_port, &addr_beg_p, &addr_end_p)) {
 -- 
 2.35.1
 
