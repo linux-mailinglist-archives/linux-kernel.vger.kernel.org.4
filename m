@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964BB5EA3FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8F95EA4FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238110AbiIZLh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S238960AbiIZL5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238045AbiIZLhK (ORCPT
+        with ESMTP id S239038AbiIZLyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:37:10 -0400
+        Mon, 26 Sep 2022 07:54:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF0B2ED46;
-        Mon, 26 Sep 2022 03:44:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867B157E2E;
+        Mon, 26 Sep 2022 03:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD3C60CD4;
-        Mon, 26 Sep 2022 10:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53A6C433C1;
-        Mon, 26 Sep 2022 10:29:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FE0C60AF3;
+        Mon, 26 Sep 2022 10:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2835C433D6;
+        Mon, 26 Sep 2022 10:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188183;
-        bh=wYMWX1RdKzeoF4adCEB63kIZCJOyfUXgVp3rUBJ24FE=;
+        s=korg; t=1664189289;
+        bh=VyzeQ3A73WzZWuQ1QIIIEVGaB9CNiZoFtGOsM/3vM0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jrbRmU94wCa/Pg4T0ylJlruUmgLzKl39TDn0NzNK8xDx0AJKA5g9boPRD6C/BxUqX
-         VjeZ9yu2WcuWCTsGj1H7hIFXrmrZh5TrOHmkSvsKmAW2IBQQuLPKN6kYgx3fgxN7C2
-         wcsDt1CAauzEfKEu8CPz6LOkY16iwlNTRYEll4BM=
+        b=COipS0xnPhmXjucJSSVpRXpMMUyoSCH+OmoCKBFmdAR3BuZgq6nvpSgyxLMhakrBu
+         wSSLlFev6SY5GKAuxLLDro2A+cEkOl9K5YEEqSsr95Iw4NuGmfSKCy5R6NELQofrRI
+         Arkx3T3jiIn/6cQ6ufKxTGv0CJtVJQ2eZK/o37fE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Ryzhov <iryzhov@nfware.com>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 068/141] netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
+Subject: [PATCH 5.19 105/207] net: bonding: Share lacpdu_mcast_addr definition
 Date:   Mon, 26 Sep 2022 12:11:34 +0200
-Message-Id: <20220926100756.896291466@linuxfoundation.org>
+Message-Id: <20220926100811.294285540@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +54,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Ryzhov <iryzhov@nfware.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 39aebedeaaa95757f5c1f2ddb5f43fdddbf478ca ]
+[ Upstream commit 1d9a143ee3408349700f44a9197b7ae0e4faae5d ]
 
-ct_sip_next_header and ct_sip_get_header return an absolute
-value of matchoff, not a shift from current dataoff.
-So dataoff should be assigned matchoff, not incremented by it.
+There are already a few definitions of arrays containing
+MULTICAST_LACPDU_ADDR and the next patch will add one more use. These all
+contain the same constant data so define one common instance for all
+bonding code.
 
-This issue can be seen in the scenario when there are multiple
-Contact headers and the first one is using a hostname and other headers
-use IP addresses. In this case, ct_sip_walk_headers will work as follows:
-
-The first ct_sip_get_header call to will find the first Contact header
-but will return -1 as the header uses a hostname. But matchoff will
-be changed to the offset of this header. After that, dataoff should be
-set to matchoff, so that the next ct_sip_get_header call find the next
-Contact header. But instead of assigning dataoff to matchoff, it is
-incremented by it, which is not correct, as matchoff is an absolute
-value of the offset. So on the next call to the ct_sip_get_header,
-dataoff will be incorrect, and the next Contact header may not be
-found at all.
-
-Fixes: 05e3ced297fe ("[NETFILTER]: nf_conntrack_sip: introduce SIP-URI parsing helper")
-Signed-off-by: Igor Ryzhov <iryzhov@nfware.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Stable-dep-of: 86247aba599e ("net: bonding: Unsync device addresses on ndo_stop")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_sip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_3ad.c  |  5 +++--
+ drivers/net/bonding/bond_main.c | 16 ++++------------
+ include/net/bond_3ad.h          |  2 --
+ include/net/bonding.h           |  3 +++
+ 4 files changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_sip.c
-index b83dc9bf0a5d..78fd9122b70c 100644
---- a/net/netfilter/nf_conntrack_sip.c
-+++ b/net/netfilter/nf_conntrack_sip.c
-@@ -477,7 +477,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 				return ret;
- 			if (ret == 0)
- 				break;
--			dataoff += *matchoff;
-+			dataoff = *matchoff;
- 		}
- 		*in_header = 0;
- 	}
-@@ -489,7 +489,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 			break;
- 		if (ret == 0)
- 			return ret;
--		dataoff += *matchoff;
-+		dataoff = *matchoff;
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index 1f0120cbe9e8..8ad095c19f27 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -87,8 +87,9 @@ static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
+ static u16 ad_ticks_per_sec;
+ static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
+ 
+-static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
+-	MULTICAST_LACPDU_ADDR;
++const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned = {
++	0x01, 0x80, 0xC2, 0x00, 0x00, 0x02
++};
+ 
+ /* ================= main 802.3ad protocol functions ================== */
+ static int ad_lacpdu_send(struct port *port);
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index bff0bfd10e23..b159b73f2969 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -865,12 +865,8 @@ static void bond_hw_addr_flush(struct net_device *bond_dev,
+ 	dev_uc_unsync(slave_dev, bond_dev);
+ 	dev_mc_unsync(slave_dev, bond_dev);
+ 
+-	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+-		/* del lacpdu mc addr from mc list */
+-		u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
+-
+-		dev_mc_del(slave_dev, lacpdu_multicast);
+-	}
++	if (BOND_MODE(bond) == BOND_MODE_8023AD)
++		dev_mc_del(slave_dev, lacpdu_mcast_addr);
+ }
+ 
+ /*--------------------------- Active slave change ---------------------------*/
+@@ -2144,12 +2140,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 		dev_uc_sync_multiple(slave_dev, bond_dev);
+ 		netif_addr_unlock_bh(bond_dev);
+ 
+-		if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+-			/* add lacpdu mc addr to mc list */
+-			u8 lacpdu_multicast[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
+-
+-			dev_mc_add(slave_dev, lacpdu_multicast);
+-		}
++		if (BOND_MODE(bond) == BOND_MODE_8023AD)
++			dev_mc_add(slave_dev, lacpdu_mcast_addr);
  	}
  
- 	if (in_header)
+ 	bond->slave_cnt++;
+diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
+index 184105d68294..f2273bd5a4c5 100644
+--- a/include/net/bond_3ad.h
++++ b/include/net/bond_3ad.h
+@@ -15,8 +15,6 @@
+ #define PKT_TYPE_LACPDU         cpu_to_be16(ETH_P_SLOW)
+ #define AD_TIMER_INTERVAL       100 /*msec*/
+ 
+-#define MULTICAST_LACPDU_ADDR    {0x01, 0x80, 0xC2, 0x00, 0x00, 0x02}
+-
+ #define AD_LACP_SLOW 0
+ #define AD_LACP_FAST 1
+ 
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index 3b816ae8b1f3..7ac1773b9922 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -785,6 +785,9 @@ extern struct rtnl_link_ops bond_link_ops;
+ /* exported from bond_sysfs_slave.c */
+ extern const struct sysfs_ops slave_sysfs_ops;
+ 
++/* exported from bond_3ad.c */
++extern const u8 lacpdu_mcast_addr[];
++
+ static inline netdev_tx_t bond_tx_drop(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	dev_core_stats_tx_dropped_inc(dev);
 -- 
 2.35.1
 
