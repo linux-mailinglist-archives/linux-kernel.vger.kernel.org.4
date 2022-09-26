@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB77C5EA131
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959C65E9ECF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236524AbiIZKqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S234710AbiIZKOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbiIZKoB (ORCPT
+        with ESMTP id S234295AbiIZKOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E8A32DA4;
-        Mon, 26 Sep 2022 03:25:12 -0700 (PDT)
+        Mon, 26 Sep 2022 06:14:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E4D12ABE;
+        Mon, 26 Sep 2022 03:13:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E81C6B80920;
-        Mon, 26 Sep 2022 10:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9F7C433D7;
-        Mon, 26 Sep 2022 10:25:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32C39B80915;
+        Mon, 26 Sep 2022 10:13:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675B4C433D7;
+        Mon, 26 Sep 2022 10:13:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187909;
-        bh=/WlxciwnRNUCW5MjxiZJbw8YecLX/8f6sOAW4c0RYOQ=;
+        s=korg; t=1664187235;
+        bh=nvk05x6gK5D03TV1CBcBORU3mHf59eHcn45/Ej8lgqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FYr4XsXebiKTEra9k7bKHVKG+hGGVEQXJ8nkuahIB4nM9VSMq1V73PCX7WVGgIaUE
-         5exx8XadPZzk/uxuFULo08MsrP43nxjEsQFZpl3hPi8vBe4lyYHgKnCV/KdKMvuASn
-         SB5Lcb35YBqz2QuOrkJvuuXyP2poX3jjTLpaHVpY=
+        b=Ehp2iS1tFXbEwA8mjDLlstZQoXCHnFhTGyzxu/fC2WHSI6s2+aYGd+Qq6fKO3Mgem
+         h3P5ZigAixXi20XEhSeyf7rpXIQ72/jecOUtIdBEq9V5JtNv+b+ByKN7/RUYDWNq6c
+         SUJ3BFEH6KUDJpM53HtO4tw1ug6Zbe7jd03t4pHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett.creeley@intel.com>,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 072/120] iavf: Fix cached head and tail value for iavf_get_tx_pending
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 4.9 14/30] USB: core: Fix RST error in hub.c
 Date:   Mon, 26 Sep 2022 12:11:45 +0200
-Message-Id: <20220926100753.624095049@linuxfoundation.org>
+Message-Id: <20220926100736.675981572@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett.creeley@intel.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ Upstream commit 809f23c0423a43266e47a7dc67e95b5cb4d1cbfc ]
+commit 766a96dc558385be735a370db867e302c8f22153 upstream.
 
-The underlying hardware may or may not allow reading of the head or tail
-registers and it really makes no difference if we use the software
-cached values. So, always used the software cached values.
+A recent commit added an invalid RST expression to a kerneldoc comment
+in hub.c.  The fix is trivial.
 
-Fixes: 9c6c12595b73 ("i40e: Detection and recovery of TX queue hung logic moved to service_task from tx_timeout")
-Signed-off-by: Brett Creeley <brett.creeley@intel.com>
-Co-developed-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9c6d778800b9 ("USB: core: Prevent nested device-reset calls")
+Cc: <stable@vger.kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YxDDcsLtRZ7c20pq@rowland.harvard.edu
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/core/hub.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index c6905d1b6182..ce2f6d1ca79f 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -114,8 +114,11 @@ u32 iavf_get_tx_pending(struct iavf_ring *ring, bool in_sw)
- {
- 	u32 head, tail;
- 
-+	/* underlying hardware might not allow access and/or always return
-+	 * 0 for the head/tail registers so just use the cached values
-+	 */
- 	head = ring->next_to_clean;
--	tail = readl(ring->tail);
-+	tail = ring->next_to_use;
- 
- 	if (head != tail)
- 		return (head < tail) ?
--- 
-2.35.1
-
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5702,7 +5702,7 @@ re_enumerate_no_bos:
+  *
+  * Return: The same as for usb_reset_and_verify_device().
+  * However, if a reset is already in progress (for instance, if a
+- * driver doesn't have pre_ or post_reset() callbacks, and while
++ * driver doesn't have pre_reset() or post_reset() callbacks, and while
+  * being unbound or re-bound during the ongoing reset its disconnect()
+  * or probe() routine tries to perform a second, nested reset), the
+  * routine returns -EINPROGRESS.
 
 
