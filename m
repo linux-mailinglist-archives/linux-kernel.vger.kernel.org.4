@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB88A5E9D5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0A65E9D63
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbiIZJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S234505AbiIZJVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234334AbiIZJU4 (ORCPT
+        with ESMTP id S233222AbiIZJVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:20:56 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A906A42ADD;
-        Mon, 26 Sep 2022 02:18:42 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q8WsIa029971;
-        Mon, 26 Sep 2022 09:17:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XLgB/8EEH2jKiQKzTA9360NF+GWxgxC0slXTZGETzO8=;
- b=JmctX17jDg7/dh7BwlLA5G1EbWyrnFoxqFEZfLJ/XJNThcO+pL3R0cpiTCUw5sasJyBK
- gagc3oX9E5VMVnQvtRtcUlGh8O4RKrQK1oEWPo8t61s+8fvfQOVePXmHiudVPiGpi3Hp
- QGgNcCiZ6krXYZVOkiXIk2aE6gRUZ64KlkMmwYtPz7+JJtUCwrFH5RrPwKwZO2h+xVPz
- /71kUYNm1klxPe6o3QNReQchF76aoiGfUvGrUbbD0viInOr1iA9N0JWYVFrVm3FY4/h5
- S9eN0sMdbxG7vWPrbohRgXzT9zIE0rB8a8M+kLNt1A70lgY17qTcTmye3wpAUqo2N9X/ yQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8nw16t8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 09:17:40 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28Q95fH9006260;
-        Mon, 26 Sep 2022 09:17:38 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9a71v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 09:17:38 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28Q9HZq746006584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Sep 2022 09:17:35 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 977314C044;
-        Mon, 26 Sep 2022 09:17:35 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBEBE4C040;
-        Mon, 26 Sep 2022 09:17:34 +0000 (GMT)
-Received: from [9.171.69.218] (unknown [9.171.69.218])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 26 Sep 2022 09:17:34 +0000 (GMT)
-Message-ID: <e0754578-1735-5811-0533-19ef0c6be2b0@linux.ibm.com>
-Date:   Mon, 26 Sep 2022 11:17:34 +0200
+        Mon, 26 Sep 2022 05:21:11 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D152242AC1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:18:57 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 9so6033629pfz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MPn6a20lGPjczB73AXADasqkPzFa5QqvxnfB30lgZnI=;
+        b=nXTHZo4VhcwYUndpnviY+WdPnUQHhydHnFwHNGsRUgPdFHA3f9I+VL/twlx0ysTtc4
+         1XA/3HdmejoO1gfByTU/ohK2Z/L9zIf61aVtVnjuQQ+ac1p8p3uE73f8JFlH04aNsyY8
+         MuoyfmaLRRK4SRqblHLfrnbC27P+QlWmfDBEI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MPn6a20lGPjczB73AXADasqkPzFa5QqvxnfB30lgZnI=;
+        b=a/IGNPgG4PTybwgfC38no6X5lmbYbZlDKDvDaXg4qWEWQzSHOgAoOCJCRX9xwj6ogn
+         EZfa5lyWL7ueca2gAbG0H9vqL+bRnnWs2imFYK0q2Q5DGk3hMYfRfxpubQufA6VGOD79
+         p/45Aarrj9RCTN5oxfI82HezIDfNObRS+nbSl5mQE4p+v8pYicnxyBhm+gE/YVcs0tCY
+         WyZdBJxneXKDzFzVFrEKicb9CnJ1q6fLK1caJkKMIbeu0bY7GNELi+X2z3borUa9leCn
+         Rk91c5tTlVkD2Up0Ss1GIlE6+JLM9AhbSUIP54rtKdsOobCFzXt8kO0+oqp211BfQgNF
+         DtHg==
+X-Gm-Message-State: ACrzQf0OHMFNavXbzEtSTVJ+CuvEbuXk8y8bCzktRbad2M3ipSIIFIVu
+        gDX0lCBQu3suyVDYLljzpCoTDg==
+X-Google-Smtp-Source: AMsMyM6FSbgFItaI3cf+torU0kBg8x6gcHN0zvvUShnmw6Xu2zce5g4Rc5RylioMGCdZ76bOEeX5QQ==
+X-Received: by 2002:aa7:888d:0:b0:538:328b:2ffb with SMTP id z13-20020aa7888d000000b00538328b2ffbmr22809720pfe.82.1664183918481;
+        Mon, 26 Sep 2022 02:18:38 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:2a7d:69c:905d:1926])
+        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0016ee3d7220esm10853134pln.24.2022.09.26.02.18.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 02:18:37 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 18:18:33 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
+Message-ID: <YzFuaUq352geBXcE@google.com>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-19-john.ogness@linutronix.de>
+ <YzEoYPSC5Qf2aL92@google.com>
+ <87leq6d0zn.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 2/3] s390/pci: remove unused bus_next field from struct
- zpci_dev
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
- <20220922095239.2115309-3-schnelle@linux.ibm.com>
-Content-Language: en-US
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220922095239.2115309-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KpW4pxW8ycrRGg4j2w_y2g-zcISFQ00s
-X-Proofpoint-GUID: KpW4pxW8ycrRGg4j2w_y2g-zcISFQ00s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_06,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- bulkscore=0 malwarescore=0 clxscore=1011 spamscore=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209260057
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leq6d0zn.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/22/22 11:52, Niklas Schnelle wrote:
-> This field was added in commit 44510d6fa0c0 ("s390/pci: Handling
-> multifunctions") but is an unused remnant of an earlier version where
-> the devices on the virtual bus were connected in a linked list instead
-> of a fixed 256 entry array of pointers.
+On (22/09/26 10:00), John Ogness wrote:
+> > Oh, hmm. This does not look to me as a simplification. Quite
+> > the opposite, moving cons_text_buf::text pointer to point to
+> > cons_text_buf::text - strlen("... dropped messages...") looks
+> > somewhat fragile.
 > 
-> It is also not used for the list of busses as that is threaded through
-> struct zpci_bus not through struct zpci_dev.
+> It relies on @ext_text and @text being packed together, which yes, may
+> be fragile.
+
+Right, and this assumption can be broken by both internal and external
+sources: new gcc/clang plugins, config options, etc.
+
+> As an alternative we could memcpy the message text (@text)
+> to the end of the dropped message text. There would be enough room.
 > 
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Generally speaking, the dropped text will be less text to copy. But
+> since dropped messages are rare anyway, it might be worth copying more
+> data so that the code is not fragile. It would also allow us to remove
+> the __no_randomize_layout in "struct cons_text_buf".
 
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+Agreed.
 
-
-> ---
->   arch/s390/include/asm/pci.h | 1 -
->   1 file changed, 1 deletion(-)
+> If the end of cons_print_dropped was changed to:
 > 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 7b4cdadbc023..108e732d7b14 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -117,7 +117,6 @@ struct zpci_bus {
->   struct zpci_dev {
->   	struct zpci_bus *zbus;
->   	struct list_head entry;		/* list of all zpci_devices, needed for hotplug, etc. */
-> -	struct list_head bus_next;
->   	struct kref kref;
->   	struct hotplug_slot hotplug_slot;
->   
+>         memcpy(txtbuf->ext_text + len, txtbuf->text, desc->len);
+>         desc->len += len;
+>         desc->outbuf = txtbuf->ext_text;
+> 
+> Would that be OK for you?
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Yes, this looks solid (nothing should be able to break it and cause
+mem corruptions).
