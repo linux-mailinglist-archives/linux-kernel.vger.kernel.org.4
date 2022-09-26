@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E7E5E9F01
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B6D5EA28E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbiIZKRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S237384AbiIZLKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235113AbiIZKQz (ORCPT
+        with ESMTP id S237431AbiIZLIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:16:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5A15A28;
-        Mon, 26 Sep 2022 03:14:52 -0700 (PDT)
+        Mon, 26 Sep 2022 07:08:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9200DF5F;
+        Mon, 26 Sep 2022 03:34:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9A09B8091E;
-        Mon, 26 Sep 2022 10:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30ED4C433C1;
-        Mon, 26 Sep 2022 10:14:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3739960AF5;
+        Mon, 26 Sep 2022 10:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C5FC433D6;
+        Mon, 26 Sep 2022 10:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187287;
-        bh=2FBLOR6h3UCh5GKhSE+UT/LyXePGcm5basdWGeNhV3M=;
+        s=korg; t=1664188367;
+        bh=9z6oqa5xkv1hJphIGbEyX/Kj8XIteefP56ek+6gh3SE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2rBvgogenrDYg7P9vhE4oJ62kwQATJmc4MBjMK8Eu5+qvcYCXOzYVI3+TtU63l44v
-         BMUAT6WSHzhVvZpNwsKuJYvoDHIOu23r0o8vSjASrsGO8AAgpp6sXFFWYY03HzCVQL
-         zUTfRZHBIN/x2fAq8LpZ8aNdF7joFqREBo4ddQkw=
+        b=IBHrHF9TEGU9TujG1bCjNzoB+0/Ppp5vFUCBXU8xWDqQ3qJ1Uees+szKDoXwV4/tk
+         6Snc5jEWLO0rztpPJtVKr0N4pDpm/zoJrifrZxX+aW3tE9QncxkC1DPi06SUGEcai5
+         anwUhr4VZ3eLQ8q+y7QHwiUYaONX7oDUQj2Tk7bk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.9 30/30] ext4: make directory inode spreading reflect flexbg size
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 095/141] net: ipa: avoid 64-bit modulus
 Date:   Mon, 26 Sep 2022 12:12:01 +0200
-Message-Id: <20220926100737.224531328@linuxfoundation.org>
+Message-Id: <20220926100757.872073671@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Alex Elder <elder@linaro.org>
 
-commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
+[ Upstream commit 437c78f976f5b39fc4b2a1c65903a229f55912dd ]
 
-Currently the Orlov inode allocator searches for free inodes for a
-directory only in flex block groups with at most inodes_per_group/16
-more directory inodes than average per flex block group. However with
-growing size of flex block group this becomes unnecessarily strict.
-Scale allowed difference from average directory count per flex block
-group with flex block group size as we do with other metrics.
+It is possible for a 32 bit x86 build to use a 64 bit DMA address.
 
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+There are two remaining spots where the IPA driver does a modulo
+operation to check alignment of a DMA address, and under certain
+conditions this can lead to a build error on i386 (at least).
+
+The alignment checks we're doing are for power-of-2 values, and this
+means the lower 32 bits of the DMA address can be used.  This ensures
+both operands to the modulo operator are 32 bits wide.
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Alex Elder <elder@linaro.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Stable-dep-of: cf412ec33325 ("net: ipa: properly limit modem routing table use")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/ialloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ipa/gsi.c       | 11 +++++++----
+ drivers/net/ipa/ipa_table.c |  9 ++++++---
+ 2 files changed, 13 insertions(+), 7 deletions(-)
 
---- a/fs/ext4/ialloc.c
-+++ b/fs/ext4/ialloc.c
-@@ -511,7 +511,7 @@ static int find_group_orlov(struct super
- 		goto fallback;
- 	}
+diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+index fe91b72eca36..e46d3622f9eb 100644
+--- a/drivers/net/ipa/gsi.c
++++ b/drivers/net/ipa/gsi.c
+@@ -1251,15 +1251,18 @@ static void gsi_evt_ring_rx_update(struct gsi_evt_ring *evt_ring, u32 index)
+ /* Initialize a ring, including allocating DMA memory for its entries */
+ static int gsi_ring_alloc(struct gsi *gsi, struct gsi_ring *ring, u32 count)
+ {
+-	size_t size = count * GSI_RING_ELEMENT_SIZE;
++	u32 size = count * GSI_RING_ELEMENT_SIZE;
+ 	struct device *dev = gsi->dev;
+ 	dma_addr_t addr;
  
--	max_dirs = ndirs / ngroups + inodes_per_group / 16;
-+	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
- 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
- 	if (min_inodes < 1)
- 		min_inodes = 1;
+-	/* Hardware requires a 2^n ring size, with alignment equal to size */
++	/* Hardware requires a 2^n ring size, with alignment equal to size.
++	 * The size is a power of 2, so we can check alignment using just
++	 * the bottom 32 bits for a DMA address of any size.
++	 */
+ 	ring->virt = dma_alloc_coherent(dev, size, &addr, GFP_KERNEL);
+-	if (ring->virt && addr % size) {
++	if (ring->virt && lower_32_bits(addr) % size) {
+ 		dma_free_coherent(dev, size, ring->virt, addr);
+-		dev_err(dev, "unable to alloc 0x%zx-aligned ring buffer\n",
++		dev_err(dev, "unable to alloc 0x%x-aligned ring buffer\n",
+ 			size);
+ 		return -EINVAL;	/* Not a good error value, but distinct */
+ 	} else if (!ring->virt) {
+diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
+index 45e1d68b4694..4f15391aad5f 100644
+--- a/drivers/net/ipa/ipa_table.c
++++ b/drivers/net/ipa/ipa_table.c
+@@ -662,10 +662,13 @@ int ipa_table_init(struct ipa *ipa)
+ 		return -ENOMEM;
+ 
+ 	/* We put the "zero rule" at the base of our table area.  The IPA
+-	 * hardware requires rules to be aligned on a 128-byte boundary.
+-	 * Make sure the allocation satisfies this constraint.
++	 * hardware requires route and filter table rules to be aligned
++	 * on a 128-byte boundary.  As long as the alignment constraint
++	 * is a power of 2, we can check alignment using just the bottom
++	 * 32 bits for a DMA address of any size.
+ 	 */
+-	if (addr % IPA_TABLE_ALIGN) {
++	BUILD_BUG_ON(!is_power_of_2(IPA_TABLE_ALIGN));
++	if (lower_32_bits(addr) % IPA_TABLE_ALIGN) {
+ 		dev_err(dev, "table address %pad not %u-byte aligned\n",
+ 			&addr, IPA_TABLE_ALIGN);
+ 		dma_free_coherent(dev, size, virt, addr);
+-- 
+2.35.1
+
 
 
