@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9A65EA5D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1EF5EA594
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 14:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiIZMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 08:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S239443AbiIZMHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 08:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239437AbiIZMU5 (ORCPT
+        with ESMTP id S239972AbiIZMGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 08:20:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C24F5E54A;
-        Mon, 26 Sep 2022 04:03:26 -0700 (PDT)
+        Mon, 26 Sep 2022 08:06:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F44B7E038;
+        Mon, 26 Sep 2022 03:55:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 468746068C;
-        Mon, 26 Sep 2022 10:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD2DC433D6;
-        Mon, 26 Sep 2022 10:49:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1156CE10DC;
+        Mon, 26 Sep 2022 10:49:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161C1C433C1;
+        Mon, 26 Sep 2022 10:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189352;
-        bh=4XjvDMY7+JMNNTaZ99vTKWavds7RXyMkidR26fFMFpc=;
+        s=korg; t=1664189358;
+        bh=xN7VbhVCMnKTVW43mRCQHob7/sSu/RcC7woljp5Xo80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gmHF06wl3JqtTE4Qc5W7PpsZfKxRdlvi0y+z/w2n3jxOM+mJO+ohdi8Et9pcqPS4X
-         bLNJ4ucVc7dX22tNxNS3SU8eKFV98SmceRAlsuHCT+Obwr7mRCAPdoKhpuIIiFyw8N
-         K5uVouAowlRVSYrqBcs3FKv2RasWAF52h6gc9tTA=
+        b=kS37EpXKeNDDMkmunrSnJroiQuQYqtruX6zBq+btBMANDc/FAjviyDJZ8WigBpSKt
+         FIdwNMPwyXKcSK+Y/DaYb9ihGzv6iSfIs5EYhwsc9fYxEeT2WCZQNndU2YEaiOjha2
+         JNDYPXa14ORsHWPJqCWqnqmz/de9r65M9gjBavaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 158/207] selftests: forwarding: add shebang for sch_red.sh
-Date:   Mon, 26 Sep 2022 12:12:27 +0200
-Message-Id: <20220926100813.726220380@linuxfoundation.org>
+        stable@vger.kernel.org, Fugang Duan <fugang.duan@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH 5.19 160/207] serial: fsl_lpuart: Reset prior to registration
+Date:   Mon, 26 Sep 2022 12:12:29 +0200
+Message-Id: <20220926100813.821388050@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
 References: <20220926100806.522017616@linuxfoundation.org>
@@ -55,38 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit 83e4b196838d90799a8879e5054a3beecf9ed256 ]
+commit 60f361722ad2ae5ee667d0b0545d40c42f754daf upstream.
 
-RHEL/Fedora RPM build checks are stricter, and complain when executable
-files don't have a shebang line, e.g.
+Since commit bd5305dcabbc ("tty: serial: fsl_lpuart: do software reset
+for imx7ulp and imx8qxp"), certain i.MX UARTs are reset after they've
+already been registered.  Register state may thus be clobbered after
+user space has begun to open and access the UART.
 
-*** WARNING: ./kselftests/net/forwarding/sch_red.sh is executable but has no shebang, removing executable bit
+Avoid by performing the reset prior to registration.
 
-Fix it by adding shebang line.
-
-Fixes: 6cf0291f9517 ("selftests: forwarding: Add a RED test for SW datapath")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Link: https://lore.kernel.org/r/20220922024453.437757-1-liuhangbin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: bd5305dcabbc ("tty: serial: fsl_lpuart: do software reset for imx7ulp and imx8qxp")
+Cc: stable@vger.kernel.org # v5.15+
+Cc: Fugang Duan <fugang.duan@nxp.com>
+Cc: Sherry Sun <sherry.sun@nxp.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/72fb646c1b0b11c989850c55f52f9ff343d1b2fa.1662884345.git.lukas@wunner.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/forwarding/sch_red.sh | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/fsl_lpuart.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/sch_red.sh b/tools/testing/selftests/net/forwarding/sch_red.sh
-index e714bae473fb..81f31179ac88 100755
---- a/tools/testing/selftests/net/forwarding/sch_red.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_red.sh
-@@ -1,3 +1,4 @@
-+#!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -2706,14 +2706,15 @@ static int lpuart_probe(struct platform_
+ 		lpuart_reg.cons = LPUART_CONSOLE;
+ 		handler = lpuart_int;
+ 	}
+-	ret = uart_add_one_port(&lpuart_reg, &sport->port);
+-	if (ret)
+-		goto failed_attach_port;
  
- # This test sends one stream of traffic from H1 through a TBF shaper, to a RED
--- 
-2.35.1
-
+ 	ret = lpuart_global_reset(sport);
+ 	if (ret)
+ 		goto failed_reset;
+ 
++	ret = uart_add_one_port(&lpuart_reg, &sport->port);
++	if (ret)
++		goto failed_attach_port;
++
+ 	ret = uart_get_rs485_mode(&sport->port);
+ 	if (ret)
+ 		goto failed_get_rs485;
+@@ -2736,9 +2737,9 @@ static int lpuart_probe(struct platform_
+ 
+ failed_irq_request:
+ failed_get_rs485:
+-failed_reset:
+ 	uart_remove_one_port(&lpuart_reg, &sport->port);
+ failed_attach_port:
++failed_reset:
+ 	lpuart_disable_clks(sport);
+ 	return ret;
+ }
 
 
