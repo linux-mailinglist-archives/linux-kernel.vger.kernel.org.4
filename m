@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840975EA23D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA365EA2DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiIZLEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S237554AbiIZLPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237284AbiIZLDi (ORCPT
+        with ESMTP id S237721AbiIZLN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:03:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FB55F214;
-        Mon, 26 Sep 2022 03:32:39 -0700 (PDT)
+        Mon, 26 Sep 2022 07:13:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FBF61138;
+        Mon, 26 Sep 2022 03:36:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8128660B5E;
-        Mon, 26 Sep 2022 10:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EC1C433D6;
-        Mon, 26 Sep 2022 10:30:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C35860AF5;
+        Mon, 26 Sep 2022 10:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6138AC433C1;
+        Mon, 26 Sep 2022 10:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188232;
-        bh=AElNz+UYwt2zIwwSdP5MS6A5MwZp9mX8D6EMOF4bxrQ=;
+        s=korg; t=1664188586;
+        bh=LWYZwJRb+TV/vCBOlcrgL3YiYNJhcCtWUrDD++5bLvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TO9Q7Fdy6jwobh0wtU6nwyyfwwQO/VJuiQplpEc6xyaNopDthHf0jjqG0NcmsaSkQ
-         Q23VkBda0PWkHl/raCkYItjiXwAKsqnD0YbcJ43fLupcsY9PRVqzL+0+bI37U6N8xK
-         TQts92kEK/gWnTiPj4EO0gr3W2yafKkr9qhsCX94=
+        b=l3qNOUQnmPph8+QLvRMvKMwLbu2+aDfUMdz1VR1IanBDcYHJ4N/0WHwspCS6aPavc
+         hKspLkQCT1qg6YqYUaVqnydxvQ/LSoGKR480H5/0QvDB1n5CPdZf/suAA+pPm43C2/
+         oOc151xAHvzYs6O5v0rhlHSQtiZ9qX+YdG1yxqaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 056/141] can: flexcan: flexcan_mailbox_read() fix return value for drop = true
-Date:   Mon, 26 Sep 2022 12:11:22 +0200
-Message-Id: <20220926100756.481218643@linuxfoundation.org>
+        stable@vger.kernel.org, Sinan Kaya <Sinan.Kaya@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 049/148] net: mana: Add rmb after checking owner bits
+Date:   Mon, 26 Sep 2022 12:11:23 +0200
+Message-Id: <20220926100757.863881132@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Haiyang Zhang <haiyangz@microsoft.com>
 
-commit a09721dd47c8468b3f2fdd73f40422699ffe26dd upstream.
+commit 6fd2c68da55c552f86e401ebe40c4a619025ef69 upstream.
 
-The following happened on an i.MX25 using flexcan with many packets on
-the bus:
+Per GDMA spec, rmb is necessary after checking owner_bits, before
+reading EQ or CQ entries.
 
-The rx-offload queue reached a length more than skb_queue_len_max. In
-can_rx_offload_offload_one() the drop variable was set to true which
-made the call to .mailbox_read() (here: flexcan_mailbox_read()) to
-_always_ return ERR_PTR(-ENOBUFS) and drop the rx'ed CAN frame. So
-can_rx_offload_offload_one() returned ERR_PTR(-ENOBUFS), too.
+Add rmb in these two places to comply with the specs.
 
-can_rx_offload_irq_offload_fifo() looks as follows:
-
-| 	while (1) {
-| 		skb = can_rx_offload_offload_one(offload, 0);
-| 		if (IS_ERR(skb))
-| 			continue;
-| 		if (!skb)
-| 			break;
-| 		...
-| 	}
-
-The flexcan driver wrongly always returns ERR_PTR(-ENOBUFS) if drop is
-requested, even if there is no CAN frame pending. As the i.MX25 is a
-single core CPU, while the rx-offload processing is active, there is
-no thread to process packets from the offload queue. So the queue
-doesn't get any shorter and this results is a tight loop.
-
-Instead of always returning ERR_PTR(-ENOBUFS) if drop is requested,
-return NULL if no CAN frame is pending.
-
-Changes since v1: https://lore.kernel.org/all/20220810144536.389237-1-u.kleine-koenig@pengutronix.de
-- don't break in can_rx_offload_irq_offload_fifo() in case of an error,
-  return NULL in flexcan_mailbox_read() in case of no pending CAN frame
-  instead
-
-Fixes: 4e9c9484b085 ("can: rx-offload: Prepare for CAN FD support")
-Link: https://lore.kernel.org/all/20220811094254.1864367-1-mkl@pengutronix.de
-Cc: stable@vger.kernel.org # v5.5
-Suggested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Tested-by: Thorsten Scherer <t.scherer@eckelmann.de>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: stable@vger.kernel.org
+Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
+Reported-by: Sinan Kaya <Sinan.Kaya@microsoft.com>
+Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Link: https://lore.kernel.org/r/1662928805-15861-1-git-send-email-haiyangz@microsoft.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/flexcan.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/microsoft/mana/gdma_main.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -954,11 +954,6 @@ static struct sk_buff *flexcan_mailbox_r
- 	u32 reg_ctrl, reg_id, reg_iflag1;
- 	int i;
+--- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
++++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+@@ -368,6 +368,11 @@ static void mana_gd_process_eq_events(vo
+ 			break;
+ 		}
  
--	if (unlikely(drop)) {
--		skb = ERR_PTR(-ENOBUFS);
--		goto mark_as_read;
--	}
--
- 	mb = flexcan_get_mb(priv, n);
- 
- 	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP) {
-@@ -987,6 +982,11 @@ static struct sk_buff *flexcan_mailbox_r
- 		reg_ctrl = priv->read(&mb->can_ctrl);
- 	}
- 
-+	if (unlikely(drop)) {
-+		skb = ERR_PTR(-ENOBUFS);
-+		goto mark_as_read;
-+	}
++		/* Per GDMA spec, rmb is necessary after checking owner_bits, before
++		 * reading eqe.
++		 */
++		rmb();
 +
- 	if (reg_ctrl & FLEXCAN_MB_CNT_EDL)
- 		skb = alloc_canfd_skb(offload->dev, &cfd);
- 	else
+ 		mana_gd_process_eqe(eq);
+ 
+ 		eq->head++;
+@@ -1096,6 +1101,11 @@ static int mana_gd_read_cqe(struct gdma_
+ 	if (WARN_ON_ONCE(owner_bits != new_bits))
+ 		return -1;
+ 
++	/* Per GDMA spec, rmb is necessary after checking owner_bits, before
++	 * reading completion info
++	 */
++	rmb();
++
+ 	comp->wq_num = cqe->cqe_info.wq_num;
+ 	comp->is_sq = cqe->cqe_info.is_sq;
+ 	memcpy(comp->cqe_data, cqe->cqe_data, GDMA_COMP_DATA_SIZE);
 
 
