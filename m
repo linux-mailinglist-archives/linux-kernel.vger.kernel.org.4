@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA365EA2DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57675EA212
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237554AbiIZLPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S237029AbiIZLBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiIZLN7 (ORCPT
+        with ESMTP id S237303AbiIZK7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:13:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FBF61138;
-        Mon, 26 Sep 2022 03:36:27 -0700 (PDT)
+        Mon, 26 Sep 2022 06:59:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D185C35B;
+        Mon, 26 Sep 2022 03:30:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C35860AF5;
-        Mon, 26 Sep 2022 10:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6138AC433C1;
-        Mon, 26 Sep 2022 10:36:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3742B80918;
+        Mon, 26 Sep 2022 10:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D96C433B5;
+        Mon, 26 Sep 2022 10:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188586;
-        bh=LWYZwJRb+TV/vCBOlcrgL3YiYNJhcCtWUrDD++5bLvg=;
+        s=korg; t=1664188245;
+        bh=YX4/Yjzp/4rYgmMsb7VPZbYol/QNYcHQ+8z4tKWO4rs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l3qNOUQnmPph8+QLvRMvKMwLbu2+aDfUMdz1VR1IanBDcYHJ4N/0WHwspCS6aPavc
-         hKspLkQCT1qg6YqYUaVqnydxvQ/LSoGKR480H5/0QvDB1n5CPdZf/suAA+pPm43C2/
-         oOc151xAHvzYs6O5v0rhlHSQtiZ9qX+YdG1yxqaU=
+        b=UGJkRrWHmjCZTO43VOKUiTTqoNBkBKo91/bKMMue7YzNJ8ZqLdlZlNDr+Ql/qhS0X
+         ImkqiGPSHyaPtyoJZ4vafwr+vHh4NE+LQclMoUVVC0DH1kDNNTBfUGvyAPsTktjlbV
+         Itl5Nv59e6aVmzkZUNAkcG2lZXAZSqs5AVlLAH3Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sinan Kaya <Sinan.Kaya@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 049/148] net: mana: Add rmb after checking owner bits
+        stable@vger.kernel.org, stable@kernel.org,
+        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Chao Yu <chao.yu@oppo.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 5.10 057/141] mm/slub: fix to return errno if kmalloc() fails
 Date:   Mon, 26 Sep 2022 12:11:23 +0200
-Message-Id: <20220926100757.863881132@linuxfoundation.org>
+Message-Id: <20220926100756.530440349@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haiyang Zhang <haiyangz@microsoft.com>
+From: Chao Yu <chao.yu@oppo.com>
 
-commit 6fd2c68da55c552f86e401ebe40c4a619025ef69 upstream.
+commit 7e9c323c52b379d261a72dc7bd38120a761a93cd upstream.
 
-Per GDMA spec, rmb is necessary after checking owner_bits, before
-reading EQ or CQ entries.
+In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
+out-of-memory, if it fails, return errno correctly rather than
+triggering panic via BUG_ON();
 
-Add rmb in these two places to comply with the specs.
+kernel BUG at mm/slub.c:5893!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
 
-Cc: stable@vger.kernel.org
-Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-Reported-by: Sinan Kaya <Sinan.Kaya@microsoft.com>
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Link: https://lore.kernel.org/r/1662928805-15861-1-git-send-email-haiyangz@microsoft.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Call trace:
+ sysfs_slab_add+0x258/0x260 mm/slub.c:5973
+ __kmem_cache_create+0x60/0x118 mm/slub.c:4899
+ create_cache mm/slab_common.c:229 [inline]
+ kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
+ kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
+ f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
+ f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
+ f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
+ mount_bdev+0x1b8/0x210 fs/super.c:1400
+ f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
+ legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+
+Cc: <stable@kernel.org>
+Fixes: 81819f0fc8285 ("SLUB core")
+Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/microsoft/mana/gdma_main.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ mm/slub.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -368,6 +368,11 @@ static void mana_gd_process_eq_events(vo
- 			break;
- 		}
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5559,7 +5559,8 @@ static char *create_unique_id(struct kme
+ 	char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
+ 	char *p = name;
  
-+		/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+		 * reading eqe.
-+		 */
-+		rmb();
-+
- 		mana_gd_process_eqe(eq);
+-	BUG_ON(!name);
++	if (!name)
++		return ERR_PTR(-ENOMEM);
  
- 		eq->head++;
-@@ -1096,6 +1101,11 @@ static int mana_gd_read_cqe(struct gdma_
- 	if (WARN_ON_ONCE(owner_bits != new_bits))
- 		return -1;
+ 	*p++ = ':';
+ 	/*
+@@ -5617,6 +5618,8 @@ static int sysfs_slab_add(struct kmem_ca
+ 		 * for the symlinks.
+ 		 */
+ 		name = create_unique_id(s);
++		if (IS_ERR(name))
++			return PTR_ERR(name);
+ 	}
  
-+	/* Per GDMA spec, rmb is necessary after checking owner_bits, before
-+	 * reading completion info
-+	 */
-+	rmb();
-+
- 	comp->wq_num = cqe->cqe_info.wq_num;
- 	comp->is_sq = cqe->cqe_info.is_sq;
- 	memcpy(comp->cqe_data, cqe->cqe_data, GDMA_COMP_DATA_SIZE);
+ 	s->kobj.kset = kset;
 
 
