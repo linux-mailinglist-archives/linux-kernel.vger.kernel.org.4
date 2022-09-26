@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF18A5EB069
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3BF5EB071
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiIZSoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 14:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        id S229974AbiIZSqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiIZSn7 (ORCPT
+        with ESMTP id S229963AbiIZSqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:43:59 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D25488A16;
-        Mon, 26 Sep 2022 11:42:42 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 184-20020a1c02c1000000b003b494ffc00bso122920wmc.0;
-        Mon, 26 Sep 2022 11:42:42 -0700 (PDT)
+        Mon, 26 Sep 2022 14:46:00 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72593B6D;
+        Mon, 26 Sep 2022 11:45:57 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so8493133wmr.1;
+        Mon, 26 Sep 2022 11:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=gp0fbvy2tUrmKm/iw/c/azuvn8FXFqwnpF65hLRML3k=;
-        b=ZmnLsxN10+ZD+EjAF3JReD7uJAXFJdjUtOJquBOO4lCnM5uS5tRaD7ZSPV3ik/PDvc
-         TgzTKXoyQJ8nqxm3hEQMcBGNBz7ujDezxSkCYqfGyH+CRU3d66jEkYx4F8KwVq6ZBCl0
-         +mx1DUuLEYCcXmyCStjn1QrX/cH05VJNV/1tsmsPAvtt5RlUYz98x8YL4tJptlEouuKV
-         ZvfgYUQCftMhSzns0BFxYr6ZnGqVLhyKW2k6ELm7DhcSXSwiyH678O47pLc3oYU4Wj1U
-         kUSDT5EzzPdLgcwnJWjx818rYWIw4KlQfxMGva5EjXPw6dchviDSgFQUsiREE4mCvJgw
-         UUig==
+        bh=KbE8+k0DQbQiN6rvJmf+M4QiM27Iyd9apl5Sske1Zzw=;
+        b=lEcglelMVfI2ds6r+pDA9x4BrelWnkKw82KQaIX1ppGx7vEVQmiIlZrrmC7NxTlcZD
+         Gq7WI4BxLyydc11i7GBzwbYddKffR9aNMnmaKvVHkxwJYi/y1uEsuG0x+SdS7tGjEF8E
+         tZoNaN+xbDeWOnSE/d7wvOWYff5pq9Kix6T9Toquh6u7PaIZXvoHhKK4F1qB7NdZTC+Y
+         OPgAnLs9jMLkUkg4VwstbCHVyPjxX7OqYNujR1Ulp9NhSsxEbHIJpheFTNnKp7t6SosN
+         EdaOM8FZvlFGs2uf5iEyFfc6mo/4nIyP/CcEYBmOwKjhGL8EdLE5gJGNpqynDoRAx/ct
+         oHhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=gp0fbvy2tUrmKm/iw/c/azuvn8FXFqwnpF65hLRML3k=;
-        b=MO9Ls0TtQiU1kotYYcbdEzx752FYNRUgZ4x9zK9O2QSZd7r1JWhE5wHd1fiwCcutsq
-         YwFvTEtFN0pTuMckTqmlkPzLRzzrY+JnvhfY2uyCRTjaMCRN/o/MmSxN0vCgKwXPuPIz
-         D+XU3u+4miHAsNPQ/NDsRkEsSShF6EGRApr7o0i9Hv1kKhT51v16S/rcM3W8JvNyhj4v
-         PpRHfG4RKuyP2QBLcLG9AOIwZeOomDe1juJcDQZXoCST+kIVnzceIffxNSTiXC6JpihU
-         QpwpxwMTlbIi+SC1/HC9SOxyGc656RI8fy0fQFX88HCwYNqIx1c2QDOGbT3bv89SFWKC
-         hOcA==
-X-Gm-Message-State: ACrzQf13KfCDlicxgPKgo7mQrBj7NfMfQBG6qNrN89X1+GlrHkobBvB6
-        VSNPDu1GciNLKA6DR/b2NSkdZp3L8A==
-X-Google-Smtp-Source: AMsMyM79aYinHSO7lUY6m3XeLtBfKUEDiqH8wQeOFu/1WkmCSWQvG0Feu519/19iTJdFJce0GVmkjw==
-X-Received: by 2002:a05:600c:4f55:b0:3b4:b687:a7b7 with SMTP id m21-20020a05600c4f5500b003b4b687a7b7mr57464wmq.185.1664217760790;
-        Mon, 26 Sep 2022 11:42:40 -0700 (PDT)
+        bh=KbE8+k0DQbQiN6rvJmf+M4QiM27Iyd9apl5Sske1Zzw=;
+        b=qJV2r3garlnGtKJjkJtUfAQT7mbBxjISLLUaTQ+EVtja88vVHQakc8LzYlC4mn0Yw5
+         qgjoHsUPY+YXGBR9C+mD0r87JaNIfyWQW/9LuVcfaoXCgXrt43dionHpq1N1Sj8BY3t+
+         6rHta2IObNexx1TJO+biqcBNo12bisr+YmhDMASt+WaToWstAyqLExV/jkpqtlsqrQ4O
+         qHOJpRBH14xMPKmKJ+i05V/qvEUdfwY54GMu3+YexWzwl/hspvhMOcEgimS3W2UZpQyW
+         QcX76Dfc39P5v53xYbUlDQME3faIFaOmjVH+MjjJMzU91KPjTL13JLvX9FnDBHUbHH9m
+         2rJw==
+X-Gm-Message-State: ACrzQf28eL5yNB2yiRGeCDnb+mj56y1HgabD3rjyrOShsNQatLlIuFMW
+        A1LBD5dKuc2d0AKZbDjJHk0VXriHnDd/
+X-Google-Smtp-Source: AMsMyM5tpVrKELCli736w1Un7LQjURTIyih0DtUhl0KVk+6QQ6tDeOcWn2gbBaTL5/k5CsaCE744TQ==
+X-Received: by 2002:a05:600c:4f82:b0:3b4:9f2f:430b with SMTP id n2-20020a05600c4f8200b003b49f2f430bmr103344wmq.16.1664217955598;
+        Mon, 26 Sep 2022 11:45:55 -0700 (PDT)
 Received: from fedora (88-106-97-87.dynamic.dsl.as9105.com. [88.106.97.87])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b003b492338f45sm13562149wmq.39.2022.09.26.11.42.40
+        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003a5537bb2besm12607843wmb.25.2022.09.26.11.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 11:42:40 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 19:42:38 +0100
+        Mon, 26 Sep 2022 11:45:55 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 19:45:53 +0100
 From:   Jules Irenge <jbi.octave@gmail.com>
-To:     borntraeger@linux.ibm.com
-Cc:     svens@linux.ibm.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agordeev@linux.ibm.com
-Subject: [PATCH 3/7] s390/qeth: Convert snprintf() to scnprintf()
-Message-ID: <YzHyniCyf+G/2xI8@fedora>
+To:     mark.rutland@arm.com
+Cc:     alexander.shishkin@linux.intel.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elana.copperman@mobileye.com
+Subject: [PATCH 4/7] x86: events: Convert snprintf() to scnprintf()
+Message-ID: <YzHzYWiq64y4DU7p@fedora>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -79,25 +80,40 @@ while scnprintf() returns the actual length.
 
 Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
 ---
- drivers/s390/net/qeth_core_sys.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/events/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/s390/net/qeth_core_sys.c b/drivers/s390/net/qeth_core_sys.c
-index 406be169173c..b40802d707a1 100644
---- a/drivers/s390/net/qeth_core_sys.c
-+++ b/drivers/s390/net/qeth_core_sys.c
-@@ -500,9 +500,9 @@ static ssize_t qeth_hw_trap_show(struct device *dev,
- 	struct qeth_card *card = dev_get_drvdata(dev);
- 
- 	if (card->info.hwtrap)
--		return snprintf(buf, 5, "arm\n");
-+		return scnprintf(buf, 5, "arm\n");
- 	else
--		return snprintf(buf, 8, "disarm\n");
-+		return scnprintf(buf, 8, "disarm\n");
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index f969410d0c90..71695d21ffd1 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1905,7 +1905,7 @@ ssize_t events_hybrid_sysfs_show(struct device *dev,
+ 		if (x86_pmu.hybrid_pmu[i].cpu_type & pmu->cpu_type) {
+ 			next_str = strchr(str, ';');
+ 			if (next_str)
+-				return snprintf(page, next_str - str + 1, "%s", str);
++				return scnprintf(page, next_str - str + 1, "%s", str);
+ 			else
+ 				return sprintf(page, "%s", str);
+ 		}
+@@ -2566,7 +2566,7 @@ static ssize_t get_attr_rdpmc(struct device *cdev,
+ 			      struct device_attribute *attr,
+ 			      char *buf)
+ {
+-	return snprintf(buf, 40, "%d\n", x86_pmu.attr_rdpmc);
++	return scnprintf(buf, 40, "%d\n", x86_pmu.attr_rdpmc);
  }
  
- static ssize_t qeth_hw_trap_store(struct device *dev,
+ static ssize_t set_attr_rdpmc(struct device *cdev,
+@@ -2624,7 +2624,7 @@ static ssize_t max_precise_show(struct device *cdev,
+ 				  struct device_attribute *attr,
+ 				  char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%d\n", x86_pmu_max_precise());
++	return scnprintf(buf, PAGE_SIZE, "%d\n", x86_pmu_max_precise());
+ }
+ 
+ static DEVICE_ATTR_RO(max_precise);
 -- 
 2.37.3
 
