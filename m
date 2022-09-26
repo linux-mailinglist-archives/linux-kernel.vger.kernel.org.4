@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF835EA85B
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F10A5EA85C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiIZO0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S234688AbiIZO0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbiIZOZn (ORCPT
+        with ESMTP id S234503AbiIZOZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:25:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31AE626D;
-        Mon, 26 Sep 2022 05:37:51 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mbhxq500fzlWvQ;
-        Mon, 26 Sep 2022 20:33:35 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 20:37:49 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 20:37:49 +0800
-Subject: Re: [PATCH 3/4] memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to
- simplify code
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-References: <20220922143344.3252585-1-liushixin2@huawei.com>
- <20220922143344.3252585-4-liushixin2@huawei.com>
- <b5252d24-0c7a-5e71-ec4b-d0460181acb8@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <08a48f70-89e7-0cd0-b5d5-c2799b5d76e0@huawei.com>
-Date:   Mon, 26 Sep 2022 20:37:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Mon, 26 Sep 2022 10:25:52 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B162C219B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 05:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664195893; x=1695731893;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XCGp0Qj6YNKh0DfMqLieNZxNgiq9Mq0FUMWMYtlQv8Y=;
+  b=lp3dlo5rUM3cekXgGxaI269lGCeR3kaVo+I2maPy3mk8uV9ZxhSAL54+
+   bgWVYbYPxmW4rBHb8ezOVrZI9nsZX2G7effEm10Ceq3I7jmqowguyiK0+
+   JWaT4YIMpgSIaEaMbbutG5Jnzer2XHJtVQQ8aBIL5acSe70vAollRZc7V
+   pCsyCb7/C4uJuf2sIK0CjgGbIv4FOlGNzkinL/Wb/AUf+5M4SBZfDJ0r/
+   S3ToXlld6lf0CLyhsxQYpaCaIqOsc7jKP6k+rADv1bXQSGLCz541QvML8
+   CffB2mJWrmnZsq5btIM73xobuCZtjtt7KdFEvcUkEU0ETg0+QHCtpTThX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="288153359"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="288153359"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 05:38:13 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="763419947"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="763419947"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.209.229]) ([10.254.209.229])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 05:38:11 -0700
+Message-ID: <64405aee-0701-5b1f-084a-f0750372a563@linux.intel.com>
+Date:   Mon, 26 Sep 2022 20:38:09 +0800
 MIME-Version: 1.0
-In-Reply-To: <b5252d24-0c7a-5e71-ec4b-d0460181acb8@linaro.org>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] [PULL REQUEST] Intel IOMMU updates for Linux v6.1
+To:     Joerg Roedel <joro@8bytes.org>
+References: <20220923004206.3630441-1-baolu.lu@linux.intel.com>
+ <YzGX7ri+CYTpKfeP@8bytes.org>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YzGX7ri+CYTpKfeP@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Joerg,
 
-
-On 2022/9/26 17:26, Krzysztof Kozlowski wrote:
-> On 22/09/2022 16:33, Liu Shixin wrote:
->> Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
->> No functional change.
+On 2022/9/26 20:15, Joerg Roedel wrote:
+> Hi Baolu,
+> 
+> On Fri, Sep 23, 2022 at 08:42:00AM +0800, Lu Baolu wrote:
+>> Lu Baolu (5):
+>>    iommu/vt-d: Remove unnecessary SVA data accesses in page fault path
+>>    iommu/vt-d: Decouple PASID & PRI enabling from SVA
+>>    iommu/vt-d: Remove pasid_set_eafe()
+>>    iommu/vt-d: Avoid unnecessary global IRTE cache invalidation
+>>    iommu/vt-d: Avoid unnecessary global DMA cache invalidation
 >>
->> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
->> ---
->>  drivers/memory/tegra/tegra210-emc-core.c | 14 +-------------
->>  1 file changed, 1 insertion(+), 13 deletions(-)
->>
->> diff --git a/drivers/memory/tegra/tegra210-emc-core.c b/drivers/memory/tegra/tegra210-emc-core.c
->> index cbe1a7723514..603b306daca1 100644
->> --- a/drivers/memory/tegra/tegra210-emc-core.c
->> +++ b/drivers/memory/tegra/tegra210-emc-core.c
->> @@ -1621,20 +1621,8 @@ static int tegra210_emc_debug_available_rates_show(struct seq_file *s,
->>  
->>  	return 0;
->>  }
->> +DEFINE_SHOW_ATTRIBUTE(tegra210_emc_debug_available_rates);
->>  
->> -static int tegra210_emc_debug_available_rates_open(struct inode *inode,
->> -						   struct file *file)
->> -{
->> -	return single_open(file, tegra210_emc_debug_available_rates_show,
->> -			   inode->i_private);
->> -}
->> -
->> -static const struct file_operations tegra210_emc_debug_available_rates_fops = {
->> -	.open = tegra210_emc_debug_available_rates_open,
->> -	.read = seq_read,
->> -	.llseek = seq_lseek,
->> -	.release = single_release,
->> -};
->>  
-> It looks you leave here two blank lines. If so, please fix it - only one
-> blank line.
-Thanks for the reminder, I have removed the duplicate blank lines in next version.
+>> Yi Liu (1):
+>>    iommu/vt-d: Rename cap_5lp_support to cap_fl5lp_support
+> 
+> These don't apply cleanly on v6.0-rc4 or -rc7. Please rebase these
+> patches to my x86/vt-d branch and re-send.
 
-Thanks,
->
->>  static int tegra210_emc_debug_min_rate_get(void *data, u64 *rate)
->>  {
-> Best regards,
-> Krzysztof
->
-> .
->
+This pull request is based on the next branch. There's a conflict
+between
+
+de9f8a91eb32 iommu/dma: Clean up Kconfig (core branch)
+
+and
+
+iommu/vt-d: Decouple PASID & PRI enabling from SVA (this series).
+
+Do you prefer applying de9f8a91eb32 to vt-d branch, or let me send a new
+v6.0-rc7 based pull request?
+
+Best regards,
+baolu
 
