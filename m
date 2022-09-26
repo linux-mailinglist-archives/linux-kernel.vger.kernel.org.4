@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1355EAC4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C821B5EAC43
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 18:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbiIZQRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 12:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S236294AbiIZQRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 12:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiIZQQz (ORCPT
+        with ESMTP id S236157AbiIZQQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:16:55 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9847956AB;
-        Mon, 26 Sep 2022 08:05:54 -0700 (PDT)
-Received: from g550jk.localnet (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::6])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B9370C78D3;
-        Mon, 26 Sep 2022 15:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1664204723; bh=C+tqJ4n0S2ecHmWkQN6j74ywMYCFWy0zDJJ0uK+9sWU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lW/hBz8qeRaX5zYRiWHV+puDQ5cZ75Qdqsw9V8u6C1jYkzvbxgIIFPFTHz+WvoVKL
-         6c9HdTUO+bR5cVDAyFVjlW3djw3UJOeUh7Bo5zdJGrXrwdLWLEZRv2pm40QcxSsgHo
-         Uqs7+fkhXPvFjLsosty3KgwGLhKIg8YC+PmL0OdU=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ARM: dts: qcom: pm8941: fix iadc node
-Date:   Mon, 26 Sep 2022 17:05:22 +0200
-Message-ID: <1828122.tdWV9SEqCh@g550jk>
-In-Reply-To: <74ef3de8-5be0-70ec-e34b-717ba93d3d77@linaro.org>
-References: <20220925161821.78030-1-luca@z3ntu.xyz> <20220925161821.78030-2-luca@z3ntu.xyz> <74ef3de8-5be0-70ec-e34b-717ba93d3d77@linaro.org>
+        Mon, 26 Sep 2022 12:16:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CFA7E315;
+        Mon, 26 Sep 2022 08:05:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2364860E8A;
+        Mon, 26 Sep 2022 15:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651C7C433D7;
+        Mon, 26 Sep 2022 15:05:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664204747;
+        bh=Aov3/htKvwTgeLQbsF1d8tAKy0N1QUy2ectm30sdcNw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ihe0QJe+e0jIrJwHJOGn1goH+ihHG3gLY3A1T+UkRE83krXWNZ+U7R7QqBB7aiaky
+         T76XyMrw13QTxm7kjfOC8NpK8MAetVPB2+IrwrkkuQX95Eh3o7Z8rS5/aY2r08vKyd
+         seYv30vLQEja3ARXi97JNIjGHYRCaLTcFXV9Ffh4b0uDvm3JtwmzqmvD8lVXXFN0tB
+         d6pIUBs6zHLG2xmYQ7HmGb4xqnyFIKonqJ1rhHGhVBAwhW8Eu8DTZkIuja71sf0HjK
+         m6PSn+YU8EdUHvHOuQ1nXZiYBkptaoXRgwB4ew0ukQua4brQkhPCjSiE8NNsbdsbj1
+         xumf0pWjCpcdA==
+Date:   Mon, 26 Sep 2022 08:05:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <Divya.Koppera@microchip.com>
+Cc:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [patch v2 net-next] net: phy: micrel: PEROUT support in lan8814
+Message-ID: <20220926080545.64f5d08d@kernel.org>
+In-Reply-To: <CO1PR11MB47713D1140834D937435A6CBE2529@CO1PR11MB4771.namprd11.prod.outlook.com>
+References: <20220916121809.16924-1-Divya.Koppera@microchip.com>
+        <CO1PR11MB47713D1140834D937435A6CBE2529@CO1PR11MB4771.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, 26 Sep 2022 04:46:35 +0000 Divya.Koppera@microchip.com wrote:
+> Gentle ping.
 
-On Montag, 26. September 2022 10:54:23 CEST Krzysztof Kozlowski wrote:
-> On 25/09/2022 18:18, Luca Weiss wrote:
-> > The iadc node name is supposed to be just 'adc' and the compatible is
-> > only supposed to be qcom,spmi-iadc according to the bindings.
-> > 
-> > Adjust the node to match that.
-> > 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > 
-> >  arch/arm/boot/dts/qcom-pm8941.dtsi | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > b/arch/arm/boot/dts/qcom-pm8941.dtsi index 3c15eecf2f21..33517cccee01
-> > 100644
-> > --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > @@ -131,8 +131,8 @@ adc-chan@48 {
-> > 
-> >  			};
-> >  		
-> >  		};
-> > 
-> > -		pm8941_iadc: iadc@3600 {
-> > -			compatible = "qcom,pm8941-iadc", 
-"qcom,spmi-iadc";
-> > +		pm8941_iadc: adc@3600 {
-> > +			compatible = "qcom,spmi-iadc";
-> 
-> I am not sure this is correct. Usually specific compatibles are encouraged.
+Who are you pinging? The patch is in "Needs ACK" state, try to find
+someone to review it. Better still try reviewing patches posted by
+others, I don't see a single review or ack from you in the history.
+Just saying "ping" to the list that owes you nothing is really low
+effort.
 
-I'm happy to change it the other way also.
-
-But the sibling of this compatible, qcom,spmi-vadc also only has that single 
-compatible so it'd align it with that.
-
-Let me know what you think.
-
-Regards
-Luca
-
-> 
-> Best regards,
-> Krzysztof
-
-
-
-
+I'm tossing your patch from patchwork. Go review something, then
+repost.
