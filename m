@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351605E9FF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465425E9FF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235698AbiIZKbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S235616AbiIZKb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiIZK3F (ORCPT
+        with ESMTP id S235788AbiIZK3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:29:05 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BFD3FA05
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 03:19:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 126772B06A11;
-        Mon, 26 Sep 2022 06:18:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 26 Sep 2022 06:18:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664187531; x=1664194731; bh=5Mi0ax84vN
-        Q8Ik9brdJtvB0uXGlTRxv6OA013bAZpL0=; b=mPjz0W9wujiA8FNtfwEiBpyqV5
-        Uqi3K6rfEHhCDoLBYocGrwnZDkbF04q7vXpH25z1j96pKnGkXXWVq7RygYRVO1+k
-        Zt0FV7UI3P08wPJrRa1bI+g8iOUe1VL7ortevqgZnntf8sBJ0oObT5s5wvThe1Ua
-        Z/YmKoMgwJTphA0EKfpEOFT9LBCN1c+H9u0o9ioZecJgfvan31OYF4ZpDtOjJlPN
-        4bUOs4vjlK09jFXq23EPpj2q7SNBTV4zNsMKuhQf1BTZA2PREikwGuiZybx0NtOk
-        Y46T3p/xM3pHwPrSL7WvKZlANcOzZ2Fz/kv1vU/+cbaiVtIGDpTm5IqWH4lw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664187531; x=1664194731; bh=5Mi0ax84vNQ8Ik9brdJtvB0uXGlT
-        Rxv6OA013bAZpL0=; b=Pbd2EZ6uT1eqTF/biLA5le3FiI0tHPHXbHbzJ8Vaihts
-        LTM+fBnyxQHyTNztlAJUtYHpBhW8tok8RUeg3ikKxP+yOyqKz+epGAtLuMkFjMBG
-        fBQ9B0BFxeWxMYcg9hrPSxljJ6A3tikN73bhwcFqHyPjXMoBmMzBcIjoroP6cAKm
-        JEeUn55n34+nZLMUn9sQPzQeEl/PzfYJkheXxbMsmq+NUZgXT+YBJc260YmJSQk3
-        N5X3nUBPLA0zQHgpVpvTQ8s315+DEplU18scVVRJ9dvWw5RMmXzDnVDAdDK5zG8S
-        VO/Ctzt65RgiKeKDHjzo2p3pxw67zdDYOJRt/Xb7ag==
-X-ME-Sender: <xms:i3wxY9xwl3kZ_jM-VepsytbsBLcquF37MQJo8kAEWTA8q21bZvO7tw>
-    <xme:i3wxY9TRpu9pHpxHNHWwm1Xjg0uMZ_NVDETo_Mb7kgDFQeOOQA2RUSM0YMj-n4NuF
-    f_d6K9TMfgVwGlxiZA>
-X-ME-Received: <xmr:i3wxY3UnXCmOxPzS0jXYbtpvMezjClRHQgLY1Vr8iQbNQ-ezMNzSSyNUnOq8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpefgueeutdefgfevveehjeefgeehvdejjeefheekffduteeutdfgieeiieff
-    uedtffenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:i3wxY_hWb4KR6szUdqDRlDMUrKa3vyQpFMbSn83YrPlgjm1QHttysg>
-    <xmx:i3wxY_Cbbgr9IV5qY0e5CWHmSc0Lke64rk1YaA1Jwq3leJIoT65MoQ>
-    <xmx:i3wxY4KhWDOB6CajfkPU9JMoeW1otbcqvviAR3jcDVfv_mZhEgy4Fw>
-    <xmx:i3wxY7gCjKLywrsbaBhdNtzjYdmSzjvNIh1YfEz5SGHfusRLWhAIMT6mGVY>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 26 Sep 2022 06:18:50 -0400 (EDT)
-Date:   Mon, 26 Sep 2022 12:18:49 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 10/33] drm/modes: Add a function to generate analog
- display modes
-Message-ID: <20220926101849.uiyc7zhgkgz4wy46@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-f733a0ed9f90@cerno.tech>
- <72a8c3ce-ed03-0a77-fb92-eaa992eb86fe@suse.de>
- <87h70y4ffb.fsf@intel.com>
- <f17b239c-715a-7c9c-fb56-477daed28009@suse.de>
+        Mon, 26 Sep 2022 06:29:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AE54E86A;
+        Mon, 26 Sep 2022 03:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664187558; x=1695723558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Yic0GwGpixPkuYrr1AQ7VR1nKuBMpremGARqqE5/85A=;
+  b=XU9yTuy7gqms4TQfoqNBXrkehFyXfi5nnUdoqY8K0au6cEyoe3WWLCCQ
+   pfhkE6NyahzWJlBEtGTxn1MrQji2wv0CDB9uhGd4j6BLJ61yatZd4Sa5a
+   IeEl5cwwWNPP6L5KiGXC1JVdOuPUH74Y0OG1gAUdMJJ2oFd/54dSR/hjg
+   tTzo2mbB+Miws+zsrBMXmEiPM6nMzQCzJrW5Pmjv+dF6fai+rMeVErNS1
+   Z93HsB+3P71+zN3A2EPI4XtiZn6Lntyz8W0RTJmfTo3gkD0lWI1kkSdqW
+   OuiuQOmu+CdzA6kSU7ynon8ishHQ4riM0AClIdcjHfkKHv8alwlOBdXM7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="302459750"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="302459750"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 03:19:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="651773562"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="651773562"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 26 Sep 2022 03:19:05 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oclCZ-007kP2-2R;
+        Mon, 26 Sep 2022 13:19:03 +0300
+Date:   Mon, 26 Sep 2022 13:19:03 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
+ is present
+Message-ID: <YzF8l7kiS7m496YE@smile.fi.intel.com>
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
+ <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+ <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
+ <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
+ <CAHQ1cqGrfTO9JLgD-k0Akg7+hXNT+WevfjH_YpsVi8wQt6_iBw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="orq4q4azvl3jus4q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f17b239c-715a-7c9c-fb56-477daed28009@suse.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHQ1cqGrfTO9JLgD-k0Akg7+hXNT+WevfjH_YpsVi8wQt6_iBw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Sep 25, 2022 at 10:43:07PM -0700, Andrey Smirnov wrote:
+> On Sun, Sep 25, 2022 at 12:21 PM Ferry Toth <fntoth@gmail.com> wrote:
 
---orq4q4azvl3jus4q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Fri, Sep 23, 2022 at 12:16:13PM +0200, Thomas Zimmermann wrote:
-> Hi
->=20
-> Am 23.09.22 um 11:18 schrieb Jani Nikula:
-> > On Fri, 23 Sep 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> > > Am 22.09.22 um 16:25 schrieb Maxime Ripard:
-> > > > +	drm_dbg_kms(dev,
-> > > > +		    "Generating a %ux%u%c, %u-line mode with a %lu kHz clock\n",
-> > > > +		    hactive, vactive,
-> > > > +		    interlace ? 'i' : 'p',
-> > > > +		    params->num_lines,
-> > > > +		    pixel_clock_hz / 1000);
-> > >=20
-> > > Divide by HZ_PER_KHZ here and in other places.
-> > >=20
-> > >     https://elixir.bootlin.com/linux/latest/source/include/linux/unit=
-s.h#L23
-> >=20
-> >  From the Department of Bikeshedding:
-> >=20
-> > I find "pixel_clock_hz / 1000" has much more clarity than
-> > "pixel_clock_hz / HZ_PER_KHZ".
->=20
-> This one's easy to see because it tells you with the _hz postfix. Many
-> places don't and then it quickly gets confusing what units the code's
-> converting.
+> I think we'd want to figure out why the ordering is important if we
+> want to justify the above fix.
 
-So if I add it to places that don't have it explicitly (ie, tests) would
-that be acceptable to both of you?
+At least we all on the same page (I hope) on justification for reverts.
 
-Maxime
+...
 
---orq4q4azvl3jus4q
-Content-Type: application/pgp-signature; name="signature.asc"
+> IMHO instead of trying to rush something in it be prudent to revert my
+> patch _and_ address the fact that above patch was lost during the
+> merge (Andy's revert needs to be updated)
 
------BEGIN PGP SIGNATURE-----
+I'm not an expert in your fixes for DWC3, so please come up with
+the solution sooner than later, otherwise I will try to get my
+reverts into the final release, because they obviously fix the
+regression.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYzF8iQAKCRDj7w1vZxhR
-xWF2AP9QJyjfI+kgaD0AWfK2cf0qTy7Uwc2SUiuCNG4ADKxe0QEAhWoobr2NZ8lL
-ukynl2SUCjF+Bk3Hw/p6n2flp1R3NwQ=
-=v4yB
------END PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
---orq4q4azvl3jus4q--
+
