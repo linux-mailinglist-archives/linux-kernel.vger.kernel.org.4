@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE98B5EA147
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423D45EA24D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiIZKr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S235296AbiIZLFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236834AbiIZKos (ORCPT
+        with ESMTP id S237472AbiIZLER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:48 -0400
+        Mon, 26 Sep 2022 07:04:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE65E558F1;
-        Mon, 26 Sep 2022 03:25:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4345F994;
+        Mon, 26 Sep 2022 03:33:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1799B8055F;
-        Mon, 26 Sep 2022 10:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24855C433C1;
-        Mon, 26 Sep 2022 10:25:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3095DB80691;
+        Mon, 26 Sep 2022 10:30:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96534C433D7;
+        Mon, 26 Sep 2022 10:30:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187940;
-        bh=/SjqnhXjwiyA/BeXgMhvlzWUvKoCyx+wh/zKjpb4Whw=;
+        s=korg; t=1664188242;
+        bh=GmsPVQjk22w5J/YIIk1+Ibh2hLoTPH+XqkuhKb9rjus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SJ7+txg2yWYcz1uesyjsuoUXFYJicDMm/29IDncG/Mc+My0E6pRtjjkGIDmwU2vf2
-         p2FPpZrrMCKzhklPbhmEGD/BuWHRuVMz+uEf3N6eRpdFEdY+GioEdqK6FZMIzsIuHK
-         +FFIGO2xafq1uTtowRUcpxSQQEkkUMHyZOEE0Vgk=
+        b=ZiEuwTeFOUECaA1BGxSw0k2HxhuDiNlcQnx3f08XqHve4Q4N/QnDxkqm9g1NQU7jm
+         ukKGZ3LENqdKq1uHBafpQPTe4JHcj9DAH63vNj1fDdJHUlHHDQLaLIaigqyRBqHKd3
+         LWlvBABwpr8QvFE3bAd4Ig0rmETayra8kkEAyM9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,19 +37,20 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Konrad Jankowski <konrad0.jankowski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 078/120] iavf: Fix set max MTU size with port VLAN and jumbo frames
+Subject: [PATCH 5.10 085/141] iavf: Fix set max MTU size with port VLAN and jumbo frames
 Date:   Mon, 26 Sep 2022 12:11:51 +0200
-Message-Id: <20220926100753.873784598@linuxfoundation.org>
+Message-Id: <20220926100757.522257618@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index 4d471a6f2946..7a17694b6a0b 100644
+index ff479bf72144..5deee75bc436 100644
 --- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
 +++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
 @@ -241,11 +241,14 @@ int iavf_get_vf_config(struct iavf_adapter *adapter)
