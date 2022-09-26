@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31075EA4F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A45EA3C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238754AbiIZL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S235039AbiIZLcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238822AbiIZLxy (ORCPT
+        with ESMTP id S237993AbiIZLbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:53:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660D481CA;
-        Mon, 26 Sep 2022 03:49:52 -0700 (PDT)
+        Mon, 26 Sep 2022 07:31:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA7813CDC;
+        Mon, 26 Sep 2022 03:42:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7214A60AF5;
-        Mon, 26 Sep 2022 10:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C860C433D7;
-        Mon, 26 Sep 2022 10:48:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF785B802C5;
+        Mon, 26 Sep 2022 10:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4DFC433C1;
+        Mon, 26 Sep 2022 10:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189320;
-        bh=wT1N8772zsUcNnX7ubuZGvmkTyerDfEJhFIeWhkXEkM=;
+        s=korg; t=1664188319;
+        bh=EBOO3tdZUjavLHBkkjyibiK3Jxo7Cy1iyAXq+Pu2VzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MRK1+tei042ndLWveJA5culRB4is6cowRgdXi1E+BqN5PqNYdP7sr9ZK1exo7pLgQ
-         itO7r9NIBQhlF1HzWVQJSizytBHtTiPunu7DY8wXkpLeZK/Il0iQJw7tQ8O7Bl+Cd0
-         daP7eGvYhMjLrkGWA5+cLjHNMCykgOJyp75r9IVY=
+        b=TjqPLBcyl0JWX7c0ApAaLcRY03k8UVtJDYV/mOccnUh4peqzE0VyRUVkEBm4uxu9R
+         xQhEIz9RPUZ4Oqqq16cAcFBAlGb5dgwGjWJqdKcAQNkije5Po3KcqODR7ixDjYApzo
+         vzm+ufZWQIGoy+c/ksB392n6VB+yHHjQZfRfFlvQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org,
+        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
+        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 148/207] perf kcore_copy: Do not check /proc/modules is unchanged
+Subject: [PATCH 5.10 111/141] drm/mediatek: dsi: Move mtk_dsi_stop() call back to mtk_dsi_poweroff()
 Date:   Mon, 26 Sep 2022 12:12:17 +0200
-Message-Id: <20220926100813.276649930@linuxfoundation.org>
+Message-Id: <20220926100758.464972362@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-[ Upstream commit 5b427df27b94aec1312cace48a746782a0925c53 ]
+[ Upstream commit 90144dd8b0d137d9e78ef34b3c418e51a49299ad ]
 
-/proc/kallsyms and /proc/modules are compared before and after the copy
-in order to ensure no changes during the copy.
+As the comment right before the mtk_dsi_stop() call advises,
+mtk_dsi_stop() should only be called after
+mtk_drm_crtc_atomic_disable(). That's because that function calls
+drm_crtc_wait_one_vblank(), which requires the vblank irq to be enabled.
 
-However /proc/modules also might change due to reference counts changing
-even though that does not make any difference.
+Previously mtk_dsi_stop(), being in mtk_dsi_poweroff() and guarded by a
+refcount, would only be called at the end of
+mtk_drm_crtc_atomic_disable(), through the call to mtk_crtc_ddp_hw_fini().
+Commit cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from
+enable/disable and define new funcs") moved the mtk_dsi_stop() call to
+mtk_output_dsi_disable(), causing it to be called before
+mtk_drm_crtc_atomic_disable(), and consequently generating vblank
+timeout warnings during suspend.
 
-Any modules loaded or unloaded should be visible in changes to kallsyms,
-so it is not necessary to check /proc/modules also anyway.
+Move the mtk_dsi_stop() call back to mtk_dsi_poweroff() so that we have
+a working vblank irq during mtk_drm_crtc_atomic_disable() and stop
+getting vblank timeout warnings.
 
-Remove the comparison checking that /proc/modules is unchanged.
-
-Fixes: fc1b691d7651d949 ("perf buildid-cache: Add ability to add kcore to the cache")
-Reported-by: Daniel Dao <dqminh@cloudflare.com>
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Tested-by: Daniel Dao <dqminh@cloudflare.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Link: https://lore.kernel.org/r/20220914122429.8770-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Link: http://lists.infradead.org/pipermail/linux-mediatek/2022-August/046713.html
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/symbol-elf.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 75bec32d4f57..647b7dff8ef3 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -2102,8 +2102,8 @@ static int kcore_copy__compare_file(const char *from_dir, const char *to_dir,
-  * unusual.  One significant peculiarity is that the mapping (start -> pgoff)
-  * is not the same for the kernel map and the modules map.  That happens because
-  * the data is copied adjacently whereas the original kcore has gaps.  Finally,
-- * kallsyms and modules files are compared with their copies to check that
-- * modules have not been loaded or unloaded while the copies were taking place.
-+ * kallsyms file is compared with its copy to check that modules have not been
-+ * loaded or unloaded while the copies were taking place.
-  *
-  * Return: %0 on success, %-1 on failure.
-  */
-@@ -2166,9 +2166,6 @@ int kcore_copy(const char *from_dir, const char *to_dir)
- 			goto out_extract_close;
- 	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index b8c1a3c1c517..146c4d04f572 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -668,6 +668,16 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+ 	if (--dsi->refcount != 0)
+ 		return;
  
--	if (kcore_copy__compare_file(from_dir, to_dir, "modules"))
--		goto out_extract_close;
++	/*
++	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
++	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
++	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
++	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
++	 * after dsi is fully set.
++	 */
++	mtk_dsi_stop(dsi);
++
++	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+ 	mtk_dsi_reset_engine(dsi);
+ 	mtk_dsi_lane0_ulp_mode_enter(dsi);
+ 	mtk_dsi_clk_ulp_mode_enter(dsi);
+@@ -718,17 +728,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
+ 	if (!dsi->enabled)
+ 		return;
+ 
+-	/*
+-	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+-	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
+-	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
+-	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
+-	 * after dsi is fully set.
+-	 */
+-	mtk_dsi_stop(dsi);
 -
- 	if (kcore_copy__compare_file(from_dir, to_dir, "kallsyms"))
- 		goto out_extract_close;
+-	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+-
+ 	dsi->enabled = false;
+ }
  
 -- 
 2.35.1
