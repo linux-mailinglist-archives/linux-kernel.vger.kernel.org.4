@@ -2,132 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335745EB5BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD51C5EB5C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiIZX1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S231175AbiIZX3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIZX1o (ORCPT
+        with ESMTP id S229832AbiIZX3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:27:44 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16666EF2B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 3so7921178pga.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
-        b=GgFgwZi+ddAl59t5WyglkquklNhracaGBrF6jU0NtDfgG0IgyUN+puhncM4Se+w3hN
-         3ew+w2WAJPxrfTMHOqMoH5NrrG6IkW5+egKVHdTceHhmZygy1KIcyJjeClsgKVlkj5ex
-         oneWUpdx17BO4/PyBE6g+cJ8tE6d/72orSPDJT/z2Dn5cNhJcTxeiz73K/6cipRmQmPg
-         5WSDE+Crbf2mdPFXkZYYQykqzOJxfF2M7gXPNUdqAk6rST36q6aTR2pVw3SdsdUcI5Zd
-         7j5360faOwyI019TWu9zwCPdBHpnL9pJ3m2PtS+Z9jLoDEfpk2kTstRnVY5XOIb1KKxO
-         K6qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
-        b=xIny8FlRuuD+sAhdSZFqnXukuynp975T9PSuxoPt2S6il2flOWNluh67w6tMg98/TY
-         WmlHJR8R1QkswWGoDr1LCPciHvVcCjddsi40nwqGLmMqwe9VzNLo8Yk5drmN6mBIHzRm
-         fmUg6NPkwKXYpMjuuoX0ld9ZiVbZ8gIRdnW/mVvhQgHfCUB+R06hxHAfOQGI8qG34xtd
-         sh46NamzsKZVT21iiB+5pv7/JeP4PROdbyph1wuROaaBdmpfI5hGg4eaQBUDj06uNkvS
-         H7xkxLm8N78sYSED7zxNgnt+SCVmpy7QzG9jO4ip5MOTxAK4zp5f/Rz5Ar767NfpejWK
-         z7tg==
-X-Gm-Message-State: ACrzQf1vyvEJoks74S8jpQLFtAiCv9tIUs1bh7hr/xvsG0zkGzjCrUOJ
-        /1ArmQlL9v9lZjeDOAnhaVyq/ELOyYWixyiRWB8tKQ==
-X-Google-Smtp-Source: AMsMyM4Y0+nAEAfTHn3/Q+IPC10tZSPdNyafhAmVC2i9miBgZKk8ZEBtq5Y706fIgaHIfrIlYaLC0/EtPvVCFzYpGnY=
-X-Received: by 2002:a63:1a51:0:b0:43b:e496:f2f4 with SMTP id
- a17-20020a631a51000000b0043be496f2f4mr22517497pgm.99.1664234861996; Mon, 26
- Sep 2022 16:27:41 -0700 (PDT)
+        Mon, 26 Sep 2022 19:29:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE6ADF96;
+        Mon, 26 Sep 2022 16:29:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98FB761514;
+        Mon, 26 Sep 2022 23:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF189C433C1;
+        Mon, 26 Sep 2022 23:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664234977;
+        bh=cta2tfrXgkkpSJeDQBht6XFAQ6L5k4lJTcVaApoEA5M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IlyI8JuH1iynVj2WuRqLKNUauOiw88VWMBxnryUrir9tdLI9dbo1weQhJANJJNQd3
+         lzEZtuZU6teyYmrl9MZkLwcQHWXi5IKX36M7hdQJlENSsReh+OlPQxsjfmn4ivdmHn
+         o6Av0sWC9HcrIMRHdDFU4uNpGld7VG6FDwvqge5LWiq2ojiAfITr+wxVOPFdUfr8ke
+         nB7po0v2mlTogzXe2v9DGSgvzofryWr4luuMrHoJSzHYWPmwru2/m38CFYZrKss1Q2
+         +HiZpmFszeq+IgkqPBT9Z3jQjGXv6xkNjDcmuFuPukxXQ+m487IiZG66kidyMFu/qX
+         oYhiYEUxAJlrw==
+Date:   Mon, 26 Sep 2022 16:29:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 02/12] tsnep: deny tc-taprio changes to
+ per-tc max SDU
+Message-ID: <20220926162934.58bf38a6@kernel.org>
+In-Reply-To: <20220926215049.ndvn4ocfvkskzel4@skbuf>
+References: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
+        <20220923163310.3192733-3-vladimir.oltean@nxp.com>
+        <20220926134025.5c438a76@kernel.org>
+        <20220926215049.ndvn4ocfvkskzel4@skbuf>
 MIME-Version: 1.0
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
-In-Reply-To: <Yyt/xgPkHfbOE3vH@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 26 Sep 2022 16:27:31 -0700
-Message-ID: <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
-Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
-To:     David Matlack <dmatlack@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oliver Upton <oupton@google.com>, peterx@redhat.com,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
-> > Cache the vendor CPU type in a global variable so that multiple calls
-> > to is_intel_cpu() do not need to re-execute CPUID.
-> >
-> > Add cpu vendor check in kvm_hypercall() so that it executes correct
-> > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
-> > exit to KVM which anyway tries to patch the instruction according to
-> > the cpu type.
->
-> The commit shortlog makes no mention (nor even implies) that this commit
-> adds AMD support to kvm_hypercall(). Please break this commit up into 2.
-> One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
-> support to kvm_hypercall().
->
-> If you really want to keep this as one commit (I don't know what the
-> benefit would be), please change the shortlog and commit message to
-> focus on the kvm_hypercall() change, as that is the real goal of this
-> commit. The precomputation is arguably and implementation detail. e.g.
->
+On Tue, 27 Sep 2022 00:50:49 +0300 Vladimir Oltean wrote:
+> > Don't all the driver patches make you wanna turn this into an opt-in?  
+> 
+> Presumably you're thinking of a way through which the caller of
+> ndo_setup_tc(TC_SETUP_QDISC_TAPRIO, struct tc_taprio_qopt_offload *)
+> knows whether the driver took the new max_sdu field into consideration,
+> and not just accepted it blindly?
+> 
+> I'm not exactly up to date with all the techniques which can achieve
+> that without changes in drivers, and I haven't noticed other qdisc
+> offloads doing it either... but this would be a great trick to learn for
+> sure. Do you have any idea?
 
-is_amd_cpu is used by guest code within fix_hypercall_test.c, just
-caching the result will break the guest code execution. I have clubbed
-these two changes together in order to ensure that is_amd_cpu works
-fine for both host userspace and guest vm logic.
+I usually put a capability field into the ops themselves. But since tc
+offloads don't have real ops (heh) we need to do the command callback
+thing. This is my knee-jerk coding of something:
 
->   KVM: selftest: Add support for AMD to kvm_hypercall()
->
->   Make it possible to use kvm_hypercall() on AMD by checking if running
->   on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
->   avoid executing CPUID in the guest on every call t kvm_hypercall()
->   (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
->   as part of kvm_selftest_arch_init() and sync it into the guest
->   after loading the ELF image.
->
-> But again, it'd be cleaner just to split it up. Caching the result of
-> is_{intel,amd}_cpu() is useful in its own right, independent of the
-> kvm_hypercall() change.
->
-> >
-> > ...
-> >
-> > @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
-> >
-> >  void kvm_selftest_arch_init(void)
-> >  {
-> > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
-> >  }
-> >
-> >  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> >  {
-> > +     sync_global_to_guest(vm, is_cpu_amd);
-> >  }
-> > --
-> > 2.37.2.789.g6183377224-goog
-> >
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 9f42fc871c3b..2d043def76d8 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -960,6 +960,11 @@ enum tc_setup_type {
+ 	TC_SETUP_QDISC_FIFO,
+ 	TC_SETUP_QDISC_HTB,
+ 	TC_SETUP_ACT,
++	TC_QUERY_CAPS,
++};
++
++struct tc_query_caps {
++	u32 cmd;
+ };
+ 
+ /* These structures hold the attributes of bpf state that are being passed
+diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+index 2ff80cd04c5c..2416151a23db 100644
+--- a/include/net/pkt_sched.h
++++ b/include/net/pkt_sched.h
+@@ -155,6 +155,12 @@ struct tc_etf_qopt_offload {
+ 	s32 queue;
+ };
+ 
++struct tc_taprio_drv_caps {
++	struct tc_query_caps base;
++
++	bool accept_max_sdu;
++};
++
+ struct tc_taprio_sched_entry {
+ 	u8 command; /* TC_TAPRIO_CMD_* */
+ 
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index 136ae21ebce9..68302ee33937 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -1219,6 +1219,7 @@ static int taprio_enable_offload(struct net_device *dev,
+ 				 struct sched_gate_list *sched,
+ 				 struct netlink_ext_ack *extack)
+ {
++	struct tc_taprio_drv_caps caps = { { .cmd = TC_SETUP_QDISC_TAPRIO, }, };
+ 	const struct net_device_ops *ops = dev->netdev_ops;
+ 	struct tc_taprio_qopt_offload *offload;
+ 	int err = 0;
+@@ -1229,6 +1230,12 @@ static int taprio_enable_offload(struct net_device *dev,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	ops->ndo_setup_tc(dev, TC_QUERY_CAPS, &caps);
++	if (!caps.accept_max_sdu && taprio_is_max_sdu_used(...))  {
++		NL_SET_ERR_MSG(extack, "nope.");
++		return -EOPNOTSUPP;
++	}
++
+ 	offload = taprio_offload_alloc(sched->num_entries);
+ 	if (!offload) {
+ 		NL_SET_ERR_MSG(extack,
+
+> > What are the chances we'll catch all drivers missing the validation 
+> > in review?  
+> 
+> Not that slim I think, they are all identifiable if you search for
+> TC_SETUP_QDISC_TAPRIO.
+
+Right, but that's what's in the tree _now_. Experience teaches that
+people may have out of tree code which implements TAPRIO and may send
+it for upstream review without as much as testing it against net-next :(
+As time passes and our memories fade the chances we'd catch such code
+when posted upstream go down, perhaps from high to medium but still,
+the explicit opt-in is more foolproof.
