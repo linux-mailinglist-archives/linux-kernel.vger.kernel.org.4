@@ -2,203 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7C75EB5C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AFB5EB5C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 01:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiIZXbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 19:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229912AbiIZXcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 19:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiIZXbJ (ORCPT
+        with ESMTP id S230138AbiIZXch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:31:09 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55519193FA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:31:08 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id a6-20020a17090abe0600b00200303ba903so8472226pjs.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=MEx5AkRis1Q8EBfRmtqZKYRH8hsFfpfHGF2r7Wrj8Wg=;
-        b=oy5u290Oq4tGTcZN/o5eOVGn93Dr3gj2v9kjK1/60a123+BFF/pOshej4ed+7lLCyK
-         87FebeWk7csjvy3AyP94AKC+3SyzVmFT+dfOG2MES3sG+CtUsxboA0eCZb5tABBBEo4x
-         HmBaD27w3gXzGs+nuO4aRtCVMcsF2zXnpLMRWMX4QH6Sf/g1lpfLbFQo58WbvapYNJO3
-         rhaiad+kcvB/uvNrzDREfmauO3IyRk+A5idHXu8Ic5z9p+1bnWyCFRGc0/MiwcnOl3hm
-         SG0AddHzOTmtjcfKBfDqhUsbxDvp7MdpuS0ia0J/7CwJnG7eoXTHr0RHzjrCsL0MhPxu
-         k9qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=MEx5AkRis1Q8EBfRmtqZKYRH8hsFfpfHGF2r7Wrj8Wg=;
-        b=XmK2DgZSTUqTMlxEXDqAVTeqmOSfDKAORR0751IxGyYmHASbwxaetV6NiFicgMP+rH
-         oVzRiuDQVgpyQsEFnthk8OnyYy2vUMwhGPxTmnjrwQnceBXpPzEaKwYOuR/wAlYcFAQw
-         TN/h3cSW+eiCCGF7PPmB9w1F5BzIEjJNdPhXg7OB4gBC6PAd1iO2do3ZuCUFpxecWp89
-         ljTn/UJmLUCbvQCCr4lNJy2FFuB7IZwT0zzaoXQtwnzx2UGeGESVPvsDUkmwpvXiJoHR
-         1rv8IPtQG9qGiW2YL+qQpYqTzLxF11CVR8jucCNCBeolRBit2iDEEkfiZs3xcIFDVWlE
-         Yehg==
-X-Gm-Message-State: ACrzQf3kxQgHIzRC6Vttb+fUjPAIr8HHlBAeobCh1NmBS8KZFNnBTf7K
-        LrAxOEf8Vc9/syKP9Bi/9lU+JUyfYrs19BpNU+GS8Q==
-X-Google-Smtp-Source: AMsMyM4rbGVokC9aE2JE/xVF0x1ZAaDQoXdTOe8TJxSSOUZU+I06PvqFSGV0xiKIvEhz/HDR3L37U5Dhs5unsxWHE67adw==
-X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
- (user=abhishekpandit job=sendgmr) by 2002:a05:6a00:1493:b0:546:2856:6d08 with
- SMTP id v19-20020a056a00149300b0054628566d08mr26226712pfu.84.1664235067789;
- Mon, 26 Sep 2022 16:31:07 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:31:03 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220926163057.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
-Subject: [PATCH] Bluetooth: Prevent double register of suspend
-From:   Abhishek Pandit-Subedi <abhishekpandit@google.com>
-To:     linux-bluetooth@vger.kernel.org
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 26 Sep 2022 19:32:37 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2052.outbound.protection.outlook.com [40.107.100.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A39E79625
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 16:32:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nnQktm4fWUz+X7u1FpFcPxWSkXKgAyPcyH0hsYola2HfHhvgQeuzXCJDpsdxgvpCcIZ5VHJKnH1YBSns0LriWVPYod1WAYgZtj5dAHWzkwla3T0pxYOGCDfAcCC3k/+acNCzCE1WmgjHq7J4K0849flMGr4doFq5ozl4Vi+vfEYRw/06QhCt5yMEbJk52TWyI7e/okgtIlvDEdPwRjeaR9Iovutdcn/K4XxoCpCHft5JGxU+aTI9jQTjfPovwYn2zkmAhDHA6hlIaGTHs+SFwYmVJOXqgbyWCoSBihf5Fg0F8PYMi30EtNg0X2ZZOnwlHAlpB5OWan+JmiQp7QQf7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsbQDCCiblilSnhF/vN+4JhszxpDTDU+h260WYwlCbc=;
+ b=mCpOGURa41NNrhIq11ny1Ta+lBIbcJN9i1e6KnnCxVL4b+IlmsMoc/3u1VH2GDyhFRnGt0tVpNl4U0SPvFy64Emv37+NgnNVVnL+MLFFTezG0Lw86kmCz4e7Lg+QZCdCJTFv2v6ypvTqYktRjGzVgNoJRFAcOgPFhSVbBe70OHW2YosnJbQBhjI7Dg/o4JMePtSpiLg3NmU1MEHc4FBWO0U+WYEedIhY8TMXLuknfP+YqE9h56G4omudId6ymLMYK2nQxUUfqxkFJSKQnDFvBPRfBv/jJRnhED8sGe9AwSndEzPIjwKhnpz2HDIMwSRKsHTYgFTOOR032X2FTThXlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vsbQDCCiblilSnhF/vN+4JhszxpDTDU+h260WYwlCbc=;
+ b=qHT3x7ggcu2dO1NJpeNLK5VoOUfgK12n4zhgItsp3ANNiIduUt2gO5q4mNwC70Wx2LK/i1NH7lxHLeoB71YVr7QAGDXIBq2kdqhg3F3mPVYDb84UJEj+ko7iAfwIY5nVA/bmxLGC65G2Ar36V9rKW842CxgZIcpb5fvw+1YzjCzPCqAFBWyA2O6KnvQOIo+ECmCbathi8O7uA/yRoxSOh72w8hrkezyb+o4vM89boJO56GqJypxs7cy974O8UktaTidw4F3UZbOhBnkS/K+UqoJ0mQj6PvUGnbmNZDLFORVpDNKeP+S2TTKUwa9z9SfXr3ssg8aijJwfw+uKLKxKag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH2PR12MB4071.namprd12.prod.outlook.com (2603:10b6:610:7b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Mon, 26 Sep
+ 2022 23:32:33 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.026; Mon, 26 Sep 2022
+ 23:32:33 +0000
+Date:   Mon, 26 Sep 2022 20:32:31 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jann Horn <jannh@google.com>, Will Deacon <will@kernel.org>,
+        Joerg Roedel <jroedel@suse.de>, jean-philippe.brucker@arm.com,
+        Linux-MM <linux-mm@kvack.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev
+Subject: Re: some likely bugs in IOMMUv2 (in tlb_finish_mmu() nested flush
+ and mremap())
+Message-ID: <YzI2jzvc8D9lYU6G@nvidia.com>
+References: <CAG48ez2NQKVbv=yG_fq_jtZjf8Q=+Wy54FxcFrK_OujFg5BwSQ@mail.gmail.com>
+ <Yy3skVk/DvwVnPXD@nvidia.com>
+ <YzIHzIxknGNba6CC@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzIHzIxknGNba6CC@google.com>
+X-ClientProxiedBy: MN2PR17CA0020.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::33) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|CH2PR12MB4071:EE_
+X-MS-Office365-Filtering-Correlation-Id: 184fd604-8d6e-44be-92ce-08daa01762c1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RZJ3jzRs6cA7NtElXqt2AB0qc+G/HFufeUJPfjvX5DSQ36mhXtPgGrdpvkQRpP4fUvjs87sPYIh2oJXcqH19QaLSnA9PxxjE6Cua4bQbQyenFe1UW8UibKVupUrqxx3Y07Vw8DX8TOw6Pa09c4edTcjTWI1CN/KCO69lxA0EbbsN62tbzyZju5zprIycY500tb1MTUDMUe1JsfRB/oc3lEdVBoy7xFCGGFdjkZqnblPu2pYnaESlc9hN9NxuYDBO9wPhs++aUKCqy2f43RKEXLQwUQ9r2vZJ2IizBc8rblSsVVVclxtZ98oHX5aJFH8B7jHMBmNel757BBxr+T3d6O924J5eUgvgLONXdskfBIAR4tq+xyr5dnhUd8AgiR0jN/dwzw3BUocBQ4Eh03JyYqGTBam50mpe+ps+On3UUFjJ7ynWeYhyw03OWD7iKrQk37XMLC+YY2LzVXJHL3DHJrbcN1b/00x8hd2IevhOnNw02kcw1Znq242KuBOefAe8Vf//U2tpcGg+E7fXt9EFaE09l0kY5gssypy7Lh+Z42iElYMAZoXNi0086a0V+Nl/J+hXOsZ0laai7+3TQMiZEtsL71HQijKq5x5KHBtB9P57LBVDFP/fBkZvsj8CTI/XrL1PkpGyDg6u9Dw8EnloWoTfI2YH44wtjsDeY06BNbWs9MR0TUplVplYSVI2/cRgD6xkFI+P72qZJAxZ7f+85Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(376002)(396003)(346002)(451199015)(54906003)(316002)(6916009)(8676002)(478600001)(6486002)(66556008)(66476007)(66946007)(4326008)(5660300002)(38100700002)(26005)(6512007)(2616005)(2906002)(36756003)(186003)(8936002)(6506007)(41300700001)(83380400001)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rHpz3XLNsQLnAfC26jtqydNC+j8h4uJO69zaiplO07VzgDrhUvY0RkDNnQFk?=
+ =?us-ascii?Q?M+5AR142qBTWrjczPZYuV9VtxFpvyvyHYPIui+LHW6DXSdmQUOjKqmUWE1nX?=
+ =?us-ascii?Q?K9romB+i7E5OjR8wOr10DyjmQlN59W+tdawiCOO8eOo5MlqePMxGrpkBUFDv?=
+ =?us-ascii?Q?tz7dMiq7uef52iNUWJ6rfX503JbKB8OKfwzAKQ6IDAZKveXZuyyDpcj/Izli?=
+ =?us-ascii?Q?626tWkJfV/EgwHC0vhGGJk09aHyviJbeEXy8fjYZb7nx9YBaUTiffnMl2kcT?=
+ =?us-ascii?Q?cG0bl/ZoViECwTm+8rzK5I5ZhMJyp0BD075DgnR1VFky2Urr9liSt/u05haq?=
+ =?us-ascii?Q?PdBepiM2W9Un6vI7oj4Y4ACHXK0AZYHLk9TvNclcDqxhQ2/5hfCl4xw0Toww?=
+ =?us-ascii?Q?EhK4Tn4iFsAWulrza+DmQb7z5Qm/gguSRMSLsawW7IZW6QsN5Ma8WQojuSXM?=
+ =?us-ascii?Q?PEACcWnw5vVE6D6b+JE0042X9E20KjylZYiiWoTm8xBThlqFL0jynIszthvf?=
+ =?us-ascii?Q?GHKJWARVZMJWTjUY5DQnPjYYd5gOrhG7snXkEQGkhQbMuK/EAXGUBvybYQSY?=
+ =?us-ascii?Q?doPUzW2DzHgdFz4m44FD4dnc0RSjgu5uJrlpaTtmsMv13eFA4NPmoeQ9jYuN?=
+ =?us-ascii?Q?5qu3i9lGqhuEZR/hbli2yqD3zv3JAjw9lYv1l9y0IbWBcHbrAhVvZhyv7jHT?=
+ =?us-ascii?Q?5OFVgv6XYTD6wXiU8KKCcxD9U5RrswBIrPdJZnXQhak0jzCtcrfbhcXlxQHl?=
+ =?us-ascii?Q?BMeYT5Dm5sO5xvLQzlkvZBm/UUc/7yQt/phFfkhCoJ7AausXckJVOavKjRL8?=
+ =?us-ascii?Q?jm0sDc6KnMPCl3NcK7AUNePtyaydgZ5zzr6KJiPNc9YHUfSk6GyBfWuragAx?=
+ =?us-ascii?Q?E7NzhMrlYhz3kw1AMvDd2SL8tNdVvQbLnay5oVxv+0mlrBQaszTDGiLwTKGh?=
+ =?us-ascii?Q?wQ+1X88v2NfONEk7zLBAZ+Ng/xafaWFZCsSTkAFVP8z7xnlOwwivMjb1OQvn?=
+ =?us-ascii?Q?aK4RxFqoNJPFgFSrYpY/CVjv0fwWlxIUch25FOOkVSuNqNKjoLt7yCDVNiW+?=
+ =?us-ascii?Q?SYt5EBwUnfUSaO7oFyByHlB9tsHOfHu79Jdkn9M/VaFYC01M5o6Jz/pl0GZZ?=
+ =?us-ascii?Q?rSqm14C1464mTJ4VAepVPuPq0pDnN72CbAMgnslR8ElKkBE/v91gly1mUCK2?=
+ =?us-ascii?Q?DOgLuXsTUWuX4dgPqDTmgoPEmRjXf7CW0264uHAXYwEDglXBGCxM1Yfl+X6r?=
+ =?us-ascii?Q?jB/qRxlvtlKqyWjjNkYfH5zNx7cQjQbumlt/SedGPf1LGL3JCvBO3kVCydBJ?=
+ =?us-ascii?Q?ncxcUshI5/Cg+tpZObrd3Nm7p9i9ELF6cNihYWZynEHMw+ASzjGP8Ep0gD3n?=
+ =?us-ascii?Q?tyw4GxHQXV4EHk00KVLiwMdrqhuLd0/gfKSa+As+19AWkthfh67L3AYPTgFP?=
+ =?us-ascii?Q?DiuRKG01cHMSmWjBuvngqUYk4UID4hCfdj90Y5zFsyXvXgRThGc7VHh42sE8?=
+ =?us-ascii?Q?NZ/deQ6MasYt0oEOv+LDHVZeYtxsoR2QEP6aq3BsAR7hgO8C3Q8Uin7j7K2b?=
+ =?us-ascii?Q?ymVjdOowXwhzKE4Lh7s=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 184fd604-8d6e-44be-92ce-08daa01762c1
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 23:32:32.9623
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X2VXARh2hItw9weKVnlZ2lRzcbsq8C6ld+gLOs0DqI8HiZXd/UnfBU+vS1BOXGW+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4071
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Mon, Sep 26, 2022 at 08:13:00PM +0000, Sean Christopherson wrote:
 
-Suspend notifier should only be registered and unregistered once per
-hdev. Since hci_sock and hci_register_dev run in different work queues
-(sock vs driver), add hci_dev_lock to avoid double registering.
+> > AFAIK if we are flushing the CPU tlb then we really must also flush
+> > the CPU tlb that KVM controls, and that is primarily what
+> > invalidate_range() is used for.
+> 
+> As above, for its actual secondary MMU, KVM invalidates and flushes at
+> invalidate_range_start(), and then prevents vCPUs from creating new entries for
+> the range until invalidate_range_start_end().
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-This is fixing a syzbot reported warning. Tested in the following ways:
-* Normal start-up of driver with bluez.
-* Start/stop loop using HCI_USER_CHANNEL (sock path).
-* USB reset triggering hci_dev_unregister (driver path).
+Was it always like this? Why did we add this invalidate_range thing if
+nothing really needed it?
 
-------------[ cut here ]------------
-double register detected
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register kernel/notifier.c:27 [inline]
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-Modules linked in:
-CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
-5.10.136-syzkaller-19376-g6f46a5fe0124 #0
-  8f0771607702f5ef7184d2ee33bd0acd70219fc4
-  Hardware name: Google Google Compute Engine/Google Compute Engine,
-  BIOS Google 07/22/2022
-  RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
-  RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-  Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
-  39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
-     e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
-     RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
-     RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
-     RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
-     RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
-     R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
-     R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-     FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
-     knlGS:0000000000000000
-     CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-     CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
-     DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-     DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-     Call Trace:
-     blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
-     hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
-     [inline]
-     hci_register_suspend_notifier+0x6b/0x7c
-     net/bluetooth/hci_core.c:2727
-     hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
-     __sock_release+0xcd/0x1de net/socket.c:597
-     sock_close+0x18/0x1c net/socket.c:1267
-     __fput+0x418/0x729 fs/file_table.c:281
-     task_work_run+0x12b/0x15b kernel/task_work.c:151
-     tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-     exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
-     exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
-     syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
-     entry_SYSCALL_64_after_hwframe+0x61/0xc6
-     RIP: 0033:0x78e38575e1db
-     Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
-     7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
-     <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-     RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
-     0000000000000003
-     RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
-     RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
-     RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
-     R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
-     R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
-
- include/net/bluetooth/hci.h |  1 +
- net/bluetooth/hci_core.c    | 16 ++++++++++++++--
- 2 files changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-index e004ba04a9ae..36304c217151 100644
---- a/include/net/bluetooth/hci.h
-+++ b/include/net/bluetooth/hci.h
-@@ -353,6 +353,7 @@ enum {
- 	HCI_OFFLOAD_CODECS_ENABLED,
- 	HCI_LE_SIMULTANEOUS_ROLES,
- 	HCI_CMD_DRAIN_WORKQUEUE,
-+	HCI_SUSPEND_REGISTERED,
+That means iommu is really the only place using it as a proper
+synchronous shadow TLB flush.
  
- 	HCI_MESH_EXPERIMENTAL,
- 	HCI_MESH,
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 66c7cdba0d32..5a32d17c69b8 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -2760,10 +2760,18 @@ int hci_register_suspend_notifier(struct hci_dev *hdev)
- {
- 	int ret = 0;
- 
--	if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks)) {
-+	hci_dev_lock(hdev);
-+	if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
-+	    !hci_dev_test_and_set_flag(hdev, HCI_SUSPEND_REGISTERED)) {
-+		memset(&hdev->suspend_notifier, 0,
-+		       sizeof(hdev->suspend_notifier));
- 		hdev->suspend_notifier.notifier_call = hci_suspend_notifier;
- 		ret = register_pm_notifier(&hdev->suspend_notifier);
-+
-+		if (ret)
-+			hci_dev_clear_flag(hdev, HCI_SUSPEND_REGISTERED);
- 	}
-+	hci_dev_unlock(hdev);
- 
- 	return ret;
- }
-@@ -2772,8 +2780,12 @@ int hci_unregister_suspend_notifier(struct hci_dev *hdev)
- {
- 	int ret = 0;
- 
--	if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks))
-+	hci_dev_lock(hdev);
-+	if (!test_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks) &&
-+	    hci_dev_test_and_clear_flag(hdev, HCI_SUSPEND_REGISTERED)) {
- 		ret = unregister_pm_notifier(&hdev->suspend_notifier);
-+	}
-+	hci_dev_unlock(hdev);
- 
- 	return ret;
- }
--- 
-2.37.3.998.g577e59143f-goog
+> > Which makes me wonder if the invalidate_range() hidden inside
+> > invalidate_end() is a bad idea in general - when is this need and
+> > would be correct? Isn't it better to put the invalidates near the TLB
+> > invalidates and leave start/end as purely a bracketing API, which by
+> > definition, cannot have an end that is 'too late'?
+> 
+> Documentation/mm/mmu_notifier.rst explains this, although even that is quite subtle.
+> The argument is that if the change is purely to downgrade protections, then
+> deferring invalidate_range() is ok because the only requirement is that secondary
+> MMUs invalidate before the "end" of the sequence.
+> 
+>   When changing a pte to write protect or to point to a new write protected page  
+>   with same content (KSM) it is fine to delay the mmu_notifier_invalidate_range   
+>   call to mmu_notifier_invalidate_range_end() outside the page table lock. This   
 
+And then if KVM never needed it why on earth did we micro-optimize it
+in such an obscure and opaque way?
+
+>   is true even if the thread doing the page table update is preempted right after 
+>   releasing page table lock but before call mmu_notifier_invalidate_range_end().
+
+That feels like it is getting dangerously close to the CVE Jan pointed
+at.. We have a write protected page, installed in the PTEs, PTLs
+unlocked and other things can sense the PTE and see that it is write
+protected - is it really true nothing acts on that - especially now
+that DavidH has gone and changed all that logic?
+
+IMHO if we had logic that required the CPU TLB to be flushed under a
+certain lock I find it to be a very, very, difficult conceptual leap
+that a shadow TLB is OK to flush later.  If the shadow TLB is OK then
+lets move the CPU TLB out of the lock as well :)
+
+> That said, I also dislike hiding invalidate_range() inside end(), I constantly
+> forget about that behavior.  To address that, what about renaming
+> mmu_notifier_invalidate_range_end() to make it more explicit, e.g.
+> mmu_notifier_invalidate_range_and_end().
+
+The name for the special case should really capture that hidden point
+above 'invalidate_range_delayed_write_protect_end' or something else
+long and horrible. Because it really is special, it is really is only
+allowed in that one special case (assuming the logic still holds) and
+every other possible case should catch the invalidate through the tlb
+flusher.
+
+Jason
