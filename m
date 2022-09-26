@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1325E5EAA78
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9308B5EAB1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbiIZPV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S236624AbiIZPbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiIZPUb (ORCPT
+        with ESMTP id S236526AbiIZP0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:20:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9727083BE2;
-        Mon, 26 Sep 2022 07:07:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3256B60DEE;
-        Mon, 26 Sep 2022 14:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E362BC433C1;
-        Mon, 26 Sep 2022 14:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664201232;
-        bh=ySnah8bvB+A3n/zCRB87xWDZuvHSaOZd/TpqYUZjtnA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aeS8lkLOd6ACEAGMd5VNRciESUfEdDm0v1dPZkJm5OJHNr6VcAvBUXdLDesLKdIH/
-         gRfMnSlfZAWqkz5W/yj68CkKsSxcBX+KsmS1Ay8qzAFxyRKjWZBpRtwKoYRa+dc/Bk
-         JIlpD2q8bO9TuXBGDeQ6txlPY8wwSWSloR/rmvNKJ7rCfuw3jDM78SIyvk8QkYs6IM
-         OHPyQMEN3RuAHr6owKFOrUGRRihacoI03GbtXM/fp8bkYt9FZ2MQM/K1t70khR0pqZ
-         UWfUy5SV95xpQITIihLrcE5Dwgv8K09zH/Zlf19IbudwsReXxTOjzxN/PwIshBRF5x
-         QDMtMvX5e0hhg==
-Message-ID: <b9874b8f-b40f-f48d-856a-c5fc91384042@kernel.org>
-Date:   Mon, 26 Sep 2022 16:07:05 +0200
+        Mon, 26 Sep 2022 11:26:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A495F10C;
+        Mon, 26 Sep 2022 07:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664201522; x=1695737522;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=3K99V46lahR/2OM+AWPRnQqkJGlMh+2oIpwQe2KYPck=;
+  b=Y6LnGx9c7yhH6Kp5vJc7Bd4doIoXc6CqLfAopx/aEQvikW1sBo4IxWPm
+   WeVc6choXalmBnTGqmH0yA/RYq8b/PLxGYs1fEsxVpoUE420yXNvOAWQD
+   Rw9Ru8IQ1m3leH2qco3MXnizcjTituW5JUcmoY0O8qzF+OsMdh7JfMCYE
+   WZ9y0bkqQLaEpdjvAw539SSgG63iVolOUFemXs57+5n4ypvx8HaaROwvy
+   QvNSW/jEae1YRk2Qbk4LmsoNijfVCIcJofvgRp+ERCkAe1MLqZIWzoTNi
+   hykujIAqT9a/w0Zwh/uV40pWc7h5URwCbZLbXE1uqleCty9FC6jnjUQWw
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="299760274"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="299760274"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 07:12:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="651841295"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="651841295"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 26 Sep 2022 07:11:51 -0700
+Date:   Mon, 26 Sep 2022 22:07:15 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <20220926140715.GB2658254@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-6-chao.p.peng@linux.intel.com>
+ <CA+EHjTx+GVpGavzMQQOispT-oUk5cSyssedYJ00=GdnCtEQO6A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [V15,01/15] dt-bindings: mediatek: Add mediatek, mt8195-jpgenc
- compatible
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        kyrie wu <kyrie.wu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
-References: <20220926091433.18633-1-irui.wang@mediatek.com>
- <20220926091433.18633-2-irui.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220926091433.18633-2-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTx+GVpGavzMQQOispT-oUk5cSyssedYJ00=GdnCtEQO6A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 11:14, Irui Wang wrote:
+On Mon, Sep 26, 2022 at 11:36:34AM +0100, Fuad Tabba wrote:
+...
 
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        jpgenc-master {
-> +                compatible = "mediatek,mt8195-jpgenc";
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 2125b50f6345..d65690cae80b 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -260,6 +260,15 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> >  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> >  #endif
+> >
+> > +#ifdef __KVM_HAVE_ZAP_GFN_RANGE
+> > +void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+> > +#else
+> > +static inline void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start
+> > +                                                     gfn_t gfn_end)
+> 
+> Missing a comma after gfn_start.
 
-Use 4 spaces for example indentation. You have it quite inconsistent.
-
-Best regards,
-Krzysztof
+Good catch, thanks!
+Chao
+> 
+> Cheers,
+> /fuad
 
