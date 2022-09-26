@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF655EAD6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC035EAD71
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiIZRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S229786AbiIZRAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiIZQ7g (ORCPT
+        with ESMTP id S230114AbiIZQ7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 12:59:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FDC28E24;
-        Mon, 26 Sep 2022 08:59:53 -0700 (PDT)
+        Mon, 26 Sep 2022 12:59:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E051A071;
+        Mon, 26 Sep 2022 09:00:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52FBC60DBF;
-        Mon, 26 Sep 2022 15:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260B1C433C1;
-        Mon, 26 Sep 2022 15:59:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFC05B80B06;
+        Mon, 26 Sep 2022 16:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73F5C433C1;
+        Mon, 26 Sep 2022 16:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664207992;
-        bh=T62VMtRqEZ1ynuRiLve/sryNWui8CQ7pF8ybsY5aRus=;
+        s=korg; t=1664208010;
+        bh=rec9eiaOYJA4wQp4tsdjMCmeHCugjNV+vS3YksDQ7jE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=if5lJPaLrzPnCW0qkc4dhYdV84CagZCivk9x9UScmTKJxGEAfDgX5+IZKCwUy8mzS
-         n7qLALuX+USlJbJEiouPPpfiNJBGfDhEE5tIzVMv4ryC0GtvRmDNlgwcOsP/2hRR2L
-         C9PnJVraK2zzggToj5y3cDD6Ga8+36U37lzRfyfg=
-Date:   Mon, 26 Sep 2022 17:59:49 +0200
+        b=JD18BsJ8F7bF7qkwg2lPLIg0oEnETVfnUPphTx0A9DcwTfXxKUiqhIgNtYk6Y9c1e
+         pBiEj5oFZ0jHyjywA3+XO4IOYnXF/yNFZWFEBo8trys/uB/0HDcmBNLtGZuU/EWzeK
+         F9adpxK7RBvkRLlf71GEI3DbCJBEq6Ts1CPy5Xu8=
+Date:   Mon, 26 Sep 2022 18:00:07 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+        slade@sladewatkins.com, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Subject: Re: [PATCH 5.4 000/120] 5.4.215-rc1 review
-Message-ID: <YzHMdYD2E6gwxiip@kroah.com>
+Message-ID: <YzHMh/je4bH8dQT8@kroah.com>
 References: <20220926100750.519221159@linuxfoundation.org>
- <39503234-9c35-cdd8-bd8c-d5c3d7d3af1e@roeck-us.net>
+ <CA+G9fYsaviCxmAqWzOxgkU7HcmzU=e0LKci2_+5uPUOc+8xb3A@mail.gmail.com>
+ <8635ce8b60.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <39503234-9c35-cdd8-bd8c-d5c3d7d3af1e@roeck-us.net>
+In-Reply-To: <8635ce8b60.wl-maz@kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,36 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 06:38:39AM -0700, Guenter Roeck wrote:
-> On 9/26/22 03:10, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.4.215 release.
-> > There are 120 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
+On Mon, Sep 26, 2022 at 10:25:59AM -0400, Marc Zyngier wrote:
+> On Mon, 26 Sep 2022 10:13:31 -0400,
+> Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > > 
-> > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> > Anything received after that time might be too late.
+> > On Mon, 26 Sept 2022 at 16:00, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.4.215 release.
+> > > There are 120 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.215-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
 > > 
+> > Following build warnings / errors noticed on arm on stable-rc 5.4.
+> > 
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> > Regressions found on arm:
+> > 
+> >    - build-gcc-8-ixp4xx_defconfig
+> >    - build-gcc-11-ixp4xx_defconfig
+> >    - build-gcc-12-ixp4xx_defconfig
+> >    - build-gcc-9-ixp4xx_defconfig
+> >    - build-gcc-10-ixp4xx_defconfig
 > 
-> Building arm:ixp4xx_defconfig ... failed
-> --------------
-> Error log:
-> drivers/gpio/gpio-ixp4xx.c:171:18: error: 'IRQCHIP_IMMUTABLE' undeclared here (not in a function); did you mean 'IS_IMMUTABLE'?
->   171 |         .flags = IRQCHIP_IMMUTABLE,
->       |                  ^~~~~~~~~~~~~~~~~
->       |                  IS_IMMUTABLE
-> drivers/gpio/gpio-ixp4xx.c:172:9: error: 'GPIOCHIP_IRQ_RESOURCE_HELPERS' undeclared here (not in a function)
->   172 |         GPIOCHIP_IRQ_RESOURCE_HELPERS,
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpio/gpio-ixp4xx.c:172:9: warning: excess elements in struct initializer
-> drivers/gpio/gpio-ixp4xx.c:172:9: note: (near initialization for 'ixp4xx_gpio_irqchip')
-> drivers/gpio/gpio-ixp4xx.c: In function 'ixp4xx_gpio_probe':
-> drivers/gpio/gpio-ixp4xx.c:296:9: error: implicit declaration of function 'gpio_irq_chip_set_chip' [-Werror=implicit-function-declaration]
->   296 |         gpio_irq_chip_set_chip(girq, &ixp4xx_gpio_irqchip);
->       |         ^~~~~~~~~~~~~~~~~~~~~~
+> Colour me surprised. [1] explained why this was a bad idea...
+> 
+> 	M.
+> 
+> [1] https://lore.kernel.org/all/CAMRc=Md9JKdW8wmbun_0_1y2RQbck7q=vzOkdw6n+FBgpf0h8w@mail.gmail.com/
 
-Offending patch now dropped, will do a -rc2 soon.
-
-thanks,
+Should now be fixed, sorry.
 
 greg k-h
