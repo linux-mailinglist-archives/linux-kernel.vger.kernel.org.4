@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8B85EB1F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68C25EB1F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiIZURh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S230439AbiIZURv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiIZURc (ORCPT
+        with ESMTP id S230444AbiIZURp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:17:32 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC337A3453
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:17:30 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id a80so7797803pfa.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 13:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
-        b=Bji77umcsdJeihjx85Wx1yJAb732Oz1ZA1q21x7/tJcnTUW/8fZte+SBOWKRr2y2X4
-         t7UYhPhE3DC/SUmvxlRXNayEpDUn6fkDZy7UDvvNDbtu4owhre655mCikZL0f8jsHtqv
-         cGn9ctLsI5otDOKjNY0EQMprAXB1loNeikeBDNXuhf21Gc6YNSGymHqhwg97uF5tGFMe
-         IZ94nsGJZnj+0Ru0uhnDDrRz3FETUQWktqxCIkpnHZcyY5l8qG/NsoDS/+XHrgbZsJr4
-         SbniuV3EE/E7bFBu3CiLO4p6FpJn/FlCsxGzzDKgRIkz5AdRBT3N+leywHBff6krEQW8
-         RNBA==
+        Mon, 26 Sep 2022 16:17:45 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370A3A3D01;
+        Mon, 26 Sep 2022 13:17:42 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id m130so9643819oif.6;
+        Mon, 26 Sep 2022 13:17:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
-        b=Gsbm+KL464+dyyv8V1n7Rw1DBtEKYjpnDLaXK+OzfXDRkovZTZtX+iXupjsIde2pnL
-         MtsIr6yxzV3nBdf09Mo3oW+ARZOEC3PNqa2kMdJSfUVhmgDViFznHfF1kLDHA6SAHq8D
-         A/k+2/TxdHKIbWs8zRaFuY1szf2g91iuoB0jnqpB1GBCFNxxvMVyI4CCbVgSKaGmPe6l
-         H8TQAljEn37rsIMp08GE90ClMqseJXvD0CUack2beYd7BTGcy+lxvUYgjPfs4LZIN17Q
-         JteG6LtIDeo0lVDyMMslqHUnCZAjczSViZQ/kEB7ZmkuZqOvgElRiCO03gBequt53UBg
-         lVkA==
-X-Gm-Message-State: ACrzQf2EhPJSWX4VhvLmfnA+i8Fcz7uFULzfVYsT8rBcU/DSI8N7BWVG
-        uLJNC/FR0nKus1GB+3dXbFkfTl+yPjsF+GlDqxLtww==
-X-Google-Smtp-Source: AMsMyM5Uwpd0MxiH9sRDQzapR2kQfL6PV2oxZumBsqYgeO5TWDHdWVPWGZZxNuX11VhdUYgOQnkrigoKWNVoBnjDEtY=
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id
- s201-20020a632cd2000000b0041c590167d8mr21300624pgs.365.1664223450163; Mon, 26
- Sep 2022 13:17:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=k0AQrlIxbwy7Ubn2EjodtbFUv1BS5TcuY8f1vFpcfW0=;
+        b=wg4ch64kxy4+euNu3MZQAOj2BG23+Pi6/rhja9pajNlsQ0bMk0K0CMEFkvzb/+0/Jb
+         9WEBQSiN5zp/owZNC2+D4EMx3CjO0+tH8cYz6yCUnH7As+xJvZDH1hEjPR2MAW2D9XGF
+         ZMJnDLk43O43nej32VfrpdojpDgrI6ec+0eq1CHOV5mOPd8QFoa3yz+AZNtcr+WeAX2w
+         AVl1BkgoZTUX4B9UsgSYYyf1gMGkcX3G52trvf7vP3yfIXJxlgsXDZ3F2oZjGA6o3yMG
+         Us96sVYPx9EW7mdZr++mY4FSfGWCzOgVGValihBrQPwM7KhtWWwFi5zKeVKaroYM1AyF
+         nygg==
+X-Gm-Message-State: ACrzQf19su+Ys6XK2CbAHeVxIpNH7N7NCMNSpHyDYrzucImdiqaiAeNK
+        c2nM5y+Z9+POSTZHtshhwD3ALvXG3w==
+X-Google-Smtp-Source: AMsMyM5pA5L+VHMfeMDYk+ZJcAO9IUEAmM1zFB24SDJbCswpwoD8hydbwaxwQ0eIbjpjKu9khowpKw==
+X-Received: by 2002:a05:6808:120e:b0:345:aeaf:c064 with SMTP id a14-20020a056808120e00b00345aeafc064mr248896oil.70.1664223461410;
+        Mon, 26 Sep 2022 13:17:41 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056830318300b00654625c0c4dsm8227545ots.17.2022.09.26.13.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 13:17:41 -0700 (PDT)
+Received: (nullmailer pid 2732492 invoked by uid 1000);
+        Mon, 26 Sep 2022 20:17:40 -0000
+Date:   Mon, 26 Sep 2022 15:17:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
+Message-ID: <20220926201740.GA2726270-robh@kernel.org>
+References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
+ <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
+ <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
+ <20220924000932.GA1450@quicinc.com>
+ <fcc5bc9f-6b6b-b9ca-45aa-ff2c880a4774@linaro.org>
+ <20220926165904.GA17938@quicinc.com>
 MIME-Version: 1.0
-References: <20220926191109.1803094-1-keescook@chromium.org>
-In-Reply-To: <20220926191109.1803094-1-keescook@chromium.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 26 Sep 2022 13:17:18 -0700
-Message-ID: <CAKwvOdmCjAQpaF40VStbFNf1ZqmTxTTZzy2v4TwSF0LVO08GYw@mail.gmail.com>
-Subject: Re: [PATCH v2] overflow: Introduce overflows_type() and castable_to_type()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-sparse@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926165904.GA17938@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Arnd
+On Mon, Sep 26, 2022 at 09:59:04AM -0700, Guru Das Srinagesh wrote:
+> On Sep 24 2022 10:17, Krzysztof Kozlowski wrote:
+> > On 24/09/2022 02:09, Guru Das Srinagesh wrote:
+> > > On Sep 21 2022 20:43, Konrad Dybcio wrote:
+> > >> Does it? I did not define this compatible in the driver, so it does
+> > >> not consume any clocks.
+> > > 
+> > > The bindings should describe only those compatibles that the driver supports -
+> > > that is, both the driver and its bindings should be in sync.
+> > 
+> > That's not entirely true. Bindings describe the hardware in the most
+> > complete way we can. Not the driver. Whether driver supports something
+> > or not, is not relevant here, except that we don't want to document
+> > non-existing things or stuff out of tree.
+> 
+> Is this only applicable to compatibles or device tree properties in general?
+> 
+> > > 
+> > > Could you please update the driver with this compatible as well? Let's not
+> > > merge this change without that first.
+> > 
+> > This could be even merged without change in the driver. However it's not
+> > the case here as driver already supports it, so your request is fulfilled.
+> 
+> My concern is that if somebody specifies a compatible/device tree property that
+> the driver doesn't support, their expectations from adding that change will not
+> be met. In addition to having the bindings describe HW in full, I think the
+> driver should also be in sync with it for this reason.
 
-On Mon, Sep 26, 2022 at 12:11 PM Kees Cook <keescook@chromium.org> wrote:
-> ---
-> v2:
->  - fix comment typo
->  - wrap clang pragma to avoid GCC warnings
->  - style nit cleanups
->  - rename __castable_to_type() to castable_to_type()
->  - remove prior overflows_type() definition
-> v1: https://lore.kernel.org/lkml/20220926003743.409911-1-keescook@chromium.org
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index f385ca652b74..fffc3f86181d 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -16,6 +16,11 @@
->  #include <linux/types.h>
->  #include <linux/vmalloc.h>
->
-> +/* We're expecting to do a lot of "always true" or "always false" tests. */
-> +#ifdef CONFIG_CC_IS_CLANG
-> +#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
-> +#endif
+Which driver? From u-boot, *BSD, Linux, TF-A, ...?
 
-Any chance we can reuse parts of __diag_ignore or __diag_clang from
-include/linux/compiler_types.h or include/linux/compiler-clang.h
-respectively?
-
-Those are needed for pragmas within preprocessor macros, which we
-don't have here, but I suspect they may be more concise to use here.
-
-> +#define TEST_SAME_TYPE(t1, t2, same)                   do {    \
-> +       typeof(t1) __t1h = type_max(t1);                        \
-> +       typeof(t1) __t1l = type_min(t1);                        \
-> +       typeof(t2) __t2h = type_max(t2);                        \
-> +       typeof(t2) __t2l = type_min(t2);                        \
-
-Can we use __auto_type here rather than typeof(macro expansion)?
--- 
-Thanks,
-~Nick Desaulniers
+Rob
