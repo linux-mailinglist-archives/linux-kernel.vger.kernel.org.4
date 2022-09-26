@@ -2,114 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6825C5EB333
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A945EB337
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 23:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiIZVd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 17:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S231345AbiIZVeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 17:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiIZVdp (ORCPT
+        with ESMTP id S231174AbiIZVeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 17:33:45 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB11A284A;
-        Mon, 26 Sep 2022 14:33:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id d42so12999707lfv.0;
-        Mon, 26 Sep 2022 14:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=wOCqP9mDpJwt9v/xIiVkrBeoGQeF5SHuPiddJ/jF30o=;
-        b=f079x/7PD0ooMx+BbwrbuX0TF3RU75GJ6QOH1nuQoTYa0EXa3s58yyQe2cQ6SPCMf/
-         WYLLvlMlWz/TGqtyGLpKgsvBOObSVyqwsChs94mu1nZxY7cwh+E67HLSC18szX3simPa
-         yHzlzj6wgMRcYjGQ91KJpDmjvHHQo6NOoDFheimghpZ1qkMyNe6TrSh3JAswI0JLdeML
-         /MQqQ221RcTNtTcHndGO7OXYL7EFNX658cArw0Z+TVAHzsnPFJ4K/u45UlfGR52LT8zz
-         WgkWc4030DVq0GwfktGBRdnOC1fGf39T0Uh5wtLEO3jg30FyIaYDPzUwLpFcTIG1IPYG
-         Qikg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=wOCqP9mDpJwt9v/xIiVkrBeoGQeF5SHuPiddJ/jF30o=;
-        b=ewl9eMiEJ7wHtXStofRig8JwbUF8tTssSHerTqEWAjgZ6Xy+zcGMXlIgk8DbU3VI19
-         4r9tu7ERtdVM+7v7JqyphcVKpuWxGYfOLKEoUDQ1HaYAAi46C+KnUdJTV8JIcI2ZKc0J
-         rvRqphk3ZILatvDbSy4RdfpjlIJM5Pb16JBrBFS2SQgZC6iMxWHw4XacLz2Kq/wSm7sl
-         5k9ul62kvBkKA0Znj6BdBxL2PIDfJsYA11S98Z9ONhk/catiNkDYcO63aKA9XWt2TJ2a
-         TQWr2hzTscoOna2VoknMDiWBYt4pJ6OgENkU3GDETZLUsW5hAUz1DPMfOHMxQxsXzVk3
-         dl8g==
-X-Gm-Message-State: ACrzQf0o7mP7QAKxURnJdVRoLQ0Yt1zHDBmTWF5b/SSz0N7VnY+jl9GD
-        /gkOFPHjSH/Gtz7KBO2VdKu0mAO04HH6YVkY/gg=
-X-Google-Smtp-Source: AMsMyM7ef1LCR3BaddJpiESFTNWER5KCPdHyc5N6UPqHxJueL+Yb8w4KqBrFLfbrCltOUj+5WGyJJ4OCkn7Lh4EIcxE=
-X-Received: by 2002:a05:6512:687:b0:4a1:d59f:dc7c with SMTP id
- t7-20020a056512068700b004a1d59fdc7cmr2400329lfe.564.1664228022638; Mon, 26
- Sep 2022 14:33:42 -0700 (PDT)
+        Mon, 26 Sep 2022 17:34:44 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B281183F;
+        Mon, 26 Sep 2022 14:34:43 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QLMLlw026751;
+        Mon, 26 Sep 2022 21:34:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=f2oVW5cv920HtluzlojR1Lmu74tSl8qrPKw3Uc0zNRA=;
+ b=XtRrgQJiv2OAKKUVLos7UsrYBHpfrT+ifm4SLHdo/kqgMtD7NEAiK04ow7VbFtLjWaUX
+ /SFaOFYKIVxlmTKfK8fF3ti7hcd8Ur/8fudeQO20duxa1LpEbQHqj3l++/DdS4BgsUzH
+ 4XJAcWbUQyM/yiHg5k5PC+qu0wrYIs+uo+WSAIzWZQvFn0xri7MnHRgDZAj8bP1dk7K6
+ 3a1D+OICEIiY0VXBYWfWTTsgIQ6u4k2aQ2jA11+HM1pzF7n9/G7Q9cJlV8LiZ/dnExBL
+ MPYGx+2l9TVapbd5UiO7eExBUGo7YGVEmmcY9doq8ZxNUuld0s0kKK+Zb7oPi0rD1a1Y cg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jsq8vmufa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 21:34:14 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QLYD49032298
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 21:34:13 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 26 Sep 2022 14:34:13 -0700
+Date:   Mon, 26 Sep 2022 14:34:13 -0700
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     Avri Altman <Avri.Altman@wdc.com>
+CC:     "mani@kernel.org" <mani@kernel.org>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "quic_nitirawa@quicinc.com" <quic_nitirawa@quicinc.com>,
+        "quic_rampraka@quicinc.com" <quic_rampraka@quicinc.com>,
+        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v1 02/16] ufs: core: Introduce Multi-circular queue
+ capability
+Message-ID: <20220926213413.GD15228@asutoshd-linux1.qualcomm.com>
+References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
+ <fa3d70c1642c64ce75461f630eabe84b3b974d4e.1663894792.git.quic_asutoshd@quicinc.com>
+ <DM6PR04MB6575F55C0A33C049E22C72B6FC509@DM6PR04MB6575.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220926204657.3147968-1-iam@sung-woo.kim>
-In-Reply-To: <20220926204657.3147968-1-iam@sung-woo.kim>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 26 Sep 2022 14:33:30 -0700
-Message-ID: <CABBYNZLdvOzTwnHp4GX9PiXVMr2SDjD1NCXLRJw1_XLvSuZyjw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: L2CAP: fix an illegal state transition from BT_DISCONN
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     syzkaller@googlegroups.com, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <DM6PR04MB6575F55C0A33C049E22C72B6FC509@DM6PR04MB6575.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5dXhM2cb4YyM6u6yv3C-R1bycUFppWH2
+X-Proofpoint-ORIG-GUID: 5dXhM2cb4YyM6u6yv3C-R1bycUFppWH2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209260132
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kim,
-
-On Mon, Sep 26, 2022 at 1:47 PM Sungwoo Kim <iam@sung-woo.kim> wrote:
+On Sat, Sep 24 2022 at 01:14 -0700, Avri Altman wrote:
+>>
+>> +       hba->mcq_sup = (hba->capabilities & MASK_MCQ_SUPPORT) >>
+>> MCQ_SUPP_SHIFT;
+>Since you are just testing for bit30, MASK_MCQ_SUPPORT is not really needed.
+>Maybe just:
+>hba->mcq_sup = (hba->capabilities >> MCQ_SUPP_SHIFT) & 1;
 >
-> Prevent an illegal state transition from BT_DISCONN to BT_CONFIG.
-> L2CAP_CONN_RSP and L2CAP_CREATE_CHAN_RSP events should be ignored
-> for BT_DISCONN state according to the Bluetooth Core v5.3 p.1096.
-> It is found by BTFuzz, a modified version of syzkaller.
->
-> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
-> ---
->  net/bluetooth/l2cap_core.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> index 2c9de67da..a15d64b13 100644
-> --- a/net/bluetooth/l2cap_core.c
-> +++ b/net/bluetooth/l2cap_core.c
-> @@ -4307,6 +4307,9 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
->                 }
->         }
+Thanks. Yeah, Mani suggested FIELD* macros as an option too.
+Let me check that as well and address this in the next version.
 
-Perhaps it would be better to switch to use l2cap_get_chan_by_scid and
-l2cap_get_chan_by_ident, since I suspect this is caused by the socket
-being terminated while the response is in course so the chan reference
-is already 0 thus why l2cap_chan_hold_unless_zero is probably
-preferable instead of checking the state directly.
-
-> +       if (chan->state == BT_DISCONN)
-> +               goto unlock;
-> +
->         err = 0;
->
->         l2cap_chan_lock(chan);
-> --
-> 2.25.1
->
-
-
--- 
-Luiz Augusto von Dentz
+-asd
