@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4911B5EA2FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873EF5E9F93
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237626AbiIZLRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S235451AbiIZK1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbiIZLQS (ORCPT
+        with ESMTP id S235612AbiIZKYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:16:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C065562;
-        Mon, 26 Sep 2022 03:37:31 -0700 (PDT)
+        Mon, 26 Sep 2022 06:24:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0AF167E7;
+        Mon, 26 Sep 2022 03:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1F5160C05;
-        Mon, 26 Sep 2022 10:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BE1C433D7;
-        Mon, 26 Sep 2022 10:36:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB063B80835;
+        Mon, 26 Sep 2022 10:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F21C433C1;
+        Mon, 26 Sep 2022 10:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188562;
-        bh=5pgYAgWRlfBhf4Ua5UHCi4kfrnOq4a8R62kstjQsXp8=;
+        s=korg; t=1664187460;
+        bh=sILuuaYyBeePaquCIlj5Gx3I8blekWSyIqEjdryyzRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pm+lcgxdNGly/cD5gmthf5vs/HGAuhK1akoMvBHbXEcvGFmU6S6UhzXhrbbOhUwYz
-         EDIImhXndr1s/LLJ8uIVQkGmjRahLuZUJ10MIuNbZ08Wds8ArHIm+wnRVnXia41318
-         /5/YA/oxXFm5RNgBCtudnKm5z4FNOlNEA7ipPPh4=
+        b=zUMPkf5yyarh2uUy5W3l/brZ7LhpTBft+7mbjHkU6AYf3R3hBaa3SKOdH8w6guw7g
+         VO4q2wZWJXIR/Y5bWS2pDuUkw//PxIBiVRLGfRDgssPel6c/lz6QyggkUlPm3XtgzM
+         2JErPKv1qkAOMeUMFDVu1oPt7xQChA0cAUifRUYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 5.15 047/148] kasan: call kasan_malloc() from __kmalloc_*track_caller()
-Date:   Mon, 26 Sep 2022 12:11:21 +0200
-Message-Id: <20220926100757.783271779@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stuart Menefy <stuart.menefy@mathembedded.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 03/58] drm/meson: Correct OSD1 global alpha value
+Date:   Mon, 26 Sep 2022 12:11:22 +0200
+Message-Id: <20220926100741.557776852@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
+References: <20220926100741.430882406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Collingbourne <pcc@google.com>
+From: Stuart Menefy <stuart.menefy@mathembedded.com>
 
-commit 5373b8a09d6e037ee0587cb5d9fe4cc09077deeb upstream.
+[ Upstream commit 6836829c8ea453c9e3e518e61539e35881c8ed5f ]
 
-We were failing to call kasan_malloc() from __kmalloc_*track_caller()
-which was causing us to sometimes fail to produce KASAN error reports
-for allocations made using e.g. devm_kcalloc(), as the KASAN poison was
-not being initialized. Fix it.
+VIU_OSD1_CTRL_STAT.GLOBAL_ALPHA is a 9 bit field, so the maximum
+value is 0x100 not 0xff.
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Cc: <stable@vger.kernel.org> # 5.15
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This matches the vendor kernel.
+
+Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
+Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220908155103.686904-1-stuart.menefy@mathembedded.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/slub.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/meson/meson_plane.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4920,6 +4920,8 @@ void *__kmalloc_track_caller(size_t size
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc(caller, ret, size, s->size, gfpflags);
+diff --git a/drivers/gpu/drm/meson/meson_plane.c b/drivers/gpu/drm/meson/meson_plane.c
+index c7daae53fa1f..26ff2dc56419 100644
+--- a/drivers/gpu/drm/meson/meson_plane.c
++++ b/drivers/gpu/drm/meson/meson_plane.c
+@@ -101,7 +101,7 @@ static void meson_plane_atomic_update(struct drm_plane *plane,
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
-+
- 	return ret;
- }
- EXPORT_SYMBOL(__kmalloc_track_caller);
-@@ -4951,6 +4953,8 @@ void *__kmalloc_node_track_caller(size_t
- 	/* Honor the call site pointer we received. */
- 	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
+ 	/* Enable OSD and BLK0, set max global alpha */
+ 	priv->viu.osd1_ctrl_stat = OSD_ENABLE |
+-				   (0xFF << OSD_GLOBAL_ALPHA_SHIFT) |
++				   (0x100 << OSD_GLOBAL_ALPHA_SHIFT) |
+ 				   OSD_BLK0_ENABLE;
  
-+	ret = kasan_kmalloc(s, ret, size, gfpflags);
-+
- 	return ret;
- }
- EXPORT_SYMBOL(__kmalloc_node_track_caller);
+ 	/* Set up BLK0 to point to the right canvas */
+-- 
+2.35.1
+
 
 
