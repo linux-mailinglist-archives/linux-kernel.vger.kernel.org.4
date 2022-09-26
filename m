@@ -2,175 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488F25E97D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7327B5E97E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 04:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiIZCJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Sep 2022 22:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S233143AbiIZCYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Sep 2022 22:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiIZCJg (ORCPT
+        with ESMTP id S229655AbiIZCYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Sep 2022 22:09:36 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24816B87;
-        Sun, 25 Sep 2022 19:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PMYkB962xIaqYzMSlUu0SD2GVm2eFHye9cJDcjs0Bvc=; b=tJoRxFAlIM2cricHQfYvPsUlw/
-        51GjAzZ2cQQdidiK2sxhDakq6VNg6kjvXecHrf2Ch7v7cprHk5zxn3XtXd/6sQV1fkgGm8rjlJlth
-        VsQb8yzGZMwmY7dxnYBniWngQJtdItw9PK3Q8gl8tZL8LtW+lhmFlMZ77IV7c9i37TSpTNTlB9EtL
-        Rp7AfbFI3WnBxtHADRSdOt/7jGDx8U1u+HkJ6GSibbrrTQlbz+zie3xJLqA720mui5pAAUSjXqIC5
-        r3+l5d3SNKs4wff3ktyrq54vMwoN4U1X7ZxM+AS9vwdtYozzxpsZlhRWUUXwHwbifq7s+TkSmsii+
-        ZyGQUp+w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ocdYm-003nTO-2M;
-        Mon, 26 Sep 2022 02:09:28 +0000
-Date:   Mon, 26 Sep 2022 03:09:28 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     syzbot <syzbot+7475732e7177a19317a1@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, ntfs3@lists.linux.dev
-Subject: Re: [syzbot] WARNING: Nested lock was not taken
-Message-ID: <YzEJ2D8kga+ZRDZx@ZenIV>
-References: <00000000000046d33405e98a9daa@google.com>
+        Sun, 25 Sep 2022 22:24:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E8227B2F
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Sep 2022 19:24:11 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q1YOtP006527;
+        Mon, 26 Sep 2022 02:24:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pL5lXV/Bwp9tO/0Weca3iph6KRFwcLc69m/lA7gV6Xs=;
+ b=g3q5loGssi3tN06UAWhHpKOx1HrsISDgdTmBDtsoYNpvLQlbQhyCfcuzU6JoXtbO4JhB
+ L0MhDfCwuNz6yoUndxSCqbCHdggF84D9aW1ErPp6exYgDx8WIoBq3KGzJ1RPy+rnUcnF
+ 7z/xYh5jZF5/rRCEDAXaury2MykyfWUl4PJcOwEF+BvTjXubFSmBwxJ6ZZMFQFII9UVn
+ woRc9vB2puqZH9lj5wOsnWAjFaQX/1WMB+Q5P1xoYA78OmK5iy4NvC/OWO++CdwckN6V
+ Pz9Wb5JnGDdIiRvVo43YYUmrBwsEdg6sruWv0LJxKnWdG6Ksk0Vymc2PuCh1fyXts0Ms pw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jstnnatsm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 02:24:00 +0000
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q2H03Z016726;
+        Mon, 26 Sep 2022 02:18:59 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3jstykc7g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 02:18:59 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28Q2Gxe0016714;
+        Mon, 26 Sep 2022 02:18:59 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 28Q2Ixkb018839
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 02:18:59 +0000
+Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 25 Sep
+ 2022 19:18:57 -0700
+Message-ID: <fee4b5ec-0e0d-8158-7e60-90f0918cab51@quicinc.com>
+Date:   Mon, 26 Sep 2022 10:18:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000046d33405e98a9daa@google.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v2] cgroup: align the comm length with TASK_COMM_LEN
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <mingo@redhat.com>, <tj@kernel.org>,
+        <william.kucharski@oracle.com>, <linux-kernel@vger.kernel.org>
+References: <20220923075105.28251-1-quic_yingangl@quicinc.com>
+ <20220923110044.7261afa0@gandalf.local.home>
+Content-Language: en-US
+From:   Kassey Li <quic_yingangl@quicinc.com>
+In-Reply-To: <20220923110044.7261afa0@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xcAbFbI6CnfY7rb6SdVsAbGLv-nb4F9k
+X-Proofpoint-ORIG-GUID: xcAbFbI6CnfY7rb6SdVsAbGLv-nb4F9k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_01,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 spamscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 clxscore=1015 impostorscore=0 mlxlogscore=897
+ priorityscore=1501 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209260014
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 06:40:36PM -0700, syzbot wrote:
 
-YANTFSBUG; please Cc ntfs maintainers to that.  Folks, seriously -
-you are fuzzing a specific filesystem, you bloody well ought to Cc
-its maintainers.  Especially since your subject lines are completely
-useless for triage - "[syzbot] WARNING: Nested lock was not taken"
-says nothing whatsoever about the report in question.
 
-Ideally - fix the subject lines as well.  You want to convince
-recepients to open the mail rather than do the default "delete
-unopened", after all...
+On 9/23/2022 11:00 PM, Steven Rostedt wrote:
+> On Fri, 23 Sep 2022 15:51:05 +0800
+> Kassey Li <quic_yingangl@quicinc.com> wrote:
+> 
+>> __string could get a dst string with length less than
+>> TASK_COMM_LEN.
+>>
+>> A task->comm may change that can cause out of bounds access
+>> for the dst string buffer, e.g in the call trace of below:
+>>
+>> Call trace:
+>>
+>>      dump_backtrace.cfi_jt+0x0/0x4
+>>      show_stack+0x14/0x1c
+>>      dump_stack+0xa0/0xd8
+>>      die_callback+0x248/0x24c
+>>      notify_die+0x7c/0xf8
+>>      die+0xac/0x290
+>>      die_kernel_fault+0x88/0x98
+>>      die_kernel_fault+0x0/0x98
+>>      do_page_fault+0xa0/0x544
+>>      do_mem_abort+0x60/0x10c
+>>      el1_da+0x1c/0xc4
+>>      trace_event_raw_event_cgroup_migrate+0x124/0x170
+>>      cgroup_attach_task+0x2e8/0x41c
+>>      __cgroup1_procs_write+0x114/0x1ec
+>>      cgroup1_tasks_write+0x10/0x18
+>>      cgroup_file_write+0xa4/0x208
+>>      kernfs_fop_write+0x1f0/0x2f4
+>>      __vfs_write+0x5c/0x200
+>>      vfs_write+0xe0/0x1a0
+>>      ksys_write+0x74/0xdc
+>>      __arm64_sys_write+0x18/0x20
+>>      el0_svc_common+0xc0/0x1a4
+>>      el0_svc_compat_handler+0x18/0x20
+>>      el0_svc_compat+0x8/0x2c
+>>
+>> Change it as arrary with same length TASK_COMM_LEN,
+>> This idea is from commit d1eb650ff413 ("tracepoint: Move signal sending
+>> tracepoint to events/signal.h").
+> 
+> This does not make sense. What exactly is the bug here?
+hi, Steven:
+     hope below info can give you idea on this , let me know if you need 
+more info.
 
-> Hello,
+kernel log:
+	Unable to handle kernel write to read-only memory at virtual address 
+ffffffbcf7450000
+
+"SharedPreferenc" is task name/comm.
+
+memory/ddr dump:
+
+   FFFFFFBCF744FFE0| 00090020 000B0029 706F742F 7070612D 61685300 
+50646572 65666572 636E6572  ...).../top-app.SharedPreferenc
+   FFFFFFBCF7450000|>52800101 97FD3A05 140000B3 AA1303E0 9400193C 
+B0000F88 90000D89 9137FD08 ...R.:..........<.............7.
+
+trace stack:
+
+-000|strcpy(inline)
+-000|trace_event_raw_event_cgroup_migrate
+-001|trace_cgroup_attach_task(inline)
+-001|cgroup_attach_task()
+-002|__read_once_size(inline)
+-002|atomic_read(inline)
+-002|static_key_count(inline)
+-002|static_key_false(inline)
+-002|trace_android_vh_cgroup_set_task(inline)
+-002|__cgroup1_procs_write()
+-003|cgroup1_tasks_write
+-004|cgroup_file_write
+-005|kernfs_fop_write$
+-006|__vfs_write()
+-007|vfs_write()
+-008|ksys_write()
+-009|__se_sys_write(inline)
+-009|__arm64_sys_write()
+-010|__invoke_syscall(inline)
+-010|invoke_syscall(inline)
+-010|el0_svc_common()
+-011|el0_svc_compat_handler()
+-012|el0_svc_compat(asm)
+
+
+
+
 > 
-> syzbot found the following issue on:
+> __string() will do a strlen(task->comm) + 1 to allocate on the ring buffer.
+> It should not be less that task->comm. The above stack dump does not show
+> what happened.
 > 
-> HEAD commit:    c194837ebb57 Merge branch 'for-next/core', remote-tracking..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16bb8574880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=15a770deac0c935a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7475732e7177a19317a1
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a45edf080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12e66470880000
+> This looks like another bug and I do not see how this patch addresses
+> the issue.
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/8d8ae425e7fa/disk-c194837e.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/c540d501ebe7/vmlinux-c194837e.xz
+> -- Steve
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7475732e7177a19317a1@syzkaller.appspotmail.com
+>>
+>> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+>> ---
+>>   include/trace/events/cgroup.h | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+>> index dd7d7c9efecd..b4ef0ffa38a4 100644
+>> --- a/include/trace/events/cgroup.h
+>> +++ b/include/trace/events/cgroup.h
+>> @@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>>   		__field(	u64,		dst_id			)
+>>   		__field(	int,		pid			)
+>>   		__string(	dst_path,	path			)
+>> -		__string(	comm,		task->comm		)
+>> +		__array(char, comm, TASK_COMM_LEN)
+>>   	),
+>>   
+>>   	TP_fast_assign(
+>> @@ -139,12 +139,12 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>>   		__entry->dst_level = dst_cgrp->level;
+>>   		__assign_str(dst_path, path);
+>>   		__entry->pid = task->pid;
+>> -		__assign_str(comm, task->comm);
+>> +		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
+	I think the problem is here, __assign_str using strcpy
+	the task->comm here tail is not '\0'
+	that's why it out of bounds access.
+
+	do you want to this version or just modify the memcpy or strncpy to do 
+with a known length ?  please give suggest so I can modify .
+
+>>   	),
+>>   
+>>   	TP_printk("dst_root=%d dst_id=%llu dst_level=%d dst_path=%s pid=%d comm=%s",
+>>   		  __entry->dst_root, __entry->dst_id, __entry->dst_level,
+>> -		  __get_str(dst_path), __entry->pid, __get_str(comm))
+>> +		  __get_str(dst_path), __entry->pid, __entry->comm)
+>>   );
+>>   
+>>   DEFINE_EVENT(cgroup_migrate, cgroup_attach_task,
 > 
-> loop4: detected capacity change from 0 to 264192
-> ==================================
-> WARNING: Nested lock was not taken
-> 6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0 Not tainted
-> ----------------------------------
-> syz-executor253/3315 is trying to lock:
-> ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
-> ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: inode_sb_list_del fs/inode.c:503 [inline]
-> ffff0000c495a9d8 (&s->s_inode_list_lock){+.+.}-{2:2}, at: evict+0x90/0x334 fs/inode.c:654
-> 
-> but this task is not holding:
-> Unable to handle kernel paging request at virtual address 0000000100000017
-> Mem abort info:
->   ESR = 0x0000000096000005
->   EC = 0x25: DABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
->   FSC = 0x05: level 1 translation fault
-> Data abort info:
->   ISV = 0, ISS = 0x00000005
->   CM = 0, WnR = 0
-> user pgtable: 4k pages, 48-bit VAs, pgdp=000000010a8da000
-> [0000000100000017] pgd=0800000107ed2003, p4d=0800000107ed2003, pud=0000000000000000
-> Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
-> Modules linked in:
-> CPU: 0 PID: 3315 Comm: syz-executor253 Not tainted 6.0.0-rc6-syzkaller-17742-gc194837ebb57 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
-> pc : __lock_acquire+0x7cc/0x30a4 kernel/locking/lockdep.c:5044
-> lr : print_lock_nested_lock_not_held kernel/locking/lockdep.c:4884 [inline]
-> lr : __lock_acquire+0x7c0/0x30a4 kernel/locking/lockdep.c:5044
-> sp : ffff80001289b8b0
-> x29: ffff80001289b990 x28: 0000000000000001 x27: ffff80000d30c000
-> x26: ffff0000c68d24b8 x25: ffff0000c68d24d8 x24: 0000000000000002
-> x23: ffff0000c68d24d0 x22: ffff80000d32a753 x21: ffff80000d32a712
-> x20: 0000000000040067 x19: ffff0000c68d1a80 x18: 0000000000000156
-> x17: 2b7463697665203a x16: 0000000000000002 x15: 0000000000000000
-> x14: 0000000000000000 x13: 205d353133335420 x12: 5b5d303434313530
-> x11: ff808000081c1630 x10: 0000000000000000 x9 : 30785d1575e13b00
-> x8 : 00000000ffffffff x7 : 205b5d3034343135 x6 : ffff800008195d30
-> x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-> x2 : 0000000000000000 x1 : 0000000100000001 x0 : ffff80000cb555a1
-> Call trace:
->  print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
->  __lock_acquire+0x7cc/0x30a4 kernel/locking/lockdep.c:5044
->  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
->  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
->  _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
->  spin_lock include/linux/spinlock.h:349 [inline]
->  inode_sb_list_del fs/inode.c:503 [inline]
->  evict+0x90/0x334 fs/inode.c:654
->  iput_final fs/inode.c:1748 [inline]
->  iput+0x2c4/0x324 fs/inode.c:1774
->  ntfs_fill_super+0x1254/0x14a4 fs/ntfs/super.c:188
->  get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
->  ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
->  vfs_get_tree+0x40/0x140 fs/super.c:1530
->  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->  path_mount+0x358/0x914 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
->  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
->  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
->  el0t_64_sync+0x18c/0x190
-> Code: 94f84769 f94002e8 d0024dc0 91168400 (f9400d01) 
-> ---[ end trace 0000000000000000 ]---
-> ----------------
-> Code disassembly (best guess):
->    0:	94f84769 	bl	0x3e11da4
->    4:	f94002e8 	ldr	x8, [x23]
->    8:	d0024dc0 	adrp	x0, 0x49ba000
->    c:	91168400 	add	x0, x0, #0x5a1
-> * 10:	f9400d01 	ldr	x1, [x8, #24] <-- trapping instruction
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
