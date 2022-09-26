@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BFB5EA17D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34305EA36C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbiIZKvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S235837AbiIZLZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236643AbiIZKsx (ORCPT
+        with ESMTP id S236094AbiIZLXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:48:53 -0400
+        Mon, 26 Sep 2022 07:23:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4925789E;
-        Mon, 26 Sep 2022 03:26:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3E1C13A;
+        Mon, 26 Sep 2022 03:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 050EB60C13;
-        Mon, 26 Sep 2022 10:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A41C433D6;
-        Mon, 26 Sep 2022 10:26:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B272760B55;
+        Mon, 26 Sep 2022 10:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0B1BC433D6;
+        Mon, 26 Sep 2022 10:39:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187979;
-        bh=N3TddU4kN2v+JH26p5k5E5UOFYOaUiaRmR6KBiOEDBQ=;
+        s=korg; t=1664188744;
+        bh=fTOFobLztgWomUcePqED+YQQvKqRE3uuRHz5dNeFLEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sltEAyPcIUr1a+dNt7GmT/8Y8KrZVFb87Oudcs9M7cdwxa16eokSFvz2ktfPNRz1s
-         dAJZgifqKfomoguurUihrOfkCcuSW4ctZ9M/57nJTM3hz2aTE/VZR0xHNBEWM/V/3F
-         ygHt7EQuWUvdMOGtBXbiD1NJ+iBuxQ0aMIsZ9MdA=
+        b=i/3uHmjlTvCbQQZbhqhqOH5c+CXc1PJpy1tDkDBUlLRh4l1WvlrEmH60lnqFIsXHR
+         /449tAZ9PZJjD1xfN1SErAdXoqVmQK90TFFJlm7BEYAiQ16Pv2/8YhjxP9FiCuzM/r
+         XFiLhh/AcsAh9EvuA8mQmb0voxtamqatp9ZwrnxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandan.babu@oracle.com>
-Subject: [PATCH 5.4 107/120] xfs: range check ri_cnt when recovering log items
-Date:   Mon, 26 Sep 2022 12:12:20 +0200
-Message-Id: <20220926100754.871725781@linuxfoundation.org>
+        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Lieven Hey <lieven.hey@kdab.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 107/148] perf jit: Include program header in ELF files
+Date:   Mon, 26 Sep 2022 12:12:21 +0200
+Message-Id: <20220926100800.128448782@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <darrick.wong@oracle.com>
+From: Lieven Hey <lieven.hey@kdab.com>
 
-commit d6abecb82573fed5f7e4b595b5c0bd37707d2848 upstream.
+[ Upstream commit babd04386b1df8c364cdaa39ac0e54349502e1e5 ]
 
-Range check the region counter when we're reassembling regions from log
-items during log recovery.  In the old days ASSERT would halt the
-kernel, but this isn't true any more so we have to make an explicit
-error return.
+The missing header makes it hard for programs like elfutils to open
+these files.
 
-Coverity-id: 1132508
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Chandan Babu R <chandan.babu@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2d86612aacb7805f ("perf symbol: Correct address for bss symbols")
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Lieven Hey <lieven.hey@kdab.com>
+Tested-by: Leo Yan <leo.yan@linaro.org>
+Cc: Leo Yan <leo.yan@linaro.org>
+Link: https://lore.kernel.org/r/20220915092910.711036-1-lieven.hey@kdab.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_log_recover.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/perf/util/genelf.c | 14 ++++++++++++++
+ tools/perf/util/genelf.h |  4 ++++
+ 2 files changed, 18 insertions(+)
 
---- a/fs/xfs/xfs_log_recover.c
-+++ b/fs/xfs/xfs_log_recover.c
-@@ -4293,7 +4293,16 @@ xlog_recover_add_to_trans(
- 			kmem_zalloc(item->ri_total * sizeof(xfs_log_iovec_t),
- 				    0);
- 	}
--	ASSERT(item->ri_total > item->ri_cnt);
+diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
+index 953338b9e887..02cd9f75e3d2 100644
+--- a/tools/perf/util/genelf.c
++++ b/tools/perf/util/genelf.c
+@@ -251,6 +251,7 @@ jit_write_elf(int fd, uint64_t load_addr, const char *sym,
+ 	Elf_Data *d;
+ 	Elf_Scn *scn;
+ 	Elf_Ehdr *ehdr;
++	Elf_Phdr *phdr;
+ 	Elf_Shdr *shdr;
+ 	uint64_t eh_frame_base_offset;
+ 	char *strsym = NULL;
+@@ -285,6 +286,19 @@ jit_write_elf(int fd, uint64_t load_addr, const char *sym,
+ 	ehdr->e_version = EV_CURRENT;
+ 	ehdr->e_shstrndx= unwinding ? 4 : 2; /* shdr index for section name */
+ 
++	/*
++	 * setup program header
++	 */
++	phdr = elf_newphdr(e, 1);
++	phdr[0].p_type = PT_LOAD;
++	phdr[0].p_offset = 0;
++	phdr[0].p_vaddr = 0;
++	phdr[0].p_paddr = 0;
++	phdr[0].p_filesz = csize;
++	phdr[0].p_memsz = csize;
++	phdr[0].p_flags = PF_X | PF_R;
++	phdr[0].p_align = 8;
 +
-+	if (item->ri_total <= item->ri_cnt) {
-+		xfs_warn(log->l_mp,
-+	"log item region count (%d) overflowed size (%d)",
-+				item->ri_cnt, item->ri_total);
-+		ASSERT(0);
-+		kmem_free(ptr);
-+		return -EFSCORRUPTED;
-+	}
-+
- 	/* Description region is ri_buf[0] */
- 	item->ri_buf[item->ri_cnt].i_addr = ptr;
- 	item->ri_buf[item->ri_cnt].i_len  = len;
+ 	/*
+ 	 * setup text section
+ 	 */
+diff --git a/tools/perf/util/genelf.h b/tools/perf/util/genelf.h
+index d4137559be05..ac638945b4cb 100644
+--- a/tools/perf/util/genelf.h
++++ b/tools/perf/util/genelf.h
+@@ -50,8 +50,10 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
+ 
+ #if GEN_ELF_CLASS == ELFCLASS64
+ #define elf_newehdr	elf64_newehdr
++#define elf_newphdr	elf64_newphdr
+ #define elf_getshdr	elf64_getshdr
+ #define Elf_Ehdr	Elf64_Ehdr
++#define Elf_Phdr	Elf64_Phdr
+ #define Elf_Shdr	Elf64_Shdr
+ #define Elf_Sym		Elf64_Sym
+ #define ELF_ST_TYPE(a)	ELF64_ST_TYPE(a)
+@@ -59,8 +61,10 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
+ #define ELF_ST_VIS(a)	ELF64_ST_VISIBILITY(a)
+ #else
+ #define elf_newehdr	elf32_newehdr
++#define elf_newphdr	elf32_newphdr
+ #define elf_getshdr	elf32_getshdr
+ #define Elf_Ehdr	Elf32_Ehdr
++#define Elf_Phdr	Elf32_Phdr
+ #define Elf_Shdr	Elf32_Shdr
+ #define Elf_Sym		Elf32_Sym
+ #define ELF_ST_TYPE(a)	ELF32_ST_TYPE(a)
+-- 
+2.35.1
+
 
 
