@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D565EA047
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDBF5EA00C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235911AbiIZKfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S235768AbiIZKdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235840AbiIZKdM (ORCPT
+        with ESMTP id S235712AbiIZKb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:33:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57A449B51;
-        Mon, 26 Sep 2022 03:20:29 -0700 (PDT)
+        Mon, 26 Sep 2022 06:31:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D280311834;
+        Mon, 26 Sep 2022 03:20:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE92A60B60;
-        Mon, 26 Sep 2022 10:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C434CC433C1;
-        Mon, 26 Sep 2022 10:20:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFCF3B80918;
+        Mon, 26 Sep 2022 10:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E2AC433D6;
+        Mon, 26 Sep 2022 10:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187618;
-        bh=olcYasHuW7BIezTv9Mi3hwjM/yjhD8t6eRgTA7tM4sU=;
+        s=korg; t=1664187593;
+        bh=tlvUgMkU11HBDwNbeCOwRwnKt9TSsz61+tOrT9iIo/E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HGhFBKmepNeOn6Pfss/nHnlVZ09w2W8+3LVRP498kKB0LJXHmMfQXt3NdCKJilzR6
-         rY1GkzYggcf9H7STJyRe2f/M8SEb85sMkcF2Exbu4maoqvZDx8fU1DYzr5d/RixDqJ
-         IuJu8K/f087LhnENsReCGk4ZRAMwNNFOzrtSKAsk=
+        b=XFcl2wG3oak5DYqEM0eHSaSt03/QuvgonV5AMapjnRalRDsY0KMkETXidvoG7C8Ye
+         p2y6acdxzVfi7IjUVlqgSQlDcRhRPLXgCew/bmI+Rfvtim44PqnXJrCsLUSMdofFXi
+         T8nBXd51tXShDCmoqJhtIBLFfsl6ldtSr7ndzpdI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>, stable@kernel.org,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.19 57/58] ext4: make directory inode spreading reflect flexbg size
-Date:   Mon, 26 Sep 2022 12:12:16 +0200
-Message-Id: <20220926100743.569623445@linuxfoundation.org>
+        stable@vger.kernel.org, Raymond Tan <raymond.tan@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH 4.19 58/58] usb: dwc3: pci: Allow Elkhart Lake to utilize DSM method for PM functionality
+Date:   Mon, 26 Sep 2022 12:12:17 +0200
+Message-Id: <20220926100743.599371856@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
 References: <20220926100741.430882406@linuxfoundation.org>
@@ -54,39 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Raymond Tan <raymond.tan@intel.com>
 
-commit 613c5a85898d1cd44e68f28d65eccf64a8ace9cf upstream.
+commit a609ce2a13360d639b384b6ca783b38c1247f2db upstream.
 
-Currently the Orlov inode allocator searches for free inodes for a
-directory only in flex block groups with at most inodes_per_group/16
-more directory inodes than average per flex block group. However with
-growing size of flex block group this becomes unnecessarily strict.
-Scale allowed difference from average directory count per flex block
-group with flex block group size as we do with other metrics.
+Similar to some other IA platforms, Elkhart Lake too depends on the
+PMU register write to request transition of Dx power state.
 
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Tested-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/all/0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com/
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220908092136.11770-3-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Thus, we add the PCI_DEVICE_ID_INTEL_EHLLP to the list of devices that
+shall execute the ACPI _DSM method during D0/D3 sequence.
+
+[heikki.krogerus@linux.intel.com: included Fixes tag]
+
+Fixes: dbb0569de852 ("usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices")
+Cc: stable@vger.kernel.org
+Signed-off-by: Raymond Tan <raymond.tan@intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/ialloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-pci.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/ext4/ialloc.c
-+++ b/fs/ext4/ialloc.c
-@@ -505,7 +505,7 @@ static int find_group_orlov(struct super
- 		goto fallback;
- 	}
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -149,7 +149,8 @@ static int dwc3_pci_quirks(struct dwc3_p
  
--	max_dirs = ndirs / ngroups + inodes_per_group / 16;
-+	max_dirs = ndirs / ngroups + inodes_per_group*flex_size / 16;
- 	min_inodes = avefreei - inodes_per_group*flex_size / 4;
- 	if (min_inodes < 1)
- 		min_inodes = 1;
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
+ 		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
+-				pdev->device == PCI_DEVICE_ID_INTEL_BXT_M) {
++		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
++		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
+ 			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
+ 			dwc->has_dsm_for_pm = true;
+ 		}
 
 
