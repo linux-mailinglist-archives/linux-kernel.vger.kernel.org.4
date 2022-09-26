@@ -2,105 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B1B5EB480
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34725EB487
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiIZWY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S231284AbiIZW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiIZWY0 (ORCPT
+        with ESMTP id S229734AbiIZW1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:24:26 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8CB82843;
-        Mon, 26 Sep 2022 15:24:24 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id y2so5042171qtv.5;
-        Mon, 26 Sep 2022 15:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Aj4jqdmP8uv2Ki8x1BJ2NHjQAOOmHG/qfBojsX6rDVs=;
-        b=mG8L5gdZLrVm1RDRA3OAiu2LDMtIYLjZiEjlmChYl3BDoqbJwV/ZVaYHLTPEuKf3Ck
-         Yrj7o25khNkwWJCqG6XN1uKigTy6lqpDWIQExDl/YYwJEbkRFRutjA5NJAypNq6QSlZ/
-         Ncyu8/LzYRk3npGqHwnZxPemhQhBA9d2Tj1KlGN2+GJ0+KkVg7zki7JP5wamHgeUHBqh
-         EHrblY3xTZOXfM/WcgHivsSFRU2t5Awk9IF+lXl84bB3Q6L4a1EycsCM9Vs1jE/QQW3H
-         3BFRgxdd/ak3FUbIhIp8ZROLVdN502PzhmHf8OGCRGcUh+M61f+bk7EZKJj0fKAbS58j
-         LD1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Aj4jqdmP8uv2Ki8x1BJ2NHjQAOOmHG/qfBojsX6rDVs=;
-        b=LtwM/rii+kBqlPLHKn6fnuFigx2FrmvvrUH17+uBMt7VGs0czRxjl1AzABWCxlNZIm
-         PHQ3nKFgx3b9g5F1+yvOj4YUBNOJJqCw65GPiGNxcFeiWII7gVwmDMAm+gQ1o5fyjDhE
-         s66DJ+7LKptIMyxDELL9zjVy4ci4jmJsmZuJaTPPu7En9BUsgXjOp3W8Q/yzs3exc3Kf
-         Dd5EqWNRN1wdqWwci8stD4snlHgDQMtxK2vrz5bvu2RCC6oMQprVAgEzntPsniM/+6Wr
-         XpmLWvgwedkG4wCjx051beWXv3afbI+nTSTl0ldDAjSO8mrX3CEkpAtJjTbWwMAu+sLy
-         TkAw==
-X-Gm-Message-State: ACrzQf0l3op9NDLqyuV4FPUKt97hgE7DjSaDbCgJwf9BvMlKSTnyEjDH
-        gbZozUuHnOYjYIiA+L7Mny4=
-X-Google-Smtp-Source: AMsMyM6bzaXiRjKSwc61FLkmjhJTbneD3ttU2gcy6/umZqi5005k6zYaKiyebUQWITyVRXAkdet35A==
-X-Received: by 2002:a05:622a:448:b0:35d:448f:d2aa with SMTP id o8-20020a05622a044800b0035d448fd2aamr3691327qtx.680.1664231064044;
-        Mon, 26 Sep 2022 15:24:24 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a05620a430400b006bb2bca5741sm12224046qko.93.2022.09.26.15.24.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 15:24:23 -0700 (PDT)
-Message-ID: <54484545-db32-1717-c161-9cd267ff06fd@gmail.com>
-Date:   Mon, 26 Sep 2022 15:24:20 -0700
+        Mon, 26 Sep 2022 18:27:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B1D8E9AF;
+        Mon, 26 Sep 2022 15:27:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C59A9614A5;
+        Mon, 26 Sep 2022 22:27:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9C3C433C1;
+        Mon, 26 Sep 2022 22:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664231239;
+        bh=Lv/eWg3lgX5ZK45i7JteXDNcaMfsmS88RtEl72dTyb4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OyzeEw7BIfPI36XRkMxPVb45FYDPkqVcvFs7wQQiRdfrPUABG65qLJiutAoKEKniM
+         SG+pAUVCu2lYMW2oXIMFIf+LVNCrPJ1GTmaJ9jIX/JqS34MMUxEQzHCMGMYNRsxOIj
+         gtrAqzbeEzJuOkNcsKgGUdgoivSgz43+fDW8syhPA+5SdAVjkz910BoqHQewDLwnYA
+         npcH789AmCRdYl9xGPQgjhrHZwWyQJA/kGrG4B7ZeR0r03eN4S1MQrE/o3GNBJzICV
+         jGn9AxKPz6QlTd4NLkTFjDyB0EBWHdl1dccsK7jMke5a3E2sR4ZV5yhlp3xsNbrEdg
+         9TLpjZnDT7ozQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BBAD35C05B1; Mon, 26 Sep 2022 15:27:18 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 15:27:18 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220926222718.GW4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220922220104.2446868-1-joel@joelfernandes.org>
+ <20220922220104.2446868-2-joel@joelfernandes.org>
+ <YzAX5kOwjrZzoed6@pc636>
+ <YzCUDXn3htWbqM4f@google.com>
+ <20220926174846.GQ4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzH+XAVSlHpuWYoD@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220926100806.522017616@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzH+XAVSlHpuWYoD@pc636>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/22 03:09, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.12 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Sep 26, 2022 at 09:32:44PM +0200, Uladzislau Rezki wrote:
+> On Mon, Sep 26, 2022 at 10:48:46AM -0700, Paul E. McKenney wrote:
+> > On Sun, Sep 25, 2022 at 05:46:53PM +0000, Joel Fernandes wrote:
+> > > Hi Vlad,
+> > > 
+> > > On Sun, Sep 25, 2022 at 10:57:10AM +0200, Uladzislau Rezki wrote:
+> > > > > Implement timer-based RCU lazy callback batching. The batch is flushed
+> > > > > whenever a certain amount of time has passed, or the batch on a
+> > > > > particular CPU grows too big. Also memory pressure will flush it in a
+> > > > > future patch.
+> > > > > 
+> > > > > To handle several corner cases automagically (such as rcu_barrier() and
+> > > > > hotplug), we re-use bypass lists to handle lazy CBs. The bypass list
+> > > > > length has the lazy CB length included in it. A separate lazy CB length
+> > > > > counter is also introduced to keep track of the number of lazy CBs.
+> > > > > 
+> > > > > v5->v6:
+> > > > > 
+> > > > > [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
+> > > > >   deferral levels wake much earlier so for those it is not needed. ]
+> > > > > 
+> > > > > [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
+> > > > > 
+> > > > > [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
+> > > > > 
+> > > > > [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
+> > > > > 
+> > > > > [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
+> > > > > 
+> > > > > [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
+> > > > > 
+> > > > I think it make sense to add some data to the commit message
+> > > > illustrating what this patch does.
+> > > 
+> > > Sure, will do!
+> > > 
+> > > > From my side i gave a try of this patch on my setup. Some data:
+> > > > 
+> > > > <snip>
+> > > > root@pc638:/home/urezki/rcu_v6# ./perf_script_parser ./perf_v6.script | sort -nk 6 | grep rcu
+> > > > name:                       rcuop/23 pid:        184 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/26 pid:        206 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/29 pid:        227 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                        rcuop/2 pid:         35 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/33 pid:        256 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/34 pid:        263 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/35 pid:        270 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/36 pid:        277 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/37 pid:        284 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/38 pid:        291 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/49 pid:        370 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/59 pid:        441 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/63 pid:        469 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                        rcuog/0 pid:         16 woken-up     2     interval: min  8034     max  8034       avg  4017
+> > > > name:                       rcuog/24 pid:        191 woken-up     2     interval: min  7941     max  7941       avg  3970
+> > > > name:                       rcuog/32 pid:        248 woken-up     2     interval: min  7542     max  7542       avg  3771
+> > > > name:                       rcuog/48 pid:        362 woken-up     2     interval: min  8065     max  8065       avg  4032
+> > > > name:                       rcuog/56 pid:        419 woken-up     2     interval: min  8076     max  8076       avg  4038
+> > > > name:                       rcuop/21 pid:        170 woken-up     2     interval: min 13311438  max 13311438    avg 6655719
+> > > > name:                       rcuog/16 pid:        134 woken-up     4     interval: min  8029     max 13303387    avg 3329863
+> > > > name:                        rcuop/9 pid:         85 woken-up     4     interval: min 10007570  max 10007586    avg 7505684
+> > > > name:                        rcuog/8 pid:         77 woken-up     8     interval: min  6240     max 10001242    avg 3753622
+> > > > name:                    rcu_preempt pid:         15 woken-up    18     interval: min  6058     max 9999713     avg 2140788
+> > > > name:                     test_rcu/0 pid:       1411 woken-up 10003     interval: min   165     max 19072       avg  4275
+> > > > root@pc638:/home/urezki/rcu_v6#
+> > > > 
+> > > > root@pc638:/home/urezki/rcu_v6# ./perf_script_parser ./perf_default.script | sort -nk 6 | grep rcu
+> > > > name:                       rcuop/33 pid:        256 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuop/51 pid:        384 woken-up     1     interval: min     0     max     0       avg     0
+> > > > name:                       rcuog/32 pid:        248 woken-up     2     interval: min 11927     max 11927       avg  5963
+> > > > name:                       rcuop/63 pid:        469 woken-up     2     interval: min 23963     max 23963       avg 11981
+> > > > name:                       rcuog/56 pid:        419 woken-up     3     interval: min 11132     max 23967       avg 11699
+> > > > name:                       rcuop/50 pid:        377 woken-up     3     interval: min  8057     max 4944344     avg 1650800
+> > > > name:                       rcuog/48 pid:        362 woken-up     8     interval: min  2712     max 37430015    avg 5298801
+> > > > name:                       rcuop/16 pid:        135 woken-up  4790     interval: min  7340     max 16649       avg  8843
+> > > > name:                       rcuog/16 pid:        134 woken-up  4792     interval: min  7368     max 16644       avg  8844
+> > > > name:                    rcu_preempt pid:         15 woken-up  5302     interval: min    26     max 12179       avg  7994
+> > > > name:                     test_rcu/0 pid:       1353 woken-up 10003     interval: min   169     max 18508       avg  4236
+> > > > root@pc638:/home/urezki/rcu_v6#
+> > > > <snip>
+> > > > 
+> > > > so it is obvious that the patch does the job.
+> > > 
+> > > Thanks a lot for testing!
+> > > 
+> > > > On my KVM machine the boot time is affected:
+> > > > 
+> > > > <snip>
+> > > > [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+> > > > [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
+> > > > [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+> > > > [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
+> > > > [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
+> > > > [  104.115418] process '/usr/bin/fstype' started with executable stack
+> > > > [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
+> > > > [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
+> > > > [  104.340193] systemd[1]: Detected virtualization kvm.
+> > > > [  104.340196] systemd[1]: Detected architecture x86-64.
+> > > > [  104.359032] systemd[1]: Set hostname to <pc638>.
+> > > > [  105.740109] random: crng init done
+> > > > [  105.741267] systemd[1]: Reached target Remote File Systems.
+> > > > <snip>
+> > > > 
+> > > > 2 - 11 and second delay is between 32 - 104. So there are still users which must
+> > > > be waiting for "RCU" in a sync way.
+> > > 
+> > > I was wondering if you can compare boot logs and see which timestamp does the
+> > > slow down start from. That way, we can narrow down the callback. Also another
+> > > idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
+> > > ftrace_dump_on_oops" to the boot params, and then manually call
+> > > "tracing_off(); panic();" from the code at the first printk that seems off in
+> > > your comparison of good vs bad. For example, if "crng init done" timestamp is
+> > > off, put the "tracing_off(); panic();" there. Then grab the serial console
+> > > output to see what were the last callbacks that was queued/invoked.
+> > 
+> > We do seem to be in need of some way to quickly and easily locate the
+> > callback that needed to be _flush() due to a wakeup.
+> >
+> <snip>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index aeea9731ef80..fe1146d97f1a 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+>  
+>         if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+>                 rwork->wq = wq;
+> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+>                 return true;
+>         }
+>  
+> <snip>
 > 
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> ?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+This one does seem like a good candidate.  Someday there might need to
+be a queue_rcu_work_flush() vs. queue_rcu_work(), but that needs to be
+proven.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> But it does not fully solve my boot-up issue. Will debug tomorrow further.
+
+Sounds good!
+
+> > Might one more proactive approach be to use Coccinelle to locate such
+> > callback functions?  We might not want -all- callbacks that do wakeups
+> > to use call_rcu_flush(), but knowing which are which should speed up
+> > slow-boot debugging by quite a bit.
+> > 
+> > Or is there a better way to do this?
+> > 
+> I am not sure what Coccinelle is. If we had something automated that measures
+> a boot time and if needed does some profiling it would be good. Otherwise it
+> is a manual debugging mainly, IMHO.
+
+Coccinelle is sort of like a variant of the "sed" command that understands
+C syntax.  It is useful for searching for patterns in Linux-kernel source
+code.
+
+But if you are able to easily find the call_rcu() invocations that are
+slowing things down, maybe it is not needed.  For now, anyway.
+
+							Thanx, Paul
