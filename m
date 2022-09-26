@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447025E9ECB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9FA5EA313
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiIZKOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S235107AbiIZLTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbiIZKNs (ORCPT
+        with ESMTP id S237703AbiIZLRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:13:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A582F73;
-        Mon, 26 Sep 2022 03:13:47 -0700 (PDT)
+        Mon, 26 Sep 2022 07:17:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD596525E;
+        Mon, 26 Sep 2022 03:38:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C878D60AF2;
-        Mon, 26 Sep 2022 10:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7885C433D6;
-        Mon, 26 Sep 2022 10:13:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 978B9B80915;
+        Mon, 26 Sep 2022 10:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA2BC433C1;
+        Mon, 26 Sep 2022 10:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187226;
-        bh=De71Q6KPiXPBoR+9AleU9zxny28K3+huMQeadpr9NMc=;
+        s=korg; t=1664188596;
+        bh=tMM/orUGFSjjL4eQY+VZYZBWlo9qcSJzCaONo3wf00w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c/ysXU9bzhE8w4b8wPuYsJWOYqjJSf2/H2QPZyOq4bLCJmIc1dkmrSyjQqkrLwyiy
-         AP7r0re+rrQbnsy8nqz/Et8UtDe9vTXxHcmhGjz7SY4kFau5KzrKF+UWIHUdtrYlRd
-         bKtDbtMY1QCECXdsI8E8KKHMHwJKXi/2RQ2ToET0=
+        b=rItiTHn8oR31MDs+Av8CV6J5ctDlVCSDYjNhTTCOm/gPgT2EqXy6sbVdbeH1UG57n
+         Xu72hV3ZPXltMYxx8w0osqjKo3sN50B6cpNBEUkkcxtnknGcmWIBZ22AtT/lnpwiRN
+         emEzBcA3oA3o9X7w1r8I9UNbRg26XhKceW7B5ejA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Melissa Wen <mwen@igalia.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 03/30] drm/vc4: crtc: Use an union to store the page flip callback
+Subject: [PATCH 5.15 060/148] arm64: dts: rockchip: Pull up wlan wake# on Gru-Bob
 Date:   Mon, 26 Sep 2022 12:11:34 +0200
-Message-Id: <20220926100736.283415181@linuxfoundation.org>
+Message-Id: <20220926100758.284961364@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
-References: <20220926100736.153157100@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit 2523e9dcc3be91bf9fdc0d1e542557ca00bbef42 ]
+[ Upstream commit e5467359a725de90b6b8d0dd865500f6373828ca ]
 
-We'll need to extend the vc4_async_flip_state structure to rely on
-another callback implementation, so let's move the current one into a
-union.
+The Gru-Bob board does not have a pull-up resistor on its
+WLAN_HOST_WAKE# pin, but Kevin does. The production/vendor kernel
+specified the pin configuration correctly as a pull-up, but this didn't
+get ported correctly to upstream.
 
-Reviewed-by: Melissa Wen <mwen@igalia.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220610115149.964394-10-maxime@cerno.tech
+This means Bob's WLAN_HOST_WAKE# pin is floating, causing inconsistent
+wakeup behavior.
+
+Note that bt_host_wake_l has a similar dynamic, but apparently the
+upstream choice was to redundantly configure both internal and external
+pull-up on Kevin (see the "Kevin has an external pull up" comment in
+rk3399-gru.dtsi). This doesn't cause any functional problem, although
+it's perhaps wasteful.
+
+Fixes: 8559bbeeb849 ("arm64: dts: rockchip: add Google Bob")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20220822164453.1.I75c57b48b0873766ec993bdfb7bc1e63da5a1637@changeid
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_crtc.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts         | 5 +++++
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
-index 51d34e7275ab..9d97f535a4d6 100644
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -717,17 +717,17 @@ struct vc4_async_flip_state {
- 	struct drm_framebuffer *fb;
- 	struct drm_pending_vblank_event *event;
- 
--	struct vc4_seqno_cb cb;
-+	union {
-+		struct vc4_seqno_cb seqno;
-+	} cb;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
+index e6c1c94c8d69..07737b65d7a3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
+@@ -87,3 +87,8 @@ h1_int_od_l: h1-int-od-l {
+ 		};
+ 	};
  };
- 
- /* Called when the V3D execution for the BO being flipped to is done, so that
-  * we can actually update the plane's address to point to it.
-  */
- static void
--vc4_async_page_flip_complete(struct vc4_seqno_cb *cb)
-+vc4_async_page_flip_complete(struct vc4_async_flip_state *flip_state)
- {
--	struct vc4_async_flip_state *flip_state =
--		container_of(cb, struct vc4_async_flip_state, cb);
- 	struct drm_crtc *crtc = flip_state->crtc;
- 	struct drm_device *dev = crtc->dev;
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
-@@ -749,6 +749,14 @@ vc4_async_page_flip_complete(struct vc4_seqno_cb *cb)
- 	up(&vc4->async_modeset);
- }
- 
-+static void vc4_async_page_flip_seqno_complete(struct vc4_seqno_cb *cb)
-+{
-+	struct vc4_async_flip_state *flip_state =
-+		container_of(cb, struct vc4_async_flip_state, cb.seqno);
 +
-+	vc4_async_page_flip_complete(flip_state);
-+}
-+
- /* Implements async (non-vblank-synced) page flips.
-  *
-  * The page flip ioctl needs to return immediately, so we grab the
-@@ -794,8 +802,8 @@ static int vc4_async_page_flip(struct drm_crtc *crtc,
- 	drm_atomic_set_fb_for_plane(plane->state, fb);
- 	plane->fb = fb;
++&wlan_host_wake_l {
++	/* Kevin has an external pull up, but Bob does not. */
++	rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up>;
++};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 1384dabbdf40..0d8458d55626 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -395,6 +395,7 @@ wifi_perst_l: wifi-perst-l {
+ 	};
  
--	vc4_queue_seqno_cb(dev, &flip_state->cb, bo->seqno,
--			   vc4_async_page_flip_complete);
-+	vc4_queue_seqno_cb(dev, &flip_state->cb.seqno, bo->seqno,
-+			   vc4_async_page_flip_seqno_complete);
- 
- 	/* Driver takes ownership of state on successful async commit. */
- 	return 0;
+ 	wlan_host_wake_l: wlan-host-wake-l {
++		/* Kevin has an external pull up, but Bob does not */
+ 		rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
+ 	};
+ };
 -- 
 2.35.1
 
