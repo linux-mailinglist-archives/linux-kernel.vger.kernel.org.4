@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66515EA20C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4779C5EA335
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237244AbiIZLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S237818AbiIZLVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbiIZK7Q (ORCPT
+        with ESMTP id S235319AbiIZLTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:59:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B375C968;
-        Mon, 26 Sep 2022 03:30:55 -0700 (PDT)
+        Mon, 26 Sep 2022 07:19:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E23E5300D;
+        Mon, 26 Sep 2022 03:39:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2613EB8094F;
-        Mon, 26 Sep 2022 10:30:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C377C43145;
-        Mon, 26 Sep 2022 10:30:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDAE7B80942;
+        Mon, 26 Sep 2022 10:37:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39252C433C1;
+        Mon, 26 Sep 2022 10:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188226;
-        bh=TPTqPH8lO4PrEtCqgz7vLf7xXCtNmo5sVkmCqzTcWpU=;
+        s=korg; t=1664188639;
+        bh=eugTPWA4tapPEbaTlrgjMVBwSsaEBg3CTel76hGAlhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sP1pscyow0sAFomdZ6nOljMV74w7KL1vlQA+yHwRihmIWEYr7YmbTKV3/p7GebeuG
-         G9pt8PIRGFtRV5ByjDnCBCYTsbDXmG9daeL+Ox6BeW8jsyyQ5J8SfqMAXuOSIntkWu
-         ahj05juouLmItWAkHGsAFUbwwn78zKhyeAyMnwsE=
+        b=YN9RYezYVrwQSHHkitTOCGrm4JWA8pKQYxgOOCLQezCh4g5lcXmFoglWAXandmzTa
+         kHErSsIGrpwdammrPBafWP8x7YtrlSzBY4pssRiADa55KhcxwlVEGzccf8hSkFMSAw
+         MjNuN7D1De3LzXLapFfXX9mkBPGgVknA2+h65ymo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@denx.de>, Marek Vasut <marex@denx.de>,
+        stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 081/141] drm/panel: simple: Fix innolux_g121i1_l01 bus_format
+Subject: [PATCH 5.15 073/148] net: phy: aquantia: wait for the suspend/resume operations to finish
 Date:   Mon, 26 Sep 2022 12:11:47 +0200
-Message-Id: <20220926100757.391528875@linuxfoundation.org>
+Message-Id: <20220926100758.771162872@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +54,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Schocher <hs@denx.de>
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-[ Upstream commit a7c48a0ab87ae52c087d663e83e56b8225ac4cce ]
+[ Upstream commit ca2dccdeeb49a7e408112d681bf447984c845292 ]
 
-innolux_g121i1_l01 sets bpc to 6, so use the corresponding bus format:
-MEDIA_BUS_FMT_RGB666_1X7X3_SPWG.
+The Aquantia datasheet notes that after issuing a Processor-Intensive
+MDIO operation, like changing the low-power state of the device, the
+driver should wait for the operation to finish before issuing a new MDIO
+command.
 
-Fixes: 4ae13e486866 ("drm/panel: simple: Add more properties to Innolux G121I1-L01")
-Signed-off-by: Heiko Schocher <hs@denx.de>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Signed-off-by: Marek Vasut <marex@denx.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220826165021.1592532-1-festevam@denx.de
+The new aqr107_wait_processor_intensive_op() function is added which can
+be used after these kind of MDIO operations. At the moment, we are only
+adding it at the end of the suspend/resume calls.
+
+The issue was identified on a board featuring the AQR113C PHY, on
+which commands like 'ip link (..) up / down' issued without any delays
+between them would render the link on the PHY to remain down.
+The issue was easy to reproduce with a one-liner:
+ $ ip link set dev ethX down; ip link set dev ethX up; \
+ ip link set dev ethX down; ip link set dev ethX up;
+
+Fixes: ac9e81c230eb ("net: phy: aquantia: add suspend / resume callbacks for AQR107 family")
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220906130451.1483448-1-ioana.ciornei@nxp.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/aquantia_main.c | 53 ++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index bf2c845ef3a2..b7b37082a9d7 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2201,7 +2201,7 @@ static const struct panel_desc innolux_g121i1_l01 = {
- 		.enable = 200,
- 		.disable = 20,
- 	},
--	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.bus_format = MEDIA_BUS_FMT_RGB666_1X7X3_SPWG,
- 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
- };
+diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
+index 3221224525ac..2f2765d7f84c 100644
+--- a/drivers/net/phy/aquantia_main.c
++++ b/drivers/net/phy/aquantia_main.c
+@@ -90,6 +90,9 @@
+ #define VEND1_GLOBAL_FW_ID_MAJOR		GENMASK(15, 8)
+ #define VEND1_GLOBAL_FW_ID_MINOR		GENMASK(7, 0)
  
++#define VEND1_GLOBAL_GEN_STAT2			0xc831
++#define VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG	BIT(15)
++
+ #define VEND1_GLOBAL_RSVD_STAT1			0xc885
+ #define VEND1_GLOBAL_RSVD_STAT1_FW_BUILD_ID	GENMASK(7, 4)
+ #define VEND1_GLOBAL_RSVD_STAT1_PROV_ID		GENMASK(3, 0)
+@@ -124,6 +127,12 @@
+ #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL2	BIT(1)
+ #define VEND1_GLOBAL_INT_VEND_MASK_GLOBAL3	BIT(0)
+ 
++/* Sleep and timeout for checking if the Processor-Intensive
++ * MDIO operation is finished
++ */
++#define AQR107_OP_IN_PROG_SLEEP		1000
++#define AQR107_OP_IN_PROG_TIMEOUT	100000
++
+ struct aqr107_hw_stat {
+ 	const char *name;
+ 	int reg;
+@@ -598,16 +607,52 @@ static void aqr107_link_change_notify(struct phy_device *phydev)
+ 		phydev_info(phydev, "Aquantia 1000Base-T2 mode active\n");
+ }
+ 
++static int aqr107_wait_processor_intensive_op(struct phy_device *phydev)
++{
++	int val, err;
++
++	/* The datasheet notes to wait at least 1ms after issuing a
++	 * processor intensive operation before checking.
++	 * We cannot use the 'sleep_before_read' parameter of read_poll_timeout
++	 * because that just determines the maximum time slept, not the minimum.
++	 */
++	usleep_range(1000, 5000);
++
++	err = phy_read_mmd_poll_timeout(phydev, MDIO_MMD_VEND1,
++					VEND1_GLOBAL_GEN_STAT2, val,
++					!(val & VEND1_GLOBAL_GEN_STAT2_OP_IN_PROG),
++					AQR107_OP_IN_PROG_SLEEP,
++					AQR107_OP_IN_PROG_TIMEOUT, false);
++	if (err) {
++		phydev_err(phydev, "timeout: processor-intensive MDIO operation\n");
++		return err;
++	}
++
++	return 0;
++}
++
+ static int aqr107_suspend(struct phy_device *phydev)
+ {
+-	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
+-				MDIO_CTRL1_LPOWER);
++	int err;
++
++	err = phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
++			       MDIO_CTRL1_LPOWER);
++	if (err)
++		return err;
++
++	return aqr107_wait_processor_intensive_op(phydev);
+ }
+ 
+ static int aqr107_resume(struct phy_device *phydev)
+ {
+-	return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
+-				  MDIO_CTRL1_LPOWER);
++	int err;
++
++	err = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
++				 MDIO_CTRL1_LPOWER);
++	if (err)
++		return err;
++
++	return aqr107_wait_processor_intensive_op(phydev);
+ }
+ 
+ static int aqr107_probe(struct phy_device *phydev)
 -- 
 2.35.1
 
