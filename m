@@ -2,182 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3C35EAE70
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966DB5EAE76
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiIZRpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S230462AbiIZRq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiIZRpU (ORCPT
+        with ESMTP id S230112AbiIZRqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:45:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421F696DB;
-        Mon, 26 Sep 2022 10:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F159261070;
-        Mon, 26 Sep 2022 17:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FA3C433C1;
-        Mon, 26 Sep 2022 17:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664212488;
-        bh=oU8fn0BSKQJ81q0PJD4003aYsQpw2jnsAd7aL0fi5nI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rsxD7Ezrth60I4eEJPxOWVxcAYT2+wvpZ0iLXxTkTwgbAKPsnHPVrnHZUJkn/mAtn
-         M9DC0FakD7h5p5ZpwtaScOq0NkEKGdLXtf7N9QA8/r6tTs8Cjsjbo/5WKt9/5ROSbD
-         Sc8lIErYHDImiS+EabT9oWGV62HB7RgUR03qP/IEsTsg1aTWGdIGhL9xkFm2A0VjU1
-         bsc1YryL1H9Epxf3UOjmRM1vqcvE3WVM0iYFE0w6fUwVBDEb7zHrP9bqPE/xWEBgoY
-         hKW9OKepxAq0AKO/57OTL7Aoe63pnrdTvFfJsrQJhrmmqiBoTNATuhAwR903oAbwIl
-         goVPh7lyg0Puw==
-Date:   Mon, 26 Sep 2022 18:14:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 16/16] crypto: arm64/sm4 - add ARMv9 SVE cryptography
- acceleration implementation
-Message-ID: <YzHd/U9vvSwuhKsx@sirena.org.uk>
-References: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
- <20220926093620.99898-17-tianjia.zhang@linux.alibaba.com>
- <CAMj1kXF8Fi9cG4p6udRYT4LbCAj0UBXQL12nmQBFEWvZsVX7Wg@mail.gmail.com>
+        Mon, 26 Sep 2022 13:46:37 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEAF7E31C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:17:00 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 126so9154650ybw.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=/h3BeLjdxneBW5Lpw3vPKkigHV9sjtKp4hks7QqaOYM=;
+        b=MoY1PU4Bxd5/q9xm1A7lEAht4nTfj/Hi0ik6EBlcAAvf8G3devq5OwMmrLRwOg4fzV
+         F7NOB0JkrSNt7MrwUtP8rWduRzVZDs/bxrikTqp/iGGo2Ei0INrCOyCR6kCwAWEA3HiK
+         w56ndbmxEFAKXEMGfLboeeYY8gFQnn6BayoiuVOGMGggPbetnRAw9Z4lTPc5/4k6tB9/
+         S879GtCc9g00YTR5F8MhSHNhwYRqI4XJD5Egv77cwwjfXgEYpzMb0lmQu+t7dcokxhS4
+         rc/C5oqQVKmuBFsN70twXTkpwIMeGqrBHNyEIEdN4/2DjdX47EWBQaHTn0gNO1Ymyqzc
+         17YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/h3BeLjdxneBW5Lpw3vPKkigHV9sjtKp4hks7QqaOYM=;
+        b=2n+ChsPoK8CQfVQEIaRBbeBCHeZNlTzYxyNmHEAeVxklqmg5AKpnFdZTvvJEsnQ/rK
+         cke2KYvXsTdSsZa2eGEYvjQnG1Qssc2VD0jsOfzOVDq3aVLy84xmJpeq+6iOw2X4GFfC
+         kiSHGma5HSWIOGfJ5HtfIlzCuxVFKqGvThfVIT0CCWyxjuk5m1ixuIxwhAGFo7Av8cOG
+         89SgMP/lLWD+9pZrLS0JFSLvIySfi3JBto1owJKnOCCvUZb6D74Im0cvDR9tfLmHVKFX
+         W2YoLeq95Y44IPWo1oJ7eQNgUPym8YE54+wKq/begsG9T1qh45XuCxRdw6AdmBPOIuzi
+         +Ccw==
+X-Gm-Message-State: ACrzQf3sTiSwPteJ7jBi3lYpERJbffNRAVPW4gYmSmCx4BSgltg1fex9
+        szfFjFd9g7BScJld84dR5vxn0+/RrnfrlZTE1fo=
+X-Google-Smtp-Source: AMsMyM5AVTUQSwaa9z3PpO0XSQ+e/ECPveCvinPqCAczJA7ny/rugrv//pFweLOFvKS3yMfbd+D4aeKZAFiFI63aPwM=
+X-Received: by 2002:a25:11c3:0:b0:6ba:51bf:5ce3 with SMTP id
+ 186-20020a2511c3000000b006ba51bf5ce3mr9126270ybr.494.1664212619281; Mon, 26
+ Sep 2022 10:16:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f7AumrwylgGDBblN"
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXF8Fi9cG4p6udRYT4LbCAj0UBXQL12nmQBFEWvZsVX7Wg@mail.gmail.com>
-X-Cookie: You may be recognized soon.  Hide.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAFcO6XNk5Wtjju=DBOcJr46miBbaWT7jL+zjhWMp+xnz7k5K9A@mail.gmail.com>
+ <87v8pa306x.wl-tiwai@suse.de>
+In-Reply-To: <87v8pa306x.wl-tiwai@suse.de>
+From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Date:   Tue, 27 Sep 2022 01:16:48 +0800
+Message-ID: <CAFcO6XP2MpiAsF7YXYjgh7FMq+hyzFJjK8iBf=ccZ2B6BpNvOg@mail.gmail.com>
+Subject: Re: A divide error bug in snd_pcm_write
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The latest kernel upstream.
+Yes, but using mmap, you can map the runtime->status page, and then
+copy the data through memcpy to overwrite the status->state data, or
+even more, which is incredible.
+this is debug log:
+````
+gef=E2=9E=A4  c
+Continuing.
+Cannot remove breakpoints because program is no longer writable.
+Further execution is probably impossible.
 
---f7AumrwylgGDBblN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thread 2 hit Hardware access (read/write) watchpoint 7: *0xffff88804c5cb000
 
-On Mon, Sep 26, 2022 at 12:02:04PM +0200, Ard Biesheuvel wrote:
+Old value =3D 0x0
+New value =3D 0x7665642f
+0xffffffff828501a9 in snd_pcm_write (file=3D<optimized out>,
+buf=3D0x20000000 "/dev/snd/pcmC#D#p", count=3D0x18,
+offset=3D0xffffc9000a81bf08) at sound/core/pcm_native.c:3494
+3494 if (runtime->status->state =3D=3D SNDRV_PCM_STATE_OPEN ||
 
-> Given that we currently do not support the use of SVE in kernel mode,
-> this patch cannot be accepted at this time (but the rest of the series
-> looks reasonable to me, although I have only skimmed over the patches)
+   0xffffffff82850199 <snd_pcm_write+25> (bad)  [rsi+riz*2+0x48]
+   0xffffffff8285019d <snd_pcm_write+29> mov    eax, DWORD PTR [rbx+0x100]
+   0xffffffff828501a3 <snd_pcm_write+35> test   DWORD PTR [rax], 0xfffffff7
+ =E2=86=92 0xffffffff828501a9 <snd_pcm_write+41> je     0xffffffff82850216
+<snd_pcm_write+150> NOT taken [Reason: !(Z)]
+   0xffffffff828501ab <snd_pcm_write+43> mov    rax, rdx
+   0xffffffff828501ae <snd_pcm_write+46> mov    rcx, rdx
+   0xffffffff828501b1 <snd_pcm_write+49> xor    edx, edx
+   0xffffffff828501b3 <snd_pcm_write+51> div    QWORD PTR [rbx+0x90]
+   0xffffffff828501ba <snd_pcm_write+58> test   rdx, rdx
+[!] Command 'context' failed to execute properly, reason: argument of
+type 'NoneType' is not iterable
+gef=E2=9E=A4  p/x 0xffff88804c5cb000
+$14 =3D 0xffff88804c5cb000
+gef=E2=9E=A4  x/10gx  0xffff88804c5cb000
+0xffff88804c5cb000: 0x646e732f7665642f 0x234423436d63702f
+0xffff88804c5cb010: 0x0000000000000070 0x0000000000000000
+0xffff88804c5cb020: 0x0000000000000000 0x0000000000000000
+0xffff88804c5cb030: 0x0000000000000000 0x0000000000000000
+0xffff88804c5cb040: 0x0000000000000000 0x0000000000000000
+gef=E2=9E=A4  x/s  0xffff88804c5cb000
+0xffff88804c5cb000: "/dev/snd/pcmC#D#p"
+gef=E2=9E=A4  p/x *(struct snd_pcm_mmap_status *)0xffff88804c5cb000
+$15 =3D {
+  state =3D 0x7665642f,
+  pad1 =3D 0x646e732f,
+  __pad1 =3D 0xffff88804c5cb008,
+  hw_ptr =3D 0x234423436d63702f,
+  __pad2 =3D 0xffff88804c5cb010,
+  tstamp =3D {
+    tv_sec =3D 0x70,
+    tv_nsec =3D 0x0
+  },
+  suspended_state =3D 0x0,
+  pad3 =3D 0x0,
+  audio_tstamp =3D {
+    tv_sec =3D 0x0,
+    tv_nsec =3D 0x0
+  }
+}
+gef=E2=9E=A4
+````
 
-> In view of the disappointing benchmark results below, I don't think
-> this is worth the hassle at the moment. If we can find a case where
-> using SVE in kernel mode truly makes a [favorable] difference, we can
-> revisit this, but not without a thorough analysis of the impact it
-> will have to support SVE in the kernel. Also, the fact that SVE may
+Regards,
+ butt3rflyh4ck.
 
-The kernel code doesn't really distinguish between FPSIMD and SVE in
-terms of state management, and with the sharing of the V and Z registers
-the architecture is very similar too so it shouldn't be too much hassle,
-the only thing we should need is some management for the VL when
-starting kernel mode SVE (probably just setting the maximum VL as a
-first pass).
 
-The current code should *work* and on a system with only a single VL
-supported it'd be equivalent since setting the VL is a noop, it'd just
-mean that any kernel mode SVE would end up using whatever the last VL
-set on the PE happened to be in which could result in inconsistent
-performance.=20
 
-> also cover cryptographic extensions does not necessarily imply that a
-> micro-architecture will perform those crypto transformations in
-> parallel and so the performance may be the same even if VL > 128.
 
-Indeed, though so long as the performance is comparable I guess it
-doesn't really hurt - if we run into situations where for some
-implementations SVE performs worse then we'd need to do something more
-complicated than just using SVE if it's available but...
+On Mon, Sep 26, 2022 at 6:21 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 26 Sep 2022 11:26:17 +0200,
+> butt3rflyh4ck wrote:
+> >
+> > Hi, there is a divide error bug in snd_pcm_write in
+> > sound/core/pcm_native.c in the latest kernel.
+> >
+> > ##Root Cause
+> > When open the device of /dev/snd/pcmC#D#p, there would attach a
+> > runtime to pcm->substream via snd_pcm_open_substream. see the code
+> > below:
+> > ```
+> > int snd_pcm_attach_substream(struct snd_pcm *pcm, int stream,
+> >     struct file *file,
+> >     struct snd_pcm_substream **rsubstream)
+> > {
+> > ......
+> >
+> >  runtime =3D kzalloc(sizeof(*runtime), GFP_KERNEL);
+> > if (runtime =3D=3D NULL)
+> > return -ENOMEM;
+> >
+> > size =3D PAGE_ALIGN(sizeof(struct snd_pcm_mmap_status));
+> > runtime->status =3D alloc_pages_exact(size, GFP_KERNEL);
+> > if (runtime->status =3D=3D NULL) {
+> > kfree(runtime);
+> > return -ENOMEM;
+> > }
+> > memset(runtime->status, 0, size);
+> >
+> > size =3D PAGE_ALIGN(sizeof(struct snd_pcm_mmap_control));
+> > runtime->control =3D alloc_pages_exact(size, GFP_KERNEL);
+> > if (runtime->control =3D=3D NULL) {
+> > free_pages_exact(runtime->status,
+> >       PAGE_ALIGN(sizeof(struct snd_pcm_mmap_status)));
+> > kfree(runtime);
+> > return -ENOMEM;
+> > }
+> > memset(runtime->control, 0, size);
+> >
+> > init_waitqueue_head(&runtime->sleep);
+> > init_waitqueue_head(&runtime->tsleep);
+> >
+> > runtime->status->state =3D SNDRV_PCM_STATE_OPEN;
+> > mutex_init(&runtime->buffer_mutex);
+> > atomic_set(&runtime->buffer_accessing, 0);
+> >
+> > substream->runtime =3D runtime;
+> > substream->private_data =3D pcm->private_data;
+> > substream->ref_count =3D 1;
+> > substream->f_flags =3D file->f_flags;
+> > substream->pid =3D get_pid(task_pid(current));
+> > pstr->substream_opened++;
+> > *rsubstream =3D substream;
+> > return 0;
+> > }
+> > ```
+> > It would kzmalloc a new runtime. And initialize runtime simply.
+> > If we write some data to the device. it would call snd_pcm_write or
+> > snd_pcm_writev. and read some date from the device, it would call
+> > snd_pcm_read or snd_pcm_readv.
+> > Anyway, the four function would use data of runtime, but some data of
+> > runtime is NULL not be initialized, see the code below:
+> > ```
+> > static ssize_t snd_pcm_write(struct file *file, const char __user *buf,
+> >     size_t count, loff_t * offset)
+> > {
+> > struct snd_pcm_file *pcm_file;
+> > struct snd_pcm_substream *substream;
+> > struct snd_pcm_runtime *runtime;
+> > snd_pcm_sframes_t result;
+> >
+> > pcm_file =3D file->private_data;
+> > substream =3D pcm_file->substream;
+> > if (PCM_RUNTIME_CHECK(substream))
+> > return -ENXIO;
+> > runtime =3D substream->runtime;
+> > if (runtime->status->state =3D=3D SNDRV_PCM_STATE_OPEN ||
+> >    runtime->status->state =3D=3D SNDRV_PCM_STATE_DISCONNECTED)
+> > return -EBADFD;
+> > if (!frame_aligned(runtime, count))    ///////  [1]
+> > return -EINVAL;
+> > count =3D bytes_to_frames(runtime, count);    /////// [2]
+> > result =3D snd_pcm_lib_write(substream, buf, count);
+> > if (result > 0)
+> > result =3D frames_to_bytes(runtime, result);
+> > return result;
+> > }
+> > ```
+> > [1] call frame_aligned to aligned.
+> > ```
+> > static inline int frame_aligned(struct snd_pcm_runtime *runtime, ssize_=
+t bytes)
+> > {
+> > return bytes % runtime->byte_align =3D=3D 0;
+> > }
+> > ```
+> > but runtime->byte_align is NULL.
+> >
+> > [2] call bytes_to_frames.
+> > ```
+> > static inline ssize_t frames_to_bytes(struct snd_pcm_runtime *runtime,
+> > snd_pcm_sframes_t size)
+> > {
+> > return size * runtime->frame_bits / 8;
+> > }
+> > ```
+> > but runtime->frame_bits is NULL.
+> >
+> > ##reproduce it
+> > [ 1189.305083][ T4656] divide error: 0000 [#1] PREEMPT SMP
+> > [ 1189.305600][ T4656] CPU: 1 PID: 4656 Comm: snd_pcm_write Not
+> > tainted 6.0.0-rc7 #16
+> > [ 1189.306157][ T4656] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> > 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
+> > [ 1189.306760][ T4656] RIP: 0010:snd_pcm_write+0x33/0xa0
+> > [ 1189.307155][ T4656] Code: 8b 38 48 85 ff 74 72 48 8b 9f c0 00 00 00
+> > 48 85 db 74 66 48 8b 83 00 01 00 00 f7 00 f7 ff ff ff 74 6b 48 89 d0
+> > 48 89 d1 31 d2 <48> f7 b3 91
+> > [ 1189.308553][ T4656] RSP: 0018:ffffc9000adc7e68 EFLAGS: 00010246
+> > [ 1189.309034][ T4656] RAX: 0000000000000000 RBX: ffff888048ec2000
+> > RCX: 0000000000000000
+> > [ 1189.309583][ T4656] RDX: 0000000000000000 RSI: 0000000000000000
+> > RDI: ffff888046fc9c00
+> > [ 1189.310163][ T4656] RBP: 0000000000000000 R08: 0000000000000000
+> > R09: 0000000000020026
+> > [ 1189.310679][ T4656] R10: 0000000000000001 R11: 0000000000000000
+> > R12: 0000000000000000
+> > [ 1189.311226][ T4656] R13: ffffc9000adc7f08 R14: 0000000000000000
+> > R15: 0000000000000000
+> > [ 1189.311754][ T4656] FS:  00000000012d8880(0000)
+> > GS:ffff88807ec00000(0000) knlGS:0000000000000000
+> > [ 1189.312350][ T4656] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008005003=
+3
+> > [ 1189.312780][ T4656] CR2: 0000000020000000 CR3: 000000004b496000
+> > CR4: 00000000000006e0
+> > [ 1189.313234][ T4656] Call Trace:
+> > [ 1189.313424][ T4656]  <TASK>
+> > [ 1189.313597][ T4656]  vfs_write+0xe6/0x4d0
+> > [ 1189.313836][ T4656]  ksys_write+0x60/0xe0
+> > [ 1189.314071][ T4656]  do_syscall_64+0x35/0xb0
+> > [ 1189.314324][ T4656]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > [ 1189.314734][ T4656] RIP: 0033:0x44dc3d
+> > [ 1189.315007][ T4656] Code: 28 c3 e8 36 29 00 00 66 0f 1f 44 00 00 f3
+> > 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
+> > 4c 24 08 0f 05 <48> 3d 01 f8
+> > [ 1189.316338][ T4656] RSP: 002b:00007ffcbdf5ef38 EFLAGS: 00000246
+> > ORIG_RAX: 0000000000000001
+> > [ 1189.317012][ T4656] RAX: ffffffffffffffda RBX: 0000000000400530
+> > RCX: 000000000044dc3d
+> > [ 1189.317693][ T4656] RDX: 0000000000000000 RSI: 0000000000000000
+> > RDI: 0000000000000003
+> > [ 1189.318172][ T4656] RBP: 00007ffcbdf5ef50 R08: 0000000082000000
+> > R09: 0000000000000000
+> > [ 1189.318648][ T4656] R10: 000000000000ffff R11: 0000000000000246
+> > R12: 00000000004030a0
+> > [ 1189.319182][ T4656] R13: 0000000000000000 R14: 00000000004c5018
+> > R15: 0000000000000000
+>
+> The question is how the code passes the check before [1]:
+>
+>  if (runtime->status->state =3D=3D SNDRV_PCM_STATE_OPEN ||
+>      runtime->status->state =3D=3D SNDRV_PCM_STATE_DISCONNECTED)
+>         return -EBADFD;
+>
+> The uninitialized state should have been with SNDRV_PCM_STATE_OPEN,
+> and runtime->byte_align is set up at snd_pcm_hw_params() followed by
+> snd_pcm-set_state() to chage the state to SNDRV_PCM_STATE_SETUP.
+>
+> Which kernel version are you testing?
+>
+>
+> Takashi
 
-> In summary, please drop this patch for now, and once there are more
-> encouraging performance numbers, please resubmit it as part of a
-> series that explicitly enables SVE in kernel mode on arm64, and
-> documents the requirements and constraints.
 
-=2E..in any case as you say until there are cases where SVE does better
-for some in kernel use case we probably just shouldn't merge things.
 
-Having said that I have been tempted to put together a branch which has
-a kernel_sve_begin() implementation and collects proposed algorithm
-implementations so they're there for people to experiment with as new
-hardware becomes available.  There's clearly interest in trying to use
-SVE in kernel and it makes sense to try to avoid common pitfalls and
-reduce duplication of effort.
-
-A couple of very minor comments on the patch:
-
-> > +config CRYPTO_SM4_ARM64_SVE_CE_BLK
-> > +       tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR (ARMv9 cryptogra=
-phy
-> +acceleration with SVE2)"
-> > +       depends on KERNEL_MODE_NEON
-> > +       select CRYPTO_SKCIPHER
-> > +       select CRYPTO_SM4
-> > +       select CRYPTO_SM4_ARM64_CE_BLK
-> > +       help
-
-Our current baseline binutils version requirement predates SVE support
-so we'd either need to manually encode all SVE instructions used or add
-suitable dependency.  The dependency seems a lot more reasonable here,
-and we could require a new enough version to avoid the manual encoding
-that is done in the patch (though I've not checked how new a version
-that'd end up requiring, it might be unreasonable so perhaps just
-depending on binutils having basic SVE support and continuing with the
-manual encoding might be more helpful).
-
-> > +.macro sm4e, vd, vn
-> > +       .inst 0xcec08400 | (.L\vn << 5) | .L\vd
-> > +.endm
-
-For any manual encodings that do get left it'd be good to note the
-binutils and LLVM versions which support the instruction so we can
-hopefully at some point switch to assembling them normally.
-
-> > +static int __init sm4_sve_ce_init(void)
-> > +{
-> > +       if (sm4_sve_get_vl() <=3D 16)
-> > +               return -ENODEV;
-
-I'm not clear what this check is attempting to guard against - what's
-the issue with larger VLs?
-
-If it is needed then we already have a sve_get_vl() in the core kernel
-which we should probably be making available to modules rather than
-having them open code something (eg, making it a static inline rather
-than putting it in asm).
-
---f7AumrwylgGDBblN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMx3fwACgkQJNaLcl1U
-h9C8Pgf9GG6I05ACG8YLcqEf0Y5yObFlPelhwSsSzTXK+0+/qIciuuTFJnnq0/Bm
-0+uR1I3XV5kCEsQRyeiXgOqzpkXdsy5ggrY29lme2tnBMA5DTV9/rhDdyoIdMcG4
-JUVAdgFQ5UfZeLUkMTYreey6trdhQqJwi++7+oZBKnO59jmud3Mp6s0g4E++Kjv/
-GvNSjKTOYl82Y433h5GvQ9J14zr/Vu2ZPj3H7XowF4HbFAu9VysfLtNmSSukK2Nu
-fXAru8Tfoz3CxrvTUWcaYOU/5I+0uuVUiIdvpeyQHW+Z8KoKE0Bh+w9Y0GK8WoeL
-AJGmPrT9aUIP7QgrTreHldsucUjVwA==
-=wgDg
------END PGP SIGNATURE-----
-
---f7AumrwylgGDBblN--
+--
+Active Defense Lab of Venustech
