@@ -2,141 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C945EB4BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E42E5EB4BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 00:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiIZWoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 18:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S229992AbiIZWpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 18:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiIZWoJ (ORCPT
+        with ESMTP id S229515AbiIZWpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:44:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A2D9E2E5;
-        Mon, 26 Sep 2022 15:44:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 26 Sep 2022 18:45:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7D63FE;
+        Mon, 26 Sep 2022 15:45:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C24DA2199A;
-        Mon, 26 Sep 2022 22:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664232246; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3wqBvT1Pdp5nBIwk7f69QChWKcic6sFvlcDIXYHLhVw=;
-        b=bp3sjpaKgKxakHrVYbA6MiKdHvmDJOaK7Knl9ZekzxVGGvefEZtlBRay9JdXNdvtsI1FeT
-        BFiGJDTn7+nBrNUAcYcwtC/v/cFeQlQAXMryESS37gkkS89krmeCqqd4ZQnBlnku1Qj9nT
-        bHo5wmUgv+yvxmGT2ireKVPFG/FEpiA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664232246;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3wqBvT1Pdp5nBIwk7f69QChWKcic6sFvlcDIXYHLhVw=;
-        b=KNEYqmH80A7uU4gjB/CKhQ0gmEKPEUyR2v8DIyep3Ttnd3fg3CE5jdzAdX4shiTSaiECHR
-        w+8QIdUkTfKWlFCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B2E7213486;
-        Mon, 26 Sep 2022 22:43:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oE9qGi8rMmOyQwAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 26 Sep 2022 22:43:59 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B68F612E7;
+        Mon, 26 Sep 2022 22:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F9CC433D7;
+        Mon, 26 Sep 2022 22:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664232304;
+        bh=cUtzvwGQvd2Ow1SY0ZECPOrLqVJpgTMsKtMEKiLNw0s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DM33jnOUDfmg9yiXQybCFQ5+OdLzcz5NuxH/wopER/MPRfZbVz9QVcExNtUUQv8KI
+         sZLCMJjcNAZKWMLAOeRk7x81U1UdUhTzwTxTskuJMovavfPi7S6qbUIJxpCbfAV+Vv
+         9Zxcb/9N6G6TYlhmN8OfOMN1nMz5CHfsZKJRuQQRpZNouZr/0ddX3ZNZfX86qU/u+W
+         p7/0sxOrusyxPRmbgrQlngL/BL00+vfR7VqEaI7Cq6O+MkRlv4dTF0gQ0n4jXRFnjo
+         frwLMsv05AWrgVxSFiekA/P4Qg203GlFxDWWL+btH/cmERXN0qOQw+6RF2HvnqLQne
+         8/hsMtz4qElPw==
+Received: by mail-vk1-f181.google.com with SMTP id k14so4160078vkk.0;
+        Mon, 26 Sep 2022 15:45:04 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2TyFdp6h/MJeEGTKL9otlz7rXtDiOH8+q01iLy9XUnZxCkLnfE
+        FiD7kO6CKi8vli1GSY1i3nGKDSujrN4On/f4yA==
+X-Google-Smtp-Source: AMsMyM7wC4yByxpxIaR8Svkq6Cx2zw5rjKAa9XCbrWV+4wDC6BoRsEsVbez5bQF6lzXc83bU4uKmMtUsDlUABID3vVA=
+X-Received: by 2002:a1f:240f:0:b0:3a3:7b48:81cd with SMTP id
+ k15-20020a1f240f000000b003a37b4881cdmr9868743vkk.19.1664232303792; Mon, 26
+ Sep 2022 15:45:03 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "Trond Myklebust" <trondmy@hammerspace.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <baf852dfb57aaf5a670bc88236f8d62c99668fcc.camel@kernel.org>
-References: <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>,
- <20220918235344.GH3600936@dread.disaster.area>,
- <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>,
- <20220920001645.GN3600936@dread.disaster.area>,
- <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>,
- <20220921000032.GR3600936@dread.disaster.area>,
- <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>,
- <20220921214124.GS3600936@dread.disaster.area>,
- <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>,
- <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>,
- <20220923095653.5c63i2jgv52j3zqp@quack3>,
- <2d41c08e1fd96d55c794c3b4cd43a51a0494bfcf.camel@hammerspace.com>,
- <baf852dfb57aaf5a670bc88236f8d62c99668fcc.camel@kernel.org>
-Date:   Tue, 27 Sep 2022 08:43:56 +1000
-Message-id: <166423223623.17572.7229091435446226718@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com> <f831f62b-004b-4f73-2a66-de9d675c44b6@gmail.com>
+In-Reply-To: <f831f62b-004b-4f73-2a66-de9d675c44b6@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 26 Sep 2022 17:44:52 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJn=i=TT9NArHK25g1NkZN_G1GjN3EGEeTAvyW_PUhgcw@mail.gmail.com>
+Message-ID: <CAL_JsqJn=i=TT9NArHK25g1NkZN_G1GjN3EGEeTAvyW_PUhgcw@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022, Jeff Layton wrote:
-> 
-> Absolutely. That is the downside of this approach, but the priority here
-> has always been to improve nfsd. If we don't get the ability to present
-> this info via statx, then so be it. Later on, I suppose we can move that
-> handling into the kernel in some fashion if we decide it's worthwhile.
-> 
-> That said, not having this in statx makes it more difficult to test
-> i_version behavior. Maybe we can add a generic ioctl for that in the
-> interim?
+On Fri, Sep 16, 2022 at 6:15 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 8/29/22 16:43, Lizhi Hou wrote:
+> > This patch series introduces OF overlay support for PCI devices which
+> > primarily addresses two use cases. First, it provides a data driven method
+> > to describe hardware peripherals that are present in a PCI endpoint and
+> > hence can be accessed by the PCI host. An example device is Xilinx/AMD
+> > Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
+> > driver -- often used in SoC platforms -- in a PCI host based system. An
+> > example device is Microchip LAN9662 Ethernet Controller.
+> >
+> > This patch series consolidates previous efforts to define such an
+> > infrastructure:
+> > https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
+> > https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+> >
+> > Normally, the PCI core discovers PCI devices and their BARs using the
+> > PCI enumeration process. However, the process does not provide a way to
+> > discover the hardware peripherals that are present in a PCI device, and
+> > which can be accessed through the PCI BARs. Also, the enumeration process
+> > does not provide a way to associate MSI-X vectors of a PCI device with the
+> > hardware peripherals that are present in the device. PCI device drivers
+> > often use header files to describe the hardware peripherals and their
+> > resources as there is no standard data driven way to do so. This patch> series proposes to use flattened device tree blob to describe the
+> > peripherals in a data driven way.
+>
+> > Based on previous discussion, using
+> > device tree overlay is the best way to unflatten the blob and populate
+> > platform devices.
+>
+> I still do not agree with this statement.  The device tree overlay
+> implementation is very incomplete and should not be used until it
+> becomes more complete.  No need to debate this right now, but I don't want
+> to let this go unchallenged.
 
-I wonder if we are over-thinking this, trying too hard, making "perfect"
-the enemy of "good".
-While we agree that the current implementation of i_version is
-imperfect, it isn't causing major data corruption all around the world.
-I don't think there are even any known bug reports are there?
-So while we do want to fix it as best we can, we don't need to make that
-the first priority.
+Then we should remove overlay support. The only way it becomes more
+complete is having actual users.
 
-I think the first priority should be to document how we want it to work,
-which is what this thread is really all about.  The documentation can
-note that some (all) filesystems do not provide perfect semantics across
-unclean restarts, and can list any other anomalies that we are aware of.
-And on that basis we can export the current i_version to user-space via
-statx and start trying to write some test code.
+But really, whether this is the right solution to the problem is
+independent of the state of kernel overlay support.
 
-We can then look at moving the i_version/ctime update from *before* the
-write to *after* the write, and any other improvements that can be
-achieved easily in common code.  We can then update the man page to say
-"since Linux 6.42, this list of anomalies is no longer present".
+> If there is no base system device tree on an ACPI based system, then I
+> am not convinced that a mixed ACPI / device tree implementation is
+> good architecture.
 
-Then we can explore some options for handling unclean restart - in a
-context where we can write tests and maybe even demonstrate a concrete
-problem before we start trying to fix it.
+Most/all of this series is needed for a DT system in which the PCI
+devices are not populated in the DT.
 
-NeilBrown
+>  I might be more supportive of using a device tree
+> description of a PCI device in a detached device tree (not linked to
+> the system device tree, but instead freestanding).  Unfortunately the
+> device tree functions assume a single system devicetree, with no concept
+> of a freestanding tree (eg, if a NULL device tree node is provided to
+> a function or macro, it often defaults to the root of the system device
+> tree).  I need to go look at whether the flag OF_DETACHED handles this,
+> or if it could be leveraged to do so.
+
+Instead of worrying about a theoretical problem, we should see if
+there is an actual problem for a user.
+
+I'm not so worried about DT functions themselves, but places which
+have 'if ACPI ... else (DT) ...' paths.
+
+Rob
