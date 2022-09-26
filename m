@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905685EAE9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB15B5EAEA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiIZRul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S229449AbiIZRvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiIZRuN (ORCPT
+        with ESMTP id S230043AbiIZRvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:50:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D61A4865;
-        Mon, 26 Sep 2022 10:22:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C60AB80B8B;
-        Mon, 26 Sep 2022 17:22:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC080C433C1;
-        Mon, 26 Sep 2022 17:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664212968;
-        bh=4EYiYZ0wrDgSgsqkBMAwgMjP6z1zRz5Fmv8L+RYBpPg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=XBGoGIPobGMP16I4bFTLp4eHtOgJGOZUZHef8ebOBcb7pYrIzpxDPi39Cv3BXSbTE
-         yDIpGbaDJShRsyYq50eEe0VIQT7TJCiUN3p5oqjE/QK7IvCBtUmJiPCLZLSXlH7tJY
-         apt19ITXr926s7KKXqBlNpm4DCsmlFbnuabBiKWwLA9JYL0EWeVfO9kAyG2aSB+T/G
-         ZsLqStUswyWHmlaVpAud1aYKUdvH2cNneaIE4hegZSo442hawm0mJq9j2jha91GKn3
-         HqBU1xFvU/s7p8HS0QDiwHdI1FUCqErzpQZm911AHs8ewHGOV2UR13IMJSpttiIkU3
-         6i8iuXQnYBY7Q==
-Date:   Mon, 26 Sep 2022 12:22:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>
-Cc:     allenbh@gmail.com, dave.jiang@intel.com,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        linux-pci@vger.kernel.org, jejb@linux.ibm.com, jdmason@kudzu.us,
-        james.smart@broadcom.com, fancer.lancer@gmail.com,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        oohall@gmail.com, bhelgaas@google.com, dick.kennedy@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 3/3] PCI/AER: Use pci_aer_raw_clear_status() to clear
- root port's AER error status
-Message-ID: <20220926172246.GA1609538@bhelgaas>
+        Mon, 26 Sep 2022 13:51:14 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6F08A1D4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:24:16 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-12803ac8113so10128146fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 10:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=gUHzJrpgIX7MrAmevww+QKfw4oN3wJovrSvxBA4zTB8=;
+        b=awzqwHGLXPv/1Hs3HJoBYiHnRA4FCKRY7v9kQNJINjnIMGTR8DgMHNaYAJJr4qCWM8
+         yOkrLZTYwGp6gN1ZbdJV784UFV0kqHXnF2afnQLoB3E/vaLaZDo4ps4ev1ZYdn88iT6y
+         D+8JlZai+E/MJwCErRTjR4aWsTLwQ+xvdrBqRYpC+gEStwDD61sFPqp71jnOEjbe6hIY
+         +TKmrxN3B6RtaoTeJa5FU6/1Ib1mV2gAw44RlkJnpgQsy3V2+lA+V33NCaZ5CYTJooYZ
+         mhF7InVOzqsQ6NLas8hMU3VncMq9+rdXP7XHz9r/HKkfNXlHblTao3rVw7T783+XHv04
+         Dmrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=gUHzJrpgIX7MrAmevww+QKfw4oN3wJovrSvxBA4zTB8=;
+        b=NM1QIlgHtxyxgBXxygZB+oXpQf02TOzXPxLFOv0qebUTNZ178rTrOKeEovWsgSUb7n
+         Em3cIX3khkg4Tl0ioAum//3C0oeab3+3/WLNgGbOl/LSIhp6R0prwJABAf5sWGl9msIu
+         rkMnvf8FvIu7UeJZ08bMBeSaQLPfVePLzpRApgjYVWuC5pPRZoG30PSxU/Dg50ndK5Bj
+         +I/FXJtgH/HIIaplbMInfJDDQjrKM4IYk7++3rHtAzw62kafNBNnBMuJrgORotPMxCSx
+         X36kgOfulFykL3Tyf4Lr4/DWyco7CzBhlgRfDF9I8ZQzFaNYPJ9uq/5yC3eHDNwg/zpb
+         5O9Q==
+X-Gm-Message-State: ACrzQf0G4x1CBqwJC/E0gFf1LV3j98dx19paOnV0eAeNO2RVMqqjXtnk
+        UzdCJ/f49JCAvsBygtGaDOHj54H6/x4v7lrEyl+8yw==
+X-Google-Smtp-Source: AMsMyM7jgpNZsPksAb/fx5EgKsCdFrfD0cCQTEp2cbcSx+42Oj0N/AqurTAG01ed7OQKsIzHiP132QTyZionY9hi7UE=
+X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
+ r12-20020a056870580c00b0012af136a8f5mr18512469oap.269.1664213055267; Mon, 26
+ Sep 2022 10:24:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e025745-06af-c5c6-aa70-6ff1f9ad0962@bytedance.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+ <20220921164521.2858932-3-xiaoyao.li@intel.com> <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
+ <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net> <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net> <DS0PR11MB63730A85E00683AB7F6F3E26DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <62d4bec1-a0c3-3b01-61bb-f284eede6378@linux.intel.com>
+In-Reply-To: <62d4bec1-a0c3-3b01-61bb-f284eede6378@linux.intel.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 26 Sep 2022 10:24:03 -0700
+Message-ID: <CALMp9eTG7EbRv_fnQpDMQ3YUjYANgu=6QwVj_ACgHnK-Mhk39Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export pt_get_curr_event()
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:16:23PM +0800, Zhuo Chen wrote:
-> On 9/23/22 5:50 AM, Bjorn Helgaas wrote:
-> > On Fri, Sep 02, 2022 at 02:16:34AM +0800, Zhuo Chen wrote:
-> > > Statements clearing AER error status in aer_enable_rootport() has the
-> > > same function as pci_aer_raw_clear_status(). So we replace them, which
-> > > has no functional changes.
+On Mon, Sep 26, 2022 at 9:55 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>
+>
+>
+> On 2022-09-22 10:42 a.m., Wang, Wei W wrote:
+> > On Thursday, September 22, 2022 10:10 PM, Peter Zijlstra wrote:
+> >> On Thu, Sep 22, 2022 at 01:59:53PM +0000, Wang, Wei W wrote:
+> >>> On Thursday, September 22, 2022 9:35 PM, Peter Zijlstra
+> >>>> On Thu, Sep 22, 2022 at 12:58:49PM +0000, Wang, Wei W wrote:
+> >>>>
+> >>>>> Add a function to expose the current running PT event to users.
+> >>>>> One usage is in KVM, it needs to get and disable the running host
+> >>>>> PT event before VMEnter to the guest and resumes the event after
+> >> VMexit to host.
+> >>>>
+> >>>> You cannot just kill a host event like that. If there is a host
+> >>>> event, the guest looses out.
+> >>>
+> >>> OK. The intention was to pause the event (that only profiles host
+> >>> info) when switching to guest, and resume when switching back to host.
+> >>
+> >> If the even doesn't profile guest context, then yes. If it does profile guest
+> >> context, you can't.
+> >
+> > Seems better to add this one:
+>
+> If the guest host mode is enabled, I think the PT driver should not
+> allow the perf tool to create a host event with !exclude_guest.
 
-> > > -	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, &reg32);
-> > > -	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, reg32);
-> > > -	pci_read_config_dword(pdev, aer + PCI_ERR_COR_STATUS, &reg32);
-> > > -	pci_write_config_dword(pdev, aer + PCI_ERR_COR_STATUS, reg32);
-> > > -	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
-> > > -	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
-> > > +	pci_aer_raw_clear_status(pdev);
-> > 
-> > It's true that this is functionally equivalent.
-> > 
-> > But 20e15e673b05 ("PCI/AER: Add pci_aer_raw_clear_status() to
-> > unconditionally clear Error Status") says pci_aer_raw_clear_status()
-> > is only for use in the EDR path (this should have been included in the
-> > function comment), so I think we should preserve that property and use
-> > pci_aer_clear_status() here.
-> > 
-> > pci_aer_raw_clear_status() is the same as pci_aer_clear_status()
-> > except it doesn't check pcie_aer_is_native().  And I'm pretty sure we
-> > can't get to aer_enable_rootport() *unless* pcie_aer_is_native(),
-> > because get_port_device_capability() checks the same thing, so they
-> > should be equivalent here.
-> > 
-> Thanks Bjorn, this very detailed correction is helpful. By the way, 'only
-> for use in the EDR path' obviously written in the function comments may be
-> better. So far only commit log has included these.
-
-Yes, definitely!  I goofed when I applied that patch without making
-sure there was something in the function comment.
-
-Bjorn
+While I agree that guest events should generally have priority over
+host events, this is not consistent with the way "normal" PMU events
+are handled.
