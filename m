@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB795EA141
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1310F5EA251
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbiIZKrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S233995AbiIZLFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236691AbiIZKo0 (ORCPT
+        with ESMTP id S237495AbiIZLEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:44:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842374DB25;
-        Mon, 26 Sep 2022 03:25:27 -0700 (PDT)
+        Mon, 26 Sep 2022 07:04:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965FB2409C;
+        Mon, 26 Sep 2022 03:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AA86B80920;
-        Mon, 26 Sep 2022 10:25:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D68C433C1;
-        Mon, 26 Sep 2022 10:25:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42361B8094E;
+        Mon, 26 Sep 2022 10:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DE1C433C1;
+        Mon, 26 Sep 2022 10:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187924;
-        bh=aeSD6Yc3XFkZs9sGQ7ngJnxWev9+a35ax/I+fVl36jY=;
+        s=korg; t=1664188223;
+        bh=S08DQW1gj5VUx0uzzhDscIteNAn8RuGIMgelwzN6fQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RMwr7Lkwqcg3oy6RvN9n1IuI+Cyd8y0/+kLuAgsgBUBDUt1AdmiNFIUK7RcVXCYAg
-         51sF2xWomxPyGWdrnlrcKqtPtIEWx+1GYqwmMGr2tNYkFj8p4wljgVldPNAWOPwOD5
-         8g219mwO30SZJSXPWHbgCNT0Vg/FELSonhoPLfUo=
+        b=WHXSr7fBG5M/UFg8ebzG8D4BHj3LSw9tVKi21oaeHixO6JJsjiLVd2iLxgrEA7aN5
+         tK8weKtFJc8tKBdO7dyviCHiQiH/OSD5s/DQxI68FjRbxFtw2O/WymqIL/3uscnpiE
+         9GZ4TFDytFntBHWPKDZKOZ3AUAk6GTSDzNVE5Yn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Wei <luwei32@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 073/120] ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
+Subject: [PATCH 5.10 080/141] net: team: Unsync device addresses on ndo_stop
 Date:   Mon, 26 Sep 2022 12:11:46 +0200
-Message-Id: <20220926100753.672548152@linuxfoundation.org>
+Message-Id: <20220926100757.354506703@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
-References: <20220926100750.519221159@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,96 +54,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lu Wei <luwei32@huawei.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 81225b2ea161af48e093f58e8dfee6d705b16af4 ]
+[ Upstream commit bd60234222b2fd5573526da7bcd422801f271f5f ]
 
-If an AF_PACKET socket is used to send packets through ipvlan and the
-default xmit function of the AF_PACKET socket is changed from
-dev_queue_xmit() to packet_direct_xmit() via setsockopt() with the option
-name of PACKET_QDISC_BYPASS, the skb->mac_header may not be reset and
-remains as the initial value of 65535, this may trigger slab-out-of-bounds
-bugs as following:
+Netdev drivers are expected to call dev_{uc,mc}_sync() in their
+ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
+This is mentioned in the kerneldoc for those dev_* functions.
 
-=================================================================
-UG: KASAN: slab-out-of-bounds in ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
-PU: 2 PID: 1768 Comm: raw_send Kdump: loaded Not tainted 6.0.0-rc4+ #6
-ardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-1.fc33
-all Trace:
-print_address_description.constprop.0+0x1d/0x160
-print_report.cold+0x4f/0x112
-kasan_report+0xa3/0x130
-ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
-ipvlan_start_xmit+0x29/0xa0 [ipvlan]
-__dev_direct_xmit+0x2e2/0x380
-packet_direct_xmit+0x22/0x60
-packet_snd+0x7c9/0xc40
-sock_sendmsg+0x9a/0xa0
-__sys_sendto+0x18a/0x230
-__x64_sys_sendto+0x74/0x90
-do_syscall_64+0x3b/0x90
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The team driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
+ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
+already been emptied in unregister_netdevice_many() before ndo_uninit is
+called. This mistake can result in addresses being leftover on former team
+ports after a team device has been deleted; see test_LAG_cleanup() in the
+last patch in this series.
 
-The root cause is:
-  1. packet_snd() only reset skb->mac_header when sock->type is SOCK_RAW
-     and skb->protocol is not specified as in packet_parse_headers()
+Add unsync calls at their expected location, team_close().
 
-  2. packet_direct_xmit() doesn't reset skb->mac_header as dev_queue_xmit()
+v3:
+* When adding or deleting a port, only sync/unsync addresses if the team
+  device is up. In other cases, it is taken care of at the right time by
+  ndo_open/ndo_set_rx_mode/ndo_stop.
 
-In this case, skb->mac_header is 65535 when ipvlan_xmit_mode_l2() is
-called. So when ipvlan_xmit_mode_l2() gets mac header with eth_hdr() which
-use "skb->head + skb->mac_header", out-of-bound access occurs.
-
-This patch replaces eth_hdr() with skb_eth_hdr() in ipvlan_xmit_mode_l2()
-and reset mac header in multicast to solve this out-of-bound bug.
-
-Fixes: 2ad7bf363841 ("ipvlan: Initial check-in of the IPVLAN driver.")
-Signed-off-by: Lu Wei <luwei32@huawei.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Fixes: 3d249d4ca7d0 ("net: introduce ethernet teaming device")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ipvlan/ipvlan_core.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/team/team.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
-index 8801d093135c..a33149ee0ddc 100644
---- a/drivers/net/ipvlan/ipvlan_core.c
-+++ b/drivers/net/ipvlan/ipvlan_core.c
-@@ -496,7 +496,6 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index 615f3776b4be..7117d559a32e 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -1270,10 +1270,12 @@ static int team_port_add(struct team *team, struct net_device *port_dev,
+ 		}
+ 	}
  
- static int ipvlan_process_outbound(struct sk_buff *skb)
+-	netif_addr_lock_bh(dev);
+-	dev_uc_sync_multiple(port_dev, dev);
+-	dev_mc_sync_multiple(port_dev, dev);
+-	netif_addr_unlock_bh(dev);
++	if (dev->flags & IFF_UP) {
++		netif_addr_lock_bh(dev);
++		dev_uc_sync_multiple(port_dev, dev);
++		dev_mc_sync_multiple(port_dev, dev);
++		netif_addr_unlock_bh(dev);
++	}
+ 
+ 	port->index = -1;
+ 	list_add_tail_rcu(&port->list, &team->port_list);
+@@ -1344,8 +1346,10 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
+ 	netdev_rx_handler_unregister(port_dev);
+ 	team_port_disable_netpoll(port);
+ 	vlan_vids_del_by_dev(port_dev, dev);
+-	dev_uc_unsync(port_dev, dev);
+-	dev_mc_unsync(port_dev, dev);
++	if (dev->flags & IFF_UP) {
++		dev_uc_unsync(port_dev, dev);
++		dev_mc_unsync(port_dev, dev);
++	}
+ 	dev_close(port_dev);
+ 	team_port_leave(team, port);
+ 
+@@ -1695,6 +1699,14 @@ static int team_open(struct net_device *dev)
+ 
+ static int team_close(struct net_device *dev)
  {
--	struct ethhdr *ethh = eth_hdr(skb);
- 	int ret = NET_XMIT_DROP;
- 
- 	/* The ipvlan is a pseudo-L2 device, so the packets that we receive
-@@ -506,6 +505,8 @@ static int ipvlan_process_outbound(struct sk_buff *skb)
- 	if (skb_mac_header_was_set(skb)) {
- 		/* In this mode we dont care about
- 		 * multicast and broadcast traffic */
-+		struct ethhdr *ethh = eth_hdr(skb);
++	struct team *team = netdev_priv(dev);
++	struct team_port *port;
 +
- 		if (is_multicast_ether_addr(ethh->h_dest)) {
- 			pr_debug_ratelimited(
- 				"Dropped {multi|broad}cast of type=[%x]\n",
-@@ -590,7 +591,7 @@ static int ipvlan_xmit_mode_l3(struct sk_buff *skb, struct net_device *dev)
- static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
- {
- 	const struct ipvl_dev *ipvlan = netdev_priv(dev);
--	struct ethhdr *eth = eth_hdr(skb);
-+	struct ethhdr *eth = skb_eth_hdr(skb);
- 	struct ipvl_addr *addr;
- 	void *lyr3h;
- 	int addr_type;
-@@ -620,6 +621,7 @@ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
- 		return dev_forward_skb(ipvlan->phy_dev, skb);
++	list_for_each_entry(port, &team->port_list, list) {
++		dev_uc_unsync(port->dev, dev);
++		dev_mc_unsync(port->dev, dev);
++	}
++
+ 	return 0;
+ }
  
- 	} else if (is_multicast_ether_addr(eth->h_dest)) {
-+		skb_reset_mac_header(skb);
- 		ipvlan_skb_crossing_ns(skb, NULL);
- 		ipvlan_multicast_enqueue(ipvlan->port, skb, true);
- 		return NET_XMIT_SUCCESS;
 -- 
 2.35.1
 
