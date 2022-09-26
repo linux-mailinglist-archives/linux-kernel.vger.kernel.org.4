@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305605E9990
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A515E9986
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 08:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiIZGem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 02:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S233424AbiIZGd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 02:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiIZGe1 (ORCPT
+        with ESMTP id S232357AbiIZGd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 02:34:27 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CA032D82;
-        Sun, 25 Sep 2022 23:34:08 -0700 (PDT)
+        Mon, 26 Sep 2022 02:33:56 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A7F31230;
+        Sun, 25 Sep 2022 23:33:55 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lAoZDk93e4f+dy5KzIZ7DlPlATNBLIdxT04ZfjmOzokvaxqg2WIySfmn1gn8SUoXj+0zObPE/h7MQxHTAoq5SWXh/S2/Oa9HC7d7H9VMzOxzZDbuE8m1lHSdOMIl7C0cqdjhvVkoNwA29CU1n7+V+cxpG9gpdiDvNBPum47O/FLjeQzNeIyvxSEqvMv5EpBw8ecwdBbIocycOTg1ut+ADdXqLxiG63JojpAFBx5/AAgVwKH2CVINNphmvK71wIxDYX/Y5mRNb+T6UJt94Ly6uuN1gdu+x7Sci3K2XCwDSB05xc00fp4TXVPEwG3tFlCGAu72jotrBqmH/iqE5Qu8CA==
+ b=NDM+qS9uPTSJU1eY/O+QSeRI+bB19ohupGYGrnxrV4vqqgUR+qAy34kEaTMDI6uXjYdJoydDN3gJIH4TZ+YWpktcgRaFMd6l7tjrQLRxE1B8YP7i4eyCJUfQgTvwRCAnS//x8+71kyAlf4RHOLBYnuEIYY1GlpoR63J55ZgHDaOtZOoQNeF3lj9optvJ33kPzHpDIKv+B/8nUXZwTiyTrQuvqoZLroDZOhbCDDL1UIO83voDhj2oXWeEXrhf/qy2PBwy2RI4mRojjVHKbSkPupDbBg0AIGBmtdNsKuh0KxivqzCELouavjmYxEmrl+D5WzmC989InJnkjJPkHqKX7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tTVvvZzu8JCMGsL/wzE9d/zHikByTOy/N+nAeETMTpU=;
- b=lI7K9bqW3SHQzW5Df17vuiKpFkPy4T1zv5obuPUddf24khkmeG+RUNbW8X8dxhnnkxyBzRvfIi7x2C94PXB1RGYys2NOGrfbv722XQsugP///0F7jOO1ChiDqxeKcWylwRfngnLACS9l94O8JenvOEk2jfsCeU3HP/4GAdSkSXaApakd49uVNMoftBV6bjagOal4YcD6MWIkKph8YPtmeWXvnmMxAUcd9bVK0oDME6GILxHjP0QY5Kwe2BjrVYAEAqyOWwcJOj8OMeu3m54eYWx9uJGAY+wj8yQY28yrrcz5M8eEgL5B3g1AlvBtJOMhtR+ath8A1XoBv3sEIXlSTA==
+ bh=e0XSmwsYhzBzkLphw6Dkc/Poa9iVIJtLOAXsA3sEI8g=;
+ b=Hi31IwaQxJXx6ZcoYQsfVwcAQIdsVQ1YkrzBQqXKplLoLIDIgJe3bCcz3hRdNGgMOzaYj+HMughanDvT7fGyweqtHw/+PIcc2x1P50Tp3bcLSYR7A7aq5ctxbNFdAfZG77Qokeh1+5u67UUuxQZUj/UTxqJCA+HFGLs/CU1xtFl9qZHy7hryeF5dtEKttoweqtVbB/ftyRnp+zFRg2wx17H5scbpUSaOr3g/WMA9YBW/TZ4cYYvXleN/IqsP8jU2jnusiTpfJFDFWfPpiszHH/UwneuztOto1FI/mpHVYfKbGMOofC/zNe/cmkqQioGYsnbUxAnbj0jcXI8JlNJwtg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -29,35 +29,35 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tTVvvZzu8JCMGsL/wzE9d/zHikByTOy/N+nAeETMTpU=;
- b=jZ+6mGPKqrygj26D56AKO3jig3x+PbbF9g3AzxWUgz0U788TE88S2BSGR/Zzd2aHS70Kik/urjF9zUusO2KYZrvU5rjOQiG4mC6MrE89e3EBb683zvw1zl0U6Ek01NA/DYpEDBuLbhhFrlPCUclZ5pBpKD5x8pPgyMEuQ4mczd0=
-Received: from SN7P222CA0003.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:124::21)
- by SJ0PR02MB8609.namprd02.prod.outlook.com (2603:10b6:a03:3e4::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19; Mon, 26 Sep
- 2022 06:34:04 +0000
-Received: from SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:124:cafe::2f) by SN7P222CA0003.outlook.office365.com
- (2603:10b6:806:124::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17 via Frontend
- Transport; Mon, 26 Sep 2022 06:34:04 +0000
+ bh=e0XSmwsYhzBzkLphw6Dkc/Poa9iVIJtLOAXsA3sEI8g=;
+ b=EE5jq6+CS3OfzmBV4TJDVyhfPLWe67f6ILd8AW3yhJj44kKG9G3Eube7lL1Sz3R2MJdbqVeIhUPVekMzXamNWiDsgL1r4bZekWGzwUK3SMtrOUxs3srqlAabJ4Nsy1VnssHdgbgjU9X9bMVKrAhf7u4e5zwmlKrccIx6xE1k0sE=
+Received: from SN4PR0501CA0124.namprd05.prod.outlook.com
+ (2603:10b6:803:42::41) by MN2PR02MB7069.namprd02.prod.outlook.com
+ (2603:10b6:208:20e::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Mon, 26 Sep
+ 2022 06:33:52 +0000
+Received: from SN1NAM02FT0057.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:42:cafe::1b) by SN4PR0501CA0124.outlook.office365.com
+ (2603:10b6:803:42::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.9 via Frontend
+ Transport; Mon, 26 Sep 2022 06:33:51 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0023.mail.protection.outlook.com (10.97.4.236) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0057.mail.protection.outlook.com (10.97.4.123) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 06:34:04 +0000
+ 15.20.5654.14 via Frontend Transport; Mon, 26 Sep 2022 06:33:51 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Sun, 25 Sep 2022 23:33:36 -0700
+ 15.1.2375.24; Sun, 25 Sep 2022 23:33:40 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.9 via Frontend Transport; Sun, 25 Sep 2022 23:33:36 -0700
+ 15.1.2507.9 via Frontend Transport; Sun, 25 Sep 2022 23:33:39 -0700
 Envelope-to: broonie@kernel.org,
  robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org,
@@ -67,12 +67,11 @@ Envelope-to: broonie@kernel.org,
  linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org,
- amit.kumar-mahapatra@amd.com,
- michal.simek@amd.com
+ amit.kumar-mahapatra@amd.com
 Received: from [10.140.6.18] (port=46254 helo=xhdlakshmis40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1ochgO-000GAg-5p; Sun, 25 Sep 2022 23:33:36 -0700
+        id 1ochgR-000GAg-H9; Sun, 25 Sep 2022 23:33:39 -0700
 From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>
@@ -81,11 +80,10 @@ CC:     <akumarma@amd.com>, <git@amd.com>, <michal.simek@xilinx.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <amit.kumar-mahapatra@amd.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <michal.simek@amd.com>
-Subject: [RESEND PATCH v3 1/7] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
-Date:   Mon, 26 Sep 2022 12:03:21 +0530
-Message-ID: <20220926063327.20753-2-amit.kumar-mahapatra@xilinx.com>
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Subject: [RESEND PATCH v3 2/7] spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
+Date:   Mon, 26 Sep 2022 12:03:22 +0530
+Message-ID: <20220926063327.20753-3-amit.kumar-mahapatra@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220926063327.20753-1-amit.kumar-mahapatra@xilinx.com>
 References: <20220926063327.20753-1-amit.kumar-mahapatra@xilinx.com>
@@ -93,24 +91,24 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1NAM02FT0023:EE_|SJ0PR02MB8609:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9fe9c12b-6810-4a0a-561c-08da9f891b51
+X-MS-TrafficTypeDiagnostic: SN1NAM02FT0057:EE_|MN2PR02MB7069:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7ccbe5d-489b-40e9-65c5-08da9f8913be
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3kJcs2PjxtxNOAECylCIk3xALlTeCO4+q44b8pJ1zcj0GfXZTTgmZxX2r3oGuFGULMP+09zho6hE1FMU2BE7a/m/eUdhua9YgPRJB6OTI7CJH+xwG7beNQsKPFd2lmPqKtTXH6yagiGot3PLzkvtjrJpq+DK7K5Cv34/enjWZw6A/lIOnvwsAqdbxKfDJCirVvlqj0E8ZcdOlwvojKuYjap/uOZlIl/+a9f+FXRyKx3ZCVV1gOE4btAnNVBy0cGEj5kmvt6IACk9GdL5K2Kjl2wTXSAId5enjVpWLgkaEACfMXox6/P16kwL89caeMwdcuxU3WfkvHOUqHm77HHRtl1xoTUihZY3YVUFtOgPAHe6/Wumox5unXyck3UghO8MZYdEmBVf3Wy8xVaebWqyfy/2WgiqUrOrpgocBn/Ngu3G/cjmbLRZ0h4BB+T86N9LDXnLKwps8+Q8rhZLZgsGNfPN4JswUUuXt5DWWXI52Ntuy9FlbWHaWzGaaEH61lFk+48h1e6b+ESB+25Vll6qXbQLwqlm589O9iJAcgW78sjMA8HNRrvlUd9SK6Xl16r0CwL3MKpL7J7I3FBRUpNTqCHUj778I1/7cqyD17TtccanMiZ9eX0gSKusrqfbjjoxgb6Sa/SXHmQjmsPw4T7rYY/FGASVVp89DlzLrd6fmatuSg9bqE5HTuH6IcgAaufFHGD3H5MJvjat+ZT4n+3aS1kimXUGt+wa71gIPPRD9EUi02dLJQWWgNW6/QpGsTDnqfBHA5rJgiXSN2OzqtNi0JczpFfapAP8clYM8tYe6sI=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(82740400003)(316002)(2906002)(7416002)(36756003)(41300700001)(70586007)(9786002)(2616005)(26005)(7696005)(1076003)(6666004)(83380400001)(478600001)(40460700003)(40480700001)(426003)(336012)(5660300002)(82310400005)(70206006)(4326008)(186003)(8676002)(356005)(7636003)(47076005)(110136005)(36860700001)(8936002)(54906003)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CqG5rXyDTKUfmBed0V1SCpUEtjq7+9NzmlBxVR5PU1/fT77o0m03uh9xlqkKNZRLVz5zSN9nPzfPgBaYWvUbbkTl6zbC4oxuRkohFQiSp0yuK1/rn1FdOpZS2vGsq9VDLRChtFUWQ5t01xgWpQYAjRGFuWimcWPdJBPOu9eA2+BZeruT+HBIaQFxKktijRuGZ715YOqONHtUKXtffH7LzMd4LJKxeGqKg8iwXnrYNoZiH3nErPcpaIkif44M3f3QRFbI4eyHtltZtEeta0ax5KOO+n55bFjbIJIiwuEoq9BSTpo2PliwJG9Fbe7SgAz+dyDWF1WyGZQZoTZ38xr583U/RBJGl8aoyUCDaL+4ITOnNLRqGROjPSyNn0hnG4Iw3f9WarX7BfouRMVLCxeErevmQ3UEmqpcZ+GtQnAK2dw/wmjxePmXeDgUnoUY8kURS0TaXi2gKc2fVBzmn3tEMBGYFGfeAiJByX554EeaZAGmQTGtKAXCyzCAiv9dmAy4XmrqmGSIIeH36lQIGS8BaM6soY3H2UY5PC1T5OkzOyRUOIsFxnxMV6qUCBXj5RFYFbncPHwsqtSkDncKF4rD4k9lJWlsT+tOaUZMWrOoELzgzqKdp2qOYvScuZv5naxwURd23Kw1nrxHKjZK2MMR8gQ66mqZ3dUXpHefSy9PbdWIBrvTwLMY9am0pVQ95hOQzn4LIwBToKSHo6I819ZJ0S6nYDWMVDT7rvCJgqqTd9QSBLNTUv5qhYtVuawnjoMVVD5/ATwUV+enh6BRvnWSjQ8sepcPVVZpVGLSVZ6oscA=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199015)(36840700001)(46966006)(40470700004)(36860700001)(83380400001)(8676002)(4326008)(70206006)(5660300002)(70586007)(7696005)(9786002)(8936002)(7416002)(47076005)(426003)(7636003)(336012)(54906003)(110136005)(186003)(1076003)(356005)(316002)(478600001)(2616005)(82310400005)(36756003)(2906002)(40460700003)(41300700001)(26005)(82740400003)(6666004)(107886003)(40480700001)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 06:34:04.3060
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 06:33:51.5989
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fe9c12b-6810-4a0a-561c-08da9f891b51
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7ccbe5d-489b-40e9-65c5-08da9f8913be
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0023.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0057.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8609
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB7069
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -120,65 +118,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document zynqmp_qspi ctrl and op_lock member description. It also adds
-return documentation for 'zynqmp_qspi_setuprxdma' and zynqmp_qspi_read_op.
+During every transfer GQSPI driver writes the CPOL & CPHA values to the
+configuration register. But the CPOL & CPHA values do not change in between
+multiple transfers, so moved the CPOL & CPHA initialization to hardware
+init so that the values are written only once.
 
-Fixes below kernel-doc warnings-
-
-spi-zynqmp-gqspi.c:178: warning: Function parameter or member 'ctlr' not
-described in 'zynqmp_qspi'
-spi-zynqmp-gqspi.c:178: warning: Function parameter or member 'op_lock'
-not described in 'zynqmp_qspi'
-
-spi-zynqmp-gqspi.c:737: warning: No description found for return value of
-'zynqmp_qspi_setuprxdma'
-spi-zynqmp-gqspi.c:822: warning: No description found for return value of
-'zynqmp_qspi_read_op'
-
-Signed-off-by: Michal Simek <michal.simek@amd.com>
 Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 ---
- drivers/spi/spi-zynqmp-gqspi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/spi/spi-zynqmp-gqspi.c | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index c760aac070e5..973008a30a09 100644
+index 973008a30a09..1b56dd29057f 100644
 --- a/drivers/spi/spi-zynqmp-gqspi.c
 +++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -141,6 +141,7 @@ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
+@@ -266,7 +266,9 @@ static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
+  *	- Enable manual slave select
+  *	- Enable manual start
+  *	- Deselect all the chip select lines
+- *	- Set the little endian mode of TX FIFO and
++ *	- Set the little endian mode of TX FIFO
++ *	- Set clock phase
++ *	- Set clock polarity and
+  *	- Enable the QSPI controller
+  */
+ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
+@@ -305,10 +307,17 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
+ 	config_reg |= GQSPI_CFG_WP_HOLD_MASK;
+ 	/* Clear pre-scalar by default */
+ 	config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
+-	/* CPHA 0 */
+-	config_reg &= ~GQSPI_CFG_CLK_PHA_MASK;
+-	/* CPOL 0 */
+-	config_reg &= ~GQSPI_CFG_CLK_POL_MASK;
++	/* Set CPHA */
++	if (xqspi->ctlr->mode_bits & SPI_CPHA)
++		config_reg |= GQSPI_CFG_CLK_PHA_MASK;
++	else
++		config_reg &= ~GQSPI_CFG_CLK_PHA_MASK;
++	/* Set CPOL */
++	if (xqspi->ctlr->mode_bits & SPI_CPOL)
++		config_reg |= GQSPI_CFG_CLK_POL_MASK;
++	else
++		config_reg &= ~GQSPI_CFG_CLK_POL_MASK;
++
+ 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
  
- /**
-  * struct zynqmp_qspi - Defines qspi driver instance
-+ * @ctlr:		Pointer to the spi controller information
-  * @regs:		Virtual address of the QSPI controller registers
-  * @refclk:		Pointer to the peripheral clock
-  * @pclk:		Pointer to the APB clock
-@@ -157,6 +158,7 @@ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
-  * @genfifoentry:	Used for storing the genfifoentry instruction.
-  * @mode:		Defines the mode in which QSPI is operating
-  * @data_completion:	completion structure
-+ * @op_lock:		Operational lock
-  */
- struct zynqmp_qspi {
- 	struct spi_controller *ctlr;
-@@ -739,6 +741,8 @@ static irqreturn_t zynqmp_qspi_irq(int irq, void *dev_id)
- /**
-  * zynqmp_qspi_setuprxdma - This function sets up the RX DMA operation
-  * @xqspi:	xqspi is a pointer to the GQSPI instance.
-+ *
-+ * Return:	0 on success; error value otherwise.
-  */
- static int zynqmp_qspi_setuprxdma(struct zynqmp_qspi *xqspi)
- {
-@@ -823,6 +827,8 @@ static void zynqmp_qspi_write_op(struct zynqmp_qspi *xqspi, u8 tx_nbits,
-  * @rx_nbits:	Receive buswidth.
-  * @genfifoentry:	genfifoentry is pointer to the variable in which
-  *			GENFIFO	mask is returned to calling function
-+ *
-+ * Return:	0 on success; error value otherwise.
-  */
- static int zynqmp_qspi_read_op(struct zynqmp_qspi *xqspi, u8 rx_nbits,
- 				u32 genfifoentry)
+ 	/* Clear the TX and RX FIFO */
+@@ -470,14 +479,6 @@ static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi,
+ 
+ 	config_reg = zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST);
+ 
+-	/* Set the QSPI clock phase and clock polarity */
+-	config_reg &= (~GQSPI_CFG_CLK_PHA_MASK) & (~GQSPI_CFG_CLK_POL_MASK);
+-
+-	if (qspi->mode & SPI_CPHA)
+-		config_reg |= GQSPI_CFG_CLK_PHA_MASK;
+-	if (qspi->mode & SPI_CPOL)
+-		config_reg |= GQSPI_CFG_CLK_POL_MASK;
+-
+ 	config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
+ 	config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
+ 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
+@@ -1170,6 +1171,9 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 		goto clk_dis_all;
+ 	}
+ 
++	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
++		SPI_TX_DUAL | SPI_TX_QUAD;
++
+ 	/* QSPI controller initializations */
+ 	zynqmp_qspi_init_hw(xqspi);
+ 
+@@ -1207,8 +1211,6 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	ctlr->setup = zynqmp_qspi_setup_op;
+ 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+-	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
+-			    SPI_TX_DUAL | SPI_TX_QUAD;
+ 	ctlr->dev.of_node = np;
+ 	ctlr->auto_runtime_pm = true;
+ 
 -- 
 2.17.1
 
