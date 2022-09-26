@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A3A5EA242
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E675EA14B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237242AbiIZLE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S236605AbiIZKrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237349AbiIZLDw (ORCPT
+        with ESMTP id S236846AbiIZKow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:03:52 -0400
+        Mon, 26 Sep 2022 06:44:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AA5F22F;
-        Mon, 26 Sep 2022 03:32:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFAF558DA;
+        Mon, 26 Sep 2022 03:25:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6ADCAB80926;
-        Mon, 26 Sep 2022 10:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DEFC433C1;
-        Mon, 26 Sep 2022 10:30:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8838BB802C5;
+        Mon, 26 Sep 2022 10:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5A6C4347C;
+        Mon, 26 Sep 2022 10:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188236;
+        s=korg; t=1664187934;
         bh=kEcA/9wTN6peHSuhYVAET0L6NbfiIGmPkAVhetaQM1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2fKzjqWPelfip2hcdlUBu7RSpkhsRumzAMv1PWlQnLaYgOWvUgPvsJmtZrSYpqQUU
-         NT1rinPbp32PSeUM2NWwm6OKjzNCF2p2pTqT90oXlNglFwtQeUU+9ZwXcIgSSefmHt
-         FEP2DCWgtfYLytUcJfmEAmCNziBgzgxSBR3MBc+c=
+        b=OuA2+btOmDCc1/A6ftTXnYhPPm4KNrpCXJLPv4F4mJetJle5ke2ic3Q9nCD44f4WE
+         Oea7z/tkMcq77UkmQN3gdUD/pePcEMVU46sM8wXMxSI5CH6C2k0MyQzpGL1nvQ2riT
+         aHzfGVG1nEQ9XbR67R9qQlY42BAz0MzBoeK377v0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,20 +37,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Keguang Zhang <keguang.zhang@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 083/141] MIPS: Loongson32: Fix PHY-mode being left unspecified
+Subject: [PATCH 5.4 076/120] MIPS: Loongson32: Fix PHY-mode being left unspecified
 Date:   Mon, 26 Sep 2022 12:11:49 +0200
-Message-Id: <20220926100757.458014834@linuxfoundation.org>
+Message-Id: <20220926100753.789656004@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100750.519221159@linuxfoundation.org>
+References: <20220926100750.519221159@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
