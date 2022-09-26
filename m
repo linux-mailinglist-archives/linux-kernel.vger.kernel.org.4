@@ -2,151 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49065E9E23
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9EC5E9E26
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 11:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbiIZJpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 05:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
+        id S234306AbiIZJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 05:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbiIZJpD (ORCPT
+        with ESMTP id S234152AbiIZJpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:45:03 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90043.outbound.protection.outlook.com [40.107.9.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B915BB7C8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 02:43:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m8CsXu5DxGjghMzQaZZQkSbXvj5fFWNupaBW8zAp5C3uXST4vE3al+ZGIDknwps5At2KOmaEey6y7VtYjSROuLZ3sN+0b0SX5J8XWNtALhUl2Pd9Lw2YyIHFiSbk4gcv5ZL2vR9BoF5+Fr9gnc/MWXbnHFSUKPmSFwZ58d/0EaklFLDMg1YhBf7sW1jjx4JLIsAyS/XZLyMZBoTsl5YfzE9KZxaPAZZAkLQS+/63ZaHyMNu2fEIrJ3NPbyc3D8mGJ/iQ5k4/oZoryJS/HCyebzZtEkW4m4LplbkNpByWMfr7GRxXEWLF69GbUDtQsfUw0Vqxn0WhLoz/1v8t9IBAPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GAIvDLNRurDEWWgrORYOFLdTscM01zy4syU2SgZiSts=;
- b=aBq6um5o68p8BjDhpYwBtg5XETq6Oy3tYGWVZMUiUtgUfN+vNLtfmGqYutm2NxwYLzlxQYeTLp/Y2MWX/ppoQVgGHmeepbeza/S6w/td6ABeHrARd4dl2EwdurA54DFo27RZL26GKhhtw+9+FTWc6+A25NXlgWO7tmjjQlPBN42NkkTChZL0G8TOsBPe0NKDbce7nllJTWjCD09srZbu2okbAbLOF2NZ2j5Ok2suBWNDq2EvcfC6jUJtf0OhFWbSNgABH02ETxAAAoHvZYjeKdhG0NNyUn1aCqrZaNqaVkt6qIKsvz73NiKpjg/ZA7qUxUyK9wdj/1bmNTgMyJxNYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GAIvDLNRurDEWWgrORYOFLdTscM01zy4syU2SgZiSts=;
- b=XO1r+q4dZLDCAklNJnowCJOB37x3utJ04cp8Jc/f6NPCgBIDWykme1CfOWDnERk8vUcF7r8FYaTFbu7AjUwt1+PmI5R4lE8fD84AbnG6q7JL2djIRDsr9IPphiej41xUmKKtFU8VEORAl2332wbpzxIiLEyfZ58ACNAvMxdom9s661z9E39TOkbEyF96mv+n8vg0vECdxW5I5KHjWsA57aos+QAfmwVbm7we5U1MtUgOz2HuRWMVxHgeA5XQFCNWxgtbRSlSE6+sExDtr2zq/5goReM/61D3ljPPNvqaBCb2IjKPRaVL1AgSXhlJl4K4JR/MU09cxyZSFZrn0lNq7g==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1736.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:17::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Mon, 26 Sep
- 2022 09:43:55 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f4ad:3944:a7f4:fcf3]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f4ad:3944:a7f4:fcf3%5]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
- 09:43:55 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Topic: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Index: AQHYtABEs/XtKdJlskKmHA1duRa+Xq3xsPoA
-Date:   Mon, 26 Sep 2022 09:43:55 +0000
-Message-ID: <fd9c174e-2c89-7e11-9e68-d6044b7eab21@csgroup.eu>
-References: <20220819191557.28116-1-pali@kernel.org>
- <20220819191557.28116-3-pali@kernel.org>
-In-Reply-To: <20220819191557.28116-3-pali@kernel.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB1736:EE_
-x-ms-office365-filtering-correlation-id: d762bf09-6ca6-4e6c-7163-08da9fa3a0d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G3GgWUISQ+v/sCKBp8E9PjdoTcyyZXAIJbMPbfkivcP5Xc1J+eGNEpJkiZci2IhKKmScux3UQsEgzd15hw0t8T+uuva2BxupNSwB+stThPwRyI0TtCThePXQf3n0N8L2m21QevqJi720syepY1L5WQyhdV3enoz9MeUOXcxwozv/R0dR2r2H+ysqd6U1/n5DwJW9QmeitqqxsPPtsgmdqldFhBvkAgMtmX5kD35PeE4ZzrDWTFfO5lAOvOJ2aAotxsCZpuLxz8BMQtq/IJTu/wRKkPGQbPSqwa0hVtu9s6hyhJb9z+nWySp+JeKqoXXWbywaBPW98EIQcg+e3mUMna1jGD9e2Itfp5HzmBoLwA2JJ5kQds4q1JhctcsWsKJvQCzewFv74rTqJ/8OV60/bwtdfX7+o09fhRBt+wr9QEGOFTQeVkynuJeXeaX5kpHAv172l8GHFupM6eNtINleX2CnKpBW2dabGc+uaqSC/xUjVqAg+pu1FS/ru41eaDl9+HT2hwzJKaSazER/2WSQnuOTTkkQke8dCQP01Re1K+hLyK0meyEGQb/uUE3w5RT2zZmuJBscC4pYZT51m77ooav6E6uPqbar1C7qC+YtUI/mrcJwER9dWGxwgJYFFP2QPr1I/uyCUn7tx/drx2O7ML0dMC75735qYKFX9nNBM/O5TONvy/UsNO+O7TBiX1dYWCIkxitSg75H9Klj1dUXiAudkOuG29/1Mll6asckwA18Vi1J9RiABeV/uxf65yMH3c4mAyzB4u8NQ8pPivGrjsPVJqMxRouwwxYyj5JeSnv6/hjyAuheSTGtBaNQ0SYBFBxO1fkY4eXljaXSCYgwCQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39850400004)(396003)(366004)(136003)(451199015)(6506007)(31686004)(2906002)(26005)(5660300002)(2616005)(316002)(36756003)(4744005)(66574015)(6512007)(76116006)(66946007)(83380400001)(41300700001)(110136005)(6486002)(186003)(44832011)(478600001)(54906003)(71200400001)(64756008)(122000001)(8936002)(86362001)(31696002)(66556008)(38070700005)(91956017)(4326008)(66476007)(66446008)(8676002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2RPOFFBeDduNmp0SW5Sa1dRcXZQWmhoQWNKWmw0UndFczZETjYrRzNsWlNq?=
- =?utf-8?B?dEVheGlpbjZHWVBIT1RHQ0pkS1ZMMnJkdlFzT1hOVTZwbWZlaXQrS254dTZI?=
- =?utf-8?B?K2QxU3l1Sm44N1dtVUxZRm1PSHZjaUVZOUxqOUdXSGxoVGZCbDVZOGVnOERF?=
- =?utf-8?B?Szl3cGw1R2dNL1lUOGh1WXNveWp1MGMyQ005bm9pb1REZFhCK2lEUFB6Y2xI?=
- =?utf-8?B?RU90OVF5RnliMzJlNklwTDEzazBZanpQamNsRlFDYitOTmV3TGdzcGw4VXho?=
- =?utf-8?B?YjNYWEZLeW5OVEpSNytSMG93aHBWVkJyaGhNYXZ5TTRNMXVMcmdCYytzeVJQ?=
- =?utf-8?B?YXpsZ01VcHlhdUsxZ0ZHa0JpVDJMcVlucGZwL21MQWF3a0JIZmN2RUt1alc2?=
- =?utf-8?B?OGUvVUtUd1ZZcnUzaVZQb2ZPeHYrM2l3SGNiRmtOMkszOTBNMzd0SXQ1THA4?=
- =?utf-8?B?RWJidEpmWW5JNVBzbG1XL01WS0VWSEloV1J4MTEzL0xDQUVaYkF0Y2RRTUpJ?=
- =?utf-8?B?RFJ3dEVyMnV2VWhwK3ZNdFJGQXQvWm5DVTA2Um9QaDRGVHVvRGRWTFdpb0Q2?=
- =?utf-8?B?Y28yZWQvRFBnd0dQd25wQXJrOG9PK2NENEd1YkdIdG91ZkVwTGRDS0RreVRF?=
- =?utf-8?B?aStTclJudERLZXZCSzRZbCt3OTNtcG5HSDVKcDI0VDc2aGZFQmRwNzFLWWFH?=
- =?utf-8?B?ZG1JdDY4c1VEbmdmUXNldmZ2QUpISkp2Slc0bUJZQU1SaXJYNnArOGlwUkVZ?=
- =?utf-8?B?dlU3MWY0dGRLUXZQeWpkTmRQQmQ0ckNLN3N6Z3lVVzcvSkk5dkJWS1diZTVm?=
- =?utf-8?B?SURpVlNTa2xqa3h6QW5talhwYUFWaDlUc291TnNrM1Jwdjd5REtvVVFiS1Ba?=
- =?utf-8?B?ckFhRmtlaHdiNFBGT1ovdFl5bkZYdGVvSkhkb2Y2a0JHSEovMlZKMjJrTDAv?=
- =?utf-8?B?L1Z1MmpiRnZIbk9IRVpNRThxNUZxS3pkTVRvSGx1SFlZaHhjUDVuL0VzNzhF?=
- =?utf-8?B?aGUra1Z6ZVErTUhLdHJjbllvWTdMK2R6OGlVanpqeEttR1laak9MTHpscVJz?=
- =?utf-8?B?MU4wZk5XSUNscUE0WExCQWMwZURKOGpjNVhiSTNpVTZmWjE0Nm1reXc0L0Vq?=
- =?utf-8?B?WTZhZTllV0pEeEU4VFd4N3FnUmIrZUJva1VianZrWTdlWStGUGRkd0pCYjg3?=
- =?utf-8?B?WFpraldBVkxVY2UxZTVxVE1RbExjOFZPMVY5UjBLZCtVK0lWTzFYK1JqcEpi?=
- =?utf-8?B?QXFEc3V4ak5LZkx1QkhYRis5RXhkamhlckZZSllRazRCQlJMM3Fra1B4dUpa?=
- =?utf-8?B?WTAzRFZHOXlSUHVQbnF0UDdBNUlTa3NRZlRLRGRMUXZaR2dXMXBRQUEvRXhp?=
- =?utf-8?B?ZXRWQjFJR0x3elZpS2dXNjVqTEYreTFFRzlEOHNrZEl3N1BsejZhYU16aXNq?=
- =?utf-8?B?dnlObXlxTDZmeU5ZVmVLS3J6azFtS2Jvb0wvY0RlMFVPZFhDOE5QTmIrN0pl?=
- =?utf-8?B?NlhzTGtXL1FSOXdUTGNRQm44cy92YWZodDFKRUhSb2Z6Wk84QzROQXpFS2dm?=
- =?utf-8?B?QksvWUl2bURFRjNKcFpKWVluRW5QUEt1U2VETE42Q3duSXJGMUNQcHBpVHkv?=
- =?utf-8?B?d1BHS2hwNXpqZkRHK2xlNXY4NHUvaDZkbC82Sk9ESHV0YUtkSHVQWndkT1BI?=
- =?utf-8?B?TFcvMkl4YWlrMFNaMDhLNUYvaStPbFhzK1dETXdxdG9tamNXYVJiN1Z6SHhs?=
- =?utf-8?B?ZlNRVGY1UXlqa2drNzNybzJka09OalZsV0lpSDFNY3VTdkJpSW4wNFFoeFhy?=
- =?utf-8?B?ZmFpQUF1a2UyM0xXVXo3Mjc3THBrdlYxT3NWbytTdzNNaERNSnhFUmVDRWQv?=
- =?utf-8?B?NjhjSjFRYVhuMUFJeVZHU3JSTWdray9RSlRVdlBtKzJ3TUM3NmZTaDFKWHRo?=
- =?utf-8?B?VXJCV05qbjJla21nbTRLcXZOQ2t4S0w1VkwxT1JnRzV1VzZ1czR3TWc3UXE5?=
- =?utf-8?B?b1h2VSsxVmRqaGpXQyswVU1qdDZ4aHliZEpTanZhRFVQdGpET2VwdUJYczQx?=
- =?utf-8?B?MXZleENOdzZ5cXo2RDVSVzNnbERZbUdHcHZlQXNrREtYaC8rbDh5SlBhNlQv?=
- =?utf-8?B?VmxjK2psT0xYNWM3VFJiQi9DTkdrclcwQzlValhKVWNtSFd1L1lGbjA3S0tk?=
- =?utf-8?Q?IlQi+J3QH8u47IIQrtZgkuU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C5C80E478D80D34C8A96AC2B9DBF5FDB@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 26 Sep 2022 05:45:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F18102C;
+        Mon, 26 Sep 2022 02:44:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6438422087;
+        Mon, 26 Sep 2022 09:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664185475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aYfBxVLDKXRyCiZQ7+UvH4mxxp4XXerCm1q4/cpIXHU=;
+        b=2p+BTxx+HjqmIk5/4mNduRmMMDjaKzg0la9AUsCspEoEPjVP1ZySGgkcgzv5kxdj8aYCdi
+        GbFMFk7huSG9pQgeJoDVbVTeRECMPNa6saRsHNcse4REWEQcXea24FeBCkGXwO6cZgxzQ+
+        OVzVKWnj1U+Wnznf4CQTCvNGE9aDfWM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664185475;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aYfBxVLDKXRyCiZQ7+UvH4mxxp4XXerCm1q4/cpIXHU=;
+        b=iI4pLzcIHbiJOieLr/8DhQlpa13oAZeoiB2NObDSNXDrNC7x56vqgFDsioIQAwkqnikFal
+        /h7fAxTr9V7JAcCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56060139BD;
+        Mon, 26 Sep 2022 09:44:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id U9LxFIN0MWMMfwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 26 Sep 2022 09:44:35 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D2977A0685; Mon, 26 Sep 2022 11:44:34 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 11:44:34 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: Re: [PATCH v3 1/5] wbt: don't show valid wbt_lat_usec in sysfs while
+ wbt is disabled
+Message-ID: <20220926094434.jrl6gnlbjqkex3wa@quack3>
+References: <20220922113558.1085314-1-yukuai3@huawei.com>
+ <20220922113558.1085314-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d762bf09-6ca6-4e6c-7163-08da9fa3a0d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2022 09:43:55.2600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B7s0D57CHobquBB2y/FZh9vqgZtEAQKlb45j79f8ABmyKstlWeJTRLxx9FT+rN8CuScwFpr1qugKMCxyImW/xqnqsElyebHMpQwyxX7HKDU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1736
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922113558.1085314-2-yukuai3@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE5LzA4LzIwMjIgw6AgMjE6MTUsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IEZ1
-bmN0aW9uIG1wYzg1eHhfZHNfcGljX2luaXQoKSBpcyBub3QgdXNlZCBvdXQgb2YgdGhlIG1wYzg1
-eHhfZHMuYyBmaWxlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUGFsaSBSb2jDoXIgPHBhbGlAa2Vy
-bmVsLm9yZz4NCg0KVGhpcyBwYXRjaCBzaG91bGQgYmUgc3F1YXNoZWQgaW50byBwYXRjaCAxLg0K
-DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9tcGM4NXh4X2RzLmMgfCAy
-ICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+
-IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L21wYzg1eHhfZHMu
-YyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9tcGM4NXh4X2RzLmMNCj4gaW5kZXggZjhk
-MmM5N2YzOWJkLi45YTZkNjM3ZWY1NGEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9wbGF0
-Zm9ybXMvODV4eC9tcGM4NXh4X2RzLmMNCj4gKysrIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84
-NXh4L21wYzg1eHhfZHMuYw0KPiBAQCAtNTQsNyArNTQsNyBAQCBzdGF0aWMgdm9pZCBtcGM4NXh4
-XzgyNTlfY2FzY2FkZShzdHJ1Y3QgaXJxX2Rlc2MgKmRlc2MpDQo+ICAgfQ0KPiAgICNlbmRpZgkv
-KiBDT05GSUdfUFBDX0k4MjU5ICovDQo+ICAgDQo+IC12b2lkIF9faW5pdCBtcGM4NXh4X2RzX3Bp
-Y19pbml0KHZvaWQpDQo+ICtzdGF0aWMgdm9pZCBfX2luaXQgbXBjODV4eF9kc19waWNfaW5pdCh2
-b2lkKQ0KPiAgIHsNCj4gICAJc3RydWN0IG1waWMgKm1waWM7DQo+ICAgI2lmZGVmIENPTkZJR19Q
-UENfSTgyNTk=
+On Thu 22-09-22 19:35:54, Yu Kuai wrote:
+> Currently, if wbt is initialized and then disabled by
+> wbt_disable_default(), sysfs will still show valid wbt_lat_usec, which
+> will confuse users that wbt is still enabled.
+> 
+> This patch shows wbt_lat_usec as zero and forbid to set it while wbt
+> is disabled.
+
+So I agree we should show 0 in wbt_lat_usec if wbt is disabled by
+wbt_disable_default(). But why do you forbid setting of wbt_lat_usec?
+IMHO if wbt_lat_usec is set, admin wants to turn on wbt so we should just
+update rwb->enable_state to WBT_STATE_ON_MANUAL.
+
+								Honza
+
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Reported-and-tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> ---
+>  block/blk-sysfs.c | 9 ++++++++-
+>  block/blk-wbt.c   | 7 +++++++
+>  block/blk-wbt.h   | 5 +++++
+>  3 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index e1f009aba6fd..1955bb6a284d 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -467,10 +467,14 @@ static ssize_t queue_io_timeout_store(struct request_queue *q, const char *page,
+>  
+>  static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
+>  {
+> +	u64 lat;
+> +
+>  	if (!wbt_rq_qos(q))
+>  		return -EINVAL;
+>  
+> -	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
+> +	lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+> +
+> +	return sprintf(page, "%llu\n", lat);
+>  }
+>  
+>  static ssize_t queue_wb_lat_store(struct request_queue *q, const char *page,
+> @@ -493,6 +497,9 @@ static ssize_t queue_wb_lat_store(struct request_queue *q, const char *page,
+>  			return ret;
+>  	}
+>  
+> +	if (wbt_disabled(q))
+> +		return -EINVAL;
+> +
+>  	if (val == -1)
+>  		val = wbt_default_latency_nsec(q);
+>  	else if (val >= 0)
+> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+> index a9982000b667..68851c2c02d2 100644
+> --- a/block/blk-wbt.c
+> +++ b/block/blk-wbt.c
+> @@ -422,6 +422,13 @@ static void wbt_update_limits(struct rq_wb *rwb)
+>  	rwb_wake_all(rwb);
+>  }
+>  
+> +bool wbt_disabled(struct request_queue *q)
+> +{
+> +	struct rq_qos *rqos = wbt_rq_qos(q);
+> +
+> +	return !rqos || RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT;
+> +}
+> +
+>  u64 wbt_get_min_lat(struct request_queue *q)
+>  {
+>  	struct rq_qos *rqos = wbt_rq_qos(q);
+> diff --git a/block/blk-wbt.h b/block/blk-wbt.h
+> index 7e44eccc676d..e42465ddcbb6 100644
+> --- a/block/blk-wbt.h
+> +++ b/block/blk-wbt.h
+> @@ -94,6 +94,7 @@ void wbt_enable_default(struct request_queue *);
+>  
+>  u64 wbt_get_min_lat(struct request_queue *q);
+>  void wbt_set_min_lat(struct request_queue *q, u64 val);
+> +bool wbt_disabled(struct request_queue *);
+>  
+>  void wbt_set_write_cache(struct request_queue *, bool);
+>  
+> @@ -125,6 +126,10 @@ static inline u64 wbt_default_latency_nsec(struct request_queue *q)
+>  {
+>  	return 0;
+>  }
+> +static inline bool wbt_disabled(struct request_queue *q)
+> +{
+> +	return true;
+> +}
+>  
+>  #endif /* CONFIG_BLK_WBT */
+>  
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
