@@ -2,110 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215BC5EA7D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DECC5EA7F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 16:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiIZOBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 10:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S234684AbiIZOIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 10:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiIZOBD (ORCPT
+        with ESMTP id S230154AbiIZOHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:01:03 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8278146DAC;
-        Mon, 26 Sep 2022 05:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1ejE6IXHMsmMDdxnD5959e9TnKubLT7CerN02Zwf5J4=; b=XAuv0lr+RMSckyM/dkw/5MaDON
-        FMJCrB6/V+FQ3BqSRYEqeeVy8wdHqGIOxPoVKxbX0Z6/6uoY0cH60CZIlzhhsLrg5gJr8jC2Em9Jr
-        eM8UJlBgmVKtEuo4C8z9FrXz26NPzz8CGlxcQx5wHc/PDFP7q3vgdCasd/Tf5cPFA0AKxkG0Jb1lM
-        egkGw8v+3tKOvL/gSlHwmrynTxfGPc4/E4nJcrv6AE7udvyvB13zXxZ6JR2AWB6RTJ8RgY+v2rbep
-        wdMPpSf7YH+J7QGhsjFvM0UGCR3Z6KxQTIzj/GvzaqJlvsqhoMbO4a9Z+N2Ke/I2sqVmyd3JenIbg
-        s3VZPxaw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocmzj-00G1GD-7d; Mon, 26 Sep 2022 12:13:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C9813002F1;
-        Mon, 26 Sep 2022 14:13:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8261D29A13691; Mon, 26 Sep 2022 14:13:53 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 14:13:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
-        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
-        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>, amit@kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YzGXgbfRngNfDhoC@hirez.programming.kicks-ass.net>
-References: <20220822114649.055452969@infradead.org>
- <20220923072104.2013212-1-borntraeger@linux.ibm.com>
- <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
- <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
- <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+        Mon, 26 Sep 2022 10:07:49 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6342028AC;
+        Mon, 26 Sep 2022 05:18:54 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q6n3rW004276;
+        Mon, 26 Sep 2022 12:32:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=2YNk7rnU4FZ13+o3uecNedyFsARFhIeA+ezdGLGCGk4=;
+ b=N/E+FthewNCLizrMRhhzGDsnNtzC5gNVHOgrchi7o+xablsWgHH+JEMTQiXZhSvOMoZF
+ kzTVL/7paUPj9gIK5AjIdHwHUp7zTtr0ZmML/F5lH58fLbqaEzl1/JMe+pdtzO3+Q8Wv
+ CpBDc0wdI3ZADsJ/CjInzicNOln/2ljjhh0sXV1kE4pHVox8SAaqpK7MvnEV11EBxYCV
+ bVSyfx7fdin1+6kiOhGPclP/i9t9BNg6jqBDp10SKp6K4Hi4N4/6ZHgFc4FvJLcX115F
+ YpdWo1trqKRP9h5ipHecJh8EJQHY+YYq8KPJ3a2K8UZTqiw7STbaldSlTTyBx3hBs9MH Pw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsrsjau3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 12:32:05 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 02E3B100034;
+        Mon, 26 Sep 2022 12:32:03 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7CD6D21FEA8;
+        Mon, 26 Sep 2022 12:32:03 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.51) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Mon, 26 Sep
+ 2022 12:32:03 +0200
+Message-ID: <a8d9aee9-a1e3-5d9a-b9f3-4e92f79a99ef@foss.st.com>
+Date:   Mon, 26 Sep 2022 12:32:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: stm32: add missing entries for gpio
+ subnodes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>
+References: <20220913074639.31932-1-alexandre.torgue@foss.st.com>
+ <9b711a9e-9e63-b69e-fabf-e05c11f145a6@linaro.org>
+ <c21b9c95-ae35-fd7e-9e8e-6926703725b4@foss.st.com>
+ <5145d4db-65bf-971d-84cd-73c222311cd3@linaro.org>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <5145d4db-65bf-971d-84cd-73c222311cd3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 12:55:21PM +0200, Christian Borntraeger wrote:
+On 9/23/22 11:21, Krzysztof Kozlowski wrote:
+> On 23/09/2022 10:29, Alexandre TORGUE wrote:
+>> Hi Krzysztof
+>>
+>> On 9/19/22 13:32, Krzysztof Kozlowski wrote:
+>>> On 13/09/2022 09:46, Alexandre Torgue wrote:
+>>>> Add "interrupt-controller" and gpio-line-names to gpio subnodes in order to
+>>>> fix dtb validation.
+>>>
+>>> Rebase your patch on recent Linux kernel and use get_maintainers.pl.
+>>
+>> I did it on 6.0-rc5 but yes I used your kernel.org address instead of
+>> linaro ones. Sorry.
+>>
+>>>
+>>>>
+>>>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+>>>> index d35dcc4f0242..92582cccbb1b 100644
+>>>> --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+>>>> +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+>>>> @@ -65,6 +65,10 @@ patternProperties:
+>>>>          '#gpio-cells':
+>>>>            const: 2
+>>>>    
+>>>> +      interrupt-controller: true
+>>>> +      '#interrupt-cells':
+>>>> +        const: 2
+>>>> +
+>>>>          reg:
+>>>>            maxItems: 1
+>>>>          clocks:
+>>>> @@ -80,6 +84,8 @@ patternProperties:
+>>>>            minimum: 1
+>>>>            maximum: 16
+>>>>    
+>>>> +      gpio-line-names: true
+>>>
+>>> maxItems?
+>>
+>> Generic question, Is it mandatory to add maxItems information for all
+>> entries ?
 > 
-> 
-> Am 26.09.22 um 10:06 schrieb Christian Borntraeger:
-> > 
-> > 
-> > Am 23.09.22 um 09:53 schrieb Christian Borntraeger:
-> > > Am 23.09.22 um 09:21 schrieb Christian Borntraeger:
-> > > > Peter,
-> > > > 
-> > > > as a heads-up. This commit (bisected and verified) triggers a
-> > > > regression in our KVM on s390x CI. The symptom is that a specific
-> > > > testcase (start a guest with next kernel and a poky ramdisk,
-> > > > then ssh via vsock into the guest and run the reboot command) now
-> > > > takes much longer (300 instead of 20 seconds). From a first look
-> > > > it seems that the sshd takes very long to end during shutdown
-> > > > but I have not looked into that yet.
-> > > > Any quick idea?
-> > > > 
-> > > > Christian
-> > > 
-> > > the sshd seems to hang in virtio-serial (not vsock).
-> > 
-> > FWIW, sshd does not seem to hang, instead it seems to busy loop in
-> > wait_port_writable calling into the scheduler over and over again.
-> 
-> -#define TASK_FREEZABLE                 0x00002000
-> +#define TASK_FREEZABLE                 0x00000000
-> 
-> "Fixes" the issue. Just have to find out which of users is responsible.
+> It's not mandatory for all. For some it is recommended, for some it does
+> not make sense. Here it's quite easy to add and it will validate the
+> entry. Any reason not to add it?
 
-Since it's not the wait_port_writable() one -- we already tested that by
-virtue of 's/wait_event_freezable/wait_event/' there, it must be on the
-producing side of that port. But I'm having a wee bit of trouble
-following that code.
+Ok understood. To be honest, no reasons to not add it.
 
-Is there a task stuck in FROZEN state? -- then again, I thought you said
-there was no actual suspend involved, so that should not be it either.
+cheers
+alex
 
-I'm curious though -- how far does it get into the scheduler? It should
-call schedule() with __state == TASK_INTERRUPTIBLE|TASK_FREEZABLE, which
-is quite sufficient to get it off the runqueue, who then puts it back?
-Or is it bailing early in the wait_event loop?
+> 
+> Best regards,
+> Krzysztof
+> 
+
