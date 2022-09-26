@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAA25E9C67
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7452C5E9C6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 10:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234555AbiIZIsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 04:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S234216AbiIZItI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 04:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234586AbiIZIsH (ORCPT
+        with ESMTP id S234108AbiIZIsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 04:48:07 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7C1E735;
-        Mon, 26 Sep 2022 01:48:05 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mbbrk59gnz1P6qF;
-        Mon, 26 Sep 2022 16:43:50 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 16:48:03 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yangyicong@hisilicon.com>
-Subject: Re: [PATCH next v2] i2c: hisi: Add support to get clock frequency
- from clock property
-To:     Weilong Chen <chenweilong@huawei.com>
-References: <20220923011417.78994-1-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <36c1742f-f0a5-84e9-15af-07c888058759@huawei.com>
-Date:   Mon, 26 Sep 2022 16:48:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 26 Sep 2022 04:48:43 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5973C16A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:48:41 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id c7so6573080ljm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 01:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=dyoN5NkBMjN5fTrHiRf8M9wo3Eh26rWGMliaShD1tmk=;
+        b=BD+lLtFdD0rf5g+823kwux0X8eeYS3fu/0vbz9T/6UhpzaHbVqcuWAAeGRcWPCFAky
+         iT0j8JWeWZABFtsd3vpFyzHCA+XDmAsL0HkwzzxNof2S7+lkwqrfEFfuWePomLnPcksc
+         5eZVDgOnAl9qKB5/0A0bbJoBVFd6VUoipR7VCPjsrKFKzv9DxqyEbzcTw3PNjpjEFwHP
+         XPJg0kg/7sIjPkUvzpzXVvdOhcf+D4yXlVl+olUtZE03G1qFEMYpny7w979Mr/oXBawP
+         iP3MNLidJccY1p9435TeCXnR0Ggnfr+kicDYq3AjtOoXVkyPWoRl4RM5NxNe5LABysCj
+         G2gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dyoN5NkBMjN5fTrHiRf8M9wo3Eh26rWGMliaShD1tmk=;
+        b=cx5QJgd8pqaV9q1Q9E8BEMIDnRgSd9+U7zg9WweE3jRcEi40bD+CjIb2RD1CRMwPMb
+         tFfhR+rEWS+eS9NLZAEslLwvwrfdBOELNaXyx5C3dlqQiMyhlNQaWNjZqWXhLfVwlnKu
+         KE3kTa4NuU8IYwcnyVoW5gdF44hP5bRAy2jVrZOPkt4CDGaeKSWqV0wvVI6jflqvwMV0
+         Ajaq6vWvvf309RFYtr/9JEwzTvtlcAk1ef8SWbdzgvfzvq1my5FuiXtyc0jmtr1Rn93z
+         9l7PLkSBbQj3bSNi+zYeu9+UPJMCVcSUDFkXH68NmlBHRX56NNBiDELJCAWDCe+uQKRG
+         ACCQ==
+X-Gm-Message-State: ACrzQf1EC1bUgz9TD1FUOmE0IJSSuFj+937J7sk/CCp5g7zulB2lyLw6
+        WEM3DKOpqXznx0g562ktPSP5Og==
+X-Google-Smtp-Source: AMsMyM4ml1rrIAAdDcF7x3+nZ6DRH+//vOF2T83Xh1IrnMXz3AhCGH85sn5jz2z/b+RKjUe9Gnigbw==
+X-Received: by 2002:a2e:90d0:0:b0:26a:cd11:cb0e with SMTP id o16-20020a2e90d0000000b0026acd11cb0emr7103228ljg.444.1664182119550;
+        Mon, 26 Sep 2022 01:48:39 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b24-20020ac24118000000b00497a879e552sm2449550lfi.291.2022.09.26.01.48.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 01:48:39 -0700 (PDT)
+Message-ID: <1841f368-e9db-1662-e950-c162a6b17f75@linaro.org>
+Date:   Mon, 26 Sep 2022 10:48:37 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220923011417.78994-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] dt-bindings: dma: Make minor fixes to qcom,bam-dma
+ binding doc
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org, agross@kernel.org,
+        dmaengine@vger.kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, andersson@kernel.org
+References: <20220918081119.295364-1-bhupesh.sharma@linaro.org>
+ <d7507d61-9d16-c2d3-2066-5e2f9afd6eb9@linaro.org>
+ <d3205b59-6b6e-2983-9e2a-39354cd1803e@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d3205b59-6b6e-2983-9e2a-39354cd1803e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/23 9:14, Weilong Chen wrote:
-> Support the driver to obtain clock information by clk_rate or
-> clock property. Find clock first, if not, fall back to clk_rate.
+On 25/09/2022 21:55, Bhupesh Sharma wrote:
 > 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
-> Change since v1:
-> - Ordered struct field to inverted triangle.
-> - Use devm_clk_get_optional_enabled().
-> - Use IS_ERR_OR_NULL.
-> Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+> On 9/18/22 2:19 PM, Krzysztof Kozlowski wrote:
+>> On 18/09/2022 09:11, Bhupesh Sharma wrote:
+>>> As a user recently noted, the qcom,bam-dma binding document
+>>> describes the BAM DMA node incorrectly.
+>>
+>> It's a bit confusing - what is exactly incorrectly described by binding?
+>> You did not make any changes to the binding itself...
 > 
->  drivers/i2c/busses/i2c-hisi.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+> Sorry for the late reply. Your comment just skipped through my mail 
+> filters :(
 > 
-> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> index 67031024217c..b3bcce71dd2c 100644
-> --- a/drivers/i2c/busses/i2c-hisi.c
-> +++ b/drivers/i2c/busses/i2c-hisi.c
-> @@ -8,6 +8,7 @@
->  #include <linux/acpi.h>
->  #include <linux/bits.h>
->  #include <linux/bitfield.h>
-> +#include <linux/clk.h>
->  #include <linux/completion.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> @@ -90,6 +91,7 @@ struct hisi_i2c_controller {
->  	struct i2c_adapter adapter;
->  	void __iomem *iobase;
->  	struct device *dev;
-> +	struct clk *clk;
->  	int irq;
->  
->  	/* Intermediates for recording the transfer process */
-> @@ -456,10 +458,16 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-> -	if (ret) {
-> -		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-> -		return ret;
-> +	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-> +	if (IS_ERR_OR_NULL(ctlr->clk)) {
-> +		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-> +		if (ret) {
-> +			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-> +			return ret;
-> +		}
-> +	} else {
-> +
+> I understand your point. I should have made the commit message more 
+> descriptive (infact now I look at it, I see some key words are actually 
+> missing from the commit message).
+> 
+> The commit message should infact read as:
+> 
+> "As a user recently noted, the qcom,bam-dma binding document
+> describes the BAM DMA node *in the example section* incorrectly. Fix the 
 
-redundant blank line? with this addressed:
+OK, now it makes sense :)
 
-Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 
-> +		clk_rate_hz = clk_get_rate(ctlr->clk);
->  	}
->  
->  	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
-> 
+Best regards,
+Krzysztof
+
