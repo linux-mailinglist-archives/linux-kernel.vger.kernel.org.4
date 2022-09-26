@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DB15EB200
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4335EB203
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 22:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiIZUTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 16:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S230471AbiIZUUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 16:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiIZUTe (ORCPT
+        with ESMTP id S230404AbiIZUUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:19:34 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162C25CF;
-        Mon, 26 Sep 2022 13:19:32 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1279948d93dso10728457fac.10;
-        Mon, 26 Sep 2022 13:19:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aQfzdQ+UJIYZ23laeVhF1EqXXgml+Qpqh/yayVl2B6I=;
-        b=RbheJcAqZFtseaIBE0jcbS5SGeWJdlJpMTU1t2ah/D5gxRD6wz8ql9QY1YvziaWZJK
-         6fn/f9IXqgCWa+tSsN0+YsiOrpdULrhIX7+oRVQ6TsPHMSOC1t563kNwsBzp24waKn62
-         kX18yZh9GSQRKJpZy+buYAjMz/JS8nMwXL4kEbt3/XtF2PMBr6Y7D7an4MwPgyKe823V
-         HEl6soXRMCtJveAbkKFdqbYMOfv1YVJAqoO29OF415nZYesHQPGrxVxwKD89mVtpJnkX
-         qqxtbfClQJwxHy3JpNXMOtLhIZIPYK79MissMiRxvbxXRidvviQSvMlLYcTlUsL/AvPy
-         afTw==
-X-Gm-Message-State: ACrzQf0+OjCWvDp2sIWz3JrjKFkMDRTX0tjMit/27AatVD/qLjKNhpi1
-        uX64/5fSB14RZn1gMdzEaw==
-X-Google-Smtp-Source: AMsMyM6J4xhTg7YRyF3BsYNaKHmzybiexgs0F0ILJnB/C9J3KDxPSiEvNW66ufrHbq4gm6gbJUcSFw==
-X-Received: by 2002:a05:6870:c095:b0:127:4189:776f with SMTP id c21-20020a056870c09500b001274189776fmr285511oad.84.1664223571364;
-        Mon, 26 Sep 2022 13:19:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x27-20020a4a2a5b000000b0044afc1ba91asm6973846oox.44.2022.09.26.13.19.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 13:19:30 -0700 (PDT)
-Received: (nullmailer pid 2735662 invoked by uid 1000);
-        Mon, 26 Sep 2022 20:19:30 -0000
-Date:   Mon, 26 Sep 2022 15:19:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Matt Ranostay <mranostay@ti.com>
-Cc:     vigneshr@ti.com, devicetree@vger.kernel.org, nm@ti.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/9] dt-bindings: PCI: Add host mode device-id for
- j721s2 platform
-Message-ID: <20220926201930.GA2735628-robh@kernel.org>
-References: <20220921031327.4135-1-mranostay@ti.com>
- <20220921031327.4135-8-mranostay@ti.com>
+        Mon, 26 Sep 2022 16:20:07 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7B933371;
+        Mon, 26 Sep 2022 13:20:05 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id b2b7e29611829f54; Mon, 26 Sep 2022 22:20:04 +0200
+Received: from kreacher.localnet (unknown [195.136.19.0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id DDA7F66D6B6;
+        Mon, 26 Sep 2022 22:20:03 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH] ACPI: docs: Drop useless DSDT override documentation
+Date:   Mon, 26 Sep 2022 22:20:03 +0200
+Message-ID: <5606509.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921031327.4135-8-mranostay@ti.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.0
+X-CLIENT-HOSTNAME: 195.136.19.0
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgudegkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvueeuvefhgefffeejjeeuueeutdfgtdfftdfhffehgfevuefhtefftdeuheeukeenucffohhmrghinheptddurdhorhhgnecukfhppeduleehrddufeeirdduledrtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhv
+ rggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 20:13:25 -0700, Matt Ranostay wrote:
-> Add unique device-id of 0xb013 for j721s2 platform to oneOf field.
-> 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> ---
->  Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Because https://01.org/linux-acpi web site has become permanently
+unreachable, the "Overriding DSDT" document in the kernel tree
+pointing to it as the main source of information is useless (and
+the config option name mentioned by it is incorrect), so drop it
+and drop the pointer to it from the ACPI Kconfig.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ Documentation/admin-guide/acpi/dsdt-override.rst |   13 -------------
+ drivers/acpi/Kconfig                             |    1 -
+ 2 files changed, 14 deletions(-)
+
+Index: linux-pm/Documentation/admin-guide/acpi/dsdt-override.rst
+===================================================================
+--- linux-pm.orig/Documentation/admin-guide/acpi/dsdt-override.rst
++++ /dev/null
+@@ -1,13 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-===============
+-Overriding DSDT
+-===============
+-
+-Linux supports a method of overriding the BIOS DSDT:
+-
+-CONFIG_ACPI_CUSTOM_DSDT - builds the image into the kernel.
+-
+-When to use this method is described in detail on the
+-Linux/ACPI home page:
+-https://01.org/linux-acpi/documentation/overriding-dsdt
+Index: linux-pm/drivers/acpi/Kconfig
+===================================================================
+--- linux-pm.orig/drivers/acpi/Kconfig
++++ linux-pm/drivers/acpi/Kconfig
+@@ -347,7 +347,6 @@ config ACPI_CUSTOM_DSDT_FILE
+ 	depends on !STANDALONE
+ 	help
+ 	  This option supports a custom DSDT by linking it into the kernel.
+-	  See Documentation/admin-guide/acpi/dsdt-override.rst
+ 
+ 	  Enter the full path name to the file which includes the AmlCode
+ 	  or dsdt_aml_code declaration.
+
+
+
