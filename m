@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506FE5EA2CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A655EA486
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235297AbiIZLOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        id S238764AbiIZLrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 07:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237465AbiIZLNW (ORCPT
+        with ESMTP id S238661AbiIZLoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:13:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A2E520A9;
-        Mon, 26 Sep 2022 03:36:06 -0700 (PDT)
+        Mon, 26 Sep 2022 07:44:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2247072FE2;
+        Mon, 26 Sep 2022 03:46:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D74B60AF5;
-        Mon, 26 Sep 2022 10:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A50FC433D6;
-        Mon, 26 Sep 2022 10:34:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75317B80171;
+        Mon, 26 Sep 2022 10:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E96C43144;
+        Mon, 26 Sep 2022 10:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664188499;
-        bh=QElWJCPBjqmG+HmAGMdcJgT1qwRW7xV3vMaLjAmZ34Y=;
+        s=korg; t=1664189195;
+        bh=Fsd7zcjTX5P25rIZ9TJl7L+OkraK9f9sN9pCQjmwUU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KqfFckyAG+j5fFTeXdXZl8Twu9JU45+t8mh2AKML7b6e0Ze0nPvKQ3kIHtt8ZfHQc
-         7CJn4KLS54T696o3PWaVDQqwfXP+ChrAAuQFsylWlyz5oAH5cy9wPeJ4an9QfBEtZd
-         ca7hXbLSi27GItWIstMJdSETfX5JZ7moXd53adDY=
+        b=eaPjkCBdbipL8ZXFWJnffsDJTfhSPIfD9Fn/pMazR3RUFb/CrB/NPJA0ZqnDDdzAO
+         P4sY/z0c0lHW+yl0xlV1hPtuSiDTZn9Ay1z+jVtVDzBlNg3i39Xwy2PT9GatuSVcXi
+         glgWb8H7KuiVL4YU7d/oJHrN4CA4EslR9cAiOBW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Callum Osmotherly <callum.osmotherly@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 028/148] ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5570 laptop
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 073/207] arm64: dts: rockchip: Lower sd speed on quartz64-b
 Date:   Mon, 26 Sep 2022 12:11:02 +0200
-Message-Id: <20220926100757.129031893@linuxfoundation.org>
+Message-Id: <20220926100809.856389118@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+References: <20220926100806.522017616@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Callum Osmotherly <callum.osmotherly@gmail.com>
+From: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 
-commit bdc9b7396f7d4d6533e70fd8d5472f505b5ef58f upstream.
+[ Upstream commit 1ea90b2d293fd8b1f3377c9ed08364ff6f2a8562 ]
 
-The Dell Precision 5570 uses the same 4-speakers-on-ALC289 just like the
-previous Precision 5560. I replicated that patch onto this one, and can
-confirm that the audio is much better (the woofers are now working);
-I've tested it on my Dell Precision 5570.
+The previously stated speed of sdr-104 is too high for the hardware
+to reliably communicate with some fast SD cards.
 
-Signed-off-by: Callum Osmotherly <callum.osmotherly@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/YyGbWM5wEoFMbW2v@piranha
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Lower this to sd-uhs-sdr50 to fix this.
+
+Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
+
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Link: https://lore.kernel.org/r/20220721044307.48641-1-frattaroli.nicolas@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8831,6 +8831,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1028, 0x0a9d, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0a9e, "Dell Latitude 5430", ALC269_FIXUP_DELL4_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0b19, "Dell XPS 15 9520", ALC289_FIXUP_DUAL_SPK),
-+	SND_PCI_QUIRK(0x1028, 0x0b1a, "Dell Precision 5570", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x164a, "Dell", ALC293_FIXUP_DELL1_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x164b, "Dell", ALC293_FIXUP_DELL1_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x1586, "HP", ALC269_FIXUP_HP_MUTE_LED_MIC2),
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+index 02d5f5a8ca03..528bb4e8ac77 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+@@ -506,7 +506,7 @@ &sdmmc0 {
+ 	disable-wp;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
+-	sd-uhs-sdr104;
++	sd-uhs-sdr50;
+ 	vmmc-supply = <&vcc3v3_sd>;
+ 	vqmmc-supply = <&vccio_sd>;
+ 	status = "okay";
+-- 
+2.35.1
+
 
 
