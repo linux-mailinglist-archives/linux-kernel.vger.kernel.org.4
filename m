@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3395EADBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76055EADC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiIZRMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S230175AbiIZRM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 13:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiIZRLi (ORCPT
+        with ESMTP id S230153AbiIZRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:11:38 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE5063F03;
-        Mon, 26 Sep 2022 09:20:55 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ocqqT-0003m5-43; Mon, 26 Sep 2022 18:20:37 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ocqqS-0002Aw-J8; Mon, 26 Sep 2022 18:20:36 +0200
-Subject: Re: [bpf-next v6 2/3] bpftool: Update doc (add autoattach to prog
- load)
-To:     Wang Yufen <wangyufen@huawei.com>, quentin@isovalent.com,
-        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
- <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2b001fcb-4340-e1ba-4b84-a69c670cf09a@iogearbox.net>
-Date:   Mon, 26 Sep 2022 18:20:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Mon, 26 Sep 2022 13:12:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5DE11C1C;
+        Mon, 26 Sep 2022 09:22:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4830A60B75;
+        Mon, 26 Sep 2022 16:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01354C433D6;
+        Mon, 26 Sep 2022 16:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1664209363;
+        bh=MCzP9eVXLKhxRL2tdxliiONv5on5c/ZHccysA1C1M94=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oXljwazRhRbwilif7FNPSeMAC8RTeh5deZY7pRY26AQuG4oF3FclRSyg9/9Hh0kNh
+         kDEM0tljg0B1xYlbkUCT6TpN48EsJIiSdereBKcJF4H/goZHs/e5SCHZv1AWr4X/Fn
+         0LLDkPoQA9wtEnkfOabFiHJzIk41MtKPy2q8YhWc=
+Date:   Mon, 26 Sep 2022 09:22:41 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: split initialization into early arch step and
+ later non-arch step
+Message-Id: <20220926092241.64f73e7420cea6b964f1f116@linux-foundation.org>
+In-Reply-To: <20220926160332.1473462-1-Jason@zx2c4.com>
+References: <20220926160332.1473462-1-Jason@zx2c4.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26670/Mon Sep 26 10:00:52 2022)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/24/22 12:13 PM, Wang Yufen wrote:
-> Add autoattach optional to prog load|loadall for supporting
-> one-step load-attach-pin_link.
-> 
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> ---
->   tools/bpf/bpftool/Documentation/bpftool-prog.rst | 13 +++++++++++--
->   1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index eb1b2a254eb1..2d9f27a0120f 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -31,7 +31,7 @@ PROG COMMANDS
->   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
->   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
->   |	**bpftool** **prog pin** *PROG* *FILE*
-> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
->   |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
->   |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
->   |	**bpftool** **prog tracelog**
-> @@ -131,7 +131,7 @@ DESCRIPTION
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
->   
-> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
->   		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
->   		  **bpftool prog load** pins only the first program from the
->   		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-> @@ -150,6 +150,15 @@ DESCRIPTION
->   		  Optional **pinmaps** argument can be provided to pin all
->   		  maps under *MAP_DIR* directory.
->   
-> +		  If **autoattach** is specified program will be attached
-> +		  before pin. In that case, only the link (representing the
-> +		  program attached to its hook) is pinned, not the program as
-> +		  such, so the path won't show in "**bpftool prog show -f**",
-> +		  only show in "**bpftool link show -f**". Also, this only works
-> +		  when bpftool (libbpf) is able to infer all necessary information
-> +		  from the objectfile, in particular, it's not supported for all
-> +		  program types.
+On Mon, 26 Sep 2022 18:03:32 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
 
-Related to Quentin's comment, the documentation should also describe clear semantics
-on what happens in failure case. I presume the use case you have in mind is to use
-this facility for scripts e.g. to run/load some tests objs? Thus would be good to describe
-to users what they need to do/clean up when things only partially succeed etc..
-
->   		  Note: *PATH* must be located in *bpffs* mount. It must not
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
+> The full RNG initialization relies on some timestamps, made possible
+> with general functions like time_init() and timekeeping_init(). However,
+> these are only available rather late in initialization. Meanwhile, other
+> things, such as memory allocator functions, make use of the RNG much
+> earlier.
 > 
+> So split RNG initialization into two phases. We can give arch randomness
+> very early on, and then later, after timekeeping and such are available,
+> initialize the rest.
+> 
+> This ensures that, for example, slabs are properly randomized if RDRAND
+> is available. Another positive consequence is that on systems with
+> RDRAND, running with CONFIG_WARN_ALL_UNSEEDED_RANDOM=y results in no
+> warnings at all.
+
+Please give a full description of the user-visible runtime effects of
+this shortcoming.
+
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: stable@vger.kernel.org
+
+Which is important when proposing a -stable backport.
+
 
