@@ -2,41 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C136A5EAA8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8A35EAB20
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 17:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236159AbiIZPWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 11:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S236719AbiIZPcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 11:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236368AbiIZPV2 (ORCPT
+        with ESMTP id S236542AbiIZPbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:21:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5FE84E54
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 07:08:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B116660DF0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 14:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85252C433C1;
-        Mon, 26 Sep 2022 14:08:25 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 10:09:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kassey Li <quic_yingangl@quicinc.com>
-Cc:     mingo@redhat.com, tj@kernel.org, william.kucharski@oracle.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] cgroup: align the comm length with TASK_COMM_LEN
-Message-ID: <20220926100933.4532f987@gandalf.local.home>
-In-Reply-To: <20220923075105.28251-1-quic_yingangl@quicinc.com>
-References: <20220923075105.28251-1-quic_yingangl@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 26 Sep 2022 11:31:09 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C783B8E0C8;
+        Mon, 26 Sep 2022 07:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1664201860; x=1695737860;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BBzeIIKz/LcOJedaqZyeeCjFt9aw0fAR/RhHCsWbipI=;
+  b=g2bJSF151A2A2aIrZBM831q00KvnPYi98cxG0kQzx23BI7TUUn6gBplG
+   v9d9CCM8pBmvjDCXGFyR4kNoSiA0R8frJgszBoaqr+R9gl+CMZg8rQRqH
+   FkAU3fO/s7enFlHOwPS81NSWzIss8b6K/WSubcIaqf1444tr3221vzqj0
+   8=;
+X-IronPort-AV: E=Sophos;i="5.93,346,1654560000"; 
+   d="scan'208";a="263256718"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:10:38 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id B89C7455BF;
+        Mon, 26 Sep 2022 14:10:37 +0000 (UTC)
+Received: from EX19D002UWA001.ant.amazon.com (10.13.138.247) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 26 Sep 2022 14:10:37 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D002UWA001.ant.amazon.com (10.13.138.247) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Mon, 26 Sep 2022 14:10:36 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Mon, 26 Sep 2022 14:10:36
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 8B4B820A8; Mon, 26 Sep 2022 14:10:35 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <renyu.zj@linux.alibaba.com>
+CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <alisaidi@amazon.com>, <german.gomez@arm.com>,
+        <james.clark@arm.com>, <john.garry@huawei.com>, <jolsa@kernel.org>,
+        <leo.yan@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mike.leach@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <timothy.hayes@arm.com>, <will@kernel.org>,
+        <xueshuai@linux.alibaba.com>, <zhuo.song@linux.alibaba.com>
+Subject: Re: [PATCH] perf arm-spe: augment the data source type with neoverse_spe list
+Date:   Mon, 26 Sep 2022 14:10:32 +0000
+Message-ID: <20220926141032.30734-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <1664197396-42672-1-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1664197396-42672-1-git-send-email-renyu.zj@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-14.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,50 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 15:51:05 +0800
-Kassey Li <quic_yingangl@quicinc.com> wrote:
-
-> __string could get a dst string with length less than
-> TASK_COMM_LEN.
+> When synthesizing event with SPE data source, commit 4e6430cbb1a9("perf
+> arm-spe: Use SPE data source for neoverse cores") augment the type with
+> source information by MIDR. However, is_midr_in_range only compares the
+> first entry in neoverse_spe.
 > 
-> A task->comm may change that can cause out of bounds access
-> for the dst string buffer, e.g in the call trace of below:
+> Change is_midr_in_range to is_midr_in_range_list to traverse the
+> neoverse_spe array so that all neoverse cores synthesize event with data
+> source packet.
 > 
-> Call trace:
-> 
->     dump_backtrace.cfi_jt+0x0/0x4
->     show_stack+0x14/0x1c
->     dump_stack+0xa0/0xd8
->     die_callback+0x248/0x24c
->     notify_die+0x7c/0xf8
->     die+0xac/0x290
->     die_kernel_fault+0x88/0x98
->     die_kernel_fault+0x0/0x98
->     do_page_fault+0xa0/0x544
->     do_mem_abort+0x60/0x10c
->     el1_da+0x1c/0xc4
+> Fixes: 4e6430cbb1a9("perf arm-spe: Use SPE data source for neoverse cores")
+> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 
->     trace_event_raw_event_cgroup_migrate+0x124/0x170
+Thanks for catching this, you're absolutely right.
 
-You're sure the above is on the strcpy()?
+Reviewed-by: Ali Saidi <alisaidi@amazon.com>
 
-Note, this code has __string() which does a strlen() which appears to be
-working fine.
+Ali
 
->     cgroup_attach_task+0x2e8/0x41c
->     __cgroup1_procs_write+0x114/0x1ec
->     cgroup1_tasks_write+0x10/0x18
->     cgroup_file_write+0xa4/0x208
->     kernfs_fop_write+0x1f0/0x2f4
->     __vfs_write+0x5c/0x200
->     vfs_write+0xe0/0x1a0
->     ksys_write+0x74/0xdc
->     __arm64_sys_write+0x18/0x20
->     el0_svc_common+0xc0/0x1a4
->     el0_svc_compat_handler+0x18/0x20
->     el0_svc_compat+0x8/0x2c
-
-Can you give the full debug report, that includes the register content and
-everything else.
-
--- Steve
