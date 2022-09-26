@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2905EA48D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 13:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C895EA1D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbiIZLrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 07:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S237010AbiIZK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238788AbiIZLom (ORCPT
+        with ESMTP id S236873AbiIZK5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 07:44:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32B773934;
-        Mon, 26 Sep 2022 03:47:03 -0700 (PDT)
+        Mon, 26 Sep 2022 06:57:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC2E186E3;
+        Mon, 26 Sep 2022 03:29:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C44E560BA5;
-        Mon, 26 Sep 2022 10:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA9BC433C1;
-        Mon, 26 Sep 2022 10:45:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F90B60BB7;
+        Mon, 26 Sep 2022 10:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC81C433D7;
+        Mon, 26 Sep 2022 10:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664189144;
-        bh=wYMWX1RdKzeoF4adCEB63kIZCJOyfUXgVp3rUBJ24FE=;
+        s=korg; t=1664188137;
+        bh=yQk9YlgoOqfyJ6JhHACq34cqc1+J3/k3yHtN1ra5+JY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TtDxyNbdMhtQW2mz/BRAxrqr5+/jZSENsCV3E08fA1/6cC33Dzi42vOvnIMoR9UYO
-         z0fN0SuZbgPWHRoGLWm5PxmvOFtqJ4f32hxG55kNH6jA0/DEsRrToBhpu8iN9RQ3pG
-         UkWL2JyTTtZoOuE3CmaIf9nH3GuUldv9OQLhf36w=
+        b=MqpvAagB2DVMPh6bMO9WyYRsGl4WsmGjtx67uwpoO4YU5B//OYECrYVSUbi0wq7n6
+         aTsGJJKUiLQD4V9Mt8mfzS/KBxAOb1qTBM0SmQ3pUSsM1g9AEbtr1AJ6Nk1D4p5aal
+         dFzuLHPZFAc3O0dCY8qq8ngMoheXsEV01O0oSYz4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Ryzhov <iryzhov@nfware.com>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 087/207] netfilter: nf_conntrack_sip: fix ct_sip_walk_headers
-Date:   Mon, 26 Sep 2022 12:11:16 +0200
-Message-Id: <20220926100810.485028507@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Peter Jones <pjones@redhat.com>
+Subject: [PATCH 5.10 051/141] efi: libstub: check Shim mode using MokSBStateRT
+Date:   Mon, 26 Sep 2022 12:11:17 +0200
+Message-Id: <20220926100756.298588497@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
+References: <20220926100754.639112000@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Ryzhov <iryzhov@nfware.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit 39aebedeaaa95757f5c1f2ddb5f43fdddbf478ca ]
+commit 5f56a74cc0a6d9b9f8ba89cea29cd7c4774cb2b1 upstream.
 
-ct_sip_next_header and ct_sip_get_header return an absolute
-value of matchoff, not a shift from current dataoff.
-So dataoff should be assigned matchoff, not incremented by it.
+We currently check the MokSBState variable to decide whether we should
+treat UEFI secure boot as being disabled, even if the firmware thinks
+otherwise. This is used by shim to indicate that it is not checking
+signatures on boot images. In the kernel, we use this to relax lockdown
+policies.
 
-This issue can be seen in the scenario when there are multiple
-Contact headers and the first one is using a hostname and other headers
-use IP addresses. In this case, ct_sip_walk_headers will work as follows:
+However, in cases where shim is not even being used, we don't want this
+variable to interfere with lockdown, given that the variable may be
+non-volatile and therefore persist across a reboot. This means setting
+it once will persistently disable lockdown checks on a given system.
 
-The first ct_sip_get_header call to will find the first Contact header
-but will return -1 as the header uses a hostname. But matchoff will
-be changed to the offset of this header. After that, dataoff should be
-set to matchoff, so that the next ct_sip_get_header call find the next
-Contact header. But instead of assigning dataoff to matchoff, it is
-incremented by it, which is not correct, as matchoff is an absolute
-value of the offset. So on the next call to the ct_sip_get_header,
-dataoff will be incorrect, and the next Contact header may not be
-found at all.
+So switch to the mirrored version of this variable, called MokSBStateRT,
+which is supposed to be volatile, and this is something we can check.
 
-Fixes: 05e3ced297fe ("[NETFILTER]: nf_conntrack_sip: introduce SIP-URI parsing helper")
-Signed-off-by: Igor Ryzhov <iryzhov@nfware.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org> # v4.19+
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Reviewed-by: Peter Jones <pjones@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_conntrack_sip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/efi/libstub/secureboot.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_sip.c
-index b83dc9bf0a5d..78fd9122b70c 100644
---- a/net/netfilter/nf_conntrack_sip.c
-+++ b/net/netfilter/nf_conntrack_sip.c
-@@ -477,7 +477,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 				return ret;
- 			if (ret == 0)
- 				break;
--			dataoff += *matchoff;
-+			dataoff = *matchoff;
- 		}
- 		*in_header = 0;
- 	}
-@@ -489,7 +489,7 @@ static int ct_sip_walk_headers(const struct nf_conn *ct, const char *dptr,
- 			break;
- 		if (ret == 0)
- 			return ret;
--		dataoff += *matchoff;
-+		dataoff = *matchoff;
- 	}
+--- a/drivers/firmware/efi/libstub/secureboot.c
++++ b/drivers/firmware/efi/libstub/secureboot.c
+@@ -19,7 +19,7 @@ static const efi_char16_t efi_SetupMode_
  
- 	if (in_header)
--- 
-2.35.1
-
+ /* SHIM variables */
+ static const efi_guid_t shim_guid = EFI_SHIM_LOCK_GUID;
+-static const efi_char16_t shim_MokSBState_name[] = L"MokSBState";
++static const efi_char16_t shim_MokSBState_name[] = L"MokSBStateRT";
+ 
+ /*
+  * Determine whether we're in secure boot mode.
+@@ -53,8 +53,8 @@ enum efi_secureboot_mode efi_get_secureb
+ 
+ 	/*
+ 	 * See if a user has put the shim into insecure mode. If so, and if the
+-	 * variable doesn't have the runtime attribute set, we might as well
+-	 * honor that.
++	 * variable doesn't have the non-volatile attribute set, we might as
++	 * well honor that.
+ 	 */
+ 	size = sizeof(moksbstate);
+ 	status = get_efi_var(shim_MokSBState_name, &shim_guid,
+@@ -63,7 +63,7 @@ enum efi_secureboot_mode efi_get_secureb
+ 	/* If it fails, we don't care why. Default to secure */
+ 	if (status != EFI_SUCCESS)
+ 		goto secure_boot_enabled;
+-	if (!(attr & EFI_VARIABLE_RUNTIME_ACCESS) && moksbstate == 1)
++	if (!(attr & EFI_VARIABLE_NON_VOLATILE) && moksbstate == 1)
+ 		return efi_secureboot_mode_disabled;
+ 
+ secure_boot_enabled:
 
 
