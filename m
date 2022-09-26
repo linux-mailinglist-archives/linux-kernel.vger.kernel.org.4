@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312055E9AA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437625E9A9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 09:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiIZHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 03:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S233483AbiIZHl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 03:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbiIZHoU (ORCPT
+        with ESMTP id S229903AbiIZHlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:44:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0030326DD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 00:44:19 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MbZQW4DfgzHtqV;
-        Mon, 26 Sep 2022 15:39:31 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 15:44:17 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
- 2022 15:44:17 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <ckeepax@opensource.cirrus.com>,
-        <krzysztof.kozlowski@linaro.org>, <tanureal@opensource.cirrus.com>,
-        <james.schulman@cirrus.com>, <cy_huang@richtek.com>,
-        <flatmax@flatmax.com>, <pierre-louis.bossart@linux.intel.com>,
-        <lukas.bulwahn@gmail.com>, <srinivas.kandagatla@linaro.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] ASoC: codecs: wcd934x: Fix Kconfig dependency
-Date:   Mon, 26 Sep 2022 07:40:42 +0000
-Message-ID: <20220926074042.13297-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 26 Sep 2022 03:41:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEDE25C6B;
+        Mon, 26 Sep 2022 00:41:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2E4B80943;
+        Mon, 26 Sep 2022 07:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDB3C433C1;
+        Mon, 26 Sep 2022 07:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664178111;
+        bh=72jn43lvORCqa4NuDs4M2sZqItx2R8kjrMkI6/Q0z3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qDkKjxqNcoAJgzVi7YgBsJVjV/mRz/Ff7vR1JF97CEw+n9Xqfhq7ZOuj04hyQWA8t
+         5i8vy2mllndpHeFEpJBKRaeZD4chDBSbM38XmZ4+MkHDe0X4BR5/nyJHVE0TtAGf/c
+         O9kzjD+GWcl2GTTAIWOClhnw9MFj89beiApfDvbfqoOsjuaEKT00tY2XB7DxyolPvs
+         EYZ5ARiYN+7z8RAgiuSwFbVqMzFkqEC1RfKvvwY0Xyv/XfXSmhvULAtdlQm6bw+UVh
+         PR+WOJCDBFgIHmo5M6D1ukV+FXZ3rtPedZJTGtzVkLPCNq+W1YFMNY9ZqE+2T62YJ6
+         4AOKL4JWDDZGQ==
+Date:   Mon, 26 Sep 2022 08:41:40 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bindings: Update maintainer's email address
+Message-ID: <YzFXtNcHB6o0fHT+@google.com>
+References: <1663979817-1078-1-git-send-email-quic_gurus@quicinc.com>
+ <78859fd2-330f-1687-7fa3-f0831402778c@gmail.com>
+ <430b8a98-d76e-521b-81a2-a302679ecce5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <430b8a98-d76e-521b-81a2-a302679ecce5@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,34 +64,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_REGMAP_SLIMBUS is not set,
-make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-will be failed, like this:
+On Mon, 26 Sep 2022, Chanwoo Choi wrote:
 
-sound/soc/codecs/wcd934x.o: In function `wcd934x_codec_probe':
-wcd934x.c:(.text+0x3310): undefined reference to `__regmap_init_slimbus'
-make: *** [vmlinux] Error 1
+> On 22. 9. 26. 04:03, Chanwoo Choi wrote:
+> > On 22. 9. 24. 09:36, Guru Das Srinagesh wrote:
+> >> Update Guru Das Srinagesh's email address.
+> >>
+> >> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 2 +-
+> >>  Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml         | 2 +-
+> >>  2 files changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> >> index 6a9c96f..480e4fb 100644
+> >> --- a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> >> +++ b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> >> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>  title: Qualcomm Technologies, Inc. PM8941 USB ID Extcon device
+> >>  
+> >>  maintainers:
+> >> -  - Guru Das Srinagesh <gurus@codeaurora.org>
+> >> +  - Guru Das Srinagesh <quic_gurus@quicinc.com>
+> >>  
+> >>  description: |
+> >>    Some Qualcomm PMICs have a "misc" module that can be used to detect when
+> >> diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> >> index ec3138c..1f3ac59 100644
+> >> --- a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> >> +++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> >> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>  title: Qualcomm Technologies, Inc. PM8008 PMIC bindings
+> >>  
+> >>  maintainers:
+> >> -  - Guru Das Srinagesh <gurus@codeaurora.org>
+> >> +  - Guru Das Srinagesh <quic_gurus@quicinc.com>
+> >>  
+> >>  description: |
+> >>    Qualcomm Technologies, Inc. PM8008 is a dedicated camera PMIC that integrates
+> > 
+> > 
+> > As Krzysztof comment, I changed the patch title and then applied it. Thanks.
+> > - dt-bindings: Update Guru Das Srinagesh's email address
+> > 
+> 
+> I'm sorry for that. It should be also confirmed from MFD maintainer.
+> I withdraw the applying.
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com> 
 
-Add select REGMAP_SLIMBUS to config SND_SOC_WCD934X.
+It's fine, go ahead.
 
-Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- sound/soc/codecs/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Lee Jones <lee@kernel.org>
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 444cee829a26..e3b90c425faf 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -1757,6 +1757,7 @@ config SND_SOC_WCD934X
- 	tristate "WCD9340/WCD9341 Codec"
- 	depends on COMMON_CLK
- 	depends on SLIMBUS
-+	select REGMAP_SLIMBUS
- 	select SND_SOC_WCD_MBHC
- 	depends on MFD_WCD934X || COMPILE_TEST
- 	help
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
