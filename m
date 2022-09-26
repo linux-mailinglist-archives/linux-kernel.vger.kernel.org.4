@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED3E5E9FB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC45E9ED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 12:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbiIZK22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 06:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S235039AbiIZKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 06:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbiIZK0X (ORCPT
+        with ESMTP id S234883AbiIZKOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 06:26:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F8B1EC4E;
-        Mon, 26 Sep 2022 03:18:41 -0700 (PDT)
+        Mon, 26 Sep 2022 06:14:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F5A2F01A;
+        Mon, 26 Sep 2022 03:14:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03227B80942;
-        Mon, 26 Sep 2022 10:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F87C433C1;
-        Mon, 26 Sep 2022 10:18:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54CBCB80918;
+        Mon, 26 Sep 2022 10:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE25C433D7;
+        Mon, 26 Sep 2022 10:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664187500;
-        bh=rroXjO0hPS+la9RzEK8lIbpNpqMPNTiAv9RECnaoBgo=;
+        s=korg; t=1664187242;
+        bh=CQYRF5PKqISVOE044XnvUyy2m8Idzz8OYW2ENNv+lu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r3FTvtzPxBC93tc4WKE89rrG222PRN2JnalcDz1yUZhR79nCbTpWCdf+42IQls5VK
-         RYCAbWpI19k8cGe/vl6dzV/g+UascX4AQ35PNQ9YM2/cJmqCmYbA2aPzMw8x2DgrYY
-         mt34O0D8GB1FyKUbLOPB32xjrSy/tJiypAgVmiIc=
+        b=t+bUXrgBKi+D2bnqocU9GzLo7WS4/11vmITcdIGVuW9jtci3R0kxJRAqH+x9q7qqe
+         +kJ5THqxrWcMpxMpLIXTxA0B6JaGPM6J9DrNkJJEGjKKqAW9mbc3kv0HbtI57EKVme
+         TOrCWOVKm6WrtfMaQAaGsjCfrTkItWTB4PXyHLA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mohan Kumar <mkumard@nvidia.com>,
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 28/58] ALSA: hda/tegra: set depop delay for tegra
+Subject: [PATCH 4.9 16/30] ALSA: hda: add Intel 5 Series / 3400 PCI DID
 Date:   Mon, 26 Sep 2022 12:11:47 +0200
-Message-Id: <20220926100742.490384416@linuxfoundation.org>
+Message-Id: <20220926100736.736591699@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100741.430882406@linuxfoundation.org>
-References: <20220926100741.430882406@linuxfoundation.org>
+In-Reply-To: <20220926100736.153157100@linuxfoundation.org>
+References: <20220926100736.153157100@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohan Kumar <mkumard@nvidia.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-commit 3c4d8c24fb6c44f426e447b04800b0ed61a7b5ae upstream.
+commit 4d40ceef4745536289012670103c59264e0fb3ec upstream.
 
-Reduce the suspend time by setting depop delay to 10ms for
-tegra.
+Handle 0x3b57 variant with same AZX_DCAPS_INTEL_PCH_NOPM
+capabilities as 0x3b56. In practise this allow use of HDMI/DP
+display audio via i915.
 
-Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+BugLink: https://gitlab.freedesktop.org/drm/intel/-/issues/2751
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220913053641.23299-1-mkumard@nvidia.com
+Link: https://lore.kernel.org/r/20220912183716.2126312-1-kai.vehmanen@linux.intel.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_hdmi.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/hda/hda_intel.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -3455,6 +3455,7 @@ static int patch_tegra_hdmi(struct hda_c
- 	if (err)
- 		return err;
- 
-+	codec->depop_delay = 10;
- 	codec->patch_ops.build_pcms = tegra_hdmi_build_pcms;
- 	spec = codec->spec;
- 	spec->chmap.ops.chmap_cea_alloc_validate_get_type =
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -2316,6 +2316,8 @@ static const struct pci_device_id azx_id
+ 	/* 5 Series/3400 */
+ 	{ PCI_DEVICE(0x8086, 0x3b56),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
++	{ PCI_DEVICE(0x8086, 0x3b57),
++	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
+ 	/* Poulsbo */
+ 	{ PCI_DEVICE(0x8086, 0x811b),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
 
 
