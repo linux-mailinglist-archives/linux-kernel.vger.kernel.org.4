@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E615EB734
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAADA5EB733
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiI0BwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 21:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S229613AbiI0Bvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 21:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiI0BwE (ORCPT
+        with ESMTP id S229472AbiI0Bvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 21:52:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFE671BC6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 18:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664243523; x=1695779523;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=Dk6ndrlNBYI60TKR2ZwIH8QqY848CDVYdIWHSrUiXuI=;
-  b=ZtZNksmJuZFFJexM6+SVAKKsCUF9YWyAq5inKbnn5DUn/gZSKSa9CWik
-   XbRTUiNTy2wqkA7s3jd8QwvwTPX/ZRnJRa+/azLVTTlb2mXnfY5ArHjvP
-   UI36ITqhraJIh+yy5dlP9SVk0VM1fy+heaBUu7owmGDfgJdinhrEryb4B
-   jxLf6SbwC1mH61xbis2sLOBND8yCiURT2E3IqSE2fZcZkW+5rLQLYSIv4
-   KzsfqGKKiEzINCJR0uG1jn49+lnGRLiUxPfuXHhJ97CiGqVh7AL06BCbO
-   3ra1WInYVncw5j6LWQg5Aa9j4zDawLZkxBatAPpgRgIvbYN2AlGVdBlog
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="363020809"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="363020809"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 18:52:02 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="725309544"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="725309544"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 18:52:00 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Yang Shi <shy828301@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <20220921060616.73086-3-ying.huang@intel.com>
-        <87o7v2lbn4.fsf@nvdebian.thelocal>
-        <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
-        <87fsgdllmb.fsf@nvdebian.thelocal>
-Date:   Tue, 27 Sep 2022 09:51:21 +0800
-In-Reply-To: <87fsgdllmb.fsf@nvdebian.thelocal> (Alistair Popple's message of
-        "Tue, 27 Sep 2022 10:02:33 +1000")
-Message-ID: <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 26 Sep 2022 21:51:46 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3030571731
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 18:51:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQpkeU7_1664243499;
+Received: from 30.221.128.222(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VQpkeU7_1664243499)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 09:51:40 +0800
+Message-ID: <1081a9ca-38d9-1ee5-e380-bf2dbe422eec@linux.alibaba.com>
+Date:   Tue, 27 Sep 2022 09:51:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH] ocfs2: fix crash issue if access released lockres in
+ debugfs
+Content-Language: en-US
+To:     Rock Li <lihongweizz@inspur.com>, mark@fasheh.com,
+        jlbec@evilplan.org
+Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
+References: <20220920073638.1358-1-lihongweizz@inspur.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20220920073638.1358-1-lihongweizz@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
+Hi,
+Sorry for the late reply.
+It seems it is indeed an issue and I'll get into it more deeply.
+I'm curious about how you figure out this? Is it a real issue you've
+encountered?
 
-> Yang Shi <shy828301@gmail.com> writes:
->
->> On Mon, Sep 26, 2022 at 2:37 AM Alistair Popple <apopple@nvidia.com> wrote:
->>>
->>>
->>> Huang Ying <ying.huang@intel.com> writes:
->>>
->>> > This is a preparation patch to batch the page unmapping and moving
->>> > for the normal pages and THP.
->>> >
->>> > In this patch, unmap_and_move() is split to migrate_page_unmap() and
->>> > migrate_page_move().  So, we can batch _unmap() and _move() in
->>> > different loops later.  To pass some information between unmap and
->>> > move, the original unused newpage->mapping and newpage->private are
->>> > used.
->>>
->>> This looks like it could cause a deadlock between two threads migrating
->>> the same pages if force == true && mode != MIGRATE_ASYNC as
->>> migrate_page_unmap() will call lock_page() while holding the lock on
->>> other pages in the list. Therefore the two threads could deadlock if the
->>> pages are in a different order.
->>
->> It seems unlikely to me since the page has to be isolated from lru
->> before migration. The isolating from lru is atomic, so the two threads
->> unlikely see the same pages on both lists.
->
-> Oh thanks! That is a good point and I agree since lru isolation is
-> atomic the two threads won't see the same pages. migrate_vma_setup()
-> does LRU isolation after locking the page which is why the potential
-> exists there. We could potentially switch that around but given
-> ZONE_DEVICE pages aren't on an lru it wouldn't help much.
->
->> But there might be other cases which may incur deadlock, for example,
->> filesystem writeback IIUC. Some filesystems may lock a bunch of pages
->> then write them back in a batch. The same pages may be on the
->> migration list and they are also dirty and seen by writeback. I'm not
->> sure whether I miss something that could prevent such a deadlock from
->> happening.
->
-> I'm not overly familiar with that area but I would assume any filesystem
-> code doing this would already have to deal with deadlock potential.
+Thanks,
+Joseph
 
-Thank you very much for pointing this out.  I think the deadlock is a
-real issue.  Anyway, we shouldn't forbid other places in kernel to lock
-2 pages at the same time.
-
-The simplest solution is to batch page migration only if mode ==
-MIGRATE_ASYNC.  Then we may consider to fall back to non-batch mode if
-mode != MIGRATE_ASYNC and trylock page fails.
-
-Best Regards,
-Huang, Ying
-
-[snip]
+On 9/20/22 3:36 PM, Rock Li wrote:
+> Access locking_state of dlm debugfs may cause crash as scene below:
+> 
+> Proc A:                  Proc that access debuginfo:
+> add_lockres_tracking(lockresA)
+> ...
+>                          ocfs2_dlm_seq_next():
+>                            //priv->p_iter_res points to next
+>                            //lockres e.g. B. priv->p_tmp_res hold
+>                            //copy of lockres A before leave
+>                          ocfs2_dlm_seq_show()
+> ...
+> remove_lockres_tracking(lockres B):
+>   //free lockres B, l_debug_list in
+>   //priv->p_ter_res is updated but not
+>   //priv->p_tmp_res
+> ...
+>                          ocfs2_dlm_seq_next():
+> 			   //priv->p_tmp_res which holds a old copy of
+>                            //lockres A, the l_debug_list holds a
+>                            //out-of-date succeed pointer, which will
+>                            //cause crash as //access invalid memory
+>                            iter = v; //priv->p_tmp_res
+>                            iter = ocfs2_dlm_next_res(iter, priv)
+> 
+> The root cause of this issue is that private->p_iter_res acts as the
+> agent of accessing lockres and is protected by ocfs2_dlm_tracking_lock
+> while p_tmp_res is only a copy of the lockres and will be out-of-dated
+> after leave critial region of ocfs2_dlm_tracking_lock. We should use
+> priv->p_ter_res as the forward iterater instead.
+> 
+> Signed-off-by: Rock Li <lihongweizz@inspur.com>
+> ---
+>  fs/ocfs2/dlmglue.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ocfs2/dlmglue.c b/fs/ocfs2/dlmglue.c
+> index c28bc98..5d84350 100644
+> --- a/fs/ocfs2/dlmglue.c
+> +++ b/fs/ocfs2/dlmglue.c
+> @@ -3109,7 +3109,7 @@ static void *ocfs2_dlm_seq_next(struct seq_file *m, void *v, loff_t *pos)
+>  	struct ocfs2_lock_res *dummy = &priv->p_iter_res;
+>  
+>  	spin_lock(&ocfs2_dlm_tracking_lock);
+> -	iter = ocfs2_dlm_next_res(iter, priv);
+> +	iter = ocfs2_dlm_next_res(dummy, priv);
+>  	list_del_init(&dummy->l_debug_list);
+>  	if (iter) {
+>  		list_add(&dummy->l_debug_list, &iter->l_debug_list);
