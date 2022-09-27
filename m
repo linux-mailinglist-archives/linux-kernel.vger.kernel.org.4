@@ -2,102 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1786A5EB913
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FC25EB915
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiI0ECB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S229663AbiI0EDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiI0EBx (ORCPT
+        with ESMTP id S229571AbiI0EDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:01:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AF753AC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664251309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7lIjUt+hfufCzcxQtRQ7Q4/F8PQSEKvpahXtOM1zAs0=;
-        b=Fw4jrLKJTnTz4XvLFd9pcdsM96W02UtQ0H6TsPfBVNE9ms8x4fcEqKxbTCXxgHgfQJ3+nH
-        wepeseVpgFJ7u48veuf9yOqBrOPmDoNhwpZa6/wwKa9QZDghvprwQevkWtuWjF+DtFfzfg
-        bYeJFfvIdS4iRyjJjTxZeLyGTgdd8Jc=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-410-VG41BaDbN2OyoUeME1VVOw-1; Tue, 27 Sep 2022 00:01:42 -0400
-X-MC-Unique: VG41BaDbN2OyoUeME1VVOw-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-12777f2df6aso3096201fac.14
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:01:41 -0700 (PDT)
+        Tue, 27 Sep 2022 00:03:22 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23FCAB049
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:03:21 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id k12so5368156qkj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=RVeDgL58MZ/WnottLUU1JEd91S6UWqT1/tRkRRE+vRU=;
+        b=epR5HFBd6WZTiwOoOcTrwHK0nEhccfHOmjrktKl+qtCLHJhx/SLK1MmYZ3OvETzJij
+         pev/5Nb1gqOU4HW6sdBTnH9atIHmoj2azPRB7YdwF/suqrYlmAo9OCU2dvaXgrS6Kd9d
+         lSPyYvcEcQV8rm51m3ZBG3ncAC9YyO/MK3Jb1OhehgT4WbZx6pjlEinKMhwBEQ4xBFGr
+         UEwmeFcdVP90XwJLRbdqJLU7OKJVWzRdbtXkT1ZOcpNVcOVX45+3UKwP8oZYbebqKJt5
+         25pWnsS9KSLMNSDrB49ymLwM4KHNAtgBV/4hDKJSyKXwISMg94qvubWiCcuOxbdMpx60
+         8nhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7lIjUt+hfufCzcxQtRQ7Q4/F8PQSEKvpahXtOM1zAs0=;
-        b=NPtTVdK/taFvic3C3LUq4B7YhD9InxUPO8hQediIMaBxqmlIBbUjDairALC2eNgoBg
-         eycIH9IH4wqGt9JTwWQezzAO0tXmIcklUty0+iY3iSvo5p1Hus1qBPbUymUJ09Ng169l
-         Uz1qyC0K3HbgEdW0VYdblacWI+qYVJwgwPs9+VR60YXH6iGyUaqUyszWXM+bonSJRSAL
-         D+/Zr/9FNmfcsPRzrtok1s6jRJbuRk78mfkHsgeOYo8iNBwV2QhNWJlh/phtv2XCmqvR
-         Ug2e2IQ6SDdOsuvjMNBU5vYOR+O/Ejoyf+8ofHZ+senuJYeQ7FGfRgM8WwvuDPEXItc5
-         o3ng==
-X-Gm-Message-State: ACrzQf2SLKCGUFXkYyqRwXhKHhv8q3LLferAJNCyh4coPQ2GRHdJQlPO
-        CoPA/PTgZqasIgsYeP54dEVZ1oPvhU/P7yg/vkucOygAtx/Z75tI9ZOpGPujHBZvL9ITl+4S+go
-        mXigNQHH4S50xXT8tojJiFtYINO/IJqJO/CadPTpL
-X-Received: by 2002:a05:6870:e409:b0:127:d330:c941 with SMTP id n9-20020a056870e40900b00127d330c941mr1049110oag.280.1664251301505;
-        Mon, 26 Sep 2022 21:01:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM70F8Ybkw+ftIjAd0V0ZxtTyRfkCtq71sY1UXmniwDHvOisWowtKgZkzq9L+wAcLMvQbmN4FB4GulJ4+Dx5uA0=
-X-Received: by 2002:a05:6870:e409:b0:127:d330:c941 with SMTP id
- n9-20020a056870e40900b00127d330c941mr1049102oag.280.1664251301353; Mon, 26
- Sep 2022 21:01:41 -0700 (PDT)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RVeDgL58MZ/WnottLUU1JEd91S6UWqT1/tRkRRE+vRU=;
+        b=HikU7Vkbt1Le57clqJen3LMuo0xWZvjpQdr5DL0S+x2kMgraTly9geRC38WtqMLq9E
+         riopzYIfoqH9yUlM8zxLAy5mgzJr3QGt4PDThxwIlJdlGQzfye3YAwjIKDZFtsWm29lB
+         vnsalArJb+4jueTSTBvtUNWrLk8sjkXxDOR2IOHO8iUkSLGnKz8d3Fc/JCUloCz7CGZE
+         DEVZ3/msuoN9PA0iQ50K5LnNH+RsKpdoxZJwaplBp3owkUOeT2zcvP4EwFAU9r55+x+F
+         xHcIanylPQKAEQWBqo6y/kvGb0zF7G4EON9Tb5Y8wZujmKvWewpJslo55S+lFILd1v0a
+         VThw==
+X-Gm-Message-State: ACrzQf3EdKSVA1kdGelTj+zKpLhFuDFX9SXFggjVTDcwqfEiDDjKSmJ7
+        GA0sOhiLSH5UQKsk7YPH0bH6Ag==
+X-Google-Smtp-Source: AMsMyM77iwhdwsmNPTD5cFhK59QYfl4INtPZKdjlZkZ+A9zp4HxaD9/Ek/bpbUMBsPNaS5INX4l2Ag==
+X-Received: by 2002:a37:e107:0:b0:6ce:1a08:fbd8 with SMTP id c7-20020a37e107000000b006ce1a08fbd8mr16879136qkm.493.1664251400586;
+        Mon, 26 Sep 2022 21:03:20 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b006bb78d095c5sm290319qkb.79.2022.09.26.21.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 21:02:31 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:02:22 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Hillf Danton <hdanton@sina.com>
+cc:     Hugh Dickins <hughd@google.com>, Keith Busch <kbusch@kernel.org>,
+        Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Song <liusong@linux.alibaba.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
+In-Reply-To: <20220924023047.1410-1-hdanton@sina.com>
+Message-ID: <5880722-767c-16db-fc3-df50a12754b9@google.com>
+References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com> <YyjdiKC0YYUkI+AI@kbusch-mbp> <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com> <20220921164012.s7lvklp2qk6occcg@quack3> <20220923144303.fywkmgnkg6eken4x@quack3> <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com>
+ <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com> <391b1763-7146-857-e3b6-dc2a8e797162@google.com> <20220924023047.1410-1-hdanton@sina.com>
 MIME-Version: 1.0
-References: <20220926102946.3097-1-wangdeming@inspur.com>
-In-Reply-To: <20220926102946.3097-1-wangdeming@inspur.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 27 Sep 2022 12:01:30 +0800
-Message-ID: <CACGkMEtnsBEu6nm0oFCJyQwwf5PzdMRAsbzZZPZZ1TS9vRg1RQ@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring: Drop unnecessary initialization of detach_buf_packed
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 7:15 PM Deming Wang <wangdeming@inspur.com> wrote:
->
-> The variable is initialized but it is only used after its assignment.
->
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+On Sat, 24 Sep 2022, Hillf Danton wrote:
+> 
+> I think the lockup can be avoided by
+> a) either advancing wake_index as early as I can [1],
+> b) or doing wakeup in case of zero wait_cnt to kill all cases of waitqueue_active().
+> 
+> Only for thoughts now.
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Thanks Hillf: I gave your __sbq_wake_up() patch below several tries,
+and as far as I could tell, it works just as well as my one-liner.
 
-> ---
->  drivers/virtio/virtio_ring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 8974c34b40fd..abac0a3de440 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1544,7 +1544,7 @@ static bool virtqueue_kick_prepare_packed(struct virtqueue *_vq)
->  static void detach_buf_packed(struct vring_virtqueue *vq,
->                               unsigned int id, void **ctx)
->  {
-> -       struct vring_desc_state_packed *state = NULL;
-> +       struct vring_desc_state_packed *state;
->         struct vring_packed_desc *desc;
->         unsigned int i, curr;
->
-> --
-> 2.27.0
->
+But I don't think it's what we would want to do: doesn't it increment
+wake_index on every call to __sbq_wake_up()? whereas I thought it was
+intended to be incremented only after wake_batch calls (thinking in
+terms of nr 1).
 
+I'll not be surprised if your advance-wake_index-earlier idea ends
+up as a part of the solution: but mainly I agree with Jan that the
+whole code needs a serious redesign (or perhaps the whole design
+needs a serious recode).  So I didn't give your version more thought.
+
+Hugh
+
+> 
+> Hillf
+> 
+> [1] https://lore.kernel.org/lkml/afe5b403-4e37-80fd-643d-79e0876a7047@linux.alibaba.com/
+> 
+> +++ b/lib/sbitmap.c
+> @@ -613,6 +613,16 @@ static bool __sbq_wake_up(struct sbitmap
+>  	if (!ws)
+>  		return false;
+>  
+> +	do {
+> +		/* open code sbq_index_atomic_inc(&sbq->wake_index) to avoid race */
+> +		int old = atomic_read(&sbq->wake_index);
+> +		int new = sbq_index_inc(old);
+> +
+> +		/* try another ws if someone else takes care of this one */
+> +		if (old != atomic_cmpxchg(&sbq->wake_index, old, new))
+> +			return true;
+> +	} while (0);
+> +
+>  	cur = atomic_read(&ws->wait_cnt);
+>  	do {
+>  		/*
+> @@ -620,7 +630,7 @@ static bool __sbq_wake_up(struct sbitmap
+>  		 * function again to wakeup a new batch on a different 'ws'.
+>  		 */
+>  		if (cur == 0)
+> -			return true;
+> +			goto out;
+>  		sub = min(*nr, cur);
+>  		wait_cnt = cur - sub;
+>  	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+> @@ -634,6 +644,7 @@ static bool __sbq_wake_up(struct sbitmap
+>  
+>  	*nr -= sub;
+>  
+> +out:
+>  	/*
+>  	 * When wait_cnt == 0, we have to be particularly careful as we are
+>  	 * responsible to reset wait_cnt regardless whether we've actually
+> @@ -661,12 +672,6 @@ static bool __sbq_wake_up(struct sbitmap
+>  	 */
+>  	smp_mb__before_atomic();
+>  
+> -	/*
+> -	 * Increase wake_index before updating wait_cnt, otherwise concurrent
+> -	 * callers can see valid wait_cnt in old waitqueue, which can cause
+> -	 * invalid wakeup on the old waitqueue.
+> -	 */
+> -	sbq_index_atomic_inc(&sbq->wake_index);
+>  	atomic_set(&ws->wait_cnt, wake_batch);
+>  
+>  	return ret || *nr;
