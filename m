@@ -2,96 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FFB5EBDD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2030B5EBDDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiI0I4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S230424AbiI0I5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiI0I4H (ORCPT
+        with ESMTP id S230326AbiI0I5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:56:07 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3367CAB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:56:05 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l8so6082482wmi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=bEQ+cO4PtSvPHzqNY25Rk57cl8sc42zs+u1n/Vf8KZg=;
-        b=XOIvxDxpY8g1tcDM9f3ZfJNAfiXKalsyBRMkO6YU1eeQ2kIfWL9DQ/j4zmvwazNZXd
-         UNhVd6jnOgv6MD0rqH548Mf7l5ZwaPA+gZcqeoo11t+0ZSW48HUgNQCUqLYNXP4D3ApU
-         rK5ZKovFnxJcUiwkzVx5J3oyBaGbsA/tY8pIDSvvHhtye8mlL0iQCBEocGUALy5WNhLF
-         81ZbVXHb6EHFRL6r56Xw204S7+CQghY04kYmyHf4Xku82mUumsYbb/Vgq75I3NSA7/D+
-         FFGBUbdvbGmUgZPuvD2FNKg2Z2sXHjsrYEmgiudPo0+Vp/mQU8D/Xs57iktslVuXYj/n
-         AmvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=bEQ+cO4PtSvPHzqNY25Rk57cl8sc42zs+u1n/Vf8KZg=;
-        b=kRD75eLTjKiD3AqLZoEfKS8IZi4oHO5hB1/5FdJ8xEx9aPMUJQ+sgcd/ny26stbEFy
-         kzE8SSjBT5KqQ+HrWfcv2n74S0WoXDVmjuDhZIXrxuAVzsz4clvHKqiOBVfHDbpLP0tD
-         IDYhE5L5mRs5VnrAqoUUo+46o9ti32WgjPueeSJFv4lRq/GA9NEdbSLnp07QX6N7+jq9
-         axApjvJnSYzCDTzwZX01pLWCKeLvota5s9HsN+CfxEhJQ7fXrg/P2SQmFcQ7H5YBDbaM
-         QnydjHX4iRlk0pn4H3TxNtVavFzRnwooou6aVg87SErtSLnGGntUS3RsNlgh9z0e5SQ3
-         Cygw==
-X-Gm-Message-State: ACrzQf2nQH8RnX/rwOs2OAONxGqTm59UNn4HK1BUdjx0B7jzi8ZCOmiv
-        u7xB5HK05UdrgIOybOLjF4fNRw==
-X-Google-Smtp-Source: AMsMyM6dnWsD/C8sFek13thSn84HTvLHGHHhfLDclUX5OEqJ+U7Jyg5vYkgBcr7E1Hl6m25sd9Tbcw==
-X-Received: by 2002:a05:600c:310b:b0:3b4:c618:180d with SMTP id g11-20020a05600c310b00b003b4c618180dmr1773755wmo.25.1664268964293;
-        Tue, 27 Sep 2022 01:56:04 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id t126-20020a1c4684000000b003b505d26776sm13183734wma.5.2022.09.27.01.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 01:56:03 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     dan.carpenter@oracle.com, davem@davemloft.net,
-        herbert@gondor.apana.org.au, jernej.skrabec@gmail.com,
-        samuel@sholland.org, wens@csie.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-sunxi@googlegroups.com, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] crypto: allwinner: sun8i-ss: use dma_addr instead u32
-Date:   Tue, 27 Sep 2022 08:55:55 +0000
-Message-Id: <20220927085555.3196257-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 04:57:20 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92A4D7A527;
+        Tue, 27 Sep 2022 01:57:18 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1FBCE1E80D33;
+        Tue, 27 Sep 2022 16:53:04 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zSR2IxmD8Duw; Tue, 27 Sep 2022 16:53:01 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zhoujie@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7F7131E80CF9;
+        Tue, 27 Sep 2022 16:53:00 +0800 (CST)
+From:   Zhou jie <zhoujie@nfschina.com>
+To:     jlayton@kernel.org, xiubli@redhat.com, idryomov@gmail.com
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhoujie@nfschina.com
+Subject: [PATCH] fs/ceph:Modify the return value to void
+Date:   Tue, 27 Sep 2022 16:57:02 +0800
+Message-Id: <20220927085702.10026-1-zhoujie@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DMA address need to be stored in a dma_addr_t
+Modify the return value of the integer to void.
 
-Fixes: 359e893e8af4 ("crypto: sun8i-ss - rework handling of IV")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Zhou jie <zhoujie@nfschina.com>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ceph/debugfs.c | 38 +++++++++++++-------------------------
+ 1 file changed, 13 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 910d6751644c..902f6be057ec 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -124,7 +124,7 @@ static int sun8i_ss_setup_ivs(struct skcipher_request *areq)
- 	unsigned int ivsize = crypto_skcipher_ivsize(tfm);
- 	struct sun8i_ss_flow *sf = &ss->flows[rctx->flow];
- 	int i = 0;
--	u32 a;
-+	dma_addr_t a;
- 	int err;
+diff --git a/fs/ceph/debugfs.c b/fs/ceph/debugfs.c
+index bec3c4549c07..e4852a1c4a0a 100644
+--- a/fs/ceph/debugfs.c
++++ b/fs/ceph/debugfs.c
+@@ -22,14 +22,14 @@
+ #include "mds_client.h"
+ #include "metric.h"
  
- 	rctx->ivlen = ivsize;
+-static int mdsmap_show(struct seq_file *s, void *p)
++static void mdsmap_show(struct seq_file *s, void *p)
+ {
+ 	int i;
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_mdsmap *mdsmap;
+ 
+ 	if (!fsc->mdsc || !fsc->mdsc->mdsmap)
+-		return 0;
++		return;
+ 	mdsmap = fsc->mdsc->mdsmap;
+ 	seq_printf(s, "epoch %d\n", mdsmap->m_epoch);
+ 	seq_printf(s, "root %d\n", mdsmap->m_root);
+@@ -43,13 +43,12 @@ static int mdsmap_show(struct seq_file *s, void *p)
+ 			       ceph_pr_addr(addr),
+ 			       ceph_mds_state_name(state));
+ 	}
+-	return 0;
+ }
+ 
+ /*
+  * mdsc debugfs
+  */
+-static int mdsc_show(struct seq_file *s, void *p)
++static void mdsc_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_mds_client *mdsc = fsc->mdsc;
+@@ -124,7 +123,6 @@ static int mdsc_show(struct seq_file *s, void *p)
+ 	}
+ 	mutex_unlock(&mdsc->mutex);
+ 
+-	return 0;
+ }
+ 
+ #define CEPH_LAT_METRIC_SHOW(name, total, avg, min, max, sq) {		\
+@@ -146,7 +144,7 @@ static int mdsc_show(struct seq_file *s, void *p)
+ 		   name, total, avg, _min, max, sum);			\
+ }
+ 
+-static int metrics_file_show(struct seq_file *s, void *p)
++static void metrics_file_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_client_metric *m = &fsc->mdsc->metric;
+@@ -161,7 +159,6 @@ static int metrics_file_show(struct seq_file *s, void *p)
+ 		   atomic64_read(&m->total_caps));
+ 	seq_printf(s, "%-35s%lld\n", "opened inodes",
+ 		   percpu_counter_sum(&m->opened_inodes));
+-	return 0;
+ }
+ 
+ static const char * const metric_str[] = {
+@@ -170,7 +167,7 @@ static const char * const metric_str[] = {
+ 	"metadata",
+ 	"copyfrom"
+ };
+-static int metrics_latency_show(struct seq_file *s, void *p)
++static void metrics_latency_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_client_metric *cm = &fsc->mdsc->metric;
+@@ -193,10 +190,9 @@ static int metrics_latency_show(struct seq_file *s, void *p)
+ 		CEPH_LAT_METRIC_SHOW(metric_str[i], total, avg, min, max, sq);
+ 	}
+ 
+-	return 0;
+ }
+ 
+-static int metrics_size_show(struct seq_file *s, void *p)
++static void metrics_size_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_client_metric *cm = &fsc->mdsc->metric;
+@@ -223,10 +219,9 @@ static int metrics_size_show(struct seq_file *s, void *p)
+ 		CEPH_SZ_METRIC_SHOW(metric_str[i], total, avg, min, max, sum);
+ 	}
+ 
+-	return 0;
+ }
+ 
+-static int metrics_caps_show(struct seq_file *s, void *p)
++static void metrics_caps_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_client_metric *m = &fsc->mdsc->metric;
+@@ -245,10 +240,9 @@ static int metrics_caps_show(struct seq_file *s, void *p)
+ 		   percpu_counter_sum(&m->i_caps_mis),
+ 		   percpu_counter_sum(&m->i_caps_hit));
+ 
+-	return 0;
+ }
+ 
+-static int caps_show_cb(struct inode *inode, struct ceph_cap *cap, void *p)
++static void caps_show_cb(struct inode *inode, struct ceph_cap *cap, void *p)
+ {
+ 	struct seq_file *s = p;
+ 
+@@ -256,10 +250,9 @@ static int caps_show_cb(struct inode *inode, struct ceph_cap *cap, void *p)
+ 		   cap->session->s_mds,
+ 		   ceph_cap_string(cap->issued),
+ 		   ceph_cap_string(cap->implemented));
+-	return 0;
+ }
+ 
+-static int caps_show(struct seq_file *s, void *p)
++static void caps_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_mds_client *mdsc = fsc->mdsc;
+@@ -304,10 +297,9 @@ static int caps_show(struct seq_file *s, void *p)
+ 	}
+ 	spin_unlock(&mdsc->caps_list_lock);
+ 
+-	return 0;
+ }
+ 
+-static int mds_sessions_show(struct seq_file *s, void *ptr)
++static void mds_sessions_show(struct seq_file *s, void *ptr)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_mds_client *mdsc = fsc->mdsc;
+@@ -340,10 +332,9 @@ static int mds_sessions_show(struct seq_file *s, void *ptr)
+ 	}
+ 	mutex_unlock(&mdsc->mutex);
+ 
+-	return 0;
+ }
+ 
+-static int status_show(struct seq_file *s, void *p)
++static void status_show(struct seq_file *s, void *p)
+ {
+ 	struct ceph_fs_client *fsc = s->private;
+ 	struct ceph_entity_inst *inst = &fsc->client->msgr.inst;
+@@ -353,7 +344,6 @@ static int status_show(struct seq_file *s, void *p)
+ 		   ceph_pr_addr(client_addr), le32_to_cpu(client_addr->nonce));
+ 	seq_printf(s, "blocklisted: %s\n", fsc->blocklisted ? "true" : "false");
+ 
+-	return 0;
+ }
+ 
+ DEFINE_SHOW_ATTRIBUTE(mdsmap);
+@@ -370,20 +360,18 @@ DEFINE_SHOW_ATTRIBUTE(metrics_caps);
+ /*
+  * debugfs
+  */
+-static int congestion_kb_set(void *data, u64 val)
++static void congestion_kb_set(void *data, u64 val)
+ {
+ 	struct ceph_fs_client *fsc = (struct ceph_fs_client *)data;
+ 
+ 	fsc->mount_options->congestion_kb = (int)val;
+-	return 0;
+ }
+ 
+-static int congestion_kb_get(void *data, u64 *val)
++static void congestion_kb_get(void *data, u64 *val)
+ {
+ 	struct ceph_fs_client *fsc = (struct ceph_fs_client *)data;
+ 
+ 	*val = (u64)fsc->mount_options->congestion_kb;
+-	return 0;
+ }
+ 
+ DEFINE_SIMPLE_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
 -- 
-2.35.1
+2.18.2
 
