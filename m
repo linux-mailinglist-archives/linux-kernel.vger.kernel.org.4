@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B715EC6C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3145EC6E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiI0Orl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S232969AbiI0Ouc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbiI0OrV (ORCPT
+        with ESMTP id S232303AbiI0Oth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:47:21 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268C0E1198;
-        Tue, 27 Sep 2022 07:41:41 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4McMl23XQVz9sSg;
-        Tue, 27 Sep 2022 16:41:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1664289694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hle7BXW0DUOW9Dhwj4zOfO58W0Wl815wU0dQKnC8baA=;
-        b=j5e+8GSMEO7nezCrj45vqLoO195JT6QX20VJfjMRJj5b1fepM3ePY4OBU6mPp3tFF83Z4o
-        gzeZpAlrjvB//3JSy3naubVVLaidvqXqgW0gPndMkDYhDSlexNbja53e2rfYn9s04Jnjc3
-        9e8S332IH33RbmSV9QxPwXn28MQAGLFGAZWjTLWX/l/Fq30HfvxrgZQPHmZhiP7uDgx5j8
-        QbW/lAChnm/kpjKB1Vulc3iln+ZVvVx+lALXgPrBRSJ9UzGZ2FLB4nDGYxQy3Gzd20uD2Y
-        9BeCn55yOuHMooJzGeAYMDMSempOFHziFWzUVZ3ERJVvO/kppV3yQm+EhSr8ug==
-Date:   Tue, 27 Sep 2022 16:41:33 +0200 (CEST)
-From:   torvic9@mailbox.org
-To:     Ian Pilcher <arequipeno@gmail.com>, pavel@ucw.cz
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kabel@kernel.org
-Message-ID: <31201714.100945.1664289693879@office.mailbox.org>
-In-Reply-To: <20220926162503.451320-3-arequipeno@gmail.com>
-References: <20220926162503.451320-1-arequipeno@gmail.com>
- <20220926162503.451320-3-arequipeno@gmail.com>
-Subject: Re: [PATCH v12 2/2] leds: trigger: Add block device LED trigger
+        Tue, 27 Sep 2022 10:49:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B3F7B29E;
+        Tue, 27 Sep 2022 07:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664290059; x=1695826059;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p5Qv2eGvYShww3iG5RQvavskwhXcWdaFVSnEf+pwu2Q=;
+  b=RsuvcpIiWPb/0vGUuj53YobuohMVgxsAm3IaZ4S+B2FPq8zs6vsItef6
+   lfcsJs6P0GvIsc+R2FEOxaIQmH8dpYECCy27K4cooa56fS33fKBOWOx4r
+   uEkq/KHSaEip/Vv/bbXY59Tjdlsw8VbFJK6WZcciw6OuFd9GZkE8dXkBj
+   t45sJjBqILTEiSZlyfiyy+/s/XL3ZLTbNAJiUxtduOQRoPSccA8Og4U6J
+   i+803f9iWl3mSlfPALo4Pm2U19E4IJCXsbMMKr0tp1yyL8PrLDU3Umx17
+   6QncXVic+zbTz+9aTdMavIHXdvF3+YUXnqyu8FEgvzfEtzZcY7jYtYu4G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="365377091"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="365377091"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 07:47:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="796788628"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="796788628"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 27 Sep 2022 07:47:22 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7CB1B7C; Tue, 27 Sep 2022 17:47:27 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>
+Subject: [PATCH v3 0/8]  pwm: lpss: Clean up and convert to a pure library
+Date:   Tue, 27 Sep 2022 17:47:15 +0300
+Message-Id: <20220927144723.9655-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: 797efdee06b3c2a1f3f
-X-MBO-RS-META: ya4tm8j7hnw34jssnnmbrbc6wfxuyi7q
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+First of all, a set of cleanups and code deduplications (for better
+maintenance) to the PWM LPSS driver.
 
-> Ian Pilcher <arequipeno@gmail.com> hat am 26.09.2022 16:25 GMT geschrieben:
-> 
->  
-> Add "blkdev" LED trigger to blink LEDs in response to block device
-> activity.
-> 
-> Add LEDS_TRIGGER_BLKDEV (tristate) config option to control building of
-> the trigger.
-> 
-> Signed-off-by: Ian Pilcher <arequipeno@gmail.com>
+Second, we may (re-)use the core part as a library in the future in
+the devices that combine the same PWM IP in their address space. So
+convert the core file to be a pure library which doesn't require any
+special resource handling or alike.
 
-For this series on 6.0-rc7:
+Changelog v3:
+- postponed last patch until we have a new user
+- added tags (Uwe, Hans)
+- expanded commit message on why forward declarations are preferred over
+  full header inclusions
 
-Tested-by: Tor Vic <torvic9@mailbox.org>
+Changelog v2:
+- replace patch 1 by Uwe's version (Uwe)
+- update NS patch to have a default namespace defined (Uwe)
+- describe all changes done in patch 4 (Uwe)
 
-> ---
->  drivers/leds/trigger/Kconfig          |    9 +
->  drivers/leds/trigger/Makefile         |    1 +
->  drivers/leds/trigger/ledtrig-blkdev.c | 1220 +++++++++++++++++++++++++
->  3 files changed, 1230 insertions(+)
->  create mode 100644 drivers/leds/trigger/ledtrig-blkdev.c
->
+Andy Shevchenko (7):
+  pwm: lpss: Move exported symbols to PWM_LPSS namespace
+  pwm: lpss: Move resource mapping to the glue drivers
+  pwm: lpss: Include headers we are direct user of
+  pwm: lpss: Use device_get_match_data to get device data
+  pwm: lpss: Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr() macros
+  pwm: lpss: Make use of bits.h macros for all masks
+  pwm: lpss: Add a comment to the bypass field
+
+Uwe Kleine-König (1):
+  pwm: lpss: Deduplicate board info data structures
+
+ drivers/pwm/pwm-lpss-pci.c      | 48 ++++++++-------------------------
+ drivers/pwm/pwm-lpss-platform.c | 40 +++++++--------------------
+ drivers/pwm/pwm-lpss.c          | 46 ++++++++++++++++++++++++++-----
+ drivers/pwm/pwm-lpss.h          | 18 +++++++++++--
+ 4 files changed, 77 insertions(+), 75 deletions(-)
+
+-- 
+2.35.1
+
