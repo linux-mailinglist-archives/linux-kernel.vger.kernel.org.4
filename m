@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9DC5EC8DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB74E5EC8DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbiI0QBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S232594AbiI0QBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiI0QBh (ORCPT
+        with ESMTP id S232363AbiI0QBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 12:01:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8732B114B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D698D01C4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22DCE61A85
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99F6961A8B
         for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DABEC43140;
-        Tue, 27 Sep 2022 16:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E5F1C433B5;
+        Tue, 27 Sep 2022 16:01:32 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1odD2g-00G2o8-0M;
+        id 1odD2g-00G2og-1v;
         Tue, 27 Sep 2022 12:02:42 -0400
-Message-ID: <20220927160241.746173925@goodmis.org>
+Message-ID: <20220927160242.207148054@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 27 Sep 2022 12:02:18 -0400
+Date:   Tue, 27 Sep 2022 12:02:19 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [for-next][PATCH 02/20] selftests/ftrace: Add eprobe syntax error testcase
+        <mingo@redhat.com>, Zeng Heng <zengheng4@huawei.com>
+Subject: [for-next][PATCH 03/20] rv/monitors: add static qualifier for local symbols
 References: <20220927160216.349640304@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,53 +46,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+From: Zeng Heng <zengheng4@huawei.com>
 
-Add a syntax error test case for eprobe as same as kprobes.
+The sparse tool complains as follows:
 
-Link: https://lkml.kernel.org/r/165932115471.2850673.8014722990775242727.stgit@devnote2
+kernel/trace/rv/monitors/wwnr/wwnr.c:18:19:
+warning: symbol 'rv_wwnr' was not declared. Should it be static?
 
-Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The `rv_wwnr` symbol is not dereferenced by other extern files,
+so add static qualifier for it.
+
+So does wip module.
+
+Link: https://lkml.kernel.org/r/20220824034357.2014202-2-zengheng4@huawei.com
+
+Cc: <mingo@redhat.com>
+Fixes:	ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
+Fixes:	8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- .../test.d/dynevent/eprobes_syntax_errors.tc  | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
+ kernel/trace/rv/monitors/wip/wip.c   | 4 ++--
+ kernel/trace/rv/monitors/wwnr/wwnr.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-new file mode 100644
-index 000000000000..fc1daac7f066
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-@@ -0,0 +1,27 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Event probe event parser error log check
-+# requires: dynamic_events events/syscalls/sys_enter_openat "<attached-group>.<attached-event> [<args>]":README error_log
-+
-+check_error() { # command-with-error-pos-by-^
-+    ftrace_errlog_check 'event_probe' "$1" 'dynamic_events'
-+}
-+
-+check_error 'e ^a.'			# NO_EVENT_INFO
-+check_error 'e ^.b'			# NO_EVENT_INFO
-+check_error 'e ^a.b'			# BAD_ATTACH_EVENT
-+check_error 'e syscalls/sys_enter_openat ^foo'	# BAD_ATTACH_ARG
-+check_error 'e:^/bar syscalls/sys_enter_openat'	# NO_GROUP_NAME
-+check_error 'e:^12345678901234567890123456789012345678901234567890123456789012345/bar syscalls/sys_enter_openat'	# GROUP_TOO_LONG
-+
-+check_error 'e:^foo.1/bar syscalls/sys_enter_openat'	# BAD_GROUP_NAME
-+check_error 'e:^ syscalls/sys_enter_openat'		# NO_EVENT_NAME
-+check_error 'e:foo/^12345678901234567890123456789012345678901234567890123456789012345 syscalls/sys_enter_openat'	# EVENT_TOO_LONG
-+check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
-+
-+check_error 'e:foo/bar syscalls/sys_enter_openat arg=^dfd'	# BAD_FETCH_ARG
-+check_error 'e:foo/bar syscalls/sys_enter_openat ^arg=$foo'	# BAD_ATTACH_ARG
-+
-+check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
-+
-+exit 0
+diff --git a/kernel/trace/rv/monitors/wip/wip.c b/kernel/trace/rv/monitors/wip/wip.c
+index 83cace53b9fa..1a989bc142f3 100644
+--- a/kernel/trace/rv/monitors/wip/wip.c
++++ b/kernel/trace/rv/monitors/wip/wip.c
+@@ -16,7 +16,7 @@
+ 
+ #include "wip.h"
+ 
+-struct rv_monitor rv_wip;
++static struct rv_monitor rv_wip;
+ DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+ 
+ static void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
+@@ -60,7 +60,7 @@ static void disable_wip(void)
+ 	da_monitor_destroy_wip();
+ }
+ 
+-struct rv_monitor rv_wip = {
++static struct rv_monitor rv_wip = {
+ 	.name = "wip",
+ 	.description = "wakeup in preemptive per-cpu testing monitor.",
+ 	.enable = enable_wip,
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
+index 599225d9cf38..a063b93c6a1d 100644
+--- a/kernel/trace/rv/monitors/wwnr/wwnr.c
++++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
+@@ -15,7 +15,7 @@
+ 
+ #include "wwnr.h"
+ 
+-struct rv_monitor rv_wwnr;
++static struct rv_monitor rv_wwnr;
+ DECLARE_DA_MON_PER_TASK(wwnr, unsigned char);
+ 
+ static void handle_switch(void *data, bool preempt, struct task_struct *p,
+@@ -59,7 +59,7 @@ static void disable_wwnr(void)
+ 	da_monitor_destroy_wwnr();
+ }
+ 
+-struct rv_monitor rv_wwnr = {
++static struct rv_monitor rv_wwnr = {
+ 	.name = "wwnr",
+ 	.description = "wakeup while not running per-task testing model.",
+ 	.enable = enable_wwnr,
 -- 
 2.35.1
