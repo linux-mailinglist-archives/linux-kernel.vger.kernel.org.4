@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08905EC9DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E2C5EC9E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiI0Qp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S233182AbiI0Qpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbiI0QpV (ORCPT
+        with ESMTP id S233097AbiI0QpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:45:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04CD11469
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:15 -0700 (PDT)
+        Tue, 27 Sep 2022 12:45:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4B512D37
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664297114;
+        s=mimecast20190719; t=1664297118;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1HjyYya3FB48JS2/Ql1r5PWH5BLiIQBcqxgu9zTRgq8=;
-        b=XmxxU0wpOiwfAxSPe2J8q7IambWkJzdVIJFx0XtWEswlhz9DSHtQvfmtJDU4NiSst0UFOP
-        eklPGmGeTVNwGSatZsVtBHiIxivAuGx8Hjt1natgGUVHC6tGpi0vdMHstNfVkMQnxOF4rN
-        C/f3oxGeDKnoOermnP1YHOgXKi/Sggk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=WTa5rbKShIyGoJknw92BfG1x+s2qAF7vnnJsM/DzVR4=;
+        b=LpP7nOlxuNbJNFyptJwYymEJT9Q8mYfck6+SypPhex+kCPgxIw7gGDks45ulj581Chv+26
+        RnnDjQ/mCx1CF5oMM5EXIfaJGN2xNGbFAomZbYpSaGzLM42Zi2AnYn5RocSQ4qZrIqPBQ5
+        F3rnQFTA8LonNS97DHeL08AVnf4SCqc=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-592-j9FQEJaqO1GGLinqDKIawA-1; Tue, 27 Sep 2022 12:45:13 -0400
-X-MC-Unique: j9FQEJaqO1GGLinqDKIawA-1
-Received: by mail-wm1-f69.google.com with SMTP id y15-20020a1c4b0f000000b003b47578405aso2963906wma.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:13 -0700 (PDT)
+ us-mta-191-4PCMQ6sHMEWuYFqqzCrJQA-1; Tue, 27 Sep 2022 12:45:17 -0400
+X-MC-Unique: 4PCMQ6sHMEWuYFqqzCrJQA-1
+Received: by mail-qk1-f199.google.com with SMTP id bs33-20020a05620a472100b006cef8cfabe2so7701640qkb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=1HjyYya3FB48JS2/Ql1r5PWH5BLiIQBcqxgu9zTRgq8=;
-        b=gNRllUkC+jUIfAf/OfCcHMM1p0uXfD2fH0J3v+kyqNdYShMIPS+1bPZVW639BDcK/w
-         tXdxfxuu6wXtCv+er7YoOntw7C+i9VYD42AXMbsnDsFtQC9wfcl0Tsw2mI1lgI6x3rTw
-         VOz290iRXPOa/hM8lzBwa4R1aKoq3ss7XmsLUF8XDOThWvFxJ5a3tSR4XUG7JqZaGJVC
-         1p8J5McT9x6M86Gu183xNO+Gnywr6szhFWxFPzVDnX+z95rt+Yp13ltBpj4FI3mMCbiX
-         m997CcMle+M3e1Jp+bCATwISPgP0rL6vEgEWYPjPrrHIul7tfjbV29C/wmnrEJvqEQQg
-         Ifuw==
-X-Gm-Message-State: ACrzQf2fnKMA7yrGiEqTmRwJEUunmN8a/+WJHZLc1JU6fcFtxL+KK1BZ
-        1IEMz/l/jDYoRZJ02ES8ASQEucQQ+askjv5PWo908g7ghZtzGt086jKa/XolAOTDFY5SsAEJ35+
-        3Q6t6s9a0piB8cslMyR99XLCU
-X-Received: by 2002:adf:c641:0:b0:22a:2da9:e248 with SMTP id u1-20020adfc641000000b0022a2da9e248mr17796272wrg.132.1664297112379;
-        Tue, 27 Sep 2022 09:45:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7sduHtnjJfER4xAtTXqMI7EcFTzkHDpdXfxL8UJvUUqEplT6WjoWUU9zwE1j3IiJwYv3cPgQ==
-X-Received: by 2002:adf:c641:0:b0:22a:2da9:e248 with SMTP id u1-20020adfc641000000b0022a2da9e248mr17796246wrg.132.1664297112149;
-        Tue, 27 Sep 2022 09:45:12 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id o2-20020adfeac2000000b00228c375d81bsm2265890wrn.2.2022.09.27.09.45.10
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=WTa5rbKShIyGoJknw92BfG1x+s2qAF7vnnJsM/DzVR4=;
+        b=PVLzFZAQ2TJYgaNrlqOWhNFx1AIixa+yklhMEtVdJEMgF13NZY6WI9iN4PGVFj1XXT
+         8T72QCUNwDstlQKob9eEkO1gzGBWIv1It+2embOw0lNEhtVNNe9ugp0ke9JyWoQiMwtG
+         zyrT7glY3GcmmVn8soo6vnm54ZUjx/1ennt/Qk2dfYUx9/XYxEExkAqY8T6lDSNza7qw
+         rw1ROBzpABG8PrYYAm5vV8KLxynHBYaj0uw03hF1/xfEHQxWvUyKBhWFXfo4iiwtzGtW
+         mgQ0pUBX8+7UhX00ceAH+X2ODuwDU/mFMgLUXx+3w3ELEn6hgWtVG/harFCHT7JRymGj
+         Xhmw==
+X-Gm-Message-State: ACrzQf1S+lYaiCsuox1AgA/ArKCiqfdi0cvrHovIBsi7pni4MUZ7MF2L
+        HHv6iQHoS5MtBwQ5buR0e7g0mvUSDN/36/JV182/HHdHyM73w3xoQYrOnQ13RlzEwMH9uRUjKtR
+        +uEXDe/0jXk4Ezx1F1gqFKgQL
+X-Received: by 2002:a05:620a:2601:b0:6bc:70bb:c56b with SMTP id z1-20020a05620a260100b006bc70bbc56bmr18970159qko.416.1664297116777;
+        Tue, 27 Sep 2022 09:45:16 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5AgLFJmBdANYEOVOVCK9odrG/eAgjCtDCyK2CtvVPq8D05QAsmkYI+yJDhMCoTJ31v1Bm/4A==
+X-Received: by 2002:a05:620a:2601:b0:6bc:70bb:c56b with SMTP id z1-20020a05620a260100b006bc70bbc56bmr18970133qko.416.1664297116560;
+        Tue, 27 Sep 2022 09:45:16 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id a19-20020ac84d93000000b00342fc6a8e25sm1082638qtw.50.2022.09.27.09.45.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:45:11 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v4 5/7] sched/topology: Introduce sched_numa_hop_mask()
-In-Reply-To: <YzBtH8s98eTmxaJo@yury-laptop>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
- <20220923155542.1212814-4-vschneid@redhat.com>
- <YzBtH8s98eTmxaJo@yury-laptop>
-Date:   Tue, 27 Sep 2022 17:45:10 +0100
-Message-ID: <xhsmhh70s4vhl.mognet@vschneid.remote.csb>
+        Tue, 27 Sep 2022 09:45:16 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:45:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] general protection fault in PageHeadHuge
+Message-ID: <YzMomT+OusJnLOPC@x1n>
+References: <0000000000006c300705e95a59db@google.com>
+ <Yy4g/BKpnJga1toG@monkey>
+ <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
+ <Yy5WHvioerD2Sev1@x1n>
+ <Yy8dBrmvDmqlsRXE@x1n>
+ <Yy9T/JmVb4ymf6WM@monkey>
+ <YzDuHbuo2x/b2Mbr@x1n>
+ <YzMjxY5O6Hf/IPTx@monkey>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YzMjxY5O6Hf/IPTx@monkey>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,26 +89,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/22 08:00, Yury Norov wrote:
-> On Fri, Sep 23, 2022 at 04:55:40PM +0100, Valentin Schneider wrote:
->> +/**
->> + * sched_numa_hop_mask() - Get the cpumask of CPUs at most @hops hops away.
->> + * @node: The node to count hops from.
->> + * @hops: Include CPUs up to that many hops away. 0 means local node.
->> + *
->> + * Requires rcu_lock to be held. Returned cpumask is only valid within that
->> + * read-side section, copy it if required beyond that.
->> + *
->> + * Note that not all hops are equal in distance; see sched_init_numa() for how
->> + * distances and masks are handled.
->> + *
->> + * Also note that this is a reflection of sched_domains_numa_masks, which may change
->> + * during the lifetime of the system (offline nodes are taken out of the masks).
->> + */
->
-> Since it's exported, can you declare function parameters and return
-> values properly?
->
+On Tue, Sep 27, 2022 at 09:24:37AM -0700, Mike Kravetz wrote:
+> This should guarantee a read fault independent of what pthread_mutex_lock
+> does.  However, it still results in the occasional "ERROR: unexpected write
+> fault".  So, something else if happening.  I will continue to experiment
+> and think about this.
 
-I'll add a bit about the return value; what is missing for the parameters?
+Thanks for verifying this, Mike.  I didn't yet reply but I did have some
+update on my side too.  I plan to look deeper and wanted to reply until
+that, because I do think there's something special on hugetlb and I still
+don't know. I just keep getting distracted by other things.. but maybe I
+should still share out what I have already.
+
+I think I already know what had guaranteed the read faults - the NPTL
+pthread lib implemented mutex in different types, and the 1st instruction
+of lock() is to fetch the mutex type (at offset 0x10) then we know how we
+should move on:
+
+(gdb) disas pthread_mutex_lock
+Dump of assembler code for function ___pthread_mutex_lock:
+   0x00007ffff7e3b0d0 <+0>:     endbr64 
+   0x00007ffff7e3b0d4 <+4>:     mov    0x10(%rdi),%eax       <---- read 0x10 of &mutex
+   0x00007ffff7e3b0d7 <+7>:     mov    %eax,%edx
+   0x00007ffff7e3b0d9 <+9>:     and    $0x17f,%edx
+(gdb) ptype pthread_mutex_t
+type = union {
+    struct __pthread_mutex_s __data;
+    char __size[40];
+    long __align;
+}
+(gdb) ptype struct __pthread_mutex_s
+type = struct __pthread_mutex_s {
+    int __lock;
+    unsigned int __count;
+    int __owner;
+    unsigned int __nusers;
+    int __kind;                                              <--- 0x10 offset here
+    short __spins;
+    short __elision;
+    __pthread_list_t __list;
+}
+
+I looked directly at asm dumped from the binary I tested to make sure it's
+accurate.  So it means with current uffd selftest logically there should
+never be a write missing fault (I still don't think it's good to have the
+write check though.. but that's separate question to ask).
+
+It also means hugetlb does something special here.  It smells really like
+for some reason the hugetlb pgtable got evicted after UFFDIO_COPY during
+locking_thread running, then any further lock() (e.g. cmpxchg) or modifying
+the counter could trigger a write fault.
+
+OTOH this also explained why futex code was never tested on userfaultfd
+selftest, simply because futex() will always to be after that "read the
+type of mutex" thing.. which is something I want to rework a bit, so as to
+have uffd selftest to cover gup as you used to rightfully suggest.  But
+that'll be nothing urgent, and be something after we know what's special
+with hugetlb new code.
+
+I'll also keep update if I figured something more out of it.
+
+-- 
+Peter Xu
 
