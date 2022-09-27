@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3726B5EB801
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82145EB82A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiI0C7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S231344AbiI0C7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiI0C6V (ORCPT
+        with ESMTP id S229798AbiI0C7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:58:21 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E15F87
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:54:44 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 429D22C0655;
-        Tue, 27 Sep 2022 02:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1664247281;
-        bh=x6rLsjU8n4jK+ehuEmcUEt5EsONMMCmZGKiq+TmClpc=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=rwpgkgMT+RTSYx9ibufWkrqd1ME2wnPUWLq17Kz9o1TiAkRPbG2ueUHMliNa/zcrg
-         FR55iaLR3e17e1PZoD/AgNa4CsH+Ld/CzwmrByMjkwx7iqar2n6wUcQOxu2Q7cWL4a
-         kTxEWXM74coRqXNdmZ7ev2MkRVEBOtW8n+coMD9DxB6ceHCUOfTJVlfM7d+679CpnE
-         1kswTYRB344oiIZWDldp1uUWRtmybvYHwMn08LCjnqX12pdxdOFqZb/BYyQXhXxYt0
-         YlLirxJgYu1lE4YhvAWPZg0Ub5PoQoz1AXfeXSTA1PfMYHaaKg8TFGWbQwiCpnYkLU
-         VNNB+WzyZgT8w==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B633265f10001>; Tue, 27 Sep 2022 15:54:41 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 27 Sep 2022 15:54:40 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.040; Tue, 27 Sep 2022 15:54:40 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "bbrezillon@kernel.org" <bbrezillon@kernel.org>
-CC:     Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
- nand-keep-config
-Thread-Topic: [PATCH] mtd: rawnand: marvell: Use correct logic for
- nand-keep-config
-Thread-Index: AQHY0huGvn+cu0p4h0STUiMnaqi9wa3xutQA
-Date:   Tue, 27 Sep 2022 02:54:40 +0000
-Message-ID: <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
-References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9665FE8B14A88C4891D7CFA1E0C7CA91@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Mon, 26 Sep 2022 22:59:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F45A6C0B;
+        Mon, 26 Sep 2022 19:56:36 -0700 (PDT)
+X-UUID: 851709d9027544bf9ebd861e28eb68f7-20220927
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EdUjnIdrI6CEvlP6x0Ld3GV/+CJojbuPjOYUrASLVW4=;
+        b=aQAykFibKy0AiUx5RmIjnEZwz5IVXHnpkvVhqlGEx8XY+2DlTHdooFmInMjOBwcqCZo4eCSn9d97BlDTsmVFJfR5qriU8tcz+m6QFtLyOzX6AzOOIqkeM6X+R8EHg9/ohl/zF5AGGZ4SmoBRvI2RJmf6ZlQkWhpR/VKz4YqcvP0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:f90e9b6f-2f73-406a-a630-ad1d26e14fb0,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:f90e9b6f-2f73-406a-a630-ad1d26e14fb0,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:08612aa3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:220927105628Q86DYP9Z,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: 851709d9027544bf9ebd861e28eb68f7-20220927
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 920561247; Tue, 27 Sep 2022 10:56:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 27 Sep 2022 10:56:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 27 Sep 2022 10:56:25 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        "Andrew-CT Chen" <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH v3 00/11] Add support for MT8195 SCP 2nd core
+Date:   Tue, 27 Sep 2022 10:55:55 +0800
+Message-ID: <20220927025606.26673-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=UoQdyN4B c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10 a=nZ5tDJ4FkKnVFCT0SwEA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAyNy8wOS8yMiAxNTo0NywgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gRnJvbTogVG9ueSBP
-J0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPg0KPiBPcmlnaW5hbGx5
-IHRoZSBhYnNlbmNlIG9mIHRoZSBtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWcgcHJvcGVydHkgY2F1
-c2VkDQo+IHRoZSBzZXR1cF9kYXRhX2ludGVyZmFjZSBmdW5jdGlvbiB0byBiZSBwcm92aWRlZC4g
-SG93ZXZlciB3aGVuDQo+IHNldHVwX2RhdGFfaW50ZXJmYWNlIHdhcyBtb3ZlZCBpbnRvIG5hbmRf
-Y29udHJvbGxlcl9vcHMgdGhlIGxvZ2ljIHdhcw0KPiB1bmludGVudGlvbmFsbHkgaW52ZXJ0ZWQu
-IFVwZGF0ZSB0aGUgbG9naWMgc28gdGhhdCBvbmx5IGlmIHRoZQ0KPiBtYXJ2ZWxsLG5hbmQta2Vl
-cC1jb25maWcgcHJvcGVydHkgaXMgcHJlc2VudCB0aGUgYm9vdGxvYWRlciBOQU5EIGNvbmZpZw0K
-PiBrZXB0Lg0KPg0KPiBGaXhlczogN2EwOGRiYWVkZDM2ICgibXRkOiByYXduYW5kOiBNb3ZlIC0+
-c2V0dXBfZGF0YV9pbnRlcmZhY2UoKSB0byBuYW5kX2NvbnRyb2xsZXJfb3BzIikNCj4gU2lnbmVk
-LW9mZi1ieTogVG9ueSBPJ0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0K
-PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVz
-aXMuY28ubno+DQo+IC0tLQ0KPg0KPiBOb3RlczoNCj4gICAgICBJIHRoaW5rIHRoaXMgaXMgYSBi
-dWcgdGhhdCdzIGJlZW4gbHVya2luZyBmb3IgNCB5ZWFycyBvciBzby4gSSdtIG5vdA0KPiAgICAg
-IHN1cmUgdGhhdCdzIHBhcnRpY3VsYXJseSBsb25nIGluIHRoZSBsaWZlIG9mIGFuIGVtYmVkZGVk
-IGRldmljZSBidXQgaXQNCj4gICAgICBkb2VzIG1ha2UgbWUgd29uZGVyIGlmIHRoZXJlIGhhdmUg
-YmVlbiBvdGhlciBidWcgcmVwb3J0cyBhYm91dCBpdC4NCj4gICAgICANCj4gICAgICBXZSBub3Rp
-Y2VkIHRoaXMgYmVjYXVzZSB3ZSBoYWQgYSBib290bG9hZGVyIHRoYXQgdXNlZCBtYXhlZCBvdXQg
-TkFORA0KPiAgICAgIHRpbWluZ3Mgd2hpY2ggbWFkZSB0aGUgdGltZSBpdCB0b29rIHRoZSBrZXJu
-ZWwgdG8gZG8gYW55dGhpbmcgb24gdGhlDQo+ICAgICAgZmlsZSBzeXN0ZW0gbG9uZ2VyIHRoYW4g
-d2UgZXhwZWN0ZWQuDQoNCkkgdGhpbmsgdGhlcmUgbWlnaHQgYmUgYSBzaW1pbGFyIGxvZ2ljIGlu
-dmVyc2lvbiBidWcgaW4gDQpkcml2ZXJzL210ZC9uYW5kL3Jhdy9kZW5hbGkuYyBidXQgSSBsYWNr
-IHRoZSBhYmlsaXR5IHRvIHRlc3QgZm9yIHRoYXQgDQpwbGF0Zm9ybS4NCg0KPiAgIGRyaXZlcnMv
-bXRkL25hbmQvcmF3L21hcnZlbGxfbmFuZC5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAx
-IGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
-dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMgYi9kcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxs
-X25hbmQuYw0KPiBpbmRleCAyNDU1YTU4MWZkNzAuLmIyNDhjNWY2NTdkNSAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4gKysrIGIvZHJpdmVycy9t
-dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4gQEAgLTI2NzIsNyArMjY3Miw3IEBAIHN0YXRp
-YyBpbnQgbWFydmVsbF9uYW5kX2NoaXBfaW5pdChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBt
-YXJ2ZWxsX25mYyAqbmZjLA0KPiAgIAljaGlwLT5jb250cm9sbGVyID0gJm5mYy0+Y29udHJvbGxl
-cjsNCj4gICAJbmFuZF9zZXRfZmxhc2hfbm9kZShjaGlwLCBucCk7DQo+ICAgDQo+IC0JaWYgKCFv
-Zl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWciKSkNCj4g
-KwlpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAibWFydmVsbCxuYW5kLWtlZXAtY29uZmln
-IikpDQo+ICAgCQljaGlwLT5vcHRpb25zIHw9IE5BTkRfS0VFUF9USU1JTkdTOw0KPiAgIA0KPiAg
-IAltdGQgPSBuYW5kX3RvX210ZChjaGlwKTs=
+The mediatek remoteproc driver currently only allows bringing up a 
+single core SCP, e.g. MT8183. It also only bringing up the 1st 
+core in SoCs with a dual-core SCP, e.g. MT8195. This series support 
+to bring-up the 2nd core of the dual-core SCP.
+
+v2 -> v3:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. add SCP core 1 node to mt8195.dtsi
+4. remove redundant call of rproc_boot for SCP
+5. refine IPI error message
+
+v1 -> v2:
+1. update dt-binding property description
+2. remove kconfig for scp dual driver
+3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
+
+Tinghan Shen (11):
+  dt-bindings: remoteproc: mediatek: Give the subnode a persistent name
+  dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
+  arm64: dts: mt8195: Add SCP core 1 node
+  remoteproc: mediatek: Remove redundant rproc_boot
+  remoteproc: mediatek: Add SCP core 1 register definitions
+  remoteproc: mediatek: Add MT8195 SCP core 1 operations
+  remoteproc: mediatek: Probe MT8195 SCP core 1
+  remoteproc: mediatek: Control SCP core 1 boot by rproc subdevice
+  remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
+  remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
+  remoteproc: mediatek: Refine ipi handler error message
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 132 ++++++++--
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  14 +-
+ .../mediatek/vcodec/mtk_vcodec_fw_scp.c       |   2 +-
+ drivers/remoteproc/mtk_common.h               |  35 +++
+ drivers/remoteproc/mtk_scp.c                  | 241 +++++++++++++++++-
+ include/linux/remoteproc/mtk_scp.h            |   1 +
+ 7 files changed, 397 insertions(+), 30 deletions(-)
+
+-- 
+2.18.0
+
