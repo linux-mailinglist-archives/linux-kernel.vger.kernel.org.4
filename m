@@ -2,545 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7DD5EBC70
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714A05EBC93
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiI0H7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S231697AbiI0IBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiI0H5o (ORCPT
+        with ESMTP id S231656AbiI0H75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:57:44 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3894AEDAC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:56:11 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id h7so1287919wru.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:56:11 -0700 (PDT)
+        Tue, 27 Sep 2022 03:59:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7099AB07C1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:56:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id rk17so5751990ejb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=QipqmHbUZGHLWu5BlBNjHs+pAuw4tqeLoTpMAyu+/es=;
-        b=jwcCEhTXdHbeKkjeWK+MvMrthc056cMoYzAYbT9fSGb4d/OJwB6wTXFupwgWETwDUk
-         KMdfyclrKSBYQhc9WU7mbIJiZj5oXw1mWipTjTmBuUfFIRcCmzl7+7SxCKCIFMSAuDWr
-         yFmEHpTm1OqGTaSEBdNsL0QDOr+kcC+BR1GvBdheTTSfxSsPtMdIZc7sDmZbiFJMnypi
-         eXyOEnRwQvrnlctUAGdFo5lUxUIabgfQj6F4R6PLQ+Q3Gw1/5nwjl8W7julSwfOfyuVX
-         tbGqcAz0RPmJLTRatEe6eZsjE5l9mhKDEPFq+Wg7/XFyrBGn+DsZeTyxKlVgYpMPl3BA
-         /PjA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ipaWPMu8MrV9IYxOaGz/3RfGA0OEYukjBOQDMEv33Kg=;
+        b=QSkoJB6u5aKIMamm1t3oC096eLYPUzBxxVKjrHPHoLa/8WCy+w0pAzJycNxLZFvaP5
+         uufvgIlVIcPQl/zylG+HDnvuAELrV8VXmeCTPKWlwO2184h+M0wf5wxfrJUysA4dpUBP
+         KotMWi3Oqf5rjz5Iqj10Il/+zwkpQjqeK3u9TTtawkeSA5muinGEa0keYYsddocdDt7Y
+         czlRRiOR/hS4f0G+gxmeQOOlqhwc+4Zr1z92zE2AS0Y/S3ohprDhfpN10dfibHGfnR0H
+         4UP/KAKWMjut0LBreRo+Pw29Y8hoKkSQeaS67EvVub/kasHLZ8m0pBPz3KDf5dhhzMJ9
+         v+dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=QipqmHbUZGHLWu5BlBNjHs+pAuw4tqeLoTpMAyu+/es=;
-        b=pBlp1X2/selzKBVgby++FGxW8OgQxgcG9APVyQkJUTsN6bssPoiW2GA4AISPc0z7R0
-         FprvP9PCgKuVdpi9fMiFRm2zc9THFgujLi1nVeigMJr9PKGed8NyGy6FgdKRssM2Y3ID
-         gcQoX2GQ4htbMNZ3+Xepg4h3YZrRTPoPmPkcXghlEb2AylN1u9OTPyeVKJTAEVVTD0ZP
-         3AL8mekKCqEAvOBTwNp4ytHk31ubKdqShIUot15HZBNLccx0u49i1nB5SHaAjyBVX8yP
-         1dW27YIQfCBndJ6+0ljZObzPMOUCUOpC5edeECTsU1aDMVSTkNBWvnM2fpFyn0VwG0A+
-         osGQ==
-X-Gm-Message-State: ACrzQf2g+ogFHzlFSYaNGmn3qQIDYkyU7qTe3hzKhpO0vfMshOttHbxZ
-        WxqPZBFnoFTYyAgSWgc7FPMJfw==
-X-Google-Smtp-Source: AMsMyM7K+ymi+QQYX5gsaalOWOHDoQxV3Hvf+WX5bbEGtYUAWosJaxnVIUdGEXgs6HuIfnku7XpykA==
-X-Received: by 2002:a5d:5a85:0:b0:22a:34a8:eda7 with SMTP id bp5-20020a5d5a85000000b0022a34a8eda7mr15590236wrb.687.1664265371088;
-        Tue, 27 Sep 2022 00:56:11 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id x8-20020adfdcc8000000b0022afbd02c69sm1076654wrm.56.2022.09.27.00.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 00:56:10 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     heiko@sntech.de, ardb@kernel.org, davem@davemloft.net,
-        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v10 33/33] crypto: rockchip: Add support for RK3399
-Date:   Tue, 27 Sep 2022 07:55:11 +0000
-Message-Id: <20220927075511.3147847-34-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220927075511.3147847-1-clabbe@baylibre.com>
-References: <20220927075511.3147847-1-clabbe@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ipaWPMu8MrV9IYxOaGz/3RfGA0OEYukjBOQDMEv33Kg=;
+        b=tTtemaR0Ze/Y3HMw2yQ5j2VAJn3AZT2lptzucdVRA7425WnAnqHECuUC7SdMc8uZSo
+         Lv165M1W/Wg2ofJvji+EDnVQ/sPeAeNs/9ZS9Mvs08QnW4JPhDOxn2EorSvrNiXG1jl6
+         qRRFaSEkGcfFYd12KRxV4R8JILQniutco1ZWEW6La8gF4Y5/SWS6qVHiH1Utrxxm34L9
+         7pcB3jTqtKmkKdyyG5fdr9TTRcWP97GuD678Q2zA6US0amVIW5v5MRoZY00I6wCX5FbZ
+         N+t7xKlsR5EwTDQRjzUn/M5HK5vR9rkrwhuv/9QhojhhlmDew0MeIu7nU9fLrzFiMmwK
+         2lkw==
+X-Gm-Message-State: ACrzQf041Vdr+aay/IABnRQ/1xlvBK0oS6fZK5jPjVFBDbVClupmxF9H
+        wACNqdIuS9Zd0sdLRnqSaC4ALfzIfYDsYbGd5Habyg==
+X-Google-Smtp-Source: AMsMyM74kmK3FajFfvRtn8uhxQhHSaHBuqlmxm5HyDuPYcbWWtyozCf4DnopQNFwWKuEpL9OUrlKG7g4x1Pq1Zihd/o=
+X-Received: by 2002:a17:906:fd85:b0:77b:b538:6472 with SMTP id
+ xa5-20020a170906fd8500b0077bb5386472mr21305559ejb.48.1664265363692; Tue, 27
+ Sep 2022 00:56:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220926100806.522017616@linuxfoundation.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 27 Sep 2022 13:25:52 +0530
+Message-ID: <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RK3399 has 2 rk3288 compatible crypto device named crypto0 and
-crypto1. The only difference is lack of RSA in crypto1.
+On Mon, 26 Sept 2022 at 16:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.12 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-We need to add driver support for 2 parallel instance as only one need
-to register crypto algorithms.
-Then the driver will round robin each request on each device.
+Results from Linaro's test farm.
+No regressions on arm, x86_64, and i386.
+Following deadlock warning noticed on arm64 with kselftests Kconfigs.
 
-For avoiding complexity (device bringup after a TFM is created), PM is
-modified to be handled per request.
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/crypto/rockchip/rk3288_crypto.c       | 92 +++++++++++++++----
- drivers/crypto/rockchip/rk3288_crypto.h       | 25 +++--
- drivers/crypto/rockchip/rk3288_crypto_ahash.c | 37 ++++----
- .../crypto/rockchip/rk3288_crypto_skcipher.c  | 37 ++++----
- 4 files changed, 123 insertions(+), 68 deletions(-)
 
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-index d96f375423d5..6217e73ba4c4 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto.c
-@@ -19,6 +19,23 @@
- #include <linux/crypto.h>
- #include <linux/reset.h>
- 
-+static struct rockchip_ip rocklist = {
-+	.dev_list = LIST_HEAD_INIT(rocklist.dev_list),
-+	.lock = __SPIN_LOCK_UNLOCKED(rocklist.lock),
-+};
-+
-+struct rk_crypto_info *get_rk_crypto(void)
-+{
-+	struct rk_crypto_info *first;
-+
-+	spin_lock(&rocklist.lock);
-+	first = list_first_entry_or_null(&rocklist.dev_list,
-+					 struct rk_crypto_info, list);
-+	list_rotate_left(&rocklist.dev_list);
-+	spin_unlock(&rocklist.lock);
-+	return first;
-+}
-+
- static const struct rk_variant rk3288_variant = {
- 	.num_clks = 4,
- 	.rkclks = {
-@@ -30,6 +47,10 @@ static const struct rk_variant rk3328_variant = {
- 	.num_clks = 3,
- };
- 
-+static const struct rk_variant rk3399_variant = {
-+	.num_clks = 3,
-+};
-+
- static int rk_crypto_get_clks(struct rk_crypto_info *dev)
- {
- 	int i, j, err;
-@@ -83,8 +104,8 @@ static void rk_crypto_disable_clk(struct rk_crypto_info *dev)
- }
- 
- /*
-- * Power management strategy: The device is suspended unless a TFM exists for
-- * one of the algorithms proposed by this driver.
-+ * Power management strategy: The device is suspended until a request
-+ * is handled. For avoiding suspend/resume yoyo, the autosuspend is set to 2s.
-  */
- static int rk_crypto_pm_suspend(struct device *dev)
- {
-@@ -166,8 +187,17 @@ static struct rk_crypto_tmp *rk_cipher_algs[] = {
- #ifdef CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG
- static int rk_crypto_debugfs_show(struct seq_file *seq, void *v)
- {
-+	struct rk_crypto_info *dd;
- 	unsigned int i;
- 
-+	spin_lock(&rocklist.lock);
-+	list_for_each_entry(dd, &rocklist.dev_list, list) {
-+		seq_printf(seq, "%s %s requests: %lu\n",
-+			   dev_driver_string(dd->dev), dev_name(dd->dev),
-+			   dd->nreq);
-+	}
-+	spin_unlock(&rocklist.lock);
-+
- 	for (i = 0; i < ARRAY_SIZE(rk_cipher_algs); i++) {
- 		if (!rk_cipher_algs[i]->dev)
- 			continue;
-@@ -198,6 +228,18 @@ static int rk_crypto_debugfs_show(struct seq_file *seq, void *v)
- DEFINE_SHOW_ATTRIBUTE(rk_crypto_debugfs);
- #endif
- 
-+static void register_debugfs(struct rk_crypto_info *crypto_info)
-+{
-+#ifdef CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG
-+	/* Ignore error of debugfs */
-+	rocklist.dbgfs_dir = debugfs_create_dir("rk3288_crypto", NULL);
-+	rocklist.dbgfs_stats = debugfs_create_file("stats", 0444,
-+						   rocklist.dbgfs_dir,
-+						   &rocklist,
-+						   &rk_crypto_debugfs_fops);
-+#endif
-+}
-+
- static int rk_crypto_register(struct rk_crypto_info *crypto_info)
- {
- 	unsigned int i, k;
-@@ -255,6 +297,9 @@ static const struct of_device_id crypto_of_id_table[] = {
- 	{ .compatible = "rockchip,rk3328-crypto",
- 	  .data = &rk3328_variant,
- 	},
-+	{ .compatible = "rockchip,rk3399-crypto",
-+	  .data = &rk3399_variant,
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, crypto_of_id_table);
-@@ -262,7 +307,7 @@ MODULE_DEVICE_TABLE(of, crypto_of_id_table);
- static int rk_crypto_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct rk_crypto_info *crypto_info;
-+	struct rk_crypto_info *crypto_info, *first;
- 	int err = 0;
- 
- 	crypto_info = devm_kzalloc(&pdev->dev,
-@@ -325,22 +370,22 @@ static int rk_crypto_probe(struct platform_device *pdev)
- 	if (err)
- 		goto err_pm;
- 
--	err = rk_crypto_register(crypto_info);
--	if (err) {
--		dev_err(dev, "err in register alg");
--		goto err_register_alg;
--	}
-+	spin_lock(&rocklist.lock);
-+	first = list_first_entry_or_null(&rocklist.dev_list,
-+					 struct rk_crypto_info, list);
-+	list_add_tail(&crypto_info->list, &rocklist.dev_list);
-+	spin_unlock(&rocklist.lock);
-+
-+	if (!first) {
-+		err = rk_crypto_register(crypto_info);
-+		if (err) {
-+			dev_err(dev, "Fail to register crypto algorithms");
-+			goto err_register_alg;
-+		}
- 
--#ifdef CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG
--	/* Ignore error of debugfs */
--	crypto_info->dbgfs_dir = debugfs_create_dir("rk3288_crypto", NULL);
--	crypto_info->dbgfs_stats = debugfs_create_file("stats", 0444,
--						       crypto_info->dbgfs_dir,
--						       crypto_info,
--						       &rk_crypto_debugfs_fops);
--#endif
-+		register_debugfs(crypto_info);
-+	}
- 
--	dev_info(dev, "Crypto Accelerator successfully registered\n");
- 	return 0;
- 
- err_register_alg:
-@@ -355,11 +400,20 @@ static int rk_crypto_probe(struct platform_device *pdev)
- static int rk_crypto_remove(struct platform_device *pdev)
- {
- 	struct rk_crypto_info *crypto_tmp = platform_get_drvdata(pdev);
-+	struct rk_crypto_info *first;
-+
-+	spin_lock_bh(&rocklist.lock);
-+	list_del(&crypto_tmp->list);
-+	first = list_first_entry_or_null(&rocklist.dev_list,
-+					 struct rk_crypto_info, list);
-+	spin_unlock_bh(&rocklist.lock);
- 
-+	if (!first) {
- #ifdef CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG
--	debugfs_remove_recursive(crypto_tmp->dbgfs_dir);
-+		debugfs_remove_recursive(rocklist.dbgfs_dir);
- #endif
--	rk_crypto_unregister();
-+		rk_crypto_unregister();
-+	}
- 	rk_crypto_pm_exit(crypto_tmp);
- 	crypto_engine_exit(crypto_tmp->engine);
- 	return 0;
-diff --git a/drivers/crypto/rockchip/rk3288_crypto.h b/drivers/crypto/rockchip/rk3288_crypto.h
-index ac979d67ced9..b2695258cade 100644
---- a/drivers/crypto/rockchip/rk3288_crypto.h
-+++ b/drivers/crypto/rockchip/rk3288_crypto.h
-@@ -190,6 +190,20 @@
- 
- #define RK_MAX_CLKS 4
- 
-+/*
-+ * struct rockchip_ip - struct for managing a list of RK crypto instance
-+ * @dev_list:		Used for doing a list of rk_crypto_info
-+ * @lock:		Control access to dev_list
-+ * @dbgfs_dir:		Debugfs dentry for statistic directory
-+ * @dbgfs_stats:	Debugfs dentry for statistic counters
-+ */
-+struct rockchip_ip {
-+	struct list_head	dev_list;
-+	spinlock_t		lock; /* Control access to dev_list */
-+	struct dentry		*dbgfs_dir;
-+	struct dentry		*dbgfs_stats;
-+};
-+
- struct rk_clks {
- 	const char *name;
- 	unsigned long max;
-@@ -201,6 +215,7 @@ struct rk_variant {
- };
- 
- struct rk_crypto_info {
-+	struct list_head		list;
- 	struct device			*dev;
- 	struct clk_bulk_data		*clks;
- 	int				num_clks;
-@@ -208,19 +223,15 @@ struct rk_crypto_info {
- 	void __iomem			*reg;
- 	int				irq;
- 	const struct rk_variant *variant;
-+	unsigned long nreq;
- 	struct crypto_engine *engine;
- 	struct completion complete;
- 	int status;
--#ifdef CONFIG_CRYPTO_DEV_ROCKCHIP_DEBUG
--	struct dentry *dbgfs_dir;
--	struct dentry *dbgfs_stats;
--#endif
- };
- 
- /* the private variable of hash */
- struct rk_ahash_ctx {
- 	struct crypto_engine_ctx enginectx;
--	struct rk_crypto_info		*dev;
- 	/* for fallback */
- 	struct crypto_ahash		*fallback_tfm;
- };
-@@ -236,7 +247,6 @@ struct rk_ahash_rctx {
- /* the private variable of cipher */
- struct rk_cipher_ctx {
- 	struct crypto_engine_ctx enginectx;
--	struct rk_crypto_info		*dev;
- 	unsigned int			keylen;
- 	u8				key[AES_MAX_KEY_SIZE];
- 	u8				iv[AES_BLOCK_SIZE];
-@@ -252,7 +262,7 @@ struct rk_cipher_rctx {
- 
- struct rk_crypto_tmp {
- 	u32 type;
--	struct rk_crypto_info		*dev;
-+	struct rk_crypto_info           *dev;
- 	union {
- 		struct skcipher_alg	skcipher;
- 		struct ahash_alg	hash;
-@@ -276,4 +286,5 @@ extern struct rk_crypto_tmp rk_ahash_sha1;
- extern struct rk_crypto_tmp rk_ahash_sha256;
- extern struct rk_crypto_tmp rk_ahash_md5;
- 
-+struct rk_crypto_info *get_rk_crypto(void);
- #endif
-diff --git a/drivers/crypto/rockchip/rk3288_crypto_ahash.c b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-index 30f78256c955..a78ff3dcd0b1 100644
---- a/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-@@ -199,8 +199,8 @@ static int rk_ahash_export(struct ahash_request *req, void *out)
- static int rk_ahash_digest(struct ahash_request *req)
- {
- 	struct rk_ahash_rctx *rctx = ahash_request_ctx(req);
--	struct rk_ahash_ctx *tctx = crypto_tfm_ctx(req->base.tfm);
--	struct rk_crypto_info *dev = tctx->dev;
-+	struct rk_crypto_info *dev;
-+	struct crypto_engine *engine;
- 
- 	if (rk_ahash_need_fallback(req))
- 		return rk_ahash_digest_fb(req);
-@@ -208,9 +208,12 @@ static int rk_ahash_digest(struct ahash_request *req)
- 	if (!req->nbytes)
- 		return zero_message_process(req);
- 
-+	dev = get_rk_crypto();
-+
- 	rctx->dev = dev;
-+	engine = dev->engine;
- 
--	return crypto_transfer_hash_request_to_engine(dev->engine, req);
-+	return crypto_transfer_hash_request_to_engine(engine, req);
- }
- 
- static void crypto_ahash_dma_start(struct rk_crypto_info *dev, struct scatterlist *sg)
-@@ -260,9 +263,14 @@ static int rk_hash_run(struct crypto_engine *engine, void *breq)
- 	int i;
- 	u32 v;
- 
-+	err = pm_runtime_resume_and_get(rkc->dev);
-+	if (err)
-+		return err;
-+
- 	rctx->mode = 0;
- 
- 	algt->stat_req++;
-+	rkc->nreq++;
- 
- 	switch (crypto_ahash_digestsize(tfm)) {
- 	case SHA1_DIGEST_SIZE:
-@@ -313,6 +321,8 @@ static int rk_hash_run(struct crypto_engine *engine, void *breq)
- 	}
- 
- theend:
-+	pm_runtime_put_autosuspend(rkc->dev);
-+
- 	local_bh_disable();
- 	crypto_finalize_hash_request(engine, breq, err);
- 	local_bh_enable();
-@@ -323,21 +333,15 @@ static int rk_hash_run(struct crypto_engine *engine, void *breq)
- static int rk_cra_hash_init(struct crypto_tfm *tfm)
- {
- 	struct rk_ahash_ctx *tctx = crypto_tfm_ctx(tfm);
--	struct rk_crypto_tmp *algt;
--	struct ahash_alg *alg = __crypto_ahash_alg(tfm->__crt_alg);
--
- 	const char *alg_name = crypto_tfm_alg_name(tfm);
--	int err;
--
--	algt = container_of(alg, struct rk_crypto_tmp, alg.hash);
--
--	tctx->dev = algt->dev;
-+	struct ahash_alg *alg = __crypto_ahash_alg(tfm->__crt_alg);
-+	struct rk_crypto_tmp *algt = container_of(alg, struct rk_crypto_tmp, alg.hash);
- 
- 	/* for fallback */
- 	tctx->fallback_tfm = crypto_alloc_ahash(alg_name, 0,
- 						CRYPTO_ALG_NEED_FALLBACK);
- 	if (IS_ERR(tctx->fallback_tfm)) {
--		dev_err(tctx->dev->dev, "Could not load fallback driver.\n");
-+		dev_err(algt->dev->dev, "Could not load fallback driver.\n");
- 		return PTR_ERR(tctx->fallback_tfm);
- 	}
- 
-@@ -349,15 +353,7 @@ static int rk_cra_hash_init(struct crypto_tfm *tfm)
- 	tctx->enginectx.op.prepare_request = rk_hash_prepare;
- 	tctx->enginectx.op.unprepare_request = rk_hash_unprepare;
- 
--	err = pm_runtime_resume_and_get(tctx->dev->dev);
--	if (err < 0)
--		goto error_pm;
--
- 	return 0;
--error_pm:
--	crypto_free_ahash(tctx->fallback_tfm);
--
--	return err;
- }
- 
- static void rk_cra_hash_exit(struct crypto_tfm *tfm)
-@@ -365,7 +361,6 @@ static void rk_cra_hash_exit(struct crypto_tfm *tfm)
- 	struct rk_ahash_ctx *tctx = crypto_tfm_ctx(tfm);
- 
- 	crypto_free_ahash(tctx->fallback_tfm);
--	pm_runtime_put_autosuspend(tctx->dev->dev);
- }
- 
- struct rk_crypto_tmp rk_ahash_sha1 = {
-diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-index 0b1c90ababb7..59069457582b 100644
---- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-@@ -17,11 +17,11 @@
- static int rk_cipher_need_fallback(struct skcipher_request *req)
- {
- 	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
--	unsigned int bs = crypto_skcipher_blocksize(tfm);
- 	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
- 	struct rk_crypto_tmp *algt = container_of(alg, struct rk_crypto_tmp, alg.skcipher);
- 	struct scatterlist *sgs, *sgd;
- 	unsigned int stodo, dtodo, len;
-+	unsigned int bs = crypto_skcipher_blocksize(tfm);
- 
- 	if (!req->cryptlen)
- 		return true;
-@@ -84,15 +84,16 @@ static int rk_cipher_fallback(struct skcipher_request *areq)
- 
- static int rk_cipher_handle_req(struct skcipher_request *req)
- {
--	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
--	struct rk_cipher_ctx *tctx = crypto_skcipher_ctx(tfm);
- 	struct rk_cipher_rctx *rctx = skcipher_request_ctx(req);
--	struct rk_crypto_info *rkc = tctx->dev;
--	struct crypto_engine *engine = rkc->engine;
-+	struct rk_crypto_info *rkc;
-+	struct crypto_engine *engine;
- 
- 	if (rk_cipher_need_fallback(req))
- 		return rk_cipher_fallback(req);
- 
-+	rkc = get_rk_crypto();
-+
-+	engine = rkc->engine;
- 	rctx->dev = rkc;
- 
- 	return crypto_transfer_skcipher_request_to_engine(engine, req);
-@@ -307,7 +308,12 @@ static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
- 	struct rk_crypto_tmp *algt = container_of(alg, struct rk_crypto_tmp, alg.skcipher);
- 	struct rk_crypto_info *rkc = rctx->dev;
- 
-+	err = pm_runtime_resume_and_get(rkc->dev);
-+	if (err)
-+		return err;
-+
- 	algt->stat_req++;
-+	rkc->nreq++;
- 
- 	ivsize = crypto_skcipher_ivsize(tfm);
- 	if (areq->iv && crypto_skcipher_ivsize(tfm) > 0) {
-@@ -401,6 +407,8 @@ static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
- 	}
- 
- theend:
-+	pm_runtime_put_autosuspend(rkc->dev);
-+
- 	local_bh_disable();
- 	crypto_finalize_skcipher_request(engine, areq, err);
- 	local_bh_enable();
-@@ -420,18 +428,13 @@ static int rk_cipher_run(struct crypto_engine *engine, void *async_req)
- static int rk_cipher_tfm_init(struct crypto_skcipher *tfm)
- {
- 	struct rk_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
--	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
- 	const char *name = crypto_tfm_alg_name(&tfm->base);
--	struct rk_crypto_tmp *algt;
--	int err;
--
--	algt = container_of(alg, struct rk_crypto_tmp, alg.skcipher);
--
--	ctx->dev = algt->dev;
-+	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
-+	struct rk_crypto_tmp *algt = container_of(alg, struct rk_crypto_tmp, alg.skcipher);
- 
- 	ctx->fallback_tfm = crypto_alloc_skcipher(name, 0, CRYPTO_ALG_NEED_FALLBACK);
- 	if (IS_ERR(ctx->fallback_tfm)) {
--		dev_err(ctx->dev->dev, "ERROR: Cannot allocate fallback for %s %ld\n",
-+		dev_err(algt->dev->dev, "ERROR: Cannot allocate fallback for %s %ld\n",
- 			name, PTR_ERR(ctx->fallback_tfm));
- 		return PTR_ERR(ctx->fallback_tfm);
- 	}
-@@ -441,14 +444,7 @@ static int rk_cipher_tfm_init(struct crypto_skcipher *tfm)
- 
- 	ctx->enginectx.op.do_one_request = rk_cipher_run;
- 
--	err = pm_runtime_resume_and_get(ctx->dev->dev);
--	if (err < 0)
--		goto error_pm;
--
- 	return 0;
--error_pm:
--	crypto_free_skcipher(ctx->fallback_tfm);
--	return err;
- }
- 
- static void rk_cipher_tfm_exit(struct crypto_skcipher *tfm)
-@@ -457,7 +453,6 @@ static void rk_cipher_tfm_exit(struct crypto_skcipher *tfm)
- 
- 	memzero_explicit(ctx->key, ctx->keylen);
- 	crypto_free_skcipher(ctx->fallback_tfm);
--	pm_runtime_put_autosuspend(ctx->dev->dev);
- }
- 
- struct rk_crypto_tmp rk_ecb_aes_alg = {
--- 
-2.35.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+
+NOTE:
+Following kernel boot warning noticed on arm64 bcm2711-rpi-4-b,
+dragonboard-845c and devices with kselftest Kconfigs [1].
+
+[   51.802754] ======================================================
+[   51.809016] WARNING: possible circular locking dependency detected
+[   51.815280] 5.19.12-rc1 #1 Not tainted
+[   51.819078] ------------------------------------------------------
+[   51.825340] kworker/u9:0/170 is trying to acquire lock:
+[   51.830635] ffff000044f1b048 (&hdev->req_lock){+.+.}-{3:3}, at:
+scan_update_work+0x2c/0x70 [bluetooth]
+[   51.840186]
+[   51.840186] but task is already holding lock:
+[   51.846095] ffff80000c563dd0
+((work_completion)(&hdev->scan_update)){+.+.}-{0:0}, at:
+process_one_work+0x1e8/0x6d4
+[   51.856610]
+[   51.856610] which lock already depends on the new lock.
+[   51.856610]
+[   51.864898]
+[   51.864898] the existing dependency chain (in reverse order) is:
+[   51.872482]
+[   51.872482] -> #1 ((work_completion)(&hdev->scan_update)){+.+.}-{0:0}:
+[   51.880603]        lock_acquire+0x84/0xa0
+[   51.884668]        __flush_work+0x88/0x510
+[   51.888820]        __cancel_work_timer+0x150/0x1d0
+[   51.893678]        cancel_work_sync+0x28/0x40
+[   51.898094]        hci_request_cancel_all+0x38/0x110 [bluetooth]
+[   51.904265]        hci_dev_close_sync+0x3c/0x620 [bluetooth]
+[   51.910071]        hci_dev_do_close+0x38/0x80 [bluetooth]
+[   51.915600]        hci_power_off+0x2c/0x70 [bluetooth]
+[   51.920870]        process_one_work+0x280/0x6d4
+[   51.925472]        worker_thread+0x7c/0x430
+[   51.929711]        kthread+0x108/0x114
+[   51.933509]        ret_from_fork+0x10/0x20
+[   51.937660]
+[   51.937660] -> #0 (&hdev->req_lock){+.+.}-{3:3}:
+[   51.943843]        __lock_acquire+0x12d8/0x205c
+[   51.948434]        lock_acquire.part.0+0xe4/0x22c
+[   51.953201]        lock_acquire+0x84/0xa0
+[   51.957261]        __mutex_lock+0x9c/0x410
+[   51.961413]        mutex_lock_nested+0x64/0xa0
+[   51.965914]        scan_update_work+0x2c/0x70 [bluetooth]
+[   51.971477]        process_one_work+0x280/0x6d4
+[   51.976074]        worker_thread+0x7c/0x430
+[   51.980313]        kthread+0x108/0x114
+[   51.984110]        ret_from_fork+0x10/0x20
+[   51.988261]
+[   51.988261] other info that might help us debug this:
+[   51.988261]
+[   51.996373]  Possible unsafe locking scenario:
+[   51.996373]
+[   52.002370]        CPU0                    CPU1
+[   52.006956]        ----                    ----
+[   52.011543]   lock((work_completion)(&hdev->scan_update));
+[   52.017103]                                lock(&hdev->req_lock);
+[   52.023280]
+lock((work_completion)(&hdev->scan_update));
+[   52.031395]   lock(&hdev->req_lock);
+[   52.035015]
+[   52.035015]  *** DEADLOCK ***
+[   52.035015]
+[   52.041013] 2 locks held by kworker/u9:0/170:
+[   52.045425]  #0: ffff000048b8d938
+((wq_completion)hci0){+.+.}-{0:0}, at: process_one_work+0x1e8/0x6d4
+[   52.054788]  #1: ffff80000c563dd0
+((work_completion)(&hdev->scan_update)){+.+.}-{0:0}, at:
+process_one_work+0x1e8/0x6d4
+[   52.065736]
+[   52.065736] stack backtrace:
+[   52.070149] CPU: 1 PID: 170 Comm: kworker/u9:0 Not tainted 5.19.12-rc1 #1
+[   52.077031] Hardware name: Raspberry Pi 4 Model B (DT)
+[   52.082237] Workqueue: hci0 scan_update_work [bluetooth]
+[   52.087725] Call trace:
+[   52.090197]  dump_backtrace+0xbc/0x130
+[   52.093997]  show_stack+0x30/0x70
+[   52.097352]  dump_stack_lvl+0x8c/0xb8
+[   52.101062]  dump_stack+0x18/0x34
+[   52.104416]  print_circular_bug+0x1f8/0x200
+[   52.108655]  check_noncircular+0x12c/0x140
+[   52.112804]  __lock_acquire+0x12d8/0x205c
+[   52.116864]  lock_acquire.part.0+0xe4/0x22c
+[   52.121101]  lock_acquire+0x84/0xa0
+[   52.124633]  __mutex_lock+0x9c/0x410
+[   52.128255]  mutex_lock_nested+0x64/0xa0
+[   52.132228]  scan_update_work+0x2c/0x70 [bluetooth]
+[   52.137265]  process_one_work+0x280/0x6d4
+[   52.141330]  worker_thread+0x7c/0x430
+[   52.145039]  kthread+0x108/0x114
+[   52.148308]  ret_from_fork+0x10/0x20
+
+
+[1] https://builds.tuxbuild.com/2FJZaTWmWVmCtAL2pw1Fvo1uWXw/config
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.11-208-gddfc03723522/testrun/12111785/suite/log-parser-boot/tests/
+
+
+## Build
+* kernel: 5.19.12-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: ddfc03723522344950fd8eddeec14bd1facf0ba5
+* git describe: v5.19.11-208-gddfc03723522
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.11-208-gddfc03723522
+
+## No test Regressions (compared to v5.19.11)
+
+## No metric Regressions (compared to v5.19.11)
+
+## No test Fixes (compared to v5.19.11)
+
+## No metric Fixes (compared to v5.19.11)
+
+## Test result summary
+total: 117926, pass: 103539, fail: 1113, skip: 13021, xfail: 253
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 69 total, 63 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
