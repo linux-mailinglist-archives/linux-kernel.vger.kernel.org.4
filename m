@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A625EC604
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64E05EC608
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiI0O2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S232079AbiI0O23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbiI0O2N (ORCPT
+        with ESMTP id S232317AbiI0O2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 10:28:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A6518699F;
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DA7186990;
         Tue, 27 Sep 2022 07:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664288891; x=1695824891;
+  t=1664288892; x=1695824892;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OpCYS+dBiHi5I1/btU2nR0TfLX5a+7mXaU5C2OHUqa4=;
-  b=iB7MXCvg2KgzUsjiB5jlwjVeEL40xvByut4d3e2R1tQ4C7uIkyrnuFpB
-   C5lwHd/ue7SYvz2pzaOvGyerq7cLdUsgip5pnltilHDmJPLR229/CrEdZ
-   LJfU1hRafyUNAIwK3+RIpu0RAncYM8AnbxFUirDTxM6e5+NtUoGgonVRi
-   HDs8cmsayRLL3SfA+u7ZjtSLEpSAaTF0GxpKwXmzEO9UCkMNO8fbIOQGi
-   sBzIwXrnGB5nx5G/IqCtoegK02OnjfmRdQJ6ZSSJfF0ir1zBk1fKhUvfL
-   AYsuzkZAylQJnY+YgFHR4RN4XHszl1p4lLJk9yGsHV9OA3YxSq1jCgXJD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="365370927"
+  bh=cc1aFjYUO4SDChMPwPNv5Bv/vhNv4tExWF8sOyp8IOc=;
+  b=AvtXbPzYTPnufJQiza+ZRHIPXhXeWSgPSD+kvl3K+YPqvweu7aF+Wco8
+   3KX5tQpUPfbkZhew7Kl9nEAyrnUM1DDiH/llettZtkTYHkGA9OXcyXiBn
+   gthYOECzUS0yiIQmeC4/7JYL8oJdvTTwXzYchh+hwj0D/5dhpwRKre9zk
+   SxXypEAqgQRY7o7CS9+gcKKgfDJsjoL3jfWFxi3uzFwOs9m7G0SWfMBCc
+   xaOIZcZeIYjpkXjpvZ7RI+TgGtAf3D3tdsG4ECcG3RfrpUY4MeMCa8+YD
+   2phU6KEOr90Mt6GZMyX+Xcj56td6+9LlW+9bJaMYGfDj3vkNV72TXvQ6j
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302808026"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="365370927"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 07:28:10 -0700
+   d="scan'208";a="302808026"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 07:28:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="616845985"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684008506"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="616845985"
+   d="scan'208";a="684008506"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 27 Sep 2022 07:28:08 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 27 Sep 2022 07:28:08 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 00B41235; Tue, 27 Sep 2022 17:28:26 +0300 (EEST)
+        id 08235265; Tue, 27 Sep 2022 17:28:27 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Prashant Malani <pmalani@chromium.org>,
@@ -51,9 +51,9 @@ Cc:     Daniel Scally <djrscally@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v1 3/5] device property: Constify parameter in fwnode_graph_is_endpoint()
-Date:   Tue, 27 Sep 2022 17:28:19 +0300
-Message-Id: <20220927142822.4095-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 4/5] device property: Constify device child node APIs
+Date:   Tue, 27 Sep 2022 17:28:20 +0300
+Message-Id: <20220927142822.4095-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220927142822.4095-1-andriy.shevchenko@linux.intel.com>
 References: <20220927142822.4095-1-andriy.shevchenko@linux.intel.com>
@@ -68,27 +68,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Constify parameter in fwnode_graph_is_endpoint() since it doesn't
-alter anything related to it.
+The device parameter is not altered in the device child node APIs,
+constify them.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/property.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/property.c  | 10 +++++-----
+ include/linux/property.h | 12 ++++++------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 1a1616c9b599..04eb5e0ab407 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -763,10 +763,10 @@ EXPORT_SYMBOL_GPL(fwnode_get_next_available_child_node);
+  * @dev: Device to find the next child node for.
+  * @child: Handle to one of the device's child nodes or a null handle.
+  */
+-struct fwnode_handle *device_get_next_child_node(struct device *dev,
++struct fwnode_handle *device_get_next_child_node(const struct device *dev,
+ 						 struct fwnode_handle *child)
+ {
+-	const struct fwnode_handle *fwnode = dev_fwnode(dev);
++	const struct fwnode_handle *fwnode = dev_fwnode_const(dev);
+ 	struct fwnode_handle *next;
+ 
+ 	if (IS_ERR_OR_NULL(fwnode))
+@@ -800,10 +800,10 @@ EXPORT_SYMBOL_GPL(fwnode_get_named_child_node);
+  * @dev: Device to find the named child node for.
+  * @childname: String to match child node name against.
+  */
+-struct fwnode_handle *device_get_named_child_node(struct device *dev,
++struct fwnode_handle *device_get_named_child_node(const struct device *dev,
+ 						  const char *childname)
+ {
+-	return fwnode_get_named_child_node(dev_fwnode(dev), childname);
++	return fwnode_get_named_child_node(dev_fwnode_const(dev), childname);
+ }
+ EXPORT_SYMBOL_GPL(device_get_named_child_node);
+ 
+@@ -859,7 +859,7 @@ EXPORT_SYMBOL_GPL(fwnode_device_is_available);
+  * device_get_child_node_count - return the number of child nodes for device
+  * @dev: Device to cound the child nodes for
+  */
+-unsigned int device_get_child_node_count(struct device *dev)
++unsigned int device_get_child_node_count(const struct device *dev)
+ {
+ 	struct fwnode_handle *child;
+ 	unsigned int count = 0;
 diff --git a/include/linux/property.h b/include/linux/property.h
-index 6f9d6604edc3..fe440211e529 100644
+index fe440211e529..31dd6cbea9b0 100644
 --- a/include/linux/property.h
 +++ b/include/linux/property.h
-@@ -406,7 +406,7 @@ struct fwnode_handle *fwnode_graph_get_remote_port(
- struct fwnode_handle *fwnode_graph_get_remote_endpoint(
- 	const struct fwnode_handle *fwnode);
+@@ -110,16 +110,16 @@ struct fwnode_handle *fwnode_get_next_available_child_node(
+ 	for (child = fwnode_get_next_available_child_node(fwnode, NULL); child;\
+ 	     child = fwnode_get_next_available_child_node(fwnode, child))
  
--static inline bool fwnode_graph_is_endpoint(struct fwnode_handle *fwnode)
-+static inline bool fwnode_graph_is_endpoint(const struct fwnode_handle *fwnode)
- {
- 	return fwnode_property_present(fwnode, "remote-endpoint");
- }
+-struct fwnode_handle *device_get_next_child_node(
+-	struct device *dev, struct fwnode_handle *child);
++struct fwnode_handle *device_get_next_child_node(const struct device *dev,
++						 struct fwnode_handle *child);
+ 
+ #define device_for_each_child_node(dev, child)				\
+ 	for (child = device_get_next_child_node(dev, NULL); child;	\
+ 	     child = device_get_next_child_node(dev, child))
+ 
+-struct fwnode_handle *fwnode_get_named_child_node(
+-	const struct fwnode_handle *fwnode, const char *childname);
+-struct fwnode_handle *device_get_named_child_node(struct device *dev,
++struct fwnode_handle *fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
++						  const char *childname);
++struct fwnode_handle *device_get_named_child_node(const struct device *dev,
+ 						  const char *childname);
+ 
+ struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
+@@ -128,7 +128,7 @@ void fwnode_handle_put(struct fwnode_handle *fwnode);
+ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
+ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
+ 
+-unsigned int device_get_child_node_count(struct device *dev);
++unsigned int device_get_child_node_count(const struct device *dev);
+ 
+ static inline bool device_property_read_bool(struct device *dev,
+ 					     const char *propname)
 -- 
 2.35.1
 
