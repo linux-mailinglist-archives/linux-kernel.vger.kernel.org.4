@@ -2,167 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFB55EC393
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0185EC39C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbiI0NFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S232330AbiI0NGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiI0NFo (ORCPT
+        with ESMTP id S232203AbiI0NGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:05:44 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB72155653
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:05:43 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id j10so5932555qtv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:05:43 -0700 (PDT)
+        Tue, 27 Sep 2022 09:06:08 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D37155433
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:07 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so15498782pjq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=VwbaJasZiu5L9FNI6re2UMaxmL63qw+/+qS40vX13/A=;
-        b=TotE1mXzB2SCsEcIQfBVS8Sd+XwKnWnfSgZU6rnC/eJM3JJQl7QInTxFA85uWTf92M
-         KokbkM81/6uqDgtH8BgVeZWcY2qNcQrvgL5mkTU/U9MdwKW4d5vzUDTnfEkKevujJIBz
-         0j/cf7agxjxZ0XKffowh1Q+KCqT5puvEc8Yeg=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=tVImipPJ55LLlj3hxov+6J9Uas9BlzTbH/QBaoiYcnE=;
+        b=AeFiLZSELiOLu0C/WY7j3qNn2XbPtZX/1DfSK5wxjFb2rqwPO7CvvZtAFF5v6/7J26
+         ahCqqp2F9wNI5OYX7qy/ObhCyFoh9fcBwqqwDTOmQ3Szz628RGrS+W9AFjoVJocXlWki
+         VC0GYuee8hoFp6tnnZjb+BQvkFkX4acVrRZQaXEcy3Crna/0t54Jbazxa/CYEy/0/zFu
+         2lndzQwEpvpkb26lSSoBm5VVsMti9KIfqB8rnh9R4Sn70IUDgJCGjP5FzkG0xZM/8Ujz
+         ktOS6zIlcVHVVfda96Denge0ZrYEMhecJgtt3RQnWSFrUZInrw19D5HLdT/lXGWs6zAx
+         AlBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VwbaJasZiu5L9FNI6re2UMaxmL63qw+/+qS40vX13/A=;
-        b=R6Jdz7qP+61mmbCsdoyV41vCL0ofV2usC+tBvx4QM6f5T6YLyF42TQmVRG+DGRY7fM
-         LeuHi/T/dI51h+pmtL5GbP2pB6eMomdCqRUjNmQoeID/nVsxwKnD/gitNHmCmNxqm51p
-         fgZ6m1qieGL8TrvdZpqv2KovJXlwf7LMr5EPrZ+gq0Fv0vomjMxaBgVPkaxuakKtu94C
-         oVbx8d+0IJaV+XOJ7tlsQ9I/7Upc/ZWiETY1qudzY9MiQdAw5OlcGLJT7enjKDlw7V5G
-         NKFV94GcNOVO4UZ7whuTCZkZNp4DDCpmEPYnN/uRoRLWXkdwuGn5LA89QfF2x0FkmbMA
-         RlPQ==
-X-Gm-Message-State: ACrzQf34ACpEahNAURceIZTY5v/RuxFzMhI+jHVmq7ZhFCK+xjtCMwEo
-        qVpQD00OJ1jMHz+nlUomID2FpA==
-X-Google-Smtp-Source: AMsMyM78YG5iIvNULbbfAoekR0u28XcrvIFqgO05NiGmtsTlmEkgArbgLdNXQ6zYrNlKg1iwJXJ1ug==
-X-Received: by 2002:ac8:7f54:0:b0:35d:159d:f88e with SMTP id g20-20020ac87f54000000b0035d159df88emr21353856qtk.415.1664283942251;
-        Tue, 27 Sep 2022 06:05:42 -0700 (PDT)
-Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05622a00c100b0035d0655b079sm827193qtw.30.2022.09.27.06.05.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 06:05:41 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 13:05:41 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <YzL1JauFkeLEMgqV@google.com>
-References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
- <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
- <20220926235944.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <YzJWoRui7mUEDtox@google.com>
- <20220927032246.GH4196@paulmck-ThinkPad-P17-Gen-1>
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tVImipPJ55LLlj3hxov+6J9Uas9BlzTbH/QBaoiYcnE=;
+        b=UgPvwh5BktNXZJ6gabRKRon5PHAjJKNThrm5grR9Bl+GQMiFWnNvH4UdLIDhqECxqE
+         p4T2MMt0tZyIAUe/wz3q7abbrnn4Dik2+RKpUo9DiyIPkYmSWeUgsF26DwkMvel9A1OV
+         PCwOMdSFYSY9IO8I/J2TLaAnm9aC49BcWtrvziqTACLjZ645Mgi1S/NuRrDbbNx519MY
+         z/Oz7TjItg1OfHbqtEKzwk7DjrP7ptvelCCfHT1xAmiXMDyKfd0oxy/3+SNViwaHv9ZH
+         57bjpFLANsXi3eRkXi27x59PyApn8PAnFngk7jWa1tdmd1Fk+AH0owW0jSO+rcCFHBcs
+         WhrQ==
+X-Gm-Message-State: ACrzQf1MJJJAy5160xnHbsOh8O0I9Ca92aoUtuC8yRD0fwRmYhtCBtFu
+        LcJFbVUazg6N0E4SRhkSb0lL0nYuIE8TSu+ZiPGQBA==
+X-Google-Smtp-Source: AMsMyM6iYfFfRkY7ZCfN7iH6SfIok108DtV5xTUiUrfRhR4EUYS3wDXnryle8l6ZhFGMR+ScZmNr7PCxr1+tKvPRj2I=
+X-Received: by 2002:a17:90b:2643:b0:205:bd0d:bdff with SMTP id
+ pa3-20020a17090b264300b00205bd0dbdffmr4399905pjb.99.1664283966835; Tue, 27
+ Sep 2022 06:06:06 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Sep 2022 06:06:06 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-5-4844816c9808@baylibre.com>
+ <32c4822a-a094-5fa3-c2af-e515bf897937@collabora.com>
+In-Reply-To: <32c4822a-a094-5fa3-c2af-e515bf897937@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927032246.GH4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 27 Sep 2022 06:06:06 -0700
+Message-ID: <CABnWg9vsd7Lk4kR4j-XrgJXAX+sEd3J+oz3hFc4sEuCGRRy8qw@mail.gmail.com>
+Subject: Re: [PATCH v1 05/17] drm/mediatek: hdmi: use a syscon/regmap instead
+ of iomem
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:22:46PM -0700, Paul E. McKenney wrote:
-[..]
-> > > > >>> --- a/kernel/workqueue.c
-> > > > >>> +++ b/kernel/workqueue.c
-> > > > >>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
-> > > > >>> 
-> > > > >>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
-> > > > >>>                rwork->wq = wq;
-> > > > >>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
-> > > > >>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
-> > > > >>>                return true;
-> > > > >>>        }
-> > > > >>> 
-> > > > >>> <snip>
-> > > > >>> 
-> > > > >>> ?
-> > > > >>> 
-> > > > >>> But it does not fully solve my boot-up issue. Will debug tomorrow further.
-> > > > >> 
-> > > > >> Ah, but at least its progress, thanks. Could you send me a patch to include
-> > > > >> in the next revision with details of this?
-> > > > >> 
-> > > > >>>> Might one more proactive approach be to use Coccinelle to locate such
-> > > > >>>> callback functions?  We might not want -all- callbacks that do wakeups
-> > > > >>>> to use call_rcu_flush(), but knowing which are which should speed up
-> > > > >>>> slow-boot debugging by quite a bit.
-> > > > >>>> 
-> > > > >>>> Or is there a better way to do this?
-> > > > >>>> 
-> > > > >>> I am not sure what Coccinelle is. If we had something automated that measures
-> > > > >>> a boot time and if needed does some profiling it would be good. Otherwise it
-> > > > >>> is a manual debugging mainly, IMHO.
-> > > > >> 
-> > > > >> Paul, What about using a default-off kernel CONFIG that splats on all lazy
-> > > > >> call_rcu() callbacks that do a wake up. We could use the trace hooks to do it
-> > > > >> in kernel I think. I can talk to Steve to get ideas on how to do that but I
-> > > > >> think it can be done purely from trace events (we might need a new
-> > > > >> trace_end_invoke_callback to fire after the callback is invoked). Thoughts?
-> > > > > 
-> > > > > Could you look for wakeups invoked between trace_rcu_batch_start() and
-> > > > > trace_rcu_batch_end() that are not from interrupt context?  This would
-> > > > > of course need to be associated with a task rather than a CPU.
-> > > > 
-> > > > Yes this sounds good, but we also need to know if the callbacks are
-> > > > lazy or not since wake-up is ok from a non lazy one. I think I’ll
-> > > > need a table to track that at queuing time.
-> > > 
-> > > Agreed.
-> > > 
-> > > > > Note that you would need to check for wakeups from interrupt handlers
-> > > > > even with the extra trace_end_invoke_callback().  The window where an
-> > > > > interrupt handler could do a wakeup would be reduced, but not eliminated.
-> > > > 
-> > > > True! Since this is a  debugging option, can we not just disable interrupts across callback invocation?
-> > > 
-> > > Not without terminally annoying lockdep, at least for any RCU callbacks
-> > > doing things like spin_lock_bh().
-> > > 
-> > 
-> > Sorry if my last email bounced. Looks like my iPhone betrayed me this once ;)
-> > 
-> > I was thinking something like this:
-> > 1. Put a flag in rcu_head to mark CBs as lazy.
-> > 2. Add a trace_rcu_invoke_callback_end() trace point.
-> > 
-> > Both #1 and #2 can be a debug CONFIG option. #2 can be a tracepoint and not
-> > exposed if needed.
-> > 
-> > 3. Put an in-kernel probe on both trace_rcu_invoke_callback_start() and
-> > trace_rcu_invoke_callback_end(). In the start probe, set a per-task flag if
-> > the current CB is lazy. In the end probe, clear it.
-> > 
-> > 4. Put an in-kernel probe on trace_rcu_sched_wakeup().
-> > 
-> > Splat in the wake up probe if:
-> > 1. Hard IRQs are on.
-> > 2. The per-cpu flag is set.
-> > 
-> > #3 actually does not even need probes if we can directly call the functions
-> > from the rcu_do_batch() function.
-> 
-> This is fine for an experiment or a debugging session, but a solution
-> based totally on instrumentation would be better for production use.
+On Tue, 20 Sep 2022 12:18, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+>> To prepare support for newer chips that need to share their address
+>> range with a dedicated ddc driver, move to a syscon.
+>>
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>> index 3196189429bc..5cd05d4fe1a9 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>
+>..snip..
+>
+>> @@ -1428,7 +1413,6 @@ static int mtk_hdmi_dt_parse_pdata(struct mtk_hdmi *hdmi,
+>>   	struct device_node *cec_np, *remote, *i2c_np;
+>>   	struct platform_device *cec_pdev;
+>>   	struct regmap *regmap;
+>> -	struct resource *mem;
+>>   	int ret;
+>>
+>>   	ret = mtk_hdmi_get_all_clk(hdmi, np);
+>> @@ -1474,8 +1458,7 @@ static int mtk_hdmi_dt_parse_pdata(struct mtk_hdmi *hdmi,
+>>   	}
+>>   	hdmi->sys_regmap = regmap;
+>>
+>> -	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> -	hdmi->regs = devm_ioremap_resource(dev, mem);
+>> +	hdmi->regs = syscon_node_to_regmap(dev->of_node);
+>
+>Nack. You're breaking ABI, this will force everyone to add syscon to devicetree,
+>hence this breaks retrocompatibility with old devicetrees.
+>
+>Hint: not here, device_node_to_regmap()
 
-Maybe we can borrow the least-significant bit of rhp->func to mark laziness?
-Then it can be production as long as we're ok with the trace_sched_wakeup
-probe.
+Hi Angelo,
 
-thanks,
+I'm sorry, I didn't think device tree retro compatibility was a thing.
 
- - Joel
+I'll drop the requirement for the module to be a syscon.
+Thx for the hint.
 
+Thx,
+Guillaume.
+
+>
+>Regards,
+>Angelo
+>
+>>   	if (IS_ERR(hdmi->regs)) {
+>>   		ret = PTR_ERR(hdmi->regs);
+>>   		goto put_device;
+>
+>
