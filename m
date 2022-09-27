@@ -2,100 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89205ECA7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1C25ECA86
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiI0RIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S231423AbiI0RJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiI0RHv (ORCPT
+        with ESMTP id S229691AbiI0RJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:07:51 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16245883CB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:07:45 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id v1so9634179plo.9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=f0hIq2KYifdNKFEFb7aEPEmJFmBWVDO/Zv/NjHfHkzg=;
-        b=kp2y1pD2TNHkVmFbKg/OSxw8KFbGNkM5ZdloYEPiV5zUAUrwEerxBdZKOJi0qRkwcM
-         fp/Zhiqf547RsKsnk784wVwp3youq2kUThdSRzsrx7HU+53VR+sIgN3UatNFz/xtzjZX
-         VA0U4dC2UnSJij6sWt4a4DCfqh3LsF7xhSHtZnlR+oUkOwNu7fsZzUbiaFE7UlXmmmW8
-         eSGzbAnmfMCZw9SAtwbi43UiPe7oTueIPEevMmHBOyKSblSqZltt/7rBOz4Xu0CfjeSW
-         pUWt2/k8jfcvjjj9CbAWQDPsRZUjW59edFsi0exMCRXEgvqaFHQYwIrxElO4Gc2V4Qee
-         vsUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=f0hIq2KYifdNKFEFb7aEPEmJFmBWVDO/Zv/NjHfHkzg=;
-        b=5K/hhkgLLkScae9txZqbKkFanL8fIgIPkFAx20Ie8ZcIFO3Kthm2jQcnJjMcgSvIpN
-         lP7sEI/OcWioVxmlDse7h21+2s0mJG82PxFsO5RNXyf/Iw7JTVejRFGwGt//mPsoIpOx
-         JAeHoxWGgVLxs5QGFh4SSPS9Q92PSZVy/9ncsucNRnhHtoisWI0OvhJrCbZui5Ghs+Cm
-         Hez0F9iJT8Je0GDFeGHn0lLuPPG4a30k3vBmCCCKblnkYp+HFOPJw1JUcM+mBZv8jffh
-         IYl0EjSNhg9dJCmOwkYiNIUadWprWzAPvtujGkjxXuxMIhJN3fe7VzrNWHBHrMYRe32G
-         oAIg==
-X-Gm-Message-State: ACrzQf1+OXiX5ms3CqopZXr8UJWzPKjXF8o9MKAWnUI9xs6ia/PABVyG
-        NWZSMM1Jioa/RDqPb2546oLBVw==
-X-Google-Smtp-Source: AMsMyM6d4d9UEcUbarBTqOcimdO4fhX+S9ZIQ+PNycGAaBaQZTVuUQHdnhU/14HYz93HVs9WNBULfw==
-X-Received: by 2002:a17:902:d512:b0:178:2898:8099 with SMTP id b18-20020a170902d51200b0017828988099mr27694224plg.131.1664298464296;
-        Tue, 27 Sep 2022 10:07:44 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y68-20020a623247000000b0053e7293be0bsm1991287pfy.121.2022.09.27.10.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 10:07:43 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 17:07:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: disable on 32-bit unless CONFIG_BROKEN
-Message-ID: <YzMt24/14n1BVdnI@google.com>
-References: <20220926165112.603078-1-pbonzini@redhat.com>
+        Tue, 27 Sep 2022 13:09:17 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD59B874
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:09:15 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1664298554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DqjIhl52wYynPPWyKfKv9xe5zkU2UZKWhsfljx76tNo=;
+        b=ZN0iDdJdQyCOg7mLjBQKl+yyz8lrgP1FIZlI4UgBMnugcVeAhwmOk4gwpAcaVZ2644R36S
+        3rggclhvkQCWu2a50jvfU8oR0cC1X4uJjx/BZEjsN3ToO+CNbwzAbkIwvCzenc6dzKBVfP
+        v1OQziGfElKYLwUq3/6lzvzaSg3/px4=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH mm v2 1/3] kasan: switch kunit tests to console tracepoints
+Date:   Tue, 27 Sep 2022 19:09:09 +0200
+Message-Id: <9345acdd11e953b207b0ed4724ff780e63afeb36.1664298455.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926165112.603078-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022, Paolo Bonzini wrote:
-> 32-bit KVM has extra complications in the code due to:
-> 
-> - different ways to write 64-bit values in VMCS
-> 
-> - different handling of DS and ES selectors as well as FS/GS bases
-> 
-> - lack of CR8 and EFER
-> 
-> - lack of XFD
-> 
+From: Andrey Konovalov <andreyknvl@google.com>
 
-More for the list:
+Switch KUnit-compatible KASAN tests from using per-task KUnit resources
+to console tracepoints.
 
-  - SVM is effectively restricted to PAE kernels due to NX requirements
+This allows for two things:
 
-> - impossibility of writing 64-bit PTEs atomically
+1. Migrating tests that trigger a KASAN report in the context of a task
+   other than current to KUnit framework.
+   This is implemented in the patches that follow.
 
-It's not impossible, just ugly.  KVM could use CMPXCHG8B to do all of the accesses
-for the TDP MMU, including the non-atomic reads and writes.
+2. Parsing and matching the contents of KASAN reports.
+   This is not yet implemented.
 
-> The last is the big one, because it prevents from using the TDP MMU
-> unconditionally.
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-As above, if the TDP MMU really is the sticking point, that's solvable.
+---
 
-The real justification for deprecating 32-bit KVM is that, outside of KVM developers,
-literally no one uses 32-bit KVM.  I.e. any amount of effort that is required to
-continue supporting 32-bit kernels is a complete waste of resources.
+Changes v1->v2:
+- Remove kunit_kasan_status struct definition.
+---
+ lib/Kconfig.kasan     |  2 +-
+ mm/kasan/kasan.h      |  8 ----
+ mm/kasan/kasan_test.c | 85 +++++++++++++++++++++++++++++++------------
+ mm/kasan/report.c     | 31 ----------------
+ 4 files changed, 63 insertions(+), 63 deletions(-)
+
+diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+index ca09b1cf8ee9..ba5b27962c34 100644
+--- a/lib/Kconfig.kasan
++++ b/lib/Kconfig.kasan
+@@ -181,7 +181,7 @@ config KASAN_VMALLOC
+ 
+ config KASAN_KUNIT_TEST
+ 	tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
+-	depends on KASAN && KUNIT
++	depends on KASAN && KUNIT && TRACEPOINTS
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  A KUnit-based KASAN test suite. Triggers different kinds of
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index abbcc1b0eec5..a84491bc4867 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -261,14 +261,6 @@ struct kasan_stack_ring {
+ 
+ #endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
+ 
+-#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+-/* Used in KUnit-compatible KASAN tests. */
+-struct kunit_kasan_status {
+-	bool report_found;
+-	bool sync_fault;
+-};
+-#endif
+-
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+ 
+ static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
+diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
+index f25692def781..3a2886f85e69 100644
+--- a/mm/kasan/kasan_test.c
++++ b/mm/kasan/kasan_test.c
+@@ -5,8 +5,12 @@
+  * Author: Andrey Ryabinin <a.ryabinin@samsung.com>
+  */
+ 
++#define pr_fmt(fmt) "kasan_test: " fmt
++
++#include <kunit/test.h>
+ #include <linux/bitops.h>
+ #include <linux/delay.h>
++#include <linux/io.h>
+ #include <linux/kasan.h>
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
+@@ -14,21 +18,28 @@
+ #include <linux/module.h>
+ #include <linux/printk.h>
+ #include <linux/random.h>
++#include <linux/set_memory.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
++#include <linux/tracepoint.h>
+ #include <linux/uaccess.h>
+-#include <linux/io.h>
+ #include <linux/vmalloc.h>
+-#include <linux/set_memory.h>
++#include <trace/events/printk.h>
+ 
+ #include <asm/page.h>
+ 
+-#include <kunit/test.h>
+-
+ #include "kasan.h"
+ 
+ #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
+ 
++static bool multishot;
++
++/* Fields set based on lines observed in the console. */
++static struct {
++	bool report_found;
++	bool async_fault;
++} test_status;
++
+ /*
+  * Some tests use these global variables to store return values from function
+  * calls that could otherwise be eliminated by the compiler as dead code.
+@@ -36,35 +47,61 @@
+ void *kasan_ptr_result;
+ int kasan_int_result;
+ 
+-static struct kunit_resource resource;
+-static struct kunit_kasan_status test_status;
+-static bool multishot;
++/* Probe for console output: obtains test_status lines of interest. */
++static void probe_console(void *ignore, const char *buf, size_t len)
++{
++	if (strnstr(buf, "BUG: KASAN: ", len))
++		WRITE_ONCE(test_status.report_found, true);
++	else if (strnstr(buf, "Asynchronous fault: ", len))
++		WRITE_ONCE(test_status.async_fault, true);
++}
+ 
+-/*
+- * Temporarily enable multi-shot mode. Otherwise, KASAN would only report the
+- * first detected bug and panic the kernel if panic_on_warn is enabled. For
+- * hardware tag-based KASAN also allow tag checking to be reenabled for each
+- * test, see the comment for KUNIT_EXPECT_KASAN_FAIL().
+- */
+-static int kasan_test_init(struct kunit *test)
++static void register_tracepoints(struct tracepoint *tp, void *ignore)
++{
++	check_trace_callback_type_console(probe_console);
++	if (!strcmp(tp->name, "console"))
++		WARN_ON(tracepoint_probe_register(tp, probe_console, NULL));
++}
++
++static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
++{
++	if (!strcmp(tp->name, "console"))
++		tracepoint_probe_unregister(tp, probe_console, NULL);
++}
++
++static int kasan_suite_init(struct kunit_suite *suite)
+ {
+ 	if (!kasan_enabled()) {
+-		kunit_err(test, "can't run KASAN tests with KASAN disabled");
++		pr_err("Can't run KASAN tests with KASAN disabled");
+ 		return -1;
+ 	}
+ 
++	/*
++	 * Temporarily enable multi-shot mode. Otherwise, KASAN would only
++	 * report the first detected bug and panic the kernel if panic_on_warn
++	 * is enabled.
++	 */
+ 	multishot = kasan_save_enable_multi_shot();
+-	test_status.report_found = false;
+-	test_status.sync_fault = false;
+-	kunit_add_named_resource(test, NULL, NULL, &resource,
+-					"kasan_status", &test_status);
++
++	/*
++	 * Because we want to be able to build the test as a module, we need to
++	 * iterate through all known tracepoints, since the static registration
++	 * won't work here.
++	 */
++	for_each_kernel_tracepoint(register_tracepoints, NULL);
+ 	return 0;
+ }
+ 
+-static void kasan_test_exit(struct kunit *test)
++static void kasan_suite_exit(struct kunit_suite *suite)
+ {
+ 	kasan_restore_multi_shot(multishot);
+-	KUNIT_EXPECT_FALSE(test, test_status.report_found);
++	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
++	tracepoint_synchronize_unregister();
++}
++
++static void kasan_test_exit(struct kunit *test)
++{
++	KUNIT_EXPECT_FALSE(test, READ_ONCE(test_status.report_found));
+ }
+ 
+ /**
+@@ -106,11 +143,12 @@ static void kasan_test_exit(struct kunit *test)
+ 	if (IS_ENABLED(CONFIG_KASAN_HW_TAGS) &&				\
+ 	    kasan_sync_fault_possible()) {				\
+ 		if (READ_ONCE(test_status.report_found) &&		\
+-		    READ_ONCE(test_status.sync_fault))			\
++		    !READ_ONCE(test_status.async_fault))		\
+ 			kasan_enable_tagging();				\
+ 		migrate_enable();					\
+ 	}								\
+ 	WRITE_ONCE(test_status.report_found, false);			\
++	WRITE_ONCE(test_status.async_fault, false);			\
+ } while (0)
+ 
+ #define KASAN_TEST_NEEDS_CONFIG_ON(test, config) do {			\
+@@ -1440,9 +1478,10 @@ static struct kunit_case kasan_kunit_test_cases[] = {
+ 
+ static struct kunit_suite kasan_kunit_test_suite = {
+ 	.name = "kasan",
+-	.init = kasan_test_init,
+ 	.test_cases = kasan_kunit_test_cases,
+ 	.exit = kasan_test_exit,
++	.suite_init = kasan_suite_init,
++	.suite_exit = kasan_suite_exit,
+ };
+ 
+ kunit_test_suite(kasan_kunit_test_suite);
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index 39e8e5a80b82..f23d51a27414 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -30,8 +30,6 @@
+ 
+ #include <asm/sections.h>
+ 
+-#include <kunit/test.h>
+-
+ #include "kasan.h"
+ #include "../slab.h"
+ 
+@@ -114,41 +112,12 @@ EXPORT_SYMBOL_GPL(kasan_restore_multi_shot);
+ 
+ #endif
+ 
+-#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+-static void update_kunit_status(bool sync)
+-{
+-	struct kunit *test;
+-	struct kunit_resource *resource;
+-	struct kunit_kasan_status *status;
+-
+-	test = current->kunit_test;
+-	if (!test)
+-		return;
+-
+-	resource = kunit_find_named_resource(test, "kasan_status");
+-	if (!resource) {
+-		kunit_set_failure(test);
+-		return;
+-	}
+-
+-	status = (struct kunit_kasan_status *)resource->data;
+-	WRITE_ONCE(status->report_found, true);
+-	WRITE_ONCE(status->sync_fault, sync);
+-
+-	kunit_put_resource(resource);
+-}
+-#else
+-static void update_kunit_status(bool sync) { }
+-#endif
+-
+ static DEFINE_SPINLOCK(report_lock);
+ 
+ static void start_report(unsigned long *flags, bool sync)
+ {
+ 	/* Respect the /proc/sys/kernel/traceoff_on_warning interface. */
+ 	disable_trace_on_warning();
+-	/* Update status of the currently running KASAN test. */
+-	update_kunit_status(sync);
+ 	/* Do not allow LOCKDEP mangling KASAN reports. */
+ 	lockdep_off();
+ 	/* Make sure we don't end up in loop. */
+-- 
+2.25.1
+
